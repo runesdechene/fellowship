@@ -1,16 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/lib/auth'
-import { Mail, Loader2 } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { Mail, Loader2, UserPlus, LogIn } from 'lucide-react'
 
 export function LoginPage() {
   const { user, loading: authLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(false)
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isNewUser, setIsNewUser] = useState<boolean | null>(null)
   const { signIn } = useAuth()
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const checkEmail = (emailToCheck: string) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+    }
+
+    if (!emailToCheck || !emailToCheck.includes('@')) {
+      setIsNewUser(null)
+      return
+    }
+    
+    setChecking(true)
+    debounceRef.current = setTimeout(async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', emailToCheck)
+        .maybeSingle()
+      
+      setIsNewUser(data === null)
+      setChecking(false)
+    }, 500)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [])
 
   if (authLoading) {
     return (
@@ -79,20 +113,57 @@ export function LoginPage() {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                checkEmail(e.target.value)
+              }}
+              onBlur={() => checkEmail(email)}
               placeholder="ton@email.com"
               required
               className="w-full rounded-lg border border-input bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
 
+          {/* Indicateur nouveau compte / connexion */}
+          {email && email.includes('@') && !checking && isNewUser !== null && (
+            <div className={`flex items-center gap-2 rounded-lg p-3 text-sm ${
+              isNewUser 
+                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' 
+                : 'bg-green-500/10 text-green-600 dark:text-green-400'
+            }`}>
+              {isNewUser ? (
+                <>
+                  <UserPlus className="h-4 w-4" />
+                  <span>Nouveau compte — on va te créer un accès</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="h-4 w-4" />
+                  <span>Compte existant — on t'envoie un lien</span>
+                </>
+              )}
+            </div>
+          )}
+
+          {checking && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Vérification...</span>
+            </div>
+          )}
+
           {error && (
             <p className="text-sm text-destructive">{error}</p>
           )}
 
-          <Button type="submit" className="w-full" size="lg" disabled={loading}>
+          <Button type="submit" className="w-full" size="lg" disabled={loading || checking}>
             {loading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
+            ) : isNewUser ? (
+              <>
+                <UserPlus className="mr-2 h-5 w-5" />
+                Créer mon compte
+              </>
             ) : (
               'Continuer avec Email'
             )}
