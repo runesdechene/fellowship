@@ -30,3 +30,6 @@ dist-ssr
 
 # Tauri
 src-tauri/target/
+
+# Local Netlify folder
+.netlify
