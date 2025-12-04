@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
+import { useProfile } from '@/hooks/useProfile'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { LogOut, Plus, Calendar, Users } from 'lucide-react'
+import { Settings, Plus, Calendar, Users } from 'lucide-react'
 
-export function DashboardPage() {
-  const { user, signOut } = useAuth()
+export function AppPage() {
+  const { user } = useAuth()
+  const { profile } = useProfile()
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,9 +22,11 @@ export function DashboardPage() {
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={signOut}>
-              <LogOut className="h-5 w-5" />
-            </Button>
+            <Link to="/app/settings">
+              <Button variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -30,7 +35,7 @@ export function DashboardPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold">
-            Salut{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''} 👋
+            Salut{profile?.full_name ? `, ${profile.full_name}` : ''} 👋
           </h1>
           <p className="text-muted-foreground">{user?.email}</p>
         </div>
