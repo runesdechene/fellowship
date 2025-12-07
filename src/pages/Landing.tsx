@@ -18,7 +18,7 @@ export function LandingPage() {
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <Link to="/login">
-              <Button>Se connecter</Button>
+              <Button>Se connecterr</Button>
             </Link>
           </div>
         </div>
