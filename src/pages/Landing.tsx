@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
-import { Calendar, Users, Zap } from 'lucide-react'
+import { Calendar, Users, Zap, Sparkles } from 'lucide-react'
 
 export function LandingPage() {
   return (
@@ -46,7 +46,7 @@ export function LandingPage() {
         </div>
 
         {/* Features */}
-        <div className="mt-24 grid gap-8 sm:grid-cols-3">
+        <div className="mt-24 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-border bg-card p-6">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
               <Calendar className="h-6 w-6 text-primary" />
@@ -72,6 +72,15 @@ export function LandingPage() {
             <h3 className="mt-4 font-semibold">Outils rapides</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               Gagnez du temps avec des outils pensés pour les professionnels.
+            </p>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="mt-4 font-semibold">Fait entièrement par IA</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Conçu et développé par intelligence artificielle pour une expérience optimale et innovante.
             </p>
           </div>
         </div>
