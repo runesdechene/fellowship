@@ -136,14 +136,17 @@ export function EventForm({ onClose }: EventFormProps) {
           <p className="text-xs text-muted-foreground">Cherche s'il existe déjà</p>
         </div>
       </div>
-      <input
-        type="text"
-        className={inputClass}
-        placeholder="Ex: Fête médiévale de Provins 2026"
-        value={form.name}
-        onChange={(e) => { update('name', e.target.value); setDismissed(false) }}
-        autoFocus
-      />
+      <div>
+        <label className="text-xs font-medium text-muted-foreground mb-1 block">Nom <span className="text-destructive">*</span></label>
+        <input
+          type="text"
+          className={inputClass}
+          placeholder="Ex: Fête médiévale de Provins 2026"
+          value={form.name}
+          onChange={(e) => { update('name', e.target.value); setDismissed(false) }}
+          autoFocus
+        />
+      </div>
       <DeduplicateSuggestions
         suggestions={suggestions}
         onSelect={handleSelectExisting}
@@ -168,12 +171,18 @@ export function EventForm({ onClose }: EventFormProps) {
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <input type="text" className={inputClass} placeholder="Ville" value={form.city} onChange={e => update('city', e.target.value)} />
-        <input type="text" className={inputClass} placeholder="Département (ex: 77)" value={form.department} onChange={e => update('department', e.target.value)} />
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
+          <input type="text" className={inputClass} placeholder="Ville" value={form.city} onChange={e => update('city', e.target.value)} />
+        </div>
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
+          <input type="text" className={inputClass} placeholder="Département (ex: 77)" value={form.department} onChange={e => update('department', e.target.value)} />
+        </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-muted-foreground mb-1 block">Début</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Début <span className="text-destructive">*</span></label>
           <input type="date" className={inputClass} value={form.start_date} onChange={e => update('start_date', e.target.value)} />
         </div>
         <div>
@@ -196,7 +205,7 @@ export function EventForm({ onClose }: EventFormProps) {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-muted-foreground mb-2 block">Type principal</label>
+        <label className="text-xs font-medium text-muted-foreground mb-2 block">Type principal <span className="text-destructive">*</span></label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {PRIMARY_TAGS.map(tag => (
             <button

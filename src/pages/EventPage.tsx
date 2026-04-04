@@ -183,10 +183,54 @@ export function EventPage() {
         Retour
       </Link>
 
-      {/* Header */}
-      {event.image_url && (
+      {/* Header image */}
+      {editing ? (
+        <div className="mb-6">
+          {editImage ? (
+            <div className="group relative">
+              <img src={URL.createObjectURL(editImage)} alt="" className="h-64 w-full rounded-xl object-cover" />
+              <div className="absolute bottom-3 right-3 flex gap-2">
+                <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
+                  <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) { setEditImage(e.target.files[0]); setRemoveImage(false) } }} />
+                </label>
+                <button onClick={() => setEditImage(null)} className="rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
+                  <span className="flex items-center gap-1.5"><X className="h-3.5 w-3.5" />Annuler</span>
+                </button>
+              </div>
+            </div>
+          ) : removeImage ? (
+            <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/50">
+              <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                <Trash2 className="h-6 w-6" />
+                <span className="text-sm">Image retirée</span>
+                <button onClick={() => setRemoveImage(false)} className="text-xs text-primary hover:underline">Annuler</button>
+              </div>
+            </div>
+          ) : event.image_url ? (
+            <div className="group relative">
+              <img src={event.image_url} alt={event.name} className="h-64 w-full rounded-xl object-cover" />
+              <div className="absolute bottom-3 right-3 flex gap-2">
+                <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
+                  <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) { setEditImage(e.target.files[0]); setRemoveImage(false) } }} />
+                </label>
+                <button onClick={() => setRemoveImage(true)} className="rounded-full bg-red-500/90 px-3 py-1.5 text-xs font-medium text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-red-600">
+                  <span className="flex items-center gap-1.5"><Trash2 className="h-3.5 w-3.5" />Retirer</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <label className="flex h-64 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-muted/50 text-muted-foreground transition-colors hover:border-primary/30 hover:bg-muted">
+              <Image className="h-8 w-8" />
+              <span className="text-sm">Ajouter une affiche</span>
+              <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) setEditImage(e.target.files[0]) }} />
+            </label>
+          )}
+        </div>
+      ) : event.image_url ? (
         <img src={event.image_url} alt={event.name} className="mb-6 h-64 w-full rounded-xl object-cover" />
-      )}
+      ) : null}
 
       {editing ? (
         <div className="mb-6 space-y-4 rounded-xl border border-border bg-card p-4">
@@ -199,26 +243,38 @@ export function EventPage() {
           <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
             Vos modifications seront visibles par tous les utilisateurs. Éditez avec précaution.
           </div>
-          <input
-            type="text"
-            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="Nom"
-            value={editForm.name}
-            onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
-          />
-          <textarea
-            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
-            placeholder="Description"
-            value={editForm.description}
-            onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
-          />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
-            <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Nom <span className="text-destructive">*</span></label>
+            <input
+              type="text"
+              className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="Nom de l'événement"
+              value={editForm.name}
+              onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Description</label>
+            <textarea
+              className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
+              placeholder="Description"
+              value={editForm.description}
+              onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+            />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">Début</label>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
+              <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
+              <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département (ex: 77)" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Début <span className="text-destructive">*</span></label>
               <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.start_date} onChange={e => setEditForm(f => ({ ...f, start_date: e.target.value }))} />
             </div>
             <div>
@@ -239,50 +295,6 @@ export function EventPage() {
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
             <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
-          </div>
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-2 block">Affiche</label>
-            {editImage ? (
-              <div className="flex items-center gap-3 rounded-xl border border-border p-3">
-                <Image className="h-5 w-5 text-muted-foreground" />
-                <span className="flex-1 truncate text-sm">{editImage.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => setEditImage(null)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : removeImage ? (
-              <div className="flex items-center gap-3 rounded-xl border border-dashed border-border p-3">
-                <span className="flex-1 text-sm text-muted-foreground">Image supprimée</span>
-                <Button variant="ghost" size="sm" onClick={() => setRemoveImage(false)}>
-                  Annuler
-                </Button>
-              </div>
-            ) : event.image_url ? (
-              <div className="space-y-2">
-                <img src={event.image_url} alt="" className="h-32 w-full rounded-lg object-cover" />
-                <div className="flex gap-2">
-                  <label className="cursor-pointer">
-                    <Button variant="outline" size="sm" asChild>
-                      <span>
-                        <Image className="mr-2 h-4 w-4" />
-                        Remplacer
-                      </span>
-                    </Button>
-                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) { setEditImage(e.target.files[0]); setRemoveImage(false) } }} />
-                  </label>
-                  <Button variant="outline" size="sm" onClick={() => setRemoveImage(true)}>
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Retirer
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <label className="block cursor-pointer rounded-xl border-2 border-dashed border-border p-4 text-center text-sm text-muted-foreground hover:border-primary/30 hover:bg-muted transition-colors">
-                <Image className="mx-auto mb-1 h-6 w-6" />
-                Cliquer pour ajouter une image
-                <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) setEditImage(e.target.files[0]) }} />
-              </label>
-            )}
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
