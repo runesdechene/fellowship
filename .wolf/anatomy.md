@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T13:30:55.101Z
-> Files: 40 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T14:15:00.000Z
+> Files: 33 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
@@ -39,26 +39,6 @@
 ## docs/superpowers/specs/
 
 - `2026-04-04-fellowship-v1-design.md` — Fellowship V1 — Design Specification (~4081 tok)
-
-## src-tauri/
-
-- `.gitignore` — Git ignore rules (~24 tok)
-- `build.rs` (~12 tok)
-- `Cargo.toml` — Rust package manifest (~168 tok)
-- `tauri.conf.json` (~250 tok)
-
-## src-tauri/capabilities/
-
-- `default.json` (~63 tok)
-
-## src-tauri/icons/
-
-- `icon.icns` (~69984 tok)
-
-## src-tauri/src/
-
-- `lib.rs` — [cfg_attr(mobile, tauri::mobile_entry_point)] (~124 tok)
-- `main.rs` — Prevents additional console window on Windows in release, DO NOT REMOVE!! (~53 tok)
 
 ## src/
 
