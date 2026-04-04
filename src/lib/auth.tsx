@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { supabase } from './supabase'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '@/types/database'
@@ -21,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const initialized = useRef(false)
 
   const fetchProfile = async (userId: string) => {
     const { data } = await supabase
@@ -39,24 +40,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        await fetchProfile(session.user.id)
-      }
+    // Prevent StrictMode double-initialization
+    if (initialized.current) {
       setLoading(false)
-    })
+      return
+    }
+    initialized.current = true
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
+
         if (session?.user) {
-          await fetchProfile(session.user.id)
+          try {
+            await fetchProfile(session.user.id)
+          } catch {
+            // Profile may not exist yet
+          }
         } else {
           setProfile(null)
         }
+
         setLoading(false)
       }
     )

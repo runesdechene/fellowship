@@ -1,10 +1,11 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T21:17:04.643Z
-> Files: 114 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T21:33:07.645Z
+> Files: 115 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
+- `feedback_no_bandaid.md` (~147 tok)
 - `feedback_v1_testing.md` — Feedback from first test session (2026-04-04) (~324 tok)
 - `project_progress.md` — Status: V1 MVP complete, pushed to main (~263 tok)
 
@@ -214,9 +215,9 @@
 
 ## src/lib/
 
-- `auth.tsx` — AuthContext (~844 tok)
+- `auth.tsx` — AuthContext (~829 tok)
 - `constants.ts` — Primary tags — fixed by admin, not user-editable (~89 tok)
-- `supabase.ts` — Exports supabase (~118 tok)
+- `supabase.ts` — Exports supabase (~115 tok)
 - `utils.ts` — Exports cn (~50 tok)
 
 ## src/pages/
@@ -227,7 +228,7 @@
 - `Explorer.tsx` — ExplorerPage (~1658 tok)
 - `Following.tsx` — FollowingPage (~42 tok)
 - `Landing.tsx` — LandingPage (~1279 tok)
-- `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~1706 tok)
+- `Login.tsx` — LoginPage — renders form (~1122 tok)
 - `Notifications.tsx` — NotificationsPage (~44 tok)
 - `Onboarding.tsx` — OnboardingPage — multi-step onboarding: 3 steps for exposant (brand name, city/postal, slug), 2 steps for public (name, postal); detects type from profile (~1567 tok)
 - `Profile.tsx` — Avatar (~1759 tok)

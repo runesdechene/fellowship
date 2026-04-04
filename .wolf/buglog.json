@@ -352,6 +352,102 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-04T21:16:55.099Z"
+    },
+    {
+      "id": "bug-023",
+      "timestamp": "2026-04-04T21:19:07.325Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "src/lib/auth.tsx",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:19:07.325Z"
+    },
+    {
+      "id": "bug-024",
+      "timestamp": "2026-04-04T21:21:16.701Z",
+      "error_message": "Missing guard clause",
+      "file": "src/lib/auth.tsx",
+      "root_cause": "No early return/throw for edge case: mounted && loading",
+      "fix": "Added guard clause: if (mounted && loading)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:21:16.701Z"
+    },
+    {
+      "id": "bug-025",
+      "timestamp": "2026-04-04T21:23:37.765Z",
+      "error_message": "Wrong condition in logic",
+      "file": "src/lib/auth.tsx",
+      "root_cause": "Condition was: if (!mounted)",
+      "fix": "Changed to: if (sessionError)",
+      "tags": [
+        "auto-detected",
+        "logic-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:23:37.765Z"
+    },
+    {
+      "id": "bug-026",
+      "timestamp": "2026-04-04T21:24:28.639Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/lib/auth.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:24:28.639Z"
+    },
+    {
+      "id": "bug-027",
+      "timestamp": "2026-04-04T21:25:44.060Z",
+      "error_message": "Type error",
+      "file": "src/lib/supabase.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:25:44.060Z"
+    },
+    {
+      "id": "bug-028",
+      "timestamp": "2026-04-04T21:28:15.025Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/main.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 5→6 lines (3 removed) | Also: // StrictMode disabled temporarily to diagnose aut; // <StrictMode>",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-04T21:30:07.342Z"
     }
   ]
 }
