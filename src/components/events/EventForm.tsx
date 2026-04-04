@@ -55,46 +55,63 @@ export function EventForm({ onClose }: EventFormProps) {
     navigate(`/evenement/${eventId}`)
   }
 
+  const [error, setError] = useState<string | null>(null)
+
   const handleSubmit = async () => {
     if (!profile) return
     setSaving(true)
+    setError(null)
 
-    let image_url: string | undefined
-    if (form.image) {
-      const ext = form.image.name.split('.').pop()
-      const path = `${crypto.randomUUID()}.${ext}`
-      const { data: uploadData } = await supabase.storage
-        .from('event-images')
-        .upload(path, form.image)
-      if (uploadData) {
-        const { data: urlData } = supabase.storage
+    try {
+      let image_url: string | undefined
+      if (form.image) {
+        const ext = form.image.name.split('.').pop()
+        const path = `${crypto.randomUUID()}.${ext}`
+        const { data: uploadData, error: uploadError } = await supabase.storage
           .from('event-images')
-          .getPublicUrl(uploadData.path)
-        image_url = urlData.publicUrl
+          .upload(path, form.image)
+        if (uploadError) {
+          console.error('Image upload failed:', uploadError)
+          // Continue without image
+        } else if (uploadData) {
+          const { data: urlData } = supabase.storage
+            .from('event-images')
+            .getPublicUrl(uploadData.path)
+          image_url = urlData.publicUrl
+        }
       }
-    }
 
-    const eventData: EventInsert = {
-      name: form.name,
-      description: form.description || null,
-      city: form.city,
-      department: form.department,
-      start_date: form.start_date,
-      end_date: form.end_date || form.start_date,
-      registration_deadline: form.registration_deadline || null,
-      registration_url: form.registration_url || null,
-      external_url: form.external_url || null,
-      primary_tag: form.primary_tag,
-      tags: secondaryTags,
-      image_url: image_url ?? null,
-      created_by: profile.id,
-    }
+      const eventData: EventInsert = {
+        name: form.name,
+        description: form.description || null,
+        city: form.city,
+        department: form.department,
+        start_date: form.start_date,
+        end_date: form.end_date || form.start_date,
+        registration_deadline: form.registration_deadline || null,
+        registration_url: form.registration_url || null,
+        external_url: form.external_url || null,
+        primary_tag: form.primary_tag,
+        tags: secondaryTags,
+        image_url: image_url ?? null,
+        created_by: profile.id,
+      }
 
-    const { data } = await createEvent(eventData)
-    setSaving(false)
-    if (data) {
-      onClose?.()
-      navigate(`/evenement/${data.id}`)
+      const { data, error: createError } = await createEvent(eventData)
+      if (createError) {
+        console.error('Event creation failed:', createError)
+        setError(createError.message ?? 'Erreur lors de la création')
+        return
+      }
+      if (data) {
+        onClose?.()
+        navigate(`/evenement/${data.id}`)
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err)
+      setError('Une erreur inattendue est survenue')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -267,6 +284,11 @@ export function EventForm({ onClose }: EventFormProps) {
 
       {/* Current step */}
       {steps[step]}
+
+      {/* Error */}
+      {error && (
+        <p className="text-sm text-destructive">{error}</p>
+      )}
 
       {/* Navigation */}
       <div className="flex items-center justify-between pt-2">
