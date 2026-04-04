@@ -27,7 +27,8 @@ export function NotesFeed({ notes, onRefresh }: NotesFeedProps) {
     <div className="space-y-3">
       {notes.map((note) => {
         const isOwn = note.user_id === user?.id
-        const authorName = (note.profiles as any)?.brand_name || (note.profiles as any)?.display_name || 'Anonyme'
+        const profiles = note.profiles as { brand_name?: string | null; display_name?: string | null } | null
+        const authorName = profiles?.brand_name || profiles?.display_name || 'Anonyme'
 
         return (
           <div

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { NoteWithAuthor, NoteInsert } from '@/types/database'
 
@@ -6,12 +6,7 @@ export function useEventNotes(eventId: string | undefined) {
   const [notes, setNotes] = useState<NoteWithAuthor[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!eventId) return
-    fetchNotes()
-  }, [eventId])
-
-  async function fetchNotes() {
+  const fetchNotes = useCallback(async () => {
     if (!eventId) return
     const { data } = await supabase
       .from('notes')
@@ -21,7 +16,13 @@ export function useEventNotes(eventId: string | undefined) {
 
     setNotes((data as NoteWithAuthor[] | null) ?? [])
     setLoading(false)
-  }
+  }, [eventId])
+
+  useEffect(() => {
+    if (!eventId) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchNotes()
+  }, [eventId, fetchNotes])
 
   return { notes, loading, refetch: fetchNotes }
 }

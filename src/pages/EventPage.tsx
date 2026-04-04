@@ -16,7 +16,7 @@ import {
   Calendar, MapPin, ExternalLink, Clock, ArrowLeft,
   Users, Check, Star, FileText
 } from 'lucide-react'
-import type { ParticipationVisibility, ParticipationStatus } from '@/types/database'
+import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
@@ -24,7 +24,7 @@ export function EventPage() {
   const { event, loading } = useEvent(id)
   const { notes, refetch: refetchNotes } = useEventNotes(id)
   const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
-  const [participation, setParticipation] = useState<any>(null)
+  const [participation, setParticipation] = useState<Participation | null>(null)
   const [loadingParticipation, setLoadingParticipation] = useState(true)
   const [friendCount, setFriendCount] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Participation, ParticipationInsert, ParticipationWithEvent } from '@/types/database'
@@ -8,12 +8,7 @@ export function useMyParticipations(year?: number) {
   const [participations, setParticipations] = useState<ParticipationWithEvent[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!user) return
-    fetchParticipations()
-  }, [user, year])
-
-  async function fetchParticipations() {
+  const fetchParticipations = useCallback(async () => {
     if (!user) return
     setLoading(true)
 
@@ -25,22 +20,26 @@ export function useMyParticipations(year?: number) {
 
     setParticipations((data as ParticipationWithEvent[] | null) ?? [])
     setLoading(false)
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (!user) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchParticipations()
+  }, [user, year, fetchParticipations])
+  // year in effect dep array triggers refetch when year changes
 
   return { participations, loading, refetch: fetchParticipations }
 }
 
+export type FriendParticipation = { id: string; event_id: string; user_id: string; events?: { name: string; [key: string]: unknown }; profiles?: { display_name: string | null; avatar_url: string | null } }
+
 export function useFriendsParticipations() {
   const { user } = useAuth()
-  const [participations, setParticipations] = useState<any[]>([])
+  const [participations, setParticipations] = useState<FriendParticipation[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!user) return
-    fetchFriendsParticipations()
-  }, [user])
-
-  async function fetchFriendsParticipations() {
+  const fetchFriendsParticipations = useCallback(async () => {
     if (!user) return
     setLoading(true)
 
@@ -61,9 +60,15 @@ export function useFriendsParticipations() {
       .order('created_at', { ascending: false })
       .limit(20)
 
-    setParticipations(data ?? [])
+    setParticipations((data as FriendParticipation[] | null) ?? [])
     setLoading(false)
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (!user) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchFriendsParticipations()
+  }, [user, fetchFriendsParticipations])
 
   return { participations, loading, refetch: fetchFriendsParticipations }
 }

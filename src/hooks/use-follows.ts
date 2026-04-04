@@ -11,6 +11,7 @@ export function useFollowStatus(targetId: string | undefined) {
 
   useEffect(() => {
     if (!user || !targetId || user.id === targetId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false)
       return
     }
@@ -107,7 +108,7 @@ export function useMyFollowers() {
         .from('follows')
         .select('profiles!follows_follower_id_fkey(*)')
         .eq('following_id', user!.id)
-      setFollowers(data?.map((f: any) => f.profiles).filter(Boolean) ?? [])
+      setFollowers(data?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
       setLoading(false)
     }
     fetch()

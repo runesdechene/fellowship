@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Notification } from '@/types/database'
@@ -9,12 +9,7 @@ export function useNotifications() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!user) return
-    fetchNotifications()
-  }, [user])
-
-  async function fetchNotifications() {
+  const fetchNotifications = useCallback(async () => {
     if (!user) return
     const { data } = await supabase
       .from('notifications')
@@ -27,7 +22,13 @@ export function useNotifications() {
     setNotifications(notifs)
     setUnreadCount(notifs.filter(n => !n.read).length)
     setLoading(false)
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (!user) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchNotifications()
+  }, [user, fetchNotifications])
 
   async function markAsRead(id: string) {
     await supabase.from('notifications').update({ read: true }).eq('id', id)

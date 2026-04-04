@@ -5,18 +5,18 @@ import { Bell, Users, UserPlus, Clock, MessageSquare, Check } from 'lucide-react
 import { Button } from '@/components/ui/button'
 import type { Notification } from '@/types/database'
 
-interface NotificationPanelProps {
-  onClose?: () => void
-}
-
 function NotificationItem({ notification, onRead }: { notification: Notification; onRead: (id: string) => void }) {
-  const data = notification.data as Record<string, any>
+  const data = notification.data as Record<string, unknown>
 
+  const friendName = typeof data.friend_name === 'string' ? data.friend_name : 'Un ami'
+  const followerName = typeof data.follower_name === 'string' ? data.follower_name : 'Quelqu\'un'
+  const eventName = typeof data.event_name === 'string' ? data.event_name : 'un événement'
+  const eventId = typeof data.event_id === 'string' ? data.event_id : ''
   const config: Record<string, { icon: React.ElementType; color: string; label: string; link: string }> = {
-    friend_going: { icon: Users, color: 'text-primary', label: `${data.friend_name ?? 'Un ami'} participe à ${data.event_name ?? 'un événement'}`, link: `/evenement/${data.event_id}` },
-    new_follower: { icon: UserPlus, color: 'text-accent', label: `${data.follower_name ?? 'Quelqu\'un'} te suit`, link: `/profil` },
-    deadline_reminder: { icon: Clock, color: 'text-destructive', label: `Inscription pour ${data.event_name ?? 'un événement'} bientôt`, link: `/evenement/${data.event_id}` },
-    friend_note: { icon: MessageSquare, color: 'text-primary', label: `${data.friend_name ?? 'Un ami'} a laissé une note sur ${data.event_name ?? 'un événement'}`, link: `/evenement/${data.event_id}` },
+    friend_going: { icon: Users, color: 'text-primary', label: `${friendName} participe à ${eventName}`, link: `/evenement/${eventId}` },
+    new_follower: { icon: UserPlus, color: 'text-accent', label: `${followerName} te suit`, link: `/profil` },
+    deadline_reminder: { icon: Clock, color: 'text-destructive', label: `Inscription pour ${eventName} bientôt`, link: `/evenement/${eventId}` },
+    friend_note: { icon: MessageSquare, color: 'text-primary', label: `${friendName} a laissé une note sur ${eventName}`, link: `/evenement/${eventId}` },
   }
 
   const { icon: Icon, color, label, link } = config[notification.type] ?? config.friend_going
@@ -40,7 +40,8 @@ function NotificationItem({ notification, onRead }: { notification: Notification
   )
 }
 
-export function NotificationPanel({ onClose: _onClose }: NotificationPanelProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function NotificationPanel({ onClose: _onClose }: { onClose?: () => void } = {}) {
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications()
 
   return (

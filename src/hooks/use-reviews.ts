@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Review, ReviewInsert } from '@/types/database'
 
 export function useEventReviews(eventId: string | undefined) {
   const { profile } = useAuth()
-  const [reviews, setReviews] = useState<(Review & { profiles: { display_name: string; brand_name: string | null } })[]>([])
+  type ReviewWithProfile = Review & { profiles: { display_name: string; brand_name: string | null } }
+  const [reviews, setReviews] = useState<ReviewWithProfile[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!eventId) return
-    fetchReviews()
-  }, [eventId])
-
-  async function fetchReviews() {
+  const fetchReviews = useCallback(async () => {
     if (!eventId) return
     const { data } = await supabase
       .from('reviews')
@@ -21,9 +17,15 @@ export function useEventReviews(eventId: string | undefined) {
       .eq('event_id', eventId)
       .order('created_at', { ascending: false })
 
-    setReviews((data as any) ?? [])
+    setReviews((data as ReviewWithProfile[] | null) ?? [])
     setLoading(false)
-  }
+  }, [eventId])
+
+  useEffect(() => {
+    if (!eventId) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchReviews()
+  }, [eventId, fetchReviews])
 
   const canSeeDetails = profile?.type === 'exposant' && profile?.plan === 'pro'
 

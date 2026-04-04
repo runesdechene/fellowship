@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
 import type { EventInsert } from '@/types/database'
 
+type EventSuggestion = { id: string; name: string; city: string; department: string; start_date: string; end_date: string }
+
 export function EventForm() {
   const { profile } = useAuth()
   const navigate = useNavigate()
   const [saving, setSaving] = useState(false)
-  const [suggestions, setSuggestions] = useState<any[]>([])
+  const [suggestions, setSuggestions] = useState<EventSuggestion[]>([])
   const [dismissed, setDismissed] = useState(false)
   const [form, setForm] = useState({
     name: '',
@@ -30,7 +32,7 @@ export function EventForm() {
 
   useEffect(() => {
     if (form.name.length < 3 || dismissed) {
-      setSuggestions([])
+      setSuggestions([]) // eslint-disable-line react-hooks/set-state-in-effect
       return
     }
     const timer = setTimeout(async () => {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
+import { useMyParticipations, useFriendsParticipations, type FriendParticipation } from '@/hooks/use-participations'
 import { useCalendarYear } from '@/hooks/use-calendar'
 import { YearView } from '@/components/calendar/YearView'
 import { Button } from '@/components/ui/button'
@@ -61,7 +61,7 @@ export function DashboardPage() {
             Tes amis bougent
           </h2>
           <div className="space-y-2">
-            {friendActivity.slice(0, 10).map((p: any) => (
+            {friendActivity.slice(0, 10).map((p: FriendParticipation) => (
               <Link
                 key={p.id}
                 to={`/evenement/${p.event_id}`}

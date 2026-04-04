@@ -11,10 +11,6 @@ export function useEvents(filters?: {
   const [events, setEvents] = useState<EventWithScore[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchEvents()
-  }, [filters?.department, filters?.tag, filters?.search, filters?.year])
-
   async function fetchEvents() {
     setLoading(true)
     let query = supabase
@@ -49,6 +45,9 @@ export function useEvents(filters?: {
     setEvents(mapped)
     setLoading(false)
   }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchEvents() }, [filters?.department, filters?.tag, filters?.search, filters?.year])
 
   return { events, loading, refetch: fetchEvents }
 }

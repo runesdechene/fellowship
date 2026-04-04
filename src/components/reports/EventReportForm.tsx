@@ -22,6 +22,7 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
 
   useEffect(() => {
     if (existing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBoothCost(existing.booth_cost?.toString() ?? '')
       setCharges(existing.charges?.toString() ?? '')
       setRevenue(existing.revenue?.toString() ?? '')
