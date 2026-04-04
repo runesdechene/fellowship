@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
-import { useEvent } from '@/hooks/use-events'
+import { useEvent, updateEvent } from '@/hooks/use-events'
 import { addParticipation, removeParticipation } from '@/hooks/use-participations'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
@@ -14,7 +14,7 @@ import { EventReportForm } from '@/components/reports/EventReportForm'
 import { Button } from '@/components/ui/button'
 import {
   Calendar, MapPin, ExternalLink, Clock, ArrowLeft,
-  Users, Check, Star, FileText
+  Users, Check, Star, FileText, Pencil, X, Save
 } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 
@@ -30,6 +30,19 @@ export function EventPage() {
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [showReportForm, setShowReportForm] = useState(false)
   const [activeTab, setActiveTab] = useState<'info' | 'notes' | 'reviews'>('info')
+  const [editing, setEditing] = useState(false)
+  const [editSaving, setEditSaving] = useState(false)
+  const [editForm, setEditForm] = useState({
+    name: '',
+    description: '',
+    city: '',
+    department: '',
+    start_date: '',
+    end_date: '',
+    registration_deadline: '',
+    registration_url: '',
+    external_url: '',
+  })
 
   // Fetch user's participation
   useEffect(() => {
@@ -74,6 +87,43 @@ export function EventPage() {
     setParticipation(null)
   }
 
+  const startEditing = () => {
+    if (!event) return
+    setEditForm({
+      name: event.name,
+      description: event.description ?? '',
+      city: event.city,
+      department: event.department,
+      start_date: event.start_date,
+      end_date: event.end_date,
+      registration_deadline: event.registration_deadline ?? '',
+      registration_url: event.registration_url ?? '',
+      external_url: event.external_url ?? '',
+    })
+    setEditing(true)
+  }
+
+  const handleSaveEdit = async () => {
+    if (!event) return
+    setEditSaving(true)
+    const { error } = await updateEvent(event.id, {
+      name: editForm.name,
+      description: editForm.description || null,
+      city: editForm.city,
+      department: editForm.department,
+      start_date: editForm.start_date,
+      end_date: editForm.end_date || editForm.start_date,
+      registration_deadline: editForm.registration_deadline || null,
+      registration_url: editForm.registration_url || null,
+      external_url: editForm.external_url || null,
+    })
+    setEditSaving(false)
+    if (!error) {
+      setEditing(false)
+      window.location.reload()
+    }
+  }
+
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -110,60 +160,128 @@ export function EventPage() {
         <img src={event.image_url} alt={event.name} className="mb-6 h-64 w-full rounded-xl object-cover" />
       )}
 
-      <div className="mb-6">
-        <span className="mb-2 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
-          {event.primary_tag}
-        </span>
-        {event.tags && event.tags.length > 0 && event.tags.map(tag => (
-          <span key={tag} className="ml-2 inline-flex rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
-            {tag}
-          </span>
-        ))}
-        <h1 className="mt-2 text-3xl font-bold">{event.name}</h1>
-
-        <div className="mt-4 space-y-2">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Calendar className="h-4 w-4" />
-            <span>{formatDate(event.start_date)}{event.end_date !== event.start_date && ` — ${formatDate(event.end_date)}`}</span>
+      {editing ? (
+        <div className="mb-6 space-y-4 rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold">Modifier l'événement</h2>
+            <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span>{event.city}, {event.department}</span>
+          <input
+            type="text"
+            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            placeholder="Nom"
+            value={editForm.name}
+            onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+          />
+          <textarea
+            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
+            placeholder="Description"
+            value={editForm.description}
+            onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+          />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
+            <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
           </div>
-          {event.registration_deadline && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="h-4 w-4" />
-              <span>Inscription avant le {formatDate(event.registration_deadline)}</span>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Début</label>
+              <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.start_date} onChange={e => setEditForm(f => ({ ...f, start_date: e.target.value }))} />
             </div>
-          )}
-          {friendCount > 0 && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Users className="h-4 w-4" />
-              <span>{friendCount} participant{friendCount > 1 ? 's' : ''}</span>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Fin</label>
+              <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.end_date} onChange={e => setEditForm(f => ({ ...f, end_date: e.target.value }))} />
             </div>
-          )}
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Date limite inscription</label>
+              <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.registration_deadline} onChange={e => setEditForm(f => ({ ...f, registration_deadline: e.target.value }))} />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Lien inscription</label>
+              <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.registration_url} onChange={e => setEditForm(f => ({ ...f, registration_url: e.target.value }))} />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
+            <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
+            <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editForm.city || !editForm.start_date}>
+              <Save className="mr-2 h-4 w-4" />
+              {editSaving ? 'Enregistrement...' : 'Enregistrer'}
+            </Button>
+          </div>
         </div>
+      ) : (
+        <div className="mb-6">
+          <div className="flex items-start justify-between">
+            <div>
+              <span className="mb-2 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
+                {event.primary_tag}
+              </span>
+              {event.tags && event.tags.length > 0 && event.tags.map(tag => (
+                <span key={tag} className="ml-2 inline-flex rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
+                  {tag}
+                </span>
+              ))}
+              <h1 className="mt-2 text-3xl font-bold">{event.name}</h1>
+            </div>
+            {isExposant && (
+              <Button variant="ghost" size="sm" onClick={startEditing}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
 
-        {/* External links */}
-        <div className="mt-4 flex gap-3">
-          {event.registration_url && (
-            <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm">
-                <FileText className="mr-2 h-4 w-4" />
-                S'inscrire
-              </Button>
-            </a>
-          )}
-          {event.external_url && (
-            <a href={event.external_url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Site web
-              </Button>
-            </a>
-          )}
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Calendar className="h-4 w-4" />
+              <span>{formatDate(event.start_date)}{event.end_date !== event.start_date && ` — ${formatDate(event.end_date)}`}</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <MapPin className="h-4 w-4" />
+              <span>{event.city}, {event.department}</span>
+            </div>
+            {event.registration_deadline && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>Inscription avant le {formatDate(event.registration_deadline)}</span>
+              </div>
+            )}
+            {friendCount > 0 && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Users className="h-4 w-4" />
+                <span>{friendCount} participant{friendCount > 1 ? 's' : ''}</span>
+              </div>
+            )}
+          </div>
+
+          {/* External links */}
+          <div className="mt-4 flex gap-3">
+            {event.registration_url && (
+              <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm">
+                  <FileText className="mr-2 h-4 w-4" />
+                  S'inscrire
+                </Button>
+              </a>
+            )}
+            {event.external_url && (
+              <a href={event.external_url} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Site web
+                </Button>
+              </a>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Participation */}
       {!loadingParticipation && (

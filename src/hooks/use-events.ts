@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { EventInsert, EventWithScore } from '@/types/database'
+import type { EventInsert, EventUpdate, EventWithScore } from '@/types/database'
 
 export function useEvents(filters?: {
   department?: string
@@ -85,6 +85,16 @@ export async function createEvent(event: EventInsert) {
   const { data, error } = await supabase
     .from('events')
     .insert(event)
+    .select()
+    .single()
+  return { data, error }
+}
+
+export async function updateEvent(id: string, updates: EventUpdate) {
+  const { data, error } = await supabase
+    .from('events')
+    .update(updates)
+    .eq('id', id)
     .select()
     .single()
   return { data, error }
