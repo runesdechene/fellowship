@@ -1,7 +1,7 @@
--- Storage buckets
-INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
-INSERT INTO storage.buckets (id, name, public) VALUES ('event-images', 'event-images', true);
-INSERT INTO storage.buckets (id, name, public) VALUES ('qr-codes', 'qr-codes', true);
+-- Storage buckets (upsert to handle existing buckets)
+INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true) ON CONFLICT (id) DO UPDATE SET public = true;
+INSERT INTO storage.buckets (id, name, public) VALUES ('event-images', 'event-images', true) ON CONFLICT (id) DO UPDATE SET public = true;
+INSERT INTO storage.buckets (id, name, public) VALUES ('qr-codes', 'qr-codes', true) ON CONFLICT (id) DO UPDATE SET public = true;
 
 -- Avatar policies
 CREATE POLICY "avatars_select_public" ON storage.objects
