@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "bugs": [
+    {
+      "id": "bug-001",
+      "timestamp": "2026-04-04T13:30:40.247Z",
+      "error_message": "Significant refactor of ",
+      "file": "package.json",
+      "root_cause": "4 lines replaced/restructured",
+      "fix": "Rewrote 9→6 lines (4 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "json"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T13:30:40.247Z"
+    }
+  ]
+}
