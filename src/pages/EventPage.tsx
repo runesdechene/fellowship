@@ -1,7 +1,258 @@
+import { useState, useEffect } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { useAuth } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
+import { useEvent } from '@/hooks/use-events'
+import { addParticipation, removeParticipation } from '@/hooks/use-participations'
+import { useEventNotes } from '@/hooks/use-notes'
+import { useEventReviews } from '@/hooks/use-reviews'
+import { NoteForm } from '@/components/notes/NoteForm'
+import { NotesFeed } from '@/components/notes/NotesFeed'
+import { ReviewForm } from '@/components/reviews/ReviewForm'
+import { ReviewSummary } from '@/components/reviews/ReviewSummary'
+import { EventReportForm } from '@/components/reports/EventReportForm'
+import { Button } from '@/components/ui/button'
+import {
+  Calendar, MapPin, ExternalLink, Clock, ArrowLeft,
+  Users, Check, Star, FileText
+} from 'lucide-react'
+import type { ParticipationVisibility, ParticipationStatus } from '@/types/database'
+
 export function EventPage() {
+  const { id } = useParams<{ id: string }>()
+  const { user, profile } = useAuth()
+  const { event, loading } = useEvent(id)
+  const { notes, refetch: refetchNotes } = useEventNotes(id)
+  const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
+  const [participation, setParticipation] = useState<any>(null)
+  const [loadingParticipation, setLoadingParticipation] = useState(true)
+  const [friendCount, setFriendCount] = useState(0)
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [showReportForm, setShowReportForm] = useState(false)
+  const [activeTab, setActiveTab] = useState<'info' | 'notes' | 'reviews'>('info')
+
+  // Fetch user's participation
+  useEffect(() => {
+    if (!user || !id) return
+    supabase
+      .from('participations')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('event_id', id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setParticipation(data)
+        setLoadingParticipation(false)
+      })
+  }, [user, id])
+
+  // Friend count
+  useEffect(() => {
+    if (!id) return
+    supabase
+      .from('participations')
+      .select('id', { count: 'exact' })
+      .eq('event_id', id)
+      .in('visibility', ['amis', 'public'])
+      .then(({ count }) => setFriendCount(count ?? 0))
+  }, [id])
+
+  const handleJoin = async (status: ParticipationStatus, visibility: ParticipationVisibility) => {
+    if (!user || !id) return
+    const { data } = await addParticipation({
+      user_id: user.id,
+      event_id: id,
+      status,
+      visibility,
+    })
+    setParticipation(data)
+  }
+
+  const handleLeave = async () => {
+    if (!participation) return
+    await removeParticipation(participation.id)
+    setParticipation(null)
+  }
+
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
+  const isPast = event ? new Date(event.end_date) < new Date() : false
+  const isExposant = profile?.type === 'exposant'
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    )
+  }
+
+  if (!event) {
+    return (
+      <div className="p-6 text-center">
+        <h1 className="text-xl font-bold">Événement introuvable</h1>
+        <Link to="/explorer" className="mt-4 text-primary hover:underline">Retour à l'explorateur</Link>
+      </div>
+    )
+  }
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Événement</h1>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+      {/* Back */}
+      <Link to="/explorer" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" />
+        Retour
+      </Link>
+
+      {/* Header */}
+      {event.image_url && (
+        <img src={event.image_url} alt={event.name} className="mb-6 h-64 w-full rounded-xl object-cover" />
+      )}
+
+      <div className="mb-6">
+        <span className="mb-2 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
+          {event.primary_tag}
+        </span>
+        {event.tags && event.tags.length > 0 && event.tags.map(tag => (
+          <span key={tag} className="ml-2 inline-flex rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
+            {tag}
+          </span>
+        ))}
+        <h1 className="mt-2 text-3xl font-bold">{event.name}</h1>
+
+        <div className="mt-4 space-y-2">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Calendar className="h-4 w-4" />
+            <span>{formatDate(event.start_date)}{event.end_date !== event.start_date && ` — ${formatDate(event.end_date)}`}</span>
+          </div>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            <span>{event.city}, {event.department}</span>
+          </div>
+          {event.registration_deadline && (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>Inscription avant le {formatDate(event.registration_deadline)}</span>
+            </div>
+          )}
+          {friendCount > 0 && (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Users className="h-4 w-4" />
+              <span>{friendCount} participant{friendCount > 1 ? 's' : ''}</span>
+            </div>
+          )}
+        </div>
+
+        {/* External links */}
+        <div className="mt-4 flex gap-3">
+          {event.registration_url && (
+            <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <FileText className="mr-2 h-4 w-4" />
+                S'inscrire
+              </Button>
+            </a>
+          )}
+          {event.external_url && (
+            <a href={event.external_url} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Site web
+              </Button>
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Participation */}
+      {!loadingParticipation && (
+        <div className="mb-6 rounded-xl border border-border bg-card p-4">
+          {participation ? (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Check className="h-5 w-5 text-green-500" />
+                <span className="font-medium">
+                  {participation.status === 'interesse' && 'Intéressé'}
+                  {participation.status === 'inscrit' && 'Inscrit'}
+                  {participation.status === 'confirme' && 'Confirmé'}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  ({participation.visibility === 'prive' ? 'Privé' : participation.visibility === 'amis' ? 'Amis' : 'Public'})
+                </span>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleLeave}>Retirer</Button>
+            </div>
+          ) : (
+            <div>
+              <p className="mb-3 text-sm font-medium">Tu y vas ?</p>
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" onClick={() => handleJoin('interesse', 'amis')}>Intéressé</Button>
+                <Button size="sm" variant="outline" onClick={() => handleJoin('inscrit', 'amis')}>Inscrit</Button>
+                <Button size="sm" onClick={() => handleJoin('confirme', 'amis')}>Confirmé</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Description */}
+      {event.description && (
+        <div className="mb-6">
+          <h2 className="mb-2 text-lg font-semibold">Description</h2>
+          <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div className="mb-4 flex gap-1 rounded-lg bg-muted p-1">
+        {(['info', 'notes', 'reviews'] as const).map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              activeTab === tab ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab === 'info' && 'Infos'}
+            {tab === 'notes' && `Notes (${notes.length})`}
+            {tab === 'reviews' && `Avis (${reviews.length})`}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      {activeTab === 'notes' && (
+        <div className="space-y-4">
+          <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
+          <NotesFeed notes={notes} onRefresh={refetchNotes} />
+        </div>
+      )}
+
+      {activeTab === 'reviews' && (
+        <div className="space-y-4">
+          <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+          {isPast && isExposant && (
+            <>
+              <Button variant="outline" onClick={() => setShowReviewForm(!showReviewForm)}>
+                <Star className="mr-2 h-4 w-4" />
+                {showReviewForm ? 'Fermer' : 'Donner mon avis'}
+              </Button>
+              {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
+            </>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'info' && isPast && isExposant && (
+        <div className="space-y-4">
+          <Button variant="outline" onClick={() => setShowReportForm(!showReportForm)}>
+            <FileText className="mr-2 h-4 w-4" />
+            {showReportForm ? 'Fermer le bilan' : 'Bilan post-événement'}
+          </Button>
+          {showReportForm && <EventReportForm eventId={event.id} />}
+        </div>
+      )}
     </div>
   )
 }
