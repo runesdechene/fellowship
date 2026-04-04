@@ -1,13 +1,22 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { supabase } from './supabase'
 import type { User, Session } from '@supabase/supabase-js'
+interface Profile {
+  id: string
+  display_name: string | null
+  type: 'exposant' | 'public' | null
+  [key: string]: unknown
+}
 
 interface AuthContextType {
   user: User | null
   session: Session | null
+  profile: Profile | null
   loading: boolean
-  signIn: (email: string) => Promise<{ error: Error | null }>
+  signIn: (email: string, accountType?: 'exposant' | 'public') => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
+  refreshProfile: () => Promise<void>
+  needsOnboarding: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -15,21 +24,44 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const fetchProfile = async (userId: string) => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+    setProfile(data)
+    return data
+  }
+
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchProfile(user.id)
+    }
+  }
+
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
+      if (session?.user) {
+        await fetchProfile(session.user.id)
+      }
       setLoading(false)
     })
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (_event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
+        if (session?.user) {
+          await fetchProfile(session.user.id)
+        } else {
+          setProfile(null)
+        }
         setLoading(false)
       }
     )
@@ -37,22 +69,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signIn = async (email: string) => {
+  const signIn = async (email: string, accountType: 'exposant' | 'public' = 'public') => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: window.location.origin + '/dashboard',
+        data: { account_type: accountType },
       },
     })
-    return { error }
+    return { error: error as Error | null }
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    setProfile(null)
   }
 
+  const needsOnboarding = !!user && !!profile && !profile.display_name
+
   return (
-    <AuthContext.Provider value={{ user, session, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signIn, signOut, refreshProfile, needsOnboarding }}>
       {children}
     </AuthContext.Provider>
   )
