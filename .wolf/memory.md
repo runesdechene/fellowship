@@ -78,3 +78,9 @@
 | 15:30 | Edited CLAUDE.md | 7→6 lines | ~44 |
 | 15:30 | Edited CLAUDE.md | 7→6 lines | ~107 |
 | 15:30 | Edited CLAUDE.md | 7→6 lines | ~129 |
+| 15:32 | Created vitest.config.ts | — | ~100 |
+| 15:32 | Created src/test/setup.ts | — | ~12 |
+| 15:32 | Edited package.json | 6→8 lines | ~53 |
+| 15:32 | Edited tsconfig.app.json | inline fix | ~14 |
+| 15:32 | Created src/test/smoke.test.ts | — | ~25 |
+| 15:32 | Edited index.html | 11→14 lines | ~175 |

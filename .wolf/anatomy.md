@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T14:15:00.000Z
-> Files: 33 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T13:32:59.692Z
+> Files: 35 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
@@ -14,15 +14,16 @@
 - `.gitignore` — Git ignore rules (~108 tok)
 - `CLAUDE.md` — CLAUDE.md (~484 tok)
 - `eslint.config.js` — ESLint flat configuration (~183 tok)
-- `index.html` — Fellowship | flw.sh (~149 tok)
+- `index.html` — Fellowship | flw.sh (~218 tok)
 - `netlify.toml` (~220 tok)
-- `package.json` — Node.js package manifest (~308 tok)
+- `package.json` — Node.js package manifest (~362 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~61036 tok)
 - `README.md` — Project documentation (~657 tok)
-- `tsconfig.app.json` (~245 tok)
+- `tsconfig.app.json` (~250 tok)
 - `tsconfig.json` — TypeScript configuration (~36 tok)
 - `tsconfig.node.json` (~194 tok)
 - `vite.config.ts` — Vite build configuration (~396 tok)
+- `vitest.config.ts` (~100 tok)
 
 ## .claude/
 
@@ -70,3 +71,8 @@
 - `Dashboard.tsx` — DashboardPage (~1075 tok)
 - `Landing.tsx` — LandingPage (~1279 tok)
 - `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~1706 tok)
+
+## src/test/
+
+- `setup.ts` (~12 tok)
+- `smoke.test.ts` (~25 tok)
