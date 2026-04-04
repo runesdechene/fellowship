@@ -12,6 +12,7 @@
 
 - **Project:** flwsh
 - **Description:** This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- **Test Infrastructure:** Uses Vitest + React Testing Library for unit testing. Path alias (@/) is configured in vitest.config.ts.
 
 ## Do-Not-Repeat
 

@@ -84,3 +84,5 @@
 | 15:32 | Edited tsconfig.app.json | inline fix | ~14 |
 | 15:32 | Created src/test/smoke.test.ts | — | ~25 |
 | 15:32 | Edited index.html | 11→14 lines | ~175 |
+| 15:33 | Set up test infrastructure | vitest.config.ts, src/test/setup.ts, src/test/smoke.test.ts, package.json, tsconfig.app.json | 1 test passing | ~3400 |
+| 15:33 | Created src/index.css | — | ~847 |

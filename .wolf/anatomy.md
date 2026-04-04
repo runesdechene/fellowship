@@ -1,6 +1,6 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T13:32:59.692Z
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T13:33:10.791Z
 > Files: 35 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
@@ -44,7 +44,7 @@
 ## src/
 
 - `App.tsx` — App (~233 tok)
-- `index.css` — Styles: 4 rules, 62 vars (~740 tok)
+- `index.css` — Styles: 4 rules, 70 vars (~847 tok)
 - `main.tsx` (~69 tok)
 
 ## src/components/
