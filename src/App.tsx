@@ -13,6 +13,7 @@ import { SettingsPage } from '@/pages/Settings'
 import { FollowingPage } from '@/pages/Following'
 import { EventPage } from '@/pages/EventPage'
 import { PublicProfilePage } from '@/pages/PublicProfile'
+import { EmbedPage } from '@/pages/Embed'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { needsOnboarding } = useAuth()
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/@:slug" element={<PublicProfilePage />} />
+          <Route path="/@:slug/embed" element={<EmbedPage />} />
           <Route
             path="/onboarding"
             element={
