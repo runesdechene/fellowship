@@ -1,86 +1,101 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
+import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
+import { useCalendarYear } from '@/hooks/use-calendar'
+import { YearView } from '@/components/calendar/YearView'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { LogOut, Plus, Calendar, Users } from 'lucide-react'
+import { Plus, Calendar, Users, ArrowRight } from 'lucide-react'
 
 export function DashboardPage() {
-  const { user, signOut } = useAuth()
+  const { profile } = useAuth()
+  const [year, setYear] = useState(new Date().getFullYear())
+  const { participations } = useMyParticipations(year)
+  const { participations: friendActivity } = useFriendsParticipations()
+  const months = useCalendarYear(participations, year)
+
+  const upcomingCount = participations.filter(
+    p => p.events && new Date(p.events.start_date) >= new Date()
+  ).length
+
+  const totalCount = participations.length
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">F</span>
-            </div>
-            <span className="text-xl font-semibold">Fellowship</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={signOut}>
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
           <h1 className="text-2xl font-bold">
-            Salut{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''} 👋
+            Salut{profile?.brand_name ? `, ${profile.brand_name}` : profile?.display_name ? `, ${profile.display_name}` : ''} !
           </h1>
-          <p className="text-muted-foreground">{user?.email}</p>
+          <p className="text-muted-foreground">Ton année en un coup d'œil</p>
         </div>
-
-        {/* Quick actions */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <button className="flex items-center gap-4 rounded-xl border border-border bg-card p-6 text-left transition-colors hover:bg-accent">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Plus className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Ajouter un événement</h3>
-              <p className="text-sm text-muted-foreground">Rechercher ou créer</p>
-            </div>
-          </button>
-
-          <button className="flex items-center gap-4 rounded-xl border border-border bg-card p-6 text-left transition-colors hover:bg-accent">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Calendar className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Mes événements</h3>
-              <p className="text-sm text-muted-foreground">0 à venir</p>
-            </div>
-          </button>
-
-          <button className="flex items-center gap-4 rounded-xl border border-border bg-card p-6 text-left transition-colors hover:bg-accent">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Users className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Mes groupes</h3>
-              <p className="text-sm text-muted-foreground">0 groupe</p>
-            </div>
-          </button>
-        </div>
-
-        {/* Empty state */}
-        <div className="mt-12 rounded-xl border border-dashed border-border p-12 text-center">
-          <Calendar className="mx-auto h-12 w-12 text-muted-foreground/50" />
-          <h3 className="mt-4 font-semibold">Aucun événement</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Commence par ajouter ton premier événement
-          </p>
-          <Button className="mt-6">
+        <Link to="/explorer">
+          <Button>
             <Plus className="mr-2 h-4 w-4" />
             Ajouter un événement
           </Button>
+        </Link>
+      </div>
+
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-border bg-card p-4">
+          <Calendar className="mb-2 h-5 w-5 text-primary" />
+          <p className="text-2xl font-bold">{totalCount}</p>
+          <p className="text-xs text-muted-foreground">événements en {year}</p>
         </div>
-      </main>
+        <div className="rounded-xl border border-border bg-card p-4">
+          <ArrowRight className="mb-2 h-5 w-5 text-accent" />
+          <p className="text-2xl font-bold">{upcomingCount}</p>
+          <p className="text-xs text-muted-foreground">à venir</p>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <YearView months={months} year={year} onYearChange={setYear} />
+      </div>
+
+      {friendActivity.length > 0 && (
+        <div>
+          <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+            <Users className="h-5 w-5" />
+            Tes amis bougent
+          </h2>
+          <div className="space-y-2">
+            {friendActivity.slice(0, 10).map((p: any) => (
+              <Link
+                key={p.id}
+                to={`/evenement/${p.event_id}`}
+                className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted"
+              >
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                  {(p.profiles?.display_name || '?')[0].toUpperCase()}
+                </div>
+                <div className="flex-1 text-sm">
+                  <span className="font-medium">{p.profiles?.display_name}</span>
+                  {' participe à '}
+                  <span className="font-medium">{p.events?.name}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {totalCount === 0 && (
+        <div className="rounded-xl border border-dashed border-border p-12 text-center">
+          <Calendar className="mx-auto h-12 w-12 text-muted-foreground/30" />
+          <h3 className="mt-4 font-semibold">Ton calendrier est vide</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Commence par ajouter ton premier événement
+          </p>
+          <Link to="/explorer">
+            <Button className="mt-6">
+              <Plus className="mr-2 h-4 w-4" />
+              Explorer les événements
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
