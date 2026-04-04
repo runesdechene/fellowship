@@ -35,11 +35,11 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col border-r border-border bg-card transition-all duration-200 ${
+      className={`hidden md:flex flex-col border-r border-border bg-card/80 backdrop-blur-xl transition-all duration-200 ${
         collapsed ? 'w-16' : 'w-56'
       }`}
     >
-      <Link to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'} className="flex h-16 items-center justify-between px-3 border-b border-border hover:bg-muted/50 transition-colors">
+      <Link to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'} className="flex h-16 items-center px-3 border-b border-border hover:bg-muted/50">
         {collapsed ? (
           <img src="/icon.png" alt="Fellowship" className="h-8 w-8 mx-auto" />
         ) : (
@@ -47,13 +47,13 @@ export function Sidebar() {
         )}
       </Link>
 
-      <nav className="flex-1 space-y-1 p-2">
+      <nav className="flex-1 space-y-0.5 p-2">
         {nav.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium ${
                 isActive
                   ? 'bg-primary/10 text-primary'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -68,7 +68,7 @@ export function Sidebar() {
 
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center border-t border-border p-3 text-muted-foreground hover:text-foreground transition-colors"
+        className="flex items-center justify-center border-t border-border p-3 text-muted-foreground hover:text-foreground"
       >
         {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
       </button>

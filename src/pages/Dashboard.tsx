@@ -21,32 +21,32 @@ export function DashboardPage() {
   const totalCount = participations.length
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-2xl">
             Salut{profile?.brand_name ? `, ${profile.brand_name}` : profile?.display_name ? `, ${profile.display_name}` : ''} !
           </h1>
-          <p className="text-muted-foreground">Ton année en un coup d'œil</p>
+          <p className="text-muted-foreground text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>Ton année en un coup d'œil</p>
         </div>
         <Link to="/explorer">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Ajouter un événement
+            Ajouter
           </Button>
         </Link>
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <div className="rounded-xl border border-border bg-card p-4">
+        <div className="rounded-2xl border border-border bg-card p-5">
           <Calendar className="mb-2 h-5 w-5 text-primary" />
-          <p className="text-2xl font-bold">{totalCount}</p>
-          <p className="text-xs text-muted-foreground">événements en {year}</p>
+          <p className="text-2xl" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>{totalCount}</p>
+          <p className="text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>événements en {year}</p>
         </div>
-        <div className="rounded-xl border border-border bg-card p-4">
+        <div className="rounded-2xl border border-border bg-card p-5">
           <ArrowRight className="mb-2 h-5 w-5 text-accent" />
-          <p className="text-2xl font-bold">{upcomingCount}</p>
-          <p className="text-xs text-muted-foreground">à venir</p>
+          <p className="text-2xl" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>{upcomingCount}</p>
+          <p className="text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>à venir</p>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export function DashboardPage() {
 
       {friendActivity.length > 0 && (
         <div>
-          <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+          <h2 className="mb-3 flex items-center gap-2 text-lg">
             <Users className="h-5 w-5" />
             Tes amis bougent
           </h2>
@@ -65,12 +65,12 @@ export function DashboardPage() {
               <Link
                 key={p.id}
                 to={`/evenement/${p.event_id}`}
-                className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted"
+                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 hover:border-primary/30 hover:shadow-sm"
               >
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary" style={{ fontFamily: "'Inter', sans-serif" }}>
                   {(p.profiles?.display_name || '?')[0].toUpperCase()}
                 </div>
-                <div className="flex-1 text-sm">
+                <div className="flex-1 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
                   <span className="font-medium">{p.profiles?.display_name}</span>
                   {' participe à '}
                   <span className="font-medium">{p.events?.name}</span>
@@ -82,10 +82,10 @@ export function DashboardPage() {
       )}
 
       {totalCount === 0 && (
-        <div className="rounded-xl border border-dashed border-border p-12 text-center">
-          <Calendar className="mx-auto h-12 w-12 text-muted-foreground/30" />
-          <h3 className="mt-4 font-semibold">Ton calendrier est vide</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border p-12 text-center">
+          <Calendar className="mx-auto h-12 w-12 text-muted-foreground/20" />
+          <h3 className="mt-4 text-lg">Ton calendrier est vide</h3>
+          <p className="mt-2 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
             Commence par ajouter ton premier événement
           </p>
           <Link to="/explorer">

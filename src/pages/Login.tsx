@@ -48,8 +48,8 @@ export function LoginPage() {
             <Mail className="h-8 w-8 text-primary" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold">Check ton email</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl">Check ton email</h1>
+            <p className="text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
               On t'a envoyé un lien magique à{' '}
               <span className="font-semibold text-foreground">{email}</span>.
               <br />
@@ -80,8 +80,8 @@ export function LoginPage() {
             <img src="/icon.png" alt="Fellowship" className="h-12 w-12" />
           </Link>
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Se connecter</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <h1 className="text-2xl">Se connecter</h1>
+            <p className="mt-1 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
               Entre ton email pour recevoir un lien de connexion
             </p>
           </div>
@@ -95,7 +95,7 @@ export function LoginPage() {
             placeholder="ton@email.com"
             required
             autoFocus
-            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full rounded-full border border-input bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
 
           {error && (

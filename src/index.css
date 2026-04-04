@@ -3,55 +3,55 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Fellowship pastel/warm palette */
-  --background: 30 25% 97%;
-  --foreground: 270 20% 20%;
-  --card: 0 0% 100%;
-  --card-foreground: 270 20% 20%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 270 20% 20%;
-  --primary: 270 40% 50%;
+  /* Fellowship "Terre & Feu" palette */
+  --background: 38 22% 97%;
+  --foreground: 30 10% 15%;
+  --card: 40 18% 99%;
+  --card-foreground: 30 10% 15%;
+  --popover: 40 18% 99%;
+  --popover-foreground: 30 10% 15%;
+  --primary: 24 72% 44%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 30 60% 95%;
-  --secondary-foreground: 270 20% 20%;
-  --muted: 30 15% 93%;
-  --muted-foreground: 270 10% 45%;
-  --accent: 25 80% 55%;
+  --secondary: 38 30% 93%;
+  --secondary-foreground: 30 10% 15%;
+  --muted: 38 16% 91%;
+  --muted-foreground: 30 8% 45%;
+  --accent: 152 32% 40%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 70% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 270 10% 88%;
-  --input: 270 10% 88%;
-  --ring: 270 40% 50%;
+  --border: 35 14% 86%;
+  --input: 35 14% 86%;
+  --ring: 24 72% 44%;
   --radius: 0.75rem;
 
-  /* Fellowship brand colors */
-  --fellowship-purple: 270 40% 50%;
-  --fellowship-orange: 25 80% 55%;
-  --fellowship-purple-light: 270 40% 92%;
-  --fellowship-orange-light: 25 80% 92%;
+  /* Brand tokens */
+  --fellowship-copper: 24 72% 44%;
+  --fellowship-forest: 152 32% 40%;
+  --fellowship-sand: 38 30% 93%;
+  --fellowship-linen: 38 22% 97%;
 }
 
 .dark {
-  --background: 270 15% 12%;
-  --foreground: 30 15% 93%;
-  --card: 270 15% 15%;
-  --card-foreground: 30 15% 93%;
-  --popover: 270 15% 15%;
-  --popover-foreground: 30 15% 93%;
-  --primary: 270 40% 65%;
-  --primary-foreground: 270 15% 10%;
-  --secondary: 270 15% 20%;
-  --secondary-foreground: 30 15% 93%;
-  --muted: 270 15% 20%;
-  --muted-foreground: 270 10% 60%;
-  --accent: 25 70% 50%;
+  --background: 28 12% 10%;
+  --foreground: 35 16% 90%;
+  --card: 28 12% 14%;
+  --card-foreground: 35 16% 90%;
+  --popover: 28 12% 14%;
+  --popover-foreground: 35 16% 90%;
+  --primary: 24 68% 55%;
+  --primary-foreground: 28 12% 8%;
+  --secondary: 28 12% 18%;
+  --secondary-foreground: 35 16% 90%;
+  --muted: 28 10% 20%;
+  --muted-foreground: 30 8% 55%;
+  --accent: 152 28% 48%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 60% 40%;
   --destructive-foreground: 0 0% 100%;
-  --border: 270 10% 22%;
-  --input: 270 10% 22%;
-  --ring: 270 40% 65%;
+  --border: 28 8% 22%;
+  --input: 28 8% 22%;
+  --ring: 24 68% 55%;
 }
 
 @theme inline {
@@ -78,13 +78,29 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-fellowship-purple: hsl(var(--fellowship-purple));
-  --color-fellowship-orange: hsl(var(--fellowship-orange));
-  --color-fellowship-purple-light: hsl(var(--fellowship-purple-light));
-  --color-fellowship-orange-light: hsl(var(--fellowship-orange-light));
+  --color-fellowship-copper: hsl(var(--fellowship-copper));
+  --color-fellowship-forest: hsl(var(--fellowship-forest));
+  --color-fellowship-sand: hsl(var(--fellowship-sand));
+  --color-fellowship-linen: hsl(var(--fellowship-linen));
 }
 
 body {
   @apply bg-background text-foreground antialiased;
-  font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'DM Serif Display', Georgia, serif;
+}
+
+/* Global transition */
+*, *::before, *::after {
+  transition-property: color, background-color, border-color, box-shadow, opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions on elements that animate differently */
+[class*="animate-"], .no-transition {
+  transition: none !important;
 }

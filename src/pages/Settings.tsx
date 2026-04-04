@@ -131,10 +131,10 @@ export function SettingsPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <h1 className="mb-8 text-2xl font-bold">Paramètres</h1>
+        <h1 className="mb-8 text-2xl">Paramètres</h1>
 
         {/* ── Section: Profil ──────────────────────────────────────────────── */}
-        <section className="mb-6 rounded-xl border border-border bg-card p-6">
+        <section className="mb-6 rounded-2xl border border-border bg-card p-6">
           <h2 className="mb-5 text-base font-semibold">Profil</h2>
 
           {/* Avatar */}
@@ -292,7 +292,7 @@ export function SettingsPage() {
 
         {/* ── Section: QR Code (exposant only) ────────────────────────────── */}
         {isExposant && slug && (
-          <section className="mb-6 rounded-xl border border-border bg-card p-6">
+          <section className="mb-6 rounded-2xl border border-border bg-card p-6">
             <h2 className="mb-2 text-base font-semibold">QR Code</h2>
             <p className="mb-5 text-sm text-muted-foreground">
               Partagez votre profil public via ce QR code.
@@ -319,7 +319,7 @@ export function SettingsPage() {
         )}
 
         {/* ── Section: Compte ─────────────────────────────────────────────── */}
-        <section className="rounded-xl border border-border bg-card p-6">
+        <section className="rounded-2xl border border-border bg-card p-6">
           <h2 className="mb-5 text-base font-semibold">Compte</h2>
 
           <div className="mb-4">

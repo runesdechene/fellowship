@@ -229,11 +229,14 @@ export function EventPage() {
           )}
         </div>
       ) : event.image_url ? (
-        <img src={event.image_url} alt={event.name} className="mb-6 h-64 w-full rounded-xl object-cover" />
+        <div className="relative mb-6 overflow-hidden rounded-2xl">
+          <img src={event.image_url} alt={event.name} className="h-64 w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        </div>
       ) : null}
 
       {editing ? (
-        <div className="mb-6 space-y-4 rounded-xl border border-border bg-card p-4">
+        <div className="mb-6 space-y-4 rounded-2xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Modifier l'événement</h2>
             <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
@@ -308,7 +311,7 @@ export function EventPage() {
         <div className="mb-6">
           <div className="flex items-start justify-between">
             <div>
-              <span className="mb-2 inline-flex rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
+              <span className="mb-2 inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                 {event.primary_tag}
               </span>
               {event.tags && event.tags.length > 0 && event.tags.map(tag => (
@@ -316,7 +319,7 @@ export function EventPage() {
                   {tag}
                 </span>
               ))}
-              <h1 className="mt-2 text-3xl font-bold">{event.name}</h1>
+              <h1 className="mt-2 text-3xl">{event.name}</h1>
             </div>
             {isExposant && (
               <Button variant="ghost" size="sm" onClick={startEditing}>
@@ -372,7 +375,7 @@ export function EventPage() {
 
       {/* Participation */}
       {!loadingParticipation && (
-        <div className="mb-6 rounded-xl border border-border bg-card p-4">
+        <div className="mb-6 rounded-2xl border border-border bg-card p-4">
           {participation ? (
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

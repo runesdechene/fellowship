@@ -44,11 +44,11 @@ export function OnboardingPage() {
     navigate(isExposant ? '/dashboard' : '/explorer')
   }
 
-  const inputClass = "w-full rounded-xl border border-input bg-background px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-ring"
+  const inputClass = "w-full rounded-full border border-input bg-card px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-ring"
 
   const exposantSteps = [
     <div key="brand" className="space-y-4">
-      <h2 className="text-2xl font-bold">Bienvenue sur Fellowship !</h2>
+      <h2 className="text-2xl">Bienvenue sur Fellowship !</h2>
       <p className="text-muted-foreground">Comment s'appelle ta marque ?</p>
       <input
         type="text"
@@ -63,7 +63,7 @@ export function OnboardingPage() {
       </Button>
     </div>,
     <div key="city" className="space-y-4">
-      <h2 className="text-2xl font-bold">Où es-tu basé ?</h2>
+      <h2 className="text-2xl">Où es-tu basé ?</h2>
       <p className="text-muted-foreground">Ta ville et ton code postal</p>
       <input
         type="text"
@@ -85,13 +85,13 @@ export function OnboardingPage() {
       </Button>
     </div>,
     <div key="slug" className="space-y-4">
-      <h2 className="text-2xl font-bold">Ton lien public</h2>
+      <h2 className="text-2xl">Ton lien public</h2>
       <p className="text-muted-foreground">Les visiteurs te trouveront ici</p>
-      <div className="flex items-center gap-0 rounded-xl border border-input bg-background text-lg">
-        <span className="px-4 py-3 text-muted-foreground">flw.sh/@</span>
+      <div className="flex items-center gap-0 rounded-full border border-input bg-card text-lg overflow-hidden">
+        <span className="px-5 py-3 text-muted-foreground">flw.sh/@</span>
         <input
           type="text"
-          className="w-full rounded-r-xl bg-background px-0 py-3 focus:outline-none"
+          className="w-full bg-card px-0 py-3 focus:outline-none"
           placeholder="rune-de-chene"
           value={formData.public_slug}
           onChange={(e) => setFormData({ ...formData, public_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
@@ -106,7 +106,7 @@ export function OnboardingPage() {
 
   const publicSteps = [
     <div key="name" className="space-y-4">
-      <h2 className="text-2xl font-bold">Bienvenue sur Fellowship !</h2>
+      <h2 className="text-2xl">Bienvenue sur Fellowship !</h2>
       <p className="text-muted-foreground">Comment tu t'appelles ?</p>
       <input
         type="text"
@@ -121,7 +121,7 @@ export function OnboardingPage() {
       </Button>
     </div>,
     <div key="postal" className="space-y-4">
-      <h2 className="text-2xl font-bold">Ton code postal</h2>
+      <h2 className="text-2xl">Ton code postal</h2>
       <p className="text-muted-foreground">Pour découvrir les événements près de chez toi</p>
       <input
         type="text"
