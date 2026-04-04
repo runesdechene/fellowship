@@ -16,6 +16,262 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-04T13:30:40.247Z"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-04-04T20:07:30.243Z",
+      "error_message": "Significant refactor of ",
+      "file": "supabase/migrations/20260404120002_storage_buckets.sql",
+      "root_cause": "4 lines replaced/restructured",
+      "fix": "Rewrote 4→4 lines (4 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "sql"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:07:30.243Z"
+    },
+    {
+      "id": "bug-003",
+      "timestamp": "2026-04-04T20:27:44.300Z",
+      "error_message": "Significant refactor of ",
+      "file": ".claude/worktrees/agent-af76a4b4/src/pages/Explorer.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 8→104 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:27:44.300Z"
+    },
+    {
+      "id": "bug-004",
+      "timestamp": "2026-04-04T20:37:36.090Z",
+      "error_message": "Incorrect value in code",
+      "file": ".claude/worktrees/agent-a1efa139/src/components/notifications/NotificationPanel.tsx",
+      "root_cause": "Had '@/hooks/use-notifications'",
+      "fix": "Changed to 'react'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:37:36.090Z"
+    },
+    {
+      "id": "bug-005",
+      "timestamp": "2026-04-04T20:37:43.492Z",
+      "error_message": "Wrong reference: NotificationPanelProps should be _onClose",
+      "file": ".claude/worktrees/agent-a1efa139/src/components/notifications/NotificationPanel.tsx",
+      "root_cause": "Used \"NotificationPanelProps\" instead of \"_onClose\"",
+      "fix": "Changed NotificationPanelProps → _onClose",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:37:43.492Z"
+    },
+    {
+      "id": "bug-006",
+      "timestamp": "2026-04-04T20:41:12.511Z",
+      "error_message": "Incorrect value in code",
+      "file": "vite.config.ts",
+      "root_cause": "Had '#0a0a0a'",
+      "fix": "Changed to '#f5f0e8'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:41:12.511Z"
+    },
+    {
+      "id": "bug-007",
+      "timestamp": "2026-04-04T20:44:52.626Z",
+      "error_message": "Type error",
+      "file": "src/components/notes/NotesFeed.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:44:52.626Z"
+    },
+    {
+      "id": "bug-008",
+      "timestamp": "2026-04-04T20:44:56.536Z",
+      "error_message": "Wrong reference: any should be unknown",
+      "file": "src/components/notifications/NotificationPanel.tsx",
+      "root_cause": "Used \"any\" instead of \"unknown\"",
+      "fix": "Changed any → unknown",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-04T20:48:55.162Z"
+    },
+    {
+      "id": "bug-009",
+      "timestamp": "2026-04-04T20:45:06.299Z",
+      "error_message": "Wrong operator: ?? should be ===",
+      "file": "src/components/notifications/NotificationPanel.tsx",
+      "root_cause": "Used \"??\" instead of \"===\"",
+      "fix": "Changed operator ?? → ===",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:45:06.299Z"
+    },
+    {
+      "id": "bug-010",
+      "timestamp": "2026-04-04T20:46:20.448Z",
+      "error_message": "Type error",
+      "file": "src/hooks/use-participations.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:46:20.448Z"
+    },
+    {
+      "id": "bug-011",
+      "timestamp": "2026-04-04T20:47:15.846Z",
+      "error_message": "Wrong reference: any should be FriendParticipation",
+      "file": "src/pages/Dashboard.tsx",
+      "root_cause": "Used \"any\" instead of \"FriendParticipation\"",
+      "fix": "Changed any → FriendParticipation",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:47:15.846Z"
+    },
+    {
+      "id": "bug-012",
+      "timestamp": "2026-04-04T20:47:35.496Z",
+      "error_message": "Wrong reference: any should be Participation",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "Used \"any\" instead of \"Participation\"",
+      "fix": "Changed any → Participation",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:47:35.496Z"
+    },
+    {
+      "id": "bug-013",
+      "timestamp": "2026-04-04T20:48:19.115Z",
+      "error_message": "Wrong return value",
+      "file": "src/hooks/use-notes.ts",
+      "root_cause": "Was returning: fetchNotes()",
+      "fix": "Now returns: // eslint-disable-next-line react-hooks/set-state-",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:48:19.115Z"
+    },
+    {
+      "id": "bug-014",
+      "timestamp": "2026-04-04T20:48:22.991Z",
+      "error_message": "Wrong return value",
+      "file": "src/hooks/use-notifications.ts",
+      "root_cause": "Was returning: fetchNotifications()",
+      "fix": "Now returns: // eslint-disable-next-line react-hooks/set-state-",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:48:22.991Z"
+    },
+    {
+      "id": "bug-015",
+      "timestamp": "2026-04-04T20:48:27.345Z",
+      "error_message": "Wrong return value",
+      "file": "src/hooks/use-participations.ts",
+      "root_cause": "Was returning: fetchParticipations()",
+      "fix": "Now returns: // eslint-disable-next-line react-hooks/set-state-",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-04T20:48:33.084Z"
+    },
+    {
+      "id": "bug-016",
+      "timestamp": "2026-04-04T20:48:37.610Z",
+      "error_message": "Wrong return value",
+      "file": "src/hooks/use-reviews.ts",
+      "root_cause": "Was returning: fetchReviews()",
+      "fix": "Now returns: // eslint-disable-next-line react-hooks/set-state-",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:48:37.610Z"
+    },
+    {
+      "id": "bug-017",
+      "timestamp": "2026-04-04T20:50:16.268Z",
+      "error_message": "Type error",
+      "file": "src/components/notifications/NotificationPanel.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T20:50:16.268Z"
     }
   ]
 }
