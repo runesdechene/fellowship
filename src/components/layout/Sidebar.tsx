@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   LayoutDashboard,
@@ -39,13 +39,13 @@ export function Sidebar() {
         collapsed ? 'w-16' : 'w-56'
       }`}
     >
-      <div className="flex h-16 items-center justify-between px-3 border-b border-border">
+      <Link to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'} className="flex h-16 items-center justify-between px-3 border-b border-border hover:bg-muted/50 transition-colors">
         {collapsed ? (
           <img src="/icon.png" alt="Fellowship" className="h-8 w-8 mx-auto" />
         ) : (
           <img src="/logo.png" alt="Fellowship" className="h-8" />
         )}
-      </div>
+      </Link>
 
       <nav className="flex-1 space-y-1 p-2">
         {nav.map(({ to, icon: Icon, label }) => (

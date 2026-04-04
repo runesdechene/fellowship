@@ -74,23 +74,30 @@ export function useMyFriends() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return
-    async function fetch() {
-      const { data: friendRows } = await supabase.rpc('get_friend_ids', { p_user_id: user!.id })
-      const friendIds = friendRows as string[] | null
-      if (!friendIds || friendIds.length === 0) {
+    if (!user) {
+      setLoading(false) // eslint-disable-line react-hooks/set-state-in-effect
+      return
+    }
+    async function fetchFriends() {
+      try {
+        const { data: friendRows } = await supabase.rpc('get_friend_ids', { p_user_id: user!.id })
+        const friendIds = friendRows as string[] | null
+        if (!friendIds || friendIds.length === 0) {
+          setFriends([])
+          setLoading(false)
+          return
+        }
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', friendIds)
+        setFriends(profiles ?? [])
+      } catch {
         setFriends([])
-        setLoading(false)
-        return
       }
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('*')
-        .in('id', friendIds)
-      setFriends(profiles ?? [])
       setLoading(false)
     }
-    fetch()
+    fetchFriends()
   }, [user])
 
   return { friends, loading }
@@ -102,16 +109,23 @@ export function useMyFollowers() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return
-    async function fetch() {
-      const { data } = await supabase
-        .from('follows')
-        .select('profiles!follows_follower_id_fkey(*)')
-        .eq('following_id', user!.id)
-      setFollowers(data?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
+    if (!user) {
+      setLoading(false) // eslint-disable-line react-hooks/set-state-in-effect
+      return
+    }
+    async function fetchFollowers() {
+      try {
+        const { data } = await supabase
+          .from('follows')
+          .select('profiles!follows_follower_id_fkey(*)')
+          .eq('following_id', user!.id)
+        setFollowers(data?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
+      } catch {
+        setFollowers([])
+      }
       setLoading(false)
     }
-    fetch()
+    fetchFollowers()
   }, [user])
 
   return { followers, loading }

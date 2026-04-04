@@ -9,16 +9,23 @@ export function useMyParticipations(year?: number) {
   const [loading, setLoading] = useState(true)
 
   const fetchParticipations = useCallback(async () => {
-    if (!user) return
+    if (!user) {
+      setLoading(false)
+      return
+    }
     setLoading(true)
 
-    const { data } = await supabase
-      .from('participations')
-      .select('*, events(*)')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
+    try {
+      const { data } = await supabase
+        .from('participations')
+        .select('*, events(*)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
 
-    setParticipations((data as ParticipationWithEvent[] | null) ?? [])
+      setParticipations((data as ParticipationWithEvent[] | null) ?? [])
+    } catch {
+      setParticipations([])
+    }
     setLoading(false)
   }, [user])
 

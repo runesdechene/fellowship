@@ -1,7 +1,12 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T20:50:16.254Z
-> Files: 110 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T21:17:04.643Z
+> Files: 114 tracked | Anatomy hits: 0 | Misses: 0
+
+## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
+
+- `feedback_v1_testing.md` — Feedback from first test session (2026-04-04) (~324 tok)
+- `project_progress.md` — Status: V1 MVP complete, pushed to main (~263 tok)
 
 ## ./
 
@@ -166,13 +171,14 @@
 
 ## src/components/events/
 
-- `EventForm.tsx` — EventForm — renders form (~2102 tok)
+- `EventForm.tsx` — EventForm (~3260 tok)
+- `TagInput.tsx` — TagInput (~942 tok)
 
 ## src/components/layout/
 
 - `AppLayout.tsx` — AppLayout (~113 tok)
 - `BottomBar.tsx` — exposantNav (~423 tok)
-- `Sidebar.tsx` — exposantNav (~730 tok)
+- `Sidebar.tsx` — exposantNav (~761 tok)
 
 ## src/components/notes/
 
@@ -199,16 +205,17 @@
 ## src/hooks/
 
 - `use-events.ts` — Exports useEvents, useEvent, createEvent, searchSimilarEvents (~823 tok)
-- `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~963 tok)
+- `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~1073 tok)
 - `use-notes.ts` — Exports useEventNotes, createNote, deleteNote (~383 tok)
 - `use-notifications.ts` — Exports useNotifications (~478 tok)
-- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 2 mor (~949 tok)
+- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 2 mor (~982 tok)
 - `use-reviews.ts` — Exports useEventReviews, useMyReview, submitReview (~575 tok)
 - `use-theme.ts` — Exports useTheme (~358 tok)
 
 ## src/lib/
 
 - `auth.tsx` — AuthContext (~844 tok)
+- `constants.ts` — Primary tags — fixed by admin, not user-editable (~89 tok)
 - `supabase.ts` — Exports supabase (~118 tok)
 - `utils.ts` — Exports cn (~50 tok)
 
@@ -217,7 +224,7 @@
 - `Dashboard.tsx` — DashboardPage (~1189 tok)
 - `Embed.tsx` — EmbedPage — lightweight standalone iframe embed: mini header with avatar + "Voir sur Fellowship" link, public participations list, no sidebar/nav (~500 tok)
 - `EventPage.tsx` — EventPage (~2938 tok)
-- `Explorer.tsx` — ExplorerPage — search bar, department/tag filters, EventCard grid, EventForm create panel (~380 tok)
+- `Explorer.tsx` — ExplorerPage (~1658 tok)
 - `Following.tsx` — FollowingPage (~42 tok)
 - `Landing.tsx` — LandingPage (~1279 tok)
 - `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~1706 tok)

@@ -272,6 +272,86 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-04T20:50:16.268Z"
+    },
+    {
+      "id": "bug-018",
+      "timestamp": "2026-04-04T21:13:56.054Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/layout/Sidebar.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:13:56.054Z"
+    },
+    {
+      "id": "bug-019",
+      "timestamp": "2026-04-04T21:14:04.641Z",
+      "error_message": "Missing error handling in useMyFriends",
+      "file": "src/hooks/use-follows.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block | Also: if (!user) {; return",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-04T21:14:14.268Z"
+    },
+    {
+      "id": "bug-020",
+      "timestamp": "2026-04-04T21:14:20.779Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "src/hooks/use-participations.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:14:20.779Z"
+    },
+    {
+      "id": "bug-021",
+      "timestamp": "2026-04-04T21:16:51.026Z",
+      "error_message": "Wrong reference: return should be eslint",
+      "file": "src/components/events/EventForm.tsx",
+      "root_cause": "Used \"return\" instead of \"eslint\"",
+      "fix": "Changed return → eslint",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:16:51.026Z"
+    },
+    {
+      "id": "bug-022",
+      "timestamp": "2026-04-04T21:16:55.099Z",
+      "error_message": "Wrong reference: return should be eslint",
+      "file": "src/components/events/TagInput.tsx",
+      "root_cause": "Used \"return\" instead of \"eslint\"",
+      "fix": "Changed return → eslint",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-04T21:16:55.099Z"
     }
   ]
 }
