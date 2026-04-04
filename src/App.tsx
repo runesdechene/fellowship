@@ -4,6 +4,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { LandingPage } from '@/pages/Landing'
 import { LoginPage } from '@/pages/Login'
 import { DashboardPage } from '@/pages/Dashboard'
+import { EmbedPage } from '@/pages/Embed'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/@:slug/embed" element={<EmbedPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
