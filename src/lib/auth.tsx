@@ -40,16 +40,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          try {
-            await fetchProfile(session.user.id)
-          } catch {
-            // Profile may not exist yet
-          }
+          fetchProfile(session.user.id).catch(() => {})
         } else {
           setProfile(null)
         }

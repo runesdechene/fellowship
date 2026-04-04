@@ -14,7 +14,7 @@ import { EventReportForm } from '@/components/reports/EventReportForm'
 import { Button } from '@/components/ui/button'
 import {
   Calendar, MapPin, ExternalLink, Clock, ArrowLeft,
-  Users, Check, Star, FileText, Pencil, X, Save
+  Users, Check, Star, FileText, Pencil, X, Save, Image, Trash2
 } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 
@@ -32,6 +32,8 @@ export function EventPage() {
   const [activeTab, setActiveTab] = useState<'info' | 'notes' | 'reviews'>('info')
   const [editing, setEditing] = useState(false)
   const [editSaving, setEditSaving] = useState(false)
+  const [editImage, setEditImage] = useState<File | null>(null)
+  const [removeImage, setRemoveImage] = useState(false)
   const [editForm, setEditForm] = useState({
     name: '',
     description: '',
@@ -100,13 +102,34 @@ export function EventPage() {
       registration_url: event.registration_url ?? '',
       external_url: event.external_url ?? '',
     })
+    setEditImage(null)
+    setRemoveImage(false)
     setEditing(true)
   }
 
   const handleSaveEdit = async () => {
     if (!event) return
     setEditSaving(true)
-    const { error } = await updateEvent(event.id, {
+
+    let image_url: string | null | undefined = undefined
+
+    if (editImage) {
+      const ext = editImage.name.split('.').pop()
+      const path = `${crypto.randomUUID()}.${ext}`
+      const { data: uploadData } = await supabase.storage
+        .from('event-images')
+        .upload(path, editImage)
+      if (uploadData) {
+        const { data: urlData } = supabase.storage
+          .from('event-images')
+          .getPublicUrl(uploadData.path)
+        image_url = urlData.publicUrl
+      }
+    } else if (removeImage) {
+      image_url = null
+    }
+
+    const updates: Parameters<typeof updateEvent>[1] = {
       name: editForm.name,
       description: editForm.description || null,
       city: editForm.city,
@@ -116,7 +139,12 @@ export function EventPage() {
       registration_deadline: editForm.registration_deadline || null,
       registration_url: editForm.registration_url || null,
       external_url: editForm.external_url || null,
-    })
+    }
+    if (image_url !== undefined) {
+      updates.image_url = image_url
+    }
+
+    const { error } = await updateEvent(event.id, updates)
     setEditSaving(false)
     if (!error) {
       setEditing(false)
@@ -168,6 +196,9 @@ export function EventPage() {
               <X className="h-4 w-4" />
             </Button>
           </div>
+          <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
+            Vos modifications seront visibles par tous les utilisateurs. Éditez avec précaution.
+          </div>
           <input
             type="text"
             className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -208,6 +239,50 @@ export function EventPage() {
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
             <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-2 block">Affiche</label>
+            {editImage ? (
+              <div className="flex items-center gap-3 rounded-xl border border-border p-3">
+                <Image className="h-5 w-5 text-muted-foreground" />
+                <span className="flex-1 truncate text-sm">{editImage.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => setEditImage(null)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : removeImage ? (
+              <div className="flex items-center gap-3 rounded-xl border border-dashed border-border p-3">
+                <span className="flex-1 text-sm text-muted-foreground">Image supprimée</span>
+                <Button variant="ghost" size="sm" onClick={() => setRemoveImage(false)}>
+                  Annuler
+                </Button>
+              </div>
+            ) : event.image_url ? (
+              <div className="space-y-2">
+                <img src={event.image_url} alt="" className="h-32 w-full rounded-lg object-cover" />
+                <div className="flex gap-2">
+                  <label className="cursor-pointer">
+                    <Button variant="outline" size="sm" asChild>
+                      <span>
+                        <Image className="mr-2 h-4 w-4" />
+                        Remplacer
+                      </span>
+                    </Button>
+                    <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) { setEditImage(e.target.files[0]); setRemoveImage(false) } }} />
+                  </label>
+                  <Button variant="outline" size="sm" onClick={() => setRemoveImage(true)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Retirer
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <label className="block cursor-pointer rounded-xl border-2 border-dashed border-border p-4 text-center text-sm text-muted-foreground hover:border-primary/30 hover:bg-muted transition-colors">
+                <Image className="mx-auto mb-1 h-6 w-6" />
+                Cliquer pour ajouter une image
+                <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) setEditImage(e.target.files[0]) }} />
+              </label>
+            )}
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>

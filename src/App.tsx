@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from '@/lib/auth'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from '@/lib/auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LandingPage } from '@/pages/Landing'
@@ -36,8 +36,6 @@ function AuthenticatedApp({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
@@ -63,8 +61,6 @@ function App() {
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
         </Routes>
-      </AuthProvider>
-    </BrowserRouter>
   )
 }
 
