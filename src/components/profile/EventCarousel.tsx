@@ -8,7 +8,7 @@ interface CarouselEvent {
   end_date: string
   city: string
   primary_tag: string
-  images?: string[] | null
+  image_url?: string | null
 }
 
 function formatDay(dateStr: string) {
@@ -21,7 +21,7 @@ function formatMonthYear(dateStr: string) {
 }
 
 function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: boolean }) {
-  const image = event.images?.[0]
+  const image = event.image_url
 
   return (
     <Link
