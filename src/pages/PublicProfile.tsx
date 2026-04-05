@@ -69,10 +69,9 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         .eq('user_id', profileData.id)
         .order('created_at', { ascending: false })
 
-      if (!user || user.id !== profileData.id) {
-        // Show events where user has any participation status
-        partsQuery = partsQuery.in('status', ['interesse', 'inscrit', 'confirme'])
-      }
+      // RLS handles visibility — inscrit/confirme visible to all authenticated,
+      // interesse/amis visible only to friends
+      // Owner sees everything (RLS: user_id = auth.uid())
 
       const { data: parts } = await partsQuery
 
