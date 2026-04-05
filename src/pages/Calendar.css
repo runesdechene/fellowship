@@ -204,7 +204,7 @@
 
 .calendar-month-banner {
   position: relative;
-  height: 80px;
+  height: 64px;
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -232,7 +232,7 @@
   display: block;
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(61, 48, 40, 0.25);
+  color: rgba(61, 48, 40, 0.65);
   margin-top: 2px;
 }
 

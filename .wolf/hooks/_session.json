@@ -63,8 +63,8 @@
       "first_read": "2026-04-05T10:42:45.618Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/AppLayout.tsx": {
-      "count": 2,
-      "tokens": 114,
+      "count": 4,
+      "tokens": 479,
       "first_read": "2026-04-05T10:44:40.807Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/hooks/use-follows.ts": {
@@ -73,8 +73,8 @@
       "first_read": "2026-04-05T10:44:43.933Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/index.css": {
-      "count": 7,
-      "tokens": 1168,
+      "count": 10,
+      "tokens": 1401,
       "first_read": "2026-04-05T10:44:44.132Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/types/supabase.ts": {
@@ -98,13 +98,13 @@
       "first_read": "2026-04-05T10:55:33.541Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx": {
-      "count": 2,
-      "tokens": 1125,
+      "count": 11,
+      "tokens": 2184,
       "first_read": "2026-04-05T10:57:36.078Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx": {
-      "count": 2,
-      "tokens": 1512,
+      "count": 5,
+      "tokens": 2034,
       "first_read": "2026-04-05T10:57:36.204Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/components/notifications/NotificationItem.tsx": {
@@ -148,8 +148,8 @@
       "first_read": "2026-04-05T11:17:22.097Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Dashboard.tsx": {
-      "count": 9,
-      "tokens": 3349,
+      "count": 12,
+      "tokens": 3416,
       "first_read": "2026-04-05T11:20:23.631Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/components/profile/FollowButton.tsx": {
@@ -158,7 +158,7 @@
       "first_read": "2026-04-05T11:20:24.059Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/lib/auth.tsx": {
-      "count": 1,
+      "count": 2,
       "tokens": 827,
       "first_read": "2026-04-05T11:20:40.047Z"
     },
@@ -258,7 +258,7 @@
       "first_read": "2026-04-05T12:49:45.240Z"
     },
     "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Login.tsx": {
-      "count": 1,
+      "count": 6,
       "tokens": 2282,
       "first_read": "2026-04-05T12:49:46.581Z"
     },
@@ -311,6 +311,36 @@
       "count": 3,
       "tokens": 0,
       "first_read": "2026-04-05T13:28:19.427Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/hooks/use-calendar.ts": {
+      "count": 2,
+      "tokens": 442,
+      "first_read": "2026-04-05T14:02:21.133Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/hooks/use-participations.ts": {
+      "count": 2,
+      "tokens": 982,
+      "first_read": "2026-04-05T14:02:26.184Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css": {
+      "count": 5,
+      "tokens": 2560,
+      "first_read": "2026-04-05T14:06:43.478Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx": {
+      "count": 3,
+      "tokens": 3009,
+      "first_read": "2026-04-05T14:44:41.565Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/SearchBar.tsx": {
+      "count": 1,
+      "tokens": 1859,
+      "first_read": "2026-04-05T15:19:01.164Z"
+    },
+    "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Onboarding.tsx": {
+      "count": 1,
+      "tokens": 1550,
+      "first_read": "2026-04-05T15:22:03.684Z"
     }
   },
   "files_written": [
@@ -1405,6 +1435,312 @@
       "action": "edit",
       "tokens": 58,
       "at": "2026-04-05T13:56:00.155Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "create",
+      "tokens": 1856,
+      "at": "2026-04-05T14:03:02.697Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "create",
+      "tokens": 1270,
+      "at": "2026-04-05T14:03:28.674Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "create",
+      "tokens": 1276,
+      "at": "2026-04-05T14:03:49.283Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "create",
+      "tokens": 1575,
+      "at": "2026-04-05T14:06:31.840Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 871,
+      "at": "2026-04-05T14:07:12.676Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 19,
+      "at": "2026-04-05T14:07:27.821Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "create",
+      "tokens": 1856,
+      "at": "2026-04-05T14:08:46.039Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 240,
+      "at": "2026-04-05T14:09:18.902Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 234,
+      "at": "2026-04-05T14:09:28.798Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 1,
+      "at": "2026-04-05T14:09:43.782Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 1043,
+      "at": "2026-04-05T14:10:44.638Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 79,
+      "at": "2026-04-05T14:10:52.987Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 39,
+      "at": "2026-04-05T14:11:02.946Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 89,
+      "at": "2026-04-05T14:11:29.765Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-04-05T14:11:44.668Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 297,
+      "at": "2026-04-05T14:12:41.270Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 69,
+      "at": "2026-04-05T14:12:48.333Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 53,
+      "at": "2026-04-05T14:13:55.652Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 124,
+      "at": "2026-04-05T14:14:01.873Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 36,
+      "at": "2026-04-05T14:15:09.443Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/hooks/use-calendar.ts",
+      "action": "edit",
+      "tokens": 75,
+      "at": "2026-04-05T14:19:20.050Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "create",
+      "tokens": 1976,
+      "at": "2026-04-05T14:19:52.692Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 783,
+      "at": "2026-04-05T14:20:24.104Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 193,
+      "at": "2026-04-05T14:20:37.235Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 101,
+      "at": "2026-04-05T14:20:44.072Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 341,
+      "at": "2026-04-05T14:23:50.176Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "edit",
+      "tokens": 142,
+      "at": "2026-04-05T14:23:59.135Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "edit",
+      "tokens": 96,
+      "at": "2026-04-05T14:26:59.627Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "edit",
+      "tokens": 55,
+      "at": "2026-04-05T14:27:18.822Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.tsx",
+      "action": "edit",
+      "tokens": 23,
+      "at": "2026-04-05T14:27:31.274Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 91,
+      "at": "2026-04-05T14:27:39.086Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx",
+      "action": "create",
+      "tokens": 2996,
+      "at": "2026-04-05T14:42:50.339Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Calendar.css",
+      "action": "edit",
+      "tokens": 262,
+      "at": "2026-04-05T14:43:24.608Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 94,
+      "at": "2026-04-05T14:43:37.900Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/CalendarMonth.tsx",
+      "action": "edit",
+      "tokens": 27,
+      "at": "2026-04-05T14:43:44.119Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx",
+      "action": "edit",
+      "tokens": 31,
+      "at": "2026-04-05T14:43:59.796Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx",
+      "action": "edit",
+      "tokens": 467,
+      "at": "2026-04-05T14:45:09.376Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx",
+      "action": "edit",
+      "tokens": 83,
+      "at": "2026-04-05T14:45:57.287Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/calendar/MonthBanner.tsx",
+      "action": "edit",
+      "tokens": 2897,
+      "at": "2026-04-05T14:50:49.806Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Dashboard.tsx",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-04-05T14:54:49.629Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/AppLayout.tsx",
+      "action": "create",
+      "tokens": 479,
+      "at": "2026-04-05T14:55:00.922Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/index.css",
+      "action": "edit",
+      "tokens": 224,
+      "at": "2026-04-05T14:55:21.293Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Dashboard.tsx",
+      "action": "edit",
+      "tokens": 18,
+      "at": "2026-04-05T14:55:38.185Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/index.css",
+      "action": "edit",
+      "tokens": 170,
+      "at": "2026-04-05T14:59:09.882Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/SearchBar.css",
+      "action": "create",
+      "tokens": 997,
+      "at": "2026-04-05T15:17:10.295Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/SearchBar.tsx",
+      "action": "create",
+      "tokens": 1859,
+      "at": "2026-04-05T15:17:33.035Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/AppLayout.tsx",
+      "action": "edit",
+      "tokens": 189,
+      "at": "2026-04-05T15:18:43.452Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/SearchBar.tsx",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-04-05T15:19:08.272Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Login.tsx",
+      "action": "edit",
+      "tokens": 67,
+      "at": "2026-04-05T15:22:43.671Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Login.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-04-05T15:22:56.097Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/pages/Login.tsx",
+      "action": "edit",
+      "tokens": 410,
+      "at": "2026-04-05T15:23:10.000Z"
     }
   ],
   "edit_counts": {
@@ -1417,8 +1753,8 @@
     "src/types/supabase.ts": 5,
     "src/types/database.ts": 1,
     "src/hooks/use-following-ids.ts": 2,
-    "src/components/calendar/CalendarMonth.tsx": 2,
-    "src/pages/Calendar.tsx": 1,
+    "src/components/calendar/CalendarMonth.tsx": 17,
+    "src/pages/Calendar.tsx": 7,
     "src/components/notifications/NotificationItem.tsx": 2,
     "src/components/notifications/NotificationSlidePanel.tsx": 4,
     "src/components/notifications/SidebarActivity.tsx": 2,
@@ -1432,13 +1768,13 @@
     "supabase/migrations/20260405140000_add_banner_url.sql": 1,
     "src/components/profile/EventCarousel.tsx": 9,
     "src/components/profile/EmailSignupPlaceholder.tsx": 6,
-    "src/index.css": 10,
+    "src/index.css": 12,
     "src/components/profile/ProfileHeader.tsx": 4,
     "src/components/profile/FellowshipFooter.tsx": 3,
     "src/components/profile/QRCodeModal.tsx": 1,
     "src/pages/PublicProfile.tsx": 12,
     "src/pages/Profile.tsx": 3,
-    "src/pages/Dashboard.tsx": 14,
+    "src/pages/Dashboard.tsx": 16,
     "src/App.tsx": 2,
     ".superpowers/brainstorm/2025-1775387460/content/profile-fullpage.html": 1,
     "src/pages/Settings.tsx": 12,
@@ -1473,14 +1809,20 @@
     "src/pages/Embed.tsx": 2,
     "src/components/calendar/MonthCell.tsx": 1,
     "src/pages/EventPage.tsx": 2,
-    "src/components/layout/AppLayout.tsx": 1,
+    "src/components/layout/AppLayout.tsx": 3,
     "src/components/layout/Sidebar.css": 1,
     "src/components/notifications/SidebarActivity.css": 1,
-    "src/components/notifications/NotificationSlidePanel.css": 2
+    "src/components/notifications/NotificationSlidePanel.css": 2,
+    "src/pages/Calendar.css": 12,
+    "src/hooks/use-calendar.ts": 1,
+    "src/components/calendar/MonthBanner.tsx": 5,
+    "src/components/layout/SearchBar.css": 1,
+    "src/components/layout/SearchBar.tsx": 2,
+    "src/pages/Login.tsx": 3
   },
-  "anatomy_hits": 45,
+  "anatomy_hits": 51,
   "anatomy_misses": 17,
-  "repeated_reads_warned": 85,
+  "repeated_reads_warned": 119,
   "cerebrum_warnings": 0,
-  "stop_count": 99
+  "stop_count": 134
 }

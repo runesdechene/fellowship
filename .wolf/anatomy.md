@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T13:56:00.143Z
-> Files: 144 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T15:23:09.987Z
+> Files: 148 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
@@ -95,7 +95,7 @@
 ## src/
 
 - `App.tsx` — OnboardingGuard (~813 tok)
-- `index.css` — Styles: 9 rules, 72 vars (~1195 tok)
+- `index.css` — Styles: 12 rules, 72 vars (~1385 tok)
 - `main.tsx` (~122 tok)
 
 ## src/components/
@@ -105,7 +105,8 @@
 
 ## src/components/calendar/
 
-- `CalendarMonth.tsx` — tagColors (~1099 tok)
+- `CalendarMonth.tsx` — TAG_COLORS (~2125 tok)
+- `MonthBanner.tsx` — MONTH_SCENES (~3071 tok)
 - `MonthCell.tsx` — tagColors (~482 tok)
 - `YearView.tsx` — YearView (~333 tok)
 
@@ -118,8 +119,10 @@
 
 ## src/components/layout/
 
-- `AppLayout.tsx` — AppLayout (~113 tok)
+- `AppLayout.tsx` — AppLayout (~520 tok)
 - `BottomBar.tsx` — exposantNav (~406 tok)
+- `SearchBar.css` — Styles: 25 rules (~997 tok)
+- `SearchBar.tsx` — SearchBar (~1861 tok)
 - `Sidebar.css` — Styles: 22 rules (~816 tok)
 - `Sidebar.tsx` — exposantNav (~1049 tok)
 
@@ -164,7 +167,7 @@
 
 ## src/hooks/
 
-- `use-calendar.ts` — Exports CalendarEvent, CalendarMonth, useCalendarYear (~442 tok)
+- `use-calendar.ts` — Exports CalendarEvent, CalendarMonth, useCalendarYear (~454 tok)
 - `use-events.ts` — Exports useEvents, useEvent, createEvent, updateEvent + 2 more (~1084 tok)
 - `use-following-ids.ts` — Exports useFollowingIds (~171 tok)
 - `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~1073 tok)
@@ -185,14 +188,15 @@
 ## src/pages/
 
 - `AuthCallback.tsx` — AuthCallbackPage — uses useNavigate, useEffect (~314 tok)
-- `Calendar.tsx` — CalendarPage (~1512 tok)
-- `Dashboard.tsx` — daysUntil (~3416 tok)
+- `Calendar.css` — Styles: 66 rules (~2685 tok)
+- `Calendar.tsx` — CalendarPage (~2091 tok)
+- `Dashboard.tsx` — daysUntil (~3312 tok)
 - `Embed.tsx` — EmbedPage (~1215 tok)
 - `EventPage.tsx` — EventPage (~6385 tok)
 - `Explorer.tsx` — EventCardSkeleton (~1711 tok)
 - `Following.tsx` — FollowingPage (~49 tok)
 - `Landing.tsx` — LandingPage (~2724 tok)
-- `Login.tsx` — LoginPage — renders form (~2282 tok)
+- `Login.tsx` — LoginPage — renders form (~2587 tok)
 - `Notifications.tsx` — NotificationsPage (~508 tok)
 - `Onboarding.tsx` — OnboardingPage (~1550 tok)
 - `Profile.tsx` — ProfilePage (~171 tok)

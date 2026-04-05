@@ -840,3 +840,89 @@
 | 15:55 | Created src/components/notifications/NotificationSlidePanel.tsx | — | ~666 |
 | 15:56 | Edited src/components/notifications/NotificationSlidePanel.css | expanded (+9 lines) | ~58 |
 | 15:56 | Session end: 182 writes across 66 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 62 reads | ~174784 tok |
+| 16:00 | Session end: 182 writes across 66 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 62 reads | ~174784 tok |
+| 16:03 | Created src/pages/Calendar.css | — | ~1856 |
+| 16:03 | Created src/components/calendar/CalendarMonth.tsx | — | ~1270 |
+| 16:03 | Created src/pages/Calendar.tsx | — | ~1276 |
+| 16:04 | Session end: 185 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 64 reads | ~180584 tok |
+| 16:06 | Created src/components/calendar/CalendarMonth.tsx | — | ~1575 |
+| 16:07 | Edited src/pages/Calendar.css | expanded (+8 lines) | ~871 |
+| 16:07 | Edited src/components/calendar/CalendarMonth.tsx | inline fix | ~19 |
+| 16:07 | Session end: 188 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~185076 tok |
+| 16:08 | Created src/pages/Calendar.css | — | ~1856 |
+| 16:09 | Edited src/components/calendar/CalendarMonth.tsx | CSS: month | ~240 |
+| 16:09 | Edited src/pages/Calendar.css | expanded (+37 lines) | ~234 |
+| 16:09 | Edited src/components/calendar/CalendarMonth.tsx | removed 11 lines | ~1 |
+| 16:10 | Session end: 192 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~187705 tok |
+| 16:10 | Session end: 192 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~187705 tok |
+| 16:10 | Edited src/components/calendar/CalendarMonth.tsx | modified return() | ~1043 |
+| 16:10 | Edited src/pages/Calendar.css | card() → wrapper() | ~79 |
+| 16:11 | Edited src/pages/Calendar.css | CSS: padding | ~39 |
+| 16:11 | Edited src/components/calendar/CalendarMonth.tsx | 11→7 lines | ~89 |
+| 16:11 | Edited src/components/calendar/CalendarMonth.tsx | inline fix | ~16 |
+| 16:12 | Session end: 197 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~188928 tok |
+| 16:12 | Edited src/components/calendar/CalendarMonth.tsx | modified getTagColor() | ~297 |
+| 16:12 | Edited src/components/calendar/CalendarMonth.tsx | CSS: background, color | ~69 |
+| 16:13 | Session end: 199 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~189338 tok |
+| 16:13 | Edited src/components/calendar/CalendarMonth.tsx | CSS: background | ~53 |
+| 16:14 | Edited src/components/calendar/CalendarMonth.tsx | CSS: color, color, opacity | ~124 |
+| 16:14 | Session end: 201 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~189830 tok |
+| 16:15 | Edited src/pages/Calendar.css | 5→5 lines | ~36 |
+| 16:15 | Session end: 202 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~190066 tok |
+| 16:16 | Session end: 202 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~190066 tok |
+| 16:18 | Session end: 202 writes across 67 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~190066 tok |
+| 16:19 | Edited src/hooks/use-calendar.ts | 12→14 lines | ~75 |
+| 16:19 | Created src/pages/Calendar.tsx | — | ~1976 |
+| 16:20 | Edited src/components/calendar/CalendarMonth.tsx | CSS: marginLeft | ~783 |
+| 16:20 | Edited src/pages/Calendar.css | expanded (+33 lines) | ~193 |
+| 16:20 | Edited src/pages/Calendar.css | expanded (+14 lines) | ~101 |
+| 16:21 | Session end: 207 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~193023 tok |
+| 16:23 | Edited src/pages/Calendar.css | expanded (+29 lines) | ~341 |
+| 16:23 | Edited src/pages/Calendar.tsx | 8→13 lines | ~142 |
+| 16:24 | Session end: 209 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~193506 tok |
+| 16:26 | Edited src/pages/Calendar.tsx | added nullish coalescing | ~96 |
+| 16:27 | Edited src/pages/Calendar.tsx | added 1 import(s) | ~55 |
+| 16:27 | Edited src/pages/Calendar.tsx | 1→2 lines | ~23 |
+| 16:27 | Edited src/pages/Calendar.css | CSS: line-height, display | ~91 |
+| 16:28 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:28 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:33 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:33 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:35 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:41 | Session end: 213 writes across 68 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~194529 tok |
+| 16:42 | Created src/components/calendar/MonthBanner.tsx | — | ~2996 |
+| 16:43 | Edited src/pages/Calendar.css | expanded (+28 lines) | ~262 |
+| 16:43 | Edited src/components/calendar/CalendarMonth.tsx | added 1 import(s) | ~94 |
+| 16:43 | Edited src/components/calendar/CalendarMonth.tsx | 7→2 lines | ~27 |
+| 16:43 | Edited src/components/calendar/MonthBanner.tsx | added 1 import(s) | ~31 |
+| 16:44 | Session end: 218 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 65 reads | ~198678 tok |
+| 16:45 | Edited src/components/calendar/MonthBanner.tsx | added nullish coalescing | ~467 |
+| 16:45 | Session end: 219 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~202152 tok |
+| 16:45 | Edited src/components/calendar/MonthBanner.tsx | hsl() → rgba() | ~83 |
+| 16:46 | Session end: 220 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~202235 tok |
+| 16:50 | Edited src/components/calendar/MonthBanner.tsx | 149→151 lines | ~2897 |
+| 16:51 | Session end: 221 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~205134 tok |
+| 16:52 | Session end: 221 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~205134 tok |
+| 16:54 | Edited src/pages/Dashboard.tsx | — | ~0 |
+| 16:55 | Created src/components/layout/AppLayout.tsx | — | ~479 |
+| 16:55 | Edited src/index.css | modified media() | ~224 |
+| 16:55 | Edited src/pages/Dashboard.tsx | inline fix | ~18 |
+| 16:56 | Session end: 225 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~205948 tok |
+| 16:59 | Edited src/index.css | media() → gradient() | ~170 |
+| 16:59 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:04 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:08 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:09 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:11 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:12 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:12 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:15 | Session end: 226 writes across 69 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 66 reads | ~206324 tok |
+| 17:17 | Created src/components/layout/SearchBar.css | — | ~997 |
+| 17:17 | Created src/components/layout/SearchBar.tsx | — | ~1859 |
+| 17:18 | Edited src/components/layout/AppLayout.tsx | modified AppLayout() | ~189 |
+| 17:19 | Edited src/components/layout/SearchBar.tsx | inline fix | ~20 |
+| 17:19 | Session end: 230 writes across 71 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 67 reads | ~211614 tok |
+| 17:22 | Edited src/pages/Login.tsx | 3→4 lines | ~67 |
+| 17:22 | Edited src/pages/Login.tsx | inline fix | ~16 |
+| 17:23 | Edited src/pages/Login.tsx | expanded (+26 lines) | ~410 |
+| 17:23 | Session end: 233 writes across 72 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~213657 tok |

@@ -2016,6 +2016,214 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-05T13:53:28.138Z"
+    },
+    {
+      "id": "bug-127",
+      "timestamp": "2026-04-05T14:09:18.907Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/calendar/CalendarMonth.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 10→16 lines (2 removed) | Also: {/* Portrait image */}; {ev.imageUrl ? ( | Also: <span className=\"calendar-event-day\">{ev.startDate; <span className=\"calendar-event-month\">{ev.startDa",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-04-05T14:14:01.878Z"
+    },
+    {
+      "id": "bug-128",
+      "timestamp": "2026-04-05T14:09:28.803Z",
+      "error_message": "CSS fix: padding",
+      "file": "src/pages/Calendar.css",
+      "root_cause": "padding: 12px 14px → 2px 0",
+      "fix": "Changed padding: 12px 14px → 2px 0",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 4,
+      "last_seen": "2026-04-05T14:15:09.448Z"
+    },
+    {
+      "id": "bug-129",
+      "timestamp": "2026-04-05T14:12:41.274Z",
+      "error_message": "Type error",
+      "file": "src/components/calendar/CalendarMonth.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: <span; className=\"calendar-event-tag\" | Also: <Link; to={`/evenement/${ev.id}`}",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-04-05T14:13:55.656Z"
+    },
+    {
+      "id": "bug-130",
+      "timestamp": "2026-04-05T14:20:24.109Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/calendar/CalendarMonth.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 44→58 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:20:24.109Z"
+    },
+    {
+      "id": "bug-131",
+      "timestamp": "2026-04-05T14:23:50.181Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Calendar.css",
+      "root_cause": "14 lines replaced/restructured",
+      "fix": "Rewrote 32→61 lines (14 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:23:50.181Z"
+    },
+    {
+      "id": "bug-132",
+      "timestamp": "2026-04-05T14:23:59.139Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Calendar.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 8→13 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:23:59.139Z"
+    },
+    {
+      "id": "bug-133",
+      "timestamp": "2026-04-05T14:26:59.632Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/pages/Calendar.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:26:59.632Z"
+    },
+    {
+      "id": "bug-134",
+      "timestamp": "2026-04-05T14:27:18.826Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/Calendar.tsx",
+      "root_cause": "Had '@/hooks/use-participations'",
+      "fix": "Changed to '@/lib/auth'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:27:18.826Z"
+    },
+    {
+      "id": "bug-135",
+      "timestamp": "2026-04-05T14:43:24.613Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Calendar.css",
+      "root_cause": "9 lines replaced/restructured",
+      "fix": "Rewrote 22→50 lines (9 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:43:24.613Z"
+    },
+    {
+      "id": "bug-136",
+      "timestamp": "2026-04-05T14:43:59.800Z",
+      "error_message": "CSS fix: MONTH_SCENES",
+      "file": "src/components/calendar/MonthBanner.tsx",
+      "root_cause": "MONTH_SCENES: Record<number, (color: string) => JSX.Element> = { → Record<number, (color: string) => ReactNode> = {",
+      "fix": "Changed MONTH_SCENES: Record<number, (color: string) => JSX.Element> = { → Record<number, (color: string) => ReactNode> = {",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:43:59.800Z"
+    },
+    {
+      "id": "bug-137",
+      "timestamp": "2026-04-05T14:45:09.381Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/calendar/MonthBanner.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:45:09.381Z"
+    },
+    {
+      "id": "bug-138",
+      "timestamp": "2026-04-05T14:45:57.292Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/calendar/MonthBanner.tsx",
+      "root_cause": "17 lines replaced/restructured",
+      "fix": "Rewrote 22→7 lines (17 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:45:57.292Z"
+    },
+    {
+      "id": "bug-139",
+      "timestamp": "2026-04-05T14:55:21.297Z",
+      "error_message": "CSS fix: display",
+      "file": "src/index.css",
+      "root_cause": "display: none → flex",
+      "fix": "Changed display: none → flex",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T14:55:21.297Z"
     }
   ]
 }
