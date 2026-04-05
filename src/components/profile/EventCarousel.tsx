@@ -8,6 +8,7 @@ interface CarouselEvent {
   start_date: string
   end_date: string
   city: string
+  department?: string
   primary_tag: string
   image_url?: string | null
 }
@@ -43,7 +44,7 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
             >{event.primary_tag}</span>
             <div className="profile-event-meta">
               <MapPin strokeWidth={1.5} />
-              <span>{event.city}</span>
+              <span>{event.city}{event.department ? ` (${event.department})` : ''}</span>
             </div>
           </div>
           <div className="profile-event-date">
