@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin } from 'lucide-react'
+import { getTagColor } from '@/lib/constants'
 
 interface CarouselEvent {
   id: string
@@ -36,7 +37,10 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="profile-event-name">{event.name}</div>
-            <span className="profile-event-tag">{event.primary_tag}</span>
+            <span
+              className="profile-event-tag"
+              style={{ background: getTagColor(event.primary_tag).bg, color: getTagColor(event.primary_tag).color }}
+            >{event.primary_tag}</span>
             <div className="profile-event-meta">
               <MapPin strokeWidth={1.5} />
               <span>{event.city}</span>
