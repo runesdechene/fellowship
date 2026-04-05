@@ -48,9 +48,10 @@ export function Sidebar() {
               to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
               className="sidebar-logo-link"
             >
-              <img src="/icon.png" alt="Fellowship" className="sidebar-logo-icon" />
-              {!collapsed && (
-                <span className="sidebar-logo-text">fellowship</span>
+              {collapsed ? (
+                <img src="/icon.png" alt="Fellowship" className="sidebar-logo-icon" />
+              ) : (
+                <img src="/logo.png" alt="Fellowship" style={{ height: 28 }} />
               )}
             </Link>
             {!collapsed && (
