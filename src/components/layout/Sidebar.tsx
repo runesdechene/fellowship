@@ -37,7 +37,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-background transition-all duration-300 ease-in-out ${
+      className={`hidden md:flex flex-col bg-card transition-all duration-300 ease-in-out ${
         collapsed ? 'w-[60px]' : 'w-72'
       }`}
     >
