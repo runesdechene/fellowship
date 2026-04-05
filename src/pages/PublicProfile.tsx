@@ -9,20 +9,6 @@ import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import type { Profile } from '@/types/database'
 
-const GRADIENTS = [
-  ['#1a0f0a', '#2d1810', '#3d2418', '#2a1a10', '#1a0f0a'],
-  ['#0a0f1a', '#10182d', '#1a2a4d', '#10182d', '#0a0f1a'],
-  ['#0a1a0f', '#102d18', '#1a4d2a', '#102d18', '#0a1a0f'],
-  ['#1a0f02', '#2d1c0a', '#4d3418', '#2d1c0a', '#1a0f02'],
-  ['#0f0a1a', '#1c102d', '#2d1a4d', '#1c102d', '#0f0a1a'],
-]
-
-function hashName(name: string): number {
-  let h = 0
-  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0
-  return Math.abs(h)
-}
-
 interface ProfileParticipation {
   id: string
   event_id: string
@@ -33,6 +19,7 @@ interface ProfileParticipation {
     end_date: string
     city: string
     primary_tag: string
+    images?: string[] | null
   } | null
 }
 
@@ -72,11 +59,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       let partsQuery = supabase
         .from('participations')
-        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag)')
+        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag, images)')
         .eq('user_id', profileData.id)
         .order('created_at', { ascending: false })
 
-      // Only filter by visibility when viewing someone else's profile
       if (!user || user.id !== profileData.id) {
         partsQuery = partsQuery.eq('visibility', 'public')
       }
@@ -127,35 +113,20 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     .map(p => p.events!)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
-  const gradientColors = GRADIENTS[hashName(displayName) % GRADIENTS.length]
-  const gradient = `linear-gradient(180deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 15%, ${gradientColors[2]} 40%, ${gradientColors[3]} 70%, ${gradientColors[4]} 100%)`
-  const haloColor = gradientColors[2]
-  const bannerUrl = profile.banner_url
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Full-page ambient background */}
-      <div
-        className="absolute inset-0"
-        style={
-          bannerUrl
-            ? { backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
-            : { background: gradient }
-        }
-      />
-      {bannerUrl && <div className="absolute inset-0 bg-black/60" />}
-      <div
-        className="absolute inset-0"
-        style={{ background: `radial-gradient(ellipse at 50% 15%, ${haloColor}33 0%, transparent 60%)` }}
-      />
-
-      {/* Content */}
-      <div className="relative">
+    <div className="min-h-screen bg-background relative">
+      <div className="mx-auto max-w-md">
         <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
-        <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-          <EventCarousel upcoming={upcoming} past={past} />
+        <div className="px-4 space-y-4">
           <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
+
+          {/* Divider */}
+          <div className="flex justify-center py-2">
+            <div className="w-8 h-0.5 rounded-full bg-primary/20" />
+          </div>
+
+          <EventCarousel upcoming={upcoming} past={past} />
         </div>
 
         <FellowshipFooter />
