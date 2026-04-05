@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import { useEvents } from '@/hooks/use-events'
-import { useFriendsParticipations } from '@/hooks/use-participations'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
@@ -14,7 +13,6 @@ type TemporalFilter = 'semaine' | 'mois' | 'proche' | '30j' | '3mois' | '6-12moi
 export function ExplorerPage() {
   const { profile } = useAuth()
   const { events: allEvents, loading } = useEvents()
-  const { participations: friendParticipations } = useFriendsParticipations()
 
   const [search, _setSearch] = useState('')
   // _setSearch will be connected to global SearchBar later
@@ -96,30 +94,15 @@ export function ExplorerPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allEvents, search, selectedTags, showProspection, temporalFilter])
 
-  // ---------- friend event IDs ----------
-  const friendEventIds = useMemo(() => {
-    const ids = new Set<string>()
-    for (const p of friendParticipations) ids.add(p.event_id)
-    return ids
-  }, [friendParticipations])
 
-  // ---------- section builders (normal mode) ----------
+  // ---------- section builders (normal mode) — 3 fixed sections ----------
   const nearbyEvents = useMemo(() =>
-    profile?.department ? filteredEvents.filter(ev => ev.department === profile.department) : [],
-  [filteredEvents, profile?.department])
+    profile?.department ? filteredEvents.filter(ev => ev.department === profile.department && new Date(ev.start_date) >= now) : [],
+  [filteredEvents, profile?.department, now])
 
-  const tagSections = useMemo(() => {
-    const sections: { tag: string; label: string; events: EventWithScore[] }[] = []
-    for (const t of PRIMARY_TAGS) {
-      const evs = filteredEvents.filter(ev => ev.primary_tag === t.value)
-      if (evs.length > 0) sections.push({ tag: t.value, label: t.label, events: evs })
-    }
-    return sections
-  }, [filteredEvents])
-
-  const friendEvents = useMemo(() =>
-    filteredEvents.filter(ev => friendEventIds.has(ev.id)),
-  [filteredEvents, friendEventIds])
+  const upcomingEvents = useMemo(() =>
+    filteredEvents.filter(ev => new Date(ev.start_date) >= now),
+  [filteredEvents, now])
 
   const recentEvents = useMemo(() =>
     [...filteredEvents].sort((a, b) =>
@@ -153,7 +136,7 @@ export function ExplorerPage() {
   // ---------- any sections to show? ----------
   const hasSections = showProspection
     ? urgentEvents.length > 0 || openRegistrationEvents.length > 0
-    : nearbyEvents.length > 0 || tagSections.length > 0 || friendEvents.length > 0 || recentEvents.length > 0
+    : nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0
 
   const showEmpty = !loading && filteredEvents.length === 0
 
@@ -309,20 +292,14 @@ export function ExplorerPage() {
           ) : (
             <>
               {nearbyEvents.length > 0 && (
-                <SlideRow title="À venir près de toi" count={nearbyEvents.length}>
+                <SlideRow title="Proche de toi" count={nearbyEvents.length}>
                   {nearbyEvents.map(renderCard)}
                 </SlideRow>
               )}
 
-              {tagSections.map(section => (
-                <SlideRow key={section.tag} title={section.label} count={section.events.length}>
-                  {section.events.map(renderCard)}
-                </SlideRow>
-              ))}
-
-              {friendEvents.length > 0 && (
-                <SlideRow title="Tes amis y vont" count={friendEvents.length}>
-                  {friendEvents.map(renderCard)}
+              {upcomingEvents.length > 0 && (
+                <SlideRow title="Bientôt" count={upcomingEvents.length}>
+                  {upcomingEvents.map(renderCard)}
                 </SlideRow>
               )}
 
