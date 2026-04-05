@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
 import { PRIMARY_TAGS, getTagColor } from '@/lib/constants'
-import { Search, Crosshair, AlertTriangle, Plus } from 'lucide-react'
+import { Crosshair, AlertTriangle, Plus } from 'lucide-react'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -138,7 +138,6 @@ export function ExplorerPage() {
     ? urgentEvents.length > 0 || openRegistrationEvents.length > 0
     : true // département section is always visible
 
-  const showEmpty = !loading && filteredEvents.length === 0
 
   return (
     <div className="explorer-page">
@@ -255,19 +254,6 @@ export function ExplorerPage() {
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="flex-shrink-0 w-[200px] rounded-2xl bg-card animate-pulse" style={{ aspectRatio: '2/3' }} />
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {showEmpty && (
-        <div className="explorer-empty">
-          <Search strokeWidth={1.5} />
-          <div className="explorer-empty-title">Aucun événement</div>
-          <div className="explorer-empty-text">
-            {search
-              ? `Aucun résultat pour "${search}"`
-              : 'Aucun événement trouvé avec ces filtres'}
           </div>
         </div>
       )}
