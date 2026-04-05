@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
+import { Navigate } from 'react-router-dom'
+import { PublicProfilePage } from './PublicProfile'
 
 export function ProfilePage() {
   const { profile, loading } = useAuth()
@@ -12,9 +13,10 @@ export function ProfilePage() {
     )
   }
 
-  if (profile?.public_slug) {
-    return <Navigate to={`/@${profile.public_slug}`} replace />
+  if (!profile?.public_slug) {
+    return <Navigate to="/reglages" replace />
   }
 
-  return <Navigate to="/reglages" replace />
+  // Render the unified profile page inline (within AppLayout)
+  return <PublicProfilePage overrideSlug={profile.public_slug} />
 }

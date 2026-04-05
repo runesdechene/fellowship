@@ -22,8 +22,13 @@ interface ProfileParticipation {
   } | null
 }
 
-export function PublicProfilePage() {
-  const { slug } = useParams<{ slug: string }>()
+interface PublicProfilePageProps {
+  overrideSlug?: string
+}
+
+export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {}) {
+  const { slug: paramSlug } = useParams<{ slug: string }>()
+  const slug = overrideSlug ?? paramSlug
   const { user } = useAuth()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [participations, setParticipations] = useState<ProfileParticipation[]>([])
