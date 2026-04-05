@@ -33,3 +33,4 @@ src-tauri/target/
 
 # Local Netlify folder
 .netlify
+.superpowers/

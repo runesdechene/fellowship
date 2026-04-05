@@ -9,6 +9,7 @@ interface AuthContextType {
   profile: Profile | null
   loading: boolean
   signIn: (email: string, accountType?: 'exposant' | 'public') => Promise<{ error: Error | null }>
+  verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
   needsOnboarding: boolean
@@ -61,9 +62,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: window.location.origin + '/auth/callback',
+        shouldCreateUser: true,
         data: { account_type: accountType },
       },
+    })
+    return { error: error as Error | null }
+  }
+
+  const verifyOtp = async (email: string, token: string) => {
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
     })
     return { error: error as Error | null }
   }
@@ -76,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const needsOnboarding = !!user && !!profile && !profile.display_name
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signIn, signOut, refreshProfile, needsOnboarding }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding }}>
       {children}
     </AuthContext.Provider>
   )

@@ -21,8 +21,7 @@ Unify the two profile pages (private `/profil` and public `/@slug`) into a singl
 - Bio text centered below, max ~300px width, muted color
 - If the user has uploaded a banner image: use it as background with a dark overlay (gradient to transparent at bottom)
 - If no banner: auto-generated gradient from the Fellowship palette (based on name hash, similar to NotificationItem avatar logic)
-- **Top-right corner (owner only):** QR Code share button (icon button)
-- **Top-left corner (owner only):** "Modifier" button linking to `/reglages`
+- **Top-right corner (owner only):** Two buttons side by side — "Modifier mon profil" (prominent, filled/primary style, links to `/reglages`) + QR Code share button (icon button). Both clearly visible so the owner understands this is THEIR public profile and can edit it.
 - **Top-right corner (visitor):** "Suivre" button (FollowButton component)
 
 ## Section 2: Event Cards Carousel
@@ -85,6 +84,13 @@ Unify the two profile pages (private `/profil` and public `/@slug`) into a singl
 
 ### Removed
 - `QRCodeCard.tsx` — replaced by `QRCodeModal`
+
+## Section 4: Footer "Propulsé par Fellowship"
+
+- Fellowship logo (`/logo.png`) displayed centered at the bottom of the page
+- White/desaturated, low opacity (~15-20%) — subtle branding, not intrusive
+- No link, no text — just the logo mark as a quiet signature
+- Adds legitimacy: "this profile is powered by something real"
 
 ## Data Fetching
 

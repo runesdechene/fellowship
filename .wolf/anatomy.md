@@ -1,20 +1,29 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-04T21:33:07.645Z
-> Files: 115 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T13:56:00.143Z
+> Files: 144 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
-- `feedback_no_bandaid.md` (~147 tok)
-- `feedback_v1_testing.md` — Feedback from first test session (2026-04-04) (~324 tok)
-- `project_progress.md` — Status: V1 MVP complete, pushed to main (~263 tok)
+- `feedback_check_git_diff.md` (~185 tok)
+- `feedback_never_regress_commits.md` — Declares chooser (~214 tok)
+- `MEMORY.md` (~183 tok)
+- `project_design_refonte.md` (~243 tok)
+- `project_fellowship_vision.md` — Problème (~436 tok)
+
+## ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/
+
+- `feedback_always_visual_companion.md` (~133 tok)
+- `feedback_no_borders.md` (~145 tok)
+- `feedback_save_credentials_to_env.md` (~181 tok)
+- `MEMORY.md` (~250 tok)
 
 ## ./
 
 - `.gitignore` — Git ignore rules (~108 tok)
 - `CLAUDE.md` — CLAUDE.md (~484 tok)
 - `eslint.config.js` — ESLint flat configuration (~183 tok)
-- `index.html` — Fellowship | flw.sh (~218 tok)
+- `index.html` — Fellowship | flw.sh (~228 tok)
 - `netlify.toml` (~220 tok)
 - `package.json` — Node.js package manifest (~380 tok)
 - `pnpm-lock.yaml` — pnpm lock file (~65508 tok)
@@ -22,7 +31,7 @@
 - `tsconfig.app.json` (~250 tok)
 - `tsconfig.json` — TypeScript configuration (~36 tok)
 - `tsconfig.node.json` (~194 tok)
-- `vite.config.ts` — https://vite.dev/config/ (~396 tok)
+- `vite.config.ts` — Vite build configuration (~396 tok)
 - `vitest.config.ts` — Vitest test configuration (~100 tok)
 
 ## .claude/
@@ -33,207 +42,162 @@
 
 - `openwolf.md` (~313 tok)
 
-## .claude/worktrees/agent-a1d91e91/src/components/notes/
+## .superpowers/brainstorm/1267-1775347024/content/
 
-- `NoteForm.tsx` — NoteForm — renders form (~692 tok)
-- `NotesFeed.tsx` — NotesFeed (~712 tok)
+- `calendar-layout-v2.html` (~3313 tok)
+- `calendar-layout.html` (~2320 tok)
+- `waiting.html` (~39 tok)
 
-## .claude/worktrees/agent-a1d91e91/src/hooks/
+## .superpowers/brainstorm/1690-1775385151/content/
 
-- `use-notes.ts` — Exports useEventNotes, createNote, deleteNote (~338 tok)
+- `notif-friends-style.html` (~1149 tok)
+- `notif-placement.html` (~1642 tok)
+- `waiting.html` (~39 tok)
 
-## .claude/worktrees/agent-a1d91e91/src/types/
+## .superpowers/brainstorm/2025-1775387460/content/
 
-- `database.ts` — Table row types (~706 tok)
-- `supabase.ts` — Exports Json, Database (~5398 tok)
+- `profile-banner.html` (~1340 tok)
+- `profile-fullpage.html` (~1943 tok)
 
-## .claude/worktrees/agent-a1efa139/src/components/notifications/
+## .superpowers/brainstorm/2356-1775389444/content/
 
-- `NotificationBell.tsx` — NotificationBell (~383 tok)
-- `NotificationPanel.tsx` — NotificationItem (~1044 tok)
-
-## .claude/worktrees/agent-a1efa139/src/hooks/
-
-- `use-notifications.ts` — Exports useNotifications (~430 tok)
-
-## .claude/worktrees/agent-a305bc7e/src/components/reports/
-
-- `EventReportForm.tsx` — EventReportForm (~1706 tok)
-
-## .claude/worktrees/agent-a305bc7e/src/components/reviews/
-
-- `ReviewForm.tsx` — StarRating — renders form (~855 tok)
-- `ReviewSummary.tsx` — ReviewSummary (~499 tok)
-
-## .claude/worktrees/agent-a305bc7e/src/hooks/
-
-- `use-reports.ts` — Exports useEventReport, saveEventReport (~282 tok)
-- `use-reviews.ts` — Exports useEventReviews, useMyReview, submitReview (~504 tok)
-
-## .claude/worktrees/agent-a3917154/src/lib/
-
-- `auth.tsx` — AuthContext (~798 tok)
-
-## .claude/worktrees/agent-a3917154/src/pages/
-
-- `Settings.tsx` — SettingsPage (~4192 tok)
-
-## .claude/worktrees/agent-a3f6d4de/src/pages/
-
-- `EventPage.tsx` — EventPage (~2855 tok)
-
-## .claude/worktrees/agent-a40c87f6/src/hooks/
-
-- `use-calendar.ts` — Exports CalendarMonth, useCalendarYear (~381 tok)
-- `use-participations.ts` — Exports useMyParticipations, useFriendsParticipations, addParticipation, updateParticipation, remove (~760 tok)
-
-## .claude/worktrees/agent-a69e0050/src/components/profile/
-
-- `FollowButton.tsx` — FollowButton (~308 tok)
-
-## .claude/worktrees/agent-a69e0050/src/hooks/
-
-- `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~905 tok)
-
-## .claude/worktrees/agent-a79fed81/src/components/calendar/
-
-- `MonthCell.tsx` — tagColors (~480 tok)
-- `YearView.tsx` — YearView (~323 tok)
-
-## .claude/worktrees/agent-a79fed81/src/hooks/
-
-- `use-calendar.ts` — Exports CalendarMonth, useCalendarYear (~381 tok)
-- `use-participations.ts` — Exports useMyParticipations, useFriendsParticipations, addParticipation, updateParticipation, remove (~760 tok)
-
-## .claude/worktrees/agent-a79fed81/src/lib/
-
-- `auth.tsx` — AuthContext (~701 tok)
-
-## .claude/worktrees/agent-a79fed81/src/pages/
-
-- `Dashboard.tsx` — DashboardPage (~1148 tok)
-
-## .claude/worktrees/agent-a91790cf/src/components/events/
-
-- `DeduplicateSuggestions.tsx` — DeduplicateSuggestions (~431 tok)
-- `EventCard.tsx` — EventCard (~708 tok)
-- `EventForm.tsx` — EventForm — renders form (~1999 tok)
-
-## .claude/worktrees/agent-a91790cf/src/hooks/
-
-- `use-events.ts` — Exports useEvents, useEvent, createEvent, searchSimilarEvents (~778 tok)
-
-## .claude/worktrees/agent-ae553bef/src/
-
-- `App.tsx` — App (~264 tok)
-
-## .claude/worktrees/agent-ae553bef/src/components/profile/
-
-- `QRCodeCard.tsx` — QRCodeCard (~434 tok)
-
-## .claude/worktrees/agent-ae553bef/src/pages/
-
-- `Embed.tsx` — EmbedPage (~1194 tok)
-
-## .claude/worktrees/agent-af3b28c1/src/lib/
-
-- `auth.tsx` — AuthContext (~820 tok)
-
-## .claude/worktrees/agent-af3b28c1/src/pages/
-
-- `Login.tsx` — LoginPage — renders form (~2481 tok)
-
-## .claude/worktrees/agent-af76a4b4/src/pages/
-
-- `Explorer.tsx` — ExplorerPage (~1130 tok)
-
-## .claude/worktrees/agent-af90885b/src/pages/
-
-- `Landing.tsx` — LandingPage (~3292 tok)
+- `design-system-proposals.html` — Design System — Fellowship (~3451 tok)
+- `design-system-softer.html` — Design System — Softer Text — Fellowship (~3369 tok)
+- `design-system-svg.html` — Design System — SVG Icons — Fellowship (~3820 tok)
+- `design-system-v3.html` — Design System v3 — Fellowship (~3486 tok)
+- `design-system-v4.html` — Design System v4 — Flat + Inverted — Fellowship (~3984 tok)
+- `event-cards-netflix.html` — Event Cards — Netflix Style — Fellowship (~3171 tok)
+- `font-jakarta-inter.html` — Plus Jakarta Sans + Inter — Fellowship (~1890 tok)
+- `font-pairing-v2.html` — Font Pairing — Fellowship (~2850 tok)
+- `font-pairing.html` — Font Pairing — Fellowship (~2625 tok)
+- `profile-editorial-light-v2.html` (~3431 tok)
+- `profile-editorial-light-v3.html` (~3288 tok)
+- `profile-editorial-light-v4.html` (~2085 tok)
+- `profile-editorial-light.html` (~3021 tok)
+- `profile-vivant.html` (~3809 tok)
 
 ## docs/superpowers/plans/
 
 - `2026-04-04-fellowship-v1.md` — Fellowship V1 Implementation Plan (~27110 tok)
+- `2026-04-05-design-system-refonte.md` — Design System Refonte Implementation Plan (~4983 tok)
+- `2026-04-05-notifications-redesign.md` — Notifications Redesign Implementation Plan (~6692 tok)
+- `2026-04-05-profile-redesign.md` — Profile Redesign Implementation Plan (~7211 tok)
 
 ## docs/superpowers/specs/
 
 - `2026-04-04-fellowship-v1-design.md` — Fellowship V1 — Design Specification (~4081 tok)
+- `2026-04-05-dashboard-calendar-design.md` — Dashboard & Calendar Redesign — Design Spec (~853 tok)
+- `2026-04-05-design-refonte.md` — Fellowship — Design Refonte Spec (~1909 tok)
+- `2026-04-05-design-system-refonte.md` — Design System Refonte — Design Spec (~1353 tok)
+- `2026-04-05-notifications-redesign.md` — Notifications Redesign — Design Spec (~1179 tok)
+- `2026-04-05-profile-redesign.md` — Profile Redesign — Design Spec (~1297 tok)
 
 ## src/
 
-- `App.tsx` — OnboardingGuard (~765 tok)
-- `index.css` — Styles: 4 rules, 70 vars (~847 tok)
-- `main.tsx` (~69 tok)
+- `App.tsx` — OnboardingGuard (~813 tok)
+- `index.css` — Styles: 9 rules, 72 vars (~1195 tok)
+- `main.tsx` (~122 tok)
 
 ## src/components/
 
 - `ProtectedRoute.tsx` — ProtectedRoute (~157 tok)
 - `theme-toggle.tsx` — ThemeToggle (~221 tok)
 
+## src/components/calendar/
+
+- `CalendarMonth.tsx` — tagColors (~1099 tok)
+- `MonthCell.tsx` — tagColors (~482 tok)
+- `YearView.tsx` — YearView (~333 tok)
+
 ## src/components/events/
 
-- `EventForm.tsx` — EventForm (~3260 tok)
-- `TagInput.tsx` — TagInput (~942 tok)
+- `DeduplicateSuggestions.tsx` — DeduplicateSuggestions (~442 tok)
+- `EventCard.tsx` — formatDate (~1630 tok)
+- `EventForm.tsx` — EventForm (~3643 tok)
+- `TagInput.tsx` — TagInput (~936 tok)
 
 ## src/components/layout/
 
 - `AppLayout.tsx` — AppLayout (~113 tok)
-- `BottomBar.tsx` — exposantNav (~423 tok)
-- `Sidebar.tsx` — exposantNav (~761 tok)
+- `BottomBar.tsx` — exposantNav (~406 tok)
+- `Sidebar.css` — Styles: 22 rules (~816 tok)
+- `Sidebar.tsx` — exposantNav (~1049 tok)
 
 ## src/components/notes/
 
-- `NoteForm.tsx` — NoteForm — textarea + visibility toggle (prive/amis) + submit button (~430 tok)
-- `NotesFeed.tsx` — NotesFeed (~755 tok)
+- `NoteForm.tsx` — NoteForm — renders form — uses useState (~713 tok)
+- `NotesFeed.tsx` — NotesFeed (~751 tok)
 
 ## src/components/notifications/
 
-- `NotificationBell.tsx` — NotificationBell — bell icon button with unread badge, click-outside close, renders NotificationPanel (~200 tok)
+- `NotificationBell.tsx` — NotificationBell — uses useState, useEffect (~394 tok)
+- `NotificationItem.tsx` — GRADIENTS (~1375 tok)
 - `NotificationPanel.tsx` — NotificationItem (~1126 tok)
+- `NotificationSlidePanel.css` — Styles: 15 rules (~650 tok)
+- `NotificationSlidePanel.tsx` — NotificationSlidePanel (~666 tok)
+- `SidebarActivity.css` — Styles: 13 rules (~596 tok)
+- `SidebarActivity.tsx` — SidebarActivity (~568 tok)
 
 ## src/components/profile/
 
-- `QRCodeCard.tsx` — QRCodeCard — displays QR code for an exposant slug, download as 1024x1024 PNG via canvas (~350 tok)
+- `EmailSignupPlaceholder.tsx` — EmailSignupPlaceholder (~372 tok)
+- `EventCarousel.tsx` — formatDay (~987 tok)
+- `FellowshipFooter.tsx` — FellowshipFooter (~66 tok)
+- `FollowButton.tsx` — FollowButton (~320 tok)
+- `ProfileHeader.tsx` — ProfileHeader (~749 tok)
+- `QRCodeCard.tsx` — QRCodeCard (~453 tok)
+- `QRCodeModal.tsx` — QRCodeModal (~860 tok)
 
 ## src/components/reports/
 
-- `EventReportForm.tsx` — EventReportForm (~1764 tok)
+- `EventReportForm.tsx` — EventReportForm — uses useState, useEffect (~1764 tok)
+
+## src/components/reviews/
+
+- `ReviewForm.tsx` — StarRating — renders form (~872 tok)
+- `ReviewSummary.tsx` — ReviewSummary (~511 tok)
 
 ## src/components/ui/
 
-- `button.tsx` — buttonVariants (~542 tok)
+- `button.tsx` — buttonVariants (~530 tok)
+- `toast.tsx` — icons (~489 tok)
 
 ## src/hooks/
 
-- `use-events.ts` — Exports useEvents, useEvent, createEvent, searchSimilarEvents (~823 tok)
+- `use-calendar.ts` — Exports CalendarEvent, CalendarMonth, useCalendarYear (~442 tok)
+- `use-events.ts` — Exports useEvents, useEvent, createEvent, updateEvent + 2 more (~1084 tok)
+- `use-following-ids.ts` — Exports useFollowingIds (~171 tok)
 - `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~1073 tok)
 - `use-notes.ts` — Exports useEventNotes, createNote, deleteNote (~383 tok)
 - `use-notifications.ts` — Exports useNotifications (~478 tok)
-- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 2 mor (~982 tok)
+- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 2 more (~982 tok)
+- `use-reports.ts` — Exports useEventReport, saveEventReport (~292 tok)
 - `use-reviews.ts` — Exports useEventReviews, useMyReview, submitReview (~575 tok)
 - `use-theme.ts` — Exports useTheme (~358 tok)
 
 ## src/lib/
 
-- `auth.tsx` — AuthContext (~829 tok)
+- `auth.tsx` — AuthContext (~827 tok)
 - `constants.ts` — Primary tags — fixed by admin, not user-editable (~89 tok)
 - `supabase.ts` — Exports supabase (~115 tok)
 - `utils.ts` — Exports cn (~50 tok)
 
 ## src/pages/
 
-- `Dashboard.tsx` — DashboardPage (~1189 tok)
-- `Embed.tsx` — EmbedPage — lightweight standalone iframe embed: mini header with avatar + "Voir sur Fellowship" link, public participations list, no sidebar/nav (~500 tok)
-- `EventPage.tsx` — EventPage (~2938 tok)
-- `Explorer.tsx` — ExplorerPage (~1658 tok)
-- `Following.tsx` — FollowingPage (~42 tok)
-- `Landing.tsx` — LandingPage (~1279 tok)
-- `Login.tsx` — LoginPage — renders form (~1122 tok)
-- `Notifications.tsx` — NotificationsPage (~44 tok)
-- `Onboarding.tsx` — OnboardingPage — multi-step onboarding: 3 steps for exposant (brand name, city/postal, slug), 2 steps for public (name, postal); detects type from profile (~1567 tok)
-- `Profile.tsx` — Avatar (~1759 tok)
-- `PublicProfile.tsx` — Avatar (~2172 tok)
-- `Settings.tsx` — SettingsPage — profile editing (avatar upload, exposant: brand_name/bio/website/slug; shared: display_name/city/postal/sex), QR code (exposant only, SVG download), account (email read-only, sign out, delete with confirm) (~800 tok)
+- `AuthCallback.tsx` — AuthCallbackPage — uses useNavigate, useEffect (~314 tok)
+- `Calendar.tsx` — CalendarPage (~1512 tok)
+- `Dashboard.tsx` — daysUntil (~3416 tok)
+- `Embed.tsx` — EmbedPage (~1215 tok)
+- `EventPage.tsx` — EventPage (~6385 tok)
+- `Explorer.tsx` — EventCardSkeleton (~1711 tok)
+- `Following.tsx` — FollowingPage (~49 tok)
+- `Landing.tsx` — LandingPage (~2724 tok)
+- `Login.tsx` — LoginPage — renders form (~2282 tok)
+- `Notifications.tsx` — NotificationsPage (~508 tok)
+- `Onboarding.tsx` — OnboardingPage (~1550 tok)
+- `Profile.tsx` — ProfilePage (~171 tok)
+- `PublicProfile.tsx` — PublicProfilePage (~1270 tok)
+- `Settings.tsx` — SettingsPage (~5191 tok)
 
 ## src/test/
 
@@ -242,8 +206,8 @@
 
 ## src/types/
 
-- `database.ts` — App-level type helpers: Row/Insert/Update types for all 8 tables, 7 enum types, computed interface types (EventWithScore, ParticipationWithEvent, etc.) (~706 tok)
-- `supabase.ts` — Auto-generated Supabase TypeScript types (Database, Tables, Enums, Views) — 629 lines (~4500 tok)
+- `database.ts` — Table row types (~772 tok)
+- `supabase.ts` — Exports Json, Database (~5491 tok)
 
 ## supabase/
 
@@ -263,7 +227,12 @@
 
 ## supabase/migrations/
 
-- `20260404110000_cleanup_old_schema.sql` — Cleanup old prototype schema before creating new Fellowship V1 schema (~202 tok)
-- `20260404120000_initial_schema.sql` — Fellowship V1 Schema (~1986 tok)
-- `20260404120001_rls_policies.sql` — Enable RLS on all tables (~1002 tok)
-- `20260404120002_storage_buckets.sql` — Storage buckets (upsert to handle existing buckets) (~450 tok)
+- `20260404110000_cleanup_old_schema.sql` — Cleanup old prototype schema before creating new Fellowship V1 schema (~216 tok)
+- `20260404120000_initial_schema.sql` — Fellowship V1 Schema (~2127 tok)
+- `20260404120001_rls_policies.sql` — Enable RLS on all tables (~1073 tok)
+- `20260404120002_storage_buckets.sql` — Storage buckets (upsert to handle existing buckets) (~482 tok)
+- `20260404120005_fix_trigger_search_path.sql` — Fix: handle_new_user trigger needs explicit search_path (~141 tok)
+- `20260405120000_fix_events_insert_policy.sql` — Fix: allow any authenticated user to create events (~120 tok)
+- `20260405120001_events_update_any_exposant.sql` — Allow any exposant to update any event (collaborative curation) (~107 tok)
+- `20260405130000_add_notification_types.sql` — Add new notification types for full platform activity monitoring (~95 tok)
+- `20260405140000_add_banner_url.sql` — Add banner_url column for profile banner images (~31 tok)
