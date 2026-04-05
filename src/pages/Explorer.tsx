@@ -23,8 +23,8 @@ export function ExplorerPage() {
   const [showProspection, setShowProspection] = useState(false)
   const [temporalFilter, setTemporalFilter] = useState<TemporalFilter>(null)
   // Month pickers for prospection (0 = current month)
-  const currentMonth = now.getMonth()
-  const currentYear = now.getFullYear()
+  const currentMonth = new Date().getMonth()
+  const currentYear = new Date().getFullYear()
   const monthOptions = Array.from({ length: 13 }, (_, i) => {
     const d = new Date(currentYear, currentMonth + i)
     return {
