@@ -32,14 +32,26 @@ const publicNav = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const [wasCollapsed, setWasCollapsed] = useState(false)
   const [showNotifPanel, setShowNotifPanel] = useState(false)
   const { profile } = useAuth()
   const nav = profile?.type === 'exposant' ? exposantNav : publicNav
 
+  const openNotifPanel = () => {
+    setWasCollapsed(collapsed)
+    setCollapsed(false)
+    setShowNotifPanel(true)
+  }
+
+  const closeNotifPanel = () => {
+    setShowNotifPanel(false)
+    if (wasCollapsed) setCollapsed(true)
+  }
+
   return (
-    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <aside className={`sidebar ${collapsed && !showNotifPanel ? 'collapsed' : ''}`}>
       {showNotifPanel ? (
-        <NotificationSlidePanel onClose={() => setShowNotifPanel(false)} />
+        <NotificationSlidePanel onClose={closeNotifPanel} />
       ) : (
         <>
           {/* Header: logo + collapse toggle */}
@@ -83,8 +95,7 @@ export function Sidebar() {
 
           {/* Activity section */}
           <div className="sidebar-activity-section">
-            <div className="sidebar-activity-divider" />
-            <SidebarActivity collapsed={collapsed} onShowAll={() => setShowNotifPanel(true)} />
+            <SidebarActivity collapsed={collapsed} onShowAll={openNotifPanel} />
           </div>
 
           {/* Expand button (only visible when collapsed) */}
