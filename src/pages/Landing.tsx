@@ -46,7 +46,7 @@ export function LandingPage() {
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link to="/login">
-            <Button size="lg" className="gap-2 px-8 shadow-md shadow-primary/20">
+            <Button size="lg" className="gap-2 px-8">
               Je suis exposant
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -125,7 +125,7 @@ export function LandingPage() {
 
           <div className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
             {/* Free */}
-            <div className="rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-8">
+            <div className="rounded-2xl bg-card p-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>Gratuit</p>
               <p className="mt-2 text-4xl">0 €</p>
               <p className="mt-1 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>pour toujours</p>
@@ -153,7 +153,7 @@ export function LandingPage() {
             </div>
 
             {/* Pro */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 text-white shadow-xl">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 text-white">
               <span className="absolute right-5 top-5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
                 POPULAIRE
               </span>
@@ -191,7 +191,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="shadow-[0_-1px_0_0_hsl(var(--border)/0.5)] py-10">
+      <footer className="border-t border-border py-10">
         <div className="mx-auto max-w-5xl px-6 text-center text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
           <p>Fellowship © 2026</p>
           <p className="mt-1">flw.sh</p>
@@ -219,7 +219,7 @@ function FeatureCard({ icon, title, description, color }: {
   }
 
   return (
-    <div className={`rounded-2xl shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] ${bgMap[color]} p-7`}>
+    <div className={`rounded-2xl ${bgMap[color]} p-7`}>
       <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${iconBg[color]}`}>
         {icon}
       </div>

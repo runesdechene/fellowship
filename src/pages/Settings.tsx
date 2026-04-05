@@ -161,7 +161,7 @@ export function SettingsPage() {
         <h1 className="mb-8 text-2xl font-bold">Paramètres</h1>
 
         {/* ── Section: Profil ──────────────────────────────────────────────── */}
-        <section className="mb-6 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
+        <section className="mb-6 rounded-2xl bg-card p-6">
           <h2 className="mb-5 text-base font-semibold">Profil</h2>
 
           {/* Avatar */}
@@ -179,7 +179,7 @@ export function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
-                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-card text-foreground shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] hover:bg-muted disabled:opacity-50"
+                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-card text-foreground hover:bg-muted disabled:opacity-50"
               >
                 {uploadingAvatar ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -206,7 +206,7 @@ export function SettingsPage() {
             <div className="mb-6">
               <p className="text-sm font-medium mb-2">Image de fond du profil</p>
               <div
-                className="relative h-32 rounded-xl overflow-hidden shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] bg-muted cursor-pointer group"
+                className="relative h-32 rounded-xl overflow-hidden bg-muted cursor-pointer group"
                 onClick={() => bannerInputRef.current?.click()}
               >
                 {bannerUrl ? (
@@ -364,13 +364,13 @@ export function SettingsPage() {
 
         {/* ── Section: QR Code (exposant only) ────────────────────────────── */}
         {isExposant && slug && (
-          <section className="mb-6 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
+          <section className="mb-6 rounded-2xl bg-card p-6">
             <h2 className="mb-2 text-base font-semibold">QR Code</h2>
             <p className="mb-5 text-sm text-muted-foreground">
               Partagez votre profil public via ce QR code.
             </p>
             <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-              <div className="flex-shrink-0 rounded-xl bg-white p-4 shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)]">
+              <div className="flex-shrink-0 rounded-xl bg-white p-4">
                 <QRCodeSVG
                   id="fellowship-qr"
                   value={qrUrl}
@@ -391,7 +391,7 @@ export function SettingsPage() {
         )}
 
         {/* ── Section: Compte ─────────────────────────────────────────────── */}
-        <section className="rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
+        <section className="rounded-2xl bg-card p-6">
           <h2 className="mb-5 text-base font-semibold">Compte</h2>
 
           <div className="mb-4">

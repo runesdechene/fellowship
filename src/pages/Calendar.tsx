@@ -17,9 +17,7 @@ export function CalendarPage() {
   const months = useCalendarYear(participations, year)
 
   // Prefetch adjacent years
-  const { participations: partsPrev } = useMyParticipations(year - 1)
   const { participations: partsNext } = useMyParticipations(year + 1)
-  const monthsPrev = useCalendarYear(partsPrev, year - 1)
   const monthsNext = useCalendarYear(partsNext, year + 1)
 
   // Sliding 12 months starting from defaultStart month
@@ -123,14 +121,25 @@ export function CalendarPage() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           style={{ willChange: 'opacity, transform' }}
         >
-          {slidingMonths.map(month => (
-            <div
-              key={`${month.year}-${month.month}`}
-              className="rounded-2xl bg-muted/40 p-4"
-            >
-              <CalendarMonth data={month} />
-            </div>
-          ))}
+          {slidingMonths.map(month => {
+            const isCurrentMonth = month.year === now.getFullYear() && month.month === now.getMonth()
+            const isEmpty = month.events.length === 0
+
+            return (
+              <div
+                key={`${month.year}-${month.month}`}
+                className={`rounded-2xl p-4 ${
+                  isCurrentMonth
+                    ? 'bg-primary/8 ring-2 ring-primary/20'
+                    : isEmpty
+                      ? 'bg-muted/60 opacity-50'
+                      : 'bg-muted/40'
+                }`}
+              >
+                <CalendarMonth data={month} />
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
