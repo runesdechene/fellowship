@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
-  LayoutDashboard,
   CalendarDays,
   Compass,
   User,
@@ -16,9 +15,8 @@ import { NotificationSlidePanel } from '@/components/notifications/NotificationS
 import './Sidebar.css'
 
 const exposantNav = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/explorer', icon: Compass, label: 'Explorer' },
+  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/profil', icon: User, label: 'Profil' },
   { to: '/reglages', icon: Settings, label: 'Réglages' },
 ]
@@ -57,7 +55,7 @@ export function Sidebar() {
           {/* Header: logo + collapse toggle */}
           <div className="sidebar-header">
             <Link
-              to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
+              to="/explorer"
               className="sidebar-logo-link"
             >
               {collapsed ? (

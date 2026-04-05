@@ -132,11 +132,11 @@ export function LandingPage() {
 
               <ul className="mt-8 space-y-3 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {[
-                  '7 événements par an',
+                  'Gestion de ses événements',
                   'Vue calendrier annuelle',
-                  '3 amis visibles',
                   'Score agrégé des festivals',
                   'Profil public basique',
+                  'Système de suivi pour sa communauté'
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <span className="mt-0.5 shrink-0 text-accent">✓</span>
@@ -158,20 +158,18 @@ export function LandingPage() {
                 POPULAIRE
               </span>
               <p className="text-xs font-semibold uppercase tracking-widest text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>Pro</p>
-              <p className="mt-2 text-4xl">7 €</p>
-              <p className="mt-1 text-sm text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>par mois</p>
+              <p className="mt-2 text-4xl">9.99€</p>
+              <p className="mt-1 text-sm text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>HT, par mois</p>
 
               <ul className="mt-8 space-y-3 text-sm text-white/80" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {[
-                  'Événements illimités',
+                  'Découverte des événements de ses amis',
                   'Visibilité privé / amis / public',
-                  'Amis illimités',
                   'Avis détaillés des exposants',
                   'Notes privées',
                   'Bilan post-événement (CA, coûts)',
-                  'QR code personnalisé',
                   'Rappels deadlines inscription',
-                  'Page embed (iframe)',
+                  'Calendrier live sur son site (HTML)',
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <span className="mt-0.5 shrink-0 text-yellow-300">✓</span>

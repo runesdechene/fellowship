@@ -5,7 +5,6 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { LandingPage } from '@/pages/Landing'
 import { LoginPage } from '@/pages/Login'
 import { OnboardingPage } from '@/pages/Onboarding'
-import { DashboardPage } from '@/pages/Dashboard'
 import { ExplorerPage } from '@/pages/Explorer'
 import { NotificationsPage } from '@/pages/Notifications'
 import { ProfilePage } from '@/pages/Profile'
@@ -64,7 +63,7 @@ function App() {
           />
 
           {/* Authenticated routes */}
-          <Route path="/dashboard" element={<AuthenticatedApp><DashboardPage /></AuthenticatedApp>} />
+          <Route path="/dashboard" element={<Navigate to="/explorer" replace />} />
           <Route path="/calendrier" element={<AuthenticatedApp><CalendarPage /></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />

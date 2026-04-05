@@ -41,7 +41,7 @@ export function OnboardingPage() {
 
     await refreshProfile()
     setSaving(false)
-    navigate(isExposant ? '/dashboard' : '/explorer')
+    navigate('/explorer')
   }
 
   const inputClass = "w-full rounded-full border border-input bg-card px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-ring"

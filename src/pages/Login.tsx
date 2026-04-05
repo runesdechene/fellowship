@@ -33,7 +33,7 @@ export function LoginPage() {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/explorer" replace />
   }
 
   const handleSendCode = async (e: React.FormEvent) => {

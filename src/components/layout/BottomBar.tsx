@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
-  LayoutDashboard,
   CalendarDays,
   Compass,
   User,
@@ -10,9 +9,8 @@ import {
 } from 'lucide-react'
 
 const exposantNav = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/explorer', icon: Compass, label: 'Explorer' },
+  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/profil', icon: User, label: 'Profil' },
 ]
 

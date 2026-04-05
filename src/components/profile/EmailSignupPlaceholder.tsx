@@ -15,7 +15,7 @@ export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceh
       )}
       <Mail className="profile-email-icon" strokeWidth={1.5} />
       <p className="profile-email-text">
-        Restez informé des prochains événements de {brandName}
+         Découvrez des événements et suivez <b>{brandName}</b>
       </p>
       <div className="profile-email-form">
         <input
