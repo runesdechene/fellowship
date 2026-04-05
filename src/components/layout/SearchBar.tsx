@@ -161,7 +161,7 @@ export function SearchBar() {
                   {profiles.map(p => (
                     <Link
                       key={p.id}
-                      to={`/${p.public_slug ?? p.id}`}
+                      to={`/@${p.public_slug ?? p.id}`}
                       className="search-result-item"
                       onClick={() => { setOpen(false); setQuery('') }}
                     >

@@ -10,7 +10,7 @@ interface QRCodeModalProps {
 
 export function QRCodeModal({ slug, onClose }: QRCodeModalProps) {
   const [copied, setCopied] = useState(false)
-  const url = `https://flw.sh/${slug}`
+  const url = `https://flw.sh/@${slug}`
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {

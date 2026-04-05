@@ -17,7 +17,8 @@ interface EmbedParticipation {
 }
 
 export function EmbedPage() {
-  const { slug } = useParams<{ slug: string }>()
+  const { slug: rawSlug } = useParams<{ slug: string }>()
+  const slug = rawSlug?.replace(/^@/, '')
   const [profile, setProfile] = useState<Profile | null>(null)
   const [participations, setParticipations] = useState<EmbedParticipation[]>([])
   const [loading, setLoading] = useState(true)
@@ -75,7 +76,7 @@ export function EmbedPage() {
           <span className="font-semibold text-sm">{displayName}</span>
         </div>
         <a
-          href={`https://flw.sh/${slug}`}
+          href={`https://flw.sh/@${slug}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"

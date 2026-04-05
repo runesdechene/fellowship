@@ -201,7 +201,7 @@ export function DashboardPage() {
                 {friends.map(friend => (
                   <Link
                     key={friend.id}
-                    to={`/${friend.public_slug ?? friend.id}`}
+                    to={`/@${friend.public_slug ?? friend.id}`}
                     className="flex items-center gap-3 rounded-2xl bg-card p-3"
                   >
                     <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
@@ -229,7 +229,7 @@ export function DashboardPage() {
                 {followers.map(follower => (
                   <Link
                     key={follower.id}
-                    to={`/${follower.public_slug ?? follower.id}`}
+                    to={`/@${follower.public_slug ?? follower.id}`}
                     className="flex items-center gap-3 rounded-2xl bg-card p-3"
                   >
                     <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
