@@ -71,6 +71,39 @@
   height: 22px;
 }
 
+/* Friends toggle */
+.calendar-friends-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: rgba(61, 48, 40, 0.4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-right: 8px;
+}
+
+.calendar-friends-toggle:hover {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+.calendar-friends-toggle.active {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.calendar-friends-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
 .calendar-today-btn {
   border-radius: 9999px;
   padding: 8px 16px;
@@ -113,7 +146,7 @@
 }
 
 .calendar-month-card.current {
-  background: white;
+  background: rgb(248, 245, 241);
   outline: 2px solid hsl(var(--primary) / 0.15);
   outline-offset: -2px;
 }
@@ -344,6 +377,20 @@
 
 .presence-avatar:first-child {
   margin-left: 0;
+}
+
+/* Friend event badge */
+.calendar-presence-friend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 9999px;
+  padding: 2px 10px 2px 2px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  background: hsl(var(--accent) / 0.08);
+  color: hsl(var(--accent));
 }
 
 .calendar-presence-friends-count {

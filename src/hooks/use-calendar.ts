@@ -12,6 +12,8 @@ export interface CalendarEvent {
   city: string
   department: string
   imageUrl: string | null
+  isFriend?: boolean
+  friendName?: string
 }
 
 export interface CalendarMonth {

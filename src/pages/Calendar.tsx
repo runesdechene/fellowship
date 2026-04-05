@@ -1,8 +1,8 @@
 import { useState, useMemo, useRef, useCallback } from 'react'
 import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
-import { useCalendarYear } from '@/hooks/use-calendar'
+import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import './Calendar.css'
 
 export function CalendarPage() {
@@ -12,6 +12,7 @@ export function CalendarPage() {
 
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
+  const [showFriends, setShowFriends] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const { participations, loading } = useMyParticipations(year)
@@ -22,10 +23,64 @@ export function CalendarPage() {
 
   const { participations: friendActivity } = useFriendsParticipations()
 
+  // Convert friend participations to CalendarEvents grouped by month
+  const friendEventsByMonth = useMemo(() => {
+    const map: Record<string, CalendarEvent[]> = {}
+    if (!showFriends) return map
+
+    for (const fp of friendActivity) {
+      const ev = fp.events as Record<string, unknown> | undefined
+      if (!ev) continue
+
+      const startDate = new Date(ev.start_date as string)
+      const endDate = new Date(ev.end_date as string)
+      const key = `${startDate.getFullYear()}-${startDate.getMonth()}`
+
+      const calEvent: CalendarEvent = {
+        id: fp.event_id,
+        name: ev.name as string,
+        startDate,
+        endDate,
+        primaryTag: (ev.primary_tag as string) ?? '',
+        status: '',
+        visibility: 'public',
+        city: (ev.city as string) ?? '',
+        department: (ev.department as string) ?? '',
+        imageUrl: (ev.image_url as string | null) ?? null,
+        isFriend: true,
+        friendName: fp.profiles?.display_name ?? 'Un ami',
+      }
+
+      if (!map[key]) map[key] = []
+      // Avoid duplicates (same event from multiple friends)
+      if (!map[key].some(e => e.id === calEvent.id)) {
+        map[key].push(calEvent)
+      }
+    }
+    return map
+  }, [friendActivity, showFriends])
+
+  // Merge friend events into months
+  const mergeWithFriends = useCallback((monthData: CalendarMonthType): CalendarMonthType => {
+    if (!showFriends) return monthData
+    const key = `${monthData.year}-${monthData.month}`
+    const friendEvents = friendEventsByMonth[key] ?? []
+    // Filter out events already in my participations
+    const myEventIds = new Set(monthData.events.map(e => e.id))
+    const newFriendEvents = friendEvents.filter(e => !myEventIds.has(e.id))
+    if (newFriendEvents.length === 0) return monthData
+    return {
+      ...monthData,
+      events: [...monthData.events, ...newFriendEvents].sort(
+        (a, b) => a.startDate.getTime() - b.startDate.getTime()
+      ),
+    }
+  }, [showFriends, friendEventsByMonth])
+
   const slidingMonths = useMemo(() => {
     const all = [...months.slice(defaultStart), ...monthsNext.slice(0, defaultStart)]
-    return all
-  }, [months, monthsNext, defaultStart])
+    return all.map(mergeWithFriends)
+  }, [months, monthsNext, defaultStart, mergeWithFriends])
 
   const firstMonth = slidingMonths[0]
   const lastMonth = slidingMonths[11]
@@ -68,6 +123,15 @@ export function CalendarPage() {
           </p>
         </div>
         <div className="calendar-nav">
+          {/* Friends toggle */}
+          <button
+            onClick={() => setShowFriends(!showFriends)}
+            className={`calendar-friends-toggle ${showFriends ? 'active' : ''}`}
+          >
+            <Users strokeWidth={1.5} />
+            <span>Amis</span>
+          </button>
+
           <button
             onClick={() => navigate('prev')}
             disabled={animating}

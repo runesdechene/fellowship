@@ -112,26 +112,40 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
 
             {/* Participants — below the card */}
             <div className="calendar-presence-row">
-              <div
-                className="calendar-presence-me"
-                style={{ background: statusCfg.bg, color: statusCfg.color }}
-              >
-                {profile?.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" className="calendar-presence-avatar-img" />
-                ) : (
+              {ev.isFriend ? (
+                /* Friend's event — show friend name */
+                <div className="calendar-presence-friend-badge">
                   <div
-                    className="calendar-presence-avatar-letter"
-                    style={{ background: statusCfg.color }}
+                    className="presence-avatar"
+                    style={{ background: `linear-gradient(135deg, ${AVATAR_GRADIENTS[hashName(ev.friendName ?? '?') % AVATAR_GRADIENTS.length][0]}, ${AVATAR_GRADIENTS[hashName(ev.friendName ?? '?') % AVATAR_GRADIENTS.length][1]})`, marginLeft: 0 }}
                   >
-                    {displayName[0].toUpperCase()}
+                    {(ev.friendName ?? '?')[0].toUpperCase()}
                   </div>
-                )}
-                <statusCfg.icon style={{ width: 10, height: 10 }} strokeWidth={2.5} />
-                <span>{displayName}</span>
-              </div>
+                  <span>{ev.friendName}</span>
+                </div>
+              ) : (
+                /* My event — show my presence */
+                <div
+                  className="calendar-presence-me"
+                  style={{ background: statusCfg.bg, color: statusCfg.color }}
+                >
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="" className="calendar-presence-avatar-img" />
+                  ) : (
+                    <div
+                      className="calendar-presence-avatar-letter"
+                      style={{ background: statusCfg.color }}
+                    >
+                      {displayName[0].toUpperCase()}
+                    </div>
+                  )}
+                  <statusCfg.icon style={{ width: 10, height: 10 }} strokeWidth={2.5} />
+                  <span>{displayName}</span>
+                </div>
+              )}
 
-              {/* Friends */}
-              {friendsAtEvent.length > 0 && (
+              {/* Friends on my events */}
+              {!ev.isFriend && friendsAtEvent.length > 0 && (
                 <div className="calendar-presence-friends">
                   <div className="presence-avatars">
                     {friendsAtEvent.slice(0, 3).map((fp, i) => {
