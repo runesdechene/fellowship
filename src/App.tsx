@@ -35,6 +35,18 @@ function AuthenticatedApp({ children }: { children: React.ReactNode }) {
   )
 }
 
+function ProfileWithLayout() {
+  const { user } = useAuth()
+  if (user) {
+    return (
+      <AppLayout>
+        <PublicProfilePage />
+      </AppLayout>
+    )
+  }
+  return <PublicProfilePage />
+}
+
 function App() {
   return (
         <Routes>
@@ -61,8 +73,8 @@ function App() {
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
 
-          {/* Public profile — catch-all, MUST be last */}
-          <Route path="/:slug" element={<PublicProfilePage />} />
+          {/* Profile — with layout if authenticated, without if not */}
+          <Route path="/:slug" element={<ProfileWithLayout />} />
           <Route path="/:slug/embed" element={<EmbedPage />} />
         </Routes>
   )
