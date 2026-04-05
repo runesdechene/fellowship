@@ -300,7 +300,7 @@ export function ExplorerPage() {
           ) : (
             <>
               {nearbyEvents.length > 0 && (
-                <SlideRow title="Proche de toi" count={nearbyEvents.length}>
+                <SlideRow title={`Dans votre département (${profile?.department})`} count={nearbyEvents.length}>
                   {nearbyEvents.map(renderCard)}
                 </SlideRow>
               )}
