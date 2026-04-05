@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, User } from 'lucide-react'
+import { MapPin, Calendar, Check, HelpCircle } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
 
@@ -29,14 +30,22 @@ function formatDateRange(start: Date, end: Date): string {
   return `${dayStart} ${monthStart} - ${dayEnd} ${monthEnd}`
 }
 
+const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: typeof Check }> = {
+  confirme: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.1)', icon: Check },
+  inscrit: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.1)', icon: Check },
+  interesse: { color: 'hsl(30 80% 50%)', bg: 'hsl(30 80% 50% / 0.1)', icon: HelpCircle },
+}
+
 interface CalendarMonthProps {
   data: CalendarMonthType
   friendParticipations?: FriendParticipation[]
 }
 
 export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonthProps) {
-  const { month, year, label, events } = data
+  const { month, label, events } = data
+  const { profile } = useAuth()
   const isEmpty = events.length === 0
+  const displayName = profile?.brand_name ?? profile?.display_name ?? 'Moi'
 
   return (
     <div>
@@ -45,52 +54,61 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
         <div className="calendar-month-name">
           {monthEmojis[month]} {label}
         </div>
-        <div className="calendar-month-year">{year}</div>
+        <div className="calendar-month-year">{data.year}</div>
       </div>
 
-      {/* Event cards */}
+      {/* Event cards — portrait image left */}
       {!isEmpty && events.map(ev => {
-        const hasImage = !!ev.imageUrl
-        const colorClass = hasImage ? 'on-image' : 'no-image'
-
-        // Find friends going to this event
-        const friendsAtEvent = friendParticipations.filter(
-          fp => fp.event_id === ev.id
-        )
+        const friendsAtEvent = friendParticipations.filter(fp => fp.event_id === ev.id)
+        const statusCfg = STATUS_CONFIG[ev.status] ?? STATUS_CONFIG.interesse
 
         return (
-          <Link key={ev.id} to={`/evenement/${ev.id}`} className="calendar-event">
-            {/* Background */}
-            {hasImage ? (
-              <img src={ev.imageUrl!} alt="" className="calendar-event-bg" />
-            ) : (
-              <div className="calendar-event-fallback">
-                <Calendar strokeWidth={1} />
-              </div>
-            )}
-            <div className={`calendar-event-gradient ${colorClass}`} />
+          <Link key={ev.id} to={`/evenement/${ev.id}`} className="calendar-event-row">
+            {/* Portrait image */}
+            <div className="calendar-event-image">
+              {ev.imageUrl ? (
+                <img src={ev.imageUrl} alt="" />
+              ) : (
+                <div className="calendar-event-image-fallback">
+                  <Calendar strokeWidth={1} />
+                </div>
+              )}
+            </div>
 
-            {/* Tag */}
-            <span className={`calendar-event-tag ${colorClass}`}>{ev.primaryTag}</span>
-
-            {/* Content */}
-            <div className="calendar-event-content">
-              <div className={`calendar-event-name ${colorClass}`}>{ev.name}</div>
-              <div className={`calendar-event-meta ${colorClass}`}>
+            {/* Info */}
+            <div className="calendar-event-info">
+              <div className="calendar-event-name">{ev.name}</div>
+              <span className="calendar-event-tag">{ev.primaryTag}</span>
+              <div className="calendar-event-meta">
                 <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
                 <span>·</span>
                 <MapPin />
                 <span>{ev.city}</span>
               </div>
 
-              {/* Presence */}
-              <div className={`calendar-event-presence ${colorClass}`}>
-                <span className={`presence-badge me ${colorClass}`}>
-                  <User style={{ width: 8, height: 8 }} />
-                  J'y vais
-                </span>
+              {/* My presence */}
+              <div className="calendar-presence-row">
+                <div
+                  className="calendar-presence-me"
+                  style={{ background: statusCfg.bg, color: statusCfg.color }}
+                >
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="" className="calendar-presence-avatar-img" />
+                  ) : (
+                    <div
+                      className="calendar-presence-avatar-letter"
+                      style={{ background: statusCfg.color }}
+                    >
+                      {displayName[0].toUpperCase()}
+                    </div>
+                  )}
+                  <statusCfg.icon style={{ width: 10, height: 10 }} strokeWidth={2.5} />
+                  <span>{displayName}</span>
+                </div>
+
+                {/* Friends */}
                 {friendsAtEvent.length > 0 && (
-                  <>
+                  <div className="calendar-presence-friends">
                     <div className="presence-avatars">
                       {friendsAtEvent.slice(0, 3).map((fp, i) => {
                         const name = fp.profiles?.display_name ?? '?'
@@ -106,10 +124,10 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                         )
                       })}
                     </div>
-                    <span>
+                    <span className="calendar-presence-friends-count">
                       {friendsAtEvent.length} ami{friendsAtEvent.length > 1 ? 's' : ''}
                     </span>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

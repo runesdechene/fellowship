@@ -145,81 +145,53 @@
   color: rgba(61, 48, 40, 0.3);
 }
 
-/* ── Event card (Netflix mini) ─────────────────────────────────────── */
+/* ── Event card (portrait image left) ──────────────────────────────── */
 
-.calendar-event {
-  display: block;
-  position: relative;
+.calendar-event-row {
+  display: flex;
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 10px;
   text-decoration: none;
-  min-height: 100px;
+  background: hsl(var(--background));
 }
 
-.calendar-event-bg {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
+/* Portrait image */
+.calendar-event-image {
+  width: 70px;
+  flex-shrink: 0;
+  background: hsl(var(--muted) / 0.5);
+}
+
+.calendar-event-image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
-.calendar-event-fallback {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--secondary)));
+.calendar-event-image-fallback {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--secondary)));
 }
 
-.calendar-event-fallback svg {
-  width: 28px;
-  height: 28px;
+.calendar-event-image-fallback svg {
+  width: 22px;
+  height: 22px;
   color: rgba(61, 48, 40, 0.08);
 }
 
-.calendar-event-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 20%, rgba(15, 10, 5, 0.8) 100%);
-}
-
-.calendar-event-gradient.no-image {
-  background: linear-gradient(180deg, transparent 30%, rgba(61, 48, 40, 0.08) 100%);
-}
-
-/* Tag badge */
-.calendar-event-tag {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  border-radius: 9999px;
-  padding: 2px 8px;
-  font-size: 9px;
-  font-weight: 600;
-  font-family: var(--font-body);
-  backdrop-filter: blur(6px);
-}
-
-.calendar-event-tag.on-image {
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-}
-
-.calendar-event-tag.no-image {
-  background: rgba(61, 48, 40, 0.06);
-  color: rgba(61, 48, 40, 0.45);
-}
-
-/* Content at bottom */
-.calendar-event-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px;
+/* Info side */
+.calendar-event-info {
+  flex: 1;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
 }
 
 .calendar-event-name {
@@ -227,58 +199,87 @@
   font-size: 13px;
   font-weight: 700;
   line-height: 1.25;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.calendar-event-name.on-image { color: white; }
-.calendar-event-name.no-image { color: hsl(var(--foreground)); }
+/* Tag badge — inline */
+.calendar-event-tag {
+  display: inline-block;
+  width: fit-content;
+  border-radius: 9999px;
+  padding: 1px 7px;
+  font-size: 9px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  background: rgba(61, 48, 40, 0.06);
+  color: rgba(61, 48, 40, 0.45);
+  margin-top: 4px;
+}
 
 .calendar-event-meta {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 10px;
-  margin-top: 3px;
+  font-family: var(--font-body);
+  margin-top: 4px;
+  color: rgba(61, 48, 40, 0.35);
 }
-
-.calendar-event-meta.on-image { color: rgba(255, 255, 255, 0.5); }
-.calendar-event-meta.no-image { color: rgba(61, 48, 40, 0.35); }
 
 .calendar-event-meta svg {
   width: 10px;
   height: 10px;
 }
 
-/* ── Presence (me + friends) ───────────────────────────────────────── */
+/* ── Presence row ──────────────────────────────────────────────────── */
 
-.calendar-event-presence {
+.calendar-presence-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 5px;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+/* My presence — name + avatar + status icon */
+.calendar-presence-me {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 9999px;
+  padding: 2px 8px 2px 2px;
   font-size: 9px;
+  font-weight: 600;
   font-family: var(--font-body);
 }
 
-.calendar-event-presence.on-image { color: rgba(255, 255, 255, 0.45); }
-.calendar-event-presence.no-image { color: rgba(61, 48, 40, 0.3); }
+.calendar-presence-avatar-img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-.presence-badge {
-  display: inline-flex;
+.calendar-presence-avatar-letter {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
-  gap: 3px;
-  border-radius: 9999px;
-  padding: 1px 6px;
-  font-weight: 600;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  color: white;
 }
 
-.presence-badge.me {
-  background: hsl(var(--primary) / 0.2);
-  color: hsl(var(--primary));
-}
-
-.presence-badge.me.on-image {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+/* Friends presence */
+.calendar-presence-friends {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .presence-avatars {
@@ -296,10 +297,17 @@
   font-weight: 700;
   color: white;
   margin-left: -4px;
+  border: 1.5px solid hsl(var(--card));
 }
 
 .presence-avatar:first-child {
   margin-left: 0;
+}
+
+.calendar-presence-friends-count {
+  font-size: 9px;
+  font-family: var(--font-body);
+  color: rgba(61, 48, 40, 0.3);
 }
 
 /* ── Skeleton ──────────────────────────────────────────────────────── */
