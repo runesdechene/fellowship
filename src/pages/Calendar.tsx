@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback } from 'react'
+import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
 import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
@@ -10,6 +11,7 @@ export function CalendarPage() {
   const defaultStart = now.getMonth()
   const defaultYear = now.getFullYear()
 
+  const { profile } = useAuth()
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
   const [showFriends, setShowFriends] = useState(false)
@@ -117,7 +119,9 @@ export function CalendarPage() {
       {/* Header */}
       <div className="calendar-header">
         <div>
-          <h1 className="calendar-title">Calendrier</h1>
+          <h1 className="calendar-title">
+            Le Calendrier <span className="calendar-title-owner">de {profile?.brand_name ?? profile?.display_name ?? ''}</span>
+          </h1>
           <p className="calendar-subtitle">
             {firstMonth?.label} {firstMonth?.year} — {lastMonth?.label} {lastMonth?.year}
           </p>
