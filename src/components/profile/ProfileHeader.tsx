@@ -12,7 +12,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps) {
   const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
-  const subtitle = [profile.type === 'exposant' ? 'Exposant' : null, profile.city].filter(Boolean).join(' · ')
+  const subtitle = [profile.craft_type ?? (profile.type === 'exposant' ? 'Exposant' : null), profile.city].filter(Boolean).join(' · ')
 
   return (
     <div className="flex flex-col items-center pt-12 pb-4 px-4">

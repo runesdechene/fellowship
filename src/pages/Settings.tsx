@@ -11,6 +11,7 @@ export function SettingsPage() {
   // Form state — initialised from profile
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '')
   const [brandName, setBrandName] = useState(profile?.brand_name ?? '')
+  const [craftType, setCraftType] = useState(profile?.craft_type ?? '')
   const [bio, setBio] = useState(profile?.bio ?? '')
   const [website, setWebsite] = useState(profile?.website ?? '')
   const [slug, setSlug] = useState(profile?.public_slug ?? '')
@@ -39,6 +40,7 @@ export function SettingsPage() {
     if (profile) {
       setDisplayName(profile.display_name ?? '')
       setBrandName(profile.brand_name ?? '')
+      setCraftType(profile.craft_type ?? '')
       setBio(profile.bio ?? '')
       setWebsite(profile.website ?? '')
       setSlug(profile.public_slug ?? '')
@@ -111,6 +113,7 @@ export function SettingsPage() {
       }
       if (isExposant) {
         updates.brand_name = brandName || null
+        updates.craft_type = craftType || null
         updates.bio = bio || null
         updates.website = website || null
         updates.public_slug = slug || null
@@ -268,6 +271,16 @@ export function SettingsPage() {
                     placeholder="Ma Marque"
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium">Type d'activité</label>
+                  <input
+                    className={inputCls}
+                    placeholder="Forgeron, Marque de vêtement, Artisan bois..."
+                    value={craftType}
+                    onChange={(e) => setCraftType(e.target.value)}
                   />
                 </div>
 

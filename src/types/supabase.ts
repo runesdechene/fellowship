@@ -289,6 +289,7 @@ export type Database = {
           bio: string | null
           brand_name: string | null
           city: string | null
+          craft_type: string | null
           created_at: string
           department: string | null
           display_name: string | null
@@ -307,6 +308,7 @@ export type Database = {
           bio?: string | null
           brand_name?: string | null
           city?: string | null
+          craft_type?: string | null
           created_at?: string
           department?: string | null
           display_name?: string | null
@@ -325,6 +327,7 @@ export type Database = {
           bio?: string | null
           brand_name?: string | null
           city?: string | null
+          craft_type?: string | null
           created_at?: string
           department?: string | null
           display_name?: string | null
