@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
@@ -121,12 +121,9 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     .map(p => p.events!)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
-  const gradient = useMemo(() => {
-    const [a, b, c, d, e] = GRADIENTS[hashName(displayName) % GRADIENTS.length]
-    return `linear-gradient(180deg, ${a} 0%, ${b} 15%, ${c} 40%, ${d} 70%, ${e} 100%)`
-  }, [displayName])
-
-  const haloColor = GRADIENTS[hashName(displayName) % GRADIENTS.length][2]
+  const gradientColors = GRADIENTS[hashName(displayName) % GRADIENTS.length]
+  const gradient = `linear-gradient(180deg, ${gradientColors[0]} 0%, ${gradientColors[1]} 15%, ${gradientColors[2]} 40%, ${gradientColors[3]} 70%, ${gradientColors[4]} 100%)`
+  const haloColor = gradientColors[2]
   const bannerUrl = profile.banner_url
 
   return (
