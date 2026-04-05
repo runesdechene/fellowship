@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
 import { PRIMARY_TAGS, getTagColor } from '@/lib/constants'
-import { Search, Crosshair, AlertTriangle } from 'lucide-react'
+import { Search, Crosshair, AlertTriangle, Plus } from 'lucide-react'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -136,7 +136,7 @@ export function ExplorerPage() {
   // ---------- any sections to show? ----------
   const hasSections = showProspection
     ? urgentEvents.length > 0 || openRegistrationEvents.length > 0
-    : nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0
+    : true // département section is always visible
 
   const showEmpty = !loading && filteredEvents.length === 0
 
@@ -299,11 +299,26 @@ export function ExplorerPage() {
             </>
           ) : (
             <>
-              {nearbyEvents.length > 0 && (
-                <SlideRow title={`Dans votre département (${profile?.department})`} count={nearbyEvents.length}>
-                  {nearbyEvents.map(renderCard)}
-                </SlideRow>
-              )}
+              <SlideRow
+                title={profile?.department ? `Dans votre département (${profile.department})` : 'Dans votre département'}
+                count={nearbyEvents.length}
+              >
+                {nearbyEvents.map(renderCard)}
+                <div key="add-card" className="flex-shrink-0 w-[200px]">
+                  <button
+                    onClick={() => {
+                      const fab = document.querySelector('.fab-button') as HTMLButtonElement
+                      fab?.click()
+                    }}
+                    className="explorer-add-card"
+                  >
+                    <div className="explorer-add-card-icon">
+                      <Plus strokeWidth={1.5} />
+                    </div>
+                    <span className="explorer-add-card-text">Ajouter un événement</span>
+                  </button>
+                </div>
+              </SlideRow>
 
               {upcomingEvents.length > 0 && (
                 <SlideRow title="Bientôt" count={upcomingEvents.length}>

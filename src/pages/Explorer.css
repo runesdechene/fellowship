@@ -217,3 +217,58 @@
   color: rgba(61, 48, 40, 0.35);
   margin-top: 8px;
 }
+
+/* ── Add event card ────────────────────────────────────────────────── */
+
+.explorer-add-card {
+  width: 100%;
+  aspect-ratio: 2/3;
+  border-radius: 18px;
+  border: 2px dashed rgba(61, 48, 40, 0.1);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.explorer-add-card:hover {
+  border-color: hsl(var(--primary) / 0.3);
+  background: hsl(var(--primary) / 0.03);
+}
+
+.explorer-add-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: hsl(var(--primary) / 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--primary));
+  transition: background 0.2s;
+}
+
+.explorer-add-card:hover .explorer-add-card-icon {
+  background: hsl(var(--primary) / 0.15);
+}
+
+.explorer-add-card-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.explorer-add-card-text {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(61, 48, 40, 0.3);
+  transition: color 0.2s;
+}
+
+.explorer-add-card:hover .explorer-add-card-text {
+  color: hsl(var(--primary));
+}
