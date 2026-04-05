@@ -8,7 +8,9 @@ import { Crosshair, AlertTriangle, Plus } from 'lucide-react'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
-type TemporalFilter = 'semaine' | 'mois' | 'proche' | '30j' | '3mois' | '6-12mois' | null
+import { Calendar as CalendarIcon } from 'lucide-react'
+
+type TemporalFilter = 'semaine' | 'mois' | 'proche' | null
 
 export function ExplorerPage() {
   const { profile } = useAuth()
@@ -20,6 +22,8 @@ export function ExplorerPage() {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
   const [showProspection, setShowProspection] = useState(false)
   const [temporalFilter, setTemporalFilter] = useState<TemporalFilter>(null)
+  const [rangeMin, setRangeMin] = useState(0)
+  const [rangeMax, setRangeMax] = useState(12)
 
   const isExposant = profile?.type === 'exposant'
 
@@ -75,24 +79,23 @@ export function ExplorerPage() {
       result = result.filter(ev => isThisMonth(ev.start_date))
     } else if (temporalFilter === 'proche') {
       result = result.filter(ev => matchesDepartment(ev))
-    } else if (temporalFilter === '30j') {
-      result = result.filter(ev =>
-        ev.registration_deadline && daysUntil(ev.registration_deadline) > 0 && daysUntil(ev.registration_deadline) <= 30
-      )
-    } else if (temporalFilter === '3mois') {
-      result = result.filter(ev =>
-        ev.registration_deadline && daysUntil(ev.registration_deadline) > 0 && daysUntil(ev.registration_deadline) <= 90
-      )
-    } else if (temporalFilter === '6-12mois') {
-      result = result.filter(ev =>
-        ev.registration_deadline && daysUntil(ev.registration_deadline) >= 180 && daysUntil(ev.registration_deadline) <= 365
-      )
+    }
+
+    // Prospection range slider filter (months from now)
+    if (showProspection && (rangeMin > 0 || rangeMax < 12)) {
+      const minDays = rangeMin * 30
+      const maxDays = rangeMax * 30
+      result = result.filter(ev => {
+        const dateStr = ev.registration_deadline ?? ev.start_date
+        const d = daysUntil(dateStr)
+        return d >= minDays && d <= maxDays
+      })
     }
 
     // Sort by start_date ascending
     return [...result].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allEvents, search, selectedTags, showProspection, temporalFilter])
+  }, [allEvents, search, selectedTags, showProspection, temporalFilter, rangeMin, rangeMax])
 
 
   // ---------- section builders (normal mode) — 3 fixed sections ----------
@@ -200,28 +203,7 @@ export function ExplorerPage() {
               Ce mois
             </button>
           </>
-        ) : (
-          <>
-            <button
-              onClick={() => setTemporalFilter(temporalFilter === '30j' ? null : '30j')}
-              className={`explorer-filter-chip urgent ${temporalFilter === '30j' ? 'active' : ''}`}
-            >
-              &lt; 30 jours
-            </button>
-            <button
-              onClick={() => setTemporalFilter(temporalFilter === '3mois' ? null : '3mois')}
-              className={`explorer-filter-chip warning ${temporalFilter === '3mois' ? 'active' : ''}`}
-            >
-              &lt; 3 mois
-            </button>
-            <button
-              onClick={() => setTemporalFilter(temporalFilter === '6-12mois' ? null : '6-12mois')}
-              className={`explorer-filter-chip ${temporalFilter === '6-12mois' ? 'active' : ''}`}
-            >
-              6-12 mois
-            </button>
-          </>
-        )}
+        ) : null}
 
         <div className="explorer-filter-divider" />
 
@@ -232,6 +214,45 @@ export function ExplorerPage() {
           Près de moi
         </button>
       </div>
+
+      {/* Prospection range slider */}
+      {showProspection && (
+        <div className="explorer-range-wrapper">
+          <div className="explorer-range-label">
+            <CalendarIcon strokeWidth={1.5} />
+            Inscription dans <span className="explorer-range-value">{rangeMin} — {rangeMax} mois</span>
+          </div>
+          <div className="explorer-range-track">
+            <div
+              className="explorer-range-fill"
+              style={{ left: `${(rangeMin / 12) * 100}%`, width: `${((rangeMax - rangeMin) / 12) * 100}%` }}
+            />
+            <input
+              type="range"
+              min={0}
+              max={12}
+              value={rangeMin}
+              onChange={e => setRangeMin(Math.min(Number(e.target.value), rangeMax - 1))}
+              className="explorer-range-slider"
+            />
+            <input
+              type="range"
+              min={0}
+              max={12}
+              value={rangeMax}
+              onChange={e => setRangeMax(Math.max(Number(e.target.value), rangeMin + 1))}
+              className="explorer-range-slider"
+            />
+          </div>
+          <div className="explorer-range-ticks">
+            <span>0</span>
+            <span>3m</span>
+            <span>6m</span>
+            <span>9m</span>
+            <span>12m</span>
+          </div>
+        </div>
+      )}
 
       {/* Prospection alert */}
       {showProspection && urgentEvents.length > 0 && (
