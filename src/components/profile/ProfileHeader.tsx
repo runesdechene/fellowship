@@ -26,9 +26,16 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
 
       <h1 className="profile-name">{displayName}</h1>
       {subtitle && <p className="profile-subtitle">{subtitle}</p>}
+
+      {!isOwner && (
+        <div className="profile-follow">
+          <FollowButton targetId={profile.id} />
+        </div>
+      )}
+
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
 
-      {isOwner ? (
+      {isOwner && (
         <div className="profile-actions">
           <Link to="/reglages">
             <Button size="sm" className="gap-2">
@@ -39,10 +46,6 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
           <Button variant="outline" size="sm" onClick={onOpenQR}>
             <QrCode className="h-4 w-4" />
           </Button>
-        </div>
-      ) : (
-        <div className="profile-actions">
-          <FollowButton targetId={profile.id} />
         </div>
       )}
     </div>

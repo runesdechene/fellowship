@@ -116,7 +116,9 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
         <div className="profile-content">
-          <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
+          {(!user || isOwner) && (
+            <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
+          )}
 
           <div className="profile-divider">
             <div className="profile-divider-line" />

@@ -1,7 +1,7 @@
 /* ── Profile Page ───────────────────────────────────────────────────── */
 
 .profile-page {
-  min-height: 100vh;
+  min-height: 80vh;
   background: hsl(var(--background));
   position: relative;
 }
@@ -122,6 +122,10 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: rgba(61, 48, 40, 0.3);
+}
+
+.profile-follow {
+  margin-top: 12px;
 }
 
 .profile-bio {
@@ -424,8 +428,8 @@
 }
 
 .profile-footer img {
-  height: 20px;
-  opacity: 0.08;
+  height: 26px;
+  opacity: 0.28;
   filter: grayscale(100%);
 }
 
