@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { FollowButton } from '@/components/profile/FollowButton'
-import { MapPin, Globe, Calendar, ExternalLink } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
+import { ProfileHeader } from '@/components/profile/ProfileHeader'
+import { EventCarousel } from '@/components/profile/EventCarousel'
+import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlaceholder'
+import { QRCodeModal } from '@/components/profile/QRCodeModal'
+import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import type { Profile } from '@/types/database'
 
-interface PublicParticipation {
+interface ProfileParticipation {
   id: string
   event_id: string
   events: {
@@ -15,36 +19,17 @@ interface PublicParticipation {
     end_date: string
     city: string
     primary_tag: string
-    external_url: string | null
   } | null
-}
-
-function Avatar({ name, url, size = 'md' }: { name: string; url?: string | null; size?: 'md' | 'lg' }) {
-  const sizeClass = size === 'lg' ? 'h-20 w-20 text-2xl' : 'h-10 w-10 text-sm'
-  if (url) {
-    return <img src={url} alt={name} className={`${sizeClass} rounded-full object-cover`} />
-  }
-  return (
-    <div className={`${sizeClass} rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary`}>
-      {name[0]?.toUpperCase() ?? '?'}
-    </div>
-  )
-}
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
 }
 
 export function PublicProfilePage() {
   const { slug } = useParams<{ slug: string }>()
+  const { user } = useAuth()
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [participations, setParticipations] = useState<PublicParticipation[]>([])
+  const [participations, setParticipations] = useState<ProfileParticipation[]>([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [showQR, setShowQR] = useState(false)
 
   useEffect(() => {
     if (!slug) return
@@ -68,12 +53,12 @@ export function PublicProfilePage() {
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag, external_url)')
+        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag)')
         .eq('user_id', profileData.id)
         .eq('visibility', 'public')
         .order('created_at', { ascending: false })
 
-      setParticipations((parts as PublicParticipation[] | null) ?? [])
+      setParticipations((parts as ProfileParticipation[] | null) ?? [])
       setLoading(false)
     }
 
@@ -103,126 +88,33 @@ export function PublicProfilePage() {
     )
   }
 
+  const isOwner = user?.id === profile.id
   const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
+  const now = new Date()
 
-  const upcoming = participations.filter(
-    p => p.events && new Date(p.events.start_date) >= new Date()
-  )
-  const past = participations.filter(
-    p => p.events && new Date(p.events.start_date) < new Date()
-  )
+  const upcoming = participations
+    .filter(p => p.events && new Date(p.events.start_date) >= now)
+    .map(p => p.events!)
+    .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+
+  const past = participations
+    .filter(p => p.events && new Date(p.events.start_date) < now)
+    .map(p => p.events!)
+    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        {/* Profile header */}
-        <div className="flex items-start gap-4 mb-6">
-          <Avatar name={displayName} url={profile.avatar_url} size="lg" />
-          <div className="flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <h1 className="text-2xl font-bold">{displayName}</h1>
-              <FollowButton targetId={profile.id} />
-            </div>
-            <div className="mt-1 flex flex-wrap gap-3 text-sm text-muted-foreground">
-              {profile.city && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5" />
-                  {profile.city}
-                </span>
-              )}
-              {profile.website && (
-                <a
-                  href={profile.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 hover:text-primary transition-colors"
-                >
-                  <Globe className="h-3.5 w-3.5" />
-                  Site web
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              )}
-            </div>
-            {profile.bio && (
-              <p className="mt-2 text-sm text-foreground/80">{profile.bio}</p>
-            )}
-          </div>
-        </div>
+      <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
-        {/* Public calendar */}
-        {participations.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-10 text-center">
-            <Calendar className="mx-auto h-10 w-10 text-muted-foreground/30" />
-            <p className="mt-3 text-sm text-muted-foreground">
-              Aucun événement public pour le moment.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {upcoming.length > 0 && (
-              <section>
-                <h2 className="mb-3 text-base font-semibold flex items-center gap-2 text-muted-foreground uppercase tracking-wide text-xs">
-                  <Calendar className="h-4 w-4" />
-                  Prochains événements
-                </h2>
-                <div className="space-y-2">
-                  {upcoming.map(p => p.events && (
-                    <EventCard key={p.id} event={p.events} />
-                  ))}
-                </div>
-              </section>
-            )}
-            {past.length > 0 && (
-              <section>
-                <h2 className="mb-3 text-base font-semibold flex items-center gap-2 text-muted-foreground uppercase tracking-wide text-xs">
-                  <Calendar className="h-4 w-4" />
-                  Événements passés
-                </h2>
-                <div className="space-y-2">
-                  {past.map(p => p.events && (
-                    <EventCard key={p.id} event={p.events} past />
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-        )}
+      <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
+        <EventCarousel upcoming={upcoming} past={past} />
+        <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
       </div>
-    </div>
-  )
-}
 
-function EventCard({
-  event,
-  past = false,
-}: {
-  event: PublicParticipation['events'] & {}
-  past?: boolean
-}) {
-  if (!event) return null
-  return (
-    <div className={`rounded-xl border border-border bg-card p-3 flex items-center gap-3 ${past ? 'opacity-60' : ''}`}>
-      <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm truncate">{event.name}</p>
-        <p className="text-xs text-muted-foreground">
-          {formatDate(event.start_date)}
-          {event.end_date !== event.start_date && ` — ${formatDate(event.end_date)}`}
-          {' · '}
-          {event.city}
-        </p>
-      </div>
-      <span className="shrink-0 rounded-full bg-primary/10 text-primary text-xs px-2 py-0.5">
-        {event.primary_tag}
-      </span>
-      {event.external_url && (
-        <a
-          href={event.external_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-        >
-          <ExternalLink className="h-4 w-4" />
-        </a>
+      <FellowshipFooter />
+
+      {showQR && profile.public_slug && (
+        <QRCodeModal slug={profile.public_slug} onClose={() => setShowQR(false)} />
       )}
     </div>
   )
