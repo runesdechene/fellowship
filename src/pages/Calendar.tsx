@@ -119,7 +119,7 @@ export function CalendarPage() {
       {/* Header */}
       <div className="calendar-header">
         <div>
-          <h1 className="calendar-title">
+          <h1 className="page-title">
             Le Calendrier <span className="calendar-title-owner">de {profile?.brand_name ?? profile?.display_name ?? ''}</span>
           </h1>
           <p className="calendar-subtitle">

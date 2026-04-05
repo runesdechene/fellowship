@@ -31,6 +31,9 @@
   --fellowship-sand: 36 33% 98%;
   --fellowship-linen: 30 18% 92%;
 
+  /* Layout tokens */
+  --page-padding: 24px;
+
   /* Font tokens */
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -109,9 +112,42 @@ h1, h2, h3, .font-display {
 
 /* Page width container */
 .page-width {
-  max-width: 1200px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ── Shared page layout ────────────────────────────────────────────── */
+
+.page-padding {
+  padding: var(--page-padding);
+}
+
+@media (min-width: 640px) {
+  :root { --page-padding: 32px; }
+}
+
+@media (min-width: 1024px) {
+  :root { --page-padding: 40px; }
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
+}
+
+.page-subtitle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(61, 48, 40, 0.35);
+  margin-top: 4px;
 }
 
 /* Disable global transitions on elements that animate differently */

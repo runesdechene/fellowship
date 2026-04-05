@@ -94,7 +94,7 @@ export function ExplorerPage() {
     <div className="explorer-page">
       {/* Header */}
       <div className="explorer-mode-bar">
-        <h1 className="explorer-title">Explorer</h1>
+        <h1 className="page-title">Explorer</h1>
       </div>
 
       {/* Filter bar */}
