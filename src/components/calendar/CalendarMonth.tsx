@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Check, HelpCircle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
+import { MonthBanner } from './MonthBanner'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
-
-const monthEmojis = ['❄️', '💝', '🌱', '🌸', '🌹', '☀️', '🏖️', '🌙', '🍂', '🎃', '🍁', '🎄']
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
   'médiéval': { bg: 'hsl(24 72% 44% / 0.1)', color: 'hsl(24 72% 50%)' },
@@ -57,13 +56,8 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
 
   return (
     <div>
-      {/* Month header */}
-      <div className="calendar-month-header">
-        <div className="calendar-month-name">
-          {monthEmojis[month]} {label}
-        </div>
-        <div className="calendar-month-year">{data.year}</div>
-      </div>
+      {/* Month banner */}
+      <MonthBanner month={month} label={label} year={data.year} />
 
       {/* Event cards — portrait image left */}
       {!isEmpty && events.map(ev => {
