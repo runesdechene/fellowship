@@ -9,7 +9,6 @@ export function LoginPage() {
   const { user, loading: authLoading, signIn, verifyOtp } = useAuth()
 
   const [email, setEmail] = useState('')
-  const [accountType, setAccountType] = useState<'exposant' | 'public'>('exposant')
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [loading, setLoading] = useState(false)
   const [verifying, setVerifying] = useState(false)
@@ -41,7 +40,7 @@ export function LoginPage() {
     setLoading(true)
     setError(null)
 
-    const { error } = await signIn(email, accountType)
+    const { error } = await signIn(email)
 
     if (error) {
       setError(error.message)
@@ -205,32 +204,6 @@ export function LoginPage() {
         </div>
 
         <form onSubmit={handleSendCode} className="space-y-4">
-          {/* Account type selector */}
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setAccountType('exposant')}
-              className={`flex-1 rounded-2xl py-3 px-4 text-sm font-semibold transition-colors ${
-                accountType === 'exposant'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card text-muted-foreground'
-              }`}
-            >
-              Je suis exposant
-            </button>
-            <button
-              type="button"
-              onClick={() => setAccountType('public')}
-              className={`flex-1 rounded-2xl py-3 px-4 text-sm font-semibold transition-colors ${
-                accountType === 'public'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card text-muted-foreground'
-              }`}
-            >
-              Je suis visiteur
-            </button>
-          </div>
-
           <input
             type="email"
             value={email}
