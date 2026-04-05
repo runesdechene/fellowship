@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { Camera, Download, LogOut, Trash2, Check, Loader2 } from 'lucide-react'
+import { Camera, ImagePlus, Download, LogOut, Trash2, Check, Loader2, X } from 'lucide-react'
 
 export function SettingsPage() {
   const { user, profile, signOut, refreshProfile } = useAuth()
@@ -18,15 +18,18 @@ export function SettingsPage() {
   const [postalCode, setPostalCode] = useState(profile?.postal_code ?? '')
   const [sex, setSex] = useState<string>(profile?.sex ?? 'indéfini')
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? '')
+  const [bannerUrl, setBannerUrl] = useState(profile?.banner_url ?? '')
 
   // UI state
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const [uploadingBanner, setUploadingBanner] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const bannerInputRef = useRef<HTMLInputElement>(null)
 
   const isExposant = profile?.type === 'exposant'
   const qrUrl = `https://flw.sh/@${slug}`
@@ -43,6 +46,7 @@ export function SettingsPage() {
       setPostalCode(profile.postal_code ?? '')
       setSex(profile.sex ?? 'indéfini')
       setAvatarUrl(profile.avatar_url ?? '')
+      setBannerUrl(profile.banner_url ?? '')
     }
   }, [profile])
 
@@ -68,6 +72,28 @@ export function SettingsPage() {
     }
   }
 
+  // ── Banner upload ──────────────────────────────────────────────────────────
+  async function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+    setUploadingBanner(true)
+    try {
+      const ext = file.name.split('.').pop()
+      const path = `${user.id}/banner-${Date.now()}.${ext}`
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(path, file, { upsert: true })
+      if (uploadError) throw uploadError
+
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+      setBannerUrl(data.publicUrl)
+    } catch (err) {
+      console.error('Banner upload error:', err)
+    } finally {
+      setUploadingBanner(false)
+    }
+  }
+
   // ── Save profile ───────────────────────────────────────────────────────────
   async function handleSave() {
     if (!user) return
@@ -81,6 +107,7 @@ export function SettingsPage() {
         postal_code: postalCode || null,
         sex: sex || null,
         avatar_url: avatarUrl || null,
+        banner_url: bannerUrl || null,
       }
       if (isExposant) {
         updates.brand_name = brandName || null
@@ -130,11 +157,11 @@ export function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-2xl px-4 py-8">
-        <h1 className="mb-8 text-2xl">Paramètres</h1>
+      <div className="page-width max-w-2xl px-4 py-8">
+        <h1 className="mb-8 text-2xl font-bold">Paramètres</h1>
 
         {/* ── Section: Profil ──────────────────────────────────────────────── */}
-        <section className="mb-6 rounded-2xl border border-border bg-card p-6">
+        <section className="mb-6 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
           <h2 className="mb-5 text-base font-semibold">Profil</h2>
 
           {/* Avatar */}
@@ -173,6 +200,51 @@ export function SettingsPage() {
               <p className="text-xs text-muted-foreground">JPG, PNG ou GIF — max 5 Mo</p>
             </div>
           </div>
+
+          {/* Banner */}
+          {isExposant && (
+            <div className="mb-6">
+              <p className="text-sm font-medium mb-2">Image de fond du profil</p>
+              <div
+                className="relative h-32 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer group"
+                onClick={() => bannerInputRef.current?.click()}
+              >
+                {bannerUrl ? (
+                  <>
+                    <img src={bannerUrl} alt="Bannière" className="h-full w-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <ImagePlus className="h-6 w-6 text-white" />
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setBannerUrl('') }}
+                      className="absolute top-2 right-2 rounded-full bg-black/50 p-1 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-muted-foreground">
+                    {uploadingBanner ? (
+                      <Loader2 className="h-6 w-6 animate-spin" />
+                    ) : (
+                      <>
+                        <ImagePlus className="h-6 w-6" />
+                        <span className="text-xs">Ajouter une image de fond</span>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+              <input
+                ref={bannerInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleBannerChange}
+              />
+              <p className="mt-1.5 text-xs text-muted-foreground">Recommandé : 1200×400px. Visible sur votre profil public.</p>
+            </div>
+          )}
 
           <div className="grid gap-4">
             {/* Champ commun : display_name */}
@@ -292,7 +364,7 @@ export function SettingsPage() {
 
         {/* ── Section: QR Code (exposant only) ────────────────────────────── */}
         {isExposant && slug && (
-          <section className="mb-6 rounded-2xl border border-border bg-card p-6">
+          <section className="mb-6 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
             <h2 className="mb-2 text-base font-semibold">QR Code</h2>
             <p className="mb-5 text-sm text-muted-foreground">
               Partagez votre profil public via ce QR code.
@@ -319,7 +391,7 @@ export function SettingsPage() {
         )}
 
         {/* ── Section: Compte ─────────────────────────────────────────────── */}
-        <section className="rounded-2xl border border-border bg-card p-6">
+        <section className="rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-6">
           <h2 className="mb-5 text-base font-semibold">Compte</h2>
 
           <div className="mb-4">
