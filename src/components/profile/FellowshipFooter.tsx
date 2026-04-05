@@ -4,7 +4,7 @@ export function FellowshipFooter() {
       <img
         src="/logo.png"
         alt="Fellowship"
-        className="h-6 opacity-15 grayscale brightness-200"
+        className="h-6 opacity-10 brightness-200"
       />
     </div>
   )

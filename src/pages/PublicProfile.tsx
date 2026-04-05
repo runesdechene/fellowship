@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
@@ -8,6 +8,20 @@ import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlacehol
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import type { Profile } from '@/types/database'
+
+const GRADIENTS = [
+  ['#1a0f0a', '#2d1810', '#3d2418', '#2a1a10', '#1a0f0a'],
+  ['#0a0f1a', '#10182d', '#1a2a4d', '#10182d', '#0a0f1a'],
+  ['#0a1a0f', '#102d18', '#1a4d2a', '#102d18', '#0a1a0f'],
+  ['#1a0f02', '#2d1c0a', '#4d3418', '#2d1c0a', '#1a0f02'],
+  ['#0f0a1a', '#1c102d', '#2d1a4d', '#1c102d', '#0f0a1a'],
+]
+
+function hashName(name: string): number {
+  let h = 0
+  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
 
 interface ProfileParticipation {
   id: string
@@ -107,16 +121,42 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     .map(p => p.events!)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
+  const gradient = useMemo(() => {
+    const [a, b, c, d, e] = GRADIENTS[hashName(displayName) % GRADIENTS.length]
+    return `linear-gradient(180deg, ${a} 0%, ${b} 15%, ${c} 40%, ${d} 70%, ${e} 100%)`
+  }, [displayName])
+
+  const haloColor = GRADIENTS[hashName(displayName) % GRADIENTS.length][2]
+  const bannerUrl = profile.banner_url
+
   return (
-    <div className="min-h-screen bg-background">
-      <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Full-page ambient background */}
+      <div
+        className="absolute inset-0"
+        style={
+          bannerUrl
+            ? { backgroundImage: `url(${bannerUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+            : { background: gradient }
+        }
+      />
+      {bannerUrl && <div className="absolute inset-0 bg-black/60" />}
+      <div
+        className="absolute inset-0"
+        style={{ background: `radial-gradient(ellipse at 50% 15%, ${haloColor}33 0%, transparent 60%)` }}
+      />
 
-      <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-        <EventCarousel upcoming={upcoming} past={past} />
-        <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
+      {/* Content */}
+      <div className="relative">
+        <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
+
+        <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
+          <EventCarousel upcoming={upcoming} past={past} />
+          <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
+        </div>
+
+        <FellowshipFooter />
       </div>
-
-      <FellowshipFooter />
 
       {showQR && profile.public_slug && (
         <QRCodeModal slug={profile.public_slug} onClose={() => setShowQR(false)} />
