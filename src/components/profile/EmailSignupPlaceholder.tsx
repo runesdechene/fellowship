@@ -7,7 +7,7 @@ interface EmailSignupPlaceholderProps {
 
 export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceholderProps) {
   return (
-    <div className="relative rounded-2xl border border-border bg-card p-5 text-center">
+    <div className="relative rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-5 text-center">
       {isOwner && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary/10 px-3 py-0.5 text-[0.6rem] font-medium text-primary whitespace-nowrap">
           Vos visiteurs verront ce formulaire ici
@@ -22,7 +22,7 @@ export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceh
           type="email"
           placeholder="votre@email.com"
           disabled
-          className="flex-1 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground cursor-not-allowed"
+          className="flex-1 rounded-lg bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground cursor-not-allowed"
         />
         <button
           disabled
