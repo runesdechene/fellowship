@@ -5,6 +5,7 @@ import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
 import { PRIMARY_TAGS, getTagColor } from '@/lib/constants'
 import { Plus } from 'lucide-react'
+import { MonthPicker } from '@/components/ui/MonthPicker'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -118,25 +119,9 @@ export function ExplorerPage() {
         <div className="explorer-filter-divider" />
 
         <span className="explorer-month-pickers-label">De</span>
-        <select
-          value={monthFrom}
-          onChange={e => setMonthFrom(e.target.value)}
-          className="explorer-month-select"
-        >
-          {monthOptions.map(m => (
-            <option key={m.value} value={m.value}>{m.label}</option>
-          ))}
-        </select>
+        <MonthPicker options={monthOptions} value={monthFrom} onChange={setMonthFrom} />
         <span className="explorer-month-pickers-label">à</span>
-        <select
-          value={monthTo}
-          onChange={e => setMonthTo(e.target.value)}
-          className="explorer-month-select"
-        >
-          {monthOptions.map(m => (
-            <option key={m.value} value={m.value}>{m.label}</option>
-          ))}
-        </select>
+        <MonthPicker options={monthOptions} value={monthTo} onChange={setMonthTo} />
 
         {profile?.department && (
           <>
