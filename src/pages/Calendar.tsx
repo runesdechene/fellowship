@@ -123,13 +123,18 @@ export function CalendarPage() {
           </p>
         </div>
         <div className="calendar-nav">
-          {/* Friends toggle */}
+          {/* Friends toggle — iOS switch */}
           <button
             onClick={() => setShowFriends(!showFriends)}
             className={`calendar-friends-toggle ${showFriends ? 'active' : ''}`}
           >
-            <Users strokeWidth={1.5} />
-            <span>Amis</span>
+            <span className="calendar-friends-label">
+              <Users strokeWidth={1.5} />
+              Amis
+            </span>
+            <div className="calendar-switch-track">
+              <div className="calendar-switch-thumb" />
+            </div>
           </button>
 
           <button

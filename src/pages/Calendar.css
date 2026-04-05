@@ -71,37 +71,66 @@
   height: 22px;
 }
 
-/* Friends toggle */
+/* Friends toggle — iOS-style switch */
 .calendar-friends-toggle {
   display: flex;
   align-items: center;
-  gap: 6px;
-  border-radius: 9999px;
-  padding: 8px 14px;
-  font-size: 12px;
+  gap: 10px;
+  margin-right: 12px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.calendar-friends-label {
+  font-size: 13px;
   font-weight: 600;
   font-family: var(--font-body);
   color: rgba(61, 48, 40, 0.4);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
 }
 
-.calendar-friends-toggle:hover {
-  background: hsl(var(--card));
-  color: hsl(var(--foreground));
-}
-
-.calendar-friends-toggle.active {
-  background: hsl(var(--primary) / 0.1);
+.calendar-friends-toggle.active .calendar-friends-label {
   color: hsl(var(--primary));
 }
 
-.calendar-friends-toggle svg {
+.calendar-friends-label svg {
   width: 16px;
   height: 16px;
+}
+
+.calendar-switch-track {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: rgba(61, 48, 40, 0.15);
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+
+.calendar-friends-toggle.active .calendar-switch-track {
+  background: hsl(var(--primary));
+}
+
+.calendar-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-friends-toggle.active .calendar-switch-thumb {
+  transform: translateX(18px);
 }
 
 .calendar-today-btn {
