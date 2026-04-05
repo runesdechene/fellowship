@@ -25,7 +25,6 @@ function ActorAvatar({ name }: { name: string }) {
         width: 22,
         height: 22,
         background: `linear-gradient(135deg, ${from}, ${to})`,
-        boxShadow: `0 0 8px ${from}66`,
         fontSize: 9,
         fontWeight: 700,
         color: 'white',
