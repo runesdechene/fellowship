@@ -169,14 +169,14 @@ export function EventPage() {
   if (!event) {
     return (
       <div className="p-6 text-center">
-        <h1 className="text-xl font-bold">Événement introuvable</h1>
+        <h1 className="text-2xl font-bold">Événement introuvable</h1>
         <Link to="/explorer" className="mt-4 text-primary hover:underline">Retour à l'explorateur</Link>
       </div>
     )
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+    <div className="page-width p-4 sm:p-6 lg:p-8">
       {/* Back */}
       <Link to="/explorer" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" />
@@ -236,7 +236,7 @@ export function EventPage() {
       ) : null}
 
       {editing ? (
-        <div className="mb-6 space-y-4 rounded-2xl border border-border bg-card p-4">
+        <div className="mb-6 space-y-4 rounded-2xl bg-card p-4">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Modifier l'événement</h2>
             <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
@@ -375,7 +375,7 @@ export function EventPage() {
 
       {/* Participation */}
       {!loadingParticipation && (
-        <div className="mb-6 rounded-2xl border border-border bg-card p-4">
+        <div className="mb-6 rounded-2xl bg-card p-4">
           {participation ? (
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

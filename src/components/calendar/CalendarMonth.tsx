@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Users } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 
 const tagColors: Record<string, { bg: string; text: string; border: string }> = {
@@ -60,7 +60,7 @@ export function CalendarMonth({ data }: CalendarMonthProps) {
               <Link
                 key={ev.id}
                 to={`/evenement/${ev.id}`}
-                className={`flex gap-3 rounded-xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 border-l-4 ${style.border} hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]`}
+                className={`flex gap-3 rounded-xl bg-card p-3 border-l-4 ${style.border}`}
               >
                 {ev.imageUrl && (
                   <img src={ev.imageUrl} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />

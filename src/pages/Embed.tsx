@@ -63,7 +63,7 @@ export function EmbedPage() {
   return (
     <div className="min-h-screen bg-background p-4 font-[Nunito,system-ui,sans-serif]">
       {/* Mini header */}
-      <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-card p-3">
+      <div className="mb-4 flex items-center justify-between rounded-2xl bg-card p-3">
         <div className="flex items-center gap-3">
           {profile.avatar_url ? (
             <img src={profile.avatar_url} alt={displayName} className="h-8 w-8 rounded-full object-cover" />
@@ -94,7 +94,7 @@ export function EmbedPage() {
       ) : (
         <div className="space-y-2">
           {participations.map(p => p.events && (
-            <div key={p.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3">
+            <div key={p.id} className="flex items-center gap-3 rounded-2xl bg-card p-3">
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm truncate">{p.events.name}</p>
                 <p className="text-xs text-muted-foreground">

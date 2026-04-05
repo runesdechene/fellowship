@@ -87,7 +87,7 @@ export function TagInput({ value, onChange, placeholder = 'Ajouter un tag...' }:
 
         {/* Suggestions dropdown */}
         {suggestions.length > 0 && (
-          <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-xl bg-card p-1 shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] shadow-lg">
+          <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-xl bg-card p-1 shadow-lg">
             {suggestions.map(tag => (
               <button
                 key={tag}

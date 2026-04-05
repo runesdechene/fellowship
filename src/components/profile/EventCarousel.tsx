@@ -26,7 +26,7 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
   return (
     <Link
       to={`/evenement/${event.id}`}
-      className={`flex overflow-hidden rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)] ${past ? 'opacity-50' : ''}`}
+      className={`flex overflow-hidden rounded-2xl bg-card transition-shadow ${past ? 'opacity-50' : ''}`}
     >
       {/* Portrait image */}
       <div className="w-[90px] shrink-0 bg-muted">
@@ -63,7 +63,7 @@ interface EventCarouselProps {
 export function EventCarousel({ upcoming, past }: EventCarouselProps) {
   if (upcoming.length === 0 && past.length === 0) {
     return (
-      <div className="rounded-2xl shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] bg-card p-10 text-center">
+      <div className="rounded-2xl bg-card p-10 text-center">
         <Calendar className="mx-auto h-10 w-10 text-muted-foreground/20" />
         <p className="mt-3 text-sm text-muted-foreground">Aucun événement pour le moment</p>
       </div>

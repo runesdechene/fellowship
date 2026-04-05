@@ -32,7 +32,7 @@ export function MonthCell({ label, events, onClick }: MonthCellProps) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col rounded-xl border border-border bg-card p-3 text-left transition-shadow hover:shadow-md min-h-[100px]"
+      className="flex flex-col rounded-2xl bg-card p-3 text-left min-h-[100px]"
     >
       <span className="text-sm font-semibold capitalize">{label}</span>
       <div className="mt-2 flex flex-wrap gap-1.5">

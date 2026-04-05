@@ -36,7 +36,7 @@ export function NotesFeed({ notes, onRefresh }: NotesFeedProps) {
             className={`rounded-xl p-4 ${
               note.visibility === 'prive'
                 ? 'border border-primary/20 bg-secondary'
-                : 'bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)]'
+                : 'bg-card'
             }`}
           >
             <div className="flex items-start justify-between">

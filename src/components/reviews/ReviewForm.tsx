@@ -49,7 +49,7 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-border bg-card p-4">
+    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl bg-card p-4">
       <h3 className="font-semibold">Ton avis sur cet événement</h3>
       <div className="space-y-3">
         <div className="flex items-center justify-between">

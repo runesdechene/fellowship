@@ -215,7 +215,7 @@ export function EventForm({ onClose }: EventFormProps) {
               className={`rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                 form.primary_tag === tag.value
                   ? 'border-2 border-primary bg-primary/10 text-primary'
-                  : 'shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] bg-card hover:bg-muted'
+                  : 'bg-card hover:bg-muted'
               }`}
             >
               {tag.label}
