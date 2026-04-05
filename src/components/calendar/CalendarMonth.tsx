@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, Check, HelpCircle } from 'lucide-react'
+import { MapPin, Check, HelpCircle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
@@ -58,16 +58,12 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
         return (
           <div key={ev.id} className="calendar-event-wrapper">
             <Link to={`/evenement/${ev.id}`} className="calendar-event-row">
-              {/* Portrait image */}
-              <div className="calendar-event-image">
-                {ev.imageUrl ? (
+              {/* Portrait image — only if available */}
+              {ev.imageUrl && (
+                <div className="calendar-event-image">
                   <img src={ev.imageUrl} alt="" />
-                ) : (
-                  <div className="calendar-event-image-fallback">
-                    <Calendar strokeWidth={1} />
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Info */}
               <div className="calendar-event-info">
