@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { SidebarActivity } from '@/components/notifications/SidebarActivity'
 import { NotificationSlidePanel } from '@/components/notifications/NotificationSlidePanel'
+import './Sidebar.css'
 
 const exposantNav = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -36,71 +37,63 @@ export function Sidebar() {
   const nav = profile?.type === 'exposant' ? exposantNav : publicNav
 
   return (
-    <aside
-      className={`hidden md:flex flex-col bg-card transition-all duration-300 ease-in-out ${
-        collapsed ? 'w-[60px]' : 'w-72'
-      }`}
-    >
+    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       {showNotifPanel ? (
         <NotificationSlidePanel onClose={() => setShowNotifPanel(false)} />
       ) : (
         <>
           {/* Header: logo + collapse toggle */}
-          <div className="flex h-16 items-center justify-between px-4">
+          <div className="sidebar-header">
             <Link
               to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
-              className="flex items-center overflow-hidden"
+              className="sidebar-logo-link"
             >
-              <img src="/icon.png" alt="Fellowship" className="h-7 w-7 shrink-0" />
+              <img src="/icon.png" alt="Fellowship" className="sidebar-logo-icon" />
               {!collapsed && (
-                <span className="ml-2 text-lg font-extrabold text-primary tracking-tight">fellowship</span>
+                <span className="sidebar-logo-text">fellowship</span>
               )}
             </Link>
             {!collapsed && (
               <button
                 onClick={() => setCollapsed(true)}
-                className="rounded-xl p-2 text-muted-foreground hover:bg-card hover:text-foreground"
+                className="sidebar-collapse-btn"
               >
-                <PanelLeftClose className="h-4 w-4" />
+                <PanelLeftClose strokeWidth={1.5} />
               </button>
             )}
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 space-y-1 px-3 pt-2">
+          <nav className="sidebar-nav">
             {nav.map(({ to, icon: Icon, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 title={collapsed ? label : undefined}
                 className={({ isActive }) =>
-                  `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-colors ${
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-foreground/40 hover:bg-card hover:text-foreground'
-                  } ${collapsed ? 'justify-center px-0' : ''}`
+                  `sidebar-nav-link ${isActive ? 'active' : ''}`
                 }
               >
-                <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.5} />
+                <Icon strokeWidth={1.5} />
                 {!collapsed && <span>{label}</span>}
               </NavLink>
             ))}
           </nav>
 
           {/* Activity section */}
-          <div className="mt-2 pt-2">
-            <div className="mx-3 mb-2 h-px bg-foreground/5" />
+          <div className="sidebar-activity-section">
+            <div className="sidebar-activity-divider" />
             <SidebarActivity collapsed={collapsed} onShowAll={() => setShowNotifPanel(true)} />
           </div>
 
           {/* Expand button (only visible when collapsed) */}
           {collapsed && (
-            <div className="px-3 pb-3">
+            <div className="sidebar-expand">
               <button
                 onClick={() => setCollapsed(false)}
-                className="flex w-full items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-card hover:text-foreground"
+                className="sidebar-expand-btn"
               >
-                <PanelLeft className="h-4 w-4" strokeWidth={1.5} />
+                <PanelLeft strokeWidth={1.5} />
               </button>
             </div>
           )}
