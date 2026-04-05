@@ -73,6 +73,7 @@
 /* ── Header ────────────────────────────────────────────────────────── */
 
 .profile-header {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,21 +101,18 @@
   margin-bottom: -44px;
 }
 
-/* Avatar row — avatar + QR button side by side */
-.profile-avatar-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
+/* Avatar — overlaps banner */
+.profile-avatar-wrapper {
   position: relative;
   z-index: 1;
 }
 
-.profile-avatar-wrapper {
-  position: relative;
-}
-
-/* QR button next to avatar */
+/* QR button — absolute right, under banner */
 .profile-qr-btn {
+  position: absolute;
+  right: 16px;
+  top: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +124,8 @@
   cursor: pointer;
   color: rgba(61, 48, 40, 0.4);
   transition: background 0.2s, color 0.2s, transform 0.15s;
-  margin-bottom: 4px;
+  /* Align with bottom of banner — banner height minus overlap + some offset */
+  margin-top: -36px;
 }
 
 .profile-qr-btn:hover {
