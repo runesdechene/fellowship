@@ -15,6 +15,7 @@ import { EventPage } from '@/pages/EventPage'
 import { PublicProfilePage } from '@/pages/PublicProfile'
 import { EmbedPage } from '@/pages/Embed'
 import { AuthCallbackPage } from '@/pages/AuthCallback'
+import { CalendarPage } from '@/pages/Calendar'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { needsOnboarding } = useAuth()
@@ -54,6 +55,7 @@ function App() {
 
           {/* Authenticated routes */}
           <Route path="/dashboard" element={<AuthenticatedApp><DashboardPage /></AuthenticatedApp>} />
+          <Route path="/calendrier" element={<AuthenticatedApp><CalendarPage /></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />
           <Route path="/profil" element={<AuthenticatedApp><ProfilePage /></AuthenticatedApp>} />

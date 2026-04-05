@@ -3,17 +3,19 @@ import { NavLink, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   LayoutDashboard,
+  CalendarDays,
   Compass,
   Bell,
   User,
   Settings,
-  ChevronLeft,
-  ChevronRight,
+  PanelLeftClose,
+  PanelLeft,
   Users,
 } from 'lucide-react'
 
 const exposantNav = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/explorer', icon: Compass, label: 'Explorer' },
   { to: '/notifications', icon: Bell, label: 'Notifications' },
   { to: '/profil', icon: User, label: 'Profil' },
@@ -35,43 +37,64 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col border-r border-border bg-card/80 backdrop-blur-xl transition-all duration-200 ${
-        collapsed ? 'w-16' : 'w-56'
+      className={`hidden md:flex flex-col bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] transition-all duration-300 ease-in-out ${
+        collapsed ? 'w-[60px]' : 'w-60'
       }`}
     >
-      <Link to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'} className="flex h-16 items-center px-3 border-b border-border hover:bg-muted/50">
-        {collapsed ? (
-          <img src="/icon.png" alt="Fellowship" className="h-8 w-8 mx-auto" />
-        ) : (
-          <img src="/logo.png" alt="Fellowship" className="h-8" />
+      {/* Header: logo + collapse toggle */}
+      <div className="flex h-14 items-center justify-between px-3">
+        <Link
+          to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
+          className="flex items-center overflow-hidden"
+        >
+          {collapsed ? (
+            <img src="/icon.png" alt="Fellowship" className="h-7 w-7 shrink-0" />
+          ) : (
+            <img src="/logo.png" alt="Fellowship" className="h-7 shrink-0" />
+          )}
+        </Link>
+        {!collapsed && (
+          <button
+            onClick={() => setCollapsed(true)}
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <PanelLeftClose className="h-4 w-4" />
+          </button>
         )}
-      </Link>
+      </div>
 
-      <nav className="flex-1 space-y-0.5 p-2">
+      {/* Nav */}
+      <nav className="flex-1 space-y-0.5 px-2 pt-2">
         {nav.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
+            title={collapsed ? label : undefined}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium ${
+              `group flex items-center gap-3 rounded-lg px-2.5 py-2 text-[0.8125rem] font-medium ${
                 isActive
                   ? 'bg-primary/10 text-primary'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-              } ${collapsed ? 'justify-center' : ''}`
+              } ${collapsed ? 'justify-center px-0' : ''}`
             }
           >
-            <Icon className="h-5 w-5 shrink-0" />
+            <Icon className="h-[18px] w-[18px] shrink-0" />
             {!collapsed && <span>{label}</span>}
           </NavLink>
         ))}
       </nav>
 
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center border-t border-border p-3 text-muted-foreground hover:text-foreground"
-      >
-        {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-      </button>
+      {/* Expand button (only visible when collapsed) */}
+      {collapsed && (
+        <div className="px-2 pb-3">
+          <button
+            onClick={() => setCollapsed(false)}
+            className="flex w-full items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <PanelLeft className="h-4 w-4" />
+          </button>
+        </div>
+      )}
     </aside>
   )
 }

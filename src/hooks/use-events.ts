@@ -100,6 +100,32 @@ export async function updateEvent(id: string, updates: EventUpdate) {
   return { data, error }
 }
 
+export function useRecentEvents(limit = 6) {
+  const [events, setEvents] = useState<EventWithScore[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('events')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit)
+      .then(({ data }) => {
+        setEvents((data ?? []).map(e => ({
+          ...e,
+          avg_overall: null,
+          review_count: null,
+          avg_affluence: null,
+          avg_organisation: null,
+          avg_rentabilite: null,
+        })))
+        setLoading(false)
+      })
+  }, [limit])
+
+  return { events, loading }
+}
+
 export async function searchSimilarEvents(name: string, startDate?: string) {
   let query = supabase
     .from('events')

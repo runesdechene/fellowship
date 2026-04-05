@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   LayoutDashboard,
+  CalendarDays,
   Compass,
   Bell,
   User,
@@ -11,6 +12,7 @@ import {
 
 const exposantNav = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Accueil' },
+  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
   { to: '/explorer', icon: Compass, label: 'Explorer' },
   { to: '/notifications', icon: Bell, label: 'Notifs' },
   { to: '/profil', icon: User, label: 'Profil' },
