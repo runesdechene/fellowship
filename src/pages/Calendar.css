@@ -18,12 +18,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .calendar-title {
   font-family: var(--font-heading);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
   letter-spacing: -0.025em;
   color: hsl(var(--foreground));
@@ -31,9 +31,9 @@
 
 .calendar-subtitle {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(61, 48, 40, 0.35);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .calendar-nav {
@@ -46,8 +46,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: transparent;
   border: none;
@@ -67,14 +67,14 @@
 }
 
 .calendar-nav-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 .calendar-today-btn {
   border-radius: 9999px;
-  padding: 6px 14px;
-  font-size: 12px;
+  padding: 8px 16px;
+  font-size: 13px;
   font-weight: 600;
   font-family: var(--font-body);
   color: hsl(var(--primary));
@@ -93,7 +93,7 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
 @media (min-width: 640px) {
@@ -107,8 +107,8 @@
 /* ── Month card ────────────────────────────────────────────────────── */
 
 .calendar-month-card {
-  border-radius: 20px;
-  padding: 16px;
+  border-radius: 24px;
+  padding: 20px;
   background: hsl(var(--card));
 }
 
@@ -127,12 +127,12 @@
 
 .calendar-month-header {
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .calendar-month-name {
   font-family: var(--font-heading);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -141,24 +141,25 @@
 
 .calendar-month-year {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(61, 48, 40, 0.3);
+  margin-top: 2px;
 }
 
 /* ── Event card (portrait image left) ──────────────────────────────── */
 
 .calendar-event-row {
   display: flex;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   text-decoration: none;
   background: hsl(var(--background));
 }
 
 /* Portrait image */
 .calendar-event-image {
-  width: 70px;
+  width: 85px;
   flex-shrink: 0;
   background: hsl(var(--muted) / 0.5);
 }
@@ -179,15 +180,15 @@
 }
 
 .calendar-event-image-fallback svg {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   color: rgba(61, 48, 40, 0.08);
 }
 
 /* Info side */
 .calendar-event-info {
   flex: 1;
-  padding: 10px 12px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -196,9 +197,9 @@
 
 .calendar-event-name {
   font-family: var(--font-heading);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1.3;
   color: hsl(var(--foreground));
   white-space: nowrap;
   overflow: hidden;
@@ -210,28 +211,28 @@
   display: inline-block;
   width: fit-content;
   border-radius: 9999px;
-  padding: 1px 7px;
-  font-size: 9px;
+  padding: 2px 9px;
+  font-size: 10px;
   font-weight: 600;
   font-family: var(--font-body);
   background: rgba(61, 48, 40, 0.06);
   color: rgba(61, 48, 40, 0.45);
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 .calendar-event-meta {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--font-body);
-  margin-top: 4px;
+  margin-top: 5px;
   color: rgba(61, 48, 40, 0.35);
 }
 
 .calendar-event-meta svg {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
 }
 
 /* ── Presence row ──────────────────────────────────────────────────── */
@@ -240,7 +241,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 8px;
   flex-wrap: wrap;
 }
 
@@ -248,29 +249,29 @@
 .calendar-presence-me {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   border-radius: 9999px;
-  padding: 2px 8px 2px 2px;
-  font-size: 9px;
+  padding: 3px 10px 3px 3px;
+  font-size: 10px;
   font-weight: 600;
   font-family: var(--font-body);
 }
 
 .calendar-presence-avatar-img {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .calendar-presence-avatar-letter {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 700;
   color: white;
 }
@@ -279,7 +280,7 @@
 .calendar-presence-friends {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .presence-avatars {
@@ -287,17 +288,17 @@
 }
 
 .presence-avatar {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
   color: white;
-  margin-left: -4px;
-  border: 1.5px solid hsl(var(--card));
+  margin-left: -5px;
+  border: 2px solid hsl(var(--card));
 }
 
 .presence-avatar:first-child {
@@ -305,7 +306,7 @@
 }
 
 .calendar-presence-friends-count {
-  font-size: 9px;
+  font-size: 10px;
   font-family: var(--font-body);
   color: rgba(61, 48, 40, 0.3);
 }
@@ -313,23 +314,23 @@
 /* ── Skeleton ──────────────────────────────────────────────────────── */
 
 .calendar-skeleton-month {
-  border-radius: 20px;
-  padding: 16px;
+  border-radius: 24px;
+  padding: 20px;
   background: hsl(var(--muted) / 0.4);
 }
 
 .calendar-skeleton-title {
-  height: 24px;
-  width: 120px;
-  margin: 0 auto 12px;
+  height: 28px;
+  width: 130px;
+  margin: 0 auto 14px;
   border-radius: 9999px;
   background: hsl(var(--muted));
   animation: pulse 2s ease-in-out infinite;
 }
 
 .calendar-skeleton-event {
-  height: 80px;
-  border-radius: 14px;
+  height: 100px;
+  border-radius: 16px;
   background: hsl(var(--muted));
   animation: pulse 2s ease-in-out infinite;
 }
