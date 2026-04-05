@@ -12,14 +12,21 @@
   gap: 10px;
   background: hsl(var(--card));
   border-radius: 16px;
-  padding: 0 16px;
-  height: 48px;
+  padding: 15px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar:focus-within {
+  border-color: hsl(var(--primary) / 0.35);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.08), 1px 0 40px 10px rgba(0, 0, 0, 0.04);
 }
 
 .search-bar-icon {
   width: 18px;
   height: 18px;
-  color: rgba(61, 48, 40, 0.25);
+  color: rgba(61, 48, 40, 0.45);
   flex-shrink: 0;
 }
 
@@ -34,7 +41,7 @@
 }
 
 .search-bar-input::placeholder {
-  color: rgba(61, 48, 40, 0.25);
+  color: rgba(61, 48, 40, 0.45);
 }
 
 .search-bar-shortcut {
