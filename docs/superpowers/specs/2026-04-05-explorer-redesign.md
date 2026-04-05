@@ -29,13 +29,21 @@ Transform the Explorer page into a Netflix-style event catalog. Full-width layou
 - Tag glass badge top-left, title large (28px Jakarta 800), location + date, CTA button "Voir l'événement"
 
 ### Netflix Sections
-Each section = title + horizontal scroll row of portrait cards.
+Each section = title + horizontal slideshow of portrait cards with navigation arrows.
+
+**Slideshow behavior:**
+- Horizontal scroll with `overflow-x: auto` + `scroll-snap-type: x mandatory` + `scroll-behavior: smooth`
+- **Desktop**: left/right arrow buttons on the sides of the row, appearing on hover over the section. Clicking scrolls by ~3 cards width. Buttons hidden when at start/end of scroll.
+- **Mobile**: no arrow buttons — native swipe/scroll is sufficient.
+- Cards snap into position when scrolling stops.
+
+**Sort order:** All sections sort events by `start_date` ascending (closest first, farthest last).
 
 Sections (in order):
-1. **"À venir près de toi"** — events matching user's department, sorted by start_date
-2. **One section per active tag** — e.g. "Médiéval & Fantastique", "Geek & Pop Culture" — grouped by primary_tag
-3. **"Tes amis y vont"** — events where friends have participations (only if user has friends with participations)
-4. **"Ajoutés récemment"** — events sorted by created_at desc
+1. **"À venir près de toi"** — events matching user's department, sorted by start_date asc
+2. **One section per active tag** — e.g. "Médiéval & Fantastique", "Geek & Pop Culture" — grouped by primary_tag, sorted by start_date asc
+3. **"Tes amis y vont"** — events where friends have participations, sorted by start_date asc
+4. **"Ajoutés récemment"** — events sorted by created_at desc (exception: this one uses creation date)
 
 If a filter chip is active, only matching events appear in sections. Empty sections are hidden.
 
