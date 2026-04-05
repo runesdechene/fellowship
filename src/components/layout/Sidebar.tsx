@@ -51,7 +51,7 @@ export function Sidebar() {
               {collapsed ? (
                 <img src="/icon.png" alt="Fellowship" className="sidebar-logo-icon" />
               ) : (
-                <img src="/logo.png" alt="Fellowship" style={{ height: 28 }} />
+                <img src="/logo.png" alt="Fellowship" style={{ height: 36 }} />
               )}
             </Link>
             {!collapsed && (
