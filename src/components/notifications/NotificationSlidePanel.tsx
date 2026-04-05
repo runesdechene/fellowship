@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import { ArrowLeft, Check } from 'lucide-react'
+import { ArrowLeft, Check, BellOff } from 'lucide-react'
 import { useNotifications } from '@/hooks/use-notifications'
 import { useFollowingIds } from '@/hooks/use-following-ids'
 import { NotificationItem } from './NotificationItem'
-import { Button } from '@/components/ui/button'
+import './NotificationSlidePanel.css'
 
 interface NotificationSlidePanelProps {
   onClose: () => void
@@ -22,31 +22,32 @@ export function NotificationSlidePanel({ onClose }: NotificationSlidePanelProps)
   }, [onClose])
 
   return (
-    <div className="flex h-full flex-col bg-card">
+    <div className="notif-panel">
       {/* Header */}
-      <div className="flex h-14 items-center gap-2 border-b border-border px-3">
-        <button
-          onClick={onClose}
-          className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Retour
-        </button>
-        <div className="flex-1" />
+      <div className="notif-panel-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={onClose} className="notif-back-btn">
+            <ArrowLeft strokeWidth={1.5} />
+          </button>
+          <span className="notif-panel-title">Notifications</span>
+        </div>
         {unreadCount > 0 && (
-          <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
-            <Check className="mr-1 h-3 w-3" />
+          <button onClick={markAllAsRead} className="notif-mark-all-btn">
+            <Check strokeWidth={2} />
             Tout lire
-          </Button>
+          </button>
         )}
       </div>
 
       {/* Notification list */}
-      <div className="flex-1 overflow-y-auto p-2">
+      <div className="notif-panel-list">
         {notifications.length === 0 ? (
-          <p className="p-4 text-center text-sm text-muted-foreground">Aucune notification</p>
+          <div className="notif-empty">
+            <BellOff className="notif-empty-icon" strokeWidth={1} />
+            <p className="notif-empty-text">Aucune notification</p>
+          </div>
         ) : (
-          <div className="space-y-0.5">
+          <div className="notif-panel-items">
             {notifications.map(n => {
               const data = (n.data ?? {}) as Record<string, unknown>
               const actorId = typeof data.actor_id === 'string' ? data.actor_id : undefined
