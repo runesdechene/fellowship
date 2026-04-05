@@ -126,3 +126,12 @@ h1, h2, h3, .font-display {
 .calendar-grid {
   animation: calendar-enter 0.35s ease-out;
 }
+
+/* Hide scrollbar for carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
