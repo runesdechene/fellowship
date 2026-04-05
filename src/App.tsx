@@ -35,6 +35,30 @@ function AuthenticatedApp({ children }: { children: React.ReactNode }) {
   )
 }
 
+function MaybeAuthenticatedProfile() {
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-muted-foreground">
+        Chargement…
+      </div>
+    )
+  }
+
+  // Authenticated: show with layout
+  if (user) {
+    return (
+      <AppLayout>
+        <PublicProfilePage />
+      </AppLayout>
+    )
+  }
+
+  // Not authenticated: show without layout
+  return <PublicProfilePage />
+}
+
 function App() {
   return (
         <Routes>
@@ -42,7 +66,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
-          <Route path="/@:slug" element={<PublicProfilePage />} />
+          <Route path="/@:slug" element={<MaybeAuthenticatedProfile />} />
           <Route path="/@:slug/embed" element={<EmbedPage />} />
           <Route
             path="/onboarding"
