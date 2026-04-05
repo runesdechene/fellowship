@@ -32,7 +32,7 @@ export function SettingsPage() {
   const bannerInputRef = useRef<HTMLInputElement>(null)
 
   const isExposant = profile?.type === 'exposant'
-  const qrUrl = `https://flw.sh/@${slug}`
+  const qrUrl = `https://flw.sh/${slug}`
 
   // Keep form in sync if profile loads after mount
   useEffect(() => {
@@ -295,7 +295,7 @@ export function SettingsPage() {
                   <label className="mb-1.5 block text-sm font-medium">Slug public</label>
                   <div className="flex items-center rounded-lg border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring">
                     <span className="border-r border-input bg-muted px-3 py-2 text-sm text-muted-foreground select-none">
-                      flw.sh/@
+                      flw.sh/
                     </span>
                     <input
                       className="flex-1 bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"

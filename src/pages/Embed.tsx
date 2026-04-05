@@ -75,7 +75,7 @@ export function EmbedPage() {
           <span className="font-semibold text-sm">{displayName}</span>
         </div>
         <a
-          href={`https://flw.sh/@${slug}`}
+          href={`https://flw.sh/${slug}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"

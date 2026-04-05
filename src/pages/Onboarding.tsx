@@ -88,7 +88,7 @@ export function OnboardingPage() {
       <h2 className="text-2xl">Ton lien public</h2>
       <p className="text-muted-foreground">Les visiteurs te trouveront ici</p>
       <div className="flex items-center gap-0 rounded-full border border-input bg-card text-lg overflow-hidden">
-        <span className="px-5 py-3 text-muted-foreground">flw.sh/@</span>
+        <span className="px-5 py-3 text-muted-foreground">flw.sh/</span>
         <input
           type="text"
           className="w-full bg-card px-0 py-3 focus:outline-none"

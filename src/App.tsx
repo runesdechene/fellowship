@@ -42,10 +42,6 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
-          <Route path="/@:slug" element={<PublicProfilePage />} />
-          <Route path="/%40:slug" element={<PublicProfilePage />} />
-          <Route path="/@:slug/embed" element={<EmbedPage />} />
-          <Route path="/%40:slug/embed" element={<EmbedPage />} />
           <Route
             path="/onboarding"
             element={
@@ -64,6 +60,10 @@ function App() {
           <Route path="/reglages" element={<AuthenticatedApp><SettingsPage /></AuthenticatedApp>} />
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
+
+          {/* Public profile — catch-all, MUST be last */}
+          <Route path="/:slug" element={<PublicProfilePage />} />
+          <Route path="/:slug/embed" element={<EmbedPage />} />
         </Routes>
   )
 }
