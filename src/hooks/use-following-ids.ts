@@ -15,7 +15,6 @@ export function useFollowingIds() {
         .select('following_id')
         .eq('follower_id', user!.id)
 
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFollowingIds(new Set((data ?? []).map(r => r.following_id)))
     }
 
