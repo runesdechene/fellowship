@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Settings, QrCode } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { FollowButton } from '@/components/profile/FollowButton'
 import type { Profile } from '@/types/database'
 
@@ -21,9 +20,14 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
       <div className={`profile-banner ${bannerUrl ? '' : 'profile-banner-empty'}`}>
         {bannerUrl && <img src={bannerUrl} alt="" className="profile-banner-image" />}
         {isOwner && (
-          <button onClick={onOpenQR} className="profile-qr-btn">
-            <QrCode strokeWidth={1.5} />
-          </button>
+          <div className="profile-banner-actions">
+            <Link to="/reglages" className="profile-banner-btn">
+              <Settings strokeWidth={1.5} />
+            </Link>
+            <button onClick={onOpenQR} className="profile-banner-btn">
+              <QrCode strokeWidth={1.5} />
+            </button>
+          </div>
         )}
       </div>
 
@@ -49,16 +53,6 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
 
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
 
-      {isOwner && (
-        <div className="profile-actions">
-          <Link to="/reglages">
-            <Button size="sm" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Modifier mon profil
-            </Button>
-          </Link>
-        </div>
-      )}
     </div>
   )
 }
