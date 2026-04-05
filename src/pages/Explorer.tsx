@@ -27,7 +27,8 @@ export function ExplorerPage() {
     }
   })
   const [monthFrom, setMonthFrom] = useState(monthOptions[0].value)
-  const [monthTo, setMonthTo] = useState(monthOptions[12].value)
+  const monthOptionsTo = [...monthOptions.filter(o => o.value > monthFrom), { value: '9999-12', label: 'la fin des temps' }]
+  const [monthTo, setMonthTo] = useState('9999-12')
 
   const now = useMemo(() => new Date(), [])
 
@@ -129,7 +130,7 @@ export function ExplorerPage() {
         />
         <span className="explorer-month-pickers-label">à</span>
         <MonthPicker
-          options={monthOptions.filter(o => o.value > monthFrom)}
+          options={monthOptionsTo}
           value={monthTo}
           onChange={setMonthTo}
         />
