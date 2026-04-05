@@ -20,15 +20,6 @@ function hashName(name: string): number {
   return Math.abs(h)
 }
 
-function formatDateRange(start: Date, end: Date): string {
-  const dayStart = start.getDate()
-  const dayEnd = end.getDate()
-  const monthStart = start.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
-  if (start.getTime() === end.getTime()) return `${dayStart} ${monthStart}`
-  if (start.getMonth() === end.getMonth()) return `${dayStart}-${dayEnd} ${monthStart}`
-  const monthEnd = end.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
-  return `${dayStart} ${monthStart} - ${dayEnd} ${monthEnd}`
-}
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: typeof Check }> = {
   confirme: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.1)', icon: Check },
@@ -77,13 +68,19 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
 
             {/* Info */}
             <div className="calendar-event-info">
-              <div className="calendar-event-name">{ev.name}</div>
-              <span className="calendar-event-tag">{ev.primaryTag}</span>
-              <div className="calendar-event-meta">
-                <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
-                <span>·</span>
-                <MapPin />
-                <span>{ev.city}</span>
+              <div className="calendar-event-top">
+                <div className="calendar-event-details">
+                  <div className="calendar-event-name">{ev.name}</div>
+                  <span className="calendar-event-tag">{ev.primaryTag}</span>
+                  <div className="calendar-event-meta">
+                    <MapPin />
+                    <span>{ev.city}</span>
+                  </div>
+                </div>
+                <div className="calendar-event-date">
+                  <span className="calendar-event-day">{ev.startDate.getDate()}</span>
+                  <span className="calendar-event-month">{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
+                </div>
               </div>
 
               {/* My presence */}
