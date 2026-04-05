@@ -2240,6 +2240,342 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-05T15:25:46.874Z"
+    },
+    {
+      "id": "bug-141",
+      "timestamp": "2026-04-05T15:30:45.533Z",
+      "error_message": "CSS fix: box-shadow",
+      "file": "src/components/layout/SearchBar.css",
+      "root_cause": "box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02) → 0 0 0 3px hsl(var(--primary) / 0.08), 1px 0 40px 10px rgba(0, 0, 0, 0.04)",
+      "fix": "Changed box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02) → 0 0 0 3px hsl(var(--primary) / 0.08), 1px 0 40px 10px rgba(0, 0, 0, 0.04)",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T15:30:45.533Z"
+    },
+    {
+      "id": "bug-142",
+      "timestamp": "2026-04-05T15:46:57.195Z",
+      "error_message": "Significant refactor of ",
+      "file": "docs/superpowers/specs/2026-04-05-explorer-redesign.md",
+      "root_cause": "5 lines replaced/restructured",
+      "fix": "Rewrote 10→18 lines (5 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "md"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T15:46:57.195Z"
+    },
+    {
+      "id": "bug-143",
+      "timestamp": "2026-04-05T15:58:19.941Z",
+      "error_message": "Wrong reference: EventCardProps should be prospection",
+      "file": "src/components/events/EventCard.tsx",
+      "root_cause": "Used \"EventCardProps\" instead of \"prospection\"",
+      "fix": "Changed EventCardProps → prospection",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T15:58:19.941Z"
+    },
+    {
+      "id": "bug-144",
+      "timestamp": "2026-04-05T16:02:03.658Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Had \"calendar-switch-track\"",
+      "fix": "Changed to \"explorer-switch-track\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:02:03.658Z"
+    },
+    {
+      "id": "bug-145",
+      "timestamp": "2026-04-05T16:02:23.487Z",
+      "error_message": "Wrong reference: setSearch should be _setSearch",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Used \"setSearch\" instead of \"_setSearch\"",
+      "fix": "Changed setSearch → _setSearch",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:02:23.487Z"
+    },
+    {
+      "id": "bug-146",
+      "timestamp": "2026-04-05T16:11:18.014Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "14 lines replaced/restructured",
+      "fix": "Rewrote 23→14 lines (14 removed) | Also: {PRIMARY_TAGS.map(tag => (; className={`explorer-filter-chip ${selectedTags.ha",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-05T16:14:26.254Z"
+    },
+    {
+      "id": "bug-147",
+      "timestamp": "2026-04-05T16:11:25.878Z",
+      "error_message": "CSS fix: 0",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "0: nearbyEvents.length > 0 || tagSections.length > 0 || friendEvents.length > 0 || recentEvents.length > 0 → nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0",
+      "fix": "Changed 0: nearbyEvents.length > 0 || tagSections.length > 0 || friendEvents.length > 0 || recentEvents.length > 0 → nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:11:25.878Z"
+    },
+    {
+      "id": "bug-148",
+      "timestamp": "2026-04-05T16:14:13.741Z",
+      "error_message": "Missing guard clause",
+      "file": "src/lib/constants.ts",
+      "root_cause": "No early return/throw for edge case: TAG_COLORS[tag]",
+      "fix": "Added guard clause: if (TAG_COLORS[tag])",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:14:13.741Z"
+    },
+    {
+      "id": "bug-149",
+      "timestamp": "2026-04-05T16:18:04.371Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:18:04.371Z"
+    },
+    {
+      "id": "bug-150",
+      "timestamp": "2026-04-05T16:20:19.963Z",
+      "error_message": "CSS fix: 0",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "0: nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0 → true // département section is always visible",
+      "fix": "Changed 0: nearbyEvents.length > 0 || upcomingEvents.length > 0 || recentEvents.length > 0 → true // département section is always visible",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:20:19.963Z"
+    },
+    {
+      "id": "bug-151",
+      "timestamp": "2026-04-05T16:20:29.571Z",
+      "error_message": "Type error",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:20:29.571Z"
+    },
+    {
+      "id": "bug-152",
+      "timestamp": "2026-04-05T16:21:00.919Z",
+      "error_message": "CSS fix: font-size, color",
+      "file": "src/pages/Explorer.css",
+      "root_cause": "font-size: 13px → 12px; color: rgba(61, 48, 40, 0.35) → hsl(var(--primary))",
+      "fix": "Changed font-size: 13px → 12px; color: rgba(61, 48, 40, 0.35) → hsl(var(--primary))",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:21:00.919Z"
+    },
+    {
+      "id": "bug-153",
+      "timestamp": "2026-04-05T16:28:44.793Z",
+      "error_message": "CSS fix: font-size, color, margin-top",
+      "file": "src/pages/Explorer.css",
+      "root_cause": "font-size: 13px → 10px; color: rgba(61, 48, 40, 0.35) → rgba(61, 48, 40, 0.2); margin-top: 8px → 6px",
+      "fix": "Changed font-size: 13px → 10px; color: rgba(61, 48, 40, 0.35) → rgba(61, 48, 40, 0.2); margin-top: 8px → 6px",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:28:44.793Z"
+    },
+    {
+      "id": "bug-154",
+      "timestamp": "2026-04-05T16:28:51.594Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Had 'semaine'",
+      "fix": "Changed to 'lucide-react'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:28:51.594Z"
+    },
+    {
+      "id": "bug-155",
+      "timestamp": "2026-04-05T16:29:08.057Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:29:08.057Z"
+    },
+    {
+      "id": "bug-156",
+      "timestamp": "2026-04-05T16:29:46.221Z",
+      "error_message": "Type error",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation | Also: // Month pickers for prospection (0 = current month); const currentMonth = now.getMonth()",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-05T16:31:56.447Z"
+    },
+    {
+      "id": "bug-157",
+      "timestamp": "2026-04-05T16:32:39.451Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Explorer.css",
+      "root_cause": "55 lines replaced/restructured",
+      "fix": "Rewrote 87→41 lines (55 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:32:39.451Z"
+    },
+    {
+      "id": "bug-158",
+      "timestamp": "2026-04-05T16:35:29.468Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "19 lines replaced/restructured",
+      "fix": "Rewrote 48→24 lines (19 removed) | Also: // Temporal filters; if (temporalFilter === 'semaine') {",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-05T16:35:41.440Z"
+    },
+    {
+      "id": "bug-159",
+      "timestamp": "2026-04-05T16:35:49.290Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Had 'semaine'",
+      "fix": "Changed to 'proche'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:35:49.290Z"
+    },
+    {
+      "id": "bug-160",
+      "timestamp": "2026-04-05T16:41:59.856Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "18 lines replaced/restructured",
+      "fix": "Rewrote 20→4 lines (18 removed) | Also: <MonthPicker options={monthOptions} value={monthFr; <MonthPicker options={monthOptions} value={monthTo",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-05T16:43:43.701Z"
+    },
+    {
+      "id": "bug-161",
+      "timestamp": "2026-04-05T16:45:35.007Z",
+      "error_message": "Type error",
+      "file": "src/pages/Explorer.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-05T16:45:35.007Z"
     }
   ]
 }

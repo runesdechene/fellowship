@@ -9,6 +9,10 @@
 
 | 22:45 | Created QRCodeCard + EmbedPage, added /@:slug/embed route, copied src/types, fixed unused Link import, build passes | src/components/profile/QRCodeCard.tsx, src/pages/Embed.tsx, src/App.tsx | committed f320a75 | ~1800 |
 
+| 2026-04-05 | Explorer Task 4+5: EventCard prospection variant (deadline badge with red/orange/glass + rating row), created Explorer.css (all explorer page styles) | src/components/events/EventCard.tsx, src/pages/Explorer.css | build passed, committed 5b78ffc + 9d1dff9 | ~320 tok |
+
+| 2026-04-05 | Explorer Task 2: Created SlideRow component — Netflix-style horizontal slideshow with scroll-snap, arrow navigation (desktop hover), canScrollLeft/Right state | src/components/events/SlideRow.tsx, src/components/events/SlideRow.css | build passed, committed a679c14 | ~171 tok |
+
 | 20:45 | Created notifications hook, panel, bell components | src/hooks/use-notifications.ts, src/components/notifications/NotificationPanel.tsx, src/components/notifications/NotificationBell.tsx | committed 93ca534 | ~800 tok |
 
 | 20:30 | Task 17: created use-reviews.ts, use-reports.ts, ReviewForm.tsx, ReviewSummary.tsx, EventReportForm.tsx | src/hooks/, src/components/reviews/, src/components/reports/ | build passed, committed | ~1800 tok |
@@ -933,3 +937,104 @@
 | 17:25 | Edited src/components/layout/AppLayout.tsx | added 1 import(s) | ~42 |
 | 17:25 | Edited src/components/layout/AppLayout.tsx | 1→3 lines | ~15 |
 | 17:26 | Session end: 238 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~215362 tok |
+| 17:27 | Session end: 238 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~215362 tok |
+| 17:30 | Edited src/components/layout/SearchBar.css | CSS: transition, search-bar, border-color | ~135 |
+| 17:31 | Session end: 239 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~216494 tok |
+| 17:35 | Session end: 239 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~216494 tok |
+| 17:37 | Session end: 239 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~216494 tok |
+| 17:38 | Created .superpowers/brainstorm/3949-1775403315/content/explorer-netflix.html | — | ~4866 |
+| 17:39 | Session end: 240 writes across 76 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~221708 tok |
+| 17:41 | Session end: 240 writes across 76 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~221708 tok |
+| 17:42 | Session end: 240 writes across 76 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~221708 tok |
+| 17:44 | Created .superpowers/brainstorm/3949-1775403315/content/explorer-prospection.html | — | ~4528 |
+| 17:44 | Session end: 241 writes across 77 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~226560 tok |
+| 17:44 | Session end: 241 writes across 77 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~226560 tok |
+| 17:46 | Created docs/superpowers/specs/2026-04-05-explorer-redesign.md | — | ~1493 |
+| 17:46 | Session end: 242 writes across 78 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~228159 tok |
+| 17:46 | Edited docs/superpowers/specs/2026-04-05-explorer-redesign.md | modified Sections() | ~316 |
+| 17:47 | Session end: 243 writes across 78 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 69 reads | ~228497 tok |
+| 17:51 | Created docs/superpowers/plans/2026-04-05-explorer-redesign.md | — | ~5487 |
+| 17:52 | Session end: 244 writes across 78 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 71 reads | ~236155 tok |
+| 17:56 | Created src/lib/constants.ts | — | ~159 |
+| 17:57 | Created src/components/events/SlideRow.css | — | ~512 |
+| 17:57 | Created src/components/events/SlideRow.tsx | — | ~636 |
+| 17:57 | Created src/components/events/HeroBanner.css | — | ~581 |
+| 17:57 | Created src/components/events/HeroBanner.tsx | — | ~392 |
+| 17:58 | Edited src/components/events/EventCard.tsx | 5→6 lines | ~40 |
+| 17:58 | Edited src/components/events/EventCard.tsx | inline fix | ~30 |
+| 17:58 | Edited src/components/events/EventCard.tsx | added 1 condition(s) | ~574 |
+| 17:58 | Edited src/components/events/EventCard.tsx | expanded (+8 lines) | ~350 |
+| 17:58 | Created src/pages/Explorer.css | — | ~975 |
+| 18:01 | Created src/pages/Explorer.tsx | — | ~3559 |
+| 18:01 | Edited src/pages/Explorer.css | expanded (+31 lines) | ~190 |
+| 18:02 | Edited src/pages/Explorer.tsx | 2→2 lines | ~31 |
+| 18:02 | Edited src/pages/Explorer.tsx | 1→3 lines | ~35 |
+| 18:04 | Session end: 258 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~246982 tok |
+| 18:08 | Session end: 258 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~246982 tok |
+| 18:09 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 18:09 | Edited src/pages/Explorer.tsx | removed 6 lines | ~13 |
+| 18:09 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 18:09 | Session end: 261 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~248866 tok |
+| 18:11 | Edited src/pages/Explorer.tsx | reduced (-9 lines) | ~172 |
+| 18:11 | Edited src/pages/Explorer.tsx | 4→4 lines | ~69 |
+| 18:11 | Edited src/pages/Explorer.tsx | reduced (-6 lines) | ~195 |
+| 18:11 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 18:12 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 18:12 | Edited src/pages/Explorer.tsx | removed 3 lines | ~1 |
+| 18:12 | Session end: 267 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249219 tok |
+| 18:14 | Edited src/lib/constants.ts | added 1 condition(s) | ~412 |
+| 18:14 | Edited src/pages/Explorer.tsx | inline fix | ~17 |
+| 18:14 | Edited src/pages/Explorer.tsx | expanded (+8 lines) | ~162 |
+| 18:14 | Session end: 270 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249477 tok |
+| 18:15 | Session end: 270 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249477 tok |
+| 18:15 | Session end: 270 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249477 tok |
+| 18:16 | Session end: 270 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249477 tok |
+| 18:18 | Edited src/pages/Explorer.tsx | added optional chaining | ~72 |
+| 18:18 | Session end: 271 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~249630 tok |
+| 18:20 | Edited src/pages/Explorer.tsx | inline fix | ~20 |
+| 18:20 | Edited src/pages/Explorer.tsx | 4→4 lines | ~59 |
+| 18:20 | Edited src/pages/Explorer.tsx | expanded (+15 lines) | ~394 |
+| 18:21 | Edited src/pages/Explorer.css | expanded (+55 lines) | ~373 |
+| 18:21 | Session end: 275 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~250671 tok |
+| 18:23 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 18:24 | Edited src/pages/Explorer.tsx | removed 14 lines | ~6 |
+| 18:24 | Edited src/pages/Explorer.tsx | inline fix | ~18 |
+| 18:24 | Session end: 278 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~250695 tok |
+| 18:26 | Session end: 278 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~250695 tok |
+| 18:27 | Session end: 278 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~250695 tok |
+| 18:28 | Edited src/pages/Explorer.css | expanded (+88 lines) | ~524 |
+| 18:28 | Edited src/pages/Explorer.tsx | added 1 import(s) | ~33 |
+| 18:28 | Edited src/pages/Explorer.tsx | 2→4 lines | ~67 |
+| 18:29 | Edited src/pages/Explorer.tsx | added nullish coalescing | ~143 |
+| 18:29 | Edited src/pages/Explorer.tsx | inline fix | ~27 |
+| 18:29 | Edited src/pages/Explorer.tsx | removed 22 lines | ~5 |
+| 18:29 | Edited src/pages/Explorer.tsx | CSS: left, width | ~404 |
+| 18:30 | Session end: 285 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~251665 tok |
+| 18:31 | Edited src/pages/Explorer.tsx | expanded (+10 lines) | ~162 |
+| 18:32 | Edited src/pages/Explorer.tsx | modified if() | ~106 |
+| 18:32 | Edited src/pages/Explorer.tsx | inline fix | ~27 |
+| 18:32 | Edited src/pages/Explorer.tsx | reduced (-12 lines) | ~277 |
+| 18:32 | Edited src/pages/Explorer.css | reduced (-46 lines) | ~314 |
+| 18:33 | Edited src/pages/Explorer.tsx | 3→3 lines | ~42 |
+| 18:33 | Session end: 291 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~252983 tok |
+| 18:34 | Edited src/pages/Explorer.tsx | 38→39 lines | ~376 |
+| 18:34 | Edited src/pages/Explorer.tsx | removed 3 lines | ~1 |
+| 18:34 | Edited src/pages/Explorer.css | removed 15 lines | ~9 |
+| 18:34 | Session end: 294 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~253369 tok |
+| 18:35 | Edited src/pages/Explorer.tsx | reduced (-24 lines) | ~231 |
+| 18:35 | Edited src/pages/Explorer.tsx | modified if() | ~126 |
+| 18:35 | Edited src/pages/Explorer.tsx | "semaine" → "proche" | ~11 |
+| 18:36 | Edited src/pages/Explorer.tsx | removed 6 lines | ~8 |
+| 18:36 | Edited src/pages/Explorer.tsx | 2→1 lines | ~22 |
+| 18:36 | Created src/pages/Explorer.tsx | — | ~1926 |
+| 18:37 | Session end: 300 writes across 84 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~255266 tok |
+| 18:41 | Created src/components/ui/MonthPicker.css | — | ~512 |
+| 18:41 | Created src/components/ui/MonthPicker.tsx | — | ~448 |
+| 18:41 | Edited src/pages/Explorer.tsx | added 1 import(s) | ~27 |
+| 18:41 | Edited src/pages/Explorer.tsx | reduced (-16 lines) | ~87 |
+| 18:42 | Session end: 304 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~256340 tok |
+| 18:43 | Edited src/pages/Explorer.tsx | added 1 condition(s) | ~169 |
+| 18:44 | Session end: 305 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~255291 tok |
+| 18:45 | Edited src/pages/Explorer.tsx | CSS: value, label | ~51 |
+| 18:45 | Edited src/pages/Explorer.tsx | 5→5 lines | ~36 |
+| 18:46 | Session end: 307 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~255378 tok |

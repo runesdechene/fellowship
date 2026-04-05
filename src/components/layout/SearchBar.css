@@ -19,8 +19,7 @@
 }
 
 .search-bar:focus-within {
-  border-color: hsl(var(--primary) / 0.35);
-  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.08), 1px 0 40px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0 10px 3px hsl(var(--primary) / 0.08), 1px 0 40px 10px rgba(0, 0, 0, 0.04);
 }
 
 .search-bar-icon {

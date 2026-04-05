@@ -53,8 +53,8 @@
 
 .explorer-filters {
   display: flex;
+  align-items: center;
   gap: 8px;
-  overflow-x: auto;
   padding: 0 24px 16px;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -231,11 +231,11 @@
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
-  color: hsl(var(--foreground));
+  color: hsl(var(--foreground)/ 0.5);
   background: hsl(var(--card));
   border: none;
-  border-radius: 12px;
-  padding: 8px 14px;
+  border-radius: 20px;
+  padding: 10px 14px;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
