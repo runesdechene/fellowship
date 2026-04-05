@@ -218,92 +218,46 @@
   margin-top: 8px;
 }
 
-/* ── Range Slider ──────────────────────────────────────────────────── */
+/* ── Month Pickers (Prospection) ───────────────────────────────────── */
 
-.explorer-range-wrapper {
+.explorer-month-pickers {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 0 24px 16px;
 }
 
-.explorer-range-label {
+.explorer-month-pickers-icon {
+  width: 16px;
+  height: 16px;
+  color: rgba(61, 48, 40, 0.3);
+  flex-shrink: 0;
+}
+
+.explorer-month-pickers-label {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(61, 48, 40, 0.35);
+}
+
+.explorer-month-select {
+  font-family: var(--font-body);
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(61, 48, 40, 0.4);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.explorer-range-label svg {
-  width: 14px;
-  height: 14px;
-}
-
-.explorer-range-value {
-  color: hsl(var(--primary));
-  font-weight: 700;
-}
-
-.explorer-range-track {
-  position: relative;
-  height: 6px;
-  border-radius: 3px;
-  background: rgba(61, 48, 40, 0.08);
-}
-
-.explorer-range-fill {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  border-radius: 3px;
-  background: hsl(var(--primary) / 0.3);
-}
-
-.explorer-range-slider {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 6px;
-  -webkit-appearance: none;
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  cursor: pointer;
   appearance: none;
-  background: transparent;
-  pointer-events: none;
-  margin: 0;
-}
-
-.explorer-range-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: hsl(var(--primary));
-  border: 3px solid hsl(var(--card));
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  pointer-events: auto;
-  position: relative;
-  top: -7px;
-}
-
-.explorer-range-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: hsl(var(--primary));
-  border: 3px solid hsl(var(--card));
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.explorer-range-ticks {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  font-family: var(--font-body);
-  font-size: 10px;
-  color: rgba(61, 48, 40, 0.2);
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233d3028' stroke-width='2' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  text-transform: capitalize;
 }
 
 /* ── Add event card ────────────────────────────────────────────────── */

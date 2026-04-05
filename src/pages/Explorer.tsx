@@ -22,8 +22,18 @@ export function ExplorerPage() {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
   const [showProspection, setShowProspection] = useState(false)
   const [temporalFilter, setTemporalFilter] = useState<TemporalFilter>(null)
-  const [rangeMin, setRangeMin] = useState(0)
-  const [rangeMax, setRangeMax] = useState(12)
+  // Month pickers for prospection (0 = current month)
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+  const monthOptions = Array.from({ length: 13 }, (_, i) => {
+    const d = new Date(currentYear, currentMonth + i)
+    return {
+      value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+      label: d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
+    }
+  })
+  const [monthFrom, setMonthFrom] = useState(monthOptions[0].value)
+  const [monthTo, setMonthTo] = useState(monthOptions[12].value)
 
   const isExposant = profile?.type === 'exposant'
 
@@ -81,21 +91,21 @@ export function ExplorerPage() {
       result = result.filter(ev => matchesDepartment(ev))
     }
 
-    // Prospection range slider filter (months from now)
-    if (showProspection && (rangeMin > 0 || rangeMax < 12)) {
-      const minDays = rangeMin * 30
-      const maxDays = rangeMax * 30
+    // Prospection month range filter
+    if (showProspection) {
+      const fromDate = new Date(monthFrom + '-01')
+      const toDate = new Date(monthTo + '-01')
+      toDate.setMonth(toDate.getMonth() + 1) // end of the "to" month
       result = result.filter(ev => {
-        const dateStr = ev.registration_deadline ?? ev.start_date
-        const d = daysUntil(dateStr)
-        return d >= minDays && d <= maxDays
+        const d = new Date(ev.start_date)
+        return d >= fromDate && d < toDate
       })
     }
 
     // Sort by start_date ascending
     return [...result].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allEvents, search, selectedTags, showProspection, temporalFilter, rangeMin, rangeMax])
+  }, [allEvents, search, selectedTags, showProspection, temporalFilter, monthFrom, monthTo])
 
 
   // ---------- section builders (normal mode) — 3 fixed sections ----------
@@ -215,42 +225,30 @@ export function ExplorerPage() {
         </button>
       </div>
 
-      {/* Prospection range slider */}
+      {/* Prospection month pickers */}
       {showProspection && (
-        <div className="explorer-range-wrapper">
-          <div className="explorer-range-label">
-            <CalendarIcon strokeWidth={1.5} />
-            Inscription dans <span className="explorer-range-value">{rangeMin} — {rangeMax} mois</span>
-          </div>
-          <div className="explorer-range-track">
-            <div
-              className="explorer-range-fill"
-              style={{ left: `${(rangeMin / 12) * 100}%`, width: `${((rangeMax - rangeMin) / 12) * 100}%` }}
-            />
-            <input
-              type="range"
-              min={0}
-              max={12}
-              value={rangeMin}
-              onChange={e => setRangeMin(Math.min(Number(e.target.value), rangeMax - 1))}
-              className="explorer-range-slider"
-            />
-            <input
-              type="range"
-              min={0}
-              max={12}
-              value={rangeMax}
-              onChange={e => setRangeMax(Math.max(Number(e.target.value), rangeMin + 1))}
-              className="explorer-range-slider"
-            />
-          </div>
-          <div className="explorer-range-ticks">
-            <span>0</span>
-            <span>3m</span>
-            <span>6m</span>
-            <span>9m</span>
-            <span>12m</span>
-          </div>
+        <div className="explorer-month-pickers">
+          <CalendarIcon strokeWidth={1.5} className="explorer-month-pickers-icon" />
+          <span className="explorer-month-pickers-label">De</span>
+          <select
+            value={monthFrom}
+            onChange={e => setMonthFrom(e.target.value)}
+            className="explorer-month-select"
+          >
+            {monthOptions.map(m => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
+          <span className="explorer-month-pickers-label">à</span>
+          <select
+            value={monthTo}
+            onChange={e => setMonthTo(e.target.value)}
+            className="explorer-month-select"
+          >
+            {monthOptions.map(m => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
         </div>
       )}
 
