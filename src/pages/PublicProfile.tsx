@@ -70,8 +70,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         .order('created_at', { ascending: false })
 
       if (!user || user.id !== profileData.id) {
-        // Show events where user is inscrit or confirme (public participation)
-        partsQuery = partsQuery.in('status', ['inscrit', 'confirme'])
+        // Show events where user has any participation status
+        partsQuery = partsQuery.in('status', ['interesse', 'inscrit', 'confirme'])
       }
 
       const { data: parts } = await partsQuery
