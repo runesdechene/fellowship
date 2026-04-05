@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations, type FriendParticipation } from '@/hooks/use-participations'
 import { useRecentEvents } from '@/hooks/use-events'
+import { useMyFriends, useMyFollowers } from '@/hooks/use-follows'
 import { EventCard } from '@/components/events/EventCard'
 import { Button } from '@/components/ui/button'
-import { Plus, Calendar, Users, ArrowRight, Compass } from 'lucide-react'
+import { Plus, Calendar, Users, UserCheck, ArrowRight, Compass } from 'lucide-react'
 
 const tagColors: Record<string, string> = {
   'médiéval': 'hsl(24 72% 44%)',
@@ -41,6 +42,8 @@ export function DashboardPage() {
   const { participations } = useMyParticipations(currentYear)
   const { participations: friendActivity } = useFriendsParticipations()
   const { events: recentEvents } = useRecentEvents(6)
+  const { friends, loading: friendsLoading } = useMyFriends()
+  const { followers, loading: followersLoading } = useMyFollowers()
 
   const upcoming = participations
     .filter(p => p.events && daysUntil(p.events.end_date) >= 0)
@@ -172,6 +175,75 @@ export function DashboardPage() {
           </div>
         </section>
       )}
+
+      {/* Réseau */}
+      <section className="mt-10">
+        <h2 className="flex items-center gap-2 text-lg font-bold mb-4">
+          <Users className="h-5 w-5 text-accent" />
+          Réseau
+        </h2>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {/* Friends */}
+          <div>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Amis ({friendsLoading ? '…' : friends.length})
+            </h3>
+            {friendsLoading ? (
+              <p className="text-sm text-muted-foreground">Chargement…</p>
+            ) : friends.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Pas encore d'amis</p>
+            ) : (
+              <div className="space-y-2">
+                {friends.map(friend => (
+                  <Link
+                    key={friend.id}
+                    to={`/@${friend.public_slug ?? friend.id}`}
+                    className="flex items-center gap-3 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 hover:bg-muted transition-colors"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                      {(friend.brand_name ?? friend.display_name ?? '?')[0].toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{friend.brand_name ?? friend.display_name ?? 'Utilisateur'}</p>
+                      {friend.city && <p className="text-xs text-muted-foreground">{friend.city}</p>}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* Followers */}
+          <div>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
+              <UserCheck className="inline h-4 w-4 mr-1" />
+              Abonnés ({followersLoading ? '…' : followers.length})
+            </h3>
+            {followersLoading ? (
+              <p className="text-sm text-muted-foreground">Chargement…</p>
+            ) : followers.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Personne ne te suit encore</p>
+            ) : (
+              <div className="space-y-2">
+                {followers.map(follower => (
+                  <Link
+                    key={follower.id}
+                    to={`/@${follower.public_slug ?? follower.id}`}
+                    className="flex items-center gap-3 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 hover:bg-muted transition-colors"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                      {(follower.brand_name ?? follower.display_name ?? '?')[0].toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{follower.brand_name ?? follower.display_name ?? 'Utilisateur'}</p>
+                      {follower.city && <p className="text-xs text-muted-foreground">{follower.city}</p>}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
