@@ -1,27 +1,34 @@
 import { Link } from 'react-router-dom'
-import { Calendar, MapPin } from 'lucide-react'
+import { MapPin, Users } from 'lucide-react'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 
-const tagColors: Record<string, string> = {
-  'médiéval': 'hsl(24 72% 44%)',
-  'geek': 'hsl(220 70% 50%)',
-  'marché': 'hsl(152 32% 40%)',
-  'salon': 'hsl(140 40% 50%)',
-  'foire': 'hsl(40 80% 50%)',
+const tagColors: Record<string, { bg: string; text: string; border: string }> = {
+  'fantastique': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-400' },
+  'médiéval': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-400' },
+  'geek': { bg: 'bg-pink-100', text: 'text-pink-700', border: 'border-pink-400' },
+  'marché': { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-400' },
+  'salon': { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-400' },
+  'foire': { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-400' },
+  'musique': { bg: 'bg-rose-100', text: 'text-rose-700', border: 'border-rose-400' },
+  'littéraire': { bg: 'bg-teal-100', text: 'text-teal-700', border: 'border-teal-400' },
+  'historique': { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-400' },
 }
 
-function getTagColor(tag: string): string {
+function getTagStyle(tag: string) {
   const key = Object.keys(tagColors).find(k => tag.toLowerCase().includes(k))
-  return key ? tagColors[key] : 'hsl(24 72% 44%)'
+  return key ? tagColors[key] : { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-400' }
 }
+
+const monthEmojis = ['❄️', '💝', '🌱', '🌸', '🌹', '☀️', '🏖️', '🌙', '🍂', '🎃', '🍁', '🎄']
 
 function formatDateRange(start: Date, end: Date): string {
-  const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
-  if (start.getTime() === end.getTime()) return start.toLocaleDateString('fr-FR', opts)
-  if (start.getMonth() === end.getMonth()) {
-    return `${start.getDate()}–${end.toLocaleDateString('fr-FR', opts)}`
-  }
-  return `${start.toLocaleDateString('fr-FR', opts)} — ${end.toLocaleDateString('fr-FR', opts)}`
+  const dayStart = start.getDate()
+  const dayEnd = end.getDate()
+  const monthStart = start.toLocaleDateString('fr-FR', { month: 'long' })
+  if (start.getTime() === end.getTime()) return `${dayStart} ${monthStart}`
+  if (start.getMonth() === end.getMonth()) return `${dayStart} - ${dayEnd} ${monthStart}`
+  const monthEnd = end.toLocaleDateString('fr-FR', { month: 'long' })
+  return `${dayStart} ${monthStart} - ${dayEnd} ${monthEnd}`
 }
 
 interface CalendarMonthProps {
@@ -29,60 +36,45 @@ interface CalendarMonthProps {
 }
 
 export function CalendarMonth({ data }: CalendarMonthProps) {
-  const { label, events } = data
+  const { month, year, label, events } = data
   const isEmpty = events.length === 0
 
   return (
-    <div className={`rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 ${isEmpty ? 'opacity-40' : ''}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-base font-bold capitalize">{label}</h3>
-        {events.length > 0 && (
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary" style={{ fontFamily: "'Inter', sans-serif" }}>
-            {events.length}
-          </span>
-        )}
+    <div className={isEmpty ? 'py-2' : ''}>
+      {/* Month header */}
+      <div className="text-center mb-3">
+        <div className="text-base font-bold uppercase tracking-wide">
+          {monthEmojis[month]} {label}
+        </div>
+        <div className="text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
+          {year}
+        </div>
       </div>
 
-      {/* Events */}
-      {isEmpty ? (
-        <p className="py-4 text-center text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-          Aucun événement
-        </p>
-      ) : (
-        <div className="space-y-2">
-          {events.map(ev => (
-            <Link
-              key={ev.id}
-              to={`/evenement/${ev.id}`}
-              className="group block overflow-hidden rounded-xl hover:shadow-md"
-              style={{ borderLeft: `4px solid ${getTagColor(ev.primaryTag)}` }}
-            >
-              {ev.imageUrl ? (
-                <div className="relative h-24 overflow-hidden">
-                  <img src={ev.imageUrl} alt={ev.name} className="h-full w-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <p className="text-xs font-bold text-white truncate">{ev.name}</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-muted/30 px-3 pt-2.5">
-                  <p className="text-sm font-bold truncate group-hover:text-primary">{ev.name}</p>
-                </div>
-              )}
-              <div className="flex items-center gap-3 px-3 py-2 bg-muted/20" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <span className="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
-                  <Calendar className="h-3 w-3" />
-                  {formatDateRange(ev.startDate, ev.endDate)}
+      {/* Event cards */}
+      {!isEmpty && (
+        <div className="space-y-3">
+          {events.map(ev => {
+            const style = getTagStyle(ev.primaryTag)
+            return (
+              <Link
+                key={ev.id}
+                to={`/evenement/${ev.id}`}
+                className={`block rounded-xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 border-l-4 ${style.border} hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]`}
+              >
+                <h4 className="font-bold text-sm leading-snug">{ev.name}</h4>
+                <span className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${style.bg} ${style.text}`}>
+                  {ev.primaryTag}
                 </span>
-                <span className="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
+                <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
+                  <span className="mx-1">·</span>
                   <MapPin className="h-3 w-3" />
-                  {ev.city}
-                </span>
-              </div>
-            </Link>
-          ))}
+                  <span>{ev.city} - {ev.department}</span>
+                </div>
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>

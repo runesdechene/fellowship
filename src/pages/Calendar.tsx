@@ -12,7 +12,7 @@ export function CalendarPage() {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Calendrier</h1>
         <div className="flex items-center gap-2">
           <button
@@ -33,15 +33,18 @@ export function CalendarPage() {
         </div>
       </div>
 
-      {/* Calendar grid */}
+      {/* Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 12 }, (_, i) => (
-            <div key={i} className="h-64 animate-pulse rounded-2xl bg-muted" />
+            <div key={i} className="space-y-3">
+              <div className="h-6 w-32 mx-auto animate-pulse rounded-full bg-muted" />
+              <div className="h-24 animate-pulse rounded-xl bg-muted" />
+            </div>
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 items-start">
           {months.map(month => (
             <CalendarMonth key={month.month} data={month} />
           ))}
