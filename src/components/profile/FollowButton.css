@@ -1,0 +1,50 @@
+/* ── Follow Button ──────────────────────────────────────────────────── */
+
+.follow-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.follow-btn:hover {
+  transform: scale(1.03);
+}
+
+.follow-btn:active {
+  transform: scale(0.97);
+}
+
+.follow-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Suivre (not following) */
+.follow-btn-follow {
+  background: hsl(var(--primary));
+  color: white;
+}
+
+.follow-btn-follow:hover {
+  background: hsl(24 72% 40%);
+}
+
+/* Suivi (following) */
+.follow-btn-following {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+/* Amis (mutual) */
+.follow-btn-friend {
+  background: hsl(var(--accent) / 0.1);
+  color: hsl(var(--accent));
+}

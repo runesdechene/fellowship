@@ -1,6 +1,6 @@
 import { useFollowStatus } from '@/hooks/use-follows'
+import './FollowButton.css'
 import { useAuth } from '@/lib/auth'
-import { Button } from '@/components/ui/button'
 import { UserPlus, UserCheck, Users } from 'lucide-react'
 
 interface FollowButtonProps {
@@ -17,26 +17,26 @@ export function FollowButton({ targetId, className }: FollowButtonProps) {
 
   if (isFriend) {
     return (
-      <Button variant="secondary" className={className} onClick={toggleFollow}>
-        <Users className="mr-2 h-4 w-4" />
+      <button className={`follow-btn follow-btn-friend ${className ?? ''}`} onClick={toggleFollow}>
+        <Users strokeWidth={1.5} />
         Amis
-      </Button>
+      </button>
     )
   }
 
   if (isFollowing) {
     return (
-      <Button variant="outline" className={className} onClick={toggleFollow}>
-        <UserCheck className="mr-2 h-4 w-4" />
+      <button className={`follow-btn follow-btn-following ${className ?? ''}`} onClick={toggleFollow}>
+        <UserCheck strokeWidth={1.5} />
         Suivi
-      </Button>
+      </button>
     )
   }
 
   return (
-    <Button className={className} onClick={toggleFollow}>
-      <UserPlus className="mr-2 h-4 w-4" />
+    <button className={`follow-btn follow-btn-follow ${className ?? ''}`} onClick={toggleFollow}>
+      <UserPlus strokeWidth={1.5} />
       Suivre
-    </Button>
+    </button>
   )
 }
