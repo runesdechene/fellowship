@@ -37,7 +37,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-card transition-all duration-300 ease-in-out ${
+      className={`hidden md:flex flex-col bg-background transition-all duration-300 ease-in-out ${
         collapsed ? 'w-[60px]' : 'w-72'
       }`}
     >
@@ -46,7 +46,7 @@ export function Sidebar() {
       ) : (
         <>
           {/* Header: logo + collapse toggle */}
-          <div className="flex h-14 items-center justify-between px-3">
+          <div className="flex h-16 items-center justify-between px-4">
             <Link
               to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
               className="flex items-center overflow-hidden"
@@ -54,13 +54,13 @@ export function Sidebar() {
               {collapsed ? (
                 <img src="/icon.png" alt="Fellowship" className="h-7 w-7 shrink-0" />
               ) : (
-                <img src="/logo.png" alt="Fellowship" className="h-7 shrink-0" />
+                <span className="text-lg font-extrabold text-primary tracking-tight">fellowship</span>
               )}
             </Link>
             {!collapsed && (
               <button
                 onClick={() => setCollapsed(true)}
-                className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="rounded-xl p-2 text-muted-foreground hover:bg-card hover:text-foreground"
               >
                 <PanelLeftClose className="h-4 w-4" />
               </button>
@@ -68,21 +68,21 @@ export function Sidebar() {
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 space-y-0.5 px-2 pt-2">
+          <nav className="flex-1 space-y-1 px-3 pt-2">
             {nav.map(({ to, icon: Icon, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 title={collapsed ? label : undefined}
                 className={({ isActive }) =>
-                  `group flex items-center gap-3 rounded-lg px-2.5 py-2 text-[0.8125rem] font-medium ${
+                  `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-colors ${
                     isActive
                       ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      : 'text-foreground/40 hover:bg-card hover:text-foreground'
                   } ${collapsed ? 'justify-center px-0' : ''}`
                 }
               >
-                <Icon className="h-[18px] w-[18px] shrink-0" />
+                <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.5} />
                 {!collapsed && <span>{label}</span>}
               </NavLink>
             ))}
@@ -90,18 +90,18 @@ export function Sidebar() {
 
           {/* Activity section */}
           <div className="mt-2 pt-2">
-            <div className="mx-2 mb-2 h-px bg-border/50" />
+            <div className="mx-3 mb-2 h-px bg-foreground/5" />
             <SidebarActivity collapsed={collapsed} onShowAll={() => setShowNotifPanel(true)} />
           </div>
 
           {/* Expand button (only visible when collapsed) */}
           {collapsed && (
-            <div className="px-2 pb-3">
+            <div className="px-3 pb-3">
               <button
                 onClick={() => setCollapsed(false)}
-                className="flex w-full items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex w-full items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-card hover:text-foreground"
               >
-                <PanelLeft className="h-4 w-4" />
+                <PanelLeft className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </div>
           )}
