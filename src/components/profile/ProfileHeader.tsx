@@ -20,6 +20,11 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
       {/* Banner */}
       <div className={`profile-banner ${bannerUrl ? '' : 'profile-banner-empty'}`}>
         {bannerUrl && <img src={bannerUrl} alt="" className="profile-banner-image" />}
+        {isOwner && (
+          <button onClick={onOpenQR} className="profile-qr-btn">
+            <QrCode strokeWidth={1.5} />
+          </button>
+        )}
       </div>
 
       {/* Avatar — overlapping banner */}
@@ -32,13 +37,6 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
           </div>
         )}
       </div>
-
-      {/* QR button — absolute right under banner */}
-      {isOwner && (
-        <button onClick={onOpenQR} className="profile-qr-btn">
-          <QrCode strokeWidth={1.5} />
-        </button>
-      )}
 
       <h1 className="profile-name">{displayName}</h1>
       {subtitle && <p className="profile-subtitle">{subtitle}</p>}

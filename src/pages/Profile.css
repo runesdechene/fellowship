@@ -82,6 +82,7 @@
 
 /* Banner */
 .profile-banner {
+  position: relative;
   width: 110%;
   height: 240px;
   border-radius: 24px;
@@ -110,8 +111,8 @@
 /* QR button — absolute right, under banner */
 .profile-qr-btn {
   position: absolute;
-  right: 16px;
-  top: 0;
+  right: 12px;
+  bottom: 12px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -124,8 +125,6 @@
   cursor: pointer;
   color: rgba(61, 48, 40, 0.4);
   transition: background 0.2s, color 0.2s, transform 0.15s;
-  /* Align with bottom of banner — banner height minus overlap + some offset */
-  margin-top: -36px;
 }
 
 .profile-qr-btn:hover {
