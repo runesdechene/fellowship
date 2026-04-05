@@ -22,14 +22,21 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
         {bannerUrl && <img src={bannerUrl} alt="" className="profile-banner-image" />}
       </div>
 
-      {/* Avatar — overlapping banner */}
-      <div className="profile-avatar-wrapper">
-        {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt={displayName} className="profile-avatar" />
-        ) : (
-          <div className="profile-avatar-fallback">
-            {displayName[0]?.toUpperCase() ?? '?'}
-          </div>
+      {/* Avatar + QR button row — overlapping banner */}
+      <div className="profile-avatar-row">
+        <div className="profile-avatar-wrapper">
+          {profile.avatar_url ? (
+            <img src={profile.avatar_url} alt={displayName} className="profile-avatar" />
+          ) : (
+            <div className="profile-avatar-fallback">
+              {displayName[0]?.toUpperCase() ?? '?'}
+            </div>
+          )}
+        </div>
+        {isOwner && (
+          <button onClick={onOpenQR} className="profile-qr-btn">
+            <QrCode strokeWidth={1.5} />
+          </button>
         )}
       </div>
 
@@ -52,9 +59,6 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
               Modifier mon profil
             </Button>
           </Link>
-          <Button variant="outline" size="sm" onClick={onOpenQR}>
-            <QrCode className="h-4 w-4" />
-          </Button>
         </div>
       )}
     </div>
