@@ -220,20 +220,6 @@
 
 /* ── Month Pickers (Prospection) ───────────────────────────────────── */
 
-.explorer-month-pickers {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 24px 16px;
-}
-
-.explorer-month-pickers-icon {
-  width: 16px;
-  height: 16px;
-  color: rgba(61, 48, 40, 0.3);
-  flex-shrink: 0;
-}
-
 .explorer-month-pickers-label {
   font-family: var(--font-body);
   font-size: 13px;

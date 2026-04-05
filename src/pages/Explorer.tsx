@@ -8,7 +8,6 @@ import { Crosshair, AlertTriangle, Plus } from 'lucide-react'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
-import { Calendar as CalendarIcon } from 'lucide-react'
 
 type TemporalFilter = 'semaine' | 'mois' | 'proche' | null
 
@@ -217,6 +216,34 @@ export function ExplorerPage() {
 
         <div className="explorer-filter-divider" />
 
+        {showProspection && (
+          <>
+            <span className="explorer-month-pickers-label">De</span>
+            <select
+              value={monthFrom}
+              onChange={e => setMonthFrom(e.target.value)}
+              className="explorer-month-select"
+            >
+              {monthOptions.map(m => (
+                <option key={m.value} value={m.value}>{m.label}</option>
+              ))}
+            </select>
+            <span className="explorer-month-pickers-label">à</span>
+            <select
+              value={monthTo}
+              onChange={e => setMonthTo(e.target.value)}
+              className="explorer-month-select"
+            >
+              {monthOptions.map(m => (
+                <option key={m.value} value={m.value}>{m.label}</option>
+              ))}
+            </select>
+            <div className="explorer-filter-divider" />
+          </>
+        )}
+
+        {!showProspection && <div className="explorer-filter-divider" />}
+
         <button
           onClick={() => setTemporalFilter(temporalFilter === 'proche' ? null : 'proche')}
           className={`explorer-filter-chip ${temporalFilter === 'proche' ? 'active' : ''}`}
@@ -224,33 +251,6 @@ export function ExplorerPage() {
           Près de moi
         </button>
       </div>
-
-      {/* Prospection month pickers */}
-      {showProspection && (
-        <div className="explorer-month-pickers">
-          <CalendarIcon strokeWidth={1.5} className="explorer-month-pickers-icon" />
-          <span className="explorer-month-pickers-label">De</span>
-          <select
-            value={monthFrom}
-            onChange={e => setMonthFrom(e.target.value)}
-            className="explorer-month-select"
-          >
-            {monthOptions.map(m => (
-              <option key={m.value} value={m.value}>{m.label}</option>
-            ))}
-          </select>
-          <span className="explorer-month-pickers-label">à</span>
-          <select
-            value={monthTo}
-            onChange={e => setMonthTo(e.target.value)}
-            className="explorer-month-select"
-          >
-            {monthOptions.map(m => (
-              <option key={m.value} value={m.value}>{m.label}</option>
-            ))}
-          </select>
-        </div>
-      )}
 
       {/* Prospection alert */}
       {showProspection && urgentEvents.length > 0 && (
