@@ -34,8 +34,8 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
         </div>
       )}
       <div className="profile-event-info">
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="profile-event-row">
+          <div className="profile-event-details">
             <div className="profile-event-name">{event.name}</div>
             <span
               className="profile-event-tag"
