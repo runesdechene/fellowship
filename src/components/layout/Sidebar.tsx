@@ -51,10 +51,9 @@ export function Sidebar() {
               to={profile?.type === 'exposant' ? '/dashboard' : '/explorer'}
               className="flex items-center overflow-hidden"
             >
-              {collapsed ? (
-                <img src="/icon.png" alt="Fellowship" className="h-7 w-7 shrink-0" />
-              ) : (
-                <span className="text-lg font-extrabold text-primary tracking-tight">fellowship</span>
+              <img src="/icon.png" alt="Fellowship" className="h-7 w-7 shrink-0" />
+              {!collapsed && (
+                <span className="ml-2 text-lg font-extrabold text-primary tracking-tight">fellowship</span>
               )}
             </Link>
             {!collapsed && (
