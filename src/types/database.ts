@@ -54,3 +54,13 @@ export interface NoteWithAuthor extends Note {
   is_friend_of_friend?: boolean
   mutual_friend_name?: string
 }
+
+// Notification data payload (stored in JSONB `data` column)
+export interface NotificationData {
+  actor_id?: string
+  actor_name?: string
+  event_id?: string
+  event_name?: string
+  friend_name?: string
+  follower_name?: string
+}

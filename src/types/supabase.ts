@@ -480,6 +480,10 @@ export type Database = {
         | "friend_going"
         | "new_follower"
         | "friend_note"
+        | "event_created"
+        | "event_updated"
+        | "event_image_added"
+        | "event_info_added"
       participation_status: "interesse" | "inscrit" | "confirme"
       participation_visibility: "prive" | "amis" | "public"
       user_plan: "free" | "pro"
@@ -618,6 +622,10 @@ export const Constants = {
         "friend_going",
         "new_follower",
         "friend_note",
+        "event_created",
+        "event_updated",
+        "event_image_added",
+        "event_info_added",
       ],
       participation_status: ["interesse", "inscrit", "confirme"],
       participation_visibility: ["prive", "amis", "public"],
