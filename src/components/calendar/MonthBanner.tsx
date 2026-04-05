@@ -156,28 +156,13 @@ interface MonthBannerProps {
   year: number
 }
 
-const MONTH_COLORS: Record<number, { color: string; bg: string }> = {
-  0:  { color: 'hsl(210 40% 55%)',  bg: 'hsl(210 30% 94%)' },  // Janvier — bleu glacé
-  1:  { color: 'hsl(340 55% 55%)',  bg: 'hsl(340 40% 94%)' },  // Février — rose
-  2:  { color: 'hsl(140 40% 45%)',  bg: 'hsl(140 30% 93%)' },  // Mars — vert tendre
-  3:  { color: 'hsl(330 50% 65%)',  bg: 'hsl(330 35% 94%)' },  // Avril — rose pâle
-  4:  { color: 'hsl(350 55% 50%)',  bg: 'hsl(350 35% 94%)' },  // Mai — rouge rosé
-  5:  { color: 'hsl(40 80% 50%)',   bg: 'hsl(40 50% 93%)' },   // Juin — doré
-  6:  { color: 'hsl(200 60% 50%)',  bg: 'hsl(200 40% 93%)' },  // Juillet — bleu mer
-  7:  { color: 'hsl(250 40% 50%)',  bg: 'hsl(250 25% 93%)' },  // Août — indigo nuit
-  8:  { color: 'hsl(30 65% 50%)',   bg: 'hsl(30 40% 93%)' },   // Septembre — orangé
-  9:  { color: 'hsl(24 72% 44%)',   bg: 'hsl(24 40% 93%)' },   // Octobre — cuivre
-  10: { color: 'hsl(15 35% 45%)',   bg: 'hsl(15 20% 92%)' },   // Novembre — brun
-  11: { color: 'hsl(150 40% 40%)', bg: 'hsl(150 25% 93%)' },   // Décembre — vert sapin
-}
-
 export function MonthBanner({ month, label, year }: MonthBannerProps) {
-  const { color, bg } = MONTH_COLORS[month] ?? MONTH_COLORS[0]
+  const color = 'rgba(61, 48, 40, 0.45)'
 
   return (
-    <div className="calendar-month-banner" style={{ background: bg }}>
+    <div className="calendar-month-banner">
       <div className="calendar-month-banner-text">
-        <span className="calendar-month-banner-label" style={{ color }}>{label}</span>
+        <span className="calendar-month-banner-label">{label}</span>
         <span className="calendar-month-banner-year">{year}</span>
       </div>
       <div className="calendar-month-banner-svg">
