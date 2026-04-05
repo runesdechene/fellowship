@@ -5,20 +5,7 @@ import { useRecentEvents } from '@/hooks/use-events'
 import { useMyFriends, useMyFollowers } from '@/hooks/use-follows'
 import { EventCard } from '@/components/events/EventCard'
 import { Button } from '@/components/ui/button'
-import { Plus, Calendar, Users, UserCheck, ArrowRight, Compass } from 'lucide-react'
-
-const tagColors: Record<string, string> = {
-  'médiéval': 'hsl(24 72% 44%)',
-  'geek': 'hsl(220 70% 50%)',
-  'marché': 'hsl(152 32% 40%)',
-  'salon': 'hsl(140 40% 50%)',
-  'foire': 'hsl(40 80% 50%)',
-}
-
-function getTagColor(tag: string): string {
-  const key = Object.keys(tagColors).find(k => tag.toLowerCase().includes(k))
-  return key ? tagColors[key] : 'hsl(24 72% 44%)'
-}
+import { Plus, Calendar, Users, UserCheck, ArrowRight, Compass, MapPin } from 'lucide-react'
 
 function daysUntil(dateStr: string): number {
   const now = new Date()
@@ -83,32 +70,39 @@ export function DashboardPage() {
               <Link
                 key={p.id}
                 to={`/evenement/${p.event_id}`}
-                className="flex items-center gap-4 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]"
-                style={{ borderLeft: `4px solid ${getTagColor(p.events!.primary_tag)}` }}
+                className="group relative flex h-[120px] overflow-hidden rounded-2xl"
               >
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold truncate">{p.events!.name}</h3>
-                  <p className="text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                    {new Date(p.events!.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}
-                    {p.events!.end_date !== p.events!.start_date && ` — ${new Date(p.events!.end_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}`}
-                    {' · '}{p.events!.city}, {p.events!.department}
-                  </p>
+                {p.events!.image_url ? (
+                  <img src={p.events!.image_url} alt={p.events!.name} className="absolute inset-0 h-full w-full object-cover" />
+                ) : (
+                  <div className="absolute inset-0 bg-card" />
+                )}
+                <div className="absolute inset-0" style={{ background: p.events!.image_url ? 'linear-gradient(90deg, rgba(15,10,5,0.75) 0%, rgba(15,10,5,0.3) 50%, transparent 100%)' : 'none' }} />
+                <div className="relative flex w-full items-center gap-4 px-5">
+                  <div className="text-center shrink-0">
+                    <div className={`text-[28px] font-extrabold leading-none ${p.events!.image_url ? 'text-white' : 'text-primary'}`}>
+                      {new Date(p.events!.start_date).getDate()}
+                    </div>
+                    <div className={`text-[10px] font-medium uppercase ${p.events!.image_url ? 'text-white/50' : 'text-primary/50'}`}>
+                      {new Date(p.events!.start_date).toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-base font-bold truncate ${p.events!.image_url ? 'text-white' : 'text-foreground'}`}>{p.events!.name}</div>
+                    <div className={`text-[11px] mt-1 flex items-center gap-1 ${p.events!.image_url ? 'text-white/45' : 'text-muted-foreground'}`}>
+                      <MapPin className="h-3 w-3" />
+                      {p.events!.city}, {p.events!.department}
+                    </div>
+                  </div>
+                  <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${p.events!.image_url ? 'bg-white/12 text-white/70' : 'bg-muted text-muted-foreground'}`}>
+                    {formatCountdown(p.events!.start_date, p.events!.end_date)}
+                  </span>
                 </div>
-                <span
-                  className="shrink-0 rounded-full px-3 py-1 text-xs font-medium"
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    background: daysUntil(p.events!.start_date) <= 0 ? 'hsl(152 32% 40% / 0.12)' : 'hsl(24 72% 44% / 0.12)',
-                    color: daysUntil(p.events!.start_date) <= 0 ? 'hsl(152 32% 40%)' : 'hsl(24 72% 44%)',
-                  }}
-                >
-                  {formatCountdown(p.events!.start_date, p.events!.end_date)}
-                </span>
               </Link>
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-8 text-center">
+          <div className="rounded-2xl bg-card p-8 text-center">
             <Calendar className="mx-auto h-10 w-10 text-muted-foreground/20" />
             <p className="mt-3 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
               Aucune date à venir
@@ -140,7 +134,7 @@ export function DashboardPage() {
               <Link
                 key={p.id}
                 to={`/evenement/${p.event_id}`}
-                className="flex items-center gap-3 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]"
+                className="flex items-center gap-3 rounded-2xl bg-card p-3"
               >
                 <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary" style={{ fontFamily: "'Inter', sans-serif" }}>
                   {(p.profiles?.display_name || '?')[0].toUpperCase()}
@@ -198,7 +192,7 @@ export function DashboardPage() {
                   <Link
                     key={friend.id}
                     to={`/@${friend.public_slug ?? friend.id}`}
-                    className="flex items-center gap-3 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 hover:bg-muted transition-colors"
+                    className="flex items-center gap-3 rounded-2xl bg-card p-3 hover:bg-muted transition-colors"
                   >
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                       {(friend.brand_name ?? friend.display_name ?? '?')[0].toUpperCase()}
@@ -228,7 +222,7 @@ export function DashboardPage() {
                   <Link
                     key={follower.id}
                     to={`/@${follower.public_slug ?? follower.id}`}
-                    className="flex items-center gap-3 rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 hover:bg-muted transition-colors"
+                    className="flex items-center gap-3 rounded-2xl bg-card p-3 hover:bg-muted transition-colors"
                   >
                     <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
                       {(follower.brand_name ?? follower.display_name ?? '?')[0].toUpperCase()}
