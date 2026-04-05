@@ -9,9 +9,9 @@ export function NotificationsPage() {
   const followingIds = useFollowingIds()
 
   return (
-    <div className="page-width p-4 sm:p-6 lg:p-8">
+    <div className="page-width page-padding">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Notifications</h1>
+        <h1 className="page-title">Notifications</h1>
         {unreadCount > 0 && (
           <Button variant="ghost" size="sm" onClick={markAllAsRead}>
             <Check className="mr-1 h-3 w-3" />

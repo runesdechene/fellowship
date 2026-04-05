@@ -176,7 +176,7 @@ export function EventPage() {
   }
 
   return (
-    <div className="page-width p-4 sm:p-6 lg:p-8">
+    <div className="page-width page-padding">
       {/* Back */}
       <Link to="/explorer" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" />

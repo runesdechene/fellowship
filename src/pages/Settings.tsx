@@ -160,8 +160,8 @@ export function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="page-width max-w-2xl px-4 py-8">
-        <h1 className="mb-8 text-2xl font-bold">Paramètres</h1>
+      <div className="page-width max-w-2xl page-padding">
+        <h1 className="page-title mb-8">Paramètres</h1>
 
         {/* ── Section: Profil ──────────────────────────────────────────────── */}
         <section className="mb-6 rounded-2xl bg-card p-6">
