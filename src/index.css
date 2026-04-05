@@ -4,11 +4,11 @@
 
 :root {
   /* Fellowship — Flat warm design system */
-  --background: 36 33% 98%;      /* #faf8f5 — warm white page bg */
+  --background: 30 18% 92%;      /* #f0ebe4 — lin page bg */
   --foreground: 24 15% 20%;      /* #3d3028 — soft warm brown */
-  --card: 30 18% 92%;            /* #f0ebe4 — lin blocks */
+  --card: 36 33% 98%;            /* #faf8f5 — warm white blocks */
   --card-foreground: 24 15% 20%;
-  --popover: 30 18% 92%;
+  --popover: 36 33% 98%;
   --popover-foreground: 24 15% 20%;
   --primary: 24 72% 44%;
   --primary-foreground: 0 0% 100%;
@@ -28,8 +28,8 @@
   /* Brand tokens */
   --fellowship-copper: 24 72% 44%;
   --fellowship-forest: 152 32% 40%;
-  --fellowship-sand: 30 18% 92%;
-  --fellowship-linen: 36 33% 98%;
+  --fellowship-sand: 36 33% 98%;
+  --fellowship-linen: 30 18% 92%;
 }
 
 .dark {
