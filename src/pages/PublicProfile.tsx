@@ -70,19 +70,25 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       setProfile(profileData)
 
-      const { data: parts } = await supabase
+      let partsQuery = supabase
         .from('participations')
         .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag)')
         .eq('user_id', profileData.id)
-        .eq('visibility', 'public')
         .order('created_at', { ascending: false })
+
+      // Only filter by visibility when viewing someone else's profile
+      if (!user || user.id !== profileData.id) {
+        partsQuery = partsQuery.eq('visibility', 'public')
+      }
+
+      const { data: parts } = await partsQuery
 
       setParticipations((parts as ProfileParticipation[] | null) ?? [])
       setLoading(false)
     }
 
     fetchProfile()
-  }, [slug])
+  }, [slug, user])
 
   if (loading) {
     return (
