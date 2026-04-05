@@ -70,7 +70,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         .order('created_at', { ascending: false })
 
       if (!user || user.id !== profileData.id) {
-        partsQuery = partsQuery.eq('visibility', 'public')
+        // Show events where user is inscrit or confirme (public participation)
+        partsQuery = partsQuery.in('status', ['inscrit', 'confirme'])
       }
 
       const { data: parts } = await partsQuery
