@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X, Calendar, MapPin, User } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/lib/auth'
 import './SearchBar.css'
 
 interface SearchEvent {
@@ -23,6 +24,7 @@ interface SearchProfile {
 }
 
 export function SearchBar() {
+  const { profile } = useAuth()
   const [query, setQuery] = useState('')
   const [events, setEvents] = useState<SearchEvent[]>([])
   const [profiles, setProfiles] = useState<SearchProfile[]>([])
@@ -97,6 +99,8 @@ export function SearchBar() {
 
   const hasResults = events.length > 0 || profiles.length > 0
 
+  const displayName = profile?.brand_name ?? profile?.display_name ?? ''
+
   return (
     <div className="search-bar-wrapper" ref={ref}>
       <div className="search-bar">
@@ -116,6 +120,17 @@ export function SearchBar() {
           <span className="search-bar-shortcut">⌘K</span>
         )}
       </div>
+
+      {/* Profile avatar */}
+      {profile && (
+        <Link to="/profil" className="search-bar-avatar">
+          {profile.avatar_url ? (
+            <img src={profile.avatar_url} alt={displayName} />
+          ) : (
+            <span>{displayName[0]?.toUpperCase() ?? '?'}</span>
+          )}
+        </Link>
+      )}
 
       {open && (
         <div className="search-results">
