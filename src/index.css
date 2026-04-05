@@ -147,35 +147,28 @@ h1, h2, h3, .font-display {
 
 .fab-button {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
+  bottom: 100px;
+  right: 40px;
   z-index: 40;
   display: flex;
-  width: 56px;
-  height: 56px;
+  width: 66px;
+  height: 66px;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: hsl(var(--primary));
+  background: linear-gradient(135deg, hsl(24 72% 48%), hsl(24 65% 38%));
   color: hsl(var(--primary-foreground));
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 20px hsl(var(--primary) / 0.35);
+  box-shadow: 0 4px 20px hsl(24 72% 44% / 0.35);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .fab-button:hover {
   transform: scale(1.08);
-  box-shadow: 0 6px 28px hsl(var(--primary) / 0.45);
+  box-shadow: 0 6px 28px hsl(24 72% 44% / 0.5);
 }
 
 .fab-button:active {
   transform: scale(0.95);
-}
-
-@media (min-width: 768px) {
-  .fab-button {
-    bottom: 32px;
-    right: 32px;
-  }
 }
