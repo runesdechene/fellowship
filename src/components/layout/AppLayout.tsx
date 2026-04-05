@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import { BottomBar } from './BottomBar'
 import { SearchBar } from './SearchBar'
+import { ChangelogModal } from './ChangelogModal'
 import { EventForm } from '@/components/events/EventForm'
 import { Plus, X } from 'lucide-react'
 
@@ -18,6 +19,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </main>
       </div>
       <BottomBar />
+
+      <ChangelogModal />
 
       {/* FAB — global */}
       <button
