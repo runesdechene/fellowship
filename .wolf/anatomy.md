@@ -1,7 +1,11 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T16:45:41.804Z
-> Files: 159 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T18:41:10.833Z
+> Files: 163 tracked | Anatomy hits: 0 | Misses: 0
+
+## ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/
+
+- `feedback_composable_css.md` (~197 tok)
 
 ## ./
 
@@ -111,9 +115,9 @@
 
 ## src/
 
-- `App.tsx` — OnboardingGuard (~813 tok)
-- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~384 tok)
-- `index.css` — Styles: 12 rules, 72 vars, 1 animations (~1385 tok)
+- `App.tsx` — OnboardingGuard (~870 tok)
+- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~674 tok)
+- `index.css` — Styles: 18 rules, 75 vars (~1563 tok)
 - `main.tsx` (~122 tok)
 
 ## src/components/
@@ -135,20 +139,20 @@
 - `EventForm.tsx` — EventForm — renders map — uses useNavigate, useState, useEffect (~3643 tok)
 - `HeroBanner.css` — Styles: 14 rules, 2 media queries (~581 tok)
 - `HeroBanner.tsx` — formatDate — renders map (~392 tok)
-- `SlideRow.css` — Styles: 14 rules, 1 media queries (~512 tok)
+- `SlideRow.css` — Styles: 14 rules (~520 tok)
 - `SlideRow.tsx` — SlideRow — uses useState, useEffect (~636 tok)
 - `TagInput.tsx` — TagInput — uses useState, useEffect (~936 tok)
 
 ## src/components/layout/
 
 - `AppLayout.tsx` — AppLayout — uses useState (~541 tok)
-- `BottomBar.tsx` — exposantNav (~406 tok)
+- `BottomBar.tsx` — exposantNav (~381 tok)
 - `ChangelogModal.css` — Styles: 16 rules (~726 tok)
 - `ChangelogModal.tsx` — ChangelogModal — uses useState, useEffect (~538 tok)
-- `SearchBar.css` — Styles: 26 rules (~1069 tok)
-- `SearchBar.tsx` — SearchBar — renders map — uses useState, useEffect (~1861 tok)
+- `SearchBar.css` — Styles: 30 rules (~1295 tok)
+- `SearchBar.tsx` — SearchBar (~1994 tok)
 - `Sidebar.css` — Styles: 21 rules, 1 media queries (~847 tok)
-- `Sidebar.tsx` — exposantNav — uses useState (~1049 tok)
+- `Sidebar.tsx` — exposantNav (~1010 tok)
 
 ## src/components/notes/
 
@@ -165,12 +169,13 @@
 
 ## src/components/profile/
 
-- `EmailSignupPlaceholder.tsx` — EmailSignupPlaceholder (~372 tok)
-- `EventCarousel.tsx` — formatDay (~987 tok)
-- `FellowshipFooter.tsx` — FellowshipFooter (~66 tok)
-- `FollowButton.tsx` — FollowButton (~320 tok)
-- `ProfileHeader.tsx` — ProfileHeader (~749 tok)
-- `QRCodeModal.tsx` — QRCodeModal — uses useState, useEffect (~860 tok)
+- `EmailSignupPlaceholder.tsx` — EmailSignupPlaceholder (~261 tok)
+- `EventCarousel.tsx` — formatDay (~902 tok)
+- `FellowshipFooter.tsx` — FellowshipFooter (~43 tok)
+- `FollowButton.css` — Styles: 8 rules (~259 tok)
+- `FollowButton.tsx` — FollowButton (~321 tok)
+- `ProfileHeader.tsx` — ProfileHeader (~575 tok)
+- `QRCodeModal.tsx` — QRCodeModal (~769 tok)
 
 ## src/components/reports/
 
@@ -211,21 +216,22 @@
 ## src/pages/
 
 - `AuthCallback.tsx` — AuthCallbackPage — uses useNavigate, useEffect (~314 tok)
-- `Calendar.css` — Styles: 66 rules, 4 media queries, 1 animations (~2685 tok)
-- `Calendar.tsx` — CalendarPage — uses useState, useMemo, useCallback (~2091 tok)
+- `Calendar.css` — Styles: 64 rules (~2657 tok)
+- `Calendar.tsx` — CalendarPage (~2090 tok)
 - `Dashboard.tsx` — daysUntil (~3312 tok)
-- `Embed.tsx` — EmbedPage — uses useState, useEffect (~1215 tok)
-- `EventPage.tsx` — EventPage — uses useState, useEffect (~6385 tok)
-- `Explorer.css` — Styles: 39 rules (~1746 tok)
-- `Explorer.tsx` — ExplorerPage (~1933 tok)
-- `Following.tsx` — FollowingPage (~49 tok)
+- `Embed.tsx` — EmbedPage (~1230 tok)
+- `EventPage.tsx` — EventPage (~6384 tok)
+- `Explorer.css` — Styles: 39 rules (~1761 tok)
+- `Explorer.tsx` — ExplorerPage (~1932 tok)
+- `Following.tsx` — FollowingPage (~45 tok)
 - `Landing.tsx` — LandingPage — renders chart, map (~2724 tok)
-- `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~2587 tok)
-- `Notifications.tsx` — NotificationsPage (~508 tok)
-- `Onboarding.tsx` — OnboardingPage — uses useNavigate, useState (~1550 tok)
+- `Login.tsx` — LoginPage — renders form (~2587 tok)
+- `Notifications.tsx` — NotificationsPage (~504 tok)
+- `Onboarding.tsx` — OnboardingPage (~1542 tok)
+- `Profile.css` — Styles: 73 rules (~3756 tok)
 - `Profile.tsx` — ProfilePage (~171 tok)
-- `PublicProfile.tsx` — PublicProfilePage — uses useState, useEffect (~1270 tok)
-- `Settings.tsx` — SettingsPage — uses useState, useEffect (~5191 tok)
+- `PublicProfile.tsx` — PublicProfilePage (~2130 tok)
+- `Settings.tsx` — SettingsPage (~5358 tok)
 
 ## src/test/
 
@@ -235,7 +241,7 @@
 ## src/types/
 
 - `database.ts` — Table row types (~772 tok)
-- `supabase.ts` — Exports Json, Database (~5491 tok)
+- `supabase.ts` — Exports Json, Database (~5523 tok)
 
 ## supabase/
 
@@ -263,3 +269,4 @@
 - `20260405120001_events_update_any_exposant.sql` — Allow any exposant to update any event (collaborative curation) (~114 tok)
 - `20260405130000_add_notification_types.sql` — Add new notification types for full platform activity monitoring (~102 tok)
 - `20260405140000_add_banner_url.sql` — Add banner_url column for profile banner images (~33 tok)
+- `20260405150000_add_craft_type.sql` — Add craft_type field for exposant profiles (e.g. "Forgeron", "Marque de vêtement") (~40 tok)

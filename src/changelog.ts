@@ -7,6 +7,30 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.3.0',
+    date: '2026-04-05',
+    title: 'Fellowship prend forme',
+    changes: [
+      'Explorer Netflix — slideshow horizontal avec flèches',
+      'Filtres par catégorie pastel + sélecteur de mois',
+      'Calendrier — bannières SVG illustrées par saison',
+      'Calendrier — présence (statut + amis) sur chaque événement',
+      'Calendrier — toggle Amis pour voir les événements de ses amis',
+      'Profil — bannière photo, bouton QR + édition sous la bannière',
+      'Profil — amis & abonnés sur la page profil',
+      'Profil — type d\'activité (forgeron, marque...)',
+      'Profil — bouton Suivre sous le nom',
+      'Profil accessible avec sidebar quand connecté',
+      'URLs /@slug fonctionnelles',
+      'Barre de recherche — avatar profil en haut à droite',
+      'Changelog — popup des nouveautés',
+      'Bouton + flottant global (FAB)',
+      'Explorer = page d\'accueil',
+      'Paddings et titres harmonisés sur toutes les pages',
+      'Nouveau logo cuivre',
+    ],
+  },
+  {
     version: '0.2.0',
     date: '2026-04-05',
     title: 'Le grand redesign',

@@ -367,7 +367,7 @@ export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceh
       )}
       <Mail className="mx-auto h-6 w-6 text-muted-foreground/40" />
       <p className="mt-2 text-sm font-medium">
-        Restez informé des prochains événements de {brandName}
+        Découvrez des événements et suivez {brandName}
       </p>
       <div className="mt-4 flex items-center gap-2 max-w-xs mx-auto">
         <input

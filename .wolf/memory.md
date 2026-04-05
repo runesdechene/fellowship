@@ -3,6 +3,8 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 2026-04-05 | Harmonized page layout: replaced `p-4 sm:p-6 lg:p-8` with `page-padding` and `text-2xl font-bold` with `page-title` across Notifications, Following, Settings, EventPage. Explorer + Calendar left as-is (own CSS systems). Build passed, committed b00918a. | src/pages/ | ~120 tok |
+
 | 2026-04-05 | Task 2: Created ProfileHeader component — ambient gradient header (5 warm palettes, hash-based selection), banner_url support with overlay, avatar with glow, action buttons (owner: Settings + QR / visitor: FollowButton) | src/components/profile/ProfileHeader.tsx | build passed, committed 0589f14 | ~520 tok |
 
 | 2026-04-05 | Task 4: Created NotificationItem shared component with ActorAvatar+glow for friends, TYPE_CONFIG for 8 notification types, compact/friend/community modes | src/components/notifications/NotificationItem.tsx | build passed, committed 739edbf | ~600 tok |
@@ -1038,3 +1040,171 @@
 | 18:45 | Edited src/pages/Explorer.tsx | CSS: value, label | ~51 |
 | 18:45 | Edited src/pages/Explorer.tsx | 5→5 lines | ~36 |
 | 18:46 | Session end: 307 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~255378 tok |
+| 18:48 | Edited src/App.tsx | 2→3 lines | ~88 |
+| 18:48 | Edited src/App.tsx | inline fix | ~22 |
+| 18:48 | Edited src/App.tsx | 3→2 lines | ~58 |
+| 18:49 | Edited src/App.tsx | CSS: Authenticated, authenticated | ~138 |
+| 18:49 | Session end: 311 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 74 reads | ~255684 tok |
+| 18:57 | Edited src/App.tsx | removed 25 lines | ~5 |
+| 18:57 | Edited src/App.tsx | inline fix | ~19 |
+| 18:58 | Session end: 313 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 75 reads | ~255474 tok |
+| 18:59 | Edited src/App.tsx | 2→2 lines | ~37 |
+| 18:59 | Edited src/App.tsx | 2→2 lines | ~38 |
+| 18:59 | Edited src/App.tsx | CSS: 40, 40 | ~77 |
+| 19:00 | Session end: 316 writes across 86 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 75 reads | ~255626 tok |
+| 19:00 | Edited src/App.tsx | 4→2 lines | ~38 |
+| 19:01 | Edited src/pages/Dashboard.tsx | "/@${friend.public_slug ??" → "/p/${friend.public_slug ?" | ~13 |
+| 19:01 | Edited src/pages/Dashboard.tsx | "/p/${friend.public_slug ?" → "/@${friend.public_slug ??" | ~13 |
+| 19:01 | Edited src/App.tsx | — | ~0 |
+| 19:01 | Edited src/App.tsx | 2→6 lines | ~89 |
+| 19:02 | Edited src/components/layout/SearchBar.tsx | "/@${p.public_slug ?? p.id" → "/${p.public_slug ?? p.id}" | ~10 |
+| 19:02 | Edited src/pages/Dashboard.tsx | "/@${friend.public_slug ??" → "/${friend.public_slug ?? " | ~12 |
+| 19:02 | Edited src/pages/Dashboard.tsx | "/@${follower.public_slug " → "/${follower.public_slug ?" | ~14 |
+| 19:02 | Edited src/components/profile/QRCodeModal.tsx | "https://flw.sh/@${slug}" → "https://flw.sh/${slug}" | ~11 |
+| 19:02 | Edited src/pages/Settings.tsx | "https://flw.sh/@${slug}" → "https://flw.sh/${slug}" | ~11 |
+| 19:03 | Edited src/pages/Embed.tsx | "https://flw.sh/@${slug}" → "https://flw.sh/${slug}" | ~9 |
+| 19:03 | Edited src/pages/Settings.tsx | inline fix | ~9 |
+| 19:03 | Edited src/pages/Onboarding.tsx | inline fix | ~19 |
+| 19:03 | Session end: 329 writes across 87 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~256468 tok |
+| 19:04 | Edited src/lib/constants.ts | modified getTagColor() | ~137 |
+| 19:04 | Edited src/pages/Onboarding.tsx | added 1 import(s) | ~28 |
+| 19:05 | Session end: 331 writes across 87 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~256632 tok |
+| 19:05 | Edited src/pages/PublicProfile.tsx | added optional chaining | ~34 |
+| 19:06 | Edited src/pages/Embed.tsx | added optional chaining | ~29 |
+| 19:06 | Edited src/components/layout/SearchBar.tsx | "/${p.public_slug ?? p.id}" → "/@${p.public_slug ?? p.id" | ~10 |
+| 19:06 | Edited src/pages/Dashboard.tsx | "/${friend.public_slug ?? " → "/@${friend.public_slug ??" | ~13 |
+| 19:06 | Edited src/pages/Dashboard.tsx | "/${follower.public_slug ?" → "/@${follower.public_slug " | ~14 |
+| 19:06 | Edited src/components/profile/QRCodeModal.tsx | "https://flw.sh/${slug}" → "https://flw.sh/@${slug}" | ~11 |
+| 19:06 | Edited src/pages/Settings.tsx | "https://flw.sh/${slug}" → "https://flw.sh/@${slug}" | ~12 |
+| 19:06 | Edited src/pages/Embed.tsx | "https://flw.sh/${slug}" → "https://flw.sh/@${slug}" | ~10 |
+| 19:06 | Edited src/pages/Settings.tsx | inline fix | ~9 |
+| 19:07 | Edited src/pages/Onboarding.tsx | inline fix | ~19 |
+| 19:07 | Edited src/lib/constants.ts | removed 11 lines | ~8 |
+| 19:07 | Edited src/pages/Onboarding.tsx | — | ~0 |
+| 19:07 | Session end: 343 writes across 87 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~256801 tok |
+| 19:08 | Session end: 343 writes across 87 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~256801 tok |
+| 19:08 | Session end: 343 writes across 87 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~256801 tok |
+| 19:10 | Created src/pages/Profile.css | — | ~2748 |
+| 19:10 | Session end: 344 writes across 88 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~259500 tok |
+| 19:11 | Created supabase/migrations/20260405150000_add_craft_type.sql | — | ~40 |
+| 19:11 | Edited src/types/supabase.ts | 3→4 lines | ~38 |
+| 19:11 | Edited src/types/supabase.ts | 6→7 lines | ~63 |
+| 19:12 | Edited src/types/supabase.ts | 6→7 lines | ~63 |
+| 19:12 | Edited src/pages/Settings.tsx | 2→3 lines | ~56 |
+| 19:12 | Edited src/pages/Settings.tsx | 2→3 lines | ~35 |
+| 19:12 | Edited src/pages/Settings.tsx | modified if() | ~44 |
+| 19:12 | Edited src/pages/Settings.tsx | expanded (+10 lines) | ~150 |
+| 19:13 | Edited src/components/profile/ProfileHeader.tsx | added nullish coalescing | ~39 |
+| 19:14 | Session end: 353 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~260109 tok |
+| 19:14 | Edited src/pages/PublicProfile.tsx | added 1 import(s) | ~20 |
+| 19:14 | Session end: 354 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~260129 tok |
+| 19:15 | Session end: 354 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~260129 tok |
+| 19:16 | Created src/pages/PublicProfile.tsx | — | ~1202 |
+| 19:16 | Created src/components/profile/ProfileHeader.tsx | — | ~483 |
+| 19:16 | Created src/components/profile/EmailSignupPlaceholder.tsx | — | ~261 |
+| 19:17 | Created src/components/profile/EventCarousel.tsx | — | ~836 |
+| 19:17 | Created src/components/profile/FellowshipFooter.tsx | — | ~43 |
+| 19:17 | Created src/components/profile/QRCodeModal.tsx | — | ~769 |
+| 19:18 | Session end: 360 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~263730 tok |
+| 19:21 | Edited src/App.tsx | added 1 condition(s) | ~498 |
+| 19:21 | Session end: 361 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~264282 tok |
+| 19:24 | Session end: 361 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~264282 tok |
+| 19:25 | Edited src/components/layout/SearchBar.tsx | added 1 import(s) | ~75 |
+| 19:25 | Edited src/components/layout/SearchBar.tsx | modified SearchBar() | ~30 |
+| 19:26 | Edited src/components/layout/SearchBar.tsx | added optional chaining | ~313 |
+| 19:26 | Edited src/components/layout/SearchBar.css | CSS: display, align-items, gap | ~35 |
+| 19:26 | Edited src/components/layout/SearchBar.css | CSS: flex | ~38 |
+| 19:27 | Edited src/components/layout/SearchBar.css | expanded (+34 lines) | ~246 |
+| 19:27 | Session end: 367 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 76 reads | ~265131 tok |
+| 19:37 | Edited src/components/profile/ProfileHeader.tsx | 21→24 lines | ~213 |
+| 19:37 | Edited src/pages/Profile.css | CSS: margin-top | ~16 |
+| 19:38 | Edited src/pages/PublicProfile.tsx | 1→3 lines | ~37 |
+| 19:38 | Session end: 370 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~267799 tok |
+| 19:38 | Session end: 370 writes across 89 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~267799 tok |
+| 19:39 | Created src/components/profile/FollowButton.tsx | — | ~313 |
+| 19:39 | Edited src/pages/Profile.css | expanded (+48 lines) | ~249 |
+| 19:40 | Created src/components/profile/FollowButton.css | — | ~259 |
+| 19:40 | Edited src/components/profile/FollowButton.tsx | added 1 import(s) | ~24 |
+| 19:40 | Edited src/pages/Profile.css | — | ~0 |
+| 19:41 | Created ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/feedback_composable_css.md | — | ~210 |
+| 19:41 | Session end: 376 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~269118 tok |
+| 19:42 | Session end: 376 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~269118 tok |
+| 19:43 | Session end: 376 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~269118 tok |
+| 19:43 | Created src/components/profile/ProfileHeader.tsx | — | ~592 |
+| 19:44 | Edited src/pages/Profile.css | expanded (+27 lines) | ~339 |
+| 19:44 | Session end: 378 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~269817 tok |
+| 19:49 | Edited src/components/profile/EventCarousel.tsx | added 1 import(s) | ~38 |
+| 19:49 | Edited src/components/profile/EventCarousel.tsx | CSS: background, color | ~63 |
+| 19:49 | Session end: 380 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~269767 tok |
+| 19:52 | Edited src/components/profile/EventCarousel.tsx | 3→3 lines | ~39 |
+| 19:52 | Edited src/pages/Profile.css | CSS: align-items, gap | ~79 |
+| 19:52 | Session end: 382 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~270080 tok |
+| 19:56 | Edited src/components/profile/EventCarousel.tsx | 3→4 lines | ~25 |
+| 19:56 | Edited src/components/profile/EventCarousel.tsx | 2→2 lines | ~38 |
+| 19:57 | Edited src/pages/PublicProfile.tsx | 3→4 lines | ~27 |
+| 19:57 | Edited src/pages/PublicProfile.tsx | "id, event_id, events(id, " → "id, event_id, events(id, " | ~30 |
+| 19:57 | Session end: 386 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~270205 tok |
+| 19:58 | Edited src/components/profile/ProfileHeader.tsx | expanded (+7 lines) | ~176 |
+| 19:58 | Edited src/components/profile/ProfileHeader.tsx | 13→10 lines | ~82 |
+| 19:58 | Edited src/pages/Profile.css | expanded (+34 lines) | ~213 |
+| 19:59 | Session end: 389 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~270859 tok |
+| 19:59 | Edited src/components/profile/ProfileHeader.tsx | 17→17 lines | ~163 |
+| 19:59 | Edited src/pages/Profile.css | CSS: right, top, margin-top | ~223 |
+| 20:00 | Edited src/pages/Profile.css | CSS: position | ~38 |
+| 20:00 | Session end: 392 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~271505 tok |
+| 20:05 | Edited src/pages/Profile.css | 19→16 lines | ~100 |
+| 20:05 | Edited src/components/profile/ProfileHeader.tsx | 22→20 lines | ~209 |
+| 20:05 | Edited src/pages/Profile.css | CSS: bottom | ~24 |
+| 20:05 | Edited src/pages/Profile.css | CSS: position | ~40 |
+| 20:06 | Edited src/components/profile/ProfileHeader.tsx | 5→10 lines | ~105 |
+| 20:06 | Edited src/components/profile/ProfileHeader.tsx | — | ~0 |
+| 20:06 | Edited src/components/profile/ProfileHeader.tsx | 2→1 lines | ~14 |
+| 20:06 | Edited src/pages/Profile.css | CSS: gap, text-decoration, profile-banner-btn | ~194 |
+| 20:07 | Session end: 400 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~272191 tok |
+| 20:08 | Edited src/components/profile/ProfileHeader.tsx | 14→16 lines | ~175 |
+| 20:09 | Edited src/pages/Profile.css | CSS: align-self, margin-top, margin-right | ~59 |
+| 20:09 | Session end: 402 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~272457 tok |
+| 20:11 | Edited src/pages/Profile.css | CSS: top, right | ~49 |
+| 20:11 | Session end: 403 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~272480 tok |
+| 20:16 | Edited src/components/layout/SearchBar.css | CSS: z-index | ~39 |
+| 20:16 | Session end: 404 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~272722 tok |
+| 20:24 | Edited src/components/layout/Sidebar.tsx | 14→13 lines | ~142 |
+| 20:24 | Edited src/components/layout/Sidebar.tsx | 2→1 lines | ~5 |
+| 20:24 | Edited src/components/layout/BottomBar.tsx | 15→13 lines | ~80 |
+| 20:25 | Edited src/App.tsx | inline fix | ~24 |
+| 20:25 | Edited src/components/layout/Sidebar.tsx | "exposant" → "/explorer" | ~8 |
+| 20:25 | Edited src/pages/Login.tsx | "/dashboard" → "/explorer" | ~14 |
+| 20:25 | Edited src/pages/Onboarding.tsx | "/dashboard" → "/explorer" | ~8 |
+| 20:26 | Edited src/pages/PublicProfile.tsx | added 2 import(s) | ~204 |
+| 20:26 | Edited src/pages/PublicProfile.tsx | CSS: loading, loading | ~50 |
+| 20:26 | Edited src/pages/PublicProfile.tsx | added nullish coalescing | ~863 |
+| 20:26 | Edited src/pages/Profile.css | expanded (+95 lines) | ~520 |
+| 20:27 | Edited src/App.tsx | — | ~0 |
+| 20:27 | Session end: 416 writes across 92 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 77 reads | ~274755 tok |
+| 20:32 | Edited src/index.css | modified media() | ~191 |
+| 20:32 | Edited src/pages/Notifications.tsx | 3→3 lines | ~47 |
+| 20:32 | Edited src/pages/Following.tsx | 2→2 lines | ~27 |
+| 20:32 | Edited src/pages/Settings.tsx | 2→2 lines | ~33 |
+| 20:32 | Edited src/pages/EventPage.tsx | "page-width p-4 sm:p-6 lg:" → "page-width page-padding" | ~13 |
+| 20:33 | Session end: 421 writes across 93 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 78 reads | ~275652 tok |
+| 20:36 | Edited src/pages/Explorer.css | CSS: padding, min-width, min-width | ~53 |
+| 20:36 | Edited src/index.css | 7→7 lines | ~44 |
+| 20:36 | Edited src/index.css | 7→7 lines | ~44 |
+| 20:37 | Edited src/pages/Explorer.tsx | "explorer-title" → "page-title" | ~14 |
+| 20:37 | Edited src/pages/Calendar.css | modified media() | ~49 |
+| 20:37 | Edited src/pages/Calendar.tsx | "calendar-title" → "page-title" | ~11 |
+| 20:37 | Edited src/pages/Explorer.css | 7→6 lines | ~34 |
+| 20:37 | Edited src/pages/Explorer.css | modified media() | ~58 |
+| 20:38 | Edited src/pages/Explorer.css | modified media() | ~59 |
+| 20:38 | Edited src/pages/Explorer.css | modified media() | ~82 |
+| 20:38 | Edited src/pages/Explorer.css | modified media() | ~62 |
+| 20:38 | Edited src/index.css | CSS: --page-padding | ~19 |
+| 20:38 | Edited src/index.css | CSS: --page-padding, --page-padding | ~52 |
+| 20:38 | Edited src/pages/Explorer.css | reduced (-8 lines) | ~23 |
+| 20:39 | Edited src/pages/Explorer.css | reduced (-8 lines) | ~44 |
+| 20:39 | Edited src/pages/Explorer.css | removed 9 lines | ~11 |
+| 20:39 | Edited src/pages/Calendar.css | reduced (-8 lines) | ~15 |
+| 20:39 | Edited src/components/events/SlideRow.css | inline fix | ~10 |
+| 20:39 | Edited src/components/events/SlideRow.css | inline fix | ~11 |
+| 20:40 | Session end: 440 writes across 93 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 79 reads | ~277588 tok |
+| 20:41 | Edited src/changelog.ts | expanded (+24 lines) | ~326 |
