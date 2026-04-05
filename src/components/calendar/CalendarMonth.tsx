@@ -6,6 +6,23 @@ import type { FriendParticipation } from '@/hooks/use-participations'
 
 const monthEmojis = ['❄️', '💝', '🌱', '🌸', '🌹', '☀️', '🏖️', '🌙', '🍂', '🎃', '🍁', '🎄']
 
+const TAG_COLORS: Record<string, { bg: string; color: string }> = {
+  'médiéval': { bg: 'hsl(24 72% 44% / 0.1)', color: 'hsl(24 72% 50%)' },
+  'fantastique': { bg: 'hsl(280 50% 55% / 0.1)', color: 'hsl(280 50% 55%)' },
+  'geek': { bg: 'hsl(220 70% 50% / 0.1)', color: 'hsl(220 70% 50%)' },
+  'marché': { bg: 'hsl(152 32% 40% / 0.1)', color: 'hsl(152 32% 45%)' },
+  'salon': { bg: 'hsl(200 50% 45% / 0.1)', color: 'hsl(200 50% 45%)' },
+  'foire': { bg: 'hsl(40 80% 50% / 0.1)', color: 'hsl(40 70% 40%)' },
+  'musique': { bg: 'hsl(340 60% 55% / 0.1)', color: 'hsl(340 55% 50%)' },
+  'littéraire': { bg: 'hsl(190 60% 45% / 0.1)', color: 'hsl(190 60% 40%)' },
+  'historique': { bg: 'hsl(10 70% 50% / 0.1)', color: 'hsl(10 70% 45%)' },
+}
+
+function getTagColor(tag: string) {
+  const key = Object.keys(TAG_COLORS).find(k => tag.toLowerCase().includes(k))
+  return key ? TAG_COLORS[key] : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+}
+
 const AVATAR_GRADIENTS = [
   ['#f0a060', '#e74c3c'],
   ['#6c5ce7', '#a29bfe'],
@@ -70,7 +87,10 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                 <div className="calendar-event-top">
                   <div className="calendar-event-details">
                     <div className="calendar-event-name">{ev.name}</div>
-                    <span className="calendar-event-tag">{ev.primaryTag}</span>
+                    <span
+                      className="calendar-event-tag"
+                      style={{ background: getTagColor(ev.primaryTag).bg, color: getTagColor(ev.primaryTag).color }}
+                    >{ev.primaryTag}</span>
                     <div className="calendar-event-meta">
                       <MapPin />
                       <span>{ev.city} ({ev.department})</span>
