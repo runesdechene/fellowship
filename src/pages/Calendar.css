@@ -146,13 +146,16 @@
   margin-top: 2px;
 }
 
-/* ── Event card (portrait image left) ──────────────────────────────── */
+/* ── Event wrapper (card + presence below) ─────────────────────────── */
+
+.calendar-event-wrapper {
+  margin-bottom: 14px;
+}
 
 .calendar-event-row {
   display: flex;
   border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 12px;
   text-decoration: none;
   background: hsl(var(--background));
 }
@@ -278,7 +281,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 6px;
+  padding: 0 4px;
   flex-wrap: wrap;
 }
 

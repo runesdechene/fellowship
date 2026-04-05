@@ -53,82 +53,88 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
         const friendsAtEvent = friendParticipations.filter(fp => fp.event_id === ev.id)
         const statusCfg = STATUS_CONFIG[ev.status] ?? STATUS_CONFIG.interesse
 
+        const days = Math.max(1, Math.round((ev.endDate.getTime() - ev.startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1)
+
         return (
-          <Link key={ev.id} to={`/evenement/${ev.id}`} className="calendar-event-row">
-            {/* Portrait image */}
-            <div className="calendar-event-image">
-              {ev.imageUrl ? (
-                <img src={ev.imageUrl} alt="" />
-              ) : (
-                <div className="calendar-event-image-fallback">
-                  <Calendar strokeWidth={1} />
-                </div>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="calendar-event-info">
-              <div className="calendar-event-top">
-                <div className="calendar-event-details">
-                  <div className="calendar-event-name">{ev.name}</div>
-                  <span className="calendar-event-tag">{ev.primaryTag}</span>
-                  <div className="calendar-event-meta">
-                    <MapPin />
-                    <span>{ev.city}</span>
-                  </div>
-                </div>
-                <div className="calendar-event-date">
-                  <span className="calendar-event-day">{ev.startDate.getDate()}</span>
-                  <span className="calendar-event-month">{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
-                </div>
-              </div>
-
-              {/* My presence */}
-              <div className="calendar-presence-row">
-                <div
-                  className="calendar-presence-me"
-                  style={{ background: statusCfg.bg, color: statusCfg.color }}
-                >
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt="" className="calendar-presence-avatar-img" />
-                  ) : (
-                    <div
-                      className="calendar-presence-avatar-letter"
-                      style={{ background: statusCfg.color }}
-                    >
-                      {displayName[0].toUpperCase()}
-                    </div>
-                  )}
-                  <statusCfg.icon style={{ width: 10, height: 10 }} strokeWidth={2.5} />
-                  <span>{displayName}</span>
-                </div>
-
-                {/* Friends */}
-                {friendsAtEvent.length > 0 && (
-                  <div className="calendar-presence-friends">
-                    <div className="presence-avatars">
-                      {friendsAtEvent.slice(0, 3).map((fp, i) => {
-                        const name = fp.profiles?.display_name ?? '?'
-                        const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
-                        return (
-                          <div
-                            key={fp.id}
-                            className="presence-avatar"
-                            style={{ background: `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i }}
-                          >
-                            {name[0].toUpperCase()}
-                          </div>
-                        )
-                      })}
-                    </div>
-                    <span className="calendar-presence-friends-count">
-                      {friendsAtEvent.length} ami{friendsAtEvent.length > 1 ? 's' : ''}
-                    </span>
+          <div key={ev.id} className="calendar-event-wrapper">
+            <Link to={`/evenement/${ev.id}`} className="calendar-event-row">
+              {/* Portrait image */}
+              <div className="calendar-event-image">
+                {ev.imageUrl ? (
+                  <img src={ev.imageUrl} alt="" />
+                ) : (
+                  <div className="calendar-event-image-fallback">
+                    <Calendar strokeWidth={1} />
                   </div>
                 )}
               </div>
+
+              {/* Info */}
+              <div className="calendar-event-info">
+                <div className="calendar-event-top">
+                  <div className="calendar-event-details">
+                    <div className="calendar-event-name">{ev.name}</div>
+                    <span className="calendar-event-tag">{ev.primaryTag}</span>
+                    <div className="calendar-event-meta">
+                      <MapPin />
+                      <span>{ev.city} ({ev.department})</span>
+                      <span>—</span>
+                      <span>{days} jour{days > 1 ? 's' : ''}</span>
+                    </div>
+                  </div>
+                  <div className="calendar-event-date">
+                    <span className="calendar-event-day">{ev.startDate.getDate()}</span>
+                    <span className="calendar-event-month">{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Participants — below the card */}
+            <div className="calendar-presence-row">
+              <div
+                className="calendar-presence-me"
+                style={{ background: statusCfg.bg, color: statusCfg.color }}
+              >
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="" className="calendar-presence-avatar-img" />
+                ) : (
+                  <div
+                    className="calendar-presence-avatar-letter"
+                    style={{ background: statusCfg.color }}
+                  >
+                    {displayName[0].toUpperCase()}
+                  </div>
+                )}
+                <statusCfg.icon style={{ width: 10, height: 10 }} strokeWidth={2.5} />
+                <span>{displayName}</span>
+              </div>
+
+              {/* Friends */}
+              {friendsAtEvent.length > 0 && (
+                <div className="calendar-presence-friends">
+                  <div className="presence-avatars">
+                    {friendsAtEvent.slice(0, 3).map((fp, i) => {
+                      const name = fp.profiles?.display_name ?? '?'
+                      const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
+                      return (
+                        <div
+                          key={fp.id}
+                          className="presence-avatar"
+                          style={{ background: `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i }}
+                        >
+                          {name[0].toUpperCase()}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <span className="calendar-presence-friends-count">
+                    {friendsAtEvent.length} ami{friendsAtEvent.length > 1 ? 's' : ''}
+                  </span>
+                </div>
+              )}
             </div>
-          </Link>
+          </div>
         )
       })}
     </div>
