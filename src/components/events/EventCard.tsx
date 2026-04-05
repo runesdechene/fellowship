@@ -6,6 +6,7 @@ interface EventCardProps {
   event: EventWithScore
   friendCount?: number
   variant?: 'portrait' | 'horizontal'
+  prospection?: boolean
 }
 
 function formatDate(date: string) {
@@ -20,7 +21,7 @@ function formatMonth(date: string) {
   return new Date(date).toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
 }
 
-export function EventCard({ event, friendCount, variant = 'portrait' }: EventCardProps) {
+export function EventCard({ event, friendCount, variant = 'portrait', prospection }: EventCardProps) {
   if (variant === 'horizontal') {
     return (
       <Link
@@ -98,20 +99,54 @@ export function EventCard({ event, friendCount, variant = 'portrait' }: EventCar
       </div>
 
       <div className="absolute right-3 top-3">
-        <div
-          className="rounded-xl px-2.5 py-1.5 text-center"
-          style={event.image_url
-            ? { background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }
-            : { background: 'rgba(61,48,40,0.06)' }
+        {(() => {
+          const showDeadline =
+            prospection &&
+            event.registration_deadline &&
+            new Date(event.registration_deadline) > new Date()
+
+          if (showDeadline) {
+            const daysLeft = Math.ceil(
+              (new Date(event.registration_deadline!).getTime() - Date.now()) /
+                (1000 * 60 * 60 * 24)
+            )
+            const badgeBg =
+              daysLeft < 30
+                ? { background: 'rgba(220,50,50,0.85)' }
+                : daysLeft < 90
+                  ? { background: 'rgba(220,140,30,0.85)' }
+                  : event.image_url
+                    ? { background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }
+                    : { background: 'rgba(61,48,40,0.06)' }
+            return (
+              <div className="rounded-xl px-2.5 py-1.5 text-center" style={badgeBg}>
+                <div className="text-[8px] font-semibold uppercase text-white/80">
+                  Inscription
+                </div>
+                <div className="text-[14px] font-bold leading-none text-white">
+                  J-{daysLeft}
+                </div>
+              </div>
+            )
           }
-        >
-          <div className={`text-lg font-extrabold leading-none ${event.image_url ? 'text-white' : 'text-foreground/50'}`}>
-            {formatDay(event.start_date)}
-          </div>
-          <div className={`text-[9px] font-semibold uppercase ${event.image_url ? 'text-white/60' : 'text-foreground/30'}`}>
-            {formatMonth(event.start_date)}
-          </div>
-        </div>
+
+          return (
+            <div
+              className="rounded-xl px-2.5 py-1.5 text-center"
+              style={event.image_url
+                ? { background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }
+                : { background: 'rgba(61,48,40,0.06)' }
+              }
+            >
+              <div className={`text-lg font-extrabold leading-none ${event.image_url ? 'text-white' : 'text-foreground/50'}`}>
+                {formatDay(event.start_date)}
+              </div>
+              <div className={`text-[9px] font-semibold uppercase ${event.image_url ? 'text-white/60' : 'text-foreground/30'}`}>
+                {formatMonth(event.start_date)}
+              </div>
+            </div>
+          )
+        })()}
       </div>
 
       <div className="mt-auto relative p-4">
@@ -138,6 +173,14 @@ export function EventCard({ event, friendCount, variant = 'portrait' }: EventCar
                 {friendCount} ami{friendCount > 1 ? 's' : ''}
               </span>
             )}
+          </div>
+        )}
+
+        {prospection && event.avg_overall !== null && (
+          <div className={`mt-1.5 flex items-center gap-1 text-[11px] ${event.image_url ? 'text-white/50' : 'text-muted-foreground'}`}>
+            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+            <span className="font-bold">{event.avg_overall}</span>
+            {event.review_count !== null && <span>({event.review_count})</span>}
           </div>
         )}
       </div>
