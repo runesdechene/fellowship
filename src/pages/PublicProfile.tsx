@@ -59,7 +59,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       let partsQuery = supabase
         .from('participations')
-        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag, images)')
+        .select('id, event_id, events(id, name, start_date, end_date, city, primary_tag)')
         .eq('user_id', profileData.id)
         .order('created_at', { ascending: false })
 
