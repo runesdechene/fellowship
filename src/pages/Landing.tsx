@@ -125,7 +125,7 @@ export function LandingPage() {
 
           <div className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
             {/* Free */}
-            <div className="rounded-2xl border border-border bg-card p-8">
+            <div className="rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>Gratuit</p>
               <p className="mt-2 text-4xl">0 €</p>
               <p className="mt-1 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>pour toujours</p>
@@ -191,7 +191,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border py-10">
+      <footer className="shadow-[0_-1px_0_0_hsl(var(--border)/0.5)] py-10">
         <div className="mx-auto max-w-5xl px-6 text-center text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
           <p>Fellowship © 2026</p>
           <p className="mt-1">flw.sh</p>
@@ -219,7 +219,7 @@ function FeatureCard({ icon, title, description, color }: {
   }
 
   return (
-    <div className={`rounded-2xl border border-border ${bgMap[color]} p-7`}>
+    <div className={`rounded-2xl shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] ${bgMap[color]} p-7`}>
       <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${iconBg[color]}`}>
         {icon}
       </div>

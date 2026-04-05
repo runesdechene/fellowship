@@ -153,7 +153,7 @@ export function SettingsPage() {
 
   // ── Shared input style ─────────────────────────────────────────────────────
   const inputCls =
-    'w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
+    'w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
 
   return (
     <div className="min-h-screen bg-background">
@@ -179,7 +179,7 @@ export function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
-                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm hover:bg-muted disabled:opacity-50"
+                className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-card text-foreground shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] hover:bg-muted disabled:opacity-50"
               >
                 {uploadingAvatar ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -206,7 +206,7 @@ export function SettingsPage() {
             <div className="mb-6">
               <p className="text-sm font-medium mb-2">Image de fond du profil</p>
               <div
-                className="relative h-32 rounded-xl overflow-hidden border border-border bg-muted cursor-pointer group"
+                className="relative h-32 rounded-xl overflow-hidden shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] bg-muted cursor-pointer group"
                 onClick={() => bannerInputRef.current?.click()}
               >
                 {bannerUrl ? (
@@ -293,8 +293,8 @@ export function SettingsPage() {
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium">Slug public</label>
-                  <div className="flex items-center rounded-lg border border-border bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring">
-                    <span className="border-r border-border bg-muted px-3 py-2 text-sm text-muted-foreground select-none">
+                  <div className="flex items-center rounded-lg border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring">
+                    <span className="border-r border-input bg-muted px-3 py-2 text-sm text-muted-foreground select-none">
                       flw.sh/@
                     </span>
                     <input
@@ -370,7 +370,7 @@ export function SettingsPage() {
               Partagez votre profil public via ce QR code.
             </p>
             <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-              <div className="flex-shrink-0 rounded-xl border border-border bg-white p-4 shadow-sm">
+              <div className="flex-shrink-0 rounded-xl bg-white p-4 shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)]">
                 <QRCodeSVG
                   id="fellowship-qr"
                   value={qrUrl}

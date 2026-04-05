@@ -24,7 +24,7 @@ export function NotificationSlidePanel({ onClose }: NotificationSlidePanelProps)
   return (
     <div className="flex h-full flex-col bg-card">
       {/* Header */}
-      <div className="flex h-14 items-center gap-2 border-b border-border px-3">
+      <div className="flex h-14 items-center gap-2 shadow-[0_1px_0_0_hsl(var(--border)/0.5)] px-3">
         <button
           onClick={onClose}
           className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"

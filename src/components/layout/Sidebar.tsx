@@ -89,7 +89,8 @@ export function Sidebar() {
           </nav>
 
           {/* Activity section */}
-          <div className="border-t border-border mt-2 pt-2">
+          <div className="mt-2 pt-2">
+            <div className="mx-2 mb-2 h-px bg-border/50" />
             <SidebarActivity collapsed={collapsed} onShowAll={() => setShowNotifPanel(true)} />
           </div>
 
