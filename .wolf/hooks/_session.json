@@ -1741,6 +1741,36 @@
       "action": "edit",
       "tokens": 410,
       "at": "2026-04-05T15:23:10.000Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/changelog.ts",
+      "action": "create",
+      "tokens": 384,
+      "at": "2026-04-05T15:25:11.999Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/ChangelogModal.css",
+      "action": "create",
+      "tokens": 726,
+      "at": "2026-04-05T15:25:28.849Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/ChangelogModal.tsx",
+      "action": "create",
+      "tokens": 538,
+      "at": "2026-04-05T15:25:40.001Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/AppLayout.tsx",
+      "action": "edit",
+      "tokens": 42,
+      "at": "2026-04-05T15:25:46.869Z"
+    },
+    {
+      "file": "C:/Users/uriel/desktop/DEVS/fellowship/src/components/layout/AppLayout.tsx",
+      "action": "edit",
+      "tokens": 15,
+      "at": "2026-04-05T15:25:52.658Z"
     }
   ],
   "edit_counts": {
@@ -1809,7 +1839,7 @@
     "src/pages/Embed.tsx": 2,
     "src/components/calendar/MonthCell.tsx": 1,
     "src/pages/EventPage.tsx": 2,
-    "src/components/layout/AppLayout.tsx": 3,
+    "src/components/layout/AppLayout.tsx": 5,
     "src/components/layout/Sidebar.css": 1,
     "src/components/notifications/SidebarActivity.css": 1,
     "src/components/notifications/NotificationSlidePanel.css": 2,
@@ -1818,11 +1848,14 @@
     "src/components/calendar/MonthBanner.tsx": 5,
     "src/components/layout/SearchBar.css": 1,
     "src/components/layout/SearchBar.tsx": 2,
-    "src/pages/Login.tsx": 3
+    "src/pages/Login.tsx": 3,
+    "src/changelog.ts": 1,
+    "src/components/layout/ChangelogModal.css": 1,
+    "src/components/layout/ChangelogModal.tsx": 1
   },
   "anatomy_hits": 51,
   "anatomy_misses": 17,
   "repeated_reads_warned": 119,
   "cerebrum_warnings": 0,
-  "stop_count": 134
+  "stop_count": 136
 }

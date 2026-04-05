@@ -926,3 +926,10 @@
 | 17:22 | Edited src/pages/Login.tsx | inline fix | ~16 |
 | 17:23 | Edited src/pages/Login.tsx | expanded (+26 lines) | ~410 |
 | 17:23 | Session end: 233 writes across 72 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~213657 tok |
+| 17:24 | Session end: 233 writes across 72 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~213657 tok |
+| 17:25 | Created src/changelog.ts | — | ~384 |
+| 17:25 | Created src/components/layout/ChangelogModal.css | — | ~726 |
+| 17:25 | Created src/components/layout/ChangelogModal.tsx | — | ~538 |
+| 17:25 | Edited src/components/layout/AppLayout.tsx | added 1 import(s) | ~42 |
+| 17:25 | Edited src/components/layout/AppLayout.tsx | 1→3 lines | ~15 |
+| 17:26 | Session end: 238 writes across 75 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 68 reads | ~215362 tok |

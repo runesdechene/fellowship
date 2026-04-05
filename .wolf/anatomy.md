@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T15:23:09.987Z
-> Files: 148 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-05T15:25:52.646Z
+> Files: 151 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ../../../.claude/projects/C--Users-uriel-Desktop-DEVS-fellowship/memory/
 
@@ -95,6 +95,7 @@
 ## src/
 
 - `App.tsx` — OnboardingGuard (~813 tok)
+- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~384 tok)
 - `index.css` — Styles: 12 rules, 72 vars (~1385 tok)
 - `main.tsx` (~122 tok)
 
@@ -119,8 +120,10 @@
 
 ## src/components/layout/
 
-- `AppLayout.tsx` — AppLayout (~520 tok)
+- `AppLayout.tsx` — AppLayout (~541 tok)
 - `BottomBar.tsx` — exposantNav (~406 tok)
+- `ChangelogModal.css` — Styles: 16 rules (~726 tok)
+- `ChangelogModal.tsx` — ChangelogModal (~538 tok)
 - `SearchBar.css` — Styles: 25 rules (~997 tok)
 - `SearchBar.tsx` — SearchBar (~1861 tok)
 - `Sidebar.css` — Styles: 22 rules (~816 tok)
