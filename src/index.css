@@ -100,7 +100,29 @@ h1, h2, h3, .font-display {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Disable transitions on elements that animate differently */
-[class*="animate-"], .no-transition {
+/* Page width container */
+.page-width {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Disable global transitions on elements that animate differently */
+[class*="animate-"] {
   transition: none !important;
+}
+
+/* Calendar slide-in */
+@keyframes calendar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.calendar-grid {
+  animation: calendar-enter 0.35s ease-out;
 }

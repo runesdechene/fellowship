@@ -60,17 +60,22 @@ export function CalendarMonth({ data }: CalendarMonthProps) {
               <Link
                 key={ev.id}
                 to={`/evenement/${ev.id}`}
-                className={`block rounded-xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 border-l-4 ${style.border} hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]`}
+                className={`flex gap-3 rounded-xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-3 border-l-4 ${style.border} hover:shadow-[2px_0_40px_-10px_rgba(0,0,0,0.12)]`}
               >
-                <h4 className="font-bold text-sm leading-snug">{ev.name}</h4>
-                <span className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${style.bg} ${style.text}`}>
-                  {ev.primaryTag}
-                </span>
-                <div className="mt-2 flex items-center gap-1 text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
-                  <span className="mx-1">·</span>
-                  <MapPin className="h-3 w-3" />
-                  <span>{ev.city} - {ev.department}</span>
+                {ev.imageUrl && (
+                  <img src={ev.imageUrl} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-bold text-sm leading-snug truncate">{ev.name}</h4>
+                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[0.65rem] font-medium ${style.bg} ${style.text}`}>
+                    {ev.primaryTag}
+                  </span>
+                  <div className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
+                    <span className="mx-1">·</span>
+                    <MapPin className="h-3 w-3" />
+                    <span>{ev.city}</span>
+                  </div>
                 </div>
               </Link>
             )
