@@ -1,19 +1,24 @@
 import { useMemo } from 'react'
 import type { ParticipationWithEvent } from '@/types/database'
 
+export interface CalendarEvent {
+  id: string
+  name: string
+  startDate: Date
+  endDate: Date
+  primaryTag: string
+  status: string
+  visibility: string
+  city: string
+  department: string
+  imageUrl: string | null
+}
+
 export interface CalendarMonth {
   month: number
   year: number
   label: string
-  events: {
-    id: string
-    name: string
-    startDate: Date
-    endDate: Date
-    primaryTag: string
-    status: string
-    visibility: string
-  }[]
+  events: CalendarEvent[]
 }
 
 export function useCalendarYear(participations: ParticipationWithEvent[], year: number): CalendarMonth[] {
@@ -40,6 +45,9 @@ export function useCalendarYear(participations: ParticipationWithEvent[], year: 
             primaryTag: p.events.primary_tag,
             status: p.status,
             visibility: p.visibility,
+            city: p.events.city,
+            department: p.events.department,
+            imageUrl: p.events.image_url,
           })
         }
       }

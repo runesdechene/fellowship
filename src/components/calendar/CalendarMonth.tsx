@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Calendar, MapPin } from 'lucide-react'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 
 const tagColors: Record<string, string> = {
@@ -14,13 +15,13 @@ function getTagColor(tag: string): string {
   return key ? tagColors[key] : 'hsl(24 72% 44%)'
 }
 
-function getDaysInMonth(year: number, month: number) {
-  return new Date(year, month + 1, 0).getDate()
-}
-
-function getFirstDayOfWeek(year: number, month: number) {
-  const day = new Date(year, month, 1).getDay()
-  return day === 0 ? 6 : day - 1 // Monday = 0
+function formatDateRange(start: Date, end: Date): string {
+  const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' }
+  if (start.getTime() === end.getTime()) return start.toLocaleDateString('fr-FR', opts)
+  if (start.getMonth() === end.getMonth()) {
+    return `${start.getDate()}–${end.toLocaleDateString('fr-FR', opts)}`
+  }
+  return `${start.toLocaleDateString('fr-FR', opts)} — ${end.toLocaleDateString('fr-FR', opts)}`
 }
 
 interface CalendarMonthProps {
@@ -28,85 +29,57 @@ interface CalendarMonthProps {
 }
 
 export function CalendarMonth({ data }: CalendarMonthProps) {
-  const { month, year, label, events } = data
-  const daysInMonth = getDaysInMonth(year, month)
-  const firstDay = getFirstDayOfWeek(year, month)
-  const today = new Date()
-  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month
-  const todayDate = today.getDate()
+  const { label, events } = data
   const isEmpty = events.length === 0
 
-  // Build set of days that have events
-  const eventDays = new Set<number>()
-  for (const ev of events) {
-    const start = ev.startDate.getMonth() === month ? ev.startDate.getDate() : 1
-    const end = ev.endDate.getMonth() === month ? ev.endDate.getDate() : daysInMonth
-    for (let d = start; d <= end; d++) eventDays.add(d)
-  }
-
-  const dayNames = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-
   return (
-    <div className={`rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 ${isEmpty ? 'opacity-50' : ''}`}>
+    <div className={`rounded-2xl bg-card shadow-[2px_0_40px_-10px_rgba(0,0,0,0.06)] p-4 ${isEmpty ? 'opacity-40' : ''}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold capitalize">{label}</h3>
+        <h3 className="text-base font-bold capitalize">{label}</h3>
         {events.length > 0 && (
-          <span className="text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-            {events.length} évt{events.length > 1 ? 's' : ''}
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary" style={{ fontFamily: "'Inter', sans-serif" }}>
+            {events.length}
           </span>
         )}
       </div>
 
-      {/* Day grid */}
-      <div className="grid grid-cols-7 gap-0.5 mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
-        {dayNames.map(d => (
-          <div key={d} className="text-center text-[0.6rem] font-medium text-muted-foreground py-0.5">
-            {d}
-          </div>
-        ))}
-        {/* Empty cells before first day */}
-        {Array.from({ length: firstDay }, (_, i) => (
-          <div key={`empty-${i}`} />
-        ))}
-        {/* Day numbers */}
-        {Array.from({ length: daysInMonth }, (_, i) => {
-          const day = i + 1
-          const hasEvent = eventDays.has(day)
-          const isToday = isCurrentMonth && day === todayDate
-
-          return (
-            <div
-              key={day}
-              className={`text-center text-[0.7rem] py-1 rounded-md ${
-                hasEvent
-                  ? 'bg-primary/15 text-primary font-semibold'
-                  : 'text-muted-foreground'
-              } ${isToday ? 'ring-1 ring-primary' : ''}`}
-            >
-              {day}
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Event list */}
-      {events.length > 0 && (
-        <div className="space-y-1.5">
+      {/* Events */}
+      {isEmpty ? (
+        <p className="py-4 text-center text-xs text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
+          Aucun événement
+        </p>
+      ) : (
+        <div className="space-y-2">
           {events.map(ev => (
             <Link
               key={ev.id}
               to={`/evenement/${ev.id}`}
-              className="block rounded-lg p-2 hover:bg-muted/50"
-              style={{
-                borderLeft: `3px solid ${getTagColor(ev.primaryTag)}`,
-                background: `${getTagColor(ev.primaryTag)}08`,
-              }}
+              className="group block overflow-hidden rounded-xl hover:shadow-md"
+              style={{ borderLeft: `4px solid ${getTagColor(ev.primaryTag)}` }}
             >
-              <div className="text-xs font-semibold truncate">{ev.name}</div>
-              <div className="text-[0.65rem] text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                {ev.startDate.getDate()}{ev.endDate.getDate() !== ev.startDate.getDate() ? `–${ev.endDate.getDate()}` : ''}{' '}
-                {ev.startDate.toLocaleDateString('fr-FR', { month: 'short' })}
+              {ev.imageUrl ? (
+                <div className="relative h-24 overflow-hidden">
+                  <img src={ev.imageUrl} alt={ev.name} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <p className="text-xs font-bold text-white truncate">{ev.name}</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-muted/30 px-3 pt-2.5">
+                  <p className="text-sm font-bold truncate group-hover:text-primary">{ev.name}</p>
+                </div>
+              )}
+              <div className="flex items-center gap-3 px-3 py-2 bg-muted/20" style={{ fontFamily: "'Inter', sans-serif" }}>
+                <span className="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
+                  <Calendar className="h-3 w-3" />
+                  {formatDateRange(ev.startDate, ev.endDate)}
+                </span>
+                <span className="flex items-center gap-1 text-[0.7rem] text-muted-foreground">
+                  <MapPin className="h-3 w-3" />
+                  {ev.city}
+                </span>
               </div>
             </Link>
           ))}
