@@ -47,40 +47,37 @@ export function QRCodeModal({ slug, onClose }: QRCodeModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative rounded-2xl bg-card p-8 shadow-xl max-w-sm w-full mx-4">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-        >
-          <X className="h-4 w-4" />
+    <div className="profile-qr-backdrop">
+      <div className="profile-qr-overlay" onClick={onClose} />
+      <div className="profile-qr-modal">
+        <button onClick={onClose} className="profile-qr-close">
+          <X strokeWidth={1.5} />
         </button>
-        <div className="text-center">
-          <h2 className="text-lg font-bold mb-6">Ton QR Code Fellowship</h2>
-          <div className="inline-block rounded-xl bg-white p-5">
+        <h2 className="profile-qr-title">Ton QR Code Fellowship</h2>
+        <div className="profile-qr-code">
+          <div className="profile-qr-code-wrapper">
             <QRCodeSVG id="profile-qr-code" value={url} size={256} level="M" />
           </div>
-          <p className="mt-4 text-sm text-muted-foreground font-mono">{url}</p>
-          <div className="mt-6 flex gap-3 justify-center">
-            <Button variant="outline" onClick={handleDownload}>
-              <Download className="mr-2 h-4 w-4" />
-              Télécharger HD
-            </Button>
-            <Button variant="outline" onClick={handleCopy}>
-              {copied ? (
-                <>
-                  <Check className="mr-2 h-4 w-4 text-accent" />
-                  Copié !
-                </>
-              ) : (
-                <>
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copier le lien
-                </>
-              )}
-            </Button>
-          </div>
+        </div>
+        <p className="profile-qr-url">{url}</p>
+        <div className="profile-qr-actions">
+          <Button variant="outline" onClick={handleDownload}>
+            <Download className="mr-2 h-4 w-4" />
+            Télécharger HD
+          </Button>
+          <Button variant="outline" onClick={handleCopy}>
+            {copied ? (
+              <>
+                <Check className="mr-2 h-4 w-4 text-accent" />
+                Copié !
+              </>
+            ) : (
+              <>
+                <Copy className="mr-2 h-4 w-4" />
+                Copier le lien
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </div>

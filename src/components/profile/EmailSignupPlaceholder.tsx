@@ -7,27 +7,24 @@ interface EmailSignupPlaceholderProps {
 
 export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceholderProps) {
   return (
-    <div className="relative rounded-2xl bg-card p-5 text-center">
+    <div className="profile-email-card">
       {isOwner && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary/10 px-3 py-0.5 text-[0.6rem] font-medium text-primary whitespace-nowrap">
+        <div className="profile-email-owner-badge">
           Vos visiteurs verront ce formulaire ici
         </div>
       )}
-      <Mail className="mx-auto h-5 w-5 text-muted-foreground/30" />
-      <p className="mt-1.5 text-xs font-medium text-foreground/70">
+      <Mail className="profile-email-icon" strokeWidth={1.5} />
+      <p className="profile-email-text">
         Restez informé des prochains événements de {brandName}
       </p>
-      <div className="mt-3 flex items-center gap-2 max-w-[240px] mx-auto">
+      <div className="profile-email-form">
         <input
           type="email"
           placeholder="votre@email.com"
           disabled
-          className="flex-1 rounded-lg bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground cursor-not-allowed"
+          className="profile-email-input"
         />
-        <button
-          disabled
-          className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground cursor-not-allowed opacity-70"
-        >
+        <button disabled className="profile-email-button">
           S'inscrire
         </button>
       </div>

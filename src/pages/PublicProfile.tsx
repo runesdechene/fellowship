@@ -8,6 +8,7 @@ import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlacehol
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import type { Profile } from '@/types/database'
+import './Profile.css'
 
 interface ProfileParticipation {
   id: string
@@ -77,22 +78,18 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   }, [slug, user])
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-muted-foreground">
-        Chargement…
-      </div>
-    )
+    return <div className="profile-loading">Chargement…</div>
   }
 
   if (notFound || !profile) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6 text-center">
-        <div className="text-6xl font-bold text-muted-foreground/30">404</div>
-        <h1 className="text-2xl font-bold">Profil introuvable</h1>
-        <p className="text-muted-foreground">
-          Aucun profil ne correspond à <span className="font-mono text-foreground">@{slug}</span>.
+      <div className="profile-not-found">
+        <div className="profile-not-found-code">404</div>
+        <h1 className="profile-not-found-title">Profil introuvable</h1>
+        <p className="profile-not-found-text">
+          Aucun profil ne correspond à <span>@{slug}</span>.
         </p>
-        <Link to="/" className="text-primary hover:underline text-sm">
+        <Link to="/" className="profile-not-found-link">
           Retour à l'accueil
         </Link>
       </div>
@@ -114,16 +111,15 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
   return (
-    <div className="min-h-screen bg-background relative">
-      <div className="mx-auto max-w-md">
+    <div className="profile-page">
+      <div className="profile-container">
         <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
-        <div className="px-4 space-y-4">
+        <div className="profile-content">
           <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
 
-          {/* Divider */}
-          <div className="flex justify-center py-2">
-            <div className="w-8 h-0.5 rounded-full bg-primary/20" />
+          <div className="profile-divider">
+            <div className="profile-divider-line" />
           </div>
 
           <EventCarousel upcoming={upcoming} past={past} />
