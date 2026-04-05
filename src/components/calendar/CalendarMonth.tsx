@@ -74,7 +74,11 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
 
         return (
           <div key={ev.id} className="calendar-event-wrapper">
-            <Link to={`/evenement/${ev.id}`} className="calendar-event-row">
+            <Link
+              to={`/evenement/${ev.id}`}
+              className="calendar-event-row"
+              style={{ background: getTagColor(ev.primaryTag).bg }}
+            >
               {/* Portrait image — only if available */}
               {ev.imageUrl && (
                 <div className="calendar-event-image">
@@ -99,8 +103,8 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                     </div>
                   </div>
                   <div className="calendar-event-date">
-                    <span className="calendar-event-day">{ev.startDate.getDate()}</span>
-                    <span className="calendar-event-month">{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
+                    <span className="calendar-event-day" style={{ color: getTagColor(ev.primaryTag).color }}>{ev.startDate.getDate()}</span>
+                    <span className="calendar-event-month" style={{ color: getTagColor(ev.primaryTag).color, opacity: 0.6 }}>{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
                   </div>
                 </div>
               </div>
