@@ -37,7 +37,7 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
       )}
 
       {/* Name */}
-      <h1 className="mt-4 text-2xl font-bold text-foreground" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+      <h1 className="mt-4 text-3xl font-extrabold text-foreground">
         {displayName}
       </h1>
       {subtitle && (
