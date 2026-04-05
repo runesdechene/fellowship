@@ -3,7 +3,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
-import { PRIMARY_TAGS } from '@/lib/constants'
+import { PRIMARY_TAGS, getTagColor } from '@/lib/constants'
 import { Search, Crosshair, AlertTriangle } from 'lucide-react'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
@@ -166,15 +166,23 @@ export function ExplorerPage() {
 
       {/* Filter chips */}
       <div className="explorer-filters">
-        {PRIMARY_TAGS.map(tag => (
-          <button
-            key={tag.value}
-            onClick={() => toggleTag(tag.value)}
-            className={`explorer-filter-chip ${selectedTags.has(tag.value) ? 'active' : ''}`}
-          >
-            {tag.label}
-          </button>
-        ))}
+        {PRIMARY_TAGS.map(tag => {
+          const colors = getTagColor(tag.value)
+          const isActive = selectedTags.has(tag.value)
+          return (
+            <button
+              key={tag.value}
+              onClick={() => toggleTag(tag.value)}
+              className="explorer-filter-chip"
+              style={isActive
+                ? { background: colors.color, color: 'white' }
+                : { background: colors.bg, color: colors.color }
+              }
+            >
+              {tag.label}
+            </button>
+          )
+        })}
 
         <div className="explorer-filter-divider" />
 
