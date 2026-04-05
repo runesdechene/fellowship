@@ -4,7 +4,7 @@
 
 :root {
   /* Fellowship — Flat warm design system */
-  --background: 30 18% 92%;      /* #f0ebe4 — lin page bg */
+  --background: 33,33%,95%;  /* #f0ebe4 — lin page bg */
   --foreground: 24 15% 20%;      /* #3d3028 — soft warm brown */
   --card: 36 33% 98%;            /* #faf8f5 — warm white blocks */
   --card-foreground: 24 15% 20%;
@@ -141,4 +141,41 @@ h1, h2, h3, .font-display {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ── FAB (Floating Action Button) ──────────────────────────────────── */
+
+.fab-button {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 40;
+  display: flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px hsl(var(--primary) / 0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fab-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 28px hsl(var(--primary) / 0.45);
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 768px) {
+  .fab-button {
+    bottom: 32px;
+    right: 32px;
+  }
 }

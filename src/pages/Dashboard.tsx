@@ -4,7 +4,7 @@ import { useMyParticipations, useFriendsParticipations, type FriendParticipation
 import { useRecentEvents } from '@/hooks/use-events'
 import { useMyFriends, useMyFollowers } from '@/hooks/use-follows'
 import { Button } from '@/components/ui/button'
-import { Plus, Calendar, Users, Compass, Clock } from 'lucide-react'
+import { Calendar, Users, Compass, Clock } from 'lucide-react'
 
 function daysUntil(dateStr: string): number {
   const now = new Date()
@@ -247,14 +247,6 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* FAB */}
-      <Link
-        to="/explorer"
-        className="fixed bottom-20 right-5 md:bottom-8 md:right-8 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground"
-        style={{ boxShadow: '0 4px 20px hsl(24 72% 44% / 0.35)' }}
-      >
-        <Plus className="h-6 w-6" strokeWidth={2} />
-      </Link>
     </div>
   )
 }
