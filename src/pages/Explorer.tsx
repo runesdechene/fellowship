@@ -3,7 +3,6 @@ import { useEvents } from '@/hooks/use-events'
 import { useFriendsParticipations } from '@/hooks/use-participations'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
-import { HeroBanner } from '@/components/events/HeroBanner'
 import { SlideRow } from '@/components/events/SlideRow'
 import { PRIMARY_TAGS } from '@/lib/constants'
 import { Search, Crosshair, AlertTriangle } from 'lucide-react'
@@ -96,11 +95,6 @@ export function ExplorerPage() {
     return [...result].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allEvents, search, selectedTags, showProspection, temporalFilter])
-
-  // ---------- hero event ----------
-  const heroEvent = useMemo(() =>
-    filteredEvents.find(ev => ev.image_url && new Date(ev.start_date) >= now),
-  [filteredEvents, now])
 
   // ---------- friend event IDs ----------
   const friendEventIds = useMemo(() => {
@@ -291,7 +285,6 @@ export function ExplorerPage() {
       {!loading && hasSections && (
         <>
           {/* Hero banner */}
-          {heroEvent && <HeroBanner event={heroEvent} />}
 
           {showProspection ? (
             <>
