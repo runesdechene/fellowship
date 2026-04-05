@@ -119,9 +119,20 @@ export function ExplorerPage() {
         <div className="explorer-filter-divider" />
 
         <span className="explorer-month-pickers-label">De</span>
-        <MonthPicker options={monthOptions} value={monthFrom} onChange={setMonthFrom} />
+        <MonthPicker
+          options={monthOptions}
+          value={monthFrom}
+          onChange={v => {
+            setMonthFrom(v)
+            if (v >= monthTo) setMonthTo(monthOptions[Math.min(monthOptions.findIndex(o => o.value === v) + 1, monthOptions.length - 1)].value)
+          }}
+        />
         <span className="explorer-month-pickers-label">à</span>
-        <MonthPicker options={monthOptions} value={monthTo} onChange={setMonthTo} />
+        <MonthPicker
+          options={monthOptions.filter(o => o.value > monthFrom)}
+          value={monthTo}
+          onChange={setMonthTo}
+        />
 
         {profile?.department && (
           <>
