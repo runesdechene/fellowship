@@ -5,6 +5,7 @@ import { createEvent, searchSimilarEvents } from '@/hooks/use-events'
 import { supabase } from '@/lib/supabase'
 import { compressImage } from '@/lib/compress-image'
 import { Button } from '@/components/ui/button'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
 import { TagInput } from './TagInput'
 import { PRIMARY_TAGS } from '@/lib/constants'
@@ -246,11 +247,10 @@ export function EventForm({ onClose }: EventFormProps) {
           <p className="text-xs text-muted-foreground">Optionnel — tu pourras compléter plus tard</p>
         </div>
       </div>
-      <textarea
-        className={`${inputClass} min-h-[80px]`}
-        placeholder="Description de l'événement..."
-        value={form.description}
-        onChange={e => update('description', e.target.value)}
+      <RichTextEditor
+        content={form.description}
+        onChange={html => update('description', html)}
+        placeholder="Décrivez l'événement..."
       />
       <div className="grid gap-3 sm:grid-cols-2">
         <div>

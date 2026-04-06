@@ -128,7 +128,6 @@
   padding: 0 0 16px 0;
   margin-bottom: 16px;
   box-shadow: none;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
 }
 
 .event-left-card:last-child {
@@ -137,12 +136,13 @@
 
 .event-left-card-label {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   color: rgba(61, 48, 40, 0.4);
   margin-bottom: 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 /* Organizer row */
@@ -603,7 +603,6 @@
   padding: 0 0 20px 0;
   margin-bottom: 20px;
   box-shadow: none;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
 }
 
 .event-section-card:last-child {
@@ -612,16 +611,60 @@
 
 .event-section-title {
   font-family: var(--font-heading);
+  color: var(--font-color-lowtitle);
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .event-section-title.muted {
   color: rgba(61, 48, 40, 0.5);
+}
+
+/* Description rich text */
+.event-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: hsl(var(--foreground));
+}
+
+.event-description p {
+  margin: 0 0 8px 0;
+}
+
+.event-description p:last-child {
+  margin-bottom: 0;
+}
+
+.event-description strong {
+  font-weight: 600;
+}
+
+.event-description em {
+  font-style: italic;
+}
+
+.event-description blockquote {
+  border-left: 3px solid hsl(var(--primary) / 0.3);
+  padding-left: 14px;
+  margin: 8px 0;
+  color: rgba(61, 48, 40, 0.6);
+  font-style: italic;
+}
+
+.event-description ul,
+.event-description ol {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.event-description li {
+  margin-bottom: 4px;
 }
 
 /* Notes + Avis side by side */

@@ -13,6 +13,8 @@ import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventDashboard } from '@/components/events/EventDashboard'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
+import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus } from 'lucide-react'
@@ -316,11 +318,10 @@ export function EventPage() {
               </div>
               <div>
                 <label className="text-xs font-medium text-muted-foreground mb-1 block">Description</label>
-                <textarea
-                  className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
-                  placeholder="Description"
-                  value={editForm.description}
-                  onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+                <RichTextEditor
+                  content={editForm.description}
+                  onChange={html => setEditForm(f => ({ ...f, description: html }))}
+                  placeholder="Décrivez l'événement..."
                 />
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -543,7 +544,7 @@ export function EventPage() {
             {event.description && (
               <div className="event-section-card">
                 <div className="event-section-title">À propos de l'événement</div>
-                <p style={{ fontSize: 16, lineHeight: 1.7, color: 'rgba(61,48,40,1)', whiteSpace: 'pre-wrap', margin: 0 }}>{event.description}</p>
+                <div className="event-description" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.description) }} />
               </div>
             )}
 
