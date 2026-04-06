@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
-import { useEvent, updateEvent } from '@/hooks/use-events'
+import { useEvent, updateEvent, useEventCreator } from '@/hooks/use-events'
 import { addParticipation, removeParticipation, useFriendsOnEvent } from '@/hooks/use-participations'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
@@ -11,14 +11,48 @@ import { NotesFeed } from '@/components/notes/NotesFeed'
 import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { EventReportForm } from '@/components/reports/EventReportForm'
-import { EventHero } from '@/components/events/EventHero'
 import { EventDashboard } from '@/components/events/EventDashboard'
-import { FriendRow } from '@/components/events/FriendRow'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2 } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
+
+const GRADIENTS = [
+  ['#f0a060', '#e74c3c'],
+  ['#6c5ce7', '#a29bfe'],
+  ['#00b894', '#00cec9'],
+  ['#fd79a8', '#e84393'],
+  ['#f39c12', '#d68910'],
+]
+
+function hashName(name: string): number {
+  let h = 0
+  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
+const STATUS_LABELS_FRIEND: Record<string, string> = {
+  interesse: 'Intéressé',
+  en_cours: 'En cours',
+  inscrit: 'Inscrit',
+}
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+function dayCount(start: string, end: string) {
+  const diff = Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86400000) + 1
+  return diff > 1 ? `${diff} jours` : '1 jour'
+}
+
+function daysUntil(date: string) {
+  const diff = Math.ceil((new Date(date).getTime() - Date.now()) / 86400000)
+  if (diff < 0) return 'Date passée'
+  if (diff === 0) return "Aujourd'hui"
+  return `${diff} jour${diff > 1 ? 's' : ''} restant${diff > 1 ? 's' : ''}`
+}
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
@@ -36,6 +70,10 @@ export function EventPage() {
   const [editSaving, setEditSaving] = useState(false)
   const [editImage, setEditImage] = useState<File | null>(null)
   const [removeImage, setRemoveImage] = useState(false)
+  const creator = useEventCreator(event?.created_by)
+  const creatorName = creator?.brand_name ?? creator?.display_name ?? '?'
+  const creatorGradient = GRADIENTS[hashName(creatorName) % GRADIENTS.length]
+
   const [editForm, setEditForm] = useState({
     name: '',
     description: '',
@@ -329,21 +367,157 @@ export function EventPage() {
           </div>
         </>
       ) : (
-        <div>
-          <EventHero
-            event={event}
-            friendCount={friendCount}
-            participationStatus={participation?.status}
-            paymentStatus={participation?.payment_status as string | null}
-            onParticipantsClick={() => setShowParticipants(true)}
-          />
+        <div className="event-two-col">
+          {/* ── LEFT COLUMN ── */}
+          <div className="event-col-left">
+            {/* Poster */}
+            <div className="event-poster">
+              {event.image_url ? (
+                <img src={event.image_url} alt={event.name} />
+              ) : (
+                <div className="event-poster-empty">
+                  <Image strokeWidth={1} />
+                </div>
+              )}
+            </div>
 
-          {showParticipants && (
-            <ParticipantsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
-          )}
+            <div className="event-col-left-sticky">
+              {/* Ajouté par */}
+              {creator && (
+                <div className="event-left-card">
+                  <div className="event-left-card-label">Ajouté par</div>
+                  <Link to={`/@${creator.public_slug ?? creator.id}`} className="event-organizer-row" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {creator.avatar_url ? (
+                      <img src={creator.avatar_url} alt={creatorName} className="event-organizer-avatar" />
+                    ) : (
+                      <div className="event-organizer-avatar-fallback" style={{ background: `linear-gradient(135deg, ${creatorGradient[0]}, ${creatorGradient[1]})` }}>
+                        {creatorName[0]?.toUpperCase() ?? '?'}
+                      </div>
+                    )}
+                    <div>
+                      <div className="event-organizer-name">{creatorName}</div>
+                      {creator.craft_type && <div className="event-organizer-role">{creator.craft_type}</div>}
+                    </div>
+                  </Link>
+                </div>
+              )}
 
-          {/* Dashboard inline — mobile only (above content) */}
-          <div className="event-dashboard-mobile-inline">
+              {/* Liens */}
+              {(event.registration_url || event.external_url || event.contact_email) && (
+                <div className="event-left-card">
+                  <div className="event-left-card-label">Liens</div>
+                  <div className="event-links-list">
+                    {event.registration_url && (
+                      <a href={event.registration_url} target="_blank" rel="noopener noreferrer" className="event-link-item primary">
+                        <FileText strokeWidth={1.5} />
+                        S'inscrire
+                      </a>
+                    )}
+                    {event.external_url && (
+                      <a href={event.external_url} target="_blank" rel="noopener noreferrer" className="event-link-item">
+                        <ExternalLink strokeWidth={1.5} />
+                        Site web
+                      </a>
+                    )}
+                    {event.contact_email && (
+                      <a href={`mailto:${event.contact_email}`} className="event-link-item">
+                        <Mail strokeWidth={1.5} />
+                        {event.contact_email}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Amis présents */}
+              {friendsOnEvent.length > 0 && (
+                <div className="event-left-card">
+                  <div className="event-left-card-label">Amis présents</div>
+                  <div className="event-friends-col">
+                    {friendsOnEvent.map(friend => {
+                      const fname = friend.brand_name ?? friend.display_name ?? '?'
+                      const [from, to] = GRADIENTS[hashName(fname) % GRADIENTS.length]
+                      return (
+                        <Link key={friend.id} to={`/@${friend.public_slug ?? friend.id}`} className="event-friend-row">
+                          {friend.avatar_url ? (
+                            <img src={friend.avatar_url} alt={fname} className="event-friend-avatar" />
+                          ) : (
+                            <div className="event-friend-avatar-fallback" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+                              {fname[0]?.toUpperCase() ?? '?'}
+                            </div>
+                          )}
+                          <div>
+                            <div className="event-friend-name">{fname}</div>
+                            <div className={`event-friend-status ${friend.status}`}>
+                              {STATUS_LABELS_FRIEND[friend.status] ?? friend.status}
+                            </div>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── RIGHT COLUMN ── */}
+          <div className="event-col-right">
+            {/* Tags */}
+            <div className="event-tags">
+              <span className="event-tag-primary">{event.primary_tag}</span>
+              {event.tags?.map(tag => (
+                <span key={tag} className="event-tag-secondary">{tag}</span>
+              ))}
+            </div>
+
+            {/* Title */}
+            <h1 className="event-title">{event.name}</h1>
+
+            {/* Meta rows */}
+            <div className="event-meta-list">
+              <div className="event-meta-row">
+                <div className="event-meta-icon"><Calendar strokeWidth={1.5} /></div>
+                <div className="event-meta-text">
+                  <span className="event-meta-primary">{formatDate(event.start_date)}{event.end_date !== event.start_date ? ` — ${formatDate(event.end_date)}` : ''}</span>
+                  <span className="event-meta-secondary">{dayCount(event.start_date, event.end_date)}</span>
+                </div>
+              </div>
+              <div className="event-meta-row">
+                <div className="event-meta-icon"><MapPin strokeWidth={1.5} /></div>
+                <div className="event-meta-text">
+                  <span className="event-meta-primary">{event.city} ({event.department})</span>
+                </div>
+              </div>
+              {event.registration_deadline && (
+                <div className="event-meta-row">
+                  <div className="event-meta-icon"><Clock strokeWidth={1.5} /></div>
+                  <div className="event-meta-text">
+                    <span className="event-meta-primary">Inscription avant le {formatDate(event.registration_deadline)}</span>
+                    <span className="event-meta-secondary">{daysUntil(event.registration_deadline)}</span>
+                  </div>
+                </div>
+              )}
+              {friendCount > 0 && (
+                <div className="event-meta-row event-meta-row-clickable" onClick={() => setShowParticipants(true)}>
+                  <div className="event-meta-icon"><Users strokeWidth={1.5} /></div>
+                  <div className="event-meta-text">
+                    <span className="event-meta-primary">{friendCount} participant{friendCount > 1 ? 's' : ''}{participation ? ' dont vous' : ''}</span>
+                    <span className="event-meta-secondary">Voir les participants</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Registration note */}
+            {event.registration_note && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'hsl(var(--muted) / 0.5)', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: 'rgba(61,48,40,0.5)', marginBottom: 20 }}>
+                <StickyNote strokeWidth={1.5} style={{ width: 14, height: 14, flexShrink: 0, marginTop: 1 }} />
+                <span>{event.registration_note}</span>
+              </div>
+            )}
+
+            {/* Mon suivi */}
             <EventDashboard
               participation={participation}
               isExposant={isExposant}
@@ -354,78 +528,48 @@ export function EventPage() {
               onToggleReport={() => setShowReportForm(!showReportForm)}
               showReportForm={showReportForm}
             />
-          </div>
 
-          <div className="event-separator" />
+            <div className="event-separator" />
 
-          <div className="event-columns">
-            {/* Left column */}
-            <div className="event-main">
-              {/* Description */}
-              {event.description && (
-                <div>
-                  <div className="event-section-label public">🌍 Infos publiques</div>
-                  <div className="event-section-card">
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{event.description}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Friends */}
-              {friendsOnEvent.length > 0 && (
-                <div>
-                  <div className="event-section-label friends">👥 Amis sur ce festival</div>
-                  <div className="event-section-card">
-                    <FriendRow friends={friendsOnEvent} />
-                  </div>
-                </div>
-              )}
-
-              {/* Notes & Reviews SIDE BY SIDE */}
-              <div className="event-notes-reviews">
-                <div>
-                  <div className="event-section-label" style={{color: 'rgba(61,48,40,0.45)'}}>📝 Notes partagées ({notes.length})</div>
-                  <div className="event-section-card">
-                    <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
-                    <NotesFeed notes={notes} onRefresh={refetchNotes} />
-                  </div>
-                </div>
-                <div>
-                  <div className="event-section-label" style={{color: 'rgba(61,48,40,0.45)'}}>⭐ Avis ({reviews.length})</div>
-                  <div className="event-section-card">
-                    <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
-                    {isPast && isExposant && (
-                      <>
-                        <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setShowReviewForm(!showReviewForm)}>
-                          {showReviewForm ? 'Fermer' : 'Donner mon avis'}
-                        </Button>
-                        {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
-                      </>
-                    )}
-                  </div>
-                </div>
+            {/* Notes + Avis */}
+            <div className="event-notes-reviews">
+              <div className="event-section-card">
+                <div className="event-section-title muted">📝 Notes partagées ({notes.length})</div>
+                <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
+                <NotesFeed notes={notes} onRefresh={refetchNotes} />
               </div>
-
-              {/* Report form (inside left column, shown via dashboard button) */}
-              {showReportForm && <EventReportForm eventId={event.id} />}
+              <div className="event-section-card">
+                <div className="event-section-title muted">⭐ Avis ({reviews.length})</div>
+                <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+                {isPast && isExposant && (
+                  <>
+                    <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setShowReviewForm(!showReviewForm)}>
+                      {showReviewForm ? 'Fermer' : 'Donner mon avis'}
+                    </Button>
+                    {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
+                  </>
+                )}
+              </div>
             </div>
 
-            {/* Right column — desktop dashboard */}
-            <div className="event-sidebar">
-              <EventDashboard
-                participation={participation}
-                isExposant={isExposant}
-                isPast={isPast}
-                onUpdate={setParticipation}
-                onLeave={handleLeave}
-                onJoin={handleJoin}
-                onToggleReport={() => setShowReportForm(!showReportForm)}
-                showReportForm={showReportForm}
-              />
-            </div>
+            {/* À propos */}
+            {event.description && (
+              <div className="event-section-card">
+                <div className="event-section-title">🌍 À propos</div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(61,48,40,0.7)', whiteSpace: 'pre-wrap', margin: 0 }}>{event.description}</p>
+              </div>
+            )}
+
+            {/* Report form */}
+            {showReportForm && <EventReportForm eventId={event.id} />}
           </div>
-
         </div>
+
+      )}
+
+      {showParticipants && (
+
+        <ParticipantsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
       )}
     </div>
   )
