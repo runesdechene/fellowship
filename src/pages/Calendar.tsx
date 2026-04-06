@@ -57,14 +57,14 @@ export function CalendarPage() {
         department: (ev.department as string) ?? '',
         imageUrl: (ev.image_url as string | null) ?? null,
         isFriend: true,
-        friendName: fp.profiles?.display_name ?? 'Un ami',
+        friendName: fp.profiles?.brand_name ?? fp.profiles?.display_name ?? 'Un ami',
       }
 
       if (!map[key]) map[key] = []
       // If same event from multiple friends, append name
       const existing = map[key].find(e => e.id === calEvent.id)
       if (existing) {
-        const newName = fp.profiles?.display_name ?? 'Un ami'
+        const newName = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? 'Un ami'
         if (existing.friendName && !existing.friendName.includes(newName)) {
           existing.friendName += `, ${newName}`
         }

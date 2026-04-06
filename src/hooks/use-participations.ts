@@ -39,7 +39,7 @@ export function useMyParticipations(year?: number) {
   return { participations, loading, refetch: fetchParticipations }
 }
 
-export type FriendParticipation = { id: string; event_id: string; user_id: string; events?: { name: string; [key: string]: unknown }; profiles?: { display_name: string | null; avatar_url: string | null; public_slug: string | null; type: string | null } }
+export type FriendParticipation = { id: string; event_id: string; user_id: string; events?: { name: string; [key: string]: unknown }; profiles?: { brand_name: string | null; display_name: string | null; avatar_url: string | null; public_slug: string | null; type: string | null } }
 
 export function useFriendsParticipations() {
   const { user } = useAuth()
@@ -61,7 +61,7 @@ export function useFriendsParticipations() {
 
     const { data } = await supabase
       .from('participations')
-      .select('*, events(*), profiles(display_name, avatar_url, public_slug, type)')
+      .select('*, events(*), profiles(brand_name, display_name, avatar_url, public_slug, type)')
       .in('user_id', friendIds)
       .in('visibility', ['amis', 'public'])
       .order('created_at', { ascending: false })
