@@ -173,17 +173,19 @@ export function CalendarPage() {
         {/* Mobile floating bar */}
         <div className="calendar-mobile-bar">
           <button
+            onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
+            className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
+          >
+            <Users strokeWidth={1.5} />
+            <span>Amis</span>
+          </button>
+          <div className="calendar-mobile-sep" />
+          <button
             onClick={() => navigate('prev')}
             disabled={animating}
             className="calendar-mobile-btn"
           >
             <ChevronLeft strokeWidth={1.5} />
-          </button>
-          <button
-            onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
-            className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
-          >
-            <Users strokeWidth={1.5} />
           </button>
           <button
             onClick={() => navigate('next')}
