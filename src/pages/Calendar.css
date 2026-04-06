@@ -350,9 +350,9 @@
 .calendar-presence-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   margin-top: 6px;
-  padding: 0 4px;
+  padding: 0;
   flex-wrap: wrap;
 }
 
@@ -434,6 +434,198 @@
   font-size: 10px;
   font-family: var(--font-body);
   color: rgba(61, 48, 40, 0.3);
+}
+
+.calendar-presence-friends-names {
+  font-size: 11px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: rgba(61, 48, 40, 0.6);
+}
+
+/* Clickable presence row */
+.calendar-presence-clickable {
+  border: none;
+  background: none;
+  padding: 4px 12px 4px 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: rgba(61, 48, 40, 0.05);
+}
+
+.calendar-presence-clickable:hover {
+  background: rgba(61, 48, 40, 0.08);
+}
+
+.calendar-presence-clickable:hover .calendar-presence-friends-names {
+  color: rgba(61, 48, 40, 0.8);
+}
+
+/* ── Calendar Friends Modal ───────────────────────────────────────── */
+
+.calendar-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  padding: 16px;
+}
+
+.calendar-modal {
+  width: 100%;
+  max-width: 400px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: hsl(var(--card));
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.calendar-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-modal-heading {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+
+.calendar-modal-event-name {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(61, 48, 40, 0.4);
+  margin-top: 1px;
+}
+
+.calendar-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: hsl(var(--muted));
+  border: none;
+  cursor: pointer;
+  color: rgba(61, 48, 40, 0.5);
+  transition: background 0.15s;
+}
+
+.calendar-modal-close:hover {
+  background: hsl(var(--muted) / 0.7);
+}
+
+.calendar-modal-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px 16px;
+}
+
+.calendar-modal-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 8px 4px;
+}
+
+.calendar-modal-section-label.pro {
+  color: hsl(252 56% 58%);
+}
+
+.calendar-modal-section-label.visiteur {
+  color: hsl(38 80% 45%);
+}
+
+.calendar-modal-empty {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(61, 48, 40, 0.3);
+}
+
+.calendar-modal-friend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.calendar-modal-friend:hover {
+  background: hsl(var(--muted));
+}
+
+.calendar-modal-friend-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.calendar-modal-friend-avatar-letter {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.calendar-modal-friend-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.calendar-modal-friend-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: hsl(var(--foreground));
+}
+
+.calendar-modal-friend-type {
+  display: block;
+  font-size: 11px;
+  color: rgba(61, 48, 40, 0.4);
+}
+
+.calendar-modal-friend-status {
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* ── Skeleton ──────────────────────────────────────────────────────── */

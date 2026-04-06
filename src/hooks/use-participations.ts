@@ -39,7 +39,7 @@ export function useMyParticipations(year?: number) {
   return { participations, loading, refetch: fetchParticipations }
 }
 
-export type FriendParticipation = { id: string; event_id: string; user_id: string; events?: { name: string; [key: string]: unknown }; profiles?: { brand_name: string | null; display_name: string | null; avatar_url: string | null; public_slug: string | null; type: string | null } }
+export type FriendParticipation = { id: string; event_id: string; user_id: string; status: string; events?: { name: string; [key: string]: unknown }; profiles?: { brand_name: string | null; display_name: string | null; avatar_url: string | null; public_slug: string | null; type: string | null } }
 
 export function useFriendsParticipations() {
   const { user } = useAuth()

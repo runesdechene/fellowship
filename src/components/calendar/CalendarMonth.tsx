@@ -46,9 +46,10 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: typeof Ch
 interface CalendarMonthProps {
   data: CalendarMonthType
   friendParticipations?: FriendParticipation[]
+  onOpenFriends?: (eventId: string, eventName: string) => void
 }
 
-export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonthProps) {
+export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }: CalendarMonthProps) {
   const { month, label, events } = data
   const { profile } = useAuth()
   const isEmpty = events.length === 0
@@ -111,17 +112,18 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                 (() => {
                   const fps = friendParticipations.filter(f => f.event_id === ev.id)
                   return (
-                    <div className="calendar-presence-friends">
+                    <button
+                      className="calendar-presence-friends calendar-presence-clickable"
+                      onClick={e => { e.preventDefault(); onOpenFriends?.(ev.id, ev.name) }}
+                    >
                       <div className="presence-avatars">
                         {fps.slice(0, 4).map((fp, i) => {
                           const name = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? '?'
                           const avatarUrl = fp.profiles?.avatar_url
-                          const slug = fp.profiles?.public_slug ?? fp.user_id
                           const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
                           return (
-                            <Link
+                            <span
                               key={fp.id}
-                              to={`/@${slug}`}
                               className="presence-avatar"
                               style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 4 - i, overflow: 'hidden' }}
                               title={name}
@@ -131,14 +133,14 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                               ) : (
                                 name[0].toUpperCase()
                               )}
-                            </Link>
+                            </span>
                           )
                         })}
                       </div>
-                      <span className="calendar-presence-friends-count">
+                      <span className="calendar-presence-friends-names">
                         {fps.map(f => f.profiles?.brand_name ?? f.profiles?.display_name ?? '?').join(', ')}
                       </span>
-                    </div>
+                    </button>
                   )
                 })()
               ) : (
@@ -164,17 +166,18 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
 
               {/* Friends on my events */}
               {!ev.isFriend && friendsAtEvent.length > 0 && (
-                <div className="calendar-presence-friends">
+                <button
+                  className="calendar-presence-friends calendar-presence-clickable"
+                  onClick={e => { e.preventDefault(); onOpenFriends?.(ev.id, ev.name) }}
+                >
                   <div className="presence-avatars">
                     {friendsAtEvent.slice(0, 3).map((fp, i) => {
                       const name = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? '?'
                       const avatarUrl = fp.profiles?.avatar_url
-                      const slug = fp.profiles?.public_slug ?? fp.user_id
                       const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
                       return (
-                        <Link
+                        <span
                           key={fp.id}
-                          to={`/@${slug}`}
                           className="presence-avatar"
                           style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i, overflow: 'hidden' }}
                           title={name}
@@ -184,19 +187,20 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                           ) : (
                             name[0].toUpperCase()
                           )}
-                        </Link>
+                        </span>
                       )
                     })}
                   </div>
-                  <span className="calendar-presence-friends-count">
+                  <span className="calendar-presence-friends-names">
                     {friendsAtEvent.length} ami{friendsAtEvent.length > 1 ? 's' : ''}
                   </span>
-                </div>
+                </button>
               )}
             </div>
           </div>
         )
       })}
+
     </div>
   )
 }

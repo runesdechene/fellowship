@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.4.1',
+    date: '2026-04-06',
+    title: 'Calendrier — amis cliquables',
+    changes: [
+      'Calendrier — participants plus visibles (texte plus sombre)',
+      'Calendrier — clic sur les amis ouvre une modal détaillée',
+      'Modal participants triés par Amis pro / Amis visiteurs',
+      'Chaque ami affiche avatar, nom, type et statut',
+    ],
+  },
+  {
     version: '0.4.0',
     date: '2026-04-06',
     title: 'La fiche événement devient un cockpit',

@@ -3,6 +3,7 @@ import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
 import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
+import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal'
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import './Calendar.css'
 
@@ -18,6 +19,7 @@ export function CalendarPage() {
   const [showPro, setShowPro] = useState(() => localStorage.getItem('fellowship-calendar-pro') === 'true')
   const [showVisiteurs, setShowVisiteurs] = useState(() => localStorage.getItem('fellowship-calendar-visiteurs') === 'true')
   const containerRef = useRef<HTMLDivElement>(null)
+  const [modalEvent, setModalEvent] = useState<{ id: string; name: string } | null>(null)
 
   const { participations, loading } = useMyParticipations(year)
   const months = useCalendarYear(participations, year)
@@ -208,11 +210,19 @@ export function CalendarPage() {
                 key={`${month.year}-${month.month}`}
                 className={`calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
               >
-                <CalendarMonth data={month} friendParticipations={friendActivity} />
+                <CalendarMonth data={month} friendParticipations={friendActivity} onOpenFriends={(id, name) => setModalEvent({ id, name })} />
               </div>
             )
           })}
         </div>
+      )}
+      {/* Friends modal — rendered at page level */}
+      {modalEvent && (
+        <CalendarFriendsModal
+          eventName={modalEvent.name}
+          friends={friendActivity.filter(f => f.event_id === modalEvent.id)}
+          onClose={() => setModalEvent(null)}
+        />
       )}
     </div>
   )
