@@ -13,7 +13,6 @@ import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventHero } from '@/components/events/EventHero'
 import { EventDashboard } from '@/components/events/EventDashboard'
-import { EventDashboardMobile } from '@/components/events/EventDashboardMobile'
 import { FriendRow } from '@/components/events/FriendRow'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2 } from 'lucide-react'
@@ -332,6 +331,20 @@ export function EventPage() {
             </div>
           )}
 
+          {/* Dashboard inline — mobile only (above content) */}
+          <div className="event-dashboard-mobile-inline">
+            <EventDashboard
+              participation={participation}
+              isExposant={isExposant}
+              isPast={isPast}
+              onUpdate={setParticipation}
+              onLeave={handleLeave}
+              onJoin={handleJoin}
+              onToggleReport={() => setShowReportForm(!showReportForm)}
+              showReportForm={showReportForm}
+            />
+          </div>
+
           <div className="event-separator" />
 
           <div className="event-columns">
@@ -401,17 +414,6 @@ export function EventPage() {
             </div>
           </div>
 
-          {/* Mobile dashboard bar */}
-          <EventDashboardMobile
-            participation={participation}
-            isExposant={isExposant}
-            isPast={isPast}
-            onUpdate={setParticipation}
-            onLeave={handleLeave}
-            onJoin={handleJoin}
-            onToggleReport={() => setShowReportForm(!showReportForm)}
-            showReportForm={showReportForm}
-          />
         </>
       )}
     </div>
