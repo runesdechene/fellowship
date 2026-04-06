@@ -10,16 +10,20 @@
 /* ── Back link ─────────────────────────────────────────────────────── */
 
 .event-back {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  color: rgba(61, 48, 40, 0.45);
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: hsl(var(--muted));
+  color: rgba(61, 48, 40, 0.5);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
 
 .event-back:hover {
+  background: hsl(var(--muted) / 0.8);
   color: hsl(var(--foreground));
 }
 

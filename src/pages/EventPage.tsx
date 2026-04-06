@@ -180,9 +180,8 @@ export function EventPage() {
   return (
     <div className="event-page">
       <div className="event-topbar">
-        <Link to="/explorer" className="event-back">
+        <Link to="/explorer" className="event-back" title="Retour">
           <ArrowLeft />
-          Retour
         </Link>
         {isExposant && !editing && (
           <button onClick={startEditing} className="event-edit-btn">
