@@ -1,7 +1,24 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Notification } from '@/types/database'
+
+// Community feed — platform-wide actions
+export const ACTIVITY_TYPES = new Set([
+  'event_created',
+  'event_image_added',
+  'event_info_added',
+  'new_exposant',
+])
+
+// Personal — important to you
+export const NOTIFICATION_TYPES = new Set([
+  'new_follower',
+  'friend_going',
+  'friend_note',
+  'deadline_reminder',
+  'event_updated',
+])
 
 export function useNotifications() {
   const { user } = useAuth()
@@ -43,5 +60,9 @@ export function useNotifications() {
     setUnreadCount(0)
   }
 
-  return { notifications, unreadCount, loading, markAsRead, markAllAsRead, refetch: fetchNotifications }
+  const activities = useMemo(() => notifications.filter(n => ACTIVITY_TYPES.has(n.type)), [notifications])
+  const personalNotifs = useMemo(() => notifications.filter(n => NOTIFICATION_TYPES.has(n.type)), [notifications])
+  const personalUnread = useMemo(() => personalNotifs.filter(n => !n.read).length, [personalNotifs])
+
+  return { notifications, activities, personalNotifs, personalUnread, unreadCount, loading, markAsRead, markAllAsRead, refetch: fetchNotifications }
 }
