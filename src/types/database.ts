@@ -55,10 +55,17 @@ export interface NoteWithAuthor extends Note {
   mutual_friend_name?: string
 }
 
+export interface PaymentEntry {
+  amount: number
+  date: string
+  label: string
+}
+
 // Notification data payload (stored in JSONB `data` column)
 export interface NotificationData {
   actor_id?: string
   actor_name?: string
+  actor_avatar_url?: string
   event_id?: string
   event_name?: string
   friend_name?: string

@@ -68,6 +68,7 @@ export type Database = {
       events: {
         Row: {
           city: string
+          contact_email: string | null
           created_at: string
           created_by: string | null
           department: string
@@ -79,12 +80,14 @@ export type Database = {
           name: string
           primary_tag: string
           registration_deadline: string | null
+          registration_note: string | null
           registration_url: string | null
           start_date: string
           tags: string[] | null
         }
         Insert: {
           city: string
+          contact_email?: string | null
           created_at?: string
           created_by?: string | null
           department: string
@@ -96,12 +99,14 @@ export type Database = {
           name: string
           primary_tag: string
           registration_deadline?: string | null
+          registration_note?: string | null
           registration_url?: string | null
           start_date: string
           tags?: string[] | null
         }
         Update: {
           city?: string
+          contact_email?: string | null
           created_at?: string
           created_by?: string | null
           department?: string
@@ -113,6 +118,7 @@ export type Database = {
           name?: string
           primary_tag?: string
           registration_deadline?: string | null
+          registration_note?: string | null
           registration_url?: string | null
           start_date?: string
           tags?: string[] | null
@@ -245,7 +251,9 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
+          payments: { amount: number; date: string; label: string }[] | null
           status: Database["public"]["Enums"]["participation_status"]
+          total_cost: number | null
           user_id: string
           visibility: Database["public"]["Enums"]["participation_visibility"]
         }
@@ -253,7 +261,9 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
+          payments?: { amount: number; date: string; label: string }[] | null
           status?: Database["public"]["Enums"]["participation_status"]
+          total_cost?: number | null
           user_id: string
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
@@ -261,7 +271,9 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
+          payments?: { amount: number; date: string; label: string }[] | null
           status?: Database["public"]["Enums"]["participation_status"]
+          total_cost?: number | null
           user_id?: string
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
@@ -490,7 +502,8 @@ export type Database = {
         | "event_updated"
         | "event_image_added"
         | "event_info_added"
-      participation_status: "interesse" | "inscrit" | "confirme"
+        | "new_exposant"
+      participation_status: "interesse" | "en_cours" | "inscrit"
       participation_visibility: "prive" | "amis" | "public"
       user_plan: "free" | "pro"
       user_sex: "homme" | "femme" | "indefini"
@@ -632,8 +645,9 @@ export const Constants = {
         "event_updated",
         "event_image_added",
         "event_info_added",
+        "new_exposant",
       ],
-      participation_status: ["interesse", "inscrit", "confirme"],
+      participation_status: ["interesse", "en_cours", "inscrit"],
       participation_visibility: ["prive", "amis", "public"],
       user_plan: ["free", "pro"],
       user_sex: ["homme", "femme", "indefini"],

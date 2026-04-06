@@ -14,7 +14,7 @@ import { EventReportForm } from '@/components/reports/EventReportForm'
 import { Button } from '@/components/ui/button'
 import {
   Calendar, MapPin, ExternalLink, Clock, ArrowLeft,
-  Users, Check, Star, FileText, Pencil, X, Save, Image, Trash2
+  Users, Check, Star, FileText, Pencil, X, Save, Image, Trash2, Mail, StickyNote
 } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 
@@ -44,6 +44,8 @@ export function EventPage() {
     registration_deadline: '',
     registration_url: '',
     external_url: '',
+    contact_email: '',
+    registration_note: '',
   })
 
   // Fetch user's participation
@@ -101,6 +103,8 @@ export function EventPage() {
       registration_deadline: event.registration_deadline ?? '',
       registration_url: event.registration_url ?? '',
       external_url: event.external_url ?? '',
+      contact_email: event.contact_email ?? '',
+      registration_note: event.registration_note ?? '',
     })
     setEditImage(null)
     setRemoveImage(false)
@@ -139,6 +143,8 @@ export function EventPage() {
       registration_deadline: editForm.registration_deadline || null,
       registration_url: editForm.registration_url || null,
       external_url: editForm.external_url || null,
+      contact_email: editForm.contact_email || null,
+      registration_note: editForm.registration_note || null,
     }
     if (image_url !== undefined) {
       updates.image_url = image_url
@@ -185,10 +191,10 @@ export function EventPage() {
 
       {/* Header image */}
       {editing ? (
-        <div className="mb-6">
+        <div className="mb-6 flex justify-center">
           {editImage ? (
-            <div className="group relative">
-              <img src={URL.createObjectURL(editImage)} alt="" className="h-64 w-full rounded-xl object-cover" />
+            <div className="group relative" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
+              <img src={URL.createObjectURL(editImage)} alt="" className="h-full w-full rounded-xl object-cover" />
               <div className="absolute bottom-3 right-3 flex gap-2">
                 <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
                   <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
@@ -200,7 +206,7 @@ export function EventPage() {
               </div>
             </div>
           ) : removeImage ? (
-            <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/50">
+            <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/50" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
               <div className="flex flex-col items-center gap-3 text-muted-foreground">
                 <Trash2 className="h-6 w-6" />
                 <span className="text-sm">Image retirée</span>
@@ -208,8 +214,8 @@ export function EventPage() {
               </div>
             </div>
           ) : event.image_url ? (
-            <div className="group relative">
-              <img src={event.image_url} alt={event.name} className="h-64 w-full rounded-xl object-cover" />
+            <div className="group relative" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
+              <img src={event.image_url} alt={event.name} className="h-full w-full rounded-xl object-cover" />
               <div className="absolute bottom-3 right-3 flex gap-2">
                 <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
                   <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
@@ -221,7 +227,7 @@ export function EventPage() {
               </div>
             </div>
           ) : (
-            <label className="flex h-64 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-muted/50 text-muted-foreground transition-colors hover:border-primary/30 hover:bg-muted">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-muted/50 text-muted-foreground transition-colors hover:border-primary/30 hover:bg-muted" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
               <Image className="h-8 w-8" />
               <span className="text-sm">Ajouter une affiche</span>
               <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) setEditImage(e.target.files[0]) }} />
@@ -229,9 +235,11 @@ export function EventPage() {
           )}
         </div>
       ) : event.image_url ? (
-        <div className="relative mb-6 overflow-hidden rounded-2xl">
-          <img src={event.image_url} alt={event.name} className="h-64 w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        <div className="relative mb-6 flex justify-center">
+          <div className="relative overflow-hidden rounded-2xl" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
+            <img src={event.image_url} alt={event.name} className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          </div>
         </div>
       ) : null}
 
@@ -298,6 +306,16 @@ export function EventPage() {
           <div>
             <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
             <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Email de contact</label>
+              <input type="email" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="contact@exemple.fr" value={editForm.contact_email} onChange={e => setEditForm(f => ({ ...f, contact_email: e.target.value }))} />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-1 block">Note d'inscription</label>
+              <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: Envoyer dossier par mail" value={editForm.registration_note} onChange={e => setEditForm(f => ({ ...f, registration_note: e.target.value }))} />
+            </div>
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
@@ -369,7 +387,22 @@ export function EventPage() {
                 </Button>
               </a>
             )}
+            {event.contact_email && (
+              <a href={`mailto:${event.contact_email}`}>
+                <Button variant="outline" size="sm">
+                  <Mail className="mr-2 h-4 w-4" />
+                  {event.contact_email}
+                </Button>
+              </a>
+            )}
           </div>
+
+          {event.registration_note && (
+            <div className="mt-3 flex items-start gap-2 rounded-lg bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
+              <StickyNote className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{event.registration_note}</span>
+            </div>
+          )}
         </div>
       )}
 
@@ -382,8 +415,8 @@ export function EventPage() {
                 <Check className="h-5 w-5 text-green-500" />
                 <span className="font-medium">
                   {participation.status === 'interesse' && 'Intéressé'}
+                  {participation.status === 'en_cours' && 'En cours'}
                   {participation.status === 'inscrit' && 'Inscrit'}
-                  {participation.status === 'confirme' && 'Confirmé'}
                 </span>
                 <span className="text-xs text-muted-foreground">
                   ({participation.visibility === 'prive' ? 'Privé' : participation.visibility === 'amis' ? 'Amis' : 'Public'})
@@ -396,8 +429,8 @@ export function EventPage() {
               <p className="mb-3 text-sm font-medium">Tu y vas ?</p>
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => handleJoin('interesse', 'amis')}>Intéressé</Button>
-                <Button size="sm" variant="outline" onClick={() => handleJoin('inscrit', 'amis')}>Inscrit</Button>
-                <Button size="sm" onClick={() => handleJoin('confirme', 'amis')}>Confirmé</Button>
+                <Button size="sm" variant="outline" onClick={() => handleJoin('en_cours', 'amis')}>En cours</Button>
+                <Button size="sm" onClick={() => handleJoin('inscrit', 'amis')}>Inscrit</Button>
               </div>
             </div>
           )}
