@@ -106,3 +106,41 @@ export async function removeParticipation(id: string) {
     .eq('id', id)
   return { error }
 }
+
+export function useFriendsOnEvent(eventId: string | undefined) {
+  const { user } = useAuth()
+  const [friends, setFriends] = useState<{ id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null; status: string }[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user || !eventId) { setLoading(false); return }
+    const resolvedEventId = eventId
+
+    async function fetch() {
+      const { data: friendIds } = await supabase.rpc('get_friend_ids', { p_user_id: user!.id })
+      if (!friendIds || (friendIds as string[]).length === 0) {
+        setFriends([])
+        setLoading(false)
+        return
+      }
+
+      const { data } = await supabase
+        .from('participations')
+        .select('status, profiles(id, display_name, brand_name, avatar_url, public_slug)')
+        .eq('event_id', resolvedEventId)
+        .in('user_id', friendIds as string[])
+
+      const result = (data ?? []).map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null } }) => ({
+        ...p.profiles,
+        status: p.status,
+      }))
+
+      setFriends(result)
+      setLoading(false)
+    }
+
+    fetch()
+  }, [user, eventId])
+
+  return { friends, loading }
+}
