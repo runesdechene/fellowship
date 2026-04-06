@@ -1,21 +1,2 @@
--- 1. Add new enum value
+-- 1. Add new enum value (must be its own transaction — cannot use in same tx)
 ALTER TYPE participation_status ADD VALUE IF NOT EXISTS 'en_cours';
-
--- 2. Migrate existing 'confirme' to 'inscrit'
-UPDATE participations SET status = 'inscrit' WHERE status = 'confirme';
-
--- 3. Add payment tracking columns
-ALTER TABLE participations ADD COLUMN IF NOT EXISTS total_cost NUMERIC;
-ALTER TABLE participations ADD COLUMN IF NOT EXISTS payments JSONB DEFAULT '[]';
-
--- 4. Update RLS
-DROP POLICY IF EXISTS "participations_select" ON participations;
-
-CREATE POLICY "participations_select" ON participations
-  FOR SELECT TO authenticated USING (
-    user_id = auth.uid()
-    OR status = 'inscrit'
-    OR (status IN ('interesse', 'en_cours') AND are_friends(auth.uid(), user_id))
-    OR visibility = 'public'
-    OR (visibility = 'amis' AND are_friends(auth.uid(), user_id))
-  );

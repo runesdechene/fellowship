@@ -183,8 +183,8 @@ h1, h2, h3, .font-display {
 
 .fab-button {
   position: fixed;
-  bottom: 60px;
-  right: 60px;
+  bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  right: 20px;
   z-index: 40;
   display: flex;
   width: 66px;

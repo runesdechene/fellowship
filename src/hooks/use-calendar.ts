@@ -55,6 +55,11 @@ export function useCalendarYear(participations: ParticipationWithEvent[], year: 
       }
     }
 
+    // Sort events chronologically within each month
+    for (const m of months) {
+      m.events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    }
+
     return months
   }, [participations, year])
 }

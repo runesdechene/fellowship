@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, X, Calendar, MapPin, User } from 'lucide-react'
+import { Search, X, Calendar, MapPin, User, Bell } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
+import { useNotifications } from '@/hooks/use-notifications'
+import { useFollowingIds } from '@/hooks/use-following-ids'
+import { NotificationItem } from '@/components/notifications/NotificationItem'
 import './SearchBar.css'
 
 interface SearchEvent {
@@ -25,12 +28,16 @@ interface SearchProfile {
 
 export function SearchBar() {
   const { profile } = useAuth()
+  const { personalNotifs, personalUnread, markAsRead, markAllAsRead } = useNotifications()
+  const followingIds = useFollowingIds()
   const [query, setQuery] = useState('')
   const [events, setEvents] = useState<SearchEvent[]>([])
   const [profiles, setProfiles] = useState<SearchProfile[]>([])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
+  const [bellOpen, setBellOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const bellRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   // Close on click outside
@@ -38,6 +45,9 @@ export function SearchBar() {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false)
+      }
+      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
+        setBellOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -120,6 +130,62 @@ export function SearchBar() {
           <span className="search-bar-shortcut">⌘K</span>
         )}
       </div>
+
+      {/* Notification bell */}
+      {profile && (
+        <div className="notif-bell-wrapper" ref={bellRef}>
+          <button
+            className="notif-bell-btn"
+            onClick={() => setBellOpen(!bellOpen)}
+          >
+            <Bell strokeWidth={1.5} />
+            {personalUnread > 0 && (
+              <span className="notif-bell-badge">
+                {personalUnread > 9 ? '9+' : personalUnread}
+              </span>
+            )}
+          </button>
+
+          {bellOpen && (
+            <div className="notif-dropdown">
+              <div className="notif-dropdown-header">
+                <span className="notif-dropdown-title">Notifications</span>
+                {personalUnread > 0 && (
+                  <button onClick={markAllAsRead} className="notif-dropdown-mark-all">
+                    Tout lire
+                  </button>
+                )}
+              </div>
+              {personalNotifs.length === 0 ? (
+                <p className="notif-dropdown-empty">Aucune notification</p>
+              ) : (
+                <div className="notif-dropdown-list">
+                  {personalNotifs.slice(0, 8).map(n => {
+                    const data = (n.data ?? {}) as Record<string, unknown>
+                    const actorId = typeof data.actor_id === 'string' ? data.actor_id : undefined
+                    return (
+                      <NotificationItem
+                        key={n.id}
+                        notification={n}
+                        isFriend={!!actorId && followingIds.has(actorId)}
+                        onRead={markAsRead}
+                        compact
+                      />
+                    )
+                  })}
+                </div>
+              )}
+              <Link
+                to="/notifications"
+                className="notif-dropdown-see-all"
+                onClick={() => setBellOpen(false)}
+              >
+                Voir toutes les notifications →
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Profile avatar */}
       {profile && (

@@ -6,6 +6,8 @@
   background: hsl(var(--card));
   transition: width 0.3s ease-in-out;
   width: 288px; /* w-72 */
+  height: 100vh;
+  overflow: hidden;
   border-right: 1px solid rgba(0,0,0,0.07);
   box-shadow: 1px 0 40px 10px rgba(0,0,0,0.02);
   border-top-right-radius: 20px;
@@ -122,9 +124,11 @@
 /* ── Activity section ──────────────────────────────────────────────── */
 
 .sidebar-activity-section {
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: auto;
   padding: 8px;
+  overflow-y: auto;
+  flex-shrink: 1;
+  min-height: 0;
 }
 
 /* ── Expand button ─────────────────────────────────────────────────── */

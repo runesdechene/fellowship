@@ -34,6 +34,8 @@ export function EventForm({ onClose }: EventFormProps) {
     registration_deadline: '',
     registration_url: '',
     external_url: '',
+    contact_email: '',
+    registration_note: '',
     primary_tag: '',
     image: null as File | null,
   })
@@ -91,6 +93,8 @@ export function EventForm({ onClose }: EventFormProps) {
         registration_deadline: form.registration_deadline || null,
         registration_url: form.registration_url || null,
         external_url: form.external_url || null,
+        contact_email: form.contact_email || null,
+        registration_note: form.registration_note || null,
         primary_tag: form.primary_tag,
         tags: secondaryTags,
         image_url: image_url ?? null,
@@ -260,6 +264,16 @@ export function EventForm({ onClose }: EventFormProps) {
       <div>
         <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web de l'événement</label>
         <input type="url" className={inputClass} placeholder="https://..." value={form.external_url} onChange={e => update('external_url', e.target.value)} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Email de contact</label>
+          <input type="email" className={inputClass} placeholder="contact@exemple.fr" value={form.contact_email} onChange={e => update('contact_email', e.target.value)} />
+        </div>
+        <div>
+          <label className="text-xs font-medium text-muted-foreground mb-1 block">Note d'inscription</label>
+          <input type="text" className={inputClass} placeholder="Ex: Envoyer dossier par mail" value={form.registration_note} onChange={e => update('registration_note', e.target.value)} />
+        </div>
       </div>
       <div>
         <label className="text-xs font-medium text-muted-foreground mb-1 block">Affiche</label>

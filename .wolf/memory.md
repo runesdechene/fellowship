@@ -3,6 +3,8 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 2026-04-06 | Task 4: Created PaymentTracker component (cost input, progress bar, payment list, add versement form). Refactored EventPage participation section: exposant gets status stepper (interesse/en_cours/inscrit) + PaymentTracker when inscrit; public gets simplified view. No confirme refs remain. | src/components/events/PaymentTracker.tsx, src/pages/EventPage.tsx | build passed, committed a3e0620 | ~250 tok |
+
 | 2026-04-05 | Harmonized page layout: replaced `p-4 sm:p-6 lg:p-8` with `page-padding` and `text-2xl font-bold` with `page-title` across Notifications, Following, Settings, EventPage. Explorer + Calendar left as-is (own CSS systems). Build passed, committed b00918a. | src/pages/ | ~120 tok |
 
 | 2026-04-05 | Task 2: Created ProfileHeader component — ambient gradient header (5 warm palettes, hash-based selection), banner_url support with overlay, avatar with glow, action buttons (owner: Settings + QR / visitor: FollowButton) | src/components/profile/ProfileHeader.tsx | build passed, committed 0589f14 | ~520 tok |
@@ -1208,3 +1210,133 @@
 | 20:39 | Edited src/components/events/SlideRow.css | inline fix | ~11 |
 | 20:40 | Session end: 440 writes across 93 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 79 reads | ~277588 tok |
 | 20:41 | Edited src/changelog.ts | expanded (+24 lines) | ~326 |
+| 20:41 | Session end: 441 writes across 93 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 80 reads | ~278298 tok |
+| 20:46 | Created supabase/migrations/20260405160000_notification_triggers.sql | — | ~1136 |
+| 20:47 | Session end: 442 writes across 94 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 80 reads | ~279515 tok |
+| 20:50 | Session end: 442 writes across 94 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 80 reads | ~279515 tok |
+| 20:51 | Edited src/pages/PublicProfile.tsx | modified if() | ~59 |
+| 20:52 | Session end: 443 writes across 94 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 80 reads | ~280445 tok |
+| 20:56 | Created supabase/migrations/20260405170000_fix_participations_rls.sql | — | ~120 |
+| 20:56 | Edited src/pages/PublicProfile.tsx | 2→2 lines | ~42 |
+| 20:56 | Session end: 445 writes across 95 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 81 reads | ~281688 tok |
+| 20:59 | Edited src/pages/PublicProfile.tsx | 2→2 lines | ~35 |
+| 21:00 | Edited src/pages/PublicProfile.tsx | CSS: RLS | ~54 |
+| 21:00 | Created supabase/migrations/20260405180000_fix_participations_rls_v2.sql | — | ~160 |
+| 21:01 | Session end: 448 writes across 96 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 81 reads | ~281967 tok |
+| 21:05 | Edited src/pages/Login.tsx | — | ~0 |
+| 21:05 | Edited src/pages/Login.tsx | inline fix | ~12 |
+| 21:05 | Edited src/pages/Login.tsx | removed 28 lines | ~23 |
+| 21:06 | Created src/pages/Onboarding.tsx | — | ~2050 |
+| 21:06 | Session end: 452 writes across 96 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 81 reads | ~284350 tok |
+| 21:07 | Session end: 452 writes across 96 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 81 reads | ~284350 tok |
+| 21:08 | Session end: 452 writes across 96 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 82 reads | ~284468 tok |
+| 21:09 | Session end: 452 writes across 96 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 82 reads | ~284459 tok |
+| 21:10 | Edited src/lib/auth.tsx | CSS: scope | ~31 |
+| 21:11 | Session end: 453 writes across 97 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 82 reads | ~284490 tok |
+| 21:13 | Session end: 453 writes across 97 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 82 reads | ~284490 tok |
+| 21:15 | Session end: 453 writes across 97 files (notif-placement.html, notif-friends-style.html, waiting.html, 2026-04-05-notifications-redesign.md, 20260405130000_add_notification_types.sql) | 82 reads | ~284490 tok |
+
+## Session: 2026-04-05 21:30
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-04-06 12:47
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 13:06 | Edited src/components/layout/AppLayout.tsx | 4→3 lines | ~37 |
+| 13:06 | Edited src/index.css | 4→4 lines | ~30 |
+| 13:06 | Edited src/hooks/use-calendar.ts | modified for() | ~61 |
+| 13:07 | Edited src/components/profile/ProfileHeader.tsx | 2→2 lines | ~27 |
+| 13:07 | Edited src/components/profile/ProfileHeader.tsx | CSS: website, https | ~135 |
+| 13:07 | Edited src/pages/Profile.css | expanded (+16 lines) | ~102 |
+| 13:07 | Edited src/components/notifications/NotificationItem.tsx | 2→2 lines | ~46 |
+| 13:07 | Edited src/components/notifications/NotificationItem.tsx | expanded (+16 lines) | ~656 |
+| 13:08 | Edited src/components/notifications/NotificationItem.tsx | CSS: e | ~613 |
+| 13:08 | Edited src/components/notifications/NotificationItem.tsx | "/profil/${actorId}" → "/@${actorId}" | ~8 |
+| 13:08 | Edited src/pages/PublicProfile.tsx | added 1 condition(s) | ~171 |
+| 13:08 | Edited src/pages/PublicProfile.tsx | 3→3 lines | ~28 |
+| 13:08 | Edited src/pages/PublicProfile.tsx | 13→12 lines | ~185 |
+| 13:09 | Edited src/pages/PublicProfile.tsx | 5→6 lines | ~92 |
+| 13:09 | Edited src/pages/PublicProfile.tsx | added error handling | ~273 |
+| 13:09 | Edited src/pages/PublicProfile.tsx | 13→12 lines | ~165 |
+| 13:09 | Edited src/pages/PublicProfile.tsx | 6→6 lines | ~104 |
+| 13:09 | Edited src/pages/PublicProfile.tsx | 3→2 lines | ~10 |
+| 13:10 | Created supabase/migrations/20260406100000_add_event_contact_fields.sql | — | ~59 |
+| 13:10 | Created supabase/migrations/20260406100001_notify_new_exposant.sql | — | ~315 |
+| 13:10 | Edited src/types/supabase.ts | expanded (+6 lines) | ~504 |
+| 13:10 | Edited src/types/supabase.ts | 3→4 lines | ~32 |
+| 13:10 | Edited src/types/supabase.ts | 3→4 lines | ~26 |
+| 13:11 | Edited src/components/notifications/NotificationItem.tsx | CSS: new_exposant | ~140 |
+| 13:11 | Edited src/components/events/EventForm.tsx | CSS: contact_email, registration_note | ~45 |
+| 13:11 | Edited src/components/events/EventForm.tsx | CSS: contact_email, registration_note | ~62 |
+| 13:11 | Edited src/components/events/EventForm.tsx | CSS: sm, Ex | ~288 |
+| 13:11 | Edited src/pages/EventPage.tsx | 4→4 lines | ~47 |
+| 13:11 | Edited src/pages/EventPage.tsx | CSS: contact_email, registration_note | ~30 |
+| 13:11 | Edited src/pages/EventPage.tsx | CSS: contact_email, registration_note | ~60 |
+| 13:11 | Edited src/pages/EventPage.tsx | CSS: contact_email, registration_note | ~66 |
+| 13:11 | Edited src/pages/EventPage.tsx | expanded (+10 lines) | ~423 |
+| 13:12 | Edited src/pages/EventPage.tsx | CSS: mailto | ~276 |
+| 13:12 | Edited src/pages/EventPage.tsx | CSS: aspectRatio, maxHeight | ~88 |
+| 13:12 | Edited src/pages/EventPage.tsx | CSS: aspectRatio, maxHeight | ~58 |
+| 13:12 | Edited src/pages/EventPage.tsx | CSS: aspectRatio, maxHeight | ~69 |
+| 13:12 | Edited src/pages/EventPage.tsx | CSS: aspectRatio, maxHeight | ~86 |
+| 13:13 | Edited src/pages/EventPage.tsx | CSS: aspectRatio, maxHeight | ~128 |
+| 13:13 | Session end: 38 writes across 12 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 20 reads | ~40480 tok |
+| 13:19 | Session end: 38 writes across 12 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 20 reads | ~40480 tok |
+| 13:22 | Session end: 38 writes across 12 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 27 reads | ~46872 tok |
+| 13:25 | Session end: 38 writes across 12 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 27 reads | ~46872 tok |
+| 13:26 | Edited src/hooks/use-notifications.ts | modified useNotifications() | ~165 |
+| 13:26 | Edited src/hooks/use-notifications.ts | 2→6 lines | ~136 |
+| 13:26 | Edited src/components/notifications/SidebarActivity.tsx | modified SidebarActivity() | ~477 |
+| 13:27 | Created src/components/layout/Sidebar.tsx | — | ~774 |
+| 13:27 | Edited src/components/layout/Sidebar.css | CSS: height, overflow | ~100 |
+| 13:27 | Edited src/components/layout/Sidebar.css | CSS: overflow-y, flex-shrink, min-height | ~35 |
+| 13:27 | Edited src/components/layout/SearchBar.tsx | added 3 import(s) | ~134 |
+| 13:27 | Edited src/components/layout/SearchBar.tsx | modified SearchBar() | ~188 |
+| 13:27 | Edited src/components/layout/SearchBar.tsx | added 1 condition(s) | ~127 |
+| 13:28 | Edited src/components/layout/SearchBar.tsx | CSS: actor_id | ~673 |
+| 13:28 | Edited src/components/layout/SearchBar.css | expanded (+131 lines) | ~765 |
+| 13:28 | Edited src/components/notifications/NotificationItem.tsx | added 3 import(s) | ~101 |
+| 13:29 | Edited src/components/notifications/NotificationItem.tsx | CSS: follower_id, following_id | ~914 |
+| 13:29 | Created src/pages/Notifications.tsx | — | ~1014 |
+| 13:30 | Session end: 52 writes across 19 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 30 reads | ~55087 tok |
+| 13:53 | Edited src/index.css | modified media() | ~56 |
+| 13:53 | Session end: 53 writes across 19 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~60003 tok |
+| 13:53 | Session end: 53 writes across 19 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~60003 tok |
+| 13:53 | Edited src/index.css | modified media() | ~37 |
+| 13:53 | Edited src/components/events/SlideRow.css | expanded (+8 lines) | ~151 |
+| 13:54 | Session end: 55 writes across 20 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~60191 tok |
+| 13:55 | Edited src/components/events/SlideRow.css | CSS: padding, scroll-padding-inline | ~109 |
+| 13:55 | Session end: 56 writes across 20 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~60300 tok |
+| 14:00 | Session end: 56 writes across 20 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~60638 tok |
+| 14:01 | Created ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/feedback_avatar_means_photo.md | — | ~140 |
+| 14:01 | Edited src/types/database.ts | 8→9 lines | ~57 |
+| 14:02 | Created supabase/migrations/20260406110000_add_avatar_to_notifications.sql | — | ~1179 |
+| 14:02 | Edited src/components/notifications/NotificationItem.tsx | added 1 condition(s) | ~200 |
+| 14:02 | Edited src/components/notifications/NotificationItem.tsx | 3→3 lines | ~31 |
+| 14:02 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:05 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:07 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:12 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:17 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:21 | Session end: 61 writes across 23 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 36 reads | ~62340 tok |
+| 14:25 | Created docs/superpowers/plans/2026-04-06-participation-refonte.md | — | ~5405 |
+| 14:25 | Session end: 62 writes across 24 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 41 reads | ~73264 tok |
+| 14:28 | Created supabase/migrations/20260406120000_participation_refonte.sql | — | ~217 |
+| 14:28 | Edited src/types/supabase.ts | expanded (+6 lines) | ~346 |
+| 14:28 | Edited src/types/supabase.ts | inline fix | ~19 |
+| 14:28 | Edited src/types/supabase.ts | inline fix | ~19 |
+| 14:28 | Edited src/types/database.ts | expanded (+6 lines) | ~41 |
+| 14:28 | Edited src/pages/EventPage.tsx | 3→3 lines | ~60 |
+| 14:28 | Edited src/pages/EventPage.tsx | 3→3 lines | ~95 |
+| 14:29 | Created supabase/migrations/20260406120001_participant_notification_triggers.sql | — | ~458 |
+| 14:30 | Edited src/hooks/use-notifications.ts | 16→16 lines | ~98 |
+| 14:31 | Created src/components/events/PaymentTracker.tsx | — | ~1314 |
+| 14:31 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~49 |
+| 14:31 | Edited src/pages/EventPage.tsx | added 1 condition(s) | ~1092 |
+| 14:33 | Edited src/components/calendar/CalendarMonth.tsx | CSS: en_cours | ~103 |
+| 14:33 | Edited src/pages/PublicProfile.tsx | inline fix | ~21 |
+| 14:34 | Created supabase/migrations/20260406120000_participation_refonte.sql | — | ~40 |
+| 14:34 | Created supabase/migrations/20260406120000b_participation_refonte_rls.sql | — | ~210 |

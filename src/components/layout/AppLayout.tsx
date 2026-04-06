@@ -34,7 +34,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
       {showCreate && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-          onClick={() => setShowCreate(false)}
         >
           <div
             className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-3xl bg-card p-6"

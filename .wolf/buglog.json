@@ -3280,6 +3280,342 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-04-05T18:39:49.777Z"
+    },
+    {
+      "id": "bug-206",
+      "timestamp": "2026-04-05T18:56:27.201Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/PublicProfile.tsx",
+      "root_cause": "Had 'inscrit'",
+      "fix": "Changed to 'interesse'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-05T18:59:05.964Z"
+    },
+    {
+      "id": "bug-207",
+      "timestamp": "2026-04-06T11:06:03.529Z",
+      "error_message": "CSS fix: bottom, right",
+      "file": "src/index.css",
+      "root_cause": "bottom: 60px → calc(60px + env(safe-area-inset-bottom, 0px)); right: 60px → 20px",
+      "fix": "Changed bottom: 60px → calc(60px + env(safe-area-inset-bottom, 0px)); right: 60px → 20px",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:06:03.529Z"
+    },
+    {
+      "id": "bug-208",
+      "timestamp": "2026-04-06T11:07:07.623Z",
+      "error_message": "Type error",
+      "file": "src/components/profile/ProfileHeader.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:07:07.623Z"
+    },
+    {
+      "id": "bug-209",
+      "timestamp": "2026-04-06T11:07:51.374Z",
+      "error_message": "CSS fix: TYPE_CONFIG",
+      "file": "src/components/notifications/NotificationItem.tsx",
+      "root_cause": "TYPE_CONFIG: Record<string, { icon: typeof Users → Record<string, TypeConfigEntry> = {",
+      "fix": "Changed TYPE_CONFIG: Record<string, { icon: typeof Users → Record<string, TypeConfigEntry> = {",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:07:51.374Z"
+    },
+    {
+      "id": "bug-210",
+      "timestamp": "2026-04-06T11:08:10.320Z",
+      "error_message": "Missing guard clause",
+      "file": "src/components/notifications/NotificationItem.tsx",
+      "root_cause": "No early return/throw for edge case: !actorId",
+      "fix": "Added guard clause: if (!actorId)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:08:10.320Z"
+    },
+    {
+      "id": "bug-211",
+      "timestamp": "2026-04-06T11:08:26.580Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/notifications/NotificationItem.tsx",
+      "root_cause": "Had `/profil/${actorId}`",
+      "fix": "Changed to `/@${actorId}`",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:08:26.580Z"
+    },
+    {
+      "id": "bug-212",
+      "timestamp": "2026-04-06T11:08:33.100Z",
+      "error_message": "CSS fix: data",
+      "file": "src/pages/PublicProfile.tsx",
+      "root_cause": "data: profileData, error → byId",
+      "fix": "Changed data: profileData, error → byId",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:08:33.100Z"
+    },
+    {
+      "id": "bug-213",
+      "timestamp": "2026-04-06T11:09:12.794Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "src/pages/PublicProfile.tsx",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:09:12.794Z"
+    },
+    {
+      "id": "bug-214",
+      "timestamp": "2026-04-06T11:11:59.634Z",
+      "error_message": "CSS fix: focus",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "focus: outline-none focus:ring-2 focus:ring-ring\" placeholder=\"https://...\" value={editForm.external_url → outline-none focus:ring-2 focus:ring-ring\" placeholder=\"Ex: Envoyer dossier par mail\" value={editForm.registration_note",
+      "fix": "Changed focus: outline-none focus:ring-2 focus:ring-ring\" placeholder=\"https://...\" value={editForm.external_url → outline-none focus:ring-2 focus:ring-ring\" placeholder=\"Ex: Envoyer dossier par mail\" value={editForm.registration_note",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:11:59.634Z"
+    },
+    {
+      "id": "bug-215",
+      "timestamp": "2026-04-06T11:12:41.492Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 5→5 lines (3 removed) | Also: <div className=\"relative mb-6 overflow-hidden roun; <img src={event.image_url} alt={event.name} classN",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-06T11:13:05.743Z"
+    },
+    {
+      "id": "bug-216",
+      "timestamp": "2026-04-06T11:12:48.348Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "Had \"flex h-64 items-center justify-center rounded-xl ",
+      "fix": "Changed to \"flex items-center justify-center rounded-xl borde",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-04-06T11:12:58.058Z"
+    },
+    {
+      "id": "bug-217",
+      "timestamp": "2026-04-06T11:26:28.742Z",
+      "error_message": "Wrong return value",
+      "file": "src/hooks/use-notifications.ts",
+      "root_cause": "Was returning: { notifications, unreadCount, loading, markAsRead,",
+      "fix": "Now returns: { notifications, activities, personalNotifs, perso",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:26:28.742Z"
+    },
+    {
+      "id": "bug-218",
+      "timestamp": "2026-04-06T11:27:17.292Z",
+      "error_message": "CSS fix: margin-top",
+      "file": "src/components/layout/Sidebar.css",
+      "root_cause": "margin-top: 8px → auto",
+      "fix": "Changed margin-top: 8px → auto",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:27:17.292Z"
+    },
+    {
+      "id": "bug-219",
+      "timestamp": "2026-04-06T11:28:04.886Z",
+      "error_message": "Type error",
+      "file": "src/components/layout/SearchBar.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:28:04.886Z"
+    },
+    {
+      "id": "bug-220",
+      "timestamp": "2026-04-06T11:29:16.037Z",
+      "error_message": "Missing await",
+      "file": "src/components/notifications/NotificationItem.tsx",
+      "root_cause": "Async call without await — returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T11:29:16.037Z"
+    },
+    {
+      "id": "bug-221",
+      "timestamp": "2026-04-06T11:53:01.885Z",
+      "error_message": "CSS fix: --page-padding",
+      "file": "src/index.css",
+      "root_cause": "--page-padding: 40px → 48px",
+      "fix": "Changed --page-padding: 40px → 48px",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-06T11:53:44.967Z"
+    },
+    {
+      "id": "bug-222",
+      "timestamp": "2026-04-06T11:53:53.671Z",
+      "error_message": "CSS fix: slide-row-track",
+      "file": "src/components/events/SlideRow.css",
+      "root_cause": "slide-row-track: :-webkit-scrollbar { → :after {",
+      "fix": "Changed slide-row-track: :-webkit-scrollbar { → :after {",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-06T11:55:31.616Z"
+    },
+    {
+      "id": "bug-223",
+      "timestamp": "2026-04-06T12:28:19.775Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/types/supabase.ts",
+      "root_cause": "Had \"inscrit\"",
+      "fix": "Changed to \"en_cours\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-06T12:28:23.119Z"
+    },
+    {
+      "id": "bug-224",
+      "timestamp": "2026-04-06T12:28:32.160Z",
+      "error_message": "Type error",
+      "file": "src/types/database.ts",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T12:28:32.160Z"
+    },
+    {
+      "id": "bug-225",
+      "timestamp": "2026-04-06T12:28:50.406Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "Had 'inscrit'",
+      "fix": "Changed to 'en_cours'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-04-06T12:28:54.560Z"
+    },
+    {
+      "id": "bug-226",
+      "timestamp": "2026-04-06T12:31:58.455Z",
+      "error_message": "Missing await",
+      "file": "src/pages/EventPage.tsx",
+      "root_cause": "Async call without await — returned Promise instead of value",
+      "fix": "Added await to async call",
+      "tags": [
+        "auto-detected",
+        "async-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-04-06T12:31:58.455Z"
     }
   ]
 }

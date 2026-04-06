@@ -1,4 +1,5 @@
-import { Bell } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Activity } from 'lucide-react'
 import { useNotifications } from '@/hooks/use-notifications'
 import { useFollowingIds } from '@/hooks/use-following-ids'
 import { NotificationItem } from './NotificationItem'
@@ -6,37 +7,26 @@ import './SidebarActivity.css'
 
 interface SidebarActivityProps {
   collapsed: boolean
-  onShowAll: () => void
 }
 
-export function SidebarActivity({ collapsed, onShowAll }: SidebarActivityProps) {
-  const { notifications, unreadCount, markAsRead } = useNotifications()
+export function SidebarActivity({ collapsed }: SidebarActivityProps) {
+  const { activities, markAsRead } = useNotifications()
   const followingIds = useFollowingIds()
-  const recent = notifications.slice(0, 4)
+  const recent = activities.slice(0, 3)
 
   if (collapsed) {
     return (
-      <button onClick={onShowAll} className="activity-bell-btn">
-        <Bell strokeWidth={1.5} />
-        {unreadCount > 0 && (
-          <span className="activity-badge">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
-      </button>
+      <Link to="/notifications" className="activity-bell-btn">
+        <Activity strokeWidth={1.5} />
+      </Link>
     )
   }
 
   return (
     <div className="activity-container">
       <div className="activity-header">
-        <Bell strokeWidth={1.5} />
+        <Activity strokeWidth={1.5} />
         <span className="activity-label">Activité</span>
-        {unreadCount > 0 && (
-          <span className="activity-badge">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
       </div>
       {recent.length === 0 ? (
         <p className="activity-empty">Aucune activité récente</p>
@@ -57,9 +47,9 @@ export function SidebarActivity({ collapsed, onShowAll }: SidebarActivityProps) 
           })}
         </div>
       )}
-      <button onClick={onShowAll} className="activity-show-all">
+      <Link to="/notifications" className="activity-show-all">
         Voir tout →
-      </button>
+      </Link>
     </div>
   )
 }

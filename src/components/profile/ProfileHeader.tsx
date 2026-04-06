@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Settings, QrCode } from 'lucide-react'
+import { Settings, QrCode, Globe } from 'lucide-react'
 import { FollowButton } from '@/components/profile/FollowButton'
 import type { Profile } from '@/types/database'
 
@@ -54,6 +54,18 @@ export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps
       )}
 
       {profile.bio && <p className="profile-bio">{profile.bio}</p>}
+
+      {profile.website && (
+        <a
+          href={profile.website.startsWith('http') ? profile.website : `https://${profile.website}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="profile-website"
+        >
+          <Globe className="h-3.5 w-3.5" strokeWidth={1.5} />
+          {profile.website.replace(/^https?:\/\//, '')}
+        </a>
+      )}
 
     </div>
   )
