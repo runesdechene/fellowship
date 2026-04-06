@@ -130,7 +130,10 @@ export function EventDashboard({
 
   return (
     <div className="event-suivi">
-      <div className="event-suivi-header">Ma participation à cet événement</div>
+      <div className="event-suivi-header">
+        <span>Ma participation à cet événement</span>
+        <button className="event-suivi-unsubscribe" onClick={onLeave}>Se désinscrire</button>
+      </div>
       <div className="event-suivi-body">
 
       <div className="event-suivi-grid">
@@ -186,17 +189,14 @@ export function EventDashboard({
       )}
 
       {/* Actions */}
-      <div className="event-suivi-actions">
-        {isPast && (
+      {isPast && (
+        <div className="event-suivi-actions">
           <button className="event-suivi-action" onClick={onToggleReport}>
             <FileText style={{ width: 14, height: 14 }} strokeWidth={1.5} />
             {showReportForm ? 'Fermer le bilan' : 'Bilan post-événement'}
           </button>
-        )}
-        <button className="event-suivi-action destructive" onClick={onLeave}>
-          Se désinscrire
-        </button>
-      </div>
+        </div>
+      )}
       </div>
     </div>
   )
