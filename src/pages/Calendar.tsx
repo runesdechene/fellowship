@@ -175,10 +175,15 @@ export function CalendarPage() {
       <div className="calendar-mobile-bar">
           <button
             onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
-            className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
+            className={`calendar-friends-toggle ${showFriends ? 'active' : ''}`}
           >
-            <Users strokeWidth={1.5} />
-            <span>Afficher amis</span>
+            <span className="calendar-friends-label">
+              <Users strokeWidth={1.5} />
+              Afficher amis
+            </span>
+            <div className="calendar-switch-track">
+              <div className="calendar-switch-thumb" />
+            </div>
           </button>
           <div className="calendar-mobile-right">
             <button
