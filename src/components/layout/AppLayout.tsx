@@ -4,7 +4,7 @@ import { BottomBar } from './BottomBar'
 import { SearchBar } from './SearchBar'
 import { ChangelogModal } from './ChangelogModal'
 import { EventForm } from '@/components/events/EventForm'
-import { Plus, X } from 'lucide-react'
+import { X } from 'lucide-react'
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [showCreate, setShowCreate] = useState(false)
@@ -13,7 +13,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex h-screen bg-background">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <SearchBar />
+        <SearchBar onCreateEvent={() => setShowCreate(true)} />
         <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
           {children}
         </main>
@@ -21,14 +21,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <BottomBar />
 
       <ChangelogModal />
-
-      {/* FAB — global */}
-      <button
-        onClick={() => setShowCreate(true)}
-        className="fab-button"
-      >
-        <Plus className="h-6 w-6" strokeWidth={2} />
-      </button>
 
       {/* Create event modal */}
       {showCreate && (

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, X, Calendar, MapPin, User, Bell } from 'lucide-react'
+import { Search, X, Calendar, MapPin, User, Bell, Plus } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import { useNotifications } from '@/hooks/use-notifications'
@@ -27,7 +27,11 @@ interface SearchProfile {
   avatar_url: string | null
 }
 
-export function SearchBar() {
+interface SearchBarProps {
+  onCreateEvent?: () => void
+}
+
+export function SearchBar({ onCreateEvent }: SearchBarProps) {
   const { profile } = useAuth()
   const { personalNotifs, personalUnread, markAsRead, markAllAsRead } = useNotifications()
   const followingIds = useFollowingIds()
@@ -37,6 +41,7 @@ export function SearchBar() {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [bellOpen, setBellOpen] = useState(false)
+  const [searchExpanded, setSearchExpanded] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -112,7 +117,27 @@ export function SearchBar() {
   const displayName = profile?.brand_name ?? profile?.display_name ?? ''
 
   return (
-    <div className="search-bar-wrapper" ref={ref}>
+    <div className={`search-bar-wrapper ${searchExpanded ? 'search-expanded' : ''}`} ref={ref}>
+      {/* Mobile: search + add (left group) */}
+      <button
+        className="search-bar-toggle"
+        onClick={() => setSearchExpanded(true)}
+      >
+        <Search strokeWidth={1.5} />
+      </button>
+
+      {profile && onCreateEvent && (
+        <button className="search-bar-add-btn search-bar-add-mobile" onClick={onCreateEvent} title="Ajouter un événement">
+          <Plus strokeWidth={2} />
+        </button>
+      )}
+
+      {/* Mobile logo (centered) */}
+      <div className="search-bar-spacer">
+        <img src="/logo.png" alt="Fellowship" />
+      </div>
+
+      {/* Search bar (always visible on desktop, expanded on mobile) */}
       <div className="search-bar">
         <Search className="search-bar-icon" strokeWidth={1.5} />
         <input
@@ -126,10 +151,22 @@ export function SearchBar() {
           <button className="search-bar-clear" onClick={() => { setQuery(''); setOpen(false) }}>
             <X strokeWidth={1.5} />
           </button>
+        ) : searchExpanded ? (
+          <button className="search-bar-clear" onClick={() => { setSearchExpanded(false); setQuery(''); setOpen(false) }}>
+            <X strokeWidth={1.5} />
+          </button>
         ) : (
           <span className="search-bar-shortcut">⌘K</span>
         )}
       </div>
+
+      {/* Desktop: add event button (after search bar) */}
+      {profile && onCreateEvent && (
+        <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
+          <Plus strokeWidth={2} />
+          <span className="search-bar-add-label">Ajouter un événement</span>
+        </button>
+      )}
 
       {/* Notification bell */}
       {profile && (

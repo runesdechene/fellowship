@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { createEvent, searchSimilarEvents } from '@/hooks/use-events'
 import { supabase } from '@/lib/supabase'
+import { compressImage } from '@/lib/compress-image'
 import { Button } from '@/components/ui/button'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
 import { TagInput } from './TagInput'
@@ -67,11 +68,11 @@ export function EventForm({ onClose }: EventFormProps) {
     try {
       let image_url: string | undefined
       if (form.image) {
-        const ext = form.image.name.split('.').pop()
-        const path = `${crypto.randomUUID()}.${ext}`
+        const compressed = await compressImage(form.image)
+        const path = `${crypto.randomUUID()}.webp`
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('event-images')
-          .upload(path, form.image)
+          .upload(path, compressed, { contentType: 'image/webp' })
         if (uploadError) {
           console.error('Image upload failed:', uploadError)
           // Continue without image

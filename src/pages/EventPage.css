@@ -123,10 +123,11 @@
 
 .event-left-card {
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 14px;
   padding: 18px;
   margin-bottom: 16px;
+  box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02);
 }
 
 .event-left-card-label {
@@ -374,11 +375,13 @@
 /* ── Mon suivi (inline in right col) ──────────────────────────────── */
 
 .event-suivi {
-  background: hsl(36 50% 96%);
-  border: 1px solid hsl(30 25% 85%);
+  background: hsl(var(--card));
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 14px;
-  padding: 18px;
+  padding: 0;
   margin-bottom: 24px;
+  box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
 }
 
 .event-suivi-header {
@@ -386,12 +389,16 @@
   font-size: 14px;
   font-weight: 700;
   color: hsl(var(--primary));
-  padding-bottom: 12px;
-  margin-bottom: 14px;
-  border-bottom: 1px solid hsl(30 25% 85%);
+  padding: 14px 18px;
+  border-left: 3px solid hsl(var(--primary));
+  background: hsl(var(--primary) / 0.04);
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.event-suivi-body {
+  padding: 18px;
 }
 
 .event-suivi-grid {
@@ -563,10 +570,11 @@
 
 .event-section-card {
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 20px;
+  box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02);
 }
 
 .event-section-title {
@@ -597,49 +605,137 @@
 /* ── Mobile ───────────────────────────────────────────────────────── */
 
 @media (max-width: 767px) {
+  .event-page {
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+
+  /* Stack columns vertically, left column on top */
   .event-two-col {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Left column: full width, poster centered, cards below */
+  .event-col-left {
+    width: 100%;
+    display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .event-col-left {
-    width: 220px;
-    text-align: center;
+  .event-poster {
+    width: 100%;
+    aspect-ratio: auto;
+    max-height: 400px;
+    margin-bottom: 16px;
   }
 
-  .event-col-right {
+  .event-poster img {
     width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    object-position: center top;
   }
 
   .event-col-left-sticky {
     position: static;
+    width: 100%;
+  }
+
+  .event-left-card {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  /* Left cards: text left-aligned */
+  .event-left-card-label {
+    text-align: left;
+  }
+
+  .event-organizer-row {
+    justify-content: flex-start;
+  }
+
+  .event-friends-col {
+    align-items: stretch;
+  }
+
+  /* Right column: full width, all left-aligned */
+  .event-col-right {
+    width: 100%;
   }
 
   .event-tags {
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .event-title {
-    text-align: center;
+    font-size: 24px;
+    text-align: left;
   }
 
   .event-meta-list {
-    align-items: center;
+    align-items: stretch;
   }
 
+  .event-meta-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .event-meta-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .event-meta-primary {
+    font-size: 13px;
+  }
+
+  /* Suivi: steppers stack, full width */
   .event-suivi-grid {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .event-suivi-block {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .event-suivi-header {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+
+  .event-suivi-body {
+    padding: 14px;
+  }
+
+  .event-suivi-actions {
     flex-direction: column;
   }
 
+  /* Section cards */
+  .event-section-card {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .event-section-title {
+    font-size: 13px;
+  }
+
+  /* Notes + Avis stack */
   .event-notes-reviews {
     flex-direction: column;
   }
 
-  .event-friends-col {
-    align-items: center;
-  }
-
-  .event-page {
-    padding-bottom: 80px;
+  /* Topbar */
+  .event-topbar {
+    margin-bottom: 16px;
   }
 }

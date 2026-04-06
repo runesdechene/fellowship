@@ -82,21 +82,24 @@ export function EventDashboard({
   if (!participation) {
     return (
       <div className="event-suivi">
-        <div className="event-cta">
-          <p className="event-cta-title">Tu y vas ?</p>
-          <div className="event-cta-buttons">
-            {isExposant ? (
-              <>
-                <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
-                <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>En cours d'inscription</Button>
-                <Button size="sm" onClick={() => onJoin('inscrit', 'amis')}>Inscrit</Button>
-              </>
-            ) : (
-              <>
-                <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
-                <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>J'y vais !</Button>
-              </>
-            )}
+        <div className="event-suivi-header">Ma participation à cet événement</div>
+        <div className="event-suivi-body">
+          <div className="event-cta">
+            <p className="event-cta-title">Tu y vas ?</p>
+            <div className="event-cta-buttons">
+              {isExposant ? (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>En cours d'inscription</Button>
+                  <Button size="sm" onClick={() => onJoin('inscrit', 'amis')}>Inscrit</Button>
+                </>
+              ) : (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
+                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>J'y vais !</Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -107,15 +110,17 @@ export function EventDashboard({
   if (!isExposant) {
     return (
       <div className="event-suivi">
-        <div className="event-suivi-header">🔒 Mon suivi</div>
-        <div className="flex items-center gap-2 mb-3">
-          <span className="font-medium text-sm">
-            {participation.status === 'interesse' ? 'Intéressé' : "J'y vais !"}
-          </span>
+        <div className="event-suivi-header">Ma participation à cet événement</div>
+        <div className="event-suivi-body">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="font-medium text-sm">
+              {participation.status === 'interesse' ? 'Intéressé' : "J'y vais !"}
+            </span>
+          </div>
+          <button className="event-suivi-action destructive" onClick={onLeave}>
+            Retirer ma participation
+          </button>
         </div>
-        <button className="event-suivi-action destructive" onClick={onLeave}>
-          Retirer ma participation
-        </button>
       </div>
     )
   }
@@ -127,7 +132,8 @@ export function EventDashboard({
 
   return (
     <div className="event-suivi">
-      <div className="event-suivi-header">🔒 Mon suivi</div>
+      <div className="event-suivi-header">Ma participation à cet événement</div>
+      <div className="event-suivi-body">
 
       <div className="event-suivi-grid">
         {/* Participation stepper */}
@@ -194,6 +200,7 @@ export function EventDashboard({
         <button className="event-suivi-action destructive" onClick={onLeave}>
           Se désinscrire
         </button>
+      </div>
       </div>
     </div>
   )

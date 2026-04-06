@@ -7,6 +7,23 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.0',
+    date: '2026-04-06',
+    title: 'Fiche événement façon Lu.ma',
+    changes: [
+      'Fiche événement entièrement redessinée — layout 2 colonnes inspiré Lu.ma',
+      'Colonne gauche : affiche, ajouté par, liens, amis présents',
+      'Colonne droite : infos, suivi de participation, notes, avis, à propos',
+      'Meta-rows avec icônes carrées (date, lieu, deadline, participants)',
+      'Bloc "Ma participation" avec header cuivre et barre latérale',
+      'Bouton "Ajouter un événement" dans la barre de recherche (remplace le FAB)',
+      'Barre de recherche mobile — icône compacte avec logo Fellowship centré',
+      'Compression automatique des images en WebP (max 800px, ~100 KB)',
+      'Toutes les images existantes compressées (-85% en moyenne)',
+      'Mobile — poster pleine largeur, contenu aligné à gauche',
+    ],
+  },
+  {
     version: '0.4.1',
     date: '2026-04-06',
     title: 'Calendrier — amis cliquables',

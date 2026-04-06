@@ -16,6 +16,56 @@
   }
 }
 
+/* Mobile: toggle button (visible only on mobile when collapsed) */
+.search-bar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: hsl(var(--card));
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  color: rgba(61, 48, 40, 0.5);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.search-bar-toggle:hover {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.search-bar-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Hide toggle on desktop */
+@media (min-width: 768px) {
+  .search-bar-toggle {
+    display: none;
+  }
+}
+
+/* Hide full search bar on mobile (collapsed) */
+@media (max-width: 767px) {
+  .search-bar-wrapper:not(.search-expanded) .search-bar {
+    display: none;
+  }
+
+  .search-bar-wrapper.search-expanded .search-bar-toggle {
+    display: none;
+  }
+
+  .search-bar-wrapper.search-expanded .search-bar-add-btn,
+  .search-bar-wrapper.search-expanded .notif-bell-wrapper,
+  .search-bar-wrapper.search-expanded .search-bar-avatar {
+    display: none;
+  }
+}
+
 .search-bar {
   position: relative;
   flex: 1;
@@ -209,6 +259,99 @@
   font-family: var(--font-body);
   font-size: 13px;
   color: rgba(61, 48, 40, 0.25);
+}
+
+/* ── Mobile logo spacer (centered) ────────────────────────────────── */
+
+.search-bar-spacer {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .search-bar-wrapper:not(.search-expanded) .search-bar-spacer {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-bar-spacer img {
+    height: 28px;
+    width: auto;
+  }
+}
+
+/* ── Add event button ─────────────────────────────────────────────── */
+
+.search-bar-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(24 72% 48%), hsl(24 65% 38%));
+  color: white;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 12px hsl(24 72% 44% / 0.25);
+}
+
+.search-bar-add-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px hsl(24 72% 44% / 0.35);
+}
+
+.search-bar-add-btn:active {
+  transform: scale(0.97);
+}
+
+.search-bar-add-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.search-bar-add-label {
+  display: none;
+}
+
+/* Mobile: show only the mobile button, hide desktop one */
+.search-bar-add-desktop {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .search-bar-add-mobile {
+    display: flex;
+  }
+
+  .search-bar-wrapper.search-expanded .search-bar-add-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .search-bar-add-mobile {
+    display: none;
+  }
+
+  .search-bar-add-desktop {
+    display: flex;
+    width: auto;
+    padding: 0 14px;
+    border-radius: 20px;
+  }
+
+  .search-bar-add-label {
+    display: inline;
+  }
 }
 
 /* ── Notification bell ─────────────────────────────────────────────── */

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent, useEventCreator } from '@/hooks/use-events'
+import { compressImage } from '@/lib/compress-image'
 import { addParticipation, removeParticipation, useFriendsOnEvent } from '@/hooks/use-participations'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
@@ -157,11 +158,11 @@ export function EventPage() {
     let image_url: string | null | undefined = undefined
 
     if (editImage) {
-      const ext = editImage.name.split('.').pop()
-      const path = `${crypto.randomUUID()}.${ext}`
+      const compressed = await compressImage(editImage)
+      const path = `${crypto.randomUUID()}.webp`
       const { data: uploadData } = await supabase.storage
         .from('event-images')
-        .upload(path, editImage)
+        .upload(path, compressed, { contentType: 'image/webp' })
       if (uploadData) {
         const { data: urlData } = supabase.storage
           .from('event-images')
@@ -403,17 +404,17 @@ export function EventPage() {
               )}
 
               {/* Liens */}
-              {(event.registration_url || event.external_url || event.contact_email) && (
+              {(event.registration_url?.startsWith('http') || event.external_url?.startsWith('http') || event.contact_email) && (
                 <div className="event-left-card">
                   <div className="event-left-card-label">Liens</div>
                   <div className="event-links-list">
-                    {event.registration_url && (
+                    {event.registration_url?.startsWith('http') && (
                       <a href={event.registration_url} target="_blank" rel="noopener noreferrer" className="event-link-item primary">
                         <FileText strokeWidth={1.5} />
                         S'inscrire
                       </a>
                     )}
-                    {event.external_url && (
+                    {event.external_url?.startsWith('http') && (
                       <a href={event.external_url} target="_blank" rel="noopener noreferrer" className="event-link-item">
                         <ExternalLink strokeWidth={1.5} />
                         Site web
@@ -531,27 +532,6 @@ export function EventPage() {
 
             <div className="event-separator" />
 
-            {/* Notes + Avis */}
-            <div className="event-notes-reviews">
-              <div className="event-section-card">
-                <div className="event-section-title muted">📝 Notes partagées ({notes.length})</div>
-                <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
-                <NotesFeed notes={notes} onRefresh={refetchNotes} />
-              </div>
-              <div className="event-section-card">
-                <div className="event-section-title muted">⭐ Avis ({reviews.length})</div>
-                <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
-                {isPast && isExposant && (
-                  <>
-                    <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setShowReviewForm(!showReviewForm)}>
-                      {showReviewForm ? 'Fermer' : 'Donner mon avis'}
-                    </Button>
-                    {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
-                  </>
-                )}
-              </div>
-            </div>
-
             {/* À propos */}
             {event.description && (
               <div className="event-section-card">
@@ -559,6 +539,27 @@ export function EventPage() {
                 <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(61,48,40,0.7)', whiteSpace: 'pre-wrap', margin: 0 }}>{event.description}</p>
               </div>
             )}
+
+            {/* Notes partagées */}
+            <div className="event-section-card">
+              <div className="event-section-title muted">📝 Notes partagées ({notes.length})</div>
+              <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
+              <NotesFeed notes={notes} onRefresh={refetchNotes} />
+            </div>
+
+            {/* Avis */}
+            <div className="event-section-card">
+              <div className="event-section-title muted">⭐ Avis ({reviews.length})</div>
+              <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+              {isPast && isExposant && (
+                <>
+                  <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setShowReviewForm(!showReviewForm)}>
+                    {showReviewForm ? 'Fermer' : 'Donner mon avis'}
+                  </Button>
+                  {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
+                </>
+              )}
+            </div>
 
             {/* Report form */}
             {showReportForm && <EventReportForm eventId={event.id} />}
