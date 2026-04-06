@@ -122,12 +122,17 @@
 /* ── Left column cards ────────────────────────────────────────────── */
 
 .event-left-card {
-  background: hsl(var(--card));
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 14px;
-  padding: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 16px 0;
   margin-bottom: 16px;
-  box-shadow: 1px 0 40px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: none;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+}
+
+.event-left-card:last-child {
+  border-bottom: none;
 }
 
 .event-left-card-label {
