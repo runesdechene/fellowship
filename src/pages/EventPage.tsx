@@ -15,7 +15,7 @@ import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventDashboard } from '@/components/events/EventDashboard'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
 
@@ -66,6 +66,7 @@ export function EventPage() {
   const [friendCount, setFriendCount] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [showReportForm, setShowReportForm] = useState(false)
+  const [showNoteModal, setShowNoteModal] = useState(false)
   const [showParticipants, setShowParticipants] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editSaving, setEditSaving] = useState(false)
@@ -230,11 +231,18 @@ export function EventPage() {
             <ArrowLeft />
           </Link>
         )}
-        {isExposant && !editing && (
-          <button onClick={startEditing} className="event-edit-btn">
-            <Pencil className="h-4 w-4" strokeWidth={1.5} />
-          </button>
-        )}
+        <div style={{ display: 'flex', gap: 8 }}>
+          {isPast && isExposant && !editing && (
+            <button onClick={() => setShowReviewForm(!showReviewForm)} className="event-edit-btn" title="Donner mon avis">
+              <Star className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
+          {isExposant && !editing && (
+            <button onClick={startEditing} className="event-edit-btn" title="Modifier">
+              <Pencil className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
+        </div>
       </div>
 
       {editing ? (
@@ -531,37 +539,43 @@ export function EventPage() {
               onToggleReport={() => setShowReportForm(!showReportForm)}
               showReportForm={showReportForm}
             />
-
-            <div className="event-separator" />
-
             {/* À propos */}
             {event.description && (
               <div className="event-section-card">
-                <div className="event-section-title">🌍 À propos</div>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(61,48,40,0.7)', whiteSpace: 'pre-wrap', margin: 0 }}>{event.description}</p>
+                <div className="event-section-title">À propos de l'événement</div>
+                <p style={{ fontSize: 16, lineHeight: 1.7, color: 'rgba(61,48,40,1)', whiteSpace: 'pre-wrap', margin: 0 }}>{event.description}</p>
               </div>
             )}
 
-            {/* Notes partagées */}
+            {/* Notes communes */}
             <div className="event-section-card">
-              <div className="event-section-title muted">📝 Notes partagées ({notes.length})</div>
-              <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
-              <NotesFeed notes={notes} onRefresh={refetchNotes} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Notes communes ({notes.length})</div>
+                {isExposant && (
+                  <button
+                    onClick={() => setShowNoteModal(true)}
+                    className="event-edit-btn"
+                    title="Ajouter une note"
+                    style={{ width: 32, height: 32 }}
+                  >
+                    <MessageSquarePlus className="h-4 w-4" strokeWidth={1.5} />
+                  </button>
+                )}
+              </div>
+              {notes.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <NotesFeed notes={notes} onRefresh={refetchNotes} />
+                </div>
+              )}
             </div>
 
             {/* Avis */}
-            <div className="event-section-card">
-              <div className="event-section-title muted">⭐ Avis ({reviews.length})</div>
-              <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
-              {isPast && isExposant && (
-                <>
-                  <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => setShowReviewForm(!showReviewForm)}>
-                    {showReviewForm ? 'Fermer' : 'Donner mon avis'}
-                  </Button>
-                  {showReviewForm && <ReviewForm eventId={event.id} onReviewSubmitted={refetchReviews} />}
-                </>
-              )}
-            </div>
+            {(reviews.length > 0 || canSeeDetails) && (
+              <div className="event-section-card">
+                <div className="event-section-title muted">Avis ({reviews.length})</div>
+                <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+              </div>
+            )}
 
             {/* Report form */}
             {showReportForm && <EventReportForm eventId={event.id} />}
@@ -571,8 +585,37 @@ export function EventPage() {
       )}
 
       {showParticipants && (
-
         <ParticipantsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
+      )}
+
+      {/* Modal: Ajouter une note */}
+      {showNoteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowNoteModal(false)}>
+          <div className="w-full max-w-md rounded-2xl bg-card p-6" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700 }}>Ajouter une note</h2>
+              <button onClick={() => setShowNoteModal(false)} className="rounded-full p-2 text-muted-foreground hover:bg-muted">
+                <X className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            </div>
+            <NoteForm eventId={event.id} onNoteAdded={() => { refetchNotes(); setShowNoteModal(false) }} />
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Donner mon avis */}
+      {showReviewForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowReviewForm(false)}>
+          <div className="w-full max-w-md rounded-2xl bg-card p-6" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700 }}>Mon avis</h2>
+              <button onClick={() => setShowReviewForm(false)} className="rounded-full p-2 text-muted-foreground hover:bg-muted">
+                <X className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            </div>
+            <ReviewForm eventId={event.id} onReviewSubmitted={() => { refetchReviews(); setShowReviewForm(false) }} />
+          </div>
+        </div>
       )}
     </div>
   )
