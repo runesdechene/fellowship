@@ -502,6 +502,11 @@
   background: rgba(61, 48, 40, 0.1);
 }
 
+/* Participation stepper */
+.event-stepper-btn.pay-active.interesse { background: hsl(38 90% 50% / 0.15); color: hsl(38 80% 35%); }
+.event-stepper-btn.pay-active.en_cours { background: hsl(210 60% 50% / 0.12); color: hsl(210 60% 40%); }
+.event-stepper-btn.pay-active.inscrit { background: hsl(152 50% 38% / 0.15); color: hsl(152 50% 32%); }
+
 /* Payment stepper */
 .event-stepper-btn.pay-active.a_payer { background: hsl(0 65% 55% / 0.12); color: hsl(0 65% 45%); }
 .event-stepper-btn.pay-active.en_cours_paiement { background: hsl(38 90% 50% / 0.15); color: hsl(38 80% 35%); }

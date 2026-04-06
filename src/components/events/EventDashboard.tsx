@@ -126,8 +126,6 @@ export function EventDashboard({
   }
 
   // Exposant — full dashboard
-  const statusOrder = ['interesse', 'en_cours', 'inscrit']
-  const currentIdx = statusOrder.indexOf(participation.status)
   const currentPayment = (participation.payment_status as string) ?? 'a_payer'
 
   return (
@@ -140,16 +138,14 @@ export function EventDashboard({
         <div className="event-suivi-block">
           <div className="event-suivi-block-label">Participation</div>
           <div className="event-stepper">
-            {PARTICIPATION_STEPS.map((step, i) => (
+            {PARTICIPATION_STEPS.map((step) => (
               <button
                 key={step.key}
                 onClick={() => handleStatusChange(step.key)}
                 className={`event-stepper-btn ${
                   step.key === participation.status
-                    ? `active ${step.key}`
-                    : i < currentIdx
-                      ? 'passed'
-                      : 'inactive'
+                    ? `pay-active ${step.key}`
+                    : 'inactive'
                 }`}
               >
                 {step.label}
