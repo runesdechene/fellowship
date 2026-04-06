@@ -107,27 +107,38 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
             {/* Participants — below the card */}
             <div className="calendar-presence-row">
               {ev.isFriend ? (
-                /* Friend's event — show friend name + avatar, clickable */
+                /* Friend's event — show ALL friends who participate */
                 (() => {
-                  const fp = friendParticipations.find(f => f.event_id === ev.id)
-                  const name = ev.friendName ?? '?'
-                  const avatarUrl = fp?.profiles?.avatar_url
-                  const slug = fp?.profiles?.public_slug ?? fp?.user_id
-                  const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
+                  const fps = friendParticipations.filter(f => f.event_id === ev.id)
                   return (
-                    <Link to={`/@${slug}`} className="calendar-presence-friend-badge" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      {avatarUrl ? (
-                        <img src={avatarUrl} alt={name} className="calendar-presence-avatar-img" style={{ marginLeft: 0 }} />
-                      ) : (
-                        <div
-                          className="presence-avatar"
-                          style={{ background: `linear-gradient(135deg, ${from}, ${to})`, marginLeft: 0 }}
-                        >
-                          {name[0].toUpperCase()}
-                        </div>
-                      )}
-                      <span>{name}</span>
-                    </Link>
+                    <div className="calendar-presence-friends">
+                      <div className="presence-avatars">
+                        {fps.slice(0, 4).map((fp, i) => {
+                          const name = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? '?'
+                          const avatarUrl = fp.profiles?.avatar_url
+                          const slug = fp.profiles?.public_slug ?? fp.user_id
+                          const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
+                          return (
+                            <Link
+                              key={fp.id}
+                              to={`/@${slug}`}
+                              className="presence-avatar"
+                              style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 4 - i, overflow: 'hidden' }}
+                              title={name}
+                            >
+                              {avatarUrl ? (
+                                <img src={avatarUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              ) : (
+                                name[0].toUpperCase()
+                              )}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                      <span className="calendar-presence-friends-count">
+                        {fps.map(f => f.profiles?.brand_name ?? f.profiles?.display_name ?? '?').join(', ')}
+                      </span>
+                    </div>
                   )
                 })()
               ) : (
