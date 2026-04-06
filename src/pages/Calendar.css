@@ -73,66 +73,36 @@
   height: 22px;
 }
 
-/* Friends toggle — iOS-style switch */
-.calendar-friends-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: 12px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-}
-
-.calendar-friends-label {
-  font-size: 13px;
-  font-weight: 600;
-  font-family: var(--font-body);
-  color: rgba(61, 48, 40, 0.4);
+/* Filter buttons (Amis pro / Amis visiteurs) */
+.calendar-filter-btn {
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: color 0.2s;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: none;
+  background: hsl(var(--muted));
+  color: rgba(61, 48, 40, 0.4);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
-.calendar-friends-toggle.active .calendar-friends-label {
+.calendar-filter-btn:hover {
+  background: hsl(var(--muted) / 0.7);
+  color: rgba(61, 48, 40, 0.6);
+}
+
+.calendar-filter-btn.active {
+  background: hsl(var(--primary) / 0.12);
   color: hsl(var(--primary));
 }
 
-.calendar-friends-label svg {
-  width: 16px;
-  height: 16px;
-}
-
-.calendar-switch-track {
-  position: relative;
-  width: 44px;
-  height: 26px;
-  border-radius: 13px;
-  background: rgba(61, 48, 40, 0.15);
-  transition: background 0.25s ease;
-  flex-shrink: 0;
-}
-
-.calendar-friends-toggle.active .calendar-switch-track {
-  background: hsl(var(--primary));
-}
-
-.calendar-switch-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  transition: transform 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.calendar-friends-toggle.active .calendar-switch-thumb {
-  transform: translateX(18px);
+.calendar-filter-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 .calendar-today-btn {
@@ -199,31 +169,10 @@
     height: 18px;
   }
 
-  .calendar-mobile-friends {
+  .calendar-mobile-filters {
     display: flex;
     align-items: center;
-    gap: 5px;
-    height: 34px;
-    border-radius: 17px;
-    padding: 0 12px;
-    background: transparent;
-    border: none;
-    color: rgba(61, 48, 40, 0.35);
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 600;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .calendar-mobile-friends.active {
-    background: hsl(var(--primary) / 0.12);
-    color: hsl(var(--primary));
-  }
-
-  .calendar-mobile-friends svg {
-    width: 16px;
-    height: 16px;
+    gap: 6px;
   }
 
   .calendar-mobile-right {
