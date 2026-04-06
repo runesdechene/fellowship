@@ -107,16 +107,29 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
             {/* Participants — below the card */}
             <div className="calendar-presence-row">
               {ev.isFriend ? (
-                /* Friend's event — show friend name */
-                <div className="calendar-presence-friend-badge">
-                  <div
-                    className="presence-avatar"
-                    style={{ background: `linear-gradient(135deg, ${AVATAR_GRADIENTS[hashName(ev.friendName ?? '?') % AVATAR_GRADIENTS.length][0]}, ${AVATAR_GRADIENTS[hashName(ev.friendName ?? '?') % AVATAR_GRADIENTS.length][1]})`, marginLeft: 0 }}
-                  >
-                    {(ev.friendName ?? '?')[0].toUpperCase()}
-                  </div>
-                  <span>{ev.friendName}</span>
-                </div>
+                /* Friend's event — show friend name + avatar, clickable */
+                (() => {
+                  const fp = friendParticipations.find(f => f.event_id === ev.id)
+                  const name = ev.friendName ?? '?'
+                  const avatarUrl = fp?.profiles?.avatar_url
+                  const slug = fp?.profiles?.public_slug ?? fp?.user_id
+                  const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
+                  return (
+                    <Link to={`/@${slug}`} className="calendar-presence-friend-badge" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={name} className="calendar-presence-avatar-img" style={{ marginLeft: 0 }} />
+                      ) : (
+                        <div
+                          className="presence-avatar"
+                          style={{ background: `linear-gradient(135deg, ${from}, ${to})`, marginLeft: 0 }}
+                        >
+                          {name[0].toUpperCase()}
+                        </div>
+                      )}
+                      <span>{name}</span>
+                    </Link>
+                  )
+                })()
               ) : (
                 /* My event — show my presence */
                 <div
@@ -144,15 +157,23 @@ export function CalendarMonth({ data, friendParticipations = [] }: CalendarMonth
                   <div className="presence-avatars">
                     {friendsAtEvent.slice(0, 3).map((fp, i) => {
                       const name = fp.profiles?.display_name ?? '?'
+                      const avatarUrl = fp.profiles?.avatar_url
+                      const slug = fp.profiles?.public_slug ?? fp.user_id
                       const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
                       return (
-                        <div
+                        <Link
                           key={fp.id}
+                          to={`/@${slug}`}
                           className="presence-avatar"
-                          style={{ background: `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i }}
+                          style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i, overflow: 'hidden' }}
+                          title={name}
                         >
-                          {name[0].toUpperCase()}
-                        </div>
+                          {avatarUrl ? (
+                            <img src={avatarUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          ) : (
+                            name[0].toUpperCase()
+                          )}
+                        </Link>
                       )
                     })}
                   </div>
