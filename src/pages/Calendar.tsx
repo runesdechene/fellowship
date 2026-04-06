@@ -14,7 +14,7 @@ export function CalendarPage() {
   const { profile } = useAuth()
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
-  const [showFriends, setShowFriends] = useState(false)
+  const [showFriends, setShowFriends] = useState(() => localStorage.getItem('fellowship-calendar-friends') === 'true')
   const containerRef = useRef<HTMLDivElement>(null)
 
   const { participations, loading } = useMyParticipations(year)
@@ -129,7 +129,7 @@ export function CalendarPage() {
         <div className="calendar-nav">
           {/* Friends toggle — iOS switch */}
           <button
-            onClick={() => setShowFriends(!showFriends)}
+            onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
             className={`calendar-friends-toggle ${showFriends ? 'active' : ''}`}
           >
             <span className="calendar-friends-label">
