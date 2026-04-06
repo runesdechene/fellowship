@@ -1,11 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-06T12:34:30.858Z
-> Files: 175 tracked | Anatomy hits: 0 | Misses: 0
-
-## ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/
-
-- `feedback_avatar_means_photo.md` (~131 tok)
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-06T16:23:41.820Z
+> Files: 189 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -95,6 +91,18 @@
 - `server-stopped` (~14 tok)
 - `server.pid` (~2 tok)
 
+## .superpowers/brainstorm/7069-1775480147/content/
+
+- `event-page-layout.html` (~2659 tok)
+- `event-page-v2.html` (~3175 tok)
+- `event-page-v3.html` (~4554 tok)
+- `waiting.html` (~41 tok)
+
+## .superpowers/brainstorm/7069-1775480147/state/
+
+- `server-stopped` (~14 tok)
+- `server.pid` (~2 tok)
+
 ## docs/superpowers/plans/
 
 - `2026-04-04-fellowship-v1.md` — Fellowship V1 Implementation Plan (~27110 tok)
@@ -102,6 +110,7 @@
 - `2026-04-05-explorer-redesign.md` — Explorer Redesign Implementation Plan (~5144 tok)
 - `2026-04-05-notifications-redesign.md` — Notifications Redesign Implementation Plan (~6692 tok)
 - `2026-04-05-profile-redesign.md` — Profile Redesign Implementation Plan (~7209 tok)
+- `2026-04-06-event-page-redesign.md` — Event Page Redesign — Implementation Plan (~9135 tok)
 - `2026-04-06-participation-refonte.md` — Participation System Refonte — Implementation Plan (~5067 tok)
 
 ## docs/superpowers/specs/
@@ -113,12 +122,13 @@
 - `2026-04-05-explorer-redesign.md` — Explorer Redesign — Design Spec (~1550 tok)
 - `2026-04-05-notifications-redesign.md` — Notifications Redesign — Design Spec (~1179 tok)
 - `2026-04-05-profile-redesign.md` — Profile Redesign — Design Spec (~1297 tok)
+- `2026-04-06-event-page-redesign.md` — Fiche Événement — Redesign Spec (~1489 tok)
 
 ## src/
 
 - `App.tsx` — OnboardingGuard (~870 tok)
-- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~674 tok)
-- `index.css` — Styles: 18 rules, 75 vars (~1574 tok)
+- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~1212 tok)
+- `index.css` — Styles: 18 rules, 75 vars, 2 media queries, 1 animations (~1574 tok)
 - `main.tsx` (~122 tok)
 
 ## src/components/
@@ -128,7 +138,8 @@
 
 ## src/components/calendar/
 
-- `CalendarMonth.tsx` — TAG_COLORS (~2126 tok)
+- `CalendarFriendsModal.tsx` — GRADIENTS (~1116 tok)
+- `CalendarMonth.tsx` — TAG_COLORS (~2684 tok)
 - `MonthBanner.tsx` — MONTH_SCENES (~3071 tok)
 - `MonthCell.tsx` — tagColors (~482 tok)
 - `YearView.tsx` — YearView (~333 tok)
@@ -137,34 +148,38 @@
 
 - `DeduplicateSuggestions.tsx` — DeduplicateSuggestions (~442 tok)
 - `EventCard.tsx` — formatDate — renders map (~2138 tok)
-- `EventForm.tsx` — EventForm (~3888 tok)
+- `EventDashboard.tsx` — src/components/events/EventDashboard.tsx (~1997 tok)
+- `EventDashboardMobile.tsx` — src/components/events/EventDashboardMobile.tsx (~790 tok)
+- `EventForm.tsx` — EventForm — renders map — uses useNavigate, useState, useEffect (~3888 tok)
+- `EventHero.tsx` — src/components/events/EventHero.tsx (~1473 tok)
+- `FriendRow.tsx` — src/components/events/FriendRow.tsx (~545 tok)
 - `HeroBanner.css` — Styles: 14 rules, 2 media queries (~581 tok)
 - `HeroBanner.tsx` — formatDate — renders map (~392 tok)
-- `PaymentTracker.tsx` — PaymentTracker — payment tracking for inscrit exposants (~350 tok)
-- `PaymentTracker.tsx` — PaymentTracker (~1314 tok)
-- `SlideRow.css` — Styles: 14 rules (~533 tok)
+- `ParticipantsModal.tsx` — GRADIENTS — uses useState, useEffect (~1949 tok)
+- `SlideRow.css` — Styles: 14 rules, 1 media queries (~533 tok)
 - `SlideRow.tsx` — SlideRow — uses useState, useEffect (~636 tok)
 - `TagInput.tsx` — TagInput — uses useState, useEffect (~936 tok)
 
 ## src/components/layout/
 
-- `AppLayout.tsx` — AppLayout (~528 tok)
-- `BottomBar.tsx` — exposantNav (~381 tok)
+- `AppLayout.tsx` — AppLayout — uses useState (~528 tok)
+- `BottomBar.css` — Styles: 5 rules, 1 media queries (~291 tok)
+- `BottomBar.tsx` — exposantNav (~325 tok)
 - `ChangelogModal.css` — Styles: 16 rules (~726 tok)
 - `ChangelogModal.tsx` — ChangelogModal — uses useState, useEffect (~538 tok)
-- `SearchBar.css` — Styles: 44 rules (~2038 tok)
-- `SearchBar.tsx` — SearchBar (~2732 tok)
-- `Sidebar.css` — Styles: 21 rules (~868 tok)
-- `Sidebar.tsx` — exposantNav (~774 tok)
+- `SearchBar.css` — Styles: 46 rules, 2 media queries (~2111 tok)
+- `SearchBar.tsx` — SearchBar — renders map — uses useState, useEffect (~2770 tok)
+- `Sidebar.css` — Styles: 21 rules, 1 media queries (~868 tok)
+- `Sidebar.tsx` — exposantNav — uses useState (~774 tok)
 
 ## src/components/notes/
 
-- `NoteForm.tsx` — NoteForm — renders form — uses useState (~713 tok)
+- `NoteForm.tsx` — NoteForm — renders form — uses useState (~451 tok)
 - `NotesFeed.tsx` — NotesFeed (~751 tok)
 
 ## src/components/notifications/
 
-- `NotificationItem.tsx` — GRADIENTS (~2124 tok)
+- `NotificationItem.tsx` — GRADIENTS — uses useNavigate, useState (~2295 tok)
 - `NotificationSlidePanel.css` — Styles: 15 rules (~669 tok)
 - `NotificationSlidePanel.tsx` — NotificationSlidePanel — uses useEffect (~666 tok)
 - `SidebarActivity.css` — Styles: 13 rules (~638 tok)
@@ -177,7 +192,7 @@
 - `FellowshipFooter.tsx` — FellowshipFooter (~43 tok)
 - `FollowButton.css` — Styles: 8 rules (~259 tok)
 - `FollowButton.tsx` — FollowButton (~321 tok)
-- `ProfileHeader.tsx` — ProfileHeader (~689 tok)
+- `ProfileHeader.tsx` — ProfileHeader (~721 tok)
 - `QRCodeModal.tsx` — QRCodeModal — uses useState, useEffect (~769 tok)
 
 ## src/components/reports/
@@ -204,7 +219,7 @@
 - `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~1073 tok)
 - `use-notes.ts` — Exports useEventNotes, createNote, deleteNote (~383 tok)
 - `use-notifications.ts` — Community feed — platform-wide actions (~689 tok)
-- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 2 more (~982 tok)
+- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 3 mor (~1412 tok)
 - `use-reports.ts` — Exports useEventReport, saveEventReport (~292 tok)
 - `use-reviews.ts` — Exports useEventReviews, useMyReview, submitReview (~575 tok)
 - `use-theme.ts` — Exports useTheme (~358 tok)
@@ -219,11 +234,12 @@
 ## src/pages/
 
 - `AuthCallback.tsx` — AuthCallbackPage — uses useNavigate, useEffect (~314 tok)
-- `Calendar.css` — Styles: 64 rules, 2 media queries, 1 animations (~2657 tok)
-- `Calendar.tsx` — CalendarPage — uses useState, useMemo, useCallback (~2090 tok)
+- `Calendar.css` — Styles: 79 rules (~3522 tok)
+- `Calendar.tsx` — CalendarPage (~2498 tok)
 - `Dashboard.tsx` — daysUntil (~3312 tok)
 - `Embed.tsx` — EmbedPage — uses useState, useEffect (~1230 tok)
-- `EventPage.tsx` — EventPage (~7733 tok)
+- `EventPage.css` — Styles: 89 rules, 1 animations (~3488 tok)
+- `EventPage.tsx` — EventPage — uses useState, useEffect (~6066 tok)
 - `Explorer.css` — Styles: 39 rules (~1761 tok)
 - `Explorer.tsx` — ExplorerPage — uses useState, useMemo (~1932 tok)
 - `Following.tsx` — FollowingPage (~45 tok)
@@ -231,9 +247,9 @@
 - `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~2281 tok)
 - `Notifications.tsx` — NotificationsPage (~1014 tok)
 - `Onboarding.tsx` — OnboardingPage — uses useNavigate, useState (~2050 tok)
-- `Profile.css` — Styles: 74 rules (~3836 tok)
+- `Profile.css` — Styles: 74 rules, 1 media queries (~3836 tok)
 - `Profile.tsx` — ProfilePage (~171 tok)
-- `PublicProfile.tsx` — PublicProfilePage (~2473 tok)
+- `PublicProfile.tsx` — PublicProfilePage — uses useState, useEffect (~2473 tok)
 - `Settings.tsx` — SettingsPage — uses useState, useEffect (~5358 tok)
 
 ## src/test/
@@ -244,7 +260,7 @@
 ## src/types/
 
 - `database.ts` — Table row types (~804 tok)
-- `supabase.ts` — Exports Json, Database (~5706 tok)
+- `supabase.ts` — Exports Json, Database (~5741 tok)
 
 ## supabase/
 
@@ -276,9 +292,10 @@
 - `20260405160000_notification_triggers.sql` — Notification triggers — auto-create notifications on actions (~1217 tok)
 - `20260405170000_fix_participations_rls.sql` — Allow reading participations with status inscrit/confirme on any profile (~128 tok)
 - `20260405180000_fix_participations_rls_v2.sql` — Fix participations visibility: (~172 tok)
-- `20260406100000_add_event_contact_fields.sql` — Add contact_email and registration_note fields for events without a registration URL (~59 tok)
-- `20260406100001_notify_new_exposant.sql` — Add new_exposant notification type (~315 tok)
-- `20260406110000_add_avatar_to_notifications.sql` — Add actor_avatar_url to all notification triggers (~1179 tok)
-- `20260406120000_participation_refonte.sql` — 1. Add new enum value (must be its own transaction — cannot use in same tx) (~40 tok)
-- `20260406120000b_participation_refonte_rls.sql` — 2. Migrate existing 'confirme' to 'inscrit' (~210 tok)
-- `20260406120001_participant_notification_triggers.sql` — Notify participants when an event is updated (not everyone) (~458 tok)
+- `20260406100000_add_event_contact_fields.sql` — Add contact_email and registration_note fields for events without a registration URL (~63 tok)
+- `20260406100001_notify_new_exposant.sql` — Add new_exposant notification type (~337 tok)
+- `20260406110000_add_avatar_to_notifications.sql` — Add actor_avatar_url to all notification triggers (~1264 tok)
+- `20260406120000_participation_refonte.sql` — 1. Add new enum value (must be its own transaction — cannot use in same tx) (~42 tok)
+- `20260406120001_participant_notification_triggers.sql` — Notify participants when an event is updated (not everyone) (~490 tok)
+- `20260406120002_participation_refonte_rls.sql` — 2. Migrate existing 'confirme' to 'inscrit' (~225 tok)
+- `20260406130000_add_payment_status.sql` — Simple payment status for exposants (private, self-managed) (~64 tok)

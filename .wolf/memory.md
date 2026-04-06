@@ -1340,3 +1340,211 @@
 | 14:33 | Edited src/pages/PublicProfile.tsx | inline fix | ~21 |
 | 14:34 | Created supabase/migrations/20260406120000_participation_refonte.sql | — | ~40 |
 | 14:34 | Created supabase/migrations/20260406120000b_participation_refonte_rls.sql | — | ~210 |
+| 14:35 | Session end: 78 writes across 29 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 46 reads | ~79892 tok |
+| 14:38 | Created supabase/migrations/20260406130000_add_payment_status.sql | — | ~60 |
+| 14:38 | Edited src/types/supabase.ts | 4→5 lines | ~71 |
+| 14:38 | Edited src/types/supabase.ts | 4→5 lines | ~72 |
+| 14:38 | Edited src/types/supabase.ts | 4→5 lines | ~73 |
+| 14:39 | Edited src/pages/EventPage.tsx | added nullish coalescing | ~484 |
+| 14:39 | Edited src/pages/EventPage.tsx | — | ~0 |
+| 14:40 | Session end: 84 writes across 30 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 46 reads | ~81354 tok |
+| 14:45 | Session end: 84 writes across 30 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 46 reads | ~81757 tok |
+| 14:56 | Session end: 84 writes across 30 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~81757 tok |
+| 15:10 | Session end: 84 writes across 30 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~81757 tok |
+| 15:11 | Created .superpowers/brainstorm/7069-1775480147/content/event-page-layout.html | — | ~2659 |
+| 15:12 | Session end: 85 writes across 31 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~84606 tok |
+| 15:14 | Created .superpowers/brainstorm/7069-1775480147/content/event-page-v2.html | — | ~3175 |
+| 15:14 | Session end: 86 writes across 32 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~88008 tok |
+| 15:19 | Created .superpowers/brainstorm/7069-1775480147/content/event-page-v3.html | — | ~4554 |
+| 15:19 | Session end: 87 writes across 33 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~92887 tok |
+| 15:22 | Session end: 87 writes across 33 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~92887 tok |
+| 15:25 | Created .superpowers/brainstorm/7069-1775480147/content/waiting.html | — | ~41 |
+| 15:26 | Created docs/superpowers/specs/2026-04-06-event-page-redesign.md | — | ~1589 |
+| 15:26 | Session end: 89 writes across 35 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~94633 tok |
+| 15:34 | Created docs/superpowers/plans/2026-04-06-event-page-redesign.md | — | ~9744 |
+| 15:34 | Session end: 90 writes across 35 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 48 reads | ~105073 tok |
+| 15:36 | Session end: 90 writes across 35 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 49 reads | ~114208 tok |
+| 15:36 | Created src/components/events/FriendRow.tsx | — | ~545 |
+| 15:36 | Created src/components/events/EventHero.tsx | — | ~1357 |
+| 15:37 | Edited src/components/events/EventHero.tsx | 2→1 lines | ~32 |
+| 15:37 | Session end: 93 writes across 37 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 49 reads | ~116142 tok |
+| 15:37 | Created src/components/events/EventDashboard.tsx | — | ~1994 |
+| 15:37 | Session end: 94 writes across 38 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 49 reads | ~118136 tok |
+| 15:37 | Created src/pages/EventPage.css | — | ~3428 |
+| 15:37 | Session end: 95 writes across 39 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 49 reads | ~121564 tok |
+| 15:38 | Session end: 95 writes across 39 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 49 reads | ~121564 tok |
+| 15:38 | Created src/components/events/EventDashboardMobile.tsx | — | ~790 |
+| 15:39 | Edited src/hooks/use-participations.ts | added nullish coalescing | ~421 |
+| 15:39 | Edited src/hooks/use-participations.ts | modified fetch() | ~178 |
+| 15:42 | Created src/pages/EventPage.tsx | — | ~5854 |
+| 15:42 | Edited src/pages/EventPage.tsx | 3→1 lines | ~21 |
+| 15:42 | Edited src/pages/EventPage.tsx | 3→2 lines | ~38 |
+| 15:42 | Edited src/pages/EventPage.tsx | 4→3 lines | ~20 |
+| 15:42 | Edited src/pages/EventPage.tsx | CSS: display, justifyContent, marginBottom | ~163 |
+| 15:44 | Session end: 103 writes across 41 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~137547 tok |
+| 15:56 | Session end: 103 writes across 41 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~137547 tok |
+| 16:06 | Session end: 103 writes across 41 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~137547 tok |
+| 16:08 | Session end: 103 writes across 41 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~137547 tok |
+| 16:08 | Session end: 103 writes across 41 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~137547 tok |
+| 16:09 | Edited src/components/layout/BottomBar.tsx | inline fix | ~46 |
+| 16:09 | Edited src/index.css | 4→4 lines | ~30 |
+| 16:10 | Edited src/pages/EventPage.css | inline fix | ~23 |
+| 16:10 | Edited src/components/layout/SearchBar.css | CSS: overflow, min-width | ~72 |
+| 16:10 | Session end: 107 writes across 42 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 54 reads | ~138461 tok |
+| 16:12 | Edited src/changelog.ts | expanded (+29 lines) | ~469 |
+| 16:12 | Session end: 108 writes across 43 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 55 reads | ~139604 tok |
+| 16:13 | Session end: 108 writes across 43 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 55 reads | ~139604 tok |
+| 16:15 | Edited src/pages/EventPage.css | 8→8 lines | ~61 |
+| 16:16 | Session end: 109 writes across 43 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 55 reads | ~139677 tok |
+| 16:16 | Session end: 109 writes across 43 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 55 reads | ~139677 tok |
+| 16:18 | Edited src/pages/EventPage.tsx | — | ~0 |
+| 16:18 | Edited src/pages/EventPage.tsx | expanded (+14 lines) | ~176 |
+| 16:18 | Edited src/pages/EventPage.tsx | — | ~0 |
+| 16:18 | Edited src/pages/EventPage.css | 5→5 lines | ~37 |
+| 16:18 | Edited src/pages/EventPage.css | removed 54 lines | ~38 |
+| 16:19 | Session end: 114 writes across 43 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 55 reads | ~137698 tok |
+| 16:20 | Edited src/components/layout/SearchBar.css | 9→8 lines | ~39 |
+| 16:20 | Created src/components/notes/NoteForm.tsx | — | ~451 |
+| 16:20 | Edited src/pages/EventPage.tsx | inline fix | ~39 |
+| 16:21 | Session end: 117 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~138973 tok |
+| 16:23 | Edited src/components/layout/SearchBar.css | CSS: left | ~22 |
+| 16:23 | Edited src/components/layout/SearchBar.css | CSS: max-width | ~12 |
+| 16:23 | Edited src/components/layout/SearchBar.css | modified media() | ~65 |
+| 16:23 | Session end: 120 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~139072 tok |
+| 16:23 | Edited src/pages/EventPage.css | 6→6 lines | ~74 |
+| 16:24 | Edited src/components/events/EventDashboard.tsx | 7→7 lines | ~69 |
+| 16:24 | Edited src/pages/EventPage.css | expanded (+15 lines) | ~98 |
+| 16:24 | Session end: 123 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~139313 tok |
+| 16:27 | Edited src/components/events/EventHero.tsx | expanded (+6 lines) | ~152 |
+| 16:27 | Session end: 124 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~139465 tok |
+| 16:28 | Edited src/pages/EventPage.tsx | CSS: position | ~135 |
+| 16:29 | Edited src/pages/EventPage.tsx | 2→2 lines | ~7 |
+| 16:29 | Edited src/pages/EventPage.css | expanded (+25 lines) | ~170 |
+| 16:29 | Session end: 127 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~139772 tok |
+| 16:31 | Edited src/pages/EventPage.tsx | expanded (+7 lines) | ~108 |
+| 16:31 | Edited src/pages/EventPage.tsx | removed 8 lines | ~10 |
+| 16:31 | Edited src/pages/EventPage.css | CSS: margin-bottom | ~165 |
+| 16:31 | Edited src/pages/EventPage.css | 10→9 lines | ~51 |
+| 16:31 | Session end: 131 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~140107 tok |
+| 16:32 | Edited src/pages/EventPage.css | 18→22 lines | ~120 |
+| 16:32 | Edited src/pages/EventPage.tsx | 4→3 lines | ~31 |
+| 16:32 | Session end: 133 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~140258 tok |
+| 16:33 | Edited src/pages/EventPage.tsx | expanded (+6 lines) | ~159 |
+| 16:33 | Session end: 134 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~140424 tok |
+| 16:37 | Session end: 134 writes across 44 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~140442 tok |
+| 16:38 | Created src/components/layout/BottomBar.css | — | ~261 |
+| 16:38 | Created src/components/layout/BottomBar.tsx | — | ~325 |
+| 16:38 | Session end: 136 writes across 45 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~141028 tok |
+| 16:41 | Edited src/components/events/EventHero.tsx | 6→6 lines | ~78 |
+| 16:41 | Session end: 137 writes across 45 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~141187 tok |
+| 16:43 | Session end: 137 writes across 45 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~141187 tok |
+| 16:44 | Created src/components/events/ParticipantsModal.tsx | — | ~1949 |
+| 16:44 | Edited src/components/events/EventHero.tsx | 6→7 lines | ~49 |
+| 16:44 | Edited src/components/events/EventHero.tsx | inline fix | ~36 |
+| 16:44 | Edited src/components/events/EventHero.tsx | 6→6 lines | ~97 |
+| 16:44 | Edited src/pages/EventPage.css | expanded (+13 lines) | ~91 |
+| 16:44 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~57 |
+| 16:45 | Edited src/pages/EventPage.tsx | 2→3 lines | ~54 |
+| 16:45 | Edited src/pages/EventPage.tsx | 6→11 lines | ~125 |
+| 16:45 | Session end: 145 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~143753 tok |
+| 16:50 | Edited src/pages/EventPage.css | CSS: max-width, margin-left, margin-right | ~39 |
+| 16:51 | Session end: 146 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~143792 tok |
+| 16:51 | Edited src/pages/EventPage.css | inline fix | ~6 |
+| 16:52 | Session end: 147 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~143798 tok |
+| 16:54 | Edited src/components/notifications/NotificationItem.tsx | CSS: active | ~220 |
+| 16:55 | Session end: 148 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~144094 tok |
+| 17:07 | Edited src/components/notifications/NotificationItem.tsx | CSS: background, color | ~117 |
+| 17:08 | Session end: 149 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~144211 tok |
+| 17:12 | Edited src/components/notifications/NotificationItem.tsx | CSS: border, transition | ~347 |
+| 17:12 | Session end: 150 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~144558 tok |
+| 17:14 | Edited src/components/layout/SearchBar.tsx | CSS: type | ~47 |
+| 17:14 | Edited src/components/layout/SearchBar.tsx | 5→4 lines | ~59 |
+| 17:15 | Edited src/components/layout/SearchBar.tsx | 26→28 lines | ~379 |
+| 17:15 | Edited src/components/profile/ProfileHeader.tsx | CSS: null | ~155 |
+| 17:15 | Session end: 154 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~146046 tok |
+| 17:17 | Session end: 154 writes across 46 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~146046 tok |
+| 17:18 | Edited src/pages/Calendar.tsx | inline fix | ~34 |
+| 17:18 | Edited src/pages/Calendar.tsx | inline fix | ~42 |
+| 17:18 | Session end: 156 writes across 47 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 56 reads | ~146140 tok |
+| 17:26 | Edited src/pages/Calendar.tsx | expanded (+24 lines) | ~676 |
+| 17:27 | Edited src/pages/Calendar.css | modified media() | ~500 |
+| 17:27 | Session end: 158 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~149998 tok |
+| 17:28 | Edited src/pages/Calendar.css | 2→2 lines | ~9 |
+| 17:28 | Session end: 159 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~150007 tok |
+| 17:28 | Edited src/pages/Calendar.tsx | 23→25 lines | ~266 |
+| 17:29 | Edited src/pages/Calendar.css | expanded (+10 lines) | ~199 |
+| 17:29 | Session end: 161 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~150472 tok |
+| 17:30 | Edited src/pages/Calendar.css | CSS: margin-top | ~53 |
+| 17:30 | Edited src/pages/Calendar.tsx | 4→5 lines | ~33 |
+| 17:31 | Edited src/pages/Calendar.tsx | 4→3 lines | ~10 |
+| 17:31 | Session end: 164 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~150846 tok |
+| 17:32 | Edited src/pages/Calendar.tsx | 25→26 lines | ~282 |
+| 17:32 | Edited src/pages/Calendar.css | CSS: justify-content | ~38 |
+| 17:32 | Edited src/pages/Calendar.css | CSS: display, align-items, gap | ~26 |
+| 17:33 | Session end: 167 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~151192 tok |
+| 17:33 | Edited src/pages/Calendar.tsx | 7→12 lines | ~157 |
+| 17:34 | Edited src/pages/Calendar.tsx | 7→7 lines | ~78 |
+| 17:34 | Session end: 169 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~151427 tok |
+| 17:35 | Edited src/hooks/use-participations.ts | inline fix | ~65 |
+| 17:35 | Edited src/hooks/use-participations.ts | 5→5 lines | ~61 |
+| 17:35 | Edited src/pages/Calendar.tsx | 2→3 lines | ~81 |
+| 17:35 | Edited src/pages/Calendar.tsx | added 2 condition(s) | ~472 |
+| 17:35 | Edited src/pages/Calendar.tsx | inline fix | ~15 |
+| 17:35 | Edited src/pages/Calendar.tsx | 13→15 lines | ~208 |
+| 17:36 | Edited src/pages/Calendar.tsx | 31→35 lines | ~399 |
+| 17:36 | Edited src/pages/Calendar.css | translateX() → buttons() | ~188 |
+| 17:36 | Edited src/pages/Calendar.css | reduced (-21 lines) | ~52 |
+| 17:36 | Session end: 178 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~153034 tok |
+| 17:40 | Edited src/pages/Calendar.tsx | 2→3 lines | ~98 |
+| 17:41 | Edited src/pages/Calendar.tsx | modified useCallback() | ~207 |
+| 17:41 | Edited src/pages/Calendar.tsx | reduced (-28 lines) | ~647 |
+| 17:41 | Edited src/pages/Calendar.css | 5→5 lines | ~22 |
+| 17:41 | Edited src/pages/Calendar.css | removed 59 lines | ~55 |
+| 17:41 | Edited src/pages/Calendar.tsx | inline fix | ~10 |
+| 17:42 | Session end: 184 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~153947 tok |
+| 17:45 | Edited src/pages/Calendar.tsx | reduced (-12 lines) | ~167 |
+| 17:45 | Edited src/pages/Calendar.css | CSS: min-width, text-align | ~50 |
+| 17:45 | Session end: 186 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~154165 tok |
+| 17:50 | Edited src/pages/Calendar.tsx | modified if() | ~121 |
+| 17:51 | Session end: 187 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~154179 tok |
+| 17:54 | Edited src/hooks/use-participations.ts | inline fix | ~73 |
+| 17:54 | Edited src/hooks/use-participations.ts | "*, events(*), profiles(di" → "*, events(*), profiles(di" | ~24 |
+| 17:54 | Edited src/components/calendar/CalendarMonth.tsx | added optional chaining | ~368 |
+| 17:54 | Edited src/components/calendar/CalendarMonth.tsx | expanded (+8 lines) | ~447 |
+| 17:55 | Session end: 191 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~155092 tok |
+| 17:57 | Edited src/pages/Calendar.tsx | added optional chaining | ~123 |
+| 17:57 | Session end: 192 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~155284 tok |
+| 17:59 | Edited src/hooks/use-participations.ts | inline fix | ~81 |
+| 17:59 | Edited src/hooks/use-participations.ts | "*, events(*), profiles(di" → "*, events(*), profiles(br" | ~28 |
+| 17:59 | Edited src/pages/Calendar.tsx | inline fix | ~25 |
+| 17:59 | Edited src/pages/Calendar.tsx | inline fix | ~26 |
+| 18:00 | Edited src/components/calendar/CalendarMonth.tsx | inline fix | ~27 |
+| 18:00 | Edited src/components/calendar/CalendarMonth.tsx | expanded (+11 lines) | ~547 |
+| 18:01 | Session end: 198 writes across 48 files (AppLayout.tsx, index.css, use-calendar.ts, ProfileHeader.tsx, Profile.css) | 57 reads | ~156350 tok |
+
+## Session: 2026-04-06 18:04
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 18:08 | Created src/components/calendar/CalendarFriendsModal.tsx | — | ~1126 |
+| 18:08 | Edited src/components/calendar/CalendarMonth.tsx | added 2 import(s) | ~121 |
+| 18:08 | Edited src/components/calendar/CalendarMonth.tsx | CSS: id, name | ~104 |
+| 18:08 | Edited src/components/calendar/CalendarMonth.tsx | 90→92 lines | ~1325 |
+| 18:08 | Edited src/components/calendar/CalendarMonth.tsx | expanded (+9 lines) | ~85 |
+| 18:09 | Edited src/pages/Calendar.css | expanded (+191 lines) | ~1043 |
+| 18:09 | Edited src/hooks/use-participations.ts | inline fix | ~85 |
+| 18:09 | Edited src/components/calendar/CalendarFriendsModal.tsx | inline fix | ~13 |
+| 18:09 | Session end: 8 writes across 4 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts) | 5 reads | ~13073 tok |
+| 18:10 | Edited src/components/calendar/CalendarMonth.tsx | 8→6 lines | ~94 |
+| 18:10 | Edited src/components/calendar/CalendarMonth.tsx | CSS: eventId, eventName | ~48 |
+| 18:10 | Edited src/components/calendar/CalendarMonth.tsx | modified CalendarMonth() | ~83 |
+| 18:10 | Edited src/components/calendar/CalendarMonth.tsx | added optional chaining | ~20 |
+| 18:10 | Edited src/components/calendar/CalendarMonth.tsx | removed 9 lines | ~3 |
+| 18:10 | Edited src/pages/Calendar.tsx | added 1 import(s) | ~156 |
+| 18:10 | Edited src/pages/Calendar.tsx | CSS: id, name | ~41 |
+| 18:10 | Edited src/pages/Calendar.tsx | inline fix | ~41 |
+| 18:11 | Edited src/pages/Calendar.tsx | expanded (+8 lines) | ~87 |
+| 18:11 | Session end: 17 writes across 5 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts, Calendar.tsx) | 5 reads | ~13646 tok |
+| 18:23 | Edited src/changelog.ts | expanded (+11 lines) | ~154 |
+| 18:24 | Session end: 18 writes across 6 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts, Calendar.tsx) | 6 reads | ~14905 tok |
+| 19:21 | Session end: 18 writes across 6 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts, Calendar.tsx) | 6 reads | ~14905 tok |

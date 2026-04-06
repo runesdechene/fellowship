@@ -158,8 +158,9 @@ export function LandingPage() {
                 POPULAIRE
               </span>
               <p className="text-xs font-semibold uppercase tracking-widest text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>Pro</p>
-              <p className="mt-2 text-4xl">9.99€</p>
+              <p className="mt-2 text-4xl"><s>9.99€</s>0.00€</p>
               <p className="mt-1 text-sm text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>HT, par mois</p>
+              <p className="mt-1 text-xs text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>Le temps de la version Alpha</p>
 
               <ul className="mt-8 space-y-3 text-sm text-white/80" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {[
