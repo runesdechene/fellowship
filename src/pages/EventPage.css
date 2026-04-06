@@ -271,13 +271,35 @@
 }
 
 .event-friend-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 10px;
   font-weight: 600;
+  padding: 2px 8px 2px 6px;
+  border-radius: 10px;
 }
 
-.event-friend-status.inscrit { color: hsl(152 50% 38%); }
-.event-friend-status.en_cours { color: hsl(210 60% 50%); }
-.event-friend-status.interesse { color: hsl(38 90% 50%); }
+.event-friend-status svg {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.event-friend-status.inscrit {
+  background: hsl(152 50% 38% / 0.12);
+  color: hsl(152 50% 32%);
+}
+
+.event-friend-status.en_cours {
+  background: hsl(210 60% 50% / 0.12);
+  color: hsl(210 55% 40%);
+}
+
+.event-friend-status.interesse {
+  background: hsl(38 90% 50% / 0.12);
+  color: hsl(38 80% 35%);
+}
 
 /* ── Right column: tags, title, meta ──────────────────────────────── */
 

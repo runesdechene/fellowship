@@ -17,7 +17,7 @@ import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus, Check, CircleDashed, Loader2 } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
 
@@ -461,6 +461,9 @@ export function EventPage() {
                           <div>
                             <div className="event-friend-name">{fname}</div>
                             <div className={`event-friend-status ${friend.status}`}>
+                              {friend.status === 'inscrit' && <Check strokeWidth={2.5} />}
+                              {friend.status === 'en_cours' && <Loader2 strokeWidth={2.5} />}
+                              {friend.status === 'interesse' && <CircleDashed strokeWidth={2.5} />}
                               {STATUS_LABELS_FRIEND[friend.status] ?? friend.status}
                             </div>
                           </div>
