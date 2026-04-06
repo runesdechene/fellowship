@@ -439,11 +439,11 @@
 .event-info-box.en_cours .event-info-box-text { color: hsl(210 30% 25%); }
 
 .event-info-box.inscrit {
-  background: hsl(var(--primary) / 0.08);
-  border: 1px solid hsl(var(--primary) / 0.2);
+  background: hsl(152 50% 38% / 0.08);
+  border: 1px solid hsl(152 50% 38% / 0.2);
 }
-.event-info-box.inscrit .event-info-box-title { color: hsl(var(--primary)); }
-.event-info-box.inscrit .event-info-box-text { color: hsl(24 30% 30%); }
+.event-info-box.inscrit .event-info-box-title { color: hsl(152 50% 32%); }
+.event-info-box.inscrit .event-info-box-text { color: hsl(152 25% 22%); }
 
 @keyframes event-info-box-in {
   from { opacity: 0; transform: translateY(-4px); }
