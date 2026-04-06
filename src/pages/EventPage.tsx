@@ -180,9 +180,15 @@ export function EventPage() {
   return (
     <div className="event-page">
       <div className="event-topbar">
-        <Link to="/explorer" className="event-back" title="Retour">
-          <ArrowLeft />
-        </Link>
+        {editing ? (
+          <button onClick={() => setEditing(false)} className="event-back" title="Annuler l'édition">
+            <ArrowLeft />
+          </button>
+        ) : (
+          <Link to="/explorer" className="event-back" title="Retour">
+            <ArrowLeft />
+          </Link>
+        )}
         {isExposant && !editing && (
           <button onClick={startEditing} className="event-edit-btn">
             <Pencil className="h-4 w-4" strokeWidth={1.5} />
