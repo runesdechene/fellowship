@@ -251,6 +251,7 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
+          payment_status: string | null
           payments: { amount: number; date: string; label: string }[] | null
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
@@ -261,6 +262,7 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
+          payment_status?: string | null
           payments?: { amount: number; date: string; label: string }[] | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
@@ -271,6 +273,7 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
+          payment_status?: string | null
           payments?: { amount: number; date: string; label: string }[] | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null

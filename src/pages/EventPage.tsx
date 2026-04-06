@@ -4,7 +4,6 @@ import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent } from '@/hooks/use-events'
 import { addParticipation, removeParticipation, updateParticipation } from '@/hooks/use-participations'
-import { PaymentTracker } from '@/components/events/PaymentTracker'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
 import { NoteForm } from '@/components/notes/NoteForm'
@@ -443,9 +442,35 @@ export function EventPage() {
                     })}
                   </div>
 
-                  {/* Payment tracking — only when inscrit */}
+                  {/* Payment status — 3 toggle badges */}
                   {participation.status === 'inscrit' && (
-                    <PaymentTracker participation={participation} onUpdate={setParticipation} />
+                    <div className="flex items-center gap-1">
+                      {(['a_payer', 'en_cours_paiement', 'paye'] as const).map(ps => {
+                        const payLabels = { a_payer: 'À payer', en_cours_paiement: 'En cours', paye: 'Payé' }
+                        const currentPs = (participation.payment_status as string) ?? 'a_payer'
+                        const isActivePs = currentPs === ps
+                        return (
+                          <button
+                            key={ps}
+                            onClick={async () => {
+                              const { data } = await updateParticipation(participation.id, { payment_status: ps })
+                              if (data) setParticipation(data)
+                            }}
+                            className={`flex-1 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-all ${
+                              isActivePs
+                                ? ps === 'paye'
+                                  ? 'bg-green-500/15 text-green-700'
+                                  : ps === 'en_cours_paiement'
+                                    ? 'bg-amber-500/15 text-amber-700'
+                                    : 'bg-red-500/10 text-red-600'
+                                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                            }`}
+                          >
+                            {payLabels[ps]}
+                          </button>
+                        )
+                      })}
+                    </div>
                   )}
                 </div>
               ) : (
