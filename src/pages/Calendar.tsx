@@ -126,8 +126,8 @@ export function CalendarPage() {
             {firstMonth?.label} {firstMonth?.year} — {lastMonth?.label} {lastMonth?.year}
           </p>
         </div>
-        <div className="calendar-nav">
-          {/* Friends toggle — iOS switch */}
+        {/* Desktop nav — hidden on mobile */}
+        <div className="calendar-nav calendar-nav-desktop">
           <button
             onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
             className={`calendar-friends-toggle ${showFriends ? 'active' : ''}`}
@@ -165,6 +165,30 @@ export function CalendarPage() {
             onClick={() => navigate('next')}
             disabled={animating}
             className="calendar-nav-btn"
+          >
+            <ChevronRight strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* Mobile floating bar */}
+        <div className="calendar-mobile-bar">
+          <button
+            onClick={() => navigate('prev')}
+            disabled={animating}
+            className="calendar-mobile-btn"
+          >
+            <ChevronLeft strokeWidth={1.5} />
+          </button>
+          <button
+            onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
+            className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
+          >
+            <Users strokeWidth={1.5} />
+          </button>
+          <button
+            onClick={() => navigate('next')}
+            disabled={animating}
+            className="calendar-mobile-btn"
           >
             <ChevronRight strokeWidth={1.5} />
           </button>

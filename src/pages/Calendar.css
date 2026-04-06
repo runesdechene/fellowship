@@ -152,6 +152,88 @@
   background: hsl(var(--primary) / 0.1);
 }
 
+/* ── Mobile floating bar ───────────────────────────────────────────── */
+
+.calendar-mobile-bar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .calendar-nav-desktop {
+    display: none;
+  }
+
+  .calendar-mobile-bar {
+    display: flex;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 30;
+    align-items: center;
+    gap: 2px;
+    background: hsl(var(--card) / 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 4px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .calendar-mobile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: rgba(61, 48, 40, 0.4);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .calendar-mobile-btn:hover {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+  }
+
+  .calendar-mobile-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .calendar-mobile-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .calendar-mobile-friends {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: rgba(61, 48, 40, 0.35);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .calendar-mobile-friends.active {
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--primary));
+  }
+
+  .calendar-mobile-friends svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 /* ── Grid ──────────────────────────────────────────────────────────── */
 
 .calendar-grid {
