@@ -68,7 +68,7 @@ export function EventHero({ event, friendCount, participationStatus, paymentStat
           {friendCount > 0 && (
             <div className="event-meta-item">
               <Users strokeWidth={1.5} />
-              <span>{friendCount} participant{friendCount > 1 ? 's' : ''}</span>
+              <span>{friendCount} participant{friendCount > 1 ? 's' : ''}{participationStatus ? ' dont vous' : ''}</span>
             </div>
           )}
         </div>
