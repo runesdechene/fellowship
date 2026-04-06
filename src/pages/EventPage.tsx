@@ -14,6 +14,7 @@ import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventHero } from '@/components/events/EventHero'
 import { EventDashboard } from '@/components/events/EventDashboard'
 import { FriendRow } from '@/components/events/FriendRow'
+import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2 } from 'lucide-react'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
@@ -30,6 +31,7 @@ export function EventPage() {
   const [friendCount, setFriendCount] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)
   const [showReportForm, setShowReportForm] = useState(false)
+  const [showParticipants, setShowParticipants] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editSaving, setEditSaving] = useState(false)
   const [editImage, setEditImage] = useState<File | null>(null)
@@ -333,7 +335,12 @@ export function EventPage() {
             friendCount={friendCount}
             participationStatus={participation?.status}
             paymentStatus={participation?.payment_status as string | null}
+            onParticipantsClick={() => setShowParticipants(true)}
           />
+
+          {showParticipants && (
+            <ParticipantsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
+          )}
 
           {/* Dashboard inline — mobile only (above content) */}
           <div className="event-dashboard-mobile-inline">

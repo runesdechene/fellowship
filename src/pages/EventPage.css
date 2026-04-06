@@ -161,6 +161,19 @@
   flex-shrink: 0;
 }
 
+.event-meta-clickable {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin: -2px -6px;
+  transition: background 0.15s;
+}
+
+.event-meta-clickable:hover {
+  background: hsl(var(--muted) / 0.6);
+  color: hsl(var(--primary));
+}
+
 .event-badges {
   display: flex;
   gap: 6px;

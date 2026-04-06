@@ -7,6 +7,7 @@ interface EventHeroProps {
   friendCount: number
   participationStatus?: string | null
   paymentStatus?: string | null
+  onParticipantsClick?: () => void
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -25,7 +26,7 @@ function formatDate(date: string) {
   return new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-export function EventHero({ event, friendCount, participationStatus, paymentStatus }: EventHeroProps) {
+export function EventHero({ event, friendCount, participationStatus, paymentStatus, onParticipantsClick }: EventHeroProps) {
   return (
     <div className="event-hero">
       {/* Poster */}
@@ -66,7 +67,7 @@ export function EventHero({ event, friendCount, participationStatus, paymentStat
             </div>
           )}
           {friendCount > 0 && (
-            <div className="event-meta-item">
+            <div className="event-meta-item event-meta-clickable" onClick={onParticipantsClick} role="button">
               <Users strokeWidth={1.5} />
               <span>{friendCount} participant{friendCount > 1 ? 's' : ''}{participationStatus ? ' dont vous' : ''}</span>
             </div>
