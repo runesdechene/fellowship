@@ -38,7 +38,7 @@
   margin-top: 10px;
 }
 
-.calendar-nav {
+.calendar-year-nav {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -122,64 +122,14 @@
   background: hsl(var(--primary) / 0.1);
 }
 
-/* ── Mobile floating bar ───────────────────────────────────────────── */
+/* ── Filters bar ───────────────────────────────────────────────────── */
 
-.calendar-mobile-bar {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .calendar-nav-desktop {
-    display: none;
-  }
-
-  .calendar-mobile-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 12px;
-  }
-
-  .calendar-mobile-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-    color: rgba(61, 48, 40, 0.4);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .calendar-mobile-btn:hover {
-    background: hsl(var(--muted));
-    color: hsl(var(--foreground));
-  }
-
-  .calendar-mobile-btn:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  .calendar-mobile-btn svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .calendar-mobile-filters {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .calendar-mobile-right {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
+.calendar-filters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 /* ── Grid ──────────────────────────────────────────────────────────── */

@@ -11,9 +11,10 @@ export function CalendarPage() {
   const defaultStart = now.getMonth()
   const defaultYear = now.getFullYear()
 
-  const { profile } = useAuth()
+  useAuth() // ensure authenticated
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
+  const [showMine, setShowMine] = useState(() => localStorage.getItem('fellowship-calendar-mine') !== 'false')
   const [showPro, setShowPro] = useState(() => localStorage.getItem('fellowship-calendar-pro') === 'true')
   const [showVisiteurs, setShowVisiteurs] = useState(() => localStorage.getItem('fellowship-calendar-visiteurs') === 'true')
   const containerRef = useRef<HTMLDivElement>(null)
@@ -68,22 +69,22 @@ export function CalendarPage() {
     return map
   }, [friendActivity, showPro, showVisiteurs])
 
-  // Merge friend events into months
+  // Merge friend events into months + filter own events
   const mergeWithFriends = useCallback((monthData: CalendarMonthType): CalendarMonthType => {
-    if (!showPro && !showVisiteurs) return monthData
-    const key = `${monthData.year}-${monthData.month}`
-    const friendEvents = friendEventsByMonth[key] ?? []
-    // Filter out events already in my participations
-    const myEventIds = new Set(monthData.events.map(e => e.id))
-    const newFriendEvents = friendEvents.filter(e => !myEventIds.has(e.id))
-    if (newFriendEvents.length === 0) return monthData
-    return {
-      ...monthData,
-      events: [...monthData.events, ...newFriendEvents].sort(
-        (a, b) => a.startDate.getTime() - b.startDate.getTime()
-      ),
+    let events = showMine ? monthData.events : []
+
+    if (showPro || showVisiteurs) {
+      const key = `${monthData.year}-${monthData.month}`
+      const friendEvents = friendEventsByMonth[key] ?? []
+      const myEventIds = new Set(monthData.events.map(e => e.id))
+      const newFriendEvents = friendEvents.filter(e => !myEventIds.has(e.id))
+      events = [...events, ...newFriendEvents]
     }
-  }, [showPro, showVisiteurs, friendEventsByMonth])
+
+    events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+
+    return { ...monthData, events }
+  }, [showMine, showPro, showVisiteurs, friendEventsByMonth])
 
   const slidingMonths = useMemo(() => {
     const all = [...months.slice(defaultStart), ...monthsNext.slice(0, defaultStart)]
@@ -125,30 +126,14 @@ export function CalendarPage() {
       {/* Header */}
       <div className="calendar-header">
         <div>
-          <h1 className="page-title">
-            Le Calendrier <span className="calendar-title-owner">de {profile?.brand_name ?? profile?.display_name ?? ''}</span>
-          </h1>
+          <h1 className="page-title">Calendrier</h1>
           <p className="calendar-subtitle">
             {firstMonth?.label} {firstMonth?.year} — {lastMonth?.label} {lastMonth?.year}
           </p>
         </div>
-        {/* Desktop nav — hidden on mobile */}
-        <div className="calendar-nav calendar-nav-desktop">
-          <button
-            onClick={() => { const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
-            className={`calendar-filter-btn ${showPro ? 'active' : ''}`}
-          >
-            <Users strokeWidth={1.5} />
-            Amis pro
-          </button>
-          <button
-            onClick={() => { const next = !showVisiteurs; setShowVisiteurs(next); localStorage.setItem('fellowship-calendar-visiteurs', String(next)) }}
-            className={`calendar-filter-btn ${showVisiteurs ? 'active' : ''}`}
-          >
-            <Users strokeWidth={1.5} />
-            Amis visiteurs
-          </button>
 
+        {/* Year navigation — absolute top right */}
+        <div className="calendar-year-nav">
           <button
             onClick={() => navigate('prev')}
             disabled={animating}
@@ -179,40 +164,28 @@ export function CalendarPage() {
         </div>
       </div>
 
-      {/* Mobile bar — under subtitle */}
-      <div className="calendar-mobile-bar">
-          <div className="calendar-mobile-filters">
-            <button
-              onClick={() => { const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
-              className={`calendar-filter-btn ${showPro ? 'active' : ''}`}
-            >
-              <Users strokeWidth={1.5} />
-              Amis pro
-            </button>
-            <button
-              onClick={() => { const next = !showVisiteurs; setShowVisiteurs(next); localStorage.setItem('fellowship-calendar-visiteurs', String(next)) }}
-              className={`calendar-filter-btn ${showVisiteurs ? 'active' : ''}`}
-            >
-              <Users strokeWidth={1.5} />
-              Amis visiteurs
-            </button>
-          </div>
-          <div className="calendar-mobile-right">
-            <button
-              onClick={() => navigate('prev')}
-              disabled={animating}
-              className="calendar-mobile-btn"
-            >
-              <ChevronLeft strokeWidth={1.5} />
-            </button>
-            <button
-              onClick={() => navigate('next')}
-              disabled={animating}
-              className="calendar-mobile-btn"
-            >
-              <ChevronRight strokeWidth={1.5} />
-            </button>
-          </div>
+      {/* Filters bar */}
+      <div className="calendar-filters">
+        <button
+          onClick={() => { const next = !showMine; setShowMine(next); localStorage.setItem('fellowship-calendar-mine', String(next)) }}
+          className={`calendar-filter-btn ${showMine ? 'active' : ''}`}
+        >
+          Mes événements
+        </button>
+        <button
+          onClick={() => { const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
+          className={`calendar-filter-btn ${showPro ? 'active' : ''}`}
+        >
+          <Users strokeWidth={1.5} />
+          Amis pro
+        </button>
+        <button
+          onClick={() => { const next = !showVisiteurs; setShowVisiteurs(next); localStorage.setItem('fellowship-calendar-visiteurs', String(next)) }}
+          className={`calendar-filter-btn ${showVisiteurs ? 'active' : ''}`}
+        >
+          <Users strokeWidth={1.5} />
+          Amis visiteurs
+        </button>
       </div>
 
       {/* Grid */}
