@@ -78,7 +78,13 @@ export function EventHero({ event, friendCount, participationStatus, paymentStat
           <div className="event-badges">
             <span
               className="event-badge-status"
-              style={{ background: 'hsl(var(--primary))', color: 'white' }}
+              style={
+                participationStatus === 'inscrit'
+                  ? { background: 'hsl(152 50% 38%)', color: 'white' }
+                  : participationStatus === 'en_cours'
+                    ? { background: 'hsl(210 60% 50%)', color: 'white' }
+                    : { background: 'hsl(38 90% 50%)', color: 'white' }
+              }
             >
               ✓ {STATUS_LABELS[participationStatus] ?? participationStatus}
             </span>
