@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent } from '@/hooks/use-events'
-import { addParticipation, removeParticipation } from '@/hooks/use-participations'
+import { addParticipation, removeParticipation, updateParticipation } from '@/hooks/use-participations'
+import { PaymentTracker } from '@/components/events/PaymentTracker'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
 import { NoteForm } from '@/components/notes/NoteForm'
@@ -410,28 +411,75 @@ export function EventPage() {
       {!loadingParticipation && (
         <div className="mb-6 rounded-2xl bg-card p-4">
           {participation ? (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-green-500" />
-                <span className="font-medium">
-                  {participation.status === 'interesse' && 'Intéressé'}
-                  {participation.status === 'en_cours' && 'En cours'}
-                  {participation.status === 'inscrit' && 'Inscrit'}
-                </span>
+            <div className="space-y-3">
+              {/* Status stepper — exposant */}
+              {isExposant ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-1">
+                    {(['interesse', 'en_cours', 'inscrit'] as const).map((s, i) => {
+                      const labels = { interesse: 'Intéressé', en_cours: 'En cours', inscrit: 'Inscrit' }
+                      const statusOrder = ['interesse', 'en_cours', 'inscrit']
+                      const currentIdx = statusOrder.indexOf(participation.status)
+                      const isActive = i <= currentIdx
+                      const isCurrent = participation.status === s
+                      return (
+                        <button
+                          key={s}
+                          onClick={async () => {
+                            const { data } = await updateParticipation(participation.id, { status: s })
+                            if (data) setParticipation(data)
+                          }}
+                          className={`flex-1 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
+                            isCurrent
+                              ? 'bg-primary text-primary-foreground'
+                              : isActive
+                                ? 'bg-primary/20 text-primary'
+                                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                          }`}
+                        >
+                          {labels[s]}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Payment tracking — only when inscrit */}
+                  {participation.status === 'inscrit' && (
+                    <PaymentTracker participation={participation} onUpdate={setParticipation} />
+                  )}
+                </div>
+              ) : (
+                /* Public user — simple status */
+                <div className="flex items-center gap-2">
+                  <Check className="h-5 w-5 text-green-500" />
+                  <span className="font-medium">
+                    {participation.status === 'interesse' ? 'Intéressé' : "J'y vais !"}
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-1">
                 <span className="text-xs text-muted-foreground">
                   ({participation.visibility === 'prive' ? 'Privé' : participation.visibility === 'amis' ? 'Amis' : 'Public'})
                 </span>
+                <Button variant="outline" size="sm" onClick={handleLeave}>Retirer</Button>
               </div>
-              <Button variant="outline" size="sm" onClick={handleLeave}>Retirer</Button>
             </div>
           ) : (
             <div>
               <p className="mb-3 text-sm font-medium">Tu y vas ?</p>
-              <div className="flex flex-wrap gap-2">
-                <Button size="sm" variant="outline" onClick={() => handleJoin('interesse', 'amis')}>Intéressé</Button>
-                <Button size="sm" variant="outline" onClick={() => handleJoin('en_cours', 'amis')}>En cours</Button>
-                <Button size="sm" onClick={() => handleJoin('inscrit', 'amis')}>Inscrit</Button>
-              </div>
+              {isExposant ? (
+                <div className="flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" onClick={() => handleJoin('interesse', 'amis')}>Intéressé</Button>
+                  <Button size="sm" variant="outline" onClick={() => handleJoin('en_cours', 'amis')}>En cours d'inscription</Button>
+                  <Button size="sm" onClick={() => handleJoin('inscrit', 'amis')}>Inscrit</Button>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" onClick={() => handleJoin('interesse', 'amis')}>Intéressé</Button>
+                  <Button size="sm" onClick={() => handleJoin('inscrit', 'public')}>J'y vais !</Button>
+                </div>
+              )}
             </div>
           )}
         </div>
