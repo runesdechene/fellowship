@@ -194,17 +194,17 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
         )}
         {showFollowBack && !compact && (
           followedBack ? (
-            <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-green-600">
-              <UserCheck className="h-3 w-3" />
-              Vous êtes amis !
-            </span>
+            <div className="mt-2 flex items-center gap-2 rounded-xl bg-green-500/10 px-4 py-2.5">
+              <UserCheck className="h-4 w-4 text-green-600" />
+              <span className="text-sm font-semibold text-green-700">Vous êtes amis !</span>
+            </div>
           ) : (
             <button
               onClick={handleFollowBack}
-              className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:bg-primary/20"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
             >
-              <UserPlus className="h-3 w-3" />
-              Suivre en retour
+              <UserPlus className="h-4 w-4" />
+              Devenir ami avec {nameText}
             </button>
           )
         )}
