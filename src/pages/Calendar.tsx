@@ -76,8 +76,9 @@ export function CalendarPage() {
     if (showPro || showVisiteurs) {
       const key = `${monthData.year}-${monthData.month}`
       const friendEvents = friendEventsByMonth[key] ?? []
-      const myEventIds = new Set(monthData.events.map(e => e.id))
-      const newFriendEvents = friendEvents.filter(e => !myEventIds.has(e.id))
+      // Only deduplicate if showing own events too
+      const existingIds = showMine ? new Set(events.map(e => e.id)) : new Set<string>()
+      const newFriendEvents = friendEvents.filter(e => !existingIds.has(e.id))
       events = [...events, ...newFriendEvents]
     }
 
