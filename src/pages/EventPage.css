@@ -572,7 +572,7 @@
   .event-mobile-bar {
     display: block;
     position: fixed;
-    bottom: calc(56px + env(safe-area-inset-bottom, 0px)); /* above BottomBar */
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px)); /* above BottomBar (~60px + safe area) */
     left: 0;
     right: 0;
     z-index: 40;
