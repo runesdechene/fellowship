@@ -178,23 +178,24 @@ export function CalendarPage() {
             className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
           >
             <Users strokeWidth={1.5} />
-            <span>Amis</span>
+            <span>Afficher amis</span>
           </button>
-          <div className="calendar-mobile-sep" />
-          <button
-            onClick={() => navigate('prev')}
-            disabled={animating}
-            className="calendar-mobile-btn"
-          >
-            <ChevronLeft strokeWidth={1.5} />
-          </button>
-          <button
-            onClick={() => navigate('next')}
-            disabled={animating}
-            className="calendar-mobile-btn"
-          >
-            <ChevronRight strokeWidth={1.5} />
-          </button>
+          <div className="calendar-mobile-right">
+            <button
+              onClick={() => navigate('prev')}
+              disabled={animating}
+              className="calendar-mobile-btn"
+            >
+              <ChevronLeft strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={() => navigate('next')}
+              disabled={animating}
+              className="calendar-mobile-btn"
+            >
+              <ChevronRight strokeWidth={1.5} />
+            </button>
+          </div>
       </div>
 
       {/* Grid */}

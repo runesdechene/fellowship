@@ -166,10 +166,7 @@
   .calendar-mobile-bar {
     display: flex;
     align-items: center;
-    gap: 2px;
-    background: hsl(var(--card));
-    border-radius: 24px;
-    padding: 4px;
+    justify-content: space-between;
     margin-top: 12px;
   }
 
@@ -229,11 +226,10 @@
     height: 16px;
   }
 
-  .calendar-mobile-sep {
-    width: 1px;
-    height: 20px;
-    background: rgba(61, 48, 40, 0.1);
-    margin: 0 2px;
+  .calendar-mobile-right {
+    display: flex;
+    align-items: center;
+    gap: 2px;
   }
 }
 
