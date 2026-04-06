@@ -179,10 +179,17 @@ export function EventPage() {
 
   return (
     <div className="event-page">
-      <Link to="/explorer" className="event-back">
-        <ArrowLeft />
-        Retour
-      </Link>
+      <div className="event-topbar">
+        <Link to="/explorer" className="event-back">
+          <ArrowLeft />
+          Retour
+        </Link>
+        {isExposant && !editing && (
+          <button onClick={startEditing} className="event-edit-btn">
+            <Pencil className="h-4 w-4" strokeWidth={1.5} />
+          </button>
+        )}
+      </div>
 
       {editing ? (
         <>
@@ -315,13 +322,7 @@ export function EventPage() {
           </div>
         </>
       ) : (
-        <div style={{ position: 'relative' }}>
-          {isExposant && (
-            <button onClick={startEditing} className="event-edit-btn">
-              <Pencil className="h-4 w-4" strokeWidth={1.5} />
-            </button>
-          )}
-
+        <div>
           <EventHero
             event={event}
             friendCount={friendCount}
