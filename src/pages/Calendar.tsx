@@ -61,8 +61,14 @@ export function CalendarPage() {
       }
 
       if (!map[key]) map[key] = []
-      // Avoid duplicates (same event from multiple friends)
-      if (!map[key].some(e => e.id === calEvent.id)) {
+      // If same event from multiple friends, append name
+      const existing = map[key].find(e => e.id === calEvent.id)
+      if (existing) {
+        const newName = fp.profiles?.display_name ?? 'Un ami'
+        if (existing.friendName && !existing.friendName.includes(newName)) {
+          existing.friendName += `, ${newName}`
+        }
+      } else {
         map[key].push(calEvent)
       }
     }
