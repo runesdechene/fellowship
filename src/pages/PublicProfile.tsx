@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
-import { useMyFriends, useMyFollowers } from '@/hooks/use-follows'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { EventCarousel } from '@/components/profile/EventCarousel'
 import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlaceholder'
@@ -40,8 +39,9 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [showQR, setShowQR] = useState(false)
-  const { friends, loading: friendsLoading } = useMyFriends()
-  const { followers, loading: followersLoading } = useMyFollowers()
+  const [friends, setFriends] = useState<Profile[]>([])
+  const [followers, setFollowers] = useState<Profile[]>([])
+  const [networkLoading, setNetworkLoading] = useState(true)
 
   useEffect(() => {
     if (!slug) return
@@ -49,13 +49,26 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     async function fetchProfile() {
       setLoading(true)
 
-      const { data: profileData, error } = await supabase
+      // Try by slug first, then by ID (for notification links using actor_id)
+      let profileData = null
+      const { data: bySlug } = await supabase
         .from('profiles')
         .select('*')
         .eq('public_slug', slug!)
         .single()
 
-      if (error || !profileData) {
+      if (bySlug) {
+        profileData = bySlug
+      } else {
+        const { data: byId } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', slug!)
+          .single()
+        profileData = byId
+      }
+
+      if (!profileData) {
         setNotFound(true)
         setLoading(false)
         return
@@ -69,13 +82,35 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         .eq('user_id', profileData.id)
         .order('created_at', { ascending: false })
 
-      // RLS handles visibility — inscrit/confirme visible to all authenticated,
+      // RLS handles visibility — inscrit visible to all authenticated,
       // interesse/amis visible only to friends
       // Owner sees everything (RLS: user_id = auth.uid())
 
       const { data: parts } = await partsQuery
 
       setParticipations((parts as ProfileParticipation[] | null) ?? [])
+
+      // Fetch friends (mutual follows) and followers for this profile
+      try {
+        const { data: friendIds } = await supabase.rpc('get_friend_ids', { p_user_id: profileData.id })
+        if (friendIds && (friendIds as string[]).length > 0) {
+          const { data: friendProfiles } = await supabase
+            .from('profiles')
+            .select('*')
+            .in('id', friendIds as string[])
+          setFriends(friendProfiles ?? [])
+        }
+
+        const { data: followerData } = await supabase
+          .from('follows')
+          .select('profiles!follows_follower_id_fkey(*)')
+          .eq('following_id', profileData.id)
+        setFollowers(followerData?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
+      } catch {
+        // Non-critical — profile still loads
+      }
+      setNetworkLoading(false)
+
       setLoading(false)
     }
 
@@ -131,15 +166,14 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
           <EventCarousel upcoming={upcoming} past={past} />
 
-          {/* Friends & Followers — owner only */}
-          {isOwner && (
-            <div className="profile-network">
+          {/* Friends & Followers */}
+          <div className="profile-network">
               <div className="profile-network-section">
                 <h3 className="profile-network-title">
                   <Users strokeWidth={1.5} />
-                  Amis ({friendsLoading ? '…' : friends.length})
+                  Amis ({networkLoading ? '…' : friends.length})
                 </h3>
-                {friendsLoading ? (
+                {networkLoading ? (
                   <p className="profile-network-empty">Chargement…</p>
                 ) : friends.length === 0 ? (
                   <p className="profile-network-empty">Pas encore d'amis</p>
@@ -162,12 +196,12 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
               <div className="profile-network-section">
                 <h3 className="profile-network-title">
                   <UserCheck strokeWidth={1.5} />
-                  Abonnés ({followersLoading ? '…' : followers.length})
+                  Abonnés ({networkLoading ? '…' : followers.length})
                 </h3>
-                {followersLoading ? (
+                {networkLoading ? (
                   <p className="profile-network-empty">Chargement…</p>
                 ) : followers.length === 0 ? (
-                  <p className="profile-network-empty">Personne ne te suit encore</p>
+                  <p className="profile-network-empty">{isOwner ? 'Personne ne te suit encore' : 'Aucun abonné'}</p>
                 ) : (
                   <div className="profile-network-list">
                     {followers.map(follower => (
@@ -185,7 +219,6 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
                 )}
               </div>
             </div>
-          )}
         </div>
 
         <FellowshipFooter />

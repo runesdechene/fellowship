@@ -38,8 +38,8 @@ function hashName(name: string): number {
 
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: typeof Check }> = {
-  confirme: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.1)', icon: Check },
   inscrit: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.1)', icon: Check },
+  en_cours: { color: 'hsl(210 60% 50%)', bg: 'hsl(210 60% 50% / 0.1)', icon: HelpCircle },
   interesse: { color: 'hsl(30 80% 50%)', bg: 'hsl(30 80% 50% / 0.1)', icon: HelpCircle },
 }
 
