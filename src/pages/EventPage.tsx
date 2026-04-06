@@ -232,7 +232,7 @@ export function EventPage() {
           </Link>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
-          {isPast && isExposant && !editing && (
+          {isPast && !editing && (
             <button onClick={() => setShowReviewForm(!showReviewForm)} className="event-edit-btn" title="Donner mon avis">
               <Star className="h-4 w-4" strokeWidth={1.5} />
             </button>
