@@ -9,9 +9,9 @@ export const changelog: ChangelogEntry[] = [
   {
     version: '0.5.0',
     date: '2026-04-06',
-    title: 'Fiche événement façon Lu.ma',
+    title: 'Nouvelle fiche événement',
     changes: [
-      'Fiche événement entièrement redessinée — layout 2 colonnes inspiré Lu.ma',
+      'Fiche événement entièrement redessinée — layout 2 colonnes moderne',
       'Colonne gauche : affiche, ajouté par, liens, amis présents',
       'Colonne droite : infos, suivi de participation, notes, avis, à propos',
       'Meta-rows avec icônes carrées (date, lieu, deadline, participants)',
