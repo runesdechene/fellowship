@@ -26,7 +26,7 @@ export function BottomBar() {
   const nav = profile?.type === 'exposant' ? exposantNav : publicNav
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex bg-card/90 backdrop-blur-xl md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex bg-card/90 backdrop-blur-xl md:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       {nav.map(({ to, icon: Icon, label }) => (
         <NavLink
           key={to}
