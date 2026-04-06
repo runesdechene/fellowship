@@ -138,7 +138,7 @@ export function EventDashboard({
             onClick={() => handleStatusChange(step.key)}
             className={`event-stepper-btn ${
               step.key === participation.status
-                ? 'active'
+                ? `active ${step.key}`
                 : i < currentIdx
                   ? 'passed'
                   : 'inactive'

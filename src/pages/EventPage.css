@@ -384,6 +384,21 @@
   color: white;
 }
 
+.event-stepper-btn.active.interesse {
+  background: hsl(38 90% 50%);
+  color: white;
+}
+
+.event-stepper-btn.active.en_cours {
+  background: hsl(210 60% 50%);
+  color: white;
+}
+
+.event-stepper-btn.active.inscrit {
+  background: hsl(152 50% 38%);
+  color: white;
+}
+
 .event-stepper-btn.passed {
   background: hsl(var(--primary) / 0.2);
   color: hsl(var(--primary));
