@@ -373,7 +373,7 @@ export function EventPage() {
               {/* Notes & Reviews SIDE BY SIDE */}
               <div className="event-notes-reviews">
                 <div>
-                  <div className="event-section-label" style={{color: 'rgba(61,48,40,0.45)'}}>📝 Notes ({notes.length})</div>
+                  <div className="event-section-label" style={{color: 'rgba(61,48,40,0.45)'}}>📝 Notes partagées ({notes.length})</div>
                   <div className="event-section-card">
                     <NoteForm eventId={event.id} onNoteAdded={refetchNotes} />
                     <NotesFeed notes={notes} onRefresh={refetchNotes} />
