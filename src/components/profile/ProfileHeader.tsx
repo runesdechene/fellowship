@@ -11,15 +11,18 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ profile, isOwner, onOpenQR }: ProfileHeaderProps) {
   const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
-  const subtitle = [profile.craft_type ?? (profile.type === 'exposant' ? 'Exposant' : null), profile.city].filter(Boolean).join(' · ')
-  const bannerUrl = profile.banner_url
+  const isVisitor = profile.type === 'public'
+  const subtitle = [profile.craft_type ?? (isVisitor ? 'Visiteur' : 'Exposant'), profile.city].filter(Boolean).join(' · ')
+  const bannerUrl = isVisitor ? null : profile.banner_url
 
   return (
     <div className="profile-header">
-      {/* Banner */}
-      <div className={`profile-banner ${bannerUrl ? '' : 'profile-banner-empty'}`}>
-        {bannerUrl && <img src={bannerUrl} alt="" className="profile-banner-image" />}
-      </div>
+      {/* Banner — hidden for visitors */}
+      {!isVisitor && (
+        <div className={`profile-banner ${bannerUrl ? '' : 'profile-banner-empty'}`}>
+          {bannerUrl && <img src={bannerUrl} alt="" className="profile-banner-image" />}
+        </div>
+      )}
 
       {/* Edit + QR buttons — under banner, right side */}
       {isOwner && (

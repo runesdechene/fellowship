@@ -23,6 +23,7 @@ interface SearchProfile {
   display_name: string | null
   city: string | null
   public_slug: string | null
+  type: string
   avatar_url: string | null
 }
 
@@ -93,8 +94,7 @@ export function SearchBar() {
           .limit(5),
         supabase
           .from('profiles')
-          .select('id, brand_name, display_name, city, public_slug, avatar_url')
-          .eq('type', 'exposant')
+          .select('id, brand_name, display_name, city, public_slug, avatar_url, type')
           .or(`brand_name.ilike.%${query}%,display_name.ilike.%${query}%`)
           .limit(5),
       ])
@@ -238,7 +238,7 @@ export function SearchBar() {
               )}
               {profiles.length > 0 && (
                 <div className="search-results-section">
-                  <div className="search-results-label">Exposants</div>
+                  <div className="search-results-label">Personnes</div>
                   {profiles.map(p => (
                     <Link
                       key={p.id}
@@ -254,13 +254,15 @@ export function SearchBar() {
                         )}
                       </div>
                       <div className="search-result-info">
-                        <div className="search-result-name">{p.brand_name ?? p.display_name ?? 'Exposant'}</div>
-                        {p.city && (
-                          <div className="search-result-meta">
-                            <MapPin />
-                            <span>{p.city}</span>
-                          </div>
-                        )}
+                        <div className="search-result-name">{p.brand_name ?? p.display_name ?? 'Utilisateur'}</div>
+                        <div className="search-result-meta">
+                          {p.type === 'public' ? (
+                            <span>Visiteur</span>
+                          ) : (
+                            <span>Exposant</span>
+                          )}
+                          {p.city && <><span>·</span><MapPin /><span>{p.city}</span></>}
+                        </div>
                       </div>
                     </Link>
                   ))}
