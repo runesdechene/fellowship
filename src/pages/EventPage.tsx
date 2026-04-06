@@ -238,12 +238,12 @@ export function EventPage() {
       </div>
 
       {editing ? (
-        <>
-          {/* Edit mode image section */}
-          <div className="mb-6 flex justify-center">
+        <div className="event-two-col">
+          {/* Left column: image */}
+          <div className="event-col-left">
             {editImage ? (
-              <div className="group relative" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
-                <img src={URL.createObjectURL(editImage)} alt="" className="h-full w-full rounded-xl object-cover" />
+              <div className="event-poster group relative">
+                <img src={URL.createObjectURL(editImage)} alt="" />
                 <div className="absolute bottom-3 right-3 flex gap-2">
                   <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
                     <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
@@ -255,7 +255,7 @@ export function EventPage() {
                 </div>
               </div>
             ) : removeImage ? (
-              <div className="flex items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/50" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
+              <div className="event-poster" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed hsl(var(--border))', background: 'hsl(var(--muted) / 0.5)', boxShadow: 'none' }}>
                 <div className="flex flex-col items-center gap-3 text-muted-foreground">
                   <Trash2 className="h-6 w-6" />
                   <span className="text-sm">Image retirée</span>
@@ -263,8 +263,8 @@ export function EventPage() {
                 </div>
               </div>
             ) : event.image_url ? (
-              <div className="group relative" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
-                <img src={event.image_url} alt={event.name} className="h-full w-full rounded-xl object-cover" />
+              <div className="event-poster group relative">
+                <img src={event.image_url} alt={event.name} />
                 <div className="absolute bottom-3 right-3 flex gap-2">
                   <label className="cursor-pointer rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm backdrop-blur-sm transition-colors hover:bg-white">
                     <span className="flex items-center gap-1.5"><Image className="h-3.5 w-3.5" />Remplacer</span>
@@ -276,97 +276,99 @@ export function EventPage() {
                 </div>
               </div>
             ) : (
-              <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-muted/50 text-muted-foreground transition-colors hover:border-primary/30 hover:bg-muted" style={{ aspectRatio: '2/3', maxHeight: '400px' }}>
-                <Image className="h-8 w-8" />
-                <span className="text-sm">Ajouter une affiche</span>
+              <label className="event-poster" style={{ display: 'flex', cursor: 'pointer', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, border: '2px dashed hsl(var(--border))', background: 'hsl(var(--muted) / 0.5)', boxShadow: 'none' }}>
+                <Image className="h-8 w-8 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Ajouter une affiche</span>
                 <input type="file" accept="image/*" className="hidden" onChange={e => { if (e.target.files?.[0]) setEditImage(e.target.files[0]) }} />
               </label>
             )}
           </div>
 
-          {/* Edit form */}
-          <div className="mb-6 space-y-4 rounded-2xl bg-card p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold">Modifier l'événement</h2>
-              <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
-              Vos modifications seront visibles par tous les utilisateurs. Éditez avec précaution.
-            </div>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">Nom <span className="text-destructive">*</span></label>
-              <input
-                type="text"
-                className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="Nom de l'événement"
-                value={editForm.name}
-                onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">Description</label>
-              <textarea
-                className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
-                placeholder="Description"
-                value={editForm.description}
-                onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
-              />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
-                <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
+          {/* Right column: form */}
+          <div className="event-col-right">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-lg">Modifier l'événement</h2>
+                <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
+                Vos modifications seront visibles par tous les utilisateurs.
               </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
-                <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département (ex: 77)" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
-              </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Début <span className="text-destructive">*</span></label>
-                <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.start_date} onChange={e => setEditForm(f => ({ ...f, start_date: e.target.value }))} />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Fin</label>
-                <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.end_date} onChange={e => setEditForm(f => ({ ...f, end_date: e.target.value }))} />
-              </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Date limite inscription</label>
-                <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.registration_deadline} onChange={e => setEditForm(f => ({ ...f, registration_deadline: e.target.value }))} />
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Nom <span className="text-destructive">*</span></label>
+                <input
+                  type="text"
+                  className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  placeholder="Nom de l'événement"
+                  value={editForm.name}
+                  onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+                />
               </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Lien inscription</label>
-                <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.registration_url} onChange={e => setEditForm(f => ({ ...f, registration_url: e.target.value }))} />
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Description</label>
+                <textarea
+                  className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
+                  placeholder="Description"
+                  value={editForm.description}
+                  onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
+                />
               </div>
-            </div>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
-              <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
+                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
+                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département (ex: 77)" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Début <span className="text-destructive">*</span></label>
+                  <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.start_date} onChange={e => setEditForm(f => ({ ...f, start_date: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Fin</label>
+                  <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.end_date} onChange={e => setEditForm(f => ({ ...f, end_date: e.target.value }))} />
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Date limite inscription</label>
+                  <input type="date" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={editForm.registration_deadline} onChange={e => setEditForm(f => ({ ...f, registration_deadline: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Lien inscription</label>
+                  <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.registration_url} onChange={e => setEditForm(f => ({ ...f, registration_url: e.target.value }))} />
+                </div>
+              </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Email de contact</label>
-                <input type="email" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="contact@exemple.fr" value={editForm.contact_email} onChange={e => setEditForm(f => ({ ...f, contact_email: e.target.value }))} />
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Site web</label>
+                <input type="url" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="https://..." value={editForm.external_url} onChange={e => setEditForm(f => ({ ...f, external_url: e.target.value }))} />
               </div>
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1 block">Note d'inscription</label>
-                <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: Envoyer dossier par mail" value={editForm.registration_note} onChange={e => setEditForm(f => ({ ...f, registration_note: e.target.value }))} />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Email de contact</label>
+                  <input type="email" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="contact@exemple.fr" value={editForm.contact_email} onChange={e => setEditForm(f => ({ ...f, contact_email: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Note d'inscription</label>
+                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: Envoyer dossier par mail" value={editForm.registration_note} onChange={e => setEditForm(f => ({ ...f, registration_note: e.target.value }))} />
+                </div>
               </div>
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
-              <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editForm.city || !editForm.start_date}>
-                <Save className="mr-2 h-4 w-4" />
-                {editSaving ? 'Enregistrement...' : 'Enregistrer'}
-              </Button>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
+                <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editForm.city || !editForm.start_date}>
+                  <Save className="mr-2 h-4 w-4" />
+                  {editSaving ? 'Enregistrement...' : 'Enregistrer'}
+                </Button>
+              </div>
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="event-two-col">
           {/* ── LEFT COLUMN ── */}
