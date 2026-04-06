@@ -141,3 +141,28 @@ export async function searchSimilarEvents(name: string, startDate?: string) {
   const { data } = await query
   return data ?? []
 }
+
+export function useEventCreator(createdBy: string | null | undefined) {
+  const [creator, setCreator] = useState<{
+    id: string
+    display_name: string | null
+    brand_name: string | null
+    avatar_url: string | null
+    public_slug: string | null
+    craft_type: string | null
+  } | null>(null)
+
+  useEffect(() => {
+    if (!createdBy) return
+    supabase
+      .from('profiles')
+      .select('id, display_name, brand_name, avatar_url, public_slug, craft_type')
+      .eq('id', createdBy)
+      .single()
+      .then(({ data }) => {
+        if (data) setCreator(data)
+      })
+  }, [createdBy])
+
+  return creator
+}
