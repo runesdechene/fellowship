@@ -262,10 +262,11 @@
 }
 
 .notif-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 360px;
+  position: fixed;
+  top: 60px;
+  left: 8px;
+  right: 8px;
+  max-width: 400px;
   max-height: 480px;
   display: flex;
   flex-direction: column;
@@ -340,6 +341,16 @@
 
 .notif-dropdown-see-all:hover {
   background: hsl(var(--background));
+}
+
+@media (min-width: 768px) {
+  .notif-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: auto;
+    right: 0;
+    width: 360px;
+  }
 }
 
 /* ── Profile avatar ────────────────────────────────────────────────── */
