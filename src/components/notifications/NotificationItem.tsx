@@ -201,9 +201,10 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
           ) : (
             <button
               onClick={handleFollowBack}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-[0.98]"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
+              style={{ background: 'hsl(152 50% 38% / 0.12)', color: 'hsl(152 50% 32%)' }}
             >
-              <UserPlus className="h-4 w-4" />
+              <UserPlus className="h-3.5 w-3.5" />
               Devenir ami avec {nameText}
             </button>
           )
