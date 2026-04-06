@@ -169,9 +169,10 @@ export function CalendarPage() {
             <ChevronRight strokeWidth={1.5} />
           </button>
         </div>
+      </div>
 
-        {/* Mobile floating bar */}
-        <div className="calendar-mobile-bar">
+      {/* Mobile bar — under subtitle */}
+      <div className="calendar-mobile-bar">
           <button
             onClick={() => { const next = !showFriends; setShowFriends(next); localStorage.setItem('fellowship-calendar-friends', String(next)) }}
             className={`calendar-mobile-friends ${showFriends ? 'active' : ''}`}
@@ -194,7 +195,6 @@ export function CalendarPage() {
           >
             <ChevronRight strokeWidth={1.5} />
           </button>
-        </div>
       </div>
 
       {/* Grid */}
