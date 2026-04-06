@@ -3,6 +3,9 @@
 /* ── Event Page ────────────────────────────────────────────────────── */
 
 .event-page {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
   padding: var(--page-padding);
   padding-bottom: 80px;
 }
