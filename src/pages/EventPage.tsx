@@ -315,21 +315,19 @@ export function EventPage() {
           </div>
         </>
       ) : (
-        <>
+        <div style={{ position: 'relative' }}>
+          {isExposant && (
+            <button onClick={startEditing} className="event-edit-btn">
+              <Pencil className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
+
           <EventHero
             event={event}
             friendCount={friendCount}
             participationStatus={participation?.status}
             paymentStatus={participation?.payment_status as string | null}
           />
-
-          {isExposant && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-              <Button variant="ghost" size="sm" onClick={startEditing}>
-                <Pencil className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
 
           {/* Dashboard inline — mobile only (above content) */}
           <div className="event-dashboard-mobile-inline">
@@ -414,7 +412,7 @@ export function EventPage() {
             </div>
           </div>
 
-        </>
+        </div>
       )}
     </div>
   )
