@@ -193,16 +193,23 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
           <p className="text-xs text-muted-foreground mt-0.5">{formatDate(notification.created_at)}</p>
         )}
         {showFollowBack && !compact && (
-          followedBack ? (
-            <div className="mt-2 flex items-center gap-2 rounded-xl bg-green-500/10 px-4 py-2.5">
-              <UserCheck className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-semibold text-green-700">Vous êtes amis !</span>
-            </div>
+          followedBack || isFriend ? (
+            <span
+              className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold"
+              style={{ background: 'hsl(152 50% 38% / 0.12)', color: 'hsl(152 50% 32%)' }}
+            >
+              <UserCheck className="h-3.5 w-3.5" />
+              Ami !
+            </span>
           ) : (
             <button
               onClick={handleFollowBack}
-              className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors"
-              style={{ background: 'hsl(152 50% 38% / 0.12)', color: 'hsl(152 50% 32%)' }}
+              className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold cursor-pointer"
+              style={{ background: 'hsl(152 50% 38% / 0.12)', color: 'hsl(152 50% 32%)', border: 'none', transition: 'background 0.15s, transform 0.1s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'hsl(152 50% 38% / 0.22)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'hsl(152 50% 38% / 0.12)')}
+              onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.97)')}
+              onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
             >
               <UserPlus className="h-3.5 w-3.5" />
               Devenir ami avec {nameText}
