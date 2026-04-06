@@ -132,7 +132,7 @@ export function CalendarPage() {
           </p>
         </div>
 
-        {/* Year navigation — absolute top right */}
+        {/* Year navigation */}
         <div className="calendar-year-nav">
           <button
             onClick={() => navigate('prev')}
@@ -141,19 +141,7 @@ export function CalendarPage() {
           >
             <ChevronLeft strokeWidth={1.5} />
           </button>
-          {year !== defaultYear && (
-            <button
-              onClick={() => {
-                if (animating) return
-                const dir = year > defaultYear ? 'prev' : 'next'
-                navigate(dir)
-                setTimeout(() => setYear(defaultYear), 250)
-              }}
-              className="calendar-today-btn"
-            >
-              Aujourd'hui
-            </button>
-          )}
+          <span className="calendar-year-label">{year}</span>
           <button
             onClick={() => navigate('next')}
             disabled={animating}

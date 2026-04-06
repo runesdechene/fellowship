@@ -105,21 +105,13 @@
   height: 14px;
 }
 
-.calendar-today-btn {
-  border-radius: 9999px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: var(--font-body);
-  color: hsl(var(--primary));
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.calendar-today-btn:hover {
-  background: hsl(var(--primary) / 0.1);
+.calendar-year-label {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  min-width: 48px;
+  text-align: center;
 }
 
 /* ── Filters bar ───────────────────────────────────────────────────── */
