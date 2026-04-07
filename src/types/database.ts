@@ -70,4 +70,5 @@ export interface NotificationData {
   event_name?: string
   friend_name?: string
   follower_name?: string
+  status?: string
 }

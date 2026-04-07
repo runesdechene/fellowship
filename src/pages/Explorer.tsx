@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
@@ -13,8 +13,19 @@ export function ExplorerPage() {
   const { profile } = useAuth()
   const { events: allEvents, loading } = useEvents()
 
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
-  const [filterDept, setFilterDept] = useState(false)
+  // Persist filters in localStorage
+  const stored = useMemo(() => {
+    try { return JSON.parse(localStorage.getItem('explorer-filters') ?? '{}') } catch { return {} }
+  }, [])
+  const persist = useCallback((patch: Record<string, unknown>) => {
+    try {
+      const cur = JSON.parse(localStorage.getItem('explorer-filters') ?? '{}')
+      localStorage.setItem('explorer-filters', JSON.stringify({ ...cur, ...patch }))
+    } catch { /* ignore */ }
+  }, [])
+
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set(stored.tags ?? []))
+  const [filterDept, setFilterDept] = useState(() => stored.dept === true)
 
   // Month pickers
   const currentMonth = new Date().getMonth()
@@ -26,9 +37,10 @@ export function ExplorerPage() {
       label: d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
     }
   })
-  const [monthFrom, setMonthFrom] = useState(monthOptions[0].value)
+  const validMonths = new Set(monthOptions.map(o => o.value))
+  const [monthFrom, setMonthFrom] = useState(() => validMonths.has(stored.monthFrom) ? stored.monthFrom : monthOptions[0].value)
   const monthOptionsTo = [...monthOptions.filter(o => o.value > monthFrom), { value: '9999-12', label: 'la fin des temps' }]
-  const [monthTo, setMonthTo] = useState('9999-12')
+  const [monthTo, setMonthTo] = useState(() => stored.monthTo === '9999-12' || validMonths.has(stored.monthTo) ? stored.monthTo : '9999-12')
 
   const now = useMemo(() => new Date(), [])
 
@@ -37,6 +49,7 @@ export function ExplorerPage() {
       const next = new Set(prev)
       if (next.has(tag)) next.delete(tag)
       else next.add(tag)
+      persist({ tags: [...next] })
       return next
     })
   }
@@ -125,21 +138,26 @@ export function ExplorerPage() {
           value={monthFrom}
           onChange={v => {
             setMonthFrom(v)
-            if (v >= monthTo) setMonthTo(monthOptions[Math.min(monthOptions.findIndex(o => o.value === v) + 1, monthOptions.length - 1)].value)
+            persist({ monthFrom: v })
+            if (v >= monthTo) {
+              const newTo = monthOptions[Math.min(monthOptions.findIndex(o => o.value === v) + 1, monthOptions.length - 1)].value
+              setMonthTo(newTo)
+              persist({ monthTo: newTo })
+            }
           }}
         />
         <span className="explorer-month-pickers-label">à</span>
         <MonthPicker
           options={monthOptionsTo}
           value={monthTo}
-          onChange={setMonthTo}
+          onChange={v => { setMonthTo(v); persist({ monthTo: v }) }}
         />
 
         {profile?.department && (
           <>
             <div className="explorer-filter-divider" />
             <button
-              onClick={() => setFilterDept(!filterDept)}
+              onClick={() => { setFilterDept(v => { persist({ dept: !v }); return !v }) }}
               className={`explorer-filter-chip ${filterDept ? 'active' : ''}`}
             >
               Dept. {profile.department}

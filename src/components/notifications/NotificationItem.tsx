@@ -61,7 +61,7 @@ const TYPE_CONFIG: Record<string, TypeConfigEntry> = {
     icon: Users,
     color: 'text-primary',
     actorName: (d) => d.actor_name ?? d.friend_name ?? 'Un ami',
-    suffix: (d) => ` participe à ${d.event_name ?? 'un événement'}`,
+    suffix: (d) => ` ${d.status === 'interesse' ? "s'intéresse à" : 'participe à'} ${d.event_name ?? 'un événement'}`,
     link: (d) => d.event_id ? `/evenement/${d.event_id}` : '/explorer',
   },
   new_follower: {

@@ -144,7 +144,9 @@ export function DashboardPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold truncate">
-                    {p.profiles?.display_name} participe à {p.events?.name}
+                    {p.profiles?.display_name}{' '}
+                    {p.status === 'interesse' ? "s'intéresse à" : 'participe à'}{' '}
+                    {p.events?.name}
                   </p>
                   <p className="text-xs text-muted-foreground">Il y a quelques heures</p>
                 </div>
