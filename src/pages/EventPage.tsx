@@ -162,10 +162,12 @@ export function EventPage() {
 
     if (editImage) {
       const compressed = await compressImage(editImage)
-      const path = `${crypto.randomUUID()}.webp`
+      const isWebp = compressed.type === 'image/webp'
+      const ext = isWebp ? 'webp' : compressed.name.split('.').pop() ?? 'jpg'
+      const path = `${crypto.randomUUID()}.${ext}`
       const { data: uploadData } = await supabase.storage
         .from('event-images')
-        .upload(path, compressed, { contentType: 'image/webp' })
+        .upload(path, compressed, { contentType: compressed.type || 'image/webp' })
       if (uploadData) {
         const { data: urlData } = supabase.storage
           .from('event-images')

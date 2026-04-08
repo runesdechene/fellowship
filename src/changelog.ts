@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.2',
+    date: '2026-04-08',
+    title: 'Correction upload images',
+    changes: [
+      'Fix — certaines photos d\'événements apparaissaient en blanc après upload',
+      'Détection automatique des images corrompues avec fallback sur l\'original',
+      'Meilleure compatibilité avec les formats photos iPhone/Android',
+    ],
+  },
+  {
     version: '0.5.1',
     date: '2026-04-08',
     title: 'Recherche intelligente & correctifs',

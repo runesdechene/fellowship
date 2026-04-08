@@ -70,10 +70,12 @@ export function EventForm({ onClose }: EventFormProps) {
       let image_url: string | undefined
       if (form.image) {
         const compressed = await compressImage(form.image)
-        const path = `${crypto.randomUUID()}.webp`
+        const isWebp = compressed.type === 'image/webp'
+        const ext = isWebp ? 'webp' : compressed.name.split('.').pop() ?? 'jpg'
+        const path = `${crypto.randomUUID()}.${ext}`
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('event-images')
-          .upload(path, compressed, { contentType: 'image/webp' })
+          .upload(path, compressed, { contentType: compressed.type || 'image/webp' })
         if (uploadError) {
           console.error('Image upload failed:', uploadError)
           // Continue without image
