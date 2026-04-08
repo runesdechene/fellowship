@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.3',
+    date: '2026-04-08',
+    title: 'Calendrier mobile repensé',
+    changes: [
+      'Nouvelle vue annuelle mobile — grille 3×4 avec les 12 mois visibles',
+      'Vue mois détaillée — gélules compactes avec miniature et statut',
+      'Navigation mois par mois avec chevrons',
+      'Fix — les événements ne débordent plus sur mobile',
+    ],
+  },
+  {
     version: '0.5.2',
     date: '2026-04-08',
     title: 'Correction upload images',
