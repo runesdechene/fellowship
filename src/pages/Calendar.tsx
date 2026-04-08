@@ -1,9 +1,11 @@
-import { useState, useMemo, useRef, useCallback } from 'react'
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
 import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
 import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal'
+import { MobileYearGrid } from '@/components/calendar/MobileYearGrid'
+import { MobileMonthView } from '@/components/calendar/MobileMonthView'
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import './Calendar.css'
 
@@ -20,6 +22,30 @@ export function CalendarPage() {
   const [showVisiteurs, setShowVisiteurs] = useState(() => localStorage.getItem('fellowship-calendar-visiteurs') === 'true')
   const containerRef = useRef<HTMLDivElement>(null)
   const [modalEvent, setModalEvent] = useState<{ id: string; name: string } | null>(null)
+
+  const [mobileView, setMobileView] = useState<'year' | 'month'>('year')
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const handleSelectMonth = useCallback((index: number) => {
+    setSelectedMonthIndex(index)
+    setMobileView('month')
+  }, [])
+
+  const handlePrevMonth = useCallback(() => {
+    setSelectedMonthIndex(i => i > 0 ? i - 1 : 11)
+  }, [])
+
+  const handleNextMonth = useCallback(() => {
+    setSelectedMonthIndex(i => i < 11 ? i + 1 : 0)
+  }, [])
 
   const { participations, loading } = useMyParticipations(year)
   const months = useCalendarYear(participations, year)
@@ -214,6 +240,26 @@ export function CalendarPage() {
               </div>
             )
           })}
+        </div>
+      )}
+      {/* Mobile calendar */}
+      {isMobile && (
+        <div className="mobile-calendar">
+          {mobileView === 'year' ? (
+            <MobileYearGrid
+              months={slidingMonths}
+              currentMonth={now.getMonth()}
+              currentYear={now.getFullYear()}
+              onSelectMonth={handleSelectMonth}
+            />
+          ) : (
+            <MobileMonthView
+              month={slidingMonths[selectedMonthIndex]}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              onBackToYear={() => setMobileView('year')}
+            />
+          )}
         </div>
       )}
       {/* Friends modal — rendered at page level */}
