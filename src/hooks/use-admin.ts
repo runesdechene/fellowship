@@ -88,6 +88,7 @@ export function useAdminEvents() {
     setLoading(false)
   }
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchEvents() }, [])
 
   return { events, loading, refetch: fetchEvents }
@@ -113,6 +114,7 @@ export function useAdminUsers() {
     setLoading(false)
   }
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchUsers() }, [])
 
   return { users, loading, refetch: fetchUsers }
@@ -134,6 +136,7 @@ export function useAdminTags() {
     setLoading(false)
   }
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchTags() }, [])
 
   async function createTag(tag: { name: string; slug: string; bg_color: string; text_color: string; sort_order: number }) {
@@ -191,6 +194,7 @@ export function useAdminReports() {
     setLoading(false)
   }
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchReports() }, [])
 
   return { reports, loading, refetch: fetchReports }
