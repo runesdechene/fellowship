@@ -15,6 +15,7 @@ import { PublicProfilePage } from '@/pages/PublicProfile'
 import { EmbedPage } from '@/pages/Embed'
 import { AuthCallbackPage } from '@/pages/AuthCallback'
 import { CalendarPage } from '@/pages/Calendar'
+import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { needsOnboarding } = useAuth()
@@ -48,6 +49,8 @@ function ProfileWithLayout() {
 
 function App() {
   return (
+    <>
+        <InstallPrompt />
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
@@ -76,6 +79,7 @@ function App() {
           <Route path="/:slug" element={<ProfileWithLayout />} />
           <Route path="/:slug/embed" element={<EmbedPage />} />
         </Routes>
+    </>
   )
 }
 
