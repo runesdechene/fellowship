@@ -1,3 +1,5 @@
+import { supabase } from './supabase'
+
 // Primary tags — fixed by admin, not user-editable
 export const PRIMARY_TAGS = [
   { value: 'fete-medievale', label: 'Médiéval' },
@@ -30,7 +32,38 @@ export const TAG_COLORS: Record<string, { bg: string; color: string }> = {
   'historique': { bg: 'hsl(10 70% 50% / 0.1)', color: 'hsl(10 70% 45%)' },
 }
 
-export function getTagColor(tag: string): { bg: string; color: string } {
+// Fetch tags from Supabase (primary source)
+export async function fetchDynamicTags(): Promise<{ value: string; label: string; bg: string; color: string }[]> {
+  const { data } = await supabase
+    .from('tags')
+    .select('slug, name, bg_color, text_color')
+    .order('sort_order', { ascending: true })
+
+  if (!data || data.length === 0) {
+    // Fallback to hardcoded tags
+    return PRIMARY_TAGS.map(t => ({
+      value: t.value,
+      label: t.label,
+      bg: TAG_COLORS[t.value]?.bg ?? 'rgba(61,48,40,0.06)',
+      color: TAG_COLORS[t.value]?.color ?? 'rgba(61,48,40,0.45)',
+    }))
+  }
+
+  return data.map(t => ({
+    value: t.slug,
+    label: t.name,
+    bg: t.bg_color,
+    color: t.text_color,
+  }))
+}
+
+export function getTagColor(tag: string, dynamicTags?: { value: string; bg: string; color: string }[]): { bg: string; color: string } {
+  // Check dynamic tags first
+  if (dynamicTags) {
+    const found = dynamicTags.find(t => t.value === tag)
+    if (found) return { bg: found.bg, color: found.color }
+  }
+  // Fallback to static map
   if (TAG_COLORS[tag]) return TAG_COLORS[tag]
   const key = Object.keys(TAG_COLORS).find(k => tag.toLowerCase().includes(k))
   return key ? TAG_COLORS[key] : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
