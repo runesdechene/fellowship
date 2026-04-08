@@ -127,19 +127,16 @@ export function useRecentEvents(limit = 6) {
 }
 
 export async function searchSimilarEvents(name: string, startDate?: string) {
-  let query = supabase
-    .from('events')
-    .select('id, name, city, department, start_date, end_date')
-    .ilike('name', `%${name}%`)
-    .limit(5)
+  const searchYear = startDate ? parseInt(startDate.substring(0, 4)) : undefined
 
-  if (startDate) {
-    const year = startDate.substring(0, 4)
-    query = query.gte('start_date', `${year}-01-01`).lte('start_date', `${year}-12-31`)
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase.rpc as any)('search_similar_events', {
+    search_name: name,
+    search_year: searchYear ?? null,
+    threshold: 0.25,
+  })
 
-  const { data } = await query
-  return data ?? []
+  return (data ?? []) as { id: string; name: string; city: string; department: string; start_date: string; end_date: string; score: number }[]
 }
 
 export function useEventCreator(createdBy: string | null | undefined) {

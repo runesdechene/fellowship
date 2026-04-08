@@ -12,7 +12,7 @@ import { PRIMARY_TAGS } from '@/lib/constants'
 import { ChevronRight, ChevronLeft, MapPin, Calendar, Tag, Image, Link as LinkIcon, Check } from 'lucide-react'
 import type { EventInsert } from '@/types/database'
 
-type EventSuggestion = { id: string; name: string; city: string; department: string; start_date: string; end_date: string }
+type EventSuggestion = { id: string; name: string; city: string; department: string; start_date: string; end_date: string; score?: number }
 
 interface EventFormProps {
   onClose?: () => void
