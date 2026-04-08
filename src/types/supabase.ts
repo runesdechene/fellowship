@@ -313,6 +313,7 @@ export type Database = {
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
+          role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
           type: Database["public"]["Enums"]["user_type"]
           website: string | null
@@ -332,6 +333,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
           type?: Database["public"]["Enums"]["user_type"]
           website?: string | null
@@ -351,6 +353,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
           type?: Database["public"]["Enums"]["user_type"]
           website?: string | null
@@ -436,6 +439,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tags: {
+        Row: {
+          bg_color: string
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          text_color: string
+        }
+        Insert: {
+          bg_color: string
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+          text_color: string
+        }
+        Update: {
+          bg_color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          text_color?: string
+        }
+        Relationships: []
       }
     }
     Views: {

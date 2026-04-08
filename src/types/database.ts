@@ -32,6 +32,10 @@ export type ParticipationVisibility = Database['public']['Enums']['participation
 export type NoteVisibility = Database['public']['Enums']['note_visibility']
 export type NotificationType = Database['public']['Enums']['notification_type']
 
+export type Tag = Database['public']['Tables']['tags']['Row']
+export type TagInsert = Database['public']['Tables']['tags']['Insert']
+export type TagUpdate = Database['public']['Tables']['tags']['Update']
+
 // Computed types
 export interface EventWithScore extends Event {
   avg_overall: number | null
