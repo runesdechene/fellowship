@@ -18,6 +18,7 @@ import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus, Check, CircleDashed, Loader2 } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
 
@@ -482,10 +483,14 @@ export function EventPage() {
           <div className="event-col-right">
             {/* Tags */}
             <div className="event-tags">
-              <span className="event-tag-primary">{event.primary_tag}</span>
-              {event.tags?.map(tag => (
-                <span key={tag} className="event-tag-secondary">{tag}</span>
-              ))}
+              {event.tags?.map((tag, i) => {
+                const I = getTagIcon(tag)
+                return (
+                  <span key={tag} className={i === 0 ? 'event-tag-primary' : 'event-tag-secondary'}>
+                    <I size={12} strokeWidth={2} className="inline -mt-px" /> {tag}
+                  </span>
+                )
+              })}
             </div>
 
             {/* Title */}

@@ -72,11 +72,7 @@ export function Sidebar() {
             {!collapsed && <span>{label}</span>}
           </NavLink>
         ))}
-      </nav>
-
-      {/* Admin link */}
-      {profile?.role === 'admin' && (
-        <div className="sidebar-nav" style={{ marginTop: 'auto', paddingTop: 8 }}>
+        {profile?.role === 'admin' && (
           <NavLink
             to="/admin"
             title={collapsed ? 'Admin' : undefined}
@@ -87,8 +83,8 @@ export function Sidebar() {
             <Shield strokeWidth={1.5} />
             {!collapsed && <span>Admin</span>}
           </NavLink>
-        </div>
-      )}
+        )}
+      </nav>
 
       {/* Activity section */}
       <div className="sidebar-activity-section">

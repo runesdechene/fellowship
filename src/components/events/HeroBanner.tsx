@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Calendar, ArrowRight } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './HeroBanner.css'
 
@@ -23,7 +24,7 @@ export function HeroBanner({ event }: HeroBannerProps) {
       )}
       <div className="hero-banner-gradient" />
       <div className="hero-banner-content">
-        <span className="hero-banner-tag">{event.primary_tag}</span>
+        {(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return <span className="hero-banner-tag"><I size={12} strokeWidth={2} className="inline -mt-px" /> {(event.tags?.[0] ?? 'autre')}</span> })()}
         <div className="hero-banner-title">{event.name}</div>
         <div className="hero-banner-meta">
           <MapPin strokeWidth={1.5} />

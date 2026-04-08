@@ -44,7 +44,7 @@ export function useCalendarYear(participations: ParticipationWithEvent[], year: 
             name: p.events.name,
             startDate: start,
             endDate: end,
-            primaryTag: p.events.primary_tag,
+            primaryTag: p.events.tags?.[0] ?? 'autre',
             status: p.status,
             visibility: p.visibility,
             city: p.events.city,

@@ -78,7 +78,6 @@ export type Database = {
           id: string
           image_url: string | null
           name: string
-          primary_tag: string
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
@@ -97,7 +96,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           name: string
-          primary_tag: string
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
@@ -116,7 +114,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           name?: string
-          primary_tag?: string
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null

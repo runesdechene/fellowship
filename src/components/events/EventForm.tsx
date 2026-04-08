@@ -7,9 +7,9 @@ import { compressImage } from '@/lib/compress-image'
 import { Button } from '@/components/ui/button'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
-import { TagInput } from './TagInput'
-import { PRIMARY_TAGS } from '@/lib/constants'
-import { ChevronRight, ChevronLeft, MapPin, Calendar, Tag, Image, Link as LinkIcon, Check } from 'lucide-react'
+import { useTags } from '@/hooks/use-tags'
+import { getTagIcon } from '@/components/ui/TagBadge'
+import { ChevronRight, ChevronLeft, MapPin, Calendar, Tag, Image, Link as LinkIcon, Check, X } from 'lucide-react'
 import type { EventInsert } from '@/types/database'
 
 type EventSuggestion = { id: string; name: string; city: string; department: string; start_date: string; end_date: string; score?: number }
@@ -21,11 +21,12 @@ interface EventFormProps {
 export function EventForm({ onClose }: EventFormProps) {
   const { profile } = useAuth()
   const navigate = useNavigate()
+  const { tags: dynamicTags } = useTags()
   const [step, setStep] = useState(0)
   const [saving, setSaving] = useState(false)
   const [suggestions, setSuggestions] = useState<EventSuggestion[]>([])
   const [dismissed, setDismissed] = useState(false)
-  const [secondaryTags, setSecondaryTags] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -38,7 +39,6 @@ export function EventForm({ onClose }: EventFormProps) {
     external_url: '',
     contact_email: '',
     registration_note: '',
-    primary_tag: '',
     image: null as File | null,
   })
 
@@ -99,8 +99,7 @@ export function EventForm({ onClose }: EventFormProps) {
         external_url: form.external_url || null,
         contact_email: form.contact_email || null,
         registration_note: form.registration_note || null,
-        primary_tag: form.primary_tag,
-        tags: secondaryTags,
+        tags: selectedTags,
         image_url: image_url ?? null,
         created_by: profile.id,
       }
@@ -130,7 +129,7 @@ export function EventForm({ onClose }: EventFormProps) {
 
   const canProceedStep0 = form.name.length >= 3 && suggestions.length === 0
   const canProceedStep1 = form.city && form.department && form.start_date
-  const canProceedStep2 = !!form.primary_tag
+  const canProceedStep2 = selectedTags.length > 0
 
   const steps = [
     // Step 0: Name + deduplication
@@ -200,42 +199,76 @@ export function EventForm({ onClose }: EventFormProps) {
       </div>
     </div>,
 
-    // Step 2: Tags
+    // Step 2: Tags (multi-select, order matters — first = primary)
     <div key="tags" className="space-y-4">
       <div className="flex items-center gap-3 mb-2">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
           <Tag className="h-5 w-5 text-primary" />
         </div>
         <div>
-          <h3 className="font-semibold">Catégorie</h3>
-          <p className="text-xs text-muted-foreground">Type d'événement et tags</p>
+          <h3 className="font-semibold">Catégories</h3>
+          <p className="text-xs text-muted-foreground">Le premier tag choisi sera la catégorie principale</p>
         </div>
       </div>
 
-      <div>
-        <label className="text-xs font-medium text-muted-foreground mb-2 block">Type principal <span className="text-destructive">*</span></label>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {PRIMARY_TAGS.map(tag => (
-            <button
-              key={tag.value}
-              type="button"
-              onClick={() => update('primary_tag', tag.value)}
-              className={`rounded-xl px-4 py-3 text-sm font-medium transition-all ${
-                form.primary_tag === tag.value
-                  ? 'border-2 border-primary bg-primary/10 text-primary'
-                  : 'bg-card hover:bg-muted'
-              }`}
-            >
-              {tag.label}
-            </button>
-          ))}
+      {selectedTags.length > 0 && (
+        <div className="rounded-2xl border border-border bg-card/50 p-3">
+          <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-2">
+            Sélection ({selectedTags.length}/4)
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {selectedTags.map((slug, i) => {
+              const tag = dynamicTags.find(t => t.value === slug)
+              if (!tag) return null
+              const Icon = getTagIcon(slug)
+              return (
+                <span
+                  key={slug}
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold cursor-pointer transition-all hover:opacity-80"
+                  style={i === 0
+                    ? { background: tag.color, color: 'white' }
+                    : { background: tag.bg, color: tag.color }
+                  }
+                  onClick={() => setSelectedTags(prev => prev.filter(t => t !== slug))}
+                  title="Cliquer pour retirer"
+                >
+                  <Icon size={12} strokeWidth={2} />
+                  {tag.label}
+                  {i === 0 && <span className="text-[10px] opacity-75 ml-1">· principal</span>}
+                  <X size={10} strokeWidth={2} className="ml-0.5 opacity-60" />
+                </span>
+              )
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div>
-        <label className="text-xs font-medium text-muted-foreground mb-2 block">Tags secondaires</label>
-        <TagInput value={secondaryTags} onChange={setSecondaryTags} placeholder="Ex: fantasy, artisanat, jeux de rôle..." />
-      </div>
+      {(selectedTags.length < 4 && dynamicTags.some(t => !selectedTags.includes(t.value))) && (
+        <>
+          {selectedTags.length > 0 && (
+            <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+              Tags disponibles
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {dynamicTags.filter(t => !selectedTags.includes(t.value)).map(tag => {
+              const Icon = getTagIcon(tag.value)
+              return (
+                <button
+                  key={tag.value}
+                  type="button"
+                  onClick={() => setSelectedTags(prev => [...prev, tag.value])}
+                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all border-2"
+                  style={{ background: tag.bg, color: tag.color, borderColor: 'transparent' }}
+                >
+                  <Icon size={16} strokeWidth={2} />
+                  {tag.label}
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
     </div>,
 
     // Step 3: Details (optional)

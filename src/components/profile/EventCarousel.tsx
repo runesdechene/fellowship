@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin } from 'lucide-react'
 import { getTagColor } from '@/lib/constants'
+import { getTagIcon } from '@/components/ui/TagBadge'
 
 interface CarouselEvent {
   id: string
@@ -9,7 +10,7 @@ interface CarouselEvent {
   end_date: string
   city: string
   department?: string
-  primary_tag: string
+  tags: string[] | null
   image_url?: string | null
 }
 
@@ -38,10 +39,12 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
         <div className="profile-event-row">
           <div className="profile-event-details">
             <div className="profile-event-name">{event.name}</div>
-            <span
-              className="profile-event-tag"
-              style={{ background: getTagColor(event.primary_tag).bg, color: getTagColor(event.primary_tag).color }}
-            >{event.primary_tag}</span>
+            {(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return (
+              <span
+                className="profile-event-tag inline-flex items-center gap-1"
+                style={{ background: getTagColor((event.tags?.[0] ?? 'autre')).bg, color: getTagColor((event.tags?.[0] ?? 'autre')).color }}
+              ><I size={10} strokeWidth={2} />{(event.tags?.[0] ?? 'autre')}</span>
+            ) })()}
             <div className="profile-event-meta">
               <MapPin strokeWidth={1.5} />
               <span>{event.city}{event.department ? ` (${event.department})` : ''}</span>

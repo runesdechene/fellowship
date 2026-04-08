@@ -1,5 +1,6 @@
 // src/components/events/EventHero.tsx
 import { Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Image } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { Event } from '@/types/database'
 
 interface EventHeroProps {
@@ -43,10 +44,14 @@ export function EventHero({ event, friendCount, participationStatus, paymentStat
       {/* Info */}
       <div className="event-info">
         <div className="event-tags">
-          <span className="event-tag-primary">{event.primary_tag}</span>
-          {event.tags?.map(tag => (
-            <span key={tag} className="event-tag-secondary">{tag}</span>
-          ))}
+          {event.tags?.map((tag, i) => {
+            const I = getTagIcon(tag)
+            return (
+              <span key={tag} className={i === 0 ? 'event-tag-primary' : 'event-tag-secondary'}>
+                <I size={12} strokeWidth={2} className="inline -mt-px" /> {tag}
+              </span>
+            )
+          })}
         </div>
 
         <h1 className="event-title">{event.name}</h1>

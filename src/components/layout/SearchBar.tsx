@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X, Calendar, MapPin, User, Bell, Plus } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import { useNotifications } from '@/hooks/use-notifications'
@@ -13,7 +14,7 @@ interface SearchEvent {
   name: string
   city: string
   start_date: string
-  primary_tag: string
+  tags: string[] | null
   image_url: string | null
 }
 
@@ -93,7 +94,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       const [eventsRes, profilesRes] = await Promise.all([
         supabase
           .from('events')
-          .select('id, name, city, start_date, primary_tag, image_url')
+          .select('id, name, city, start_date, tags, image_url')
           .ilike('name', `%${query}%`)
           .order('start_date', { ascending: false })
           .limit(5),
@@ -266,7 +267,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                           <MapPin />
                           <span>{ev.city}</span>
                           <span>·</span>
-                          <span>{ev.primary_tag}</span>
+                          {(() => { const I = getTagIcon((ev.tags?.[0] ?? 'autre')); return <><I size={12} strokeWidth={2} /><span>{(ev.tags?.[0] ?? 'autre')}</span></> })()}
                         </div>
                       </div>
                     </Link>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Calendar, ExternalLink } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { Profile } from '@/types/database'
 
 interface EmbedParticipation {
@@ -12,7 +13,7 @@ interface EmbedParticipation {
     start_date: string
     end_date: string
     city: string
-    primary_tag: string
+    tags: string[] | null
   } | null
 }
 
@@ -37,7 +38,7 @@ export function EmbedPage() {
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, events(id, name, start_date, end_date, city, primary_tag)')
+        .select('id, events(id, name, start_date, end_date, city, tags)')
         .eq('user_id', p.id)
         .eq('visibility', 'public')
         .order('created_at', { ascending: false })
@@ -104,9 +105,11 @@ export function EmbedPage() {
                   {' · '}{p.events.city}
                 </p>
               </div>
-              <span className="shrink-0 rounded-full bg-primary/10 text-primary text-xs px-2 py-0.5">
-                {p.events.primary_tag}
-              </span>
+              {(() => { const I = getTagIcon((p.events.tags?.[0] ?? 'autre')); return (
+                <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary text-xs px-2 py-0.5">
+                  <I size={10} strokeWidth={2} />{(p.events.tags?.[0] ?? 'autre')}
+                </span>
+              ) })()}
             </div>
           ))}
         </div>

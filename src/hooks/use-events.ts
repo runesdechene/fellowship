@@ -22,7 +22,7 @@ export function useEvents(filters?: {
       query = query.eq('department', filters.department)
     }
     if (filters?.tag) {
-      query = query.eq('primary_tag', filters.tag)
+      query = query.contains('tags', [filters.tag])
     }
     if (filters?.search) {
       query = query.ilike('name', `%${filters.search}%`)

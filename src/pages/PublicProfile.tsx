@@ -21,7 +21,7 @@ interface ProfileParticipation {
     end_date: string
     city: string
     department?: string
-    primary_tag: string
+    tags: string[] | null
     image_url?: string | null
   } | null
 }
@@ -78,7 +78,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       let partsQuery = supabase
         .from('participations')
-        .select('id, event_id, events(id, name, start_date, end_date, city, department, primary_tag, image_url)')
+        .select('id, event_id, events(id, name, start_date, end_date, city, department, tags, image_url)')
         .eq('user_id', profileData.id)
         .order('created_at', { ascending: false })
 

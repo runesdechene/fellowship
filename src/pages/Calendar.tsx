@@ -37,7 +37,20 @@ export function CalendarPage() {
   const handleSelectMonth = useCallback((index: number) => {
     setSelectedMonthIndex(index)
     setMobileView('month')
+    window.history.pushState({ calendarView: 'month' }, '')
   }, [])
+
+  // Handle browser back button: return to year view instead of leaving page
+  useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      if (mobileView === 'month') {
+        e.preventDefault()
+        setMobileView('year')
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [mobileView])
 
   const handlePrevMonth = useCallback(() => {
     setSelectedMonthIndex(i => i > 0 ? i - 1 : 11)
@@ -78,7 +91,7 @@ export function CalendarPage() {
         name: ev.name as string,
         startDate,
         endDate,
-        primaryTag: (ev.primary_tag as string) ?? '',
+        primaryTag: ((ev.tags as string[] | null)?.[0] as string) ?? 'autre',
         status: '',
         visibility: 'public',
         city: (ev.city as string) ?? '',

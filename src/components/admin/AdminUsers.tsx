@@ -59,6 +59,7 @@ export function AdminUsers() {
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
               <th className="p-3 font-medium">Nom</th>
+              <th className="p-3 font-medium">Enseigne</th>
               <th className="p-3 font-medium">Email</th>
               <th className="p-3 font-medium">Type</th>
               <th className="p-3 font-medium">Métier</th>
@@ -70,7 +71,8 @@ export function AdminUsers() {
           <tbody>
             {filtered.map(user => (
               <tr key={user.id} className="border-b border-border/50 hover:bg-muted/30">
-                <td className="p-3 font-medium">{user.display_name ?? user.brand_name ?? '—'}</td>
+                <td className="p-3 font-medium">{user.display_name ?? '—'}</td>
+                <td className="p-3">{user.brand_name ?? '—'}</td>
                 <td className="p-3 text-muted-foreground">{user.email}</td>
                 <td className="p-3">
                   <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${

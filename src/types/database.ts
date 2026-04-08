@@ -23,6 +23,11 @@ export type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
 export type EventUpdate = Database['public']['Tables']['events']['Update']
 export type ParticipationUpdate = Database['public']['Tables']['participations']['Update']
 
+// Tag types
+export type Tag = Database['public']['Tables']['tags']['Row']
+export type TagInsert = Database['public']['Tables']['tags']['Insert']
+export type TagUpdate = Database['public']['Tables']['tags']['Update']
+
 // Enum types
 export type UserType = Database['public']['Enums']['user_type']
 export type UserSex = Database['public']['Enums']['user_sex']
@@ -31,10 +36,6 @@ export type ParticipationStatus = Database['public']['Enums']['participation_sta
 export type ParticipationVisibility = Database['public']['Enums']['participation_visibility']
 export type NoteVisibility = Database['public']['Enums']['note_visibility']
 export type NotificationType = Database['public']['Enums']['notification_type']
-
-export type Tag = Database['public']['Tables']['tags']['Row']
-export type TagInsert = Database['public']['Tables']['tags']['Insert']
-export type TagUpdate = Database['public']['Tables']['tags']['Update']
 
 // Computed types
 export interface EventWithScore extends Event {

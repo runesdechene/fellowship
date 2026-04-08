@@ -24,7 +24,7 @@ export function OnboardingPage() {
     setSaving(true)
 
     const updates: Record<string, string> = {
-      display_name: formData.display_name,
+      display_name: accountType === 'exposant' ? formData.brand_name : formData.display_name,
       city: formData.city,
       postal_code: formData.postal_code,
       type: accountType,
@@ -90,7 +90,7 @@ export function OnboardingPage() {
         className={inputClass}
         placeholder="Rune de Chêne"
         value={formData.brand_name}
-        onChange={(e) => setFormData({ ...formData, brand_name: e.target.value, display_name: formData.display_name || e.target.value })}
+        onChange={(e) => setFormData({ ...formData, brand_name: e.target.value })}
         autoFocus
       />
       <Button className="w-full" size="lg" onClick={() => setStep(2)} disabled={!formData.brand_name}>

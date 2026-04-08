@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAdminEvents, adminDeleteEvent } from '@/hooks/use-admin'
 import { Loader2, Trash2, ExternalLink, Search } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import { useNavigate } from 'react-router-dom'
 
 export function AdminEvents() {
@@ -64,7 +65,7 @@ export function AdminEvents() {
                 <td className="p-3">{event.city}</td>
                 <td className="p-3 text-muted-foreground">{event.creator_name ?? '—'}</td>
                 <td className="p-3">{event.participant_count}</td>
-                <td className="p-3">{event.primary_tag}</td>
+                <td className="p-3">{(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return <span className="inline-flex items-center gap-1"><I size={12} strokeWidth={2} />{(event.tags?.[0] ?? 'autre')}</span> })()}</td>
                 <td className="p-3">
                   <div className="flex gap-2">
                     <button

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Star, Users } from 'lucide-react'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 
 interface EventCardProps {
@@ -55,7 +56,7 @@ export function EventCard({ event, friendCount, variant = 'portrait', prospectio
             </div>
             <div className={`text-[11px] mt-1 flex items-center gap-1 ${event.image_url ? 'text-white/45' : 'text-muted-foreground'}`}>
               <MapPin className="h-3 w-3" />
-              {event.city} · {event.primary_tag}
+              {event.city} · {(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return <I className="inline h-3 w-3" strokeWidth={2} /> })()} {(event.tags?.[0] ?? 'autre')}
             </div>
           </div>
         </div>
@@ -87,15 +88,21 @@ export function EventCard({ event, friendCount, variant = 'portrait', prospectio
       />
 
       <div className="absolute left-3 top-3">
-        <span
-          className="rounded-full px-2.5 py-0.5 text-[10px] font-medium"
-          style={event.image_url
-            ? { background: 'rgba(255,255,255,0.15)', color: 'white', backdropFilter: 'blur(6px)' }
-            : { background: 'rgba(61,48,40,0.08)', color: 'rgba(61,48,40,0.5)' }
-          }
-        >
-          {event.primary_tag}
-        </span>
+        {(() => {
+          const Icon = getTagIcon((event.tags?.[0] ?? 'autre'))
+          return (
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-medium"
+              style={event.image_url
+                ? { background: 'rgba(255,255,255,0.15)', color: 'white', backdropFilter: 'blur(6px)' }
+                : { background: 'rgba(61,48,40,0.08)', color: 'rgba(61,48,40,0.5)' }
+              }
+            >
+              <Icon size={10} strokeWidth={2} />
+              {(event.tags?.[0] ?? 'autre')}
+            </span>
+          )
+        })()}
       </div>
 
       <div className="absolute right-3 top-3">

@@ -3,7 +3,8 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
-import { PRIMARY_TAGS, getTagColor } from '@/lib/constants'
+import { useTags } from '@/hooks/use-tags'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import { Plus } from 'lucide-react'
 import { MonthPicker } from '@/components/ui/MonthPicker'
 import type { EventWithScore } from '@/types/database'
@@ -12,6 +13,7 @@ import './Explorer.css'
 export function ExplorerPage() {
   const { profile } = useAuth()
   const { events: allEvents, loading } = useEvents()
+  const { tags: dynamicTags } = useTags()
 
   // Persist filters in localStorage
   const stored = useMemo(() => {
@@ -60,7 +62,7 @@ export function ExplorerPage() {
 
     // Tag filter
     if (selectedTags.size > 0) {
-      result = result.filter(ev => selectedTags.has(ev.primary_tag))
+      result = result.filter(ev => ev.tags?.some(t => selectedTags.has(t)))
     }
 
     // Department filter
@@ -112,9 +114,10 @@ export function ExplorerPage() {
 
       {/* Filter bar */}
       <div className="explorer-filters">
-        {PRIMARY_TAGS.map(tag => {
-          const colors = getTagColor(tag.value)
+        {dynamicTags.map(tag => {
+          const colors = { bg: tag.bg, color: tag.color }
           const isActive = selectedTags.has(tag.value)
+          const Icon = getTagIcon(tag.value)
           return (
             <button
               key={tag.value}
@@ -125,6 +128,7 @@ export function ExplorerPage() {
                 : { background: colors.bg, color: colors.color }
               }
             >
+              <Icon size={14} strokeWidth={2} />
               {tag.label}
             </button>
           )

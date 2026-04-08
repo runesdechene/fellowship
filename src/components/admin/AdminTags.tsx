@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useAdminTags } from '@/hooks/use-admin'
 import { Loader2, Plus, Trash2, Pencil, X, Check } from 'lucide-react'
 
@@ -10,6 +10,83 @@ function TagPreview({ name, bg, color }: { name: string; bg: string; color: stri
     >
       {name}
     </span>
+  )
+}
+
+/** Convert hex (#rrggbb) to HSL string */
+function hexToHsl(hex: string): { h: number; s: number; l: number } {
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
+  const max = Math.max(r, g, b), min = Math.min(r, g, b)
+  const l = (max + min) / 2
+  if (max === min) return { h: 0, s: 0, l: Math.round(l * 100) }
+  const d = max - min
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max - min)
+  let h = 0
+  if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+  else if (max === g) h = ((b - r) / d + 2) / 6
+  else h = ((r - g) / d + 4) / 6
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
+}
+
+/** Build bg (light) and text (solid) HSL strings from a hex color */
+function hexToTagColors(hex: string): { bg_color: string; text_color: string } {
+  const { h, s, l } = hexToHsl(hex)
+  return {
+    bg_color: `hsl(${h} ${s}% ${l}% / 0.1)`,
+    text_color: `hsl(${h} ${s}% ${l}%)`,
+  }
+}
+
+/** Best-effort parse of hsl(...) to hex for the color input */
+function hslStringToHex(hsl: string): string {
+  const nums = hsl.match(/[\d.]+/g)
+  if (!nums || nums.length < 3) return '#6688aa'
+  const h = parseFloat(nums[0]) / 360
+  const s = parseFloat(nums[1]) / 100
+  const l = parseFloat(nums[2]) / 100
+  const hue2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1; if (t > 1) t -= 1
+    if (t < 1/6) return p + (q - p) * 6 * t
+    if (t < 1/2) return q
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
+    return p
+  }
+  let r: number, g: number, b: number
+  if (s === 0) { r = g = b = l }
+  else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+    const p = 2 * l - q
+    r = hue2rgb(p, q, h + 1/3)
+    g = hue2rgb(p, q, h)
+    b = hue2rgb(p, q, h - 1/3)
+  }
+  const toHex = (n: number) => Math.round(n * 255).toString(16).padStart(2, '0')
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+}
+
+function ColorPicker({ value, onChange, label }: { value: string; label: string; onChange: (hex: string) => void }) {
+  const ref = useRef<HTMLInputElement>(null)
+  const hex = hslStringToHex(value)
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        className="h-8 w-8 rounded-lg border border-border shrink-0 cursor-pointer"
+        style={{ background: hex }}
+        title={label}
+      />
+      <input
+        ref={ref}
+        type="color"
+        value={hex}
+        onChange={e => onChange(e.target.value)}
+        className="sr-only"
+      />
+      <span className="text-xs text-muted-foreground">{label}</span>
+    </div>
   )
 }
 
@@ -65,7 +142,7 @@ export function AdminTags() {
 
       {showNew && (
         <div className="rounded-2xl border border-border bg-card p-4 mb-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <input
               placeholder="Nom (ex: Médiéval)"
               value={newTag.name}
@@ -78,29 +155,25 @@ export function AdminTags() {
               onChange={e => setNewTag({ ...newTag, slug: e.target.value })}
               className="rounded-xl border border-border px-3 py-2 text-sm"
             />
-            <input
-              placeholder="Couleur fond (HSL)"
-              value={newTag.bg_color}
-              onChange={e => setNewTag({ ...newTag, bg_color: e.target.value })}
-              className="rounded-xl border border-border px-3 py-2 text-sm"
-            />
-            <input
-              placeholder="Couleur texte (HSL)"
-              value={newTag.text_color}
-              onChange={e => setNewTag({ ...newTag, text_color: e.target.value })}
-              className="rounded-xl border border-border px-3 py-2 text-sm"
-            />
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4 mb-3">
+            <ColorPicker
+              label="Couleur"
+              value={newTag.text_color}
+              onChange={hex => {
+                const colors = hexToTagColors(hex)
+                setNewTag({ ...newTag, ...colors })
+              }}
+            />
             <TagPreview name={newTag.name || 'Aperçu'} bg={newTag.bg_color} color={newTag.text_color} />
-            <div className="flex gap-2 ml-auto">
-              <button onClick={() => setShowNew(false)} className="px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:bg-muted">
-                Annuler
-              </button>
-              <button onClick={handleCreate} className="px-3 py-1.5 rounded-lg text-sm bg-primary text-primary-foreground font-medium">
-                Créer
-              </button>
-            </div>
+          </div>
+          <div className="flex gap-2 justify-end">
+            <button onClick={() => setShowNew(false)} className="px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:bg-muted">
+              Annuler
+            </button>
+            <button onClick={handleCreate} className="px-3 py-1.5 rounded-lg text-sm bg-primary text-primary-foreground font-medium">
+              Créer
+            </button>
           </div>
         </div>
       )}
@@ -110,26 +183,26 @@ export function AdminTags() {
           <div key={tag.id} className="flex items-center gap-4 p-4">
             {editing === tag.id ? (
               <>
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-2">
+                <div className="flex-1 flex flex-wrap items-center gap-3">
                   <input
                     value={editValues.name}
                     onChange={e => setEditValues({ ...editValues, name: e.target.value })}
-                    className="rounded-lg border border-border px-2 py-1 text-sm"
+                    className="rounded-lg border border-border px-2 py-1 text-sm flex-1 min-w-[120px]"
+                    placeholder="Nom"
                   />
                   <input
                     value={editValues.slug}
                     onChange={e => setEditValues({ ...editValues, slug: e.target.value })}
-                    className="rounded-lg border border-border px-2 py-1 text-sm"
+                    className="rounded-lg border border-border px-2 py-1 text-sm flex-1 min-w-[120px]"
+                    placeholder="Slug"
                   />
-                  <input
-                    value={editValues.bg_color}
-                    onChange={e => setEditValues({ ...editValues, bg_color: e.target.value })}
-                    className="rounded-lg border border-border px-2 py-1 text-sm"
-                  />
-                  <input
+                  <ColorPicker
+                    label="Couleur"
                     value={editValues.text_color}
-                    onChange={e => setEditValues({ ...editValues, text_color: e.target.value })}
-                    className="rounded-lg border border-border px-2 py-1 text-sm"
+                    onChange={hex => {
+                      const colors = hexToTagColors(hex)
+                      setEditValues({ ...editValues, ...colors })
+                    }}
                   />
                 </div>
                 <TagPreview name={editValues.name} bg={editValues.bg_color} color={editValues.text_color} />
