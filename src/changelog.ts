@@ -7,6 +7,20 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.0',
+    date: '2026-04-08',
+    title: 'Admin Hub & nouveau système de tags',
+    changes: [
+      'Admin Hub — dashboard, gestion événements, utilisateurs, tags et signalements',
+      'Tags dynamiques — gérés depuis l\'admin avec color picker visuel',
+      'Multi-tags — choisissez jusqu\'à 4 catégories par événement, le premier est le principal',
+      'Icônes par catégorie — Médiéval ⚔️, Fantastique ✨, Geek 🎮, Musique 🎵...',
+      'Tag « Autre » pour les événements non catégorisés',
+      'Les filtres Explorer reconnaissent tous les tags d\'un événement',
+      'Onboarding exposant — le nom d\'enseigne devient le nom d\'affichage',
+    ],
+  },
+  {
     version: '0.5.3',
     date: '2026-04-08',
     title: 'Calendrier mobile repensé',
