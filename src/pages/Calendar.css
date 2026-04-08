@@ -322,7 +322,9 @@
 
 /* Tag badge — inline */
 .calendar-event-tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   width: fit-content;
   border-radius: 9999px;
   padding: 2px 9px;
@@ -878,6 +880,9 @@
 }
 
 .mobile-event-pill-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
