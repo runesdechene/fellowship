@@ -6,6 +6,7 @@ import {
   User,
   Bell,
   Users,
+  Shield,
 } from 'lucide-react'
 import './BottomBar.css'
 
@@ -25,10 +26,13 @@ const publicNav = [
 export function BottomBar() {
   const { profile } = useAuth()
   const nav = profile?.type === 'exposant' ? exposantNav : publicNav
+  const allNav = profile?.role === 'admin'
+    ? [...nav, { to: '/admin', icon: Shield, label: 'Admin' }]
+    : nav
 
   return (
     <nav className="bottom-bar">
-      {nav.map(({ to, icon: Icon, label }) => (
+      {allNav.map(({ to, icon: Icon, label }) => (
         <NavLink
           key={to}
           to={to}

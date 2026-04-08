@@ -9,6 +9,7 @@ import {
   PanelLeftClose,
   PanelLeft,
   Users,
+  Shield,
 } from 'lucide-react'
 import { SidebarActivity } from '@/components/notifications/SidebarActivity'
 import './Sidebar.css'
@@ -72,6 +73,22 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      {/* Admin link */}
+      {profile?.role === 'admin' && (
+        <div className="sidebar-nav" style={{ marginTop: 'auto', paddingTop: 8 }}>
+          <NavLink
+            to="/admin"
+            title={collapsed ? 'Admin' : undefined}
+            className={({ isActive }) =>
+              `sidebar-nav-link ${isActive ? 'active' : ''}`
+            }
+          >
+            <Shield strokeWidth={1.5} />
+            {!collapsed && <span>Admin</span>}
+          </NavLink>
+        </div>
+      )}
 
       {/* Activity section */}
       <div className="sidebar-activity-section">
