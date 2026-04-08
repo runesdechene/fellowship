@@ -1,23 +1,16 @@
 // src/components/calendar/MobileMonthView.tsx
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react'
+import { useTags } from '@/hooks/use-tags'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { CalendarMonth } from '@/hooks/use-calendar'
 
-const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  'médiéval': { bg: 'hsl(24 72% 50% / 0.08)', color: 'hsl(24 72% 44%)' },
-  'fantastique': { bg: 'hsl(280 50% 55% / 0.08)', color: 'hsl(280 50% 50%)' },
-  'geek': { bg: 'hsl(220 70% 50% / 0.08)', color: 'hsl(220 70% 45%)' },
-  'marché': { bg: 'hsl(152 32% 45% / 0.08)', color: 'hsl(152 32% 38%)' },
-  'salon': { bg: 'hsl(200 50% 45% / 0.08)', color: 'hsl(200 50% 40%)' },
-  'foire': { bg: 'hsl(40 80% 50% / 0.08)', color: 'hsl(40 70% 38%)' },
-  'musique': { bg: 'hsl(340 60% 55% / 0.08)', color: 'hsl(340 55% 50%)' },
-  'littéraire': { bg: 'hsl(190 60% 45% / 0.08)', color: 'hsl(190 60% 40%)' },
-  'historique': { bg: 'hsl(10 70% 50% / 0.08)', color: 'hsl(10 70% 45%)' },
-}
-
-function getTagStyle(tag: string) {
-  const key = Object.keys(TAG_COLORS).find(k => tag.toLowerCase().includes(k))
-  return key ? TAG_COLORS[key] : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+function useTagStyle() {
+  const { tags } = useTags()
+  return (slug: string) => {
+    const t = tags.find(t => t.value === slug)
+    return t ? { bg: t.bg, color: t.color } : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+  }
 }
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
@@ -45,6 +38,7 @@ interface MobileMonthViewProps {
 }
 
 export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear }: MobileMonthViewProps) {
+  const getTagStyle = useTagStyle()
   return (
     <div className="mobile-month-view">
       {/* Month nav */}
@@ -86,7 +80,7 @@ export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear 
                   </div>
                 )}
                 <div className="mobile-event-pill-info">
-                  <div className="mobile-event-pill-name">{ev.name}</div>
+                  <div className="mobile-event-pill-name">{(() => { const I = getTagIcon(ev.primaryTag); return <I size={12} strokeWidth={2} className="inline -mt-px shrink-0" /> })()}{' '}{ev.name}</div>
                   <div className="mobile-event-pill-meta">
                     <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
                     <span>·</span>

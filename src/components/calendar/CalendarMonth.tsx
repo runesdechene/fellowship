@@ -2,24 +2,17 @@ import { Link } from 'react-router-dom'
 import { MapPin, Check, HelpCircle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { MonthBanner } from './MonthBanner'
+import { useTags } from '@/hooks/use-tags'
+import { getTagIcon } from '@/components/ui/TagBadge'
 import type { CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
 
-const TAG_COLORS: Record<string, { bg: string; color: string }> = {
-  'médiéval': { bg: 'hsl(24 72% 44% / 0.1)', color: 'hsl(24 72% 50%)' },
-  'fantastique': { bg: 'hsl(280 50% 55% / 0.1)', color: 'hsl(280 50% 55%)' },
-  'geek': { bg: 'hsl(220 70% 50% / 0.1)', color: 'hsl(220 70% 50%)' },
-  'marché': { bg: 'hsl(152 32% 40% / 0.1)', color: 'hsl(152 32% 45%)' },
-  'salon': { bg: 'hsl(200 50% 45% / 0.1)', color: 'hsl(200 50% 45%)' },
-  'foire': { bg: 'hsl(40 80% 50% / 0.1)', color: 'hsl(40 70% 40%)' },
-  'musique': { bg: 'hsl(340 60% 55% / 0.1)', color: 'hsl(340 55% 50%)' },
-  'littéraire': { bg: 'hsl(190 60% 45% / 0.1)', color: 'hsl(190 60% 40%)' },
-  'historique': { bg: 'hsl(10 70% 50% / 0.1)', color: 'hsl(10 70% 45%)' },
-}
-
-function getTagColor(tag: string) {
-  const key = Object.keys(TAG_COLORS).find(k => tag.toLowerCase().includes(k))
-  return key ? TAG_COLORS[key] : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+function useTagColor() {
+  const { tags } = useTags()
+  return (slug: string) => {
+    const t = tags.find(t => t.value === slug)
+    return t ? { bg: t.bg, color: t.color } : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+  }
 }
 
 const AVATAR_GRADIENTS = [
@@ -52,6 +45,7 @@ interface CalendarMonthProps {
 export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }: CalendarMonthProps) {
   const { month, label, events } = data
   const { profile } = useAuth()
+  const getTagColor = useTagColor()
   const isEmpty = events.length === 0
   const displayName = profile?.brand_name ?? profile?.display_name ?? 'Moi'
 
@@ -86,10 +80,12 @@ export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }
                 <div className="calendar-event-top">
                   <div className="calendar-event-details">
                     <div className="calendar-event-name">{ev.name}</div>
-                    <span
-                      className="calendar-event-tag"
-                      style={{ background: getTagColor(ev.primaryTag).bg, color: getTagColor(ev.primaryTag).color }}
-                    >{ev.primaryTag}</span>
+                    {(() => { const I = getTagIcon(ev.primaryTag); const tc = getTagColor(ev.primaryTag); return (
+                      <span
+                        className="calendar-event-tag inline-flex items-center gap-1"
+                        style={{ background: tc.bg, color: tc.color }}
+                      ><I size={10} strokeWidth={2} />{ev.primaryTag}</span>
+                    ) })()}
                     <div className="calendar-event-meta">
                       <MapPin />
                       <span>{ev.city} ({ev.department})</span>
