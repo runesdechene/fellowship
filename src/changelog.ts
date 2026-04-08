@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.5.1',
+    date: '2026-04-08',
+    title: 'Recherche intelligente & correctifs',
+    changes: [
+      'Détection d\'événements similaires à la création — même avec fautes de frappe ou accents manquants',
+      'L\'activité récente distingue "s\'intéresse à" et "participe à" correctement',
+      'Les filtres de l\'Explorer sont mémorisés quand vous quittez la page',
+    ],
+  },
+  {
     version: '0.5.0',
     date: '2026-04-06',
     title: 'Nouvelle fiche événement',
