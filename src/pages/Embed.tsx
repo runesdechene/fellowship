@@ -35,6 +35,7 @@ interface EmbedEvent {
     start_date: string
     end_date: string
     city: string
+    department: string | null
     tags: string[] | null
     image_url: string | null
   } | null
@@ -70,7 +71,7 @@ export function EmbedPage() {
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, events(id, name, start_date, end_date, city, tags, image_url)')
+        .select('id, events(id, name, start_date, end_date, city, department, tags, image_url)')
         .eq('user_id', p.id)
         .eq('visibility', 'public')
 
@@ -125,6 +126,7 @@ export function EmbedPage() {
 
   return (
     <div className="embed-page" data-theme={theme}>
+     <div className="embed-page-container">
       {/* Header */}
       <div className="embed-header">
         {profile.avatar_url ? (
@@ -157,8 +159,9 @@ export function EmbedPage() {
                 href={`https://flw.sh/evenement/${ev.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="embed-card"
+                className={`embed-card${i === 0 ? ' embed-card-featured' : ''}`}
               >
+                {i === 0 && <span className="embed-card-badge">En vedette</span>}
                 <div className="embed-card-image">
                   {ev.image_url ? (
                     <img src={ev.image_url} alt={ev.name} />
@@ -175,12 +178,12 @@ export function EmbedPage() {
                 <div className="embed-card-body">
                   <div className="embed-card-name">{ev.name}</div>
                   <div className="embed-card-meta">
-                    <span className="embed-card-date" style={{ color: accent }}>
+                    <span className="embed-card-date">
                       {formatDate(ev.start_date, ev.end_date)}
                     </span>
-                    <span className="embed-card-city">📍 {ev.city}</span>
+                    <span className="embed-card-city">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
                   </div>
-                  <div className="embed-card-link" style={{ color: accent }}>
+                  <div className="embed-card-link">
                     Voir l'événement →
                   </div>
                 </div>
@@ -200,6 +203,7 @@ export function EmbedPage() {
         <img src="/logo.png" alt="Fellowship" className="embed-footer-logo" />
         <span className="embed-footer-text">Calendrier propulsé par Fellowship</span>
       </a>
+      </div>
     </div>
   )
 }

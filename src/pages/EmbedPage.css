@@ -4,9 +4,14 @@
   min-height: 100vh;
   padding: 20px;
   font-family: -apple-system, 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-  max-width: 480px;
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
+}
+
+.embed-page-container 
+{
+    max-width: 480px;
+    margin: auto;
 }
 
 /* Light theme (default) */
@@ -31,8 +36,8 @@
 }
 
 .embed-avatar {
-  width: 32px;
-  height: 32px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -55,7 +60,7 @@
 }
 
 .embed-header-name {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
@@ -79,20 +84,21 @@
 
 .embed-card {
   display: flex;
-  height: 110px;
-  border-radius: 16px;
+  height: 150px;
+  border-radius: 0px;
   overflow: hidden;
   background: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.01);
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: all 0.4s;
+  opacity: 0.9;
 }
 
 .embed-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06), 0 8px 30px rgba(0,0,0,0.1);
+  box-shadow:0 4px 40px rgba(0,0,0,0.07);
+  opacity: 1;
 }
 
 .embed-page[data-theme="dark"] .embed-card {
@@ -100,13 +106,42 @@
 }
 
 .embed-card-image {
-  width: 110px;
+  width: 130px;
   flex-shrink: 0;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+/* ── Featured badge ── */
+
+.embed-card-featured {
+  position: relative;
+  outline: 2px solid rgba(200,121,65,0.4);
+  outline-offset: -2px;
+  box-shadow: 0 2px 8px rgba(200,121,65,0.15), 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.embed-card-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #c87941, #e8a665);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  z-index: 2;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(200,121,65,0.3);
+}
+
+.embed-page[data-theme="dark"] .embed-card-badge {
+  box-shadow: 0 2px 6px rgba(200,121,65,0.5);
 }
 
 .embed-card-image img {
@@ -148,7 +183,7 @@
 }
 
 .embed-card-name {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.3px;
   line-height: 1.2;
@@ -168,11 +203,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .embed-card-date {
-  font-weight: 700;
+  font-weight: 600;
+  color: rgba(146, 126, 69, 0.856)
 }
 
 .embed-card-city {
@@ -181,8 +217,8 @@
 
 .embed-card-link {
   margin-top: 8px;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 12px;
+  color: #bbaea3;
 }
 
 /* ── Footer ── */

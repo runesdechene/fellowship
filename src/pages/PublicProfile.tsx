@@ -82,11 +82,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         .from('participations')
         .select('id, event_id, events(id, name, start_date, end_date, city, department, tags, image_url)')
         .eq('user_id', profileData.id)
+        .eq('status', 'inscrit')
         .order('created_at', { ascending: false })
 
-      // RLS handles visibility — inscrit visible to all authenticated,
-      // interesse/amis visible only to friends
-      // Owner sees everything (RLS: user_id = auth.uid())
+      // Only show "inscrit" participations on public profile (for everyone, including owner)
 
       const { data: parts } = await partsQuery
 
@@ -175,6 +174,12 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
           <div className="profile-divider">
             <div className="profile-divider-line" />
           </div>
+
+          {isOwner && (
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(61,48,40,0.4)', textAlign: 'center', margin: '0 0 8px', fontStyle: 'italic' }}>
+              Seuls vos événements inscrits apparaissent sur cette page.
+            </p>
+          )}
 
           <EventCarousel upcoming={upcoming} past={past} />
 

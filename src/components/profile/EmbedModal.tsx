@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Copy, Check } from 'lucide-react'
+import { X, Copy, Check, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface EmbedModalProps {
@@ -51,7 +51,7 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
         }}>
           {snippet}
         </pre>
-        <div className="profile-qr-actions">
+        <div className="profile-qr-actions" style={{ flexDirection: 'column', gap: 8 }}>
           <Button variant="outline" onClick={handleCopy}>
             {copied ? (
               <>
@@ -64,6 +64,12 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
                 Copier le code
               </>
             )}
+          </Button>
+          <Button variant="outline" asChild>
+            <a href={`/@${slug}/embed`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
+              <ExternalLink className="mr-2 h-4 w-4" style={{ flexShrink: 0 }} />
+              Voir mon calendrier public
+            </a>
           </Button>
         </div>
       </div>
