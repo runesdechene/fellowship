@@ -5,7 +5,6 @@ import { EventCard } from '@/components/events/EventCard'
 import { SlideRow } from '@/components/events/SlideRow'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
-import { Plus } from 'lucide-react'
 import { MonthPicker } from '@/components/ui/MonthPicker'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
@@ -85,10 +84,6 @@ export function ExplorerPage() {
   }, [allEvents, selectedTags, filterDept, monthFrom, monthTo])
 
   // ---------- sections ----------
-  const nearbyEvents = useMemo(() =>
-    profile?.department ? filteredEvents.filter(ev => ev.department === profile.department && new Date(ev.start_date) >= now) : [],
-  [filteredEvents, profile?.department, now])
-
   const upcomingEvents = useMemo(() =>
     filteredEvents.filter(ev => new Date(ev.start_date) >= now),
   [filteredEvents, now])
@@ -184,27 +179,6 @@ export function ExplorerPage() {
       {/* Sections */}
       {!loading && (
         <>
-          <SlideRow
-            title={profile?.department ? `Dans votre département (${profile.department})` : 'Dans votre département'}
-            count={nearbyEvents.length}
-          >
-            {nearbyEvents.map(renderCard)}
-            <div key="add-card" className="flex-shrink-0 w-[200px]">
-              <button
-                onClick={() => {
-                  const fab = document.querySelector('.fab-button') as HTMLButtonElement
-                  fab?.click()
-                }}
-                className="explorer-add-card"
-              >
-                <div className="explorer-add-card-icon">
-                  <Plus strokeWidth={1.5} />
-                </div>
-                <span className="explorer-add-card-text">Ajouter un événement</span>
-              </button>
-            </div>
-          </SlideRow>
-
           {upcomingEvents.length > 0 && (
             <SlideRow title="Bientôt" count={upcomingEvents.length}>
               {upcomingEvents.map(renderCard)}

@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.6.1',
+    date: '2026-04-09',
+    title: 'Correctifs Explorer',
+    changes: [
+      'Fix — les tags ne font plus déborder la page sur mobile (scroll horizontal)',
+      'Section "Dans votre département" masquée temporairement',
+    ],
+  },
+  {
     version: '0.6.0',
     date: '2026-04-08',
     title: 'Admin Hub & nouveau système de tags',

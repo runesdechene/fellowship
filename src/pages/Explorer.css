@@ -56,8 +56,10 @@
   align-items: center;
   gap: 8px;
   padding: 0 var(--page-padding) 16px;
+  overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .explorer-filters::-webkit-scrollbar {
