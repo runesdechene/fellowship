@@ -13,10 +13,13 @@ export const changelog: ChangelogEntry[] = [
     changes: [
       'Widget embed — intégrez votre calendrier Fellowship sur votre site web',
       'Cartes événements style Lu.ma avec images, dates et tags',
+      'Macaron "En vedette" sur l\'événement le plus proche',
       'Thème clair/sombre et couleur d\'accent personnalisables via l\'URL',
       'Bouton "Intégrer mon calendrier" sur votre profil — copiez le code iframe',
       'Fix — les participations "Inscrit" sont maintenant automatiquement publiques',
-      'Footer "Calendrier propulsé par Fellowship" avec lien vers le profil',
+      'Profil public — seuls les événements inscrits sont visibles',
+      'Explorer — les filtres remettent le défilement au début',
+      'Cartes événements migrées en CSS pur (finies les classes Tailwind)',
     ],
   },
   {

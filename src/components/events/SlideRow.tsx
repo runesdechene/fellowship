@@ -21,6 +21,12 @@ export function SlideRow({ title, titleStyle, count, children }: SlideRowProps) 
     setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10)
   }
 
+  // Reset scroll to start when children change (e.g. filter toggled)
+  useEffect(() => {
+    const el = trackRef.current
+    if (el) el.scrollTo({ left: 0 })
+  }, [children])
+
   useEffect(() => {
     const el = trackRef.current
     if (!el) return

@@ -91,7 +91,7 @@
 .event-poster {
   width: 100%;
   aspect-ratio: 2 / 3;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(140, 80, 30, 0.18);
   margin-bottom: 20px;
