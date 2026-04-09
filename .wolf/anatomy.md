@@ -1,22 +1,22 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-04-06T16:23:41.820Z
-> Files: 189 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-04-09T15:06:52.659Z
+> Files: 242 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
 - `.gitignore` — Git ignore rules (~111 tok)
 - `CLAUDE.md` — CLAUDE.md (~484 tok)
 - `eslint.config.js` — ESLint flat configuration (~183 tok)
-- `index.html` — Fellowship | flw.sh (~228 tok)
+- `index.html` — Fellowship | flw.sh (~283 tok)
 - `netlify.toml` (~220 tok)
-- `package.json` — Node.js package manifest (~380 tok)
-- `pnpm-lock.yaml` — pnpm lock file (~65508 tok)
+- `package.json` — Node.js package manifest (~468 tok)
+- `pnpm-lock.yaml` — pnpm lock file (~78056 tok)
 - `README.md` — Project documentation (~657 tok)
 - `tsconfig.app.json` (~250 tok)
 - `tsconfig.json` — TypeScript configuration (~36 tok)
 - `tsconfig.node.json` (~194 tok)
-- `vite.config.ts` — Vite build configuration (~396 tok)
+- `vite.config.ts` — Vite build configuration (~387 tok)
 - `vitest.config.ts` — Vitest test configuration (~100 tok)
 
 ## .claude/
@@ -58,6 +58,22 @@
 - `events` (~143 tok)
 - `server.pid` (~2 tok)
 
+## .superpowers/brainstorm/21086-1775648520/content/
+
+- `mobile-calendar-full.html` (~4630 tok)
+- `mobile-year-view.html` (~4116 tok)
+- `waiting.html` (~39 tok)
+
+## .superpowers/brainstorm/21086-1775648520/state/
+
+- `server-stopped` (~14 tok)
+- `server.pid` (~2 tok)
+
+## .superpowers/brainstorm/22354-1775658157/state/
+
+- `server-stopped` (~14 tok)
+- `server.pid` (~2 tok)
+
 ## .superpowers/brainstorm/2356-1775389444/content/
 
 - `design-system-proposals.html` — Design System — Fellowship (~3451 tok)
@@ -81,6 +97,13 @@
 - `server-stopped` (~14 tok)
 - `server.pid` (~2 tok)
 
+## .superpowers/brainstorm/28525-1775745520/content/
+
+- `calendar-classic.html` (~6954 tok)
+- `luma-style.html` (~4073 tok)
+- `timeline-approaches.html` (~3435 tok)
+- `waiting.html` (~39 tok)
+
 ## .superpowers/brainstorm/3949-1775403315/content/
 
 - `explorer-netflix.html` — Explorer — Netflix Style (~4866 tok)
@@ -103,6 +126,18 @@
 - `server-stopped` (~14 tok)
 - `server.pid` (~2 tok)
 
+## .superpowers/brainstorm/9924-1775505826/content/
+
+- `event-page-luma-v1.html` — Event Page — Lu.ma-inspired — Fellowship (~5846 tok)
+- `event-page-luma-v2.html` — Event Page v2 — Fellowship (~5369 tok)
+- `event-page-luma-v3.html` — Event Page v3 — Fellowship (~5036 tok)
+- `event-page-luma-v4.html` — Event Page v4 — Fellowship (~5226 tok)
+
+## .superpowers/brainstorm/9924-1775505826/state/
+
+- `server-stopped` (~14 tok)
+- `server.pid` (~2 tok)
+
 ## docs/superpowers/plans/
 
 - `2026-04-04-fellowship-v1.md` — Fellowship V1 Implementation Plan (~27110 tok)
@@ -110,8 +145,12 @@
 - `2026-04-05-explorer-redesign.md` — Explorer Redesign Implementation Plan (~5144 tok)
 - `2026-04-05-notifications-redesign.md` — Notifications Redesign Implementation Plan (~6692 tok)
 - `2026-04-05-profile-redesign.md` — Profile Redesign Implementation Plan (~7209 tok)
+- `2026-04-06-event-page-redesign-v2.md` — Event Page Redesign v2 — Implementation Plan (~7344 tok)
 - `2026-04-06-event-page-redesign.md` — Event Page Redesign — Implementation Plan (~9135 tok)
 - `2026-04-06-participation-refonte.md` — Participation System Refonte — Implementation Plan (~5067 tok)
+- `2026-04-08-admin-hub.md` — Admin Hub — Implementation Plan (~11973 tok)
+- `2026-04-08-mobile-calendar.md` — Mobile Calendar Redesign — Implementation Plan (~4578 tok)
+- `2026-04-09-embed-widget.md` — Embed Widget Implementation Plan (~5180 tok)
 
 ## docs/superpowers/specs/
 
@@ -122,13 +161,23 @@
 - `2026-04-05-explorer-redesign.md` — Explorer Redesign — Design Spec (~1550 tok)
 - `2026-04-05-notifications-redesign.md` — Notifications Redesign — Design Spec (~1179 tok)
 - `2026-04-05-profile-redesign.md` — Profile Redesign — Design Spec (~1297 tok)
+- `2026-04-06-event-page-redesign-v2.md` — Fiche Événement — Redesign v2 Spec (~1178 tok)
 - `2026-04-06-event-page-redesign.md` — Fiche Événement — Redesign Spec (~1489 tok)
+- `2026-04-08-admin-hub-design.md` — Hub Admin Fellowship — Design Spec (~1264 tok)
+- `2026-04-08-mobile-calendar-design.md` — Calendrier Mobile — Design Spec (~764 tok)
+- `2026-04-09-embed-widget-design.md` — Widget Embed — Calendrier intégrable (~1108 tok)
+
+## scripts/
+
+- `compress-bucket-images.cjs` — Compress all images in the event-images bucket. (~727 tok)
+- `compress-bucket-images.mjs` — Compress all images in the event-images bucket. (~743 tok)
+- `compress-existing-images.mjs` — One-time script: compress existing event images in Supabase storage. (~1200 tok)
 
 ## src/
 
-- `App.tsx` — OnboardingGuard (~870 tok)
-- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~1212 tok)
-- `index.css` — Styles: 18 rules, 75 vars, 2 media queries, 1 animations (~1574 tok)
+- `App.tsx` — AdminLayout (~1456 tok)
+- `changelog.ts` — Exports ChangelogEntry, changelog, LATEST_VERSION, hasSeenLatest, markAsSeen (~2047 tok)
+- `index.css` — Styles: 18 rules, 77 vars, 2 media queries, 1 animations (~1604 tok)
 - `main.tsx` (~122 tok)
 
 ## src/components/
@@ -136,25 +185,37 @@
 - `ProtectedRoute.tsx` — ProtectedRoute (~157 tok)
 - `theme-toggle.tsx` — ThemeToggle (~221 tok)
 
+## src/components/admin/
+
+- `AdminDashboard.tsx` — AdminDashboard (~447 tok)
+- `AdminEvents.tsx` — AdminEvents — renders table — uses useState, useNavigate (~1216 tok)
+- `AdminLayout.tsx` — adminTabs (~410 tok)
+- `AdminReports.tsx` — AdminReports — renders table — uses useNavigate (~761 tok)
+- `AdminRoute.tsx` — AdminRoute (~157 tok)
+- `AdminTags.tsx` — Convert hex (#rrggbb) to HSL string (~2666 tok)
+- `AdminUsers.tsx` — AdminUsers — renders table — uses useState (~1463 tok)
+
 ## src/components/calendar/
 
 - `CalendarFriendsModal.tsx` — GRADIENTS (~1116 tok)
-- `CalendarMonth.tsx` — TAG_COLORS (~2684 tok)
+- `CalendarMonth.tsx` — useTagColor — renders map (~2569 tok)
+- `MobileMonthView.tsx` — src/components/calendar/MobileMonthView.tsx (~1185 tok)
+- `MobileYearGrid.tsx` — src/components/calendar/MobileYearGrid.tsx (~726 tok)
 - `MonthBanner.tsx` — MONTH_SCENES (~3071 tok)
 - `MonthCell.tsx` — tagColors (~482 tok)
 - `YearView.tsx` — YearView (~333 tok)
 
 ## src/components/events/
 
-- `DeduplicateSuggestions.tsx` — DeduplicateSuggestions (~442 tok)
-- `EventCard.tsx` — formatDate — renders map (~2138 tok)
-- `EventDashboard.tsx` — src/components/events/EventDashboard.tsx (~1997 tok)
+- `DeduplicateSuggestions.tsx` — DeduplicateSuggestions (~589 tok)
+- `EventCard.tsx` — formatDate — renders map (~2265 tok)
+- `EventDashboard.tsx` — src/components/events/EventDashboard.tsx (~1971 tok)
 - `EventDashboardMobile.tsx` — src/components/events/EventDashboardMobile.tsx (~790 tok)
-- `EventForm.tsx` — EventForm — renders map — uses useNavigate, useState, useEffect (~3888 tok)
-- `EventHero.tsx` — src/components/events/EventHero.tsx (~1473 tok)
+- `EventForm.tsx` — EventForm — renders map — uses useNavigate, useState, useEffect (~4420 tok)
+- `EventHero.tsx` — src/components/events/EventHero.tsx (~1526 tok)
 - `FriendRow.tsx` — src/components/events/FriendRow.tsx (~545 tok)
 - `HeroBanner.css` — Styles: 14 rules, 2 media queries (~581 tok)
-- `HeroBanner.tsx` — formatDate — renders map (~392 tok)
+- `HeroBanner.tsx` — formatDate — renders map (~448 tok)
 - `ParticipantsModal.tsx` — GRADIENTS — uses useState, useEffect (~1949 tok)
 - `SlideRow.css` — Styles: 14 rules, 1 media queries (~533 tok)
 - `SlideRow.tsx` — SlideRow — uses useState, useEffect (~636 tok)
@@ -162,15 +223,15 @@
 
 ## src/components/layout/
 
-- `AppLayout.tsx` — AppLayout — uses useState (~528 tok)
+- `AppLayout.tsx` — AppLayout — uses useState (~483 tok)
 - `BottomBar.css` — Styles: 5 rules, 1 media queries (~291 tok)
-- `BottomBar.tsx` — exposantNav (~325 tok)
+- `BottomBar.tsx` — exposantNav (~362 tok)
 - `ChangelogModal.css` — Styles: 16 rules (~726 tok)
 - `ChangelogModal.tsx` — ChangelogModal — uses useState, useEffect (~538 tok)
-- `SearchBar.css` — Styles: 46 rules, 2 media queries (~2111 tok)
-- `SearchBar.tsx` — SearchBar — renders map — uses useState, useEffect (~2770 tok)
+- `SearchBar.css` — Styles: 61 rules, 7 media queries (~2918 tok)
+- `SearchBar.tsx` — SearchBar — renders map — uses useState, useEffect (~3224 tok)
 - `Sidebar.css` — Styles: 21 rules, 1 media queries (~868 tok)
-- `Sidebar.tsx` — exposantNav — uses useState (~774 tok)
+- `Sidebar.tsx` — exposantNav — uses useState (~887 tok)
 
 ## src/components/notes/
 
@@ -179,7 +240,7 @@
 
 ## src/components/notifications/
 
-- `NotificationItem.tsx` — GRADIENTS — uses useNavigate, useState (~2295 tok)
+- `NotificationItem.tsx` — GRADIENTS — uses useNavigate, useState (~2309 tok)
 - `NotificationSlidePanel.css` — Styles: 15 rules (~669 tok)
 - `NotificationSlidePanel.tsx` — NotificationSlidePanel — uses useEffect (~666 tok)
 - `SidebarActivity.css` — Styles: 13 rules (~638 tok)
@@ -188,12 +249,17 @@
 ## src/components/profile/
 
 - `EmailSignupPlaceholder.tsx` — EmailSignupPlaceholder (~261 tok)
-- `EventCarousel.tsx` — formatDay — renders map (~902 tok)
+- `EventCarousel.tsx` — formatDay — renders map (~977 tok)
 - `FellowshipFooter.tsx` — FellowshipFooter (~43 tok)
 - `FollowButton.css` — Styles: 8 rules (~259 tok)
 - `FollowButton.tsx` — FollowButton (~321 tok)
 - `ProfileHeader.tsx` — ProfileHeader (~721 tok)
 - `QRCodeModal.tsx` — QRCodeModal — uses useState, useEffect (~769 tok)
+
+## src/components/pwa/
+
+- `InstallPrompt.css` — Styles: 11 rules, 1 animations (~539 tok)
+- `InstallPrompt.tsx` — InstallPrompt — uses useState, useEffect (~784 tok)
 
 ## src/components/reports/
 
@@ -209,47 +275,54 @@
 - `button.tsx` — buttonVariants (~530 tok)
 - `MonthPicker.css` — Styles: 10 rules (~512 tok)
 - `MonthPicker.tsx` — MonthPicker — uses useState, useEffect (~448 tok)
+- `RichTextEditor.css` — Styles: 16 rules (~523 tok)
+- `RichTextEditor.tsx` — RichTextEditor (~838 tok)
+- `TagBadge.tsx` — TAG_ICONS (~358 tok)
 - `toast.tsx` — icons — uses useState, useEffect (~489 tok)
 
 ## src/hooks/
 
-- `use-calendar.ts` — Exports CalendarEvent, CalendarMonth, useCalendarYear (~502 tok)
-- `use-events.ts` — Exports useEvents, useEvent, createEvent, updateEvent + 2 more (~1084 tok)
+- `use-admin.ts` — --- Metrics --- (~1807 tok)
+- `use-calendar.ts` — Exports CalendarEvent, CalendarMonth, useCalendarYear (~504 tok)
+- `use-events.ts` — Exports useEvents, useEvent, createEvent, updateEvent + 3 more (~1294 tok)
 - `use-following-ids.ts` — Exports useFollowingIds (~171 tok)
 - `use-follows.ts` — Exports useFollowStatus, useMyFriends, useMyFollowers (~1073 tok)
 - `use-notes.ts` — Exports useEventNotes, createNote, deleteNote (~383 tok)
 - `use-notifications.ts` — Community feed — platform-wide actions (~689 tok)
-- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 3 mor (~1412 tok)
+- `use-participations.ts` — Exports useMyParticipations, FriendParticipation, useFriendsParticipations, addParticipation + 3 more (~1412 tok)
 - `use-reports.ts` — Exports useEventReport, saveEventReport (~292 tok)
 - `use-reviews.ts` — Exports useEventReviews, useMyReview, submitReview (~575 tok)
+- `use-tags.ts` — Exports useTags (~153 tok)
 - `use-theme.ts` — Exports useTheme (~358 tok)
 
 ## src/lib/
 
-- `auth.tsx` — AuthContext — uses useState, useEffect, useContext (~832 tok)
-- `constants.ts` — Primary tags — fixed by admin, not user-editable (~553 tok)
+- `auth.tsx` — AuthContext — uses useState, useEffect, useContext (~853 tok)
+- `compress-image.ts` — Compress and resize an image file to WebP format. (~762 tok)
+- `constants.ts` — Primary tags — fixed by admin, not user-editable (~842 tok)
 - `supabase.ts` — Exports supabase (~115 tok)
 - `utils.ts` — Exports cn (~50 tok)
 
 ## src/pages/
 
 - `AuthCallback.tsx` — AuthCallbackPage — uses useNavigate, useEffect (~314 tok)
-- `Calendar.css` — Styles: 79 rules (~3522 tok)
-- `Calendar.tsx` — CalendarPage (~2498 tok)
-- `Dashboard.tsx` — daysUntil (~3312 tok)
-- `Embed.tsx` — EmbedPage — uses useState, useEffect (~1230 tok)
-- `EventPage.css` — Styles: 89 rules, 1 animations (~3488 tok)
-- `EventPage.tsx` — EventPage — uses useState, useEffect (~6066 tok)
-- `Explorer.css` — Styles: 39 rules (~1761 tok)
-- `Explorer.tsx` — ExplorerPage — uses useState, useMemo (~1932 tok)
+- `Calendar.css` — Styles: 78 rules, 3 media queries (~4876 tok)
+- `Calendar.tsx` — CalendarPage — uses useState, useEffect, useCallback, useMemo (~3099 tok)
+- `Dashboard.tsx` — daysUntil (~3340 tok)
+- `Embed.tsx` — TAG_EMOJI (~1964 tok)
+- `EmbedPage.css` — Styles: 48 rules (~1539 tok)
+- `EventPage.css` — Styles: 90 rules (~4585 tok)
+- `EventPage.tsx` — GRADIENTS — uses useState, useEffect (~9035 tok)
+- `Explorer.css` — Styles: 39 rules (~1794 tok)
+- `Explorer.tsx` — ExplorerPage (~1955 tok)
 - `Following.tsx` — FollowingPage (~45 tok)
-- `Landing.tsx` — LandingPage — renders chart, map (~2720 tok)
+- `Landing.tsx` — LandingPage — renders chart, map (~2769 tok)
 - `Login.tsx` — LoginPage — renders form — uses useState, useEffect (~2281 tok)
 - `Notifications.tsx` — NotificationsPage (~1014 tok)
-- `Onboarding.tsx` — OnboardingPage — uses useNavigate, useState (~2050 tok)
+- `Onboarding.tsx` — OnboardingPage — uses useNavigate, useState (~2049 tok)
 - `Profile.css` — Styles: 74 rules, 1 media queries (~3836 tok)
 - `Profile.tsx` — ProfilePage (~171 tok)
-- `PublicProfile.tsx` — PublicProfilePage — uses useState, useEffect (~2473 tok)
+- `PublicProfile.tsx` — PublicProfilePage — uses useState, useEffect (~2472 tok)
 - `Settings.tsx` — SettingsPage — uses useState, useEffect (~5358 tok)
 
 ## src/test/
@@ -259,8 +332,8 @@
 
 ## src/types/
 
-- `database.ts` — Table row types (~804 tok)
-- `supabase.ts` — Exports Json, Database (~5741 tok)
+- `database.ts` — Table row types (~872 tok)
+- `supabase.ts` — Exports Json, Database (~5930 tok)
 
 ## supabase/
 
@@ -271,12 +344,13 @@
 
 - `cli-latest` (~2 tok)
 - `gotrue-version` (~3 tok)
+- `linked-project.json` (~40 tok)
 - `pooler-url` (~25 tok)
 - `postgres-version` (~3 tok)
 - `project-ref` (~6 tok)
 - `rest-version` (~2 tok)
-- `storage-migration` (~8 tok)
-- `storage-version` (~2 tok)
+- `storage-migration` (~6 tok)
+- `storage-version` (~3 tok)
 
 ## supabase/migrations/
 
@@ -299,3 +373,9 @@
 - `20260406120001_participant_notification_triggers.sql` — Notify participants when an event is updated (not everyone) (~490 tok)
 - `20260406120002_participation_refonte_rls.sql` — 2. Migrate existing 'confirme' to 'inscrit' (~225 tok)
 - `20260406130000_add_payment_status.sql` — Simple payment status for exposants (private, self-managed) (~64 tok)
+- `20260407100000_notify_friend_going_with_status.sql` — Add participation status to friend_going notification data (~323 tok)
+- `20260408100000_fuzzy_search_events.sql` — Fuzzy search for event deduplication using pg_trgm (~210 tok)
+- `20260408200000_add_role_column.sql` — Add role column for system permissions (admin vs regular user) (~83 tok)
+- `20260408200001_create_tags_table.sql` — Dynamic tags table (replaces hardcoded constants.ts tags) (~481 tok)
+- `20260408200002_admin_rls_policies.sql` — Admin can delete any event (~244 tok)
+- `20260408300000_merge_primary_tag_into_tags.sql` — Merge primary_tag as first element of tags array, then drop the column (~124 tok)

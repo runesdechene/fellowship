@@ -1,11 +1,33 @@
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
-import { Calendar, ExternalLink } from 'lucide-react'
-import { getTagIcon } from '@/components/ui/TagBadge'
+import { Calendar } from 'lucide-react'
 import type { Profile } from '@/types/database'
+import './EmbedPage.css'
 
-interface EmbedParticipation {
+/* ── Tag icon map (inline — no Tailwind dependency) ── */
+const TAG_EMOJI: Record<string, string> = {
+  'fete-medievale': '⚔️',
+  'fantastique': '✨',
+  'geek': '🎮',
+  'festival-musique': '🎵',
+  'foire': '🎪',
+  'marche': '🧺',
+  'salon': '🎤',
+  'litteraire': '📖',
+  'historique': '🏛️',
+}
+
+/* ── Fallback gradient colors for events without images ── */
+const FALLBACK_GRADIENTS = [
+  'linear-gradient(135deg, #2c1810, #8B4513)',
+  'linear-gradient(135deg, #1a3a2a, #3CB371)',
+  'linear-gradient(135deg, #3a2a1a, #DAA520)',
+  'linear-gradient(135deg, #1a2a3a, #4682B4)',
+  'linear-gradient(135deg, #3a1a2a, #8B3A62)',
+]
+
+interface EmbedEvent {
   id: string
   events: {
     id: string
@@ -14,106 +36,170 @@ interface EmbedParticipation {
     end_date: string
     city: string
     tags: string[] | null
+    image_url: string | null
   } | null
 }
 
 export function EmbedPage() {
   const { slug: rawSlug } = useParams<{ slug: string }>()
   const slug = rawSlug?.replace(/^@/, '')
+  const [searchParams] = useSearchParams()
+
+  const theme = searchParams.get('theme') === 'dark' ? 'dark' : 'light'
+  const max = Math.min(Math.max(parseInt(searchParams.get('max') ?? '10', 10) || 10, 1), 50)
+  const accent = /^[0-9a-fA-F]{3,8}$/.test(searchParams.get('accent') ?? '')
+    ? `#${searchParams.get('accent')}`
+    : '#c87941'
+
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [participations, setParticipations] = useState<EmbedParticipation[]>([])
+  const [participations, setParticipations] = useState<EmbedEvent[]>([])
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
     if (!slug) return
-    async function fetch() {
+    async function fetchData() {
       const { data: p } = await supabase
         .from('profiles')
         .select('*')
         .eq('public_slug', slug!)
         .single()
 
-      if (!p) { setLoading(false); return }
+      if (!p) { setNotFound(true); setLoading(false); return }
       setProfile(p)
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, events(id, name, start_date, end_date, city, tags)')
+        .select('id, events(id, name, start_date, end_date, city, tags, image_url)')
         .eq('user_id', p.id)
         .eq('visibility', 'public')
-        .order('created_at', { ascending: false })
 
-      setParticipations((parts as EmbedParticipation[] | null) ?? [])
+      setParticipations((parts as EmbedEvent[] | null) ?? [])
       setLoading(false)
     }
-    fetch()
+    fetchData()
   }, [slug])
 
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  const events = useMemo(() => {
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    return participations
+      .filter(p => p.events && new Date(p.events.start_date) >= now)
+      .map(p => p.events!)
+      .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+      .slice(0, max)
+  }, [participations, max])
+
+  const formatDate = (start: string, end: string) => {
+    const s = new Date(start)
+    const e = new Date(end)
+    const fmt = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+    return start === end ? fmt(s) : `${fmt(s)} — ${fmt(e)}`
+  }
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen text-muted-foreground">Chargement...</div>
-  }
-
-  if (!profile) {
-    return <div className="flex items-center justify-center h-screen text-muted-foreground">Profil introuvable</div>
-  }
-
-  const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
-
-  return (
-    <div className="min-h-screen bg-background p-4 font-[Nunito,system-ui,sans-serif]">
-      {/* Mini header */}
-      <div className="mb-4 flex items-center justify-between rounded-2xl bg-card p-3">
-        <div className="flex items-center gap-3">
-          {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt={displayName} className="h-8 w-8 rounded-full object-cover" />
-          ) : (
-            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-              {displayName[0]?.toUpperCase()}
-            </div>
-          )}
-          <span className="font-semibold text-sm">{displayName}</span>
-        </div>
-        <a
-          href={`https://flw.sh/@${slug}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
-          Voir sur Fellowship
-          <ExternalLink className="h-3 w-3" />
-        </a>
-      </div>
-
-      {/* Events list */}
-      {participations.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-          <Calendar className="mx-auto h-8 w-8 text-muted-foreground/30" />
-          <p className="mt-2 text-sm text-muted-foreground">Aucun événement public</p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {participations.map(p => p.events && (
-            <div key={p.id} className="flex items-center gap-3 rounded-2xl bg-card p-3">
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate">{p.events.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {formatDate(p.events.start_date)}
-                  {p.events.end_date !== p.events.start_date && ` — ${formatDate(p.events.end_date)}`}
-                  {' · '}{p.events.city}
-                </p>
+    return (
+      <div className="embed-page" data-theme={theme}>
+        <div className="embed-cards">
+          {[1, 2].map(i => (
+            <div key={i} className="embed-skeleton">
+              <div className="embed-skeleton-image" />
+              <div className="embed-skeleton-body">
+                <div className="embed-skeleton-line" />
+                <div className="embed-skeleton-line" />
+                <div className="embed-skeleton-line" />
               </div>
-              {(() => { const I = getTagIcon((p.events.tags?.[0] ?? 'autre')); return (
-                <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary text-xs px-2 py-0.5">
-                  <I size={10} strokeWidth={2} />{(p.events.tags?.[0] ?? 'autre')}
-                </span>
-              ) })()}
             </div>
           ))}
         </div>
+      </div>
+    )
+  }
+
+  if (notFound || !profile) {
+    return <div className="embed-centered">Profil introuvable</div>
+  }
+
+  const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
+  const subtitle = [profile.craft_type, profile.city].filter(Boolean).join(' · ')
+
+  return (
+    <div className="embed-page" data-theme={theme}>
+      {/* Header */}
+      <div className="embed-header">
+        {profile.avatar_url ? (
+          <img src={profile.avatar_url} alt={displayName} className="embed-avatar" />
+        ) : (
+          <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
+            {displayName[0]?.toUpperCase()}
+          </div>
+        )}
+        <div className="embed-header-info">
+          <div className="embed-header-name">{displayName}</div>
+          {subtitle && <div className="embed-header-sub">{subtitle}</div>}
+        </div>
+      </div>
+
+      {/* Events */}
+      {events.length === 0 ? (
+        <div className="embed-empty">
+          <Calendar className="embed-empty-icon" strokeWidth={1.5} />
+          <p className="embed-empty-text">Aucun événement à venir</p>
+        </div>
+      ) : (
+        <div className="embed-cards">
+          {events.map((ev, i) => {
+            const tag = ev.tags?.[0] ?? 'autre'
+            const emoji = TAG_EMOJI[tag] ?? '📌'
+            return (
+              <a
+                key={ev.id}
+                href={`https://flw.sh/evenement/${ev.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="embed-card"
+              >
+                <div className="embed-card-image">
+                  {ev.image_url ? (
+                    <img src={ev.image_url} alt={ev.name} />
+                  ) : (
+                    <div
+                      className="embed-card-image-fallback"
+                      style={{ background: FALLBACK_GRADIENTS[i % FALLBACK_GRADIENTS.length] }}
+                    >
+                      {emoji}
+                    </div>
+                  )}
+                  <span className="embed-card-tag">{tag}</span>
+                </div>
+                <div className="embed-card-body">
+                  <div className="embed-card-name">{ev.name}</div>
+                  <div className="embed-card-meta">
+                    <span className="embed-card-date" style={{ color: accent }}>
+                      {formatDate(ev.start_date, ev.end_date)}
+                    </span>
+                    <span className="embed-card-city">📍 {ev.city}</span>
+                  </div>
+                  <div className="embed-card-link" style={{ color: accent }}>
+                    Voir l'événement →
+                  </div>
+                </div>
+              </a>
+            )
+          })}
+        </div>
       )}
+
+      {/* Footer — Fellowship branding */}
+      <a
+        href={`https://flw.sh/@${slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="embed-footer"
+      >
+        <img src="/logo.png" alt="Fellowship" className="embed-footer-logo" />
+        <span className="embed-footer-text">Calendrier propulsé par Fellowship</span>
+      </a>
     </div>
   )
 }

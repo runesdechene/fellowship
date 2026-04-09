@@ -3,6 +3,14 @@
 > Chronological action log. Hooks and AI append to this file automatically.
 > Old sessions are consolidated by the daemon weekly.
 
+| 2026-04-09 | Tasks 1-2 (Embed Widget): Created src/pages/EmbedPage.css (fully isolated, no Tailwind/Fellowship vars, dark theme support via data-theme attr, skeleton loading, responsive). Rewrote src/pages/Embed.tsx — adds theme/max/accent URL params, image_url field, useMemo filtering for upcoming events only, fallback gradients, Fellowship footer branding. | src/pages/EmbedPage.css, src/pages/Embed.tsx |
+
+| 2026-04-08 | Task 9 (Admin Hub): Created src/hooks/use-admin.ts — 5 hooks: useAdminMetrics, useAdminEvents, useAdminUsers, useAdminTags, useAdminReports + adminDeleteEvent utility. One TS fix: cast via `unknown` for ReportWithEvent spread. Build passed, committed 0ca8d13. | src/hooks/use-admin.ts |
+
+| 2026-04-08 | Tasks 1-3 (Admin Hub DB): Created 3 migrations — role column on profiles (20260408200000), tags table with RLS + seed data for 9 tags (20260408200001), admin RLS policies for events/profiles/event_reports (20260408200002). 3 separate commits: 8730fcf, 031af6c, c0c4a94. | supabase/migrations/ |
+
+| 2026-04-08 | Task 2: Created MobileMonthView component — month nav (prev/next), back-to-year button, event pills with tag-color backgrounds, date range formatting, status badges. TypeScript OK, committed cb2d85e. | src/components/calendar/MobileMonthView.tsx |
+
 | 2026-04-06 | Task 4: Created PaymentTracker component (cost input, progress bar, payment list, add versement form). Refactored EventPage participation section: exposant gets status stepper (interesse/en_cours/inscrit) + PaymentTracker when inscrit; public gets simplified view. No confirme refs remain. | src/components/events/PaymentTracker.tsx, src/pages/EventPage.tsx | build passed, committed a3e0620 | ~250 tok |
 
 | 2026-04-05 | Harmonized page layout: replaced `p-4 sm:p-6 lg:p-8` with `page-padding` and `text-2xl font-bold` with `page-title` across Notifications, Following, Settings, EventPage. Explorer + Calendar left as-is (own CSS systems). Build passed, committed b00918a. | src/pages/ | ~120 tok |
@@ -1548,3 +1556,449 @@
 | 18:23 | Edited src/changelog.ts | expanded (+11 lines) | ~154 |
 | 18:24 | Session end: 18 writes across 6 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts, Calendar.tsx) | 6 reads | ~14905 tok |
 | 19:21 | Session end: 18 writes across 6 files (CalendarFriendsModal.tsx, CalendarMonth.tsx, Calendar.css, use-participations.ts, Calendar.tsx) | 6 reads | ~14905 tok |
+
+## Session: 2026-04-06 22:01
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:07 | Created .superpowers/brainstorm/9924-1775505826/content/event-page-luma-v1.html | — | ~5846 |
+| 22:07 | Session end: 1 writes across 1 files (event-page-luma-v1.html) | 10 reads | ~18865 tok |
+| 22:10 | Created .superpowers/brainstorm/9924-1775505826/content/event-page-luma-v2.html | — | ~5369 |
+| 22:10 | Session end: 2 writes across 2 files (event-page-luma-v1.html, event-page-luma-v2.html) | 10 reads | ~24617 tok |
+| 22:13 | Created .superpowers/brainstorm/9924-1775505826/content/event-page-luma-v3.html | — | ~5036 |
+| 22:13 | Session end: 3 writes across 3 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html) | 10 reads | ~30013 tok |
+| 22:16 | Created .superpowers/brainstorm/9924-1775505826/content/event-page-luma-v4.html | — | ~5226 |
+| 22:16 | Session end: 4 writes across 4 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html) | 10 reads | ~35612 tok |
+| 22:19 | Created docs/superpowers/specs/2026-04-06-event-page-redesign-v2.md | — | ~1256 |
+| 22:20 | Session end: 5 writes across 5 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 11 reads | ~38447 tok |
+| 22:28 | Created docs/superpowers/plans/2026-04-06-event-page-redesign-v2.md | — | ~7834 |
+| 22:28 | Session end: 6 writes across 5 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 17 reads | ~54009 tok |
+| 22:31 | Edited src/hooks/use-events.ts | added 2 condition(s) | ~193 |
+| 22:32 | Created src/pages/EventPage.css | — | ~3559 |
+| 22:33 | Edited src/pages/EventPage.tsx | inline fix | ~22 |
+| 22:34 | Edited src/pages/EventPage.tsx | 3→1 lines | ~20 |
+| 22:34 | Edited src/pages/EventPage.tsx | inline fix | ~48 |
+| 22:34 | Edited src/pages/EventPage.tsx | inline fix | ~42 |
+| 22:34 | Edited src/pages/EventPage.tsx | added 2 condition(s) | ~321 |
+| 22:34 | Edited src/pages/EventPage.tsx | added optional chaining | ~72 |
+| 22:35 | Edited src/pages/EventPage.tsx | added nullish coalescing | ~2789 |
+| 22:37 | Created src/components/events/EventDashboard.tsx | — | ~1928 |
+| 22:37 | Edited src/pages/EventPage.tsx | 7→11 lines | ~84 |
+| 22:38 | Edited src/pages/EventPage.tsx | 11→8 lines | ~45 |
+| 22:38 | Edited src/pages/EventPage.tsx | 5→6 lines | ~16 |
+| 22:40 | Session end: 19 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 20 reads | ~65333 tok |
+| 22:41 | Edited src/pages/EventPage.tsx | 28→28 lines | ~411 |
+| 22:41 | Session end: 20 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 20 reads | ~65744 tok |
+| 22:43 | Edited src/pages/EventPage.tsx | 16→16 lines | ~212 |
+| 22:43 | Session end: 21 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 20 reads | ~65956 tok |
+| 22:44 | Edited src/pages/EventPage.tsx | added optional chaining | ~354 |
+| 22:44 | Session end: 22 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 20 reads | ~66310 tok |
+| 22:46 | Edited src/pages/EventPage.css | CSS: box-shadow | ~60 |
+| 22:46 | Edited src/pages/EventPage.css | CSS: box-shadow | ~58 |
+| 22:46 | Edited src/pages/EventPage.css | CSS: box-shadow | ~60 |
+| 22:46 | Session end: 25 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 21 reads | ~67427 tok |
+| 22:48 | Edited src/pages/EventPage.css | CSS: overflow, border-left | ~158 |
+| 22:48 | Edited src/components/events/EventDashboard.tsx | inline fix | ~22 |
+| 22:48 | Edited src/components/events/EventDashboard.tsx | 20→23 lines | ~310 |
+| 22:49 | Edited src/components/events/EventDashboard.tsx | 11→13 lines | ~158 |
+| 22:49 | Edited src/components/events/EventDashboard.tsx | 4→5 lines | ~57 |
+| 22:49 | Edited src/components/events/EventDashboard.tsx | 5→6 lines | ~45 |
+| 22:49 | Session end: 31 writes across 9 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 21 reads | ~68108 tok |
+| 22:55 | Edited src/components/layout/SearchBar.tsx | added 1 import(s) | ~36 |
+| 22:55 | Edited src/components/layout/SearchBar.tsx | modified SearchBar() | ~35 |
+| 22:55 | Edited src/components/layout/SearchBar.tsx | expanded (+8 lines) | ~103 |
+| 22:55 | Edited src/components/layout/SearchBar.css | modified media() | ~278 |
+| 22:55 | Edited src/components/layout/AppLayout.tsx | inline fix | ~18 |
+| 22:55 | Edited src/components/layout/AppLayout.tsx | removed 9 lines | ~10 |
+| 22:55 | Edited src/components/layout/AppLayout.tsx | inline fix | ~10 |
+| 22:56 | Edited src/components/layout/SearchBar.tsx | 2→1 lines | ~22 |
+| 22:56 | Session end: 39 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~74029 tok |
+| 23:00 | Edited src/components/layout/SearchBar.tsx | 2→3 lines | ~44 |
+| 23:00 | Edited src/components/layout/SearchBar.tsx | CSS: Mobile | ~351 |
+| 23:01 | Edited src/components/layout/SearchBar.css | modified media() | ~409 |
+| 23:01 | Session end: 42 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~74949 tok |
+| 23:02 | Edited src/components/layout/SearchBar.css | modified media() | ~396 |
+| 23:02 | Edited src/components/layout/SearchBar.tsx | 2→7 lines | ~59 |
+| 23:03 | Session end: 44 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~75404 tok |
+| 23:05 | Edited src/components/layout/SearchBar.tsx | CSS: Desktop | ~539 |
+| 23:05 | Edited src/components/layout/SearchBar.css | CSS: Mobile | ~490 |
+| 23:05 | Session end: 46 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~76433 tok |
+| 23:10 | Edited src/pages/EventPage.css | modified media() | ~549 |
+| 23:10 | Session end: 47 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~77049 tok |
+| 23:12 | Edited src/pages/EventPage.css | expanded (+10 lines) | ~72 |
+| 23:12 | Edited src/pages/EventPage.css | CSS: min-width, width | ~50 |
+| 23:12 | Session end: 49 writes across 12 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 24 reads | ~77171 tok |
+| 23:16 | Created src/lib/compress-image.ts | — | ~374 |
+| 23:16 | Edited src/components/events/EventForm.tsx | added 1 import(s) | ~84 |
+| 23:16 | Edited src/components/events/EventForm.tsx | CSS: contentType | ~83 |
+| 23:16 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~37 |
+| 23:16 | Edited src/pages/EventPage.tsx | CSS: contentType | ~80 |
+| 23:17 | Created scripts/compress-existing-images.mjs | — | ~1200 |
+| 23:18 | Session end: 55 writes across 15 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 26 reads | ~83005 tok |
+| 23:19 | Created scripts/compress-bucket-images.mjs | — | ~743 |
+| 23:20 | Created scripts/compress-bucket-images.cjs | — | ~718 |
+| 23:20 | Session end: 57 writes across 17 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 26 reads | ~84571 tok |
+| 23:22 | Edited scripts/compress-bucket-images.cjs | inline fix | ~31 |
+| 23:22 | Session end: 58 writes across 17 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 26 reads | ~84604 tok |
+| 23:24 | Edited src/changelog.ts | expanded (+17 lines) | ~286 |
+| 23:25 | Edited src/changelog.ts | "Fiche événement façon Lu." → "Nouvelle fiche événement" | ~11 |
+| 23:25 | Edited src/changelog.ts | "Fiche événement entièreme" → "Fiche événement entièreme" | ~22 |
+| 23:25 | Session end: 61 writes across 18 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 27 reads | ~86135 tok |
+| 23:48 | Edited src/components/events/EventDashboard.tsx | 15→13 lines | ~128 |
+| 23:48 | Edited src/pages/EventPage.css | 4→9 lines | ~194 |
+| 23:48 | Edited src/components/events/EventDashboard.tsx | 3→1 lines | ~23 |
+| 23:49 | Session end: 64 writes across 18 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 27 reads | ~86578 tok |
+| 23:55 | Edited index.html | "https://fonts.googleapis." → "https://fonts.googleapis." | ~44 |
+| 23:55 | Edited src/index.css | "Inter" → "Nunito" | ~30 |
+| 23:55 | Session end: 66 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~86883 tok |
+| 23:57 | Edited src/components/events/EventDashboard.tsx | 67→67 lines | ~704 |
+| 23:57 | Edited src/pages/EventPage.css | expanded (+18 lines) | ~189 |
+| 23:58 | Session end: 68 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~87721 tok |
+| 00:00 | Edited src/pages/EventPage.css | CSS: border-bottom, event-section-card, border-bottom | ~76 |
+| 00:00 | Session end: 69 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~87797 tok |
+| 00:01 | Edited src/pages/EventPage.css | CSS: border-bottom, event-left-card, border-bottom | ~74 |
+| 00:01 | Session end: 70 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~87871 tok |
+| 00:03 | Session end: 70 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~87871 tok |
+| 00:03 | Edited index.html | "https://fonts.googleapis." → "https://fonts.googleapis." | ~41 |
+| 00:03 | Edited src/index.css | "Nunito" → "Lato" | ~29 |
+| 00:04 | Session end: 72 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~87944 tok |
+| 00:05 | Edited index.html | "https://fonts.googleapis." → "https://fonts.googleapis." | ~44 |
+| 00:05 | Edited src/index.css | "Lato" → "Open Sans" | ~30 |
+| 00:05 | Session end: 74 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~88022 tok |
+| 00:06 | Edited index.html | "https://fonts.googleapis." → "https://fonts.googleapis." | ~34 |
+| 00:06 | Edited src/index.css | "Open Sans" → "Segoe UI" | ~32 |
+| 00:06 | Session end: 76 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~88091 tok |
+| 00:07 | Edited index.html | "https://fonts.googleapis." → "https://fonts.googleapis." | ~42 |
+| 00:07 | Edited src/index.css | "Segoe UI" → "Inter" | ~29 |
+| 00:08 | Session end: 78 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~88165 tok |
+| 00:10 | Edited src/pages/EventPage.tsx | modified if() | ~3004 |
+| 00:10 | Session end: 79 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~91194 tok |
+| 00:11 | Edited src/pages/EventPage.tsx | inline fix | ~27 |
+| 00:12 | Session end: 80 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~91221 tok |
+| 00:12 | Edited src/pages/EventPage.tsx | inline fix | ~29 |
+| 00:12 | Edited src/pages/EventPage.tsx | CSS: border, boxShadow | ~111 |
+| 00:13 | Session end: 82 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 28 reads | ~91361 tok |
+| 00:29 | Edited src/pages/EventPage.tsx | inline fix | ~49 |
+| 00:30 | Edited src/pages/EventPage.tsx | 2→3 lines | ~53 |
+| 00:30 | Edited src/pages/EventPage.tsx | CSS: display, gap | ~160 |
+| 00:30 | Edited src/pages/EventPage.tsx | expanded (+9 lines) | ~382 |
+| 00:30 | Edited src/pages/EventPage.tsx | expanded (+29 lines) | ~550 |
+| 00:31 | Session end: 87 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~94145 tok |
+| 00:32 | Edited src/pages/EventPage.tsx | 5→5 lines | ~73 |
+| 00:33 | Session end: 88 writes across 20 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~94218 tok |
+| 00:34 | Created src/components/ui/RichTextEditor.tsx | — | ~838 |
+| 00:34 | Created src/components/ui/RichTextEditor.css | — | ~523 |
+| 00:34 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~38 |
+| 00:34 | Edited src/pages/EventPage.tsx | 9→8 lines | ~112 |
+| 00:35 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~28 |
+| 00:35 | Edited src/pages/EventPage.tsx | rgba() → sanitize() | ~96 |
+| 00:35 | Edited src/pages/EventPage.css | expanded (+41 lines) | ~194 |
+| 00:36 | Edited src/components/events/EventForm.tsx | added 1 import(s) | ~32 |
+| 00:36 | Edited src/components/events/EventForm.tsx | 6→5 lines | ~48 |
+| 00:36 | Session end: 97 writes across 22 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~96153 tok |
+| 00:42 | Edited src/pages/EventPage.css | expanded (+22 lines) | ~158 |
+| 00:42 | Edited src/pages/EventPage.tsx | inline fix | ~58 |
+| 00:43 | Edited src/pages/EventPage.tsx | 3→6 lines | ~140 |
+| 00:43 | Session end: 100 writes across 22 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~97360 tok |
+| 00:46 | Session end: 100 writes across 22 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~97360 tok |
+| 00:59 | Session end: 100 writes across 22 files (event-page-luma-v1.html, event-page-luma-v2.html, event-page-luma-v3.html, event-page-luma-v4.html, 2026-04-06-event-page-redesign-v2.md) | 30 reads | ~97360 tok |
+
+## Session: 2026-04-07 22:53
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 22:56 | Edited src/pages/Dashboard.tsx | 1→3 lines | ~50 |
+| 22:56 | Edited src/components/notifications/NotificationItem.tsx | " participe à ${d.event_na" → " ${d.status === " | ~34 |
+| 22:56 | Edited src/types/database.ts | 3→4 lines | ~20 |
+| 22:57 | Created supabase/migrations/20260407100000_notify_friend_going_with_status.sql | — | ~302 |
+| 22:57 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 9 reads | ~26437 tok |
+| 22:58 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 9 reads | ~26437 tok |
+| 23:00 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:41 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:41 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:42 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:43 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:44 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 10 reads | ~26739 tok |
+| 01:45 | Session end: 4 writes across 4 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql) | 11 reads | ~26739 tok |
+| 01:47 | Edited src/pages/Explorer.tsx | inline fix | ~16 |
+| 01:47 | Edited src/pages/Explorer.tsx | added error handling | ~429 |
+| 01:47 | Edited src/pages/Explorer.tsx | CSS: tags | ~67 |
+| 01:47 | Edited src/pages/Explorer.tsx | inline fix | ~26 |
+| 01:48 | Edited src/pages/Explorer.tsx | CSS: monthFrom, monthTo | ~102 |
+| 01:48 | Edited src/pages/Explorer.tsx | inline fix | ~20 |
+| 01:48 | Session end: 10 writes across 5 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql, Explorer.tsx) | 14 reads | ~33618 tok |
+| 01:49 | Session end: 10 writes across 5 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql, Explorer.tsx) | 14 reads | ~33618 tok |
+| 02:01 | Session end: 10 writes across 5 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql, Explorer.tsx) | 16 reads | ~38063 tok |
+| 02:05 | Created supabase/migrations/20260408100000_fuzzy_search_events.sql | — | ~196 |
+| 02:05 | Edited src/hooks/use-events.ts | modified searchSimilarEvents() | ~131 |
+| 02:05 | Edited src/components/events/DeduplicateSuggestions.tsx | 7→11 lines | ~94 |
+| 02:05 | Edited src/components/events/DeduplicateSuggestions.tsx | CSS: background | ~339 |
+| 02:06 | Edited src/components/events/EventForm.tsx | inline fix | ~40 |
+| 02:06 | Edited src/hooks/use-events.ts | rpc() → await() | ~106 |
+| 02:07 | Session end: 16 writes across 9 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql, Explorer.tsx) | 18 reads | ~43344 tok |
+| 02:23 | Edited src/changelog.ts | expanded (+10 lines) | ~134 |
+| 02:24 | Session end: 17 writes across 10 files (Dashboard.tsx, NotificationItem.tsx, database.ts, 20260407100000_notify_friend_going_with_status.sql, Explorer.tsx) | 19 reads | ~44934 tok |
+
+## Session: 2026-04-08 12:14
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 12:22 | Edited src/lib/compress-image.ts | added 2 condition(s) | ~762 |
+| 12:22 | Edited src/components/events/EventForm.tsx | added nullish coalescing | ~146 |
+| 12:23 | Edited src/pages/EventPage.tsx | added nullish coalescing | ~124 |
+| 12:23 | Session end: 3 writes across 3 files (compress-image.ts, EventForm.tsx, EventPage.tsx) | 15 reads | ~23595 tok |
+| 12:26 | Edited src/changelog.ts | expanded (+10 lines) | ~228 |
+| 12:26 | Session end: 4 writes across 4 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts) | 16 reads | ~25393 tok |
+| 12:59 | Edited src/pages/Calendar.css | modified media() | ~78 |
+| 12:59 | Session end: 5 writes across 5 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 18 reads | ~31503 tok |
+| 13:03 | Session end: 5 writes across 5 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 18 reads | ~31503 tok |
+| 13:36 | Session end: 5 writes across 5 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 23 reads | ~38575 tok |
+| 13:43 | Created .superpowers/brainstorm/21086-1775648520/content/mobile-year-view.html | — | ~4116 |
+| 13:43 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:43 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:46 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:50 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:52 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:52 | Session end: 6 writes across 6 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~42985 tok |
+| 13:55 | Created .superpowers/brainstorm/21086-1775648520/content/mobile-calendar-full.html | — | ~4630 |
+| 13:55 | Session end: 7 writes across 7 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~47946 tok |
+| 13:59 | Created .superpowers/brainstorm/21086-1775648520/content/waiting.html | — | ~39 |
+| 14:00 | Created docs/superpowers/specs/2026-04-08-mobile-calendar-design.md | — | ~815 |
+| 14:00 | Session end: 9 writes across 9 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 25 reads | ~48860 tok |
+| 14:02 | Created docs/superpowers/plans/2026-04-08-mobile-calendar.md | — | ~4883 |
+| 14:02 | Session end: 10 writes across 10 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 26 reads | ~54856 tok |
+| 14:07 | Created src/components/calendar/MobileYearGrid.tsx | — | ~726 |
+| 14:08 | Created src/components/calendar/MobileMonthView.tsx | — | ~1312 |
+| 14:08 | Edited src/pages/Calendar.css | modified media() | ~1288 |
+| 14:09 | Edited src/pages/Calendar.tsx | inline fix | ~21 |
+| 14:09 | Edited src/pages/Calendar.tsx | added 2 import(s) | ~84 |
+| 14:09 | Edited src/pages/Calendar.tsx | expanded (+24 lines) | ~278 |
+| 14:09 | Edited src/pages/Calendar.tsx | expanded (+20 lines) | ~200 |
+| 14:10 | Edited src/changelog.ts | expanded (+11 lines) | ~127 |
+| 14:10 | Session end: 18 writes across 13 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 29 reads | ~59020 tok |
+| 14:23 | Edited src/pages/Calendar.css | CSS: max-width | ~61 |
+| 14:23 | Edited src/pages/Calendar.css | CSS: min-width | ~28 |
+| 14:23 | Edited src/pages/Calendar.css | CSS: overflow, min-width | ~69 |
+| 14:24 | Session end: 21 writes across 13 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 29 reads | ~60446 tok |
+| 14:27 | Session end: 21 writes across 13 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 29 reads | ~60446 tok |
+| 14:32 | Edited vite.config.ts | 34→34 lines | ~263 |
+| 14:32 | Edited index.html | 2→5 lines | ~92 |
+| 14:32 | Session end: 23 writes across 15 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 33 reads | ~60808 tok |
+| 15:50 | Created src/components/pwa/InstallPrompt.tsx | — | ~784 |
+| 15:51 | Created src/components/pwa/InstallPrompt.css | — | ~539 |
+| 15:51 | Edited src/App.tsx | added 1 import(s) | ~39 |
+| 15:51 | Edited src/App.tsx | modified App() | ~22 |
+| 15:51 | Edited src/App.tsx | 3→4 lines | ~27 |
+| 15:52 | Session end: 28 writes across 18 files (compress-image.ts, EventForm.tsx, EventPage.tsx, changelog.ts, Calendar.css) | 45 reads | ~65184 tok |
+
+## Session: 2026-04-08 15:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 15:56 | Edited src/pages/Calendar.tsx | CSS: calendarView, button, e | ~170 |
+| 15:56 | Session end: 1 writes across 1 files (Calendar.tsx) | 2 reads | ~4030 tok |
+| 16:11 | Session end: 1 writes across 1 files (Calendar.tsx) | 2 reads | ~4030 tok |
+
+## Session: 2026-04-08 16:16
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-04-08 16:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:02 | Created docs/superpowers/specs/2026-04-08-admin-hub-design.md | — | ~1348 |
+| 17:03 | Session end: 1 writes across 1 files (2026-04-08-admin-hub-design.md) | 6 reads | ~2253 tok |
+| 17:10 | Created docs/superpowers/plans/2026-04-08-admin-hub.md | — | ~12771 |
+| 17:10 | Session end: 2 writes across 2 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md) | 15 reads | ~26995 tok |
+| 17:11 | Created supabase/migrations/20260408200000_add_role_column.sql | — | ~78 |
+| 17:11 | Created supabase/migrations/20260408200001_create_tags_table.sql | — | ~449 |
+| 17:11 | Created supabase/migrations/20260408200002_admin_rls_policies.sql | — | ~228 |
+| 17:13 | Edited src/types/supabase.ts | 43→46 lines | ~465 |
+| 17:13 | Edited src/types/supabase.ts | expanded (+30 lines) | ~206 |
+| 17:13 | Edited src/types/database.ts | 1→5 lines | ~64 |
+| 17:13 | Edited src/lib/auth.tsx | CSS: isAdmin | ~25 |
+| 17:13 | Edited src/lib/auth.tsx | added optional chaining | ~77 |
+| 17:14 | Created src/components/admin/AdminRoute.tsx | — | ~157 |
+| 17:14 | Created src/components/admin/AdminLayout.tsx | — | ~410 |
+| 17:16 | Edited src/App.tsx | expanded (+10 lines) | ~496 |
+| 17:16 | Edited src/App.tsx | modified AdminFallback() | ~77 |
+| 17:16 | Edited src/App.tsx | expanded (+20 lines) | ~305 |
+| 17:16 | Created src/components/admin/AdminDashboard.tsx | — | ~22 |
+| 17:16 | Created src/components/admin/AdminEvents.tsx | — | ~22 |
+| 17:16 | Created src/components/admin/AdminUsers.tsx | — | ~22 |
+| 17:16 | Created src/components/admin/AdminTags.tsx | — | ~20 |
+| 17:16 | Created src/components/admin/AdminReports.tsx | — | ~23 |
+| 17:16 | Edited src/components/layout/Sidebar.tsx | 9→10 lines | ~37 |
+| 17:16 | Edited src/components/layout/Sidebar.tsx | added optional chaining | ~171 |
+| 17:16 | Edited src/components/layout/BottomBar.tsx | 7→8 lines | ~27 |
+| 17:17 | Edited src/components/layout/BottomBar.tsx | CSS: to, label | ~98 |
+| 17:18 | Created src/hooks/use-admin.ts | — | ~1733 |
+| 17:18 | Edited src/hooks/use-admin.ts | inline fix | ~13 |
+| 17:21 | Created src/components/admin/AdminDashboard.tsx | — | ~447 |
+| 17:21 | Created src/components/admin/AdminEvents.tsx | — | ~1152 |
+| 17:21 | Created src/components/admin/AdminUsers.tsx | — | ~1432 |
+| 17:21 | Created src/components/admin/AdminTags.tsx | — | ~2017 |
+| 17:21 | Created src/components/admin/AdminReports.tsx | — | ~761 |
+| 17:23 | Edited src/lib/constants.ts | added 1 import(s) | ~26 |
+| 17:23 | Edited src/lib/constants.ts | added optional chaining | ~363 |
+| 17:24 | Edited src/hooks/use-admin.ts | 1→2 lines | ~30 |
+| 17:24 | Edited src/hooks/use-admin.ts | 1→2 lines | ~29 |
+| 17:24 | Edited src/hooks/use-admin.ts | 1→2 lines | ~29 |
+| 17:24 | Edited src/hooks/use-admin.ts | 1→2 lines | ~30 |
+| 17:25 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:34 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:35 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:35 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:36 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:36 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:37 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:38 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+| 17:39 | Session end: 37 writes across 20 files (2026-04-08-admin-hub-design.md, 2026-04-08-admin-hub.md, 20260408200000_add_role_column.sql, 20260408200001_create_tags_table.sql, 20260408200002_admin_rls_policies.sql) | 24 reads | ~40514 tok |
+
+## Session: 2026-04-08 17:39
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:42 | Created ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/reference_supabase_cli.md | — | ~242 |
+| 17:42 | Edited ../../../.claude/projects/C--Users-uriel-desktop-DEVS-fellowship/memory/MEMORY.md | 1→2 lines | ~59 |
+| 17:42 | Session end: 2 writes across 2 files (reference_supabase_cli.md, MEMORY.md) | 2 reads | ~12295 tok |
+| 17:42 | Session end: 2 writes across 2 files (reference_supabase_cli.md, MEMORY.md) | 2 reads | ~12295 tok |
+| 17:47 | Edited src/types/database.ts | 1→6 lines | ~66 |
+| 17:49 | Edited src/types/database.ts | removed 5 lines | ~5 |
+| 17:50 | Session end: 4 writes across 3 files (reference_supabase_cli.md, MEMORY.md, database.ts) | 6 reads | ~21561 tok |
+| 17:51 | Edited src/lib/auth.tsx | added optional chaining | ~28 |
+| 17:51 | Session end: 5 writes across 4 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx) | 6 reads | ~21589 tok |
+| 17:52 | Edited src/components/layout/Sidebar.tsx | 32→28 lines | ~246 |
+| 17:52 | Session end: 6 writes across 5 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 7 reads | ~22756 tok |
+| 17:53 | Edited src/components/admin/AdminUsers.tsx | 2→3 lines | ~49 |
+| 17:53 | Edited src/components/admin/AdminUsers.tsx | 2→3 lines | ~64 |
+| 17:53 | Session end: 8 writes across 6 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 8 reads | ~24301 tok |
+| 17:54 | Edited src/pages/Onboarding.tsx | inline fix | ~24 |
+| 17:54 | Edited src/pages/Onboarding.tsx | CSS: brand_name | ~109 |
+| 17:54 | Session end: 10 writes across 7 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 9 reads | ~26484 tok |
+| 17:55 | Session end: 10 writes across 7 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 9 reads | ~26484 tok |
+| 17:56 | Created src/hooks/use-tags.ts | — | ~153 |
+| 17:56 | Edited src/pages/Explorer.tsx | added 1 import(s) | ~26 |
+| 17:56 | Edited src/pages/Explorer.tsx | CSS: tags | ~36 |
+| 17:56 | Edited src/pages/Explorer.tsx | CSS: bg, color | ~42 |
+| 17:56 | Edited src/components/events/EventForm.tsx | "@/lib/constants" → "@/hooks/use-tags" | ~12 |
+| 17:56 | Edited src/components/events/EventForm.tsx | CSS: tags | ~42 |
+| 17:57 | Edited src/components/events/EventForm.tsx | 14→14 lines | ~149 |
+| 17:57 | Edited src/pages/Explorer.tsx | 2→1 lines | ~12 |
+| 17:57 | Session end: 18 writes across 10 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 12 reads | ~33983 tok |
+| 17:58 | Edited src/components/events/EventForm.tsx | 14→17 lines | ~196 |
+| 17:59 | Created src/components/admin/AdminTags.tsx | — | ~2666 |
+| 17:59 | Session end: 20 writes across 11 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 13 reads | ~38873 tok |
+| 18:00 | Created src/components/ui/TagBadge.tsx | — | ~358 |
+| 18:01 | Edited src/components/events/EventCard.tsx | added 1 import(s) | ~60 |
+| 18:01 | Edited src/components/events/EventCard.tsx | inline fix | ~46 |
+| 18:01 | Edited src/components/events/EventCard.tsx | expanded (+6 lines) | ~172 |
+| 18:01 | Edited src/components/events/EventHero.tsx | added 1 import(s) | ~47 |
+| 18:01 | Edited src/components/events/EventHero.tsx | inline fix | ~56 |
+| 18:01 | Edited src/components/events/HeroBanner.tsx | added 1 import(s) | ~44 |
+| 18:01 | Edited src/components/events/HeroBanner.tsx | inline fix | ~55 |
+| 18:01 | Edited src/pages/EventPage.tsx | added 1 import(s) | ~73 |
+| 18:02 | Edited src/pages/EventPage.tsx | inline fix | ~57 |
+| 18:02 | Edited src/pages/Explorer.tsx | added 1 import(s) | ~28 |
+| 18:02 | Edited src/pages/Explorer.tsx | 17→19 lines | ~191 |
+| 18:02 | Edited src/components/events/EventForm.tsx | added 1 import(s) | ~28 |
+| 18:02 | Edited src/components/events/EventForm.tsx | 17→19 lines | ~231 |
+| 18:02 | Edited src/components/profile/EventCarousel.tsx | added 1 import(s) | ~54 |
+| 18:02 | Edited src/components/profile/EventCarousel.tsx | 4→6 lines | ~109 |
+| 18:02 | Edited src/components/layout/SearchBar.tsx | added 1 import(s) | ~38 |
+| 18:02 | Edited src/components/layout/SearchBar.tsx | inline fix | ~44 |
+| 18:03 | Edited src/pages/Embed.tsx | added 1 import(s) | ~31 |
+| 18:03 | Edited src/pages/Embed.tsx | 3→5 lines | ~94 |
+| 18:03 | Edited src/components/admin/AdminEvents.tsx | added 1 import(s) | ~35 |
+| 18:03 | Edited src/components/admin/AdminEvents.tsx | inline fix | ~61 |
+| 18:03 | Session end: 42 writes across 20 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 21 reads | ~60275 tok |
+| 18:06 | Session end: 42 writes across 20 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 21 reads | ~60275 tok |
+| 18:07 | Session end: 42 writes across 20 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 21 reads | ~60275 tok |
+| 18:11 | Session end: 42 writes across 20 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 21 reads | ~60275 tok |
+| 18:27 | Created supabase/migrations/20260408300000_merge_primary_tag_into_tags.sql | — | ~116 |
+| 18:27 | Edited src/types/supabase.ts | 41→38 lines | ~346 |
+| 18:27 | Edited src/components/admin/AdminEvents.tsx | added optional chaining | ~8 |
+| 18:27 | Edited src/components/events/EventCard.tsx | added optional chaining | ~8 |
+| 18:27 | Edited src/components/events/EventHero.tsx | added optional chaining | ~8 |
+| 18:28 | Edited src/components/events/HeroBanner.tsx | added optional chaining | ~8 |
+| 18:28 | Edited src/pages/EventPage.tsx | added optional chaining | ~8 |
+| 18:28 | Edited src/pages/Explorer.tsx | added optional chaining | ~22 |
+| 18:28 | Edited src/hooks/use-events.ts | "primary_tag" → "tags" | ~15 |
+| 18:28 | Edited src/hooks/use-calendar.ts | added optional chaining | ~16 |
+| 18:28 | Edited src/pages/Calendar.tsx | added optional chaining | ~22 |
+| 18:28 | Edited src/pages/Embed.tsx | CSS: tags | ~11 |
+| 18:28 | Edited src/pages/Embed.tsx | "id, events(id, name, star" → "id, events(id, name, star" | ~21 |
+| 18:28 | Edited src/pages/Embed.tsx | added optional chaining | ~9 |
+| 18:29 | Edited src/pages/PublicProfile.tsx | CSS: tags | ~16 |
+| 18:29 | Edited src/pages/PublicProfile.tsx | "id, event_id, events(id, " → "id, event_id, events(id, " | ~31 |
+| 18:29 | Edited src/components/profile/EventCarousel.tsx | inline fix | ~7 |
+| 18:29 | Edited src/components/profile/EventCarousel.tsx | added optional chaining | ~8 |
+| 18:29 | Edited src/components/layout/SearchBar.tsx | inline fix | ~7 |
+| 18:29 | Edited src/components/layout/SearchBar.tsx | "id, name, city, start_dat" → "id, name, city, start_dat" | ~19 |
+| 18:29 | Edited src/components/layout/SearchBar.tsx | added optional chaining | ~8 |
+| 18:29 | Edited src/components/events/EventForm.tsx | 16→15 lines | ~107 |
+| 18:30 | Edited src/components/events/EventForm.tsx | 2→1 lines | ~8 |
+| 18:30 | Edited src/components/events/EventForm.tsx | inline fix | ~14 |
+| 18:30 | Edited src/components/events/EventForm.tsx | added 1 condition(s) | ~658 |
+| 18:30 | Edited src/components/events/EventForm.tsx | — | ~0 |
+| 18:30 | Edited src/components/events/EventHero.tsx | 6→10 lines | ~108 |
+| 18:30 | Edited src/pages/EventPage.tsx | 6→10 lines | ~120 |
+| 18:31 | Edited src/lib/auth.tsx | 2→1 lines | ~6 |
+| 18:31 | Session end: 71 writes across 26 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 25 reads | ~69654 tok |
+| 18:33 | Edited src/components/events/EventForm.tsx | CSS: hover | ~727 |
+| 18:33 | Edited src/components/events/EventForm.tsx | inline fix | ~33 |
+| 18:33 | Session end: 73 writes across 26 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 25 reads | ~70534 tok |
+| 18:36 | Edited src/pages/Explorer.css | CSS: display, align-items, gap | ~105 |
+| 18:37 | Session end: 74 writes across 27 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 26 reads | ~72445 tok |
+| 18:46 | Edited src/changelog.ts | expanded (+14 lines) | ~233 |
+| 18:46 | Session end: 75 writes across 28 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 27 reads | ~74456 tok |
+| 18:48 | Edited src/components/calendar/CalendarMonth.tsx | CSS: slug | ~191 |
+| 18:48 | Edited src/components/calendar/CalendarMonth.tsx | modified CalendarMonth() | ~61 |
+| 18:48 | Edited src/components/calendar/CalendarMonth.tsx | 4→6 lines | ~116 |
+| 18:49 | Edited src/components/calendar/MobileMonthView.tsx | CSS: slug | ~158 |
+| 18:49 | Edited src/components/calendar/MobileMonthView.tsx | modified MobileMonthView() | ~44 |
+| 18:49 | Edited src/components/calendar/MobileMonthView.tsx | 2→2 lines | ~75 |
+| 18:50 | Session end: 81 writes across 30 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 29 reads | ~78750 tok |
+| 01:24 | Edited src/pages/Calendar.css | CSS: align-items, gap | ~30 |
+| 01:24 | Edited src/pages/Calendar.css | CSS: display, align-items, gap | ~74 |
+| 01:25 | Session end: 83 writes across 31 files (reference_supabase_cli.md, MEMORY.md, database.ts, auth.tsx, Sidebar.tsx) | 30 reads | ~83715 tok |
+
+## Session: 2026-04-09 15:24
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 15:25 | Edited src/pages/EventPage.css | expanded (+15 lines) | ~98 |
+| 15:25 | Edited src/pages/EventPage.css | CSS: overflow-x | ~26 |
+| 15:25 | Session end: 2 writes across 1 files (EventPage.css) | 3 reads | ~17084 tok |
+| 15:51 | Edited src/pages/Explorer.css | CSS: overflow-x, -webkit-overflow-scrolling | ~64 |
+| 15:51 | Edited src/pages/EventPage.css | 5→4 lines | ~19 |
+| 15:51 | Edited src/pages/EventPage.css | removed 18 lines | ~15 |
+| 15:51 | Session end: 5 writes across 2 files (EventPage.css, Explorer.css) | 5 reads | ~21315 tok |
+| 15:52 | Edited src/pages/Explorer.tsx | removed 22 lines | ~12 |
+| 15:52 | Edited src/pages/Explorer.tsx | — | ~0 |
+| 15:52 | Edited src/pages/Explorer.tsx | removed 5 lines | ~7 |
+| 15:52 | Session end: 8 writes across 3 files (EventPage.css, Explorer.css, Explorer.tsx) | 5 reads | ~21334 tok |
+| 16:00 | Edited src/changelog.ts | expanded (+9 lines) | ~116 |
+| 16:00 | Session end: 9 writes across 4 files (EventPage.css, Explorer.css, Explorer.tsx, changelog.ts) | 6 reads | ~23423 tok |
+| 16:11 | Session end: 9 writes across 4 files (EventPage.css, Explorer.css, Explorer.tsx, changelog.ts) | 7 reads | ~23534 tok |
+
+## Session: 2026-04-09 16:29
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 16:45 | Created .superpowers/brainstorm/28525-1775745520/content/timeline-approaches.html | — | ~3435 |
+| 16:45 | Session end: 1 writes across 1 files (timeline-approaches.html) | 13 reads | ~22998 tok |
+| 16:48 | Created .superpowers/brainstorm/28525-1775745520/content/calendar-classic.html | — | ~6954 |
+| 16:49 | Session end: 2 writes across 2 files (timeline-approaches.html, calendar-classic.html) | 13 reads | ~30448 tok |
+| 16:51 | Created .superpowers/brainstorm/28525-1775745520/content/luma-style.html | — | ~4073 |
+| 16:51 | Session end: 3 writes across 3 files (timeline-approaches.html, calendar-classic.html, luma-style.html) | 13 reads | ~34812 tok |
+| 16:52 | Created .superpowers/brainstorm/28525-1775745520/content/waiting.html | — | ~39 |
+| 16:52 | Session end: 4 writes across 4 files (timeline-approaches.html, calendar-classic.html, luma-style.html, waiting.html) | 13 reads | ~34853 tok |
+| 16:53 | Created docs/superpowers/specs/2026-04-09-embed-widget-design.md | — | ~1182 |
+| 16:53 | Session end: 5 writes across 5 files (timeline-approaches.html, calendar-classic.html, luma-style.html, waiting.html, 2026-04-09-embed-widget-design.md) | 13 reads | ~36119 tok |
+| 17:00 | Created docs/superpowers/plans/2026-04-09-embed-widget.md | — | ~5526 |
+| 17:00 | Session end: 6 writes across 6 files (timeline-approaches.html, calendar-classic.html, luma-style.html, waiting.html, 2026-04-09-embed-widget-design.md) | 17 reads | ~44317 tok |
+| 17:06 | Created src/pages/EmbedPage.css | — | ~1539 |
+| 17:06 | Created src/pages/Embed.tsx | — | ~1964 |
