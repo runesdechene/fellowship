@@ -6,8 +6,9 @@ import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { EventCarousel } from '@/components/profile/EventCarousel'
 import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlaceholder'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
+import { EmbedModal } from '@/components/profile/EmbedModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
-import { Users, UserCheck } from 'lucide-react'
+import { Users, UserCheck, Code } from 'lucide-react'
 import type { Profile } from '@/types/database'
 import './Profile.css'
 
@@ -39,6 +40,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [showQR, setShowQR] = useState(false)
+  const [showEmbed, setShowEmbed] = useState(false)
   const [friends, setFriends] = useState<Profile[]>([])
   const [followers, setFollowers] = useState<Profile[]>([])
   const [networkLoading, setNetworkLoading] = useState(true)
@@ -155,6 +157,16 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
       <div className="profile-container">
         <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
+        {isOwner && profile.public_slug && (
+          <button
+            onClick={() => setShowEmbed(true)}
+            className="profile-embed-btn"
+          >
+            <Code size={16} strokeWidth={2} />
+            Intégrer mon calendrier
+          </button>
+        )}
+
         <div className="profile-content">
           {(!user || isOwner) && (
             <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
@@ -226,6 +238,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       {showQR && profile.public_slug && (
         <QRCodeModal slug={profile.public_slug} onClose={() => setShowQR(false)} />
+      )}
+
+      {showEmbed && profile.public_slug && (
+        <EmbedModal slug={profile.public_slug} onClose={() => setShowEmbed(false)} />
       )}
     </div>
   )

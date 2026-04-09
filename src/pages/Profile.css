@@ -729,3 +729,27 @@
   gap: 12px;
   justify-content: center;
 }
+
+/* ── Embed button ── */
+
+.profile-embed-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto 16px;
+  padding: 8px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(61, 48, 40, 0.1);
+  background: rgba(200, 121, 65, 0.06);
+  color: hsl(25 60% 45%);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.profile-embed-btn:hover {
+  background: rgba(200, 121, 65, 0.12);
+  border-color: rgba(200, 121, 65, 0.2);
+}
