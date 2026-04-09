@@ -65,7 +65,10 @@ export function EventDashboard({
 
   const handleStatusChange = async (status: ParticipationStatus) => {
     if (!participation) return
-    const { data } = await updateParticipation(participation.id, { status })
+    const update: { status: ParticipationStatus; visibility?: 'amis' | 'public' } = { status }
+    // Inscrit → automatically public (visible on embed widget / public profile)
+    if (status === 'inscrit') update.visibility = 'public'
+    const { data } = await updateParticipation(participation.id, update)
     if (data) {
       onUpdate(data)
       setInfoBox(status)
@@ -91,7 +94,7 @@ export function EventDashboard({
                 <>
                   <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
                   <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>En cours d'inscription</Button>
-                  <Button size="sm" onClick={() => onJoin('inscrit', 'amis')}>Inscrit</Button>
+                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>Inscrit</Button>
                 </>
               ) : (
                 <>

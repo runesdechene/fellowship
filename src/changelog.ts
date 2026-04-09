@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.0',
+    date: '2026-04-09',
+    title: 'Widget calendrier intégrable',
+    changes: [
+      'Widget embed — intégrez votre calendrier Fellowship sur votre site web',
+      'Cartes événements style Lu.ma avec images, dates et tags',
+      'Thème clair/sombre et couleur d\'accent personnalisables via l\'URL',
+      'Bouton "Intégrer mon calendrier" sur votre profil — copiez le code iframe',
+      'Fix — les participations "Inscrit" sont maintenant automatiquement publiques',
+      'Footer "Calendrier propulsé par Fellowship" avec lien vers le profil',
+    ],
+  },
+  {
     version: '0.6.1',
     date: '2026-04-09',
     title: 'Correctifs Explorer',
