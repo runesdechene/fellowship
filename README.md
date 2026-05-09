@@ -1,73 +1,99 @@
-# React + TypeScript + Vite
+# Fellowship
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Gestionnaire d'événements pour professionnels — créateurs, artisans, exposants. PWA déployée sur Netlify, backend Supabase.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript 5.9** (strict) + **Vite 7**
+- **Tailwind CSS v4** (config CSS-first dans `src/index.css`, pas de `tailwind.config`)
+- **Supabase** — auth (magic link OTP), Postgres + RLS, Storage
+- **React Router v7**
+- **PWA** via `vite-plugin-pwa` (Workbox)
+- **shadcn/ui** pattern : `class-variance-authority` + `clsx` + `tailwind-merge`
+- **Vitest** + React Testing Library pour les tests
+- **pnpm** comme package manager
 
-## React Compiler
+## Setup local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Prérequis : Node 20+ et pnpm 9+.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+cp .env.example .env   # remplir les valeurs Supabase
+pnpm dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Variables d'environnement
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+`.env` à la racine :
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+VITE_SUPABASE_URL=<your-supabase-url>
+VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+```
+
+## Commandes
+
+| Commande | Action |
+|---|---|
+| `pnpm dev` | Vite dev server (HMR) |
+| `pnpm build` | TypeScript check + build prod (`dist/`) |
+| `pnpm lint` | ESLint |
+| `pnpm test` | Vitest run |
+| `pnpm test:watch` | Vitest watch mode |
+| `pnpm preview` | Preview du build prod local |
+
+## Architecture
+
+```
+src/
+├── lib/
+│   ├── supabase.ts      Client Supabase singleton
+│   ├── auth.tsx         AuthContext + useAuth() (OTP magic link)
+│   └── utils.ts         cn() helper Tailwind
+├── components/
+│   ├── ui/              Primitives shadcn-style (button, toast, ...)
+│   ├── events/          EventCard, EventForm, EventDashboard, EventHero
+│   ├── calendar/        Vues calendrier (year, month, mobile)
+│   ├── notifications/   NotificationItem, panels, sidebars
+│   ├── admin/           Hub admin (events, users, tags, reports)
+│   └── ...              profile, layout, pwa, reviews, notes
+├── hooks/               useEvents, useParticipations, useFollows, useAdmin, ...
+├── pages/               Landing, Login, Dashboard, EventPage, Profile, Embed, ...
+├── types/
+│   ├── database.ts      Row types app
+│   └── supabase.ts      Types générés (Supabase CLI)
+└── version.ts           APP_VERSION exporté (synchronisé à package.json via Vite)
+
+supabase/migrations/     23 migrations SQL (RLS, triggers, fuzzy search, ...)
+docs/superpowers/        Specs + plans de design (frozen, history)
+graphify-out/            Knowledge graph du projet (graph.json, GRAPH_REPORT.md, viz HTML)
+```
+
+Path alias : `@` → `./src` (configuré dans `vite.config.ts` et `tsconfig.app.json`).
+
+## Knowledge graph (Graphify)
+
+Le projet est mappé en graphe de connaissances persistant via [graphify](https://github.com/safishamsi/graphify) :
+
+```bash
+pip install graphifyy
+/graphify --update .          # refresh incrémental après modifications
+```
+
+- `graphify-out/graph.json` — graphe NetworkX persistant (utile pour `--update` et queries)
+- `graphify-out/GRAPH_REPORT.md` — audit communautés, god nodes, gaps
+- `graphify-out/graph.html` — visualisation interactive (ouvrir dans le navigateur)
+
+## Déploiement
+
+Netlify avec SPA fallback. Build : `pnpm build`, publish : `dist/`, Node 20.
+Variables d'env Supabase à définir dans le dashboard Netlify.
+
+Headers de sécurité actifs dans `netlify.toml` (`X-Frame-Options: DENY`, `nosniff`,
+`Referrer-Policy: strict-origin-when-cross-origin`) + cache immutable sur `/assets/*`.
+
+## CI
+
+GitHub Actions sur PR + push `main` : lint → build (typecheck inclus) → test.
+Voir `.github/workflows/ci.yml`.
