@@ -95,7 +95,7 @@ export function ExplorerPage() {
   [filteredEvents])
 
   const renderCard = (ev: EventWithScore) => (
-    <div key={ev.id} className="flex-shrink-0 w-[200px]">
+    <div key={ev.id} className="flex-shrink-0 w-[240px]">
       <EventCard event={ev} />
     </div>
   )

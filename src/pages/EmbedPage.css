@@ -85,7 +85,7 @@
 .embed-card {
   display: flex;
   height: 150px;
-  border-radius: 0px;
+  border-radius: 10px;
   overflow: hidden;
   background: white;
   box-shadow: 0 4px 30px rgba(0,0,0,0.01);
