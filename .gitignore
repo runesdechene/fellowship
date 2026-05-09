@@ -34,3 +34,10 @@ src-tauri/target/
 # Local Netlify folder
 .netlify
 .superpowers/
+
+# Graphify temp working files (root)
+.graphify_*
+
+# Graphify output — keep persistent graph + cache, ignore machine-specific
+graphify-out/cost.json
+graphify-out/.needs_update
