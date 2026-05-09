@@ -88,7 +88,7 @@ export function OnboardingPage() {
       <input
         type="text"
         className={inputClass}
-        placeholder="Rune de Chêne"
+        placeholder="Atelier Lumière"
         value={formData.brand_name}
         onChange={(e) => setFormData({ ...formData, brand_name: e.target.value })}
         autoFocus
@@ -126,7 +126,7 @@ export function OnboardingPage() {
         <input
           type="text"
           className="w-full bg-card px-0 py-3 focus:outline-none"
-          placeholder="rune-de-chene"
+          placeholder="atelier-lumiere"
           value={formData.public_slug}
           onChange={(e) => setFormData({ ...formData, public_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })}
           autoFocus

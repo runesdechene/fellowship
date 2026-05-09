@@ -17,7 +17,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['icon.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Fellowship',
         short_name: 'Fellowship',
