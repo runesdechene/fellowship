@@ -8,8 +8,10 @@ import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlacehol
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
-import { Users, UserCheck, Code } from 'lucide-react'
+import { ProfileNetworkStats } from '@/components/profile/ProfileNetworkStats'
+import { Code } from 'lucide-react'
 import type { Profile } from '@/types/database'
+import type { NetworkMember } from '@/lib/profile-network'
 import './Profile.css'
 
 interface ProfileParticipation {
@@ -41,8 +43,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const [notFound, setNotFound] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const [showEmbed, setShowEmbed] = useState(false)
-  const [friends, setFriends] = useState<Profile[]>([])
-  const [followers, setFollowers] = useState<Profile[]>([])
+  const [friends, setFriends] = useState<NetworkMember[]>([])
+  const [followers, setFollowers] = useState<NetworkMember[]>([])
   const [networkLoading, setNetworkLoading] = useState(true)
 
   useEffect(() => {
@@ -91,22 +93,51 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       setParticipations((parts as ProfileParticipation[] | null) ?? [])
 
-      // Fetch friends (mutual follows) and followers for this profile
+      // Fetch friends + followers with recency timestamps for this profile
       try {
-        const { data: friendIds } = await supabase.rpc('get_friend_ids', { p_user_id: profileData.id })
-        if (friendIds && (friendIds as string[]).length > 0) {
+        type FriendRow = { friend_id: string; friended_at: string }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: friendRows } = await (supabase.rpc as any)('get_friends_with_dates', { p_user_id: profileData.id })
+        const friendDates = (friendRows as FriendRow[] | null) ?? []
+
+        if (friendDates.length > 0) {
           const { data: friendProfiles } = await supabase
             .from('profiles')
-            .select('*')
-            .in('id', friendIds as string[])
-          setFriends(friendProfiles ?? [])
+            .select('id, display_name, brand_name, avatar_url, public_slug, craft_type, city')
+            .in('id', friendDates.map(f => f.friend_id))
+          const dateMap = new Map(friendDates.map(f => [f.friend_id, f.friended_at]))
+          const enriched: NetworkMember[] = (friendProfiles ?? []).map(p => ({
+            ...p,
+            joinedAt: dateMap.get(p.id) ?? new Date(0).toISOString(),
+          }))
+          setFriends(enriched)
+        } else {
+          setFriends([])
         }
 
         const { data: followerData } = await supabase
           .from('follows')
-          .select('profiles!follows_follower_id_fkey(*)')
+          .select('created_at, profiles!follows_follower_id_fkey(id, display_name, brand_name, avatar_url, public_slug, craft_type, city)')
           .eq('following_id', profileData.id)
-        setFollowers(followerData?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
+          .order('created_at', { ascending: false })
+
+        type FollowerRow = {
+          created_at: string
+          profiles: {
+            id: string
+            display_name: string | null
+            brand_name: string | null
+            avatar_url: string | null
+            public_slug: string | null
+            craft_type: string | null
+            city: string | null
+          } | null
+        }
+
+        const followersList: NetworkMember[] = ((followerData as FollowerRow[] | null) ?? [])
+          .filter(f => f.profiles)
+          .map(f => ({ ...f.profiles!, joinedAt: f.created_at }))
+        setFollowers(followersList)
       } catch {
         // Non-critical — profile still loads
       }
@@ -171,6 +202,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
             <EmailSignupPlaceholder brandName={displayName} isOwner={isOwner} />
           )}
 
+          {!networkLoading && (
+            <ProfileNetworkStats friends={friends} followers={followers} isOwner={isOwner} />
+          )}
+
           <div className="profile-divider">
             <div className="profile-divider-line" />
           </div>
@@ -183,59 +218,6 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
           <EventCarousel upcoming={upcoming} past={past} />
 
-          {/* Friends & Followers */}
-          <div className="profile-network">
-              <div className="profile-network-section">
-                <h3 className="profile-network-title">
-                  <Users strokeWidth={1.5} />
-                  Amis ({networkLoading ? '…' : friends.length})
-                </h3>
-                {networkLoading ? (
-                  <p className="profile-network-empty">Chargement…</p>
-                ) : friends.length === 0 ? (
-                  <p className="profile-network-empty">Pas encore d'amis</p>
-                ) : (
-                  <div className="profile-network-list">
-                    {friends.map(friend => (
-                      <Link key={friend.id} to={`/@${friend.public_slug ?? friend.id}`} className="profile-network-item">
-                        <div className="profile-network-avatar">
-                          {(friend.brand_name ?? friend.display_name ?? '?')[0].toUpperCase()}
-                        </div>
-                        <div className="profile-network-info">
-                          <span className="profile-network-name">{friend.brand_name ?? friend.display_name ?? 'Utilisateur'}</span>
-                          {friend.city && <span className="profile-network-city">{friend.city}</span>}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="profile-network-section">
-                <h3 className="profile-network-title">
-                  <UserCheck strokeWidth={1.5} />
-                  Abonnés ({networkLoading ? '…' : followers.length})
-                </h3>
-                {networkLoading ? (
-                  <p className="profile-network-empty">Chargement…</p>
-                ) : followers.length === 0 ? (
-                  <p className="profile-network-empty">{isOwner ? 'Personne ne te suit encore' : 'Aucun abonné'}</p>
-                ) : (
-                  <div className="profile-network-list">
-                    {followers.map(follower => (
-                      <Link key={follower.id} to={`/@${follower.public_slug ?? follower.id}`} className="profile-network-item">
-                        <div className="profile-network-avatar">
-                          {(follower.brand_name ?? follower.display_name ?? '?')[0].toUpperCase()}
-                        </div>
-                        <div className="profile-network-info">
-                          <span className="profile-network-name">{follower.brand_name ?? follower.display_name ?? 'Utilisateur'}</span>
-                          {follower.city && <span className="profile-network-city">{follower.city}</span>}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
         </div>
 
         <FellowshipFooter />
