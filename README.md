@@ -30,7 +30,6 @@ pnpm dev
 ```
 VITE_SUPABASE_URL=<your-supabase-url>
 VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
-VITE_SENTRY_DSN=<optional — Sentry DSN, error monitoring is dormant if absent>
 ```
 
 ## Commandes
