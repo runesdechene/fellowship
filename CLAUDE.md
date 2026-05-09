@@ -2,6 +2,22 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Knowledge graph (Graphify)
+
+Before exploring the codebase by grepping/reading files, **consult the project knowledge graph** in `graphify-out/`:
+
+- `graph.json` — persistent NetworkX graph (328 nodes, 245 edges, 103 communities). Use `/graphify query "<question>"` for BFS traversal, or `/graphify path "A" "B"` for shortest-path between concepts.
+- `GRAPH_REPORT.md` — human-readable audit (god nodes, surprising connections, knowledge gaps).
+- `graph.html` — interactive visualization (open in browser).
+
+The graph is auto-maintained:
+- A `post-commit` git hook re-runs AST extraction on changed code files after every commit (zero LLM cost for code-only changes).
+- For doc/image changes, run `/graphify --update .` manually (LLM semantic re-extraction needed).
+
+**On a fresh clone of this repo:** run `pip install graphifyy && graphify hook install` once to get the auto-rebuild hook on this machine (hooks live in `.git/hooks/` and are not committed).
+
+Honest caveats: AST nodes are deterministic and reliable. Semantic edges (extracted by LLM) are tagged `EXTRACTED` / `INFERRED` / `AMBIGUOUS` with confidence scores — filter `AMBIGUOUS` when in doubt.
+
 ## Project Overview
 
 **Fellowship (flwsh)** — Event management app for professionals ("Gestionnaire d'événements pour professionnels"). French-language UI. Deployed as PWA on Netlify.
