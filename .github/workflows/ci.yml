@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Lint, Build, Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build (typecheck + Vite)
+        run: pnpm build
+        env:
+          # Build does not execute the supabase module-level throw, but
+          # vite-plugin-pwa needs a real string when substituting import.meta.env
+          VITE_SUPABASE_URL: https://ci.local.invalid
+          VITE_SUPABASE_ANON_KEY: ci-placeholder
+
+      - name: Test
+        run: pnpm test
