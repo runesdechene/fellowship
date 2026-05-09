@@ -65,6 +65,7 @@ export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }
           <div key={ev.id} className="calendar-event-wrapper">
             <Link
               to={`/evenement/${ev.id}`}
+              state={{ from: '/calendrier' }}
               className="calendar-event-row"
               style={{ background: getTagColor(ev.primaryTag).bg }}
             >

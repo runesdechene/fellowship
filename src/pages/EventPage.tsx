@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent, useEventCreator } from '@/hooks/use-events'
@@ -60,6 +60,8 @@ function daysUntil(date: string) {
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
+  const location = useLocation()
+  const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
   const { user, profile } = useAuth()
   const { event, loading } = useEvent(id)
   const { notes, refetch: refetchNotes } = useEventNotes(id)
@@ -232,7 +234,7 @@ export function EventPage() {
             <ArrowLeft />
           </button>
         ) : (
-          <Link to="/explorer" className="event-back" title="Retour">
+          <Link to={backTo} className="event-back" title="Retour">
             <ArrowLeft />
           </Link>
         )}

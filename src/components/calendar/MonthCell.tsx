@@ -40,6 +40,7 @@ export function MonthCell({ label, events, onClick }: MonthCellProps) {
           <Link
             key={event.id}
             to={`/evenement/${event.id}`}
+            state={{ from: '/calendrier' }}
             onClick={(e) => e.stopPropagation()}
             title={event.name}
             className={`h-3 w-3 rounded-full ${getTagColor(event.primaryTag)} transition-transform hover:scale-125`}

@@ -71,6 +71,7 @@ export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear 
               <Link
                 key={ev.id}
                 to={`/evenement/${ev.id}`}
+                state={{ from: '/calendrier' }}
                 className="mobile-event-pill"
                 style={{ background: tagStyle.bg }}
               >
