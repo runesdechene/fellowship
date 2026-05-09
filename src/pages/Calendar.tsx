@@ -134,10 +134,12 @@ export function CalendarPage() {
     return { ...monthData, events }
   }, [showMine, showPro, showVisiteurs, friendEventsByMonth])
 
+  /* eslint-disable react-hooks/preserve-manual-memoization -- React Compiler can't track defaultStart across renders; manual useMemo is required here */
   const slidingMonths = useMemo(() => {
     const all = [...months.slice(defaultStart), ...monthsNext.slice(0, defaultStart)]
     return all.map(mergeWithFriends)
   }, [months, monthsNext, defaultStart, mergeWithFriends])
+  /* eslint-enable react-hooks/preserve-manual-memoization */
 
   const firstMonth = slidingMonths[0]
   const lastMonth = slidingMonths[11]

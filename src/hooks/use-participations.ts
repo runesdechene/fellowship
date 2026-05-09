@@ -113,6 +113,7 @@ export function useFriendsOnEvent(eventId: string | undefined) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- early-exit synchronous reset, no async race
     if (!user || !eventId) { setLoading(false); return }
     const resolvedEventId = eventId
 

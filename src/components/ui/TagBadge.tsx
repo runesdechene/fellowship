@@ -24,6 +24,7 @@ const TAG_ICONS: Record<string, LucideIcon> = {
   'historique': Landmark,
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- helper colocated with TagBadge, used by HeroBanner & EventCarousel
 export function getTagIcon(slug: string): LucideIcon {
   return TAG_ICONS[slug] ?? Tag
 }
@@ -49,6 +50,7 @@ export function TagBadge({ slug, label, bg, color, size = 'sm', className = '' }
       } ${textClass} ${className}`}
       style={bg && color ? { background: bg, color } : undefined}
     >
+      {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
       <Icon size={iconSize} strokeWidth={2} />
       {label ?? slug}
     </span>

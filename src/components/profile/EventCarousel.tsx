@@ -24,6 +24,9 @@ function formatMonthYear(dateStr: string) {
 
 function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: boolean }) {
   const image = event.image_url
+  const tagSlug = event.tags?.[0] ?? 'autre'
+  const TagIcon = getTagIcon(tagSlug)
+  const tagColor = getTagColor(tagSlug)
 
   return (
     <Link
@@ -39,12 +42,8 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
         <div className="profile-event-row">
           <div className="profile-event-details">
             <div className="profile-event-name">{event.name}</div>
-            {(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return (
-              <span
-                className="profile-event-tag inline-flex items-center gap-1"
-                style={{ background: getTagColor((event.tags?.[0] ?? 'autre')).bg, color: getTagColor((event.tags?.[0] ?? 'autre')).color }}
-              ><I size={10} strokeWidth={2} />{(event.tags?.[0] ?? 'autre')}</span>
-            ) })()}
+            {/* eslint-disable-next-line react-hooks/static-components -- TagIcon is from TAG_ICONS static lookup, ref is stable */}
+            <span className="profile-event-tag inline-flex items-center gap-1" style={{ background: tagColor.bg, color: tagColor.color }}><TagIcon size={10} strokeWidth={2} />{tagSlug}</span>
             <div className="profile-event-meta">
               <MapPin strokeWidth={1.5} />
               <span>{event.city}{event.department ? ` (${event.department})` : ''}</span>

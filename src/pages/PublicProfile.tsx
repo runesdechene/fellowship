@@ -78,7 +78,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
       setProfile(profileData)
 
-      let partsQuery = supabase
+      const partsQuery = supabase
         .from('participations')
         .select('id, event_id, events(id, name, start_date, end_date, city, department, tags, image_url)')
         .eq('user_id', profileData.id)

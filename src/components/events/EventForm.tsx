@@ -44,7 +44,7 @@ export function EventForm({ onClose }: EventFormProps) {
 
   useEffect(() => {
     if (form.name.length < 3 || dismissed) {
-      setSuggestions([]) // eslint-disable-line react-hooks/set-state-in-effect
+      setSuggestions([])
       return
     }
     const timer = setTimeout(async () => {

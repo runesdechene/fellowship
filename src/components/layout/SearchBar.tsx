@@ -80,6 +80,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
   // Debounced search
   useEffect(() => {
     if (!query || query.length < 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset state synchronously when query is too short, no async race possible
       setEvents([])
       setProfiles([])
       setOpen(false)

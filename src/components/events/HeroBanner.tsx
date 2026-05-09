@@ -13,6 +13,8 @@ function formatDate(date: string) {
 }
 
 export function HeroBanner({ event }: HeroBannerProps) {
+  const tagSlug = event.tags?.[0] ?? 'autre'
+  const TagIcon = getTagIcon(tagSlug)
   return (
     <Link to={`/evenement/${event.id}`} className="hero-banner">
       {event.image_url ? (
@@ -24,7 +26,8 @@ export function HeroBanner({ event }: HeroBannerProps) {
       )}
       <div className="hero-banner-gradient" />
       <div className="hero-banner-content">
-        {(() => { const I = getTagIcon((event.tags?.[0] ?? 'autre')); return <span className="hero-banner-tag"><I size={12} strokeWidth={2} className="inline -mt-px" /> {(event.tags?.[0] ?? 'autre')}</span> })()}
+        {/* eslint-disable-next-line react-hooks/static-components -- TagIcon is from TAG_ICONS static lookup, ref is stable */}
+        <span className="hero-banner-tag"><TagIcon size={12} strokeWidth={2} className="inline -mt-px" /> {tagSlug}</span>
         <div className="hero-banner-title">{event.name}</div>
         <div className="hero-banner-meta">
           <MapPin strokeWidth={1.5} />

@@ -62,6 +62,7 @@ export function EventCard({ event, friendCount, variant = 'portrait', prospectio
   // Portrait (Netflix-style) — default
   const showDeadline = prospection && event.registration_deadline && new Date(event.registration_deadline) > new Date()
   const daysLeft = showDeadline
+    // eslint-disable-next-line react-hooks/purity -- live deadline countdown reads current time intentionally
     ? Math.ceil((new Date(event.registration_deadline!).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0
 
