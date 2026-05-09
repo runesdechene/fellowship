@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.3',
+    date: '2026-05-09',
+    title: 'Explorer — vue grille avec 3 modes',
+    changes: [
+      'Explorer affiche maintenant tous les événements en grille verticale (jusqu\'à 8 par ligne sur grand écran)',
+      'Nouveau sélecteur de mode : Bientôt (à venir uniquement) · Récents (par date d\'ajout) · Tous (chronologique, passés + à venir)',
+      'Le mode choisi est mémorisé entre les sessions, comme les filtres tags / mois / département',
+      'État vide affiché quand les filtres ne renvoient aucun résultat',
+    ],
+  },
+  {
     version: '0.7.0',
     date: '2026-04-09',
     title: 'Widget calendrier intégrable',

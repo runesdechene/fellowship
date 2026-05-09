@@ -305,3 +305,53 @@
 .explorer-add-card:hover .explorer-add-card-text {
   color: hsl(var(--primary));
 }
+
+/* ── Mode segmented control ───────────────────────────────────────── */
+
+.explorer-mode-segmented {
+  display: inline-flex;
+  align-items: center;
+  background: hsl(var(--card));
+  border-radius: 9999px;
+  padding: 4px;
+  margin: 0 var(--page-padding) 18px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.explorer-mode-btn {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgba(61, 48, 40, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  font: inherit;
+}
+
+.explorer-mode-btn:hover:not(.active) {
+  color: rgba(61, 48, 40, 0.85);
+}
+
+.explorer-mode-btn.active {
+  background: hsl(var(--primary));
+  color: white;
+}
+
+/* ── Events grid (responsive auto-fill) ────────────────────────────── */
+
+.explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 0 var(--page-padding);
+}
+
+.explorer-grid-skeleton {
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+  background: hsl(var(--card));
+}

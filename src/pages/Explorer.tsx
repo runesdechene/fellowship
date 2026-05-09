@@ -1,13 +1,19 @@
 import { useState, useMemo, useCallback } from 'react'
+import { Search } from 'lucide-react'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { EventCard } from '@/components/events/EventCard'
-import { SlideRow } from '@/components/events/SlideRow'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { MonthPicker } from '@/components/ui/MonthPicker'
-import type { EventWithScore } from '@/types/database'
+import { applyViewMode, VIEW_MODES, type ViewMode } from '@/lib/explorer'
 import './Explorer.css'
+
+const MODE_LABELS: Record<ViewMode, string> = {
+  upcoming: 'Bientôt',
+  recent: 'Récents',
+  all: 'Tous',
+}
 
 export function ExplorerPage() {
   const { profile } = useAuth()
@@ -27,6 +33,9 @@ export function ExplorerPage() {
 
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set(stored.tags ?? []))
   const [filterDept, setFilterDept] = useState(() => stored.dept === true)
+  const [mode, setMode] = useState<ViewMode>(() =>
+    (VIEW_MODES as readonly string[]).includes(stored.mode) ? stored.mode : 'upcoming'
+  )
 
   // Month pickers
   const currentMonth = new Date().getMonth()
@@ -55,21 +64,23 @@ export function ExplorerPage() {
     })
   }
 
-  // ---------- filtered events ----------
+  const changeMode = (next: ViewMode) => {
+    setMode(next)
+    persist({ mode: next })
+  }
+
+  // ---------- filtered events (tags / dept / month range) ----------
   const filteredEvents = useMemo(() => {
     let result = allEvents
 
-    // Tag filter
     if (selectedTags.size > 0) {
       result = result.filter(ev => ev.tags?.some(t => selectedTags.has(t)))
     }
 
-    // Department filter
     if (filterDept && profile?.department) {
       result = result.filter(ev => ev.department === profile.department)
     }
 
-    // Month range filter
     const fromDate = new Date(monthFrom + '-01')
     const toDate = new Date(monthTo + '-01')
     toDate.setMonth(toDate.getMonth() + 1)
@@ -78,26 +89,15 @@ export function ExplorerPage() {
       return d >= fromDate && d < toDate
     })
 
-    // Sort by start_date ascending
+    // Default sort: start_date asc (chronological)
     return [...result].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allEvents, selectedTags, filterDept, monthFrom, monthTo])
 
-  // ---------- sections ----------
-  const upcomingEvents = useMemo(() =>
-    filteredEvents.filter(ev => new Date(ev.start_date) >= now),
-  [filteredEvents, now])
-
-  const recentEvents = useMemo(() =>
-    [...filteredEvents].sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    ),
-  [filteredEvents])
-
-  const renderCard = (ev: EventWithScore) => (
-    <div key={ev.id} className="flex-shrink-0 w-[240px]">
-      <EventCard event={ev} />
-    </div>
+  // ---------- apply view mode (filter + sort) on top of filteredEvents ----------
+  const displayedEvents = useMemo(
+    () => applyViewMode(filteredEvents, mode, now),
+    [filteredEvents, mode, now]
   )
 
   return (
@@ -107,7 +107,7 @@ export function ExplorerPage() {
         <h1 className="page-title">Explorer</h1>
       </div>
 
-      {/* Filter bar */}
+      {/* Filter bar (tags + months + dept) */}
       <div className="explorer-filters">
         {dynamicTags.map(tag => {
           const colors = { bg: tag.bg, color: tag.color }
@@ -165,32 +165,45 @@ export function ExplorerPage() {
         )}
       </div>
 
-      {/* Loading */}
+      {/* Mode segmented control */}
+      <div className="explorer-mode-segmented" role="tablist" aria-label="Mode d'affichage">
+        {VIEW_MODES.map(m => (
+          <button
+            key={m}
+            role="tab"
+            aria-selected={mode === m}
+            className={`explorer-mode-btn${mode === m ? ' active' : ''}`}
+            onClick={() => changeMode(m)}
+          >
+            {MODE_LABELS[m]}
+          </button>
+        ))}
+      </div>
+
+      {/* Loading skeleton */}
       {loading && (
-        <div style={{ padding: '0 24px' }}>
-          <div className="flex gap-4 overflow-hidden">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="flex-shrink-0 w-[200px] rounded-2xl bg-card animate-pulse" style={{ aspectRatio: '2/3' }} />
-            ))}
-          </div>
+        <div className="explorer-grid">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="explorer-grid-skeleton animate-pulse" />
+          ))}
         </div>
       )}
 
-      {/* Sections */}
-      {!loading && (
-        <>
-          {upcomingEvents.length > 0 && (
-            <SlideRow title="Bientôt" count={upcomingEvents.length}>
-              {upcomingEvents.map(renderCard)}
-            </SlideRow>
-          )}
+      {/* Grid or empty state */}
+      {!loading && displayedEvents.length > 0 && (
+        <div className="explorer-grid">
+          {displayedEvents.map(ev => (
+            <EventCard key={ev.id} event={ev} />
+          ))}
+        </div>
+      )}
 
-          {recentEvents.length > 0 && (
-            <SlideRow title="Ajoutés récemment" count={recentEvents.length}>
-              {recentEvents.map(renderCard)}
-            </SlideRow>
-          )}
-        </>
+      {!loading && displayedEvents.length === 0 && (
+        <div className="explorer-empty">
+          <Search strokeWidth={1.5} />
+          <div className="explorer-empty-title">Aucun événement ne correspond</div>
+          <div className="explorer-empty-text">Essaie d'élargir tes filtres (tags, plage de mois, département).</div>
+        </div>
       )}
     </div>
   )
