@@ -30,6 +30,7 @@ pnpm dev
 ```
 VITE_SUPABASE_URL=<your-supabase-url>
 VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+VITE_SENTRY_DSN=<optional — Sentry DSN, error monitoring is dormant if absent>
 ```
 
 ## Commandes
@@ -90,8 +91,12 @@ pip install graphifyy
 Netlify avec SPA fallback. Build : `pnpm build`, publish : `dist/`, Node 20.
 Variables d'env Supabase à définir dans le dashboard Netlify.
 
-Headers de sécurité actifs dans `netlify.toml` (`X-Frame-Options: DENY`, `nosniff`,
-`Referrer-Policy: strict-origin-when-cross-origin`) + cache immutable sur `/assets/*`.
+Headers de sécurité actifs dans `netlify.toml` :
+- `Content-Security-Policy` strict (script-src 'self', frame-ancestors 'none' par défaut)
+- `frame-ancestors *` uniquement sur la route `/*/embed` (le widget doit être iframable)
+- `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy` : caméra/micro/géoloc/cohort tous à off
+- Cache immutable sur `/assets/*`, `*.js`, `*.css`
 
 ## CI
 
