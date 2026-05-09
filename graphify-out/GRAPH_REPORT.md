@@ -1,118 +1,121 @@
 # Graph Report - .  (2026-05-09)
 
 ## Corpus Check
-- 136 files · ~131,576 words
+- 97 files · ~113,277 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 328 nodes · 245 edges · 103 communities detected
-- Extraction: 86% EXTRACTED · 13% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
+- 335 nodes · 249 edges · 106 communities detected
+- Extraction: 86% EXTRACTED · 12% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Architecture & Foundations|Architecture & Foundations]]
-- [[_COMMUNITY_Admin Hub|Admin Hub]]
-- [[_COMMUNITY_Event Page & Notifications|Event Page & Notifications]]
-- [[_COMMUNITY_Embed Widget|Embed Widget]]
-- [[_COMMUNITY_Root Brand Assets|Root Brand Assets]]
-- [[_COMMUNITY_Tag Color Utils|Tag Color Utils]]
-- [[_COMMUNITY_Event Date Utils|Event Date Utils]]
-- [[_COMMUNITY_Events Hooks|Events Hooks]]
-- [[_COMMUNITY_Admin Hooks|Admin Hooks]]
-- [[_COMMUNITY_Participations Hooks|Participations Hooks]]
-- [[_COMMUNITY_Login OTP Handlers|Login OTP Handlers]]
-- [[_COMMUNITY_Settings Handlers|Settings Handlers]]
-- [[_COMMUNITY_App Shell & Routes|App Shell & Routes]]
-- [[_COMMUNITY_PWA Manifest Icons|PWA Manifest Icons]]
-- [[_COMMUNITY_EventCard|EventCard]]
-- [[_COMMUNITY_EventForm|EventForm]]
-- [[_COMMUNITY_TagInput|TagInput]]
-- [[_COMMUNITY_EventCarousel|EventCarousel]]
-- [[_COMMUNITY_QRCodeModal|QRCodeModal]]
-- [[_COMMUNITY_InstallPrompt|InstallPrompt]]
-- [[_COMMUNITY_EventReportForm|EventReportForm]]
-- [[_COMMUNITY_use-follows|use-follows]]
-- [[_COMMUNITY_use-notes|use-notes]]
-- [[_COMMUNITY_use-reviews|use-reviews]]
-- [[_COMMUNITY_changelog|changelog]]
-- [[_COMMUNITY_CalendarMonth|CalendarMonth]]
-- [[_COMMUNITY_MobileMonthView|MobileMonthView]]
-- [[_COMMUNITY_EventDashboard|EventDashboard]]
-- [[_COMMUNITY_HeroBanner|HeroBanner]]
-- [[_COMMUNITY_ParticipantsModal|ParticipantsModal]]
-- [[_COMMUNITY_NotesFeed|NotesFeed]]
-- [[_COMMUNITY_EmbedModal|EmbedModal]]
-- [[_COMMUNITY_TagBadge|TagBadge]]
-- [[_COMMUNITY_use-reports|use-reports]]
-- [[_COMMUNITY_auth|auth]]
-- [[_COMMUNITY_constants|constants]]
-- [[_COMMUNITY_Calendar|Calendar]]
-- [[_COMMUNITY_Embed|Embed]]
-- [[_COMMUNITY_Explorer|Explorer]]
-- [[_COMMUNITY_ProtectedRoute|ProtectedRoute]]
-- [[_COMMUNITY_theme-toggle|theme-toggle]]
-- [[_COMMUNITY_AdminDashboard|AdminDashboard]]
-- [[_COMMUNITY_AdminEvents|AdminEvents]]
-- [[_COMMUNITY_AdminLayout|AdminLayout]]
-- [[_COMMUNITY_AdminRoute|AdminRoute]]
-- [[_COMMUNITY_AdminUsers|AdminUsers]]
-- [[_COMMUNITY_CalendarFriendsModal|CalendarFriendsModal]]
-- [[_COMMUNITY_MobileYearGrid|MobileYearGrid]]
-- [[_COMMUNITY_MonthBanner|MonthBanner]]
-- [[_COMMUNITY_MonthCell|MonthCell]]
-- [[_COMMUNITY_DeduplicateSuggestions|DeduplicateSuggestions]]
-- [[_COMMUNITY_EventHero|EventHero]]
-- [[_COMMUNITY_FriendRow|FriendRow]]
-- [[_COMMUNITY_SlideRow|SlideRow]]
-- [[_COMMUNITY_BottomBar|BottomBar]]
-- [[_COMMUNITY_ChangelogModal|ChangelogModal]]
-- [[_COMMUNITY_SearchBar|SearchBar]]
-- [[_COMMUNITY_NoteForm|NoteForm]]
-- [[_COMMUNITY_NotificationItem|NotificationItem]]
-- [[_COMMUNITY_NotificationSlidePanel|NotificationSlidePanel]]
-- [[_COMMUNITY_FellowshipFooter|FellowshipFooter]]
-- [[_COMMUNITY_FollowButton|FollowButton]]
-- [[_COMMUNITY_MonthPicker|MonthPicker]]
-- [[_COMMUNITY_RichTextEditor|RichTextEditor]]
-- [[_COMMUNITY_toast|toast]]
-- [[_COMMUNITY_use-calendar|use-calendar]]
-- [[_COMMUNITY_use-following-ids|use-following-ids]]
-- [[_COMMUNITY_use-notifications|use-notifications]]
-- [[_COMMUNITY_use-tags|use-tags]]
-- [[_COMMUNITY_use-theme|use-theme]]
-- [[_COMMUNITY_compress-image|compress-image]]
-- [[_COMMUNITY_utils|utils]]
-- [[_COMMUNITY_AuthCallback|AuthCallback]]
-- [[_COMMUNITY_Dashboard|Dashboard]]
-- [[_COMMUNITY_Following|Following]]
-- [[_COMMUNITY_Onboarding|Onboarding]]
-- [[_COMMUNITY_Profile|Profile]]
-- [[_COMMUNITY_PublicProfile|PublicProfile]]
-- [[_COMMUNITY_Design System Surfaces|Design System Surfaces]]
-- [[_COMMUNITY_Boilerplate Leftovers|Boilerplate Leftovers]]
-- [[_COMMUNITY_eslint.config.js|eslint.config.js]]
-- [[_COMMUNITY_vite.config.ts|vite.config.ts]]
-- [[_COMMUNITY_vitest.config.ts|vitest.config.ts]]
-- [[_COMMUNITY_AdminReports.tsx|AdminReports.tsx]]
-- [[_COMMUNITY_YearView.tsx|YearView.tsx]]
-- [[_COMMUNITY_EventDashboardMobile.tsx|EventDashboardMobile.tsx]]
-- [[_COMMUNITY_AppLayout.tsx|AppLayout.tsx]]
-- [[_COMMUNITY_Sidebar.tsx|Sidebar.tsx]]
-- [[_COMMUNITY_SidebarActivity.tsx|SidebarActivity.tsx]]
-- [[_COMMUNITY_EmailSignupPlaceholder.tsx|EmailSignupPlaceholder.tsx]]
-- [[_COMMUNITY_ProfileHeader.tsx|ProfileHeader.tsx]]
-- [[_COMMUNITY_ReviewForm.tsx|ReviewForm.tsx]]
-- [[_COMMUNITY_ReviewSummary.tsx|ReviewSummary.tsx]]
-- [[_COMMUNITY_button.tsx|button.tsx]]
-- [[_COMMUNITY_supabase.ts|supabase.ts]]
-- [[_COMMUNITY_Landing.tsx|Landing.tsx]]
-- [[_COMMUNITY_Notifications.tsx|Notifications.tsx]]
-- [[_COMMUNITY_setup.ts|setup.ts]]
-- [[_COMMUNITY_smoke.test.ts|smoke.test.ts]]
-- [[_COMMUNITY_database.ts|database.ts]]
-- [[_COMMUNITY_supabase.ts|supabase.ts]]
-- [[_COMMUNITY_Vite Template Scaffolding|Vite Template Scaffolding]]
-- [[_COMMUNITY_Pastel Tag System|Pastel Tag System]]
+- [[_COMMUNITY_Community 0|Community 0]]
+- [[_COMMUNITY_Community 1|Community 1]]
+- [[_COMMUNITY_Community 2|Community 2]]
+- [[_COMMUNITY_Community 3|Community 3]]
+- [[_COMMUNITY_Community 4|Community 4]]
+- [[_COMMUNITY_Community 5|Community 5]]
+- [[_COMMUNITY_Community 6|Community 6]]
+- [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
+- [[_COMMUNITY_Community 9|Community 9]]
+- [[_COMMUNITY_Community 10|Community 10]]
+- [[_COMMUNITY_Community 11|Community 11]]
+- [[_COMMUNITY_Community 12|Community 12]]
+- [[_COMMUNITY_Community 13|Community 13]]
+- [[_COMMUNITY_Community 14|Community 14]]
+- [[_COMMUNITY_Community 15|Community 15]]
+- [[_COMMUNITY_Community 16|Community 16]]
+- [[_COMMUNITY_Community 17|Community 17]]
+- [[_COMMUNITY_Community 18|Community 18]]
+- [[_COMMUNITY_Community 19|Community 19]]
+- [[_COMMUNITY_Community 20|Community 20]]
+- [[_COMMUNITY_Community 21|Community 21]]
+- [[_COMMUNITY_Community 22|Community 22]]
+- [[_COMMUNITY_Community 23|Community 23]]
+- [[_COMMUNITY_Community 24|Community 24]]
+- [[_COMMUNITY_Community 25|Community 25]]
+- [[_COMMUNITY_Community 26|Community 26]]
+- [[_COMMUNITY_Community 27|Community 27]]
+- [[_COMMUNITY_Community 28|Community 28]]
+- [[_COMMUNITY_Community 29|Community 29]]
+- [[_COMMUNITY_Community 30|Community 30]]
+- [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
+- [[_COMMUNITY_Community 33|Community 33]]
+- [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 35|Community 35]]
+- [[_COMMUNITY_Community 36|Community 36]]
+- [[_COMMUNITY_Community 37|Community 37]]
+- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 39|Community 39]]
+- [[_COMMUNITY_Community 40|Community 40]]
+- [[_COMMUNITY_Community 41|Community 41]]
+- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 43|Community 43]]
+- [[_COMMUNITY_Community 44|Community 44]]
+- [[_COMMUNITY_Community 45|Community 45]]
+- [[_COMMUNITY_Community 46|Community 46]]
+- [[_COMMUNITY_Community 47|Community 47]]
+- [[_COMMUNITY_Community 48|Community 48]]
+- [[_COMMUNITY_Community 49|Community 49]]
+- [[_COMMUNITY_Community 50|Community 50]]
+- [[_COMMUNITY_Community 51|Community 51]]
+- [[_COMMUNITY_Community 52|Community 52]]
+- [[_COMMUNITY_Community 53|Community 53]]
+- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 55|Community 55]]
+- [[_COMMUNITY_Community 56|Community 56]]
+- [[_COMMUNITY_Community 57|Community 57]]
+- [[_COMMUNITY_Community 58|Community 58]]
+- [[_COMMUNITY_Community 59|Community 59]]
+- [[_COMMUNITY_Community 60|Community 60]]
+- [[_COMMUNITY_Community 61|Community 61]]
+- [[_COMMUNITY_Community 62|Community 62]]
+- [[_COMMUNITY_Community 63|Community 63]]
+- [[_COMMUNITY_Community 64|Community 64]]
+- [[_COMMUNITY_Community 65|Community 65]]
+- [[_COMMUNITY_Community 66|Community 66]]
+- [[_COMMUNITY_Community 67|Community 67]]
+- [[_COMMUNITY_Community 68|Community 68]]
+- [[_COMMUNITY_Community 69|Community 69]]
+- [[_COMMUNITY_Community 70|Community 70]]
+- [[_COMMUNITY_Community 71|Community 71]]
+- [[_COMMUNITY_Community 72|Community 72]]
+- [[_COMMUNITY_Community 73|Community 73]]
+- [[_COMMUNITY_Community 74|Community 74]]
+- [[_COMMUNITY_Community 75|Community 75]]
+- [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
+- [[_COMMUNITY_Community 78|Community 78]]
+- [[_COMMUNITY_Community 79|Community 79]]
+- [[_COMMUNITY_Community 80|Community 80]]
+- [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 87|Community 87]]
+- [[_COMMUNITY_Community 88|Community 88]]
+- [[_COMMUNITY_Community 89|Community 89]]
+- [[_COMMUNITY_Community 90|Community 90]]
+- [[_COMMUNITY_Community 91|Community 91]]
+- [[_COMMUNITY_Community 92|Community 92]]
+- [[_COMMUNITY_Community 93|Community 93]]
+- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 95|Community 95]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
+- [[_COMMUNITY_Community 99|Community 99]]
+- [[_COMMUNITY_Community 100|Community 100]]
+- [[_COMMUNITY_Community 101|Community 101]]
+- [[_COMMUNITY_Community 102|Community 102]]
+- [[_COMMUNITY_Community 103|Community 103]]
+- [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Fellowship V1 Design Spec` - 8 edges
@@ -123,8 +126,8 @@
 6. `Event Page Redesign v2 (Lu.ma 2-cols)` - 5 edges
 7. `Embed Widget Plan (/:slug/embed)` - 5 edges
 8. `Logo (current) — bronze/copper gradient 'Fellowship' wordmark with brand mark` - 5 edges
-9. `Fellowship V1 Implementation Plan` - 4 edges
-10. `Notifications Redesign Plan` - 4 edges
+9. `ErrorBoundary` - 4 edges
+10. `Fellowship V1 Implementation Plan` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` --semantically_similar_to--> `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill`  [INFERRED] [semantically similar]
@@ -135,8 +138,8 @@
   logo.png → logoold.png
 - `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` --semantically_similar_to--> `Logo (current) — bronze/copper gradient 'Fellowship' wordmark with brand mark`  [INFERRED] [semantically similar]
   icon.png → logo.png
-- `Apple Touch Icon (PNG) — Four Figures Mark` --semantically_similar_to--> `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots`  [INFERRED] [semantically similar]
-  public/apple-touch-icon.png → icon.png
+- `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` --semantically_similar_to--> `Apple Touch Icon (PNG) — Four Figures Mark`  [INFERRED] [semantically similar]
+  icon.png → public/apple-touch-icon.png
 
 ## Hyperedges (group relationships)
 - **Design System Refonte (tokens + typography + cards + flat surfaces)** — ds_css_tokens, ds_typography_jakarta_inter, ds_palette_terre_feu, ds_flat_surfaces, ds_tag_pastel_system, ds_eventcard_netflix [EXTRACTED 0.95]
@@ -152,415 +155,427 @@
 
 ## Communities
 
-### Community 0 - "Architecture & Foundations"
+### Community 0 - "Community 0"
 Cohesion: 0.09
 Nodes (22): Source Architecture (lib, components, pages), Netlify Deployment (PWA, SPA fallback), Fellowship Project Overview, Supabase Auth via Magic Link OTP, Tech Stack (React 19, TS 5.9, Vite 7, Tailwind v4, Supabase), MobileMonthView (event pills), useIsMobile Hook (640px breakpoint), MobileYearGrid (3x4 months) (+14 more)
 
-### Community 1 - "Admin Hub"
+### Community 1 - "Community 1"
 Cohesion: 0.12
 Nodes (18): Admin Dashboard Metrics, role column on profiles, AdminRoute Guard (role===admin), Tags Supabase table (dynamic), CSS Tokens (Flat warm design), Netflix-style EventCard Component, Terre & Feu Color Palette, Plus Jakarta Sans + Inter Typography (+10 more)
 
-### Community 2 - "Event Page & Notifications"
+### Community 2 - "Community 2"
 Cohesion: 0.14
 Nodes (14): EventDashboard (sticky private), EventHero Component, Mon Suivi Inline Block, Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section, NotificationSlidePanel, Payment Tracking (total_cost, payments JSONB) (+6 more)
 
-### Community 3 - "Embed Widget"
+### Community 3 - "Community 3"
 Cohesion: 0.18
 Nodes (12): EmbedPage.css (isolated, no Tailwind), EmbedModal (copyable snippet), URL Params (theme, max, accent), Embed Widget Plan (/:slug/embed), Profile Redesign Plan, ProfileHeader (ambient gradient), banner_url Migration, EmailSignupPlaceholder (+4 more)
 
-### Community 4 - "Root Brand Assets"
+### Community 4 - "Community 4"
 Cohesion: 0.31
 Nodes (10): Apple Touch Icon (PNG) — Four Figures Mark, Apple Touch Icon (SVG) — Black 'F' Placeholder, Exemple — Calendar/Events grid screenshot (Fellowship app), Favicon (SVG) — Black 'F' Placeholder 32px, Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark, Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots, Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill, Logo (current) — bronze/copper gradient 'Fellowship' wordmark with brand mark (+2 more)
 
-### Community 5 - "Tag Color Utils"
+### Community 5 - "Community 5"
 Cohesion: 0.25
 Nodes (2): hexToHsl(), hexToTagColors()
 
-### Community 6 - "Event Date Utils"
+### Community 6 - "Community 6"
 Cohesion: 0.22
 Nodes (0): 
 
-### Community 7 - "Events Hooks"
+### Community 7 - "Community 7"
 Cohesion: 0.25
 Nodes (0): 
 
-### Community 8 - "Admin Hooks"
+### Community 8 - "Community 8"
 Cohesion: 0.29
 Nodes (0): 
 
-### Community 9 - "Participations Hooks"
+### Community 9 - "Community 9"
 Cohesion: 0.29
 Nodes (0): 
 
-### Community 10 - "Login OTP Handlers"
+### Community 10 - "Community 10"
 Cohesion: 0.47
 Nodes (3): handleCodeChange(), handlePaste(), handleVerify()
 
-### Community 11 - "Settings Handlers"
+### Community 11 - "Community 11"
 Cohesion: 0.33
 Nodes (0): 
 
-### Community 12 - "App Shell & Routes"
+### Community 12 - "Community 12"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 13 - "PWA Manifest Icons"
+### Community 13 - "Community 13"
+Cohesion: 0.4
+Nodes (1): ErrorBoundary
+
+### Community 14 - "Community 14"
 Cohesion: 0.6
 Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
 
-### Community 14 - "EventCard"
+### Community 15 - "Community 15"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 15 - "EventForm"
+### Community 16 - "Community 16"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 16 - "TagInput"
+### Community 17 - "Community 17"
 Cohesion: 0.67
 Nodes (2): addTag(), handleKeyDown()
 
-### Community 17 - "EventCarousel"
+### Community 18 - "Community 18"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 18 - "QRCodeModal"
+### Community 19 - "Community 19"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 19 - "InstallPrompt"
+### Community 20 - "Community 20"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 20 - "EventReportForm"
+### Community 21 - "Community 21"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 21 - "use-follows"
+### Community 22 - "Community 22"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 22 - "use-notes"
+### Community 23 - "Community 23"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 23 - "use-reviews"
+### Community 24 - "Community 24"
 Cohesion: 0.5
 Nodes (0): 
 
-### Community 24 - "changelog"
+### Community 25 - "Community 25"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 25 - "CalendarMonth"
+### Community 26 - "Community 26"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 26 - "MobileMonthView"
+### Community 27 - "Community 27"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 27 - "EventDashboard"
+### Community 28 - "Community 28"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 28 - "HeroBanner"
+### Community 29 - "Community 29"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 29 - "ParticipantsModal"
+### Community 30 - "Community 30"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 30 - "NotesFeed"
+### Community 31 - "Community 31"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 31 - "EmbedModal"
+### Community 32 - "Community 32"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 32 - "TagBadge"
+### Community 33 - "Community 33"
 Cohesion: 1.0
 Nodes (2): getTagIcon(), TagBadge()
 
-### Community 33 - "use-reports"
+### Community 34 - "Community 34"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 34 - "auth"
+### Community 35 - "Community 35"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 35 - "constants"
+### Community 36 - "Community 36"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 36 - "Calendar"
+### Community 37 - "Community 37"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 37 - "Embed"
+### Community 38 - "Community 38"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 38 - "Explorer"
+### Community 39 - "Community 39"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 39 - "ProtectedRoute"
+### Community 40 - "Community 40"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 40 - "theme-toggle"
+### Community 41 - "Community 41"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 41 - "AdminDashboard"
+### Community 42 - "Community 42"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 42 - "AdminEvents"
+### Community 43 - "Community 43"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 43 - "AdminLayout"
+### Community 44 - "Community 44"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 44 - "AdminRoute"
+### Community 45 - "Community 45"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 45 - "AdminUsers"
+### Community 46 - "Community 46"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 46 - "CalendarFriendsModal"
+### Community 47 - "Community 47"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 47 - "MobileYearGrid"
+### Community 48 - "Community 48"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 48 - "MonthBanner"
+### Community 49 - "Community 49"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 49 - "MonthCell"
+### Community 50 - "Community 50"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 50 - "DeduplicateSuggestions"
+### Community 51 - "Community 51"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 51 - "EventHero"
+### Community 52 - "Community 52"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 52 - "FriendRow"
+### Community 53 - "Community 53"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 53 - "SlideRow"
+### Community 54 - "Community 54"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 54 - "BottomBar"
+### Community 55 - "Community 55"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 55 - "ChangelogModal"
+### Community 56 - "Community 56"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 56 - "SearchBar"
+### Community 57 - "Community 57"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 57 - "NoteForm"
+### Community 58 - "Community 58"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 58 - "NotificationItem"
+### Community 59 - "Community 59"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 59 - "NotificationSlidePanel"
+### Community 60 - "Community 60"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 60 - "FellowshipFooter"
+### Community 61 - "Community 61"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 61 - "FollowButton"
+### Community 62 - "Community 62"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 62 - "MonthPicker"
+### Community 63 - "Community 63"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 63 - "RichTextEditor"
+### Community 64 - "Community 64"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 64 - "toast"
+### Community 65 - "Community 65"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 65 - "use-calendar"
+### Community 66 - "Community 66"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 66 - "use-following-ids"
+### Community 67 - "Community 67"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 67 - "use-notifications"
+### Community 68 - "Community 68"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 68 - "use-tags"
+### Community 69 - "Community 69"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 69 - "use-theme"
+### Community 70 - "Community 70"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 70 - "compress-image"
+### Community 71 - "Community 71"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 71 - "utils"
+### Community 72 - "Community 72"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 72 - "AuthCallback"
+### Community 73 - "Community 73"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 73 - "Dashboard"
+### Community 74 - "Community 74"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 74 - "Following"
+### Community 75 - "Community 75"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 75 - "Onboarding"
+### Community 76 - "Community 76"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 76 - "Profile"
+### Community 77 - "Community 77"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 77 - "PublicProfile"
+### Community 78 - "Community 78"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 78 - "Design System Surfaces"
+### Community 79 - "Community 79"
 Cohesion: 1.0
 Nodes (2): Flat Surfaces (no shadows, lin background), Rationale: Inverted Surfaces (warm white / lin cards)
 
-### Community 79 - "Boilerplate Leftovers"
+### Community 80 - "Community 80"
 Cohesion: 1.0
 Nodes (2): Boilerplate Leftover (scaffold artifact to clean up), Vite Default Logo (lightning bolt)
 
-### Community 80 - "eslint.config.js"
+### Community 81 - "Community 81"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 81 - "vite.config.ts"
+### Community 82 - "Community 82"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 82 - "vitest.config.ts"
+### Community 83 - "Community 83"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 83 - "AdminReports.tsx"
+### Community 84 - "Community 84"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 84 - "YearView.tsx"
+### Community 85 - "Community 85"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 85 - "EventDashboardMobile.tsx"
+### Community 86 - "Community 86"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 86 - "AppLayout.tsx"
+### Community 87 - "Community 87"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 87 - "Sidebar.tsx"
+### Community 88 - "Community 88"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 88 - "SidebarActivity.tsx"
+### Community 89 - "Community 89"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 89 - "EmailSignupPlaceholder.tsx"
+### Community 90 - "Community 90"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 90 - "ProfileHeader.tsx"
+### Community 91 - "Community 91"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 91 - "ReviewForm.tsx"
+### Community 92 - "Community 92"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 92 - "ReviewSummary.tsx"
+### Community 93 - "Community 93"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 93 - "button.tsx"
+### Community 94 - "Community 94"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 94 - "supabase.ts"
+### Community 95 - "Community 95"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 95 - "Landing.tsx"
+### Community 96 - "Community 96"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 96 - "Notifications.tsx"
+### Community 97 - "Community 97"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 97 - "setup.ts"
+### Community 98 - "Community 98"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 98 - "smoke.test.ts"
+### Community 99 - "Community 99"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 99 - "database.ts"
+### Community 100 - "Community 100"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 100 - "supabase.ts"
+### Community 101 - "Community 101"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 101 - "Vite Template Scaffolding"
+### Community 102 - "Community 102"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 103 - "Community 103"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 104 - "Community 104"
 Cohesion: 1.0
 Nodes (1): Vite + React + TS Template
 
-### Community 102 - "Pastel Tag System"
+### Community 105 - "Community 105"
 Cohesion: 1.0
 Nodes (1): Pastel Tag System
 
@@ -575,133 +590,137 @@ Nodes (1): Pastel Tag System
 ## Knowledge Gaps
 - **37 isolated node(s):** `Netlify Deployment (PWA, SPA fallback)`, `Supabase Auth via Magic Link OTP`, `Vite + React + TS Template`, `Phase 0 Cleanup (Remove Tauri)`, `Test Infrastructure (Vitest + RTL)` (+32 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `ProtectedRoute`** (2 nodes): `ProtectedRoute()`, `ProtectedRoute.tsx`
+- **Thin community `Community 40`** (2 nodes): `ProtectedRoute()`, `ProtectedRoute.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `theme-toggle`** (2 nodes): `theme-toggle.tsx`, `ThemeToggle()`
+- **Thin community `Community 41`** (2 nodes): `theme-toggle.tsx`, `ThemeToggle()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminDashboard`** (2 nodes): `AdminDashboard()`, `AdminDashboard.tsx`
+- **Thin community `Community 42`** (2 nodes): `AdminDashboard()`, `AdminDashboard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminEvents`** (2 nodes): `handleDelete()`, `AdminEvents.tsx`
+- **Thin community `Community 43`** (2 nodes): `handleDelete()`, `AdminEvents.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminLayout`** (2 nodes): `AdminLayout()`, `AdminLayout.tsx`
+- **Thin community `Community 44`** (2 nodes): `AdminLayout()`, `AdminLayout.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminRoute`** (2 nodes): `AdminRoute()`, `AdminRoute.tsx`
+- **Thin community `Community 45`** (2 nodes): `AdminRoute()`, `AdminRoute.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminUsers`** (2 nodes): `toggleSuspend()`, `AdminUsers.tsx`
+- **Thin community `Community 46`** (2 nodes): `toggleSuspend()`, `AdminUsers.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `CalendarFriendsModal`** (2 nodes): `hashName()`, `CalendarFriendsModal.tsx`
+- **Thin community `Community 47`** (2 nodes): `hashName()`, `CalendarFriendsModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `MobileYearGrid`** (2 nodes): `getTagDotColor()`, `MobileYearGrid.tsx`
+- **Thin community `Community 48`** (2 nodes): `getTagDotColor()`, `MobileYearGrid.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `MonthBanner`** (2 nodes): `MonthBanner()`, `MonthBanner.tsx`
+- **Thin community `Community 49`** (2 nodes): `MonthBanner()`, `MonthBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `MonthCell`** (2 nodes): `getTagColor()`, `MonthCell.tsx`
+- **Thin community `Community 50`** (2 nodes): `getTagColor()`, `MonthCell.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `DeduplicateSuggestions`** (2 nodes): `formatDate()`, `DeduplicateSuggestions.tsx`
+- **Thin community `Community 51`** (2 nodes): `formatDate()`, `DeduplicateSuggestions.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `EventHero`** (2 nodes): `formatDate()`, `EventHero.tsx`
+- **Thin community `Community 52`** (2 nodes): `formatDate()`, `EventHero.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `FriendRow`** (2 nodes): `hashName()`, `FriendRow.tsx`
+- **Thin community `Community 53`** (2 nodes): `hashName()`, `FriendRow.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `SlideRow`** (2 nodes): `SlideRow()`, `SlideRow.tsx`
+- **Thin community `Community 54`** (2 nodes): `SlideRow()`, `SlideRow.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `BottomBar`** (2 nodes): `BottomBar()`, `BottomBar.tsx`
+- **Thin community `Community 55`** (2 nodes): `BottomBar()`, `BottomBar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ChangelogModal`** (2 nodes): `ChangelogModal()`, `ChangelogModal.tsx`
+- **Thin community `Community 56`** (2 nodes): `ChangelogModal()`, `ChangelogModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `SearchBar`** (2 nodes): `SearchBar()`, `SearchBar.tsx`
+- **Thin community `Community 57`** (2 nodes): `SearchBar()`, `SearchBar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `NoteForm`** (2 nodes): `NoteForm()`, `NoteForm.tsx`
+- **Thin community `Community 58`** (2 nodes): `NoteForm()`, `NoteForm.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `NotificationItem`** (2 nodes): `hashName()`, `NotificationItem.tsx`
+- **Thin community `Community 59`** (2 nodes): `hashName()`, `NotificationItem.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `NotificationSlidePanel`** (2 nodes): `handleKey()`, `NotificationSlidePanel.tsx`
+- **Thin community `Community 60`** (2 nodes): `handleKey()`, `NotificationSlidePanel.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `FellowshipFooter`** (2 nodes): `FellowshipFooter()`, `FellowshipFooter.tsx`
+- **Thin community `Community 61`** (2 nodes): `FellowshipFooter()`, `FellowshipFooter.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `FollowButton`** (2 nodes): `FollowButton()`, `FollowButton.tsx`
+- **Thin community `Community 62`** (2 nodes): `FollowButton()`, `FollowButton.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `MonthPicker`** (2 nodes): `MonthPicker()`, `MonthPicker.tsx`
+- **Thin community `Community 63`** (2 nodes): `MonthPicker()`, `MonthPicker.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `RichTextEditor`** (2 nodes): `RichTextEditor()`, `RichTextEditor.tsx`
+- **Thin community `Community 64`** (2 nodes): `RichTextEditor()`, `RichTextEditor.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `toast`** (2 nodes): `toast.tsx`, `Toast()`
+- **Thin community `Community 65`** (2 nodes): `toast.tsx`, `Toast()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `use-calendar`** (2 nodes): `use-calendar.ts`, `useCalendarYear()`
+- **Thin community `Community 66`** (2 nodes): `use-calendar.ts`, `useCalendarYear()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `use-following-ids`** (2 nodes): `use-following-ids.ts`, `useFollowingIds()`
+- **Thin community `Community 67`** (2 nodes): `use-following-ids.ts`, `useFollowingIds()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `use-notifications`** (2 nodes): `use-notifications.ts`, `useNotifications()`
+- **Thin community `Community 68`** (2 nodes): `use-notifications.ts`, `useNotifications()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `use-tags`** (2 nodes): `use-tags.ts`, `useTags()`
+- **Thin community `Community 69`** (2 nodes): `use-tags.ts`, `useTags()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `use-theme`** (2 nodes): `use-theme.ts`, `useTheme()`
+- **Thin community `Community 70`** (2 nodes): `use-theme.ts`, `useTheme()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `compress-image`** (2 nodes): `compressImage()`, `compress-image.ts`
+- **Thin community `Community 71`** (2 nodes): `compressImage()`, `compress-image.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `utils`** (2 nodes): `utils.ts`, `cn()`
+- **Thin community `Community 72`** (2 nodes): `utils.ts`, `cn()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AuthCallback`** (2 nodes): `AuthCallbackPage()`, `AuthCallback.tsx`
+- **Thin community `Community 73`** (2 nodes): `AuthCallbackPage()`, `AuthCallback.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Dashboard`** (2 nodes): `daysUntil()`, `Dashboard.tsx`
+- **Thin community `Community 74`** (2 nodes): `daysUntil()`, `Dashboard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Following`** (2 nodes): `FollowingPage()`, `Following.tsx`
+- **Thin community `Community 75`** (2 nodes): `FollowingPage()`, `Following.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Onboarding`** (2 nodes): `handleSubmit()`, `Onboarding.tsx`
+- **Thin community `Community 76`** (2 nodes): `handleSubmit()`, `Onboarding.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Profile`** (2 nodes): `ProfilePage()`, `Profile.tsx`
+- **Thin community `Community 77`** (2 nodes): `ProfilePage()`, `Profile.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `PublicProfile`** (2 nodes): `fetchProfile()`, `PublicProfile.tsx`
+- **Thin community `Community 78`** (2 nodes): `fetchProfile()`, `PublicProfile.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Design System Surfaces`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
+- **Thin community `Community 79`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Boilerplate Leftovers`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
+- **Thin community `Community 80`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `eslint.config.js`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 81`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `vite.config.ts`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 82`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `vitest.config.ts`** (1 nodes): `vitest.config.ts`
+- **Thin community `Community 83`** (1 nodes): `vitest.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AdminReports.tsx`** (1 nodes): `AdminReports.tsx`
+- **Thin community `Community 84`** (1 nodes): `version.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `YearView.tsx`** (1 nodes): `YearView.tsx`
+- **Thin community `Community 85`** (1 nodes): `ErrorFallback.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `EventDashboardMobile.tsx`** (1 nodes): `EventDashboardMobile.tsx`
+- **Thin community `Community 86`** (1 nodes): `AdminReports.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `AppLayout.tsx`** (1 nodes): `AppLayout.tsx`
+- **Thin community `Community 87`** (1 nodes): `YearView.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Sidebar.tsx`** (1 nodes): `Sidebar.tsx`
+- **Thin community `Community 88`** (1 nodes): `EventDashboardMobile.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `SidebarActivity.tsx`** (1 nodes): `SidebarActivity.tsx`
+- **Thin community `Community 89`** (1 nodes): `AppLayout.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `EmailSignupPlaceholder.tsx`** (1 nodes): `EmailSignupPlaceholder.tsx`
+- **Thin community `Community 90`** (1 nodes): `Sidebar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ProfileHeader.tsx`** (1 nodes): `ProfileHeader.tsx`
+- **Thin community `Community 91`** (1 nodes): `SidebarActivity.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ReviewForm.tsx`** (1 nodes): `ReviewForm.tsx`
+- **Thin community `Community 92`** (1 nodes): `EmailSignupPlaceholder.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ReviewSummary.tsx`** (1 nodes): `ReviewSummary.tsx`
+- **Thin community `Community 93`** (1 nodes): `ProfileHeader.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `button.tsx`** (1 nodes): `button.tsx`
+- **Thin community `Community 94`** (1 nodes): `ReviewForm.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `supabase.ts`** (1 nodes): `supabase.ts`
+- **Thin community `Community 95`** (1 nodes): `ReviewSummary.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Landing.tsx`** (1 nodes): `Landing.tsx`
+- **Thin community `Community 96`** (1 nodes): `button.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Notifications.tsx`** (1 nodes): `Notifications.tsx`
+- **Thin community `Community 97`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `setup.ts`** (1 nodes): `setup.ts`
+- **Thin community `Community 98`** (1 nodes): `Landing.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `smoke.test.ts`** (1 nodes): `smoke.test.ts`
+- **Thin community `Community 99`** (1 nodes): `Notifications.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `database.ts`** (1 nodes): `database.ts`
+- **Thin community `Community 100`** (1 nodes): `setup.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `supabase.ts`** (1 nodes): `supabase.ts`
+- **Thin community `Community 101`** (1 nodes): `smoke.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Vite Template Scaffolding`** (1 nodes): `Vite + React + TS Template`
+- **Thin community `Community 102`** (1 nodes): `database.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Pastel Tag System`** (1 nodes): `Pastel Tag System`
+- **Thin community `Community 103`** (1 nodes): `supabase.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 104`** (1 nodes): `Vite + React + TS Template`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 105`** (1 nodes): `Pastel Tag System`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
@@ -713,10 +732,10 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Design System Refonte Plan` connect `Admin Hub` to `Architecture & Foundations`, `Event Page & Notifications`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `Fellowship V1 Design Spec` connect `Architecture & Foundations` to `Admin Hub`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **Why does `Design System Refonte Plan` connect `Community 1` to `Community 0`, `Community 2`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Why does `Fellowship V1 Design Spec` connect `Community 0` to `Community 1`?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**
