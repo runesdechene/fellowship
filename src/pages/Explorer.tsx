@@ -166,12 +166,11 @@ export function ExplorerPage() {
       </div>
 
       {/* Mode segmented control */}
-      <div className="explorer-mode-segmented" role="tablist" aria-label="Mode d'affichage">
+      <div className="explorer-mode-segmented" role="group" aria-label="Mode d'affichage">
         {VIEW_MODES.map(m => (
           <button
             key={m}
-            role="tab"
-            aria-selected={mode === m}
+            aria-pressed={mode === m}
             className={`explorer-mode-btn${mode === m ? ' active' : ''}`}
             onClick={() => changeMode(m)}
           >
