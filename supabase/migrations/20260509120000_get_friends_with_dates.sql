@@ -2,7 +2,9 @@
 -- (= MAX of both follow timestamps). Used for sorting friends by recency.
 CREATE OR REPLACE FUNCTION get_friends_with_dates(p_user_id UUID)
 RETURNS TABLE(friend_id UUID, friended_at TIMESTAMPTZ)
-LANGUAGE sql STABLE SECURITY DEFINER AS $$
+LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = public
+AS $$
   SELECT
     f1.following_id AS friend_id,
     GREATEST(f1.created_at, f2.created_at) AS friended_at
