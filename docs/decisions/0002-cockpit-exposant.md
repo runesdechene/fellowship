@@ -125,6 +125,32 @@ Maquette : [`assets/mes-dates.html`](assets/mes-dates.html). **Home de l'exposan
 - **Affichage prix = HT en headline** (cible pro qui récupère la TVA), TTC en mention discrète : **9,99 € HT/mois (12 € TTC)**. Règle générale à appliquer partout (boutique, landing…).
 - **Variante festivalier** : mêmes lignes, mais statuts de candidature → « **J'y vais / Intéressé** », pas d'encart candidature, **et pas de paywall** (le festivalier n'a pas de tier Pro). Le cap « 3 mois » est un **levier de conversion exposant uniquement** ; côté festivalier, on **n'ampute pas** — les dates lointaines (>90 j) vont dans une section **« Plus tard »** visible (repliable), jamais cadenassées. (Maquette festivalier à faire avec le parcours festivalier.)
 
+## Écran Mes dates — variante FESTIVALIER (validé)
+
+Maquette : [`assets/festivalier-mesdates.html`](assets/festivalier-mesdates.html). Même écran que le Mes dates exposant, **adapté au festivalier** (V1, cf. 0001 §8).
+
+- **Contexte personne** : la barre montre « Camille · Festivalière » (avatar rond, **pas une entité**), nav allégée : **Explorer · Mes dates · Mes créateurs**. **Aucun cadenas** (le festivalier n'a rien à acheter).
+- **Statuts** : « **J'y vais** » (vert) / « **Intéressée** » (ambre contour) — pas de candidature.
+- **« Qui y va »** = ses abonnements (« Lucie & 2 créateurs que tu suis y vont »).
+- **Section « Plus tard » VISIBLE, jamais cadenassée** : dates >90 j affichées (compte à rebours « dans 6 mois ») — le cap 3 mois est exposant-only, on n'ampute pas le festivalier (décision actée).
+- **Upsell « Devenir exposant »** (vert, pas « Pro ») en bas de barre → crée une entité sans recréer de compte.
+
+## Discussion festival unifiée — Questions + Rencontres (validé)
+
+Décision (2026-05-25) : **chaque festival a UNE discussion = des threads** (async, public, persistant — **≠ chat temps réel, qui est V1.5**), avec **deux catégories** :
+- **❓ Questions** (pratique : élec, parking, sol, rentabilité) — mémoire du festival qui s'accumule d'une édition à l'autre.
+- **🤝 Rencontres / Organisation** (« qui vient ? on se retrouve où ? covoiturage ? ») — ouvert **exposants ET festivaliers**.
+
+Appliqué à la page festival (onglets Questions/Rencontres dans la carte Discussion). **Festival-ancré** (pas de page forum globale → cohérent avec « pas d'annuaire »). Cold-start assumé pour les Rencontres festivaliers (même moteur de threads, coût marginal nul, se remplit avec la densité).
+
+## Notifications — chantier transverse (à concevoir)
+
+⚠️ Système de notifs **bien fichu** identifié comme liant essentiel (par Uriel, 2026-05-25) : threads (réponse à ta question / rencontre), **convergences** (« 3 compagnons viennent de s'inscrire à X »), dates qui approchent (J-7), deadlines candidature, parrainage validé. À distinguer du **fil Communauté** (activité réseau) : les notifs parlent de **toi/tes actions**. L'app a déjà `NotificationSlidePanel` + triggers Supabase — à étendre. **À maquetter/spécifier.**
+
+## Écran Mes créateurs — festivalier (à valider)
+
+*(maquette en cours — voir companion)*
+
 ## Écran Groupes — chat (REPORTÉ EN V1.5)
 
 Maquette de référence : [`assets/groupes-v1.5.html`](assets/groupes-v1.5.html). **Décision (2026-05-25) : le chat de groupe N'EST PAS en V1.**

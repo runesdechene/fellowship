@@ -152,6 +152,9 @@
   .qa-foot{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--muted)}
   .qa-foot .rep{display:flex;align-items:center;gap:5px;color:var(--amber);font-weight:600}
   .qa-foot .rep svg{width:13px;height:13px;stroke-width:2.2}
+  .disc-tabs{display:flex;gap:7px;margin-bottom:14px}
+  .disc-tab{padding:7px 13px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer}
+  .disc-tab.on{background:color-mix(in srgb,var(--cop) 18%,transparent);border-color:color-mix(in srgb,var(--amber) 40%,transparent);color:var(--amber)}
 
   /* ---- Avis ---- */
   .rev-head{display:flex;align-items:center;gap:18px;margin-bottom:16px}
@@ -277,11 +280,15 @@
           </div>
         </div>
 
-        <!-- Questions & réponses (threads) -->
+        <!-- Discussion du festival (threads : Questions + Rencontres) -->
         <div class="card">
-          <h2><svg viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--amber)"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> Questions &amp; réponses <span class="cnt">· 6 questions</span></h2>
-          <p class="sub">Les réponses restent d'une édition à l'autre — la mémoire du festival, écrite par les exposants qui y sont allés.</p>
-          <div class="qa-list">
+          <h2><svg viewBox="0 0 24 24" style="width:15px;height:15px;color:var(--amber)"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Discussion du festival <span class="cnt">· 6 questions · 3 rencontres</span></h2>
+          <div class="disc-tabs">
+            <button class="disc-tab on" data-cat="questions">❓ Questions</button>
+            <button class="disc-tab" data-cat="rencontres">🤝 Rencontres</button>
+          </div>
+          <p class="sub" id="disc-sub">Les réponses restent d'une édition à l'autre — la mémoire du festival, écrite par ceux qui y sont allés.</p>
+          <div class="qa-list" id="cat-questions">
             <div class="qa">
               <div class="qa-top"><div class="qa-q">Y a-t-il l'électricité sur les stands ?</div><span class="qa-badge resolved">✓ Résolu</span></div>
               <div class="qa-ans"><b>Théo — Cuir d'Antan :</b> Oui, sur demande à l'inscription (16A). Prévois quand même ta rallonge, les bornes sont espacées.</div>
@@ -292,7 +299,17 @@
               <div class="qa-foot"><span class="rep"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 2 réponses</span><span>posée par toi · il y a 3 j</span></div>
             </div>
           </div>
-          <button class="btn btn-g btn-block"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Poser une question</button>
+          <div class="qa-list" id="cat-rencontres" style="display:none">
+            <div class="qa">
+              <div class="qa-top"><div class="qa-q">🤝 On se retrouve à l'entrée artisans samedi 9h pour un café ☕</div><span class="qa-badge open">5 partants</span></div>
+              <div class="qa-foot"><span class="rep"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8"/></svg> 5 personnes</span><span>lancée par Camille</span></div>
+            </div>
+            <div class="qa">
+              <div class="qa-top"><div class="qa-q">🚐 Covoiturage depuis Lyon vendredi soir — 2 places + matériel</div><span class="qa-badge open">Ouverte</span></div>
+              <div class="qa-foot"><span class="rep"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> 3 réponses</span><span>festivaliers &amp; exposants</span></div>
+            </div>
+          </div>
+          <button class="btn btn-g btn-block" id="disc-cta"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Poser une question</button>
         </div>
 
         <!-- Avis -->
@@ -390,6 +407,18 @@
   document.getElementById('howto-x').addEventListener('click',closeHowto);
   bg.addEventListener('click',e=>{ if(e.target===bg) closeHowto(); });
   document.getElementById('mark-cand').addEventListener('click',()=>{ setStep(2); closeHowto(); });
+
+  // Discussion : onglets Questions / Rencontres
+  document.querySelectorAll('.disc-tab').forEach(t=>t.addEventListener('click',()=>{
+    document.querySelectorAll('.disc-tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
+    const isQ = t.dataset.cat==='questions';
+    document.getElementById('cat-questions').style.display = isQ?'':'none';
+    document.getElementById('cat-rencontres').style.display = isQ?'none':'';
+    document.getElementById('disc-sub').textContent = isQ
+      ? "Les réponses restent d'une édition à l'autre — la mémoire du festival, écrite par ceux qui y sont allés."
+      : "Organise-toi pour ce festival : covoiturage, points de rendez-vous, qui vient. Exposants et festivaliers.";
+    document.getElementById('disc-cta').lastChild.textContent = isQ ? ' Poser une question' : ' Lancer une rencontre';
+  }));
 </script>
 </body>
 </html>

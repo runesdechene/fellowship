@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Mes dates (festivalier)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--sidebar:#1b1311;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+
+  .sidebar{position:fixed;left:0;top:0;width:262px;height:100vh;background:rgba(27,19,17,.7);backdrop-filter:blur(16px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+  .logo{font-family:var(--h);font-weight:800;font-size:20px;display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:14px}
+  .person-sel{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+  .person-sel .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e07a5f,#b5683a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px}
+  .person-sel .nm b{font-family:var(--h);font-size:14px;display:block}.person-sel .nm span{font-size:11px;color:var(--muted)}
+  .nav{display:flex;flex-direction:column;gap:3px;flex:1}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:500;font-size:14px}
+  .nav a svg{width:18px;height:18px;stroke-width:2}
+  .nav a:hover{background:var(--surface);color:var(--text)}
+  .nav a.active{background:color-mix(in srgb,var(--cop) 16%,transparent);color:var(--amber)}
+  .become{margin-top:10px;background:linear-gradient(150deg,color-mix(in srgb,var(--green) 16%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--green) 30%,var(--line));border-radius:13px;padding:13px}
+  .become b{font-family:var(--h);font-size:13px;color:#fff;display:block;margin-bottom:3px}
+  .become span{font-size:11.5px;color:var(--muted);display:block;margin-bottom:10px;line-height:1.4}
+  .become a{display:block;text-align:center;background:var(--green);color:#16310a;font-weight:700;font-size:12.5px;padding:9px;border-radius:9px;text-decoration:none}
+  .side-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;align-items:center;gap:10px}
+  .side-foot .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#e07a5f,#b5683a)}
+  .side-foot .nm{flex:1}.side-foot .nm b{font-size:13px;font-family:var(--h)}.side-foot .nm span{font-size:11px;color:var(--muted);display:block}
+
+  .stage{position:fixed;left:262px;right:0;top:0;bottom:0;overflow-y:auto}
+  .page{max-width:760px;margin:0 auto;padding:30px 32px 60px}
+  .phead{margin-bottom:20px}
+  .phead h1{font-size:30px;color:#fff;margin-bottom:5px}
+  .phead .psub{font-size:14px;color:var(--muted)}
+  .tabs{display:flex;gap:7px;margin-bottom:20px}
+  .tab{padding:8px 16px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+  .tab.on{background:color-mix(in srgb,var(--cop) 18%,transparent);border-color:color-mix(in srgb,var(--amber) 40%,transparent);color:var(--amber)}
+
+  .month{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 11px;padding-left:2px}
+  .month:first-of-type{margin-top:0}
+  .drow{display:flex;align-items:center;gap:15px;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:13px 15px;margin-bottom:10px;cursor:pointer;transition:.13s}
+  .drow:hover{border-color:color-mix(in srgb,var(--amber) 32%,var(--line))}
+  .ddate{width:50px;flex-shrink:0;text-align:center;display:flex;flex-direction:column;line-height:1}
+  .ddate b{font-family:var(--h);font-size:24px;color:var(--amber)}
+  .ddate span{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .ddate .range{font-size:10px;color:var(--muted)}
+  .dthumb{width:46px;height:62px;border-radius:8px;overflow:hidden;flex-shrink:0}
+  .dthumb img{width:100%;height:100%;object-fit:cover}
+  .dinfo{flex:1;min-width:0}
+  .dinfo b{font-family:var(--h);font-size:15px;color:#fff;display:block;line-height:1.2;margin-bottom:4px}
+  .dinfo .dmeta{font-size:12.5px;color:var(--muted)}
+  .dinfo .dfr{display:flex;align-items:center;gap:7px;margin-top:7px}
+  .avs{display:flex}
+  .avs span{width:22px;height:22px;border-radius:50%;border:2px solid var(--surface);margin-left:-7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#1c1310}
+  .avs span:first-child{margin-left:0}
+  .dfr small{font-size:11.5px;color:var(--muted)}
+  .dstatus{flex-shrink:0}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:99px;white-space:nowrap}
+  .badge .dot{width:6px;height:6px;border-radius:50%}
+  .badge.go{background:var(--green);color:#16310a}
+  .badge.go .dot{background:#16310a}
+  .badge.interest{background:rgba(255,255,255,.06);color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line))}
+  .badge.interest .dot{background:var(--amber)}
+
+  /* Section "Plus tard" (pas de paywall pour le festivalier) */
+  .latersep{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
+  .latersep .ll{flex:1;height:1px;background:var(--line)}
+  .latersep b{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .countdown{font-size:11px;font-weight:700;color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);padding:3px 9px;border-radius:99px;margin-left:auto}
+  .drow.later{opacity:.82}
+
+  .empty-cta{margin-top:20px;text-align:center;padding:24px;border:1px dashed var(--line);border-radius:16px}
+  .empty-cta p{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--b);font-weight:700;font-size:14px;border-radius:11px;padding:12px 22px;border:none;cursor:pointer;text-decoration:none;background:linear-gradient(135deg,var(--cop),var(--cop-d));color:#fff}
+  .btn svg{width:16px;height:16px;stroke-width:2.2}
+
+  @media(max-width:1080px){.sidebar{display:none}.stage{left:0}}
+  @media(max-width:560px){.dthumb{display:none}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="person-sel"><div class="av">C</div><div class="nm"><b>Camille</b><span>Festivalière</span></div></div>
+  <nav class="nav">
+    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z"/></svg> Explorer</a>
+    <a class="active" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg> Mes dates</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A3.5 3.5 0 0015.5 5c-1.4 0-2.7.8-3.5 2-0.8-1.2-2.1-2-3.5-2A3.5 3.5 0 002 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg> Mes créateurs</a>
+  </nav>
+  <div class="become">
+    <b>Tu exposes aussi ?</b>
+    <span>Crée ta vitrine et gère ta saison, sans changer de compte.</span>
+    <a href="#">Devenir exposant</a>
+  </div>
+  <div class="side-foot"><div class="av"></div><div class="nm"><b>Camille R.</b><span>Mon compte</span></div></div>
+</aside>
+
+<main class="stage">
+  <div class="page">
+    <div class="phead">
+      <h1>Mes dates</h1>
+      <div class="psub">Les festivals où tu vas — et ceux qui te font de l'œil.</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on">À venir</button>
+      <button class="tab">Passées</button>
+    </div>
+
+    <!-- Septembre -->
+    <div class="month">Septembre 2026</div>
+    <div class="drow">
+      <div class="ddate"><b>5</b><span>Sam</span><span class="range">→ 6</span></div>
+      <div class="dthumb"><img src="https://picsum.photos/seed/perouges/200/280" alt=""></div>
+      <div class="dinfo">
+        <b>Grandes Médiévales de Pérouges</b>
+        <div class="dmeta">Pérouges (01) · ⚔️ Médiéval</div>
+        <div class="dfr"><div class="avs"><span style="background:#f2a900">L</span><span style="background:#6c5ce7;color:#fff">M</span></div><small>Lucie &amp; 2 créateurs que tu suis y vont</small></div>
+      </div>
+      <div class="dstatus"><span class="badge go"><span class="dot"></span> J'y vais</span></div>
+    </div>
+    <div class="drow">
+      <div class="ddate"><b>20</b><span>Sam</span><span class="range">→ 21</span></div>
+      <div class="dthumb"><img src="https://picsum.photos/seed/cremieu/200/280" alt=""></div>
+      <div class="dinfo">
+        <b>Médiévales de Crémieu</b>
+        <div class="dmeta">Crémieu (38) · ⚔️ Médiéval</div>
+      </div>
+      <div class="dstatus"><span class="badge interest"><span class="dot"></span> Intéressée</span></div>
+    </div>
+
+    <!-- Octobre -->
+    <div class="month">Octobre 2026</div>
+    <div class="drow">
+      <div class="ddate"><b>5</b><span>Sam</span><span class="range">→ 6</span></div>
+      <div class="dthumb"><img src="https://picsum.photos/seed/geekA/200/280" alt=""></div>
+      <div class="dinfo">
+        <b>Geek &amp; Fantasy Show</b>
+        <div class="dmeta">Toulouse (31) · 🎮 Geek</div>
+        <div class="dfr"><div class="avs"><span style="background:#3d9970;color:#fff">T</span></div><small>Théo — Cuir d'Antan y expose</small></div>
+      </div>
+      <div class="dstatus"><span class="badge go"><span class="dot"></span> J'y vais</span></div>
+    </div>
+
+    <!-- Plus tard (visible, JAMAIS cadenassé pour le festivalier) -->
+    <div class="latersep"><b>Plus tard</b><div class="ll"></div><span class="countdown">dans 6 mois</span></div>
+    <div class="drow later">
+      <div class="ddate"><b>6</b><span>Déc</span></div>
+      <div class="dthumb"><img src="https://picsum.photos/seed/marcheA/200/280" alt=""></div>
+      <div class="dinfo">
+        <b>Marché de Noël des Créateurs</b>
+        <div class="dmeta">Lyon (69) · 🎄 Noël</div>
+      </div>
+      <div class="dstatus"><span class="badge interest"><span class="dot"></span> Intéressée</span></div>
+    </div>
+
+    <div class="empty-cta">
+      <p>Envie d'en ajouter d'autres&nbsp;?</p>
+      <a class="btn" href="#"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg> Explorer les festivals</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on'); }));
+</script>
+</body>
+</html>
