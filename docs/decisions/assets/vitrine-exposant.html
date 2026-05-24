@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Vitrine exposant</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--sidebar:#1b1311;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+  a{color:inherit}
+
+  /* ---- App shell ---- */
+  .sidebar{position:fixed;left:0;top:0;width:262px;height:100vh;background:rgba(27,19,17,.7);backdrop-filter:blur(16px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+  .logo{font-family:var(--h);font-weight:800;font-size:20px;display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:14px}
+  .entity{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+  .entity .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#6b4a2e,#3c2a1a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffd9a8;font-size:14px}
+  .entity .nm b{font-family:var(--h);font-size:14px;display:block}.entity .nm span{font-size:11px;color:var(--muted)}
+  .nav{display:flex;flex-direction:column;gap:3px;flex:1}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:500;font-size:14px}
+  .nav a svg{width:18px;height:18px;stroke-width:2}
+  .nav a:hover{background:var(--surface);color:var(--text)}
+  .nav a.active{background:color-mix(in srgb,var(--cop) 16%,transparent);color:var(--amber)}
+  .side-foot{border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:center;gap:10px}
+  .side-foot .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green),hsl(92 40% 46%))}
+  .side-foot .nm{flex:1}.side-foot .nm b{font-size:13px;font-family:var(--h)}.side-foot .nm span{font-size:11px;color:var(--muted);display:block}
+
+  /* ---- Stage ---- */
+  .stage{position:fixed;left:262px;right:0;top:0;bottom:0;overflow-y:auto}
+
+  /* ---- Cover ---- */
+  .cover{position:relative;height:240px;overflow:hidden}
+  .cover img{width:100%;height:100%;object-fit:cover}
+  .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,10,.15) 40%,var(--bg) 100%)}
+
+  .page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 32px 60px}
+
+  /* ---- Header vitrine ---- */
+  .vhead{display:flex;align-items:flex-end;gap:22px;margin-top:-58px;position:relative;z-index:2}
+  .vav{width:124px;height:124px;border-radius:26px;border:4px solid var(--bg);overflow:hidden;flex-shrink:0;box-shadow:0 18px 40px rgba(0,0,0,.5);background:linear-gradient(135deg,#b5683a,#6b3b22)}
+  .vav img{width:100%;height:100%;object-fit:cover}
+  .vid{flex:1;padding-bottom:6px;min-width:0}
+  .vid .brand{font-size:32px;color:#fff;line-height:1.05;display:flex;align-items:center;gap:10px}
+  .vid .verified{color:var(--amber)}
+  .vid .verified svg{width:21px;height:21px;stroke-width:2.4}
+  .vid .person{font-size:13.5px;color:var(--muted);margin:5px 0 11px}
+  .vid .person b{color:var(--text);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:12px;font-weight:600;padding:5px 11px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);color:#e6d4bd}
+  .vact{display:flex;align-items:center;gap:9px;padding-bottom:8px}
+
+  /* ---- Buttons ---- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--b);font-weight:600;font-size:14px;border-radius:11px;padding:11px 20px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:.14s}
+  .btn svg{width:17px;height:17px;stroke-width:2}
+  .btn-p{background:linear-gradient(135deg,var(--cop),var(--cop-d));color:#fff;box-shadow:0 8px 24px hsl(20 65% 32% / .45)}
+  .btn-p:hover{filter:brightness(1.07)}
+  .btn-g{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18);color:#fff}
+  .btn-g:hover{background:rgba(255,255,255,.14)}
+  .btn-block{width:100%}
+  .iconbtn{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .iconbtn:hover{background:rgba(255,255,255,.14)}
+  .iconbtn svg{width:19px;height:19px;stroke-width:2}
+  /* état suivi (alternatif) */
+  .btn-follow.is-on{background:color-mix(in srgb,var(--green) 20%,transparent);border-color:color-mix(in srgb,var(--green) 45%,transparent);color:var(--green);box-shadow:none}
+
+  /* ---- Stats réseau ---- */
+  .vstats{display:flex;align-items:center;gap:10px;margin:20px 0 4px;flex-wrap:wrap}
+  .stat{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:11px 16px;cursor:pointer;transition:.14s}
+  .stat:hover{border-color:color-mix(in srgb,var(--amber) 35%,var(--line))}
+  .avs{display:flex}
+  .avs span{width:28px;height:28px;border-radius:50%;border:2px solid var(--surface);margin-left:-9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1c1310}
+  .avs span:first-child{margin-left:0}
+  .stat .st b{font-family:var(--h);font-size:16px;color:#fff}
+  .stat .st span{font-size:12px;color:var(--muted);margin-left:5px}
+  .stat-plain{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:9px 16px}
+  .stat-plain b{font-family:var(--h);font-size:16px;color:#fff}.stat-plain span{font-size:11.5px;color:var(--muted)}
+
+  /* ---- Grid ---- */
+  .grid{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:start;margin-top:24px}
+  .col-main{display:flex;flex-direction:column;gap:22px;min-width:0}
+  .col-side{display:flex;flex-direction:column;gap:18px;position:sticky;top:22px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:9px}
+  .card h2 svg{width:15px;height:15px;color:var(--amber)}
+  .card h2 .cnt{color:var(--amber)}
+  .seeall{margin-left:auto;font-size:12px;color:var(--amber);font-weight:600;text-transform:none;letter-spacing:0;cursor:pointer}
+
+  .about p{color:#d8cabb;line-height:1.62;font-size:14.5px}
+
+  /* ---- Galerie créations ---- */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .gphoto{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:pointer}
+  .gphoto img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+  .gphoto:hover img{transform:scale(1.07)}
+
+  /* ---- Ma saison (où me rencontrer) ---- */
+  .season-intro{font-size:12.5px;color:var(--muted);margin:-8px 0 16px}
+  .fest{display:flex;gap:13px;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+  .fest:first-of-type{border-top:none;padding-top:0}
+  .fest .fimg{width:50px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--surface2)}
+  .fest .fimg img{width:100%;height:100%;object-fit:cover}
+  .fest .fb{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .fest .fb b{font-family:var(--h);font-size:14px;color:#fff;line-height:1.2;margin-bottom:4px}
+  .fest .fb .fmeta{font-size:12px;color:var(--muted)}
+  .fest .ftog{align-self:center;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--green) 20%,transparent);color:var(--green);white-space:nowrap}
+  .fest.past{opacity:.55}
+  .past-head{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:16px 0 4px}
+
+  .nudge{display:flex;align-items:center;gap:16px;background:color-mix(in srgb,var(--cop) 12%,transparent);border:1px solid color-mix(in srgb,var(--cop) 26%,transparent);border-radius:16px;padding:18px 22px}
+  .nudge .ic{font-size:24px}
+  .nudge .nt{flex:1}
+  .nudge .nt b{font-family:var(--h);font-size:15px;color:#fff;display:block;margin-bottom:3px}
+  .nudge .nt span{font-size:13px;color:var(--muted);display:block}
+  .nudge .btn{flex-shrink:0}
+
+  /* ---- Liens ---- */
+  .links{display:flex;flex-direction:column;gap:8px}
+  .linkrow{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:11px 14px;cursor:pointer;transition:.14s;text-decoration:none}
+  .linkrow:hover{border-color:color-mix(in srgb,var(--amber) 40%,var(--line))}
+  .linkrow .li{width:20px;height:20px;flex-shrink:0;color:var(--amber)}
+  .linkrow .li svg{width:20px;height:20px;stroke-width:2}
+  .linkrow .lt{flex:1;min-width:0}
+  .linkrow .lt b{font-family:var(--h);font-size:13.5px;color:var(--text);display:block;line-height:1.2}
+  .linkrow .lt span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .linkrow .lext{width:15px;height:15px;color:var(--muted);flex-shrink:0;stroke-width:2.2}
+
+  /* ---- Footer partage ---- */
+  .vfooter{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:34px;color:var(--muted);font-size:12.5px}
+  .vfooter .mark{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:9px}
+  .vfooter code{font-family:var(--b);color:var(--text)}
+
+  @media(max-width:1080px){.sidebar{display:none}.stage{left:0}.grid{grid-template-columns:1fr}.col-side{position:static}.vhead{flex-direction:column;align-items:flex-start;gap:14px}.vact{padding-bottom:0}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="entity"><div class="av">RC</div><div class="nm"><b>Rune de Chêne</b><span>Exposant · toi</span></div></div>
+  <nav class="nav">
+    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z"/></svg> Explorer</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg> Tableau de bord</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Calendrier</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8M23 21v-2a4 4 0 00-3-3.87"/></svg> Communauté</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg> Ma vitrine</a>
+  </nav>
+  <div class="side-foot"><div class="av"></div><div class="nm"><b>Uriel</b><span>Mon compte</span></div></div>
+</aside>
+
+<main class="stage">
+  <div class="cover"><img src="https://picsum.photos/seed/ceramic-studio/1600/500" alt=""></div>
+
+  <div class="page">
+    <header class="vhead">
+      <div class="vav"><img src="https://picsum.photos/seed/camille-potter/300/300" alt="Terres & Flammes"></div>
+      <div class="vid">
+        <div class="brand">Terres &amp; Flammes <span class="verified" title="Exposant vérifié"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></span></div>
+        <div class="person">par <b>Camille Royer</b> · Céramiste · Lyon (69)</div>
+        <div class="chips"><span class="chip">🏺 Grès</span><span class="chip">🔥 Raku</span><span class="chip">🎨 Émaux maison</span><span class="chip">Pièces uniques</span></div>
+      </div>
+      <div class="vact">
+        <button class="btn btn-p btn-follow" id="followbtn"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M19 8v6M22 11h-6"/></svg> <span>Suivre</span></button>
+        <button class="iconbtn" title="Partager"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+        <button class="iconbtn" title="QR / lien"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 21v.01M17 21h.01M21 17h.01"/></svg></button>
+      </div>
+    </header>
+
+    <div class="vstats">
+      <div class="stat">
+        <div class="avs"><span style="background:#e07a5f;color:#fff">A</span><span style="background:#6c5ce7;color:#fff">M</span><span style="background:#f0a060">J</span></div>
+        <div class="st"><b>248</b><span>abonnés</span></div>
+      </div>
+      <div class="stat">
+        <div class="avs"><span style="background:#3d9970;color:#fff">U</span><span style="background:#f2a900">T</span><span style="background:#6c5ce7;color:#fff">M</span></div>
+        <div class="st"><b>17</b><span>compagnons</span></div>
+      </div>
+      <div class="stat-plain"><b>12</b><span>festivals en 2026</span></div>
+    </div>
+
+    <div class="grid">
+      <!-- COLONNE GAUCHE -->
+      <div class="col-main">
+
+        <div class="card about">
+          <h2><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> À propos</h2>
+          <p>Céramiste installée à Lyon depuis 2016. Je façonne au tour des pièces utilitaires en grès, cuites au raku pour des émaux vivants et imprévisibles. Chaque pièce est unique. On se croise sur les festivals médiévaux et marchés de créateurs de la région — viens voir l'atelier ambulant et le four raku en démonstration le dimanche.</p>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> Sélection</h2>
+          <p class="season-intro">Un aperçu de mon univers — pas un flux daté, mes 6 pièces signatures.</p>
+          <div class="gallery">
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer1/400/400" alt=""></div>
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer2/400/400" alt=""></div>
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer3/400/400" alt=""></div>
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer4/400/400" alt=""></div>
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer5/400/400" alt=""></div>
+            <div class="gphoto"><img src="https://picsum.photos/seed/cer6/400/400" alt=""></div>
+          </div>
+        </div>
+
+        <div class="nudge">
+          <span class="ic">🔔</span>
+          <div class="nt"><b>Ne rate plus ses dates</b><span>Suis Terres &amp; Flammes pour être prévenu de ses prochains festivals.</span></div>
+          <button class="btn btn-p btn-follow" id="followbtn2"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M19 8v6M22 11h-6"/></svg> <span>Suivre</span></button>
+        </div>
+
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <aside class="col-side">
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1.5-1.5"/></svg> Liens</h2>
+          <div class="links">
+            <a class="linkrow" href="#"><span class="li"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20 15 15 0 010-20z"/></svg></span><span class="lt"><b>Site web</b><span>terresetflammes.fr</span></span><svg class="lext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+            <a class="linkrow" href="#"><span class="li"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg></span><span class="lt"><b>Boutique en ligne</b><span>terresetflammes.etsy.com</span></span><svg class="lext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+            <a class="linkrow" href="#"><span class="li"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></span><span class="lt"><b>Instagram</b><span>@terres.et.flammes</span></span><svg class="lext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+            <a class="linkrow" href="#"><span class="li"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></span><span class="lt"><b>Atelier — réservation cours</b><span>atelier-terresetflammes.fr</span></span><svg class="lext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Où me rencontrer</h2>
+          <p class="season-intro">Sa saison 2026 — les festivals où elle expose.</p>
+
+          <div class="fest">
+            <div class="fimg"><img src="https://picsum.photos/seed/perouges/200/280" alt=""></div>
+            <div class="fb"><b>Grandes Médiévales de Pérouges</b><span class="fmeta">5–6 sept. · Pérouges (01)</span></div>
+            <span class="ftog">Tu y vas</span>
+          </div>
+          <div class="fest">
+            <div class="fimg"><img src="https://picsum.photos/seed/cremieu/200/280" alt=""></div>
+            <div class="fb"><b>Médiévales de Crémieu</b><span class="fmeta">20–21 sept. · Crémieu (38)</span></div>
+          </div>
+          <div class="fest">
+            <div class="fimg"><img src="https://picsum.photos/seed/noellyon/200/280" alt=""></div>
+            <div class="fb"><b>Marché de Noël des Créateurs</b><span class="fmeta">déc. · Lyon (69)</span></div>
+          </div>
+
+          <div class="past-head">Déjà passés</div>
+          <div class="fest past">
+            <div class="fimg"><img src="https://picsum.photos/seed/annecy/200/280" alt=""></div>
+            <div class="fb"><b>Festival des Lumières</b><span class="fmeta">févr. · Annecy (74)</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="vfooter"><span class="mark">✦</span> Vitrine Fellowship · <code>flw.sh/@terres-et-flammes</code></div>
+  </div>
+</main>
+
+<script>
+  // Toggle Suivre / Suivi (démo) — synchronise les 2 boutons
+  let following=false;
+  function renderFollow(){
+    document.querySelectorAll('.btn-follow').forEach(b=>{
+      const sp=b.querySelector('span');
+      if(following){ b.classList.remove('btn-p'); b.classList.add('is-on'); sp.textContent='Suivi'; }
+      else { b.classList.add('btn-p'); b.classList.remove('is-on'); sp.textContent='Suivre'; }
+    });
+  }
+  document.querySelectorAll('.btn-follow').forEach(b=>b.addEventListener('click',()=>{ following=!following; renderFollow(); }));
+</script>
+</body>
+</html>

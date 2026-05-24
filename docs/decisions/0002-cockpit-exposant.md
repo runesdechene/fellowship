@@ -87,6 +87,21 @@ Maquette : [`assets/festival-exposant.html`](assets/festival-exposant.html). Éc
 - **Compagnons / qui y va** = followers uniquement (cf. [modèle de visibilité](#) / mémoire) : avatars + « 9 utilisateurs de Fellowship y vont » + nommés.
 - **Avis** : note globale + Affluence / Organisation / Rentabilité, **détail verrouillé hors Pro** (incitation Pro).
 
+## Écran Vitrine — profil public exposant (validé)
+
+Maquette : [`assets/vitrine-exposant.html`](assets/vitrine-exposant.html). Page publique partageable (`flw.sh/@slug`) — **identité de l'artisan + surface d'acquisition virale**. C'est elle qui rend le réseau précieux : on clique un nom (compagnons, Q&R, discussion) → on arrive ici → on suit. Reprend les éléments de la `PublicProfile` actuelle, redesignés Nuit de Festival.
+
+- **Layout** : cover pleine largeur (240px, fondu vers `--bg`), avatar carré arrondi en débord, header (brand_name + nom réel + métier·ville + **chips de spécialité**, badge **vérifié**), actions (Suivre / Partager / QR). **Stats réseau** : Abonnés + Compagnons (bulles cliquables) + « N festivals en 2026 ». Puis **grille 2 colonnes** (`1fr` + `340px`).
+  - **Gauche** : À propos → **Sélection** → nudge « Ne rate plus ses dates » (pleine largeur).
+  - **Droite** : **Liens** → **Où me rencontrer**.
+- **Bouton Suivre = 3 états** (Suivre / Suivi / Compagnons) — c'est l'action-clé de la page (convertir un visiteur en abonné, cf. modèle de visibilité followers).
+- **Sélection (ex-« Mes créations »)** : galerie **curée, limitée à 6 pièces signatures**. Cadrage volontairement **intemporel** (« un aperçu de mon univers, pas un flux daté ») → tue l'objection « ça fige les créations dans le passé ». Un lookbook se met à jour 2×/an, pas un feed à nourrir.
+  - **Pas d'import Instagram en V1** (tranché). Raisons : l'API Basic Display est fermée (fin 2024) → l'aspiration auto exige un compte Pro + Page FB + revue d'app + tokens (fragile, beaucoup d'artisans en compte perso) ; et **on ne veut pas être un tuyau de trafic vers Meta**. La valeur de la vitrine reste **native Fellowship**. (Import éventuel = V1.5, comme simple accélérateur de remplissage, jamais comme embed.)
+- **Liens** : carte façon link-in-bio, **multi-liens libres** (site web, boutique en ligne / Etsy, Instagram **en lien**, site secondaire…). Icône + libellé + domaine + ↗.
+- **Où me rencontrer** : les **prochains festivals** où l'exposant expose (sa saison/tournée), + passés (atténués). Festival commun mis en avant (**« Tu y vas »**) → relie les écrans. Reframe de l'EventCarousel (statut `inscrit` uniquement, comme l'app actuelle).
+- **Footer de marque** « Vitrine Fellowship · flw.sh/@slug » — la page est faite pour être **partagée** (bio Insta, boutique).
+- **Vue propriétaire (« Ma vitrine »)** — *non maquettée, décrite* : remplace **Suivre** par **Éditer / Intégrer le calendrier / QR** ; ajoute **« Gérer ma sélection »** (et, si V1.5, « Importer depuis Instagram ») ; les compteurs réseau ouvrent les modales Abonnés/Compagnons avec le **« suivre en retour »** (cf. inventaire `PublicProfile`).
+
 ## Ouvert / à creuser
 
 - [ ] Modèle de données équipe (membres d'une entité, rôles/permissions).
