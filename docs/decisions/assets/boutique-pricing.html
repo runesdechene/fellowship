@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Passer en Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--sidebar:#1b1311;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+  a{color:inherit}
+
+  /* ---- App shell ---- */
+  .sidebar{position:fixed;left:0;top:0;width:262px;height:100vh;background:rgba(27,19,17,.7);backdrop-filter:blur(16px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+  .logo{font-family:var(--h);font-weight:800;font-size:20px;display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:14px}
+  .entity{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+  .entity .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#6b4a2e,#3c2a1a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffd9a8;font-size:14px}
+  .entity .nm b{font-family:var(--h);font-size:14px;display:block}.entity .nm span{font-size:11px;color:var(--muted)}
+  .nav{display:flex;flex-direction:column;gap:3px;flex:1}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:500;font-size:14px}
+  .nav a svg{width:18px;height:18px;stroke-width:2}
+  .nav a:hover{background:var(--surface);color:var(--text)}
+  .nav a.locked{opacity:.5}.nav a.locked .lock{margin-left:auto}.nav a.locked .lock svg{width:14px;height:14px}
+  .side-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;align-items:center;gap:10px}
+  .side-foot .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green),hsl(92 40% 46%))}
+  .side-foot .nm{flex:1}.side-foot .nm b{font-size:13px;font-family:var(--h)}.side-foot .nm span{font-size:11px;color:var(--muted);display:block}
+
+  /* ---- Stage ---- */
+  .stage{position:fixed;left:262px;right:0;top:0;bottom:0;overflow-y:auto}
+  .amb{position:absolute;top:0;left:0;right:0;height:360px;z-index:0;background:radial-gradient(120% 90% at 50% -10%,color-mix(in srgb,var(--cop) 26%,transparent),transparent 70%);pointer-events:none}
+  .page{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:46px 32px 60px}
+  .phead{text-align:center;margin-bottom:30px}
+  .phead .eyb{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:11px}
+  .phead h1{font-size:38px;color:#fff;line-height:1.05;margin-bottom:12px}
+  .phead p{font-size:15.5px;color:#d8cabb;max-width:540px;margin:0 auto;line-height:1.55}
+
+  .toggle{display:inline-flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:4px;margin:22px auto 0}
+  .toggle button{border:none;background:none;color:var(--muted);font-family:var(--b);font-weight:600;font-size:13.5px;padding:9px 18px;border-radius:99px;cursor:pointer;transition:.13s}
+  .toggle button.on{background:color-mix(in srgb,var(--cop) 22%,transparent);color:var(--amber)}
+  .toggle .save{font-size:10.5px;font-weight:700;color:var(--green);margin-left:4px}
+  .togwrap{text-align:center}
+
+  /* ---- Plans ---- */
+  .plans{display:grid;grid-template-columns:1fr 1.08fr;gap:18px;margin-top:30px;align-items:stretch}
+  .plan{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;display:flex;flex-direction:column}
+  .plan.pro{background:linear-gradient(168deg,color-mix(in srgb,var(--cop) 16%,var(--surface)),var(--surface));border:1.5px solid color-mix(in srgb,var(--cop) 45%,var(--line));box-shadow:0 20px 50px rgba(0,0,0,.4);position:relative}
+  .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--cop),var(--amber));color:#2a1810;font-size:11px;font-weight:800;letter-spacing:.04em;padding:5px 14px;border-radius:99px;white-space:nowrap}
+  .plan .pname{font-family:var(--h);font-size:15px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+  .plan .ptag{font-size:12.5px;color:var(--muted);margin:4px 0 18px}
+  .price{display:flex;align-items:baseline;gap:6px}
+  .price .amt{font-family:var(--h);font-size:40px;font-weight:800;color:#fff;line-height:1}
+  .price .per{font-size:13px;color:var(--muted)}
+  .price-sub{font-size:12px;color:var(--muted);margin-top:6px;min-height:16px}
+  .plan .btn{margin:20px 0 22px;width:100%}
+  .feats{display:flex;flex-direction:column;gap:11px}
+  .feat{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:#e6d4bd;line-height:1.4}
+  .feat .ic{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+  .feat .ic svg{width:18px;height:18px;stroke-width:2.4}
+  .feat.yes .ic{color:var(--green)}
+  .feat.no{color:var(--muted);opacity:.7}
+  .feat.no .ic{color:var(--muted)}
+  .feat.star .ic{color:var(--amber)}
+  .feats .gr{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 -2px}
+
+  /* ---- Buttons ---- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--b);font-weight:700;font-size:14.5px;border-radius:12px;padding:13px 22px;border:1px solid transparent;cursor:pointer;text-decoration:none}
+  .btn svg{width:17px;height:17px;stroke-width:2.2}
+  .btn-p{background:linear-gradient(135deg,var(--cop),var(--cop-d));color:#fff;box-shadow:0 8px 24px hsl(20 65% 32% / .45)}
+  .btn-p:hover{filter:brightness(1.07)}
+  .btn-ghost{background:var(--surface2);border-color:var(--line);color:var(--muted)}
+
+  /* ---- Comparatif ---- */
+  .cmp{margin-top:34px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .cmp h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:18px 22px;border-bottom:1px solid var(--line)}
+  .crow{display:grid;grid-template-columns:1fr 110px 110px;align-items:center;padding:13px 22px;border-bottom:1px solid var(--line);font-size:14px}
+  .crow:last-child{border-bottom:none}
+  .crow.head{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:11px 22px}
+  .crow .cl{color:#e6d4bd}
+  .crow .cc{text-align:center}
+  .crow .cc svg{width:17px;height:17px;stroke-width:2.6}
+  .ok{color:var(--green)}.lock{color:var(--muted);opacity:.6}
+  .crow .cc.prohead{color:var(--amber);font-family:var(--h);font-weight:800}
+  .crow .cc.freehead{color:var(--muted);font-family:var(--h);font-weight:800}
+
+  /* ---- Parrainage ---- */
+  .parrain{margin-top:18px;display:flex;align-items:center;gap:18px;background:linear-gradient(120deg,color-mix(in srgb,var(--green) 14%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--green) 32%,var(--line));border-radius:18px;padding:20px 22px}
+  .parrain .pic{font-size:30px;flex-shrink:0}
+  .parrain .pt{flex:1}
+  .parrain .pt b{font-family:var(--h);font-size:17px;color:#fff;display:block;margin-bottom:4px}
+  .parrain .pt p{font-size:13.5px;color:#d8cabb;line-height:1.5}
+  .parrain .pt p b{display:inline;color:var(--green);font-size:inherit}
+  .parrain .pcode{display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .parrain .pcode code{font-family:var(--b);font-weight:700;color:var(--amber);background:var(--surface2);border:1px dashed color-mix(in srgb,var(--amber) 40%,var(--line));border-radius:9px;padding:10px 14px;font-size:13.5px}
+  .btn-green{background:var(--green);color:#16310a;border:none}
+
+  .reassure{text-align:center;font-size:12.5px;color:var(--muted);margin-top:22px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+  .reassure span{display:flex;align-items:center;gap:6px}
+  .reassure svg{width:14px;height:14px;stroke-width:2;color:var(--green)}
+
+  @media(max-width:1080px){.sidebar{display:none}.stage{left:0}}
+  @media(max-width:680px){.plans{grid-template-columns:1fr}.crow{grid-template-columns:1fr 70px 70px}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="entity"><div class="av">RC</div><div class="nm"><b>Rune de Chêne</b><span>Exposant · gratuit</span></div></div>
+  <nav class="nav">
+    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z"/></svg> Explorer</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Mes dates</a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg> Ma vitrine</a>
+    <a class="locked" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg> Tableau de bord <span class="lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span></a>
+    <a class="locked" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Calendrier <span class="lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span></a>
+    <a class="locked" href="#"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8M23 21v-2a4 4 0 00-3-3.87"/></svg> Communauté <span class="lock"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span></a>
+  </nav>
+  <div class="side-foot"><div class="av"></div><div class="nm"><b>Uriel</b><span>Mon compte</span></div></div>
+</aside>
+
+<main class="stage">
+  <div class="amb"></div>
+  <div class="page">
+    <div class="phead">
+      <span class="eyb">Exposant Pro</span>
+      <h1>Fais tourner ta saison à fond.</h1>
+      <p>Le gratuit te fait découvrir et suivre tes dates. Le Pro te donne le cockpit, la saison complète et le fil de ta tribu.</p>
+      <div class="togwrap">
+        <div class="toggle">
+          <button class="on" id="tog-m">Mensuel</button>
+          <button id="tog-a">Annuel <span class="save">−20 %</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="plans">
+      <!-- Gratuit -->
+      <div class="plan">
+        <div class="pname">Découverte</div>
+        <div class="ptag">Pour y prendre goût.</div>
+        <div class="price"><span class="amt">0 €</span><span class="per">/ pour toujours</span></div>
+        <div class="price-sub">Aucune carte requise.</div>
+        <a class="btn btn-ghost" href="#">Ton offre actuelle</a>
+        <div class="feats">
+          <div class="feat yes"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Explorer tous les festivals</div>
+          <div class="feat yes"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Mes dates — 3 prochains mois</div>
+          <div class="feat yes"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Ma vitrine publique (+ galerie)</div>
+          <div class="feat yes"><span class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Candidater aux festivals</div>
+          <div class="feat no"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Calendrier saison, cockpit &amp; communauté</div>
+        </div>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan pro">
+        <span class="ribbon">★ Pour vivre de ton art</span>
+        <div class="pname">Pro</div>
+        <div class="ptag">Le métier d'exposant, outillé.</div>
+        <div class="price"><span class="amt" id="price-amt">14,99 €</span><span class="per" id="price-per">HT / mois</span></div>
+        <div class="price-sub" id="price-sub">soit ~18 € TTC · sans engagement</div>
+        <a class="btn btn-p" href="#"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Passer en Pro</a>
+        <div class="feats">
+          <div class="gr">Tout le gratuit, plus :</div>
+          <div class="feat star"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span> <span><b>Calendrier saison complète</b> — toute ton année, plus de limite à 3 mois</span></div>
+          <div class="feat star"><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span> <span><b>Tableau de bord</b> — à régler, véhicule &amp; coût carburant, bilan</span></div>
+          <div class="feat star"><span class="ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8"/></svg></span> <span><b>Communauté</b> — le fil de ta tribu, où va ton monde</span></div>
+          <div class="feat star"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></span> <span>Avis détaillés des exposants (rentabilité réelle)</span></div>
+          <div class="feat star"><span class="ic"><svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span> <span>Calendrier intégrable sur ton site</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparatif détaillé -->
+    <div class="cmp">
+      <h2>En détail</h2>
+      <div class="crow head"><span class="cl">Surface</span><span class="cc freehead">Gratuit</span><span class="cc prohead">Pro</span></div>
+      <div class="crow"><span class="cl">Explorer les festivals</span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Mes dates (agenda)</span><span class="cc">3 mois</span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Page festival + candidater</span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Ma vitrine publique (+ galerie)</span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Calendrier saison (année complète)</span><span class="cc"><svg class="lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Tableau de bord (cockpit)</span><span class="cc"><svg class="lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Communauté — fil du réseau</span><span class="cc"><svg class="lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+      <div class="crow"><span class="cl">Avis détaillés des exposants</span><span class="cc"><svg class="lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span><span class="cc"><svg class="ok" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span></div>
+    </div>
+
+    <!-- Parrainage -->
+    <div class="parrain">
+      <div class="pic">🎁</div>
+      <div class="pt">
+        <b>Parraine, gagne des mois</b>
+        <p>Pour chaque exposant que tu fais passer en Pro, <b>1 mois offert</b> — cumulable, sans limite. Ta tribu s'agrandit, ta saison te coûte moins cher.</p>
+      </div>
+      <div class="pcode">
+        <code>flw.sh/p/rune</code>
+        <a class="btn btn-green" href="#">Copier mon lien</a>
+      </div>
+    </div>
+
+    <div class="reassure">
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Sans engagement, annulable en 1 clic</span>
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Tes données restent les tiennes</span>
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Prix HT — TVA récupérable</span>
+    </div>
+  </div>
+</main>
+
+<script>
+  const m=document.getElementById('tog-m'),a=document.getElementById('tog-a');
+  const amt=document.getElementById('price-amt'),per=document.getElementById('price-per'),sub=document.getElementById('price-sub');
+  m.addEventListener('click',()=>{ m.classList.add('on'); a.classList.remove('on'); amt.textContent='14,99 €'; per.textContent='HT / mois'; sub.textContent='soit ~18 € TTC · sans engagement'; });
+  a.addEventListener('click',()=>{ a.classList.add('on'); m.classList.remove('on'); amt.textContent='11,99 €'; per.textContent='HT / mois'; sub.textContent='facturé 143,88 € HT/an · 2 mois offerts'; });
+</script>
+</body>
+</html>
