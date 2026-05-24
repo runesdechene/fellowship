@@ -29,4 +29,4 @@ Liens entre décisions avec des liens Markdown relatifs (compatibles Obsidian si
 ## Index
 
 - [0001 — Fondations : vision, offres, et DA fondatrice](0001-fondations-vision-packs-da.md) (2026-05-24) — mission/vision, positionnement, modèle de packs, compte unique, périmètre été/V2, **DA « Nuit de Festival »** + [maquette de référence](assets/landing-founding-theme.html)
-- [0002 — Cockpit exposant](0002-cockpit-exposant.md) (2026-05-24) — la home produit (tableau de bord), modules, chat global par festival, véhicule, équipe + [maquette](assets/dashboard-exposant.html)
+- [0002 — Cockpit exposant](0002-cockpit-exposant.md) (2026-05-24) — la home produit (tableau de bord), modules, chat global par festival, véhicule, équipe + [cockpit](assets/dashboard-exposant.html) · [calendrier](assets/calendar-exposant.html)

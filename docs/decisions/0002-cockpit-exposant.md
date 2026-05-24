@@ -46,6 +46,18 @@
 - 2 thèmes : **nuit** (défaut, halos chauds) + **jour** (fond lin plat uniforme, halos masqués pour éviter les taches de couleur). Toggle lune/soleil.
 - Palette **copper (bronze patiné) + vert tilleul `#a8cc7a`** + ambre. Plus Jakarta Sans + Inter.
 
+## Écran Calendrier (validé)
+
+Maquette : [`assets/calendar-exposant.html`](assets/calendar-exposant.html). Reprend le paradigme du calendrier actuel de l'app (vue année), redesigné en Nuit de Festival.
+
+- **Vue année** : 12 mois en grille (**4 → 3 → 2 → 1** colonnes selon la largeur), hauteurs **égalisées par ligne**.
+- Chaque mois = **carte-cadre** avec un **bandeau illustré de saison** (flocons, cœurs, soleil, vagues, lune, citrouille, sapin…) en en-tête.
+- **Carte festival épurée** : **affiche portrait encadrée** (arrondie, qui respire), **fond neutre** (`surface2`, pas de teinte par tag), **tag neutralisé** (chip gris + emoji coloré — testé : moins de bruit visuel).
+- **Statut = badge rond** (icône + label dessous), à gauche de la **date neutre/terreuse**. Termes : **Payé · À payer · Repéré · Terminé** (Repéré = festival qui intéresse, à creuser ; « En réflexion » possible plus tard).
+- **Compagnons** : ligne discrète sous l'événement (« X compagnons sur cette date »). Festivals d'amis seuls = bloc minoritaire « Tes compagnons ce mois-ci ».
+- **Mois vides** : opacité faible + « Ce mois est libre » très discret.
+- Filtres = **toggles** d'affichage (Mes festivals / Mes compagnons), pas de « Découvrir » (page à part).
+
 ## Ouvert / à creuser
 
 - [ ] Mécanique précise du chat de festival (qui peut écrire, modération, public/privé).

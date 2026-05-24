@@ -125,6 +125,7 @@ Choisie parmi 6 directions testées. Référence : [`assets/landing-founding-the
 - [ ] **Imagerie** : la landing n'a aucune capture produit ni photo (hypothèse "ce qui sonne encore un peu off"). À traiter — screenshot du calendrier et/ou photo chaleureuse de stand.
 - [ ] **Asset logo** dans le lettrage Jakarta (+ version jour).
 - [ ] Détail : l'eyebrow "Pour les festivaliers" est resté vert (152) — couleur propre au festivalier ou à uniformiser ?
+- [ ] **Désaturer légèrement la DA** (rendu jugé un peu trop brun) — à appliquer en **une seule passe sur TOUTES les maquettes** (landing, cockpit, calendrier) via une variable globale de saturation.
 
 ## 11. Méthode de collaboration (rappel)
 
