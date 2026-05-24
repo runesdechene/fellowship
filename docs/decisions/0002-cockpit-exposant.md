@@ -125,6 +125,15 @@ Maquette : [`assets/mes-dates.html`](assets/mes-dates.html). **Home de l'exposan
 - **Affichage prix = HT en headline** (cible pro qui récupère la TVA), TTC en mention discrète : **9,99 € HT/mois (12 € TTC)**. Règle générale à appliquer partout (boutique, landing…).
 - **Variante festivalier** : mêmes lignes, mais statuts de candidature → « **J'y vais / Intéressé** », pas d'encart candidature, **et pas de paywall** (le festivalier n'a pas de tier Pro). Le cap « 3 mois » est un **levier de conversion exposant uniquement** ; côté festivalier, on **n'ampute pas** — les dates lointaines (>90 j) vont dans une section **« Plus tard »** visible (repliable), jamais cadenassées. (Maquette festivalier à faire avec le parcours festivalier.)
 
+## Écran Groupes — chat (REPORTÉ EN V1.5)
+
+Maquette de référence : [`assets/groupes-v1.5.html`](assets/groupes-v1.5.html). **Décision (2026-05-25) : le chat de groupe N'EST PAS en V1.**
+
+- **Pourquoi reporté** : (1) **WhatsApp possède déjà** la coordination festival — un chat V1 ne sera pas 10× meilleur ; (2) le chat est un **produit entier** (temps réel, push, accusés, média, réactions, modération) qui mangerait l'été déjà engagé (refonte comptes + abonnement + festivalier) ; (3) **cold-start** : réseau mince au lancement → chat vide ; (4) **ce n'est pas le wedge** (le toolkit + les Q&R persistantes couvrent la valeur). Complétion idéale, mais complétion ≠ lancement.
+- **Substitution V1 = on chevauche WhatsApp** : les CTA « Créer un groupe » (page festival, Communauté) deviennent **« Partager »** → lien du festival pré-rempli vers WhatsApp. Zéro chat à construire, et ça **diffuse des liens Fellowship** dans les groupes WhatsApp (acquisition gratuite). *(Appliqué : le rally de la page festival affiche désormais « Partager ».)*
+- **Spec V1.5 (capturée pour plus tard)** : groupes **sur mesure** (« La Troupe ») **+ suggérés par les convergences** (« 6 compagnons vont à Pérouges → créer le groupe ? », pré-rempli avec les présents) ; création par n'importe qui, tout membre peut inviter (paramétrable), groupe-festival rejoignable par les exposants présents ; **festivaliers plus tard** (chats d'expédition), on démarre exposant ; **photos + réactions emoji**. Layout validé : liste de groupes (messagerie) + chat (bulles, épinglés, lien vers le festival), onglet « Groupes » avec badge non-lus.
+- **Gratuit/Pro** : à trancher en V1.5 (instinct : gratuit, c'est de la colle sociale, pas un outil de gestion).
+
 ## Ouvert / à creuser
 
 - [ ] Modèle de données équipe (membres d'une entité, rôles/permissions).
