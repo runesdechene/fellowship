@@ -10,7 +10,7 @@
 
 ## Structure (validée)
 
-- **Menu latéral gauche** : sélecteur d'**entité** en haut (« Rune de Chêne · Exposant » — le compte unique en action), nav (Tableau de bord, Calendrier, Découvrir, Communauté, Ma vitrine, Documents, Paramètres), compte « Uriel » + **toggle thème nuit/jour** en bas.
+- **Menu latéral gauche** : sélecteur d'**entité** en haut (« Rune de Chêne · Exposant » — le compte unique en action), nav (**Explorer** tout en haut, puis Tableau de bord, Calendrier, Communauté, Ma vitrine, Documents, Paramètres), compte « Uriel » + **toggle thème nuit/jour** en bas.
 - **Bandeau Bilan** pleine largeur en haut.
 - **3 colonnes indépendantes** (flex, hauteurs naturelles — pas de grille en lignes qui couple les hauteurs et crée des trous) :
   - **Col 1** : Prochain festival → Tes prochains festivals
@@ -57,6 +57,20 @@ Maquette : [`assets/calendar-exposant.html`](assets/calendar-exposant.html). Rep
 - **Compagnons** : ligne discrète sous l'événement (« X compagnons sur cette date »). Festivals d'amis seuls = bloc minoritaire « Tes compagnons ce mois-ci ».
 - **Mois vides** : opacité faible + « Ce mois est libre » très discret.
 - Filtres = **toggles** d'affichage (Mes festivals / Mes compagnons), pas de « Découvrir » (page à part).
+
+## Écran Explorer (validé)
+
+Maquette : [`assets/explorer.html`](assets/explorer.html). Page de **découverte des festivals**, renommée **« Explorer »** et placée **tout en haut** du menu (au-dessus du Tableau de bord). Pensée comme l'expérience de découverte partagée exposant **et** festivalier.
+
+- **Carousel coverflow plein écran** : grande **affiche centrale** (animée, léger Ken Burns), affiches **précédente/suivante** de part et d'autre, **3ᵉ niveau** plus rapproché. Les côtés sont **assombris (brightness), pas transparents** (sinon on voyait au travers). Ça **tourne tout seul** (~4,5 s), flèches + clic sur une affiche latérale pour naviguer. Le **fond ambiant** suit l'affiche centrale.
+- **Affiches sans bordure ni radius** (ce sont de vraies affiches, souvent avec texte intégré → on ne plaque rien dessus).
+- **Infos sous la carte** (et **non** sur l'affiche) : intitulé · nom · type+lieu+dates · amis qui y vont. Elles **changent à chaque rotation**. Bloc **centré à égale distance** entre le bas de l'affiche et les boutons.
+- **Boutons d'action fixes en bas** : « Voir le festival » + « ★ Repérer » + compteur de résultats.
+- **Topbar = barre segmentée Quoi / Où / Quand** (façon Airbnb, une seule ligne — scalable aux **~28 catégories** prévues, vs empiler des pills). Chaque segment ouvre un **popover** :
+  - **Quoi** → grille des catégories (+ « N autres… »).
+  - **Où** → ville + **curseur de rayon (km)** + bouton **« 🇫🇷 Toute la France »** (recherche nationale, ignore le rayon).
+  - **Quand** → **périodes glissantes** : Ce mois-ci / 3 / 6 / **12 prochains mois** / Ajoutés récemment / Terminés. (Pas de « Cette année » → caduque en décembre ; on raisonne en fenêtre glissante.)
+- **« Qui y va » = uniquement tes abonnés** (cf. modèle de visibilité) : bouboules avatars + « Camille & Maraël y vont » (1-2 nommés) ou « **N utilisateurs de Fellowship y vont** » (au-delà).
 
 ## Ouvert / à creuser
 
