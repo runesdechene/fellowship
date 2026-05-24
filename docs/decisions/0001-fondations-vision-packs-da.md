@@ -139,6 +139,7 @@ Choisie parmi 6 directions testées. Référence : [`assets/landing-founding-the
 - **Secondaire — Vert tilleul CHAUD** : **`#a8cc7a`** (`hsl(86 44% 64%)`, foncé `hsl(92 40% 46%)`). Issu du tag "Marché de producteurs". Choisi après avoir écarté indigo/cyan/violet/magenta/teal : **un vert chaud, pas froid** — c'est ce qui résout le "off" (tout le reste de l'ambiance étant chaud). Sert les icônes, l'organisateur, les badges.
 - **Amber** `#ffce85` (lueurs, dégradé titre, accents).
 - **Halos d'ambiance (`bgfx`)** : calque **fixe** plein écran, blobs chauds (copper/rose/or) baignant TOUT le site (pas juste le hero). En mode jour : `mix-blend-mode: multiply`, opacité réduite.
+- **Désaturation « trop brun » — évaluée puis PARKÉE (2026-05-25)** : 3 degrés comparés (actuel / doux `#15110f` / franc `#141312`). Décision : **on garde le brun chaud actuel pour l'instant**. Réglage rouvrable d'un coup plus tard (changer les tokens `--bg/--surface/--surface2/--muted`). Pas un chantier ouvert.
 
 ### Typographie
 - **Plus Jakarta Sans** — titres + wordmark logo.
