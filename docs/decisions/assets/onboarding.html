@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d;height:100%}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+
+  .ob-bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+  .ob-bg img{width:100%;height:100%;object-fit:cover;filter:blur(60px) brightness(.34);transform:scale(1.25)}
+  .ob-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 0%,color-mix(in srgb,var(--cop) 30%,transparent),transparent 60%),linear-gradient(180deg,rgba(20,12,10,.5),var(--bg))}
+
+  .ob-wrap{position:relative;z-index:1;width:100%;max-width:480px}
+  .ob-logo{font-family:var(--h);font-weight:800;font-size:22px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;color:#fff}
+  .ob-logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:15px}
+
+  .ob-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.55);position:relative;min-height:380px;display:flex;flex-direction:column}
+  .ob-back{position:absolute;top:22px;left:22px;width:34px;height:34px;border-radius:9px;background:var(--surface2);border:1px solid var(--line);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ob-back:hover{color:var(--text)}.ob-back svg{width:17px;height:17px;stroke-width:2.4}
+  .ob-dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px}
+  .ob-dots .dot{width:7px;height:7px;border-radius:99px;background:var(--line);transition:.2s}
+  .ob-dots .dot.on{background:var(--amber);width:22px}
+  .ob-dots .dot.done{background:var(--green)}
+
+  .step{display:none;flex-direction:column;flex:1;animation:fade .3s}
+  .step.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyb{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--amber);text-align:center;margin-bottom:9px}
+  .step h2{font-size:23px;color:#fff;text-align:center;line-height:1.15;margin-bottom:8px}
+  .step .sub{font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:22px;line-height:1.5}
+
+  .choice{display:flex;flex-direction:column;gap:13px;margin-top:6px}
+  . choice{}
+  .cc{display:flex;align-items:center;gap:15px;padding:18px;border-radius:16px;background:var(--surface2);border:1px solid var(--line);cursor:pointer;transition:.14s;text-align:left}
+  .cc:hover{border-color:var(--amber);transform:translateY(-2px)}
+  .cc .cic{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:color-mix(in srgb,var(--cop) 18%,transparent)}
+  .cc .ct{flex:1}.cc .ct b{font-family:var(--h);font-size:16px;color:#fff;display:block;margin-bottom:3px}.cc .ct span{font-size:12.5px;color:var(--muted);line-height:1.4}
+  .cc .carr{color:var(--muted)}.cc .carr svg{width:20px;height:20px;stroke-width:2.2}
+
+  .field{margin-bottom:16px}
+  .field label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
+  .field input{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--text);font-family:var(--b);font-size:15.5px;outline:none;transition:.13s}
+  .field input:focus{border-color:var(--amber)}
+  .field .hint{font-size:11.5px;color:var(--muted);margin-top:7px}
+  .row2{display:grid;grid-template-columns:1fr 110px;gap:11px}
+  .slug-field{display:flex;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:0 16px;overflow:hidden}
+  .slug-field .pfx{color:var(--muted);font-size:14.5px;flex-shrink:0}
+  .slug-field input{background:none;border:none;padding:14px 0;color:var(--amber);font-weight:600}
+
+  .crafts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .craft{padding:10px 14px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);color:var(--text);font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
+  .craft:hover{border-color:var(--amber)}
+  .craft.on{background:color-mix(in srgb,var(--cop) 20%,transparent);border-color:var(--amber);color:var(--amber)}
+
+  .avup{display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:20px}
+  .avup-circle{width:84px;height:84px;border-radius:50%;background:var(--surface2);border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:.13s;position:relative}
+  .avup-circle.sq{border-radius:19px;background:linear-gradient(135deg,#3c2a1a,#241813)}
+  .avup-circle:hover{border-color:var(--amber);color:var(--amber)}
+  .avup-circle svg{width:26px;height:26px;stroke-width:2}
+  .avup-circle .plus{position:absolute;right:-3px;bottom:-3px;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--cop),var(--cop-d));border:2px solid var(--surface);color:#fff;display:flex;align-items:center;justify-content:center}
+  .avup-circle .plus svg{width:14px;height:14px;stroke-width:3}
+  .avup-label{font-size:12.5px;color:var(--muted);font-weight:600}
+  .spacer{flex:1}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:var(--b);font-weight:700;font-size:15px;border-radius:13px;padding:15px;border:none;cursor:pointer;text-decoration:none;margin-top:8px}
+  .btn-p{background:linear-gradient(135deg,var(--cop),var(--cop-d));color:#fff;box-shadow:0 8px 24px hsl(20 65% 32% / .45)}
+  .btn-p:hover{filter:brightness(1.07)}
+  .btn svg{width:18px;height:18px;stroke-width:2.2}
+
+  /* succès */
+  .done-ic{width:66px;height:66px;border-radius:50%;background:color-mix(in srgb,var(--green) 22%,transparent);display:flex;align-items:center;justify-content:center;margin:6px auto 18px;color:var(--green)}
+  .done-ic svg{width:32px;height:32px;stroke-width:2.6}
+  .entitycard{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin:6px 0 6px}
+  .entitycard .eav{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#6b4a2e,#3c2a1a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffd9a8;font-size:15px}
+  .entitycard .et b{font-family:var(--h);font-size:15px;color:#fff;display:block}.entitycard .et span{font-size:12px;color:var(--muted)}
+  .person-line{font-size:12.5px;color:var(--muted);text-align:center;margin-top:4px}
+  .person-line b{color:var(--text)}
+  .addhint{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:7px}
+  .addhint svg{width:14px;height:14px;color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="ob-bg"><img src="https://picsum.photos/seed/festivalnight/1400/900" alt=""></div>
+
+<div class="ob-wrap">
+  <div class="ob-logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="ob-card">
+    <button class="ob-back" id="ob-back" style="display:none"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="ob-dots" id="ob-dots" style="display:none"></div>
+
+    <!-- ÉTAPE 0 : choix -->
+    <section class="step active" id="p-choice">
+      <div class="eyb">Bienvenue</div>
+      <h2>Tu viens pour quoi&nbsp;?</h2>
+      <div class="sub">Le réseau qui fait tourner les festivals.</div>
+      <div class="choice">
+        <div class="cc" data-path="fest">
+          <div class="cic">🎟️</div>
+          <div class="ct"><b>Je découvre des festivals</b><span>Suivre des créateurs, repérer où aller, planifier mes sorties.</span></div>
+          <span class="carr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+        <div class="cc" data-path="expo">
+          <div class="cic">🎪</div>
+          <div class="ct"><b>Je suis exposant / créateur</b><span>Gérer ma saison, ma vitrine, candidater aux festivals.</span></div>
+          <span class="carr"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="addhint" style="margin-top:20px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> Tu pourras devenir exposant plus tard, sans recréer de compte.</div>
+    </section>
+
+    <!-- ===== FESTIVALIER ===== -->
+    <section class="step" id="p-fest-name">
+      <div class="eyb">Festivalier</div>
+      <h2>Comment on t'appelle&nbsp;?</h2>
+      <div class="sub">Ton prénom suffit pour commencer.</div>
+      <div class="avup">
+        <div class="avup-circle"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg><span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
+        <span class="avup-label">Ta photo (facultatif)</span>
+      </div>
+      <div class="field"><label>Prénom</label><input type="text" placeholder="Camille" value="Camille"></div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next">Continuer</button>
+    </section>
+    <section class="step" id="p-fest-cp">
+      <div class="eyb">Festivalier</div>
+      <h2>Tu es où&nbsp;?</h2>
+      <div class="sub">Pour te montrer les festivals près de chez toi.</div>
+      <div class="field"><label>Code postal</label><input type="text" placeholder="69000" value="69000"><div class="hint">On ne montre jamais ton adresse exacte.</div></div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next">Continuer</button>
+    </section>
+    <section class="step" id="p-fest-done">
+      <div class="done-ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h2>Bienvenue, Camille&nbsp;!</h2>
+      <div class="sub">Ton espace est prêt. Découvre les festivals et suis tes créateurs préférés.</div>
+      <div class="spacer"></div>
+      <a class="btn btn-p" href="#"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg> Explorer les festivals</a>
+    </section>
+
+    <!-- ===== EXPOSANT ===== -->
+    <section class="step" id="p-expo-name">
+      <div class="eyb">Toi · 1 / 5</div>
+      <h2>Comment on t'appelle&nbsp;?</h2>
+      <div class="sub">D'abord toi, la personne. Ta marque vient juste après.</div>
+      <div class="avup">
+        <div class="avup-circle"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg><span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
+        <span class="avup-label">Ta photo perso (facultatif)</span>
+      </div>
+      <div class="field"><label>Ton prénom</label><input type="text" placeholder="Uriel" value="Uriel"></div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next">Continuer</button>
+    </section>
+    <section class="step" id="p-expo-brand">
+      <div class="eyb">Ton entité exposant · 2 / 5</div>
+      <h2>Ta marque</h2>
+      <div class="sub">C'est l'entité sous laquelle tu exposes.</div>
+      <div class="avup">
+        <div class="avup-circle sq"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
+        <span class="avup-label">Logo ou photo de ta marque</span>
+      </div>
+      <div class="field"><label>Nom de la marque</label><input type="text" id="brand-in" placeholder="Rune de Chêne" value="Rune de Chêne"></div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next">Continuer</button>
+    </section>
+    <section class="step" id="p-expo-craft">
+      <div class="eyb">Ton entité exposant · 3 / 5</div>
+      <h2>Ton métier&nbsp;?</h2>
+      <div class="sub">Dis-le avec tes mots.</div>
+      <div class="field"><label>Métier / artisanat</label><input type="text" placeholder="Forgeron, céramiste, maroquinier…" value="Forgeron coutelier"><div class="hint">Champ libre — c'est ta façon de nommer ton art.</div></div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next">Continuer</button>
+    </section>
+    <section class="step" id="p-expo-loc">
+      <div class="eyb">Ton entité exposant · 4 / 5</div>
+      <h2>Où es-tu basé&nbsp;?</h2>
+      <div class="sub">Ton point de départ pour les distances et l'itinéraire.</div>
+      <div class="row2">
+        <div class="field" style="margin:0"><label>Ville</label><input type="text" placeholder="Lyon" value="Lyon"></div>
+        <div class="field" style="margin:0"><label>Code postal</label><input type="text" placeholder="69000" value="69000"></div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next" style="margin-top:18px">Continuer</button>
+    </section>
+    <section class="step" id="p-expo-slug">
+      <div class="eyb">Ton entité exposant · 5 / 5</div>
+      <h2>Ton lien public</h2>
+      <div class="sub">L'adresse de ta vitrine, à partager partout.</div>
+      <div class="field"><label>Lien</label>
+        <div class="slug-field"><span class="pfx">flw.sh/</span><input type="text" id="slug-in" value="rune-de-chene"></div>
+        <div class="hint">Tu pourras le changer plus tard.</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn btn-p ob-next"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Créer ma vitrine</button>
+    </section>
+    <section class="step" id="p-expo-done">
+      <div class="done-ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h2>Ta vitrine est prête&nbsp;!</h2>
+      <div class="sub">Voici ton entité. Tu pourras candidater, gérer ta saison et la faire vivre.</div>
+      <div class="entitycard">
+        <div class="eav">RC</div>
+        <div class="et"><b>Rune de Chêne</b><span>Exposant · Forgeron coutelier · Lyon</span></div>
+      </div>
+      <div class="person-line">rattachée à <b>Uriel</b> · ton compte</div>
+      <div class="spacer"></div>
+      <a class="btn btn-p" href="#"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg> Entrer dans Fellowship</a>
+      <div class="addhint"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> Tu pourras ajouter d'autres entités via le sélecteur.</div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const flows={fest:['p-fest-name','p-fest-cp','p-fest-done'],expo:['p-expo-name','p-expo-brand','p-expo-craft','p-expo-loc','p-expo-slug','p-expo-done']};
+  let path=null,idx=0;
+  const backBtn=document.getElementById('ob-back'),dotsEl=document.getElementById('ob-dots');
+  function show(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+  function render(){
+    const isDone = path && idx===flows[path].length-1;
+    backBtn.style.display = (path && !isDone) ? '' : 'none';
+    while(dotsEl.firstChild) dotsEl.removeChild(dotsEl.firstChild);
+    if(path && !isDone){
+      const n=flows[path].length-1;
+      for(let i=0;i<n;i++){ const d=document.createElement('span'); d.className='dot'+(i===idx?' on':(i<idx?' done':'')); dotsEl.appendChild(d); }
+      dotsEl.style.display='';
+    } else { dotsEl.style.display='none'; }
+  }
+  function choose(p){ path=p; idx=0; show(flows[p][0]); render(); }
+  function next(){ if(idx<flows[path].length-1){ idx++; show(flows[path][idx]); render(); } }
+  function back(){ if(idx>0){ idx--; show(flows[path][idx]); render(); } else { path=null; show('p-choice'); render(); } }
+  document.querySelectorAll('.cc').forEach(c=>c.addEventListener('click',()=>choose(c.dataset.path)));
+  document.querySelectorAll('.ob-next').forEach(b=>b.addEventListener('click',next));
+  backBtn.addEventListener('click',back);
+  document.querySelectorAll('.craft').forEach(c=>c.addEventListener('click',()=>{ document.querySelectorAll('.craft').forEach(x=>x.classList.remove('on')); c.classList.add('on'); }));
+  // slug auto depuis la marque
+  const brand=document.getElementById('brand-in'),slug=document.getElementById('slug-in');
+  if(brand&&slug) brand.addEventListener('input',()=>{ slug.value=brand.value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); });
+</script>
+</body>
+</html>

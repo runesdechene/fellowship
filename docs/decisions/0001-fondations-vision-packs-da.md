@@ -88,6 +88,19 @@ Maquette : [`assets/boutique-pricing.html`](assets/boutique-pricing.html) (« Pa
   - *Argument pour le faire maintenant* : une migration de comptes est exponentiellement plus douloureuse avec des utilisateurs ; là on est en alpha → moment le moins cher.
   - **Frontière à tenir** (cohérence avec "organisateur = V2") : on livre le **contenant** (créer une entité festival + sa page publique) mais **pas** les outils de gestion de dossiers dedans (= V2).
 
+### Modèle validé + onboarding (2026-05-24)
+
+Maquette : [`assets/onboarding.html`](assets/onboarding.html) (assistant multi-étapes).
+
+- **La personne est le socle, toujours présente** : identité festivalière de base (prénom, code postal, **photo perso facultative**, abonnements, « Mes dates »). Tout compte a une personne.
+- **Les entités sont des casquettes pro rattachées** à la personne : **Exposant** (marque, métier, ville, **logo/photo**, lien public, vitrine — V1) ; **Festival/Organisateur** (V2). Multi-entités possible.
+- **Onboarding = on branche dès l'inscription** (tranché) : Étape 0 « Tu viens pour quoi ? » →
+  - **Festivalier** : prénom + (photo) + code postal → 2 étapes, friction mini.
+  - **Exposant** : crée la personne **puis** l'entité dans la foulée — Toi (prénom + photo perso) → Marque (nom + logo) → **Métier (champ LIBRE)** → Ville/CP → **Lien public `flw.sh/<slug>` (sans @)**. Écran final = carte d'entité « rattachée à <personne> ».
+- **Promesse affichée** : « Tu pourras devenir exposant plus tard, sans recréer de compte » + « ajouter d'autres entités via le sélecteur ».
+- **Convention lien public : `flw.sh/<slug>` SANS @** (harmonisé partout : vitrine, onboarding).
+- **Gap technique** : aujourd'hui 1 compte = 1 `profiles` row avec `type` figé (exposant/public), pas d'entités, sélecteur inexistant. Cible = table `users` (personne) + table entités (ex-`profiles`), contexte `{ user, currentEntity, allEntities, switchEntity() }`. C'est le chantier à séquencer **en premier**.
+
 ## 8. Périmètre LANCEMENT ÉTÉ vs V2
 
 **Été (indispensable) :**
@@ -110,6 +123,7 @@ Choisie parmi 6 directions testées. Référence : [`assets/landing-founding-the
 - **Nuit (par défaut)** : fond brun-nuit profond, halos chauds, ambiance "soir de festival, guirlandes".
 - **Jour (inversé)** : version lin/crème claire, mêmes accents assombris pour lisibilité.
 - **Toggle** lune↔soleil : petit **switch** avec curseur copper qui glisse (nuit→jour). La nuit est le défaut.
+- **Exigence (verrouillée 2026-05-24)** : le toggle jour/nuit doit être **accessible partout** (toutes les pages, y compris onboarding/login) et le choix **persisté** (cookie/localStorage) pour survivre à la navigation et aux sessions. Le défaut reste nuit ; le jour ne doit jamais « se réinitialiser » en changeant de page.
 
 ### Palette
 | Rôle | Nuit | Jour |
