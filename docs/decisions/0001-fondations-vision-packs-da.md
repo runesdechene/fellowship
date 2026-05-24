@@ -67,12 +67,12 @@ Maquette : [`assets/boutique-pricing.html`](assets/boutique-pricing.html) (« Pa
 
 - **Raisonnement HT partout** (cible pro, TVA récupérable). TTC en mention discrète.
 - **Mensuel = premium flexibilité, Annuel = réflexe malin** (l'annuel donne trésorerie d'avance + rétention, logique pour une activité saisonnière) :
-  - **Mensuel : 14,99 € HT/mois** (~18 € TTC).
-  - **Annuel : 11,99 € HT/mois** (facturé 143,88 € HT/an, ≈ 2 mois offerts, −20 %).
-- **Accroches/teases partout = « dès 11,99 € HT/mois »** (prix d'appel annuel). La boutique montre le détail mensuel/annuel.
+  - **Mensuel : 11,99 € HT/mois** (~14,40 € TTC).
+  - **Annuel : 9,99 € HT/mois** (facturé 119,88 € HT/an, ≈ 2 mois offerts, −17 %).
+- **Accroches/teases partout = « dès 9,99 € HT/mois »** (prix d'appel annuel). La boutique montre le détail mensuel/annuel.
 - **Parrainage** (remplace l'idée de « tarif fondateur ») : **1 mois offert par filleul**, **cumulable sans limite**. Garde-fous : le mois se débloque quand le **filleul passe Pro** (pas à la simple inscription → anti-farm), parrain **et** filleul sur abonnement pro. C'est notre **levier d'amorçage viral** (les premiers Pro recrutent les suivants → attaque le démarrage à froid).
 - **Ruban Pro = « Pour vivre de ton art »** (bénéfice, pas une preuve sociale qu'on n'a pas encore au lancement).
-- ⚠️ **Chiffres encore À VALIDER** : 14,99 / 11,99 HT sont la **structure** posée, pas le prix gravé. Décision finale non prise.
+- ⚠️ **Chiffres encore À VALIDER** : 11,99 / 9,99 HT sont la **structure** posée, pas le prix gravé. Décision finale non prise.
 
 ## 6. Deux moteurs de revenus
 

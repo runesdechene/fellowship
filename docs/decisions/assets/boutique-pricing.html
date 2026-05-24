@@ -132,7 +132,7 @@
       <div class="togwrap">
         <div class="toggle">
           <button class="on" id="tog-m">Mensuel</button>
-          <button id="tog-a">Annuel <span class="save">−20 %</span></button>
+          <button id="tog-a">Annuel <span class="save">−17 %</span></button>
         </div>
       </div>
     </div>
@@ -159,8 +159,8 @@
         <span class="ribbon">★ Pour vivre de ton art</span>
         <div class="pname">Pro</div>
         <div class="ptag">Le métier d'exposant, outillé.</div>
-        <div class="price"><span class="amt" id="price-amt">14,99 €</span><span class="per" id="price-per">HT / mois</span></div>
-        <div class="price-sub" id="price-sub">soit ~18 € TTC · sans engagement</div>
+        <div class="price"><span class="amt" id="price-amt">11,99 €</span><span class="per" id="price-per">HT / mois</span></div>
+        <div class="price-sub" id="price-sub">soit ~14,40 € TTC · sans engagement</div>
         <a class="btn btn-p" href="#"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Passer en Pro</a>
         <div class="feats">
           <div class="gr">Tout le gratuit, plus :</div>
@@ -211,8 +211,8 @@
 <script>
   const m=document.getElementById('tog-m'),a=document.getElementById('tog-a');
   const amt=document.getElementById('price-amt'),per=document.getElementById('price-per'),sub=document.getElementById('price-sub');
-  m.addEventListener('click',()=>{ m.classList.add('on'); a.classList.remove('on'); amt.textContent='14,99 €'; per.textContent='HT / mois'; sub.textContent='soit ~18 € TTC · sans engagement'; });
-  a.addEventListener('click',()=>{ a.classList.add('on'); m.classList.remove('on'); amt.textContent='11,99 €'; per.textContent='HT / mois'; sub.textContent='facturé 143,88 € HT/an · 2 mois offerts'; });
+  m.addEventListener('click',()=>{ m.classList.add('on'); a.classList.remove('on'); amt.textContent='11,99 €'; per.textContent='HT / mois'; sub.textContent='soit ~14,40 € TTC · sans engagement'; });
+  a.addEventListener('click',()=>{ a.classList.add('on'); m.classList.remove('on'); amt.textContent='9,99 €'; per.textContent='HT / mois'; sub.textContent='facturé 119,88 € HT/an · 2 mois offerts'; });
 </script>
 </body>
 </html>
