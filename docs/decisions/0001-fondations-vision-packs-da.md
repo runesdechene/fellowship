@@ -38,14 +38,30 @@ Ce n'est **pas** le logiciel (copiable). C'est la **distribution** :
 ## 5. Modèle d'offres (la "boutique") — V1
 
 Un seul compte, un seul chemin d'upgrade :
-1. **Gratuit — Festivalier** : découvrir les festivals, suivre ses créateurs, planifier ses sorties.
-2. **Gratuit — Exposant (Découverte)** : bases du toolkit (gérer ses dates, calendrier annuel, voir la communauté, page exposant publique) — *« pour y prendre goût »*.
-3. **Payant — Exposant Pro** : toolkit complet (bilan de rentabilité, rappels de deadlines, avis détaillés, calendrier embed, "Postuler en 1 clic" à venir).
+1. **Gratuit — Festivalier** : découvrir les festivals (Explorer), suivre ses créateurs, planifier ses sorties (**Mes dates**, 3 mois).
+2. **Gratuit — Exposant (Découverte)** : Explorer + **Mes dates** (agenda 3 prochains mois) + **Ma vitrine** publique (avec galerie « Sélection ») + voir une page festival & **candidater**. Calendrier saison, Communauté et Tableau de bord sont **teasés** (cadenas visibles) — *« pour y prendre goût »*.
+3. **Payant — Exposant Pro** : tout le gratuit **+ Tableau de bord** (cockpit pilotage), **+ Calendrier saison** (année complète), **+ Communauté** (fil complet du réseau), + avis détaillés, + calendrier embed.
 
 - **Principe de la ligne gratuit/payant** : le gratuit crée l'habitude et fait sentir la valeur ; le Pro débloque ce qui fait gagner du temps/de l'argent.
 - **Pourquoi** : le gratuit nourrit le réseau et **retient les indécis** (ils n'ont aucune raison d'aller voir un concurrent), neutralisant la peur de "pousser vers la concurrence".
+
+### Matrice gratuit / Pro (verrouillée 2026-05-24)
+
+| Surface | Gratuit | Pro |
+|---|---|---|
+| Explorer | ✅ | ✅ |
+| **Mes dates** (agenda 3 mois) | ✅ | ✅ |
+| Page festival (voir + candidater) | ✅ | ✅ (+ pilotage agrégé) |
+| **Ma vitrine** (+ galerie Sélection) | ✅ | ✅ |
+| **Calendrier** (saison année) | 🔒 teasé | ✅ |
+| **Communauté** (fil du réseau) | 🔒 teasé | ✅ |
+| **Tableau de bord** (cockpit) | 🔒 teasé | ✅ |
+
+- **Mes dates ≠ Calendrier** : deux écrans distincts (agenda simple tourné vers l'avenir proche *vs* vue saison année complète). Le gratuit a **Mes dates** *à la place* du Calendrier — pas un calendrier amputé. La limite « 3 mois » vit dans **Mes dates**, pas dans le Calendrier (entièrement Pro).
+- **Principe « teaser, pas cacher »** : les surfaces Pro restent **visibles cadenassées** (mini-fil + aperçu floutté pour Communauté ; « +N dates après X 🔒 » pour Mes dates ; aperçu floutté pour le Dashboard). On fait **naître l'envie** ; un mur noir ne convertit pas.
+- **Payer pour se relier à sa tribu > payer pour de l'admin** : mettre **Communauté** en Pro est un levier *émotionnel* (voir où va son monde, les convergences) — plus désirable qu'un outil de gestion. Choix assumé.
+- **Galerie « Sélection » = gratuite** : une belle vitrine attire des abonnés → fait grossir *notre* réseau ; on ne bride pas notre propre pub.
 - ⚠️ **À valider** : **le prix** (placeholder actuel **9,99 € HT/mois**). Décision non prise.
-- ⚠️ **À affiner** : la liste exacte des features gratuit vs Pro (on l'a esquissée sur la maquette, pas verrouillée).
 
 ## 6. Deux moteurs de revenus
 
