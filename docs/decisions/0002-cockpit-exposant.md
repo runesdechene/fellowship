@@ -72,9 +72,26 @@ Maquette : [`assets/explorer.html`](assets/explorer.html). Page de **découverte
   - **Quand** → **périodes glissantes** : Ce mois-ci / 3 / 6 / **12 prochains mois** / Ajoutés récemment / Terminés. (Pas de « Cette année » → caduque en décembre ; on raisonne en fenêtre glissante.)
 - **« Qui y va » = uniquement tes abonnés** (cf. modèle de visibilité) : bouboules avatars + « Camille & Maraël y vont » (1-2 nommés) ou « **N utilisateurs de Fellowship y vont** » (au-delà).
 
+## Écran Page festival — vue exposant (validé)
+
+Maquette : [`assets/festival-exposant.html`](assets/festival-exposant.html). Écran atteint depuis « Voir le festival » (Explorer) — **surface de conversion** de l'exposant. Reprend les éléments de l'`EventPage` actuelle, redesignés en Nuit de Festival et recentrés sur la candidature.
+
+- **Layout** : fond ambiant unique partant du haut (affiche floutée → `--bg`, aucune coupure). **Grille 2 colonnes** (`1fr` + `348px`) :
+  - **Gauche** : titre (pastille statut, catégorie, nom, méta dates/lieu/type, actions Repéré/Partager/Site, organisateur) → Compagnons → À propos → Infos pratiques → Q&R → Avis.
+  - **Droite** : **affiche** (largeur de la colonne, 2:3) puis **cockpit candidature sticky**.
+- **Cockpit candidature** (le différenciateur vs concurrent) : J-X, deadline, **tracker auto-déclaré « suivi perso »** Repéré → Candidaté → Inscrit, lignes Emplacement / Candidature / Itinéraire (+coût véhicule), CTA **Candidater** · Poser une question · Itinéraire.
+- **Candidater = modale « Comment candidater » (libre, communautaire).** Pas de dossier interne en V1 (les orgas = V2). La modale liste les **moyens connus** pour ce festival — email, dossier PDF, téléphone, contact nommé — **renseignés par la communauté** (« Suggérer une correction »). Bas de modale : « Tu as envoyé ta candidature ? → Marquer comme candidaté » (avance le tracker). Doit tourner avec **1 seul moyen** renseigné, et afficher un état vide « sois le premier à renseigner ».
+- **Fellowship V1 = carnet de bord / CRM de candidatures** : même quand l'inscription se fait par mail/PDF ailleurs, l'app retient où tu en es, la deadline, le coût, qui y va. Migration propre : quand l'orga arrive (V2), le dossier devient interne et le statut se synchronise.
+- **Discussion = Questions & réponses threadées** (pas un chat) : questions avec réponses attachées, badge **Résolu/Ouverte**, compteur de réponses, « Poser une question ». Argument clé : **les réponses restent d'une édition à l'autre = la mémoire du festival** (« élec sur les stands ? », « sol praticable sous la pluie ? ») → aide à décider de candidater, actif qui grossit.
+- **Le chat temps réel sort de la page festival** : réservé aux **groupes** qu'un exposant crée (potes/troupe) et plus tard aux **chats d'expédition festivaliers**. La carte Compagnons pointe vers **« Créer un groupe »**.
+- **Compagnons / qui y va** = followers uniquement (cf. [modèle de visibilité](#) / mémoire) : avatars + « 9 utilisateurs de Fellowship y vont » + nommés.
+- **Avis** : note globale + Affluence / Organisation / Rentabilité, **détail verrouillé hors Pro** (incitation Pro).
+
 ## Ouvert / à creuser
 
-- [ ] Mécanique précise du chat de festival (qui peut écrire, modération, public/privé).
 - [ ] Modèle de données équipe (membres d'une entité, rôles/permissions).
 - [ ] Source/API exacte du prix carburant + cache.
 - [ ] États « avec photo » du véhicule (la maquette montre le fallback sans photo).
+- [ ] **Groupes** : un groupe est-il rattaché à un festival ou libre (puis rattachable) ? Écran Groupes à maquetter. C'est là que vit le chat temps réel.
+- [ ] **Modale « Comment candidater »** : modèle de données des moyens de contact (multi-format), édition communautaire / modération, état vide.
+- [ ] **Q&R festival** : threads (réponses, marquage Résolu, épinglage), persistance inter-éditions, qui peut poser/répondre.
