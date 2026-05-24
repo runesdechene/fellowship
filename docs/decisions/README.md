@@ -28,4 +28,4 @@ Liens entre décisions avec des liens Markdown relatifs (compatibles Obsidian si
 
 ## Index
 
-- _(à remplir au fil des décisions)_
+- [0001 — Fondations : vision, offres, et DA fondatrice](0001-fondations-vision-packs-da.md) (2026-05-24) — mission/vision, positionnement, modèle de packs, compte unique, périmètre été/V2, **DA « Nuit de Festival »** + [maquette de référence](assets/landing-founding-theme.html)
