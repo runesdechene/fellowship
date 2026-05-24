@@ -1,559 +1,530 @@
-# Refonte des comptes — Fondation (Phase 1) — Implementation Plan
+# Refonte des comptes — Fondation — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Transformer le modèle de compte « 1 user = 1 profil de type figé » en « 1 personne → N entités », **sans casser l'authentification** des utilisateurs alpha existants.
+**Goal:** Poser des fondations de comptes propres : **1 personne ↔ N entités** (et **1 entité ↔ N gérants**), entités typées (exposant / festival / entreprise), avec un **acteur actif sélectionnable** qui détermine au nom de qui on agit.
 
-**Architecture :** On **conserve la table `profiles` comme table d'acteurs polymorphe** (le moins destructif possible vu que TOUTES les FK et tout le RLS pointent déjà sur `profiles(id) = auth.uid()`). On ajoute une dimension `kind` (`person` | `entity`) et un lien `owner_user_id`. La **personne** garde `id = auth.uid()` ; les **entités** sont de nouvelles lignes possédées par la personne. Migration **expand-contract** (additive, vérifiable, réversible — on ne supprime rien avant validation).
+**Architecture :** Modèle **acteur partagé** + **subtypes**. Une table `actors` (identité commune) ; `users` (la personne, festivalier) et `entities` (casquettes pro) sont des sous-types qui partagent l'`actor_id` ; `memberships` (M2M user↔entity + rôle) débloque le multi-gérants. **Toute action pointe un `actor_id`** ; ce qu'un acteur a le droit de faire dépend de son **type** (personne → va en *visiteur* ; exposant → *expose* ; festival → *organise*, ne « va » pas). RLS via `can_act_as(actor_id)`.
 
-**Tech Stack :** Supabase (Postgres + RLS + trigger), `@supabase/supabase-js` v2, React 19 + Context, Vite, Vitest. Auth = magic-link OTP.
-
----
-
-## ⚠️ DÉCISION À CONFIRMER PAR URIEL AVANT TOUTE EXÉCUTION
-
-Ce plan **ne doit pas être exécuté tel quel sans validation** du modèle de données ci-dessous — c'est le keystone, et il est quasi irréversible une fois les users migrés. Le reste du plan en découle.
-
-### La contrainte dure (constatée dans le code)
-`profiles.id = auth.users.id = auth.uid()`. Et **tout** s'appuie dessus :
-- FK : `events.created_by`, `participations.user_id`, `notes.user_id`, `event_reports.user_id`, `reviews.user_id`, `follows.follower_id` + `follows.following_id`, `notifications.user_id`, `push_subscriptions.user_id` → tous `REFERENCES profiles(id)`.
-- RLS : chaque policy fait `auth.uid() = id` ou `user_id = auth.uid()`.
-- Trigger `handle_new_user()` crée 1 ligne `profiles` par signup.
-
-Conséquence : **toute approche qui déplace l'identité hors de `profiles.id` casse l'auth et 9 tables.** D'où le choix ci-dessous.
-
-### Modèle recommandé : `profiles` = table d'acteurs polymorphe
-
-| | Aujourd'hui | Cible |
-|---|---|---|
-| Une ligne `profiles` | un user (type figé) | un **acteur** : soit une **personne**, soit une **entité** |
-| `id` | = auth.uid() | personne : = auth.uid() · entité : `gen_random_uuid()` |
-| Nouvelle colonne `kind` | — | `'person'` \| `'entity'` |
-| Nouvelle colonne `owner_user_id` | — | entité → l'id de la personne propriétaire ; personne → NULL |
-| `entity_type` | (réutilise `type`) | entité → `'exposant'` (V1) \| `'festival'` (V2) |
-
-- **Personne** (festivalier de base) : `kind='person'`, `id=auth.uid()`, porte `display_name` (prénom), `avatar_url` (photo perso), `city`, `postal_code`, `department`, `sex`, `plan`.
-- **Entité** (casquette pro) : `kind='entity'`, `owner_user_id=<personne>`, porte `brand_name`, `craft_type` (texte libre), `bio`, `website`, `banner_url`, `public_slug`, `avatar_url` (logo).
-- **Helper SQL `owns_actor(actor_id)`** = `actor_id = auth.uid() OR (SELECT owner_user_id FROM profiles WHERE id = actor_id) = auth.uid()`. Remplace `= auth.uid()` dans les policies d'écriture, **de façon additive**.
-
-**Pourquoi ce modèle (et pas une nouvelle table `entities` séparée) :** une table séparée obligerait à re-router *toutes* les FK et *tout* le RLS de 9 tables en une fois → migration big-bang à haut risque sur l'auth. Garder `profiles` comme acteurs rend les FK **inchangées** (elles pointent un acteur, personne ou entité) et le RLS **patchable de façon additive**. C'est la voie la plus sûre pour une bascule sans coupure.
-
-### Alternatives écartées
-- **Table `entities` distincte + `users` distincte** : propre conceptuellement, mais big-bang sur 9 tables de FK + réécriture totale du RLS → risque auth maximal. ❌ pour une bascule sûre.
-- **Garder 1 profil = 1 type, ajouter juste un toggle** : ne permet pas le multi-entités ni la séparation personne/marque voulue (0001 §7). ❌ ne répond pas au besoin.
-
-### Questions ouvertes qui impactent le modèle (à trancher avec Uriel)
-1. **`plan` (free/pro) sur la personne ou sur l'entité ?** Reco : **sur la personne** (un humain paie une fois, ses entités exposant héritent du Pro). Impact : 1 sub couvre N entités du même humain. À confirmer.
-2. **Attribution des participations/follows existants** lors du split d'un exposant alpha : tout l'historique exposant part **sur l'entité** (cf. Task 3). Les festivaliers (type `public`) n'ont pas d'entité → rien à déplacer. OK ?
-3. **`follows` personne↔entité** : en V1 on suit des **entités** (vitrines). Une personne (festivalier) est-elle « suivable » ? Reco V1 : non (festivaliers privés) → `following_id` = toujours une entité. À confirmer (n'impacte pas Phase 1, juste le wiring social ultérieur).
+**Tech Stack :** Supabase (Postgres + RLS + trigger), `@supabase/supabase-js` v2, React 19 + Context, Vite, Vitest.
 
 ---
 
-## Périmètre de CE plan (Scope Check)
+## Décision d'architecture (validée avec Uriel, 2026-05-25)
 
-La refonte complète couvre 4 sous-systèmes. **Ce plan ne traite que le 1er** (la fondation irréversible). Chacun des suivants sera un plan dédié, écrit une fois celui-ci validé et exécuté :
+### Pourquoi PAS le polymorphe à propriétaire unique (modèle abandonné)
+Un `profiles.owner_user_id` **unique** rend impossible qu'**une entité soit gérée par deux comptes** (cas explicite d'Uriel : Mathéo + lui gèrent « Rune de Chêne » ; cf. 0002 « équipe multi-personnes »). Disqualifié.
 
-- ✅ **CE PLAN — Phase 1 : Fondation données + contexte auth.** Produit un logiciel qui marche : login OK, `profiles` devient polymorphe, chaque humain a une personne + (si exposant) une entité, `useAuth()` expose `currentEntity` + `switchEntity()`. Aucune régression fonctionnelle visible.
-- ⏭️ **Plan 2 — Onboarding branché** (réécriture `Onboarding.tsx` : parcours festivalier vs exposant créant l'entité — maquette `docs/decisions/assets/onboarding.html`).
-- ⏭️ **Plan 3 — Câblage par surface** (Explorer, Calendar, EventPage, PublicProfile/vitrine, Settings, Embed, sélecteur d'entité dans `AppLayout`, gating gratuit/Pro) → consommer `currentEntity` partout.
-- ⏭️ **Plan 4 — Contract** (supprimer l'ancienne colonne `type`/champs legacy une fois tout vérifié en prod ; nettoyage RLS).
+### Pourquoi on prend le risque d'une migration plus lourde
+On est en **alpha** (très peu d'utilisateurs). C'est le moment **le moins cher** pour des fondations propres. On assume un **cutover coordonné** (cf. stratégie de migration) plutôt qu'un patch conservateur.
 
-> **Pourquoi ce découpage :** la fondation doit être posée, vérifiée et stable AVANT de recâbler les écrans. Recâbler sur un modèle non figé = retravail garanti. Phase 1 est aussi la seule partie « auth/DB irréversible » → c'est celle qui mérite ta relecture la plus attentive.
+### Le modèle cible
+
+```
+actors(id, kind)                         -- identité partagée. kind ∈ {person, entity}
+  ├─ users(actor_id → actors)            -- la PERSONNE (auth). actor_id = auth.uid()
+  │     prénom(display_name), avatar, ville, CP, sexe, plan(free/pro), role(admin)
+  └─ entities(actor_id → actors)         -- les CASQUETTES PRO. id = uuid
+        type ∈ {exposant, festival, entreprise}
+        brand_name, craft_type(libre), bio, website, banner, public_slug, avatar(logo), ville, CP
+
+memberships(user_actor_id, entity_actor_id, role)   -- M2M. role ∈ {owner, admin, member}
+  → 1 personne → N entités ; 1 entité → N gérants ✅
+
+actions (participations, follows, reviews, notes, event_reports, events, notifications)
+  → pointent un actor_id (peu importe personne ou entité)
+
+can_act_as(actor_id) = (actor_id = auth.uid())
+                       OR (membership: auth.uid() est membre de l'entité actor_id)
+```
+
+### Règle de validité par type d'acteur (le point clé d'Uriel)
+| Acteur actif | Va à un festival ? | Comment c'est vu | Vitrine | Crée/organise |
+|---|---|---|---|---|
+| **Personne** (Uriel) | ✅ en **visiteur** | « Uriel y va (visiteur) » | non | — |
+| **Entité exposant** (Rune de Chêne) | ✅ en **exposant** | « Rune de Chêne y expose » | oui | candidate |
+| **Entité entreprise** | ✅ en **exposant** | « <Marque> y expose » | oui | candidate |
+| **Entité festival/orga** | ❌ | — (option non proposée) | oui | **organise** le festival (V2) |
+
+- Une participation = `(actor_id, event_id)`. La **nature** (visiteur/exposant) **découle du type d'acteur** — aucun champ supplémentaire.
+- Clé d'unicité = **`(actor_id, event_id)`**, PAS `(humain, event)`. → le même humain peut aller au festival A en tant qu'Uriel-visiteur ET exposer au festival B en tant que Rune de Chêne. Acteurs distincts = lignes distinctes.
 
 ---
 
-## File Structure (Phase 1)
+## Stratégie de migration : cutover propre (adapté à l'alpha)
 
-**Migrations (créer) :**
-- `supabase/migrations/20260525120000_actors_expand.sql` — ajoute enum `actor_kind`, colonnes `kind`/`owner_user_id`/`entity_type`, backfill des personnes, helper `owns_actor()`.
-- `supabase/migrations/20260525120001_actors_split_exposants.sql` — crée une entité pour chaque exposant alpha existant + re-route ses données + vérifications.
-- `supabase/migrations/20260525120002_actors_rls_additive.sql` — policies additives basées sur `owns_actor()` (sans supprimer les anciennes).
-- `supabase/migrations/20260525120003_handle_new_user_person.sql` — le trigger crée désormais une **personne** (`kind='person'`).
+> L'identité est couplée à **toutes** les pages (chaque requête filtre sur `user_id = auth.uid()`). On ne peut donc pas migrer « page par page en prod » proprement. À l'échelle alpha, on fait un **cutover coordonné** : on construit le nouveau schéma + on recâble l'app **sur une branche**, on teste, **backup**, on déploie d'un bloc. L'ancien (`profiles`) n'est supprimé qu'au **Plan 4 (contract)**, une fois la prod stable → rollback toujours possible.
 
-**Code (créer) :**
-- `src/lib/actorContext.ts` — helpers **purs** (split personne/entités, choix de l'entité courante, persistance, needsOnboarding).
-- `src/lib/actorContext.test.ts` — tests Vitest (fonctions pures, pas de RTL — cf. contrainte infra de test du projet).
+**Séquence générale :**
+1. **Phase 1 (CE PLAN)** — nouveau schéma `actors/users/entities/memberships` + backfill depuis `profiles` + colonnes `actor_id` sur les tables d'action (backfillées) + RLS `can_act_as`. `profiles` **conservé** (lecture legacy).
+2. **Phase 2 (CE PLAN)** — couche identité côté app : helpers purs (dont la **règle de validité par type**), refonte `AuthContext` (`user / entities / currentActor / switchActor / capabilities`).
+3. **Plan 3 (suivant)** — recâblage : onboarding branché, sélecteur d'entité, toutes les pages écrivent/lisent `actor_id`, gating gratuit/Pro.
+4. **Plan 4 (suivant)** — contract : drop `profiles` + colonnes `user_id` legacy + anciennes policies.
 
-**Code (modifier) :**
-- `src/lib/auth.tsx` — `AuthContext` : expose `person`, `entities`, `currentEntity`, `switchEntity()`, garde `profile` en alias rétro-compatible.
-- `src/types/database.ts` — types `Actor` / `Person` / `Entity` dérivés.
-- `src/types/supabase.ts` — **régénéré** (`supabase gen types`) après migrations.
-- `src/pages/AuthCallback.tsx` + `src/App.tsx` (`OnboardingGuard`) — `needsOnboarding` basé sur la personne.
-
-**Note infra de test (mémoire projet) :** `render()` de React Testing Library ne flushe pas le sync sur cette stack → **on teste des fonctions pures** (`actorContext.ts`), pas des composants. Les migrations SQL se vérifient par **requêtes d'assertion** sur une base Supabase locale (`supabase db reset`), pas par Vitest.
+> **Note infra de test (mémoire projet) :** RTL `render()` ne flushe pas le sync → on teste des **fonctions pures**. Les migrations se vérifient par **requêtes d'assertion** sur base locale (`supabase db reset`).
 
 ---
 
-## Pré-requis (avant Task 1)
+## Pré-requis (avant toute exécution)
 
-- [ ] **Sauvegarde** de la base de prod (`supabase db dump` ou snapshot dashboard). La migration touche l'auth → **filet obligatoire**.
-- [ ] Exécution d'abord sur **branche + base locale** (`supabase start` puis `supabase db reset`), jamais direct en prod.
-- [ ] Confirmer le **nombre d'utilisateurs alpha** et combien sont `type='exposant'` :
+- [ ] **Backup prod** (`supabase db dump` ou snapshot dashboard) — filet obligatoire (touche l'auth).
+- [ ] Travailler sur **branche git** + **base Supabase locale** (`supabase start`, `supabase db reset`). Jamais direct en prod.
+- [ ] Relever les volumes (servent de contrôle au backfill) :
   ```sql
   SELECT type, count(*) FROM profiles GROUP BY type;
   ```
-  Noter les chiffres — ils servent de contrôle dans Task 3.
 
 ---
 
-## Task 1 : Module pur `actorContext.ts` + tests
+## File Structure
 
-**Files :**
-- Create: `src/lib/actorContext.ts`
-- Test: `src/lib/actorContext.test.ts`
+**Migrations (créer) :**
+- `supabase/migrations/20260525120000_actors_schema.sql` — enums + tables `actors/users/entities/memberships` + `can_act_as()` + RLS de ces tables.
+- `supabase/migrations/20260525120001_actors_backfill.sql` — backfill depuis `profiles` (+ vérifications).
+- `supabase/migrations/20260525120002_actions_actor_id.sql` — colonne `actor_id` sur les tables d'action + backfill + RLS additif.
+- `supabase/migrations/20260525120003_handle_new_user.sql` — trigger signup → crée actor(person)+user (+ ligne `profiles` legacy le temps de la transition).
 
-- [ ] **Step 1 : Écrire les tests qui échouent**
+**Code (créer) :**
+- `src/lib/actorModel.ts` — types + **fonctions pures** (identité, acteur courant, **capacités par type**, persistance).
+- `src/lib/actorModel.test.ts` — tests Vitest.
 
-```typescript
-// src/lib/actorContext.test.ts
-import { describe, it, expect } from 'vitest'
-import {
-  resolvePersonAndEntities,
-  pickCurrentEntity,
-  deriveNeedsOnboarding,
-  ENTITY_STORAGE_KEY,
-  type ActorRow,
-} from './actorContext'
-
-const AUTH = 'auth-uid-1'
-const person: ActorRow = { id: AUTH, kind: 'person', owner_user_id: null, display_name: 'Uriel', entity_type: null } as ActorRow
-const entityA: ActorRow = { id: 'e-a', kind: 'entity', owner_user_id: AUTH, brand_name: 'Rune de Chêne', entity_type: 'exposant' } as ActorRow
-const entityB: ActorRow = { id: 'e-b', kind: 'entity', owner_user_id: AUTH, brand_name: 'Autre Marque', entity_type: 'exposant' } as ActorRow
-
-describe('resolvePersonAndEntities', () => {
-  it('sépare la personne (id=authUid) de ses entités', () => {
-    const { person: p, entities } = resolvePersonAndEntities([person, entityA, entityB], AUTH)
-    expect(p?.id).toBe(AUTH)
-    expect(entities.map(e => e.id)).toEqual(['e-a', 'e-b'])
-  })
-  it('renvoie person=null si aucune ligne personne', () => {
-    const { person: p, entities } = resolvePersonAndEntities([entityA], AUTH)
-    expect(p).toBeNull()
-    expect(entities).toHaveLength(1)
-  })
-})
-
-describe('pickCurrentEntity', () => {
-  it('choisit l\'entité stockée si elle existe', () => {
-    expect(pickCurrentEntity([entityA, entityB], 'e-b')?.id).toBe('e-b')
-  })
-  it('retombe sur null (mode personne/festivalier) si rien de stocké', () => {
-    expect(pickCurrentEntity([entityA], null)).toBeNull()
-  })
-  it('ignore un id stocké qui n\'existe plus', () => {
-    expect(pickCurrentEntity([entityA], 'disparue')).toBeNull()
-  })
-})
-
-describe('deriveNeedsOnboarding', () => {
-  it('vrai si la personne n\'a pas de display_name', () => {
-    expect(deriveNeedsOnboarding({ ...person, display_name: null } as ActorRow)).toBe(true)
-  })
-  it('faux si display_name présent', () => {
-    expect(deriveNeedsOnboarding(person)).toBe(false)
-  })
-  it('vrai si personne absente', () => {
-    expect(deriveNeedsOnboarding(null)).toBe(true)
-  })
-})
-
-it('expose une clé de stockage stable', () => {
-  expect(ENTITY_STORAGE_KEY).toBe('flwsh.currentEntityId')
-})
-```
-
-- [ ] **Step 2 : Lancer les tests, vérifier l'échec**
-
-Run: `pnpm test src/lib/actorContext.test.ts`
-Expected: FAIL — « Cannot find module './actorContext' ».
-
-- [ ] **Step 3 : Implémenter le module**
-
-```typescript
-// src/lib/actorContext.ts
-export type ActorKind = 'person' | 'entity'
-
-// Forme minimale dont dépend la logique de contexte (sur-ensemble = la Row profiles).
-export interface ActorRow {
-  id: string
-  kind: ActorKind
-  owner_user_id: string | null
-  entity_type: 'exposant' | 'festival' | null
-  display_name: string | null
-  brand_name?: string | null
-  [key: string]: unknown
-}
-
-export const ENTITY_STORAGE_KEY = 'flwsh.currentEntityId'
-
-/** Sépare la personne (id === authUid) de ses entités (owner_user_id === authUid). */
-export function resolvePersonAndEntities(rows: ActorRow[], authUid: string) {
-  const person = rows.find(r => r.id === authUid && r.kind === 'person') ?? null
-  const entities = rows.filter(r => r.kind === 'entity' && r.owner_user_id === authUid)
-  return { person, entities }
-}
-
-/** Choisit l'entité active : celle stockée si encore présente, sinon null (= mode personne/festivalier). */
-export function pickCurrentEntity(entities: ActorRow[], storedId: string | null): ActorRow | null {
-  if (!storedId) return null
-  return entities.find(e => e.id === storedId) ?? null
-}
-
-/** Onboarding requis tant que la personne n'a pas de prénom (display_name). */
-export function deriveNeedsOnboarding(person: ActorRow | null): boolean {
-  return !person || !person.display_name
-}
-
-export function readStoredEntityId(): string | null {
-  try { return localStorage.getItem(ENTITY_STORAGE_KEY) } catch { return null }
-}
-export function writeStoredEntityId(id: string | null): void {
-  try {
-    if (id) localStorage.setItem(ENTITY_STORAGE_KEY, id)
-    else localStorage.removeItem(ENTITY_STORAGE_KEY)
-  } catch { /* localStorage indisponible : on ignore */ }
-}
-```
-
-- [ ] **Step 4 : Lancer les tests, vérifier le succès**
-
-Run: `pnpm test src/lib/actorContext.test.ts`
-Expected: PASS (toutes).
-
-- [ ] **Step 5 : Commit**
-
-```bash
-git add src/lib/actorContext.ts src/lib/actorContext.test.ts
-git commit -m "feat(accounts): pure actor-context helpers (person/entities) + tests"
-```
+**Code (modifier) :**
+- `src/lib/auth.tsx` — `AuthContext` : `user / entities / currentActor / switchActor / capabilities` (+ `profile` alias rétro-compat).
+- `src/types/database.ts` + `src/types/supabase.ts` (régénéré).
+- `src/pages/AuthCallback.tsx`, `src/pages/Login.tsx`, `src/App.tsx` (gardes).
 
 ---
 
-## Task 2 : Migration EXPAND — colonnes acteurs + backfill personnes + `owns_actor()`
+# PHASE 1 — Schéma & migration de données
 
-**Files :**
-- Create: `supabase/migrations/20260525120000_actors_expand.sql`
+## Task 1 : Schéma `actors / users / entities / memberships` + `can_act_as()`
 
-- [ ] **Step 1 : Écrire la migration (additive, non destructive)**
+**Files :** Create `supabase/migrations/20260525120000_actors_schema.sql`
+
+- [ ] **Step 1 : Écrire la migration**
 
 ```sql
--- 20260525120000_actors_expand.sql
--- EXPAND : on ajoute la dimension "acteur" sans rien supprimer.
+-- 20260525120000_actors_schema.sql
+CREATE TYPE actor_kind     AS ENUM ('person', 'entity');
+CREATE TYPE entity_type    AS ENUM ('exposant', 'festival', 'entreprise');
+CREATE TYPE membership_role AS ENUM ('owner', 'admin', 'member');
 
--- 1. Type "kind"
-DO $$ BEGIN
-  CREATE TYPE actor_kind AS ENUM ('person', 'entity');
-EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+-- Identité partagée. Pour une personne, actors.id = auth.users.id (= auth.uid()).
+CREATE TABLE actors (
+  id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  kind actor_kind NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 
--- 2. Type "entity_type" (exposant V1, festival V2)
-DO $$ BEGIN
-  CREATE TYPE entity_type AS ENUM ('exposant', 'festival');
-EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+-- La PERSONNE (festivalier de base). actor_id = auth.uid().
+CREATE TABLE users (
+  actor_id UUID PRIMARY KEY REFERENCES actors(id) ON DELETE CASCADE,
+  auth_id  UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  display_name TEXT,
+  avatar_url TEXT,
+  city TEXT, department TEXT, postal_code TEXT,
+  sex user_sex DEFAULT 'indefini',
+  plan user_plan NOT NULL DEFAULT 'free',
+  role TEXT NOT NULL DEFAULT 'user',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 
--- 3. Colonnes sur profiles (toutes nullable / avec défaut → additif)
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS kind actor_kind NOT NULL DEFAULT 'person';
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS owner_user_id UUID REFERENCES profiles(id) ON DELETE CASCADE;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS entity_type entity_type;
+-- Les CASQUETTES PRO.
+CREATE TABLE entities (
+  actor_id UUID PRIMARY KEY REFERENCES actors(id) ON DELETE CASCADE,
+  type entity_type NOT NULL,
+  brand_name TEXT NOT NULL,
+  craft_type TEXT,              -- texte LIBRE
+  bio TEXT, website TEXT, banner_url TEXT, avatar_url TEXT,
+  public_slug TEXT UNIQUE,
+  city TEXT, department TEXT, postal_code TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX idx_entities_slug ON entities(public_slug) WHERE public_slug IS NOT NULL;
+CREATE INDEX idx_entities_type ON entities(type);
 
-CREATE INDEX IF NOT EXISTS idx_profiles_owner ON profiles(owner_user_id) WHERE owner_user_id IS NOT NULL;
-CREATE INDEX IF NOT EXISTS idx_profiles_kind ON profiles(kind);
+-- M2M : qui gère quelle entité, avec quel rôle.
+CREATE TABLE memberships (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_actor_id   UUID NOT NULL REFERENCES users(actor_id)   ON DELETE CASCADE,
+  entity_actor_id UUID NOT NULL REFERENCES entities(actor_id) ON DELETE CASCADE,
+  role membership_role NOT NULL DEFAULT 'owner',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (user_actor_id, entity_actor_id)
+);
+CREATE INDEX idx_memberships_user   ON memberships(user_actor_id);
+CREATE INDEX idx_memberships_entity ON memberships(entity_actor_id);
 
--- 4. Backfill : toute ligne existante est une PERSONNE pour l'instant
---    (les exposants seront splittés en personne + entité dans la migration suivante).
-UPDATE profiles SET kind = 'person' WHERE kind IS NULL;
-
--- 5. Helper d'autorisation : l'utilisateur courant agit-il en tant que cet acteur ?
-CREATE OR REPLACE FUNCTION owns_actor(actor_id UUID)
-RETURNS BOOLEAN
-LANGUAGE sql STABLE SECURITY DEFINER
-SET search_path = public
-AS $$
-  SELECT actor_id = auth.uid()
-      OR EXISTS (SELECT 1 FROM profiles WHERE id = actor_id AND owner_user_id = auth.uid());
+-- Autorisation : l'utilisateur courant agit-il en tant que cet acteur ?
+CREATE OR REPLACE FUNCTION can_act_as(target_actor UUID)
+RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
+  SELECT target_actor = auth.uid()
+      OR EXISTS (
+        SELECT 1 FROM memberships
+        WHERE user_actor_id = auth.uid() AND entity_actor_id = target_actor
+      );
 $$;
+
+-- RLS des nouvelles tables
+ALTER TABLE actors      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE entities    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE memberships ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY actors_select_all   ON actors   FOR SELECT USING (true);
+CREATE POLICY users_select_all    ON users    FOR SELECT USING (true);   -- profils publics lisibles
+CREATE POLICY users_update_self   ON users    FOR UPDATE USING (actor_id = auth.uid()) WITH CHECK (actor_id = auth.uid());
+CREATE POLICY entities_select_all ON entities FOR SELECT USING (true);
+CREATE POLICY entities_write_owned ON entities FOR ALL TO authenticated
+  USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+CREATE POLICY memberships_select_mine ON memberships FOR SELECT TO authenticated
+  USING (user_actor_id = auth.uid() OR can_act_as(entity_actor_id));
+CREATE POLICY memberships_insert_self ON memberships FOR INSERT TO authenticated
+  WITH CHECK (user_actor_id = auth.uid());   -- on s'ajoute soi-même (création d'entité). Invitations = Plan 3.
+CREATE POLICY memberships_delete_owned ON memberships FOR DELETE TO authenticated
+  USING (can_act_as(entity_actor_id));
 ```
 
-- [ ] **Step 2 : Appliquer sur base locale**
-
-Run: `supabase db reset` (recharge toutes les migrations sur la base locale).
-Expected: aucune erreur ; la migration passe.
-
-- [ ] **Step 3 : Vérifier le schéma**
-
-Run (psql local) :
+- [ ] **Step 2 : Appliquer** — `supabase db reset` → aucune erreur.
+- [ ] **Step 3 : Vérifier** (psql) :
 ```sql
-\d profiles    -- doit montrer kind, owner_user_id, entity_type
-SELECT proname FROM pg_proc WHERE proname = 'owns_actor';  -- 1 ligne
-SELECT kind, count(*) FROM profiles GROUP BY kind;  -- tout en 'person'
+\dt   -- actors, users, entities, memberships présentes
+SELECT proname FROM pg_proc WHERE proname='can_act_as';  -- 1
 ```
-Expected: colonnes présentes, fonction présente, 100 % `person`.
-
 - [ ] **Step 4 : Commit**
-
 ```bash
-git add supabase/migrations/20260525120000_actors_expand.sql
-git commit -m "feat(accounts): expand profiles into polymorphic actors + owns_actor()"
+git add supabase/migrations/20260525120000_actors_schema.sql
+git commit -m "feat(accounts): actors/users/entities/memberships schema + can_act_as()"
 ```
 
----
+## Task 2 : Backfill depuis `profiles`
 
-## Task 3 : Migration SPLIT — créer une entité par exposant alpha + re-router ses données
+**Files :** Create `supabase/migrations/20260525120001_actors_backfill.sql`
 
-> ⚠️ **Migration de données la plus sensible.** Sur l'alpha (poignée d'exposants) le volume est faible et vérifiable. On ne supprime jamais la ligne d'origine ; on la **convertit en personne** et on **crée une entité** qui reprend les champs marque + l'historique pro.
-
-**Files :**
-- Create: `supabase/migrations/20260525120001_actors_split_exposants.sql`
-
-- [ ] **Step 1 : Écrire la migration**
+- [ ] **Step 1 : Écrire le backfill**
 
 ```sql
--- 20260525120001_actors_split_exposants.sql
--- Pour chaque profil de type 'exposant' : on garde la ligne comme PERSONNE
--- (id = auth.uid()) et on crée une ENTITÉ qui porte la marque + reprend l'historique pro.
+-- 20260525120001_actors_backfill.sql
+-- 1. Un acteur PERSONNE par profil existant (actors.id = profiles.id = auth.uid()).
+INSERT INTO actors (id, kind, created_at)
+  SELECT id, 'person', created_at FROM profiles
+  ON CONFLICT (id) DO NOTHING;
 
--- 1. Créer une entité par exposant existant, en copiant les champs "marque".
-WITH created AS (
-  INSERT INTO profiles (
-    id, kind, owner_user_id, entity_type, type, email,
-    brand_name, craft_type, bio, website, banner_url, public_slug, avatar_url,
-    city, department, postal_code, plan, created_at
-  )
-  SELECT
-    gen_random_uuid(), 'entity', p.id, 'exposant', 'exposant', p.email,
-    p.brand_name, p.craft_type, p.bio, p.website, p.banner_url, p.public_slug, p.avatar_url,
-    p.city, p.department, p.postal_code, p.plan, p.created_at
-  FROM profiles p
-  WHERE p.type = 'exposant' AND p.kind = 'person' AND p.owner_user_id IS NULL
-  RETURNING id AS entity_id, owner_user_id AS person_id
+-- 2. La table users (champs personne).
+INSERT INTO users (actor_id, auth_id, email, display_name, avatar_url, city, department, postal_code, sex, plan, role, created_at)
+  SELECT id, id, email,
+         CASE WHEN type='exposant' THEN NULL ELSE display_name END,  -- l'exposant met son prénom à l'onboarding (Plan 2) ; null = needsOnboarding
+         CASE WHEN type='exposant' THEN NULL ELSE avatar_url END,
+         city, department, postal_code, sex, plan, COALESCE(role,'user'), created_at
+  FROM profiles
+  ON CONFLICT (actor_id) DO NOTHING;
+
+-- 3. Pour chaque exposant : un acteur ENTITÉ + entities + membership(owner).
+WITH expo AS (SELECT * FROM profiles WHERE type='exposant'),
+ins_actor AS (
+  INSERT INTO actors (id, kind, created_at)
+    SELECT gen_random_uuid(), 'entity', e.created_at FROM expo e
+    RETURNING id, created_at
 )
--- 2. Mémoriser le mapping personne→entité le temps de la migration.
-SELECT * INTO TEMP TABLE _split_map FROM created;
-
--- 3. Re-router l'historique PRO de la personne vers l'entité.
-UPDATE events e        SET created_by = m.entity_id FROM _split_map m WHERE e.created_by = m.person_id;
-UPDATE participations x SET user_id   = m.entity_id FROM _split_map m WHERE x.user_id   = m.person_id;
-UPDATE reviews r       SET user_id    = m.entity_id FROM _split_map m WHERE r.user_id    = m.person_id;
-UPDATE event_reports er SET user_id   = m.entity_id FROM _split_map m WHERE er.user_id   = m.person_id;
-UPDATE notes n         SET user_id    = m.entity_id FROM _split_map m WHERE n.user_id     = m.person_id;
--- follows : l'exposant suivait/était suivi en tant que marque → on déplace vers l'entité.
-UPDATE follows f       SET following_id = m.entity_id FROM _split_map m WHERE f.following_id = m.person_id;
-UPDATE follows f       SET follower_id  = m.entity_id FROM _split_map m WHERE f.follower_id  = m.person_id;
-
--- 4. Nettoyer les champs "marque" sur la PERSONNE (ils vivent désormais sur l'entité).
---    public_slug est UNIQUE → on doit le libérer côté personne (l'entité le détient).
-UPDATE profiles p SET
-  brand_name = NULL, craft_type = NULL, bio = NULL, website = NULL,
-  banner_url = NULL, public_slug = NULL, entity_type = NULL,
-  type = 'public'  -- la personne redevient un acteur "public" (festivalier de base)
-FROM _split_map m WHERE p.id = m.person_id;
-
-DROP TABLE _split_map;
+-- mapping ordonné : on ré-associe via une numérotation stable
+, mapped AS (
+  SELECT a.id AS entity_actor_id, e.id AS person_id, e.*
+  FROM (SELECT *, row_number() OVER (ORDER BY created_at, id) rn FROM expo) e
+  JOIN (SELECT id, row_number() OVER (ORDER BY created_at, id) rn FROM ins_actor) a
+    ON e.rn = a.rn
+)
+, ins_entity AS (
+  INSERT INTO entities (actor_id, type, brand_name, craft_type, bio, website, banner_url, avatar_url, public_slug, city, department, postal_code, created_at)
+    SELECT entity_actor_id, 'exposant',
+           COALESCE(brand_name, display_name, 'Ma marque'),
+           craft_type, bio, website, banner_url, avatar_url, public_slug, city, department, postal_code, created_at
+    FROM mapped
+  RETURNING actor_id
+)
+INSERT INTO memberships (user_actor_id, entity_actor_id, role)
+  SELECT person_id, entity_actor_id, 'owner' FROM mapped;
 ```
 
-- [ ] **Step 2 : Appliquer + vérifier les invariants**
+> ⚠️ Le mapping `row_number()` suppose un ordre stable ; sur l'alpha (peu de lignes) c'est sûr. **Alternative plus robuste recommandée à l'exécution** : faire le split en PL/pgSQL avec une boucle `FOR r IN SELECT ... LOOP` qui crée actor+entity+membership ligne par ligne (zéro risque d'appariement). À privilégier si > quelques exposants.
 
-Run: `supabase db reset` puis (psql) :
+- [ ] **Step 2 : Vérifier les invariants** (psql) :
 ```sql
--- autant d'entités créées que d'exposants d'origine
-SELECT count(*) FROM profiles WHERE kind='entity' AND entity_type='exposant';
--- aucune personne ne garde un slug (les slugs sont sur les entités)
-SELECT count(*) FROM profiles WHERE kind='person' AND public_slug IS NOT NULL;  -- attendu : 0
--- aucune participation/review orpheline
-SELECT count(*) FROM participations x LEFT JOIN profiles p ON p.id=x.user_id WHERE p.id IS NULL;  -- 0
-SELECT count(*) FROM follows f WHERE NOT EXISTS (SELECT 1 FROM profiles WHERE id=f.follower_id)
-   OR NOT EXISTS (SELECT 1 FROM profiles WHERE id=f.following_id);  -- 0
+SELECT (SELECT count(*) FROM users)    AS users,
+       (SELECT count(*) FROM profiles) AS profiles;            -- égaux
+SELECT count(*) FROM entities;                                 -- = nb exposants (pré-requis)
+SELECT count(*) FROM memberships WHERE role='owner';           -- = nb exposants
+-- chaque entité a exactement 1 owner
+SELECT entity_actor_id, count(*) FROM memberships GROUP BY 1 HAVING count(*)<>1;  -- 0 ligne
+-- slugs uniques préservés
+SELECT public_slug, count(*) FROM entities WHERE public_slug IS NOT NULL GROUP BY 1 HAVING count(*)>1;  -- 0
 ```
-Expected: nb entités = nb exposants relevé en pré-requis ; 0 / 0 / 0.
-
-- [ ] **Step 3 : Test de connexion (manuel, base locale)**
-
-Se connecter avec un compte exposant de test → vérifier que l'auth passe (la personne existe, `id=auth.uid()`), et que l'entité est bien rattachée (`owner_user_id`).
-
-- [ ] **Step 4 : Commit**
-
-```bash
-git add supabase/migrations/20260525120001_actors_split_exposants.sql
-git commit -m "feat(accounts): split existing exposants into person + entity (data re-routed)"
-```
-
----
-
-## Task 4 : RLS additif basé sur `owns_actor()`
-
-> On **ajoute** des policies qui autorisent l'écriture quand on « possède » l'acteur, **sans supprimer** les anciennes (`= auth.uid()`). Les anciennes restent vraies pour les personnes (id=auth.uid()) ; les nouvelles couvrent les entités. Nettoyage = Plan 4 (contract).
-
-**Files :**
-- Create: `supabase/migrations/20260525120002_actors_rls_additive.sql`
-
-- [ ] **Step 1 : Écrire les policies additives**
-
-```sql
--- 20260525120002_actors_rls_additive.sql
--- Écritures "au nom d'un acteur possédé" (personne OU entité de l'utilisateur).
-
--- PARTICIPATIONS
-CREATE POLICY "participations_insert_owned" ON participations
-  FOR INSERT TO authenticated WITH CHECK (owns_actor(user_id));
-CREATE POLICY "participations_update_owned" ON participations
-  FOR UPDATE TO authenticated USING (owns_actor(user_id)) WITH CHECK (owns_actor(user_id));
-CREATE POLICY "participations_delete_owned" ON participations
-  FOR DELETE TO authenticated USING (owns_actor(user_id));
-
--- NOTES
-CREATE POLICY "notes_insert_owned" ON notes
-  FOR INSERT TO authenticated WITH CHECK (owns_actor(user_id));
-CREATE POLICY "notes_update_owned" ON notes
-  FOR UPDATE TO authenticated USING (owns_actor(user_id)) WITH CHECK (owns_actor(user_id));
-CREATE POLICY "notes_delete_owned" ON notes
-  FOR DELETE TO authenticated USING (owns_actor(user_id));
-
--- EVENT REPORTS
-CREATE POLICY "event_reports_owned" ON event_reports
-  FOR ALL TO authenticated USING (owns_actor(user_id)) WITH CHECK (owns_actor(user_id));
-
--- REVIEWS (l'entité exposant écrit ; on conserve la contrainte "est un exposant")
-CREATE POLICY "reviews_insert_owned_exposant" ON reviews
-  FOR INSERT TO authenticated WITH CHECK (
-    owns_actor(user_id)
-    AND EXISTS (SELECT 1 FROM profiles WHERE id = reviews.user_id AND entity_type = 'exposant')
-  );
-CREATE POLICY "reviews_update_owned" ON reviews
-  FOR UPDATE TO authenticated USING (owns_actor(user_id)) WITH CHECK (owns_actor(user_id));
-
--- FOLLOWS (on suit "en tant que" un acteur possédé)
-CREATE POLICY "follows_insert_owned" ON follows
-  FOR INSERT TO authenticated WITH CHECK (owns_actor(follower_id));
-CREATE POLICY "follows_delete_owned" ON follows
-  FOR DELETE TO authenticated USING (owns_actor(follower_id));
-
--- EVENTS (création par une entité exposant possédée)
-CREATE POLICY "events_insert_owned_exposant" ON events
-  FOR INSERT TO authenticated WITH CHECK (
-    EXISTS (SELECT 1 FROM profiles WHERE id = events.created_by
-            AND entity_type = 'exposant' AND owns_actor(events.created_by))
-  );
-CREATE POLICY "events_update_owned" ON events
-  FOR UPDATE TO authenticated USING (owns_actor(created_by)) WITH CHECK (owns_actor(created_by));
-
--- PROFILES : mise à jour d'un acteur possédé (la personne OU ses entités)
-CREATE POLICY "profiles_update_owned" ON profiles
-  FOR UPDATE TO authenticated USING (owns_actor(id)) WITH CHECK (owns_actor(id));
--- INSERT d'une entité par son propriétaire (pour "créer une entité")
-CREATE POLICY "profiles_insert_owned_entity" ON profiles
-  FOR INSERT TO authenticated WITH CHECK (kind = 'entity' AND owner_user_id = auth.uid());
-```
-
-- [ ] **Step 2 : Appliquer + tester les policies (psql, en simulant un utilisateur)**
-
-Run: `supabase db reset` puis, pour un exposant de test (avec `SET request.jwt.claim.sub = '<auth-uid>'` via le helper de test Supabase ou via l'app) : insérer une participation `user_id = <entity_id>` → doit réussir ; `user_id = <entité d'un autre>` → doit échouer.
-
 - [ ] **Step 3 : Commit**
-
 ```bash
-git add supabase/migrations/20260525120002_actors_rls_additive.sql
-git commit -m "feat(accounts): additive RLS via owns_actor() for owned entities"
+git add supabase/migrations/20260525120001_actors_backfill.sql
+git commit -m "feat(accounts): backfill actors/users/entities/memberships from profiles"
 ```
 
----
+## Task 3 : `actor_id` sur les tables d'action + backfill + RLS additif
 
-## Task 5 : Trigger `handle_new_user` crée une PERSONNE
+**Files :** Create `supabase/migrations/20260525120002_actions_actor_id.sql`
 
-**Files :**
-- Create: `supabase/migrations/20260525120003_handle_new_user_person.sql`
+> Règle de backfill : si le propriétaire de l'action était un **exposant**, l'action part sur son **entité** ; sinon elle reste sur la **personne** (dont l'actor_id = l'ancien `user_id`, valeur inchangée).
 
 - [ ] **Step 1 : Écrire la migration**
 
 ```sql
--- 20260525120003_handle_new_user_person.sql
--- Au signup, on crée une PERSONNE (kind='person'). L'entité exposant est créée
--- explicitement par l'onboarding (Plan 2), plus via raw_user_meta_data.
+-- 20260525120002_actions_actor_id.sql
+-- Table d'aide : pour chaque personne-exposant, son entité.
+CREATE TEMP TABLE _expo_entity AS
+  SELECT m.user_actor_id AS person_id, m.entity_actor_id AS entity_id
+  FROM memberships m JOIN entities e ON e.actor_id=m.entity_actor_id AND e.type='exposant';
+
+-- Helper inline : actor cible d'un ancien user_id
+-- (entité si exposant, sinon la personne elle-même = l'ancien id).
+-- PARTICIPATIONS
+ALTER TABLE participations ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE participations p SET actor_id = COALESCE(ee.entity_id, p.user_id)
+  FROM (SELECT p2.id, ee.entity_id FROM participations p2 LEFT JOIN _expo_entity ee ON ee.person_id=p2.user_id) ee
+  WHERE p.id = ee.id;
+ALTER TABLE participations ALTER COLUMN actor_id SET NOT NULL;
+ALTER TABLE participations ADD CONSTRAINT uniq_participation_actor UNIQUE (actor_id, event_id);
+
+-- Idem pour les autres tables (même motif COALESCE(entity, ancien id)).
+ALTER TABLE reviews       ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE reviews r       SET actor_id = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=r.user_id), r.user_id);
+ALTER TABLE event_reports ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE event_reports er SET actor_id = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=er.user_id), er.user_id);
+ALTER TABLE notes         ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE notes n         SET actor_id = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=n.user_id), n.user_id);
+ALTER TABLE events        ADD COLUMN created_by_actor UUID REFERENCES actors(id) ON DELETE SET NULL;
+UPDATE events e        SET created_by_actor = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=e.created_by), e.created_by);
+ALTER TABLE notifications ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE notifications nt SET actor_id = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=nt.user_id), nt.user_id);
+
+-- FOLLOWS : deux côtés
+ALTER TABLE follows ADD COLUMN follower_actor  UUID REFERENCES actors(id) ON DELETE CASCADE;
+ALTER TABLE follows ADD COLUMN following_actor UUID REFERENCES actors(id) ON DELETE CASCADE;
+UPDATE follows f SET follower_actor  = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=f.follower_id),  f.follower_id);
+UPDATE follows f SET following_actor = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=f.following_id), f.following_id);
+
+-- RLS additif via can_act_as (les anciennes policies restent valables pour les personnes)
+CREATE POLICY participations_write_actor ON participations FOR ALL TO authenticated
+  USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+CREATE POLICY reviews_write_actor ON reviews FOR ALL TO authenticated
+  USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+CREATE POLICY event_reports_write_actor ON event_reports FOR ALL TO authenticated
+  USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+CREATE POLICY notes_write_actor ON notes FOR ALL TO authenticated
+  USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+CREATE POLICY follows_write_actor ON follows FOR ALL TO authenticated
+  USING (can_act_as(follower_actor)) WITH CHECK (can_act_as(follower_actor));
+CREATE POLICY events_write_actor ON events FOR ALL TO authenticated
+  USING (can_act_as(created_by_actor)) WITH CHECK (can_act_as(created_by_actor));
+```
+
+> Les **vues/fonctions** `friends`, `are_friends`, `get_friend_ids`, `event_scores` s'appuient sur les anciens `follower_id/following_id/user_id` — elles **restent valides** en Phase 1 (colonnes conservées). Leur bascule sur `*_actor` se fera au **Plan 3** quand les pages liront `actor_id`.
+
+- [ ] **Step 2 : Vérifier** (psql) : aucune `actor_id` nulle ; contrainte d'unicité OK ; 0 orphelin (`LEFT JOIN actors` → null = 0).
+- [ ] **Step 3 : Commit**
+```bash
+git add supabase/migrations/20260525120002_actions_actor_id.sql
+git commit -m "feat(accounts): add+backfill actor_id on action tables + additive RLS"
+```
+
+## Task 4 : Trigger signup → personne (+ ligne profiles legacy transitoire)
+
+**Files :** Create `supabase/migrations/20260525120003_handle_new_user.sql`
+
+- [ ] **Step 1 : Écrire la migration**
+
+```sql
+-- 20260525120003_handle_new_user.sql
 CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER
-LANGUAGE plpgsql SECURITY DEFINER SET search_path = public
-AS $$
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 BEGIN
-  INSERT INTO profiles (id, email, kind, type)
-  VALUES (NEW.id, NEW.email, 'person', 'public');
+  -- Acteur + personne (le cœur du nouveau modèle)
+  INSERT INTO actors (id, kind) VALUES (NEW.id, 'person') ON CONFLICT DO NOTHING;
+  INSERT INTO users (actor_id, auth_id, email) VALUES (NEW.id, NEW.id, NEW.email)
+    ON CONFLICT (actor_id) DO NOTHING;
+  -- Ligne profiles legacy (transition : pages non encore recâblées la lisent). Retiré au Plan 4.
+  INSERT INTO profiles (id, email, type, kind) VALUES (NEW.id, NEW.email, 'public', 'person')
+    ON CONFLICT (id) DO NOTHING;
   RETURN NEW;
 END;
 $$;
 ```
+> `profiles.kind` n'existe pas encore → ajouter `ALTER TABLE profiles ADD COLUMN IF NOT EXISTS kind text;` en tête de cette migration, OU retirer `kind` de l'INSERT profiles (legacy n'en a pas besoin). **Choix simple : retirer `kind` de l'INSERT profiles.**
 
-- [ ] **Step 2 : Appliquer + tester**
-
-Run: `supabase db reset`. Créer un nouvel utilisateur de test (via l'app sur la base locale) → une ligne `profiles` avec `kind='person'`, `type='public'`.
-Expected: OK.
-
+- [ ] **Step 2 : Appliquer + test** — nouveau signup (app locale) → 1 ligne `actors(person)`, 1 `users`, 1 `profiles`. 
 - [ ] **Step 3 : Commit**
-
 ```bash
-git add supabase/migrations/20260525120003_handle_new_user_person.sql
-git commit -m "feat(accounts): new signups create a person actor"
+git add supabase/migrations/20260525120003_handle_new_user.sql
+git commit -m "feat(accounts): signup creates actor+user (+ legacy profiles row during transition)"
 ```
 
 ---
+
+# PHASE 2 — Couche identité (app)
+
+## Task 5 : Module pur `actorModel.ts` (+ règle de validité par type) + tests
+
+**Files :** Create `src/lib/actorModel.ts`, `src/lib/actorModel.test.ts`
+
+- [ ] **Step 1 : Écrire les tests qui échouent**
+
+```typescript
+// src/lib/actorModel.test.ts
+import { describe, it, expect } from 'vitest'
+import { presenceNature, actorCan, pickCurrentActor, deriveNeedsOnboarding, ENTITY_STORAGE_KEY, type ActorView } from './actorModel'
+
+const uriel: ActorView   = { id:'u1', kind:'person', entityType:null,        label:'Uriel',         hasName:true }
+const rune: ActorView    = { id:'e1', kind:'entity', entityType:'exposant',  label:'Rune de Chêne', hasName:true }
+const orga: ActorView    = { id:'e2', kind:'entity', entityType:'festival',  label:'Fest Orga',     hasName:true }
+
+describe('presenceNature (qui peut aller à un festival, et comment)', () => {
+  it('personne → visiteur', () => expect(presenceNature(uriel)).toBe('visitor'))
+  it('exposant → exposant',  () => expect(presenceNature(rune)).toBe('exhibitor'))
+  it('festival/orga → null (ne va pas, il organise)', () => expect(presenceNature(orga)).toBeNull())
+})
+
+describe('actorCan', () => {
+  it('exposant peut exposer, pas organiser', () => {
+    expect(actorCan(rune,'exhibit')).toBe(true)
+    expect(actorCan(rune,'organize')).toBe(false)
+  })
+  it('festival peut organiser, pas aller', () => {
+    expect(actorCan(orga,'organize')).toBe(true)
+    expect(actorCan(orga,'attend')).toBe(false)
+  })
+  it('personne peut aller, pas exposer ni avoir de vitrine', () => {
+    expect(actorCan(uriel,'attend')).toBe(true)
+    expect(actorCan(uriel,'exhibit')).toBe(false)
+    expect(actorCan(uriel,'haveVitrine')).toBe(false)
+  })
+})
+
+describe('pickCurrentActor', () => {
+  it('défaut = la personne si rien de stocké', () => expect(pickCurrentActor(uriel,[rune],null).id).toBe('u1'))
+  it('entité stockée si valide', () => expect(pickCurrentActor(uriel,[rune],'e1').id).toBe('e1'))
+  it('retombe sur la personne si id stocké invalide', () => expect(pickCurrentActor(uriel,[rune],'x').id).toBe('u1'))
+})
+
+describe('deriveNeedsOnboarding', () => {
+  it('vrai si la personne n’a pas de prénom', () => expect(deriveNeedsOnboarding({...uriel,hasName:false})).toBe(true))
+  it('faux sinon', () => expect(deriveNeedsOnboarding(uriel)).toBe(false))
+  it('vrai si pas de personne', () => expect(deriveNeedsOnboarding(null)).toBe(true))
+})
+
+it('clé de stockage stable', () => expect(ENTITY_STORAGE_KEY).toBe('flwsh.currentActorId'))
+```
+
+- [ ] **Step 2 : Lancer, vérifier l'échec** — `pnpm test src/lib/actorModel.test.ts` → FAIL (module absent).
+
+- [ ] **Step 3 : Implémenter**
+
+```typescript
+// src/lib/actorModel.ts
+export type ActorKind = 'person' | 'entity'
+export type EntityType = 'exposant' | 'festival' | 'entreprise'
+export type ActorAction = 'attend' | 'exhibit' | 'organize' | 'haveVitrine' | 'review'
+
+/** Vue minimale d'un acteur pour la logique d'app (sur-ensemble = users/entities row). */
+export interface ActorView {
+  id: string
+  kind: ActorKind
+  entityType: EntityType | null
+  label: string | null        // display_name (personne) ou brand_name (entité)
+  hasName: boolean            // la personne a-t-elle renseigné son prénom ?
+}
+
+export const ENTITY_STORAGE_KEY = 'flwsh.currentActorId'
+
+/** Nature de présence à un festival selon le type d'acteur (règle produit). */
+export function presenceNature(a: ActorView): 'visitor' | 'exhibitor' | null {
+  if (a.kind === 'person') return 'visitor'
+  if (a.entityType === 'exposant' || a.entityType === 'entreprise') return 'exhibitor'
+  return null // festival/orga : n'y va pas
+}
+
+export function actorCan(a: ActorView, action: ActorAction): boolean {
+  switch (action) {
+    case 'attend':      return presenceNature(a) !== null
+    case 'exhibit':     return presenceNature(a) === 'exhibitor'
+    case 'organize':    return a.kind === 'entity' && a.entityType === 'festival'
+    case 'haveVitrine': return a.kind === 'entity'
+    case 'review':      return presenceNature(a) === 'exhibitor'
+  }
+}
+
+/** Acteur actif : entité stockée si valide, sinon la personne (mode festivalier). */
+export function pickCurrentActor(person: ActorView, entities: ActorView[], storedId: string | null): ActorView {
+  if (storedId) {
+    const e = entities.find(x => x.id === storedId)
+    if (e) return e
+  }
+  return person
+}
+
+export function deriveNeedsOnboarding(person: ActorView | null): boolean {
+  return !person || !person.hasName
+}
+
+export function readStoredActorId(): string | null {
+  try { return localStorage.getItem(ENTITY_STORAGE_KEY) } catch { return null }
+}
+export function writeStoredActorId(id: string | null): void {
+  try { id ? localStorage.setItem(ENTITY_STORAGE_KEY, id) : localStorage.removeItem(ENTITY_STORAGE_KEY) } catch { /* ignore */ }
+}
+```
+
+- [ ] **Step 4 : Lancer, vérifier le succès** — `pnpm test src/lib/actorModel.test.ts` → PASS.
+- [ ] **Step 5 : Commit**
+```bash
+git add src/lib/actorModel.ts src/lib/actorModel.test.ts
+git commit -m "feat(accounts): pure actor model (capabilities by type, current actor) + tests"
+```
 
 ## Task 6 : Régénérer les types Supabase
 
-**Files :**
-- Modify: `src/types/supabase.ts`
-- Modify: `src/types/database.ts`
+**Files :** Modify `src/types/supabase.ts`, `src/types/database.ts`
 
-- [ ] **Step 1 : Régénérer les types depuis le schéma local**
-
-Run (cf. mémoire projet — binaire supabase direct sous Windows) :
-```bash
-supabase gen types typescript --local > src/types/supabase.ts
-```
-Expected: `profiles.Row` contient `kind`, `owner_user_id`, `entity_type` ; enums `actor_kind`, `entity_type` présents.
-
-- [ ] **Step 2 : Ajouter les types dérivés**
-
-Dans `src/types/database.ts`, après `export type Profile = ...` :
+- [ ] **Step 1 :** `supabase gen types typescript --local > src/types/supabase.ts`
+- [ ] **Step 2 :** dans `database.ts`, ajouter :
 ```typescript
-export type ActorKind = Database['public']['Enums']['actor_kind']
-export type EntityType = Database['public']['Enums']['entity_type']
-/** Un acteur = une ligne profiles (personne ou entité). */
-export type Actor = Profile
+export type ActorRow      = Database['public']['Tables']['actors']['Row']
+export type UserRow       = Database['public']['Tables']['users']['Row']
+export type EntityRow     = Database['public']['Tables']['entities']['Row']
+export type MembershipRow = Database['public']['Tables']['memberships']['Row']
+export type EntityType    = Database['public']['Enums']['entity_type']
 ```
-
-- [ ] **Step 3 : Vérifier la compilation**
-
-Run: `pnpm build`
-Expected: `tsc -b` passe (0 erreur).
-
+- [ ] **Step 3 :** `pnpm build` → 0 erreur de types sur les nouvelles tables.
 - [ ] **Step 4 : Commit**
-
 ```bash
 git add src/types/supabase.ts src/types/database.ts
-git commit -m "chore(accounts): regen supabase types + actor type aliases"
+git commit -m "chore(accounts): regen supabase types + row aliases"
 ```
 
----
+## Task 7 : Refonte `AuthContext`
 
-## Task 7 : Refonte `AuthContext` → personne + entités + entité courante
+**Files :** Modify `src/lib/auth.tsx`
 
-> On **ne supprime pas** `profile` : on le garde en **alias rétro-compatible** (= `currentEntity ?? person`) pour que les pages existantes continuent de tourner jusqu'au Plan 3. Zéro régression.
-
-**Files :**
-- Modify: `src/lib/auth.tsx`
-
-- [ ] **Step 1 : Étendre le type du contexte**
-
-Remplacer l'interface `AuthContextType` (auth.tsx:6-17) par :
+- [ ] **Step 1 : Nouveau type de contexte** (remplace `AuthContextType`)
 ```typescript
+import type { UserRow, EntityRow } from '@/types/database'
+import { pickCurrentActor, deriveNeedsOnboarding, readStoredActorId, writeStoredActorId,
+         actorCan, type ActorView, type ActorAction } from './actorModel'
+
 interface AuthContextType {
   user: User | null
   session: Session | null
-  /** La personne (festivalier de base, id = auth.uid()). */
-  person: Actor | null
-  /** Les entités (casquettes pro) possédées par la personne. */
-  entities: Actor[]
-  /** L'entité active dans le sélecteur, ou null = mode personne/festivalier. */
-  currentEntity: Actor | null
-  /** Alias rétro-compat : l'acteur "courant" (entité active sinon personne). */
-  profile: Actor | null
-  switchEntity: (entityId: string | null) => void
+  person: UserRow | null
+  entities: EntityRow[]
+  currentActor: ActorView           // acteur actif (personne par défaut)
+  currentActorRow: UserRow | EntityRow | null
+  switchActor: (actorId: string | null) => void
+  can: (action: ActorAction) => boolean
+  profile: (UserRow | EntityRow) | null   // alias rétro-compat
   loading: boolean
   signIn: (email: string) => Promise<{ error: Error | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
@@ -564,180 +535,89 @@ interface AuthContextType {
 }
 ```
 
-- [ ] **Step 2 : Réécrire le provider**
-
-Remplacer le corps de `AuthProvider` (auth.tsx:21-95) par :
+- [ ] **Step 2 : Provider** — charger personne + entités via memberships, exposer l'acteur courant.
 ```typescript
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [person, setPerson] = useState<Actor | null>(null)
-  const [entities, setEntities] = useState<Actor[]>([])
-  const [currentEntityId, setCurrentEntityId] = useState<string | null>(readStoredEntityId())
-  const [loading, setLoading] = useState(true)
+const [person, setPerson] = useState<UserRow | null>(null)
+const [entities, setEntities] = useState<EntityRow[]>([])
+const [currentActorId, setCurrentActorId] = useState<string | null>(readStoredActorId())
 
-  const fetchActors = async (authUid: string) => {
-    // La personne (id=authUid) + ses entités (owner_user_id=authUid), en une requête.
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .or(`id.eq.${authUid},owner_user_id.eq.${authUid}`)
-    const rows = (data ?? []) as unknown as ActorRow[]
-    const { person: p, entities: ents } = resolvePersonAndEntities(rows, authUid)
-    setPerson((p as Actor) ?? null)
-    setEntities(ents as Actor[])
-  }
-
-  const refreshProfile = async () => { if (user) await fetchActors(user.id) }
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) fetchActors(session.user.id).catch(() => {})
-      else { setPerson(null); setEntities([]) }
-      setLoading(false)
-    })
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const switchEntity = (entityId: string | null) => {
-    setCurrentEntityId(entityId)
-    writeStoredEntityId(entityId)
-  }
-
-  const signIn = async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email, options: { shouldCreateUser: true },
-    })
-    return { error: error as Error | null }
-  }
-  const verifyOtp = async (email: string, token: string) => {
-    const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
-    return { error: error as Error | null }
-  }
-  const signOut = async () => {
-    await supabase.auth.signOut({ scope: 'local' })
-    setPerson(null); setEntities([]); switchEntity(null)
-  }
-
-  const currentEntity = pickCurrentEntity(entities as ActorRow[], currentEntityId) as Actor | null
-  const profile = currentEntity ?? person  // alias rétro-compat
-  const needsOnboarding = !!user && deriveNeedsOnboarding(person as ActorRow | null)
-  const isAdmin = (person as { role?: string } | null)?.role === 'admin'
-
-  return (
-    <AuthContext.Provider value={{
-      user, session, person, entities, currentEntity, profile,
-      switchEntity, loading, signIn, verifyOtp, signOut, refreshProfile,
-      needsOnboarding, isAdmin,
-    }}>
-      {children}
-    </AuthContext.Provider>
-  )
+const fetchIdentity = async (authUid: string) => {
+  const { data: u } = await supabase.from('users').select('*').eq('actor_id', authUid).single()
+  setPerson((u as UserRow) ?? null)
+  const { data: ms } = await supabase.from('memberships')
+    .select('entity_actor_id, entities(*)').eq('user_actor_id', authUid)
+  setEntities(((ms ?? []).map((m: { entities: EntityRow }) => m.entities).filter(Boolean)) as EntityRow[])
 }
+// onAuthStateChange → fetchIdentity(session.user.id) ; sinon reset.
+
+const toView = (row: UserRow | EntityRow | null, kind: 'person'|'entity'): ActorView | null => row && ({
+  id: (row as { actor_id: string }).actor_id,
+  kind,
+  entityType: kind==='entity' ? (row as EntityRow).type : null,
+  label: kind==='entity' ? (row as EntityRow).brand_name : (row as UserRow).display_name,
+  hasName: kind==='person' ? !!(row as UserRow).display_name : true,
+})
+const personView = toView(person,'person')
+const entityViews = entities.map(e => toView(e,'entity')!) 
+const currentActor = personView ? pickCurrentActor(personView, entityViews, currentActorId) : personView!
+const currentActorRow = currentActor?.kind==='entity'
+  ? entities.find(e => e.actor_id===currentActor.id) ?? null
+  : person
+const switchActor = (id: string | null) => { setCurrentActorId(id); writeStoredActorId(id) }
+const can = (action: ActorAction) => currentActor ? actorCan(currentActor, action) : false
+const profile = currentActorRow
+const needsOnboarding = !!user && deriveNeedsOnboarding(personView)
+const isAdmin = person?.role === 'admin'
 ```
-Et compléter les imports en tête de fichier :
-```typescript
-import { supabase } from './supabase'
-import type { User, Session } from '@supabase/supabase-js'
-import type { Actor } from '@/types/database'
-import {
-  resolvePersonAndEntities, pickCurrentEntity, deriveNeedsOnboarding,
-  readStoredEntityId, writeStoredEntityId, type ActorRow,
-} from './actorContext'
-```
+(Conserver `signIn(email)` sans `accountType`, `verifyOtp`, `signOut` qui reset `switchActor(null)`.)
 
-> **Note :** `signIn` perd le paramètre `accountType` (le type ne se choisit plus au login mais à l'onboarding — Plan 2). `Login.tsx` l'appelle peut-être avec un 2e argument : à ajuster en Task 8.
-
-- [ ] **Step 3 : Vérifier la compilation**
-
-Run: `pnpm build`
-Expected: erreurs UNIQUEMENT là où `signIn(email, type)` est appelé avec 2 args (corrigé en Task 8) et là où `profile.type==='exposant'` est lu (toléré : alias en place). Noter ces erreurs pour Task 8.
-
+- [ ] **Step 3 :** `pnpm build` — noter les erreurs résiduelles (`signIn` 2 args, lectures `profile.type`) → corrigées Task 8 / Plan 3.
 - [ ] **Step 4 : Commit**
-
 ```bash
 git add src/lib/auth.tsx
-git commit -m "feat(accounts): AuthContext exposes person/entities/currentEntity/switchEntity"
+git commit -m "feat(accounts): AuthContext exposes person/entities/currentActor/switchActor/can"
 ```
 
----
+## Task 8 : Gardes auth (callback / login / onboarding gate)
 
-## Task 8 : Adapter les gardes auth (callback, onboarding gate, login)
+**Files :** Modify `src/pages/AuthCallback.tsx`, `src/pages/Login.tsx`, vérifier `src/App.tsx`
 
-**Files :**
-- Modify: `src/pages/AuthCallback.tsx:13-21`
-- Modify: `src/pages/Login.tsx` (appel `signIn`)
-- Modify: `src/App.tsx` (`OnboardingGuard` — déjà basé sur `needsOnboarding`, vérifier)
-
-- [ ] **Step 1 : AuthCallback — router sur la personne**
-
-Remplacer le bloc de redirection (AuthCallback.tsx:13-21) par :
+- [ ] **Step 1 : AuthCallback** — router sur `needsOnboarding` :
 ```typescript
-    if (user) {
-      if (needsOnboarding) {
-        navigate('/onboarding', { replace: true })
-      } else {
-        navigate('/explorer', { replace: true })  // home unique ; le type se gère via currentEntity
-      }
-    } else {
-      navigate('/login', { replace: true })
-    }
+const { user, needsOnboarding, loading } = useAuth()
+// ...
+if (user) navigate(needsOnboarding ? '/onboarding' : '/explorer', { replace: true })
+else navigate('/login', { replace: true })
 ```
-et adapter le hook : `const { user, needsOnboarding, loading } = useAuth()` (retirer `profile`).
-
-> Le routage exposant-vs-festivalier (`/dashboard` vs `/explorer`) sera affiné au Plan 3 selon `currentEntity`. Pour Phase 1, tout le monde atterrit sur `/explorer` (déjà la cible réelle aujourd'hui — `/dashboard` y redirige).
-
-- [ ] **Step 2 : Login — retirer le 2e argument**
-
-Dans `src/pages/Login.tsx`, repérer l'appel `signIn(email, ...)` et le réduire à `signIn(email)`. (Le choix festivalier/exposant se fait à l'onboarding désormais.)
-
-- [ ] **Step 3 : Vérifier compilation + lint**
-
-Run: `pnpm build && pnpm lint`
-Expected: 0 erreur de compilation. Les lectures résiduelles de `profile.type` compilent (le champ `type` existe encore sur l'acteur en Phase 1).
-
-- [ ] **Step 4 : Test fumée manuel (base locale)**
-
-1. Login nouveau compte → arrive sur `/onboarding` (personne sans `display_name`). 
-2. (Onboarding réel = Plan 2 ; pour tester, renseigner `display_name` à la main en base) → re-login → arrive sur `/explorer`.
-3. Login compte exposant migré → `/explorer`, et en console : `useAuth().entities` contient son entité.
-
+- [ ] **Step 2 : Login** — `signIn(email)` (retirer le 2e argument `accountType`).
+- [ ] **Step 3 :** `pnpm build && pnpm lint` → 0 erreur (les lectures `profile.type` restantes appartiennent au Plan 3 ; si bloquantes, garder `type` sur l'alias en attendant).
+- [ ] **Step 4 : Test fumée** (base locale) : nouveau compte → `/onboarding` ; compte exposant migré → `/explorer`, `useAuth().entities` contient son entité, `useAuth().can('exhibit')` vrai quand l'entité est active, faux en mode personne.
 - [ ] **Step 5 : Commit**
-
 ```bash
 git add src/pages/AuthCallback.tsx src/pages/Login.tsx src/App.tsx
-git commit -m "feat(accounts): auth guards based on person + needsOnboarding"
+git commit -m "feat(accounts): auth guards on person identity + needsOnboarding"
 ```
 
 ---
 
-## Auto-vérification du plan (faite)
-
-- **Couverture spec** : modèle personne→entités (0001 §7) ✓ ; migration sans casser l'auth ✓ ; AuthContext `{person, entities, currentEntity, switchEntity}` ✓ ; RLS ✓. **Hors périmètre Phase 1 (→ plans 2-4, listés)** : onboarding branché, sélecteur d'entité UI, câblage Explorer/Calendar/EventPage/PublicProfile/Settings/Embed, gating gratuit/Pro, contract.
-- **Placeholders** : aucun (toutes les étapes ont SQL/TS réels).
-- **Cohérence des noms** : `owns_actor`, `resolvePersonAndEntities`, `pickCurrentEntity`, `deriveNeedsOnboarding`, `currentEntity`, `switchEntity`, `ENTITY_STORAGE_KEY` — identiques entre tasks.
+## Auto-vérification (faite)
+- **Couverture spec** : 1 personne↔N entités + 1 entité↔N gérants (memberships) ✓ ; entités typées ✓ ; acteur partagé + actions sur `actor_id` ✓ ; **règle de validité par type** (visiteur/expose/organise) ✓ codée et testée (`presenceNature`/`actorCan`) ✓ ; migration sans casser l'auth (cutover + backup) ✓.
+- **Hors périmètre (→ Plans 3-4)** : onboarding branché, sélecteur d'entité UI, recâblage des pages (Explorer/Calendar/EventPage/PublicProfile/Settings/Embed), bascule des vues `friends`/`event_scores` sur `*_actor`, gating gratuit/Pro, contract (drop `profiles`).
+- **Placeholders** : aucun. **Cohérence noms** : `can_act_as`, `actor_id`, `actorModel`, `presenceNature`, `actorCan`, `pickCurrentActor`, `currentActor`, `switchActor`, `ENTITY_STORAGE_KEY` cohérents entre tasks.
 
 ## Risques & rollback
-
 | Risque | Gravité | Mitigation |
 |---|---|---|
-| **Migration auth casse le login** | 🔴 critique | Expand-contract (rien supprimé) ; backup pré-migration ; test intégral sur base locale + staging avant prod ; rollback = restaurer le dump. |
-| Re-routage de données (Task 3) erroné | 🟠 | Requêtes d'assertion (counts orphelins = 0) ; volume alpha faible ; lignes d'origine conservées (juste converties). |
-| `public_slug UNIQUE` en conflit (slug sur 2 lignes) | 🟠 | Task 3 libère le slug côté personne dans la même transaction. |
-| RLS trop permissif/restrictif | 🟠 | Policies additives testées par insert simulé (Task 4 step 2) ; anciennes conservées. |
-| Pages lisant `profile.type` | 🟢 | `type` conservé en Phase 1 + alias `profile` ; nettoyage au Plan 3/4. |
+| Migration casse l'auth | 🔴 | Backup prod ; branche + base locale ; `profiles` conservé (cutover, pas destructif) ; rollback = restaurer le dump. |
+| Backfill exposant→entité mal apparié | 🟠 | Préférer la **boucle PL/pgSQL** (Task 2 note) ; requêtes d'assertion (counts, owners uniques, 0 orphelin). |
+| Vues `friends`/`event_scores` sur anciennes colonnes | 🟢 | Colonnes legacy conservées en Phase 1 ; bascule au Plan 3. |
+| Doublon d'identité (profiles + users) pendant la transition | 🟠 | Trigger dual-write ; source de vérité = `users/entities` côté app ; `profiles` retiré au Plan 4. |
 
-## Questions ouvertes pour Uriel (à trancher avant exécution)
+## Questions ouvertes (à confirmer avant exécution)
+1. **`plan` (Pro) sur `users` (la personne)** — reco retenue. Un abo couvre les entités du même humain. OK ?
+2. **Backfill : prénom de l'exposant** mis à `NULL` → l'exposant repasse par l'onboarding pour saisir son prénom (Plan 2). Acceptable, ou on copie `display_name` existant dans `users.display_name` ?
+3. **Invitations multi-gérants** (ajouter un 2ᵉ gérant) = Plan 3 (UI + policy d'insert membership par un owner). OK de ne pas la faire en Phase 1 ?
 
-1. **`plan` (Pro) sur la personne ou l'entité ?** (reco : personne).
-2. **Historique d'un exposant alpha → entité** (reco : oui, Task 3). OK ?
-3. **Une personne peut-elle être suivie ?** (reco V1 : non).
-4. **Confirmer le modèle « profiles polymorphe »** vs table `entities` séparée (reco : polymorphe, cf. §décision).
-
-## Plans suivants (à écrire après validation + exécution de Phase 1)
-
-- **Plan 2 — Onboarding branché** (`Onboarding.tsx`, création d'entité, avatars, slug, métier libre) — réf. `docs/decisions/assets/onboarding.html`.
-- **Plan 3 — Câblage par surface** + sélecteur d'entité (`AppLayout`) + gating gratuit/Pro (réf. matrice 0001 §5).
-- **Plan 4 — Contract** (drop `type`/champs legacy, nettoyage RLS) une fois la prod stable.
+## Plans suivants
+- **Plan 3 — Recâblage & onboarding** : onboarding branché (réf. `docs/decisions/assets/onboarding.html`), sélecteur d'entité (`AppLayout`), toutes les pages sur `actor_id`, bascule vues sociales, gating gratuit/Pro (réf. matrice 0001 §5), invitations multi-gérants.
+- **Plan 4 — Contract** : drop `profiles`, colonnes `user_id`/`follower_id`/`following_id` legacy, anciennes policies.
