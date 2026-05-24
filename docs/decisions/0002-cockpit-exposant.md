@@ -115,6 +115,16 @@ Maquette : [`assets/communaute-fil.html`](assets/communaute-fil.html). **Pas un 
 - **Présence dans la barre de gauche** : mini-fil « Activité du réseau » (pastille *en direct*), **plafonné à 3 lignes** poussé en bas au-dessus du compte — l'ambiance permanente, le « coin de l'œil ». + **badge rouge** sur l'onglet Communauté = activité nouvelle depuis ta dernière visite (se vide à l'ouverture, ≠ notifs perso) → l'appât qui fait revenir.
 - **Démarrage à froid** : réseau pauvre → la page met les suggestions/découverte (festival-ancrées) en avant ; réseau riche → le fil prend le dessus. Jamais de page morte exposant le vide.
 
+## Écran Mes dates — home gratuit (validé)
+
+Maquette : [`assets/mes-dates.html`](assets/mes-dates.html). **Home de l'exposant gratuit** (et écran festivalier). Sert la matrice de gating (cf. [0001 §5](0001-fondations-vision-packs-da.md)) : le gratuit a **Mes dates** *à la place* du Calendrier (qui est Pro).
+
+- **Agenda simple tourné vers l'avenir proche** (3 prochains mois), volontairement plus léger que le Calendrier Pro (vue saison année). Festivals **groupés par mois** ; ligne = bloc date + affiche + nom/lieu/type + **statut** (Repéré · Candidaté · Inscrit · Payé) + « N utilisateurs y vont » (followers). Onglet **À venir / Passées**.
+- **Tease Pro au-delà de 3 mois** : carte « **+N dates après [mois]** » avec dates **floutées** derrière + CTA « Voir ma saison complète — Pro ». Principe *teaser, pas cacher* — montrer que ça existe, cadenasser le détail.
+- **Nav du gratuit** : Explorer · **Mes dates** · Ma vitrine actifs ; **Tableau de bord · Calendrier · Communauté cadenassés** (🔒 visibles = vitrine de ce qu'il rate). Encart **« Passe en Pro »** en bas de barre. Sélecteur d'entité affiche « Exposant · gratuit ».
+- **Affichage prix = HT en headline** (cible pro qui récupère la TVA), TTC en mention discrète : **9,99 € HT/mois (12 € TTC)**. Règle générale à appliquer partout (boutique, landing…).
+- **Variante festivalier** : mêmes lignes, mais statuts de candidature → « **J'y vais / Intéressé** », pas d'encart candidature, **et pas de paywall** (le festivalier n'a pas de tier Pro). Le cap « 3 mois » est un **levier de conversion exposant uniquement** ; côté festivalier, on **n'ampute pas** — les dates lointaines (>90 j) vont dans une section **« Plus tard »** visible (repliable), jamais cadenassées. (Maquette festivalier à faire avec le parcours festivalier.)
+
 ## Ouvert / à creuser
 
 - [ ] Modèle de données équipe (membres d'une entité, rôles/permissions).
