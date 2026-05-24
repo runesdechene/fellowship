@@ -1,0 +1,31 @@
+# Décisions — le "board room" de Fellowship
+
+Ce dossier est la **source de vérité des décisions stratégiques et produit** de Fellowship :
+positionnement, analyse concurrentielle, offres/packs, pricing, go-to-market, choix de vision.
+
+> Distinct de :
+> - `docs/superpowers/specs/` + `plans/` → décisions **techniques / design d'implémentation**
+> - `graphify-out/` → carte du code **auto-dérivée**
+> - mémoire Claude (privée) → contexte de session, non partagé
+
+## Convention
+
+Un fichier Markdown par décision (ou par session de décisions), nommé :
+
+```
+NNNN-titre-court.md      ex: 0001-session-2026-05-24-landing-et-packs.md
+```
+
+Chaque doc suit un format ADR léger :
+
+- **Contexte** — pourquoi on se pose la question maintenant
+- **Options envisagées** — les pistes, avec trade-offs
+- **Décision** — ce qu'on a tranché, et pourquoi
+- **Conséquences** — ce que ça implique (dev, design, business)
+- **Statut** — `proposé` / `acté` / `révisé` / `abandonné`
+
+Liens entre décisions avec des liens Markdown relatifs (compatibles Obsidian si on ouvre ce dossier comme vault).
+
+## Index
+
+- _(à remplir au fil des décisions)_
