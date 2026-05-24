@@ -102,6 +102,19 @@ Maquette : [`assets/vitrine-exposant.html`](assets/vitrine-exposant.html). Page 
 - **Footer de marque** « Vitrine Fellowship · flw.sh/@slug » — la page est faite pour être **partagée** (bio Insta, boutique).
 - **Vue propriétaire (« Ma vitrine »)** — *non maquettée, décrite* : remplace **Suivre** par **Éditer / Intégrer le calendrier / QR** ; ajoute **« Gérer ma sélection »** (et, si V1.5, « Importer depuis Instagram ») ; les compteurs réseau ouvrent les modales Abonnés/Compagnons avec le **« suivre en retour »** (cf. inventaire `PublicProfile`).
 
+## Écran Communauté — le fil du réseau (validé)
+
+Maquette : [`assets/communaute-fil.html`](assets/communaute-fil.html). **Pas un annuaire de gens** (tranché) — c'est **le fil d'activité de ton réseau** (le *qui*, vs Explorer = le *quoi*). C'est lui qui donne le **sentiment d'activité** sur le site.
+
+- **Décision de fond : aucune grille « parcourir les exposants ».** Raisons : (1) le rôle de la plateforme n'est pas un catalogue d'humains — les liens se créent *parce qu'on est au même festival* (découverte **festival-ancrée**) ; (2) on n'agrège/n'expose pas notre base de créateurs (data) ; (3) **cohérence** avec le modèle de visibilité (on ne voit que ses abonnés partout — un browse-all serait la seule entorse, et exposerait notre faible nombre au lancement).
+- **Découverte de gens = contextuelle & intentionnelle uniquement** : **recherche** (pull : tu tapes un nom que tu connais déjà), **suggestions ancrées dans une relation** (« compagnons de tes compagnons », « va aux mêmes festivals que toi », « suivi par N compagnons » — jamais une grille brute, donc jamais de compteur global révélé), et surtout la découverte **sur la page festival** (« qui y va »).
+- **L'item-roi = la Convergence** : quand plusieurs compagnons tombent sur le même festival → carte mise en avant (affiche + avatars empilés + « N de tes compagnons y seront » + Voir le festival). Le fil devient un **moteur de décision** (signal de troupeau) déguisé en réseau social.
+- **Autres battements** (filtrés sur tes abonnements) : avis d'un pair *avec citation* (intel de confiance, y compris négatifs honnêtes), « X va à / expose à Y » (relié au festival, « vous y seriez tous les deux »), « +N dates ajoutées » (chips), nudge de suivi **tissé dans le fil** (« Camille & Théo suivent désormais Lucie → Suivre »).
+- **Colonne droite** : Suggestions ancrées + **Convergences à venir** (vue d'ensemble persistante — complémentaire de l'item Convergence du fil, qui lui est événementiel « ça vient de se confirmer »).
+- **Le fil ≠ les notifications** : les notifs parlent de *toi* (on t'a suivi/commenté) ; le fil parle de *ton réseau* (où *ils* vont). À ne pas mélanger.
+- **Présence dans la barre de gauche** : mini-fil « Activité du réseau » (pastille *en direct*), **plafonné à 3 lignes** poussé en bas au-dessus du compte — l'ambiance permanente, le « coin de l'œil ». + **badge rouge** sur l'onglet Communauté = activité nouvelle depuis ta dernière visite (se vide à l'ouverture, ≠ notifs perso) → l'appât qui fait revenir.
+- **Démarrage à froid** : réseau pauvre → la page met les suggestions/découverte (festival-ancrées) en avant ; réseau riche → le fil prend le dessus. Jamais de page morte exposant le vide.
+
 ## Ouvert / à creuser
 
 - [ ] Modèle de données équipe (membres d'une entité, rôles/permissions).

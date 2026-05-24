@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Communauté (fil du réseau)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--sidebar:#1b1311;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+  a{color:inherit}
+
+  /* ---- App shell ---- */
+  .sidebar{position:fixed;left:0;top:0;width:262px;height:100vh;background:rgba(27,19,17,.7);backdrop-filter:blur(16px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+  .logo{font-family:var(--h);font-weight:800;font-size:20px;display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:14px}
+  .entity{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+  .entity .av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#6b4a2e,#3c2a1a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffd9a8;font-size:14px}
+  .entity .nm b{font-family:var(--h);font-size:14px;display:block}.entity .nm span{font-size:11px;color:var(--muted)}
+  .nav{display:flex;flex-direction:column;gap:3px}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:500;font-size:14px}
+  .nav a svg{width:18px;height:18px;stroke-width:2}
+  .nav a:hover{background:var(--surface);color:var(--text)}
+  .nav a.active{background:color-mix(in srgb,var(--cop) 16%,transparent);color:var(--amber)}
+  .nav a .navbadge{margin-left:auto;background:#e5484d;color:#fff;font-size:10.5px;font-weight:800;min-width:19px;height:19px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 0 0 3px color-mix(in srgb,#e5484d 22%,transparent)}
+
+  /* ---- Mini-fil dans la barre (plafonné, poussé en bas) ---- */
+  .side-activity{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column}
+  .sa-head{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px;padding:0 6px 10px}
+  .sa-head .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green)}
+  .sa-item{display:flex;align-items:center;gap:9px;padding:7px 6px;border-radius:9px;text-decoration:none;cursor:pointer}
+  .sa-item:hover{background:var(--surface)}
+  .sa-item .sav{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#1c1310}
+  .sa-item .sat{font-size:12px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sa-item .sat b{color:var(--text);font-weight:600}
+  .sa-all{font-size:12px;color:var(--amber);font-weight:600;padding:8px 6px 0;cursor:pointer}
+
+  .side-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;align-items:center;gap:10px}
+  .side-foot .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green),hsl(92 40% 46%))}
+  .side-foot .nm{flex:1}.side-foot .nm b{font-size:13px;font-family:var(--h)}.side-foot .nm span{font-size:11px;color:var(--muted);display:block}
+
+  /* ---- Stage ---- */
+  .stage{position:fixed;left:262px;right:0;top:0;bottom:0;overflow-y:auto}
+  .page{max-width:1040px;margin:0 auto;padding:26px 32px 60px}
+  .phead{margin-bottom:20px}
+  .phead h1{font-size:30px;color:#fff;margin-bottom:4px}
+  .phead .psub{font-size:14px;color:var(--muted)}
+  .ptools{display:flex;align-items:center;gap:12px;margin-top:18px}
+  .segs{display:flex;gap:7px;flex-wrap:wrap}
+  .seg{padding:8px 15px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.13s}
+  .seg:hover{color:var(--text)}
+  .seg.on{background:color-mix(in srgb,var(--cop) 18%,transparent);border-color:color-mix(in srgb,var(--amber) 40%,transparent);color:var(--amber)}
+  .psearch{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:9px 15px;min-width:220px}
+  .psearch svg{width:16px;height:16px;stroke-width:2.2;color:var(--muted)}
+  .psearch input{background:none;border:none;outline:none;color:var(--text);font-family:var(--b);font-size:13.5px;width:100%}
+  .psearch input::placeholder{color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:1fr 330px;gap:26px;align-items:start}
+  .feed{display:flex;flex-direction:column;gap:13px;min-width:0}
+  .col-side{display:flex;flex-direction:column;gap:18px;position:sticky;top:26px}
+
+  .daysep{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 2px;padding-left:2px}
+  .daysep:first-child{margin-top:0}
+
+  /* ---- Convergence (item roi) ---- */
+  .conv{display:flex;align-items:center;gap:16px;background:linear-gradient(120deg,color-mix(in srgb,var(--cop) 16%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--cop) 30%,var(--line));border-radius:18px;padding:16px 18px;box-shadow:0 12px 30px rgba(0,0,0,.28)}
+  .conv-affiche{width:58px;height:80px;border-radius:9px;overflow:hidden;flex-shrink:0;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+  .conv-affiche img{width:100%;height:100%;object-fit:cover}
+  .conv-body{flex:1;min-width:0}
+  .conv-eyb{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .conv-body b{font-family:var(--h);font-size:18px;color:#fff;display:block;margin:4px 0 2px;line-height:1.1}
+  .conv-meta{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+  .conv-foot{display:flex;align-items:center;gap:11px}
+  .conv-foot .ftxt{font-size:13px;color:#e6d4bd}.conv-foot .ftxt b{color:#fff;font-family:var(--h)}
+
+  .avs{display:flex}
+  .avs span{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--surface);margin-left:-10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1c1310}
+  .avs span:first-child{margin-left:0}
+
+  /* ---- Item d'activité ---- */
+  .act{display:flex;align-items:flex-start;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px 17px}
+  .act-av{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#1c1310}
+  .act-b{flex:1;min-width:0}
+  .act-t{font-size:14px;color:#d8cabb;line-height:1.45}
+  .act-t b{color:#fff;font-weight:600}
+  .act-t a{color:var(--amber);font-weight:600;text-decoration:none}
+  .act-t time{color:var(--muted);font-size:12px;font-weight:500}
+  .act-stars{margin-top:6px;color:var(--amber);font-size:13px;letter-spacing:1px}
+  .act-stars span{color:#d8cabb;font-size:13.5px;letter-spacing:normal;font-style:italic;margin-left:6px}
+  .act-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .act-chips{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .act-chips span{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--surface2);border:1px solid var(--line);color:#e6d4bd}
+  .act-thumb{width:42px;height:58px;border-radius:7px;overflow:hidden;flex-shrink:0}
+  .act-thumb img{width:100%;height:100%;object-fit:cover}
+
+  /* ---- Buttons ---- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--b);font-weight:600;font-size:13.5px;border-radius:10px;padding:9px 16px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:.14s;white-space:nowrap}
+  .btn svg{width:15px;height:15px;stroke-width:2}
+  .btn-p{background:linear-gradient(135deg,var(--cop),var(--cop-d));color:#fff}
+  .btn-p:hover{filter:brightness(1.07)}
+  .btn-g{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18);color:#fff}
+  .btn-g:hover{background:rgba(255,255,255,.14)}
+  .btn-follow.is-on{background:color-mix(in srgb,var(--green) 20%,transparent);border-color:color-mix(in srgb,var(--green) 45%,transparent);color:var(--green)}
+  .act .btn{align-self:center;flex-shrink:0}
+
+  /* ---- Colonne droite ---- */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .card h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h2 svg{width:14px;height:14px;color:var(--amber)}
+  .sugg{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line)}
+  .sugg:first-of-type{border-top:none;padding-top:0}
+  .sugg .sav{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#1c1310}
+  .sugg .sb{flex:1;min-width:0}
+  .sugg .sb b{font-family:var(--h);font-size:13.5px;color:#fff;display:block;line-height:1.2}
+  .sugg .sb span{font-size:11.5px;color:var(--muted);display:block;margin-top:2px}
+  .sugg .btn{padding:7px 13px;font-size:12.5px}
+
+  .conv-mini{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+  .conv-mini:first-of-type{border-top:none;padding-top:0}
+  .conv-mini .cm-b{flex:1;min-width:0}
+  .conv-mini .cm-b b{font-family:var(--h);font-size:13px;color:#fff;display:block;line-height:1.2}
+  .conv-mini .cm-b span{font-size:11.5px;color:var(--muted)}
+  .conv-mini .avs span{width:24px;height:24px;font-size:9px;border-width:2px}
+
+  @media(max-width:1080px){.sidebar{display:none}.stage{left:0}.grid{grid-template-columns:1fr}.col-side{position:static}.psearch{display:none}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="entity"><div class="av">RC</div><div class="nm"><b>Rune de Chêne</b><span>Exposant · toi</span></div></div>
+  <nav class="nav">
+    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z"/></svg> Explorer</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg> Tableau de bord</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Calendrier</a>
+    <a class="active" href="#"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8M23 21v-2a4 4 0 00-3-3.87"/></svg> Communauté <span class="navbadge">3</span></a>
+    <a href="#"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg> Ma vitrine</a>
+  </nav>
+
+  <!-- Mini-fil (résumé récent) -->
+  <div class="side-activity">
+    <div class="sa-head"><span class="live"></span> Activité du réseau</div>
+    <a class="sa-item"><span class="sav" style="background:#3d9970;color:#fff">T</span><span class="sat"><b>Théo</b> a noté Pérouges</span></a>
+    <a class="sa-item"><span class="sav" style="background:#f0a060">C</span><span class="sat"><b>Camille</b> va à Crémieu</span></a>
+    <a class="sa-item"><span class="sav" style="background:#6c5ce7;color:#fff">M</span><span class="sat"><b>Maraël</b> +3 dates</span></a>
+    <a class="sa-all">Tout voir →</a>
+  </div>
+
+  <div class="side-foot"><div class="av"></div><div class="nm"><b>Uriel</b><span>Mon compte</span></div></div>
+</aside>
+
+<main class="stage">
+  <div class="page">
+    <div class="phead">
+      <h1>Communauté</h1>
+      <div class="psub">Le fil de ton réseau — où vont tes compagnons, ce qu'ils en disent.</div>
+      <div class="ptools">
+        <div class="segs">
+          <button class="seg on">Tout</button>
+          <button class="seg">Où ils vont</button>
+          <button class="seg">Avis</button>
+          <button class="seg">Réseau</button>
+        </div>
+        <div class="psearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Chercher un exposant…"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- FIL -->
+      <div class="feed">
+        <div class="daysep">Cette semaine</div>
+
+        <!-- Convergence : l'item roi -->
+        <div class="conv">
+          <div class="conv-affiche"><img src="https://picsum.photos/seed/cremieu/200/280" alt=""></div>
+          <div class="conv-body">
+            <span class="conv-eyb">🎪 Ça se rassemble</span>
+            <b>Médiévales de Crémieu</b>
+            <div class="conv-meta">20–21 sept. · Crémieu (38)</div>
+            <div class="conv-foot">
+              <div class="avs"><span style="background:#f0a060">C</span><span style="background:#3d9970;color:#fff">T</span><span style="background:#6c5ce7;color:#fff">M</span><span style="background:#e07a5f;color:#fff">J</span><span style="background:#2a1e19;color:var(--amber);font-size:10px">+2</span></div>
+              <span class="ftxt"><b>6 de tes compagnons</b> y seront</span>
+            </div>
+          </div>
+          <a class="btn btn-g" href="#">Voir le festival</a>
+        </div>
+
+        <!-- Avis -->
+        <div class="act">
+          <div class="act-av" style="background:#3d9970;color:#fff">T</div>
+          <div class="act-b">
+            <div class="act-t"><b>Théo — Cuir d'Antan</b> a noté <a href="#">Grandes Médiévales de Pérouges</a> <time>· il y a 2 j</time></div>
+            <div class="act-stars">★★★★★ <span>« Meilleure édition depuis des années, public au rendez-vous. »</span></div>
+          </div>
+        </div>
+
+        <!-- Va à -->
+        <div class="act">
+          <div class="act-av" style="background:#f0a060">C</div>
+          <div class="act-b">
+            <div class="act-t"><b>Camille — Terres &amp; Flammes</b> expose aux <a href="#">Médiévales de Crémieu</a> <time>· il y a 3 j</time></div>
+            <div class="act-sub">Tu y es repéré aussi · vous y seriez tous les deux</div>
+          </div>
+          <div class="act-thumb"><img src="https://picsum.photos/seed/cremieu/200/280" alt=""></div>
+        </div>
+
+        <!-- Nouvelles dates -->
+        <div class="act">
+          <div class="act-av" style="background:#6c5ce7;color:#fff">M</div>
+          <div class="act-b">
+            <div class="act-t"><b>Maraël — Verre &amp; Lumière</b> a ajouté 3 dates à sa saison <time>· il y a 4 j</time></div>
+            <div class="act-chips"><span>⚔️ Pérouges</span><span>⚔️ Crémieu</span><span>🎵 Annecy</span></div>
+          </div>
+        </div>
+
+        <div class="daysep">Plus tôt</div>
+
+        <!-- Suggestion ancrée (nudge tissé dans le fil) -->
+        <div class="act">
+          <div class="act-av" style="background:#f2a900">L</div>
+          <div class="act-b">
+            <div class="act-t"><b>Camille</b> et <b>Théo</b> suivent désormais <b>Lucie — Bois Tourné</b> <time>· il y a 6 j</time></div>
+            <div class="act-sub">Tourneur sur bois · Grenoble (38) · va à 4 festivals que tu suis</div>
+          </div>
+          <button class="btn btn-p btn-follow"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M19 8v6M22 11h-6"/></svg><span>Suivre</span></button>
+        </div>
+
+        <!-- Avis 2 -->
+        <div class="act">
+          <div class="act-av" style="background:#e07a5f;color:#fff">J</div>
+          <div class="act-b">
+            <div class="act-t"><b>Joss — Forge du Val</b> a noté <a href="#">Geek &amp; Fantasy Show</a> <time>· il y a 8 j</time></div>
+            <div class="act-stars">★★★☆☆ <span>« Bonne ambiance mais public peu acheteur pour de l'artisanat. »</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLONNE DROITE -->
+      <aside class="col-side">
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M19 8v6M22 11h-6"/></svg> Suggestions pour toi</h2>
+          <div class="sugg">
+            <div class="sav" style="background:#f2a900">L</div>
+            <div class="sb"><b>Lucie — Bois Tourné</b><span>Mêmes festivals que toi</span></div>
+            <button class="btn btn-g btn-follow"><span>Suivre</span></button>
+          </div>
+          <div class="sugg">
+            <div class="sav" style="background:#00b894;color:#fff">N</div>
+            <div class="sb"><b>Naïm — Épices &amp; Routes</b><span>Suivi par 3 compagnons</span></div>
+            <button class="btn btn-g btn-follow"><span>Suivre</span></button>
+          </div>
+          <div class="sugg">
+            <div class="sav" style="background:#fd79a8;color:#fff">É</div>
+            <div class="sb"><b>Élise — Fil &amp; Laine</b><span>Céramiste · près de Lyon</span></div>
+            <button class="btn btn-g btn-follow"><span>Suivre</span></button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8"/></svg> Convergences à venir</h2>
+          <div class="conv-mini">
+            <div class="cm-b"><b>Médiévales de Crémieu</b><span>20–21 sept.</span></div>
+            <div class="avs"><span style="background:#f0a060">C</span><span style="background:#3d9970;color:#fff">T</span><span style="background:#2a1e19;color:var(--amber);font-size:9px">+4</span></div>
+          </div>
+          <div class="conv-mini">
+            <div class="cm-b"><b>Renaissance Festival</b><span>septembre · Nantes</span></div>
+            <div class="avs"><span style="background:#6c5ce7;color:#fff">M</span><span style="background:#e07a5f;color:#fff">J</span><span style="background:#2a1e19;color:var(--amber);font-size:9px">+1</span></div>
+          </div>
+          <div class="conv-mini">
+            <div class="cm-b"><b>Marché de Noël</b><span>déc. · Strasbourg</span></div>
+            <div class="avs"><span style="background:#f2a900">L</span><span style="background:#00b894;color:#fff">N</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Segments
+  document.querySelectorAll('.seg').forEach(s=>s.addEventListener('click',()=>{ document.querySelectorAll('.seg').forEach(x=>x.classList.remove('on')); s.classList.add('on'); }));
+  // Suivre / Suivi
+  document.querySelectorAll('.btn-follow').forEach(b=>b.addEventListener('click',()=>{
+    const sp=b.querySelector('span'); const on=b.classList.toggle('is-on');
+    if(b.classList.contains('btn-p')){ b.classList.toggle('btn-p',!on); }
+    sp.textContent=on?'Suivi':'Suivre';
+  }));
+</script>
+</body>
+</html>
