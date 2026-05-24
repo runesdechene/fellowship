@@ -49,6 +49,15 @@ can_act_as(actor_id) = (actor_id = auth.uid())
 - Une participation = `(actor_id, event_id)`. La **nature** (visiteur/exposant) **découle du type d'acteur** — aucun champ supplémentaire.
 - Clé d'unicité = **`(actor_id, event_id)`**, PAS `(humain, event)`. → le même humain peut aller au festival A en tant qu'Uriel-visiteur ET exposer au festival B en tant que Rune de Chêne. Acteurs distincts = lignes distinctes.
 
+### Rôles, abonnement & audit (sécurité — validé 2026-05-25)
+- **Abonnement rattaché au `users`-Chef.** `users.plan` (free/pro). Le **propriétaire (owner)** d'une entité est son **Chef** = le souscripteur. **Pro Orga** (festival/organisateur) sera un **abonnement distinct** → le modèle d'abonnement s'étendra plus tard (hors fondation, mais on n'y met pas d'obstacle).
+- **Hiérarchie de rôles** (`memberships.role`) : **owner** (propriétaire/Chef — Uriel) · **admin** (gestion étendue) · **member** (employé : agit mais **ne peut RIEN supprimer**). Uriel reste owner même si Mathéo gère.
+- **Sécurité structurelle dès la fondation** (RLS, pas juste l'UI) :
+  - **Supprimer une entité** / **gérer l'équipe** (inviter/retirer des membres) / **gérer l'abonnement** = **owner uniquement**.
+  - **Agir au nom de l'entité** (participer, candidater, noter, créer un event, poster) = **tout membre** (`can_act_as`).
+  - L'**UI d'invitation** vient au Plan 3 ; les **garde-fous RLS owner-only existent dès maintenant** → un employé ne *peut pas* supprimer, même via l'API.
+- **Audit / attribution humaine** : chaque action porte `actor_id` (au nom de qui = l'entité) **ET** `acted_by_user_id` (**qui** l'a faite = l'humain). On sait que « Mathéo a candidaté pour Rune de Chêne ». Logs d'imputabilité dès la fondation.
+
 ---
 
 ## Stratégie de migration : cutover propre (adapté à l'alpha)
@@ -156,7 +165,7 @@ CREATE TABLE memberships (
 CREATE INDEX idx_memberships_user   ON memberships(user_actor_id);
 CREATE INDEX idx_memberships_entity ON memberships(entity_actor_id);
 
--- Autorisation : l'utilisateur courant agit-il en tant que cet acteur ?
+-- Autorisation : l'utilisateur courant agit-il AU NOM de cet acteur ? (soi-même OU membre de l'entité)
 CREATE OR REPLACE FUNCTION can_act_as(target_actor UUID)
 RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
   SELECT target_actor = auth.uid()
@@ -164,6 +173,15 @@ RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS
         SELECT 1 FROM memberships
         WHERE user_actor_id = auth.uid() AND entity_actor_id = target_actor
       );
+$$;
+
+-- Sécurité : l'utilisateur courant est-il OWNER de cette entité ? (actions destructrices)
+CREATE OR REPLACE FUNCTION is_entity_owner(target_entity UUID)
+RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM memberships
+    WHERE user_actor_id = auth.uid() AND entity_actor_id = target_entity AND role = 'owner'
+  );
 $$;
 
 -- RLS des nouvelles tables
@@ -176,14 +194,37 @@ CREATE POLICY actors_select_all   ON actors   FOR SELECT USING (true);
 CREATE POLICY users_select_all    ON users    FOR SELECT USING (true);   -- profils publics lisibles
 CREATE POLICY users_update_self   ON users    FOR UPDATE USING (actor_id = auth.uid()) WITH CHECK (actor_id = auth.uid());
 CREATE POLICY entities_select_all ON entities FOR SELECT USING (true);
-CREATE POLICY entities_write_owned ON entities FOR ALL TO authenticated
+-- Éditer le profil d'entité : tout membre (vitrine). Mais...
+CREATE POLICY entities_update_member ON entities FOR UPDATE TO authenticated
   USING (can_act_as(actor_id)) WITH CHECK (can_act_as(actor_id));
+-- ...SUPPRIMER l'entité = OWNER uniquement (sécurité structurelle : un employé ne peut pas).
+CREATE POLICY entities_delete_owner ON entities FOR DELETE TO authenticated
+  USING (is_entity_owner(actor_id));
+-- PAS d'INSERT client direct sur entities/memberships (RLS fermé par défaut).
+-- La création d'entité passe par la RPC SECURITY DEFINER ci-dessous (atomique) →
+-- empêche de s'auto-déclarer owner d'une entité tierce.
+
 CREATE POLICY memberships_select_mine ON memberships FOR SELECT TO authenticated
   USING (user_actor_id = auth.uid() OR can_act_as(entity_actor_id));
-CREATE POLICY memberships_insert_self ON memberships FOR INSERT TO authenticated
-  WITH CHECK (user_actor_id = auth.uid());   -- on s'ajoute soi-même (création d'entité). Invitations = Plan 3.
-CREATE POLICY memberships_delete_owned ON memberships FOR DELETE TO authenticated
-  USING (can_act_as(entity_actor_id));
+-- Inviter un membre = OWNER de l'entité uniquement (UI = Plan 3, garde-fou RLS = maintenant).
+CREATE POLICY memberships_insert_by_owner ON memberships FOR INSERT TO authenticated
+  WITH CHECK (is_entity_owner(entity_actor_id));
+-- Retirer un membre = owner ; ou quitter soi-même.
+CREATE POLICY memberships_delete_owner_or_self ON memberships FOR DELETE TO authenticated
+  USING (is_entity_owner(entity_actor_id) OR user_actor_id = auth.uid());
+
+-- Création d'entité atomique & sûre : crée l'acteur + l'entité + le membership OWNER pour auth.uid().
+-- (L'onboarding appelle supabase.rpc('create_owned_entity', …), puis complète les champs via UPDATE.)
+CREATE OR REPLACE FUNCTION create_owned_entity(p_type entity_type, p_brand_name TEXT)
+RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+DECLARE new_id UUID;
+BEGIN
+  IF auth.uid() IS NULL THEN RAISE EXCEPTION 'not authenticated'; END IF;
+  INSERT INTO actors(id, kind) VALUES (gen_random_uuid(), 'entity') RETURNING id INTO new_id;
+  INSERT INTO entities(actor_id, type, brand_name) VALUES (new_id, p_type, p_brand_name);
+  INSERT INTO memberships(user_actor_id, entity_actor_id, role) VALUES (auth.uid(), new_id, 'owner');
+  RETURN new_id;
+END; $$;
 ```
 
 - [ ] **Step 2 : Appliquer** — `supabase db reset` → aucune erreur.
@@ -307,6 +348,20 @@ ALTER TABLE follows ADD COLUMN follower_actor  UUID REFERENCES actors(id) ON DEL
 ALTER TABLE follows ADD COLUMN following_actor UUID REFERENCES actors(id) ON DELETE CASCADE;
 UPDATE follows f SET follower_actor  = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=f.follower_id),  f.follower_id);
 UPDATE follows f SET following_actor = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id=f.following_id), f.following_id);
+
+-- AUDIT : QUI (humain) a réalisé l'action ? (l'ancien user_id = l'humain = users.actor_id).
+-- Permet les logs d'imputabilité : « Mathéo a candidaté pour Rune de Chêne ».
+ALTER TABLE participations ADD COLUMN acted_by_user_id UUID REFERENCES users(actor_id) ON DELETE SET NULL;
+ALTER TABLE reviews        ADD COLUMN acted_by_user_id UUID REFERENCES users(actor_id) ON DELETE SET NULL;
+ALTER TABLE event_reports  ADD COLUMN acted_by_user_id UUID REFERENCES users(actor_id) ON DELETE SET NULL;
+ALTER TABLE notes          ADD COLUMN acted_by_user_id UUID REFERENCES users(actor_id) ON DELETE SET NULL;
+ALTER TABLE events         ADD COLUMN acted_by_user_id UUID REFERENCES users(actor_id) ON DELETE SET NULL;
+UPDATE participations SET acted_by_user_id = user_id;
+UPDATE reviews        SET acted_by_user_id = user_id;
+UPDATE event_reports  SET acted_by_user_id = user_id;
+UPDATE notes          SET acted_by_user_id = user_id;
+UPDATE events         SET acted_by_user_id = created_by;
+-- (Going forward : l'app renseigne acted_by_user_id = auth.uid() à chaque écriture — câblage Plan 3.)
 
 -- RLS additif via can_act_as (les anciennes policies restent valables pour les personnes)
 CREATE POLICY participations_write_actor ON participations FOR ALL TO authenticated
@@ -613,10 +668,13 @@ git commit -m "feat(accounts): auth guards on person identity + needsOnboarding"
 | Vues `friends`/`event_scores` sur anciennes colonnes | 🟢 | Colonnes legacy conservées en Phase 1 ; bascule au Plan 3. |
 | Doublon d'identité (profiles + users) pendant la transition | 🟠 | Trigger dual-write ; source de vérité = `users/entities` côté app ; `profiles` retiré au Plan 4. |
 
-## Questions ouvertes (à confirmer avant exécution)
-1. **`plan` (Pro) sur `users` (la personne)** — reco retenue. Un abo couvre les entités du même humain. OK ?
-2. **Backfill : prénom de l'exposant** mis à `NULL` → l'exposant repasse par l'onboarding pour saisir son prénom (Plan 2). Acceptable, ou on copie `display_name` existant dans `users.display_name` ?
-3. **Invitations multi-gérants** (ajouter un 2ᵉ gérant) = Plan 3 (UI + policy d'insert membership par un owner). OK de ne pas la faire en Phase 1 ?
+## Décisions tranchées (Uriel, 2026-05-25)
+1. ✅ **Abonnement rattaché au `users`-Chef** (owner). **Pro Orga** = abo distinct à venir (le modèle d'abonnement s'étendra ; pas d'obstacle posé).
+2. ✅ **Backfill : prénom exposant remis à `NULL` → on relance l'onboarding** (l'exposant ressaisit son prénom au Plan 2). Pas de copie.
+3. ✅ **Invitations multi-gérants = Plan 3** côté UI, **MAIS** la sécurité est **structurelle dès la fondation** : rôles `owner/admin/member`, RLS **owner-only** pour supprimer une entité / gérer l'équipe, et **audit `acted_by_user_id`** sur les actions. Un employé ne *peut pas* supprimer, même via l'API.
+
+## Reste à confirmer
+- **Granularité fine des permissions admin vs member** (qui peut éditer la vitrine, créer un event, etc.) — affinée au Plan 3. La fondation garantit juste le owner-only sur le destructif.
 
 ## Plans suivants
 - **Plan 3 — Recâblage & onboarding** : onboarding branché (réf. `docs/decisions/assets/onboarding.html`), sélecteur d'entité (`AppLayout`), toutes les pages sur `actor_id`, bascule vues sociales, gating gratuit/Pro (réf. matrice 0001 §5), invitations multi-gérants.
