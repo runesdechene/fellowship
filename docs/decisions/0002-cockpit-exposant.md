@@ -147,9 +147,13 @@ Appliqué à la page festival (onglets Questions/Rencontres dans la carte Discus
 
 ⚠️ Système de notifs **bien fichu** identifié comme liant essentiel (par Uriel, 2026-05-25) : threads (réponse à ta question / rencontre), **convergences** (« 3 compagnons viennent de s'inscrire à X »), dates qui approchent (J-7), deadlines candidature, parrainage validé. À distinguer du **fil Communauté** (activité réseau) : les notifs parlent de **toi/tes actions**. L'app a déjà `NotificationSlidePanel` + triggers Supabase — à étendre. **À maquetter/spécifier.**
 
-## Écran Mes créateurs — festivalier (à valider)
+## Écran Mes créateurs — festivalier (validé)
 
-*(maquette en cours — voir companion)*
+Maquette : [`assets/mes-createurs.html`](assets/mes-createurs.html). Page des **abonnements du festivalier** (les artisans qu'il suit).
+
+- **Cartes créateur** : logo + nom + métier·ville + **galerie mini** (3 aperçus d'œuvres) + bouton Suivi (toggle).
+- **« Où le croiser »** = le ressort : si la prochaine date du créateur tombe sur un festival où le festivalier va → encart **vert « Tu la croises à Pérouges · 5 sept »**. Sinon « Prochaine date : … » ou « Pas encore de date annoncée ». Transforme un suivi passif en **rendez-vous concret**.
+- **Scalabilité (≥40 abonnements)** : basculeur **Cartes / Liste compacte** (compact = galeries masquées, 3 colonnes) + **recherche**. Le cas simple reste léger ; au-delà on compacte et on filtre « 🟢 Bientôt près de toi ». Jugé **largement suffisant pour la V1**.
 
 ## Écran Groupes — chat (REPORTÉ EN V1.5)
 

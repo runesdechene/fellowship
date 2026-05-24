@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fellowship — Mes créateurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#160e0d;--sidebar:#1b1311;--surface:#221815;--surface2:#2a1e19;--text:#fbf3e8;--muted:#ac9c8f;--line:rgba(255,240,225,.09);--cop:hsl(25 78% 52%);--cop-d:hsl(16 70% 40%);--green:#a8cc7a;--amber:#ffce85;--h:'Plus Jakarta Sans',sans-serif;--b:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#160e0d}
+  body{font-family:var(--b);color:var(--text);-webkit-font-smoothing:antialiased;font-size:15px;overflow:hidden}
+  h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em}
+  svg{stroke-linecap:round;stroke-linejoin:round;fill:none;stroke:currentColor}
+  img{display:block}
+
+  .sidebar{position:fixed;left:0;top:0;width:262px;height:100vh;background:rgba(27,19,17,.7);backdrop-filter:blur(16px);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 14px;z-index:30}
+  .logo{font-family:var(--h);font-weight:800;font-size:20px;display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--cop),var(--amber));display:flex;align-items:center;justify-content:center;color:#2a1810;font-size:14px}
+  .person-sel{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:16px}
+  .person-sel .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e07a5f,#b5683a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px}
+  .person-sel .nm b{font-family:var(--h);font-size:14px;display:block}.person-sel .nm span{font-size:11px;color:var(--muted)}
+  .nav{display:flex;flex-direction:column;gap:3px;flex:1}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-weight:500;font-size:14px}
+  .nav a svg{width:18px;height:18px;stroke-width:2}
+  .nav a:hover{background:var(--surface);color:var(--text)}
+  .nav a.active{background:color-mix(in srgb,var(--cop) 16%,transparent);color:var(--amber)}
+  .side-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;align-items:center;gap:10px}
+  .side-foot .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#e07a5f,#b5683a)}
+  .side-foot .nm{flex:1}.side-foot .nm b{font-size:13px;font-family:var(--h)}.side-foot .nm span{font-size:11px;color:var(--muted);display:block}
+
+  .stage{position:fixed;left:262px;right:0;top:0;bottom:0;overflow-y:auto}
+  .page{max-width:880px;margin:0 auto;padding:30px 32px 60px}
+  .phead{margin-bottom:18px}
+  .phead h1{font-size:30px;color:#fff;margin-bottom:5px}
+  .phead .psub{font-size:14px;color:var(--muted)}
+  .tabs{display:flex;gap:7px;margin-bottom:22px}
+  .tab{padding:8px 16px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+  .tab.on{background:color-mix(in srgb,var(--cop) 18%,transparent);border-color:color-mix(in srgb,var(--amber) 40%,transparent);color:var(--amber)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .creator{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:13px;transition:.13s}
+  .creator:hover{border-color:color-mix(in srgb,var(--amber) 30%,var(--line))}
+  .ctop{display:flex;align-items:center;gap:12px}
+  .clogo{width:48px;height:48px;border-radius:13px;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,#6b4a2e,#3c2a1a);display:flex;align-items:center;justify-content:center;font-weight:700;color:#ffd9a8;font-size:16px}
+  .clogo img{width:100%;height:100%;object-fit:cover}
+  .cid{flex:1;min-width:0}
+  .cid b{font-family:var(--h);font-size:15.5px;color:#fff;display:block;line-height:1.15}
+  .cid span{font-size:12px;color:var(--muted)}
+  .followbtn{font-size:12px;font-weight:700;padding:7px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;background:color-mix(in srgb,var(--green) 18%,transparent);border:1px solid color-mix(in srgb,var(--green) 40%,transparent);color:var(--green)}
+  .followbtn.off{background:linear-gradient(135deg,var(--cop),var(--cop-d));border:none;color:#fff}
+
+  .works{display:flex;gap:6px}
+  .works div{flex:1;aspect-ratio:1.4;border-radius:8px;overflow:hidden}
+  .works img{width:100%;height:100%;object-fit:cover}
+
+  .cnext{display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:12.5px;cursor:pointer}
+  .cnext svg{width:15px;height:15px;color:var(--amber);stroke-width:2;flex-shrink:0}
+  .cnext .nt{flex:1;min-width:0;color:var(--muted)}
+  .cnext .nt b{color:var(--text);font-weight:600}
+  .cnext.cross{background:color-mix(in srgb,var(--green) 14%,transparent);border-color:color-mix(in srgb,var(--green) 32%,transparent)}
+  .cnext.cross .nt b{color:var(--green)}
+  .cnext.none{color:var(--muted);font-style:italic;cursor:default}
+
+  .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .csearch{flex:1;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 14px}
+  .csearch svg{width:15px;height:15px;color:var(--muted);stroke-width:2.2}
+  .csearch input{background:none;border:none;outline:none;color:var(--text);font-family:var(--b);font-size:13.5px;width:100%}
+  .viewtog{display:flex;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;flex-shrink:0}
+  .vt{width:38px;height:34px;border-radius:8px;background:none;border:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .vt svg{width:17px;height:17px;stroke-width:2}
+  .vt.on{background:color-mix(in srgb,var(--cop) 20%,transparent);color:var(--amber)}
+  .grid.compact{grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid.compact .works{display:none}
+  .grid.compact .creator{padding:13px;gap:9px}
+  .grid.compact .clogo{width:42px;height:42px}
+  .grid.compact .cnext{padding:8px 10px;font-size:11.5px}
+  @media(max-width:1080px){.sidebar{display:none}.stage{left:0}}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}.grid.compact{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><span class="mark">✦</span> Fellowship</div>
+  <div class="person-sel"><div class="av">C</div><div class="nm"><b>Camille</b><span>Festivalière</span></div></div>
+  <nav class="nav">
+    <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.9 6.4-6.4 2.9 2.9-6.4 6.4-2.9z"/></svg> Explorer</a>
+    <a href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg> Mes dates</a>
+    <a class="active" href="#"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A3.5 3.5 0 0015.5 5c-1.4 0-2.7.8-3.5 2-0.8-1.2-2.1-2-3.5-2A3.5 3.5 0 002 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg> Mes créateurs</a>
+  </nav>
+  <div class="side-foot"><div class="av"></div><div class="nm"><b>Camille R.</b><span>Mon compte</span></div></div>
+</aside>
+
+<main class="stage">
+  <div class="page">
+    <div class="phead">
+      <h1>Mes créateurs</h1>
+      <div class="psub">Les artisans que tu suis — et où les croiser.</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on">Tous · 14</button>
+      <button class="tab">🟢 Bientôt près de toi</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="csearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Chercher un créateur…"></div>
+      <div class="viewtog">
+        <button class="vt on" data-v="confort" title="Cartes"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></button>
+        <button class="vt" data-v="compact" title="Liste compacte"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+      </div>
+    </div>
+
+    <div class="grid" id="cgrid">
+      <!-- croisé sur une date où Camille va -->
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo"><img src="https://picsum.photos/seed/cer1/120/120" alt=""></div>
+          <div class="cid"><b>Terres &amp; Flammes</b><span>Céramiste · Lyon</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/cer2/200/150"></div><div><img src="https://picsum.photos/seed/cer3/200/150"></div><div><img src="https://picsum.photos/seed/cer4/200/150"></div></div>
+        <div class="cnext cross"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span class="nt"><b>Tu la croises à Pérouges</b> · 5 sept</span></div>
+      </div>
+
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo">CA</div>
+          <div class="cid"><b>Cuir d'Antan</b><span>Maroquinier · Lyon</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/leather1/200/150"></div><div><img src="https://picsum.photos/seed/leather2/200/150"></div><div><img src="https://picsum.photos/seed/leather3/200/150"></div></div>
+        <div class="cnext cross"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span class="nt"><b>Tu le croises à Pérouges</b> · 5 sept</span></div>
+      </div>
+
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo">VL</div>
+          <div class="cid"><b>Verre &amp; Lumière</b><span>Souffleur de verre · Annecy</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/glass1/200/150"></div><div><img src="https://picsum.photos/seed/glass2/200/150"></div><div><img src="https://picsum.photos/seed/glass3/200/150"></div></div>
+        <div class="cnext"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="nt">Prochaine date : <b>Crémieu</b> · 20 sept</span></div>
+      </div>
+
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo">RC</div>
+          <div class="cid"><b>Rune de Chêne</b><span>Forgeron coutelier · Lyon</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/forge1/200/150"></div><div><img src="https://picsum.photos/seed/forge2/200/150"></div><div><img src="https://picsum.photos/seed/forge3/200/150"></div></div>
+        <div class="cnext"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="nt">Prochaine date : <b>Marché de Noël</b> · déc.</span></div>
+      </div>
+
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo">BT</div>
+          <div class="cid"><b>Bois Tourné</b><span>Tourneur sur bois · Grenoble</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/wood1/200/150"></div><div><img src="https://picsum.photos/seed/wood2/200/150"></div><div><img src="https://picsum.photos/seed/wood3/200/150"></div></div>
+        <div class="cnext none"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="nt">Pas encore de date annoncée</span></div>
+      </div>
+
+      <div class="creator">
+        <div class="ctop">
+          <div class="clogo">ÉR</div>
+          <div class="cid"><b>Épices &amp; Routes</b><span>Épicier voyageur · Marseille</span></div>
+          <button class="followbtn">Suivi</button>
+        </div>
+        <div class="works"><div><img src="https://picsum.photos/seed/spice1/200/150"></div><div><img src="https://picsum.photos/seed/spice2/200/150"></div><div><img src="https://picsum.photos/seed/spice3/200/150"></div></div>
+        <div class="cnext"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="nt">Prochaine date : <b>Foire de Crémieu</b> · 20 sept</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on'); }));
+  document.querySelectorAll('.vt').forEach(b=>b.addEventListener('click',()=>{ document.querySelectorAll('.vt').forEach(x=>x.classList.remove('on')); b.classList.add('on'); document.getElementById('cgrid').classList.toggle('compact', b.dataset.v==='compact'); }));
+  document.querySelectorAll('.followbtn').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const on=!b.classList.contains('off'); b.classList.toggle('off',on); b.textContent=on?'Suivre':'Suivi'; }));
+</script>
+</body>
+</html>
