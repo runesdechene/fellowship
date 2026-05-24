@@ -676,6 +676,24 @@ git commit -m "feat(accounts): auth guards on person identity + needsOnboarding"
 ## Reste à confirmer
 - **Granularité fine des permissions admin vs member** (qui peut éditer la vitrine, créer un event, etc.) — affinée au Plan 3. La fondation garantit juste le owner-only sur le destructif.
 
-## Plans suivants
-- **Plan 3 — Recâblage & onboarding** : onboarding branché (réf. `docs/decisions/assets/onboarding.html`), sélecteur d'entité (`AppLayout`), toutes les pages sur `actor_id`, bascule vues sociales, gating gratuit/Pro (réf. matrice 0001 §5), invitations multi-gérants.
-- **Plan 4 — Contract** : drop `profiles`, colonnes `user_id`/`follower_id`/`following_id` legacy, anciennes policies.
+## Impact ADMIN de la fondation (à ne pas oublier)
+- **`role` (admin) déménage** de `profiles` vers `users` → `isAdmin` lit `users.role` (déjà dans Task 7). Vérifier `AdminRoute`.
+- Les pages admin existantes **lisent `profiles`/`type`** : `AdminUsers`, `AdminEvents`, `AdminReports`, `AdminTags`, `AdminDashboard`. Elles **fonctionnent encore en Phase 1** (profiles conservé) mais **doivent être recâblées au Plan 3** sur `users`/`entities`/`memberships`, puis ne pas casser au contract (Plan 4).
+
+## Roadmap des plans (vue d'ensemble — pour ne rien perdre des maquettes)
+
+> La fondation (ce plan) est le **plan 1**. Les maquettes figées (`docs/decisions/`) sont les **specs** ; chaque domaine a besoin de son propre plan d'implémentation. **Chaque plan de feature inclut sa tranche admin/modération** (ne pas la traiter à part = risque d'oubli).
+
+- **Plan 1 — Fondation comptes** (CE PLAN) : actors/users/entities/memberships, migration, couche identité.
+- **Plan 2 — Onboarding branché** : `Onboarding.tsx` festivalier vs exposant (RPC `create_owned_entity`), avatars, slug, métier libre. Réf. `assets/onboarding.html`.
+- **Plan 3 — Recâblage app + ADMIN** : sélecteur d'entité (`AppLayout`), toutes les pages sur `actor_id`, bascule vues sociales (`friends`/`event_scores`), **gating gratuit/Pro** (matrice 0001 §5), **invitations multi-gérants** (rôles), **+ recâblage de toute la zone admin** sur le nouveau modèle.
+- **Plan 4 — Contract** : drop `profiles` + colonnes legacy + anciennes policies.
+- **Plan 5 — Page festival + Discussion** : candidature (modale « comment candidater » communautaire), **Q&R + Rencontres (threads)**, compagnons. **Admin : modération threads + infos candidature.** Réf. `assets/festival-exposant.html`.
+- **Plan 6 — Vitrine + Mes créateurs** : galerie « Sélection », liens, « où me rencontrer ». **Admin : modération vitrines/galeries, vérification entité.** Réf. `assets/vitrine-exposant.html`, `mes-createurs.html`.
+- **Plan 7 — Explorer + Mes dates** (exposant gratuit & festivalier) : carousel, topbar Quoi/Où/Quand, agenda 3 mois + tease. Réf. `assets/explorer.html`, `mes-dates.html`, `festivalier-mesdates.html`.
+- **Plan 8 — Communauté (fil)** : convergences, suggestions ancrées, mini-fil + badge. Réf. `assets/communaute-fil.html`.
+- **Plan 9 — Abonnement & parrainage** : boutique, Stripe (mensuel/annuel HT, Pro/Pro Orga), parrainage (1 mois/filleul). **Admin : gestion abos, remboursements, suivi parrainage.** Réf. `assets/boutique-pricing.html`.
+- **Plan 10 — Notifications** : chantier transverse (threads, convergences, dates, deadlines, parrainage). **Admin : pas de modération, mais supervision.**
+- **V1.5 — Groupes/chat** (reporté, réf. `assets/groupes-v1.5.html`).
+
+> **Réglages produit transverses déjà actés** : DA jour/nuit persistant (cookie) ; affichage prix HT ; modèle de visibilité followers ; liens `flw.sh/<slug>` sans @.
