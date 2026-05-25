@@ -68,7 +68,7 @@ describe('deckCardStyle', () => {
   it('voisin droit (offset +1)', () => {
     const s = deckCardStyle(1)
     expect(s.isCenter).toBe(false)
-    expect(s.transform).toContain('translateX(104%)')
+    expect(s.transform).toContain('translateX(120%)')
     expect(s.transform).toContain('rotateY(-18deg)')
     expect(s.filter).toBe('brightness(.45)')
   })

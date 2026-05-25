@@ -33,7 +33,7 @@ export function deckCardStyle(offset: number): DeckStyle {
       opacity: 0, filter: 'none', zIndex: 0, pointerEvents: 'none', isCenter: false,
     }
   }
-  const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 104 : 152)
+  const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 120 : 172)
   const rot = offset === 0 ? 0 : (offset < 0 ? 18 : -18)
   const sc = offset === 0 ? 1 : (ao === 1 ? 0.74 : 0.62)
   return {

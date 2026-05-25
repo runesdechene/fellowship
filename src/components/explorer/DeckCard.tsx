@@ -51,7 +51,6 @@ export function DeckCard({ event, style, isCenter, canAddImage, onClick, onAddIm
           ＋ Ajouter une image
         </button>
       )}
-      <div className="grad" aria-hidden="true" />
     </div>
   )
 }
