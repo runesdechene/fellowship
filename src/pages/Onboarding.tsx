@@ -20,6 +20,7 @@ export function OnboardingPage() {
   const [form, setForm] = useState({ prenom: '', brand: '', craft: '', city: '', postal: '', slug: '' })
   const [slugStatus, setSlugStatus] = useState<SlugStatus>('idle')
   const [saving, setSaving] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const slugTouched = useRef(false)
 
@@ -106,7 +107,7 @@ export function OnboardingPage() {
       }
 
       await refreshProfile()
-      navigate('/explorer', { replace: true })
+      setSubmitted(true)
     } catch {
       setError('Une erreur est survenue. Réessaie.')
       setSaving(false)
@@ -121,6 +122,9 @@ export function OnboardingPage() {
   const stepPos = steps.indexOf(currentStep) + 1
   const stepTotal = steps.length
 
+  // Initiales entité (succès exposant)
+  const initials = form.brand.trim().split(/\s+/).slice(0, 2).map(w => w[0] ?? '').join('').toUpperCase() || '?'
+
   return (
     <div className="onboarding">
       {/* Discreet theme toggle */}
@@ -134,15 +138,45 @@ export function OnboardingPage() {
         </div>
 
         <div className="ob-card">
+          {/* ── SUCCESS SCREEN ── */}
+          {submitted && flow.case !== 'exposant' && (
+            <section className="step">
+              <div className="done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <h2>Bienvenue, {form.prenom}&nbsp;!</h2>
+              <div className="sub">Ton espace est prêt. Découvre les festivals et suis tes créateurs préférés.</div>
+              <div className="spacer" />
+              <button className="btn btn-p" onClick={() => navigate('/explorer', { replace: true })}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg> Explorer les festivals
+              </button>
+            </section>
+          )}
+          {submitted && flow.case === 'exposant' && (
+            <section className="step">
+              <div className="done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <h2>Ta vitrine est prête&nbsp;!</h2>
+              <div className="sub">Voici ton entité. Tu pourras candidater, gérer ta saison et la faire vivre.</div>
+              <div className="entitycard">
+                <div className="eav">{initials}</div>
+                <div className="et"><b>{form.brand}</b><span>Exposant · {form.craft} · {form.city}</span></div>
+              </div>
+              <div className="person-line">rattachée à <b>{form.prenom}</b> · ton compte</div>
+              <div className="spacer" />
+              <button className="btn btn-p" onClick={() => navigate('/explorer', { replace: true })}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg> Entrer dans Fellowship
+              </button>
+              <div className="addhint"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> Tu pourras ajouter d'autres entités via le sélecteur.</div>
+            </section>
+          )}
+
           {/* Back button */}
-          {currentStep !== 'choice' && (stepIndex > 0 || entities.length === 0) && (
+          {!submitted && currentStep !== 'choice' && (stepIndex > 0 || entities.length === 0) && (
             <button className="ob-back" onClick={goBack}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
             </button>
           )}
 
           {/* Progress dots */}
-          {currentStep !== 'choice' && (
+          {!submitted && currentStep !== 'choice' && (
             <div className="ob-dots">
               {steps.map((_, i) => (
                 <span
@@ -154,11 +188,14 @@ export function OnboardingPage() {
           )}
 
           {/* Error */}
-          {error && (
+          {!submitted && error && (
             <p style={{ color: 'salmon', textAlign: 'center', fontSize: 13, marginBottom: 12 }}>
               {error}
             </p>
           )}
+
+          {/* ── STEPS (hidden when submitted) ── */}
+          {!submitted && (<>
 
           {/* ── ÉTAPE : choice ── */}
           {currentStep === 'choice' && (
@@ -389,6 +426,8 @@ export function OnboardingPage() {
               </button>
             </section>
           )}
+
+          </>)}
         </div>
       </div>
     </div>
