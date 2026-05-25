@@ -11,6 +11,7 @@ import { AmbientBackground } from '@/components/explorer/AmbientBackground'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { EventDock } from '@/components/explorer/EventDock'
+import { EventHeader } from '@/components/explorer/EventHeader'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -216,8 +217,7 @@ export function ExplorerPage() {
     return t ? dynamicTags.find(d => d.value === t) : undefined
   }, [currentEvent, dynamicTags])
 
-  // ---------- Participation status badge ----------
-  const STATUS_LABELS: Record<string, string> = { interesse: '★ Repéré', inscrit: '✓ Inscrit', confirme: '✓ Confirmé', en_cours: '● En cours' }
+  // ---------- Participation status ----------
   const activeStatus = currentEvent ? (participations.find(p => p.event_id === currentEvent.id)?.status ?? null) : null
 
   return (
@@ -250,7 +250,7 @@ export function ExplorerPage() {
             <DeckSkeleton />
           ) : displayed.length > 0 && currentEvent ? (
             <>
-              {activeStatus && <div className="status-badge">{STATUS_LABELS[activeStatus] ?? activeStatus}</div>}
+              <EventHeader event={currentEvent} status={activeStatus} />
               <EventDeck
                 events={displayed}
                 activeIndex={safeIndex}

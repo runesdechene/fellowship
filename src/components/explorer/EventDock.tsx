@@ -3,12 +3,6 @@ import { useFriendsOnEvent } from '@/hooks/use-participations'
 import { TagBadge } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 
-function fmt(ev: EventWithScore) {
-  const d = (s: string) => new Date(s).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-  const range = ev.end_date !== ev.start_date ? `${d(ev.start_date)} – ${d(ev.end_date)}` : d(ev.start_date)
-  return `${range} · ${ev.city}${ev.department ? ` (${ev.department})` : ''}`
-}
-
 interface EventDockProps {
   event: EventWithScore
   eyebrow: string
@@ -23,11 +17,8 @@ export function EventDock({ event, eyebrow, saved, onToggleSave, tagInfo }: Even
   return (
     <div className="dockinfo">
       {eyebrow && <span className="eyb">{eyebrow}</span>}
+      <TagBadge slug={tag} label={tagInfo?.label ?? tag} bg={tagInfo?.bg} color={tagInfo?.color} size="md" />
       <h2>{event.name}</h2>
-      <div className="tagline">
-        <TagBadge slug={tag} label={tagInfo?.label ?? tag} bg={tagInfo?.bg} color={tagInfo?.color} size="md" />
-        <span className="meta">{fmt(event)}</span>
-      </div>
       {friends.length > 0 && (
         <div className="fr">
           <span className="cav">
@@ -39,7 +30,7 @@ export function EventDock({ event, eyebrow, saved, onToggleSave, tagInfo }: Even
         </div>
       )}
       <div className="cta">
-        <Link to={`/evenement/${event.id}`} className="btn btn-p">Voir le festival</Link>
+        <Link to={`/evenement/${event.id}`} className="btn btn-ghost">Voir le festival</Link>
         <button type="button" className="btn btn-star" onClick={onToggleSave} aria-pressed={saved}>
           {saved ? '★ Repéré' : '★ Repérer'}
         </button>
