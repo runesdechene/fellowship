@@ -42,6 +42,11 @@ describe('resolveOnboardingFlow', () => {
     expect(f.createsEntity).toBe(true)
     expect(f.steps).toEqual(['name', 'brand', 'craft', 'location', 'slug'])
   })
+  it('plusieurs entités → toujours complétion (≥1)', () => {
+    const f = resolveOnboardingFlow(3, null)
+    expect(f.case).toBe('completion')
+    expect(f.createsEntity).toBe(false)
+  })
 })
 
 describe('resolveUniqueHandle', () => {
@@ -57,5 +62,9 @@ describe('resolveUniqueHandle', () => {
   it('base vide → membre', async () => {
     const h = await resolveUniqueHandle('', async () => false)
     expect(h).toBe('membre')
+  })
+  it('épuisement → fallback timestamp', async () => {
+    const h = await resolveUniqueHandle('Camille', async () => true)
+    expect(h).toMatch(/^camille-\d{10,}$/)
   })
 })

@@ -843,6 +843,11 @@ export type Database = {
       create_owned_entity: {
         Args: {
           p_brand_name: string
+          p_city?: string
+          p_craft_type?: string
+          p_department?: string
+          p_postal_code?: string
+          p_public_slug?: string
           p_type: Database["public"]["Enums"]["entity_type"]
         }
         Returns: string
@@ -1044,3 +1049,4 @@ export const Constants = {
     },
   },
 } as const
+

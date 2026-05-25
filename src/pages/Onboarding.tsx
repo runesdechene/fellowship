@@ -81,26 +81,26 @@ export function OnboardingPage() {
         }).eq('actor_id', person.actor_id)
         if (e) throw e
       } else {
-        // Exposant : personne d'abord, puis création + complétion de l'entité.
+        // Exposant : personne d'abord, puis création ATOMIQUE de l'entité (slug inclus dans la RPC).
         const { error: eu } = await supabase.from('users')
           .update({ display_name: form.prenom, handle }).eq('actor_id', person.actor_id)
         if (eu) throw eu
         const { data: newId, error: er } = await supabase.rpc('create_owned_entity', {
           p_type: 'exposant', p_brand_name: form.brand,
+          p_craft_type: form.craft, p_city: form.city,
+          p_department: deriveDepartment(form.postal) ?? undefined, p_postal_code: form.postal,
+          p_public_slug: form.slug.trim(),
         })
-        if (er) throw er
-        const { error: ee } = await supabase.from('entities').update({
-          craft_type: form.craft, city: form.city,
-          department: deriveDepartment(form.postal), postal_code: form.postal,
-          public_slug: form.slug.trim(),
-        }).eq('actor_id', newId as string)
-        if (ee) {
-          // Course sur le slug : on renvoie l'utilisateur corriger.
-          setError('Ce lien est déjà pris, choisis-en un autre.')
-          setStepIndex(steps.indexOf('slug'))
-          setSlugStatus('taken')
-          setSaving(false)
-          return
+        if (er) {
+          // Collision de slug (UNIQUE) = la transaction a tout annulé, rien n'est créé → retry propre.
+          if (er.code === '23505' || /duplicate|unique/i.test(er.message || '')) {
+            setError('Ce lien est déjà pris, choisis-en un autre.')
+            setStepIndex(steps.indexOf('slug'))
+            setSlugStatus('taken')
+            setSaving(false)
+            return
+          }
+          throw er
         }
         switchActor(newId as string)
       }
@@ -230,7 +230,7 @@ export function OnboardingPage() {
             {slugStatus === 'available' && <p className="text-sm text-green-600">✓ Disponible</p>}
             {slugStatus === 'taken' && <p className="text-sm text-destructive">Ce lien est déjà pris.</p>}
             <Button className="w-full" size="lg" onClick={handleSubmit}
-              disabled={!form.slug || slugStatus === 'taken' || slugStatus === 'checking' || saving}>
+              disabled={!form.slug || slugStatus !== 'available' || saving}>
               {saving ? 'Création…' : 'Créer ma vitrine'}
             </Button>
           </div>
