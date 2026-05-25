@@ -225,3 +225,34 @@ h1, h2, h3, .font-display {
 .fab-button:active {
   transform: scale(0.95);
 }
+
+/* ── Theme toggle (lune ↔ soleil) ─────────────────────────────────── */
+.theme-toggle {
+  position: relative;
+  width: 58px;
+  height: 30px;
+  border-radius: 99px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.theme-toggle .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.35);
+}
+.light .theme-toggle .knob {
+  transform: translateX(28px);
+}
