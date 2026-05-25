@@ -1,209 +1,277 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Search } from 'lucide-react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
-import { EventCard } from '@/components/events/EventCard'
 import { useTags } from '@/hooks/use-tags'
-import { getTagIcon } from '@/components/ui/TagBadge'
-import { MonthPicker } from '@/components/ui/MonthPicker'
-import { applyViewMode, VIEW_MODES, type ViewMode } from '@/lib/explorer'
+import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
+import { composeFilter, type Zone, type Period } from '@/lib/explorer'
+import { uploadEventImage } from '@/lib/event-image'
+import { supabase } from '@/lib/supabase'
+import { AmbientBackground } from '@/components/explorer/AmbientBackground'
+import { EventDeck } from '@/components/explorer/EventDeck'
+import { SearchSegments } from '@/components/explorer/SearchSegments'
+import { EventDock } from '@/components/explorer/EventDock'
+import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
-const MODE_LABELS: Record<ViewMode, string> = {
-  upcoming: 'Bientôt',
-  recent: 'Récents',
-  all: 'Tous',
+// ---------- Persist helpers ----------
+function readStored(): Record<string, unknown> {
+  try { return JSON.parse(localStorage.getItem('explorer-filters') ?? '{}') } catch { return {} }
+}
+function persistFilters(patch: Record<string, unknown>) {
+  try {
+    const cur = readStored()
+    localStorage.setItem('explorer-filters', JSON.stringify({ ...cur, ...patch }))
+  } catch { /* ignore */ }
 }
 
-export function ExplorerPage() {
-  const { profile } = useAuth()
-  const { events: allEvents, loading } = useEvents()
-  const { tags: dynamicTags } = useTags()
-
-  // Persist filters in localStorage
-  const stored = useMemo(() => {
-    try { return JSON.parse(localStorage.getItem('explorer-filters') ?? '{}') } catch { return {} }
-  }, [])
-  const persist = useCallback((patch: Record<string, unknown>) => {
-    try {
-      const cur = JSON.parse(localStorage.getItem('explorer-filters') ?? '{}')
-      localStorage.setItem('explorer-filters', JSON.stringify({ ...cur, ...patch }))
-    } catch { /* ignore */ }
-  }, [])
-
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set(stored.tags ?? []))
-  const [filterDept, setFilterDept] = useState(() => stored.dept === true)
-  const [mode, setMode] = useState<ViewMode>(() =>
-    (VIEW_MODES as readonly string[]).includes(stored.mode) ? stored.mode : 'upcoming'
-  )
-
-  // Month pickers
-  const currentMonth = new Date().getMonth()
-  const currentYear = new Date().getFullYear()
-  const monthOptions = Array.from({ length: 13 }, (_, i) => {
-    const d = new Date(currentYear, currentMonth + i)
-    return {
-      value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
-      label: d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
-    }
-  })
-  const validMonths = new Set(monthOptions.map(o => o.value))
-  const [monthFrom, setMonthFrom] = useState(() => validMonths.has(stored.monthFrom) ? stored.monthFrom : monthOptions[0].value)
-  const monthOptionsTo = [...monthOptions.filter(o => o.value > monthFrom), { value: '9999-12', label: 'la fin des temps' }]
-  const [monthTo, setMonthTo] = useState(() => stored.monthTo === '9999-12' || validMonths.has(stored.monthTo) ? stored.monthTo : '9999-12')
-
-  const now = useMemo(() => new Date(), [])
-
-  const toggleTag = (tag: string) => {
-    setSelectedTags(prev => {
-      const next = new Set(prev)
-      if (next.has(tag)) next.delete(tag)
-      else next.add(tag)
-      persist({ tags: [...next] })
-      return next
-    })
-  }
-
-  const changeMode = (next: ViewMode) => {
-    setMode(next)
-    persist({ mode: next })
-  }
-
-  // ---------- filtered events (tags / dept / month range) ----------
-  const filteredEvents = useMemo(() => {
-    let result = allEvents
-
-    if (selectedTags.size > 0) {
-      result = result.filter(ev => ev.tags?.some(t => selectedTags.has(t)))
-    }
-
-    if (filterDept && profile?.department) {
-      result = result.filter(ev => ev.department === profile.department)
-    }
-
-    const fromDate = new Date(monthFrom + '-01')
-    const toDate = new Date(monthTo + '-01')
-    toDate.setMonth(toDate.getMonth() + 1)
-    result = result.filter(ev => {
-      const d = new Date(ev.start_date)
-      return d >= fromDate && d < toDate
-    })
-
-    // Default sort: start_date asc (chronological)
-    return [...result].sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allEvents, selectedTags, filterDept, monthFrom, monthTo])
-
-  // ---------- apply view mode (filter + sort) on top of filteredEvents ----------
-  const displayedEvents = useMemo(
-    () => applyViewMode(filteredEvents, mode, now),
-    [filteredEvents, mode, now]
-  )
-
+// ---------- Skeleton ----------
+function DeckSkeleton() {
   return (
-    <div className="explorer-page">
-      {/* Header */}
-      <div className="explorer-mode-bar">
-        <h1 className="page-title">Explorer</h1>
-      </div>
-
-      {/* Filter bar (tags + months + dept) */}
-      <div className="explorer-filters">
-        {dynamicTags.map(tag => {
-          const colors = { bg: tag.bg, color: tag.color }
-          const isActive = selectedTags.has(tag.value)
-          const Icon = getTagIcon(tag.value)
-          return (
-            <button
-              key={tag.value}
-              onClick={() => toggleTag(tag.value)}
-              className="explorer-filter-chip"
-              style={isActive
-                ? { background: colors.color, color: 'white' }
-                : { background: colors.bg, color: colors.color }
-              }
-            >
-              <Icon size={14} strokeWidth={2} />
-              {tag.label}
-            </button>
-          )
-        })}
-
-        <div className="explorer-filter-divider" />
-
-        <span className="explorer-month-pickers-label">De</span>
-        <MonthPicker
-          options={monthOptions}
-          value={monthFrom}
-          onChange={v => {
-            setMonthFrom(v)
-            persist({ monthFrom: v })
-            if (v >= monthTo) {
-              const newTo = monthOptions[Math.min(monthOptions.findIndex(o => o.value === v) + 1, monthOptions.length - 1)].value
-              setMonthTo(newTo)
-              persist({ monthTo: newTo })
-            }
-          }}
-        />
-        <span className="explorer-month-pickers-label">à</span>
-        <MonthPicker
-          options={monthOptionsTo}
-          value={monthTo}
-          onChange={v => { setMonthTo(v); persist({ monthTo: v }) }}
-        />
-
-        {profile?.department && (
-          <>
-            <div className="explorer-filter-divider" />
-            <button
-              onClick={() => { setFilterDept(v => { persist({ dept: !v }); return !v }) }}
-              className={`explorer-filter-chip ${filterDept ? 'active' : ''}`}
-            >
-              Dept. {profile.department}
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* Mode segmented control */}
-      <div className="explorer-mode-segmented" role="group" aria-label="Mode d'affichage">
-        {VIEW_MODES.map(m => (
-          <button
-            key={m}
-            aria-pressed={mode === m}
-            className={`explorer-mode-btn${mode === m ? ' active' : ''}`}
-            onClick={() => changeMode(m)}
-          >
-            {MODE_LABELS[m]}
-          </button>
+    <div className="flow">
+      <div className="deck">
+        {[0, 1, 2].map(i => (
+          <div
+            key={i}
+            className="card"
+            style={{
+              transform: `translate(-50%,-50%) translateX(${(i - 1) * 104}%) scale(${i === 1 ? 1 : 0.74})`,
+              opacity: i === 1 ? 1 : 0.4,
+              background: 'hsl(var(--card))',
+              animation: 'pulse 1.5s ease-in-out infinite',
+            }}
+          />
         ))}
       </div>
+    </div>
+  )
+}
 
-      {/* Loading skeleton */}
-      {loading && (
-        <div className="explorer-grid">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="explorer-grid-skeleton animate-pulse" />
-          ))}
-        </div>
-      )}
+// ---------- Empty state ----------
+function ExplorerEmpty() {
+  return (
+    <div className="explorer-empty-coverflow">
+      <div className="explorer-empty-icon">🎪</div>
+      <div className="explorer-empty-title">Aucun festival ne correspond</div>
+      <div className="explorer-empty-text">Élargis tes filtres pour découvrir plus de festivals.</div>
+    </div>
+  )
+}
 
-      {/* Grid or empty state */}
-      {!loading && displayedEvents.length > 0 && (
-        <div className="explorer-grid">
-          {displayedEvents.map(ev => (
-            <EventCard key={ev.id} event={ev} />
-          ))}
-        </div>
-      )}
+// ---------- Main component ----------
+export function ExplorerPage() {
+  const navigate = useNavigate()
+  const { profile, currentActor, isAdmin, user } = useAuth()
+  const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
+  const { tags: dynamicTags } = useTags()
+  const { participations, refetch: refetchParticipations } = useMyParticipations()
 
-      {!loading && displayedEvents.length === 0 && (
-        <div className="explorer-empty">
-          <Search strokeWidth={1.5} />
-          <div className="explorer-empty-title">Aucun événement ne correspond</div>
-          <div className="explorer-empty-text">Essaie d'élargir tes filtres (tags, plage de mois, département).</div>
+  // ---------- Filters (persisted) ----------
+  const stored = useMemo(() => readStored(), [])
+
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(
+    () => new Set((stored.tags as string[] | undefined) ?? [])
+  )
+  const [zone, setZone] = useState<Zone>(
+    () => (stored.zone === 'mine' || stored.zone === 'france') ? stored.zone as Zone : 'france'
+  )
+  const [period, setPeriod] = useState<Period>(
+    () => {
+      const validPeriods: Period[] = ['this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
+      return validPeriods.includes(stored.period as Period) ? stored.period as Period : 'next-12'
+    }
+  )
+
+  // ---------- Active index ----------
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  // ---------- Derived events ----------
+  const now = useMemo(() => new Date(), [])
+
+  const displayed = useMemo(
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period }, { department: profile?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, profile?.department, now]
+  )
+
+  // Clamp activeIndex when displayed shrinks
+  const safeIndex = displayed.length > 0 ? Math.min(activeIndex, displayed.length - 1) : 0
+
+  // ---------- Navigation ----------
+  const go = useCallback((d: number) => {
+    if (displayed.length === 0) return
+    setActiveIndex(i => (i + d + displayed.length) % displayed.length)
+  }, [displayed.length])
+
+  // ---------- Autoplay ----------
+  const reducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    []
+  )
+
+  useEffect(() => {
+    if (reducedMotion || displayed.length <= 1) return
+    const id = setInterval(() => {
+      setActiveIndex(i => (i + 1) % displayed.length)
+    }, 4500)
+    return () => clearInterval(id)
+  }, [displayed.length, reducedMotion])
+
+  // ---------- Keyboard ----------
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1) }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1) }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [go])
+
+  // ---------- Filter setters with reset + persist ----------
+  const toggleTag = (value: string) => {
+    setSelectedTags(prev => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      persistFilters({ tags: [...next] })
+      return next
+    })
+    setActiveIndex(0)
+  }
+
+  const handleZone = (z: Zone) => {
+    setZone(z)
+    persistFilters({ zone: z })
+    setActiveIndex(0)
+  }
+
+  const handlePeriod = (p: Period) => {
+    setPeriod(p)
+    persistFilters({ period: p })
+    setActiveIndex(0)
+  }
+
+  // ---------- Repérer (save) ----------
+  const isSaved = useCallback(
+    (eventId: string) => participations.some(p => p.event_id === eventId),
+    [participations]
+  )
+
+  const toggleSave = useCallback(async (event: EventWithScore) => {
+    if (!currentActor || !user) return
+    const existing = participations.find(p => p.event_id === event.id)
+    if (existing) {
+      await removeParticipation(existing.id)
+    } else {
+      await addParticipation({
+        actor_id: currentActor.id,
+        acted_by_user_id: user.id,
+        event_id: event.id,
+        status: 'interesse',
+        visibility: 'amis',
+      })
+    }
+    refetchParticipations()
+  }, [currentActor, user, participations, refetchParticipations])
+
+  // ---------- Add image ----------
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const pendingEventRef = useRef<EventWithScore | null>(null)
+
+  const onAddImage = useCallback((event: EventWithScore) => {
+    pendingEventRef.current = event
+    fileInputRef.current?.click()
+  }, [])
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    const event = pendingEventRef.current
+    if (!file || !event) return
+    // Reset input so the same file can be re-selected later
+    e.target.value = ''
+    try {
+      const image_url = await uploadEventImage(file)
+      await supabase.from('events').update({ image_url }).eq('id', event.id)
+      refetchEvents()
+    } catch (err) {
+      console.error('Add image failed:', err)
+    }
+  }
+
+  // ---------- canAddImage ----------
+  const canAddImage = currentActor?.kind === 'entity' || isAdmin
+
+  // ---------- eyebrow ----------
+  const eyebrowFor = useCallback((_event: EventWithScore) => {
+    if (period === 'recent') return 'Nouveau'
+    if (zone === 'mine') return 'Près de toi'
+    return 'À découvrir'
+  }, [period, zone])
+
+  // ---------- Current event (safely indexed) ----------
+  const currentEvent = displayed.length > 0 ? displayed[safeIndex] : null
+
+  return (
+    <div className="explorer">
+      {/* Hidden file input for add-image */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+
+      <AmbientBackground imageUrl={currentEvent?.image_url ?? null} />
+
+      <div className="stagewrap">
+        <SearchSegments
+          tags={dynamicTags}
+          selectedTags={selectedTags}
+          zone={zone}
+          period={period}
+          userDept={profile?.department ?? null}
+          onToggleTag={toggleTag}
+          onZone={handleZone}
+          onPeriod={handlePeriod}
+        />
+
+        <div className="stagebody">
+          {loading ? (
+            <DeckSkeleton />
+          ) : displayed.length > 0 && currentEvent ? (
+            <>
+              <EventDeck
+                events={displayed}
+                activeIndex={safeIndex}
+                canAddImage={canAddImage}
+                onSelect={i => setActiveIndex(i)}
+                onPrev={() => go(-1)}
+                onNext={() => go(1)}
+                onCardClick={ev => navigate(`/evenement/${ev.id}`)}
+                onAddImage={onAddImage}
+              />
+              <div className="infozone">
+                <EventDock
+                  event={currentEvent}
+                  eyebrow={eyebrowFor(currentEvent)}
+                  saved={isSaved(currentEvent.id)}
+                  onToggleSave={() => toggleSave(currentEvent)}
+                />
+              </div>
+            </>
+          ) : (
+            <ExplorerEmpty />
+          )}
         </div>
-      )}
+
+        <div className="bottombar">
+          <div className="counter">
+            <b>{displayed.length > 0 ? safeIndex + 1 : 0}</b>
+            {' / '}
+            {displayed.length} festival{displayed.length !== 1 ? 's' : ''} trouvé{displayed.length !== 1 ? 's' : ''}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
