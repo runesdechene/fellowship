@@ -22,10 +22,10 @@
 /* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
 .explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .explorer .xb { position: absolute; border-radius: 50%; filter: blur(85px); }
-.explorer .xb1 { width: 48vh; height: 48vh; left: 8%; top: -6%; background: color-mix(in srgb, var(--xh-accent, #e8a06a) 55%, transparent); transition: background 0.6s ease; }
-.explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.24); }
-.explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.18); }
-.explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.16); }
+.explorer .xb1 { width: 48vh; height: 48vh; left: 8%; top: -6%; background: color-mix(in srgb, var(--xh-accent, #e8a06a) 28%, transparent); transition: background 0.6s ease; }
+.explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.12); }
+.explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.09); }
+.explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.08); }
 .light .explorer .xb { opacity: 0.5; mix-blend-mode: multiply; }
 
 /* ── Empty state (no events match the filters) ────────────────────── */
@@ -1050,4 +1050,47 @@
   .explorer .arrow.l { left: 6px; }
   .explorer .arrow.r { right: 6px; }
   .explorer .card { width: 54vw; height: 50vh; }
+}
+
+/* ── Mobile (téléphone) ──────────────────────────────────────────────
+   L'Explorer vit dans `100vh − 64px` (barre de nav appli, pb-16 sur <main>),
+   mais ses unités vh visent le plein viewport : on recale deck/dock pour
+   éviter chevauchement et clipping, et on fait tenir la barre de recherche. */
+@media (max-width: 640px) {
+  /* Barre de recherche : tient dans l'écran, segments à largeur égale, valeurs tronquées si besoin */
+  .explorer .top { padding: 16px 12px 28px; }
+  .explorer .searchbar { display: flex; width: 100%; max-width: 440px; padding: 5px 5px 5px 6px; }
+  .explorer .seg-group { flex: 1; width: 100%; min-width: 0; }
+  .explorer .seg { flex: 1 1 0; min-width: 0; align-items: stretch; padding: 7px 9px; }
+  .explorer .seg-l { font-size: 8.5px; letter-spacing: 0.05em; }
+  .explorer .seg-v { font-size: 11.5px; width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .explorer .seg-sep { height: 22px; }
+  .explorer .seg-search { width: 36px; height: 36px; margin-left: 4px; }
+  .explorer .seg-search svg { width: 16px; height: 16px; }
+  .explorer .seg-searchfield { padding: 0 6px 0 10px; }
+  .explorer .seg-input { font-size: 14px; }
+
+  /* Scrubber */
+  .explorer .scrubber { width: calc(100% - 28px); margin-top: -18px; }
+
+  /* Deck / cartes : portrait, calées pour laisser la place au dock */
+  .explorer .flow { padding-top: 4vh; perspective: 1100px; }
+  .explorer .deck { height: 44vh; }
+  .explorer .card { width: 60vw; height: 42vh; }
+
+  /* Flèches compactes aux bords */
+  .explorer .arrow { width: 40px; height: 40px; }
+  .explorer .arrow svg { width: 19px; height: 19px; }
+  .explorer .arrow.l { left: 2px; }
+  .explorer .arrow.r { right: 2px; }
+
+  /* Dock remonté (deck plus court) + compact */
+  .explorer .infozone { top: 53vh; padding: 0 14px; }
+  .explorer .dockinfo { gap: 10px; max-width: 100%; }
+  .explorer .dockinfo h2 { font-size: 20px; }
+
+  /* Bottombar compacte */
+  .explorer .bottombar { padding: 12px 0 14px; gap: 8px; }
+  .explorer .dock-cta { gap: 9px; }
+  .explorer .btn { font-size: 13px; padding: 10px 18px; }
 }
