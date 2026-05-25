@@ -1,13 +1,18 @@
 import { useRef } from 'react'
-import { deckCardStyle, eventBadge } from '@/lib/explorer'
+import { deckCardStyle, eventBadge, participationChip, type ActorKind } from '@/lib/explorer'
 import { DeckCard } from './DeckCard'
 import type { EventWithScore } from '@/types/database'
+
+export interface PartLite { status: string; payment_status: string | null }
 
 interface EventDeckProps {
   events: EventWithScore[]
   activeIndex: number
   canAddImage: boolean
   now: Date
+  /** Participation de l'acteur courant par event_id (pour la pastille de statut sur carte). */
+  partByEvent: Map<string, PartLite>
+  actorKind: ActorKind
   onSelect: (index: number) => void
   onPrev: () => void
   onNext: () => void
@@ -17,7 +22,7 @@ interface EventDeckProps {
   onAddImage: (event: EventWithScore) => void
 }
 
-export function EventDeck({ events, activeIndex, canAddImage, now, onSelect, onPrev, onNext, onSwipe, onCardClick, onAddImage }: EventDeckProps) {
+export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, actorKind, onSelect, onPrev, onNext, onSwipe, onCardClick, onAddImage }: EventDeckProps) {
   const hasPrev = activeIndex > 0
   const hasNext = activeIndex < events.length - 1
 
@@ -60,6 +65,8 @@ export function EventDeck({ events, activeIndex, canAddImage, now, onSelect, onP
           if (Math.abs(offset) > 3) return null // fenêtrage perf : ne pas monter les cartes lointaines
           const s = deckCardStyle(offset)
           const badge = eventBadge(ev, now)
+          const part = partByEvent.get(ev.id)
+          const statusChip = participationChip(part?.status, part?.payment_status, actorKind)
           return (
             <DeckCard
               key={ev.id}
@@ -67,6 +74,7 @@ export function EventDeck({ events, activeIndex, canAddImage, now, onSelect, onP
               isCenter={s.isCenter}
               canAddImage={canAddImage}
               badge={badge}
+              statusChip={statusChip}
               style={{ transform: s.transform, opacity: s.opacity, filter: s.filter, zIndex: s.zIndex, pointerEvents: s.pointerEvents }}
               onClick={() => handleCardClick(offset, i, ev)}
               onAddImage={onAddImage}

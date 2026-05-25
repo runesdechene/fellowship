@@ -714,6 +714,28 @@
 .explorer .card-badge.nouveau { background: var(--lime); color: #1b2e10; }
 .explorer .card-badge.populaire { background: var(--amber); color: #3a2410; }
 
+/* Pastille de statut de participation — coin haut-GAUCHE (miroir du badge). */
+.explorer .card-status {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+}
+.explorer .card-status.repere { background: var(--amber); color: #3a2410; }
+.explorer .card-status.going { background: var(--lime); color: #1b2e10; }
+.explorer .card-status.pending { background: var(--copper); color: #fff; }
+.explorer .card-status.paid { background: hsl(152 55% 42%); color: #fff; }
+
 /* ── Card fallback (no photo) ─────────────────────────────────────── */
 
 .explorer .card-fallback {
@@ -1010,6 +1032,8 @@
 }
 .explorer .eh-status.going { background: hsl(86 44% 64% / .2); border: 1px solid hsl(86 44% 64% / .45); color: var(--lime); }
 .explorer .eh-status.repere { background: hsl(40 90% 60% / .16); border: 1px solid hsl(40 90% 60% / .4); color: var(--amber); }
+.explorer .eh-status.pending { background: hsl(28 80% 60% / .16); border: 1px solid hsl(28 80% 60% / .4); color: var(--copper); }
+.explorer .eh-status.paid { background: hsl(152 50% 45% / .18); border: 1px solid hsl(152 50% 45% / .45); color: hsl(152 45% 46%); }
 .explorer .eh-meta { display: flex; align-items: center; gap: 18px; }
 .explorer .eh-item { display: flex; align-items: center; gap: 9px; }
 .explorer .eh-ico { font-size: 22px; }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getTagIcon } from '@/components/ui/TagBadge'
+import type { StatusChip } from '@/lib/explorer'
 import type { EventWithScore } from '@/types/database'
 
 interface DeckCardProps {
@@ -8,11 +9,12 @@ interface DeckCardProps {
   isCenter: boolean
   canAddImage: boolean
   badge?: 'nouveau' | 'populaire' | null
+  statusChip?: StatusChip | null
   onClick: () => void
   onAddImage: (event: EventWithScore) => void
 }
 
-export function DeckCard({ event, style, isCenter, canAddImage, badge, onClick, onAddImage }: DeckCardProps) {
+export function DeckCard({ event, style, isCenter, canAddImage, badge, statusChip, onClick, onAddImage }: DeckCardProps) {
   const tag = event.tags?.[0] ?? 'autre'
   const Icon = getTagIcon(tag)
   // Track (imageUrl, errorFlag) together so we can reset error when URL changes
@@ -30,6 +32,9 @@ export function DeckCard({ event, style, isCenter, canAddImage, badge, onClick, 
   const imageless = !event.image_url || tracked.error
   return (
     <div className={'card' + (isCenter ? ' is-center' : '')} style={style} onClick={onClick}>
+      {statusChip && (
+        <span className={'card-status ' + statusChip.variant}>{statusChip.label}</span>
+      )}
       {badge && (
         <span className={'card-badge ' + badge}>
           {badge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}

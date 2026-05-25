@@ -1,13 +1,7 @@
 import { useFriendsOnEvent } from '@/hooks/use-participations'
 import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
+import type { StatusChip } from '@/lib/explorer'
 import type { EventWithScore } from '@/types/database'
-
-const STATUS_PILL: Record<string, { label: string; cls: string }> = {
-  interesse: { label: '★ Repéré', cls: 'eh-status repere' },
-  inscrit: { label: '✓ Tu y vas', cls: 'eh-status going' },
-  confirme: { label: '✓ Tu y vas', cls: 'eh-status going' },
-  en_cours: { label: '✓ Tu y vas', cls: 'eh-status going' },
-}
 
 function dateRange(start: string, end: string): string {
   const s = new Date(start), e = new Date(end)
@@ -21,16 +15,15 @@ function dateRange(start: string, end: string): string {
 
 interface EventDockProps {
   event: EventWithScore
-  status: string | null
+  statusChip: StatusChip | null
   tagInfo?: { label?: string; bg?: string; color?: string }
   /** Rejoue le fade doux à chaque changement d'événement. Off pendant le scrub (évite le strobe). */
   animate?: boolean
 }
 
-export function EventDock({ event, status, tagInfo, animate = true }: EventDockProps) {
+export function EventDock({ event, statusChip, tagInfo, animate = true }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
-  const pill = status ? STATUS_PILL[status] : null
   return (
     <div key={animate ? event.id : 'static'} className={'dockinfo' + (animate ? ' eh-fade' : '')}>
       {/* Tag — même recette graphique que les .etag de la landing (pilule teintée de --c) */}
@@ -59,7 +52,7 @@ export function EventDock({ event, status, tagInfo, animate = true }: EventDockP
         </div>
       </div>
 
-      {pill && <span className={pill.cls}>{pill.label}</span>}
+      {statusChip && <span className={'eh-status ' + statusChip.variant}>{statusChip.label}</span>}
 
       {friends.length > 0 && (
         <div className="fr">

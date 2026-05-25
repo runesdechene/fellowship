@@ -4,7 +4,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, type Zone, type Period } from '@/lib/explorer'
+import { composeFilter, participationChip, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
@@ -235,8 +235,14 @@ export function ExplorerPage() {
     return t ? dynamicTags.find(d => d.value === t) : undefined
   }, [currentEvent, dynamicTags])
 
-  // ---------- Participation status ----------
-  const activeStatus = currentEvent ? (participations.find(p => p.event_id === currentEvent.id)?.status ?? null) : null
+  // ---------- Participation status (par event, adapté à l'acteur) ----------
+  const actorKind: ActorKind = currentActor?.kind === 'entity' ? 'entity' : 'person'
+  const partByEvent = useMemo(
+    () => new Map(participations.map(p => [p.event_id, { status: p.status as string, payment_status: (p.payment_status as string | null) ?? null }])),
+    [participations]
+  )
+  const activePart = currentEvent ? partByEvent.get(currentEvent.id) : undefined
+  const activeChip = participationChip(activePart?.status, activePart?.payment_status, actorKind)
 
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
@@ -295,6 +301,8 @@ export function ExplorerPage() {
                 activeIndex={safeIndex}
                 canAddImage={canAddImage}
                 now={now}
+                partByEvent={partByEvent}
+                actorKind={actorKind}
                 onSelect={i => setActiveIndex(i)}
                 onPrev={() => go(-1)}
                 onNext={() => go(1)}
@@ -305,7 +313,7 @@ export function ExplorerPage() {
               <div className="infozone">
                 <EventDock
                   event={currentEvent}
-                  status={activeStatus}
+                  statusChip={activeChip}
                   tagInfo={activeTagInfo}
                   animate={!scrubbing}
                 />

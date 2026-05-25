@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, eventBadge } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, eventBadge, participationChip } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -157,6 +157,31 @@ describe('composeFilter — recherche texte', () => {
   it('query vide = comportement normal (période appliquée)', () => {
     const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'this-month', query: '' }, { department: null, now })
     expect(r.map(e => e.id)).toEqual(['hf'])
+  })
+})
+
+describe('participationChip', () => {
+  it('null si pas de participation', () => {
+    expect(participationChip(null, null, 'person')).toBeNull()
+    expect(participationChip(undefined, null, 'entity')).toBeNull()
+  })
+  it('repéré (interesse) pour les deux acteurs', () => {
+    expect(participationChip('interesse', null, 'person')?.variant).toBe('repere')
+    expect(participationChip('interesse', null, 'entity')?.label).toContain('Repéré')
+  })
+  it('personne inscrite → J’y vais', () => {
+    expect(participationChip('inscrit', null, 'person')?.label).toContain('vais')
+    expect(participationChip('en_cours', null, 'person')?.variant).toBe('going')
+  })
+  it('exposant : en_cours → En inscription', () => {
+    expect(participationChip('en_cours', null, 'entity')?.label).toContain('inscription')
+  })
+  it('exposant inscrit reflète le paiement', () => {
+    expect(participationChip('inscrit', 'paye', 'entity')?.label).toContain('Payé')
+    expect(participationChip('inscrit', 'paye', 'entity')?.variant).toBe('paid')
+    expect(participationChip('inscrit', 'en_cours_paiement', 'entity')?.label).toContain('Paiement')
+    expect(participationChip('inscrit', 'a_payer', 'entity')?.label).toContain('Inscrit')
+    expect(participationChip('inscrit', null, 'entity')?.label).toContain('Inscrit')
   })
 })
 

@@ -91,6 +91,31 @@ export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'popul
   return null
 }
 
+export type ActorKind = 'person' | 'entity'
+export interface StatusChip { label: string; variant: 'repere' | 'going' | 'pending' | 'paid' }
+
+/**
+ * Pastille de statut de participation, adaptée à l'acteur.
+ * Personne : Repéré / J'y vais. Exposant : Repéré / En inscription / Inscrit / Paiement / Payé
+ * (reflète `status` + `payment_status`, terminologie alignée sur le dashboard exposant).
+ */
+export function participationChip(
+  status: string | null | undefined,
+  payment: string | null | undefined,
+  kind: ActorKind,
+): StatusChip | null {
+  if (!status) return null
+  if (status === 'interesse') return { label: '★ Repéré', variant: 'repere' }
+  if (kind === 'entity') {
+    if (status === 'en_cours') return { label: '📝 En inscription', variant: 'pending' }
+    // status === 'inscrit' : on reflète le paiement
+    if (payment === 'paye') return { label: '💳 Payé', variant: 'paid' }
+    if (payment === 'en_cours_paiement') return { label: '💳 Paiement', variant: 'pending' }
+    return { label: '✓ Inscrit', variant: 'going' }
+  }
+  return { label: '✓ J’y vais', variant: 'going' }
+}
+
 export function composeFilter(
   events: EventWithScore[],
   filters: ExplorerFilters,
