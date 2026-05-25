@@ -14,16 +14,16 @@ interface FollowersModalProps {
 }
 
 export function FollowersModal({ followers, friendIds, isOwner, ownerEmptyLabel, onClose }: FollowersModalProps) {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
   const [followedBack, setFollowedBack] = useState<Set<string>>(new Set())
   const [pending, setPending] = useState<Set<string>>(new Set())
 
   const handleFollowBack = async (followerId: string) => {
-    if (!user || pending.has(followerId)) return
+    if (!currentActor || pending.has(followerId)) return
     setPending(prev => new Set(prev).add(followerId))
     const { error } = await supabase
       .from('follows')
-      .insert({ follower_id: user.id, following_id: followerId })
+      .insert({ follower_actor: currentActor.id, following_actor: followerId })
     setPending(prev => {
       const next = new Set(prev)
       next.delete(followerId)

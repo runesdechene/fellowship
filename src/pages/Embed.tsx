@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Calendar } from 'lucide-react'
-import type { Profile } from '@/types/database'
+import type { EntityRow } from '@/types/database'
 import './EmbedPage.css'
 
 /* ── Tag icon map (inline — no Tailwind dependency) ── */
@@ -52,7 +52,7 @@ export function EmbedPage() {
     ? `#${searchParams.get('accent')}`
     : '#c87941'
 
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const [entity, setEntity] = useState<EntityRow | null>(null)
   const [participations, setParticipations] = useState<EmbedEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
@@ -60,19 +60,19 @@ export function EmbedPage() {
   useEffect(() => {
     if (!slug) return
     async function fetchData() {
-      const { data: p } = await supabase
-        .from('profiles')
+      const { data: e } = await supabase
+        .from('entities')
         .select('*')
         .eq('public_slug', slug!)
         .single()
 
-      if (!p) { setNotFound(true); setLoading(false); return }
-      setProfile(p)
+      if (!e) { setNotFound(true); setLoading(false); return }
+      setEntity(e as EntityRow)
 
       const { data: parts } = await supabase
         .from('participations')
         .select('id, events(id, name, start_date, end_date, city, department, tags, image_url)')
-        .eq('user_id', p.id)
+        .eq('actor_id', (e as EntityRow).actor_id)
         .eq('visibility', 'public')
 
       setParticipations((parts as EmbedEvent[] | null) ?? [])
@@ -117,20 +117,20 @@ export function EmbedPage() {
     )
   }
 
-  if (notFound || !profile) {
+  if (notFound || !entity) {
     return <div className="embed-centered">Profil introuvable</div>
   }
 
-  const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
-  const subtitle = [profile.craft_type, profile.city].filter(Boolean).join(' · ')
+  const displayName = entity.brand_name
+  const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
   return (
     <div className="embed-page" data-theme={theme}>
      <div className="embed-page-container">
       {/* Header */}
       <div className="embed-header">
-        {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt={displayName} className="embed-avatar" />
+        {entity.avatar_url ? (
+          <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
         ) : (
           <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
             {displayName[0]?.toUpperCase()}

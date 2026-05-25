@@ -135,7 +135,7 @@ interface NotificationItemProps {
 
 export function NotificationItem({ notification, isFriend, onRead, compact = false }: NotificationItemProps) {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
   const data = (notification.data ?? {}) as NotificationData
   const config = TYPE_CONFIG[notification.type] ?? TYPE_CONFIG.event_created
   const Icon = config.icon
@@ -159,8 +159,8 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
   const handleFollowBack = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!user || !actorId) return
-    await supabase.from('follows').insert({ follower_id: user.id, following_id: actorId })
+    if (!currentActor || !actorId) return
+    await supabase.from('follows').insert({ follower_actor: currentActor.id, following_actor: actorId })
     setFollowedBack(true)
   }
 

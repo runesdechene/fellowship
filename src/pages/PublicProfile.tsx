@@ -10,7 +10,7 @@ import { EmbedModal } from '@/components/profile/EmbedModal'
 import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import { ProfileNetworkStats } from '@/components/profile/ProfileNetworkStats'
 import { Code } from 'lucide-react'
-import type { Profile } from '@/types/database'
+import type { Profile, EntityRow } from '@/types/database'
 import type { NetworkMember } from '@/lib/profile-network'
 import './Profile.css'
 
@@ -33,11 +33,35 @@ interface PublicProfilePageProps {
   overrideSlug?: string
 }
 
+/** Build a Profile-compatible object from an EntityRow for ProfileHeader (legacy prop). */
+function entityAsProfile(entity: EntityRow): Profile {
+  return {
+    id: entity.actor_id,
+    avatar_url: entity.avatar_url,
+    banner_url: entity.banner_url,
+    bio: entity.bio,
+    brand_name: entity.brand_name,
+    city: entity.city,
+    craft_type: entity.craft_type,
+    created_at: entity.created_at,
+    department: entity.department,
+    display_name: entity.brand_name,
+    email: '',
+    plan: 'free' as Profile['plan'],
+    postal_code: entity.postal_code,
+    public_slug: entity.public_slug,
+    role: 'user',
+    sex: null,
+    type: 'public' as Profile['type'],
+    website: entity.website,
+  }
+}
+
 export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {}) {
   const { slug: paramSlug } = useParams<{ slug: string }>()
   const slug = overrideSlug ?? paramSlug?.replace(/^@/, '')
-  const { user } = useAuth()
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const { user, currentActor } = useAuth()
+  const [entity, setEntity] = useState<EntityRow | null>(null)
   const [participations, setParticipations] = useState<ProfileParticipation[]>([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
@@ -53,91 +77,103 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     async function fetchProfile() {
       setLoading(true)
 
-      // Try by slug first, then by ID (for notification links using actor_id)
-      let profileData = null
+      // Resolve entity by public_slug. Also try by actor_id for notification links.
+      let entityData: EntityRow | null = null
       const { data: bySlug } = await supabase
-        .from('profiles')
+        .from('entities')
         .select('*')
         .eq('public_slug', slug!)
         .single()
 
       if (bySlug) {
-        profileData = bySlug
+        entityData = bySlug as EntityRow
       } else {
+        // Fallback: look up by actor_id (notification links may use the raw id)
         const { data: byId } = await supabase
-          .from('profiles')
+          .from('entities')
           .select('*')
-          .eq('id', slug!)
+          .eq('actor_id', slug!)
           .single()
-        profileData = byId
+        entityData = (byId as EntityRow) ?? null
       }
 
-      if (!profileData) {
+      if (!entityData) {
         setNotFound(true)
         setLoading(false)
         return
       }
 
-      setProfile(profileData)
+      setEntity(entityData)
 
-      const partsQuery = supabase
+      const { data: parts } = await supabase
         .from('participations')
         .select('id, event_id, events(id, name, start_date, end_date, city, department, tags, image_url)')
-        .eq('user_id', profileData.id)
+        .eq('actor_id', entityData.actor_id)
         .eq('status', 'inscrit')
         .order('created_at', { ascending: false })
 
-      // Only show "inscrit" participations on public profile (for everyone, including owner)
-
-      const { data: parts } = await partsQuery
-
       setParticipations((parts as ProfileParticipation[] | null) ?? [])
 
-      // Fetch friends + followers with recency timestamps for this profile
+      // Fetch friends + followers for this entity's actor_id
       try {
         type FriendRow = { friend_id: string; friended_at: string }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: friendRows } = await (supabase.rpc as any)('get_friends_with_dates', { p_user_id: profileData.id })
+        const { data: friendRows } = await (supabase.rpc as any)('get_friends_with_dates', { p_user_id: entityData.actor_id })
         const friendDates = (friendRows as FriendRow[] | null) ?? []
 
         if (friendDates.length > 0) {
-          const { data: friendProfiles } = await supabase
-            .from('profiles')
-            .select('id, display_name, brand_name, avatar_url, public_slug, craft_type, city')
-            .in('id', friendDates.map(f => f.friend_id))
+          const friendActorIds = friendDates.map(f => f.friend_id)
+          const { data: friendActors } = await supabase
+            .from('actor_public')
+            .select('actor_id, label, avatar_url, public_slug')
+            .in('actor_id', friendActorIds)
           const dateMap = new Map(friendDates.map(f => [f.friend_id, f.friended_at]))
-          const enriched: NetworkMember[] = (friendProfiles ?? []).map(p => ({
-            ...p,
-            joinedAt: dateMap.get(p.id) ?? new Date(0).toISOString(),
+          const enriched: NetworkMember[] = ((friendActors ?? []) as Array<{ actor_id: string | null; label: string | null; avatar_url: string | null; public_slug: string | null }>).map(a => ({
+            id: a.actor_id ?? '',
+            display_name: null,
+            brand_name: a.label,
+            avatar_url: a.avatar_url,
+            public_slug: a.public_slug,
+            craft_type: null,
+            city: null,
+            joinedAt: dateMap.get(a.actor_id ?? '') ?? new Date(0).toISOString(),
           }))
           setFriends(enriched)
         } else {
           setFriends([])
         }
 
-        const { data: followerData } = await supabase
+        // Followers: 2-query pattern — get actor ids, then resolve via actor_public
+        const { data: followerLinks } = await supabase
           .from('follows')
-          .select('created_at, profiles!follows_follower_id_fkey(id, display_name, brand_name, avatar_url, public_slug, craft_type, city)')
-          .eq('following_id', profileData.id)
+          .select('created_at, follower_actor')
+          .eq('following_actor', entityData.actor_id)
           .order('created_at', { ascending: false })
 
-        type FollowerRow = {
-          created_at: string
-          profiles: {
-            id: string
-            display_name: string | null
-            brand_name: string | null
-            avatar_url: string | null
-            public_slug: string | null
-            craft_type: string | null
-            city: string | null
-          } | null
-        }
+        type FollowerLink = { created_at: string; follower_actor: string | null }
+        const links = (followerLinks as FollowerLink[] | null) ?? []
+        const followerActorIds = links.map(l => l.follower_actor).filter((id): id is string => !!id)
 
-        const followersList: NetworkMember[] = ((followerData as FollowerRow[] | null) ?? [])
-          .filter(f => f.profiles)
-          .map(f => ({ ...f.profiles!, joinedAt: f.created_at }))
-        setFollowers(followersList)
+        if (followerActorIds.length > 0) {
+          const { data: followerActors } = await supabase
+            .from('actor_public')
+            .select('actor_id, label, avatar_url, public_slug')
+            .in('actor_id', followerActorIds)
+          const dateMap = new Map(links.map(l => [l.follower_actor ?? '', l.created_at]))
+          const followersList: NetworkMember[] = ((followerActors ?? []) as Array<{ actor_id: string | null; label: string | null; avatar_url: string | null; public_slug: string | null }>).map(a => ({
+            id: a.actor_id ?? '',
+            display_name: null,
+            brand_name: a.label,
+            avatar_url: a.avatar_url,
+            public_slug: a.public_slug,
+            craft_type: null,
+            city: null,
+            joinedAt: dateMap.get(a.actor_id ?? '') ?? new Date(0).toISOString(),
+          }))
+          setFollowers(followersList)
+        } else {
+          setFollowers([])
+        }
       } catch {
         // Non-critical — profile still loads
       }
@@ -153,7 +189,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     return <div className="profile-loading">Chargement…</div>
   }
 
-  if (notFound || !profile) {
+  if (notFound || !entity) {
     return (
       <div className="profile-not-found">
         <div className="profile-not-found-code">404</div>
@@ -168,8 +204,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     )
   }
 
-  const isOwner = user?.id === profile.id
-  const displayName = profile.brand_name ?? profile.display_name ?? 'Utilisateur'
+  const isOwner = currentActor?.id === entity.actor_id
+  const displayName = entity.brand_name
   const now = new Date()
 
   const upcoming = participations
@@ -182,12 +218,14 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     .map(p => p.events!)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
 
+  const profileForHeader = entityAsProfile(entity)
+
   return (
     <div className="profile-page">
       <div className="profile-container">
-        <ProfileHeader profile={profile} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
+        <ProfileHeader profile={profileForHeader} isOwner={isOwner} onOpenQR={() => setShowQR(true)} />
 
-        {isOwner && profile.public_slug && (
+        {isOwner && entity.public_slug && (
           <button
             onClick={() => setShowEmbed(true)}
             className="profile-embed-btn"
@@ -223,12 +261,12 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         <FellowshipFooter />
       </div>
 
-      {showQR && profile.public_slug && (
-        <QRCodeModal slug={profile.public_slug} onClose={() => setShowQR(false)} />
+      {showQR && entity.public_slug && (
+        <QRCodeModal slug={entity.public_slug} onClose={() => setShowQR(false)} />
       )}
 
-      {showEmbed && profile.public_slug && (
-        <EmbedModal slug={profile.public_slug} onClose={() => setShowEmbed(false)} />
+      {showEmbed && entity.public_slug && (
+        <EmbedModal slug={entity.public_slug} onClose={() => setShowEmbed(false)} />
       )}
     </div>
   )

@@ -19,7 +19,7 @@ interface EventFormProps {
 }
 
 export function EventForm({ onClose }: EventFormProps) {
-  const { profile } = useAuth()
+  const { currentActor, user } = useAuth()
   const navigate = useNavigate()
   const { tags: dynamicTags } = useTags()
   const [step, setStep] = useState(0)
@@ -62,7 +62,7 @@ export function EventForm({ onClose }: EventFormProps) {
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async () => {
-    if (!profile) return
+    if (!currentActor || !user) return
     setSaving(true)
     setError(null)
 
@@ -101,7 +101,8 @@ export function EventForm({ onClose }: EventFormProps) {
         registration_note: form.registration_note || null,
         tags: selectedTags,
         image_url: image_url ?? null,
-        created_by: profile.id,
+        created_by_actor: currentActor.id,
+        acted_by_user_id: user.id,
       }
 
       const { data, error: createError } = await createEvent(eventData)
