@@ -1,0 +1,429 @@
+/* ============================================================
+   Onboarding.css — Fellowship DA « Nuit de Festival »
+   Ported from docs/decisions/assets/onboarding.html <style>
+   All selectors scoped to .onboarding; @keyframes fade is global.
+   Token map: --surface→hsl(var(--card))  --surface2→hsl(var(--secondary))
+              --text→hsl(var(--foreground))  --muted→hsl(var(--muted-foreground))
+              --line→hsl(var(--border))  --bg→hsl(var(--background))
+              --cop→var(--copper)  --cop-d→var(--copper-d)
+              --green→var(--lime)  --h→var(--font-heading)  --b→var(--font-body)
+   ============================================================ */
+
+/* ── Root centering (replaces maquette body flex) ── */
+.onboarding {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+/* ── Wrap ── */
+.onboarding .ob-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── Logo ── */
+.onboarding .ob-logo {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.onboarding .ob-logo .mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--copper), var(--amber));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2a1810;
+  font-size: 15px;
+}
+
+/* ── Card ── */
+.onboarding .ob-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 22px;
+  padding: 30px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Back button ── */
+.onboarding .ob-back {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding .ob-back:hover {
+  color: hsl(var(--foreground));
+}
+
+.onboarding .ob-back svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.4;
+}
+
+/* ── Progress dots ── */
+.onboarding .ob-dots {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.onboarding .ob-dots .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: hsl(var(--border));
+  transition: 0.2s;
+}
+
+.onboarding .ob-dots .dot.on {
+  background: var(--amber);
+  width: 22px;
+}
+
+.onboarding .ob-dots .dot.done {
+  background: var(--lime);
+}
+
+/* ── Fade animation (global — no prefix) ── */
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Step container ─── React renders one step at a time,
+      so no display:none / .step.active needed ── */
+.onboarding .step {
+  animation: fade 0.3s;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ── Eyebrow label ── */
+.onboarding .eyb {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--amber);
+  text-align: center;
+  margin-bottom: 9px;
+}
+
+/* ── Step headings ── */
+.onboarding .step h2 {
+  font-size: 23px;
+  color: #fff;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.onboarding .step .sub {
+  font-size: 13.5px;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+/* ── Choice list ── */
+.onboarding .choice {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin-top: 6px;
+}
+
+/* ── Choice card ── */
+.onboarding .cc {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  border-radius: 16px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  cursor: pointer;
+  transition: 0.14s;
+  text-align: left;
+}
+
+.onboarding .cc:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+}
+
+.onboarding .cc .cic {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--copper) 18%, transparent);
+}
+
+.onboarding .cc .ct {
+  flex: 1;
+}
+
+.onboarding .cc .ct b {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: #fff;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.onboarding .cc .ct span {
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+}
+
+.onboarding .cc .carr {
+  color: hsl(var(--muted-foreground));
+}
+
+.onboarding .cc .carr svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+/* ── Form fields ── */
+.onboarding .field {
+  margin-bottom: 16px;
+}
+
+.onboarding .field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: hsl(var(--muted-foreground));
+  display: block;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.onboarding .field input {
+  width: 100%;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  outline: none;
+  transition: 0.13s;
+}
+
+.onboarding .field input:focus {
+  border-color: var(--amber);
+}
+
+.onboarding .field .hint {
+  font-size: 11.5px;
+  color: hsl(var(--muted-foreground));
+  margin-top: 7px;
+}
+
+/* ── Two-column row ── */
+.onboarding .row2 {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 11px;
+}
+
+/* ── Slug field ── */
+.onboarding .slug-field {
+  display: flex;
+  align-items: center;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 0 16px;
+  overflow: hidden;
+}
+
+.onboarding .slug-field .pfx {
+  color: hsl(var(--muted-foreground));
+  font-size: 14.5px;
+  flex-shrink: 0;
+}
+
+.onboarding .slug-field input {
+  background: none;
+  border: none;
+  padding: 14px 0;
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ── Spacer ── */
+.onboarding .spacer {
+  flex: 1;
+}
+
+/* ── Buttons ── */
+.onboarding .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 13px;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.onboarding .btn-p {
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: 0 8px 24px hsl(20 65% 32% / 0.45);
+}
+
+.onboarding .btn-p:hover {
+  filter: brightness(1.07);
+}
+
+.onboarding .btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.2;
+}
+
+/* ── Success icon ── */
+.onboarding .done-ic {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lime) 22%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px auto 18px;
+  color: var(--lime);
+}
+
+.onboarding .done-ic svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 2.6;
+}
+
+/* ── Entity card (success step) ── */
+.onboarding .entitycard {
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.onboarding .entitycard .eav {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6b4a2e, #3c2a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #ffd9a8;
+  font-size: 15px;
+}
+
+.onboarding .entitycard .et b {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  color: #fff;
+  display: block;
+}
+
+.onboarding .entitycard .et span {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Person line ── */
+.onboarding .person-line {
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin-top: 4px;
+}
+
+.onboarding .person-line b {
+  color: hsl(var(--foreground));
+}
+
+/* ── Add hint ── */
+.onboarding .addhint {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.onboarding .addhint svg {
+  width: 14px;
+  height: 14px;
+  color: var(--amber);
+}
