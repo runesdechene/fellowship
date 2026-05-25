@@ -17,7 +17,8 @@
 4. **Carte sans image = fallback « B »** : surface sombre (`hsl(var(--card))`) + lueur copper en haut + **icône de catégorie** en filigrane + infos en bas. (82 % des events ont une image ; ~18 % utilisent ce fallback.)
 5. **Bouton « Ajouter une image »** sur les cartes sans image : visible pour **tout exposant** (+ admin), **pas les festivaliers**. **Les fiches events sont déjà 100 % collaboratives** (RLS `events_update_exposant` : tout exposant peut éditer n'importe quel event) — **sauf si un organisateur a revendiqué la fiche** (verrou = module orga **V2**, pas encore en base). Donc **aucun nouveau backend** : on réutilise l'update collaboratif existant + l'upload `EventForm` (compression → webp → Storage → URL publique).
 6. **« X y vont »** = participations **réelles** des compagnons (follow mutuel). **CTAs** : « Voir le festival » (→ page event) et « ★ Repérer » (bascule la participation de l'acteur courant).
-7. **Données réelles obligatoires** en dev (cf. [[reference_local_dev_data]]).
+7. **Mobile = coverflow rétréci** (option B), **pas** de bascule en liste : on conserve le carrousel 3D compacté. Raison : les affiches sont souvent chargées d'infos → voir l'image (même petite) a de la valeur, et ça garde l'effet.
+8. **Données réelles obligatoires** en dev (cf. [[reference_local_dev_data]]).
 
 ---
 
@@ -65,8 +66,11 @@ Vérifié sur la base : la RLS `events_update_exposant` autorise **tout exposant
 - **Fenêtrage du deck** : ne monter/charger que les cartes proches de l'actif (ex. ±3) ; les autres ne sont pas rendues ou sans `<img>`. Évite 68+ `<img>` simultanés. `loading="lazy"` + préchargement de l'image ambiante de la carte suivante.
 - Transitions GPU (`transform`/`opacity`), `will-change` ciblé. Respecter `prefers-reduced-motion` (réduire/désactiver autoplay + rotations).
 
-## 7. Mobile / responsive
-- < ~1080px : sidebar masquée (la **BottomBar** existante prend le relais), cartes agrandies, flèches rapprochées (comme la media-query maquette). Barre de recherche adaptée (segments empilables / popovers plein largeur). Autoplay conservé mais swipe tactile gauche/droite ajouté.
+## 7. Mobile / responsive (décision : coverflow rétréci — option B)
+< ~1080px : **sidebar** masquée (la **BottomBar** existante prend le relais) ; on **conserve le coverflow 3D** mais compacté (esprit media-query maquette), **pas** de bascule en liste.
+- **Budget vertical serré** (le point dur de B) : searchbar **compacte** = une pilule « Quoi · Où · Quand » qui ouvre les popovers en plein largeur → deck centré → **dock condensé** (eyebrow + nom + tag·date·lieu + « X y vont » sur 1–2 lignes) → CTAs → BottomBar. Réduire les hauteurs pour tenir sans scroll de page.
+- Cartes latérales réduites mais visibles (slivers) ; tap sur une carte latérale la centre.
+- **Gestes** : swipe tactile gauche/droite (+ flèches rapprochées). Autoplay conservé, `prefers-reduced-motion` respecté.
 
 ## 8. DA jour/nuit (gotchas appliqués d'emblée)
 - `.explorer svg { fill:none; stroke:currentColor }` (icônes au trait).
