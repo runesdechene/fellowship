@@ -816,6 +816,24 @@
 .explorer .eh-sub { font-size: 11px; color: rgba(255,255,255,.65); }
 .explorer .eh-div { width: 1px; height: 32px; background: rgba(255,255,255,.18); }
 
+/* ── Dock tag — recette graphique des .etag de la landing (pilule teintée de --c) ── */
+.explorer .dock-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 38%, transparent);
+}
+.light .explorer .dock-tag {
+  color: color-mix(in srgb, var(--c) 58%, #2a2018);
+  border-color: color-mix(in srgb, var(--c) 34%, transparent);
+}
+
 /* ── Ghost CTA (transparent + border) ─────────────────────────────── */
 .explorer .btn-ghost {
   background: rgba(255,255,255,.07);

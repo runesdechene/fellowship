@@ -11,7 +11,6 @@ import { AmbientBackground } from '@/components/explorer/AmbientBackground'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { EventDock } from '@/components/explorer/EventDock'
-import { EventHeader } from '@/components/explorer/EventHeader'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -201,13 +200,6 @@ export function ExplorerPage() {
   // ---------- canAddImage ----------
   const canAddImage = currentActor?.kind === 'entity' || isAdmin
 
-  // ---------- eyebrow ----------
-  const eyebrowFor = useCallback((_event: EventWithScore) => {
-    if (period === 'recent') return 'Nouveau'
-    if (zone === 'mine') return 'Près de toi'
-    return 'À découvrir'
-  }, [period, zone])
-
   // ---------- Current event (safely indexed) ----------
   const currentEvent = displayed.length > 0 ? displayed[safeIndex] : null
 
@@ -250,7 +242,6 @@ export function ExplorerPage() {
             <DeckSkeleton />
           ) : displayed.length > 0 && currentEvent ? (
             <>
-              <EventHeader event={currentEvent} status={activeStatus} />
               <EventDeck
                 events={displayed}
                 activeIndex={safeIndex}
@@ -264,8 +255,8 @@ export function ExplorerPage() {
               <div className="infozone">
                 <EventDock
                   event={currentEvent}
-                  eyebrow={eyebrowFor(currentEvent)}
                   saved={isSaved(currentEvent.id)}
+                  status={activeStatus}
                   onToggleSave={() => toggleSave(currentEvent)}
                   tagInfo={activeTagInfo}
                 />
