@@ -354,7 +354,7 @@
   display: flex;
   align-items: flex-start;  /* le deck est monté vers le haut… */
   justify-content: center;
-  padding-top: 7vh;         /* …via ce padding ; les flèches, elles, restent au centre vertical */
+  padding-top: 13vh;        /* …via ce padding (deck descendu ~50px) ; les flèches restent au centre vertical */
   perspective: 1700px;
 }
 
@@ -362,7 +362,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 60vh;
+  top: 66vh;
   bottom: 0;
   display: flex;
   align-items: center;
