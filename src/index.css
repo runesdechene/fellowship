@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:where(.light, .light *));
 
 :root {
   /* Fellowship — DA « Nuit de Festival » (nuit = défaut) */

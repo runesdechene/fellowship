@@ -309,7 +309,7 @@ export function EventPage() {
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="rounded-lg border border-amber-700 bg-amber-950/30 px-4 py-3 text-sm text-amber-200">
+              <div className="rounded-lg border border-amber-700 bg-amber-950/30 px-4 py-3 text-sm text-amber-200 light:border-amber-300 light:bg-amber-50 light:text-amber-800">
                 Vos modifications seront visibles par tous les utilisateurs.
               </div>
               <div>
