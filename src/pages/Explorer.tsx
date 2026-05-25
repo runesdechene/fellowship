@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
@@ -252,9 +252,7 @@ export function ExplorerPage() {
               <div className="infozone">
                 <EventDock
                   event={currentEvent}
-                  saved={isSaved(currentEvent.id)}
                   status={activeStatus}
-                  onToggleSave={() => toggleSave(currentEvent)}
                   tagInfo={activeTagInfo}
                 />
               </div>
@@ -265,6 +263,14 @@ export function ExplorerPage() {
         </div>
 
         <div className="bottombar">
+          {currentEvent && (
+            <div className="dock-cta">
+              <Link to={`/evenement/${currentEvent.id}`} className="btn btn-ghost">Voir le festival</Link>
+              <button type="button" className="btn btn-star" onClick={() => toggleSave(currentEvent)} aria-pressed={isSaved(currentEvent.id)}>
+                {isSaved(currentEvent.id) ? '★ Repéré' : '★ Repérer'}
+              </button>
+            </div>
+          )}
           <div className="counter">
             <b>{displayed.length > 0 ? safeIndex + 1 : 0}</b>
             {' / '}

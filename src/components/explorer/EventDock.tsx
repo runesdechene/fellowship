@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { useFriendsOnEvent } from '@/hooks/use-participations'
 import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
@@ -22,13 +21,11 @@ function dateRange(start: string, end: string): string {
 
 interface EventDockProps {
   event: EventWithScore
-  saved: boolean
   status: string | null
-  onToggleSave: () => void
   tagInfo?: { label?: string; bg?: string; color?: string }
 }
 
-export function EventDock({ event, saved, status, onToggleSave, tagInfo }: EventDockProps) {
+export function EventDock({ event, status, tagInfo }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
   const pill = status ? STATUS_PILL[status] : null
@@ -72,13 +69,6 @@ export function EventDock({ event, saved, status, onToggleSave, tagInfo }: Event
           {friends.length === 1 ? `${friends[0].label ?? 'Un compagnon'} y va` : `${friends.length} compagnons y vont`}
         </div>
       )}
-
-      <div className="cta">
-        <Link to={`/evenement/${event.id}`} className="btn btn-ghost">Voir le festival</Link>
-        <button type="button" className="btn btn-star" onClick={onToggleSave} aria-pressed={saved}>
-          {saved ? '★ Repéré' : '★ Repérer'}
-        </button>
-      </div>
     </div>
   )
 }

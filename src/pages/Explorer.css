@@ -298,7 +298,12 @@
   flex-direction: column;
   align-items: center;
   gap: 11px;
-  padding: 14px 0 26px;
+  padding: 14px 0 28px;
+}
+
+.explorer .dock-cta {
+  display: flex;
+  gap: 11px;
 }
 
 /* ── Distance pill (pill container only — no range input in V1) ───── */
@@ -336,7 +341,11 @@
 
 .explorer .flow {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  height: 62vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -347,7 +356,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + 25vh);
+  top: 58vh;
   bottom: 0;
   display: flex;
   align-items: center;
@@ -358,7 +367,7 @@
 .explorer .deck {
   position: relative;
   width: 100%;
-  height: 46vh;
+  height: 52vh;
   transform-style: preserve-3d;
 }
 
@@ -369,7 +378,7 @@
   left: 50%;
   top: 50%;
   width: 36vh;
-  height: 46vh;
+  height: 52vh;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
