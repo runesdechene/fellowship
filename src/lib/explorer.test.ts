@@ -111,6 +111,24 @@ describe('composeFilter', () => {
     const r = composeFilter(events, { tags: new Set(), zone: 'france', period: 'past' }, { department: '69', now })
     expect(r.map(e => e.id)).toEqual(['c'])
   })
+  it('ce mois-ci exclut les événements déjà terminés', () => {
+    const evs = [
+      ev({ id: 'fut', start_date: '2026-06-20', end_date: '2026-06-21' }),
+      ev({ id: 'fini', start_date: '2026-06-02', end_date: '2026-06-03' }),
+      ev({ id: 'next', start_date: '2026-07-10', end_date: '2026-07-11' }),
+    ]
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'this-month' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['fut'])
+  })
+  it('terminés : triés du plus récemment terminé au plus ancien', () => {
+    const evs = [
+      ev({ id: 'old', start_date: '2026-01-01', end_date: '2026-01-05' }),
+      ev({ id: 'recent', start_date: '2026-05-01', end_date: '2026-05-10' }),
+      ev({ id: 'mid', start_date: '2026-03-01', end_date: '2026-03-04' }),
+    ]
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'past' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['recent', 'mid', 'old'])
+  })
 })
 
 describe('eventBadge', () => {

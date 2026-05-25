@@ -98,12 +98,17 @@ export function composeFilter(
     const end = new Date(ev.end_date)
     const start = new Date(ev.start_date)
     if (range.past) return end < ctx.now
-    if (range.from && start < range.from && end < ctx.now) return false
+    // Périodes à venir : ne jamais afficher un événement déjà terminé (corrige « Ce mois-ci »).
+    if (end < ctx.now) return false
     if (range.to && start >= range.to) return false
     return true
   })
-  result = [...result].sort(filters.period === 'recent'
-    ? (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    : (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+  result = [...result].sort(
+    filters.period === 'past'
+      // Terminés : du plus récemment terminé au plus ancien.
+      ? (a, b) => new Date(b.end_date).getTime() - new Date(a.end_date).getTime()
+      : filters.period === 'recent'
+        ? (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        : (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
   return result
 }
