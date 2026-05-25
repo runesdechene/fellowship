@@ -1,49 +1,50 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
-  CalendarDays,
-  Compass,
-  User,
-  Bell,
-  Users,
-  Shield,
+  CalendarDays, CalendarClock, Compass, User, Heart,
+  LayoutDashboard, Store, Users, Shield, type LucideIcon,
 } from 'lucide-react'
+import { navItemsFor, entryState, NAV_DEFS } from '@/lib/navModel'
 import './BottomBar.css'
 
-const exposantNav = [
-  { to: '/explorer', icon: Compass, label: 'Explorer' },
-  { to: '/calendrier', icon: CalendarDays, label: 'Calendrier' },
-  { to: '/profil', icon: User, label: 'Profil' },
-]
-
-const publicNav = [
-  { to: '/explorer', icon: Compass, label: 'Explorer' },
-  { to: '/suivis', icon: Users, label: 'Suivis' },
-  { to: '/notifications', icon: Bell, label: 'Notifs' },
-  { to: '/profil', icon: User, label: 'Profil' },
-]
+const ICONS: Record<string, LucideIcon> = {
+  Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User,
+}
 
 export function BottomBar() {
-  const { profile } = useAuth()
-  const nav = profile?.type === 'exposant' ? exposantNav : publicNav
-  const allNav = profile?.role === 'admin'
-    ? [...nav, { to: '/admin', icon: Shield, label: 'Admin' }]
-    : nav
+  const { currentActor, person, isAdmin } = useAuth()
+  const navigate = useNavigate()
+  const plan = person?.plan === 'pro' ? 'pro' : 'free'
+  // 4 premières entrées de la nav de l'acteur (mobile), + Admin si applicable.
+  const keys = navItemsFor(currentActor).slice(0, 4)
 
   return (
     <nav className="bottom-bar">
-      {allNav.map(({ to, icon: Icon, label }) => (
-        <NavLink
-          key={to}
-          to={to}
-          className={({ isActive }) =>
-            `bottom-bar-link ${isActive ? 'active' : ''}`
-          }
-        >
-          <Icon strokeWidth={1.5} />
-          <span>{label}</span>
+      {keys.map(key => {
+        const def = NAV_DEFS[key]
+        const Icon = ICONS[def.icon] ?? Compass
+        const state = entryState(key, plan)
+        if (state === 'active') {
+          return (
+            <NavLink key={key} to={def.to} className={({ isActive }) => `bottom-bar-link ${isActive ? 'active' : ''}`}>
+              <Icon strokeWidth={1.5} />
+              <span>{def.label}</span>
+            </NavLink>
+          )
+        }
+        return (
+          <button key={key} onClick={() => navigate(def.to)} className="bottom-bar-link bottom-bar-link--muted">
+            <Icon strokeWidth={1.5} />
+            <span>{def.label}</span>
+          </button>
+        )
+      })}
+      {isAdmin && (
+        <NavLink to="/admin" className={({ isActive }) => `bottom-bar-link ${isActive ? 'active' : ''}`}>
+          <Shield strokeWidth={1.5} />
+          <span>Admin</span>
         </NavLink>
-      ))}
+      )}
     </nav>
   )
 }
