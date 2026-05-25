@@ -19,6 +19,15 @@
   overflow: hidden;
 }
 
+/* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
+.explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.explorer .xb { position: absolute; border-radius: 50%; filter: blur(85px); }
+.explorer .xb1 { width: 48vh; height: 48vh; left: 8%; top: -6%; background: color-mix(in srgb, var(--xh-accent, #e8a06a) 55%, transparent); transition: background 0.6s ease; }
+.explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.24); }
+.explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.18); }
+.explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.16); }
+.light .explorer .xb { opacity: 0.5; mix-blend-mode: multiply; }
+
 /* ── Empty state (no events match the filters) ────────────────────── */
 .explorer .explorer-empty-coverflow {
   position: absolute;
@@ -341,14 +350,11 @@
 
 .explorer .flow {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: auto;
-  height: 62vh;
+  inset: 0;                 /* pleine hauteur → les flèches (top:50%) restent centrées sur toute la page */
   display: flex;
-  align-items: center;
+  align-items: flex-start;  /* le deck est monté vers le haut… */
   justify-content: center;
+  padding-top: 7vh;         /* …via ce padding ; les flèches, elles, restent au centre vertical */
   perspective: 1700px;
 }
 
@@ -356,7 +362,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 58vh;
+  top: 60vh;
   bottom: 0;
   display: flex;
   align-items: center;

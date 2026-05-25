@@ -10,6 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { EventDock } from '@/components/explorer/EventDock'
+import { getTagLandingColor } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -211,8 +212,19 @@ export function ExplorerPage() {
   // ---------- Participation status ----------
   const activeStatus = currentEvent ? (participations.find(p => p.event_id === currentEvent.id)?.status ?? null) : null
 
+  // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
+  const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
+
   return (
-    <div className="explorer">
+    <div className="explorer" style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
+      {/* Halos d'ambiance (teintes landing ; le halo principal suit la couleur de l'affiche active) */}
+      <div className="xhalos" aria-hidden="true">
+        <span className="xb xb1" />
+        <span className="xb xb2" />
+        <span className="xb xb3" />
+        <span className="xb xb4" />
+      </div>
+
       {/* Hidden file input for add-image */}
       <input
         ref={fileInputRef}
