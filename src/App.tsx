@@ -19,6 +19,8 @@ import { AuthCallbackPage } from '@/pages/AuthCallback'
 import { CalendarPage } from '@/pages/Calendar'
 import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 import { AdminRoute } from '@/components/admin/AdminRoute'
+import { ComingSoon } from '@/components/layout/ComingSoon'
+import { ProGate } from '@/components/layout/ProGate'
 
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
 const AdminDashboard = lazy(() => import('@/components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })))
@@ -85,12 +87,16 @@ function App() {
 
           {/* Authenticated routes */}
           <Route path="/dashboard" element={<Navigate to="/explorer" replace />} />
-          <Route path="/calendrier" element={<AuthenticatedApp><CalendarPage /></AuthenticatedApp>} />
+          <Route path="/calendrier" element={<AuthenticatedApp><ProGate title="Calendrier"><CalendarPage /></ProGate></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />
           <Route path="/profil" element={<AuthenticatedApp><ProfilePage /></AuthenticatedApp>} />
           <Route path="/reglages" element={<AuthenticatedApp><SettingsPage /></AuthenticatedApp>} />
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
+          <Route path="/mes-dates" element={<AuthenticatedApp><ComingSoon title="Mes dates" /></AuthenticatedApp>} />
+          <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
+          <Route path="/communaute" element={<AuthenticatedApp><ProGate title="Communauté"><ComingSoon title="Communauté" /></ProGate></AuthenticatedApp>} />
+          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Tableau de bord"><ComingSoon title="Tableau de bord" /></ProGate></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
 
           {/* Admin routes */}
