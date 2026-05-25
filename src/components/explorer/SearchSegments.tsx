@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { PERIODS, type Period, type Zone } from '@/lib/explorer'
 
@@ -25,12 +25,23 @@ type Pop = 'quoi' | 'ou' | 'quand' | null
 
 export function SearchSegments({ tags, selectedTags, zone, period, userDept, onToggleTag, onZone, onPeriod }: SearchSegmentsProps) {
   const [open, setOpen] = useState<Pop>(null)
+  const topRef = useRef<HTMLDivElement>(null)
   const toggle = (p: Pop) => setOpen(o => (o === p ? null : p))
+
+  // Fermer le popover au clic en dehors de la barre de recherche.
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (topRef.current && !topRef.current.contains(e.target as Node)) setOpen(null)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [open])
   const quoiLabel = selectedTags.size === 0 ? 'Tous les festivals' : `${selectedTags.size} catégorie${selectedTags.size > 1 ? 's' : ''}`
   const ouLabel = zone === 'france' ? 'Toute la France' : (userDept ? `Mon coin (${userDept})` : 'Près de moi')
   const quandLabel = PERIODS.find(p => p.value === period)?.label ?? ''
   return (
-    <div className="top">
+    <div className="top" ref={topRef}>
       <div className="searchbar">
         <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
           <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>
@@ -68,10 +79,10 @@ export function SearchSegments({ tags, selectedTags, zone, period, userDept, onT
         <div className="pop open" onClick={e => e.stopPropagation()}>
           <h4>Localisation</h4>
           <div className="peropts">
-            <button className={'peropt' + (zone === 'mine' ? ' on' : '')} onClick={() => onZone('mine')} disabled={!userDept}>
+            <button className={'peropt' + (zone === 'mine' ? ' on' : '')} onClick={() => { onZone('mine'); setOpen(null) }} disabled={!userDept}>
               📍 Mon coin{userDept ? ` (${userDept})` : ''}
             </button>
-            <button className={'peropt' + (zone === 'france' ? ' on' : '')} onClick={() => onZone('france')}>🇫🇷 Toute la France</button>
+            <button className={'peropt' + (zone === 'france' ? ' on' : '')} onClick={() => { onZone('france'); setOpen(null) }}>🇫🇷 Toute la France</button>
           </div>
         </div>
       )}
@@ -81,7 +92,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, userDept, onT
           <h4>Période</h4>
           <div className="peropts">
             {PERIODS.map(p => (
-              <button key={p.value} className={'peropt' + (period === p.value ? ' on' : '')} onClick={() => onPeriod(p.value)}>{p.label}</button>
+              <button key={p.value} className={'peropt' + (period === p.value ? ' on' : '')} onClick={() => { onPeriod(period === p.value ? 'all' : p.value); setOpen(null) }}>{p.label}</button>
             ))}
           </div>
         </div>

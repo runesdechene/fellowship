@@ -77,8 +77,8 @@ export function ExplorerPage() {
   )
   const [period, setPeriod] = useState<Period>(
     () => {
-      const validPeriods: Period[] = ['this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
-      return validPeriods.includes(stored.period as Period) ? stored.period as Period : 'next-12'
+      const validPeriods: Period[] = ['all', 'this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
+      return validPeriods.includes(stored.period as Period) ? stored.period as Period : 'all'
     }
   )
 

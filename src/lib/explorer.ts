@@ -44,8 +44,9 @@ export function deckCardStyle(offset: number): DeckStyle {
   }
 }
 
-export type Period = 'this-month' | 'next-3' | 'next-6' | 'next-12' | 'recent' | 'past'
+export type Period = 'all' | 'this-month' | 'next-3' | 'next-6' | 'next-12' | 'recent' | 'past'
 export const PERIODS: { value: Period; label: string }[] = [
+  { value: 'all', label: "Jusqu'à la fin des temps" },
   { value: 'this-month', label: 'Ce mois-ci' },
   { value: 'next-3', label: '3 prochains mois' },
   { value: 'next-6', label: '6 prochains mois' },
@@ -59,6 +60,7 @@ export interface PeriodRange { from: Date | null; to: Date | null; past?: boolea
 export function periodToRange(period: Period, now: Date): PeriodRange {
   const addMonths = (n: number) => { const d = new Date(now); d.setMonth(d.getMonth() + n); return d }
   switch (period) {
+    case 'all': return { from: now, to: null }
     case 'this-month': {
       const from = new Date(now.getFullYear(), now.getMonth(), 1)
       const to = new Date(now.getFullYear(), now.getMonth() + 1, 1)
