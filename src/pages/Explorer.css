@@ -392,6 +392,14 @@
   background: hsl(var(--card));
 }
 
+/* Wrapper qui clippe l'image (et son zoom Ken Burns) tout en laissant le badge déborder du coin de la carte. */
+.explorer .card-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
 .explorer .card img {
   position: absolute;
   inset: 0;

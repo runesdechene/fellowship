@@ -35,19 +35,21 @@ export function DeckCard({ event, style, isCenter, canAddImage, badge, onClick, 
           {badge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}
         </span>
       )}
-      <div className="card-fallback">
-        <span className="card-fallback-glow" aria-hidden="true" />
-        {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
-        <Icon className="card-fallback-ico" aria-hidden="true" />
+      <div className="card-media">
+        <div className="card-fallback">
+          <span className="card-fallback-glow" aria-hidden="true" />
+          {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
+          <Icon className="card-fallback-ico" aria-hidden="true" />
+        </div>
+        {showImg && (
+          <img
+            src={event.image_url!}
+            alt={event.name}
+            loading={isCenter ? 'eager' : 'lazy'}
+            onError={() => setTracked(t => ({ ...t, error: true }))}
+          />
+        )}
       </div>
-      {showImg && (
-        <img
-          src={event.image_url!}
-          alt={event.name}
-          loading={isCenter ? 'eager' : 'lazy'}
-          onError={() => setTracked(t => ({ ...t, error: true }))}
-        />
-      )}
       {isCenter && canAddImage && imageless && (
         <button
           type="button"
