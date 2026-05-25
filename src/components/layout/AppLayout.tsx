@@ -14,6 +14,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { currentActor } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+  // L'Explorer (coverflow) est immersif plein écran : pas de SearchBar globale (son Quoi/Où/Quand la remplace).
+  const fullBleed = location.pathname === '/explorer'
   useEffect(() => {
     if (currentActor && !isRouteValidFor(location.pathname, currentActor)) {
       navigate('/explorer', { replace: true })
@@ -24,8 +26,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex h-screen">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <SearchBar onCreateEvent={() => setShowCreate(true)} />
-        <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
+        {!fullBleed && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
+        <main className={fullBleed ? 'flex-1 overflow-hidden pb-16 md:pb-0' : 'flex-1 overflow-y-auto pb-16 md:pb-0'}>
           {children}
         </main>
       </div>
