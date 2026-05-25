@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { useWaitlist } from '@/hooks/use-waitlist'
 import './Landing.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -22,6 +23,8 @@ const marqueTags: { label: string; color: string }[] = [
 
 export function LandingPage() {
   const [audience, setAudience] = useState<Audience>('exposant')
+  const [email, setEmail] = useState('')
+  const { status, error, submit } = useWaitlist()
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -80,6 +83,7 @@ export function LandingPage() {
               <button
                 data-a="festivalier"
                 className={audience === 'festivalier' ? 'on' : ''}
+                aria-pressed={audience === 'festivalier'}
                 onClick={() => switchAudience('festivalier')}
               >
                 Festivalier
@@ -87,6 +91,7 @@ export function LandingPage() {
               <button
                 data-a="exposant"
                 className={audience === 'exposant' ? 'on' : ''}
+                aria-pressed={audience === 'exposant'}
                 onClick={() => switchAudience('exposant')}
               >
                 Exposant
@@ -94,6 +99,7 @@ export function LandingPage() {
               <button
                 data-a="organisateur"
                 className={audience === 'organisateur' ? 'on' : ''}
+                aria-pressed={audience === 'organisateur'}
                 onClick={() => switchAudience('organisateur')}
               >
                 Organisateur <span className="mini">Soon</span>
@@ -441,24 +447,39 @@ export function LandingPage() {
           <p style={{ color: 'hsl(var(--muted-foreground))', margin: '14px 0 24px' }}>
             Laissez votre email, vous serez les premiers à digitaliser la gestion de votre festival.
           </p>
-          {/* TODO(L5): wire up form submission */}
-          <form style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <input
-              className="em-input"
-              type="email"
-              placeholder="votre@email.fr"
-            />
-            <button
-              type="submit"
-              className="btn btn-primary"
-              style={{
-                background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
-                boxShadow: 'none',
-              }}
+          {status === 'success' ? (
+            <p className="proof">Merci ! On te prévient au lancement. ✓</p>
+          ) : (
+            <form
+              style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}
+              onSubmit={(e) => { e.preventDefault(); submit(email) }}
             >
-              Je m'inscris
-            </button>
-          </form>
+              <input
+                className="em-input"
+                type="email"
+                name="email"
+                placeholder="votre@email.fr"
+                aria-label="Votre email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === 'submitting'}
+              />
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{
+                  background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
+                  boxShadow: 'none',
+                }}
+                disabled={status === 'submitting'}
+              >
+                {status === 'submitting' ? 'Envoi…' : "Je m'inscris"}
+              </button>
+              {status === 'error' && error && (
+                <p style={{ color: 'salmon', fontSize: 13, marginTop: 8, width: '100%', textAlign: 'center' }}>{error}</p>
+              )}
+            </form>
+          )}
         </div>
       </section>
 
