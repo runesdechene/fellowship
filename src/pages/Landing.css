@@ -163,11 +163,11 @@
   color: #fff;
   box-shadow: 0 4px 16px hsl(24 80% 50% / .4);
 }
-[data-aud="exposant"] .landing .seg button[data-a="exposant"].on,
-[data-aud="festivalier"] .landing .seg button[data-a="festivalier"].on {
+.landing[data-aud="exposant"] .seg button[data-a="exposant"].on,
+.landing[data-aud="festivalier"] .seg button[data-a="festivalier"].on {
   background: var(--gradient-primary);
 }
-[data-aud="organisateur"] .landing .seg button[data-a="organisateur"].on {
+.landing[data-aud="organisateur"] .seg button[data-a="organisateur"].on {
   background: linear-gradient(135deg, var(--lime), var(--lime-d));
 }
 .landing .seg .mini {
@@ -343,9 +343,9 @@
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
 }
-[data-aud="exposant"]     .landing .v.exposant,
-[data-aud="festivalier"]  .landing .v.festivalier,
-[data-aud="organisateur"] .landing .v.organisateur {
+.landing[data-aud="exposant"]     .v.exposant,
+.landing[data-aud="festivalier"]  .v.festivalier,
+.landing[data-aud="organisateur"] .v.organisateur {
   display: block;
   animation: fadeUp .4s ease both;
 }
