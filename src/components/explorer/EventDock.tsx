@@ -23,14 +23,16 @@ interface EventDockProps {
   event: EventWithScore
   status: string | null
   tagInfo?: { label?: string; bg?: string; color?: string }
+  /** Rejoue le fade doux à chaque changement d'événement. Off pendant le scrub (évite le strobe). */
+  animate?: boolean
 }
 
-export function EventDock({ event, status, tagInfo }: EventDockProps) {
+export function EventDock({ event, status, tagInfo, animate = true }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
   const pill = status ? STATUS_PILL[status] : null
   return (
-    <div className="dockinfo">
+    <div key={animate ? event.id : 'static'} className={'dockinfo' + (animate ? ' eh-fade' : '')}>
       {/* Tag — même recette graphique que les .etag de la landing (pilule teintée de --c) */}
       <span className="dock-tag" style={{ '--c': getTagLandingColor(tag) } as React.CSSProperties}>
         <span aria-hidden="true">{getTagEmoji(tag)}</span>

@@ -282,6 +282,7 @@ export function ExplorerPage() {
                   event={currentEvent}
                   status={activeStatus}
                   tagInfo={activeTagInfo}
+                  animate={!scrubbing}
                 />
               </div>
             </>

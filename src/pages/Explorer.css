@@ -768,6 +768,18 @@
   padding: 0 20px;
 }
 
+/* Fade doux + micro-blur quand le contenu du dock change (rejoué via key=event.id). */
+.explorer .dockinfo.eh-fade {
+  animation: eh-fade 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes eh-fade {
+  from { opacity: 0; filter: blur(6px); transform: translateY(7px); }
+  to   { opacity: 1; filter: blur(0); transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .explorer .dockinfo.eh-fade { animation: none; }
+}
+
 .explorer .dockinfo .eyb {
   font-size: 10.5px;
   font-weight: 800;
