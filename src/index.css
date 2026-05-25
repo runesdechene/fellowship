@@ -3,33 +3,38 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Fellowship — Flat warm design system */
-  --background: 33,33%,95%;  /* #f0ebe4 — lin page bg */
-  --foreground: 24 15% 20%;      /* #3d3028 — soft warm brown */
-  --card: 36 33% 98%;            /* #faf8f5 — warm white blocks */
-  --card-foreground: 24 15% 20%;
-  --popover: 36 33% 98%;
-  --popover-foreground: 24 15% 20%;
-  --primary: 24 72% 44%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 30 15% 89%;       /* #e8e2da — slightly darker lin */
-  --secondary-foreground: 24 15% 20%;
-  --muted: 30 12% 87%;           /* #e2dbd3 */
-  --muted-foreground: 24 12% 45%;
-  --accent: 152 32% 40%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 65% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 30 10% 82%;
-  --input: 30 10% 82%;
-  --ring: 24 72% 44%;
+  /* Fellowship — DA « Nuit de Festival » (nuit = défaut) */
+  --background: #170f0e;
+  --foreground: #fbf3e8;
+  --card: #241917;
+  --card-foreground: #fbf3e8;
+  --popover: #241917;
+  --popover-foreground: #fbf3e8;
+  --secondary: #1e1513;
+  --secondary-foreground: #fbf3e8;
+  --muted: #1e1513;
+  --muted-foreground: #b3a293;
+  --accent: #241917;            /* surface de survol neutre ; le vert de marque = --forest */
+  --accent-foreground: #fbf3e8;
+  --destructive: hsl(0 65% 55%);
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 240, 225, 0.10);
+  --input: rgba(255, 240, 225, 0.14);
+  --primary: hsl(25 78% 52%);
+  --primary-foreground: #ffffff;
+  --ring: hsl(25 78% 52%);
   --radius: 0.75rem;
 
-  /* Brand tokens */
-  --fellowship-copper: 24 72% 44%;
-  --fellowship-forest: 152 32% 40%;
-  --fellowship-sand: 36 33% 98%;
-  --fellowship-linen: 30 18% 92%;
+  /* Tokens de marque (DA) */
+  --copper: hsl(24 85% 56%);
+  --copper-d: hsl(16 80% 48%);
+  --forest: hsl(152 42% 52%);
+  --lime: hsl(86 44% 64%);
+  --lime-d: hsl(92 40% 46%);
+  --amber: #ffce85;
+  --gradient-primary: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
+  --gradient-pro: linear-gradient(155deg, hsl(25 78% 52%), hsl(18 72% 41%) 62%, hsl(12 64% 32%));
+  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2e1e1a, #170f0e 60%);
 
   /* Layout tokens */
   --page-padding: 24px;
@@ -38,66 +43,73 @@
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Font color */
-
+  /* Font color — used in EventPage.css */
   --font-color-lowtitle: rgb(190, 171, 171);
   --font-color-text: rgb(66, 39, 39);
 }
 
-.dark {
-  --background: 24 12% 8%;
-  --foreground: 30 16% 90%;
-  --card: 24 12% 12%;
-  --card-foreground: 30 16% 90%;
-  --popover: 24 12% 12%;
-  --popover-foreground: 30 16% 90%;
-  --primary: 24 68% 55%;
-  --primary-foreground: 24 12% 8%;
-  --secondary: 24 10% 16%;
-  --secondary-foreground: 30 16% 90%;
-  --muted: 24 8% 18%;
-  --muted-foreground: 24 8% 55%;
-  --accent: 152 28% 48%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 60% 40%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 24 6% 20%;
-  --input: 24 6% 20%;
-  --ring: 24 68% 55%;
+/* Mode JOUR (inversé) — override sur la classe .light */
+.light {
+  --background: #f0ebe4;
+  --foreground: #3d3028;
+  --card: #f6f1e8;
+  --card-foreground: #3d3028;
+  --popover: #f6f1e8;
+  --popover-foreground: #3d3028;
+  --secondary: #ece4d6;
+  --secondary-foreground: #3d3028;
+  --muted: #ece4d6;
+  --muted-foreground: #7c6f64;
+  --accent: #ece4d6;
+  --accent-foreground: #3d3028;
+  --destructive: hsl(0 60% 48%);
+  --destructive-foreground: #ffffff;
+  --border: rgba(60, 45, 35, 0.13);
+  --input: rgba(60, 45, 35, 0.16);
+
+  --forest: hsl(152 40% 38%);
+  --lime: hsl(88 50% 36%);
+  --amber: hsl(36 82% 46%);
+  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #f8f2e8, #ece3d4 60%);
 }
 
 @theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-fellowship-copper: hsl(var(--fellowship-copper));
-  --color-fellowship-forest: hsl(var(--fellowship-forest));
-  --color-fellowship-sand: hsl(var(--fellowship-sand));
-  --color-fellowship-linen: hsl(var(--fellowship-linen));
+  --color-copper: var(--copper);
+  --color-forest: var(--forest);
+  --color-lime: var(--lime);
+  --color-amber: var(--amber);
 }
 
+html {
+  background: var(--background);
+}
 body {
-  @apply bg-background text-foreground antialiased;
+  @apply text-foreground antialiased;
+  background: var(--page-backdrop);
+  background-attachment: fixed;
   font-family: var(--font-body);
   font-size: 15px;
 }
@@ -145,7 +157,7 @@ h1, h2, h3, .font-display {
   font-size: 36px;
   font-weight: 800;
   letter-spacing: -0.025em;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .page-subtitle {
@@ -197,17 +209,17 @@ h1, h2, h3, .font-display {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, hsl(24 72% 48%), hsl(24 65% 38%));
-  color: hsl(var(--primary-foreground));
+  background: var(--gradient-primary);
+  color: var(--primary-foreground);
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 20px hsl(24 72% 44% / 0.35);
+  box-shadow: 0 4px 20px hsl(25 78% 52% / 0.35);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .fab-button:hover {
   transform: scale(1.08);
-  box-shadow: 0 6px 28px hsl(24 72% 44% / 0.5);
+  box-shadow: 0 6px 28px hsl(25 78% 52% / 0.5);
 }
 
 .fab-button:active {
