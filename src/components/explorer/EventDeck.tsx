@@ -14,12 +14,18 @@ interface EventDeckProps {
 }
 
 export function EventDeck({ events, activeIndex, canAddImage, onSelect, onPrev, onNext, onCardClick, onAddImage }: EventDeckProps) {
+  const hasPrev = activeIndex > 0
+  const hasNext = activeIndex < events.length - 1
   return (
     <div className="flow">
-      <button className="arrow l" onClick={onPrev} aria-label="Précédent">
-        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
-      </button>
+      {hasPrev && (
+        <button className="arrow l" onClick={onPrev} aria-label="Précédent">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+      )}
       <div className="deck">
+        {hasPrev && <button type="button" className="navzone l" onClick={onPrev} aria-label="Festival précédent" />}
+        {hasNext && <button type="button" className="navzone r" onClick={onNext} aria-label="Festival suivant" />}
         {events.map((ev, i) => {
           const offset = i - activeIndex
           if (Math.abs(offset) > 3) return null // fenêtrage perf : ne pas monter les cartes lointaines
@@ -37,9 +43,11 @@ export function EventDeck({ events, activeIndex, canAddImage, onSelect, onPrev, 
           )
         })}
       </div>
-      <button className="arrow r" onClick={onNext} aria-label="Suivant">
-        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
-      </button>
+      {hasNext && (
+        <button className="arrow r" onClick={onNext} aria-label="Suivant">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
+        </button>
+      )}
     </div>
   )
 }

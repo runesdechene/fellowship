@@ -40,7 +40,7 @@ export function deckCardStyle(offset: number): DeckStyle {
     transform: `translate(-50%,-50%) translateX(${tx}%) rotateY(${rot}deg) scale(${sc})`,
     opacity: 1,
     filter: offset === 0 ? 'none' : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)'),
-    zIndex: 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
+    zIndex: offset === 0 ? 20 : 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
   }
 }
 

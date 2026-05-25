@@ -81,7 +81,7 @@
 .explorer .top {
   display: flex;
   justify-content: center;
-  padding: 0px 0 60px;
+  padding: 30px 0 60px;
   position: relative;
 }
 
@@ -307,7 +307,7 @@
   flex-direction: column;
   align-items: center;
   gap: 11px;
-  padding: 0px 0 50px;
+  padding: 40px 0 40px;
 }
 
 .explorer .dock-cta {
@@ -383,7 +383,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 31vh;
+  width: 36vh;
   height: 52vh;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
@@ -521,6 +521,23 @@
   box-shadow: 0 16px 40px rgba(60, 45, 35, 0.12);
 }
 
+/* ── Card "Ajouté le" label ───────────────────────────────────────── */
+
+.explorer .card-added {
+  position: absolute;
+  top: 9px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
 /* ── Card fallback (no photo) ─────────────────────────────────────── */
 
 .explorer .card-fallback {
@@ -616,6 +633,22 @@
   background: rgba(60, 45, 35, 0.06);
   border-color: rgba(60, 45, 35, 0.14);
 }
+
+/* ── Nav zones (invisible click targets inside .deck) ─────────────── */
+/* z12: above side cards (z8-9), below center card (z20), below arrows (z20) */
+.explorer .navzone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 12;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.explorer .navzone.l { left: 0; }
+.explorer .navzone.r { right: 0; }
 
 /* ── Dock / info zone ─────────────────────────────────────────────── */
 
@@ -727,6 +760,7 @@
 .explorer .counter {
   font-size: 11px;
   color: hsl(var(--muted-foreground));
+  padding-top: 10px;
 }
 
 .explorer .counter b {

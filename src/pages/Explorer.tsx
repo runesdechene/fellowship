@@ -99,7 +99,7 @@ export function ExplorerPage() {
   // ---------- Navigation ----------
   const go = useCallback((d: number) => {
     if (displayed.length === 0) return
-    setActiveIndex(i => (i + d + displayed.length) % displayed.length)
+    setActiveIndex(i => Math.max(0, Math.min(displayed.length - 1, i + d)))
   }, [displayed.length])
 
   // ---------- Autoplay ----------

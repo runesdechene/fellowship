@@ -29,6 +29,7 @@ export function DeckCard({ event, style, isCenter, canAddImage, onClick, onAddIm
   const imageless = !event.image_url || tracked.error
   return (
     <div className={'card' + (isCenter ? ' is-center' : '')} style={style} onClick={onClick}>
+      <span className="card-added" aria-hidden="true">Ajouté le {new Date(event.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
       <div className="card-fallback">
         <span className="card-fallback-glow" aria-hidden="true" />
         {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
