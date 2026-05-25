@@ -3,23 +3,23 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 
 export function useFollowingIds() {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
   const [followingIds, setFollowingIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    if (!user) return
+    if (!currentActor) return
 
     async function fetch() {
       const { data } = await supabase
         .from('follows')
-        .select('following_id')
-        .eq('follower_id', user!.id)
+        .select('following_actor')
+        .eq('follower_actor', currentActor!.id)
 
-      setFollowingIds(new Set((data ?? []).map(r => r.following_id)))
+      setFollowingIds(new Set((data ?? []).map(r => r.following_actor as string)))
     }
 
     fetch()
-  }, [user])
+  }, [currentActor])
 
   return followingIds
 }
