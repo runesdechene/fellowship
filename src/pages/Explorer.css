@@ -1070,13 +1070,14 @@
   .explorer .seg-searchfield { padding: 0 6px 0 10px; }
   .explorer .seg-input { font-size: 14px; }
 
-  /* Scrubber */
-  .explorer .scrubber { width: calc(100% - 28px); margin-top: -18px; }
+  /* Scrubber masqué : on swipe directement dans le carrousel (gain de place). */
+  .explorer .scrubber { display: none; }
+  .explorer .top { padding: 16px 12px 12px; }
 
-  /* Deck / cartes : portrait, calées pour laisser la place au dock */
-  .explorer .flow { padding-top: 4vh; perspective: 1100px; }
-  .explorer .deck { height: 44vh; }
-  .explorer .card { width: 60vw; height: 42vh; }
+  /* Deck / cartes : on swipe ; touch-action pan-y pour capter le geste horizontal. */
+  .explorer .deck { touch-action: pan-y; height: 46vh; }
+  .explorer .flow { padding-top: 3vh; perspective: 1100px; }
+  .explorer .card { width: 64vw; height: 44vh; }
 
   /* Flèches compactes aux bords */
   .explorer .arrow { width: 40px; height: 40px; }
@@ -1084,13 +1085,13 @@
   .explorer .arrow.l { left: 2px; }
   .explorer .arrow.r { right: 2px; }
 
-  /* Dock remonté (deck plus court) + compact */
-  .explorer .infozone { top: 53vh; padding: 0 14px; }
-  .explorer .dockinfo { gap: 10px; max-width: 100%; }
-  .explorer .dockinfo h2 { font-size: 20px; }
+  /* Dock remonté + compact */
+  .explorer .infozone { top: 54vh; padding: 0 14px; }
+  .explorer .dockinfo { gap: 11px; max-width: 100%; }
+  .explorer .dockinfo h2 { font-size: 21px; }
 
-  /* Bottombar compacte */
-  .explorer .bottombar { padding: 12px 0 14px; gap: 8px; }
-  .explorer .dock-cta { gap: 9px; }
-  .explorer .btn { font-size: 13px; padding: 10px 18px; }
+  /* Bottombar : CTA larges et confortables au doigt */
+  .explorer .bottombar { padding: 10px 0 16px; gap: 9px; }
+  .explorer .dock-cta { width: 100%; max-width: 360px; gap: 10px; padding: 0 16px; }
+  .explorer .dock-cta .btn { flex: 1; justify-content: center; font-size: 15px; padding: 14px 14px; }
 }

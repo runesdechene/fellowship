@@ -284,6 +284,7 @@ export function ExplorerPage() {
                 onSelect={i => setActiveIndex(i)}
                 onPrev={() => go(-1)}
                 onNext={() => go(1)}
+                onSwipe={go}
                 onCardClick={ev => navigate(`/evenement/${ev.id}`)}
                 onAddImage={onAddImage}
               />
