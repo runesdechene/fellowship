@@ -788,6 +788,17 @@ export type Database = {
       }
     }
     Views: {
+      actor_public: {
+        Row: {
+          actor_id: string | null
+          avatar_url: string | null
+          entity_type: Database["public"]["Enums"]["entity_type"] | null
+          kind: Database["public"]["Enums"]["actor_kind"] | null
+          label: string | null
+          public_slug: string | null
+        }
+        Relationships: []
+      }
       event_scores: {
         Row: {
           avg_affluence: number | null
@@ -814,17 +825,17 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "follows_follower_id_fkey"
+            foreignKeyName: "follows_follower_actor_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "actors"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "follows_following_id_fkey"
+            foreignKeyName: "follows_following_actor_fkey"
             columns: ["friend_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "actors"
             referencedColumns: ["id"]
           },
         ]
