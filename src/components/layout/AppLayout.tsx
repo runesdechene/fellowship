@@ -1,13 +1,24 @@
-import { useState, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { BottomBar } from './BottomBar'
 import { SearchBar } from './SearchBar'
 import { ChangelogModal } from './ChangelogModal'
 import { EventForm } from '@/components/events/EventForm'
+import { useAuth } from '@/lib/auth'
+import { isRouteValidFor } from '@/lib/navModel'
 import { X } from 'lucide-react'
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [showCreate, setShowCreate] = useState(false)
+  const { currentActor } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (currentActor && !isRouteValidFor(location.pathname, currentActor)) {
+      navigate('/explorer', { replace: true })
+    }
+  }, [currentActor, location.pathname, navigate])
 
   return (
     <div className="flex h-screen bg-background">
