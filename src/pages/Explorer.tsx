@@ -85,6 +85,8 @@ export function ExplorerPage() {
 
   // ---------- Recherche texte (transient, non persistée) ----------
   const [query, setQuery] = useState('')
+  // Event à recentrer après recomposition de la liste (préserve la position à l'annulation de recherche).
+  const [focusEventId, setFocusEventId] = useState<string | null>(null)
 
   // ---------- Active index ----------
   const [activeIndex, setActiveIndex] = useState(0)
@@ -102,6 +104,16 @@ export function ExplorerPage() {
 
   // Clamp activeIndex when displayed shrinks
   const safeIndex = displayed.length > 0 ? Math.min(activeIndex, displayed.length - 1) : 0
+
+  // Après recomposition de la liste, recentre sur le festival mémorisé (annulation de recherche
+  // → on reste sur le même festival au lieu de revenir à la première carte).
+  // setState pendant le rendu, guardé (motif getDerivedStateFromProps comme DeckCard) :
+  // React re-rend immédiatement avant peinture, donc pas de flash ni d'effet.
+  if (focusEventId != null && displayed.length > 0) {
+    const idx = displayed.findIndex(e => e.id === focusEventId)
+    setFocusEventId(null)
+    setActiveIndex(idx >= 0 ? idx : 0)
+  }
 
   // ---------- Navigation ----------
   const go = useCallback((d: number) => {
@@ -157,9 +169,11 @@ export function ExplorerPage() {
     setActiveIndex(0)
   }
 
+  // Avant un changement de recherche, on mémorise le festival affiché pour le
+  // retrouver dans la nouvelle liste (ne pas rebooter le carrousel à l'annulation).
   const handleQuery = (q: string) => {
+    setFocusEventId(displayed[safeIndex]?.id ?? null)
     setQuery(q)
-    setActiveIndex(0)
   }
 
   // ---------- Repérer (save) ----------
