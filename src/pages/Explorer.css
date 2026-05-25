@@ -790,7 +790,9 @@
 /* ── Above-card header (status + editorial date/lieu) ─────────────── */
 .explorer .event-header {
   position: absolute;
-  top: 12px;
+  /* Ancré juste au-dessus du bord haut de la carte (carte ≈ 40vh centrée → top à 50%−20vh). */
+  top: auto;
+  bottom: calc(50% + 20vh + 14px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
