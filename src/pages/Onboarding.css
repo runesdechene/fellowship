@@ -186,6 +186,11 @@
   cursor: pointer;
   transition: 0.14s;
   text-align: left;
+  /* button reset — keeps maquette look when rendered as <button> */
+  width: 100%;
+  font-family: var(--font-body);
+  color: inherit;
+  appearance: none;
 }
 
 .onboarding .cc:hover {

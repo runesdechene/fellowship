@@ -137,7 +137,7 @@ export function OnboardingPage() {
           {/* Back button */}
           {currentStep !== 'choice' && (stepIndex > 0 || entities.length === 0) && (
             <button className="ob-back" onClick={goBack}>
-              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
             </button>
           )}
 
@@ -167,26 +167,26 @@ export function OnboardingPage() {
               <h2>Tu viens pour quoi&nbsp;?</h2>
               <div className="sub">Le réseau qui fait tourner les festivals.</div>
               <div className="choice">
-                <div className="cc" onClick={() => choose('exposant')}>
+                <button type="button" className="cc" onClick={() => choose('exposant')}>
                   <div className="cic">🎪</div>
                   <div className="ct">
                     <b>Je suis exposant / créateur</b>
                     <span>Gérer ma saison, ma vitrine, candidater aux festivals.</span>
                   </div>
-                  <span className="carr">
+                  <span className="carr" aria-hidden="true">
                     <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
                   </span>
-                </div>
-                <div className="cc" onClick={() => choose('festivalier')}>
+                </button>
+                <button type="button" className="cc" onClick={() => choose('festivalier')}>
                   <div className="cic">🎟️</div>
                   <div className="ct">
                     <b>Je découvre des festivals</b>
                     <span>Suivre des créateurs, repérer où aller, planifier mes sorties.</span>
                   </div>
-                  <span className="carr">
+                  <span className="carr" aria-hidden="true">
                     <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
                   </span>
-                </div>
+                </button>
               </div>
               <div className="addhint">
                 <svg viewBox="0 0 24 24">
