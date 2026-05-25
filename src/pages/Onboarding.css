@@ -348,6 +348,10 @@
   color: #fff;
   box-shadow: 0 8px 24px hsl(20 65% 32% / 0.45);
 }
+/* Mode jour : halo copper léger (l'ombre nuit est trop dure sur fond clair). */
+.light .onboarding .btn-p {
+  box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20);
+}
 
 .onboarding .btn-p:hover {
   filter: brightness(1.07);
