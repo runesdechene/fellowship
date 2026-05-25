@@ -9,10 +9,10 @@ interface FollowButtonProps {
 }
 
 export function FollowButton({ targetId, className }: FollowButtonProps) {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
   const { isFollowing, isFriend, loading, toggleFollow } = useFollowStatus(targetId)
 
-  if (!user || user.id === targetId) return null
+  if (!currentActor || currentActor.id === targetId) return null
   if (loading) return null
 
   if (isFriend) {

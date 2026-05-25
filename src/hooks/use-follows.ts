@@ -1,16 +1,25 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
-import type { Profile } from '@/types/database'
+
+export type PublicActor = {
+  actor_id: string
+  kind: 'person' | 'entity'
+  label: string | null
+  avatar_url: string | null
+  entity_type: string | null
+  public_slug: string | null
+}
 
 export function useFollowStatus(targetId: string | undefined) {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
+  const me = currentActor?.id
   const [isFollowing, setIsFollowing] = useState(false)
   const [isFriend, setIsFriend] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user || !targetId || user.id === targetId) {
+    if (!me || !targetId || me === targetId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false)
       return
@@ -18,49 +27,32 @@ export function useFollowStatus(targetId: string | undefined) {
 
     async function check() {
       const { data: myFollow } = await supabase
-        .from('follows')
-        .select('id')
-        .eq('follower_id', user!.id)
-        .eq('following_id', targetId!)
-        .maybeSingle()
-
+        .from('follows').select('id')
+        .eq('follower_actor', me!).eq('following_actor', targetId!).maybeSingle()
       const { data: theirFollow } = await supabase
-        .from('follows')
-        .select('id')
-        .eq('follower_id', targetId!)
-        .eq('following_id', user!.id)
-        .maybeSingle()
-
+        .from('follows').select('id')
+        .eq('follower_actor', targetId!).eq('following_actor', me!).maybeSingle()
       setIsFollowing(!!myFollow)
       setIsFriend(!!myFollow && !!theirFollow)
       setLoading(false)
     }
-
     check()
-  }, [user, targetId])
+  }, [me, targetId])
 
   const toggleFollow = async () => {
-    if (!user || !targetId) return
-
+    if (!me || !targetId) return
     if (isFollowing) {
-      await supabase
-        .from('follows')
-        .delete()
-        .eq('follower_id', user.id)
-        .eq('following_id', targetId)
+      await supabase.from('follows').delete()
+        .eq('follower_actor', me).eq('following_actor', targetId)
       setIsFollowing(false)
       setIsFriend(false)
     } else {
-      await supabase
-        .from('follows')
-        .insert({ follower_id: user.id, following_id: targetId })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from('follows') as any).insert({ follower_actor: me, following_actor: targetId })
       setIsFollowing(true)
       const { data: theirFollow } = await supabase
-        .from('follows')
-        .select('id')
-        .eq('follower_id', targetId)
-        .eq('following_id', user.id)
-        .maybeSingle()
+        .from('follows').select('id')
+        .eq('follower_actor', targetId).eq('following_actor', me).maybeSingle()
       setIsFriend(!!theirFollow)
     }
   }
@@ -69,64 +61,48 @@ export function useFollowStatus(targetId: string | undefined) {
 }
 
 export function useMyFriends() {
-  const { user } = useAuth()
-  const [friends, setFriends] = useState<Profile[]>([])
+  const { currentActor } = useAuth()
+  const [friends, setFriends] = useState<PublicActor[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false) // eslint-disable-line react-hooks/set-state-in-effect
-      return
-    }
+    if (!currentActor) { setLoading(false); return } // eslint-disable-line react-hooks/set-state-in-effect
     async function fetchFriends() {
       try {
-        const { data: friendRows } = await supabase.rpc('get_friend_ids', { p_user_id: user!.id })
+        const { data: friendRows } = await supabase.rpc('get_friend_ids', { p_user_id: currentActor!.id })
         const friendIds = friendRows as string[] | null
-        if (!friendIds || friendIds.length === 0) {
-          setFriends([])
-          setLoading(false)
-          return
-        }
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('*')
-          .in('id', friendIds)
-        setFriends(profiles ?? [])
-      } catch {
-        setFriends([])
-      }
+        if (!friendIds || friendIds.length === 0) { setFriends([]); setLoading(false); return }
+        const { data } = await supabase.from('actor_public').select('*').in('actor_id', friendIds)
+        setFriends((data as PublicActor[] | null) ?? [])
+      } catch { setFriends([]) }
       setLoading(false)
     }
     fetchFriends()
-  }, [user])
+  }, [currentActor])
 
   return { friends, loading }
 }
 
 export function useMyFollowers() {
-  const { user } = useAuth()
-  const [followers, setFollowers] = useState<Profile[]>([])
+  const { currentActor } = useAuth()
+  const [followers, setFollowers] = useState<PublicActor[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false) // eslint-disable-line react-hooks/set-state-in-effect
-      return
-    }
+    if (!currentActor) { setLoading(false); return } // eslint-disable-line react-hooks/set-state-in-effect
     async function fetchFollowers() {
       try {
-        const { data } = await supabase
-          .from('follows')
-          .select('profiles!follows_follower_id_fkey(*)')
-          .eq('following_id', user!.id)
-        setFollowers(data?.map((f: { profiles: Profile }) => f.profiles).filter(Boolean) ?? [])
-      } catch {
-        setFollowers([])
-      }
+        const { data: rows } = await supabase.from('follows')
+          .select('follower_actor').eq('following_actor', currentActor!.id)
+        const ids = (rows ?? []).map(r => r.follower_actor as string)
+        if (ids.length === 0) { setFollowers([]); setLoading(false); return }
+        const { data } = await supabase.from('actor_public').select('*').in('actor_id', ids)
+        setFollowers((data as PublicActor[] | null) ?? [])
+      } catch { setFollowers([]) }
       setLoading(false)
     }
     fetchFollowers()
-  }, [user])
+  }, [currentActor])
 
   return { followers, loading }
 }

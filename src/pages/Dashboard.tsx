@@ -202,16 +202,15 @@ export function DashboardPage() {
               <div className="space-y-2">
                 {friends.map(friend => (
                   <Link
-                    key={friend.id}
-                    to={`/@${friend.public_slug ?? friend.id}`}
+                    key={friend.actor_id}
+                    to={`/@${friend.public_slug ?? friend.actor_id}`}
                     className="flex items-center gap-3 rounded-2xl bg-card p-3"
                   >
                     <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                      {(friend.brand_name ?? friend.display_name ?? '?')[0].toUpperCase()}
+                      {(friend.label ?? '?')[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold truncate">{friend.brand_name ?? friend.display_name ?? 'Utilisateur'}</p>
-                      {friend.city && <p className="text-xs text-muted-foreground">{friend.city}</p>}
+                      <p className="text-sm font-semibold truncate">{friend.label ?? 'Utilisateur'}</p>
                     </div>
                   </Link>
                 ))}
@@ -230,16 +229,15 @@ export function DashboardPage() {
               <div className="space-y-2">
                 {followers.map(follower => (
                   <Link
-                    key={follower.id}
-                    to={`/@${follower.public_slug ?? follower.id}`}
+                    key={follower.actor_id}
+                    to={`/@${follower.public_slug ?? follower.actor_id}`}
                     className="flex items-center gap-3 rounded-2xl bg-card p-3"
                   >
                     <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                      {(follower.brand_name ?? follower.display_name ?? '?')[0].toUpperCase()}
+                      {(follower.label ?? '?')[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold truncate">{follower.brand_name ?? follower.display_name ?? 'Utilisateur'}</p>
-                      {follower.city && <p className="text-xs text-muted-foreground">{follower.city}</p>}
+                      <p className="text-sm font-semibold truncate">{follower.label ?? 'Utilisateur'}</p>
                     </div>
                   </Link>
                 ))}
