@@ -9,7 +9,7 @@ interface EventReportFormProps {
 }
 
 export function EventReportForm({ eventId }: EventReportFormProps) {
-  const { user, profile } = useAuth()
+  const { user, currentActor, person } = useAuth()
   const { report: existing } = useEventReport(eventId)
   const [boothCost, setBoothCost] = useState('')
   const [charges, setCharges] = useState('')
@@ -31,7 +31,7 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
     }
   }, [existing])
 
-  if (profile?.plan !== 'pro') {
+  if (person?.plan !== 'pro') {
     return (
       <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-secondary p-4 text-sm">
         <Lock className="h-4 w-4 text-primary" />
@@ -43,10 +43,11 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
   const profit = (parseFloat(revenue) || 0) - (parseFloat(boothCost) || 0) - (parseFloat(charges) || 0)
 
   const handleSave = async () => {
-    if (!user) return
+    if (!user || !currentActor) return
     setSaving(true)
     await saveEventReport({
-      user_id: user.id,
+      actor_id: currentActor.id,
+      acted_by_user_id: user.id,
       event_id: eventId,
       booth_cost: boothCost ? parseFloat(boothCost) : null,
       charges: charges ? parseFloat(charges) : null,

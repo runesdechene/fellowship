@@ -22,7 +22,7 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
 }
 
 export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
-  const { user } = useAuth()
+  const { user, currentActor } = useAuth()
   const { review: existing } = useMyReview(eventId)
   const [affluence, setAffluence] = useState(existing?.affluence ?? 0)
   const [organisation, setOrganisation] = useState(existing?.organisation ?? 0)
@@ -32,11 +32,12 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user || !affluence || !organisation || !rentabilite) return
+    if (!user || !currentActor || !affluence || !organisation || !rentabilite) return
     setSaving(true)
 
     await submitReview({
-      user_id: user.id,
+      actor_id: currentActor.id,
+      acted_by_user_id: user.id,
       event_id: eventId,
       affluence,
       organisation,
