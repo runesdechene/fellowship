@@ -83,6 +83,9 @@ export function ExplorerPage() {
     }
   )
 
+  // ---------- Recherche texte (transient, non persistée) ----------
+  const [query, setQuery] = useState('')
+
   // ---------- Active index ----------
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -93,8 +96,8 @@ export function ExplorerPage() {
   const now = useMemo(() => new Date(), [])
 
   const displayed = useMemo(
-    () => composeFilter(allEvents, { tags: selectedTags, zone, period }, { department: profile?.department ?? null, now }),
-    [allEvents, selectedTags, zone, period, profile?.department, now]
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query }, { department: profile?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, query, profile?.department, now]
   )
 
   // Clamp activeIndex when displayed shrinks
@@ -151,6 +154,11 @@ export function ExplorerPage() {
   const handlePeriod = (p: Period) => {
     setPeriod(p)
     persistFilters({ period: p })
+    setActiveIndex(0)
+  }
+
+  const handleQuery = (q: string) => {
+    setQuery(q)
     setActiveIndex(0)
   }
 
@@ -244,10 +252,12 @@ export function ExplorerPage() {
           selectedTags={selectedTags}
           zone={zone}
           period={period}
+          query={query}
           userDept={profile?.department ?? null}
           onToggleTag={toggleTag}
           onZone={handleZone}
           onPeriod={handlePeriod}
+          onQuery={handleQuery}
         />
 
         {!loading && displayed.length > 1 && (

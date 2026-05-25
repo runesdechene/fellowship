@@ -75,7 +75,12 @@ export function periodToRange(period: Period, now: Date): PeriodRange {
 }
 
 export type Zone = 'mine' | 'france'
-export interface ExplorerFilters { tags: Set<string>; zone: Zone; period: Period }
+export interface ExplorerFilters { tags: Set<string>; zone: Zone; period: Period; query?: string }
+
+/** Normalise pour une comparaison insensible à la casse et aux accents. */
+export function normalizeText(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
+}
 
 /** Compose tags ∩ zone ∩ période, puis tri (chronologique ; created_at desc si 'recent'). */
 export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'populaire' | null {
@@ -92,9 +97,15 @@ export function composeFilter(
   ctx: { department: string | null; now: Date },
 ): EventWithScore[] {
   const range = periodToRange(filters.period, ctx.now)
+  const q = normalizeText(filters.query ?? '')
+  const searching = q.length > 0
   let result = events.filter(ev => {
     if (filters.tags.size > 0 && !ev.tags?.some(t => filters.tags.has(t))) return false
     if (filters.zone === 'mine' && ctx.department && ev.department !== ctx.department) return false
+    // Recherche texte (nom + ville) : on cherche dans tout le temps, période ignorée.
+    if (searching) {
+      return normalizeText(ev.name).includes(q) || normalizeText(ev.city ?? '').includes(q)
+    }
     const end = new Date(ev.end_date)
     const start = new Date(ev.start_date)
     if (range.past) return end < ctx.now
@@ -104,11 +115,12 @@ export function composeFilter(
     return true
   })
   result = [...result].sort(
-    filters.period === 'past'
-      // Terminés : du plus récemment terminé au plus ancien.
-      ? (a, b) => new Date(b.end_date).getTime() - new Date(a.end_date).getTime()
-      : filters.period === 'recent'
-        ? (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        : (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+    searching || filters.period !== 'past' && filters.period !== 'recent'
+      ? (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+      : filters.period === 'past'
+        // Terminés : du plus récemment terminé au plus ancien.
+        ? (a, b) => new Date(b.end_date).getTime() - new Date(a.end_date).getTime()
+        // Récents : par date d'ajout décroissante.
+        : (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
   return result
 }

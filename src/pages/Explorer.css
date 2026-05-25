@@ -168,6 +168,52 @@
   stroke-width: 2.4;
 }
 
+/* ── Mode recherche texte (champ inline) ──────────────────────────── */
+
+.explorer .searchbar.is-searching {
+  width: min(440px, 82vw);
+  padding: 6px 8px 6px 8px;
+}
+
+.explorer .seg-search-ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  flex-shrink: 0;
+  color: var(--copper);
+}
+.explorer .seg-search-ico svg { width: 20px; height: 20px; stroke-width: 2.2; }
+
+.explorer .seg-input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: hsl(var(--foreground));
+}
+.explorer .seg-input::placeholder { color: hsl(var(--muted-foreground)); }
+
+.explorer .seg-clear {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.explorer .seg-clear:hover { background: rgba(255, 255, 255, 0.2); }
+.explorer .seg-clear svg { width: 16px; height: 16px; stroke-width: 2.4; }
+.light .explorer .seg-clear { background: rgba(60, 45, 35, 0.08); }
+
 /* ── Scrubber (navigation rapide sous la barre de recherche) ──────── */
 
 .explorer .scrubber {

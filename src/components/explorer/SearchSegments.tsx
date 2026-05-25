@@ -15,18 +15,23 @@ interface SearchSegmentsProps {
   selectedTags: Set<string>
   zone: Zone
   period: Period
+  query: string
   userDept: string | null
   onToggleTag: (value: string) => void
   onZone: (zone: Zone) => void
   onPeriod: (period: Period) => void
+  onQuery: (query: string) => void
 }
 
 type Pop = 'quoi' | 'ou' | 'quand' | null
 
-export function SearchSegments({ tags, selectedTags, zone, period, userDept, onToggleTag, onZone, onPeriod }: SearchSegmentsProps) {
+export function SearchSegments({ tags, selectedTags, zone, period, query, userDept, onToggleTag, onZone, onPeriod, onQuery }: SearchSegmentsProps) {
   const [open, setOpen] = useState<Pop>(null)
+  const [searching, setSearching] = useState(false)
   const topRef = useRef<HTMLDivElement>(null)
   const toggle = (p: Pop) => setOpen(o => (o === p ? null : p))
+  const enterSearch = () => { setOpen(null); setSearching(true) }
+  const exitSearch = () => { onQuery(''); setSearching(false) }
 
   // Fermer le popover au clic en dehors de la barre de recherche.
   useEffect(() => {
@@ -42,21 +47,43 @@ export function SearchSegments({ tags, selectedTags, zone, period, userDept, onT
   const quandLabel = PERIODS.find(p => p.value === period)?.label ?? ''
   return (
     <div className="top" ref={topRef}>
-      <div className="searchbar">
-        <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
-          <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>
-        </button>
-        <span className="seg-sep" />
-        <button className={'seg' + (open === 'ou' ? ' active' : '')} onClick={() => toggle('ou')}>
-          <span className="seg-l">Où</span><span className="seg-v">{ouLabel}</span>
-        </button>
-        <span className="seg-sep" />
-        <button className={'seg' + (open === 'quand' ? ' active' : '')} onClick={() => toggle('quand')}>
-          <span className="seg-l">Quand</span><span className="seg-v">{quandLabel}</span>
-        </button>
-        <button className="seg-search" aria-label="Fermer" onClick={() => setOpen(null)}>
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
-        </button>
+      <div className={'searchbar' + (searching ? ' is-searching' : '')}>
+        {searching ? (
+          <>
+            <span className="seg-search-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
+            </span>
+            <input
+              className="seg-input"
+              type="text"
+              autoFocus
+              value={query}
+              placeholder="Rechercher un festival…"
+              onChange={e => onQuery(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Escape') exitSearch() }}
+            />
+            <button className="seg-clear" aria-label="Fermer la recherche" onClick={exitSearch}>
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </>
+        ) : (
+          <>
+            <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
+              <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>
+            </button>
+            <span className="seg-sep" />
+            <button className={'seg' + (open === 'ou' ? ' active' : '')} onClick={() => toggle('ou')}>
+              <span className="seg-l">Où</span><span className="seg-v">{ouLabel}</span>
+            </button>
+            <span className="seg-sep" />
+            <button className={'seg' + (open === 'quand' ? ' active' : '')} onClick={() => toggle('quand')}>
+              <span className="seg-l">Quand</span><span className="seg-v">{quandLabel}</span>
+            </button>
+            <button className="seg-search" aria-label="Rechercher" onClick={enterSearch}>
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
+            </button>
+          </>
+        )}
       </div>
 
       {open === 'quoi' && (

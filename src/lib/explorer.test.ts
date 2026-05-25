@@ -131,6 +131,35 @@ describe('composeFilter', () => {
   })
 })
 
+describe('composeFilter — recherche texte', () => {
+  const now = new Date('2026-06-15')
+  const evs = [
+    ev({ id: 'hf', name: 'Hellfest Open Air', city: 'Clisson', start_date: '2026-06-19', end_date: '2026-06-21' }),
+    ev({ id: 'av', name: 'Festival OFF', city: 'Avignon', start_date: '2026-07-05', end_date: '2026-07-25' }),
+    ev({ id: 'past', name: 'Vieilles Charrues', city: 'Carhaix', start_date: '2026-01-10', end_date: '2026-01-12' }),
+  ]
+  it('cherche dans le nom (insensible à la casse)', () => {
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'all', query: 'hellfest' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['hf'])
+  })
+  it('cherche dans la ville', () => {
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'all', query: 'avignon' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['av'])
+  })
+  it('insensible aux accents', () => {
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'all', query: 'vieilles' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['past'])
+  })
+  it('ignore la période : trouve un terminé même en filtre « ce mois-ci »', () => {
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'this-month', query: 'charrues' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['past'])
+  })
+  it('query vide = comportement normal (période appliquée)', () => {
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'this-month', query: '' }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['hf'])
+  })
+})
+
 describe('eventBadge', () => {
   const now = new Date('2026-06-15')
   it('nouveau si créé dans les 30 derniers jours', () => {
