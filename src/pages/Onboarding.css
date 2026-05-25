@@ -9,6 +9,14 @@
               --green→var(--lime)  --h→var(--font-heading)  --b→var(--font-body)
    ============================================================ */
 
+/* ── Base: line icons (fill none, stroke currentColor) ── */
+.onboarding svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* ── Root centering (replaces maquette body flex) ── */
 .onboarding {
   min-height: 100vh;
@@ -37,7 +45,7 @@
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
-  color: #fff;
+  color: hsl(var(--foreground));
 }
 
 .onboarding .ob-logo .mark {
@@ -152,7 +160,7 @@
 /* ── Step headings ── */
 .onboarding .step h2 {
   font-size: 23px;
-  color: #fff;
+  color: hsl(var(--foreground));
   text-align: center;
   line-height: 1.15;
   margin-bottom: 8px;
@@ -217,7 +225,7 @@
 .onboarding .cc .ct b {
   font-family: var(--font-heading);
   font-size: 16px;
-  color: #fff;
+  color: hsl(var(--foreground));
   display: block;
   margin-bottom: 3px;
 }
@@ -394,7 +402,7 @@
 .onboarding .entitycard .et b {
   font-family: var(--font-heading);
   font-size: 15px;
-  color: #fff;
+  color: hsl(var(--foreground));
   display: block;
 }
 
