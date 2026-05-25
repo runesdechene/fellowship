@@ -183,7 +183,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     }
 
     fetchProfile()
-  }, [slug, user])
+  }, [slug, currentActor])
 
   if (loading) {
     return <div className="profile-loading">Chargement…</div>
