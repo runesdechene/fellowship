@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useFriendsOnEvent } from '@/hooks/use-participations'
-import { getTagIcon } from '@/components/ui/TagBadge'
+import { getTagEmoji } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 
 const STATUS_PILL: Record<string, { label: string; cls: string }> = {
@@ -31,14 +31,12 @@ interface EventDockProps {
 export function EventDock({ event, saved, status, onToggleSave, tagInfo }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
-  const TagIcon = getTagIcon(tag)
   const pill = status ? STATUS_PILL[status] : null
   return (
     <div className="dockinfo">
       {/* Tag — même recette graphique que les .etag de la landing (pilule teintée de --c) */}
       <span className="dock-tag" style={{ '--c': tagInfo?.color ?? '#ffce85' } as React.CSSProperties}>
-        {/* eslint-disable-next-line react-hooks/static-components -- Icon from static TAG_ICONS lookup, ref stable */}
-        <TagIcon size={14} strokeWidth={2} />
+        <span aria-hidden="true">{getTagEmoji(tag)}</span>
         {tagInfo?.label ?? tag}
       </span>
 

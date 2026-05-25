@@ -29,6 +29,23 @@ export function getTagIcon(slug: string): LucideIcon {
   return TAG_ICONS[slug] ?? Tag
 }
 
+const TAG_EMOJIS: Record<string, string> = {
+  'fete-medievale': '⚔️',
+  'fantastique': '🐉',
+  'geek': '🎮',
+  'festival-musique': '🎵',
+  'foire': '🎪',
+  'marche': '🧺',
+  'salon': '🛍️',
+  'litteraire': '📚',
+  'historique': '🏰',
+}
+
+// eslint-disable-next-line react-refresh/only-export-components -- emoji helper colocated with TagBadge (festival-tag style, comme la landing)
+export function getTagEmoji(slug: string): string {
+  return TAG_EMOJIS[slug] ?? '🎉'
+}
+
 interface TagBadgeProps {
   slug: string
   label?: string
