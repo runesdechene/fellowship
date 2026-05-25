@@ -7,7 +7,6 @@ import { useMyParticipations, addParticipation, removeParticipation } from '@/ho
 import { composeFilter, type Zone, type Period } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
-import { AmbientBackground } from '@/components/explorer/AmbientBackground'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { EventDock } from '@/components/explorer/EventDock'
@@ -222,8 +221,6 @@ export function ExplorerPage() {
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-
-      <AmbientBackground imageUrl={currentEvent?.image_url ?? null} />
 
       <div className="stagewrap">
         <SearchSegments

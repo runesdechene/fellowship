@@ -32,10 +32,8 @@
   padding: 0 24px;
 }
 .explorer .explorer-empty-icon { font-size: 48px; opacity: 0.8; }
-.explorer .explorer-empty-title { font-family: var(--font-heading); font-size: 20px; color: #fff; }
-.explorer .explorer-empty-text { color: rgba(255, 255, 255, 0.72); font-size: 14px; max-width: 360px; }
-.light .explorer .explorer-empty-title { color: hsl(var(--foreground)); }
-.light .explorer .explorer-empty-text { color: hsl(var(--muted-foreground)); }
+.explorer .explorer-empty-title { font-family: var(--font-heading); font-size: 20px; color: hsl(var(--foreground)); }
+.explorer .explorer-empty-text { color: hsl(var(--muted-foreground)); font-size: 14px; max-width: 360px; }
 
 /* ── SVG baseline (mandatory) ─────────────────────────────────────── */
 
@@ -57,37 +55,6 @@
   bottom: 0;
   height: 100%;
   overflow: hidden;
-}
-
-/* ── Ambient background ───────────────────────────────────────────── */
-
-.explorer .ambient {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  transition: opacity 0.6s;
-}
-
-.explorer .ambient img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(50px) brightness(0.4);
-  transform: scale(1.2);
-}
-
-.explorer .ambient::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 100% at 50% 35%, rgba(20, 12, 10, 0.28), rgba(20, 12, 10, 0.84));
-}
-
-/* Fallback when no ambient image */
-.explorer .ambient-fallback {
-  position: absolute;
-  inset: 0;
-  background: var(--page-backdrop);
 }
 
 /* ── Stage wrap ───────────────────────────────────────────────────── */
@@ -158,18 +125,17 @@
   color: var(--amber);
 }
 
-/* Text over dark glass/ambient — keep #fff both themes */
 .explorer .seg-v {
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: hsl(var(--foreground));
   white-space: nowrap;
 }
 
 .explorer .seg-sep {
   width: 1px;
   height: 30px;
-  background: rgba(255, 255, 255, 0.22);
+  background: hsl(var(--border));
 }
 
 .explorer .seg-search {
@@ -347,7 +313,7 @@
   border-radius: 99px;
   padding: 8px 16px;
   font-size: 13px;
-  color: #fff;
+  color: hsl(var(--foreground));
   font-weight: 600;
 }
 
@@ -381,7 +347,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + 24vh);
+  top: calc(50% + 25vh);
   bottom: 0;
   display: flex;
   align-items: center;
@@ -392,7 +358,7 @@
 .explorer .deck {
   position: relative;
   width: 100%;
-  height: 40vh;
+  height: 46vh;
   transform-style: preserve-3d;
 }
 
@@ -402,8 +368,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 33vh;
-  height: 40vh;
+  width: 36vh;
+  height: 46vh;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
@@ -607,7 +573,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: hsl(var(--foreground));
   cursor: pointer;
   z-index: 20;
 }
@@ -634,7 +600,6 @@
 .light .explorer .arrow {
   background: rgba(60, 45, 35, 0.06);
   border-color: rgba(60, 45, 35, 0.14);
-  color: hsl(var(--foreground));
 }
 
 /* ── Dock / info zone ─────────────────────────────────────────────── */
@@ -651,12 +616,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 18px;
   max-width: 620px;
   padding: 0 20px;
 }
 
-/* Text over ambient/dark backdrop — keep #fff */
 .explorer .dockinfo .eyb {
   font-size: 10.5px;
   font-weight: 800;
@@ -667,7 +631,7 @@
 
 .explorer .dockinfo h2 {
   font-size: 27px;
-  color: #fff;
+  color: hsl(var(--foreground));
   line-height: 1.05;
 }
 
@@ -684,12 +648,13 @@
   font-weight: 700;
   padding: 4px 11px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
 }
 
 .explorer .dockinfo .meta {
-  color: rgba(255, 255, 255, 0.85);
+  color: hsl(var(--muted-foreground));
   font-size: 13.5px;
 }
 
@@ -698,7 +663,7 @@
   align-items: center;
   justify-content: center;
   gap: 9px;
-  color: rgba(255, 255, 255, 0.88);
+  color: hsl(var(--muted-foreground));
   font-size: 13px;
 }
 
@@ -706,7 +671,7 @@
   width: 26px;
   height: 26px;
   font-size: 10px;
-  border-color: rgba(20, 12, 10, 0.55);
+  border-color: hsl(var(--border));
 }
 
 /* ── CTA buttons ──────────────────────────────────────────────────── */
@@ -746,16 +711,12 @@
 
 .explorer .counter {
   font-size: 11px;
-  color: rgba(255, 255, 255, .45);
+  color: hsl(var(--muted-foreground));
 }
 
 .explorer .counter b {
   font-family: var(--font-heading);
-  color: rgba(255, 255, 255, .7);
-}
-
-.light .explorer .counter {
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--foreground));
 }
 
 /* ── Status badge (above deck, participation indicator) ───────────── */
@@ -772,7 +733,7 @@
   background: rgba(255, 255, 255, .14);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, .24);
-  color: #fff;
+  color: hsl(var(--foreground));
   border-radius: 99px;
   padding: 7px 16px;
   font-size: 12.5px;
@@ -782,7 +743,6 @@
 .light .explorer .status-badge {
   background: rgba(60, 45, 35, .08);
   border-color: rgba(60, 45, 35, .16);
-  color: hsl(var(--foreground));
 }
 
 /* ── Responsive ───────────────────────────────────────────────────── */
@@ -790,9 +750,9 @@
 /* ── Above-card header (status + editorial date/lieu) ─────────────── */
 .explorer .event-header {
   position: absolute;
-  /* Ancré juste au-dessus du bord haut de la carte (carte ≈ 40vh centrée → top à 50%−20vh). */
+  /* Ancré juste au-dessus du bord haut de la carte (carte ≈ 46vh centrée → top à 50%−23vh). */
   top: auto;
-  bottom: calc(50% + 20vh + 14px);
+  bottom: calc(50% + 23vh + 14px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -812,9 +772,9 @@
 .explorer .eh-item { display: flex; align-items: center; gap: 9px; }
 .explorer .eh-ico { font-size: 22px; }
 .explorer .eh-lines { line-height: 1.1; text-align: left; }
-.explorer .eh-strong { font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45); }
-.explorer .eh-sub { font-size: 11px; color: rgba(255,255,255,.65); }
-.explorer .eh-div { width: 1px; height: 32px; background: rgba(255,255,255,.18); }
+.explorer .eh-strong { font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: hsl(var(--foreground)); }
+.explorer .eh-sub { font-size: 11px; color: hsl(var(--muted-foreground)); }
+.explorer .eh-div { width: 1px; height: 32px; background: hsl(var(--border)); }
 
 /* ── Dock tag — recette graphique des .etag de la landing (pilule teintée de --c) ── */
 .explorer .dock-tag {
@@ -837,11 +797,11 @@
 /* ── Ghost CTA (transparent + border) ─────────────────────────────── */
 .explorer .btn-ghost {
   background: rgba(255,255,255,.07);
-  border: 1.5px solid rgba(255,255,255,.22);
-  color: #fff;
+  border: 1.5px solid hsl(var(--border));
+  color: hsl(var(--foreground));
 }
 .explorer .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
-.light .explorer .btn-ghost { background: rgba(60,45,35,.04); border-color: rgba(60,45,35,.18); color: hsl(var(--foreground)); }
+.light .explorer .btn-ghost { background: rgba(60,45,35,.04); border-color: rgba(60,45,35,.18); }
 
 @media (max-width: 1080px) {
   /* No sidebar to hide here (AppLayout handles it), so just shrink cards and nudge arrows */
