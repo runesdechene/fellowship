@@ -160,6 +160,14 @@ Choisie parmi 6 directions testées. Référence : [`assets/landing-founding-the
 - Dans la maquette, le token CSS `--indigo` porte (par héritage d'itérations) la valeur du **vert secondaire** : à **renommer `--secondary`** lors de l'implémentation réelle.
 - L'app actuelle (dashboard, calendrier) est en clair chaud. Landing/thème fondateur = sombre par défaut + toggle. À terme, harmoniser toute l'app sur ce système 2-thèmes.
 
+### Gotchas jour/nuit au port de maquette (appris en intégrant landing + onboarding, 2026-05-25)
+
+Les maquettes sont **nuit-only** : au port vers le système 2-thèmes, 3 pièges reviennent à CHAQUE page. À vérifier systématiquement (détail opérationnel dans la mémoire `reference_da_daynight_gotchas`) :
+1. **Icônes SVG** → poser une règle de base scopée `<scope> svg { fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round }`, sinon `fill:black` → blobs noirs (les deux thèmes).
+2. **Texte clair en dur** (`color:#fff`) → invisible en jour. Utiliser `hsl(var(--foreground))` ; `#fff` réservé aux fonds fixes colorés (bouton dégradé, avatar gradient).
+3. **Ombres** → l'ombre nuit (noire/copper-foncé forte) est dure sur fond clair ; override `.light` chaud et très basse opacité (cartes ≈ `rgba(60,45,35,.07)`, boutons ≈ `hsl(24 70% 50% / .20)`).
+- Tokens : garder triplets-HSL + `hsl(var())` (jamais de valeurs brutes qui cassent les `hsl(var())` du CSS manuel). Variant `light:` dispo pour les overrides jour côté composant.
+
 ## 10. Points encore OUVERTS (à ne pas oublier)
 
 - [ ] **Prix** de l'offre Pro (9,99 € = placeholder).
