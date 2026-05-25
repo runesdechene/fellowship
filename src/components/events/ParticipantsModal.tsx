@@ -71,10 +71,10 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
       const friendSet = new Set(friendIds)
       const result: Participant[] = parts
         .filter((p: { profiles: unknown }) => p.profiles)
-        .map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null; craft_type: string | null } }) => ({
-          ...p.profiles,
+        .map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null; craft_type: string | null } | null }) => ({
+          ...p.profiles!,
           status: p.status,
-          isFriend: friendSet.has(p.profiles.id),
+          isFriend: friendSet.has(p.profiles!.id),
         }))
 
       // Friends first, then others

@@ -119,7 +119,7 @@ export type Database = {
           id: string
           improvements: string[] | null
           revenue: number | null
-          user_id: string
+          user_id: string | null
           wins: string[] | null
         }
         Insert: {
@@ -132,7 +132,7 @@ export type Database = {
           id?: string
           improvements?: string[] | null
           revenue?: number | null
-          user_id: string
+          user_id?: string | null
           wins?: string[] | null
         }
         Update: {
@@ -145,7 +145,7 @@ export type Database = {
           id?: string
           improvements?: string[] | null
           revenue?: number | null
-          user_id?: string
+          user_id?: string | null
           wins?: string[] | null
         }
         Relationships: [
@@ -268,25 +268,25 @@ export type Database = {
         Row: {
           created_at: string
           follower_actor: string | null
-          follower_id: string
+          follower_id: string | null
           following_actor: string | null
-          following_id: string
+          following_id: string | null
           id: string
         }
         Insert: {
           created_at?: string
           follower_actor?: string | null
-          follower_id: string
+          follower_id?: string | null
           following_actor?: string | null
-          following_id: string
+          following_id?: string | null
           id?: string
         }
         Update: {
           created_at?: string
           follower_actor?: string | null
-          follower_id?: string
+          follower_id?: string | null
           following_actor?: string | null
-          following_id?: string
+          following_id?: string | null
           id?: string
         }
         Relationships: [
@@ -367,7 +367,7 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
-          user_id: string
+          user_id: string | null
           visibility: Database["public"]["Enums"]["note_visibility"]
         }
         Insert: {
@@ -377,7 +377,7 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
-          user_id: string
+          user_id?: string | null
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Update: {
@@ -387,7 +387,7 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
-          user_id?: string
+          user_id?: string | null
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Relationships: [
@@ -429,7 +429,7 @@ export type Database = {
           id: string
           read: boolean
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           actor_id?: string | null
@@ -438,7 +438,7 @@ export type Database = {
           id?: string
           read?: boolean
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           actor_id?: string | null
@@ -447,7 +447,7 @@ export type Database = {
           id?: string
           read?: boolean
           type?: Database["public"]["Enums"]["notification_type"]
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -477,7 +477,7 @@ export type Database = {
           payments: Json | null
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
-          user_id: string
+          user_id: string | null
           visibility: Database["public"]["Enums"]["participation_visibility"]
         }
         Insert: {
@@ -490,7 +490,7 @@ export type Database = {
           payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
-          user_id: string
+          user_id?: string | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Update: {
@@ -503,7 +503,7 @@ export type Database = {
           payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
-          user_id?: string
+          user_id?: string | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Relationships: [
@@ -643,7 +643,7 @@ export type Database = {
           id: string
           organisation: number
           rentabilite: number
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           acted_by_user_id?: string | null
@@ -655,7 +655,7 @@ export type Database = {
           id?: string
           organisation: number
           rentabilite: number
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           acted_by_user_id?: string | null
@@ -667,7 +667,7 @@ export type Database = {
           id?: string
           organisation?: number
           rentabilite?: number
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

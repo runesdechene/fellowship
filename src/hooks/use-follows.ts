@@ -47,8 +47,7 @@ export function useFollowStatus(targetId: string | undefined) {
       setIsFollowing(false)
       setIsFriend(false)
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase.from('follows') as any).insert({ follower_actor: me, following_actor: targetId })
+      await supabase.from('follows').insert({ follower_actor: me, following_actor: targetId })
       setIsFollowing(true)
       const { data: theirFollow } = await supabase
         .from('follows').select('id')

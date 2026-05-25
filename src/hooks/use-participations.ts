@@ -131,8 +131,8 @@ export function useFriendsOnEvent(eventId: string | undefined) {
         .eq('event_id', resolvedEventId)
         .in('user_id', friendIds as string[])
 
-      const result = (data ?? []).map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null } }) => ({
-        ...p.profiles,
+      const result = (data ?? []).filter((p) => p.profiles).map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null } | null }) => ({
+        ...p.profiles!,
         status: p.status,
       }))
 
