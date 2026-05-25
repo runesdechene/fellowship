@@ -21,7 +21,7 @@ const styles: Record<ToastVariant, string> = {
   success: 'bg-accent/10 text-accent border-accent/20',
   error: 'bg-destructive/10 text-destructive border-destructive/20',
   info: 'bg-primary/10 text-primary border-primary/20',
-  warning: 'bg-amber-500/10 text-amber-700 border-amber-500/20 dark:text-amber-400',
+  warning: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
 }
 
 export function Toast({ message, variant = 'info', duration = 3000, onDismiss }: ToastProps) {
