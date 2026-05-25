@@ -159,3 +159,6 @@
   width: 16px;
   height: 16px;
 }
+
+.sidebar-nav-link--muted { width: 100%; background: none; border: none; cursor: pointer; opacity: .72; font: inherit; color: inherit; }
+.sidebar-nav-link--muted:hover { opacity: 1; }
