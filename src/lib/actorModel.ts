@@ -47,5 +47,8 @@ export function readStoredActorId(): string | null {
   try { return localStorage.getItem(ENTITY_STORAGE_KEY) } catch { return null }
 }
 export function writeStoredActorId(id: string | null): void {
-  try { id ? localStorage.setItem(ENTITY_STORAGE_KEY, id) : localStorage.removeItem(ENTITY_STORAGE_KEY) } catch { /* ignore */ }
+  try {
+    if (id) localStorage.setItem(ENTITY_STORAGE_KEY, id)
+    else localStorage.removeItem(ENTITY_STORAGE_KEY)
+  } catch { /* ignore */ }
 }
