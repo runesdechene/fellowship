@@ -237,7 +237,7 @@ export function OnboardingPage() {
 
           {/* ── ÉTAPE : name (prénom) ── */}
           {currentStep === 'name' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); if (isLastInputStep) { handleSubmit() } else { goNext() } }}>
               <div className="eyb">
                 {flow.case === 'completion'
                   ? 'Bienvenue'
@@ -264,16 +264,16 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.prenom || saving}
-                onClick={isLastInputStep ? handleSubmit : goNext}
+                type="submit"
               >
                 {isLastInputStep ? (saving ? 'Enregistrement…' : "C'est parti !") : 'Continuer'}
               </button>
-            </section>
+            </form>
           )}
 
           {/* ── ÉTAPE : postal (festivalier) ── */}
           {currentStep === 'postal' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); handleSubmit() }}>
               <div className="eyb">Festivalier</div>
               <h2>Tu es où&nbsp;?</h2>
               <div className="sub">Pour te montrer les festivals près de chez toi.</div>
@@ -292,16 +292,16 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.postal || saving}
-                onClick={handleSubmit}
+                type="submit"
               >
                 {saving ? 'Enregistrement…' : 'Découvrir les festivals'}
               </button>
-            </section>
+            </form>
           )}
 
           {/* ── ÉTAPE : brand (exposant) ── */}
           {currentStep === 'brand' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); goNext() }}>
               <div className="eyb">Ton entité exposant · {stepPos} / {stepTotal}</div>
               <h2>Ta marque</h2>
               <div className="sub">C'est l'entité sous laquelle tu exposes.</div>
@@ -319,16 +319,16 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.brand}
-                onClick={goNext}
+                type="submit"
               >
                 Continuer
               </button>
-            </section>
+            </form>
           )}
 
           {/* ── ÉTAPE : craft (métier libre) ── */}
           {currentStep === 'craft' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); goNext() }}>
               <div className="eyb">Ton entité exposant · {stepPos} / {stepTotal}</div>
               <h2>Ton métier&nbsp;?</h2>
               <div className="sub">Dis-le avec tes mots.</div>
@@ -347,16 +347,16 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.craft}
-                onClick={goNext}
+                type="submit"
               >
                 Continuer
               </button>
-            </section>
+            </form>
           )}
 
           {/* ── ÉTAPE : location (ville + CP entité) ── */}
           {currentStep === 'location' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); goNext() }}>
               <div className="eyb">Ton entité exposant · {stepPos} / {stepTotal}</div>
               <h2>Où es-tu basé&nbsp;?</h2>
               <div className="sub">Ton point de départ pour les distances et l'itinéraire.</div>
@@ -385,17 +385,17 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.city || !form.postal}
-                onClick={goNext}
+                type="submit"
                 style={{ marginTop: 18 }}
               >
                 Continuer
               </button>
-            </section>
+            </form>
           )}
 
           {/* ── ÉTAPE : slug (lien public entité) ── */}
           {currentStep === 'slug' && (
-            <section className="step">
+            <form className="step" onSubmit={(e) => { e.preventDefault(); handleSubmit() }}>
               <div className="eyb">Ton entité exposant · {stepPos} / {stepTotal}</div>
               <h2>Ton lien public</h2>
               <div className="sub">L'adresse de ta vitrine, à partager partout.</div>
@@ -419,12 +419,12 @@ export function OnboardingPage() {
               <button
                 className="btn btn-p"
                 disabled={!form.slug || slugStatus !== 'available' || saving}
-                onClick={handleSubmit}
+                type="submit"
               >
                 <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
                 {saving ? 'Création…' : 'Créer ma vitrine'}
               </button>
-            </section>
+            </form>
           )}
 
           </>)}
