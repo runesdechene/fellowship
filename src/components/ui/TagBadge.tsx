@@ -46,6 +46,24 @@ export function getTagEmoji(slug: string): string {
   return TAG_EMOJIS[slug] ?? '🎉'
 }
 
+// Couleurs EXACTES des tags de la landing (marquee .etag) mappées aux tags de l'app.
+const TAG_LANDING_COLORS: Record<string, string> = {
+  'fete-medievale': '#e8a06a',
+  'fantastique': '#c4a0e0',
+  'geek': '#79b4d6',
+  'festival-musique': '#b89ae0',
+  'foire': '#e8c06a',
+  'marche': '#f0a86a',
+  'salon': '#7fc6b4',
+  'litteraire': '#7fc6a0',
+  'historique': '#d4be8a',
+}
+
+// eslint-disable-next-line react-refresh/only-export-components -- helper colocated with TagBadge
+export function getTagLandingColor(slug: string): string {
+  return TAG_LANDING_COLORS[slug] ?? '#e8a06a'
+}
+
 interface TagBadgeProps {
   slug: string
   label?: string
