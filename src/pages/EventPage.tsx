@@ -62,7 +62,7 @@ export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
   const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
-  const { user, profile } = useAuth()
+  const { user, currentActor, profile } = useAuth()
   const { event, loading } = useEvent(id)
   const { notes, refetch: refetchNotes } = useEventNotes(id)
   const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
@@ -95,19 +95,19 @@ export function EventPage() {
     registration_note: '',
   })
 
-  // Fetch user's participation
+  // Fetch current actor's participation
   useEffect(() => {
-    if (!user || !id) return
+    if (!currentActor || !id) return
     supabase
       .from('participations')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('actor_id', currentActor.id)
       .eq('event_id', id)
       .maybeSingle()
       .then(({ data }) => {
         setParticipation(data)
       })
-  }, [user, id])
+  }, [currentActor, id])
 
   // Friend count
   useEffect(() => {
@@ -121,9 +121,10 @@ export function EventPage() {
   }, [id])
 
   const handleJoin = async (status: ParticipationStatus, visibility: ParticipationVisibility) => {
-    if (!user || !id) return
+    if (!user || !currentActor || !id) return
     const { data } = await addParticipation({
-      user_id: user.id,
+      actor_id: currentActor.id,
+      acted_by_user_id: user.id,
       event_id: id,
       status,
       visibility,
@@ -452,10 +453,10 @@ export function EventPage() {
                   <div className="event-left-card-label">Amis présents</div>
                   <div className="event-friends-col">
                     {friendsOnEvent.map(friend => {
-                      const fname = friend.brand_name ?? friend.display_name ?? '?'
+                      const fname = friend.label ?? '?'
                       const [from, to] = GRADIENTS[hashName(fname) % GRADIENTS.length]
                       return (
-                        <Link key={friend.id} to={`/@${friend.public_slug ?? friend.id}`} className="event-friend-row">
+                        <Link key={friend.actor_id} to={`/@${friend.public_slug ?? friend.actor_id}`} className="event-friend-row">
                           {friend.avatar_url ? (
                             <img src={friend.avatar_url} alt={fname} className="event-friend-avatar" />
                           ) : (

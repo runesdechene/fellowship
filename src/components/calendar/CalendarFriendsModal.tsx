@@ -35,8 +35,8 @@ interface CalendarFriendsModalProps {
 }
 
 export function CalendarFriendsModal({ eventName, friends, onClose }: CalendarFriendsModalProps) {
-  const pros = friends.filter(f => f.profiles?.type === 'exposant')
-  const visiteurs = friends.filter(f => f.profiles?.type === 'public')
+  const pros = friends.filter(f => f.actor_public?.kind === 'entity')
+  const visiteurs = friends.filter(f => f.actor_public?.kind === 'person')
 
   return (
     <div className="calendar-modal-overlay" onClick={onClose}>
@@ -79,9 +79,9 @@ export function CalendarFriendsModal({ eventName, friends, onClose }: CalendarFr
 }
 
 function FriendItem({ friend }: { friend: FriendParticipation }) {
-  const name = friend.profiles?.brand_name ?? friend.profiles?.display_name ?? '?'
-  const slug = friend.profiles?.public_slug ?? friend.user_id
-  const avatarUrl = friend.profiles?.avatar_url
+  const name = friend.actor_public?.label ?? '?'
+  const slug = friend.actor_public?.public_slug ?? friend.actor_id
+  const avatarUrl = friend.actor_public?.avatar_url
   const [from, to] = GRADIENTS[hashName(name) % GRADIENTS.length]
   const status = friend.status ?? 'interesse'
 
@@ -100,7 +100,7 @@ function FriendItem({ friend }: { friend: FriendParticipation }) {
       <div className="calendar-modal-friend-info">
         <span className="calendar-modal-friend-name">{name}</span>
         <span className="calendar-modal-friend-type">
-          {friend.profiles?.type === 'exposant' ? 'Exposant' : 'Visiteur'}
+          {friend.actor_public?.kind === 'entity' ? 'Exposant' : 'Visiteur'}
         </span>
       </div>
       <span

@@ -78,9 +78,9 @@ export function CalendarPage() {
       if (!ev) continue
 
       // Filter by friend type
-      const friendType = fp.profiles?.type
-      if (friendType === 'exposant' && !showPro) continue
-      if (friendType === 'public' && !showVisiteurs) continue
+      const friendKind = fp.actor_public?.kind
+      if (friendKind === 'entity' && !showPro) continue
+      if (friendKind === 'person' && !showVisiteurs) continue
 
       const startDate = new Date(ev.start_date as string)
       const endDate = new Date(ev.end_date as string)
@@ -98,14 +98,14 @@ export function CalendarPage() {
         department: (ev.department as string) ?? '',
         imageUrl: (ev.image_url as string | null) ?? null,
         isFriend: true,
-        friendName: fp.profiles?.brand_name ?? fp.profiles?.display_name ?? 'Un ami',
+        friendName: fp.actor_public?.label ?? 'Un ami',
       }
 
       if (!map[key]) map[key] = []
       // If same event from multiple friends, append name
       const existing = map[key].find(e => e.id === calEvent.id)
       if (existing) {
-        const newName = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? 'Un ami'
+        const newName = fp.actor_public?.label ?? 'Un ami'
         if (existing.friendName && !existing.friendName.includes(newName)) {
           existing.friendName += `, ${newName}`
         }

@@ -31,12 +31,12 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 interface Participant {
-  id: string
-  display_name: string | null
-  brand_name: string | null
+  actor_id: string
+  label: string | null
   avatar_url: string | null
   public_slug: string | null
-  craft_type: string | null
+  entity_type: string | null
+  kind: string
   status: string
   isFriend: boolean
 }
@@ -47,34 +47,47 @@ interface ParticipantsModalProps {
 }
 
 export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
   const [participants, setParticipants] = useState<Participant[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetch() {
-      // Get friend IDs
+      // Get friend IDs (keyed on the current actor)
       let friendIds: string[] = []
-      if (user) {
-        const { data } = await supabase.rpc('get_friend_ids', { p_user_id: user.id })
+      if (currentActor) {
+        const { data } = await supabase.rpc('get_friend_ids', { p_user_id: currentActor.id })
         friendIds = (data as string[] | null) ?? []
       }
 
       // Get all participants on this event (RLS: inscrit is public)
       const { data: parts } = await supabase
         .from('participations')
-        .select('status, profiles(id, display_name, brand_name, avatar_url, public_slug, craft_type)')
+        .select('actor_id, status')
         .eq('event_id', eventId)
 
-      if (!parts) { setLoading(false); return }
+      if (!parts || parts.length === 0) { setLoading(false); return }
+
+      // Fetch actor_public rows for all actor_ids in a second query (VIEW — no FK embed possible)
+      const actorIds = (parts as Array<{ actor_id: string; status: string }>).map(p => p.actor_id)
+      const { data: actors } = await supabase
+        .from('actor_public')
+        .select('actor_id, label, avatar_url, public_slug, entity_type, kind')
+        .in('actor_id', actorIds)
+
+      const actorMap: Record<string, { label: string | null; avatar_url: string | null; public_slug: string | null; entity_type: string | null; kind: string }> = {}
+      for (const a of (actors ?? [])) {
+        if (a.actor_id) actorMap[a.actor_id] = { label: a.label, avatar_url: a.avatar_url, public_slug: a.public_slug, entity_type: a.entity_type, kind: a.kind ?? 'person' }
+      }
 
       const friendSet = new Set(friendIds)
-      const result: Participant[] = parts
-        .filter((p: { profiles: unknown }) => p.profiles)
-        .map((p: { status: string; profiles: { id: string; display_name: string | null; brand_name: string | null; avatar_url: string | null; public_slug: string | null; craft_type: string | null } | null }) => ({
-          ...p.profiles!,
+      const result: Participant[] = (parts as Array<{ actor_id: string; status: string }>)
+        .filter(p => actorMap[p.actor_id])
+        .map(p => ({
+          ...actorMap[p.actor_id],
+          actor_id: p.actor_id,
           status: p.status,
-          isFriend: friendSet.has(p.profiles!.id),
+          isFriend: friendSet.has(p.actor_id),
         }))
 
       // Friends first, then others
@@ -89,7 +102,7 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
     }
 
     fetch()
-  }, [eventId, user])
+  }, [eventId, currentActor])
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={onClose}>
@@ -127,7 +140,7 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
                 </div>
               )}
               {participants.filter(p => p.isFriend).map(p => (
-                <ParticipantItem key={p.id} participant={p} />
+                <ParticipantItem key={p.actor_id} participant={p} />
               ))}
               {participants.some(p => !p.isFriend) && (
                 <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(61,48,40,0.35)', padding: '12px 8px 4px' }}>
@@ -135,7 +148,7 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
                 </div>
               )}
               {participants.filter(p => !p.isFriend).map(p => (
-                <ParticipantItem key={p.id} participant={p} />
+                <ParticipantItem key={p.actor_id} participant={p} />
               ))}
             </>
           )}
@@ -146,12 +159,12 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
 }
 
 function ParticipantItem({ participant: p }: { participant: Participant }) {
-  const name = p.brand_name ?? p.display_name ?? '?'
+  const name = p.label ?? '?'
   const [from, to] = GRADIENTS[hashName(name) % GRADIENTS.length]
 
   return (
     <Link
-      to={`/@${p.public_slug ?? p.id}`}
+      to={`/@${p.public_slug ?? p.actor_id}`}
       style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px', borderRadius: 10, textDecoration: 'none', color: 'inherit', transition: 'background 0.15s' }}
       className="hover:bg-muted"
     >
@@ -164,8 +177,8 @@ function ParticipantItem({ participant: p }: { participant: Participant }) {
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</div>
-        {p.craft_type && (
-          <div style={{ fontSize: 11, color: 'rgba(61,48,40,0.4)' }}>{p.craft_type}</div>
+        {p.entity_type && (
+          <div style={{ fontSize: 11, color: 'rgba(61,48,40,0.4)' }}>{p.entity_type}</div>
         )}
       </div>
       <span style={{ fontSize: 10, fontWeight: 600, color: STATUS_COLORS[p.status] ?? 'rgba(61,48,40,0.4)', flexShrink: 0 }}>

@@ -115,12 +115,12 @@ export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }
                     >
                       <div className="presence-avatars">
                         {fps.slice(0, 4).map((fp, i) => {
-                          const name = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? '?'
-                          const avatarUrl = fp.profiles?.avatar_url
+                          const name = fp.actor_public?.label ?? '?'
+                          const avatarUrl = fp.actor_public?.avatar_url
                           const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
                           return (
                             <span
-                              key={fp.id}
+                              key={fp.actor_id}
                               className="presence-avatar"
                               style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 4 - i, overflow: 'hidden' }}
                               title={name}
@@ -135,7 +135,7 @@ export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }
                         })}
                       </div>
                       <span className="calendar-presence-friends-names">
-                        {fps.map(f => f.profiles?.brand_name ?? f.profiles?.display_name ?? '?').join(', ')}
+                        {fps.map(f => f.actor_public?.label ?? '?').join(', ')}
                       </span>
                     </button>
                   )
@@ -169,12 +169,12 @@ export function CalendarMonth({ data, friendParticipations = [], onOpenFriends }
                 >
                   <div className="presence-avatars">
                     {friendsAtEvent.slice(0, 3).map((fp, i) => {
-                      const name = fp.profiles?.brand_name ?? fp.profiles?.display_name ?? '?'
-                      const avatarUrl = fp.profiles?.avatar_url
+                      const name = fp.actor_public?.label ?? '?'
+                      const avatarUrl = fp.actor_public?.avatar_url
                       const [from, to] = AVATAR_GRADIENTS[hashName(name) % AVATAR_GRADIENTS.length]
                       return (
                         <span
-                          key={fp.id}
+                          key={fp.actor_id}
                           className="presence-avatar"
                           style={{ background: avatarUrl ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 3 - i, overflow: 'hidden' }}
                           title={name}
