@@ -14,7 +14,9 @@ CREATE TEMP TABLE _expo_entity AS
 -- PARTICIPATIONS
 ALTER TABLE participations ADD COLUMN actor_id UUID REFERENCES actors(id) ON DELETE CASCADE;
 UPDATE participations p SET actor_id = COALESCE((SELECT entity_id FROM _expo_entity WHERE person_id = p.user_id), p.user_id);
-ALTER TABLE participations ALTER COLUMN actor_id SET NOT NULL;
+-- NB (expand/contract) : actor_id reste NULLABLE en Phase 1. Les pages écrivent encore via user_id
+-- (anciennes policies actives) ; le SET NOT NULL est posé au Plan 3 (contract), une fois tous les
+-- writers recâblés sur actor_id. La contrainte UNIQUE tient déjà (Postgres autorise plusieurs NULL).
 ALTER TABLE participations ADD CONSTRAINT uniq_participation_actor UNIQUE (actor_id, event_id);
 
 -- REVIEWS

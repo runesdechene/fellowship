@@ -7,15 +7,111 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
+      actors: {
+        Row: {
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["actor_kind"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["actor_kind"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["actor_kind"]
+        }
+        Relationships: []
+      }
+      entities: {
+        Row: {
+          actor_id: string
+          avatar_url: string | null
+          banner_url: string | null
+          bio: string | null
+          brand_name: string
+          city: string | null
+          craft_type: string | null
+          created_at: string
+          department: string | null
+          postal_code: string | null
+          public_slug: string | null
+          type: Database["public"]["Enums"]["entity_type"]
+          website: string | null
+        }
+        Insert: {
+          actor_id: string
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          brand_name: string
+          city?: string | null
+          craft_type?: string | null
+          created_at?: string
+          department?: string | null
+          postal_code?: string | null
+          public_slug?: string | null
+          type: Database["public"]["Enums"]["entity_type"]
+          website?: string | null
+        }
+        Update: {
+          actor_id?: string
+          avatar_url?: string | null
+          banner_url?: string | null
+          bio?: string | null
+          brand_name?: string
+          city?: string | null
+          craft_type?: string | null
+          created_at?: string
+          department?: string | null
+          postal_code?: string | null
+          public_slug?: string | null
+          type?: Database["public"]["Enums"]["entity_type"]
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entities_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: true
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_reports: {
         Row: {
+          acted_by_user_id: string | null
+          actor_id: string | null
           booth_cost: number | null
           charges: number | null
           created_at: string
@@ -27,6 +123,8 @@ export type Database = {
           wins: string[] | null
         }
         Insert: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           booth_cost?: number | null
           charges?: number | null
           created_at?: string
@@ -38,6 +136,8 @@ export type Database = {
           wins?: string[] | null
         }
         Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           booth_cost?: number | null
           charges?: number | null
           created_at?: string
@@ -49,6 +149,20 @@ export type Database = {
           wins?: string[] | null
         }
         Relationships: [
+          {
+            foreignKeyName: "event_reports_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "event_reports_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "event_reports_event_id_fkey"
             columns: ["event_id"]
@@ -67,10 +181,12 @@ export type Database = {
       }
       events: {
         Row: {
+          acted_by_user_id: string | null
           city: string
           contact_email: string | null
           created_at: string
           created_by: string | null
+          created_by_actor: string | null
           department: string
           description: string | null
           end_date: string
@@ -85,10 +201,12 @@ export type Database = {
           tags: string[] | null
         }
         Insert: {
+          acted_by_user_id?: string | null
           city: string
           contact_email?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_actor?: string | null
           department: string
           description?: string | null
           end_date: string
@@ -103,10 +221,12 @@ export type Database = {
           tags?: string[] | null
         }
         Update: {
+          acted_by_user_id?: string | null
           city?: string
           contact_email?: string | null
           created_at?: string
           created_by?: string | null
+          created_by_actor?: string | null
           department?: string
           description?: string | null
           end_date?: string
@@ -122,6 +242,20 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "events_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "events_created_by_actor_fkey"
+            columns: ["created_by_actor"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
@@ -133,28 +267,48 @@ export type Database = {
       follows: {
         Row: {
           created_at: string
+          follower_actor: string | null
           follower_id: string
+          following_actor: string | null
           following_id: string
           id: string
         }
         Insert: {
           created_at?: string
+          follower_actor?: string | null
           follower_id: string
+          following_actor?: string | null
           following_id: string
           id?: string
         }
         Update: {
           created_at?: string
+          follower_actor?: string | null
           follower_id?: string
+          following_actor?: string | null
           following_id?: string
           id?: string
         }
         Relationships: [
           {
+            foreignKeyName: "follows_follower_actor_fkey"
+            columns: ["follower_actor"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "follows_follower_id_fkey"
             columns: ["follower_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_actor_fkey"
+            columns: ["following_actor"]
+            isOneToOne: false
+            referencedRelation: "actors"
             referencedColumns: ["id"]
           },
           {
@@ -166,8 +320,49 @@ export type Database = {
           },
         ]
       }
+      memberships: {
+        Row: {
+          created_at: string
+          entity_actor_id: string
+          id: string
+          role: Database["public"]["Enums"]["membership_role"]
+          user_actor_id: string
+        }
+        Insert: {
+          created_at?: string
+          entity_actor_id: string
+          id?: string
+          role?: Database["public"]["Enums"]["membership_role"]
+          user_actor_id: string
+        }
+        Update: {
+          created_at?: string
+          entity_actor_id?: string
+          id?: string
+          role?: Database["public"]["Enums"]["membership_role"]
+          user_actor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "memberships_user_actor_id_fkey"
+            columns: ["user_actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       notes: {
         Row: {
+          acted_by_user_id: string | null
+          actor_id: string | null
           content: string
           created_at: string
           event_id: string
@@ -176,6 +371,8 @@ export type Database = {
           visibility: Database["public"]["Enums"]["note_visibility"]
         }
         Insert: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           content: string
           created_at?: string
           event_id: string
@@ -184,6 +381,8 @@ export type Database = {
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           content?: string
           created_at?: string
           event_id?: string
@@ -192,6 +391,20 @@ export type Database = {
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Relationships: [
+          {
+            foreignKeyName: "notes_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "notes_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notes_event_id_fkey"
             columns: ["event_id"]
@@ -210,6 +423,7 @@ export type Database = {
       }
       notifications: {
         Row: {
+          actor_id: string | null
           created_at: string
           data: Json
           id: string
@@ -218,6 +432,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          actor_id?: string | null
           created_at?: string
           data?: Json
           id?: string
@@ -226,6 +441,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          actor_id?: string | null
           created_at?: string
           data?: Json
           id?: string
@@ -234,6 +450,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
@@ -245,39 +468,59 @@ export type Database = {
       }
       participations: {
         Row: {
+          acted_by_user_id: string | null
+          actor_id: string | null
           created_at: string
           event_id: string
           id: string
           payment_status: string | null
-          payments: { amount: number; date: string; label: string }[] | null
+          payments: Json | null
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
           user_id: string
           visibility: Database["public"]["Enums"]["participation_visibility"]
         }
         Insert: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           created_at?: string
           event_id: string
           id?: string
           payment_status?: string | null
-          payments?: { amount: number; date: string; label: string }[] | null
+          payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           user_id: string
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           created_at?: string
           event_id?: string
           id?: string
           payment_status?: string | null
-          payments?: { amount: number; date: string; label: string }[] | null
+          payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           user_id?: string
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Relationships: [
+          {
+            foreignKeyName: "participations_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "participations_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "participations_event_id_fkey"
             columns: ["event_id"]
@@ -391,6 +634,8 @@ export type Database = {
       }
       reviews: {
         Row: {
+          acted_by_user_id: string | null
+          actor_id: string | null
           affluence: number
           comment: string | null
           created_at: string
@@ -401,6 +646,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           affluence: number
           comment?: string | null
           created_at?: string
@@ -411,6 +658,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string | null
           affluence?: number
           comment?: string | null
           created_at?: string
@@ -421,6 +670,20 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reviews_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "reviews_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "reviews_event_id_fkey"
             columns: ["event_id"]
@@ -466,6 +729,59 @@ export type Database = {
           text_color?: string
         }
         Relationships: []
+      }
+      users: {
+        Row: {
+          actor_id: string
+          auth_id: string
+          avatar_url: string | null
+          city: string | null
+          created_at: string
+          department: string | null
+          display_name: string | null
+          email: string
+          plan: Database["public"]["Enums"]["user_plan"]
+          postal_code: string | null
+          role: string
+          sex: Database["public"]["Enums"]["user_sex"] | null
+        }
+        Insert: {
+          actor_id: string
+          auth_id: string
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          department?: string | null
+          display_name?: string | null
+          email: string
+          plan?: Database["public"]["Enums"]["user_plan"]
+          postal_code?: string | null
+          role?: string
+          sex?: Database["public"]["Enums"]["user_sex"] | null
+        }
+        Update: {
+          actor_id?: string
+          auth_id?: string
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          department?: string | null
+          display_name?: string | null
+          email?: string
+          plan?: Database["public"]["Enums"]["user_plan"]
+          postal_code?: string | null
+          role?: string
+          sex?: Database["public"]["Enums"]["user_sex"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: true
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -520,11 +836,42 @@ export type Database = {
         Args: { user_a: string; user_b: string }
         Returns: boolean
       }
+      can_act_as: { Args: { target_actor: string }; Returns: boolean }
+      create_owned_entity: {
+        Args: {
+          p_brand_name: string
+          p_type: Database["public"]["Enums"]["entity_type"]
+        }
+        Returns: string
+      }
       get_friend_ids: { Args: { p_user_id: string }; Returns: string[] }
+      get_friends_with_dates: {
+        Args: { p_user_id: string }
+        Returns: {
+          friend_id: string
+          friended_at: string
+        }[]
+      }
+      is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
+      search_similar_events: {
+        Args: { search_name: string; search_year?: number; threshold?: number }
+        Returns: {
+          city: string
+          department: string
+          end_date: string
+          id: string
+          name: string
+          score: number
+          start_date: string
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
+      actor_kind: "person" | "entity"
+      entity_type: "exposant" | "festival" | "entreprise"
+      membership_role: "owner" | "admin" | "member"
       note_visibility: "prive" | "amis"
       notification_type:
         | "deadline_reminder"
@@ -536,7 +883,7 @@ export type Database = {
         | "event_image_added"
         | "event_info_added"
         | "new_exposant"
-      participation_status: "interesse" | "en_cours" | "inscrit"
+      participation_status: "interesse" | "inscrit" | "confirme" | "en_cours"
       participation_visibility: "prive" | "amis" | "public"
       user_plan: "free" | "pro"
       user_sex: "homme" | "femme" | "indefini"
@@ -666,8 +1013,14 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
+      actor_kind: ["person", "entity"],
+      entity_type: ["exposant", "festival", "entreprise"],
+      membership_role: ["owner", "admin", "member"],
       note_visibility: ["prive", "amis"],
       notification_type: [
         "deadline_reminder",
@@ -680,7 +1033,7 @@ export const Constants = {
         "event_info_added",
         "new_exposant",
       ],
-      participation_status: ["interesse", "en_cours", "inscrit"],
+      participation_status: ["interesse", "inscrit", "confirme", "en_cours"],
       participation_visibility: ["prive", "amis", "public"],
       user_plan: ["free", "pro"],
       user_sex: ["homme", "femme", "indefini"],
@@ -688,3 +1041,4 @@ export const Constants = {
     },
   },
 } as const
+

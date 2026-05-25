@@ -1,5 +1,12 @@
 import type { Database } from './supabase'
 
+// Accounts foundation (actors model)
+export type ActorRow      = Database['public']['Tables']['actors']['Row']
+export type UserRow       = Database['public']['Tables']['users']['Row']
+export type EntityRow     = Database['public']['Tables']['entities']['Row']
+export type MembershipRow = Database['public']['Tables']['memberships']['Row']
+export type EntityType    = Database['public']['Enums']['entity_type']
+
 // Table row types
 export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Event = Database['public']['Tables']['events']['Row']
