@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { createEvent, searchSimilarEvents } from '@/hooks/use-events'
-import { supabase } from '@/lib/supabase'
-import { compressImage } from '@/lib/compress-image'
+import { uploadEventImage } from '@/lib/event-image'
 import { Button } from '@/components/ui/button'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
@@ -69,21 +68,11 @@ export function EventForm({ onClose }: EventFormProps) {
     try {
       let image_url: string | undefined
       if (form.image) {
-        const compressed = await compressImage(form.image)
-        const isWebp = compressed.type === 'image/webp'
-        const ext = isWebp ? 'webp' : compressed.name.split('.').pop() ?? 'jpg'
-        const path = `${crypto.randomUUID()}.${ext}`
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('event-images')
-          .upload(path, compressed, { contentType: compressed.type || 'image/webp' })
-        if (uploadError) {
-          console.error('Image upload failed:', uploadError)
+        try {
+          image_url = await uploadEventImage(form.image)
+        } catch (uploadErr) {
+          console.error('Image upload failed:', uploadErr)
           // Continue without image
-        } else if (uploadData) {
-          const { data: urlData } = supabase.storage
-            .from('event-images')
-            .getPublicUrl(uploadData.path)
-          image_url = urlData.publicUrl
         }
       }
 
