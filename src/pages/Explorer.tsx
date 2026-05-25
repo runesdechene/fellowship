@@ -9,6 +9,7 @@ import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
+import { ScrubBar } from '@/components/explorer/ScrubBar'
 import { EventDock } from '@/components/explorer/EventDock'
 import { getTagLandingColor } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
@@ -85,6 +86,9 @@ export function ExplorerPage() {
   // ---------- Active index ----------
   const [activeIndex, setActiveIndex] = useState(0)
 
+  // Vrai pendant qu'on manipule le scrubber → met l'autoplay en pause
+  const [scrubbing, setScrubbing] = useState(false)
+
   // ---------- Derived events ----------
   const now = useMemo(() => new Date(), [])
 
@@ -109,12 +113,12 @@ export function ExplorerPage() {
   )
 
   useEffect(() => {
-    if (reducedMotion || displayed.length <= 1) return
+    if (reducedMotion || displayed.length <= 1 || scrubbing) return
     const id = setInterval(() => {
       setActiveIndex(i => (i + 1) % displayed.length)
     }, 4500)
     return () => clearInterval(id)
-  }, [displayed.length, reducedMotion])
+  }, [displayed.length, reducedMotion, scrubbing])
 
   // ---------- Keyboard ----------
   useEffect(() => {
@@ -245,6 +249,17 @@ export function ExplorerPage() {
           onZone={handleZone}
           onPeriod={handlePeriod}
         />
+
+        {!loading && displayed.length > 1 && (
+          <ScrubBar
+            count={displayed.length}
+            index={safeIndex}
+            labels={displayed.map(e => e.name)}
+            onScrub={setActiveIndex}
+            onScrubStart={() => setScrubbing(true)}
+            onScrubEnd={() => setScrubbing(false)}
+          />
+        )}
 
         <div className="stagebody">
           {loading ? (
