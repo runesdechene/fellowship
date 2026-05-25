@@ -210,6 +210,16 @@ export function ExplorerPage() {
   // ---------- Current event (safely indexed) ----------
   const currentEvent = displayed.length > 0 ? displayed[safeIndex] : null
 
+  // ---------- Tag info for dock ----------
+  const activeTagInfo = useMemo(() => {
+    const t = currentEvent?.tags?.[0]
+    return t ? dynamicTags.find(d => d.value === t) : undefined
+  }, [currentEvent, dynamicTags])
+
+  // ---------- Participation status badge ----------
+  const STATUS_LABELS: Record<string, string> = { interesse: '★ Repéré', inscrit: '✓ Inscrit', confirme: '✓ Confirmé', en_cours: '● En cours' }
+  const activeStatus = currentEvent ? (participations.find(p => p.event_id === currentEvent.id)?.status ?? null) : null
+
   return (
     <div className="explorer">
       {/* Hidden file input for add-image */}
@@ -240,6 +250,7 @@ export function ExplorerPage() {
             <DeckSkeleton />
           ) : displayed.length > 0 && currentEvent ? (
             <>
+              {activeStatus && <div className="status-badge">{STATUS_LABELS[activeStatus] ?? activeStatus}</div>}
               <EventDeck
                 events={displayed}
                 activeIndex={safeIndex}
@@ -256,6 +267,7 @@ export function ExplorerPage() {
                   eyebrow={eyebrowFor(currentEvent)}
                   saved={isSaved(currentEvent.id)}
                   onToggleSave={() => toggleSave(currentEvent)}
+                  tagInfo={activeTagInfo}
                 />
               </div>
             </>

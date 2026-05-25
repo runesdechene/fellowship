@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useFriendsOnEvent } from '@/hooks/use-participations'
-import { getTagIcon } from '@/components/ui/TagBadge'
+import { TagBadge } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 
 function fmt(ev: EventWithScore) {
@@ -14,19 +14,18 @@ interface EventDockProps {
   eyebrow: string
   saved: boolean
   onToggleSave: () => void
+  tagInfo?: { label?: string; bg?: string; color?: string }
 }
 
-export function EventDock({ event, eyebrow, saved, onToggleSave }: EventDockProps) {
+export function EventDock({ event, eyebrow, saved, onToggleSave, tagInfo }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
-  const Icon = getTagIcon(tag)
   return (
     <div className="dockinfo">
       {eyebrow && <span className="eyb">{eyebrow}</span>}
       <h2>{event.name}</h2>
       <div className="tagline">
-        {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
-        <span className="ctag"><Icon size={12} strokeWidth={2} /> {tag}</span>
+        <TagBadge slug={tag} label={tagInfo?.label ?? tag} bg={tagInfo?.bg} color={tagInfo?.color} size="md" />
         <span className="meta">{fmt(event)}</span>
       </div>
       {friends.length > 0 && (

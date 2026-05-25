@@ -381,7 +381,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(50% + 22vh);
+  top: calc(50% + 24vh);
   bottom: 0;
   display: flex;
   align-items: center;
@@ -392,7 +392,7 @@
 .explorer .deck {
   position: relative;
   width: 100%;
-  height: 44vh;
+  height: 40vh;
   transform-style: preserve-3d;
 }
 
@@ -403,18 +403,22 @@
   left: 50%;
   top: 50%;
   width: 33vh;
-  height: 44vh;
+  height: 40vh;
   overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
   will-change: transform;
   cursor: pointer;
+  background: hsl(var(--card));
 }
 
 .explorer .card img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
 }
 
 .explorer .card .grad {
@@ -423,6 +427,7 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 3%, transparent 48%);
   opacity: 0;
   transition: opacity 0.4s;
+  z-index: 2;
 }
 
 .explorer .card.is-center .grad {
@@ -544,6 +549,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 0;
 }
 
 .explorer .card-fallback-glow {
@@ -577,6 +583,7 @@
   font-weight: 600;
   cursor: pointer;
   z-index: 3;
+  white-space: nowrap;
 }
 
 .light .explorer .card-addimg {
@@ -644,7 +651,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 13px;
+  gap: 15px;
   max-width: 620px;
   padding: 0 20px;
 }
@@ -707,6 +714,7 @@
 .explorer .cta {
   display: flex;
   gap: 12px;
+  margin-top: 14px;
 }
 
 .explorer .btn {
@@ -737,13 +745,44 @@
 /* ── Counter ──────────────────────────────────────────────────────── */
 
 .explorer .counter {
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  color: rgba(255, 255, 255, .45);
 }
 
 .explorer .counter b {
   font-family: var(--font-heading);
+  color: rgba(255, 255, 255, .7);
+}
+
+.light .explorer .counter {
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Status badge (above deck, participation indicator) ───────────── */
+
+.explorer .status-badge {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, .24);
   color: #fff;
+  border-radius: 99px;
+  padding: 7px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.light .explorer .status-badge {
+  background: rgba(60, 45, 35, .08);
+  border-color: rgba(60, 45, 35, .16);
+  color: hsl(var(--foreground));
 }
 
 /* ── Responsive ───────────────────────────────────────────────────── */
