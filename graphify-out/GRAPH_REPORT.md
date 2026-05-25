@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-05-26)
 
 ## Corpus Check
-- 124 files · ~172,703 words
+- 124 files · ~173,137 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 410 nodes · 304 edges · 133 communities detected
+- 413 nodes · 308 edges · 133 communities detected
 - Extraction: 89% EXTRACTED · 10% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -227,8 +227,8 @@ Cohesion: 0.33
 Nodes (2): actorCan(), presenceNature()
 
 ### Community 11 - "Community 11"
-Cohesion: 0.4
-Nodes (2): composeFilter(), periodToRange()
+Cohesion: 0.38
+Nodes (3): composeFilter(), normalizeText(), periodToRange()
 
 ### Community 12 - "Community 12"
 Cohesion: 0.47
@@ -251,40 +251,40 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 17 - "Community 17"
-Cohesion: 0.5
-Nodes (2): getTagIcon(), TagBadge()
-
-### Community 18 - "Community 18"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 19 - "Community 19"
+### Community 18 - "Community 18"
 Cohesion: 0.5
-Nodes (2): resolveUniqueHandle(), slugify()
+Nodes (2): getTagIcon(), TagBadge()
+
+### Community 19 - "Community 19"
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 20 - "Community 20"
 Cohesion: 0.5
-Nodes (2): hashName(), networkListItemDisplay()
+Nodes (2): resolveUniqueHandle(), slugify()
 
 ### Community 21 - "Community 21"
-Cohesion: 0.6
-Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
+Cohesion: 0.5
+Nodes (2): hashName(), networkListItemDisplay()
 
 ### Community 22 - "Community 22"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.6
+Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
 
 ### Community 23 - "Community 23"
 Cohesion: 0.5
 Nodes (0): 
 
 ### Community 24 - "Community 24"
-Cohesion: 0.67
-Nodes (2): addTag(), handleKeyDown()
-
-### Community 25 - "Community 25"
 Cohesion: 0.5
 Nodes (0): 
+
+### Community 25 - "Community 25"
+Cohesion: 0.67
+Nodes (2): addTag(), handleKeyDown()
 
 ### Community 26 - "Community 26"
 Cohesion: 0.5
@@ -307,16 +307,16 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 31 - "Community 31"
-Cohesion: 0.67
-Nodes (2): isRouteValidFor(), navItemsFor()
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 32 - "Community 32"
 Cohesion: 0.67
-Nodes (2): persistFilters(), readStored()
+Nodes (2): isRouteValidFor(), navItemsFor()
 
 ### Community 33 - "Community 33"
 Cohesion: 0.67
-Nodes (0): 
+Nodes (2): persistFilters(), readStored()
 
 ### Community 34 - "Community 34"
 Cohesion: 0.67
@@ -900,7 +900,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Design System Refonte Plan` connect `Community 1` to `Community 0`, `Community 2`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `Fellowship V1 Design Spec` connect `Community 0` to `Community 1`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**

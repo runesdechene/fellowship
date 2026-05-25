@@ -29,6 +29,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, query, userDe
   const [open, setOpen] = useState<Pop>(null)
   const [searching, setSearching] = useState(false)
   const topRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const toggle = (p: Pop) => setOpen(o => (o === p ? null : p))
   const enterSearch = () => { setOpen(null); setSearching(true) }
   const exitSearch = () => { onQuery(''); setSearching(false) }
@@ -42,48 +43,54 @@ export function SearchSegments({ tags, selectedTags, zone, period, query, userDe
     document.addEventListener('mousedown', onDown)
     return () => document.removeEventListener('mousedown', onDown)
   }, [open])
+
+  // Le champ reste monté (pour animer entrée + sortie) : on focus manuellement à l'ouverture.
+  useEffect(() => {
+    if (searching) inputRef.current?.focus()
+  }, [searching])
   const quoiLabel = selectedTags.size === 0 ? 'Tous les festivals' : `${selectedTags.size} catégorie${selectedTags.size > 1 ? 's' : ''}`
   const ouLabel = zone === 'france' ? 'Toute la France' : (userDept ? `Mon coin (${userDept})` : 'Près de moi')
   const quandLabel = PERIODS.find(p => p.value === period)?.label ?? ''
   return (
     <div className="top" ref={topRef}>
       <div className={'searchbar' + (searching ? ' is-searching' : '')}>
-        {searching ? (
-          <>
-            <span className="seg-search-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
-            </span>
-            <input
-              className="seg-input"
-              type="text"
-              autoFocus
-              value={query}
-              placeholder="Rechercher un festival…"
-              onChange={e => onQuery(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Escape') exitSearch() }}
-            />
-            <button className="seg-clear" aria-label="Fermer la recherche" onClick={exitSearch}>
-              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-            </button>
-          </>
-        ) : (
-          <>
-            <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
-              <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>
-            </button>
-            <span className="seg-sep" />
-            <button className={'seg' + (open === 'ou' ? ' active' : '')} onClick={() => toggle('ou')}>
-              <span className="seg-l">Où</span><span className="seg-v">{ouLabel}</span>
-            </button>
-            <span className="seg-sep" />
-            <button className={'seg' + (open === 'quand' ? ' active' : '')} onClick={() => toggle('quand')}>
-              <span className="seg-l">Quand</span><span className="seg-v">{quandLabel}</span>
-            </button>
-            <button className="seg-search" aria-label="Rechercher" onClick={enterSearch}>
-              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
-            </button>
-          </>
-        )}
+        {/* Couche segments — tient la largeur de la barre ; se fond sous le champ pendant la recherche. */}
+        <div className="seg-group">
+          <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
+            <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>
+          </button>
+          <span className="seg-sep" />
+          <button className={'seg' + (open === 'ou' ? ' active' : '')} onClick={() => toggle('ou')}>
+            <span className="seg-l">Où</span><span className="seg-v">{ouLabel}</span>
+          </button>
+          <span className="seg-sep" />
+          <button className={'seg' + (open === 'quand' ? ' active' : '')} onClick={() => toggle('quand')}>
+            <span className="seg-l">Quand</span><span className="seg-v">{quandLabel}</span>
+          </button>
+          <button className="seg-search" aria-label="Rechercher" tabIndex={searching ? -1 : 0} onClick={enterSearch}>
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
+          </button>
+        </div>
+
+        {/* Couche recherche — recouvre les segments avec un wipe ; occupe le même espace. */}
+        <div className="seg-searchfield" aria-hidden={!searching}>
+          <span className="seg-search-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg>
+          </span>
+          <input
+            ref={inputRef}
+            className="seg-input"
+            type="text"
+            value={query}
+            placeholder="Rechercher un festival…"
+            tabIndex={searching ? 0 : -1}
+            onChange={e => onQuery(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Escape') exitSearch() }}
+          />
+          <button className="seg-clear" aria-label="Fermer la recherche" tabIndex={searching ? 0 : -1} onClick={exitSearch}>
+            <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
       </div>
 
       {open === 'quoi' && (
