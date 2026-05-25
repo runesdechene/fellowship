@@ -1,357 +1,738 @@
-/* ── Explorer Page ─────────────────────────────────────────────────── */
+/* ── Explorer — Coverflow page styles ──────────────────────────────── */
+/* Scoped to .explorer root div (lives inside AppLayout <main>).       */
+/* Token map:                                                           */
+/*   --surface   → hsl(var(--card))                                    */
+/*   --surface2  → hsl(var(--secondary))                               */
+/*   --text      → hsl(var(--foreground))                              */
+/*   --muted     → hsl(var(--muted-foreground))                        */
+/*   --line      → hsl(var(--border))                                  */
+/*   --bg        → hsl(var(--background))                              */
+/*   --cop/--cop-d → var(--copper)/var(--copper-d)                     */
+/*   --green     → var(--lime)                                         */
+/*   --h/--b     → var(--font-heading)/var(--font-body)                */
 
-.explorer-page {
-  padding-top: var(--page-padding);
-  padding-bottom: 80px;
+/* ── Root ─────────────────────────────────────────────────────────── */
+
+.explorer {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 
-.explorer-mode-bar {
+/* ── SVG baseline (mandatory) ─────────────────────────────────────── */
+
+.explorer svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Stage ────────────────────────────────────────────────────────── */
+
+.explorer .stage {
+  position: relative;
+  inset: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Ambient background ───────────────────────────────────────────── */
+
+.explorer .ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: opacity 0.6s;
+}
+
+.explorer .ambient img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(50px) brightness(0.4);
+  transform: scale(1.2);
+}
+
+.explorer .ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 35%, rgba(20, 12, 10, 0.28), rgba(20, 12, 10, 0.84));
+}
+
+/* Fallback when no ambient image */
+.explorer .ambient-fallback {
+  position: absolute;
+  inset: 0;
+  background: var(--page-backdrop);
+}
+
+/* ── Stage wrap ───────────────────────────────────────────────────── */
+
+.explorer .stagewrap {
+  position: relative;
+  z-index: 2;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--page-padding);
-  margin-bottom: 16px;
+  flex-direction: column;
 }
 
-.explorer-title {
-  font-family: var(--font-heading);
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: hsl(var(--foreground));
-}
+/* ── Top bar / searchbar ──────────────────────────────────────────── */
 
-.explorer-prospection-toggle {
+.explorer .top {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
+  justify-content: center;
+  padding: 22px 20px 6px;
+  position: relative;
 }
 
-.explorer-prospection-label {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(61, 48, 40, 0.35);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: color 0.2s;
-}
-
-.explorer-prospection-toggle.active .explorer-prospection-label {
-  color: hsl(var(--primary));
-}
-
-.explorer-prospection-label svg {
-  width: 16px;
-  height: 16px;
-}
-
-.explorer-filters {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 var(--page-padding) 16px;
-  overflow-x: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.explorer-filters::-webkit-scrollbar {
-  display: none;
-}
-
-.explorer-filter-chip {
+.explorer .searchbar {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 99px;
+  padding: 6px 6px 6px 10px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+}
+
+/* Day-mode overrides */
+.light .explorer .searchbar {
+  background: rgba(60, 45, 35, 0.06);
+  border-color: rgba(60, 45, 35, 0.14);
+  box-shadow: 0 10px 28px rgba(60, 45, 35, 0.10);
+}
+
+/* ── Segments ─────────────────────────────────────────────────────── */
+
+.explorer .seg {
+  background: none;
   border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: hsl(var(--card));
-  color: rgba(61, 48, 40, 0.45);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.explorer-filter-chip:hover {
-  background: rgba(61, 48, 40, 0.06);
-}
-
-.explorer-filter-chip.active {
-  background: hsl(var(--primary));
-  color: white;
-}
-
-.explorer-filter-chip.urgent {
-  background: hsl(0 65% 55% / 0.1);
-  color: hsl(0 65% 50%);
-}
-
-.explorer-filter-chip.urgent.active {
-  background: hsl(0 65% 55%);
-  color: white;
-}
-
-.explorer-filter-chip.warning {
-  background: hsl(30 80% 50% / 0.1);
-  color: hsl(30 70% 45%);
-}
-
-.explorer-filter-chip.warning.active {
-  background: hsl(30 80% 50%);
-  color: white;
-}
-
-.explorer-filter-divider {
-  width: 1px;
-  background: rgba(61, 48, 40, 0.08);
-  margin: 0 4px;
-  flex-shrink: 0;
-  align-self: stretch;
-}
-
-.explorer-alert {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: hsl(0 65% 55% / 0.06);
-  border-radius: 16px;
-  padding: 14px 18px;
-  margin: 0 24px 20px;
-}
-
-.explorer-alert-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: hsl(0 65% 55% / 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.explorer-alert-icon svg {
-  width: 18px;
-  height: 18px;
-  color: hsl(0 65% 50%);
-}
-
-.explorer-alert-text {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  color: hsl(0 55% 40%);
-}
-
-.explorer-alert-count {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 800;
-  color: hsl(0 65% 50%);
-  margin-left: auto;
-}
-
-.explorer-empty {
-  border-radius: 24px;
-  background: hsl(var(--card));
-  padding: 48px 24px;
-  text-align: center;
-  margin: 0 24px;
-}
-
-/* iOS-style switch */
-.explorer-switch-track {
-  position: relative;
-  width: 44px;
-  height: 26px;
-  border-radius: 13px;
-  background: rgba(61, 48, 40, 0.15);
-  transition: background 0.25s ease;
-  flex-shrink: 0;
-}
-
-.explorer-prospection-toggle.active .explorer-switch-track {
-  background: hsl(var(--primary));
-}
-
-.explorer-switch-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: white;
-  transition: transform 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.explorer-prospection-toggle.active .explorer-switch-thumb {
-  transform: translateX(18px);
-}
-
-.explorer-empty svg {
-  width: 40px;
-  height: 40px;
-  color: rgba(61, 48, 40, 0.1);
-  margin: 0 auto 16px;
-}
-
-.explorer-empty-title {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: hsl(var(--foreground));
-}
-
-.explorer-empty-text {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(61, 48, 40, 0.35);
-  margin-top: 8px;
-}
-
-/* ── Month Pickers (Prospection) ───────────────────────────────────── */
-
-.explorer-month-pickers-label {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(61, 48, 40, 0.35);
-}
-
-.explorer-month-select {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  color: hsl(var(--foreground)/ 0.5);
-  background: hsl(var(--card));
-  border: none;
-  border-radius: 20px;
-  padding: 10px 14px;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233d3028' stroke-width='2' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 30px;
-  text-transform: capitalize;
-}
-
-/* ── Add event card ────────────────────────────────────────────────── */
-
-.explorer-add-card {
-  width: 100%;
-  aspect-ratio: 2/3;
-  border-radius: 18px;
-  border: 2px dashed rgba(61, 48, 40, 0.1);
-  background: transparent;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: border-color 0.2s, background 0.2s;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 8px 22px;
+  border-radius: 99px;
+  transition: 0.15s;
 }
 
-.explorer-add-card:hover {
-  border-color: hsl(var(--primary) / 0.3);
-  background: hsl(var(--primary) / 0.03);
+.explorer .seg:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
-.explorer-add-card-icon {
+.explorer .seg.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.explorer .seg-l {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+/* Text over dark glass/ambient — keep #fff both themes */
+.explorer .seg-v {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.explorer .seg-sep {
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.explorer .seg-search {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: hsl(var(--primary) / 0.08);
+  border: none;
+  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  color: #fff;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: hsl(var(--primary));
-  transition: background 0.2s;
+  margin-left: 8px;
+  flex-shrink: 0;
 }
 
-.explorer-add-card:hover .explorer-add-card-icon {
-  background: hsl(var(--primary) / 0.15);
+.explorer .seg-search svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.4;
 }
 
-.explorer-add-card-icon svg {
-  width: 22px;
-  height: 22px;
+/* ── Pop-overs ────────────────────────────────────────────────────── */
+
+.explorer .pop {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.18s;
 }
 
-.explorer-add-card-text {
-  font-family: var(--font-body);
-  font-size: 12px;
+.explorer .pop.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* Surface (not media) — use semantic tokens */
+.explorer .pop h4 {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 12px;
+}
+
+/* Day-mode */
+.light .explorer .pop {
+  box-shadow: 0 16px 40px rgba(60, 45, 35, 0.14);
+}
+
+/* ── Category grid / chips ────────────────────────────────────────── */
+
+.explorer .catgrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(115px, 1fr));
+  gap: 8px;
+  width: 395px;
+}
+
+.explorer .catchip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(61, 48, 40, 0.3);
-  transition: color 0.2s;
+  cursor: pointer;
+  transition: 0.12s;
+  text-align: left;
 }
 
-.explorer-add-card:hover .explorer-add-card-text {
-  color: hsl(var(--primary));
+.explorer .catchip:hover {
+  border-color: var(--amber);
 }
 
-/* ── Mode segmented control ───────────────────────────────────────── */
+.explorer .catchip.on {
+  background: color-mix(in srgb, var(--copper) 20%, transparent);
+  border-color: var(--amber);
+  color: var(--amber);
+}
 
-.explorer-mode-segmented {
+/* ── Pop line (date / location inputs) ───────────────────────────── */
+
+.explorer .popline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: hsl(var(--foreground));
+  font-size: 14px;
+  margin-bottom: 12px;
+  width: 340px;
+}
+
+.explorer .popline:last-child {
+  margin-bottom: 0;
+}
+
+.explorer .popline input[type="text"] {
+  flex: 1;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+}
+
+/* ── Period options ───────────────────────────────────────────────── */
+
+.explorer .peropts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 340px;
+}
+
+.explorer .peropt {
+  padding: 9px 14px;
+  border-radius: 99px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.explorer .peropt:hover {
+  border-color: var(--amber);
+}
+
+.explorer .peropt.on {
+  background: color-mix(in srgb, var(--copper) 20%, transparent);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* ── Bottom bar ───────────────────────────────────────────────────── */
+
+.explorer .bottombar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  padding: 14px 0 26px;
+}
+
+/* ── Distance pill (pill container only — no range input in V1) ───── */
+
+.explorer .distpill {
   display: inline-flex;
   align-items: center;
-  background: hsl(var(--card));
-  border-radius: 9999px;
-  padding: 4px;
-  margin: 0 var(--page-padding) 18px;
-  font-family: var(--font-body);
-  font-size: 12px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border-radius: 99px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #fff;
   font-weight: 600;
 }
 
-.explorer-mode-btn {
-  padding: 8px 16px;
-  border-radius: 9999px;
-  background: transparent;
-  color: rgba(61, 48, 40, 0.5);
+.explorer .distpill b {
+  font-family: var(--font-heading);
+  color: var(--amber);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ── Stage body ───────────────────────────────────────────────────── */
+
+.explorer .stagebody {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+/* ── Coverflow flow / deck ────────────────────────────────────────── */
+
+.explorer .flow {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1700px;
+}
+
+.explorer .infozone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 22vh);
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.explorer .deck {
+  position: relative;
+  width: 100%;
+  height: 44vh;
+  transform-style: preserve-3d;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────── */
+
+.explorer .card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 33vh;
+  height: 44vh;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  will-change: transform;
+  cursor: pointer;
+}
+
+.explorer .card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.explorer .card .grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 3%, transparent 48%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.explorer .card.is-center .grad {
+  opacity: 1;
+}
+
+.explorer .card.is-center img {
+  animation: explorer-kb 9s ease-in-out infinite alternate;
+}
+
+@keyframes explorer-kb {
+  from { transform: scale(1.01); }
+  to   { transform: scale(1.1); }
+}
+
+.explorer .card .info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.45s 0.1s, transform 0.45s 0.1s;
+}
+
+.explorer .card.is-center .info {
+  opacity: 1;
+  transform: none;
+}
+
+/* Text over card photo — keep #fff both themes */
+.explorer .card .eyb {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.explorer .card h2 {
+  font-size: 26px;
+  line-height: 1.05;
+  color: #fff;
+}
+
+.explorer .card .ctag {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.explorer .card .cmeta {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.explorer .card .open {
+  color: var(--lime);
+  font-weight: 600;
+}
+
+/* ── Friends on card ──────────────────────────────────────────────── */
+
+.explorer .card .cfriends {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12.5px;
+  margin-top: 3px;
+}
+
+.explorer .cav {
+  display: flex;
+}
+
+.explorer .cav span {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  margin-left: -8px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #1c1310;
+}
+
+.explorer .cav span:first-child {
+  margin-left: 0;
+}
+
+/* ── Day-mode card shadow ─────────────────────────────────────────── */
+
+.light .explorer .card {
+  box-shadow: 0 16px 40px rgba(60, 45, 35, 0.12);
+}
+
+/* ── Card fallback (no photo) ─────────────────────────────────────── */
+
+.explorer .card-fallback {
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--card));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explorer .card-fallback-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 55%;
+  background: radial-gradient(90% 80% at 50% 0%, hsl(25 78% 52% / 0.22), transparent);
+}
+
+.explorer .card-fallback-ico {
+  width: 64px;
+  height: 64px;
+  opacity: 0.5;
+  color: hsl(var(--muted-foreground));
+}
+
+.explorer .card-addimg {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border-radius: 99px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.light .explorer .card-addimg {
+  background: rgba(60, 45, 35, 0.08);
+  border-color: rgba(60, 45, 35, 0.16);
+  color: hsl(var(--foreground));
+}
+
+/* ── Navigation arrows ────────────────────────────────────────────── */
+
+.explorer .arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.explorer .arrow:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.explorer .arrow svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
+}
+
+.explorer .arrow.l {
+  left: 3%;
+}
+
+.explorer .arrow.r {
+  right: 3%;
+}
+
+/* Day-mode arrows */
+.light .explorer .arrow {
+  background: rgba(60, 45, 35, 0.06);
+  border-color: rgba(60, 45, 35, 0.14);
+  color: hsl(var(--foreground));
+}
+
+/* ── Dock / info zone ─────────────────────────────────────────────── */
+
+.explorer .dock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+}
+
+.explorer .dockinfo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  max-width: 620px;
+  padding: 0 20px;
+}
+
+/* Text over ambient/dark backdrop — keep #fff */
+.explorer .dockinfo .eyb {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.explorer .dockinfo h2 {
+  font-size: 27px;
+  color: #fff;
+  line-height: 1.05;
+}
+
+.explorer .dockinfo .tagline {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.explorer .dockinfo .ctag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.explorer .dockinfo .meta {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13.5px;
+}
+
+.explorer .dockinfo .fr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+}
+
+.explorer .dockinfo .fr .cav span {
+  width: 26px;
+  height: 26px;
+  font-size: 10px;
+  border-color: rgba(20, 12, 10, 0.55);
+}
+
+/* ── CTA buttons ──────────────────────────────────────────────────── */
+
+.explorer .cta {
+  display: flex;
+  gap: 12px;
+}
+
+.explorer .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14.5px;
+  border-radius: 99px;
+  padding: 13px 26px;
   border: none;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-  font: inherit;
+  text-decoration: none;
 }
 
-.explorer-mode-btn:hover:not(.active) {
-  color: rgba(61, 48, 40, 0.85);
+.explorer .btn-p {
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: 0 8px 26px hsl(20 65% 32% / 0.5);
 }
 
-.explorer-mode-btn.active {
-  background: hsl(var(--primary));
-  color: white;
+.explorer .btn-star {
+  background: var(--lime);
+  color: #1b2e10;
 }
 
-/* ── Events grid (responsive auto-fill) ────────────────────────────── */
+/* ── Counter ──────────────────────────────────────────────────────── */
 
-.explorer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  padding: 0 var(--page-padding);
+.explorer .counter {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.explorer-grid-skeleton {
-  aspect-ratio: 2 / 3;
-  border-radius: 14px;
-  background: hsl(var(--card));
+.explorer .counter b {
+  font-family: var(--font-heading);
+  color: #fff;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 1080px) {
+  /* No sidebar to hide here (AppLayout handles it), so just shrink cards and nudge arrows */
+  .explorer .arrow.l { left: 6px; }
+  .explorer .arrow.r { right: 6px; }
+  .explorer .card { width: 54vw; height: 50vh; }
 }
