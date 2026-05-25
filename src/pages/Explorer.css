@@ -521,22 +521,36 @@
   box-shadow: 0 16px 40px rgba(60, 45, 35, 0.12);
 }
 
-/* ── Card "Ajouté le" label ───────────────────────────────────────── */
-
-/* « Ajouté le X » — au-dessus de la carte, change selon l'affiche active */
-.explorer .added-on {
+/* Badge au-dessus de la carte (change selon l'affiche active) */
+.explorer .deck-badge {
   position: absolute;
-  top: 2.5vh;
-  left: 0;
-  right: 0;
-  text-align: center;
+  top: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 6;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .03em;
-  color: hsl(var(--muted-foreground));
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
   pointer-events: none;
 }
+.explorer .deck-badge.nouveau {
+  background: color-mix(in srgb, var(--lime) 18%, transparent);
+  color: var(--lime);
+  border: 1px solid color-mix(in srgb, var(--lime) 42%, transparent);
+}
+.explorer .deck-badge.populaire {
+  background: color-mix(in srgb, var(--amber) 18%, transparent);
+  color: var(--amber);
+  border: 1px solid color-mix(in srgb, var(--amber) 42%, transparent);
+}
+.light .explorer .deck-badge.nouveau { color: color-mix(in srgb, var(--lime) 60%, #2a2018); }
+.light .explorer .deck-badge.populaire { color: color-mix(in srgb, var(--amber) 62%, #2a2018); }
 
 /* ── Card fallback (no photo) ─────────────────────────────────────── */
 
@@ -753,6 +767,11 @@
 .explorer .btn-star {
   background: var(--lime);
   color: #1b2e10;
+}
+.explorer .btn-star { transition: box-shadow .2s, transform .15s, filter .15s; }
+.explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.explorer .btn-star[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lime) 28%, transparent), 0 8px 22px color-mix(in srgb, var(--lime) 45%, transparent);
 }
 
 /* ── Counter ──────────────────────────────────────────────────────── */

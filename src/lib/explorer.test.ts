@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, eventBadge } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -53,7 +53,7 @@ const ev = (p: Partial<EventWithScore>): EventWithScore => ({
   city: p.city ?? 'Lyon', department: p.department ?? '69',
   start_date: p.start_date ?? '2026-07-01', end_date: p.end_date ?? '2026-07-02',
   tags: p.tags ?? [], created_at: p.created_at ?? '2026-01-01',
-  avg_overall: null, review_count: null, registration_deadline: null,
+  avg_overall: null, review_count: p.review_count ?? null, registration_deadline: null,
   registration_url: null, external_url: null, contact_email: null, registration_note: null,
 } as EventWithScore)
 
@@ -110,5 +110,18 @@ describe('composeFilter', () => {
   it('past ne garde que les terminés', () => {
     const r = composeFilter(events, { tags: new Set(), zone: 'france', period: 'past' }, { department: '69', now })
     expect(r.map(e => e.id)).toEqual(['c'])
+  })
+})
+
+describe('eventBadge', () => {
+  const now = new Date('2026-06-15')
+  it('nouveau si créé dans les 30 derniers jours', () => {
+    expect(eventBadge(ev({ created_at: '2026-06-01' }), now)).toBe('nouveau')
+  })
+  it('populaire si ≥3 avis (et pas récent)', () => {
+    expect(eventBadge(ev({ created_at: '2025-01-01', review_count: 5 }), now)).toBe('populaire')
+  })
+  it('rien si ni récent ni populaire', () => {
+    expect(eventBadge(ev({ created_at: '2025-01-01', review_count: 0 }), now)).toBeNull()
   })
 })

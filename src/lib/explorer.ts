@@ -78,6 +78,14 @@ export type Zone = 'mine' | 'france'
 export interface ExplorerFilters { tags: Set<string>; zone: Zone; period: Period }
 
 /** Compose tags ∩ zone ∩ période, puis tri (chronologique ; created_at desc si 'recent'). */
+export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'populaire' | null {
+  const created = new Date(event.created_at).getTime()
+  const days = (now.getTime() - created) / 86_400_000
+  if (days >= 0 && days <= 30) return 'nouveau'
+  if ((event.review_count ?? 0) >= 3) return 'populaire'
+  return null
+}
+
 export function composeFilter(
   events: EventWithScore[],
   filters: ExplorerFilters,
