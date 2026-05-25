@@ -385,7 +385,6 @@
   top: 50%;
   width: 36vh;
   height: 52vh;
-  overflow: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
   will-change: transform;
@@ -521,36 +520,26 @@
   box-shadow: 0 16px 40px rgba(60, 45, 35, 0.12);
 }
 
-/* Badge au-dessus de la carte (change selon l'affiche active) */
-.explorer .deck-badge {
+/* Badge coin de carte (NOUVEAU / POPULAIRE), légèrement débordant */
+.explorer .card-badge {
   position: absolute;
-  top: 2vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 6;
+  top: -7px;
+  right: -7px;
+  z-index: 4;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 5px;
+  padding: 5px 11px;
   border-radius: 99px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: .04em;
+  letter-spacing: .03em;
   text-transform: uppercase;
-  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
 }
-.explorer .deck-badge.nouveau {
-  background: color-mix(in srgb, var(--lime) 18%, transparent);
-  color: var(--lime);
-  border: 1px solid color-mix(in srgb, var(--lime) 42%, transparent);
-}
-.explorer .deck-badge.populaire {
-  background: color-mix(in srgb, var(--amber) 18%, transparent);
-  color: var(--amber);
-  border: 1px solid color-mix(in srgb, var(--amber) 42%, transparent);
-}
-.light .explorer .deck-badge.nouveau { color: color-mix(in srgb, var(--lime) 60%, #2a2018); }
-.light .explorer .deck-badge.populaire { color: color-mix(in srgb, var(--amber) 62%, #2a2018); }
+.explorer .card-badge.nouveau { background: var(--lime); color: #1b2e10; }
+.explorer .card-badge.populaire { background: var(--amber); color: #3a2410; }
 
 /* ── Card fallback (no photo) ─────────────────────────────────────── */
 

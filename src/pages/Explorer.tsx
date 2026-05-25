@@ -4,7 +4,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, eventBadge, type Zone, type Period } from '@/lib/explorer'
+import { composeFilter, type Zone, type Period } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
@@ -212,9 +212,6 @@ export function ExplorerPage() {
   // ---------- Participation status ----------
   const activeStatus = currentEvent ? (participations.find(p => p.event_id === currentEvent.id)?.status ?? null) : null
 
-  // ---------- Badge (Nouveau / Populaire) ----------
-  const activeBadge = currentEvent ? eventBadge(currentEvent, now) : null
-
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
@@ -254,15 +251,11 @@ export function ExplorerPage() {
             <DeckSkeleton />
           ) : displayed.length > 0 && currentEvent ? (
             <>
-              {activeBadge && (
-                <div className={'deck-badge ' + activeBadge}>
-                  {activeBadge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}
-                </div>
-              )}
               <EventDeck
                 events={displayed}
                 activeIndex={safeIndex}
                 canAddImage={canAddImage}
+                now={now}
                 onSelect={i => setActiveIndex(i)}
                 onPrev={() => go(-1)}
                 onNext={() => go(1)}

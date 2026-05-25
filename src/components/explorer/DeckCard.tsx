@@ -7,11 +7,12 @@ interface DeckCardProps {
   style: React.CSSProperties
   isCenter: boolean
   canAddImage: boolean
+  badge?: 'nouveau' | 'populaire' | null
   onClick: () => void
   onAddImage: (event: EventWithScore) => void
 }
 
-export function DeckCard({ event, style, isCenter, canAddImage, onClick, onAddImage }: DeckCardProps) {
+export function DeckCard({ event, style, isCenter, canAddImage, badge, onClick, onAddImage }: DeckCardProps) {
   const tag = event.tags?.[0] ?? 'autre'
   const Icon = getTagIcon(tag)
   // Track (imageUrl, errorFlag) together so we can reset error when URL changes
@@ -29,6 +30,11 @@ export function DeckCard({ event, style, isCenter, canAddImage, onClick, onAddIm
   const imageless = !event.image_url || tracked.error
   return (
     <div className={'card' + (isCenter ? ' is-center' : '')} style={style} onClick={onClick}>
+      {badge && (
+        <span className={'card-badge ' + badge}>
+          {badge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}
+        </span>
+      )}
       <div className="card-fallback">
         <span className="card-fallback-glow" aria-hidden="true" />
         {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
