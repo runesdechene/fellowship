@@ -44,9 +44,9 @@
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Font color — used in EventPage.css */
-  --font-color-lowtitle: rgb(190, 171, 171);
-  --font-color-text: rgb(66, 39, 39);
+  /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
+  --font-color-lowtitle: #b3a293;
+  --font-color-text: #fbf3e8;
 }
 
 /* Mode JOUR (inversé) — override sur la classe .light */
@@ -72,6 +72,10 @@
   --lime: hsl(88 50% 36%);
   --amber: hsl(36 82% 46%);
   --page-backdrop: radial-gradient(120% 70% at 50% 0%, #f8f2e8, #ece3d4 60%);
+
+  /* Font color — day overrides (original values) */
+  --font-color-lowtitle: rgb(190, 171, 171);
+  --font-color-text: rgb(66, 39, 39);
 }
 
 @theme inline {
@@ -164,7 +168,7 @@ h1, h2, h3, .font-display {
 .page-subtitle {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(61, 48, 40, 0.35);
+  color: var(--muted-foreground);
   margin-top: 4px;
 }
 
