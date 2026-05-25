@@ -226,6 +226,14 @@ h1, h2, h3, .font-display {
   box-shadow: 0 6px 28px hsl(25 78% 52% / 0.5);
 }
 
+/* Mode jour : halo copper plus léger sur le FAB (l'ombre nuit est trop dure sur fond clair). */
+.light .fab-button {
+  box-shadow: 0 4px 16px hsl(24 72% 50% / 0.22);
+}
+.light .fab-button:hover {
+  box-shadow: 0 6px 22px hsl(24 72% 50% / 0.30);
+}
+
 .fab-button:active {
   transform: scale(0.95);
 }

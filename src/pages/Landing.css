@@ -35,6 +35,13 @@
   transform: translateY(-1px);
   box-shadow: 0 8px 30px hsl(20 65% 34% / .55);
 }
+/* Mode jour : halo copper léger (l'ombre nuit est trop dure sur fond clair). */
+.light .landing .btn-primary {
+  box-shadow: 0 6px 16px hsl(24 70% 50% / .20);
+}
+.light .landing .btn-primary:hover {
+  box-shadow: 0 8px 22px hsl(24 70% 50% / .28);
+}
 .landing .btn-ghost {
   background: rgba(255,255,255,.07);
   color: hsl(var(--foreground));
@@ -493,6 +500,9 @@
   border: none;
   position: relative;
   box-shadow: 0 16px 42px hsl(20 70% 36% / .44);
+}
+.light .landing .tier.pro {
+  box-shadow: 0 14px 36px hsl(24 60% 50% / .16);
 }
 .landing .tier .ttl {
   font-size: 12px;
