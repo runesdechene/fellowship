@@ -220,7 +220,7 @@ export function ExplorerPage() {
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
   return (
-    <div className="explorer" style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
+    <div className={'explorer' + (scrubbing ? ' is-scrubbing' : '')} style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
       {/* Halos d'ambiance (teintes landing ; le halo principal suit la couleur de l'affiche active) */}
       <div className="xhalos" aria-hidden="true">
         <span className="xb xb1" />

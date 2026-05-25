@@ -475,6 +475,11 @@
   background: hsl(var(--card));
 }
 
+/* Pendant le scrub : transition courte pour que le deck colle au curseur sans traîner. */
+.explorer.is-scrubbing .card {
+  transition: transform 0.12s linear, opacity 0.12s linear, filter 0.12s linear;
+}
+
 /* Wrapper qui clippe l'image (et son zoom Ken Burns) tout en laissant le badge déborder du coin de la carte. */
 .explorer .card-media {
   position: absolute;
