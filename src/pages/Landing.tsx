@@ -1,231 +1,477 @@
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Calendar, Users, BarChart3, MapPin, Heart, ArrowRight } from 'lucide-react'
+import { ThemeToggle } from '@/components/theme-toggle'
+import './Landing.css'
+
+type Audience = 'festivalier' | 'exposant' | 'organisateur'
+
+const marqueTags: { label: string; color: string }[] = [
+  { label: '⚔️ Médiéval',              color: '#e8a06a' },
+  { label: '🎵 Fête de la musique',    color: '#b89ae0' },
+  { label: '🖼️ Exposition',            color: '#7fc6a0' },
+  { label: '🎄 Marché de Noël',        color: '#e8897a' },
+  { label: '🎮 Festival geek',         color: '#79b4d6' },
+  { label: '🛠️ Foire artisanale',      color: '#e8c06a' },
+  { label: '🎨 Marché de créateurs',   color: '#f0a86a' },
+  { label: '🐉 Fantasy',              color: '#c4a0e0' },
+  { label: '📚 Salon du livre',        color: '#7fc6b4' },
+  { label: '🪑 Brocante',             color: '#d4be8a' },
+  { label: '🦸 Comic Con',            color: '#e89ab4' },
+  { label: '🧺 Marché de producteurs', color: '#a8cc7a' },
+]
 
 export function LandingPage() {
+  const [audience, setAudience] = useState<Audience>('exposant')
+  const navRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const handler = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 16)
+    }
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  function switchAudience(a: Audience) {
+    setAudience(a)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="landing" data-aud={audience}>
 
       {/* ── Nav ── */}
-      <header className="sticky top-0 z-50 border-b border-transparent bg-background/80 backdrop-blur-xl [&.scrolled]:border-border">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Fellowship" className="h-8 w-auto" />
-          </Link>
-          <Link to="/login">
-            <Button variant="outline" className="px-5">
+      <nav ref={navRef}>
+        <div className="wrap nav-in">
+          <div className="logo">
+            <span className="mark">✦</span> Fellowship
+          </div>
+          <div className="nav-links">
+            <a className="link" href="#">À propos</a>
+            <a className="link" href="#">Tarifs</a>
+            <ThemeToggle />
+            <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
               Se connecter
-            </Button>
-          </Link>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Hero ── */}
+      <header className="hero">
+        {/* Glow blobs */}
+        <div className="glow g-a" aria-hidden="true" />
+        <div className="glow g-b" aria-hidden="true" />
+        <div className="glow g-c" aria-hidden="true" />
+
+        {/* Decorative dots */}
+        <div className="dot" style={{ left: '18%', top: '26%' }} aria-hidden="true" />
+        <div className="dot" style={{ left: '31%', top: '16%', animationDelay: '-1s' }} aria-hidden="true" />
+        <div className="dot" style={{ left: '69%', top: '22%', animationDelay: '-2s' }} aria-hidden="true" />
+        <div className="dot" style={{ left: '84%', top: '38%', animationDelay: '-.5s' }} aria-hidden="true" />
+        <div className="dot" style={{ left: '50%', top: '12%', animationDelay: '-1.5s' }} aria-hidden="true" />
+
+        <div className="wrap">
+          {/* Audience switcher */}
+          <div className="switch-wrap">
+            <div className="seg">
+              <button
+                data-a="festivalier"
+                className={audience === 'festivalier' ? 'on' : ''}
+                onClick={() => switchAudience('festivalier')}
+              >
+                Festivalier
+              </button>
+              <button
+                data-a="exposant"
+                className={audience === 'exposant' ? 'on' : ''}
+                onClick={() => switchAudience('exposant')}
+              >
+                Exposant
+              </button>
+              <button
+                data-a="organisateur"
+                className={audience === 'organisateur' ? 'on' : ''}
+                onClick={() => switchAudience('organisateur')}
+              >
+                Organisateur <span className="mini">Soon</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Hero — Exposant */}
+          <div className="v exposant">
+            <h1>Les festivals,<br /><span className="grad">ensemble.</span></h1>
+            <p className="lead">
+              Gère toute ta saison, retrouve tes amis sur la route, et découvre des centaines de dates
+              où t'inscrire tout au long de l'année.
+            </p>
+            <div className="hero-cta">
+              <Link to="/login" className="btn btn-primary">
+                Commencer gratuitement{' '}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
+              <a href="#" className="btn btn-ghost">Voir comment ça marche</a>
+            </div>
+            <div className="proof">
+              <span className="avatars"><span /><span /><span /></span>
+              Déjà <strong style={{ color: 'hsl(var(--foreground))', margin: '0 3px' }}>500+ exposants</strong> sur la liste d'attente
+            </div>
+          </div>
+
+          {/* Hero — Festivalier */}
+          <div className="v festivalier">
+            <h1>Tes festivals préférés,<br /><span className="grad">dans toute la France.</span></h1>
+            <p className="lead">
+              Découvre des festivals près de chez toi, suis tes exposants et créateurs favoris,
+              et planifie ton été facilement, côte à côte avec tes amis.
+            </p>
+            <div className="hero-cta">
+              <Link to="/login" className="btn btn-primary">
+                Créer mon compte{' '}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
+              <a href="#" className="btn btn-ghost">Explorer les festivals</a>
+            </div>
+            <div className="proof">Gratuit, pour toujours · Aucune carte requise</div>
+          </div>
+
+          {/* Hero — Organisateur */}
+          <div className="v organisateur">
+            <h1>Vos dossiers d'exposants,<br /><span className="grad">enfin automatisés.</span></h1>
+            <p className="lead">
+              Fini le papier, les PDF et les relances perdues dans les emails. Recevez et gérez les
+              candidatures en un seul flux, et découvrez des centaines de créateurs pour vos événements.
+            </p>
+            <div className="hero-cta">
+              <Link
+                to="/login"
+                className="btn btn-primary"
+                style={{
+                  background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
+                  boxShadow: 'none',
+                }}
+              >
+                Rejoindre la liste d'attente
+              </Link>
+            </div>
+            <div className="proof">🌱 En développement · Lancement V2</div>
+          </div>
         </div>
       </header>
 
-      {/* ── Hero ── */}
-      <section className="relative mx-auto max-w-5xl px-6 pt-24 pb-28 text-center">
-        {/* Warm gradient blob */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-16 -z-10 h-[480px] w-[700px] -translate-x-1/2 rounded-full opacity-20 blur-3xl"
-          style={{ background: 'radial-gradient(ellipse, hsl(24 72% 44% / 0.6) 0%, hsl(152 32% 40% / 0.3) 50%, transparent 100%)' }}
-        />
-
-        <span className="mb-6 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-          La plateforme des artisans de festival
-        </span>
-
-        <h1 className="mx-auto max-w-3xl text-5xl leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-1px' }}>
-          Les festivals,{' '}
-          <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            ensemble.
-          </span>
-        </h1>
-
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-          Découvre, organise et partage tes événements avec ta communauté d'artisans et de passionnés.
-        </p>
-
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link to="/login">
-            <Button size="lg" className="gap-2 px-8">
-              Je suis exposant
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <Link to="/login">
-            <Button size="lg" variant="outline" className="px-8">
-              Découvrir les événements
-            </Button>
-          </Link>
+      {/* ── Marquee ── */}
+      <div className="marquee">
+        <div className="mtrack">
+          {marqueTags.map((t) => (
+            <span
+              key={t.label + '-1'}
+              className="etag"
+              style={{ '--c': t.color } as React.CSSProperties}
+            >
+              {t.label}
+            </span>
+          ))}
+          {/* duplicate for seamless loop */}
+          {marqueTags.map((t) => (
+            <span
+              key={t.label + '-2'}
+              className="etag"
+              style={{ '--c': t.color } as React.CSSProperties}
+            >
+              {t.label}
+            </span>
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* ── Features exposants ── */}
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="mb-2">
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
-            Exposants
-          </span>
-        </div>
-        <h2 className="mb-10 text-3xl">Pour les exposants</h2>
+      {/* ── Features — Exposant ── */}
+      <section className="block v exposant">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Pour les exposants</span>
+            <h2>Ton année de festivals, maîtrisée.</h2>
+          </div>
+          <div className="features">
 
-        <div className="grid gap-5 sm:grid-cols-3">
-          <FeatureCard
-            icon={<Calendar className="h-6 w-6" />}
-            title="Calendrier annuel"
-            description="Gère toute ton année de festivals en un coup d'œil — vue mensuelle, statuts, deadlines."
-            color="primary"
-          />
-          <FeatureCard
-            icon={<Users className="h-6 w-6" />}
-            title="Communauté"
-            description="Vois où vont tes amis, partage tes dates, retrouve-toi sur les mêmes festivals."
-            color="accent"
-          />
-          <FeatureCard
-            icon={<BarChart3 className="h-6 w-6" />}
-            title="Avis & Bilans"
-            description="Note les festivals, suis ta rentabilité, identifie ceux qui te font progresser."
-            color="forest"
-          />
-        </div>
-      </section>
-
-      {/* ── Features public ── */}
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="mb-2">
-          <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
-            Visiteurs
-          </span>
-        </div>
-        <h2 className="mb-10 text-3xl">Pour les visiteurs</h2>
-
-        <div className="grid gap-5 sm:grid-cols-2">
-          <FeatureCard
-            icon={<MapPin className="h-6 w-6" />}
-            title="Découvre"
-            description="Trouve des événements près de chez toi — marchés, foires, créateurs, artisans locaux."
-            color="primary"
-          />
-          <FeatureCard
-            icon={<Heart className="h-6 w-6" />}
-            title="Suis tes artisans"
-            description="Sache toujours où passent tes créateurs préférés et ne rate plus jamais leurs dates."
-            color="accent"
-          />
-        </div>
-      </section>
-
-      {/* ── Pricing ── */}
-      <section className="bg-gradient-to-b from-background to-secondary/30 py-24">
-        <div className="mx-auto max-w-5xl px-6">
-          <h2 className="mb-3 text-center text-3xl">Simple et transparent</h2>
-          <p className="mb-14 text-center text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Commence gratuitement, passe Pro quand tu veux.
-          </p>
-
-          <div className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
-            {/* Free */}
-            <div className="rounded-2xl bg-card p-8">
-              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>Gratuit</p>
-              <p className="mt-2 text-4xl">0 €</p>
-              <p className="mt-1 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>pour toujours</p>
-
-              <ul className="mt-8 space-y-3 text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-                {[
-                  'Gestion de ses événements',
-                  'Vue calendrier annuelle',
-                  'Score agrégé des festivals',
-                  'Profil public basique',
-                  'Système de suivi pour sa communauté'
-                ].map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <span className="mt-0.5 shrink-0 text-accent">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <Link to="/login" className="mt-8 block">
-                <Button variant="outline" className="w-full">
-                  Commencer gratuitement
-                </Button>
-              </Link>
+            <div className="feat">
+              <div className="ico copper">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                  <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+              </div>
+              <h3>Vision d'ensemble</h3>
+              <p>Toute ton année en un coup d'œil. Prévois tes dates et déniche de nouvelles dates où t'inscrire, facilement.</p>
             </div>
 
-            {/* Pro */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-accent p-8 text-white">
-              <span className="absolute right-5 top-5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-                POPULAIRE
-              </span>
-              <p className="text-xs font-semibold uppercase tracking-widest text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>Pro</p>
-              <p className="mt-2 text-4xl"><s className="text-white/60">9.99€</s>0.00€</p>
-              <p className="mt-1 text-sm text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>HT, par mois</p>
-              <p className="mt-1 text-xs text-white/70" style={{ fontFamily: "'Inter', sans-serif" }}>Le temps de la version Alpha</p>
-
-              <ul className="mt-8 space-y-3 text-sm text-white/80" style={{ fontFamily: "'Inter', sans-serif" }}>
-                {[
-                  'Découverte des événements de ses amis',
-                  'Visibilité privé / amis / public',
-                  'Avis détaillés des exposants',
-                  'Notes privées',
-                  'Bilan post-événement (CA, coûts)',
-                  'Rappels deadlines inscription',
-                  'Calendrier live sur son site (HTML)',
-                ].map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <span className="mt-0.5 shrink-0 text-yellow-300">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <Link to="/login" className="mt-8 block">
-                <Button className="w-full bg-white text-primary hover:bg-white/90">
-                  Essayer Pro
-                </Button>
-              </Link>
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="9" cy="7" r="3.5" />
+                  <path d="M2.5 20v-1a6 6 0 0113 0v1" />
+                  <path d="M16 4a4 4 0 010 7" />
+                  <path d="M21.5 20v-1a6 6 0 00-3.5-5.5" />
+                </svg>
+              </div>
+              <h3>L'esprit de camaraderie</h3>
+              <p>Vois où vont tes amis, organisez vos covoiturages, collaborez, et soyez prévenus quand l'un de vous galère.</p>
             </div>
+
+            <div className="feat">
+              <div className="ico copper">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a1 1 0 001-1v-4" />
+                  <path d="M2 9V7a2 2 0 012-2h13a1 1 0 011 1v3" />
+                  <circle cx="17" cy="13" r="1.5" />
+                </svg>
+              </div>
+              <h3>Inscriptions, paiements &amp; rentabilité</h3>
+              <p>Suis tes inscriptions, tes paiements et ton bilan. Sache enfin quels festivals valent vraiment le coup.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0" />
+                </svg>
+              </div>
+              <h3>Rappels de deadlines</h3>
+              <p>Ne rate plus jamais une date limite d'inscription. Fellowship te prévient au bon moment.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico copper">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
+                </svg>
+              </div>
+              <h3>Calendrier intégrable, toujours à jour</h3>
+              <p>Affiche ton agenda en direct sur ton site. Relié à Fellowship, il se met à jour tout seul — tu ne le réédites jamais.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" />
+                </svg>
+              </div>
+              <h3>Postuler en 1 clic <span className="soon">Bientôt</span></h3>
+              <p>Vois un festival, clique « Postuler », ton dossier part direct à l'organisateur.</p>
+            </div>
+
           </div>
         </div>
       </section>
 
+      {/* ── Features — Festivalier ── */}
+      <section className="block v festivalier">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow f">Pour les festivaliers</span>
+            <h2>Ne rate plus jamais tes créateurs.</h2>
+          </div>
+          <div className="two">
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <h3>Découvre</h3>
+              <p>Trouve les festivals, marchés et salons près de chez toi, toute l'année.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico copper">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M19 14c1.49-1.46 3-3.2 3-5.5A5.5 5.5 0 0012 5 5.5 5.5 0 002 8.5c0 2.3 1.5 4.04 3 5.5l7 7z" />
+                </svg>
+              </div>
+              <h3>Suis tes artisans</h3>
+              <p>Sache toujours où passent tes créateurs préférés et planifie tes sorties.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── Features — Organisateur ── */}
+      <section className="block v organisateur">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow o">Pour les organisateurs</span>
+            <h2>Ce qui arrive pour vous.</h2>
+          </div>
+          <div className="features">
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                  <path d="M14 2v6h6" />
+                </svg>
+              </div>
+              <h3>Dossiers centralisés</h3>
+              <p>Toutes les candidatures d'exposants au même endroit, fini les PDF et le papier.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" />
+                </svg>
+              </div>
+              <h3>Candidatures en flux</h3>
+              <p>Les exposants postulent en 1 clic, vous recevez tout, prêt à traiter.</p>
+            </div>
+
+            <div className="feat">
+              <div className="ico lime">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 3v18h18M18 17V9M13 17V5M8 17v-4" />
+                </svg>
+              </div>
+              <h3>Pilotage &amp; relances</h3>
+              <p>Sachez qui recontacter, quand et comment. Automatisez les relances.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing — Exposant ── */}
+      <section className="block v exposant">
+        <div className="wrap">
+          <div className="sec-head" style={{ textAlign: 'center' }}>
+            <span className="eyebrow">Tarifs</span>
+            <h2>Commence gratuitement.</h2>
+            <p style={{ color: 'hsl(var(--muted-foreground))', marginTop: '10px' }}>
+              Un seul compte. Tu passes Pro quand tu veux.
+            </p>
+          </div>
+          <div className="tiers">
+
+            {/* Découverte */}
+            <div className="tier">
+              <div className="ttl">Découverte</div>
+              <div className="per">Tarifs bientôt</div>
+              <ul>
+                <li><span className="ck">✓</span> Gérer ses dates de festivals</li>
+                <li><span className="ck">✓</span> Calendrier annuel</li>
+                <li><span className="ck">✓</span> Voir sa communauté</li>
+                <li><span className="ck">✓</span> Page exposant publique</li>
+              </ul>
+              <Link to="/login" className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
+                Commencer gratuitement
+              </Link>
+            </div>
+
+            {/* Pro */}
+            <div className="tier pro">
+              <span className="pop">★ Pour vivre de ton art</span>
+              <div className="ttl">Pro</div>
+              <div className="per">Tarifs bientôt</div>
+              <ul>
+                <li><span className="ck">✓</span> Tout le plan Découverte</li>
+                <li><span className="ck">✓</span> Bilan de rentabilité (CA, coûts)</li>
+                <li><span className="ck">✓</span> Rappels de deadlines</li>
+                <li><span className="ck">✓</span> Avis détaillés des festivals</li>
+                <li><span className="ck">✓</span> Calendrier en direct sur ton site</li>
+                <li><span className="ck">✓</span> Postuler en 1 clic <em style={{ opacity: 0.7 }}>(bientôt)</em></li>
+              </ul>
+              <Link to="/login" className="btn btn-white" style={{ width: '100%', justifyContent: 'center' }}>
+                Passer Pro
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing — Festivalier ── */}
+      <section className="block v festivalier">
+        <div className="wrap" style={{ textAlign: 'center', maxWidth: '560px' }}>
+          <span className="eyebrow f">Tarifs</span>
+          <h2 style={{ fontSize: '34px', marginTop: '10px' }}>Gratuit. Pour toujours.</h2>
+          <p style={{ color: 'hsl(var(--muted-foreground))', margin: '14px 0 28px' }}>
+            Découvrir, suivre et planifier ne te coûtera jamais rien. Et si un jour tu exposes, ton compte est déjà prêt.
+          </p>
+          <Link to="/login" className="btn btn-primary">Créer mon compte gratuit</Link>
+        </div>
+      </section>
+
+      {/* ── Org teaser card (visible in exposant view) ── */}
+      <section className="block v exposant">
+        <div className="wrap">
+          <div className="org-card">
+            <div>
+              <span className="soon-tag">Bientôt</span>
+              <h2>Vous organisez un festival ?</h2>
+              <p>Recevez les candidatures des exposants en un flux, gérez tout sans papier.</p>
+            </div>
+            <button
+              className="btn btn-primary"
+              style={{
+                background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
+                boxShadow: 'none',
+              }}
+              onClick={() => switchAudience('organisateur')}
+            >
+              Rejoindre la liste d'attente
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Organisateur waitlist ── */}
+      <section className="block v organisateur">
+        <div className="wrap" style={{ textAlign: 'center', maxWidth: '560px' }}>
+          <h2 style={{ fontSize: '30px' }}>On vous prévient au lancement.</h2>
+          <p style={{ color: 'hsl(var(--muted-foreground))', margin: '14px 0 24px' }}>
+            Laissez votre email, vous serez les premiers à digitaliser la gestion de votre festival.
+          </p>
+          {/* TODO(L5): wire up form submission */}
+          <form style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <input
+              className="em-input"
+              type="email"
+              placeholder="votre@email.fr"
+            />
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{
+                background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
+                boxShadow: 'none',
+              }}
+            >
+              Je m'inscris
+            </button>
+          </form>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto max-w-5xl px-6 text-center text-sm text-muted-foreground" style={{ fontFamily: "'Inter', sans-serif" }}>
-          <p>Fellowship © 2026</p>
-          <p className="mt-1">flw.sh</p>
+      <footer>
+        <div className="wrap">
+          <div className="logo" style={{ justifyContent: 'center', marginBottom: '8px' }}>
+            <span className="mark">✦</span> Fellowship
+          </div>
+          <p>Le réseau qui fait tourner les festivals · flw.sh · © 2026</p>
         </div>
       </footer>
-    </div>
-  )
-}
 
-function FeatureCard({ icon, title, description, color }: {
-  icon: React.ReactNode
-  title: string
-  description: string
-  color: 'primary' | 'accent' | 'forest'
-}) {
-  const bgMap = {
-    primary: 'bg-primary/8',
-    accent: 'bg-accent/8',
-    forest: 'bg-accent/8',
-  }
-  const iconBg = {
-    primary: 'bg-primary/12 text-primary',
-    accent: 'bg-accent/12 text-accent',
-    forest: 'bg-accent/12 text-accent',
-  }
-
-  return (
-    <div className={`rounded-2xl ${bgMap[color]} p-7`}>
-      <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${iconBg[color]}`}>
-        {icon}
-      </div>
-      <h3 className="mb-2 text-lg">{title}</h3>
-      <p className="leading-relaxed text-muted-foreground text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
-        {description}
-      </p>
     </div>
   )
 }
