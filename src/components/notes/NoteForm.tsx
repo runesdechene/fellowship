@@ -10,17 +10,18 @@ interface NoteFormProps {
 }
 
 export function NoteForm({ eventId, onNoteAdded }: NoteFormProps) {
-  const { user } = useAuth()
+  const { user, currentActor } = useAuth()
   const [content, setContent] = useState('')
   const [saving, setSaving] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user || !content.trim()) return
+    if (!user || !currentActor || !content.trim()) return
     setSaving(true)
 
     await createNote({
-      user_id: user.id,
+      actor_id: currentActor.id,
+      acted_by_user_id: user.id,
       event_id: eventId,
       content: content.trim(),
       visibility: 'amis',

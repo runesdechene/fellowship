@@ -9,7 +9,7 @@ interface NotesFeedProps {
 }
 
 export function NotesFeed({ notes, onRefresh }: NotesFeedProps) {
-  const { user } = useAuth()
+  const { currentActor } = useAuth()
 
   if (notes.length === 0) {
     return <p className="text-sm text-muted-foreground italic">Aucune note pour le moment</p>
@@ -26,9 +26,8 @@ export function NotesFeed({ notes, onRefresh }: NotesFeedProps) {
   return (
     <div className="space-y-3">
       {notes.map((note) => {
-        const isOwn = note.user_id === user?.id
-        const profiles = note.profiles as { brand_name?: string | null; display_name?: string | null } | null
-        const authorName = profiles?.brand_name || profiles?.display_name || 'Anonyme'
+        const isOwn = note.actor_id === currentActor?.id
+        const authorName = note.actor_public?.label || 'Anonyme'
 
         return (
           <div

@@ -2,6 +2,23 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { NoteWithAuthor, NoteInsert } from '@/types/database'
 
+type ActorPublicRow = { actor_id: string | null; label: string | null; avatar_url: string | null; entity_type: string | null; kind: string | null }
+
+async function attachAuthors(rows: Array<{ actor_id: string | null; [k: string]: unknown }>): Promise<NoteWithAuthor[]> {
+  const actorIds = [...new Set(rows.map(r => r.actor_id).filter(Boolean) as string[])]
+  let byId: Record<string, ActorPublicRow> = {}
+  if (actorIds.length > 0) {
+    const { data: actors } = await supabase
+      .from('actor_public').select('actor_id, label, avatar_url, entity_type, kind').in('actor_id', actorIds)
+    byId = Object.fromEntries(
+      ((actors ?? []) as ActorPublicRow[])
+        .filter(a => a.actor_id != null)
+        .map(a => [a.actor_id as string, a])
+    )
+  }
+  return rows.map(r => ({ ...r, actor_public: r.actor_id ? byId[r.actor_id] ?? null : null })) as unknown as NoteWithAuthor[]
+}
+
 export function useEventNotes(eventId: string | undefined) {
   const [notes, setNotes] = useState<NoteWithAuthor[]>([])
   const [loading, setLoading] = useState(true)
@@ -9,12 +26,10 @@ export function useEventNotes(eventId: string | undefined) {
   const fetchNotes = useCallback(async () => {
     if (!eventId) return
     const { data } = await supabase
-      .from('notes')
-      .select('*, profiles(id, display_name, avatar_url, brand_name)')
+      .from('notes').select('*')
       .eq('event_id', eventId)
       .order('created_at', { ascending: false })
-
-    setNotes((data as NoteWithAuthor[] | null) ?? [])
+    setNotes(await attachAuthors((data as Array<{ actor_id: string | null; [k: string]: unknown }> | null) ?? []))
     setLoading(false)
   }, [eventId])
 
@@ -28,11 +43,7 @@ export function useEventNotes(eventId: string | undefined) {
 }
 
 export async function createNote(note: NoteInsert) {
-  const { data, error } = await supabase
-    .from('notes')
-    .insert(note)
-    .select('*, profiles(id, display_name, avatar_url, brand_name)')
-    .single()
+  const { data, error } = await supabase.from('notes').insert(note).select('*').single()
   return { data, error }
 }
 

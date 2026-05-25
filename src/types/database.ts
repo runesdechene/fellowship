@@ -62,7 +62,7 @@ export interface ParticipationWithUser extends Participation {
 }
 
 export interface NoteWithAuthor extends Note {
-  profiles: Profile
+  actor_public: { actor_id: string; label: string | null; avatar_url: string | null; entity_type: string | null; kind: string } | null
   is_friend_of_friend?: boolean
   mutual_friend_name?: string
 }
