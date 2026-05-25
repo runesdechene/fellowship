@@ -257,3 +257,23 @@ h1, h2, h3, .font-display {
 .light .theme-toggle .knob {
   transform: translateX(28px);
 }
+
+/* ── Calque d'ambiance « bgfx » (halos festival) ──────────────────── */
+.bgfx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bgfx .b {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(85px);
+}
+.bgfx .b1 { width: 480px; height: 480px; background: hsl(24 85% 50% / 0.38); left: -4%; top: -70px; }
+.bgfx .b2 { width: 380px; height: 380px; background: hsl(330 60% 50% / 0.26); right: -2%; top: 5%; }
+.bgfx .b3 { width: 440px; height: 440px; background: hsl(45 90% 55% / 0.15); left: 38%; top: 40%; }
+.bgfx .b4 { width: 430px; height: 430px; background: hsl(152 50% 45% / 0.20); left: -8%; bottom: 8%; }
+.bgfx .b5 { width: 360px; height: 360px; background: hsl(24 85% 50% / 0.24); right: -5%; bottom: -50px; }
+.light .bgfx .b { opacity: 0.5; mix-blend-mode: multiply; }
