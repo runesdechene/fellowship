@@ -251,6 +251,9 @@ export function ExplorerPage() {
             <DeckSkeleton />
           ) : displayed.length > 0 && currentEvent ? (
             <>
+              <div className="added-on">
+                Ajouté le {new Date(currentEvent.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </div>
               <EventDeck
                 events={displayed}
                 activeIndex={safeIndex}
