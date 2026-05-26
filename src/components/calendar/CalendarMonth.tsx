@@ -6,6 +6,7 @@ import { getTagIcon } from '@/components/ui/TagBadge'
 import { participationChip, type ActorKind } from '@/lib/explorer'
 import type { CalendarMonth as CalendarMonthType, CalendarEvent } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
+import { avatarGradient } from '@/lib/avatar-gradient'
 
 function useTagColor() {
   const { tags } = useTags()
@@ -13,16 +14,6 @@ function useTagColor() {
     const t = tags.find(t => t.value === slug)
     return t ? { bg: t.bg, color: t.color } : { bg: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }
   }
-}
-
-const AVATAR_GRADIENTS = [
-  ['#f0a060', '#e74c3c'], ['#6c5ce7', '#a29bfe'], ['#00b894', '#00cec9'],
-  ['#fd79a8', '#e84393'], ['#f39c12', '#d68910'],
-]
-function hashName(name: string): number {
-  let h = 0
-  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0
-  return Math.abs(h)
 }
 
 interface CalendarMonthProps {
@@ -86,10 +77,9 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                   {friendsAtEvent.slice(0, 4).map((fp, i) => {
                     const nm = fp.actor_public?.label ?? '?'
                     const url = fp.actor_public?.avatar_url
-                    const [from, to] = AVATAR_GRADIENTS[hashName(nm) % AVATAR_GRADIENTS.length]
                     return (
                       <span key={fp.actor_id} className="calendar-pav-item"
-                        style={{ background: url ? 'transparent' : `linear-gradient(135deg, ${from}, ${to})`, zIndex: 4 - i }}>
+                        style={{ background: url ? 'transparent' : avatarGradient(nm), zIndex: 4 - i }}>
                         {url ? <img src={url} alt={nm} /> : nm[0].toUpperCase()}
                       </span>
                     )
@@ -107,7 +97,6 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
           <div className="calendar-friend-lbl">Tes compagnons ce mois-ci</div>
           {friendsOnly.map(ev => {
             const fname = ev.friendName ?? 'Un ami'
-            const [from, to] = AVATAR_GRADIENTS[hashName(fname) % AVATAR_GRADIENTS.length]
             return (
               <Link key={ev.id} to={`/evenement/${ev.id}`} state={{ from: '/calendrier' }} className="calendar-evF">
                 {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
@@ -115,7 +104,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                   <div className="calendar-evF-name">{ev.name}</div>
                   <div className="calendar-evF-meta">{fname} y va · {ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</div>
                 </div>
-                <span className="calendar-evF-av" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>{fname[0].toUpperCase()}</span>
+                <span className="calendar-evF-av" style={{ background: avatarGradient(fname) }}>{fname[0].toUpperCase()}</span>
               </Link>
             )
           })}
