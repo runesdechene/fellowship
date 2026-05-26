@@ -2,11 +2,12 @@ import { type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Lock } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
+import { planForActor } from '@/lib/navModel'
 
-/** Enveloppe une surface Pro : si la personne n'est pas Pro, affiche un teaser « Passe en Pro ». */
+/** Enveloppe une surface Pro : débloquée si l'acteur actif (entité) a le plan Pro. */
 export function ProGate({ title, children }: { title: string; children: ReactNode }) {
-  const { person } = useAuth()
-  if (person?.plan === 'pro') return <>{children}</>
+  const { currentActor, currentActorRow } = useAuth()
+  if (planForActor(currentActor, currentActorRow) === 'pro') return <>{children}</>
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 p-8 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">

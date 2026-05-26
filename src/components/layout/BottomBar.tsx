@@ -4,7 +4,7 @@ import {
   CalendarDays, CalendarClock, Compass, User, Heart,
   LayoutDashboard, Store, Users, Shield, type LucideIcon,
 } from 'lucide-react'
-import { navItemsFor, entryState, NAV_DEFS } from '@/lib/navModel'
+import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
 import './BottomBar.css'
 
 const ICONS: Record<string, LucideIcon> = {
@@ -12,9 +12,9 @@ const ICONS: Record<string, LucideIcon> = {
 }
 
 export function BottomBar() {
-  const { currentActor, person, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, isAdmin } = useAuth()
   const navigate = useNavigate()
-  const plan = person?.plan === 'pro' ? 'pro' : 'free'
+  const plan = planForActor(currentActor, currentActorRow)
   // 4 premières entrées de la nav de l'acteur (mobile), + Admin si applicable.
   const keys = navItemsFor(currentActor).slice(0, 4)
 

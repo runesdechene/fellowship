@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
+import { planForActor } from '@/lib/navModel'
 import { useEventReport, saveEventReport } from '@/hooks/use-reports'
 import { Button } from '@/components/ui/button'
 import { Lock, Plus, X } from 'lucide-react'
@@ -9,7 +10,7 @@ interface EventReportFormProps {
 }
 
 export function EventReportForm({ eventId }: EventReportFormProps) {
-  const { user, currentActor, person } = useAuth()
+  const { user, currentActor, currentActorRow } = useAuth()
   const { report: existing } = useEventReport(eventId)
   const [boothCost, setBoothCost] = useState('')
   const [charges, setCharges] = useState('')
@@ -31,7 +32,7 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
     }
   }, [existing])
 
-  if (person?.plan !== 'pro') {
+  if (planForActor(currentActor, currentActorRow) !== 'pro') {
     return (
       <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-secondary p-4 text-sm">
         <Lock className="h-4 w-4 text-primary" />

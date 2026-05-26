@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
+import { planForActor } from '@/lib/navModel'
 import type { Review, ReviewInsert } from '@/types/database'
 
 type ReviewWithActor = Review & { actor_label: string | null; actor_entity_type: string | null }
 
 export function useEventReviews(eventId: string | undefined) {
-  const { currentActor, person } = useAuth()
+  const { currentActor, currentActorRow } = useAuth()
   const [reviews, setReviews] = useState<ReviewWithActor[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -34,7 +35,7 @@ export function useEventReviews(eventId: string | undefined) {
     fetchReviews()
   }, [eventId, fetchReviews])
 
-  const canSeeDetails = currentActor?.kind === 'entity' && person?.plan === 'pro'
+  const canSeeDetails = planForActor(currentActor, currentActorRow) === 'pro'
 
   return { reviews, loading, canSeeDetails, refetch: fetchReviews }
 }

@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Store, Users, Shield, Lock, Sparkles,
   PanelLeftClose, PanelLeft, type LucideIcon,
 } from 'lucide-react'
-import { navItemsFor, entryState, NAV_DEFS } from '@/lib/navModel'
+import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
 import { EntitySwitcher } from './EntitySwitcher'
 import { SidebarActivity } from '@/components/notifications/SidebarActivity'
 import './Sidebar.css'
@@ -17,9 +17,9 @@ const ICONS: Record<string, LucideIcon> = {
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const { currentActor, person, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, isAdmin } = useAuth()
   const navigate = useNavigate()
-  const plan = person?.plan === 'pro' ? 'pro' : 'free'
+  const plan = planForActor(currentActor, currentActorRow)
   const keys = navItemsFor(currentActor)
 
   return (
