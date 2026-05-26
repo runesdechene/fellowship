@@ -1169,3 +1169,28 @@
   .explorer .counter--bottom { display: none; }
   .explorer .counter--top { display: block; text-align: center; padding: 6px 0 0; font-size: 11px; }
 }
+
+/* ── Écrans COURTS (petits téléphones, ~iPhone SE, paysage) ──────────
+   Le chrome fixe (barre recherche, compteur, nav appli 64px) prend une
+   part proportionnelle plus grande quand la hauteur est faible : les
+   couches vh (deck/dock/bottombar) se chevauchent. On compresse par
+   paliers. Additif — les grands écrans ne sont pas affectés. */
+@media (max-width: 640px) and (max-height: 740px) {
+  .explorer .top { padding: 12px 12px 8px; }
+  .explorer .flow { padding-top: 2vh; }
+  .explorer .deck { height: 38vh; }
+  .explorer .card { height: 36vh; }
+  .explorer .infozone { top: 42vh; }
+  .explorer .dockinfo { gap: 4px; }
+  .explorer .dockinfo h2 { font-size: 18px; }
+  .explorer .counter--top { padding: 3px 0 0; }
+  .explorer .bottombar { margin-bottom: 3vh; padding: 6px 0 10px; }
+  .explorer .dock-cta .btn { padding: 9px 12px; }
+}
+
+@media (max-width: 640px) and (max-height: 620px) {
+  .explorer .deck { height: 32vh; }
+  .explorer .card { height: 30vh; }
+  .explorer .infozone { top: 35vh; }
+  .explorer .bottombar { margin-bottom: 1vh; }
+}
