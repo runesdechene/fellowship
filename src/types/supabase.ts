@@ -63,10 +63,13 @@ export type Database = {
           craft_type: string | null
           created_at: string
           department: string | null
+          links: Json
+          plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
-          plan: Database["public"]["Enums"]["user_plan"]
+          specialties: string[]
           type: Database["public"]["Enums"]["entity_type"]
+          verified: boolean
           website: string | null
         }
         Insert: {
@@ -79,10 +82,13 @@ export type Database = {
           craft_type?: string | null
           created_at?: string
           department?: string | null
+          links?: Json
+          plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
+          specialties?: string[]
           type: Database["public"]["Enums"]["entity_type"]
+          verified?: boolean
           website?: string | null
         }
         Update: {
@@ -95,10 +101,13 @@ export type Database = {
           craft_type?: string | null
           created_at?: string
           department?: string | null
+          links?: Json
+          plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
+          specialties?: string[]
           type?: Database["public"]["Enums"]["entity_type"]
+          verified?: boolean
           website?: string | null
         }
         Relationships: [
@@ -108,6 +117,38 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "actors"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      entity_gallery: {
+        Row: {
+          created_at: string
+          entity_actor_id: string
+          id: string
+          image_url: string
+          position: number
+        }
+        Insert: {
+          created_at?: string
+          entity_actor_id: string
+          id?: string
+          image_url: string
+          position?: number
+        }
+        Update: {
+          created_at?: string
+          entity_actor_id?: string
+          id?: string
+          image_url?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entity_gallery_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
           },
         ]
       }
@@ -468,6 +509,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      organizer_waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string
+        }
+        Relationships: []
       }
       participations: {
         Row: {
@@ -902,7 +964,12 @@ export type Database = {
         | "event_image_added"
         | "event_info_added"
         | "new_exposant"
-      participation_status: "interesse" | "inscrit" | "confirme" | "en_cours"
+      participation_status:
+        | "interesse"
+        | "inscrit"
+        | "confirme"
+        | "en_cours"
+        | "refuse"
       participation_visibility: "prive" | "amis" | "public"
       user_plan: "free" | "pro"
       user_sex: "homme" | "femme" | "indefini"
@@ -1052,7 +1119,13 @@ export const Constants = {
         "event_info_added",
         "new_exposant",
       ],
-      participation_status: ["interesse", "inscrit", "confirme", "en_cours"],
+      participation_status: [
+        "interesse",
+        "inscrit",
+        "confirme",
+        "en_cours",
+        "refuse",
+      ],
       participation_visibility: ["prive", "amis", "public"],
       user_plan: ["free", "pro"],
       user_sex: ["homme", "femme", "indefini"],

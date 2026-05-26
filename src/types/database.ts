@@ -1,11 +1,21 @@
 import type { Database } from './supabase'
 
 // Accounts foundation (actors model)
-export type ActorRow      = Database['public']['Tables']['actors']['Row']
-export type UserRow       = Database['public']['Tables']['users']['Row']
-export type EntityRow     = Database['public']['Tables']['entities']['Row']
-export type MembershipRow = Database['public']['Tables']['memberships']['Row']
-export type EntityType    = Database['public']['Enums']['entity_type']
+export type ActorRow        = Database['public']['Tables']['actors']['Row']
+export type UserRow         = Database['public']['Tables']['users']['Row']
+export type EntityRow       = Database['public']['Tables']['entities']['Row']
+export type MembershipRow   = Database['public']['Tables']['memberships']['Row']
+export type EntityType      = Database['public']['Enums']['entity_type']
+
+// Vitrine types
+export type EntityGalleryRow = Database['public']['Tables']['entity_gallery']['Row']
+
+/** Un lien externe de vitrine (stocké dans entities.links jsonb). */
+export interface VitrineLink {
+  type: 'website' | 'shop' | 'instagram' | 'facebook' | 'other'
+  label: string
+  url: string
+}
 
 // Table row types
 export type Profile = Database['public']['Tables']['profiles']['Row']
