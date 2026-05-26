@@ -735,7 +735,7 @@
   white-space: nowrap;
   box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
 }
-.explorer .card-status.repere  { background: #a8cc7a; color: #1b2e10; }
+.explorer .card-status.repere  { background: hsl(44 89% 71%); color: #41351c; }
 .explorer .card-status.dossier { background: #86bce8; color: #0e2233; }
 .explorer .card-status.accepte { background: #5fd9a0; color: #06281a; }
 .explorer .card-status.apayer  { background: #ffce85; color: #3a2410; }
@@ -813,10 +813,15 @@
   color: hsl(var(--foreground));
   cursor: pointer;
   z-index: 20;
+  transition: transform 0.13s ease, background 0.15s ease;
 }
 
 .explorer .arrow:hover {
   background: hsl(var(--muted));
+}
+/* Petit retour tactile au clic : la flèche dézoome légèrement. */
+.explorer .arrow:active {
+  transform: translateY(-50%) scale(0.86);
 }
 
 .explorer .arrow svg {
@@ -968,8 +973,8 @@
 
 /* « Repérer » : vert vif assorti au statut « Repéré » (cohérent partout), lisible nuit + jour. */
 .explorer .btn-star {
-  background: hsl(122 55% 42%);
-  color: #fff;
+  background: hsl(44, 89%, 71%);
+  color: #41351c;
   transition: box-shadow .2s, transform .15s, filter .15s, background .2s, color .2s;
 }
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
@@ -1082,8 +1087,8 @@
 
 /* ── Ghost CTA (transparent + border) ─────────────────────────────── */
 .explorer .btn-ghost {
-  background: hsl(var(--card));
-  border: 1.5px solid hsl(var(--border));
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.2);
   color: hsl(var(--foreground));
 }
 .explorer .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }

@@ -34,7 +34,7 @@
   --lime-d: hsl(92 40% 46%);
   --amber: #ffce85;
   /* Statuts de participation (vocabulaire unifié) — couleur de texte/accent (nuit) */
-  --status-repere:  #a8cc7a;   /* tilleul */
+  --status-repere:  hsl(44 88% 64%);   /* jaune doré (assorti au bouton Repérer) */
   --status-dossier: #86bce8;   /* bleu */
   --status-accepte: #5fd9a0;   /* émeraude */
   --status-apayer:  #ffce85;   /* ambre */
@@ -77,7 +77,7 @@
   --forest: hsl(152 40% 38%);
   --lime: hsl(88 50% 36%);
   --amber: hsl(36 82% 46%);
-  --status-repere:  hsl(88 50% 32%);
+  --status-repere:  hsl(42 80% 42%);
   --status-dossier: hsl(210 55% 42%);
   --status-accepte: hsl(152 48% 32%);
   --status-apayer:  hsl(36 82% 40%);
