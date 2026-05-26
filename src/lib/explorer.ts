@@ -33,13 +33,17 @@ export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   const ao = Math.abs(offset)
   if (ao > 2) {
     return {
-      transform: `translate(-50%,-50%) translateX(${offset > 0 ? 170 : -170}%) scale(.5)`,
+      transform: `translate(-50%,-50%) translateX(${offset > 0 ? 170 : -170}%) translateZ(-130px) scale(.5)`,
       opacity: 0, filter: 'none', zIndex: 0, pointerEvents: 'none', isCenter: false,
     }
   }
   const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 120 : 172)
   const rot = offset === 0 ? 0 : (offset < 0 ? 18 : -18)
   const sc = offset === 0 ? 1 : (ao === 1 ? 0.74 : 0.62)
+  // Profondeur 3D : le deck est en preserve-3d, donc l'empilement se fait par translateZ
+  // (le z-index est ignoré). Centre devant, voisines reculées → ordre stable, plus de flash
+  // « carte qui passe au-dessus » à l'entrée (l'ordre DOM ne décide plus).
+  const tz = offset === 0 ? 0 : (ao === 1 ? -55 : -110)
   // Voisines : on les fait reculer. Nuit = assombrir ; jour = éclaircir + désaturer
   // (brightness > 1, jamais d'opacité → les cartes restent OPAQUES, pas de transparence).
   const dim = offset === 0
@@ -48,7 +52,7 @@ export function deckCardStyle(offset: number, isLight = false): DeckStyle {
       ? (ao === 1 ? 'brightness(1.4) saturate(.5) blur(0.5px)' : 'brightness(1.75) saturate(.32) blur(1.5px)')
       : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)')
   return {
-    transform: `translate(-50%,-50%) translateX(${tx}%) rotateY(${rot}deg) scale(${sc})`,
+    transform: `translate(-50%,-50%) translateX(${tx}%) translateZ(${tz}px) rotateY(${rot}deg) scale(${sc})`,
     opacity: 1,
     filter: dim,
     zIndex: offset === 0 ? 20 : 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
