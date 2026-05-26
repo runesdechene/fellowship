@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, type LucideIcon } from 'lucide-react'
-import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
+import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarActivity } from '@/components/notifications/SidebarActivity'
@@ -38,9 +38,10 @@ export function Sidebar() {
           const def = NAV_DEFS[key]
           const Icon = ICONS[def.icon] ?? Compass
           const state = entryState(key, plan)
+          const to = key === 'vitrine' ? vitrineHref((currentActorRow as { public_slug?: string | null })?.public_slug) : def.to
           if (state === 'active') {
             return (
-              <NavLink key={key} to={def.to} title={collapsed ? def.label : undefined}
+              <NavLink key={key} to={to} title={collapsed ? def.label : undefined}
                 className={({ isActive }) => (isActive ? 'active' : '')}>
                 <Icon strokeWidth={2} />
                 <span className="navlabel">{def.label}</span>
@@ -49,7 +50,7 @@ export function Sidebar() {
           }
           const Badge = state === 'lock-pro' ? Lock : Sparkles
           return (
-            <button key={key} className={`navlink ${state === 'lock-pro' ? 'locked' : ''}`} onClick={() => navigate(def.to)} title={collapsed ? def.label : undefined}>
+            <button key={key} className={`navlink ${state === 'lock-pro' ? 'locked' : ''}`} onClick={() => navigate(to)} title={collapsed ? def.label : undefined}>
               <Icon strokeWidth={2} />
               <span className="navlabel">{def.label}</span>
               <span className="lock"><Badge strokeWidth={2} /></span>

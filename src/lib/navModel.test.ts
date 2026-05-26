@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navItemsFor, entryState, isRouteValidFor, planForActor, mobilePrimaryFor, mobileSecondaryFor, NAV_DEFS, type NavKey } from './navModel'
+import { navItemsFor, entryState, isRouteValidFor, planForActor, mobilePrimaryFor, mobileSecondaryFor, NAV_DEFS, vitrineHref, type NavKey } from './navModel'
 
 const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
@@ -58,4 +58,12 @@ describe('planForActor', () => {
 it('NAV_DEFS couvre toutes les clés utilisées', () => {
   const keys: NavKey[] = ['explorer','mes-dates','mes-createurs','profil','reglages','dashboard','calendrier','communaute','vitrine']
   keys.forEach(k => expect(NAV_DEFS[k]).toBeTruthy())
+})
+
+describe('vitrineHref', () => {
+  it('slug présent → /{slug}', () => expect(vitrineHref('terres-et-flammes')).toBe('/terres-et-flammes'))
+  it('slug absent → /profil', () => {
+    expect(vitrineHref(null)).toBe('/profil')
+    expect(vitrineHref(undefined)).toBe('/profil')
+  })
 })

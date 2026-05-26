@@ -65,6 +65,11 @@ export function isRouteValidFor(path: string, actor: { kind: string; entityType:
   return navPaths.some(p => path.startsWith(p)) || SHARED_PREFIXES.some(p => path.startsWith(p))
 }
 
+/** Lien de la vitrine du propriétaire : sa page publique si elle a un slug, sinon /profil. */
+export function vitrineHref(publicSlug: string | null | undefined): string {
+  return publicSlug ? `/${publicSlug}` : '/profil'
+}
+
 /**
  * Plan effectif de l'acteur actif : le Pro vit sur l'entité, jamais sur la personne.
  * `entityRow` est la ligne de l'acteur actif (UserRow | EntityRow) ; seul EntityRow porte `plan`.

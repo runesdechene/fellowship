@@ -5,7 +5,7 @@ import {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
   Shield, Check, LogOut, Lock, Sparkles, type LucideIcon,
 } from 'lucide-react'
-import { mobileSecondaryFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
+import { mobileSecondaryFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { ThemeToggle } from '@/components/theme-toggle'
 import './AccountSheet.css'
 
@@ -70,8 +70,9 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
           const def = NAV_DEFS[key]
           const Icon = ICONS[def.icon] ?? Compass
           const state = entryState(key, plan)
+          const to = key === 'vitrine' ? vitrineHref((currentActorRow as { public_slug?: string | null })?.public_slug) : def.to
           return (
-            <button key={key} className="sheet-item" onClick={() => go(def.to)}>
+            <button key={key} className="sheet-item" onClick={() => go(to)}>
               <Icon strokeWidth={1.8} />
               <span className="sheet-item-lbl">{def.label}</span>
               {state === 'lock-pro' && <Lock className="sheet-badge" strokeWidth={2} />}
