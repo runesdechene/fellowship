@@ -1158,9 +1158,10 @@
   .explorer .eh-sub { font-size: 10px; }
   .explorer .eh-ico { font-size: 13px; }
 
-  /* Bottombar : CTA compacts (moins hauts) + remontés vers le dock
-     (la .stagebody flex:1 la collait sinon tout en bas de l'écran). */
-  .explorer .bottombar { padding: 8px 0 14px; gap: 8px; margin-top: -12vh; }
+  /* Bottombar : CTA compacts (moins hauts) + remontés vers le dock.
+     margin-bottom (et non margin-top négatif, absorbé par la .stagebody flex:1)
+     réserve un espace sous la barre → les boutons remontent d'autant. */
+  .explorer .bottombar { padding: 8px 0 14px; gap: 8px; margin-bottom: 12vh; }
   .explorer .dock-cta { width: 100%; max-width: 360px; gap: 10px; padding: 0 16px; }
   .explorer .dock-cta .btn { flex: 1; justify-content: center; font-size: 13.5px; padding: 10px 12px; }
 
