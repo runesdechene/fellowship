@@ -45,8 +45,8 @@
 }
 
 .bottom-bar-link svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 /* Reset bouton uniquement — surtout PAS `font: inherit` (réinitialiserait la taille à celle du body
