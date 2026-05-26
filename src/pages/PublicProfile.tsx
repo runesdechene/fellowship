@@ -11,7 +11,6 @@ import { VitrineLinks } from '@/components/vitrine/VitrineLinks'
 import { VitrineSeason } from '@/components/vitrine/VitrineSeason'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
-import { FellowshipFooter } from '@/components/profile/FellowshipFooter'
 import type { VitrineLink } from '@/types/database'
 import './Vitrine.css'
 
@@ -83,7 +82,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
           </aside>
         </div>
 
-        <FellowshipFooter />
+        <div className="v-footer">
+          <span className="v-footer-mark">✦</span>
+          Vitrine Fellowship{entity.public_slug ? <> · <code>flw.sh/{entity.public_slug}</code></> : null}
+        </div>
       </div>
 
       {showQR && entity.public_slug && <QRCodeModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}

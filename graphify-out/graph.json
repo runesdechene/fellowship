@@ -1923,7 +1923,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L1",
       "id": "src_hooks_use_events_ts",
-      "community": 8,
+      "community": 9,
       "norm_label": "use-events.ts"
     },
     {
@@ -1932,7 +1932,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L5",
       "id": "use_events_useevents",
-      "community": 8,
+      "community": 9,
       "norm_label": "useevents()"
     },
     {
@@ -1941,7 +1941,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L55",
       "id": "use_events_useevent",
-      "community": 8,
+      "community": 9,
       "norm_label": "useevent()"
     },
     {
@@ -1950,7 +1950,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L84",
       "id": "use_events_createevent",
-      "community": 8,
+      "community": 9,
       "norm_label": "createevent()"
     },
     {
@@ -1959,7 +1959,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L93",
       "id": "use_events_updateevent",
-      "community": 8,
+      "community": 9,
       "norm_label": "updateevent()"
     },
     {
@@ -1968,7 +1968,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L103",
       "id": "use_events_userecentevents",
-      "community": 8,
+      "community": 9,
       "norm_label": "userecentevents()"
     },
     {
@@ -1977,7 +1977,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L129",
       "id": "use_events_searchsimilarevents",
-      "community": 8,
+      "community": 9,
       "norm_label": "searchsimilarevents()"
     },
     {
@@ -1986,7 +1986,7 @@
       "source_file": "src\\hooks\\use-events.ts",
       "source_location": "L142",
       "id": "use_events_useeventcreator",
-      "community": 8,
+      "community": 9,
       "norm_label": "useeventcreator()"
     },
     {
@@ -2670,7 +2670,7 @@
       "source_file": "src\\lib\\navModel.ts",
       "source_location": "L1",
       "id": "src_lib_navmodel_ts",
-      "community": 9,
+      "community": 7,
       "norm_label": "navmodel.ts"
     },
     {
@@ -2679,7 +2679,7 @@
       "source_file": "src\\lib\\navModel.ts",
       "source_location": "L35",
       "id": "navmodel_navitemsfor",
-      "community": 9,
+      "community": 7,
       "norm_label": "navitemsfor()"
     },
     {
@@ -2688,7 +2688,7 @@
       "source_file": "src\\lib\\navModel.ts",
       "source_location": "L41",
       "id": "navmodel_mobileprimaryfor",
-      "community": 9,
+      "community": 7,
       "norm_label": "mobileprimaryfor()"
     },
     {
@@ -2697,7 +2697,7 @@
       "source_file": "src\\lib\\navModel.ts",
       "source_location": "L47",
       "id": "navmodel_mobilesecondaryfor",
-      "community": 9,
+      "community": 7,
       "norm_label": "mobilesecondaryfor()"
     },
     {
@@ -2706,34 +2706,43 @@
       "source_file": "src\\lib\\navModel.ts",
       "source_location": "L53",
       "id": "navmodel_entrystate",
-      "community": 9,
+      "community": 7,
       "norm_label": "entrystate()"
+    },
+    {
+      "label": "isPublicProfilePath()",
+      "file_type": "code",
+      "source_file": "src\\lib\\navModel.ts",
+      "source_location": "L71",
+      "id": "navmodel_ispublicprofilepath",
+      "community": 7,
+      "norm_label": "ispublicprofilepath()"
     },
     {
       "label": "isRouteValidFor()",
       "file_type": "code",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L63",
+      "source_location": "L77",
       "id": "navmodel_isroutevalidfor",
-      "community": 9,
+      "community": 7,
       "norm_label": "isroutevalidfor()"
     },
     {
       "label": "vitrineHref()",
       "file_type": "code",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L69",
+      "source_location": "L85",
       "id": "navmodel_vitrinehref",
-      "community": 9,
+      "community": 7,
       "norm_label": "vitrinehref()"
     },
     {
       "label": "planForActor()",
       "file_type": "code",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L77",
+      "source_location": "L93",
       "id": "navmodel_planforactor",
-      "community": 9,
+      "community": 7,
       "norm_label": "planforactor()"
     },
     {
@@ -3057,7 +3066,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L1",
       "id": "src_pages_eventpage_tsx",
-      "community": 7,
+      "community": 8,
       "norm_label": "eventpage.tsx"
     },
     {
@@ -3066,7 +3075,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L33",
       "id": "eventpage_hashname",
-      "community": 7,
+      "community": 8,
       "norm_label": "hashname()"
     },
     {
@@ -3075,7 +3084,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L45",
       "id": "eventpage_formatdate",
-      "community": 7,
+      "community": 8,
       "norm_label": "formatdate()"
     },
     {
@@ -3084,7 +3093,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L49",
       "id": "eventpage_daycount",
-      "community": 7,
+      "community": 8,
       "norm_label": "daycount()"
     },
     {
@@ -3093,7 +3102,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L54",
       "id": "eventpage_daysuntil",
-      "community": 7,
+      "community": 8,
       "norm_label": "daysuntil()"
     },
     {
@@ -3102,7 +3111,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L123",
       "id": "eventpage_handlejoin",
-      "community": 7,
+      "community": 8,
       "norm_label": "handlejoin()"
     },
     {
@@ -3111,7 +3120,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L135",
       "id": "eventpage_handleleave",
-      "community": 7,
+      "community": 8,
       "norm_label": "handleleave()"
     },
     {
@@ -3120,7 +3129,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L141",
       "id": "eventpage_startediting",
-      "community": 7,
+      "community": 8,
       "norm_label": "startediting()"
     },
     {
@@ -3129,7 +3138,7 @@
       "source_file": "src\\pages\\EventPage.tsx",
       "source_location": "L161",
       "id": "eventpage_handlesaveedit",
-      "community": 7,
+      "community": 8,
       "norm_label": "handlesaveedit()"
     },
     {
@@ -6780,7 +6789,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L63",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_src": "src_lib_navmodel_ts",
+      "_tgt": "navmodel_ispublicprofilepath",
+      "source": "src_lib_navmodel_ts",
+      "target": "navmodel_ispublicprofilepath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\lib\\navModel.ts",
+      "source_location": "L77",
       "weight": 1.0,
       "_src": "src_lib_navmodel_ts",
       "_tgt": "navmodel_isroutevalidfor",
@@ -6792,7 +6813,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L69",
+      "source_location": "L85",
       "weight": 1.0,
       "_src": "src_lib_navmodel_ts",
       "_tgt": "navmodel_vitrinehref",
@@ -6804,7 +6825,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L77",
+      "source_location": "L93",
       "weight": 1.0,
       "_src": "src_lib_navmodel_ts",
       "_tgt": "navmodel_planforactor",
@@ -6828,7 +6849,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "src\\lib\\navModel.ts",
-      "source_location": "L64",
+      "source_location": "L78",
       "weight": 1.0,
       "_src": "navmodel_isroutevalidfor",
       "_tgt": "navmodel_navitemsfor",
@@ -6846,6 +6867,18 @@
       "_tgt": "navmodel_mobileprimaryfor",
       "source": "navmodel_mobileprimaryfor",
       "target": "navmodel_mobilesecondaryfor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\lib\\navModel.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_src": "navmodel_isroutevalidfor",
+      "_tgt": "navmodel_ispublicprofilepath",
+      "source": "navmodel_ispublicprofilepath",
+      "target": "navmodel_isroutevalidfor",
       "confidence_score": 1.0
     },
     {

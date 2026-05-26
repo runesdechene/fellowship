@@ -97,9 +97,8 @@
   position: relative;
   height: 240px;
   overflow: hidden;
-  /* Extends to full-width beyond .vitrine's padding by using negative margin */
-  margin-left: -32px;
-  margin-right: -32px;
+  /* Enfant direct de .v-page-root (pleine largeur, sans padding) → déjà full-bleed.
+     PAS de marge négative ici (sinon débordement de 64px = scroll horizontal). */
 }
 
 .v-cover img {
@@ -716,6 +715,33 @@
   padding: 8px 0;
 }
 
+/* ── Footer partage (maquette .vfooter) ─────────────────────────────── */
+.v-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 34px;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body);
+  font-size: 12.5px;
+}
+.v-footer-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--copper), var(--amber));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2a1810;
+  font-size: 9px;
+}
+.v-footer code {
+  font-family: var(--font-body);
+  color: hsl(var(--foreground));
+}
+
 /* ── Responsive: ≤1080px → 1-col, sidebar static ───────────────────── */
 @media (max-width: 1080px) {
   .v-grid {
@@ -735,11 +761,6 @@
   .v-act {
     padding-bottom: 0;
   }
-
-  .v-cover {
-    margin-left: -24px;
-    margin-right: -24px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -748,8 +769,6 @@
   }
 
   .v-cover {
-    margin-left: -16px;
-    margin-right: -16px;
     height: 180px;
   }
 
