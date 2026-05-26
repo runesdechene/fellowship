@@ -731,10 +731,10 @@
   white-space: nowrap;
   box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
 }
-.explorer .card-badge.nouveau { background: var(--lime); color: #1b2e10; }
+.explorer .card-badge.nouveau { background: rgb(56, 51, 48); color: #f9fff6; }
 .explorer .card-badge.populaire { background: var(--amber); color: #3a2410; }
 /* Mode jour : --lime devient foncé → texte blanc lisible sur le badge Nouveau. */
-.light .explorer .card-badge.nouveau { color: #fff; }
+.light .explorer .card-badge.nouveau { color: #fff5ee; }
 
 /* Pastille de statut de participation — coin haut-GAUCHE (miroir du badge). */
 .explorer .card-status {
@@ -1067,18 +1067,6 @@
   gap: 12px;
   text-align: center;
 }
-.explorer .eh-status {
-  display: inline-flex; align-items: center; gap: 7px;
-  border-radius: 99px; padding: 7px 16px; font-size: 12.5px; font-weight: 700;
-}
-.explorer .eh-status.repere  { background: color-mix(in srgb, var(--status-repere)  18%, transparent); border: 1px solid color-mix(in srgb, var(--status-repere)  40%, transparent); color: var(--status-repere); }
-.explorer .eh-status.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-dossier) 40%, transparent); color: var(--status-dossier); }
-.explorer .eh-status.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-accepte) 40%, transparent); color: var(--status-accepte); }
-.explorer .eh-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); border: 1px solid color-mix(in srgb, var(--status-apayer)  40%, transparent); color: var(--status-apayer); }
-.explorer .eh-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
-.explorer .eh-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); border: 1px solid color-mix(in srgb, var(--status-refuse)  40%, transparent); color: var(--status-refuse); }
-.explorer .eh-status.termine { background: rgba(255,240,225,.08); border: 1px solid hsl(var(--border)); color: hsl(var(--muted-foreground)); }
-.explorer .eh-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
 .explorer .eh-meta { display: flex; align-items: center; gap: 18px; }
 .explorer .eh-item { display: flex; align-items: center; gap: 9px; }
 .explorer .eh-ico { font-size: 22px; }

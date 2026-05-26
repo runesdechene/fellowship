@@ -4,7 +4,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, participationChip, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
@@ -245,13 +245,6 @@ export function ExplorerPage() {
     () => new Map(participations.map(p => [p.event_id, { status: p.status as string, payment_status: (p.payment_status as string | null) ?? null }])),
     [participations]
   )
-  const activePart = currentEvent ? partByEvent.get(currentEvent.id) : undefined
-  const activeChip = currentEvent
-    ? participationChip(activePart?.status, activePart?.payment_status, actorKind, {
-        isPast: new Date(currentEvent.end_date) < now,
-      })
-    : null
-
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
@@ -321,7 +314,6 @@ export function ExplorerPage() {
               <div className="infozone" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
                 <EventDock
                   event={currentEvent}
-                  statusChip={activeChip}
                   tagInfo={activeTagInfo}
                   animate={!scrubbing}
                 />

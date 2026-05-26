@@ -1,6 +1,5 @@
 import { useFriendsOnEvent } from '@/hooks/use-participations'
 import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
-import type { StatusChip } from '@/lib/explorer'
 import type { EventWithScore } from '@/types/database'
 
 function dateRange(start: string, end: string): string {
@@ -15,13 +14,12 @@ function dateRange(start: string, end: string): string {
 
 interface EventDockProps {
   event: EventWithScore
-  statusChip: StatusChip | null
   tagInfo?: { label?: string; bg?: string; color?: string }
   /** Rejoue le fade doux à chaque changement d'événement. Off pendant le scrub (évite le strobe). */
   animate?: boolean
 }
 
-export function EventDock({ event, statusChip, tagInfo, animate = true }: EventDockProps) {
+export function EventDock({ event, tagInfo, animate = true }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
   return (
@@ -51,8 +49,6 @@ export function EventDock({ event, statusChip, tagInfo, animate = true }: EventD
           </div>
         </div>
       </div>
-
-      {statusChip && <span className={'eh-status ' + statusChip.variant}>{statusChip.label}</span>}
 
       {friends.length > 0 && (
         <div className="fr">
