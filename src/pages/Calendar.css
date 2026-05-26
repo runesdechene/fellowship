@@ -617,21 +617,6 @@
 @media (max-width: 639px) {
   .mobile-calendar { display: block; }
   .calendar-grid { display: none; }
-
-  /* Bandeaux de mois full-bleed : ils débordent du padding de page (24px) pour
-     atteindre les bords de l'écran. Les pills d'événement, elles, restent en
-     retrait → rythme "titre pleine largeur / contenu indenté". */
-  .agenda-mh,
-  .agenda-empty {
-    margin-left: calc(-1 * var(--page-padding));
-    margin-right: calc(-1 * var(--page-padding));
-  }
-  .agenda-mh .calendar-month-banner,
-  .agenda-empty {
-    border-radius: 0;
-  }
-  .agenda-empty { padding: 0 var(--page-padding); }
-  .agenda-count { right: 16px; }
 }
 
 /* ── Mobile Event Pill ────────────────────────────────────────────── */
@@ -831,4 +816,24 @@
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
   opacity: 0.55;
+}
+
+/* Overrides mobiles — PLACÉS APRÈS les règles de base agenda exprès : à
+   spécificité égale, la cascade fait gagner la dernière déclaration. (Le bloc
+   @media plus haut, avant ces règles, se faisait écraser par les `margin`/
+   `border-radius` de base.) */
+@media (max-width: 639px) {
+  /* Bandeaux de mois (pleins ET vides) full-bleed : ils débordent du padding de
+     page (24px) jusqu'aux bords de l'écran. Coins carrés. Les pills restent en
+     retrait → rythme "titre pleine largeur / contenu indenté". */
+  .agenda-mh,
+  .agenda-empty {
+    margin-left: calc(-1 * var(--page-padding));
+    margin-right: calc(-1 * var(--page-padding));
+    border-radius: 0;
+  }
+  .agenda-mh .calendar-month-banner { border-radius: 0; }
+  /* Texte du mois vide réaligné sur le contenu indenté (= padding de page). */
+  .agenda-empty { padding: 0 var(--page-padding); }
+  .agenda-count { right: 16px; }
 }
