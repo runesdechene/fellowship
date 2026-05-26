@@ -18,8 +18,8 @@
   height: 100%;
   overflow: hidden;
 }
-/* Mode jour : fond clair propre sous les halos (le backdrop beige global jurait/assombrissait). */
-.light .explorer { background: #f7f3ec; }
+/* Mode jour : fond clair chaud sous les halos (pas trop pâle, garde un peu de profondeur). */
+.light .explorer { background: #f1ebe1; }
 
 /* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
 .explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -28,8 +28,12 @@
 .explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.12); }
 .explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.09); }
 .explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.08); }
-/* Mode jour : halos en teintes douces (blend normal) — surtout PAS multiply qui assombrit le fond clair. */
-.light .explorer .xb { opacity: 0.3; mix-blend-mode: normal; }
+/* Mode jour : halos bien présents (effet wow) en blend normal — PAS multiply (qui assombrissait). */
+.light .explorer .xb { opacity: 1; mix-blend-mode: normal; }
+.light .explorer .xb1 { background: color-mix(in srgb, var(--xh-accent, #e8a06a) 42%, transparent); }
+.light .explorer .xb2 { background: hsl(330 72% 62% / 0.26); }
+.light .explorer .xb3 { background: hsl(45 95% 58% / 0.30); }
+.light .explorer .xb4 { background: hsl(152 55% 52% / 0.22); }
 
 /* ── Empty state (no events match the filters) ────────────────────── */
 .explorer .explorer-empty-coverflow {
@@ -969,8 +973,8 @@
 
 /* « Repérer » : vert vif assorti au statut « Repéré » (cohérent partout), lisible nuit + jour. */
 .explorer .btn-star {
-  background: hsl(88 52% 48%);
-  color: #14260b;
+  background: hsl(95 48% 40%);
+  color: #fff;
   transition: box-shadow .2s, transform .15s, filter .15s, background .2s, color .2s;
 }
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
