@@ -48,11 +48,12 @@ export function isRouteValidFor(path: string, actor: { kind: string; entityType:
   return navPaths.some(p => path.startsWith(p)) || SHARED_PREFIXES.some(p => path.startsWith(p))
 }
 
-/** Plan effectif de l'acteur actif : le Pro vit sur l'entité, jamais sur la personne. */
-export function planForActor(
-  actor: { kind: string } | null,
-  entityRow: { plan?: Plan | null } | null,
-): Plan {
-  if (actor?.kind === 'entity') return entityRow?.plan === 'pro' ? 'pro' : 'free'
-  return 'free'
+/**
+ * Plan effectif de l'acteur actif : le Pro vit sur l'entité, jamais sur la personne.
+ * `entityRow` est la ligne de l'acteur actif (UserRow | EntityRow) ; seul EntityRow porte `plan`.
+ */
+export function planForActor(actor: { kind: string } | null, entityRow: unknown): Plan {
+  if (actor?.kind !== 'entity') return 'free'
+  const plan = (entityRow as { plan?: Plan | null } | null | undefined)?.plan
+  return plan === 'pro' ? 'pro' : 'free'
 }

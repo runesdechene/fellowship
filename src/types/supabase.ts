@@ -744,7 +744,6 @@ export type Database = {
           display_name: string | null
           email: string
           handle: string | null
-          plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
@@ -759,7 +758,6 @@ export type Database = {
           display_name?: string | null
           email: string
           handle?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
@@ -774,7 +772,6 @@ export type Database = {
           display_name?: string | null
           email?: string
           handle?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
