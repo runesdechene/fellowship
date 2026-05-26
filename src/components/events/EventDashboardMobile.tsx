@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { ChevronUp } from 'lucide-react'
 import { EventDashboard } from './EventDashboard'
+import { participationChip } from '@/lib/explorer'
 import type { Participation, ParticipationStatus } from '@/types/database'
 
 interface EventDashboardMobileProps {
@@ -15,17 +16,6 @@ interface EventDashboardMobileProps {
   showReportForm: boolean
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  interesse: 'Intéressé',
-  en_cours: 'En cours',
-  inscrit: 'Inscrit',
-}
-
-const PAYMENT_LABELS: Record<string, string> = {
-  a_payer: 'À payer',
-  en_cours_paiement: 'En cours',
-  paye: 'Payé',
-}
 
 export function EventDashboardMobile(props: EventDashboardMobileProps) {
   const [open, setOpen] = useState(false)
@@ -41,36 +31,19 @@ export function EventDashboardMobile(props: EventDashboardMobileProps) {
       <div className="event-mobile-bar-collapsed" onClick={() => setOpen(!open)}>
         <div className="event-mobile-bar-badges">
           {participation ? (
-            <>
-              <span
-                style={{
-                  background: 'hsl(var(--primary))',
-                  color: 'white',
-                  padding: '3px 10px',
-                  borderRadius: 16,
-                  fontSize: 11,
-                  fontWeight: 700,
-                }}
-              >
-                {STATUS_LABELS[participation.status] ?? participation.status}
-              </span>
-              {participation.status === 'inscrit' && participation.payment_status && (
-                <span
-                  style={{
-                    background: participation.payment_status === 'paye' ? 'hsl(152 50% 38% / 0.12)' : 'hsl(var(--muted))',
-                    color: participation.payment_status === 'paye' ? 'hsl(152 50% 32%)' : 'rgba(61,48,40,0.5)',
-                    padding: '3px 10px',
-                    borderRadius: 16,
-                    fontSize: 11,
-                    fontWeight: 600,
-                  }}
-                >
-                  {PAYMENT_LABELS[(participation.payment_status as string)] ?? ''}
-                </span>
-              )}
-            </>
+            (() => {
+              const chip = participationChip(
+                participation.status as string,
+                (participation.payment_status as string | null) ?? null,
+                props.isExposant ? 'entity' : 'person',
+                { isPast: props.isPast },
+              )
+              return chip ? (
+                <span className={'event-mobile-status ' + chip.variant}>{chip.label}</span>
+              ) : null
+            })()
           ) : (
-            <span style={{ fontSize: 12, fontWeight: 600, color: 'hsl(var(--primary))' }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--primary)' }}>
               Tu y vas ?
             </span>
           )}

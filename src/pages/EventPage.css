@@ -556,7 +556,7 @@
 
 /* Payment stepper */
 .event-stepper-btn.pay-active.a_payer { background: hsl(0 65% 55% / 0.12); color: hsl(0 65% 45%); }
-.event-stepper-btn.pay-active.en_cours_paiement { background: hsl(38 90% 50% / 0.15); color: hsl(38 80% 35%); }
+
 .event-stepper-btn.pay-active.paye { background: hsl(152 50% 38% / 0.15); color: hsl(152 50% 32%); }
 
 /* Info box (ephemeral) */
@@ -855,3 +855,13 @@
 .event-badge-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
 .event-badge-status.termine { background: rgba(255,240,225,.08); color: var(--muted-foreground); }
 .event-badge-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
+
+.event-mobile-status { padding: 3px 10px; border-radius: 16px; font-size: 11px; font-weight: 700; }
+.event-mobile-status.repere  { background: color-mix(in srgb, var(--status-repere)  18%, transparent); color: var(--status-repere); }
+.event-mobile-status.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); color: var(--status-dossier); }
+.event-mobile-status.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); color: var(--status-accepte); }
+.event-mobile-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); color: var(--status-apayer); }
+.event-mobile-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
+.event-mobile-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
+.event-mobile-status.termine { background: rgba(255,240,225,.08); color: var(--muted-foreground); }
+.event-mobile-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }

@@ -18,29 +18,32 @@ interface EventDashboardProps {
 }
 
 const PARTICIPATION_STEPS = [
-  { key: 'interesse' as const, label: 'Intéressé' },
-  { key: 'en_cours' as const, label: 'En cours' },
-  { key: 'inscrit' as const, label: 'Inscrit' },
+  { key: 'interesse' as const, label: 'Repéré' },
+  { key: 'en_cours' as const, label: 'Dossier envoyé' },
+  { key: 'confirme' as const, label: 'Accepté' },
 ]
 
 const PAYMENT_STEPS = [
   { key: 'a_payer', label: 'À payer' },
-  { key: 'en_cours_paiement', label: 'En cours' },
   { key: 'paye', label: 'Payé' },
 ]
 
 const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
   interesse: {
-    title: '👀 Intéressé',
-    text: 'Tes amis peuvent voir que tu t\'intéresses à cet événement. Tu recevras les notifications de mise à jour.',
+    title: '★ Repéré',
+    text: 'Tes amis voient que tu as repéré cet événement. Tu recevras les notifications de mise à jour.',
   },
   en_cours: {
-    title: '📋 En cours d\'inscription',
-    text: 'Tes amis voient que tu es en cours d\'inscription. Tu recevras les notifications de mise à jour.',
+    title: '📨 Dossier envoyé',
+    text: 'Ta candidature est envoyée. Marque « Accepté » dès que l\'organisateur valide ton dossier.',
   },
-  inscrit: {
-    title: '✓ Inscrit',
-    text: 'Ton public peut voir que tu participes. L\'événement apparaît sur ton calendrier live.',
+  confirme: {
+    title: '✦ Accepté',
+    text: 'Ton dossier est accepté. Renseigne le paiement ci-dessous. Une fois payé, tu passes « Inscrit ».',
+  },
+  refuse: {
+    title: '✕ Refusé',
+    text: 'Dossier refusé — gardé en historique. Tu peux te retirer complètement avec « Se désinscrire ».',
   },
 }
 
@@ -67,7 +70,7 @@ export function EventDashboard({
     if (!participation) return
     const update: { status: ParticipationStatus; visibility?: 'amis' | 'public' } = { status }
     // Inscrit → automatically public (visible on embed widget / public profile)
-    if (status === 'inscrit') update.visibility = 'public'
+    if (status === 'inscrit' || status === 'confirme') update.visibility = 'public'
     const { data } = await updateParticipation(participation.id, update)
     if (data) {
       onUpdate(data)
@@ -92,13 +95,13 @@ export function EventDashboard({
             <div className="event-cta-buttons">
               {isExposant ? (
                 <>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>En cours d'inscription</Button>
-                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>Inscrit</Button>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Repéré</Button>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>Dossier envoyé</Button>
+                  <Button size="sm" onClick={() => onJoin('confirme', 'public')}>Accepté</Button>
                 </>
               ) : (
                 <>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Intéressé</Button>
+                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Repéré</Button>
                   <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>J'y vais !</Button>
                 </>
               )}
@@ -117,7 +120,7 @@ export function EventDashboard({
         <div className="event-suivi-body">
           <div className="flex items-center gap-2 mb-3">
             <span className="font-medium text-sm">
-              {participation.status === 'interesse' ? 'Intéressé' : "J'y vais !"}
+              {participation.status === 'interesse' ? 'Repéré' : "J'y vais !"}
             </span>
           </div>
           <button className="event-suivi-action destructive" onClick={onLeave}>
@@ -157,11 +160,17 @@ export function EventDashboard({
                 {step.label}
               </button>
             ))}
+            <button
+              onClick={() => handleStatusChange('refuse' as ParticipationStatus)}
+              className={`event-stepper-btn ${ (participation.status as string) === 'refuse' ? 'pay-active refuse' : 'inactive'}`}
+            >
+              Refusé
+            </button>
           </div>
         </div>
 
-        {/* Payment stepper — only when inscrit */}
-        {participation.status === 'inscrit' && (
+        {/* Payment stepper — when accepté or inscrit */}
+        {(participation.status === 'confirme' || participation.status === 'inscrit') && (
           <div className="event-suivi-block">
             <div className="event-suivi-block-label">Paiement</div>
             <div className="event-stepper">
