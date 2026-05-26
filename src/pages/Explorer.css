@@ -26,7 +26,8 @@
 .explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.12); }
 .explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.09); }
 .explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.08); }
-.light .explorer .xb { opacity: 0.5; mix-blend-mode: multiply; }
+/* Mode jour : halos en teintes douces (blend normal) — surtout PAS multiply qui assombrit le fond clair. */
+.light .explorer .xb { opacity: 0.3; mix-blend-mode: normal; }
 
 /* ── Empty state (no events match the filters) ────────────────────── */
 .explorer .explorer-empty-coverflow {
@@ -964,19 +965,24 @@
   box-shadow: 0 8px 26px hsl(20 65% 32% / 0.5);
 }
 
+/* « Repérer » : ambre festif (lisible nuit + jour), pas de vert. */
 .explorer .btn-star {
-  background: var(--lime);
-  color: #1b2e10;
+  background: var(--amber);
+  color: #3a2410;
+  transition: box-shadow .2s, transform .15s, filter .15s, background .2s, color .2s;
 }
-/* Mode jour : le vert tilleul foncé du token est terne ; on remet un vert vif et lisible. */
-.light .explorer .btn-star {
-  background: hsl(88 55% 50%);
-  color: #14260b;
-}
-.explorer .btn-star { transition: box-shadow .2s, transform .15s, filter .15s; }
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
+/* État repéré (« 🚫 Ne plus repérer ») : atténué = clairement différent + signale l'action de retrait. */
 .explorer .btn-star[aria-pressed="true"] {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lime) 28%, transparent), 0 8px 22px color-mix(in srgb, var(--lime) 45%, transparent);
+  background: color-mix(in srgb, hsl(var(--muted-foreground)) 14%, transparent);
+  color: hsl(var(--muted-foreground));
+  box-shadow: none;
+}
+.explorer .btn-star[aria-pressed="true"]:hover {
+  filter: none;
+  transform: none;
+  color: hsl(0 65% 55%);
+  background: color-mix(in srgb, hsl(0 65% 55%) 12%, transparent);
 }
 
 /* ── Counter ──────────────────────────────────────────────────────── */

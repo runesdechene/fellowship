@@ -333,7 +333,7 @@ export function ExplorerPage() {
             <div className="dock-cta">
               <Link to={`/evenement/${currentEvent.id}`} className="btn btn-ghost">Voir le festival</Link>
               <button type="button" className="btn btn-star" onClick={() => toggleSave(currentEvent)} aria-pressed={isSaved(currentEvent.id)}>
-                {isSaved(currentEvent.id) ? '★ Repéré' : '★ Repérer'}
+                {isSaved(currentEvent.id) ? '🚫 Ne plus repérer' : '★ Repérer'}
               </button>
             </div>
           )}

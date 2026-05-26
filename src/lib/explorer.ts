@@ -45,7 +45,7 @@ export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   const dim = offset === 0
     ? 'none'
     : isLight
-      ? (ao === 1 ? 'brightness(1.07) saturate(.6)' : 'brightness(1.14) saturate(.45)')
+      ? (ao === 1 ? 'brightness(1.4) saturate(.5) blur(0.5px)' : 'brightness(1.75) saturate(.32) blur(1.5px)')
       : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)')
   return {
     transform: `translate(-50%,-50%) translateX(${tx}%) rotateY(${rot}deg) scale(${sc})`,
