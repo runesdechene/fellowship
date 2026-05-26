@@ -714,7 +714,8 @@
 /* Compteur posé par-dessus le bandeau (coin haut-droit), dans le cadre. */
 .agenda-count {
   position: absolute;
-  top: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   right: 12px;
   z-index: 2;
   display: inline-flex;
@@ -801,6 +802,7 @@
   margin-bottom: 9px;
   border-radius: 12px;
   background: hsl(var(--secondary) / 0.45);
+  opacity: 0.5;
 }
 .agenda-empty-nm {
   font-family: var(--font-heading);
