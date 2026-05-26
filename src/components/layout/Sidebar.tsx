@@ -72,12 +72,13 @@ export function Sidebar() {
         </div>
       )}
 
-      <SidebarActivity collapsed={collapsed} />
-
-      <div className="side-foot">
-        <Link to="/reglages" className="av" aria-label="Mon compte" />
-        {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
-        <ThemeToggle />
+      <div className="sidebar-bottom">
+        <SidebarActivity collapsed={collapsed} />
+        <div className="side-foot">
+          <Link to="/reglages" className="av" aria-label="Mon compte" />
+          {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
+          <ThemeToggle />
+        </div>
       </div>
 
       {collapsed && (
