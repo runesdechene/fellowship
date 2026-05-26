@@ -412,15 +412,18 @@ d) Remplacer **tout** le bloc `{/* Status + payment badges */} ... {participatio
         )}
 ```
 
-- [ ] **Step 2: Ajouter les classes de variante dans `EventPage.css`**
+- [ ] **Step 2: Créer la règle de base + les variantes dans `EventPage.css`**
 
-Localiser la règle `.event-badge-status` existante :
-
-Run: `pnpm exec grep -n "event-badge-status" src/pages/EventPage.css`
-
-Juste après le bloc `.event-badge-status { ... }` (conserver ses styles de forme : padding, radius, font), ajouter les variantes (translucide + texte thémé, comme le dock) :
+> Il n'existe aucune règle `.event-badge-status` / `.event-badges` (le style était 100 % inline dans `EventHero`). On crée la forme pilule + les variantes translucides thémées (cohérent avec le dock Explorer). Ajouter à la fin de `src/pages/EventPage.css` :
 
 ```css
+/* ── Pastille de statut de participation (chip unifié) ─────────────── */
+.event-badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 2px; }
+.event-badge-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 999px;
+  font-family: var(--font-body); font-size: 12px; font-weight: 700;
+}
 .event-badge-status.repere  { background: color-mix(in srgb, var(--status-repere)  18%, transparent); color: var(--status-repere); }
 .event-badge-status.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); color: var(--status-dossier); }
 .event-badge-status.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); color: var(--status-accepte); }
@@ -430,8 +433,6 @@ Juste après le bloc `.event-badge-status { ... }` (conserver ses styles de form
 .event-badge-status.termine { background: rgba(255,240,225,.08); color: var(--muted-foreground); }
 .event-badge-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 ```
-
-> Si `.event-badge-status` fixait une couleur de fond/texte en dur, la retirer (les variantes la portent désormais).
 
 - [ ] **Step 3: Passer `isExposant` depuis `EventPage.tsx`**
 
