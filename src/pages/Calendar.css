@@ -26,7 +26,7 @@
   display: block;
   font-size: 24px;
   font-weight: 600;
-  color: rgba(61, 48, 40, 0.3);
+  color: hsl(var(--muted-foreground));
   letter-spacing: -0.01em;
   margin-top: 5px;
 }
@@ -34,7 +34,7 @@
 .calendar-subtitle {
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(61, 48, 40, 0.35);
+  color: hsl(var(--muted-foreground));
   margin-top: 10px;
 }
 
@@ -53,7 +53,7 @@
   border-radius: 50%;
   background: transparent;
   border: none;
-  color: rgba(61, 48, 40, 0.4);
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
@@ -73,31 +73,31 @@
   height: 22px;
 }
 
-/* Filter buttons (Amis pro / Amis visiteurs) */
+/* ── Filter buttons (maquette chip style) ──────────────────────────── */
 .calendar-filter-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: none;
-  background: hsl(var(--muted));
-  color: rgba(61, 48, 40, 0.4);
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 99px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
 .calendar-filter-btn:hover {
-  background: hsl(var(--muted) / 0.7);
-  color: rgba(61, 48, 40, 0.6);
+  color: hsl(var(--foreground));
 }
 
 .calendar-filter-btn.active {
-  background: hsl(var(--primary) / 0.12);
-  color: hsl(var(--primary));
+  background: color-mix(in srgb, var(--copper) 18%, transparent);
+  color: var(--amber);
+  border-color: transparent;
 }
 
 .calendar-filter-btn svg {
@@ -144,30 +144,14 @@
   .calendar-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* ── Month card ────────────────────────────────────────────────────── */
-
-.calendar-month-card {
-  border-radius: 24px;
-  padding: 20px;
-  background: hsl(var(--card));
-}
-
+/* ── Carte-mois (DA) ──────────────────────────────────────────────── */
+.calendar-month-card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 18px; padding: 15px; }
 .calendar-month-card.current {
-  background: rgb(252, 250, 247);
   outline: 2px solid hsl(var(--primary) / 0.15);
   outline-offset: -2px;
 }
-
-.calendar-month-card.empty {
-  background: rgb(252, 250, 247);
-  opacity: 0.5;
-  transition: all 0.4s;
-}
-
-.calendar-month-card.empty:hover {
-  background: rgb(252, 250, 247);
-  opacity: 0.9;
-}
+.calendar-month-card.empty { opacity: 0.5; }
+.calendar-month-empty-note { display: flex; align-items: center; justify-content: center; text-align: center; color: hsl(var(--muted-foreground)); font-size: 12.5px; padding: 18px 10px; }
 
 /* ── Month banner ──────────────────────────────────────────────────── */
 
@@ -177,7 +161,7 @@
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 16px;
-  background: hsl(var(--background));
+  background: hsl(var(--secondary));
 }
 
 .calendar-month-banner-text {
@@ -201,7 +185,7 @@
   display: block;
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(61, 48, 40, 0.65);
+  color: hsl(var(--muted-foreground));
   margin-top: 2px;
 }
 
@@ -222,30 +206,10 @@
 
 /* ── Event wrapper (card + presence below) ─────────────────────────── */
 
-.calendar-event-wrapper {
-  margin-bottom: 14px;
-}
-
-.calendar-event-row {
-  display: flex;
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  background: hsl(var(--background));
-}
-
-/* Portrait image */
-.calendar-event-image {
-  width: 85px;
-  flex-shrink: 0;
-  background: hsl(var(--muted) / 0.5);
-}
-
-.calendar-event-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.calendar-event-wrapper { margin-bottom: 12px; }
+.calendar-event-row { display: flex; gap: 11px; align-items: center; text-decoration: none; color: hsl(var(--foreground)); background: hsl(var(--secondary)); border-radius: 12px; padding: 10px 12px; }
+.calendar-event-image { width: 54px; height: 74px; flex-shrink: 0; border-radius: 9px; overflow: hidden; border: 1px solid hsl(var(--border)); }
+.calendar-event-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .calendar-event-image-fallback {
   width: 100%;
@@ -259,18 +223,10 @@
 .calendar-event-image-fallback svg {
   width: 26px;
   height: 26px;
-  color: rgba(61, 48, 40, 0.08);
+  color: hsl(var(--border));
 }
 
-/* Info side */
-.calendar-event-info {
-  flex: 1;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-}
+.calendar-event-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
 
 .calendar-event-top {
   display: flex;
@@ -283,15 +239,20 @@
   min-width: 0;
 }
 
-/* Date block — right side */
-.calendar-event-date {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  padding: 2px 0;
-}
+.calendar-event-name { font-family: var(--font-heading); font-weight: 700; font-size: 13.5px; line-height: 1.2; color: hsl(var(--foreground)); }
 
+/* Tag badge — inline */
+.calendar-event-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 99px; }
+
+.calendar-event-meta { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: hsl(var(--muted-foreground)); }
+.calendar-event-meta svg { width: 11px; height: 11px; }
+
+/* Date block — right side */
+.calendar-event-date { padding-left: 4px; text-align: center; display: flex; flex-direction: column; justify-content: center; gap: 4px; flex-shrink: 0; width: 46px; }
+.calendar-event-date b { font-family: var(--font-heading); font-size: 20px; line-height: 1; color: hsl(var(--foreground)); }
+.calendar-event-date span { font-size: 9.5px; opacity: 0.8; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+
+/* Legacy date sub-elements (kept for compat) */
 .calendar-event-day {
   font-family: var(--font-heading);
   font-size: 28px;
@@ -309,49 +270,34 @@
   color: hsl(var(--primary) / 0.5);
 }
 
-.calendar-event-name {
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: hsl(var(--foreground));
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* Pastille statut (vocabulaire unifié) */
+.calendar-evst { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; align-self: center; font-size: 10px; font-weight: 700; padding: 5px 10px; border-radius: 99px; white-space: nowrap; }
+.calendar-evst.repere  { background: color-mix(in srgb, var(--status-repere)  18%, transparent); color: var(--status-repere); }
+.calendar-evst.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); color: var(--status-dossier); }
+.calendar-evst.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); color: var(--status-accepte); }
+.calendar-evst.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); color: var(--status-apayer); }
+.calendar-evst.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
+.calendar-evst.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
+.calendar-evst.termine { background: rgba(255,240,225,.08); color: hsl(var(--muted-foreground)); }
+.calendar-evst.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 
-/* Tag badge — inline */
-.calendar-event-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  width: fit-content;
-  border-radius: 9999px;
-  padding: 2px 9px;
-  font-size: 10px;
-  font-weight: 600;
-  font-family: var(--font-body);
-  background: rgba(61, 48, 40, 0.06);
-  color: rgba(61, 48, 40, 0.45);
-  margin-top: 5px;
-}
+/* ── Compagnons sur une de mes dates ──────────────────────────────── */
+.calendar-companions { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: hsl(var(--muted-foreground)); padding: 9px 2px 0; background: none; border: none; cursor: pointer; width: 100%; text-align: left; }
+.calendar-pav { display: flex; }
+.calendar-pav-item { width: 24px; height: 24px; border-radius: 50%; border: 2px solid hsl(var(--card)); margin-left: -7px; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1c1310; overflow: hidden; }
+.calendar-pav-item:first-child { margin-left: 0; }
+.calendar-pav-item img { width: 100%; height: 100%; object-fit: cover; }
 
-.calendar-event-meta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-family: var(--font-body);
-  margin-top: 5px;
-  color: rgba(61, 48, 40, 0.35);
-}
+/* ── Section « Tes compagnons ce mois-ci » ────────────────────────── */
+.calendar-friend-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: hsl(var(--muted-foreground)); opacity: 0.7; margin-top: 14px; padding-top: 13px; border-top: 1px solid hsl(var(--border)); }
+.calendar-evF { display: flex; gap: 9px; align-items: center; padding: 8px 2px; opacity: 0.72; text-decoration: none; }
+.calendar-evF img { width: 32px; height: 42px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid hsl(var(--border)); }
+.calendar-evF-info { flex: 1; min-width: 0; }
+.calendar-evF-name { font-family: var(--font-heading); font-size: 12px; font-weight: 600; line-height: 1.2; color: hsl(var(--foreground)); }
+.calendar-evF-meta { font-size: 11px; color: hsl(var(--muted-foreground)); }
+.calendar-evF-av { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1c1310; flex-shrink: 0; }
 
-.calendar-event-meta svg {
-  width: 11px;
-  height: 11px;
-}
-
-/* ── Presence row ──────────────────────────────────────────────────── */
+/* ── Presence row (legacy — kept for compat) ───────────────────────── */
 
 .calendar-presence-row {
   display: flex;
@@ -439,14 +385,14 @@
 .calendar-presence-friends-count {
   font-size: 10px;
   font-family: var(--font-body);
-  color: rgba(61, 48, 40, 0.3);
+  color: hsl(var(--muted-foreground));
 }
 
 .calendar-presence-friends-names {
   font-size: 11px;
   font-family: var(--font-body);
   font-weight: 600;
-  color: rgba(61, 48, 40, 0.6);
+  color: hsl(var(--muted-foreground));
 }
 
 /* Clickable presence row */
@@ -457,15 +403,15 @@
   border-radius: 20px;
   cursor: pointer;
   transition: background 0.15s;
-  background: rgba(61, 48, 40, 0.05);
+  background: hsl(var(--muted));
 }
 
 .calendar-presence-clickable:hover {
-  background: rgba(61, 48, 40, 0.08);
+  background: hsl(var(--border));
 }
 
 .calendar-presence-clickable:hover .calendar-presence-friends-names {
-  color: rgba(61, 48, 40, 0.8);
+  color: hsl(var(--foreground));
 }
 
 /* ── Calendar Friends Modal ───────────────────────────────────────── */
@@ -520,7 +466,7 @@
   display: block;
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(61, 48, 40, 0.4);
+  color: hsl(var(--muted-foreground));
   margin-top: 1px;
 }
 
@@ -534,12 +480,12 @@
   background: hsl(var(--muted));
   border: none;
   cursor: pointer;
-  color: rgba(61, 48, 40, 0.5);
+  color: hsl(var(--muted-foreground));
   transition: background 0.15s;
 }
 
 .calendar-modal-close:hover {
-  background: hsl(var(--muted) / 0.7);
+  background: hsl(var(--border));
 }
 
 .calendar-modal-list {
@@ -568,7 +514,7 @@
   padding: 24px;
   text-align: center;
   font-size: 13px;
-  color: rgba(61, 48, 40, 0.3);
+  color: hsl(var(--muted-foreground));
 }
 
 .calendar-modal-friend {
@@ -625,7 +571,7 @@
 .calendar-modal-friend-type {
   display: block;
   font-size: 11px;
-  color: rgba(61, 48, 40, 0.4);
+  color: hsl(var(--muted-foreground));
 }
 
 .calendar-modal-friend-status {
@@ -721,7 +667,7 @@
 
 .mobile-year-cell-empty {
   font-size: 9px;
-  color: rgba(61, 48, 40, 0.2);
+  color: hsl(var(--muted-foreground));
 }
 
 .mobile-year-cell-events {
@@ -747,7 +693,7 @@
 .mobile-year-cell-name {
   font-size: 8px;
   font-family: var(--font-body);
-  color: rgba(61, 48, 40, 0.5);
+  color: hsl(var(--muted-foreground));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -757,7 +703,7 @@
 .mobile-year-cell-overflow {
   font-size: 8px;
   font-family: var(--font-body);
-  color: rgba(61, 48, 40, 0.25);
+  color: hsl(var(--muted-foreground));
   padding-left: 10px;
 }
 
@@ -780,7 +726,7 @@
   justify-content: center;
   background: hsl(var(--card));
   border: none;
-  color: rgba(61, 48, 40, 0.4);
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
@@ -815,7 +761,7 @@
   border: none;
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(61, 48, 40, 0.4);
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
   margin-bottom: 12px;
   transition: background 0.15s;
@@ -835,7 +781,7 @@
   padding: 40px 0;
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(61, 48, 40, 0.25);
+  color: hsl(var(--muted-foreground));
 }
 
 .mobile-month-events {
@@ -899,7 +845,7 @@
   margin-top: 2px;
   font-family: var(--font-body);
   font-size: 10px;
-  color: rgba(61, 48, 40, 0.35);
+  color: hsl(var(--muted-foreground));
 }
 
 .mobile-event-pill-status {
@@ -913,3 +859,13 @@
   font-size: 10px;
   margin-right: 10px;
 }
+
+/* ── Mobile event pill status variants ────────────────────────────── */
+.mobile-event-pill-status.repere  { background: color-mix(in srgb, var(--status-repere)  20%, transparent); color: var(--status-repere); }
+.mobile-event-pill-status.dossier { background: color-mix(in srgb, var(--status-dossier) 20%, transparent); color: var(--status-dossier); }
+.mobile-event-pill-status.accepte { background: color-mix(in srgb, var(--status-accepte) 20%, transparent); color: var(--status-accepte); }
+.mobile-event-pill-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  20%, transparent); color: var(--status-apayer); }
+.mobile-event-pill-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 20%, transparent); color: var(--status-inscrit); }
+.mobile-event-pill-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  18%, transparent); color: var(--status-refuse); }
+.mobile-event-pill-status.termine { background: rgba(255,240,225,.10); color: hsl(var(--muted-foreground)); }
+.mobile-event-pill-status.going   { background: color-mix(in srgb, var(--status-inscrit) 20%, transparent); color: var(--status-inscrit); }
