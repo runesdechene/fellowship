@@ -65,7 +65,7 @@ export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, 
         {hasNext && <button type="button" className="navzone r" onClick={onNext} aria-label="Festival suivant" />}
         {events.map((ev, i) => {
           const offset = i - activeIndex
-          if (Math.abs(offset) > 3) return null // fenêtrage perf : ne pas monter les cartes lointaines
+          if (Math.abs(offset) > 5) return null // fenêtrage perf : ao≤4 visibles, ao5 en staging
           const s = deckCardStyle(offset, isLight)
           const badge = eventBadge(ev, now)
           const part = partByEvent.get(ev.id)

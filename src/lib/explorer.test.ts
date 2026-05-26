@@ -68,23 +68,32 @@ describe('deckCardStyle', () => {
   it('voisin droit (offset +1)', () => {
     const s = deckCardStyle(1)
     expect(s.isCenter).toBe(false)
-    expect(s.transform).toContain('translateX(120%)')
     expect(s.transform).toContain('rotateY(-18deg)')
     expect(s.veil).toBeGreaterThan(0)   // recule via un voile, opaque
     expect(s.opacity).toBe(1)
   })
-  it('hors fenêtre (offset 3)', () => {
-    const s = deckCardStyle(3)
+  it('hors fenêtre (offset 6) → invisible', () => {
+    const s = deckCardStyle(6)
     expect(s.opacity).toBe(0)
     expect(s.pointerEvents).toBe('none')
+  })
+  it('rangs 3 et 4 visibles (profondeur) mais non cliquables', () => {
+    expect(deckCardStyle(3).opacity).toBe(1)
+    expect(deckCardStyle(4).opacity).toBe(1)
+    expect(deckCardStyle(3).pointerEvents).toBe('none')
   })
   it('centre : aucun voile', () => {
     expect(deckCardStyle(0).veil).toBe(0)
     expect(deckCardStyle(0, true).veil).toBe(0)
   })
-  it('voile jour plus puissant que nuit (éclaircissement marqué), cartes toujours opaques', () => {
+  it('voile progressif vers le lointain (1 < 2 < 3 < 4)', () => {
+    const v = (o: number) => deckCardStyle(o, true).veil
+    expect(v(1)).toBeLessThan(v(2))
+    expect(v(2)).toBeLessThan(v(3))
+    expect(v(3)).toBeLessThan(v(4))
+  })
+  it('voile jour plus puissant que nuit, cartes toujours opaques', () => {
     expect(deckCardStyle(1, true).veil).toBeGreaterThan(deckCardStyle(1, false).veil)
-    expect(deckCardStyle(2, true).veil).toBeGreaterThan(deckCardStyle(1, true).veil)  // tertiaire plus voilée
     expect(deckCardStyle(1, true).opacity).toBe(1)
   })
 })

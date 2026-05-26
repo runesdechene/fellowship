@@ -857,9 +857,10 @@
   right: 3%;
 }
 
-/* Day-mode arrows : même fond card (la bordure vient du token, gérée par la règle de base). */
+/* Day-mode arrows : même fond card + chevron foncé (le blanc de base est invisible sur fond clair). */
 .light .explorer .arrow {
   background: hsl(var(--card));
+  color: hsl(var(--foreground));
 }
 
 /* ── Nav zones (invisible click targets inside .deck) ─────────────── */

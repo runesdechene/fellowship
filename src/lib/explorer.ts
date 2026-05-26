@@ -32,36 +32,42 @@ export interface DeckStyle {
  * `isLight` : en mode jour, les voisines **fondent par opacité** (le fond clair transparaît = éclairci)
  * au lieu d'être assombries par un filtre brightness (qui les rend tristes sur fond clair).
  */
+// Profondeur progressive : 4 rangs de voisines de plus en plus « lointaines »
+// (translateZ recule, scale rétrécit, flou augmente, voile s'épaissit). Le deck est en
+// preserve-3d → l'empilement suit le translateZ (z-index ignoré). Voile = couleur du fond
+// posée sur l'affiche (≠ opacity → opaque, marche sur photo ET fallback).
+const DEPTH: Record<number, { tx: number; sc: number; tz: number; blur: number; vN: number; vD: number }> = {
+  1: { tx: 110, sc: 0.78, tz: -55,  blur: 0,   vN: 0.36, vD: 0.50 },
+  2: { tx: 158, sc: 0.65, tz: -130, blur: 0.8, vN: 0.55, vD: 0.70 },
+  3: { tx: 192, sc: 0.55, tz: -215, blur: 1.8, vN: 0.72, vD: 0.84 },
+  4: { tx: 214, sc: 0.47, tz: -310, blur: 2.8, vN: 0.85, vD: 0.93 },
+}
+
 export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   const ao = Math.abs(offset)
-  if (ao > 2) {
+  if (offset === 0) {
     return {
-      transform: `translate(-50%,-50%) translateX(${offset > 0 ? 170 : -170}%) translateZ(-130px) scale(.5)`,
+      transform: `translate(-50%,-50%) translateX(0%) translateZ(0px) rotateY(0deg) scale(1)`,
+      opacity: 1, filter: 'none', zIndex: 20, pointerEvents: 'auto', isCenter: true, veil: 0,
+    }
+  }
+  if (ao > 4) {
+    return {
+      transform: `translate(-50%,-50%) translateX(${offset > 0 ? 230 : -230}%) translateZ(-380px) scale(.42)`,
       opacity: 0, filter: 'none', zIndex: 0, pointerEvents: 'none', isCenter: false, veil: 0,
     }
   }
-  const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 120 : 172)
-  const rot = offset === 0 ? 0 : (offset < 0 ? 18 : -18)
-  const sc = offset === 0 ? 1 : (ao === 1 ? 0.74 : 0.62)
-  // Profondeur 3D : le deck est en preserve-3d, donc l'empilement se fait par translateZ
-  // (le z-index est ignoré). Centre devant, voisines reculées → ordre stable, plus de flash
-  // « carte qui passe au-dessus » à l'entrée (l'ordre DOM ne décide plus).
-  const tz = offset === 0 ? 0 : (ao === 1 ? -55 : -110)
-  // Voisines : on les fait RECULER via un voile de la couleur du fond (≠ opacity, pas de transparence).
-  // Marche sur photo ET fallback (qui sinon blanchit). Jour = voile plus puissant (éclaircissement marqué).
-  // Le filtre ne garde qu'un léger flou de profondeur sur les cartes lointaines.
-  const veil = offset === 0
-    ? 0
-    : isLight
-      ? (ao === 1 ? 0.58 : 0.78)
-      : (ao === 1 ? 0.44 : 0.62)
-  const blur = ao === 2 ? 'blur(1px)' : 'none'
+  const dir = offset < 0 ? -1 : 1
+  const d = DEPTH[ao]
+  const rot = dir < 0 ? 18 : -18
   return {
-    transform: `translate(-50%,-50%) translateX(${tx}%) translateZ(${tz}px) rotateY(${rot}deg) scale(${sc})`,
+    transform: `translate(-50%,-50%) translateX(${dir * d.tx}%) translateZ(${d.tz}px) rotateY(${rot}deg) scale(${d.sc})`,
     opacity: 1,
-    filter: blur,
-    veil,
-    zIndex: offset === 0 ? 20 : 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
+    filter: d.blur ? `blur(${d.blur}px)` : 'none',
+    veil: isLight ? d.vD : d.vN,
+    zIndex: 20 - ao,
+    pointerEvents: ao <= 2 ? 'auto' : 'none',  // cartes lointaines = décor, pas cliquables
+    isCenter: false,
   }
 }
 
