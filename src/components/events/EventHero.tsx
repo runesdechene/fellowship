@@ -2,32 +2,25 @@
 import { Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Image } from 'lucide-react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import type { Event } from '@/types/database'
+import { participationChip } from '@/lib/explorer'
 
 interface EventHeroProps {
   event: Event
   friendCount: number
   participationStatus?: string | null
   paymentStatus?: string | null
+  isExposant?: boolean
   onParticipantsClick?: () => void
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  interesse: 'Intéressé',
-  en_cours: 'En cours',
-  inscrit: 'Inscrit',
-}
-
-const PAYMENT_LABELS: Record<string, string> = {
-  a_payer: 'À payer',
-  en_cours_paiement: 'En cours',
-  paye: 'Payé',
 }
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-export function EventHero({ event, friendCount, participationStatus, paymentStatus, onParticipantsClick }: EventHeroProps) {
+export function EventHero({ event, friendCount, participationStatus, paymentStatus, isExposant, onParticipantsClick }: EventHeroProps) {
+  const chip = participationChip(participationStatus, paymentStatus, isExposant ? 'entity' : 'person', {
+    isPast: new Date(event.end_date) < new Date(),
+  })
   return (
     <div className="event-hero">
       {/* Poster */}
@@ -79,35 +72,10 @@ export function EventHero({ event, friendCount, participationStatus, paymentStat
           )}
         </div>
 
-        {/* Status + payment badges */}
-        {participationStatus && (
+        {/* Statut de participation (chip unifié) */}
+        {chip && (
           <div className="event-badges">
-            <span
-              className="event-badge-status"
-              style={
-                participationStatus === 'inscrit'
-                  ? { background: 'hsl(152 50% 38%)', color: 'white' }
-                  : participationStatus === 'en_cours'
-                    ? { background: 'hsl(210 60% 50%)', color: 'white' }
-                    : { background: 'hsl(38 90% 50%)', color: 'white' }
-              }
-            >
-              ✓ {STATUS_LABELS[participationStatus] ?? participationStatus}
-            </span>
-            {participationStatus === 'inscrit' && paymentStatus && (
-              <span
-                className="event-badge-status"
-                style={
-                  paymentStatus === 'paye'
-                    ? { background: 'hsl(152 50% 38% / 0.12)', color: 'hsl(152 50% 32%)', border: '1px solid hsl(152 50% 38% / 0.25)' }
-                    : paymentStatus === 'en_cours_paiement'
-                      ? { background: 'hsl(38 90% 50% / 0.12)', color: 'hsl(38 80% 35%)', border: '1px solid hsl(38 90% 50% / 0.2)' }
-                      : { background: 'hsl(0 65% 55% / 0.08)', color: 'hsl(0 65% 45%)', border: '1px solid hsl(0 65% 55% / 0.15)' }
-                }
-              >
-                💰 {PAYMENT_LABELS[paymentStatus] ?? paymentStatus}
-              </span>
-            )}
+            <span className={'event-badge-status ' + chip.variant}>{chip.label}</span>
           </div>
         )}
 
