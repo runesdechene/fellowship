@@ -28,6 +28,15 @@ describe('isRouteValidFor', () => {
     expect(isRouteValidFor('/explorer', exposant)).toBe(true)
   })
   it('route partagée (event) toujours valide', () => expect(isRouteValidFor('/evenement/abc', person)).toBe(true))
+  it('vitrine publique /{slug} valide pour tout acteur', () => {
+    expect(isRouteValidFor('/runes-de-chene', exposant)).toBe(true)
+    expect(isRouteValidFor('/une-marque', person)).toBe(true)
+    expect(isRouteValidFor('/runes-de-chene/embed', person)).toBe(true)
+  })
+  it('route applicative réservée non-valide reste bloquée', () => {
+    expect(isRouteValidFor('/calendrier', person)).toBe(false)
+    expect(isRouteValidFor('/mes-dates', exposant)).toBe(false)
+  })
 })
 
 describe('mobilePrimaryFor / mobileSecondaryFor', () => {

@@ -59,10 +59,26 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
 
 const SHARED_PREFIXES = ['/explorer', '/profil', '/reglages', '/evenement', '/notifications']
 
-/** Une route est valide pour un acteur si elle est dans sa nav ou si c'est une surface partagée. */
+// Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
+// chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
+const RESERVED_TOP = new Set([
+  'explorer', 'calendrier', 'communaute', 'tableau-de-bord', 'dashboard',
+  'mes-dates', 'mes-createurs', 'profil', 'reglages', 'suivis',
+  'notifications', 'evenement', 'admin', 'onboarding', 'login', 'auth',
+])
+
+/** Route profil/vitrine public `/:slug` (ou `/:slug/embed`) : premier segment non réservé. */
+function isPublicProfilePath(path: string): boolean {
+  const first = path.replace(/^\/+/, '').split('/')[0]
+  return first !== '' && !RESERVED_TOP.has(first)
+}
+
+/** Une route est valide pour un acteur si elle est dans sa nav, une surface partagée, ou une vitrine publique. */
 export function isRouteValidFor(path: string, actor: { kind: string; entityType: string | null } | null): boolean {
   const navPaths = navItemsFor(actor).map(k => NAV_DEFS[k].to)
-  return navPaths.some(p => path.startsWith(p)) || SHARED_PREFIXES.some(p => path.startsWith(p))
+  return navPaths.some(p => path.startsWith(p))
+    || SHARED_PREFIXES.some(p => path.startsWith(p))
+    || isPublicProfilePath(path)
 }
 
 /** Lien de la vitrine du propriétaire : sa page publique si elle a un slug, sinon /profil. */
