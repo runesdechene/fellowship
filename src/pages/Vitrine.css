@@ -11,6 +11,71 @@
 /*   --amber     → var(--amber)                                        */
 /*   --green     → var(--forest)                                       */
 
+/* ── Page root (full-bleed cover wrapper) ───────────────────────────── */
+.v-page-root {
+  min-height: 100vh;
+  background: hsl(var(--background));
+  position: relative;
+}
+
+/* ── Loading & 404 ─────────────────────────────────────────────────── */
+.profile-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.profile-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.profile-not-found-code {
+  font-family: var(--font-heading);
+  font-size: 64px;
+  font-weight: 800;
+  color: hsl(var(--muted-foreground) / 0.25);
+}
+
+.profile-not-found-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+
+.profile-not-found-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: hsl(var(--muted-foreground));
+}
+
+.profile-not-found-text span {
+  font-family: monospace;
+  color: hsl(var(--foreground));
+}
+
+.profile-not-found-link {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--copper);
+  text-decoration: none;
+}
+
+.profile-not-found-link:hover {
+  text-decoration: underline;
+}
+
 /* ── SVG baseline ──────────────────────────────────────────────────── */
 .vitrine svg {
   fill: none;
@@ -420,6 +485,58 @@
 
 /* Mode jour : ombre douce sur les cartes */
 .light .v-card {
+  box-shadow: 0 2px 12px rgba(60, 45, 35, 0.06);
+}
+
+/* ── About card ─────────────────────────────────────────────────────── */
+.v-about p {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: hsl(var(--foreground));
+  margin: 0;
+}
+
+/* ── Follow nudge ───────────────────────────────────────────────────── */
+.v-nudge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: color-mix(in srgb, var(--copper) 10%, hsl(var(--card)));
+  border: 1px solid color-mix(in srgb, var(--copper) 28%, hsl(var(--border)));
+  border-radius: 18px;
+  padding: 18px 20px;
+}
+
+.v-nudge-ic {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.v-nudge-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.v-nudge-t b {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+
+.v-nudge-t span {
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+}
+
+/* Mode jour : nudge avec ombre */
+.light .v-nudge {
   box-shadow: 0 2px 12px rgba(60, 45, 35, 0.06);
 }
 
