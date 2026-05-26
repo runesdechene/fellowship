@@ -30,8 +30,11 @@ export function DeckCard({ event, style, isCenter, canAddImage, badge, statusChi
   }
   const showImg = !!event.image_url && !tracked.error
   const imageless = !event.image_url || tracked.error
+  // Le dim de profondeur (assombrir nuit / éclaircir jour) ne s'applique qu'à l'AFFICHE,
+  // pas aux overlays (tag « Repéré », badge) qui doivent garder leurs vraies couleurs.
+  const { filter, ...rootStyle } = style
   return (
-    <div className={'card' + (isCenter ? ' is-center' : '')} style={style} onClick={onClick}>
+    <div className={'card' + (isCenter ? ' is-center' : '')} style={rootStyle} onClick={onClick}>
       {statusChip && (
         <span className={'card-status ' + statusChip.variant}>{statusChip.label}</span>
       )}
@@ -40,7 +43,7 @@ export function DeckCard({ event, style, isCenter, canAddImage, badge, statusChi
           {badge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}
         </span>
       )}
-      <div className="card-media">
+      <div className="card-media" style={{ filter }}>
         <div className="card-fallback">
           <span className="card-fallback-glow" aria-hidden="true" />
           {/* eslint-disable-next-line react-hooks/static-components -- Icon is from TAG_ICONS static lookup, ref is stable */}
