@@ -115,8 +115,11 @@ Quand `isOwner`, chaque section porte une affordance d'édition :
 3. **Édition inline** : cover/avatar, marque/bio/métier, specialties, links, galerie (upload/suppr/réordon).
 4. **Toggle vérifié admin** (petit) : bouton dans l'admin pour basculer `entities.verified`.
 
+## Acté en plus
+- **Rebrancher le lien nav « Ma vitrine »** : il pointe aujourd'hui sur `/profil` → le faire pointer vers la vitrine publique du propriétaire **`/{public_slug}`** (fallback `/profil` si l'entité n'a pas encore de slug). Petit ajustement dans `navModel.ts` / le calcul du lien (le `to` de `vitrine` peut devenir dynamique selon l'acteur courant, ou résolu au rendu de la nav). Inclus en Phase 2.
+
 ## Hors périmètre
-- Refonte des **autres** pages profil (`/profil` `ProfilePage`, Settings) — on touche `PublicProfile` (la vitrine publique `/:slug`). Le lien nav « Ma vitrine » pointe aujourd'hui sur `/profil` : **à rebrancher** vers la vitrine publique du propriétaire (`/{public_slug}`) — petit ajustement noté, à confirmer.
+- Refonte des **autres** pages profil (`/profil` `ProfilePage`, Settings) — on ne touche que `PublicProfile` (la vitrine publique `/:slug`).
 - Légendes de galerie, liens illimités, « par {personne} », nom de domaine custom — différés.
 - Migration paiement / merge en prod (au merge de branche).
 
