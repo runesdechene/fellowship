@@ -554,6 +554,8 @@
   will-change: transform;
   cursor: pointer;
   background: hsl(var(--card));
+  border-radius: 20px;
+  /* PAS d'overflow:hidden ici → les badges en coin (top/left:-7px) peuvent déborder. */
 }
 
 /* Pendant le scrub : transition courte pour que le deck colle au curseur sans traîner. */
@@ -566,6 +568,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  border-radius: 20px;
   z-index: 0;
   /* Le dim (clair/sombre) s'anime quand la carte arrive/part du centre — pas de flash sec. */
   transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
