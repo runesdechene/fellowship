@@ -96,9 +96,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 99px;
   padding: 6px 6px 6px 10px;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
@@ -115,10 +114,8 @@
   pointer-events: none;
 }
 
-/* Day-mode : le sélecteur Quoi/Où/Quand sur fond blanc franc. */
+/* Day-mode : le sélecteur Quoi/Où/Quand sur fond card (couleur sidebar). */
 .light .explorer .searchbar {
-  background: #ffffff;
-  border-color: rgba(60, 45, 35, 0.12);
   box-shadow: 0 10px 28px rgba(60, 45, 35, 0.12);
 }
 
@@ -808,9 +805,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: hsl(var(--card));
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -820,7 +816,7 @@
 }
 
 .explorer .arrow:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: hsl(var(--muted));
 }
 
 .explorer .arrow svg {
@@ -837,10 +833,10 @@
   right: 3%;
 }
 
-/* Day-mode arrows */
+/* Day-mode arrows : même fond card, pas de bordure (comme la nuit). */
 .light .explorer .arrow {
-  background: rgba(60, 45, 35, 0.06);
-  border-color: rgba(60, 45, 35, 0.14);
+  background: hsl(var(--card));
+  border: none;
 }
 
 /* ── Nav zones (invisible click targets inside .deck) ─────────────── */
@@ -980,7 +976,7 @@
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
 /* État repéré (« 🚫 Ne plus repérer ») : atténué = clairement différent + signale l'action de retrait. */
 .explorer .btn-star[aria-pressed="true"] {
-  background: color-mix(in srgb, hsl(var(--muted-foreground)) 14%, transparent);
+  background: hsl(var(--card));
   color: hsl(var(--muted-foreground));
   box-shadow: none;
 }
@@ -1087,12 +1083,12 @@
 
 /* ── Ghost CTA (transparent + border) ─────────────────────────────── */
 .explorer .btn-ghost {
-  background: rgba(255,255,255,.07);
+  background: hsl(var(--card));
   border: 1.5px solid hsl(var(--border));
   color: hsl(var(--foreground));
 }
 .explorer .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
-.light .explorer .btn-ghost { background: rgba(60,45,35,.04); border-color: rgba(60,45,35,.18); }
+.light .explorer .btn-ghost { background: hsl(var(--card)); }
 
 @media (max-width: 1080px) {
   /* No sidebar to hide here (AppLayout handles it), so just shrink cards and nudge arrows */
