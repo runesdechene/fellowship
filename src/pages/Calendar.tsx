@@ -183,7 +183,7 @@ export function CalendarPage() {
           onClick={() => { const next = !showMine; setShowMine(next); localStorage.setItem('fellowship-calendar-mine', String(next)) }}
           className={`calendar-filter-btn ${showMine ? 'active' : ''}`}
         >
-          Mes événements
+          Mes dates
         </button>
         <button
           onClick={() => { const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
@@ -197,7 +197,7 @@ export function CalendarPage() {
           className={`calendar-filter-btn ${showVisiteurs ? 'active' : ''}`}
         >
           <Users strokeWidth={1.5} />
-          Amis visiteurs
+          Visiteurs
         </button>
       </div>
       </div>{/* /.calendar-topbar */}
