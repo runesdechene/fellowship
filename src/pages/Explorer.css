@@ -567,7 +567,10 @@
   inset: 0;
   overflow: hidden;
   z-index: 0;
+  /* Le dim (clair/sombre) s'anime quand la carte arrive/part du centre — pas de flash sec. */
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.explorer.is-scrubbing .card-media { transition: filter 0.12s linear; }
 
 .explorer .card img {
   position: absolute;
@@ -810,14 +813,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: hsl(var(--foreground));
+  color: rgba(255, 255, 255, 0.76);
   cursor: pointer;
   z-index: 20;
-  transition: transform 0.13s ease, background 0.15s ease;
+  transition: all 0.2s;
 }
 
 .explorer .arrow:hover {
   background: hsl(var(--muted));
+  filter: brightness(150%);
 }
 /* Petit retour tactile au clic : la flèche dézoome légèrement. */
 .explorer .arrow:active {
@@ -980,9 +984,9 @@
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
 /* État repéré (« 🚫 Ne plus repérer ») : atténué = clairement différent + signale l'action de retrait. */
 .explorer .btn-star[aria-pressed="true"] {
-  background: hsl(var(--card));
-  color: hsl(var(--muted-foreground));
-  box-shadow: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    color: hsl(var(--foreground));
 }
 .explorer .btn-star[aria-pressed="true"]:hover {
   filter: none;
