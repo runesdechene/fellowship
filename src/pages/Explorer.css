@@ -738,7 +738,7 @@
 .explorer .card-status.repere  { background: hsl(44 89% 71%); color: #41351c; }
 .explorer .card-status.dossier { background: #86bce8; color: #0e2233; }
 .explorer .card-status.accepte { background: #5fd9a0; color: #06281a; }
-.explorer .card-status.apayer  { background: #ffce85; color: #3a2410; }
+.explorer .card-status.apayer  { background: hsl(30 95% 64%); color: #3a2410; }
 .explorer .card-status.inscrit { background: hsl(152 55% 40%); color: #fff; }
 .explorer .card-status.refuse  { background: #e8897a; color: #fff; }
 .explorer .card-status.termine { background: rgba(20,14,12,.55); color: #d8c7b4; }
