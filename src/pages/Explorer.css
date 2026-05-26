@@ -731,10 +731,14 @@
   white-space: nowrap;
   box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
 }
-.explorer .card-status.repere { background: var(--amber); color: #3a2410; }
-.explorer .card-status.going { background: var(--lime); color: #1b2e10; }
-.explorer .card-status.pending { background: var(--copper); color: #fff; }
-.explorer .card-status.paid { background: hsl(152 55% 42%); color: #fff; }
+.explorer .card-status.repere  { background: #a8cc7a; color: #1b2e10; }
+.explorer .card-status.dossier { background: #86bce8; color: #0e2233; }
+.explorer .card-status.accepte { background: #5fd9a0; color: #06281a; }
+.explorer .card-status.apayer  { background: #ffce85; color: #3a2410; }
+.explorer .card-status.inscrit { background: hsl(152 55% 40%); color: #fff; }
+.explorer .card-status.refuse  { background: #e8897a; color: #fff; }
+.explorer .card-status.termine { background: rgba(20,14,12,.55); color: #d8c7b4; }
+.explorer .card-status.going   { background: hsl(152 55% 40%); color: #fff; }
 
 /* ── Card fallback (no photo) ─────────────────────────────────────── */
 
@@ -1030,10 +1034,14 @@
   display: inline-flex; align-items: center; gap: 7px;
   border-radius: 99px; padding: 7px 16px; font-size: 12.5px; font-weight: 700;
 }
-.explorer .eh-status.going { background: hsl(86 44% 64% / .2); border: 1px solid hsl(86 44% 64% / .45); color: var(--lime); }
-.explorer .eh-status.repere { background: hsl(40 90% 60% / .16); border: 1px solid hsl(40 90% 60% / .4); color: var(--amber); }
-.explorer .eh-status.pending { background: hsl(28 80% 60% / .16); border: 1px solid hsl(28 80% 60% / .4); color: var(--copper); }
-.explorer .eh-status.paid { background: hsl(152 50% 45% / .18); border: 1px solid hsl(152 50% 45% / .45); color: hsl(152 45% 46%); }
+.explorer .eh-status.repere  { background: color-mix(in srgb, var(--status-repere)  18%, transparent); border: 1px solid color-mix(in srgb, var(--status-repere)  40%, transparent); color: var(--status-repere); }
+.explorer .eh-status.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-dossier) 40%, transparent); color: var(--status-dossier); }
+.explorer .eh-status.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-accepte) 40%, transparent); color: var(--status-accepte); }
+.explorer .eh-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); border: 1px solid color-mix(in srgb, var(--status-apayer)  40%, transparent); color: var(--status-apayer); }
+.explorer .eh-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
+.explorer .eh-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); border: 1px solid color-mix(in srgb, var(--status-refuse)  40%, transparent); color: var(--status-refuse); }
+.explorer .eh-status.termine { background: rgba(255,240,225,.08); border: 1px solid var(--border); color: var(--muted-foreground); }
+.explorer .eh-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
 .explorer .eh-meta { display: flex; align-items: center; gap: 18px; }
 .explorer .eh-item { display: flex; align-items: center; gap: 9px; }
 .explorer .eh-ico { font-size: 22px; }

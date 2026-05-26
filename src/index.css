@@ -33,6 +33,13 @@
   --lime: hsl(86 44% 64%);
   --lime-d: hsl(92 40% 46%);
   --amber: #ffce85;
+  /* Statuts de participation (vocabulaire unifié) — couleur de texte/accent (nuit) */
+  --status-repere:  #a8cc7a;   /* tilleul */
+  --status-dossier: #86bce8;   /* bleu */
+  --status-accepte: #5fd9a0;   /* émeraude */
+  --status-apayer:  #ffce85;   /* ambre */
+  --status-inscrit: #34c98a;   /* forêt */
+  --status-refuse:  #e8897a;   /* terracotta */
   --gradient-primary: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
   --gradient-pro: linear-gradient(155deg, hsl(25 78% 52%), hsl(18 72% 41%) 62%, hsl(12 64% 32%));
   --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2e1e1a, #170f0e 60%);
@@ -70,6 +77,12 @@
   --forest: hsl(152 40% 38%);
   --lime: hsl(88 50% 36%);
   --amber: hsl(36 82% 46%);
+  --status-repere:  hsl(88 50% 32%);
+  --status-dossier: hsl(210 55% 42%);
+  --status-accepte: hsl(152 48% 32%);
+  --status-apayer:  hsl(36 82% 40%);
+  --status-inscrit: hsl(152 52% 28%);
+  --status-refuse:  hsl(8 62% 46%);
   --page-backdrop: radial-gradient(120% 70% at 50% 0%, #f8f2e8, #ece3d4 60%);
 
   /* Font color — day overrides (original values) */
