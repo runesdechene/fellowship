@@ -24,8 +24,12 @@ export interface DeckStyle {
   pointerEvents: 'auto' | 'none'; isCenter: boolean
 }
 
-/** Coverflow : style d'une carte selon son décalage à la carte active (porté du layout() maquette). */
-export function deckCardStyle(offset: number): DeckStyle {
+/**
+ * Coverflow : style d'une carte selon son décalage à la carte active (porté du layout() maquette).
+ * `isLight` : en mode jour, les voisines **fondent par opacité** (le fond clair transparaît = éclairci)
+ * au lieu d'être assombries par un filtre brightness (qui les rend tristes sur fond clair).
+ */
+export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   const ao = Math.abs(offset)
   if (ao > 2) {
     return {
@@ -36,10 +40,17 @@ export function deckCardStyle(offset: number): DeckStyle {
   const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 120 : 172)
   const rot = offset === 0 ? 0 : (offset < 0 ? 18 : -18)
   const sc = offset === 0 ? 1 : (ao === 1 ? 0.74 : 0.62)
+  // Voisines : on les fait reculer. Nuit = assombrir ; jour = éclaircir + désaturer
+  // (brightness > 1, jamais d'opacité → les cartes restent OPAQUES, pas de transparence).
+  const dim = offset === 0
+    ? 'none'
+    : isLight
+      ? (ao === 1 ? 'brightness(1.07) saturate(.6)' : 'brightness(1.14) saturate(.45)')
+      : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)')
   return {
     transform: `translate(-50%,-50%) translateX(${tx}%) rotateY(${rot}deg) scale(${sc})`,
     opacity: 1,
-    filter: offset === 0 ? 'none' : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)'),
+    filter: dim,
     zIndex: offset === 0 ? 20 : 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
   }
 }

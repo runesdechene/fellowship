@@ -77,6 +77,16 @@ describe('deckCardStyle', () => {
     expect(s.opacity).toBe(0)
     expect(s.pointerEvents).toBe('none')
   })
+  it('voisin en mode jour : éclairci (brightness > 1), opaque (pas de transparence)', () => {
+    const s = deckCardStyle(1, true)
+    expect(s.filter).toContain('brightness(1')
+    expect(s.opacity).toBe(1)
+  })
+  it('voisin en mode nuit : assombri (brightness < 1), opaque', () => {
+    const s = deckCardStyle(1, false)
+    expect(s.filter).toBe('brightness(.45)')
+    expect(s.opacity).toBe(1)
+  })
 })
 
 describe('periodToRange', () => {

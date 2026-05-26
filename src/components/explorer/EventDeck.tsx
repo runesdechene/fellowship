@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTheme } from '@/hooks/use-theme'
 import { deckCardStyle, eventBadge, participationChip, type ActorKind } from '@/lib/explorer'
 import { DeckCard } from './DeckCard'
 import type { EventWithScore } from '@/types/database'
@@ -23,6 +24,8 @@ interface EventDeckProps {
 }
 
 export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, actorKind, onSelect, onPrev, onNext, onSwipe, onCardClick, onAddImage }: EventDeckProps) {
+  const { theme } = useTheme()
+  const isLight = theme === 'day'
   const hasPrev = activeIndex > 0
   const hasNext = activeIndex < events.length - 1
 
@@ -63,7 +66,7 @@ export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, 
         {events.map((ev, i) => {
           const offset = i - activeIndex
           if (Math.abs(offset) > 3) return null // fenêtrage perf : ne pas monter les cartes lointaines
-          const s = deckCardStyle(offset)
+          const s = deckCardStyle(offset, isLight)
           const badge = eventBadge(ev, now)
           const part = partByEvent.get(ev.id)
           const statusChip = participationChip(part?.status, part?.payment_status, actorKind, {

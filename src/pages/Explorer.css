@@ -968,6 +968,11 @@
   background: var(--lime);
   color: #1b2e10;
 }
+/* Mode jour : le vert tilleul foncé du token est terne ; on remet un vert vif et lisible. */
+.light .explorer .btn-star {
+  background: hsl(88 55% 50%);
+  color: #14260b;
+}
 .explorer .btn-star { transition: box-shadow .2s, transform .15s, filter .15s; }
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
 .explorer .btn-star[aria-pressed="true"] {
