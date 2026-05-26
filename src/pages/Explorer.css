@@ -806,7 +806,7 @@
   height: 52px;
   border-radius: 50%;
   background: hsl(var(--card));
-  border: none;
+  border: 1px solid hsl(var(--border));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -833,10 +833,9 @@
   right: 3%;
 }
 
-/* Day-mode arrows : même fond card, pas de bordure (comme la nuit). */
+/* Day-mode arrows : même fond card (la bordure vient du token, gérée par la règle de base). */
 .light .explorer .arrow {
   background: hsl(var(--card));
-  border: none;
 }
 
 /* ── Nav zones (invisible click targets inside .deck) ─────────────── */
