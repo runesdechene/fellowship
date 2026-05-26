@@ -57,10 +57,13 @@ export function planForActor(
 ```
 - `entryState(key, plan)` (déjà pur) **inchangé**. `navItemsFor` **inchangé**.
 
-### Lecture côté UI
-`useAuth()` expose déjà `currentActor` (acteur actif) et `currentActorRow` (la ligne `UserRow | EntityRow` de l'acteur actif).
-- **`ProGate.tsx`** : remplacer `person?.plan === 'pro'` par `planForActor(currentActor, currentActorRow) === 'pro'`.
-- **`Sidebar.tsx:22`** et **`BottomBar.tsx`** : remplacer la dérivation `person.plan` par `planForActor(currentActor, currentActorRow)`.
+### Lecture côté UI — les 5 consommateurs de `person.plan`
+`useAuth()` expose déjà `currentActor` (acteur actif) et `currentActorRow` (la ligne `UserRow | EntityRow` de l'acteur actif). Tous remplacent leur lecture de `person.plan` par `planForActor(currentActor, currentActorRow)` :
+- **`ProGate.tsx:9`** : `planForActor(...) === 'pro'`.
+- **`Sidebar.tsx:22`** : `const plan = planForActor(currentActor, currentActorRow)`.
+- **`BottomBar.tsx:17`** : idem.
+- **`use-reviews.ts:37`** : `canSeeDetails = planForActor(currentActor, currentActorRow) === 'pro'` (le check `kind === 'entity'` est désormais encapsulé dans `planForActor`).
+- **`components/reports/EventReportForm.tsx:34`** : `if (planForActor(currentActor, currentActorRow) !== 'pro')`.
 
 > `currentActorRow` est l'`EntityRow` quand on agit en tant qu'entité (porte `plan`), sinon la `UserRow` (personne — `planForActor` renvoie `'free'`).
 

@@ -252,6 +252,14 @@ export function ExplorerPage() {
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
+  const counterContent = (
+    <>
+      <b>{displayed.length > 0 ? safeIndex + 1 : 0}</b>
+      {' / '}
+      {displayed.length} festival{displayed.length !== 1 ? 's' : ''} trouvé{displayed.length !== 1 ? 's' : ''}
+    </>
+  )
+
   return (
     <div className={'explorer' + (scrubbing ? ' is-scrubbing' : '')} style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
       {/* Halos d'ambiance (teintes landing ; le halo principal suit la couleur de l'affiche active) */}
@@ -284,6 +292,9 @@ export function ExplorerPage() {
           onPeriod={handlePeriod}
           onQuery={handleQuery}
         />
+
+        {/* Compteur : sous la barre sur mobile (gain de hauteur), en bas sur desktop. */}
+        <div className="counter counter--top">{counterContent}</div>
 
         {!loading && displayed.length > 1 && (
           <ScrubBar
@@ -337,11 +348,7 @@ export function ExplorerPage() {
               </button>
             </div>
           )}
-          <div className="counter">
-            <b>{displayed.length > 0 ? safeIndex + 1 : 0}</b>
-            {' / '}
-            {displayed.length} festival{displayed.length !== 1 ? 's' : ''} trouvé{displayed.length !== 1 ? 's' : ''}
-          </div>
+          <div className="counter counter--bottom">{counterContent}</div>
         </div>
       </div>
     </div>

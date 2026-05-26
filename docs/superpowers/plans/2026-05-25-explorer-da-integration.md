@@ -144,7 +144,7 @@ export const PERIODS: { value: Period; label: string }[] = [
   { value: 'next-3', label: '3 prochains mois' },
   { value: 'next-6', label: '6 prochains mois' },
   { value: 'next-12', label: '12 prochains mois' },
-  { value: 'recent', label: '🆕 Ajoutés récemment' },
+  { value: 'recent', label: '✨ Ajoutés récemment' },
   { value: 'past', label: '✅ Terminés' },
 ]
 

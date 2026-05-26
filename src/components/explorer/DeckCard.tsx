@@ -40,7 +40,7 @@ export function DeckCard({ event, style, isCenter, canAddImage, badge, statusChi
       )}
       {badge && (
         <span className={'card-badge ' + badge}>
-          {badge === 'nouveau' ? '🆕 Nouveau' : '🔥 Populaire'}
+          {badge === 'nouveau' ? '✨  Nouveau' : '🔥 Populaire'}
         </span>
       )}
       <div className="card-media" style={{ filter }}>
