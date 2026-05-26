@@ -837,5 +837,9 @@
   .agenda-mh .calendar-month-banner { border-radius: 0; }
   /* Texte du mois vide réaligné sur le contenu indenté (= padding de page). */
   .agenda-empty { padding: 0 var(--page-padding); }
-  .agenda-count { right: 16px; }
+  /* Même alignement gauche/droite que les mois vides : nom de mois et compteur
+     calés sur le padding de page (les bandeaux sont full-bleed, donc on ré-indente
+     leur contenu au lieu de le coller au bord). */
+  .agenda-mh .calendar-month-banner-text { left: var(--page-padding); }
+  .agenda-count { right: var(--page-padding); }
 }
