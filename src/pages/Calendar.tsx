@@ -14,7 +14,8 @@ export function CalendarPage() {
   const defaultStart = now.getMonth()
   const defaultYear = now.getFullYear()
 
-  useAuth() // ensure authenticated
+  const { profile } = useAuth()
+  const actorKind: 'entity' | 'person' = profile?.type === 'exposant' ? 'entity' : 'person'
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
   const [showMine, setShowMine] = useState(() => localStorage.getItem('fellowship-calendar-mine') !== 'false')
@@ -252,7 +253,7 @@ export function CalendarPage() {
                 key={`${month.year}-${month.month}`}
                 className={`calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
               >
-                <CalendarMonth data={month} friendParticipations={friendActivity} onOpenFriends={(id, name) => setModalEvent({ id, name })} />
+                <CalendarMonth data={month} actorKind={actorKind} friendParticipations={friendActivity} onOpenFriends={(id, name) => setModalEvent({ id, name })} />
               </div>
             )
           })}
