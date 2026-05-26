@@ -6,7 +6,7 @@ import { SearchBar } from './SearchBar'
 import { ChangelogModal } from './ChangelogModal'
 import { EventForm } from '@/components/events/EventForm'
 import { useAuth } from '@/lib/auth'
-import { isRouteValidFor } from '@/lib/navModel'
+import { isRouteValidFor, isPublicProfilePath } from '@/lib/navModel'
 import { X } from 'lucide-react'
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -14,8 +14,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { currentActor } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
-  // L'Explorer (coverflow) est immersif plein écran : pas de SearchBar globale (son Quoi/Où/Quand la remplace).
-  const fullBleed = location.pathname === '/explorer'
+  // L'Explorer (coverflow) est immersif plein écran : pas de SearchBar + main sans scroll.
+  const isExplorer = location.pathname === '/explorer'
+  // La vitrine publique (/:slug) commence par une cover plein-bord en haut du stage :
+  // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
+  // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
+  const isVitrine = isPublicProfilePath(location.pathname)
+  const hideSearchBar = isExplorer || isVitrine
+  const noScroll = isExplorer
   useEffect(() => {
     if (currentActor && !isRouteValidFor(location.pathname, currentActor)) {
       navigate('/explorer', { replace: true })
@@ -26,8 +32,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex h-screen">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        {!fullBleed && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
-        <main className={fullBleed ? 'flex-1 overflow-hidden pb-16 md:pb-0' : 'flex-1 overflow-y-auto pb-16 md:pb-0'}>
+        {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
+        <main className={noScroll ? 'flex-1 overflow-hidden pb-16 md:pb-0' : 'flex-1 overflow-y-auto pb-16 md:pb-0'}>
           {children}
         </main>
       </div>

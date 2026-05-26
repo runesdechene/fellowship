@@ -68,7 +68,7 @@ const RESERVED_TOP = new Set([
 ])
 
 /** Route profil/vitrine public `/:slug` (ou `/:slug/embed`) : premier segment non réservé. */
-function isPublicProfilePath(path: string): boolean {
+export function isPublicProfilePath(path: string): boolean {
   const first = path.replace(/^\/+/, '').split('/')[0]
   return first !== '' && !RESERVED_TOP.has(first)
 }
