@@ -93,6 +93,7 @@ export function CalendarPage() {
         endDate,
         primaryTag: ((ev.tags as string[] | null)?.[0] as string) ?? 'autre',
         status: '',
+        paymentStatus: null,
         visibility: 'public',
         city: (ev.city as string) ?? '',
         department: (ev.department as string) ?? '',

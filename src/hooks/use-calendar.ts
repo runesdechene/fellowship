@@ -8,6 +8,7 @@ export interface CalendarEvent {
   endDate: Date
   primaryTag: string
   status: string
+  paymentStatus: string | null
   visibility: string
   city: string
   department: string
@@ -23,43 +24,45 @@ export interface CalendarMonth {
   events: CalendarEvent[]
 }
 
-export function useCalendarYear(participations: ParticipationWithEvent[], year: number): CalendarMonth[] {
-  return useMemo(() => {
-    const months: CalendarMonth[] = Array.from({ length: 12 }, (_, i) => ({
-      month: i,
-      year,
-      label: new Date(year, i).toLocaleDateString('fr-FR', { month: 'long' }),
-      events: [],
-    }))
+export function buildCalendarMonths(participations: ParticipationWithEvent[], year: number): CalendarMonth[] {
+  const months: CalendarMonth[] = Array.from({ length: 12 }, (_, i) => ({
+    month: i,
+    year,
+    label: new Date(year, i).toLocaleDateString('fr-FR', { month: 'long' }),
+    events: [],
+  }))
 
-    for (const p of participations) {
-      if (!p.events) continue
-      const start = new Date(p.events.start_date)
-      const end = new Date(p.events.end_date)
+  for (const p of participations) {
+    if (!p.events) continue
+    const start = new Date(p.events.start_date)
+    const end = new Date(p.events.end_date)
 
-      for (let m = start.getMonth(); m <= end.getMonth(); m++) {
-        if (start.getFullYear() === year || end.getFullYear() === year) {
-          months[m]?.events.push({
-            id: p.events.id,
-            name: p.events.name,
-            startDate: start,
-            endDate: end,
-            primaryTag: p.events.tags?.[0] ?? 'autre',
-            status: p.status,
-            visibility: p.visibility,
-            city: p.events.city,
-            department: p.events.department,
-            imageUrl: p.events.image_url,
-          })
-        }
+    for (let m = start.getMonth(); m <= end.getMonth(); m++) {
+      if (start.getFullYear() === year || end.getFullYear() === year) {
+        months[m]?.events.push({
+          id: p.events.id,
+          name: p.events.name,
+          startDate: start,
+          endDate: end,
+          primaryTag: p.events.tags?.[0] ?? 'autre',
+          status: p.status,
+          paymentStatus: (p.payment_status as string | null) ?? null,
+          visibility: p.visibility,
+          city: p.events.city,
+          department: p.events.department,
+          imageUrl: p.events.image_url,
+        })
       }
     }
+  }
 
-    // Sort events chronologically within each month
-    for (const m of months) {
-      m.events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-    }
+  for (const m of months) {
+    m.events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+  }
 
-    return months
-  }, [participations, year])
+  return months
+}
+
+export function useCalendarYear(participations: ParticipationWithEvent[], year: number): CalendarMonth[] {
+  return useMemo(() => buildCalendarMonths(participations, year), [participations, year])
 }
