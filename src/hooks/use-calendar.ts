@@ -37,23 +37,22 @@ export function buildCalendarMonths(participations: ParticipationWithEvent[], ye
     const start = new Date(p.events.start_date)
     const end = new Date(p.events.end_date)
 
-    for (let m = start.getMonth(); m <= end.getMonth(); m++) {
-      if (start.getFullYear() === year || end.getFullYear() === year) {
-        months[m]?.events.push({
-          id: p.events.id,
-          name: p.events.name,
-          startDate: start,
-          endDate: end,
-          primaryTag: p.events.tags?.[0] ?? 'autre',
-          status: p.status,
-          paymentStatus: (p.payment_status as string | null) ?? null,
-          visibility: p.visibility,
-          city: p.events.city,
-          department: p.events.department,
-          imageUrl: p.events.image_url,
-        })
-      }
-    }
+    // Rattaché au mois de la DATE DE DÉBUT uniquement — jamais dupliqué sur les
+    // mois suivants (un événement à cheval juillet→août n'apparaît qu'en juillet).
+    if (start.getFullYear() !== year) continue
+    months[start.getMonth()]?.events.push({
+      id: p.events.id,
+      name: p.events.name,
+      startDate: start,
+      endDate: end,
+      primaryTag: p.events.tags?.[0] ?? 'autre',
+      status: p.status,
+      paymentStatus: (p.payment_status as string | null) ?? null,
+      visibility: p.visibility,
+      city: p.events.city,
+      department: p.events.department,
+      imageUrl: p.events.image_url,
+    })
   }
 
   for (const m of months) {

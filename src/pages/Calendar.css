@@ -617,13 +617,17 @@
 @media (max-width: 639px) {
   .mobile-calendar { display: block; }
   .calendar-grid { display: none; }
-  /* En-tête + filtres collants pendant le scroll de l'agenda */
+  /* En-tête + filtres collants pendant le scroll de l'agenda.
+     Verre dépoli (pas un aplat) pour se fondre dans le dégradé radial du body
+     (--page-backdrop), sinon on voit une bande de couleur plate dégueu. */
   .calendar-topbar {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: hsl(var(--background));
-    padding-bottom: 4px;
+    background: hsl(var(--background) / 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding-bottom: 8px;
   }
 }
 
@@ -714,18 +718,28 @@
 .agenda-month { margin-bottom: 18px; }
 
 .agenda-mh {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 6px 2px 9px;
+  position: relative;
+  margin: 0 0 9px;
 }
-.agenda-mh .calendar-month-banner { flex: 1; min-width: 0; }
+/* Le bandeau de mois prend toute la largeur (comme les pills en dessous). */
+.agenda-mh .calendar-month-banner { width: 100%; margin-bottom: 0; }
+/* Compteur posé par-dessus le bandeau (coin haut-droit), dans le cadre. */
 .agenda-count {
-  flex-shrink: 0;
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: hsl(var(--background) / 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 700;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--foreground));
 }
 
 .agenda-event { margin-bottom: 7px; }
@@ -789,32 +803,29 @@
   color: #fff;
 }
 
-/* Mois vide : ligne fine */
+/* Mois vide : mini-bandeau réduit (reprend le carré arrondi des mois pleins). */
 .agenda-empty {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 2px;
-  margin-bottom: 4px;
-}
-.agenda-empty::before {
-  content: '';
-  width: 4px; height: 13px;
-  border-radius: 2px;
-  background: hsl(var(--border));
-  flex-shrink: 0;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 14px;
+  margin-bottom: 9px;
+  border-radius: 12px;
+  background: hsl(var(--secondary) / 0.45);
 }
 .agenda-empty-nm {
   font-family: var(--font-heading);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: hsl(var(--muted-foreground));
   text-transform: capitalize;
 }
 .agenda-empty-lbl {
-  margin-left: auto;
-  font-size: 10px;
-  font-style: italic;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: hsl(var(--muted-foreground));
-  opacity: 0.7;
+  opacity: 0.55;
 }

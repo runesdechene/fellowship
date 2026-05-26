@@ -22,4 +22,11 @@ describe('buildCalendarMonths', () => {
     const months = buildCalendarMonths([p], 2026)
     expect(months[4].events[0].paymentStatus).toBeNull()
   })
+
+  it('événement à cheval sur deux mois → uniquement dans le mois de début', () => {
+    const p = part({ events: { id: 'e1', name: 'Oustafest', start_date: '2026-07-30', end_date: '2026-08-02', city: 'Istres', department: '13', tags: ['musique'], image_url: null } })
+    const months = buildCalendarMonths([p], 2026)
+    expect(months[6].events).toHaveLength(1)  // juillet (mois de début)
+    expect(months[7].events).toHaveLength(0)  // août — pas de doublon
+  })
 })
