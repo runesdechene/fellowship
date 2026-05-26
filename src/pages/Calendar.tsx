@@ -4,8 +4,7 @@ import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-parti
 import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
 import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal'
-import { MobileYearGrid } from '@/components/calendar/MobileYearGrid'
-import { MobileMonthView } from '@/components/calendar/MobileMonthView'
+import { MobileAgenda } from '@/components/calendar/MobileAgenda'
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import './Calendar.css'
 
@@ -24,8 +23,6 @@ export function CalendarPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [modalEvent, setModalEvent] = useState<{ id: string; name: string } | null>(null)
 
-  const [mobileView, setMobileView] = useState<'year' | 'month'>('year')
-  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640)
 
   useEffect(() => {
@@ -33,32 +30,6 @@ export function CalendarPage() {
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
-  }, [])
-
-  const handleSelectMonth = useCallback((index: number) => {
-    setSelectedMonthIndex(index)
-    setMobileView('month')
-    window.history.pushState({ calendarView: 'month' }, '')
-  }, [])
-
-  // Handle browser back button: return to year view instead of leaving page
-  useEffect(() => {
-    const handlePopState = (e: PopStateEvent) => {
-      if (mobileView === 'month') {
-        e.preventDefault()
-        setMobileView('year')
-      }
-    }
-    window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
-  }, [mobileView])
-
-  const handlePrevMonth = useCallback(() => {
-    setSelectedMonthIndex(i => i > 0 ? i - 1 : 11)
-  }, [])
-
-  const handleNextMonth = useCallback(() => {
-    setSelectedMonthIndex(i => i < 11 ? i + 1 : 0)
   }, [])
 
   const { participations, loading } = useMyParticipations(year)
@@ -175,6 +146,8 @@ export function CalendarPage() {
 
   return (
     <div className="calendar-page">
+      {/* En-tête + filtres : collants sur mobile via .calendar-topbar (neutre en desktop) */}
+      <div className="calendar-topbar">
       {/* Header */}
       <div className="calendar-header">
         <div>
@@ -227,6 +200,7 @@ export function CalendarPage() {
           Amis visiteurs
         </button>
       </div>
+      </div>{/* /.calendar-topbar */}
 
       {/* Grid */}
       {loading ? (
@@ -259,25 +233,15 @@ export function CalendarPage() {
           })}
         </div>
       )}
-      {/* Mobile calendar */}
+      {/* Mobile calendar — agenda vertical */}
       {isMobile && (
         <div className="mobile-calendar">
-          {mobileView === 'year' ? (
-            <MobileYearGrid
-              months={slidingMonths}
-              currentMonth={now.getMonth()}
-              currentYear={now.getFullYear()}
-              onSelectMonth={handleSelectMonth}
-            />
-          ) : (
-            <MobileMonthView
-              month={slidingMonths[selectedMonthIndex]}
-              actorKind={actorKind}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onBackToYear={() => setMobileView('year')}
-            />
-          )}
+          <MobileAgenda
+            months={slidingMonths}
+            actorKind={actorKind}
+            friendParticipations={friendActivity}
+            onOpenFriends={(id, name) => setModalEvent({ id, name })}
+          />
         </div>
       )}
       {/* Friends modal — rendered at page level */}
