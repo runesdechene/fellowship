@@ -28,12 +28,12 @@
 .explorer .xb2 { width: 40vh; height: 40vh; right: 6%; top: 2%; background: hsl(330 60% 50% / 0.12); }
 .explorer .xb3 { width: 44vh; height: 44vh; left: 40%; bottom: -10%; background: hsl(45 90% 55% / 0.09); }
 .explorer .xb4 { width: 38vh; height: 38vh; left: -4%; bottom: 6%; background: hsl(152 50% 45% / 0.08); }
-/* Mode jour : halos bien présents (effet wow) en blend normal — PAS multiply (qui assombrissait). */
-.light .explorer .xb { opacity: 1; mix-blend-mode: normal; }
-.light .explorer .xb1 { background: color-mix(in srgb, var(--xh-accent, #e8a06a) 42%, transparent); }
-.light .explorer .xb2 { background: hsl(330 72% 62% / 0.26); }
-.light .explorer .xb3 { background: hsl(45 95% 58% / 0.30); }
-.light .explorer .xb4 { background: hsl(152 55% 52% / 0.22); }
+/* Mode jour : halos discrets en blend normal — PAS multiply (qui assombrissait le fond clair). */
+.light .explorer .xb { opacity: 0.6; mix-blend-mode: normal; }
+.light .explorer .xb1 { background: color-mix(in srgb, var(--xh-accent, #e8a06a) 22%, transparent); }
+.light .explorer .xb2 { background: hsl(330 70% 62% / 0.12); }
+.light .explorer .xb3 { background: hsl(45 95% 58% / 0.14); }
+.light .explorer .xb4 { background: hsl(152 55% 52% / 0.10); }
 
 /* ── Empty state (no events match the filters) ────────────────────── */
 .explorer .explorer-empty-coverflow {
@@ -88,8 +88,11 @@
 .explorer .top {
   display: flex;
   justify-content: center;
-  padding: 30px 0 60px;
+  padding: 18px 0;
   position: relative;
+  z-index: 3;
+  background: hsl(var(--card));
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .explorer .searchbar {
@@ -973,7 +976,7 @@
 
 /* « Repérer » : vert vif assorti au statut « Repéré » (cohérent partout), lisible nuit + jour. */
 .explorer .btn-star {
-  background: hsl(95 48% 40%);
+  background: hsl(122 55% 42%);
   color: #fff;
   transition: box-shadow .2s, transform .15s, filter .15s, background .2s, color .2s;
 }
