@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import { ChevronDown, Check } from 'lucide-react'
@@ -10,6 +10,17 @@ function initials(label: string): string {
 export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   const { person, entities, currentActor, currentActorRow, switchActor } = useAuth()
   const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Ferme le dropdown au clic en dehors.
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [open])
 
   const label = currentActor?.kind === 'entity'
     ? entities.find(e => e.actor_id === currentActor.id)?.brand_name ?? 'Entité'
@@ -28,7 +39,7 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   }
 
   return (
-    <div className="entity-menu">
+    <div className="entity-menu" ref={menuRef}>
       <button className="entity" onClick={() => setOpen(o => !o)}>
         <div className="av">{initials(label)}</div>
         {!collapsed && <div className="nm"><b>{label}</b><span>{sub}</span></div>}
