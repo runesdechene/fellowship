@@ -159,7 +159,7 @@ interface MonthBannerProps {
 }
 
 export function MonthBanner({ month, label, year }: MonthBannerProps) {
-  const color = 'rgba(61, 48, 40, 0.45)'
+  const color = 'hsl(var(--muted-foreground))'
 
   return (
     <div className="calendar-month-banner">

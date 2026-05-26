@@ -4,20 +4,16 @@ import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import type { CalendarMonth } from '@/hooks/use-calendar'
+import { participationChip, type ActorKind } from '@/lib/explorer'
 
 function useTagStyle() {
   const { tags } = useTags()
   return (slug: string) => {
     const t = tags.find(t => t.value === slug)
-    return t ? { bg: t.bg, color: t.color } : { bg: 'rgba(61,48,40,0.06)', color: 'rgba(61,48,40,0.45)' }
+    return t ? { bg: t.bg, color: t.color } : { bg: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }
   }
 }
 
-const STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
-  inscrit: { color: 'hsl(152 50% 38%)', bg: 'hsl(152 50% 38% / 0.12)', label: '✓' },
-  en_cours: { color: 'hsl(210 60% 50%)', bg: 'hsl(210 60% 50% / 0.12)', label: '●' },
-  interesse: { color: 'hsl(30 80% 50%)', bg: 'hsl(30 80% 50% / 0.12)', label: '○' },
-}
 
 function formatDateRange(start: Date, end: Date): string {
   const sameMonth = start.getMonth() === end.getMonth()
@@ -32,12 +28,13 @@ function formatDateRange(start: Date, end: Date): string {
 
 interface MobileMonthViewProps {
   month: CalendarMonth
+  actorKind: ActorKind
   onPrevMonth: () => void
   onNextMonth: () => void
   onBackToYear: () => void
 }
 
-export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear }: MobileMonthViewProps) {
+export function MobileMonthView({ month, actorKind, onPrevMonth, onNextMonth, onBackToYear }: MobileMonthViewProps) {
   const getTagStyle = useTagStyle()
   return (
     <div className="mobile-month-view">
@@ -65,7 +62,7 @@ export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear 
         <div className="mobile-month-events">
           {month.events.map(ev => {
             const tagStyle = getTagStyle(ev.primaryTag)
-            const statusCfg = STATUS_CONFIG[ev.status] ?? STATUS_CONFIG.interesse
+            const chip = participationChip(ev.status, ev.paymentStatus, actorKind, { isPast: ev.endDate < new Date() })
 
             return (
               <Link
@@ -88,13 +85,9 @@ export function MobileMonthView({ month, onPrevMonth, onNextMonth, onBackToYear 
                     <span>{ev.city} ({ev.department})</span>
                   </div>
                 </div>
-                {ev.status && (
-                  <div
-                    className="mobile-event-pill-status"
-                    style={{ background: statusCfg.bg, color: statusCfg.color }}
-                    title={ev.status}
-                  >
-                    {statusCfg.label}
+                {chip && (
+                  <div className={'mobile-event-pill-status ' + chip.variant} title={chip.label}>
+                    {chip.label}
                   </div>
                 )}
               </Link>

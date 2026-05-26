@@ -272,6 +272,7 @@ export function CalendarPage() {
           ) : (
             <MobileMonthView
               month={slidingMonths[selectedMonthIndex]}
+              actorKind={actorKind}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
               onBackToYear={() => setMobileView('year')}

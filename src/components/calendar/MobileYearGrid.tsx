@@ -15,7 +15,7 @@ const TAG_COLORS: Record<string, string> = {
 
 function getTagDotColor(tag: string): string {
   const key = Object.keys(TAG_COLORS).find(k => tag.toLowerCase().includes(k))
-  return key ? TAG_COLORS[key] : 'rgba(61,48,40,0.3)'
+  return key ? TAG_COLORS[key] : 'hsl(var(--muted-foreground))'
 }
 
 interface MobileYearGridProps {
