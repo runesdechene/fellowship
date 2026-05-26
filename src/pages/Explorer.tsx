@@ -242,7 +242,12 @@ export function ExplorerPage() {
     [participations]
   )
   const activePart = currentEvent ? partByEvent.get(currentEvent.id) : undefined
-  const activeChip = participationChip(activePart?.status, activePart?.payment_status, actorKind)
+  const activeChip = currentEvent
+    ? participationChip(activePart?.status, activePart?.payment_status, actorKind, {
+        boothCost: currentEvent.booth_cost,
+        isPast: new Date(currentEvent.end_date) < now,
+      })
+    : null
 
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'

@@ -51,6 +51,8 @@ export interface EventWithScore extends Event {
   avg_affluence: number | null
   avg_organisation: number | null
   avg_rentabilite: number | null
+  /** Coût du stand (emplacement). Null = événement gratuit pour l'exposant. */
+  booth_cost?: number | null
 }
 
 export interface ParticipationWithEvent extends Participation {

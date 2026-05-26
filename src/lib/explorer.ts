@@ -92,28 +92,45 @@ export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'popul
 }
 
 export type ActorKind = 'person' | 'entity'
-export interface StatusChip { label: string; variant: 'repere' | 'going' | 'pending' | 'paid' }
+
+export type StatusVariant =
+  | 'repere' | 'dossier' | 'accepte' | 'apayer' | 'inscrit'
+  | 'refuse' | 'termine' | 'going'
+
+export interface StatusChip { label: string; variant: StatusVariant }
+
+export interface ChipContext {
+  /** event.booth_cost — un coût 0/null = gratuit (pas d'étape paiement). */
+  boothCost?: number | null
+  /** end_date < now — override « Terminé », prioritaire sur tout le reste. */
+  isPast?: boolean
+}
 
 /**
- * Pastille de statut de participation, adaptée à l'acteur.
- * Personne : Repéré / J'y vais. Exposant : Repéré / En inscription / Inscrit / Paiement / Payé
- * (reflète `status` + `payment_status`, terminologie alignée sur le dashboard exposant).
+ * Pastille de statut de participation, vocabulaire unifié (Explorer / Événement / Calendrier).
+ * Exposant : Repéré → Dossier envoyé → Accepté → À payer → Inscrit (+ Refusé). Personne : Repéré / J'y vais.
+ * « Inscrit » = confirme/inscrit + payé (ou gratuit). « Accepté » = confirme avant paiement.
  */
 export function participationChip(
   status: string | null | undefined,
   payment: string | null | undefined,
   kind: ActorKind,
+  ctx?: ChipContext,
 ): StatusChip | null {
   if (!status) return null
+  if (ctx?.isPast) return { label: '✓ Terminé', variant: 'termine' }
   if (status === 'interesse') return { label: '★ Repéré', variant: 'repere' }
-  if (kind === 'entity') {
-    if (status === 'en_cours') return { label: '📝 En inscription', variant: 'pending' }
-    // status === 'inscrit' : on reflète le paiement
-    if (payment === 'paye') return { label: '💳 Payé', variant: 'paid' }
-    if (payment === 'en_cours_paiement') return { label: '💳 Paiement', variant: 'pending' }
-    return { label: '✓ Inscrit', variant: 'going' }
-  }
-  return { label: '✓ J’y vais', variant: 'going' }
+  if (status === 'refuse') return { label: '✕ Refusé', variant: 'refuse' }
+  if (kind === 'person') return { label: '✓ J’y vais', variant: 'going' }
+
+  // Exposant
+  if (status === 'en_cours') return { label: '📨 Dossier envoyé', variant: 'dossier' }
+
+  // Branche « accepté » : confirme (= Accepté) ou inscrit (legacy)
+  const isFree = ctx?.boothCost == null || ctx.boothCost <= 0
+  if (isFree || payment === 'paye') return { label: '✓ Inscrit', variant: 'inscrit' }
+  if (payment === 'a_payer') return { label: '€ À payer', variant: 'apayer' }
+  return { label: '✦ Accepté', variant: 'accepte' }
 }
 
 export function composeFilter(
