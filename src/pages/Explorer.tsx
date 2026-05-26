@@ -94,6 +94,10 @@ export function ExplorerPage() {
   // Vrai pendant qu'on manipule le scrubber → met l'autoplay en pause
   const [scrubbing, setScrubbing] = useState(false)
 
+  // Vrai quand la souris est sur le contenu/les boutons du bas → met l'autoplay en pause
+  // (sinon le slide change pile quand on veut cliquer un bouton).
+  const [hoverPause, setHoverPause] = useState(false)
+
   // ---------- Derived events ----------
   const now = useMemo(() => new Date(), [])
 
@@ -128,12 +132,12 @@ export function ExplorerPage() {
   )
 
   useEffect(() => {
-    if (reducedMotion || displayed.length <= 1 || scrubbing) return
+    if (reducedMotion || displayed.length <= 1 || scrubbing || hoverPause) return
     const id = setInterval(() => {
       setActiveIndex(i => (i + 1) % displayed.length)
     }, 4500)
     return () => clearInterval(id)
-  }, [displayed.length, reducedMotion, scrubbing])
+  }, [displayed.length, reducedMotion, scrubbing, hoverPause])
 
   // ---------- Keyboard ----------
   useEffect(() => {
@@ -314,7 +318,7 @@ export function ExplorerPage() {
                 onCardClick={ev => navigate(`/evenement/${ev.id}`)}
                 onAddImage={onAddImage}
               />
-              <div className="infozone">
+              <div className="infozone" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
                 <EventDock
                   event={currentEvent}
                   statusChip={activeChip}
@@ -328,7 +332,7 @@ export function ExplorerPage() {
           )}
         </div>
 
-        <div className="bottombar">
+        <div className="bottombar" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
           {currentEvent && (
             <div className="dock-cta">
               <Link to={`/evenement/${currentEvent.id}`} className="btn btn-ghost">Voir le festival</Link>
