@@ -617,18 +617,21 @@
 @media (max-width: 639px) {
   .mobile-calendar { display: block; }
   .calendar-grid { display: none; }
-  /* En-tête + filtres collants pendant le scroll de l'agenda.
-     Verre dépoli (pas un aplat) pour se fondre dans le dégradé radial du body
-     (--page-backdrop), sinon on voit une bande de couleur plate dégueu. */
-  .calendar-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: hsl(var(--background) / 0.72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    padding-bottom: 8px;
+
+  /* Bandeaux de mois full-bleed : ils débordent du padding de page (24px) pour
+     atteindre les bords de l'écran. Les pills d'événement, elles, restent en
+     retrait → rythme "titre pleine largeur / contenu indenté". */
+  .agenda-mh,
+  .agenda-empty {
+    margin-left: calc(-1 * var(--page-padding));
+    margin-right: calc(-1 * var(--page-padding));
   }
+  .agenda-mh .calendar-month-banner,
+  .agenda-empty {
+    border-radius: 0;
+  }
+  .agenda-empty { padding: 0 var(--page-padding); }
+  .agenda-count { right: 16px; }
 }
 
 /* ── Mobile Event Pill ────────────────────────────────────────────── */
