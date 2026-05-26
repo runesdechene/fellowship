@@ -76,11 +76,11 @@ export function ExplorerPage() {
   const [zone, setZone] = useState<Zone>(
     () => (stored.zone === 'mine' || stored.zone === 'france') ? stored.zone as Zone : 'france'
   )
-  const [period, setPeriod] = useState<Period>(
-    () => {
-      const validPeriods: Period[] = ['all', 'this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
-      return validPeriods.includes(stored.period as Period) ? stored.period as Period : 'all'
-    }
+  const validPeriods: Period[] = ['all', 'this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
+  // `periodChoice` = choix explicite de l'utilisateur (persisté) ; null = pas encore choisi → on
+  // applique le défaut selon l'acteur (dérivé plus bas), sans state à synchroniser.
+  const [periodChoice, setPeriodChoice] = useState<Period | null>(
+    () => validPeriods.includes(stored.period as Period) ? stored.period as Period : null
   )
 
   // ---------- Recherche texte (transient, non persistée) ----------
@@ -97,6 +97,10 @@ export function ExplorerPage() {
   // Vrai quand la souris est sur le contenu/les boutons du bas → met l'autoplay en pause
   // (sinon le slide change pile quand on veut cliquer un bouton).
   const [hoverPause, setHoverPause] = useState(false)
+
+  // Défaut « Quand » selon l'acteur : un EXPOSANT veut découvrir les nouveautés (« Ajoutés
+  // récemment ») ; un visiteur garde l'agenda à venir (« all »). Dérivé → pas de setState en effet.
+  const period: Period = periodChoice ?? (currentActor?.kind === 'entity' ? 'recent' : 'all')
 
   // ---------- Derived events ----------
   const now = useMemo(() => new Date(), [])
@@ -168,7 +172,7 @@ export function ExplorerPage() {
   }
 
   const handlePeriod = (p: Period) => {
-    setPeriod(p)
+    setPeriodChoice(p)
     persistFilters({ period: p })
     setActiveIndex(0)
   }
