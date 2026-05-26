@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
@@ -25,7 +26,7 @@ function useTagStyle() {
 
 export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFriends }: MobileAgendaProps) {
   const getTagStyle = useTagStyle()
-  const now = new Date()
+  const now = useMemo(() => new Date(), [])
 
   return (
     <div className="mobile-agenda">
@@ -85,7 +86,12 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                   </Link>
 
                   {friendsAtEvent.length > 0 && (
-                    <button className="agenda-companions" onClick={() => onOpenFriends(ev.id, ev.name)}>
+                    <button
+                      type="button"
+                      className="agenda-companions"
+                      aria-label={`Voir les ${friendsAtEvent.length} compagnon${friendsAtEvent.length > 1 ? 's' : ''} sur ${ev.name}`}
+                      onClick={() => onOpenFriends(ev.id, ev.name)}
+                    >
                       <div className="agenda-pav">
                         {friendsAtEvent.slice(0, 4).map((fp, i) => {
                           const nm = fp.actor_public?.label ?? '?'
