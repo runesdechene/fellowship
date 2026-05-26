@@ -811,13 +811,19 @@
   color: hsl(var(--muted-foreground));
   text-transform: capitalize;
 }
+/* Même gélule que le compteur des mois pleins (.agenda-count) → alignement
+   identique (le padding interne de la pilule décale le texte pareil). */
 .agenda-empty-lbl {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: hsl(var(--background) / 0.5);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground));
-  opacity: 0.55;
 }
 
 /* Overrides mobiles — PLACÉS APRÈS les règles de base agenda exprès : à
