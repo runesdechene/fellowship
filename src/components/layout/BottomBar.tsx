@@ -1,54 +1,63 @@
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   CalendarDays, CalendarClock, Compass, User, Heart,
-  LayoutDashboard, Store, Users, Shield, type LucideIcon,
+  LayoutDashboard, Store, Users, type LucideIcon,
 } from 'lucide-react'
-import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { mobilePrimaryFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
+import { AccountSheet } from './AccountSheet'
 import './BottomBar.css'
 
 const ICONS: Record<string, LucideIcon> = {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User,
 }
 
+function initials(label: string): string {
+  return label.split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('') || '?'
+}
+
 export function BottomBar() {
-  const { currentActor, currentActorRow, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, person } = useAuth()
   const navigate = useNavigate()
+  const [sheetOpen, setSheetOpen] = useState(false)
   const plan = planForActor(currentActor, currentActorRow)
-  // 4 premières entrées de la nav de l'acteur (mobile), + Admin si applicable.
-  const keys = navItemsFor(currentActor).slice(0, 4)
+  const keys = mobilePrimaryFor(currentActor)   // 3 liens principaux
+  const acctLabel = currentActor?.label ?? person?.display_name ?? 'Moi'
 
   return (
-    <nav className="bottom-bar">
-      {keys.map(key => {
-        const def = NAV_DEFS[key]
-        const Icon = ICONS[def.icon] ?? Compass
-        const state = entryState(key, plan)
-        if (state === 'active') {
+    <>
+      <nav className="bottom-bar">
+        {keys.map(key => {
+          const def = NAV_DEFS[key]
+          const Icon = ICONS[def.icon] ?? Compass
+          const state = entryState(key, plan)
+          const label = def.shortLabel ?? def.label
+          if (state === 'active') {
+            return (
+              <NavLink key={key} to={def.to} className={({ isActive }) => `bottom-bar-link ${isActive ? 'active' : ''}`}>
+                <Icon strokeWidth={1.5} />
+                <span>{label}</span>
+              </NavLink>
+            )
+          }
           return (
-            <NavLink key={key} to={def.to} className={({ isActive }) => `bottom-bar-link ${isActive ? 'active' : ''}`}>
+            <button key={key} onClick={() => navigate(def.to)} className="bottom-bar-link bottom-bar-link--muted">
               <Icon strokeWidth={1.5} />
-              <span>{def.label}</span>
-            </NavLink>
+              <span>{label}</span>
+            </button>
           )
-        }
-        return (
-          <button key={key} onClick={() => navigate(def.to)} className="bottom-bar-link bottom-bar-link--muted">
-            <Icon strokeWidth={1.5} />
-            <span>{def.label}</span>
-          </button>
-        )
-      })}
-      {isAdmin && (
-        <NavLink to="/admin" className={({ isActive }) => `bottom-bar-link ${isActive ? 'active' : ''}`}>
-          <Shield strokeWidth={1.5} />
-          <span>Admin</span>
-        </NavLink>
-      )}
-      <div className="bottom-bar-toggle">
-        <ThemeToggle />
-      </div>
-    </nav>
+        })}
+        <button
+          className={`bottom-bar-link bottom-bar-account${sheetOpen ? ' active' : ''}`}
+          onClick={() => setSheetOpen(true)}
+          aria-label="Compte et options"
+        >
+          <span className="bottom-bar-avatar">{initials(acctLabel)}</span>
+          <span>Compte</span>
+        </button>
+      </nav>
+      <AccountSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+    </>
   )
 }

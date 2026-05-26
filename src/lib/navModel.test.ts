@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navItemsFor, entryState, isRouteValidFor, planForActor, NAV_DEFS, type NavKey } from './navModel'
+import { navItemsFor, entryState, isRouteValidFor, planForActor, mobilePrimaryFor, mobileSecondaryFor, NAV_DEFS, type NavKey } from './navModel'
 
 const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
@@ -28,6 +28,20 @@ describe('isRouteValidFor', () => {
     expect(isRouteValidFor('/explorer', exposant)).toBe(true)
   })
   it('route partagée (event) toujours valide', () => expect(isRouteValidFor('/evenement/abc', person)).toBe(true))
+})
+
+describe('mobilePrimaryFor / mobileSecondaryFor', () => {
+  it('exposant : 3 primaires = Cockpit/Calendrier/Explorer', () => {
+    expect(mobilePrimaryFor(exposant)).toEqual(['dashboard', 'calendrier', 'explorer'])
+  })
+  it('visiteur : 3 primaires = Explorer/Mes dates/Mes créateurs', () => {
+    expect(mobilePrimaryFor(person)).toEqual(['explorer', 'mes-dates', 'mes-createurs'])
+  })
+  it('secondaire = nav de l\'acteur moins les primaires (sans doublon)', () => {
+    const sec = mobileSecondaryFor(exposant)
+    expect(sec).toEqual(['communaute', 'vitrine', 'reglages'])
+    expect(sec.some(k => mobilePrimaryFor(exposant).includes(k))).toBe(false)
+  })
 })
 
 describe('planForActor', () => {

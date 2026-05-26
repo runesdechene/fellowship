@@ -53,5 +53,19 @@
    et grossirait le texte vs les NavLink). La taille/police viennent de .bottom-bar-link. */
 .bottom-bar-link--muted { background: none; border: none; cursor: pointer; opacity: .6; }
 
-/* Bascule thème — slot compact en fin de barre (pas flex:1, pour ne pas s'étirer). */
-.bottom-bar-toggle { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 0 12px; }
+/* Tête de compte (à droite) — ouvre la feuille d'options secondaires. */
+.bottom-bar-account { background: none; border: none; cursor: pointer; }
+.bottom-bar-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+  background: linear-gradient(135deg, var(--copper), var(--amber));
+  color: #2a1810;
+}
