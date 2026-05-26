@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.37',
+    date: '2026-05-26',
+    title: 'Calendrier — nouvelle direction artistique',
+    changes: [
+      'Le calendrier passe à la DA « Nuit de Festival » (cartes-mois, bannières saisonnières, mode nuit/jour)',
+      'Pastilles de statut unifiées avec le reste de l\'app (Repéré, Accepté, À payer, Inscrit, Refusé)',
+      'Nouvelle section « Tes compagnons ce mois-ci » regroupant les dates où vont tes contacts',
+      'Filtres restylés ; vues mobiles harmonisées',
+    ],
+  },
+  {
     version: '0.7.36',
     date: '2026-05-26',
     title: 'Statuts de participation unifiés',
