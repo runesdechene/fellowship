@@ -67,7 +67,6 @@ export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, 
           const badge = eventBadge(ev, now)
           const part = partByEvent.get(ev.id)
           const statusChip = participationChip(part?.status, part?.payment_status, actorKind, {
-            boothCost: ev.booth_cost,
             isPast: new Date(ev.end_date) < now,
           })
           return (

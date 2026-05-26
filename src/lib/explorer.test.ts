@@ -184,32 +184,28 @@ describe('participationChip', () => {
     expect(c?.label).toContain('Dossier')
   })
 
-  it('exposant : confirme + paiement non renseigné + payant → Accepté', () => {
-    const c = participationChip('confirme', null, 'entity', { boothCost: 120 })
+  it('exposant : confirme + paiement non renseigné → Accepté', () => {
+    const c = participationChip('confirme', null, 'entity')
     expect(c?.variant).toBe('accepte')
     expect(c?.label).toContain('Accepté')
   })
 
-  it('exposant : confirme + a_payer + payant → À payer', () => {
-    const c = participationChip('confirme', 'a_payer', 'entity', { boothCost: 120 })
+  it('exposant : confirme + a_payer → À payer', () => {
+    const c = participationChip('confirme', 'a_payer', 'entity')
     expect(c?.variant).toBe('apayer')
     expect(c?.label).toContain('À payer')
   })
 
   it('exposant : confirme + paye → Inscrit', () => {
-    const c = participationChip('confirme', 'paye', 'entity', { boothCost: 120 })
+    const c = participationChip('confirme', 'paye', 'entity')
     expect(c?.variant).toBe('inscrit')
     expect(c?.label).toContain('Inscrit')
   })
 
-  it('exposant : event gratuit (booth_cost 0/null) → Inscrit direct', () => {
-    expect(participationChip('confirme', 'a_payer', 'entity', { boothCost: 0 })?.variant).toBe('inscrit')
-    expect(participationChip('confirme', null, 'entity', { boothCost: null })?.variant).toBe('inscrit')
-  })
-
   it('exposant : inscrit legacy traité comme confirme (reflète le paiement)', () => {
-    expect(participationChip('inscrit', 'paye', 'entity', { boothCost: 120 })?.variant).toBe('inscrit')
-    expect(participationChip('inscrit', 'a_payer', 'entity', { boothCost: 120 })?.variant).toBe('apayer')
+    expect(participationChip('inscrit', 'paye', 'entity')?.variant).toBe('inscrit')
+    expect(participationChip('inscrit', 'a_payer', 'entity')?.variant).toBe('apayer')
+    expect(participationChip('inscrit', null, 'entity')?.variant).toBe('accepte')
   })
 
   it('refuse → Refusé', () => {

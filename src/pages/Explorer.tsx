@@ -244,7 +244,6 @@ export function ExplorerPage() {
   const activePart = currentEvent ? partByEvent.get(currentEvent.id) : undefined
   const activeChip = currentEvent
     ? participationChip(activePart?.status, activePart?.payment_status, actorKind, {
-        boothCost: currentEvent.booth_cost,
         isPast: new Date(currentEvent.end_date) < now,
       })
     : null
