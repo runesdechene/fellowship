@@ -1,0 +1,661 @@
+/* ── Vitrine exposant — page styles ────────────────────────────────── */
+/* Scoped to .vitrine root (lives inside a scrollable page).           */
+/* Token map:                                                           */
+/*   --surface   → hsl(var(--card))                                    */
+/*   --surface2  → hsl(var(--secondary))                               */
+/*   --text      → hsl(var(--foreground))                              */
+/*   --muted     → hsl(var(--muted-foreground))                        */
+/*   --line      → hsl(var(--border))                                  */
+/*   --bg        → hsl(var(--background))                              */
+/*   --cop       → var(--copper)                                       */
+/*   --amber     → var(--amber)                                        */
+/*   --green     → var(--forest)                                       */
+
+/* ── SVG baseline ──────────────────────────────────────────────────── */
+.vitrine svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Page shell ─────────────────────────────────────────────────────── */
+.vitrine {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 32px 60px;
+  position: relative;
+}
+
+/* ── Cover ──────────────────────────────────────────────────────────── */
+.v-cover {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  /* Extends to full-width beyond .vitrine's padding by using negative margin */
+  margin-left: -32px;
+  margin-right: -32px;
+}
+
+.v-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient fade to background (same as maquette .cover::after) */
+.v-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.12) 40%,
+    hsl(var(--background)) 100%
+  );
+  pointer-events: none;
+}
+
+.v-cover-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--copper) 60%, transparent),
+    color-mix(in srgb, var(--amber) 40%, hsl(var(--background)))
+  );
+}
+
+/* Mode jour : dégradé de fond moins sombre sur la couverture */
+.light .v-cover::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 248, 240, 0.08) 40%,
+    hsl(var(--background)) 100%
+  );
+}
+
+/* ── Header vitrine ─────────────────────────────────────────────────── */
+.v-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  margin-top: -58px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Avatar */
+.v-av {
+  width: 124px;
+  height: 124px;
+  border-radius: 26px;
+  border: 4px solid hsl(var(--background));
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback avatar — initials on gradient */
+.v-av-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 40px;
+  color: #fff;
+}
+
+/* Mode jour : ombre plus douce */
+.light .v-av {
+  box-shadow: 0 12px 28px rgba(60, 45, 35, 0.2);
+}
+
+/* Identity */
+.v-id {
+  flex: 1;
+  padding-bottom: 6px;
+  min-width: 0;
+}
+
+.v-id .v-brand {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: hsl(var(--foreground));
+  line-height: 1.05;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Verified badge */
+.v-verified {
+  color: var(--amber);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.v-verified svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 2.4;
+}
+
+/* Subtitle (craft · city) */
+.v-sub {
+  font-size: 13.5px;
+  color: hsl(var(--muted-foreground));
+  margin: 5px 0 11px;
+  line-height: 1.4;
+}
+
+/* Specialties chips */
+.v-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.v-chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 99px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+/* Actions row */
+.v-act {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+.v-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 11px;
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.14s;
+  white-space: nowrap;
+}
+
+.v-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2;
+}
+
+/* Primary (follow) */
+.v-btn-p {
+  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  color: #fff;
+  box-shadow: 0 8px 24px hsl(20 65% 32% / 0.45);
+}
+
+.v-btn-p:hover {
+  filter: brightness(1.07);
+}
+
+/* Follow-on state (suivi) */
+.v-btn-follow.is-on {
+  background: color-mix(in srgb, var(--forest) 20%, transparent);
+  border-color: color-mix(in srgb, var(--forest) 45%, transparent);
+  color: var(--forest);
+  box-shadow: none;
+}
+
+/* Icon button */
+.v-iconbtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.v-iconbtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.v-iconbtn svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 2;
+}
+
+/* Mode jour : iconbtn sur fond clair */
+.light .v-iconbtn {
+  background: hsl(var(--secondary));
+  border-color: hsl(var(--border));
+}
+
+.light .v-iconbtn:hover {
+  background: hsl(var(--card));
+  border-color: var(--amber);
+}
+
+/* ── Stats réseau ───────────────────────────────────────────────────── */
+.v-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 4px;
+  flex-wrap: wrap;
+}
+
+/* Stat card (clickable) — followers / friends */
+.v-stat {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 13px;
+  padding: 11px 16px;
+  cursor: pointer;
+  transition: 0.14s;
+}
+
+.v-stat:hover {
+  border-color: color-mix(in srgb, var(--amber) 35%, hsl(var(--border)));
+}
+
+/* Stacked avatars */
+.v-avs {
+  display: flex;
+}
+
+.v-avs span {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid hsl(var(--card));
+  margin-left: -9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.v-avs span:first-child {
+  margin-left: 0;
+}
+
+.v-avs span img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.v-stat .v-st b {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
+  color: hsl(var(--foreground));
+}
+
+.v-stat .v-st span {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  margin-left: 5px;
+}
+
+/* Plain stat card (non-interactive figure) */
+.v-stat-plain {
+  display: flex;
+  flex-direction: column;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 13px;
+  padding: 9px 16px;
+}
+
+.v-stat-plain b {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
+  color: hsl(var(--foreground));
+}
+
+.v-stat-plain span {
+  font-size: 11.5px;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Two-column grid (main + sidebar) ──────────────────────────────── */
+.v-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 26px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.v-col-main {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
+
+.v-col-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 22px;
+}
+
+/* ── Card ───────────────────────────────────────────────────────────── */
+.v-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.v-card h2 {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.v-card h2 svg {
+  width: 15px;
+  height: 15px;
+  color: var(--amber);
+  stroke-width: 2;
+}
+
+/* Mode jour : ombre douce sur les cartes */
+.light .v-card {
+  box-shadow: 0 2px 12px rgba(60, 45, 35, 0.06);
+}
+
+/* ── Gallery ────────────────────────────────────────────────────────── */
+.v-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.v-gphoto {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.v-gphoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+
+.v-gphoto:hover img {
+  transform: scale(1.07);
+}
+
+/* ── Links ──────────────────────────────────────────────────────────── */
+.v-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.v-linkrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 11px;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: 0.14s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.v-linkrow:hover {
+  border-color: color-mix(in srgb, var(--amber) 40%, hsl(var(--border)));
+}
+
+.v-linkrow .v-li {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-linkrow .v-li svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+.v-linkrow .v-lt {
+  flex: 1;
+  min-width: 0;
+}
+
+.v-linkrow .v-lt b {
+  font-family: var(--font-heading);
+  font-size: 13.5px;
+  color: hsl(var(--foreground));
+  display: block;
+  line-height: 1.2;
+}
+
+.v-linkrow .v-lt span {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.v-linkrow .v-lext {
+  width: 15px;
+  height: 15px;
+  color: hsl(var(--muted-foreground));
+  flex-shrink: 0;
+  stroke-width: 2.2;
+}
+
+/* ── Season / Où me rencontrer ──────────────────────────────────────── */
+.v-fest {
+  display: flex;
+  gap: 13px;
+  padding: 11px 0;
+  border-top: 1px solid hsl(var(--border));
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.14s;
+}
+
+.v-fest:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.v-fest:hover {
+  opacity: 0.82;
+}
+
+.v-fest .v-fimg {
+  width: 50px;
+  height: 68px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: hsl(var(--secondary));
+}
+
+.v-fest .v-fimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.v-fest .v-fb {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.v-fest .v-fb b {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.v-fest .v-fmeta {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Past events block */
+.v-fest.v-past {
+  opacity: 0.55;
+}
+
+.v-past-head {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: hsl(var(--muted-foreground));
+  margin: 16px 0 4px;
+}
+
+/* Empty state */
+.v-season-empty {
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+  padding: 8px 0;
+}
+
+/* ── Responsive: ≤1080px → 1-col, sidebar static ───────────────────── */
+@media (max-width: 1080px) {
+  .v-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .v-col-side {
+    position: static;
+  }
+
+  .v-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .v-act {
+    padding-bottom: 0;
+  }
+
+  .v-cover {
+    margin-left: -24px;
+    margin-right: -24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vitrine {
+    padding: 0 16px 48px;
+  }
+
+  .v-cover {
+    margin-left: -16px;
+    margin-right: -16px;
+    height: 180px;
+  }
+
+  .v-head {
+    margin-top: -40px;
+  }
+
+  .v-av {
+    width: 88px;
+    height: 88px;
+    border-radius: 18px;
+  }
+
+  .v-av-fallback {
+    font-size: 30px;
+  }
+
+  .v-id .v-brand {
+    font-size: 24px;
+  }
+
+  .v-gallery {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+}
