@@ -20,7 +20,7 @@ interface EventDashboardProps {
 const PARTICIPATION_STEPS = [
   { key: 'interesse' as const, label: 'Repéré' },
   { key: 'en_cours' as const, label: 'Dossier envoyé' },
-  { key: 'confirme' as const, label: 'Accepté' },
+  { key: 'inscrit' as const, label: 'Accepté' },
 ]
 
 const PAYMENT_STEPS = [
@@ -37,7 +37,7 @@ const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
     title: '📨 Dossier envoyé',
     text: 'Ta candidature est envoyée. Marque « Accepté » dès que l\'organisateur valide ton dossier.',
   },
-  confirme: {
+  inscrit: {
     title: '✦ Accepté',
     text: 'Ton dossier est accepté. Renseigne le paiement ci-dessous. Une fois payé, tu passes « Inscrit ».',
   },
@@ -70,7 +70,7 @@ export function EventDashboard({
     if (!participation) return
     const update: { status: ParticipationStatus; visibility?: 'amis' | 'public' } = { status }
     // Inscrit → automatically public (visible on embed widget / public profile)
-    if (status === 'inscrit' || status === 'confirme') update.visibility = 'public'
+    if (status === 'inscrit') update.visibility = 'public'
     const { data } = await updateParticipation(participation.id, update)
     if (data) {
       onUpdate(data)
@@ -97,7 +97,7 @@ export function EventDashboard({
                 <>
                   <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Repéré</Button>
                   <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>Dossier envoyé</Button>
-                  <Button size="sm" onClick={() => onJoin('confirme', 'public')}>Accepté</Button>
+                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>Accepté</Button>
                 </>
               ) : (
                 <>

@@ -553,6 +553,7 @@
 .event-stepper-btn.pay-active.interesse { background: hsl(38 90% 50% / 0.15); color: hsl(38 80% 35%); }
 .event-stepper-btn.pay-active.en_cours { background: hsl(210 60% 50% / 0.12); color: hsl(210 60% 40%); }
 .event-stepper-btn.pay-active.inscrit { background: hsl(152 50% 38% / 0.15); color: hsl(152 50% 32%); }
+.event-stepper-btn.pay-active.refuse { background: hsl(8 62% 50% / 0.15); color: hsl(8 60% 45%); }
 
 /* Payment stepper */
 .event-stepper-btn.pay-active.a_payer { background: hsl(0 65% 55% / 0.12); color: hsl(0 65% 45%); }
@@ -583,6 +584,10 @@
 .event-info-box.inscrit { background: hsl(152 50% 38% / 0.08); border: 1px solid hsl(152 50% 38% / 0.2); }
 .event-info-box.inscrit .event-info-box-title { color: hsl(152 50% 32%); }
 .event-info-box.inscrit .event-info-box-text { color: hsl(152 25% 22%); }
+
+.event-info-box.refuse { background: hsl(8 62% 50% / 0.08); border: 1px solid hsl(8 62% 50% / 0.2); }
+.event-info-box.refuse .event-info-box-title { color: hsl(8 60% 45%); }
+.event-info-box.refuse .event-info-box-text { color: hsl(8 35% 28%); }
 
 @keyframes event-info-box-in {
   from { opacity: 0; transform: translateY(-4px); }
@@ -853,7 +858,7 @@
 .event-badge-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); color: var(--status-apayer); }
 .event-badge-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 .event-badge-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
-.event-badge-status.termine { background: rgba(255,240,225,.08); color: var(--muted-foreground); }
+.event-badge-status.termine { background: rgba(255,240,225,.08); color: hsl(var(--muted-foreground)); }
 .event-badge-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 
 .event-mobile-status { padding: 3px 10px; border-radius: 16px; font-size: 11px; font-weight: 700; }
@@ -863,5 +868,5 @@
 .event-mobile-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); color: var(--status-apayer); }
 .event-mobile-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 .event-mobile-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
-.event-mobile-status.termine { background: rgba(255,240,225,.08); color: var(--muted-foreground); }
+.event-mobile-status.termine { background: rgba(255,240,225,.08); color: hsl(var(--muted-foreground)); }
 .event-mobile-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }

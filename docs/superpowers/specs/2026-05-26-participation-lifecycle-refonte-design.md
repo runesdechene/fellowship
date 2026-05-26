@@ -60,9 +60,9 @@ Objectif : **zéro migration destructive de `status`**. On reste compatible avec
    ```
    (Postgres : `ADD VALUE` ne peut pas tourner dans un bloc transactionnel partagé avec son usage — migration dédiée, voir plan.)
 
-2. **`confirme` est réutilisé** comme « Accepté » (valeur jusqu'ici inutilisée dans l'UI).
+2. **`inscrit` reste le statut « accepté »** (le dashboard pose `inscrit`, comme avant). La distinction Accepté / À payer / Inscrit est **dérivée du `payment_status`** : `inscrit` + paiement non renseigné → Accepté ; `+ a_payer` → À payer ; `+ paye` → Inscrit. **Raison décisive :** la visibilité publique (politique RLS « inscrit is public » + requêtes profil public / embed / participants filtrant `status = 'inscrit'`) est keyée sur `inscrit`. Repurposer vers `confirme` rendrait les exposants acceptés **invisibles** publiquement (régression). On ne touche donc pas à cette mécanique.
 
-3. **`inscrit` devient un alias *legacy*** : pour un exposant, `participationChip` traite `inscrit` **exactement comme `confirme`** (branche « accepté », le paiement décide ensuite À payer/Inscrit). → **aucune migration des lignes `inscrit`** ; les anciennes participations s'affichent correctement. Le dashboard, lui, **pose désormais `confirme`** (plus `inscrit`) pour un exposant.
+3. **`confirme` n'est pas utilisé** : valeur enum laissée inerte. `participationChip` la traite défensivement comme `inscrit` (branche « accepté »), mais aucun chemin de l'app ne la pose. **Aucune migration de lignes** : les `inscrit` existants s'affichent correctement.
 
 4. **Paiement** : migrer les valeurs obsolètes
    ```sql

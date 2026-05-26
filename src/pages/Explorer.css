@@ -1040,7 +1040,7 @@
 .explorer .eh-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); border: 1px solid color-mix(in srgb, var(--status-apayer)  40%, transparent); color: var(--status-apayer); }
 .explorer .eh-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
 .explorer .eh-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); border: 1px solid color-mix(in srgb, var(--status-refuse)  40%, transparent); color: var(--status-refuse); }
-.explorer .eh-status.termine { background: rgba(255,240,225,.08); border: 1px solid var(--border); color: var(--muted-foreground); }
+.explorer .eh-status.termine { background: rgba(255,240,225,.08); border: 1px solid hsl(var(--border)); color: hsl(var(--muted-foreground)); }
 .explorer .eh-status.going   { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); border: 1px solid color-mix(in srgb, var(--status-inscrit) 45%, transparent); color: var(--status-inscrit); }
 .explorer .eh-meta { display: flex; align-items: center; gap: 18px; }
 .explorer .eh-item { display: flex; align-items: center; gap: 9px; }
