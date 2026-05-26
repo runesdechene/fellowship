@@ -88,11 +88,8 @@
 .explorer .top {
   display: flex;
   justify-content: center;
-  padding: 18px 0;
+  padding: 30px 0 60px;
   position: relative;
-  z-index: 3;
-  background: hsl(var(--card));
-  border-bottom: 1px solid hsl(var(--border));
 }
 
 .explorer .searchbar {
@@ -118,11 +115,11 @@
   pointer-events: none;
 }
 
-/* Day-mode overrides */
+/* Day-mode : le sélecteur Quoi/Où/Quand sur fond blanc franc. */
 .light .explorer .searchbar {
-  background: rgba(60, 45, 35, 0.06);
-  border-color: rgba(60, 45, 35, 0.14);
-  box-shadow: 0 10px 28px rgba(60, 45, 35, 0.10);
+  background: #ffffff;
+  border-color: rgba(60, 45, 35, 0.12);
+  box-shadow: 0 10px 28px rgba(60, 45, 35, 0.12);
 }
 
 /* ── Segments ─────────────────────────────────────────────────────── */
