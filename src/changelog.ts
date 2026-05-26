@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.36',
+    date: '2026-05-26',
+    title: 'Statuts de participation unifiés',
+    changes: [
+      'Nouveau cycle clair pour les exposants : Repéré → Dossier envoyé → Accepté → À payer → Inscrit',
+      'Statut « Refusé » pour garder l\'historique d\'un dossier non retenu',
+      'Vocabulaire et couleurs de statut harmonisés entre l\'Explorer et la page événement',
+      '« Repéré » passe au vert, cohérent avec le bouton Repérer',
+    ],
+  },
+  {
     version: '0.7.3',
     date: '2026-05-09',
     title: 'Explorer — vue grille avec 3 modes',
