@@ -47,3 +47,12 @@ export function isRouteValidFor(path: string, actor: { kind: string; entityType:
   const navPaths = navItemsFor(actor).map(k => NAV_DEFS[k].to)
   return navPaths.some(p => path.startsWith(p)) || SHARED_PREFIXES.some(p => path.startsWith(p))
 }
+
+/** Plan effectif de l'acteur actif : le Pro vit sur l'entité, jamais sur la personne. */
+export function planForActor(
+  actor: { kind: string } | null,
+  entityRow: { plan?: Plan | null } | null,
+): Plan {
+  if (actor?.kind === 'entity') return entityRow?.plan === 'pro' ? 'pro' : 'free'
+  return 'free'
+}

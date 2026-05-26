@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navItemsFor, entryState, isRouteValidFor, NAV_DEFS, type NavKey } from './navModel'
+import { navItemsFor, entryState, isRouteValidFor, planForActor, NAV_DEFS, type NavKey } from './navModel'
 
 const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
@@ -28,6 +28,17 @@ describe('isRouteValidFor', () => {
     expect(isRouteValidFor('/explorer', exposant)).toBe(true)
   })
   it('route partagée (event) toujours valide', () => expect(isRouteValidFor('/evenement/abc', person)).toBe(true))
+})
+
+describe('planForActor', () => {
+  it('entité pro → pro', () => expect(planForActor({ kind: 'entity' }, { plan: 'pro' })).toBe('pro'))
+  it('entité free → free', () => expect(planForActor({ kind: 'entity' }, { plan: 'free' })).toBe('free'))
+  it('entité sans plan (null) → free', () => {
+    expect(planForActor({ kind: 'entity' }, { plan: null })).toBe('free')
+    expect(planForActor({ kind: 'entity' }, {})).toBe('free')
+  })
+  it('personne → free quelle que soit la valeur', () => expect(planForActor({ kind: 'person' }, { plan: 'pro' })).toBe('free'))
+  it('acteur null → free', () => expect(planForActor(null, null)).toBe('free'))
 })
 
 it('NAV_DEFS couvre toutes les clés utilisées', () => {
