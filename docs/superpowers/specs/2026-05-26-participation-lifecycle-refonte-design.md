@@ -22,9 +22,11 @@ On unifie le vocabulaire et on aligne le cycle sur le **vrai parcours d'un expos
 |---|---|---|---|
 | ★ **Repéré** | `status = interesse` | tilleul `#a8cc7a` | repéré, pas candidaté (= couleur du bouton « Repérer ») |
 | 📨 **Dossier envoyé** | `status = en_cours` | bleu `#86bce8` | candidature envoyée, en attente de réponse |
-| ✦ **Accepté** | `status = confirme`/`inscrit` + paiement non renseigné (`payment_status` null) **et** `booth_cost > 0` | émeraude `#5fd9a0` | dossier validé, paiement débloqué |
-| € **À payer** | `status = confirme`/`inscrit` + `payment_status = a_payer` + `booth_cost > 0` | ambre `#ffce85` | action requise : régler le stand |
-| ✓ **Inscrit** | `status = confirme`/`inscrit` + `payment_status = paye` **OU** `booth_cost` 0/null | forêt `#2ea36f` | payé (ou gratuit) — verrouillé |
+| ✦ **Accepté** | `status = confirme`/`inscrit` + paiement non renseigné (`payment_status` null) | émeraude `#5fd9a0` | dossier validé, paiement débloqué |
+| € **À payer** | `status = confirme`/`inscrit` + `payment_status = a_payer` | ambre `#ffce85` | action requise : régler le stand |
+| ✓ **Inscrit** | `status = confirme`/`inscrit` + `payment_status = paye` | forêt `#2ea36f` | payé — verrouillé |
+
+> **Note (2026-05-26) :** pour un exposant, le stand est **toujours payant** — il n'y a donc pas de cas « gratuit ». Et il n'existe aucun champ de coût au niveau de l'**événement** (`booth_cost` vit sur `event_reports`, le bilan post-événement). Le cycle est donc piloté uniquement par `payment_status` de la participation.
 | ✕ **Refusé** | `status = refuse` | terracotta `#e8897a` | candidature refusée — atténué + bouton « retirer » |
 | ✓ **Terminé** | `end_date < aujourd'hui` (override) | gris sépia | date passée — neutre, carte atténuée |
 
@@ -70,7 +72,7 @@ Objectif : **zéro migration destructive de `status`**. On reste compatible avec
 
 5. **Régénérer les types** Supabase (`participation_status` gagne `refuse`).
 
-> Note : `booth_cost` (sur `events`) et `payment_status` (sur `participations`) existent déjà — aucune création de colonne.
+> Note : `payment_status` (sur `participations`) existe déjà — aucune création de colonne. (`booth_cost` est sur `event_reports`, pas sur `events` : non utilisé ici.)
 
 ## Architecture logicielle
 
@@ -86,7 +88,6 @@ export type StatusVariant =
 export interface StatusChip { label: string; variant: StatusVariant }
 
 export interface ChipContext {
-  boothCost?: number | null  // event.booth_cost — pour le cas « gratuit »
   isPast?: boolean           // end_date < now — override « Terminé »
 }
 
@@ -106,10 +107,9 @@ Logique :
 5. **Personne** (`kind === 'person'`) → `{ "✓ J'y vais", 'going' }`.
 6. **Exposant**, branche « en cours » : `status === 'en_cours'` → `{ '📨 Dossier envoyé', 'dossier' }`.
 7. **Exposant**, branche « accepté » (`status === 'confirme'` **ou** `'inscrit'`) :
-   - `boothCost` 0/null → `{ '✓ Inscrit', 'inscrit' }` (gratuit).
    - `payment === 'paye'` → `{ '✓ Inscrit', 'inscrit' }`.
    - `payment === 'a_payer'` → `{ '€ À payer', 'apayer' }`.
-   - sinon (paiement non renseigné, payant) → `{ '✦ Accepté', 'accepte' }`.
+   - sinon (paiement non renseigné) → `{ '✦ Accepté', 'accepte' }`.
 
 C'est une **fonction pure**, entièrement testable (étendre `src/lib/explorer.test.ts`).
 
@@ -140,7 +140,7 @@ Les pastilles existantes (`.explorer .card-status.*`, `.explorer .eh-status.*`) 
   - **Refusé** conserve la participation : le statut reste, l'événement est **grisé** (sur le calendrier comme ailleurs). Garde l'historique du refus.
   - **« Retirer »** = le chemin de **désinscription existant** (`onLeave` / « Se désinscrire ») : supprime la participation **et tout statut**, l'événement disparaît. Aucun nouveau code — on réutilise `onLeave`.
   - Refusé reste grisé tant que l'utilisateur ne clique pas « retirer ».
-- Le bloc **Paiement** se débloque sur `confirme` (au lieu de `inscrit`) **et** seulement si `booth_cost > 0`.
+- Le bloc **Paiement** se débloque sur `confirme` (au lieu de `inscrit`) — le stand est toujours payant pour un exposant.
 - `PAYMENT_STEPS` : 2 états — `À payer` (a_payer), `Payé` (paye). **Supprimer** `en_cours_paiement`.
 - Le badge replié mobile (`EventDashboardMobile`) affiche le libellé dérivé via `participationChip` (plus de `STATUS_LABELS`/`PAYMENT_LABELS` maison divergents).
 - `INFO_MESSAGES` : ajuster les libellés (Accepté / Refusé).

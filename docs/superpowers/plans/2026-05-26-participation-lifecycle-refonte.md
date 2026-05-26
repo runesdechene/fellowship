@@ -397,7 +397,6 @@ interface EventHeroProps {
 ```tsx
 export function EventHero({ event, friendCount, participationStatus, paymentStatus, isExposant, onParticipantsClick }: EventHeroProps) {
   const chip = participationChip(participationStatus, paymentStatus, isExposant ? 'entity' : 'person', {
-    boothCost: event.booth_cost,
     isPast: new Date(event.end_date) < new Date(),
   })
 ```
@@ -511,7 +510,9 @@ const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
 }
 ```
 
-- [ ] **Step 2: Débloquer le paiement sur `confirme` (+ event payant) au lieu de `inscrit`**
+- [ ] **Step 2: Débloquer le paiement sur `confirme` au lieu de `inscrit`**
+
+> Pour un exposant le stand est toujours payant ; le bloc paiement s'affiche dès qu'un dossier est accepté (`confirme`), et reste valable pour les `inscrit` legacy. Pas de champ `booth_cost` au niveau événement (il vit sur `event_reports`) — aucun prop `event` à ajouter.
 
 Dans `EventDashboard.tsx`, remplacer la condition d'affichage du bloc Paiement (ligne 164) :
 
@@ -519,13 +520,11 @@ Dans `EventDashboard.tsx`, remplacer la condition d'affichage du bloc Paiement (
         {participation.status === 'inscrit' && (
 ```
 
-par (le bloc paiement n'a de sens que pour un dossier accepté **et** un stand payant) :
+par :
 
 ```tsx
-        {(participation.status === 'confirme' || participation.status === 'inscrit') && (event.booth_cost ?? 0) > 0 && (
+        {(participation.status === 'confirme' || participation.status === 'inscrit') && (
 ```
-
-> `EventDashboard` doit recevoir l'`event` pour lire `booth_cost`. Vérifier les props : si `event` n'est pas déjà passé, l'ajouter à `EventDashboardProps` (`event: Event`) et au site d'appel dans `EventPage.tsx` (et `EventDashboardMobile` qui relaie `{...props}`). Importer `Event` depuis `@/types/database`.
 
 - [ ] **Step 3: Ajouter l'action « Refusé » sur le stepper participation**
 
@@ -555,7 +554,7 @@ b) Remplacer le bloc `{participation ? ( <> ...badges... </> ) : (...)}` (lignes
                 participation.status as string,
                 (participation.payment_status as string | null) ?? null,
                 props.isExposant ? 'entity' : 'person',
-                { boothCost: props.event?.booth_cost, isPast: props.isPast },
+                { isPast: props.isPast },
               )
               return chip ? (
                 <span className={'event-mobile-status ' + chip.variant}>{chip.label}</span>
@@ -567,7 +566,7 @@ b) Remplacer le bloc `{participation ? ( <> ...badges... </> ) : (...)}` (lignes
             </span>
 ```
 
-c) Ajouter en tête de fichier : `import { participationChip } from '@/lib/explorer'`. (Le prop `event` arrive avec l'ajout fait en Step 2 ; `isPast` existe déjà sur les props.)
+c) Ajouter en tête de fichier : `import { participationChip } from '@/lib/explorer'`. (`isExposant` et `isPast` existent déjà sur les props de `EventDashboardMobile`.)
 
 d) Ajouter dans `EventPage.css` une règle minimale pour `.event-mobile-status` réutilisant les variantes (réutilise les couleurs translucides) :
 
@@ -641,7 +640,7 @@ git push
 
 **Couverture de la spec :**
 - Cycle exposant (Repéré/Dossier envoyé/Accepté/À payer/Inscrit/Refusé) + personne (Repéré/J'y vais) + Terminé → Task 2 (`participationChip` + tests). ✓
-- Cas event gratuit (booth_cost 0/null → Inscrit) → Task 2 (`isFree`). ✓
+- Stand exposant toujours payant (pas de cas gratuit ; pas de champ coût au niveau événement) → Task 2 piloté par `payment_status` seul. ✓
 - Override Terminé (isPast) → Task 2 (priorité en tête). ✓
 - Enum `refuse` + suppression `en_cours_paiement` (data) → Task 1. ✓
 - `inscrit` alias legacy de `confirme`, **zéro migration de status** → Task 2 (branche commune confirme/inscrit). ✓
@@ -655,5 +654,5 @@ git push
 
 **Cohérence des types/noms :** `StatusVariant` (Task 2) = `repere|dossier|accepte|apayer|inscrit|refuse|termine|going`, repris à l'identique dans toutes les classes CSS (Tasks 3-5). `ChipContext { boothCost, isPast }` (Task 2) utilisé tel quel dans EventDeck/Explorer/EventHero/EventDashboardMobile. `confirme` posé par le stepper (Task 5) ⇄ lu par `participationChip` (Task 2). `--status-*` défini en Task 3, consommé en Tasks 3-5.
 
-**Risques :** `ADD VALUE` Postgres isolé (Task 1, UPDATE ne référence pas `refuse`) ; application migration = action sortante à confirmer ; `EventDashboard` doit recevoir `event` (vérif explicite en Task 5 Step 2).
+**Risques :** `ADD VALUE` Postgres isolé (Task 1, UPDATE ne référence pas `refuse`) ; application migration = action sortante à confirmer. `booth_cost` n'existe PAS au niveau événement (il vit sur `event_reports`) — le cycle ne dépend que de `payment_status` ; aucun prop `event` à ajouter au dashboard.
 ```
