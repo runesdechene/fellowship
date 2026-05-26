@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, eventBadge, participationChip } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -147,6 +147,16 @@ describe('composeFilter', () => {
     ]
     const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'past' }, { department: null, now })
     expect(r.map(e => e.id)).toEqual(['recent', 'mid', 'old'])
+  })
+  it('monthRange : ne garde que les événements démarrant dans le mois (par date de début)', () => {
+    const evs = [
+      ev({ id: 'jul', start_date: '2026-07-10', end_date: '2026-07-11' }),
+      ev({ id: 'aug', start_date: '2026-08-02', end_date: '2026-08-03' }),
+      ev({ id: 'jun', start_date: '2026-06-20', end_date: '2026-06-21' }),
+    ]
+    // mois index 6 = juillet ; prend le pas sur period:'recent'
+    const r = composeFilter(evs, { tags: new Set(), zone: 'france', period: 'recent', monthRange: monthRangeFor(2026, 6) }, { department: null, now })
+    expect(r.map(e => e.id)).toEqual(['jul'])
   })
 })
 

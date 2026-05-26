@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, type KeyboardEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { MonthBanner } from './MonthBanner'
@@ -26,14 +26,25 @@ function useTagStyle() {
 
 export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFriends }: MobileAgendaProps) {
   const getTagStyle = useTagStyle()
+  const navigate = useNavigate()
   const now = useMemo(() => new Date(), [])
+
+  // Cliquer un mois (plein ou vide) ouvre l'Explorer filtré sur ce mois précis.
+  const openMonth = (m: CalendarMonth) => navigate('/explorer', { state: { month: { year: m.year, month: m.month } } })
+  const monthNav = (m: CalendarMonth) => ({
+    role: 'button' as const,
+    tabIndex: 0,
+    'aria-label': `Voir les festivals de ${m.label}`,
+    onClick: () => openMonth(m),
+    onKeyDown: (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMonth(m) } },
+  })
 
   return (
     <div className="mobile-agenda">
       {months.map(month => {
         if (month.events.length === 0) {
           return (
-            <div key={`${month.year}-${month.month}`} className="agenda-empty">
+            <div key={`${month.year}-${month.month}`} className="agenda-empty" {...monthNav(month)}>
               <span className="agenda-empty-nm">{month.label}</span>
               <span className="agenda-empty-lbl">libre</span>
             </div>
@@ -45,7 +56,7 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
 
         return (
           <section key={`${month.year}-${month.month}`} className="agenda-month">
-            <div className="agenda-mh">
+            <div className="agenda-mh" {...monthNav(month)}>
               <MonthBanner month={month.month} label={month.label} year={month.year} />
               {mine.length > 0 && (
                 <span className="agenda-count">{mine.length} date{mine.length > 1 ? 's' : ''}</span>

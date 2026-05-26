@@ -15,6 +15,8 @@ interface SearchSegmentsProps {
   selectedTags: Set<string>
   zone: Zone
   period: Period
+  /** Si défini (arrivée depuis le calendrier), « Quand » affiche ce mois au lieu du preset. */
+  monthLabel?: string | null
   query: string
   userDept: string | null
   onToggleTag: (value: string) => void
@@ -25,7 +27,7 @@ interface SearchSegmentsProps {
 
 type Pop = 'quoi' | 'ou' | 'quand' | null
 
-export function SearchSegments({ tags, selectedTags, zone, period, query, userDept, onToggleTag, onZone, onPeriod, onQuery }: SearchSegmentsProps) {
+export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, query, userDept, onToggleTag, onZone, onPeriod, onQuery }: SearchSegmentsProps) {
   const [open, setOpen] = useState<Pop>(null)
   const [searching, setSearching] = useState(false)
   const topRef = useRef<HTMLDivElement>(null)
@@ -50,7 +52,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, query, userDe
   }, [searching])
   const quoiLabel = selectedTags.size === 0 ? 'Tous les festivals' : `${selectedTags.size} catégorie${selectedTags.size > 1 ? 's' : ''}`
   const ouLabel = zone === 'france' ? 'Toute la France' : (userDept ? `Mon coin (${userDept})` : 'Près de moi')
-  const quandLabel = PERIODS.find(p => p.value === period)?.label ?? ''
+  const quandLabel = monthLabel ?? (PERIODS.find(p => p.value === period)?.label ?? '')
   return (
     <div className="top" ref={topRef}>
       <div className={'searchbar' + (searching ? ' is-searching' : '')}>
@@ -126,7 +128,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, query, userDe
           <h4>Période</h4>
           <div className="peropts">
             {PERIODS.map(p => (
-              <button key={p.value} className={'peropt' + (period === p.value ? ' on' : '')} onClick={() => { onPeriod(period === p.value ? 'all' : p.value); setOpen(null) }}>{p.label}</button>
+              <button key={p.value} className={'peropt' + (!monthLabel && period === p.value ? ' on' : '')} onClick={() => { onPeriod(!monthLabel && period === p.value ? 'all' : p.value); setOpen(null) }}>{p.label}</button>
             ))}
           </div>
         </div>

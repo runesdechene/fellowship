@@ -708,7 +708,11 @@
 .agenda-mh {
   position: relative;
   margin: 0 0 9px;
+  cursor: pointer;
 }
+.agenda-mh:focus-visible,
+.agenda-empty:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; }
+.agenda-empty { cursor: pointer; }
 /* Le bandeau de mois prend toute la largeur (comme les pills en dessous). */
 .agenda-mh .calendar-month-banner { width: 100%; margin-bottom: 0; }
 /* Compteur posé par-dessus le bandeau (coin haut-droit), dans le cadre. */

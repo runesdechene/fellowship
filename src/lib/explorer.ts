@@ -102,7 +102,19 @@ export function periodToRange(period: Period, now: Date): PeriodRange {
 }
 
 export type Zone = 'mine' | 'france'
-export interface ExplorerFilters { tags: Set<string>; zone: Zone; period: Period; query?: string }
+export interface ExplorerFilters {
+  tags: Set<string>
+  zone: Zone
+  period: Period
+  query?: string
+  /** Filtre "mois précis" (depuis le calendrier) : prend le pas sur `period`. */
+  monthRange?: { from: Date; to: Date } | null
+}
+
+/** Plage [1er du mois, 1er du mois suivant) pour un mois calendaire précis. */
+export function monthRangeFor(year: number, month: number): { from: Date; to: Date } {
+  return { from: new Date(year, month, 1), to: new Date(year, month + 1, 1) }
+}
 
 /** Normalise pour une comparaison insensible à la casse et aux accents. */
 export function normalizeText(s: string): string {
@@ -172,16 +184,23 @@ export function composeFilter(
     if (searching) {
       return normalizeText(ev.name).includes(q) || normalizeText(ev.city ?? '').includes(q)
     }
-    const end = new Date(ev.end_date)
     const start = new Date(ev.start_date)
+    // Mode "mois précis" (clic depuis le calendrier) : événements dont la date de
+    // DÉBUT tombe dans le mois, comme le calendrier. Prend le pas sur `period`.
+    if (filters.monthRange) {
+      return start >= filters.monthRange.from && start < filters.monthRange.to
+    }
+    const end = new Date(ev.end_date)
     if (range.past) return end < ctx.now
     // Périodes à venir : ne jamais afficher un événement déjà terminé (corrige « Ce mois-ci »).
     if (end < ctx.now) return false
     if (range.to && start >= range.to) return false
     return true
   })
+  // Chronologique pour les vues "à venir", "ce mois-ci" et "mois précis".
+  const chrono = !!filters.monthRange || searching || (filters.period !== 'past' && filters.period !== 'recent')
   result = [...result].sort(
-    searching || filters.period !== 'past' && filters.period !== 'recent'
+    chrono
       ? (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
       : filters.period === 'past'
         // Terminés : du plus récemment terminé au plus ancien.

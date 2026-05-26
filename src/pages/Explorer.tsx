@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { EventDeck } from '@/components/explorer/EventDeck'
@@ -62,6 +62,7 @@ function ExplorerEmpty() {
 // ---------- Main component ----------
 export function ExplorerPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { profile, currentActor, isAdmin, user } = useAuth()
   const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
   const { tags: dynamicTags } = useTags()
@@ -102,12 +103,27 @@ export function ExplorerPage() {
   // récemment ») ; un visiteur garde l'agenda à venir (« all »). Dérivé → pas de setState en effet.
   const period: Period = periodChoice ?? (currentActor?.kind === 'entity' ? 'recent' : 'all')
 
+  // ---------- Filtre "mois précis" (arrivée depuis le calendrier via navigate state) ----------
+  const [monthFilter, setMonthFilter] = useState<{ year: number; month: number } | null>(() => {
+    const m = (location.state as { month?: { year: number; month: number } } | null)?.month
+    return m && typeof m.year === 'number' && typeof m.month === 'number' ? m : null
+  })
+  const monthRange = useMemo(
+    () => monthFilter ? monthRangeFor(monthFilter.year, monthFilter.month) : null,
+    [monthFilter]
+  )
+  const monthLabel = useMemo(() => {
+    if (!monthFilter) return null
+    const s = new Date(monthFilter.year, monthFilter.month, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }, [monthFilter])
+
   // ---------- Derived events ----------
   const now = useMemo(() => new Date(), [])
 
   const displayed = useMemo(
-    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query }, { department: profile?.department ?? null, now }),
-    [allEvents, selectedTags, zone, period, query, profile?.department, now]
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query, monthRange }, { department: profile?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, query, monthRange, profile?.department, now]
   )
 
   // Clamp activeIndex when displayed shrinks
@@ -172,6 +188,7 @@ export function ExplorerPage() {
   }
 
   const handlePeriod = (p: Period) => {
+    setMonthFilter(null)   // choisir une période sort du mode "mois précis"
     setPeriodChoice(p)
     persistFilters({ period: p })
     setActiveIndex(0)
@@ -285,6 +302,7 @@ export function ExplorerPage() {
           selectedTags={selectedTags}
           zone={zone}
           period={period}
+          monthLabel={monthLabel}
           query={query}
           userDept={profile?.department ?? null}
           onToggleTag={toggleTag}
