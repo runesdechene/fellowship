@@ -18,6 +18,8 @@
   height: 100%;
   overflow: hidden;
 }
+/* Mode jour : fond clair propre sous les halos (le backdrop beige global jurait/assombrissait). */
+.light .explorer { background: #f7f3ec; }
 
 /* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
 .explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -965,10 +967,10 @@
   box-shadow: 0 8px 26px hsl(20 65% 32% / 0.5);
 }
 
-/* « Repérer » : ambre festif (lisible nuit + jour), pas de vert. */
+/* « Repérer » : vert vif assorti au statut « Repéré » (cohérent partout), lisible nuit + jour. */
 .explorer .btn-star {
-  background: var(--amber);
-  color: #3a2410;
+  background: hsl(88 52% 48%);
+  color: #14260b;
   transition: box-shadow .2s, transform .15s, filter .15s, background .2s, color .2s;
 }
 .explorer .btn-star:hover { filter: brightness(1.05); transform: translateY(-1px); }
