@@ -80,7 +80,7 @@ export function EventDeck({ events, activeIndex, canAddImage, now, partByEvent, 
               canAddImage={canAddImage}
               badge={badge}
               statusChip={statusChip}
-              style={{ transform: s.transform, opacity: s.opacity, filter: s.filter, zIndex: s.zIndex, pointerEvents: s.pointerEvents }}
+              style={{ transform: s.transform, opacity: s.opacity, filter: s.filter, zIndex: s.zIndex, pointerEvents: s.pointerEvents, ['--card-veil']: s.veil } as React.CSSProperties}
               onClick={() => handleCardClick(offset, i, ev)}
               onAddImage={onAddImage}
             />

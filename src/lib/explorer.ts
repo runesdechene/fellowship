@@ -21,7 +21,10 @@ export function applyViewMode(
 
 export interface DeckStyle {
   transform: string; opacity: number; filter: string; zIndex: number;
-  pointerEvents: 'auto' | 'none'; isCenter: boolean
+  pointerEvents: 'auto' | 'none'; isCenter: boolean;
+  /** Opacité du voile (couleur du fond) posé sur l'affiche pour la faire reculer — fonctionne
+   *  sur photo ET fallback sans transparence (≠ propriété opacity). 0 = aucun voile (carte centrale). */
+  veil: number
 }
 
 /**
@@ -34,7 +37,7 @@ export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   if (ao > 2) {
     return {
       transform: `translate(-50%,-50%) translateX(${offset > 0 ? 170 : -170}%) translateZ(-130px) scale(.5)`,
-      opacity: 0, filter: 'none', zIndex: 0, pointerEvents: 'none', isCenter: false,
+      opacity: 0, filter: 'none', zIndex: 0, pointerEvents: 'none', isCenter: false, veil: 0,
     }
   }
   const tx = offset === 0 ? 0 : (offset < 0 ? -1 : 1) * (ao === 1 ? 120 : 172)
@@ -44,17 +47,20 @@ export function deckCardStyle(offset: number, isLight = false): DeckStyle {
   // (le z-index est ignoré). Centre devant, voisines reculées → ordre stable, plus de flash
   // « carte qui passe au-dessus » à l'entrée (l'ordre DOM ne décide plus).
   const tz = offset === 0 ? 0 : (ao === 1 ? -55 : -110)
-  // Voisines : on les fait reculer. Nuit = assombrir ; jour = éclaircir + désaturer
-  // (brightness > 1, jamais d'opacité → les cartes restent OPAQUES, pas de transparence).
-  const dim = offset === 0
-    ? 'none'
+  // Voisines : on les fait RECULER via un voile de la couleur du fond (≠ opacity, pas de transparence).
+  // Marche sur photo ET fallback (qui sinon blanchit). Jour = voile plus puissant (éclaircissement marqué).
+  // Le filtre ne garde qu'un léger flou de profondeur sur les cartes lointaines.
+  const veil = offset === 0
+    ? 0
     : isLight
-      ? (ao === 1 ? 'brightness(1.4) saturate(.5) blur(0.5px)' : 'brightness(1.75) saturate(.32) blur(1.5px)')
-      : (ao === 1 ? 'brightness(.45)' : 'brightness(.3)')
+      ? (ao === 1 ? 0.58 : 0.78)
+      : (ao === 1 ? 0.44 : 0.62)
+  const blur = ao === 2 ? 'blur(1px)' : 'none'
   return {
     transform: `translate(-50%,-50%) translateX(${tx}%) translateZ(${tz}px) rotateY(${rot}deg) scale(${sc})`,
     opacity: 1,
-    filter: dim,
+    filter: blur,
+    veil,
     zIndex: offset === 0 ? 20 : 10 - ao, pointerEvents: 'auto', isCenter: offset === 0,
   }
 }

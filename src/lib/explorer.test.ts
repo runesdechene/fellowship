@@ -70,22 +70,22 @@ describe('deckCardStyle', () => {
     expect(s.isCenter).toBe(false)
     expect(s.transform).toContain('translateX(120%)')
     expect(s.transform).toContain('rotateY(-18deg)')
-    expect(s.filter).toBe('brightness(.45)')
+    expect(s.veil).toBeGreaterThan(0)   // recule via un voile, opaque
+    expect(s.opacity).toBe(1)
   })
   it('hors fenêtre (offset 3)', () => {
     const s = deckCardStyle(3)
     expect(s.opacity).toBe(0)
     expect(s.pointerEvents).toBe('none')
   })
-  it('voisin en mode jour : éclairci (brightness > 1), opaque (pas de transparence)', () => {
-    const s = deckCardStyle(1, true)
-    expect(s.filter).toContain('brightness(1')
-    expect(s.opacity).toBe(1)
+  it('centre : aucun voile', () => {
+    expect(deckCardStyle(0).veil).toBe(0)
+    expect(deckCardStyle(0, true).veil).toBe(0)
   })
-  it('voisin en mode nuit : assombri (brightness < 1), opaque', () => {
-    const s = deckCardStyle(1, false)
-    expect(s.filter).toBe('brightness(.45)')
-    expect(s.opacity).toBe(1)
+  it('voile jour plus puissant que nuit (éclaircissement marqué), cartes toujours opaques', () => {
+    expect(deckCardStyle(1, true).veil).toBeGreaterThan(deckCardStyle(1, false).veil)
+    expect(deckCardStyle(2, true).veil).toBeGreaterThan(deckCardStyle(1, true).veil)  // tertiaire plus voilée
+    expect(deckCardStyle(1, true).opacity).toBe(1)
   })
 })
 

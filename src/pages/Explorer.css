@@ -571,6 +571,19 @@
   transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .explorer.is-scrubbing .card-media { transition: filter 0.12s linear; }
+/* Voile « profondeur » : couleur du fond posée sur l'affiche (photo OU fallback) pour la faire
+   reculer/fondre — opaque, pas de transparence. Opacité pilotée par --card-veil (par carte). */
+.explorer .card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: hsl(var(--background));
+  opacity: var(--card-veil, 0);
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.explorer.is-scrubbing .card-media::after { transition: opacity 0.12s linear; }
 
 .explorer .card img {
   position: absolute;
@@ -720,6 +733,8 @@
 }
 .explorer .card-badge.nouveau { background: var(--lime); color: #1b2e10; }
 .explorer .card-badge.populaire { background: var(--amber); color: #3a2410; }
+/* Mode jour : --lime devient foncé → texte blanc lisible sur le badge Nouveau. */
+.light .explorer .card-badge.nouveau { color: #fff; }
 
 /* Pastille de statut de participation — coin haut-GAUCHE (miroir du badge). */
 .explorer .card-status {
