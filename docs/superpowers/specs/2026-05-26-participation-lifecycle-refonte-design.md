@@ -134,8 +134,12 @@ Les pastilles existantes (`.explorer .card-status.*`, `.explorer .eh-status.*`) 
 
 ### Dashboard exposant (`EventDashboard.tsx` + `EventDashboardMobile.tsx`)
 
-- `PARTICIPATION_STEPS` : `Repéré` (interesse) → `Dossier envoyé` (en_cours) → `Accepté` (**confirme**, plus `inscrit`).
-- Ajouter une action **« Refusé »** (pose `status = refuse`) + un bouton **« retirer »** (supprime la participation) sur les états dossier.
+- `PARTICIPATION_STEPS` : `Repéré` (interesse — **renomme l'actuel « Intéressé »**) → `Dossier envoyé` (en_cours) → `Accepté` (**confirme**, plus `inscrit`).
+- Ajouter une action **« Refusé »** (pose `status = refuse`).
+- **Refusé vs Retirer** — deux actions distinctes :
+  - **Refusé** conserve la participation : le statut reste, l'événement est **grisé** (sur le calendrier comme ailleurs). Garde l'historique du refus.
+  - **« Retirer »** = le chemin de **désinscription existant** (`onLeave` / « Se désinscrire ») : supprime la participation **et tout statut**, l'événement disparaît. Aucun nouveau code — on réutilise `onLeave`.
+  - Refusé reste grisé tant que l'utilisateur ne clique pas « retirer ».
 - Le bloc **Paiement** se débloque sur `confirme` (au lieu de `inscrit`) **et** seulement si `booth_cost > 0`.
 - `PAYMENT_STEPS` : 2 états — `À payer` (a_payer), `Payé` (paye). **Supprimer** `en_cours_paiement`.
 - Le badge replié mobile (`EventDashboardMobile`) affiche le libellé dérivé via `participationChip` (plus de `STATUS_LABELS`/`PAYMENT_LABELS` maison divergents).
