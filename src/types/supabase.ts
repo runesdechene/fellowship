@@ -65,6 +65,7 @@ export type Database = {
           department: string | null
           postal_code: string | null
           public_slug: string | null
+          plan: Database["public"]["Enums"]["user_plan"]
           type: Database["public"]["Enums"]["entity_type"]
           website: string | null
         }
@@ -80,6 +81,7 @@ export type Database = {
           department?: string | null
           postal_code?: string | null
           public_slug?: string | null
+          plan?: Database["public"]["Enums"]["user_plan"]
           type: Database["public"]["Enums"]["entity_type"]
           website?: string | null
         }
@@ -95,6 +97,7 @@ export type Database = {
           department?: string | null
           postal_code?: string | null
           public_slug?: string | null
+          plan?: Database["public"]["Enums"]["user_plan"]
           type?: Database["public"]["Enums"]["entity_type"]
           website?: string | null
         }
