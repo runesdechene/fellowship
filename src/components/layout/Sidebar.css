@@ -131,6 +131,28 @@
   min-height: 0;
 }
 
+/* ── Footer (thème) ────────────────────────────────────────────────── */
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid hsl(var(--border));
+  flex-shrink: 0;
+}
+
+.sidebar-footer-label {
+  font-size: 12px;
+  font-family: var(--font-body);
+  color: hsl(var(--muted-foreground));
+}
+
+.sidebar.collapsed .sidebar-footer {
+  justify-content: center;
+  padding: 12px 0;
+}
+
 /* ── Expand button ─────────────────────────────────────────────────── */
 
 .sidebar-expand {

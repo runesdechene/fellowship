@@ -52,3 +52,6 @@
 /* Reset bouton uniquement — surtout PAS `font: inherit` (réinitialiserait la taille à celle du body
    et grossirait le texte vs les NavLink). La taille/police viennent de .bottom-bar-link. */
 .bottom-bar-link--muted { background: none; border: none; cursor: pointer; opacity: .6; }
+
+/* Bascule thème — slot compact en fin de barre (pas flex:1, pour ne pas s'étirer). */
+.bottom-bar-toggle { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 0 12px; }

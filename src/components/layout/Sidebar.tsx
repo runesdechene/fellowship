@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
 import { EntitySwitcher } from './EntitySwitcher'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarActivity } from '@/components/notifications/SidebarActivity'
 import './Sidebar.css'
 
@@ -73,6 +74,11 @@ export function Sidebar() {
 
       <div className="sidebar-activity-section">
         <SidebarActivity collapsed={collapsed} />
+      </div>
+
+      <div className="sidebar-footer">
+        <ThemeToggle />
+        {!collapsed && <span className="sidebar-footer-label">Thème</span>}
       </div>
 
       {collapsed && (

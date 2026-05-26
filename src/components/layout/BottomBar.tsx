@@ -5,6 +5,7 @@ import {
   LayoutDashboard, Store, Users, Shield, type LucideIcon,
 } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, NAV_DEFS } from '@/lib/navModel'
+import { ThemeToggle } from '@/components/theme-toggle'
 import './BottomBar.css'
 
 const ICONS: Record<string, LucideIcon> = {
@@ -45,6 +46,9 @@ export function BottomBar() {
           <span>Admin</span>
         </NavLink>
       )}
+      <div className="bottom-bar-toggle">
+        <ThemeToggle />
+      </div>
     </nav>
   )
 }
