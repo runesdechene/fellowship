@@ -113,6 +113,15 @@
 .fest-main { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
 .fest-side { display: flex; flex-direction: column; gap: 18px; }
 
+/* ── Mode édition (formulaire exposant) ───────────────────────────── */
+.event-two-col { display: flex; gap: 28px; align-items: flex-start; }
+.event-col-left { width: 280px; flex-shrink: 0; }
+.event-col-right { flex: 1; min-width: 0; }
+@media (max-width: 900px) {
+  .event-two-col { flex-direction: column; }
+  .event-col-left { width: 100%; max-width: 360px; }
+}
+
 /* ── Hero ─────────────────────────────────────────────────────────── */
 
 .fest-hero { padding: 4px 0 2px; }

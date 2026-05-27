@@ -265,7 +265,7 @@ export function EventPage() {
   return (
     <div className="event-page">
       {/* Ambient : affiche floutée derrière le hero */}
-      {event.image_url && (
+      {!editing && event.image_url && (
         <div className="event-ambient" aria-hidden="true">
           <img src={event.image_url} alt="" />
         </div>
