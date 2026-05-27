@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent, useEventCreator } from '@/hooks/use-events'
 import { compressImage } from '@/lib/compress-image'
-import { addParticipation, removeParticipation, useFriendsOnEvent } from '@/hooks/use-participations'
+import { addParticipation, removeParticipation, updateParticipation, useFriendsOnEvent } from '@/hooks/use-participations'
 import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
 import { NoteForm } from '@/components/notes/NoteForm'
@@ -13,13 +13,17 @@ import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventDashboard } from '@/components/events/EventDashboard'
+import { FestivalFacts } from '@/components/events/FestivalFacts'
+import { DiscussionTeaser } from '@/components/events/DiscussionTeaser'
+import { HowToApplyModal } from '@/components/events/HowToApplyModal'
+import { candidatureState, mapsSearchUrl, daysUntilStart, editionLabel, hasApplyInfo } from '@/lib/festival'
 import { useDateQuota } from '@/hooks/use-date-quota'
 import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Clock, Users, ExternalLink, FileText, Mail, StickyNote, Star, MessageSquarePlus, Check, CircleDashed, Loader2 } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send } from 'lucide-react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
@@ -38,26 +42,8 @@ function hashName(name: string): number {
   return Math.abs(h)
 }
 
-const STATUS_LABELS_FRIEND: Record<string, string> = {
-  interesse: 'Intéressé',
-  en_cours: 'En cours',
-  inscrit: 'Inscrit',
-}
-
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-}
-
-function dayCount(start: string, end: string) {
-  const diff = Math.round((new Date(end).getTime() - new Date(start).getTime()) / 86400000) + 1
-  return diff > 1 ? `${diff} jours` : '1 jour'
-}
-
-function daysUntil(date: string) {
-  const diff = Math.ceil((new Date(date).getTime() - Date.now()) / 86400000)
-  if (diff < 0) return 'Date passée'
-  if (diff === 0) return "Aujourd'hui"
-  return `${diff} jour${diff > 1 ? 's' : ''} restant${diff > 1 ? 's' : ''}`
 }
 
 export function EventPage() {
@@ -77,6 +63,7 @@ export function EventPage() {
   const [showReportForm, setShowReportForm] = useState(false)
   const [showNoteModal, setShowNoteModal] = useState(false)
   const [showParticipants, setShowParticipants] = useState(false)
+  const [showHowTo, setShowHowTo] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editSaving, setEditSaving] = useState(false)
   const [editImage, setEditImage] = useState<File | null>(null)
@@ -97,6 +84,11 @@ export function EventPage() {
     external_url: '',
     contact_email: '',
     registration_note: '',
+    edition: '',
+    opening_hours: '',
+    expected_attendance: '',
+    stand_size: '',
+    stand_price: '',
   })
 
   // Fetch current actor's participation
@@ -144,6 +136,27 @@ export function EventPage() {
     setParticipation(null)
   }
 
+  // « Marquer comme candidaté » depuis la modale : passe en en_cours (ou crée la participation).
+  const handleMarkApplied = async () => {
+    if (participation) {
+      const { data } = await updateParticipation(participation.id, { status: 'en_cours' })
+      if (data) setParticipation(data)
+    } else {
+      await handleJoin('en_cours', 'amis')
+    }
+  }
+
+  // Partage : Web Share API si dispo, sinon copie du lien.
+  const sharePage = async () => {
+    const url = window.location.href
+    try {
+      if (navigator.share) await navigator.share({ title: event?.name, url })
+      else await navigator.clipboard.writeText(url)
+    } catch {
+      /* partage annulé */
+    }
+  }
+
   const startEditing = () => {
     if (!event) return
     setEditForm({
@@ -158,6 +171,11 @@ export function EventPage() {
       external_url: event.external_url ?? '',
       contact_email: event.contact_email ?? '',
       registration_note: event.registration_note ?? '',
+      edition: event.edition != null ? String(event.edition) : '',
+      opening_hours: event.opening_hours ?? '',
+      expected_attendance: event.expected_attendance ?? '',
+      stand_size: event.stand_size ?? '',
+      stand_price: event.stand_price ?? '',
     })
     setEditImage(null)
     setRemoveImage(false)
@@ -200,6 +218,11 @@ export function EventPage() {
       external_url: editForm.external_url || null,
       contact_email: editForm.contact_email || null,
       registration_note: editForm.registration_note || null,
+      edition: editForm.edition ? Number(editForm.edition) : null,
+      opening_hours: editForm.opening_hours || null,
+      expected_attendance: editForm.expected_attendance || null,
+      stand_size: editForm.stand_size || null,
+      stand_price: editForm.stand_price || null,
     }
     if (image_url !== undefined) {
       updates.image_url = image_url
@@ -233,8 +256,21 @@ export function EventPage() {
     )
   }
 
+  const cand = candidatureState(event)
+  const eyebrow = [event.tags?.[0], editionLabel(event.edition)].filter(Boolean).join(' · ')
+  const jx = daysUntilStart(event)
+  const applyAvailable = hasApplyInfo(event)
+  const friendNames = friendsOnEvent.map((f) => f.label).filter(Boolean).slice(0, 3).join(', ')
+
   return (
     <div className="event-page">
+      {/* Ambient : affiche floutée derrière le hero */}
+      {event.image_url && (
+        <div className="event-ambient" aria-hidden="true">
+          <img src={event.image_url} alt="" />
+        </div>
+      )}
+
       <div className="event-topbar">
         {editing ? (
           <button onClick={() => setEditing(false)} className="event-back" title="Annuler l'édition">
@@ -242,7 +278,7 @@ export function EventPage() {
           </button>
         ) : (
           <Link to={backTo} className="event-back" title="Retour">
-            <ArrowLeft />
+            <ArrowLeft /> Retour
           </Link>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
@@ -380,6 +416,33 @@ export function EventPage() {
                   <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: Envoyer dossier par mail" value={editForm.registration_note} onChange={e => setEditForm(f => ({ ...f, registration_note: e.target.value }))} />
                 </div>
               </div>
+              {/* Infos pratiques (champs descriptifs festival) */}
+              <div className="pt-2 border-t border-border">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">Infos pratiques</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">N° d'édition</label>
+                    <input type="number" min="1" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: 21" value={editForm.edition} onChange={e => setEditForm(f => ({ ...f, edition: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Horaires</label>
+                    <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: 10h – 19h" value={editForm.opening_hours} onChange={e => setEditForm(f => ({ ...f, opening_hours: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Affluence attendue</label>
+                    <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: ~40 000 visiteurs" value={editForm.expected_attendance} onChange={e => setEditForm(f => ({ ...f, expected_attendance: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Taille d'emplacement</label>
+                    <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: 3×3 m" value={editForm.stand_size} onChange={e => setEditForm(f => ({ ...f, stand_size: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">Prix d'emplacement</label>
+                    <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ex: 120 € le week-end" value={editForm.stand_price} onChange={e => setEditForm(f => ({ ...f, stand_price: e.target.value }))} />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
                 <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editForm.city || !editForm.start_date}>
@@ -391,174 +454,94 @@ export function EventPage() {
           </div>
         </div>
       ) : (
-        <div className="event-two-col">
-          {/* ── LEFT COLUMN ── */}
-          <div className="event-col-left">
-            {/* Poster */}
-            <div className="event-poster">
-              {event.image_url ? (
-                <img src={event.image_url} alt={event.name} />
-              ) : (
-                <div className="event-poster-empty">
-                  <Image strokeWidth={1} />
-                </div>
+        <div className="fest-grid">
+          {/* ── COLONNE PRINCIPALE ── */}
+          <div className="fest-main">
+            {/* Hero */}
+            <div className="fest-hero">
+              {cand && (
+                <span className={`fest-statpill ${cand}`}>
+                  <span className="fest-statpill-dot" />
+                  {cand === 'open' ? 'Candidatures ouvertes' : 'Candidatures clôturées'}
+                </span>
               )}
+              {eyebrow && <span className="fest-eyebrow">{eyebrow}</span>}
+              <h1 className="fest-title">{event.name}</h1>
+              <div className="fest-hmeta">
+                <span className="fest-hmeta-item">
+                  <Calendar strokeWidth={2} />
+                  {formatDate(event.start_date)}{event.end_date !== event.start_date ? ` – ${formatDate(event.end_date)}` : ''}
+                </span>
+                <span className="fest-hmeta-item">
+                  <MapPin strokeWidth={2} />
+                  {event.city} ({event.department})
+                </span>
+                {event.tags?.[0] && (() => {
+                  const I = getTagIcon(event.tags[0])
+                  return <span className="fest-hmeta-item tag"><I size={16} strokeWidth={2} /> {event.tags[0]}</span>
+                })()}
+              </div>
+              <div className="fest-hactions">
+                <button className="fest-iconbtn" onClick={sharePage} title="Partager">
+                  <Share2 strokeWidth={2} />
+                </button>
+                {event.external_url?.startsWith('http') && (
+                  <a className="fest-iconbtn" href={event.external_url} target="_blank" rel="noopener noreferrer" title="Site web">
+                    <Globe strokeWidth={2} />
+                  </a>
+                )}
+                {creator && (
+                  <Link to={`/@${creator.public_slug ?? creator.id}`} className="fest-org">
+                    {creator.avatar_url ? (
+                      <img src={creator.avatar_url} alt={creatorName} className="fest-org-av" />
+                    ) : (
+                      <span className="fest-org-av fallback" style={{ background: `linear-gradient(135deg, ${creatorGradient[0]}, ${creatorGradient[1]})` }}>
+                        {creatorName[0]?.toUpperCase() ?? '?'}
+                      </span>
+                    )}
+                    <span>Organisé par <b>{creatorName}</b></span>
+                  </Link>
+                )}
+              </div>
             </div>
 
-            <div className="event-col-left-sticky">
-              {/* Ajouté par */}
-              {creator && (
-                <div className="event-left-card">
-                  <div className="event-left-card-label">Ajouté par</div>
-                  <Link to={`/@${creator.public_slug ?? creator.id}`} className="event-organizer-row" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    {creator.avatar_url ? (
-                      <img src={creator.avatar_url} alt={creatorName} className="event-organizer-avatar" />
-                    ) : (
-                      <div className="event-organizer-avatar-fallback" style={{ background: `linear-gradient(135deg, ${creatorGradient[0]}, ${creatorGradient[1]})` }}>
-                        {creatorName[0]?.toUpperCase() ?? '?'}
-                      </div>
-                    )}
-                    <div>
-                      <div className="event-organizer-name">{creatorName}</div>
-                      {creator.craft_type && <div className="event-organizer-role">{creator.craft_type}</div>}
-                    </div>
-                  </Link>
+            {/* Compagnons sur cette date */}
+            {friendCount > 0 && (
+              <div className="event-section-card fest-companions">
+                <div className="event-section-title">
+                  <Users strokeWidth={1.8} /> Tes compagnons sur cette date
                 </div>
-              )}
-
-              {/* Liens */}
-              {(event.registration_url?.startsWith('http') || event.external_url?.startsWith('http') || event.contact_email) && (
-                <div className="event-left-card">
-                  <div className="event-left-card-label">Liens</div>
-                  <div className="event-links-list">
-                    {event.registration_url?.startsWith('http') && (
-                      <a href={event.registration_url} target="_blank" rel="noopener noreferrer" className="event-link-item primary">
-                        <FileText strokeWidth={1.5} />
-                        S'inscrire
-                      </a>
-                    )}
-                    {event.external_url?.startsWith('http') && (
-                      <a href={event.external_url} target="_blank" rel="noopener noreferrer" className="event-link-item">
-                        <ExternalLink strokeWidth={1.5} />
-                        Site web
-                      </a>
-                    )}
-                    {event.contact_email && (
-                      <a href={`mailto:${event.contact_email}`} className="event-link-item">
-                        <Mail strokeWidth={1.5} />
-                        {event.contact_email}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Amis présents */}
-              {friendsOnEvent.length > 0 && (
-                <div className="event-left-card">
-                  <div className="event-left-card-label">Amis présents</div>
-                  <div className="event-friends-col">
-                    {friendsOnEvent.map(friend => {
-                      const fname = friend.label ?? '?'
+                <div className="fest-friends-band" onClick={() => setShowParticipants(true)} role="button" tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setShowParticipants(true) }}>
+                  <div className="fest-avs">
+                    {friendsOnEvent.slice(0, 5).map((f) => {
+                      const fname = f.label ?? '?'
                       const [from, to] = GRADIENTS[hashName(fname) % GRADIENTS.length]
-                      return (
-                        <Link key={friend.actor_id} to={`/@${friend.public_slug ?? friend.actor_id}`} className="event-friend-row">
-                          {friend.avatar_url ? (
-                            <img src={friend.avatar_url} alt={fname} className="event-friend-avatar" />
-                          ) : (
-                            <div className="event-friend-avatar-fallback" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
-                              {fname[0]?.toUpperCase() ?? '?'}
-                            </div>
-                          )}
-                          <div>
-                            <div className="event-friend-name">{fname}</div>
-                            <div className={`event-friend-status ${friend.status}`}>
-                              {friend.status === 'inscrit' && <Check strokeWidth={2.5} />}
-                              {friend.status === 'en_cours' && <Loader2 strokeWidth={2.5} />}
-                              {friend.status === 'interesse' && <CircleDashed strokeWidth={2.5} />}
-                              {STATUS_LABELS_FRIEND[friend.status] ?? friend.status}
-                            </div>
-                          </div>
-                        </Link>
+                      return f.avatar_url ? (
+                        <img key={f.actor_id} src={f.avatar_url} alt={fname} className="fest-av" />
+                      ) : (
+                        <span key={f.actor_id} className="fest-av fallback" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+                          {fname[0]?.toUpperCase() ?? '?'}
+                        </span>
                       )
                     })}
+                    {friendCount > 5 && <span className="fest-av more">+{friendCount - 5}</span>}
+                  </div>
+                  <div className="fest-friends-txt">
+                    <b>{friendCount} utilisateur{friendCount > 1 ? 's' : ''} de Fellowship y {friendCount > 1 ? 'vont' : 'va'}</b>
+                    {friendNames && <span>dont {friendNames}, parmi tes abonnés</span>}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* ── RIGHT COLUMN ── */}
-          <div className="event-col-right">
-            {/* Tags */}
-            <div className="event-tags">
-              {event.tags?.map((tag, i) => {
-                const I = getTagIcon(tag)
-                return (
-                  <span key={tag} className={i === 0 ? 'event-tag-primary' : 'event-tag-secondary'}>
-                    <I size={12} strokeWidth={2} className="inline -mt-px" /> {tag}
-                  </span>
-                )
-              })}
-            </div>
-
-            {/* Title */}
-            <h1 className="event-title">{event.name}</h1>
-
-            {/* Meta rows */}
-            <div className="event-meta-list">
-              <div className="event-meta-row">
-                <div className="event-meta-icon"><Calendar strokeWidth={1.5} /></div>
-                <div className="event-meta-text">
-                  <span className="event-meta-primary">{formatDate(event.start_date)}{event.end_date !== event.start_date ? ` — ${formatDate(event.end_date)}` : ''}</span>
-                  <span className="event-meta-secondary">{dayCount(event.start_date, event.end_date)}</span>
-                </div>
-              </div>
-              <div className="event-meta-row">
-                <div className="event-meta-icon"><MapPin strokeWidth={1.5} /></div>
-                <div className="event-meta-text">
-                  <span className="event-meta-primary">{event.city} ({event.department})</span>
-                </div>
-              </div>
-              {event.registration_deadline && (
-                <div className="event-meta-row">
-                  <div className="event-meta-icon"><Clock strokeWidth={1.5} /></div>
-                  <div className="event-meta-text">
-                    <span className="event-meta-primary">Inscription avant le {formatDate(event.registration_deadline)}</span>
-                    <span className="event-meta-secondary">{daysUntil(event.registration_deadline)}</span>
+                <div className="fest-rally">
+                  <span className="fest-rally-ic">🎪</span>
+                  <div className="fest-rally-t">
+                    <b>Vous serez {friendCount} réuni{friendCount > 1 ? 's' : ''} à {event.city}</b>
+                    <span>Partage le festival pour vous organiser</span>
                   </div>
+                  <button className="fest-btn ghost" onClick={sharePage}>Partager</button>
                 </div>
-              )}
-              {friendCount > 0 && (
-                <div className="event-meta-row event-meta-row-clickable" onClick={() => setShowParticipants(true)}>
-                  <div className="event-meta-icon"><Users strokeWidth={1.5} /></div>
-                  <div className="event-meta-text">
-                    <span className="event-meta-primary">{friendCount} participant{friendCount > 1 ? 's' : ''}{participation ? ' dont vous' : ''}</span>
-                    <span className="event-meta-secondary">Voir les participants</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Registration note */}
-            {event.registration_note && (
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, background: 'hsl(var(--muted) / 0.5)', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: 'rgba(61,48,40,0.5)', marginBottom: 20 }}>
-                <StickyNote strokeWidth={1.5} style={{ width: 14, height: 14, flexShrink: 0, marginTop: 1 }} />
-                <span>{event.registration_note}</span>
               </div>
             )}
-
-            {/* Mon suivi */}
-            <EventDashboard
-              participation={participation}
-              isExposant={isExposant}
-              isPast={isPast}
-              onUpdate={setParticipation}
-              onLeave={handleLeave}
-              onJoin={handleJoin}
-              onToggleReport={() => setShowReportForm(!showReportForm)}
-              showReportForm={showReportForm}
-            />
             {/* À propos */}
             {event.description && (
               <div className="event-section-card">
@@ -566,6 +549,12 @@ export function EventPage() {
                 <div className="event-description" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.description) }} />
               </div>
             )}
+
+            {/* Infos pratiques */}
+            <FestivalFacts event={event} />
+
+            {/* Discussion du festival (placeholder) */}
+            <DiscussionTeaser />
 
             {/* Notes communes */}
             <div className="event-section-card">
@@ -592,7 +581,7 @@ export function EventPage() {
             {/* Avis */}
             {(reviews.length > 0 || canSeeDetails) && (
               <div className="event-section-card">
-                <div className="event-section-title muted">Avis ({reviews.length})</div>
+                <div className="event-section-title muted">Avis des exposants ({reviews.length})</div>
                 <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
               </div>
             )}
@@ -600,12 +589,85 @@ export function EventPage() {
             {/* Report form */}
             {showReportForm && <EventReportForm eventId={event.id} />}
           </div>
+
+          {/* ── COLONNE LATÉRALE (cockpit) ── */}
+          <aside className="fest-side">
+            <div className="event-poster">
+              {event.image_url ? (
+                <img src={event.image_url} alt={event.name} />
+              ) : (
+                <div className="event-poster-empty">
+                  <Image strokeWidth={1} />
+                </div>
+              )}
+            </div>
+
+            <div className="fest-cockpit">
+              <div className="fest-cockpit-head">
+                <div className="fest-jx">
+                  {jx != null ? <b>J-{jx}</b> : <b>{isPast ? 'Passé' : 'En cours'}</b>}
+                  <span>{formatDate(event.start_date)}</span>
+                </div>
+                {event.registration_deadline && cand && (
+                  <div className="fest-deadline">
+                    Candidatures<br />
+                    <b>jusqu'au {new Date(event.registration_deadline).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</b>
+                  </div>
+                )}
+              </div>
+
+              <EventDashboard
+                participation={participation}
+                isExposant={isExposant}
+                isPast={isPast}
+                onUpdate={setParticipation}
+                onLeave={handleLeave}
+                onJoin={handleJoin}
+                onToggleReport={() => setShowReportForm(!showReportForm)}
+                showReportForm={showReportForm}
+              />
+
+              <div className="fest-ckrows">
+                {event.stand_price && (
+                  <div className="fest-ckrow">
+                    <span className="fest-ckrow-lab"><Store strokeWidth={1.8} /> Emplacement</span>
+                    <span className="fest-ckrow-val">{event.stand_price}</span>
+                  </div>
+                )}
+                {applyAvailable && (
+                  <button className="fest-ckrow click" onClick={() => setShowHowTo(true)}>
+                    <span className="fest-ckrow-lab"><FileText strokeWidth={1.8} /> Candidature</span>
+                    <span className="fest-ckrow-val warn">Comment faire <ChevronRight strokeWidth={2.4} /></span>
+                  </button>
+                )}
+                <a className="fest-ckrow" href={mapsSearchUrl(event)} target="_blank" rel="noopener noreferrer">
+                  <span className="fest-ckrow-lab"><Map strokeWidth={1.8} /> Itinéraire</span>
+                  <span className="fest-ckrow-val">Voir sur la carte</span>
+                </a>
+              </div>
+
+              <div className="fest-ckcta">
+                {applyAvailable && (
+                  <button className="fest-btn primary" onClick={() => setShowHowTo(true)}>
+                    <Send strokeWidth={2} /> Candidater
+                  </button>
+                )}
+                <button className="fest-btn ghost" onClick={sharePage}>
+                  <Share2 strokeWidth={2} /> Partager
+                </button>
+              </div>
+            </div>
+          </aside>
         </div>
 
       )}
 
       {showParticipants && (
         <ParticipantsModal eventId={event.id} onClose={() => setShowParticipants(false)} />
+      )}
+
+      {showHowTo && (
+        <HowToApplyModal event={event} onClose={() => setShowHowTo(false)} onMarkApplied={handleMarkApplied} />
       )}
 
       {/* Modal: Ajouter une note */}
