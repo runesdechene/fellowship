@@ -45,7 +45,10 @@ export function DateRow({ participation, actorKind, now, companions, onOpenCompa
 
       <div className="md-info">
         <b>{ev.name}</b>
-        <div className="md-meta"><Icon size={13} strokeWidth={2} className="inline -mt-px" /> {ev.city} ({ev.department})</div>
+        <div className="md-meta">
+          {/* eslint-disable-next-line react-hooks/static-components -- Icon vient du lookup statique TAG_ICONS, réf stable (cf. HeroBanner) */}
+          <Icon size={13} strokeWidth={2} className="inline -mt-px" /> {ev.city} ({ev.department})
+        </div>
         {companions.length > 0 && (
           <button
             type="button"
