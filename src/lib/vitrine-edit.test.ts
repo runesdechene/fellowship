@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalizeLinkUrl, addChip, reorderPositions, SPECIALTIES_CAP } from './vitrine-edit'
+import { normalizeLinkUrl, addChip, reorderPositions, canEditVitrine, SPECIALTIES_CAP } from './vitrine-edit'
 
 describe('normalizeLinkUrl', () => {
   it('ajoute https:// si pas de schéma', () => {
@@ -40,5 +40,20 @@ describe('reorderPositions', () => {
       { id: 'a', position: 1 },
       { id: 'm', position: 2 },
     ])
+  })
+})
+
+describe('canEditVitrine', () => {
+  it('vrai si l\'entité est dans les memberships de la personne', () => {
+    expect(canEditVitrine(['e1', 'e2'], 'e2')).toBe(true)
+  })
+  it('faux si non membre (mode personne sur la vitrine d\'autrui ou la sienne sans appartenance)', () => {
+    expect(canEditVitrine(['e1'], 'e2')).toBe(false)
+  })
+  it('faux si pas d\'entité (actor_id null)', () => {
+    expect(canEditVitrine(['e1'], null)).toBe(false)
+  })
+  it('faux si aucune entité', () => {
+    expect(canEditVitrine([], 'e1')).toBe(false)
   })
 })

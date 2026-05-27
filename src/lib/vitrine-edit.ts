@@ -23,3 +23,13 @@ export function addChip(list: string[], raw: string): string[] {
 export function reorderPositions(orderedIds: string[]): Array<{ id: string; position: number }> {
   return orderedIds.map((id, position) => ({ id, position }))
 }
+
+/**
+ * Droit d'édition de la vitrine = la personne connectée est membre de l'entité.
+ * Miroir frontend du RLS backend `can_act_as(actor_id)` : l'autorisation tient à
+ * l'appartenance (memberships), pas à l'acteur actif. `memberEntityIds` = actor_id
+ * des entités de la personne (via memberships).
+ */
+export function canEditVitrine(memberEntityIds: string[], entityActorId: string | null): boolean {
+  return !!entityActorId && memberEntityIds.includes(entityActorId)
+}

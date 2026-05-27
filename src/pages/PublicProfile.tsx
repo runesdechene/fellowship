@@ -4,6 +4,7 @@ import { Pencil, Check } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { useVitrine } from '@/hooks/use-vitrine'
 import { useVitrineEdit } from '@/hooks/use-vitrine-edit'
+import { canEditVitrine } from '@/lib/vitrine-edit'
 import { useFollowStatus } from '@/hooks/use-follows'
 import { VitrineCover } from '@/components/vitrine/VitrineCover'
 import { VitrineHeader } from '@/components/vitrine/VitrineHeader'
@@ -22,7 +23,7 @@ interface PublicProfilePageProps { overrideSlug?: string }
 export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {}) {
   const { slug: paramSlug } = useParams<{ slug: string }>()
   const slug = overrideSlug ?? paramSlug?.replace(/^@/, '')
-  const { currentActor } = useAuth()
+  const { currentActor, entities } = useAuth()
   const data = useVitrine(slug)
   const { isFollowing, toggleFollow } = useFollowStatus(data.entity?.actor_id)
   const [showQR, setShowQR] = useState(false)
@@ -56,8 +57,10 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     </div>
   )
 
-  const isOwner = currentActor?.id === entity.actor_id
-  const canFollow = !!currentActor && !isOwner
+  // Droit d'édition = appartenance à l'entité (miroir du RLS can_act_as), pas l'acteur
+  // actif : on peut éditer sa vitrine même en mode personne/festivalier.
+  const canEdit = canEditVitrine(entities.map(e => e.actor_id), entity.actor_id)
+  const canFollow = !!currentActor && !canEdit
   const links = (entity.links as unknown as VitrineLink[]) ?? []
   const year = new Date().getFullYear()
 
@@ -93,7 +96,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     <div className="v-page-root">
       <VitrineCover url={entity.banner_url} editing={editing} onUpload={uploadCover} />
       <div className="vitrine">
-        {isOwner && (
+        {canEdit && (
           <div className="v-edit-bar">
             <button type="button" className={`v-btn ${editing ? 'v-btn-p' : ''}`} onClick={() => setEditing(v => !v)}>
               {editing ? <><Check /> Terminé</> : <><Pencil /> Modifier ma vitrine</>}
@@ -105,7 +108,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         )}
 
         <VitrineHeader
-          entity={entity} isOwner={isOwner} isFollowing={isFollowing}
+          entity={entity} isOwner={canEdit} isFollowing={isFollowing}
           onToggleFollow={canFollow ? toggleFollow : undefined}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
