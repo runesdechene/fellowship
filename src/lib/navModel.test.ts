@@ -13,8 +13,8 @@ describe('navItemsFor', () => {
 describe('entryState', () => {
   it('item Pro + plan free → lock-pro', () => expect(entryState('calendrier','free')).toBe('lock-pro'))
   it('item Pro + plan pro + construit → active', () => expect(entryState('calendrier','pro')).toBe('active'))
-  it('item Pro + plan pro + non construit → bientot', () => expect(entryState('communaute','pro')).toBe('bientot'))
-  it('item Pro + plan free (même non construit) → lock-pro', () => expect(entryState('communaute','free')).toBe('lock-pro'))
+  it('item Pro + plan pro + non construit → bientot', () => expect(entryState('dashboard','pro')).toBe('bientot'))
+  it('item Pro + plan free (même non construit) → lock-pro', () => expect(entryState('dashboard','free')).toBe('lock-pro'))
   it('item gratuit non construit → bientot', () => expect(entryState('mes-dates','free')).toBe('bientot'))
   it('item gratuit construit → active', () => expect(entryState('explorer','free')).toBe('active'))
 })
