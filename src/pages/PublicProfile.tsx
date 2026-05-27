@@ -11,7 +11,7 @@ import { VitrineStats } from '@/components/vitrine/VitrineStats'
 import { VitrineGallery } from '@/components/vitrine/VitrineGallery'
 import { VitrineLinks } from '@/components/vitrine/VitrineLinks'
 import { VitrineSeason } from '@/components/vitrine/VitrineSeason'
-import { EditableText } from '@/components/vitrine/edit/EditableText'
+import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
 import type { EntityRow, EntityGalleryRow, VitrineLink } from '@/types/database'
@@ -27,7 +27,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const { isFollowing, toggleFollow } = useFollowStatus(data.entity?.actor_id)
   const [showQR, setShowQR] = useState(false)
   const [showEmbed, setShowEmbed] = useState(false)
-  const [editing, setEditing] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   // Copie locale optimiste. On seede UNE fois par identité d'entité : si data.entity
   // change de référence (futur refetch/realtime) sans changer d'actor_id, on garde la
@@ -72,10 +72,6 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     const url = await edit.uploadImage(file, 'cover')
     if (url) patchEntity({ banner_url: url })
   }
-  const uploadAvatar = async (file: File) => {
-    const url = await edit.uploadImage(file, 'avatar')
-    if (url) patchEntity({ avatar_url: url })
-  }
   const addPhotos = async (files: File[]) => {
     const rows = await edit.addGalleryImages(files, gallery.length)
     if (rows.length) setGallery(g => [...g, ...rows])
@@ -93,33 +89,26 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
   return (
     <div className="v-page-root">
-      <VitrineCover url={entity.banner_url} editing={editing} onUpload={uploadCover} />
-      <div className={`vitrine ${editing ? 'is-editing' : ''}`}>
+      <VitrineCover url={entity.banner_url} editing={false} onUpload={uploadCover} />
+      <div className="vitrine">
         <VitrineHeader
-          entity={entity} isOwner={canEdit} isFollowing={isFollowing}
+          entity={entity} canEdit={canEdit} isFollowing={isFollowing}
           onToggleFollow={canFollow ? toggleFollow : undefined}
+          onEdit={() => setShowEditModal(true)}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
-          editing={editing} onToggleEdit={() => setEditing(v => !v)} saveStatus={edit.status}
-          onField={patchEntity} onAvatar={uploadAvatar}
         />
         <VitrineStats followers={data.followers} friends={data.friends} seasonCount={data.season.length} year={year} />
 
         <div className="v-grid">
           <div className="v-col-main">
-            {(entity.bio || editing) && (
+            {entity.bio && (
               <div className="v-card v-about">
                 <h2>À propos</h2>
-                {editing ? (
-                  <EditableText
-                    className="v-about-input" multiline value={entity.bio ?? ''} aria-label="À propos"
-                    placeholder="Présente ton univers, ton artisanat…"
-                    onCommit={v => patchEntity({ bio: v.trim() || null })}
-                  />
-                ) : <p>{entity.bio}</p>}
+                <p>{entity.bio}</p>
               </div>
             )}
-            <VitrineGallery photos={gallery} editing={editing} onAdd={addPhotos} onRemove={removePhoto} onReorder={reorderPhotos} />
+            <VitrineGallery photos={gallery} editing={false} onAdd={addPhotos} onRemove={removePhoto} onReorder={reorderPhotos} />
             {canFollow && !isFollowing && (
               <div className="v-nudge">
                 <span className="v-nudge-ic">🔔</span>
@@ -132,7 +121,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
             )}
           </div>
           <aside className="v-col-side">
-            <VitrineLinks links={links} editing={editing} onChange={next => patchEntity({ links: next })} />
+            <VitrineLinks links={links} editing={false} onChange={next => patchEntity({ links: next })} />
             <VitrineSeason season={data.season} />
           </aside>
         </div>
@@ -143,6 +132,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         </div>
       </div>
 
+      {showEditModal && <VitrineEditModal entity={entity} api={edit} onClose={() => setShowEditModal(false)} onSaved={patch => patchEntity(patch)} />}
       {showQR && entity.public_slug && <QRCodeModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}
       {showEmbed && entity.public_slug && <EmbedModal slug={entity.public_slug} onClose={() => setShowEmbed(false)} />}
     </div>
