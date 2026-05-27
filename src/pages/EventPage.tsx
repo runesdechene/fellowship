@@ -13,6 +13,8 @@ import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { EventReportForm } from '@/components/reports/EventReportForm'
 import { EventDashboard } from '@/components/events/EventDashboard'
+import { useDateQuota } from '@/hooks/use-date-quota'
+import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
@@ -67,6 +69,8 @@ export function EventPage() {
   const { notes, refetch: refetchNotes } = useEventNotes(id)
   const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
   const { friends: friendsOnEvent } = useFriendsOnEvent(id)
+  const { canAdd } = useDateQuota()
+  const [showQuotaModal, setShowQuotaModal] = useState(false)
   const [participation, setParticipation] = useState<Participation | null>(null)
   const [friendCount, setFriendCount] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)
@@ -122,6 +126,8 @@ export function EventPage() {
 
   const handleJoin = async (status: ParticipationStatus, visibility: ParticipationVisibility) => {
     if (!user || !currentActor || !id) return
+    // Quota dates : bloque l'ajout d'une NOUVELLE date pour une entité gratuite au plafond.
+    if (!canAdd) { setShowQuotaModal(true); return }
     const { data } = await addParticipation({
       actor_id: currentActor.id,
       acted_by_user_id: user.id,
@@ -631,6 +637,8 @@ export function EventPage() {
           </div>
         </div>
       )}
+
+      {showQuotaModal && <DateQuotaModal onClose={() => setShowQuotaModal(false)} />}
     </div>
   )
 }
