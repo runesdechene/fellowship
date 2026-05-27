@@ -37,3 +37,36 @@ export function linkTypeIcon(type: VitrineLink['type']): string {
     default: return 'Link'
   }
 }
+
+/** Nombre de jours (inclus) entre début et fin ; 1 si fin absente/égale. */
+export function eventDurationDays(start: string, end: string | null | undefined): number {
+  const s = new Date(start)
+  const e = end ? new Date(end) : s
+  const ms = e.getTime() - s.getTime()
+  return Math.max(1, Math.round(ms / 86400000) + 1)
+}
+
+/** Plus petite année de début parmi les événements ; null si vide. */
+export function firstSeasonYear(events: SeasonEvent[]): number | null {
+  if (events.length === 0) return null
+  return Math.min(...events.map(e => new Date(e.start_date).getFullYear()))
+}
+
+export interface CompanionRow {
+  event_id: string
+  actor_id: string
+  label: string | null
+  avatar_url: string | null
+  public_slug: string | null
+}
+
+/** Regroupe des lignes (event_id + acteur) en Map<event_id, acteurs[]>. */
+export function companionsByEvent(rows: CompanionRow[]): Map<string, CompanionRow[]> {
+  const map = new Map<string, CompanionRow[]>()
+  for (const r of rows) {
+    const arr = map.get(r.event_id) ?? []
+    arr.push(r)
+    map.set(r.event_id, arr)
+  }
+  return map
+}

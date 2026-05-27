@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { splitSeason, type SeasonEvent, linkHost, linkTypeIcon } from './vitrine'
+import { splitSeason, type SeasonEvent, linkHost, linkTypeIcon, eventDurationDays, firstSeasonYear, companionsByEvent } from './vitrine'
 
 const ev = (id: string, start: string): SeasonEvent =>
   ({ id, name: id, start_date: start, end_date: start, city: 'X', department: '01', tags: null, image_url: null })
@@ -34,5 +34,40 @@ describe('linkTypeIcon', () => {
   })
   it('type inconnu → Link', () => {
     expect(linkTypeIcon('other')).toBe('Link')
+  })
+})
+
+describe('eventDurationDays', () => {
+  it('compte les jours inclus (3 jours pour 12→14)', () => {
+    expect(eventDurationDays('2026-06-12', '2026-06-14')).toBe(3)
+  })
+  it('1 jour si début = fin', () => {
+    expect(eventDurationDays('2026-07-03', '2026-07-03')).toBe(1)
+  })
+  it('1 jour si fin manquante', () => {
+    expect(eventDurationDays('2026-07-03', null)).toBe(1)
+  })
+})
+
+describe('firstSeasonYear', () => {
+  it('renvoie la plus petite année de début', () => {
+    expect(firstSeasonYear([ev('a', '2024-05-01'), ev('b', '2023-09-01'), ev('c', '2025-01-01')])).toBe(2023)
+  })
+  it('null si vide', () => {
+    expect(firstSeasonYear([])).toBeNull()
+  })
+})
+
+describe('companionsByEvent', () => {
+  it('regroupe les compagnons par event_id', () => {
+    const rows = [
+      { event_id: 'e1', actor_id: 'a', label: 'A', avatar_url: null, public_slug: 'a' },
+      { event_id: 'e1', actor_id: 'b', label: 'B', avatar_url: null, public_slug: 'b' },
+      { event_id: 'e2', actor_id: 'a', label: 'A', avatar_url: null, public_slug: 'a' },
+    ]
+    const map = companionsByEvent(rows)
+    expect(map.get('e1')!.map(m => m.actor_id)).toEqual(['a', 'b'])
+    expect(map.get('e2')!.length).toBe(1)
+    expect(map.get('e3')).toBeUndefined()
   })
 })
