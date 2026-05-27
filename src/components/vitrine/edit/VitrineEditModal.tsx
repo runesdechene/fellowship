@@ -76,9 +76,9 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
             <div className="v-field"><label>Ville</label><input className="v-inp" value={city} onChange={e => setCity(e.target.value)} placeholder="Lyon…" /></div>
           </div>
           <div className="v-field">
-            <label>Une phrase qui te résume</label>
-            <textarea className="v-inp" maxLength={140} value={bio} onChange={e => setBio(e.target.value)} placeholder="Ton univers en une phrase…" />
-            <div className="v-hint"><span>Apparaît sous ton nom.</span><span>{bio.length} / 140</span></div>
+            <label>Présentation</label>
+            <textarea className="v-inp" maxLength={400} value={bio} onChange={e => setBio(e.target.value)} placeholder="Présente ton univers, ton artisanat…" />
+            <div className="v-hint"><span>Apparaît sous ton nom.</span><span>{bio.length} / 400</span></div>
           </div>
           <div className="v-field">
             <label>Lien boutique</label>
