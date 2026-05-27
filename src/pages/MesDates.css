@@ -52,3 +52,8 @@
 @keyframes md-pulse { 0%, 100% { opacity: .5; } 50% { opacity: .9; } }
 
 @media (max-width: 560px) { .md-head { flex-direction: column; } .md-thumb { display: none; } .md-page { padding: 24px 16px 80px; } }
+
+.md-quota { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; white-space: nowrap; font-size: 11.5px; font-weight: 600; padding: 6px 12px; border-radius: 99px; text-decoration: none; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); color: hsl(var(--muted-foreground)); }
+.md-quota b { color: hsl(var(--primary)); font-weight: 800; }
+.md-quota.at-limit { border-color: color-mix(in srgb, var(--status-apayer) 50%, hsl(var(--border))); }
+.md-quota.at-limit b { color: var(--status-apayer); }

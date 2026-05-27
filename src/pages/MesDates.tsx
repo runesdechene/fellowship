@@ -6,6 +6,7 @@ import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-parti
 import { groupParticipationsByMonth, type MonthBucket } from '@/lib/mes-dates'
 import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal'
 import { DateRow } from '@/components/mes-dates/DateRow'
+import { useDateQuota } from '@/hooks/use-date-quota'
 import type { ActorKind } from '@/lib/explorer'
 import './MesDates.css'
 
@@ -14,6 +15,7 @@ type Tab = 'upcoming' | 'past'
 export function MesDatesPage() {
   const { currentActor } = useAuth()
   const actorKind: ActorKind = currentActor?.kind === 'entity' ? 'entity' : 'person'
+  const quota = useDateQuota()
 
   const now = useMemo(() => new Date(), [])
   const [tab, setTab] = useState<Tab>('upcoming')
@@ -60,6 +62,11 @@ export function MesDatesPage() {
           <h1 className="page-title">Mes dates</h1>
           <p className="md-sub">{subtitle}</p>
         </div>
+        {quota.isFreeEntity && (
+          <Link to="/reglages" className={'md-quota' + (quota.atLimit ? ' at-limit' : '')}>
+            <b>{quota.used} / {quota.limit}</b> dates à venir · Pro = illimité
+          </Link>
+        )}
       </div>
 
       <div className="md-tabs">
