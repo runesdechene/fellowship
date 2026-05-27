@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Pencil, Check } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
@@ -29,11 +29,20 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const [showEmbed, setShowEmbed] = useState(false)
   const [editing, setEditing] = useState(false)
 
-  // Copie locale optimiste (seedée depuis le hook de lecture)
+  // Copie locale optimiste. On seede UNE fois par identité d'entité : si data.entity
+  // change de référence (futur refetch/realtime) sans changer d'actor_id, on garde la
+  // copie locale pour ne pas écraser une édition en cours. Et comme le toggle « editing »
+  // ne touche pas data.entity, sortir du mode édition ne re-seede pas (pas de revert).
   const [entity, setEntity] = useState<EntityRow | null>(null)
   const [gallery, setGallery] = useState<EntityGalleryRow[]>([])
-  useEffect(() => { setEntity(data.entity) }, [data.entity]) // eslint-disable-line react-hooks/set-state-in-effect
-  useEffect(() => { setGallery(data.gallery) }, [data.gallery]) // eslint-disable-line react-hooks/set-state-in-effect
+  const seededFor = useRef<string | null>(null)
+  useEffect(() => {
+    if (data.entity && seededFor.current !== data.entity.actor_id) {
+      seededFor.current = data.entity.actor_id
+      setEntity(data.entity) // eslint-disable-line react-hooks/set-state-in-effect
+      setGallery(data.gallery)
+    }
+  }, [data.entity, data.gallery])
 
   const edit = useVitrineEdit(entity?.actor_id ?? '')
 
