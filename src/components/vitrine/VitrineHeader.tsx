@@ -19,8 +19,8 @@ interface Props {
 }
 
 export function VitrineHeader({ entity, canEdit, isFollowing, followers, friends, onEdit, onToggleFollow, onOpenSocial, onShare, onQR }: Props) {
-  const subtitle = [entity.craft_type, [entity.city, entity.department ? `(${entity.department})` : null].filter(Boolean).join(' ')]
-    .filter(Boolean).join(' · ')
+  const location = (entity as { location?: string | null }).location ?? entity.city
+  const subtitle = [entity.craft_type, location].filter(Boolean).join(' · ')
   const initials = entity.brand_name.split(/\s+/).map(w => w[0] ?? '').slice(0, 2).join('').toUpperCase()
   const link = ((entity.links as unknown as VitrineLink[]) ?? [])[0]
 

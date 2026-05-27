@@ -14,7 +14,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
   const firstLink = ((entity.links as unknown as VitrineLink[]) ?? [])[0]
   const [brand, setBrand] = useState(entity.brand_name)
   const [craft, setCraft] = useState(entity.craft_type ?? '')
-  const [city, setCity] = useState(entity.city ?? '')
+  const [location, setLocation] = useState((entity as { location?: string | null }).location ?? entity.city ?? '')
   const [bio, setBio] = useState(entity.bio ?? '')
   const [link, setLink] = useState(firstLink?.url ?? '')
   const [cover, setCover] = useState(entity.banner_url)
@@ -40,7 +40,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
     const patch: Record<string, unknown> = {
       brand_name: brand.trim() || entity.brand_name,
       craft_type: craft.trim() || null,
-      city: city.trim() || null,
+      location: location.trim() || null,
       bio: bio.trim() || null,
       links,
       banner_url: cover,
@@ -73,7 +73,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
           <div className="v-field"><label>Nom de la marque</label><input className="v-inp" value={brand} onChange={e => setBrand(e.target.value)} /></div>
           <div className="v-row2">
             <div className="v-field"><label>Métier</label><input className="v-inp" value={craft} onChange={e => setCraft(e.target.value)} placeholder="Céramiste…" /></div>
-            <div className="v-field"><label>Ville</label><input className="v-inp" value={city} onChange={e => setCity(e.target.value)} placeholder="Lyon…" /></div>
+            <div className="v-field"><label>Localisation</label><input className="v-inp" value={location} onChange={e => setLocation(e.target.value)} placeholder="Nice, Bretagne, France…" /></div>
           </div>
           <div className="v-field">
             <label>Présentation</label>
