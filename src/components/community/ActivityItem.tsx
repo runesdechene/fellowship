@@ -47,7 +47,8 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
       {item.kind === 'follow' && item.target && onFollow && (
         <button
           className={`btn btn-follow ${isFollowed ? 'is-on' : 'btn-p'}`}
-          onClick={() => onFollow(item.target!.actorId)}
+          onClick={() => !isFollowed && onFollow(item.target!.actorId)}
+          disabled={isFollowed}
         >
           <span>{isFollowed ? 'Suivi' : 'Suivre'}</span>
         </button>

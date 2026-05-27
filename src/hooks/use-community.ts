@@ -33,14 +33,14 @@ async function loadActors(ids: string[]): Promise<Map<string, FeedActor>> {
   return map
 }
 
-export function useCommunityFeed(): CommunityData {
+export function useCommunityFeed(enabled = true): CommunityData {
   const { currentActor } = useAuth()
   const [data, setData] = useState<CommunityData>({
     feed: [], convergences: [], suggestions: [], loading: true, error: false,
   })
 
   useEffect(() => {
-    if (!currentActor) { setData(d => ({ ...d, loading: false })); return } // eslint-disable-line react-hooks/set-state-in-effect
+    if (!currentActor || !enabled) { setData(d => ({ ...d, loading: false })); return } // eslint-disable-line react-hooks/set-state-in-effect
     let cancelled = false
     const me = currentActor.id
     const since = new Date(Date.now() - WINDOW_DAYS * 86_400_000).toISOString()
@@ -66,10 +66,9 @@ export function useCommunityFeed(): CommunityData {
             .select('id, actor_id, event_id, status, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
             .order('created_at', { ascending: false }).limit(FEED_LIMIT),
-          supabase.from('follows')
-            .select('id, follower_actor, following_actor, created_at')
-            .in('follower_actor', followingIds).gte('created_at', since)
-            .order('created_at', { ascending: false }).limit(FEED_LIMIT),
+          // RPC SECURITY DEFINER : la RLS `follows` ne laisse pas lire les follows entre tiers.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (supabase.rpc as any)('get_network_follow_activity', { p_actor_id: me, p_since: since }),
           supabase.from('participations')
             .select('actor_id, event_id, events!inner(start_date)')
             .in('actor_id', followingIds).gte('events.start_date', today),
@@ -77,7 +76,7 @@ export function useCommunityFeed(): CommunityData {
 
         const reviews = revRes.data ?? []
         const parts = partRes.data ?? []
-        const fols = folRes.data ?? []
+        const fols = (folRes.data ?? []) as Array<{ follow_id: string; src_actor: string; dst_actor: string; occurred_at: string }>
         const upcoming = (upcomingRes.data ?? []) as Array<{ actor_id: string | null; event_id: string }>
 
         const eventIds = [...new Set([
@@ -85,7 +84,7 @@ export function useCommunityFeed(): CommunityData {
         ])]
         const actorIds = [...new Set([
           ...followingIds,
-          ...fols.map(f => f.following_actor).filter((x): x is string => !!x),
+          ...fols.flatMap(f => [f.src_actor, f.dst_actor]).filter((x): x is string => !!x),
         ])]
         const [eventsRes, actorMap] = await Promise.all([
           eventIds.length
@@ -117,10 +116,10 @@ export function useCommunityFeed(): CommunityData {
           })
         }
         for (const f of fols) {
-          if (!f.follower_actor || !f.following_actor) continue
+          if (!f.src_actor || !f.dst_actor) continue
           items.push({
-            id: `fol-${f.id}`, kind: 'follow', occurredAt: f.created_at,
-            actor: unknownActor(f.follower_actor), target: unknownActor(f.following_actor),
+            id: `fol-${f.follow_id}`, kind: 'follow', occurredAt: f.occurred_at,
+            actor: unknownActor(f.src_actor), target: unknownActor(f.dst_actor),
           })
         }
 
@@ -129,20 +128,14 @@ export function useCommunityFeed(): CommunityData {
           .map(u => ({ eventId: u.event_id, actor: unknownActor(u.actor_id) }))
         const convergences = rankConvergences(convParts, eventMap).slice(0, 5)
 
-        const { data: secondDegree } = await supabase
-          .from('follows').select('following_actor').in('follower_actor', followingIds)
-        const counts = new Map<string, number>()
-        for (const s of secondDegree ?? []) {
-          const id = s.following_actor
-          if (!id || id === me || followingIds.includes(id)) continue
-          counts.set(id, (counts.get(id) ?? 0) + 1)
-        }
-        const suggIds = [...counts.keys()].slice(0, 12)
-        const suggActors = await loadActors(suggIds)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: suggRows } = await (supabase.rpc as any)('get_follow_suggestions', { p_actor_id: me })
+        const suggList = (suggRows ?? []) as Array<{ suggested_actor: string; shared_followers: number }>
+        const suggActors = await loadActors(suggList.map(s => s.suggested_actor))
         const suggestions = rankSuggestions(
-          suggIds.map(id => ({
-            actor: suggActors.get(id) ?? unknownActor(id),
-            sharedFollowers: counts.get(id) ?? 0, sharedEvents: 0,
+          suggList.map(s => ({
+            actor: suggActors.get(s.suggested_actor) ?? unknownActor(s.suggested_actor),
+            sharedFollowers: Number(s.shared_followers), sharedEvents: 0,
           }))
         ).slice(0, 5)
 
@@ -153,12 +146,12 @@ export function useCommunityFeed(): CommunityData {
     }
     run()
     return () => { cancelled = true }
-  }, [currentActor])
+  }, [currentActor, enabled])
 
   return data
 }
 
-export function useNetworkActivityMini(): FeedItem[] {
-  const { feed } = useCommunityFeed()
+export function useNetworkActivityMini(enabled = true): FeedItem[] {
+  const { feed } = useCommunityFeed(enabled)
   return feed.slice(0, 3)
 }

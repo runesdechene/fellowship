@@ -14,7 +14,8 @@ function miniText(item: FeedItem): string {
 export function SidebarNetworkActivity({ collapsed }: { collapsed: boolean }) {
   const { currentActor, currentActorRow } = useAuth()
   const isPro = planForActor(currentActor, currentActorRow) === 'pro'
-  const items = useNetworkActivityMini()
+  // Perf : on ne lance le feed réseau que pour un Pro avec sidebar déployée (pas sur chaque page pour tous).
+  const items = useNetworkActivityMini(isPro && !collapsed)
 
   if (collapsed) {
     return <Link to="/communaute" className="sa-bell" aria-label="Activité du réseau"><Activity strokeWidth={1.5} /></Link>

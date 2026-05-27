@@ -15,7 +15,7 @@ export function SuggestionsCard({ items, isFollowed, onFollow }: {
           <div key={s.actor.actorId} className="sugg">
             <div className="sav" style={{ background: avatarColor(s.actor.label) }}>{s.actor.label[0]?.toUpperCase()}</div>
             <div className="sb"><b>{s.actor.label}</b><span>{s.reason}</span></div>
-            <button className={`btn btn-g btn-follow ${on ? 'is-on' : ''}`} onClick={() => onFollow(s.actor.actorId)}>
+            <button className={`btn btn-g btn-follow ${on ? 'is-on' : ''}`} onClick={() => !on && onFollow(s.actor.actorId)} disabled={on}>
               <span>{on ? 'Suivi' : 'Suivre'}</span>
             </button>
           </div>
