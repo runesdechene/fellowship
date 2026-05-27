@@ -46,15 +46,17 @@ En-tête « Sur la route depuis {1re année} · N escales ». Les événements *
 - **Hover** : le tampon se soulève, anneaux en **vert printemps**, l'affiche **reprend ses couleurs** (transition).
 - « +N » pour voir tout le passé.
 
-## Édition (mode « Modifier »)
+## Édition — modale « Modifier ma vitrine »
 
-Toggle propriétaire (`canEditVitrine`). En édition, **seule l'identité se saisit** ; l'agenda (escales/tampons) se peuple seul.
-- Bouton **✎ Modifier** (cuivre) → **✓ Terminé** (vert forest) une fois en édition.
-- **Cover** : bouton overlay « Changer la cover » → upload (bucket `entity-gallery`, préfixe `<actor_id>/cover/`).
-- **Avatar** : overlay caméra → upload.
-- **Champs directs** (pas de crayon, commit au blur) : nom, métier, ville, punchline, lien boutique.
-- **Blocs auto atténués** (opacité ~0.4, non éditables) : bande sociale, escales, tampons — avec un bandeau d'aide « *tes escales et tes tampons se remplissent automatiquement depuis ton agenda* ».
-- Réutilise `EditableText`, `useVitrineEdit`, `canEditVitrine` (déjà livrés v0.7.90). On retire l'éditeur de galerie et de liens multiples.
+Le bouton **✎ Modifier** (propriétaire, `canEditVitrine`) ouvre une **modale d'édition** façon Instagram « Modifier le profil » — **pas d'édition inline**. Peu de champs → une modale propre suffit, et la vitrine derrière reste intacte. Réf. validée : `.superpowers/brainstorm/8160-1779874636/content/site-modal4.html`.
+
+Design (validé) :
+- **Esthétique 2026** : aucune ligne de séparation (header/pied fondus), **inputs sans bordure** (remplis, fond doux légèrement plus clair que la carte, **anneau cuivre au focus**), coins très arrondis, aéré.
+- **Médias en tuiles, sur une ligne** : **avatar à gauche** (carré arrondi) + **cover à droite**, chacun avec un **overlay sombre léger + icône caméra centrée** par défaut (clic = upload).
+- **Champs** : *Nom de la marque* ; *Métier* + *Ville* (deux colonnes) ; *Une phrase qui te résume* (textarea, **compteur 140**) → punchline = `entities.bio` (court) ; *Lien boutique* (aide « affiché en vert sous ta phrase »).
+- **Pied** : *Annuler* (texte) + *Enregistrer* (bouton cuivre proéminent).
+- **Persistance** : tout est poussé à l'**Enregistrer** (un `updateEntity` + uploads cover/avatar le cas échéant), pas de commit par champ.
+- **Hors modale** : escales & tampons (auto depuis l'agenda), bande sociale. Rien à saisir pour eux.
 
 ## Ce qui change vs la vitrine actuelle
 
@@ -70,7 +72,7 @@ Toggle propriétaire (`canEditVitrine`). En édition, **seule l'identité se sai
 ## Réutilisation / impact technique
 
 - **Données** : escales & tampons viennent des **participations + events** (déjà dispo via `use-vitrine`/`useFriendsOnEvent`). Champs events utilisés : `image_url` (affiche portrait), `tags`, `city`/`department`, `start_date`/`end_date` (durée), `name`. Identité : `entities` (brand_name, craft_type, city, department, avatar_url, banner_url, bio→punchline, links→boutique). Colonne `verified` conservée en base mais **non affichée**.
-- **Édition inline** : on **garde** le mode édition par toggle, `canEditVitrine` (membership), `useVitrineEdit`, `EditableText`, l'upload cover/avatar (bucket `entity-gallery`). On **retire** l'éditeur de galerie et le ChipEditor de spécialités du rendu vitrine (spécialités : à décider — soit retirées, soit déplacées). Éditable : cover, avatar, nom, métier, ville, punchline, lien boutique.
+- **Édition** : via **modale** (cf. section dédiée). On réutilise `canEditVitrine` (membership), `useVitrineEdit` (update entité + upload bucket `entity-gallery`, préfixes `<actor_id>/cover/` & `/avatar/`). On **abandonne l'édition inline** (`EditableText` inline, dimming des blocs) et on **retire** l'éditeur de galerie, le ChipEditor de spécialités et le `LinkEditor` multi-liens du rendu vitrine. Éditable (dans la modale) : cover, avatar, nom, métier, ville, punchline, lien boutique.
 - **Embed iframe** : la page est pensée pour être embarquée. « Intégrer à mon site » réutilise/étend l'`EmbedModal` existant — mais cette fois l'embed = **l'agenda/escales** (et non l'ancien calendrier). En mode embed : pas de sidebar (déjà géré pour `/:slug`).
 - **Composants** : refonte de `PublicProfile` + composants `src/components/vitrine/` (nouveaux : `VitrineEscales`, `VitrineTampons` ; `VitrineHeader` allégé ; `VitrineStats` → bande sociale compacte ; `VitrineGallery`/`VitrineLinks` retirés du rendu). `Vitrine.css` (dans `src/pages/`) retravaillé.
 - **Palette** : cuivre **rare** (Modifier/Suivre, nav active). Le vert printemps `--lime` = accent secondaire (vérifié + lien boutique). La couleur vient surtout des **tags d'événement**.
