@@ -1,19 +1,24 @@
 import { UserPlus, Check, Share2, QrCode, Pencil, Link2 } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
 import { linkHost } from '@/lib/vitrine'
+import { VitrineSocialStrip } from './VitrineSocialStrip'
 import type { EntityRow, VitrineLink } from '@/types/database'
+import type { NetworkMember } from '@/lib/profile-network'
 
 interface Props {
   entity: EntityRow
   canEdit: boolean
   isFollowing: boolean
+  followers: NetworkMember[]
+  friends: NetworkMember[]
   onEdit?: () => void
   onToggleFollow?: () => void
+  onOpenSocial?: () => void
   onShare: () => void
   onQR: () => void
 }
 
-export function VitrineHeader({ entity, canEdit, isFollowing, onEdit, onToggleFollow, onShare, onQR }: Props) {
+export function VitrineHeader({ entity, canEdit, isFollowing, followers, friends, onEdit, onToggleFollow, onOpenSocial, onShare, onQR }: Props) {
   const subtitle = [entity.craft_type, [entity.city, entity.department ? `(${entity.department})` : null].filter(Boolean).join(' ')]
     .filter(Boolean).join(' · ')
   const initials = entity.brand_name.split(/\s+/).map(w => w[0] ?? '').slice(0, 2).join('').toUpperCase()
@@ -48,6 +53,7 @@ export function VitrineHeader({ entity, canEdit, isFollowing, onEdit, onToggleFo
           <Link2 /> {linkHost(link.url)}
         </a>
       )}
+      <VitrineSocialStrip followers={followers} friends={friends} onOpen={onOpenSocial} />
     </>
   )
 }

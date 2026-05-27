@@ -9,9 +9,9 @@ import { canEditVitrine } from '@/lib/vitrine-edit'
 import { splitSeason } from '@/lib/vitrine'
 import { VitrineCover } from '@/components/vitrine/VitrineCover'
 import { VitrineHeader } from '@/components/vitrine/VitrineHeader'
-import { VitrineSocialStrip } from '@/components/vitrine/VitrineSocialStrip'
 import { VitrineEscales } from '@/components/vitrine/VitrineEscales'
 import { VitrineTampons } from '@/components/vitrine/VitrineTampons'
+import { VitrineEmptyRoad } from '@/components/vitrine/VitrineEmptyRoad'
 import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
@@ -62,14 +62,20 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
       <div className="vitrine">
         <VitrineHeader
           entity={entity} canEdit={canEdit} isFollowing={isFollowing}
+          followers={data.followers} friends={data.friends}
           onEdit={() => setEditOpen(true)}
           onToggleFollow={canFollow ? toggleFollow : undefined}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
         />
-        <VitrineSocialStrip followers={data.followers} friends={data.friends} />
-        <VitrineEscales events={upcoming} companions={companions} onEmbed={canEdit ? () => setShowEmbed(true) : undefined} />
-        <VitrineTampons events={past} />
+        {upcoming.length === 0 && past.length === 0 ? (
+          <VitrineEmptyRoad canEdit={canEdit} />
+        ) : (
+          <>
+            <VitrineEscales events={upcoming} companions={companions} onEmbed={canEdit ? () => setShowEmbed(true) : undefined} />
+            <VitrineTampons events={past} />
+          </>
+        )}
         <div className="v-footer">
           <span className="v-footer-mark">✦</span>
           Carnet de route Fellowship{entity.public_slug ? <> · <code>flw.sh/{entity.public_slug}</code></> : null}

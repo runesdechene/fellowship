@@ -330,13 +330,21 @@
 .v-biolink:hover { text-decoration: underline; }
 .v-biolink svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
 .v-btn-o.is-on { background: color-mix(in srgb, var(--forest) 20%, transparent); border: 1px solid color-mix(in srgb, var(--forest) 45%, transparent); color: var(--forest); }
-.v-social { display: inline-flex; align-items: center; gap: 11px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 12px; padding: 10px 14px; margin-top: 16px; cursor: pointer; color: hsl(var(--foreground)); font: inherit; }
+.v-social { display: flex; width: fit-content; align-items: center; gap: 11px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 12px; padding: 10px 14px; margin-top: 16px; cursor: pointer; color: hsl(var(--foreground)); font: inherit; }
 .v-avs { display: flex; }
 .v-avs span { width: 28px; height: 28px; border-radius: 50%; border: 2px solid hsl(var(--card)); margin-left: -9px; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; background-size: cover; }
 .v-avs span:first-child { margin-left: 0; }
 .v-avs img { width: 100%; height: 100%; object-fit: cover; }
 .v-social-t { font-size: 13.5px; } .v-social-t b { font-weight: 700; } .v-social-t .m { color: hsl(var(--muted-foreground)); }
 .v-social-ch { margin-left: 6px; color: hsl(var(--muted-foreground)); }
+
+/* ── État vide (carnet sans escale) ── */
+.v-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 40px 24px; border: 1.5px dashed hsl(var(--border)); border-radius: 18px; }
+.v-empty-ic { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--copper) 14%, transparent); color: var(--copper); margin-bottom: 2px; }
+.v-empty-ic svg { width: 24px; height: 24px; fill: none; stroke: currentColor; }
+.v-empty-t { font-family: var(--font-heading); font-weight: 700; font-size: 17px; color: hsl(var(--foreground)); }
+.v-empty-p { font-size: 14px; color: hsl(var(--muted-foreground)); max-width: 42ch; line-height: 1.5; }
+.v-empty-cta { margin-top: 8px; text-decoration: none; }
 .v-sec { margin-top: 34px; }
 .v-sec-h { font-family: var(--font-heading); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .v-sec-h svg { width: 15px; height: 15px; fill: none; stroke: currentColor; }
