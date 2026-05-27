@@ -25,6 +25,7 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
 }
 
 const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'profil', 'reglages']
+// `mes-dates` est partagé : un exposant est aussi festivalier (et c'est la compensation gratuite du Calendrier Pro).
 const EXPOSANT_NAV: NavKey[] = ['explorer', 'mes-dates', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
 
 // BottomBar mobile : 3 liens principaux par acteur (le reste → feuille de compte).
