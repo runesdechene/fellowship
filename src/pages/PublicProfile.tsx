@@ -11,7 +11,7 @@ import { VitrineStats } from '@/components/vitrine/VitrineStats'
 import { VitrineGallery } from '@/components/vitrine/VitrineGallery'
 import { VitrineLinks } from '@/components/vitrine/VitrineLinks'
 import { VitrineSeason } from '@/components/vitrine/VitrineSeason'
-import { InlineText } from '@/components/vitrine/edit/InlineText'
+import { EditableText } from '@/components/vitrine/edit/EditableText'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
 import type { EntityRow, EntityGalleryRow, VitrineLink } from '@/types/database'
@@ -94,7 +94,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   return (
     <div className="v-page-root">
       <VitrineCover url={entity.banner_url} editing={editing} onUpload={uploadCover} />
-      <div className="vitrine">
+      <div className={`vitrine ${editing ? 'is-editing' : ''}`}>
         <VitrineHeader
           entity={entity} isOwner={canEdit} isFollowing={isFollowing}
           onToggleFollow={canFollow ? toggleFollow : undefined}
@@ -111,9 +111,11 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
               <div className="v-card v-about">
                 <h2>À propos</h2>
                 {editing ? (
-                  <InlineText value={entity.bio ?? ''} multiline placeholder="Présente ton univers, ton artisanat…" onCommit={v => patchEntity({ bio: v || null })}>
-                    <p>{entity.bio || <span className="v-edit-empty">+ Ajouter une présentation</span>}</p>
-                  </InlineText>
+                  <EditableText
+                    className="v-about-input" multiline value={entity.bio ?? ''} aria-label="À propos"
+                    placeholder="Présente ton univers, ton artisanat…"
+                    onCommit={v => patchEntity({ bio: v.trim() || null })}
+                  />
                 ) : <p>{entity.bio}</p>}
               </div>
             )}

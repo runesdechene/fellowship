@@ -39,7 +39,7 @@ export function VitrineSeason({ season }: VitrineSeasonProps) {
   const hasEvents = upcoming.length > 0 || past.length > 0
 
   return (
-    <div className="v-card">
+    <div className="v-card v-season">
       <h2>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="3" y="4" width="18" height="18" rx="2" />

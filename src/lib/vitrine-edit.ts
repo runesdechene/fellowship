@@ -1,5 +1,5 @@
 /** Nombre max de spécialités affichables sans casser le header. */
-export const SPECIALTIES_CAP = 8
+export const SPECIALTIES_CAP = 3
 
 /** Ajoute https:// si l'URL n'a pas de schéma ; trim ; chaîne vide si rien. */
 export function normalizeLinkUrl(raw: string): string {

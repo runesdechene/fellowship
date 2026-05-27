@@ -1,8 +1,9 @@
 import { BadgeCheck, UserPlus, Check, Pencil, Share2, QrCode } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
-import { InlineText } from './edit/InlineText'
+import { EditableText } from './edit/EditableText'
 import { ChipEditor } from './edit/ChipEditor'
 import { ImageDrop } from './edit/ImageDrop'
+import { SPECIALTIES_CAP } from '@/lib/vitrine-edit'
 import type { EntityRow } from '@/types/database'
 import type { SaveStatus } from '@/hooks/use-vitrine-edit'
 
@@ -42,29 +43,31 @@ export function VitrineHeader({
       <div className="v-id">
         <div className="v-brand">
           {editing && onField ? (
-            <InlineText value={entity.brand_name} onCommit={v => onField({ brand_name: v || entity.brand_name })}>
-              {entity.brand_name}
-            </InlineText>
+            <EditableText
+              className="v-brand-input" value={entity.brand_name} aria-label="Nom de la marque"
+              onCommit={v => onField({ brand_name: v.trim() || entity.brand_name })}
+            />
           ) : entity.brand_name}
           {entity.verified && <span className="v-verified" title="Exposant vérifié"><BadgeCheck /></span>}
         </div>
 
         {editing && onField ? (
-          <div className="v-sub">
-            <InlineText value={entity.craft_type ?? ''} placeholder="Métier" onCommit={v => onField({ craft_type: v || null })}>
-              {entity.craft_type || <span className="v-edit-empty">+ métier</span>}
-            </InlineText>
-            {' · '}
-            <InlineText value={entity.city ?? ''} placeholder="Ville" onCommit={v => onField({ city: v || null })}>
-              {entity.city || <span className="v-edit-empty">+ ville</span>}
-            </InlineText>
+          <div className="v-sub v-sub-edit">
+            <EditableText
+              className="v-sub-input" value={entity.craft_type ?? ''} placeholder="Métier" aria-label="Métier"
+              onCommit={v => onField({ craft_type: v.trim() || null })}
+            />
+            <EditableText
+              className="v-sub-input" value={entity.city ?? ''} placeholder="Ville" aria-label="Ville"
+              onCommit={v => onField({ city: v.trim() || null })}
+            />
           </div>
         ) : subtitle && <div className="v-sub">{subtitle}</div>}
 
         {editing && onField ? (
           <ChipEditor values={entity.specialties} onChange={v => onField({ specialties: v })} />
         ) : entity.specialties.length > 0 && (
-          <div className="v-chips">{entity.specialties.map(s => <span key={s} className="v-chip">{s}</span>)}</div>
+          <div className="v-chips">{entity.specialties.slice(0, SPECIALTIES_CAP).map(s => <span key={s} className="v-chip">{s}</span>)}</div>
         )}
       </div>
 
@@ -74,7 +77,7 @@ export function VitrineHeader({
             {saveStatus === 'saving' && <span className="v-save-pill">Enregistrement…</span>}
             {saveStatus === 'saved' && <span className="v-save-pill is-ok">✓ Enregistré</span>}
             {saveStatus === 'error' && <span className="v-save-pill is-err">Échec — réessaie</span>}
-            <button type="button" className={`v-btn v-btn-follow ${editing ? 'is-on' : 'v-btn-p'}`} onClick={onToggleEdit} aria-pressed={editing}>
+            <button type="button" className={`v-btn ${editing ? 'v-btn-edit is-done' : 'v-btn-p'}`} onClick={onToggleEdit} aria-pressed={editing}>
               {editing ? <Check /> : <Pencil />}<span>{editing ? 'Terminé' : 'Modifier'}</span>
             </button>
           </>
