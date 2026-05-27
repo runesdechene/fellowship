@@ -58,15 +58,15 @@ export function MesDatesPage() {
   return (
     <div className="md-page">
       <div className="md-head">
-        <div>
+        <div className="md-title-row">
           <h1 className="page-title">Mes dates</h1>
-          <p className="md-sub">{subtitle}</p>
+          {quota.isFreeEntity && (
+            <Link to="/reglages" className={'md-quota' + (quota.atLimit ? ' at-limit' : '')}>
+              <b>{quota.used} / {quota.limit}</b> dates à venir · Pro = illimité
+            </Link>
+          )}
         </div>
-        {quota.isFreeEntity && (
-          <Link to="/reglages" className={'md-quota' + (quota.atLimit ? ' at-limit' : '')}>
-            <b>{quota.used} / {quota.limit}</b> dates à venir · Pro = illimité
-          </Link>
-        )}
+        <p className="md-sub">{subtitle}</p>
       </div>
 
       <div className="md-tabs">
