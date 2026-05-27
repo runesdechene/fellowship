@@ -91,6 +91,18 @@
 .v-cover::after { content: ''; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg, hsl(var(--background)/0) 35%, hsl(var(--background)) 100%); }
 .vitrine { max-width: 800px; margin: -64px auto 0; padding: 0 28px 64px; position: relative; z-index: 1; }
+/* Repositionnement de la bannière (propriétaire) */
+.v-cover.is-repositioning img { cursor: grab; touch-action: none; }
+.v-cover.is-repositioning img:active { cursor: grabbing; }
+.v-cover-reposition { position: absolute; top: 16px; right: 24px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; background: rgba(13,9,8,.55); backdrop-filter: blur(6px); border: 1px solid color-mix(in srgb, #fff 28%, transparent); color: #fff; border-radius: 10px; padding: 7px 13px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; }
+.v-cover-reposition:hover { background: rgba(13,9,8,.72); }
+.v-cover-reposition svg { width: 15px; height: 15px; fill: none; stroke: currentColor; }
+.v-cover-hint { position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); z-index: 3; background: rgba(13,9,8,.62); backdrop-filter: blur(6px); color: #fff; border-radius: 999px; padding: 6px 14px; font-family: var(--font-body); font-size: 12.5px; font-weight: 600; pointer-events: none; white-space: nowrap; }
+.v-cover-tools { position: absolute; top: 16px; right: 24px; z-index: 3; display: flex; gap: 8px; }
+.v-cover-ok, .v-cover-cancel { width: 38px; height: 38px; border-radius: 10px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+.v-cover-ok { background: var(--forest); color: #fff; }
+.v-cover-cancel { background: rgba(13,9,8,.6); color: #fff; }
+.v-cover-ok svg, .v-cover-cancel svg { width: 18px; height: 18px; fill: none; stroke: currentColor; }
 
 /* ── Header vitrine ─────────────────────────────────────────────────── */
 .v-head {

@@ -1756,6 +1756,15 @@
       "norm_label": "vitrinecover()"
     },
     {
+      "label": "VitrineEmptyRoad.tsx",
+      "file_type": "code",
+      "source_file": "src\\components\\vitrine\\VitrineEmptyRoad.tsx",
+      "source_location": "L1",
+      "id": "src_components_vitrine_vitrineemptyroad_tsx",
+      "community": 134,
+      "norm_label": "vitrineemptyroad.tsx"
+    },
+    {
       "label": "VitrineEscales.tsx",
       "file_type": "code",
       "source_file": "src\\components\\vitrine\\VitrineEscales.tsx",
@@ -1779,7 +1788,7 @@
       "source_file": "src\\components\\vitrine\\VitrineHeader.tsx",
       "source_location": "L1",
       "id": "src_components_vitrine_vitrineheader_tsx",
-      "community": 134,
+      "community": 135,
       "norm_label": "vitrineheader.tsx"
     },
     {
@@ -2400,7 +2409,7 @@
       "source_file": "src\\lib\\actorModel.test.ts",
       "source_location": "L1",
       "id": "src_lib_actormodel_test_ts",
-      "community": 135,
+      "community": 136,
       "norm_label": "actormodel.test.ts"
     },
     {
@@ -2499,7 +2508,7 @@
       "source_file": "src\\lib\\avatar-gradient.test.ts",
       "source_location": "L1",
       "id": "src_lib_avatar_gradient_test_ts",
-      "community": 136,
+      "community": 137,
       "norm_label": "avatar-gradient.test.ts"
     },
     {
@@ -2535,7 +2544,7 @@
       "source_file": "src\\lib\\calendar-format.test.ts",
       "source_location": "L1",
       "id": "src_lib_calendar_format_test_ts",
-      "community": 137,
+      "community": 138,
       "norm_label": "calendar-format.test.ts"
     },
     {
@@ -2733,7 +2742,7 @@
       "source_file": "src\\lib\\navModel.test.ts",
       "source_location": "L1",
       "id": "src_lib_navmodel_test_ts",
-      "community": 138,
+      "community": 139,
       "norm_label": "navmodel.test.ts"
     },
     {
@@ -2823,7 +2832,7 @@
       "source_file": "src\\lib\\onboarding.test.ts",
       "source_location": "L1",
       "id": "src_lib_onboarding_test_ts",
-      "community": 139,
+      "community": 140,
       "norm_label": "onboarding.test.ts"
     },
     {
@@ -2940,7 +2949,7 @@
       "source_file": "src\\lib\\supabase.ts",
       "source_location": "L1",
       "id": "src_lib_supabase_ts",
-      "community": 140,
+      "community": 141,
       "norm_label": "supabase.ts"
     },
     {
@@ -2949,7 +2958,7 @@
       "source_file": "src\\lib\\theme.test.ts",
       "source_location": "L1",
       "id": "src_lib_theme_test_ts",
-      "community": 141,
+      "community": 142,
       "norm_label": "theme.test.ts"
     },
     {
@@ -3003,7 +3012,7 @@
       "source_file": "src\\lib\\vitrine-edit.test.ts",
       "source_location": "L1",
       "id": "src_lib_vitrine_edit_test_ts",
-      "community": 142,
+      "community": 143,
       "norm_label": "vitrine-edit.test.ts"
     },
     {
@@ -3435,7 +3444,7 @@
       "source_file": "src\\pages\\Notifications.tsx",
       "source_location": "L1",
       "id": "src_pages_notifications_tsx",
-      "community": 143,
+      "community": 144,
       "norm_label": "notifications.tsx"
     },
     {
@@ -3516,7 +3525,7 @@
       "source_file": "src\\pages\\PublicProfile.tsx",
       "source_location": "L1",
       "id": "src_pages_publicprofile_tsx",
-      "community": 144,
+      "community": 145,
       "norm_label": "publicprofile.tsx"
     },
     {
@@ -3579,7 +3588,7 @@
       "source_file": "src\\test\\setup.ts",
       "source_location": "L1",
       "id": "src_test_setup_ts",
-      "community": 145,
+      "community": 146,
       "norm_label": "setup.ts"
     },
     {
@@ -3588,7 +3597,7 @@
       "source_file": "src\\test\\smoke.test.ts",
       "source_location": "L1",
       "id": "src_test_smoke_test_ts",
-      "community": 146,
+      "community": 147,
       "norm_label": "smoke.test.ts"
     },
     {
@@ -3597,7 +3606,7 @@
       "source_file": "src\\types\\database.ts",
       "source_location": "L1",
       "id": "src_types_database_ts",
-      "community": 147,
+      "community": 148,
       "norm_label": "database.ts"
     },
     {
@@ -3606,7 +3615,7 @@
       "source_file": "src\\types\\supabase.ts",
       "source_location": "L1",
       "id": "src_types_supabase_ts",
-      "community": 148,
+      "community": 149,
       "norm_label": "supabase.ts"
     },
     {
@@ -3683,7 +3692,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 149,
+      "community": 150,
       "norm_label": "vite + react + ts template",
       "id": "readme_vite_template"
     },
@@ -3813,7 +3822,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 150,
+      "community": 151,
       "norm_label": "pastel tag system",
       "id": "ds_tag_pastel_system"
     },

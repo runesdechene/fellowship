@@ -58,7 +58,15 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
 
   return (
     <div className="v-page-root">
-      <VitrineCover url={entity.banner_url} />
+      <VitrineCover
+        url={entity.banner_url}
+        position={(entity as { banner_position?: number | null }).banner_position ?? 50}
+        canEdit={canEdit}
+        onReposition={pos => {
+          setEntity(e => (e ? { ...e, banner_position: pos } as EntityRow : e))
+          edit.updateEntity({ banner_position: pos })
+        }}
+      />
       <div className="vitrine">
         <VitrineHeader
           entity={entity} canEdit={canEdit} isFollowing={isFollowing}
