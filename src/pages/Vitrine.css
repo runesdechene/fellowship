@@ -266,6 +266,15 @@
   border-color: var(--amber);
 }
 
+/* Mode jour : ombres des boutons colorés adoucies (cf. bouton global button.tsx) */
+.light .v-btn-p,
+.light .v-save {
+  box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20);
+}
+.light .v-btn-p:hover {
+  box-shadow: 0 8px 22px hsl(24 70% 50% / 0.28);
+}
+
 /* ── Footer partage (maquette .vfooter) ─────────────────────────────── */
 .v-footer {
   display: flex;
