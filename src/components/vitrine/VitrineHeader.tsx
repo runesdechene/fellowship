@@ -1,94 +1,53 @@
-import { BadgeCheck, UserPlus, Check, Pencil, Share2, QrCode } from 'lucide-react'
+import { UserPlus, Check, Share2, QrCode, Pencil, Link2 } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
-import { EditableText } from './edit/EditableText'
-import { ChipEditor } from './edit/ChipEditor'
-import { ImageDrop } from './edit/ImageDrop'
-import { SPECIALTIES_CAP } from '@/lib/vitrine-edit'
-import type { EntityRow } from '@/types/database'
-import type { SaveStatus } from '@/hooks/use-vitrine-edit'
+import { linkHost } from '@/lib/vitrine'
+import type { EntityRow, VitrineLink } from '@/types/database'
 
-interface VitrineHeaderProps {
+interface Props {
   entity: EntityRow
-  isOwner: boolean
+  canEdit: boolean
   isFollowing: boolean
+  onEdit?: () => void
   onToggleFollow?: () => void
   onShare: () => void
   onQR: () => void
-  editing?: boolean
-  onToggleEdit?: () => void
-  saveStatus?: SaveStatus
-  onField?: (patch: Record<string, unknown>) => void
-  onAvatar?: (file: File) => Promise<void>
 }
 
-export function VitrineHeader({
-  entity, isOwner, isFollowing, onToggleFollow, onShare, onQR,
-  editing, onToggleEdit, saveStatus, onField, onAvatar,
-}: VitrineHeaderProps) {
-  const subtitleParts: string[] = []
-  if (entity.craft_type) subtitleParts.push(entity.craft_type)
-  const geo = [entity.city, entity.department ? `(${entity.department})` : null].filter(Boolean).join(' ')
-  if (geo) subtitleParts.push(geo)
-  const subtitle = subtitleParts.join(' · ')
-
+export function VitrineHeader({ entity, canEdit, isFollowing, onEdit, onToggleFollow, onShare, onQR }: Props) {
+  const subtitle = [entity.craft_type, [entity.city, entity.department ? `(${entity.department})` : null].filter(Boolean).join(' ')]
+    .filter(Boolean).join(' · ')
   const initials = entity.brand_name.split(/\s+/).map(w => w[0] ?? '').slice(0, 2).join('').toUpperCase()
+  const link = ((entity.links as unknown as VitrineLink[]) ?? [])[0]
 
   return (
-    <header className="v-head">
-      <div className="v-av" style={!entity.avatar_url ? { background: avatarGradient(entity.brand_name) } : undefined}>
-        {entity.avatar_url ? <img src={entity.avatar_url} alt={entity.brand_name} /> : <span className="v-av-fallback">{initials}</span>}
-        {editing && onAvatar && <div className="v-av-edit"><ImageDrop label="" onPick={onAvatar} className="v-av-drop" /></div>}
-      </div>
-
-      <div className="v-id">
-        <div className="v-brand">
-          {editing && onField ? (
-            <EditableText
-              className="v-brand-input" value={entity.brand_name} aria-label="Nom de la marque"
-              onCommit={v => onField({ brand_name: v.trim() || entity.brand_name })}
-            />
-          ) : entity.brand_name}
-          {entity.verified && <span className="v-verified" title="Exposant vérifié"><BadgeCheck /></span>}
+    <>
+      <header className="v-head">
+        <div className="v-av" style={!entity.avatar_url ? { background: avatarGradient(entity.brand_name) } : undefined}>
+          {entity.avatar_url ? <img src={entity.avatar_url} alt={entity.brand_name} /> : <span className="v-av-fallback">{initials}</span>}
         </div>
-
-        {editing && onField ? (
-          <div className="v-sub v-sub-edit">
-            <EditableText
-              className="v-sub-input" value={entity.craft_type ?? ''} placeholder="Métier" aria-label="Métier"
-              onCommit={v => onField({ craft_type: v.trim() || null })}
-            />
-            <EditableText
-              className="v-sub-input" value={entity.city ?? ''} placeholder="Ville" aria-label="Ville"
-              onCommit={v => onField({ city: v.trim() || null })}
-            />
-          </div>
-        ) : subtitle && <div className="v-sub">{subtitle}</div>}
-
-        {editing && onField ? (
-          <ChipEditor values={entity.specialties} onChange={v => onField({ specialties: v })} />
-        ) : entity.specialties.length > 0 && (
-          <div className="v-chips">{entity.specialties.slice(0, SPECIALTIES_CAP).map(s => <span key={s} className="v-chip">{s}</span>)}</div>
-        )}
-      </div>
-
-      <div className="v-act">
-        {isOwner && onToggleEdit ? (
-          <>
-            {saveStatus === 'saving' && <span className="v-save-pill">Enregistrement…</span>}
-            {saveStatus === 'saved' && <span className="v-save-pill is-ok">✓ Enregistré</span>}
-            {saveStatus === 'error' && <span className="v-save-pill is-err">Échec — réessaie</span>}
-            <button type="button" className={`v-btn ${editing ? 'v-btn-edit is-done' : 'v-btn-p'}`} onClick={onToggleEdit} aria-pressed={editing}>
-              {editing ? <Check /> : <Pencil />}<span>{editing ? 'Terminé' : 'Modifier'}</span>
+        <div className="v-id">
+          <div className="v-brand">{entity.brand_name}</div>
+          {subtitle && <div className="v-sub">{subtitle}</div>}
+        </div>
+        <div className="v-act">
+          {canEdit ? (
+            <button type="button" className="v-btn v-btn-p" onClick={onEdit}><Pencil /> Modifier</button>
+          ) : onToggleFollow && (
+            <button type="button" className={`v-btn ${isFollowing ? 'v-btn-o is-on' : 'v-btn-p'}`} onClick={onToggleFollow} aria-pressed={isFollowing}>
+              {isFollowing ? <Check /> : <UserPlus />}<span>{isFollowing ? 'Suivi' : 'Suivre'}</span>
             </button>
-          </>
-        ) : onToggleFollow && (
-          <button type="button" className={`v-btn v-btn-follow ${isFollowing ? 'is-on' : 'v-btn-p'}`} onClick={onToggleFollow} aria-pressed={isFollowing}>
-            {isFollowing ? <Check /> : <UserPlus />}<span>{isFollowing ? 'Suivi' : 'Suivre'}</span>
-          </button>
-        )}
-        <button type="button" className="v-iconbtn" title="Partager" onClick={onShare} aria-label="Partager"><Share2 /></button>
-        <button type="button" className="v-iconbtn" title="QR / lien" onClick={onQR} aria-label="QR Code"><QrCode /></button>
-      </div>
-    </header>
+          )}
+          <button type="button" className="v-iconbtn" title="Partager" onClick={onShare} aria-label="Partager"><Share2 /></button>
+          <button type="button" className="v-iconbtn" title="QR / lien" onClick={onQR} aria-label="QR Code"><QrCode /></button>
+        </div>
+      </header>
+
+      {entity.bio && <p className="v-punch">{entity.bio}</p>}
+      {link && (
+        <a className="v-biolink" href={link.url} target="_blank" rel="noopener noreferrer">
+          <Link2 /> {linkHost(link.url)}
+        </a>
+      )}
+    </>
   )
 }
