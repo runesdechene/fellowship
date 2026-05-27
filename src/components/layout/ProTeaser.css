@@ -1,5 +1,7 @@
 /* Teaser Pro générique : vrai contenu flouté + voile dégradé + CTA centré. */
-.pro-teaser { position: relative; min-height: 78vh; overflow: hidden; }
+/* Hauteur plafonnée au viewport : le CTA reste centré à l'écran même si l'aperçu
+   flouté (ex. calendrier 12 mois sur mobile) est beaucoup plus haut. */
+.pro-teaser { position: relative; height: 82vh; overflow: hidden; }
 
 .pro-teaser-content {
   filter: blur(6px);
