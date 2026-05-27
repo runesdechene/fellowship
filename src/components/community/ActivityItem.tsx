@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { avatarColor, type FeedItem } from '@/lib/community'
+import { type FeedItem } from '@/lib/community'
+import { ActorAvatar, ActorName } from './ActorLinks'
 
 function ago(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
@@ -16,11 +17,11 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
   const a = item.actor
   return (
     <div className="act">
-      <div className="act-av" style={{ background: avatarColor(a.label) }}>{a.label[0]?.toUpperCase()}</div>
+      <ActorAvatar actor={a} className="act-av" />
       <div className="act-b">
         {item.kind === 'review' && item.event && (
           <>
-            <div className="act-t"><b>{a.label}</b> a noté{' '}
+            <div className="act-t"><ActorName actor={a} /> a noté{' '}
               <Link to={`/evenement/${item.event.id}`}>{item.event.name}</Link>{' '}
               <time>· {ago(item.occurredAt)}</time>
             </div>
@@ -30,14 +31,14 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
           </>
         )}
         {item.kind === 'participation' && item.event && (
-          <div className="act-t"><b>{a.label}</b> va à{' '}
+          <div className="act-t"><ActorName actor={a} /> va à{' '}
             <Link to={`/evenement/${item.event.id}`}>{item.event.name}</Link>{' '}
             <time>· {ago(item.occurredAt)}</time>
           </div>
         )}
         {item.kind === 'follow' && item.target && (
           <>
-            <div className="act-t"><b>{a.label}</b> suit désormais <b>{item.target.label}</b>{' '}
+            <div className="act-t"><ActorName actor={a} /> suit désormais <ActorName actor={item.target} />{' '}
               <time>· {ago(item.occurredAt)}</time>
             </div>
             {item.target.slug && <div className="act-sub"><Link to={`/${item.target.slug}`}>Voir la vitrine</Link></div>}

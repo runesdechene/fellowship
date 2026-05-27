@@ -412,3 +412,13 @@
   .comm-grid { grid-template-columns: 1fr; }
   .comm-side { display: none; }
 }
+
+/* ── Liens cliquables : noms d'acteurs, avatars, titres d'événements ───── */
+.comm-page .actor-name { color: hsl(var(--foreground)); font-weight: 600; text-decoration: none; }
+.comm-page .actor-name:hover { text-decoration: underline; }
+/* Dans le fil, .act-t a est ambre (liens événement) : on garde les noms d'acteur en clair. */
+.comm-page .act-t a.actor-name { color: hsl(var(--foreground)); }
+.comm-page a.actor-clickable { text-decoration: none; cursor: pointer; }
+.comm-page a.actor-clickable:hover { filter: brightness(1.08); }
+.comm-page .conv-title { text-decoration: none; }
+.comm-page .conv-title:hover { text-decoration: underline; }

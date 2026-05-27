@@ -14,11 +14,11 @@ export function ConvergenceCard({ conv }: { conv: Convergence }) {
   return (
     <div className="conv">
       {event.imageUrl && (
-        <div className="conv-affiche"><img src={event.imageUrl} alt="" /></div>
+        <Link to={`/evenement/${event.id}`} className="conv-affiche"><img src={event.imageUrl} alt="" /></Link>
       )}
       <div className="conv-body">
         <span className="conv-eyb">🎪 Ça se rassemble</span>
-        <b>{event.name}</b>
+        <Link to={`/evenement/${event.id}`} className="conv-title"><b>{event.name}</b></Link>
         <div className="conv-meta">{fmtRange(event.startDate, event.endDate)}{event.city ? ` · ${event.city}` : ''}</div>
         <div className="conv-foot">
           <div className="avs">
