@@ -13,7 +13,7 @@ import { VitrineEscales } from '@/components/vitrine/VitrineEscales'
 import { VitrineTampons } from '@/components/vitrine/VitrineTampons'
 import { VitrineEmptyRoad } from '@/components/vitrine/VitrineEmptyRoad'
 import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
-import { QRCodeModal } from '@/components/profile/QRCodeModal'
+import { VitrineQRModal } from '@/components/vitrine/VitrineQRModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
 import type { EntityRow } from '@/types/database'
 import './Vitrine.css'
@@ -91,7 +91,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
       </div>
 
       {editOpen && <VitrineEditModal entity={entity} api={edit} onClose={() => setEditOpen(false)} onSaved={patch => setEntity(e => (e ? { ...e, ...patch } as EntityRow : e))} />}
-      {showQR && entity.public_slug && <QRCodeModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}
+      {showQR && entity.public_slug && <VitrineQRModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}
       {showEmbed && entity.public_slug && <EmbedModal slug={entity.public_slug} onClose={() => setShowEmbed(false)} />}
     </div>
   )

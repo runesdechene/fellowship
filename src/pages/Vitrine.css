@@ -435,3 +435,17 @@ textarea.v-inp { resize: vertical; min-height: 60px; line-height: 1.5; }
 .v-cancel:hover { color: hsl(var(--foreground)); }
 .v-save { margin-left: auto; flex: 1; max-width: 200px; background: linear-gradient(135deg, var(--copper), var(--copper-d)); color: #fff; border: none; border-radius: 13px; padding: 12px; font-family: var(--font-body); font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 22px hsl(20 65% 32%/.4); }
 .v-save:hover { filter: brightness(1.07); } .v-save:disabled { opacity: .7; cursor: default; }
+
+/* ── Modale QR ── */
+.v-qr-modal { max-width: 360px; }
+.v-qr-body { align-items: center; text-align: center; }
+.v-qr-card { background: #fff; border-radius: 16px; padding: 18px; display: inline-flex; box-shadow: 0 10px 28px rgba(0,0,0,.3); }
+.v-qr-hint { font-size: 13px; color: hsl(var(--muted-foreground)); line-height: 1.45; max-width: 30ch; }
+.v-qr-url { font-family: var(--font-body); font-size: 12.5px; color: hsl(var(--foreground)); opacity: .7; word-break: break-all; }
+.v-qr-foot { gap: 10px; }
+.v-qr-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 12px; padding: 11px; font-family: var(--font-body); font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1px solid hsl(var(--border)); background: transparent; color: hsl(var(--foreground)); }
+.v-qr-btn:hover { border-color: hsl(33 16% 34%); }
+.v-qr-btn.is-primary { border: none; background: linear-gradient(135deg, var(--copper), var(--copper-d)); color: #fff; }
+.v-qr-btn.is-primary:hover { filter: brightness(1.07); border: none; }
+.v-qr-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
+.light .v-qr-btn.is-primary { box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20); }
