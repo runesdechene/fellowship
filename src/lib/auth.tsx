@@ -26,6 +26,18 @@ interface AuthContextType {
   refreshProfile: () => Promise<void>
   needsOnboarding: boolean
   isAdmin: boolean
+  // Debug admin : force le plan perçu de l'entité active (pur client, n'écrit rien en base).
+  planOverride: PlanOverride
+  setPlanOverride: (v: PlanOverride) => void
+}
+
+type PlanOverride = 'pro' | 'free' | null
+const PLAN_OVERRIDE_KEY = 'debug-plan-override'
+function readPlanOverride(): PlanOverride {
+  try {
+    const v = localStorage.getItem(PLAN_OVERRIDE_KEY)
+    return v === 'pro' || v === 'free' ? v : null
+  } catch { return null }
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -38,6 +50,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [entities, setEntities] = useState<EntityRow[]>([])
   const [currentActorId, setCurrentActorId] = useState<string | null>(readStoredActorId())
   const [loading, setLoading] = useState(true)
+  const [planOverride, setPlanOverrideState] = useState<PlanOverride>(() => readPlanOverride())
+
+  const setPlanOverride = (v: PlanOverride) => {
+    setPlanOverrideState(v)
+    try {
+      if (v) localStorage.setItem(PLAN_OVERRIDE_KEY, v)
+      else localStorage.removeItem(PLAN_OVERRIDE_KEY)
+    } catch { /* ignore */ }
+  }
 
   const switchActor = (id: string | null) => {
     setCurrentActorId(id)
@@ -124,7 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     .map(e => toView(e, 'entity'))
     .filter((v): v is ActorView => !!v)
   const currentActor = personView ? pickCurrentActor(personView, entityViews, currentActorId) : null
-  const currentActorRow = currentActor?.kind === 'entity'
+  const rawActorRow = currentActor?.kind === 'entity'
     ? entities.find(e => e.actor_id === currentActor.id) ?? null
     : person
   const can = (action: ActorAction) => (currentActor ? actorCan(currentActor, action) : false)
@@ -133,12 +154,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const needsOnboarding = !!user && person !== null && deriveNeedsOnboarding(personView)
   const isAdmin = person?.role === 'admin'
 
+  // Debug admin : surcharge du plan perçu de l'entité active (n'écrit rien en base).
+  const currentActorRow = (isAdmin && planOverride && currentActor?.kind === 'entity' && rawActorRow)
+    ? { ...(rawActorRow as EntityRow), plan: planOverride }
+    : rawActorRow
+
   return (
     <AuthContext.Provider
       value={{
         user, session,
         person, entities, currentActor, currentActorRow, switchActor, can,
         profile, loading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
+        planOverride, setPlanOverride,
       }}
     >
       {children}

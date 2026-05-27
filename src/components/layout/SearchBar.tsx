@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth'
 import { useNotifications } from '@/hooks/use-notifications'
 import { useFollowingIds } from '@/hooks/use-following-ids'
 import { NotificationItem } from '@/components/notifications/NotificationItem'
+import { DebugPlanSwitch } from './DebugPlanSwitch'
 import './SearchBar.css'
 
 interface SearchEvent {
@@ -169,6 +170,9 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
           <span className="search-bar-add-label">Ajouter un événement</span>
         </button>
       )}
+
+      {/* Debug admin : switch de plan (Réel/Pro/Gratuit) */}
+      <DebugPlanSwitch />
 
       {/* Notification bell */}
       {profile && (
