@@ -1,0 +1,414 @@
+/* ── Communauté — Fil du réseau ──────────────────────────────────────── */
+/* Scoped to .comm-page / .comm-teaser (lives inside AppLayout <main>).   */
+/* Every selector is ancestor-scoped so the bare classNames the community */
+/* components render (.conv / .act / .card / .btn …) don't collide with    */
+/* global classes elsewhere.                                              */
+/*                                                                         */
+/* Token map (mockup → app):                                              */
+/*   --surface   → hsl(var(--card))                                       */
+/*   --surface2  → hsl(var(--muted))                                      */
+/*   --text      → hsl(var(--foreground))                                 */
+/*   --muted     → hsl(var(--muted-foreground))                           */
+/*   --line      → hsl(var(--border))                                     */
+/*   --bg        → hsl(var(--background))                                  */
+/*   --cop/--cop-d gradient → linear-gradient(135deg, hsl(25 78% 52%),    */
+/*                            hsl(16 70% 40%))                            */
+/*   --amber (accents/links)  → var(--amber)  (FULL color, never hsl())   */
+/*   --green   → hsl(86 44% 64%)                                          */
+
+/* ── Page container ───────────────────────────────────────────────────── */
+.comm-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 26px 32px 60px;
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+}
+
+/* ── SVG baseline (mandatory) ─────────────────────────────────────────── */
+.comm-page svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+.comm-head { margin-bottom: 20px; }
+.comm-head h1 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 30px;
+  color: hsl(var(--foreground));
+  margin-bottom: 4px;
+}
+.comm-sub { font-size: 14px; color: hsl(var(--muted-foreground)); }
+
+/* ── Segments ─────────────────────────────────────────────────────────── */
+.comm-segs { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 18px; }
+.comm-page .seg {
+  padding: 8px 15px;
+  border-radius: 99px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.13s;
+}
+.comm-page .seg:hover { color: hsl(var(--foreground)); }
+.comm-page .seg.on {
+  background: color-mix(in srgb, var(--copper) 18%, transparent);
+  border-color: color-mix(in srgb, var(--amber) 40%, transparent);
+  color: var(--amber);
+}
+
+/* ── Grid (feed + sticky side) ────────────────────────────────────────── */
+.comm-grid {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 26px;
+  align-items: start;
+}
+.comm-feed { display: flex; flex-direction: column; gap: 13px; min-width: 0; }
+.comm-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 26px;
+}
+
+/* ── Convergence (item roi) ───────────────────────────────────────────── */
+.comm-page .conv {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--copper) 16%, hsl(var(--card))), hsl(var(--card)));
+  border: 1px solid color-mix(in srgb, var(--copper) 30%, hsl(var(--border)));
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+.comm-page .conv-affiche {
+  width: 58px;
+  height: 80px;
+  border-radius: 9px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.comm-page .conv-affiche img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.comm-page .conv-body { flex: 1; min-width: 0; }
+.comm-page .conv-eyb {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.comm-page .conv-body b {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: hsl(var(--foreground));
+  display: block;
+  margin: 4px 0 2px;
+  line-height: 1.1;
+}
+.comm-page .conv-meta { font-size: 12.5px; color: hsl(var(--muted-foreground)); margin-bottom: 10px; }
+.comm-page .conv-foot { display: flex; align-items: center; gap: 11px; }
+.comm-page .conv-foot .ftxt { font-size: 13px; color: hsl(var(--muted-foreground)); }
+.comm-page .conv-foot .ftxt b { color: hsl(var(--foreground)); font-family: var(--font-heading); }
+
+/* ── Avatar stacks ────────────────────────────────────────────────────── */
+.comm-page .avs { display: flex; }
+.comm-page .avs span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2.5px solid hsl(var(--card));
+  margin-left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1c1310; /* sits on a dynamic colored background set inline */
+}
+.comm-page .avs span:first-child { margin-left: 0; }
+.comm-page .avs .avs-more {
+  background: hsl(var(--muted));
+  color: var(--amber);
+  font-size: 10px;
+}
+
+/* ── Activity item ────────────────────────────────────────────────────── */
+.comm-page .act {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 15px;
+  padding: 15px 17px;
+}
+.comm-page .act-av {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1c1310; /* on dynamic colored background set inline */
+}
+.comm-page .act-b { flex: 1; min-width: 0; }
+.comm-page .act-t { font-size: 14px; color: hsl(var(--foreground)); line-height: 1.45; }
+.comm-page .act-t b { color: hsl(var(--foreground)); font-weight: 600; }
+.comm-page .act-t a { color: var(--amber); font-weight: 600; text-decoration: none; }
+.comm-page .act-t a:hover { text-decoration: underline; }
+.comm-page .act-t time { color: hsl(var(--muted-foreground)); font-size: 12px; font-weight: 500; }
+.comm-page .act-stars { margin-top: 6px; color: var(--amber); font-size: 13px; letter-spacing: 1px; }
+.comm-page .act-stars span {
+  color: hsl(var(--foreground));
+  font-size: 13.5px;
+  letter-spacing: normal;
+  font-style: italic;
+  margin-left: 6px;
+}
+.comm-page .act-sub { font-size: 12.5px; color: hsl(var(--muted-foreground)); margin-top: 3px; }
+.comm-page .act-sub a { color: var(--amber); text-decoration: none; }
+.comm-page .act-sub a:hover { text-decoration: underline; }
+.comm-page .act-chips { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+.comm-page .act-chips span {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+.comm-page .act .btn { align-self: center; flex-shrink: 0; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.comm-page .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  border-radius: 10px;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.14s;
+  white-space: nowrap;
+}
+.comm-page .btn svg { width: 15px; height: 15px; stroke-width: 2; }
+.comm-page .btn-p {
+  background: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
+  color: #fff; /* on copper gradient in both themes — acceptable */
+}
+.comm-page .btn-p:hover { filter: brightness(1.07); }
+.comm-page .btn-g {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: hsl(var(--foreground));
+}
+.comm-page .btn-g:hover { background: rgba(255, 255, 255, 0.14); }
+/* État « Suivi » (vert tendre, lisible nuit + jour) */
+.comm-page .btn-follow.is-on {
+  background: color-mix(in srgb, hsl(86 44% 64%) 20%, transparent);
+  border-color: color-mix(in srgb, hsl(86 44% 64%) 45%, transparent);
+  color: hsl(86 44% 64%);
+}
+
+/* ── Right column cards ───────────────────────────────────────────────── */
+.comm-page .card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  padding: 18px;
+}
+.comm-page .card h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Suggestions */
+.comm-page .sugg {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 0;
+  border-top: 1px solid hsl(var(--border));
+}
+.comm-page .sugg:first-of-type { border-top: none; padding-top: 0; }
+.comm-page .sugg .sav {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1c1310; /* on dynamic colored background set inline */
+}
+.comm-page .sugg .sb { flex: 1; min-width: 0; }
+.comm-page .sugg .sb b {
+  font-family: var(--font-heading);
+  font-size: 13.5px;
+  color: hsl(var(--foreground));
+  display: block;
+  line-height: 1.2;
+}
+.comm-page .sugg .sb span { font-size: 11.5px; color: hsl(var(--muted-foreground)); display: block; margin-top: 2px; }
+.comm-page .sugg .btn { padding: 7px 13px; font-size: 12.5px; }
+
+/* Convergences mini-list */
+.comm-page .conv-mini {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 0;
+  border-top: 1px solid hsl(var(--border));
+  cursor: pointer;
+  text-decoration: none;
+}
+.comm-page .conv-mini:first-of-type { border-top: none; padding-top: 0; }
+.comm-page .conv-mini .cm-b { flex: 1; min-width: 0; }
+.comm-page .conv-mini .cm-b b {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  color: hsl(var(--foreground));
+  display: block;
+  line-height: 1.2;
+}
+.comm-page .conv-mini .cm-b span { font-size: 11.5px; color: hsl(var(--muted-foreground)); }
+.comm-page .conv-mini .avs span { width: 24px; height: 24px; font-size: 9px; border-width: 2px; }
+.comm-page .conv-mini .avs .avs-more { font-size: 9px; }
+
+/* ── Teaser (free plan) ───────────────────────────────────────────────── */
+.comm-teaser { position: relative; }
+.comm-teaser-feed {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.comm-teaser-veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, transparent, hsl(var(--background)) 75%);
+}
+.comm-teaser-cta {
+  text-align: center;
+  max-width: 360px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.comm-teaser-cta h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 22px;
+  color: hsl(var(--foreground));
+}
+.comm-teaser-cta p { font-size: 14px; color: hsl(var(--muted-foreground)); line-height: 1.5; }
+.comm-teaser-cta .btn { margin-top: 4px; }
+.comm-teaser-lock {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--copper) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--copper) 32%, transparent);
+  color: var(--amber);
+  margin-bottom: 4px;
+}
+.comm-teaser-lock svg { width: 26px; height: 26px; }
+
+/* ── States: empty / inline-empty / skeleton ──────────────────────────── */
+.comm-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 70px 24px;
+}
+.comm-empty-icon { font-size: 48px; opacity: 0.85; }
+.comm-empty h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 20px;
+  color: hsl(var(--foreground));
+}
+.comm-empty p { font-size: 14px; color: hsl(var(--muted-foreground)); max-width: 380px; line-height: 1.5; }
+.comm-empty .btn { margin-top: 6px; }
+.comm-empty-inline {
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+  padding: 24px 4px;
+  text-align: center;
+}
+.comm-page .comm-skel {
+  min-height: 84px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ── Day mode (.light) overrides ──────────────────────────────────────── */
+/* Night shadows are too harsh on the warm light bg → warm, very low opacity. */
+.light .comm-page .conv,
+.light .comm-page .card {
+  box-shadow: 0 12px 30px rgba(60, 45, 35, 0.07);
+}
+.light .comm-page .conv-affiche { box-shadow: 0 6px 16px rgba(60, 45, 35, 0.18); }
+/* Ghost button : en jour les rgba(255,255,255,..) sont invisibles → fond card + bord token. */
+.light .comm-page .btn-g {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+.light .comm-page .btn-g:hover { background: hsl(var(--muted)); }
+/* En jour le lien actif sidebar utilise un cuivre foncé ; on garde --amber (déjà foncé en .light) pour les accents. */
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 1080px) {
+  .comm-page { padding: 22px 18px 48px; }
+  .comm-grid { grid-template-columns: 1fr; }
+  .comm-side { display: none; }
+}

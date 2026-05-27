@@ -105,3 +105,28 @@ export function useMyFollowers() {
 
   return { followers, loading }
 }
+
+export function useFollowingSet() {
+  const { currentActor } = useAuth()
+  const [following, setFollowing] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    if (!currentActor) { setFollowing(new Set()); return } // eslint-disable-line react-hooks/set-state-in-effect
+    let cancelled = false
+    async function run() {
+      const { data } = await supabase.from('follows')
+        .select('following_actor').eq('follower_actor', currentActor!.id)
+      if (!cancelled) setFollowing(new Set((data ?? []).map(r => r.following_actor as string).filter(Boolean)))
+    }
+    run()
+    return () => { cancelled = true }
+  }, [currentActor])
+
+  const follow = async (actorId: string) => {
+    if (!currentActor || following.has(actorId)) return
+    await supabase.from('follows').insert({ follower_actor: currentActor.id, following_actor: actorId })
+    setFollowing(prev => new Set(prev).add(actorId))
+  }
+
+  return { following, follow }
+}
