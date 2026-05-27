@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { groupParticipationsByMonth, freeWindowSplit } from './mes-dates'
+import { groupParticipationsByMonth } from './mes-dates'
 import type { ParticipationWithEvent } from '@/types/database'
 
 const NOW = new Date('2026-05-15T12:00:00Z')
@@ -58,34 +58,5 @@ describe('groupParticipationsByMonth', () => {
     const orphan = { id: 'x', event_id: 'ex', status: 'interesse', payment_status: null, visibility: 'amis', events: null } as unknown as ParticipationWithEvent
     const out = groupParticipationsByMonth([orphan, part('1', '2026-06-05', '2026-06-06')], { now: NOW, direction: 'upcoming' })
     expect(out).toHaveLength(1)
-  })
-})
-
-describe('freeWindowSplit', () => {
-  // buckets « upcoming » à partir de mai 2026 (mois courant)
-  const buckets = groupParticipationsByMonth([
-    part('a', '2026-05-20', '2026-05-21'),
-    part('b', '2026-06-10', '2026-06-11'),
-    part('c', '2026-07-05', '2026-07-06'),
-    part('d', '2026-08-01', '2026-08-02'),
-    part('e', '2026-09-01', '2026-09-02'),
-  ], { now: NOW, direction: 'upcoming' })
-
-  it('garde le mois courant + 2 mois suivants dans visible', () => {
-    const { visible } = freeWindowSplit(buckets, NOW)
-    expect(visible.map(b => `${b.year}-${b.month}`)).toEqual(['2026-4', '2026-5', '2026-6'])
-  })
-
-  it('renvoie les buckets au-delà dans beyond + le compte exact', () => {
-    const { beyond, beyondCount } = freeWindowSplit(buckets, NOW)
-    expect(beyond.map(b => `${b.year}-${b.month}`)).toEqual(['2026-7', '2026-8'])
-    expect(beyondCount).toBe(2)
-  })
-
-  it('rien au-delà → beyond vide, beyondCount 0', () => {
-    const small = groupParticipationsByMonth([part('a', '2026-05-20', '2026-05-21')], { now: NOW, direction: 'upcoming' })
-    const { beyond, beyondCount } = freeWindowSplit(small, NOW)
-    expect(beyond).toEqual([])
-    expect(beyondCount).toBe(0)
   })
 })

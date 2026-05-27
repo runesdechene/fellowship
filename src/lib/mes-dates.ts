@@ -55,25 +55,3 @@ export function groupParticipationsByMonth(
   })
   return buckets
 }
-
-/**
- * Découpe « fenêtre gratuite » pour l'exposant free : mois courant + 2 mois suivants.
- * `visible` = buckets dans la fenêtre ; `beyond` = au-delà ; `beyondCount` = total d'events au-delà.
- */
-export function freeWindowSplit(buckets: MonthBucket[], now: Date): {
-  visible: MonthBucket[]
-  beyond: MonthBucket[]
-  beyondCount: number
-} {
-  // Borne haute incluse : mois courant + 2 (ex. mai → juillet).
-  const limit = new Date(now.getFullYear(), now.getMonth() + 2, 1)
-  const limitKey = limit.getFullYear() * 12 + limit.getMonth()
-  const visible: MonthBucket[] = []
-  const beyond: MonthBucket[] = []
-  for (const b of buckets) {
-    if (b.year * 12 + b.month <= limitKey) visible.push(b)
-    else beyond.push(b)
-  }
-  const beyondCount = beyond.reduce((n, b) => n + b.events.length, 0)
-  return { visible, beyond, beyondCount }
-}

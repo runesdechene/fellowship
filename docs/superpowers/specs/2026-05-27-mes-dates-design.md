@@ -1,6 +1,8 @@
 # Page « Mes dates » — Design
 
 > **Statut :** validé (brainstorm 2026-05-27). Page gratuite servant de **compensation** au Calendrier passé Pro. S'appuie sur le vocabulaire de statut déjà unifié (`participationChip`, `docs/superpowers/specs/2026-05-26-participation-lifecycle-refonte-design.md`).
+>
+> **⚠️ Mise à jour 2026-05-27 (post-implémentation) — pivot du palier gratuit.** Le **cap d'horizon « 3 mois »** + le tease flou (décrits plus bas) ont été **abandonnés** et retirés du code. Raison : gater l'horizon de visibilité de SA PROPRE donnée fait punitif, et « Mes dates débloquée = même liste plus longue » fait doublon avec le Calendrier. Décision : **« Mes dates » affiche TOUT pour tout le monde** (aucun cap d'horizon). Le palier gratuit est désormais piloté par un **quota de dates/an avec statut** (≈10, fenêtre 12 mois glissants, entité gratuite seulement), enforced **à l'ajout d'un statut** — spec dédiée : `docs/superpowers/specs/2026-05-27-quota-dates-gratuit-design.md`. Les sections ci-dessous décrivant la fenêtre 3 mois / le tease sont **caduques** (gardées pour trace).
 
 ## Contexte & problème
 
