@@ -32,8 +32,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   // Copie locale optimiste (seedée depuis le hook de lecture)
   const [entity, setEntity] = useState<EntityRow | null>(null)
   const [gallery, setGallery] = useState<EntityGalleryRow[]>([])
-  useEffect(() => { setEntity(data.entity) }, [data.entity])
-  useEffect(() => { setGallery(data.gallery) }, [data.gallery])
+  useEffect(() => { setEntity(data.entity) }, [data.entity]) // eslint-disable-line react-hooks/set-state-in-effect
+  useEffect(() => { setGallery(data.gallery) }, [data.gallery]) // eslint-disable-line react-hooks/set-state-in-effect
 
   const edit = useVitrineEdit(entity?.actor_id ?? '')
 
