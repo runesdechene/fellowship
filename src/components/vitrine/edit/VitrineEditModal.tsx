@@ -20,6 +20,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
   const [cover, setCover] = useState(entity.banner_url)
   const [avatar, setAvatar] = useState(entity.avatar_url)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(false)
   const coverRef = useRef<HTMLInputElement>(null)
   const avatarRef = useRef<HTMLInputElement>(null)
 
@@ -31,6 +32,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
   }
 
   async function save() {
+    setError(false)
     setSaving(true)
     const links: VitrineLink[] = link.trim()
       ? [{ type: 'shop', label: 'Boutique', url: /^[a-z]+:\/\//i.test(link.trim()) ? link.trim() : `https://${link.trim()}` }]
@@ -46,7 +48,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
     }
     const ok = await api.updateEntity(patch)
     setSaving(false)
-    if (ok) { onSaved(patch); onClose() }
+    if (ok) { onSaved(patch); onClose() } else { setError(true) }
   }
 
   return (
@@ -85,6 +87,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
           </div>
         </div>
         <div className="v-mfoot">
+          {error && <span className="v-merror">Échec de l'enregistrement — réessaie.</span>}
           <button type="button" className="v-cancel" onClick={onClose}>Annuler</button>
           <button type="button" className="v-save" onClick={save} disabled={saving}>{saving ? 'Enregistrement…' : 'Enregistrer'}</button>
         </div>

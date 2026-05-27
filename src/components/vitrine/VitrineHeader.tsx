@@ -31,7 +31,7 @@ export function VitrineHeader({ entity, canEdit, isFollowing, onEdit, onToggleFo
         </div>
         <div className="v-act">
           {canEdit ? (
-            <button type="button" className="v-btn v-btn-p" onClick={onEdit}><Pencil /> Modifier</button>
+            <button type="button" className="v-btn v-btn-p" onClick={() => onEdit?.()}><Pencil /> Modifier</button>
           ) : onToggleFollow && (
             <button type="button" className={`v-btn ${isFollowing ? 'v-btn-o is-on' : 'v-btn-p'}`} onClick={onToggleFollow} aria-pressed={isFollowing}>
               {isFollowing ? <Check /> : <UserPlus />}<span>{isFollowing ? 'Suivi' : 'Suivre'}</span>
