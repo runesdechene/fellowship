@@ -17,6 +17,7 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
   const [location, setLocation] = useState((entity as { location?: string | null }).location ?? entity.city ?? '')
   const [bio, setBio] = useState(entity.bio ?? '')
   const [link, setLink] = useState(firstLink?.url ?? '')
+  const [slug, setSlug] = useState(entity.public_slug ?? '')
   const [cover, setCover] = useState(entity.banner_url)
   const [avatar, setAvatar] = useState(entity.avatar_url)
   const [saving, setSaving] = useState(false)
@@ -45,6 +46,8 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
       links,
       banner_url: cover,
       avatar_url: avatar,
+      // On ne vide jamais le slug (casserait l'URL publique) : si laissé vide on garde l'existant.
+      public_slug: slug.trim() || entity.public_slug,
     }
     const ok = await api.updateEntity(patch)
     setSaving(false)
@@ -84,6 +87,14 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
             <label>Lien boutique</label>
             <input className="v-inp" value={link} onChange={e => setLink(e.target.value)} placeholder="boutique.monsite.fr" />
             <div className="v-hint"><span>Affiché en vert sous ta phrase.</span></div>
+          </div>
+          <div className="v-field">
+            <label>Adresse publique</label>
+            <div className="v-slug">
+              <span>flw.sh/@</span>
+              <input value={slug} onChange={e => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="mon-slug" />
+            </div>
+            <div className="v-hint"><span>L'URL de ta vitrine — doit être unique.</span></div>
           </div>
         </div>
         <div className="v-mfoot">

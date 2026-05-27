@@ -440,6 +440,12 @@
 textarea.v-inp { resize: vertical; min-height: 60px; line-height: 1.5; }
 .v-hint { font-size: 11px; color: hsl(var(--muted-foreground)); opacity: .75; display: flex; justify-content: space-between; gap: 8px; padding: 0 2px; }
 .v-row2 { display: flex; gap: 12px; } .v-row2 .v-field { flex: 1; }
+/* Champ slug : préfixe flw.sh/@ collé à l'input. */
+.v-slug { display: flex; align-items: stretch; background: hsl(9 22% 16.5%); border-radius: 13px; overflow: hidden; transition: box-shadow .15s, background .15s; }
+.v-slug:focus-within { background: hsl(9 22% 19%); box-shadow: 0 0 0 2px color-mix(in srgb, var(--copper) 60%, transparent); }
+.v-slug span { display: flex; align-items: center; padding: 11px 2px 11px 14px; font-size: 14px; color: hsl(var(--muted-foreground)); user-select: none; white-space: nowrap; }
+.v-slug input { flex: 1; min-width: 0; font-family: var(--font-body); font-size: 14px; color: hsl(var(--foreground)); background: transparent; border: none; padding: 11px 14px 11px 0; }
+.v-slug input:focus { outline: none; }
 .v-mfoot { display: flex; align-items: center; gap: 12px; padding: 14px 22px 20px; }
 .v-merror { font-size: 12px; color: #e0796b; font-weight: 600; }
 .v-cancel { background: none; border: none; color: hsl(var(--muted-foreground)); font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; padding: 6px; }

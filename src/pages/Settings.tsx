@@ -1,58 +1,52 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { Camera, ImagePlus, Download, LogOut, Trash2, Check, Loader2, X } from 'lucide-react'
+import { Camera, Download, LogOut, Trash2, Check, Loader2, ExternalLink } from 'lucide-react'
+import type { EntityRow } from '@/types/database'
 
 export function SettingsPage() {
-  const { user, profile, signOut, refreshProfile } = useAuth()
+  const { user, profile, entities, currentActor, currentActorRow, signOut, refreshProfile } = useAuth()
 
-  // Form state — initialised from profile
+  // ── Infos personnelles (compte) ────────────────────────────────────────────
+  // Ne vivent QUE ici, sur `profiles`. L'identité publique (marque, métier, bio,
+  // lien, photos de la vitrine, slug) se modifie sur la vitrine → table `entities`.
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '')
-  const [brandName, setBrandName] = useState(profile?.brand_name ?? '')
-  const [craftType, setCraftType] = useState(profile?.craft_type ?? '')
-  const [bio, setBio] = useState(profile?.bio ?? '')
-  const [website, setWebsite] = useState(profile?.website ?? '')
-  const [slug, setSlug] = useState(profile?.public_slug ?? '')
   const [city, setCity] = useState(profile?.city ?? '')
   const [postalCode, setPostalCode] = useState(profile?.postal_code ?? '')
   const [sex, setSex] = useState<string>(profile?.sex ?? 'indéfini')
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? '')
-  const [bannerUrl, setBannerUrl] = useState(profile?.banner_url ?? '')
 
   // UI state
   const [saving, setSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
-  const [uploadingBanner, setUploadingBanner] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const bannerInputRef = useRef<HTMLInputElement>(null)
 
-  const isExposant = profile?.type === 'exposant'
-  const qrUrl = `https://flw.sh/@${slug}`
+  // QR / partage : l'URL publique se résout sur le slug de l'ENTITÉ (cf. use-vitrine.ts),
+  // pas sur profiles. On prend l'entité active si on agit en tant qu'elle, sinon la première.
+  const entity: EntityRow | null =
+    (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null) ?? entities[0] ?? null
+  const entitySlug = entity?.public_slug ?? ''
+  const qrUrl = `https://flw.sh/@${entitySlug}`
 
   // Keep form in sync if profile loads after mount
   useEffect(() => {
     if (profile) {
       setDisplayName(profile.display_name ?? '')
-      setBrandName(profile.brand_name ?? '')
-      setCraftType(profile.craft_type ?? '')
-      setBio(profile.bio ?? '')
-      setWebsite(profile.website ?? '')
-      setSlug(profile.public_slug ?? '')
       setCity(profile.city ?? '')
       setPostalCode(profile.postal_code ?? '')
       setSex(profile.sex ?? 'indéfini')
       setAvatarUrl(profile.avatar_url ?? '')
-      setBannerUrl(profile.banner_url ?? '')
     }
   }, [profile])
 
-  // ── Avatar upload ──────────────────────────────────────────────────────────
+  // ── Avatar (photo personnelle) ───────────────────────────────────────────────
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file || !user) return
@@ -74,29 +68,7 @@ export function SettingsPage() {
     }
   }
 
-  // ── Banner upload ──────────────────────────────────────────────────────────
-  async function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file || !user) return
-    setUploadingBanner(true)
-    try {
-      const ext = file.name.split('.').pop()
-      const path = `${user.id}/banner-${Date.now()}.${ext}`
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(path, file, { upsert: true })
-      if (uploadError) throw uploadError
-
-      const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-      setBannerUrl(data.publicUrl)
-    } catch (err) {
-      console.error('Banner upload error:', err)
-    } finally {
-      setUploadingBanner(false)
-    }
-  }
-
-  // ── Save profile ───────────────────────────────────────────────────────────
+  // ── Save (infos personnelles uniquement) ─────────────────────────────────────
   async function handleSave() {
     if (!user) return
     setSaving(true)
@@ -109,14 +81,6 @@ export function SettingsPage() {
         postal_code: postalCode || null,
         sex: sex || null,
         avatar_url: avatarUrl || null,
-        banner_url: bannerUrl || null,
-      }
-      if (isExposant) {
-        updates.brand_name = brandName || null
-        updates.craft_type = craftType || null
-        updates.bio = bio || null
-        updates.website = website || null
-        updates.public_slug = slug || null
       }
       const { error } = await supabase
         .from('profiles')
@@ -143,7 +107,7 @@ export function SettingsPage() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `qr-${slug || 'fellowship'}.svg`
+    a.download = `qr-${entitySlug || 'fellowship'}.svg`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -163,9 +127,18 @@ export function SettingsPage() {
       <div className="page-width max-w-2xl page-padding">
         <h1 className="page-title mb-8">Paramètres</h1>
 
-        {/* ── Section: Profil ──────────────────────────────────────────────── */}
+        {/* ── Section: Infos personnelles ──────────────────────────────────── */}
         <section className="mb-6 rounded-2xl bg-card p-6">
-          <h2 className="mb-5 text-base font-semibold">Profil</h2>
+          <h2 className="mb-1.5 text-base font-semibold">Infos personnelles</h2>
+          {entity && (
+            <p className="mb-5 text-sm text-muted-foreground">
+              Ton nom de marque, ta présentation, ton lien et tes photos publiques se modifient sur{' '}
+              <Link to={`/${entitySlug}`} className="inline-flex items-center gap-1 font-medium text-foreground underline underline-offset-2">
+                ta vitrine <ExternalLink className="h-3 w-3" />
+              </Link>
+              .
+            </p>
+          )}
 
           {/* Avatar */}
           <div className="mb-6 flex items-center gap-4">
@@ -175,7 +148,7 @@ export function SettingsPage() {
                   <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-muted-foreground">
-                    {(displayName || brandName || '?')[0]?.toUpperCase()}
+                    {(displayName || entity?.brand_name || '?')[0]?.toUpperCase()}
                   </div>
                 )}
               </div>
@@ -199,58 +172,12 @@ export function SettingsPage() {
               />
             </div>
             <div>
-              <p className="text-sm font-medium">Photo de profil</p>
+              <p className="text-sm font-medium">Photo personnelle</p>
               <p className="text-xs text-muted-foreground">JPG, PNG ou GIF — max 5 Mo</p>
             </div>
           </div>
 
-          {/* Banner */}
-          {isExposant && (
-            <div className="mb-6">
-              <p className="text-sm font-medium mb-2">Image de fond du profil</p>
-              <div
-                className="relative h-32 rounded-xl overflow-hidden bg-muted cursor-pointer group"
-                onClick={() => bannerInputRef.current?.click()}
-              >
-                {bannerUrl ? (
-                  <>
-                    <img src={bannerUrl} alt="Bannière" className="h-full w-full object-cover" />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <ImagePlus className="h-6 w-6 text-white" />
-                    </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setBannerUrl('') }}
-                      className="absolute top-2 right-2 rounded-full bg-black/50 p-1 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </>
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-muted-foreground">
-                    {uploadingBanner ? (
-                      <Loader2 className="h-6 w-6 animate-spin" />
-                    ) : (
-                      <>
-                        <ImagePlus className="h-6 w-6" />
-                        <span className="text-xs">Ajouter une image de fond</span>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-              <input
-                ref={bannerInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleBannerChange}
-              />
-              <p className="mt-1.5 text-xs text-muted-foreground">Recommandé : 1200×400px. Visible sur votre profil public.</p>
-            </div>
-          )}
-
           <div className="grid gap-4">
-            {/* Champ commun : display_name */}
             <div>
               <label className="mb-1.5 block text-sm font-medium">Prénom / Nom affiché</label>
               <input
@@ -261,67 +188,6 @@ export function SettingsPage() {
               />
             </div>
 
-            {/* Champs exposant uniquement */}
-            {isExposant && (
-              <>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">Nom de marque</label>
-                  <input
-                    className={inputCls}
-                    placeholder="Ma Marque"
-                    value={brandName}
-                    onChange={(e) => setBrandName(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">Type d'activité</label>
-                  <input
-                    className={inputCls}
-                    placeholder="Forgeron, Marque de vêtement, Artisan bois..."
-                    value={craftType}
-                    onChange={(e) => setCraftType(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">Biographie</label>
-                  <textarea
-                    className={`${inputCls} min-h-[90px] resize-y`}
-                    placeholder="Quelques mots sur vous ou votre marque…"
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">Site web</label>
-                  <input
-                    className={inputCls}
-                    placeholder="https://mamarque.fr"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                  />
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium">Slug public</label>
-                  <div className="flex items-center rounded-lg border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring">
-                    <span className="border-r border-input bg-muted px-3 py-2 text-sm text-muted-foreground select-none">
-                      flw.sh/@
-                    </span>
-                    <input
-                      className="flex-1 bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                      placeholder="mon-slug"
-                      value={slug}
-                      onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Champs communs : localisation & genre */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1.5 block text-sm font-medium">Ville</label>
@@ -375,12 +241,12 @@ export function SettingsPage() {
           </div>
         </section>
 
-        {/* ── Section: QR Code (exposant only) ────────────────────────────── */}
-        {isExposant && slug && (
+        {/* ── Section: QR Code (partage de la vitrine) ────────────────────── */}
+        {entity && entitySlug && (
           <section className="mb-6 rounded-2xl bg-card p-6">
             <h2 className="mb-2 text-base font-semibold">QR Code</h2>
             <p className="mb-5 text-sm text-muted-foreground">
-              Partagez votre profil public via ce QR code.
+              Partagez votre vitrine publique via ce QR code.
             </p>
             <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
               <div className="flex-shrink-0 rounded-xl bg-white p-4">
