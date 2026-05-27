@@ -90,7 +90,9 @@ export function MesDatesPage() {
           {/* Tease « Mes dates débloquée » : vraies dates au-delà de 3 mois, flou progressif. */}
           {split.beyond.length > 0 && (
             <div className="md-tease">
-              <div className="md-tease-blur" aria-hidden="true">{renderBuckets(split.beyond)}</div>
+              {/* `inert` retire le sous-arbre du tab order ET de l'arbre d'accessibilité ET des pointer-events
+                  (aria-hidden seul laisse les liens/boutons floutés focusables au clavier). */}
+              <div className="md-tease-blur" inert>{renderBuckets(split.beyond)}</div>
               <div className="md-tease-cta">
                 <div className="md-tease-lock"><Lock strokeWidth={1.5} /></div>
                 <b>+{split.beyondCount} date{split.beyondCount > 1 ? 's' : ''} au-delà de 3 mois</b>
