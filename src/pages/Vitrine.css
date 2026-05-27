@@ -97,7 +97,7 @@
   display: flex;
   align-items: flex-end;
   gap: 22px;
-  margin-top: -58px;
+  margin-top: 0;
   position: relative;
   z-index: 2;
 }
@@ -304,7 +304,7 @@
   }
 
   .v-head {
-    margin-top: -40px;
+    margin-top: 0;
   }
 
   .v-av {
