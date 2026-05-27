@@ -77,8 +77,8 @@ export function VitrineEditModal({ entity, api, onClose, onSaved }: Props) {
           </div>
           <div className="v-field">
             <label>Présentation</label>
-            <textarea className="v-inp" maxLength={400} value={bio} onChange={e => setBio(e.target.value)} placeholder="Présente ton univers, ton artisanat…" />
-            <div className="v-hint"><span>Apparaît sous ton nom.</span><span>{bio.length} / 400</span></div>
+            <textarea className="v-inp" maxLength={255} value={bio} onChange={e => setBio(e.target.value)} placeholder="Présente ton univers, ton artisanat…" />
+            <div className="v-hint"><span>Apparaît sous ton nom.</span><span>{bio.length} / 255</span></div>
           </div>
           <div className="v-field">
             <label>Lien boutique</label>
