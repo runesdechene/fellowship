@@ -9,6 +9,7 @@ import {
 import type { ComponentType } from 'react'
 import { linkHost, linkTypeIcon } from '@/lib/vitrine'
 import type { VitrineLink } from '@/types/database'
+import { LinkEditor } from './edit/LinkEditor'
 
 // Local lucide icon map keyed by the string names linkTypeIcon() returns
 const ICON_MAP: Record<string, ComponentType<{ className?: string }>> = {
@@ -27,10 +28,12 @@ function LinkIcon({ type }: { type: VitrineLink['type'] }) {
 
 interface VitrineLinksProps {
   links: VitrineLink[]
+  editing?: boolean
+  onChange?: (next: VitrineLink[]) => void
 }
 
-export function VitrineLinks({ links }: VitrineLinksProps) {
-  if (links.length === 0) return null
+export function VitrineLinks({ links, editing, onChange }: VitrineLinksProps) {
+  if (!editing && links.length === 0) return null
 
   return (
     <div className="v-card">
@@ -41,26 +44,19 @@ export function VitrineLinks({ links }: VitrineLinksProps) {
         </svg>
         Liens
       </h2>
-      <div className="v-links">
-        {links.map((l, i) => (
-          <a
-            key={i}
-            className="v-linkrow"
-            href={l.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="v-li">
-              <LinkIcon type={l.type} />
-            </span>
-            <span className="v-lt">
-              <b>{l.label}</b>
-              <span>{linkHost(l.url)}</span>
-            </span>
-            <ExternalLink className="v-lext" />
-          </a>
-        ))}
-      </div>
+      {editing && onChange ? (
+        <LinkEditor links={links} onChange={onChange} />
+      ) : (
+        <div className="v-links">
+          {links.map((l, i) => (
+            <a key={i} className="v-linkrow" href={l.url} target="_blank" rel="noopener noreferrer">
+              <span className="v-li"><LinkIcon type={l.type} /></span>
+              <span className="v-lt"><b>{l.label}</b><span>{linkHost(l.url)}</span></span>
+              <ExternalLink className="v-lext" />
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
