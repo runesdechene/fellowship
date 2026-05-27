@@ -17,6 +17,7 @@ import { PublicProfilePage } from '@/pages/PublicProfile'
 import { EmbedPage } from '@/pages/Embed'
 import { AuthCallbackPage } from '@/pages/AuthCallback'
 import { CalendarPage } from '@/pages/Calendar'
+import { CommunautePage } from '@/pages/Communaute'
 import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 import { AdminRoute } from '@/components/admin/AdminRoute'
 import { ComingSoon } from '@/components/layout/ComingSoon'
@@ -95,7 +96,7 @@ function App() {
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
           <Route path="/mes-dates" element={<AuthenticatedApp><ComingSoon title="Mes dates" /></AuthenticatedApp>} />
           <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
-          <Route path="/communaute" element={<AuthenticatedApp><ProGate title="Communauté"><ComingSoon title="Communauté" /></ProGate></AuthenticatedApp>} />
+          <Route path="/communaute" element={<AuthenticatedApp><CommunautePage /></AuthenticatedApp>} />
           <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Tableau de bord"><ComingSoon title="Tableau de bord" /></ProGate></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
 
