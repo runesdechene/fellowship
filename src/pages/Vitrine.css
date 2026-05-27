@@ -340,7 +340,16 @@
 
   .v-id .v-brand {
     font-size: 24px;
+    justify-content: center;
   }
+
+  /* Bloc d'identité centré sur mobile */
+  .v-head { align-items: center; text-align: center; }
+  .v-id { padding-bottom: 0; }
+  .v-act { justify-content: center; flex-wrap: wrap; }
+  .v-punch { text-align: center; }
+  .v-biolink { display: flex; justify-content: center; }
+  .v-social { margin-left: auto; margin-right: auto; }
 }
 
 /* ── Page de garde ── */
