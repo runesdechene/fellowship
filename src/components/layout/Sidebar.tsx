@@ -5,7 +5,7 @@ import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDash
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { SidebarActivity } from '@/components/notifications/SidebarActivity'
+import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
 import './Sidebar.css'
 
 const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings }
@@ -74,7 +74,7 @@ export function Sidebar() {
       )}
 
       <div className="sidebar-bottom">
-        <SidebarActivity collapsed={collapsed} />
+        <SidebarNetworkActivity collapsed={collapsed} />
         <div className="side-foot">
           <Link to="/reglages" className="av" aria-label="Mon compte" />
           {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
