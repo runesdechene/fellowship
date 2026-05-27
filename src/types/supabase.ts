@@ -233,14 +233,19 @@ export type Database = {
           created_by_actor: string | null
           department: string
           description: string | null
+          edition: number | null
           end_date: string
+          expected_attendance: string | null
           external_url: string | null
           id: string
           image_url: string | null
           name: string
+          opening_hours: string | null
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
+          stand_price: string | null
+          stand_size: string | null
           start_date: string
           tags: string[] | null
         }
@@ -253,14 +258,19 @@ export type Database = {
           created_by_actor?: string | null
           department: string
           description?: string | null
+          edition?: number | null
           end_date: string
+          expected_attendance?: string | null
           external_url?: string | null
           id?: string
           image_url?: string | null
           name: string
+          opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          stand_price?: string | null
+          stand_size?: string | null
           start_date: string
           tags?: string[] | null
         }
@@ -273,14 +283,19 @@ export type Database = {
           created_by_actor?: string | null
           department?: string
           description?: string | null
+          edition?: number | null
           end_date?: string
+          expected_attendance?: string | null
           external_url?: string | null
           id?: string
           image_url?: string | null
           name?: string
+          opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          stand_price?: string | null
+          stand_size?: string | null
           start_date?: string
           tags?: string[] | null
         }
