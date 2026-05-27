@@ -49,13 +49,13 @@ export function VitrineNetworkModal({ followers, friends, onClose }: Props) {
             <div className="v-net-h">Compagnons exposants <span>{friends.length}</span></div>
             {friends.length === 0
               ? <p className="v-net-empty">Pas encore de compagnon exposant.</p>
-              : friends.map(m => <MemberRow key={`c-${m.id}`} m={m} onNavigate={onClose} />)}
+              : <div className="v-net-grid">{friends.map(m => <MemberRow key={`c-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
           </div>
           <div className="v-net-sec">
             <div className="v-net-h">Abonnés <span>{followers.length}</span></div>
             {followers.length === 0
               ? <p className="v-net-empty">Pas encore d'abonnés.</p>
-              : followers.map(m => <MemberRow key={`f-${m.id}`} m={m} onNavigate={onClose} />)}
+              : <div className="v-net-grid">{followers.map(m => <MemberRow key={`f-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
           </div>
         </div>
       </div>
