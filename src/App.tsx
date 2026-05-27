@@ -22,6 +22,7 @@ import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 import { AdminRoute } from '@/components/admin/AdminRoute'
 import { ComingSoon } from '@/components/layout/ComingSoon'
 import { ProGate } from '@/components/layout/ProGate'
+import { ProTeaser } from '@/components/layout/ProTeaser'
 
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
 const AdminDashboard = lazy(() => import('@/components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })))
@@ -88,7 +89,7 @@ function App() {
 
           {/* Authenticated routes */}
           <Route path="/dashboard" element={<Navigate to="/explorer" replace />} />
-          <Route path="/calendrier" element={<AuthenticatedApp><ProGate title="Calendrier"><CalendarPage /></ProGate></AuthenticatedApp>} />
+          <Route path="/calendrier" element={<AuthenticatedApp><ProTeaser title="Ta saison, en grand" pitch="Le calendrier année complète : toutes tes dates, leurs statuts et les festivals où tu retrouves ta tribu."><CalendarPage /></ProTeaser></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />
           <Route path="/profil" element={<AuthenticatedApp><ProfilePage /></AuthenticatedApp>} />
