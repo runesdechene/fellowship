@@ -46,8 +46,8 @@ export function VitrineCover({ url, position, canEdit, onReposition }: Props) {
       )}
 
       {canEdit && url && !editing && (
-        <button type="button" className="v-cover-reposition" onClick={start} title="Repositionner la bannière">
-          <Move /> <span>Repositionner</span>
+        <button type="button" className="v-cover-reposition" onClick={start} title="Repositionner la bannière" aria-label="Repositionner la bannière">
+          <Move />
         </button>
       )}
       {editing && (

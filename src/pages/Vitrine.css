@@ -94,7 +94,7 @@
 /* Repositionnement de la bannière (propriétaire) */
 .v-cover.is-repositioning img { cursor: grab; touch-action: none; }
 .v-cover.is-repositioning img:active { cursor: grabbing; }
-.v-cover-reposition { position: absolute; top: 16px; right: 24px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; background: rgba(13,9,8,.55); backdrop-filter: blur(6px); border: 1px solid color-mix(in srgb, #fff 28%, transparent); color: #fff; border-radius: 10px; padding: 7px 13px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; }
+.v-cover-reposition { position: absolute; top: 16px; right: 24px; z-index: 3; display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: rgba(13,9,8,.55); backdrop-filter: blur(6px); border: 1px solid color-mix(in srgb, #fff 28%, transparent); color: #fff; border-radius: 10px; cursor: pointer; }
 .v-cover-reposition:hover { background: rgba(13,9,8,.72); }
 .v-cover-reposition svg { width: 15px; height: 15px; fill: none; stroke: currentColor; }
 .v-cover-hint { position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); z-index: 3; background: rgba(13,9,8,.62); backdrop-filter: blur(6px); color: #fff; border-radius: 999px; padding: 6px 14px; font-family: var(--font-body); font-size: 12.5px; font-weight: 600; pointer-events: none; white-space: nowrap; }
@@ -347,9 +347,6 @@
   .v-head { align-items: center; text-align: center; }
   .v-id { padding-bottom: 0; }
   .v-act { justify-content: center; flex-wrap: wrap; }
-  .v-punch { text-align: center; }
-  .v-biolink { display: flex; justify-content: center; }
-  .v-social { margin-left: auto; margin-right: auto; }
 }
 
 /* ── Page de garde ── */
@@ -458,3 +455,10 @@ textarea.v-inp { resize: vertical; min-height: 60px; line-height: 1.5; }
 .v-qr-btn.is-primary:hover { filter: brightness(1.07); border: none; }
 .v-qr-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
 .light .v-qr-btn.is-primary { box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20); }
+
+/* Centrage mobile des éléments du carnet définis ci-dessus (doit venir APRÈS leurs règles de base) */
+@media (max-width: 640px) {
+  .v-punch { text-align: center; }
+  .v-biolink { display: flex; justify-content: center; }
+  .v-social { margin-left: auto; margin-right: auto; }
+}
