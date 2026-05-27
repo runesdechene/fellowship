@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { participationChip, type ActorKind } from '@/lib/explorer'
 import { avatarGradient } from '@/lib/avatar-gradient'
+import { cn } from '@/lib/utils'
 import type { ParticipationWithEvent } from '@/types/database'
 import type { FriendParticipation } from '@/hooks/use-participations'
 
@@ -16,23 +17,22 @@ interface DateRowProps {
 const WEEKDAYS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
 
 export function DateRow({ participation, actorKind, now, companions, onOpenCompanions }: DateRowProps) {
-  const navigate = useNavigate()
   const ev = participation.events
   const start = new Date(ev.start_date)
   const end = new Date(ev.end_date)
-  const multiDay = end.getDate() !== start.getDate() || end.getMonth() !== start.getMonth()
+  const multiDay =
+    end.getDate() !== start.getDate() ||
+    end.getMonth() !== start.getMonth() ||
+    end.getFullYear() !== start.getFullYear()
   const tag = ev.tags?.[0] ?? 'autre'
   const Icon = getTagIcon(tag)
-  const chip = participationChip(participation.status, participation.payment_status as string | null, actorKind, { isPast: end < now })
+  const chip = participationChip(participation.status, participation.payment_status, actorKind, { isPast: end < now })
 
   return (
-    <div
-      className="md-row"
-      role="button"
-      tabIndex={0}
-      onClick={() => navigate(`/evenement/${ev.id}`)}
-      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/evenement/${ev.id}`) } }}
-    >
+    <div className="md-row">
+      {/* Lien « stretched » : couvre toute la carte pour le clic/clavier, sans imbriquer le bouton compagnons. */}
+      <Link to={`/evenement/${ev.id}`} className="md-row-link" aria-label={ev.name} />
+
       <div className="md-date">
         <b>{start.getDate()}</b>
         <span>{WEEKDAYS[start.getDay()]}</span>
@@ -50,7 +50,7 @@ export function DateRow({ participation, actorKind, now, companions, onOpenCompa
           <button
             type="button"
             className="md-companions"
-            onClick={e => { e.stopPropagation(); onOpenCompanions(ev.id, ev.name) }}
+            onClick={() => onOpenCompanions(ev.id, ev.name)}
             aria-label={`Voir les ${companions.length} compagnon${companions.length > 1 ? 's' : ''} sur ${ev.name}`}
           >
             <div className="md-avs">
@@ -64,14 +64,14 @@ export function DateRow({ participation, actorKind, now, companions, onOpenCompa
                 )
               })}
             </div>
-            <small>{companions.length} compagnon{companions.length > 1 ? 's' : ''} y {companions.length > 1 ? 'vont' : 'va'}</small>
+            <span>{companions.length} compagnon{companions.length > 1 ? 's' : ''} y {companions.length > 1 ? 'vont' : 'va'}</span>
           </button>
         )}
       </div>
 
       {chip && (
         <div className="md-status">
-          <span className={'md-badge ' + chip.variant}><span className="md-dot" /> {chip.label}</span>
+          <span className={cn('md-badge', chip.variant)}><span className="md-dot" /> {chip.label}</span>
         </div>
       )}
     </div>
