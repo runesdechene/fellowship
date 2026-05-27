@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import { useNetworkActivityMini } from '@/hooks/use-community'
 import { avatarColor, type FeedItem } from '@/lib/community'
+import { avatarImgStyle } from './ActorLinks'
 
 function miniText(item: FeedItem): string {
   if (item.kind === 'review') return `a noté ${item.event?.name ?? ''}`
@@ -31,7 +32,9 @@ export function SidebarNetworkActivity({ collapsed }: { collapsed: boolean }) {
       <div className="sa-head"><span className="live" /> <span>Activité du réseau</span></div>
       {items.map(item => (
         <Link key={item.id} to="/communaute" className="sa-item">
-          <span className="sav" style={{ background: avatarColor(item.actor.label) }}>{item.actor.label[0]?.toUpperCase()}</span>
+          <span className="sav" style={item.actor.avatarUrl ? undefined : { background: avatarColor(item.actor.label) }}>
+            {item.actor.avatarUrl ? <img src={item.actor.avatarUrl} alt="" style={avatarImgStyle} /> : item.actor.label[0]?.toUpperCase()}
+          </span>
           <span className="sat"><b>{item.actor.label}</b> {miniText(item)}</span>
         </Link>
       ))}

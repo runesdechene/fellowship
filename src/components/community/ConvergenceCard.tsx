@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { avatarColor, type Convergence } from '@/lib/community'
+import { avatarImgStyle } from './ActorLinks'
 
 function fmtRange(start: string, end: string): string {
   const s = new Date(start), e = new Date(end)
@@ -23,7 +24,9 @@ export function ConvergenceCard({ conv }: { conv: Convergence }) {
         <div className="conv-foot">
           <div className="avs">
             {sample.map(a => (
-              <span key={a.actorId} style={{ background: avatarColor(a.label) }}>{a.label[0]?.toUpperCase()}</span>
+              <span key={a.actorId} style={a.avatarUrl ? undefined : { background: avatarColor(a.label) }}>
+                {a.avatarUrl ? <img src={a.avatarUrl} alt="" style={avatarImgStyle} /> : a.label[0]?.toUpperCase()}
+              </span>
             ))}
             {count > sample.length && <span className="avs-more">+{count - sample.length}</span>}
           </div>
