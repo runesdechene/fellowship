@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { EntityRow, EntityGalleryRow } from '@/types/database'
+import type { EntityRow } from '@/types/database'
 import type { NetworkMember } from '@/lib/profile-network'
 import type { SeasonEvent } from '@/lib/vitrine'
 
 export interface VitrineData {
   entity: EntityRow | null
-  gallery: EntityGalleryRow[]
   season: SeasonEvent[]
   friends: NetworkMember[]
   followers: NetworkMember[]
@@ -16,7 +15,7 @@ export interface VitrineData {
 
 export function useVitrine(slug: string | undefined): VitrineData {
   const [data, setData] = useState<VitrineData>({
-    entity: null, gallery: [], season: [], friends: [], followers: [],
+    entity: null, season: [], friends: [], followers: [],
     loading: true, notFound: false,
   })
 
@@ -36,11 +35,6 @@ export function useVitrine(slug: string | undefined): VitrineData {
         return
       }
 
-      const { data: gal } = await supabase
-        .from('entity_gallery').select('*')
-        .eq('entity_actor_id', entity.actor_id)
-        .order('position', { ascending: true })
-
       const { data: parts } = await supabase
         .from('participations')
         .select('events(id, name, start_date, end_date, city, department, tags, image_url)')
@@ -51,7 +45,7 @@ export function useVitrine(slug: string | undefined): VitrineData {
       const { friends, followers } = await fetchNetwork(entity.actor_id)
 
       if (!cancelled) setData({
-        entity, gallery: (gal as EntityGalleryRow[] | null) ?? [], season,
+        entity, season,
         friends, followers, loading: false, notFound: false,
       })
     }

@@ -7,9 +7,6 @@ export type EntityRow       = Database['public']['Tables']['entities']['Row']
 export type MembershipRow   = Database['public']['Tables']['memberships']['Row']
 export type EntityType      = Database['public']['Enums']['entity_type']
 
-// Vitrine types
-export type EntityGalleryRow = Database['public']['Tables']['entity_gallery']['Row']
-
 /** Un lien externe de vitrine (stocké dans entities.links jsonb). */
 export interface VitrineLink {
   type: 'website' | 'shop' | 'instagram' | 'facebook' | 'other'
