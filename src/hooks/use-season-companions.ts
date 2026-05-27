@@ -16,14 +16,27 @@ export function useSeasonCompanions(eventIds: string[]): Map<string, CompanionRo
       const { data: friendIds } = await supabase.rpc('get_friend_ids', { p_user_id: currentActor!.id })
       const ids = (friendIds as string[] | null) ?? []
       if (ids.length === 0) { if (!cancelled) setMap(new Map()); return }
+      // actor_public is a VIEW — PostgREST cannot infer the FK, so p.actor_public is always null.
+      // Use the two-query pattern: fetch participations first, then actor_public rows by actor_id.
       const { data: parts } = await supabase
         .from('participations')
-        .select('event_id, actor_id, actor_public:actor_id(label, avatar_url, public_slug)')
+        .select('event_id, actor_id')
         .in('event_id', eventIds).in('actor_id', ids).eq('status', 'inscrit')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rows: CompanionRow[] = ((parts ?? []) as any[]).map(p => ({
+      const partRows = (parts ?? []) as Array<{ event_id: string; actor_id: string }>
+      const actorIds = [...new Set(partRows.map(r => r.actor_id))]
+      const actorMap: Record<string, { label: string | null; avatar_url: string | null; public_slug: string | null }> = {}
+      if (actorIds.length > 0) {
+        const { data: actors } = await supabase
+          .from('actor_public')
+          .select('actor_id, label, avatar_url, public_slug')
+          .in('actor_id', actorIds)
+        for (const a of (actors ?? [])) {
+          if (a.actor_id) actorMap[a.actor_id] = { label: a.label, avatar_url: a.avatar_url, public_slug: a.public_slug }
+        }
+      }
+      const rows: CompanionRow[] = partRows.map(p => ({
         event_id: p.event_id, actor_id: p.actor_id,
-        label: p.actor_public?.label ?? null, avatar_url: p.actor_public?.avatar_url ?? null, public_slug: p.actor_public?.public_slug ?? null,
+        ...actorMap[p.actor_id] ?? { label: null, avatar_url: null, public_slug: null },
       }))
       if (!cancelled) setMap(companionsByEvent(rows))
     }
