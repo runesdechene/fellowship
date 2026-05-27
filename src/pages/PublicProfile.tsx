@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Pencil, Check } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { useVitrine } from '@/hooks/use-vitrine'
+import { useVitrineEdit } from '@/hooks/use-vitrine-edit'
 import { useFollowStatus } from '@/hooks/use-follows'
 import { VitrineCover } from '@/components/vitrine/VitrineCover'
 import { VitrineHeader } from '@/components/vitrine/VitrineHeader'
@@ -9,26 +11,34 @@ import { VitrineStats } from '@/components/vitrine/VitrineStats'
 import { VitrineGallery } from '@/components/vitrine/VitrineGallery'
 import { VitrineLinks } from '@/components/vitrine/VitrineLinks'
 import { VitrineSeason } from '@/components/vitrine/VitrineSeason'
+import { InlineText } from '@/components/vitrine/edit/InlineText'
 import { QRCodeModal } from '@/components/profile/QRCodeModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
-import type { VitrineLink } from '@/types/database'
+import type { EntityRow, EntityGalleryRow, VitrineLink } from '@/types/database'
 import './Vitrine.css'
 
-interface PublicProfilePageProps {
-  overrideSlug?: string
-}
+interface PublicProfilePageProps { overrideSlug?: string }
 
 export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {}) {
   const { slug: paramSlug } = useParams<{ slug: string }>()
   const slug = overrideSlug ?? paramSlug?.replace(/^@/, '')
   const { currentActor } = useAuth()
-  const { entity, gallery, season, friends, followers, loading, notFound } = useVitrine(slug)
-  const { isFollowing, toggleFollow } = useFollowStatus(entity?.actor_id)
+  const data = useVitrine(slug)
+  const { isFollowing, toggleFollow } = useFollowStatus(data.entity?.actor_id)
   const [showQR, setShowQR] = useState(false)
   const [showEmbed, setShowEmbed] = useState(false)
+  const [editing, setEditing] = useState(false)
 
-  if (loading) return <div className="profile-loading">Chargement…</div>
-  if (notFound || !entity) return (
+  // Copie locale optimiste (seedée depuis le hook de lecture)
+  const [entity, setEntity] = useState<EntityRow | null>(null)
+  const [gallery, setGallery] = useState<EntityGalleryRow[]>([])
+  useEffect(() => { setEntity(data.entity) }, [data.entity])
+  useEffect(() => { setGallery(data.gallery) }, [data.gallery])
+
+  const edit = useVitrineEdit(entity?.actor_id ?? '')
+
+  if (data.loading) return <div className="profile-loading">Chargement…</div>
+  if (data.notFound || !entity) return (
     <div className="profile-not-found">
       <div className="profile-not-found-code">404</div>
       <h1 className="profile-not-found-title">Profil introuvable</h1>
@@ -42,29 +52,71 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const links = (entity.links as unknown as VitrineLink[]) ?? []
   const year = new Date().getFullYear()
 
+  // Helpers de mise à jour locale + persistance
+  const patchEntity = (patch: Record<string, unknown>) => {
+    setEntity(e => (e ? { ...e, ...patch } as EntityRow : e))
+    edit.updateEntity(patch)
+  }
+  const uploadCover = async (file: File) => {
+    const url = await edit.uploadImage(file, 'cover')
+    if (url) patchEntity({ banner_url: url })
+  }
+  const uploadAvatar = async (file: File) => {
+    const url = await edit.uploadImage(file, 'avatar')
+    if (url) patchEntity({ avatar_url: url })
+  }
+  const addPhotos = async (files: File[]) => {
+    const rows = await edit.addGalleryImages(files, gallery.length)
+    if (rows.length) setGallery(g => [...g, ...rows])
+  }
+  const removePhoto = async (id: string) => {
+    const prev = gallery
+    setGallery(g => g.filter(p => p.id !== id))
+    const ok = await edit.removeGalleryImage(id)
+    if (!ok) setGallery(prev)
+  }
+  const reorderPhotos = (orderedIds: string[]) => {
+    setGallery(g => orderedIds.map(id => g.find(p => p.id === id)!).filter(Boolean))
+    edit.reorderGallery(orderedIds)
+  }
+
   return (
     <div className="v-page-root">
-      <VitrineCover url={entity.banner_url} />
+      <VitrineCover url={entity.banner_url} editing={editing} onUpload={uploadCover} />
       <div className="vitrine">
+        {isOwner && (
+          <div className="v-edit-bar">
+            <button type="button" className={`v-btn ${editing ? 'v-btn-p' : ''}`} onClick={() => setEditing(v => !v)}>
+              {editing ? <><Check /> Terminé</> : <><Pencil /> Modifier ma vitrine</>}
+            </button>
+            {edit.status === 'saving' && <span className="v-save-pill">Enregistrement…</span>}
+            {edit.status === 'saved' && <span className="v-save-pill is-ok">✓ Enregistré</span>}
+            {edit.status === 'error' && <span className="v-save-pill is-err">Échec — réessaie</span>}
+          </div>
+        )}
+
         <VitrineHeader
-          entity={entity}
-          isOwner={isOwner}
-          isFollowing={isFollowing}
+          entity={entity} isOwner={isOwner} isFollowing={isFollowing}
           onToggleFollow={canFollow ? toggleFollow : undefined}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
+          editing={editing} onField={patchEntity} onAvatar={uploadAvatar}
         />
-        <VitrineStats followers={followers} friends={friends} seasonCount={season.length} year={year} />
+        <VitrineStats followers={data.followers} friends={data.friends} seasonCount={data.season.length} year={year} />
 
         <div className="v-grid">
           <div className="v-col-main">
-            {entity.bio && (
+            {(entity.bio || editing) && (
               <div className="v-card v-about">
                 <h2>À propos</h2>
-                <p>{entity.bio}</p>
+                {editing ? (
+                  <InlineText value={entity.bio ?? ''} multiline placeholder="Présente ton univers, ton artisanat…" onCommit={v => patchEntity({ bio: v || null })}>
+                    <p>{entity.bio || <span className="v-edit-empty">+ Ajouter une présentation</span>}</p>
+                  </InlineText>
+                ) : <p>{entity.bio}</p>}
               </div>
             )}
-            <VitrineGallery photos={gallery} />
+            <VitrineGallery photos={gallery} editing={editing} onAdd={addPhotos} onRemove={removePhoto} onReorder={reorderPhotos} />
             {canFollow && !isFollowing && (
               <div className="v-nudge">
                 <span className="v-nudge-ic">🔔</span>
@@ -77,8 +129,8 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
             )}
           </div>
           <aside className="v-col-side">
-            <VitrineLinks links={links} />
-            <VitrineSeason season={season} />
+            <VitrineLinks links={links} editing={editing} onChange={next => patchEntity({ links: next })} />
+            <VitrineSeason season={data.season} />
           </aside>
         </div>
 
