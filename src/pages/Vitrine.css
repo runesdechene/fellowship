@@ -795,3 +795,49 @@
     gap: 6px;
   }
 }
+
+/* ───── Édition inline (Phase 3) ───── */
+.v-edit-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.v-save-pill { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: hsl(var(--secondary)); color: hsl(var(--muted-foreground)); }
+.v-save-pill.is-ok { color: var(--copper); }
+.v-save-pill.is-err { color: #c0392b; }
+
+.v-edit-pencil { margin-left: 6px; background: none; border: none; cursor: pointer; opacity: .55; font-size: .85em; }
+.v-edit-pencil:hover { opacity: 1; }
+.v-edit-empty { opacity: .5; font-style: italic; }
+
+.v-edit-inline { display: inline-flex; align-items: center; gap: 6px; width: 100%; }
+.v-edit-input { flex: 1; min-width: 0; padding: 6px 10px; border-radius: 8px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); color: hsl(var(--foreground)); font: inherit; }
+textarea.v-edit-input { min-height: 96px; resize: vertical; }
+.v-edit-ok, .v-edit-cancel { display: inline-flex; padding: 4px; border-radius: 6px; border: none; cursor: pointer; background: hsl(var(--secondary)); color: hsl(var(--foreground)); }
+.v-edit-ok { color: var(--copper); }
+.v-edit-ok svg, .v-edit-cancel svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
+
+.v-chips-edit .v-chip { display: inline-flex; align-items: center; gap: 4px; }
+.v-chip-x { display: inline-flex; background: none; border: none; cursor: pointer; padding: 0; opacity: .6; }
+.v-chip-x svg { width: 12px; height: 12px; fill: none; stroke: currentColor; }
+.v-chip-input { padding: 2px 8px; border-radius: 999px; border: 1px dashed var(--copper); background: transparent; color: hsl(var(--foreground)); font: inherit; max-width: 140px; }
+
+.v-links-edit { display: flex; flex-direction: column; gap: 8px; }
+.v-linkrow-edit { display: grid; grid-template-columns: 96px 1fr 1fr auto; gap: 6px; align-items: center; }
+.v-link-type, .v-link-label, .v-link-url { padding: 6px 8px; border-radius: 8px; border: 1px solid hsl(var(--border)); background: hsl(var(--card)); color: hsl(var(--foreground)); font: inherit; min-width: 0; }
+.v-link-del, .v-link-add { display: inline-flex; padding: 6px; border-radius: 8px; border: none; cursor: pointer; background: hsl(var(--secondary)); color: hsl(var(--foreground)); }
+.v-link-add { color: var(--copper); }
+.v-link-del svg, .v-link-add svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
+
+.v-imagedrop { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: none; cursor: pointer; background: rgba(0,0,0,.55); color: #f3e9d8; backdrop-filter: blur(4px); }
+.v-imagedrop svg { width: 18px; height: 18px; fill: none; stroke: currentColor; }
+.v-cover-edit { position: absolute; right: 16px; bottom: 16px; }
+.v-cover { position: relative; }
+
+.v-av { position: relative; }
+.v-av-edit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: inherit; background: rgba(0,0,0,.35); opacity: 0; transition: opacity .15s; }
+.v-av:hover .v-av-edit { opacity: 1; }
+.v-av-drop { padding: 6px; background: transparent; }
+
+.v-gphoto.is-editing { position: relative; cursor: grab; }
+.v-gphoto.is-dragging { opacity: .4; }
+.v-gphoto-del { position: absolute; top: 4px; right: 4px; display: inline-flex; padding: 4px; border-radius: 999px; border: none; cursor: pointer; background: rgba(0,0,0,.6); color: #fff; }
+.v-gphoto-del svg { width: 14px; height: 14px; fill: none; stroke: currentColor; }
+.v-gphoto-add { display: flex; align-items: center; justify-content: center; border: 2px dashed hsl(var(--border)); background: transparent; cursor: pointer; color: var(--copper); }
+.v-gphoto-add svg { width: 28px; height: 28px; fill: none; stroke: currentColor; }
