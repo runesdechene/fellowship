@@ -17,20 +17,11 @@ export function SidebarNetworkActivity({ collapsed }: { collapsed: boolean }) {
   // Perf : on ne lance le feed réseau que pour un Pro avec sidebar déployée (pas sur chaque page pour tous).
   const items = useNetworkActivityMini(isPro && !collapsed)
 
+  // Pas de teaser réseau pour les non-Pro : on ne montre rien (les gens n'ont pas à savoir).
+  if (!isPro) return null
+
   if (collapsed) {
     return <Link to="/communaute" className="sa-bell" aria-label="Activité du réseau"><Activity strokeWidth={1.5} /></Link>
-  }
-
-  if (!isPro) {
-    return (
-      <div className="side-activity">
-        <div className="sa-head"><span className="live" /> <span>Activité du réseau</span></div>
-        <Link to="/communaute" className="sa-item sa-locked">
-          <span className="sav" style={{ background: 'hsl(var(--muted))' }}>✦</span>
-          <span className="sat">Vois où va ta tribu — <b>Pro</b></span>
-        </Link>
-      </div>
-    )
   }
 
   if (items.length === 0) return null
