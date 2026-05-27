@@ -6,7 +6,7 @@ const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
 
 describe('navItemsFor', () => {
   it('personne → festivalier', () => expect(navItemsFor(person)).toEqual(['explorer','mes-dates','mes-createurs','profil','reglages']))
-  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','dashboard','calendrier','communaute','vitrine','reglages']))
+  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','mes-dates','dashboard','calendrier','communaute','vitrine','reglages']))
   it('null → explorer seul', () => expect(navItemsFor(null)).toEqual(['explorer']))
 })
 
@@ -15,7 +15,7 @@ describe('entryState', () => {
   it('item Pro + plan pro + construit → active', () => expect(entryState('calendrier','pro')).toBe('active'))
   it('item Pro + plan pro + non construit → bientot', () => expect(entryState('dashboard','pro')).toBe('bientot'))
   it('item Pro + plan free (même non construit) → lock-pro', () => expect(entryState('dashboard','free')).toBe('lock-pro'))
-  it('item gratuit non construit → bientot', () => expect(entryState('mes-dates','free')).toBe('bientot'))
+  it('item gratuit construit (mes-dates) → active', () => expect(entryState('mes-dates','free')).toBe('active'))
   it('item gratuit construit → active', () => expect(entryState('explorer','free')).toBe('active'))
 })
 
@@ -23,6 +23,7 @@ describe('isRouteValidFor', () => {
   it('calendrier valide pour exposant', () => expect(isRouteValidFor('/calendrier', exposant)).toBe(true))
   it('calendrier invalide pour personne', () => expect(isRouteValidFor('/calendrier', person)).toBe(false))
   it('mes-dates valide pour personne', () => expect(isRouteValidFor('/mes-dates', person)).toBe(true))
+  it('mes-dates valide pour exposant aussi', () => expect(isRouteValidFor('/mes-dates', exposant)).toBe(true))
   it('explorer valide pour les deux', () => {
     expect(isRouteValidFor('/explorer', person)).toBe(true)
     expect(isRouteValidFor('/explorer', exposant)).toBe(true)
@@ -35,7 +36,7 @@ describe('isRouteValidFor', () => {
   })
   it('route applicative réservée non-valide reste bloquée', () => {
     expect(isRouteValidFor('/calendrier', person)).toBe(false)
-    expect(isRouteValidFor('/mes-dates', exposant)).toBe(false)
+    expect(isRouteValidFor('/tableau-de-bord', person)).toBe(false)
   })
 })
 
@@ -48,7 +49,7 @@ describe('mobilePrimaryFor / mobileSecondaryFor', () => {
   })
   it('secondaire = nav de l\'acteur moins les primaires (sans doublon)', () => {
     const sec = mobileSecondaryFor(exposant)
-    expect(sec).toEqual(['communaute', 'vitrine', 'reglages'])
+    expect(sec).toEqual(['mes-dates', 'communaute', 'vitrine', 'reglages'])
     expect(sec.some(k => mobilePrimaryFor(exposant).includes(k))).toBe(false)
   })
 })

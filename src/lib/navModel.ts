@@ -14,7 +14,7 @@ export interface NavDef {
 
 export const NAV_DEFS: Record<NavKey, NavDef> = {
   explorer:        { key: 'explorer',        to: '/explorer',        label: 'Explorer',       icon: 'Compass',         pro: false, built: true },
-  'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: false },
+  'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: true },
   'mes-createurs': { key: 'mes-createurs',   to: '/mes-createurs',   label: 'Mes créateurs',  shortLabel: 'Créateurs', icon: 'Heart',           pro: false, built: false },
   dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Tableau de bord',shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: false },
   calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: true,  built: true },
@@ -25,7 +25,7 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
 }
 
 const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'profil', 'reglages']
-const EXPOSANT_NAV: NavKey[] = ['explorer', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
+const EXPOSANT_NAV: NavKey[] = ['explorer', 'mes-dates', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
 
 // BottomBar mobile : 3 liens principaux par acteur (le reste → feuille de compte).
 const PERSON_PRIMARY: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs']
