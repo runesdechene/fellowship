@@ -1,9 +1,10 @@
-import { BadgeCheck, UserPlus, Check, Share2, QrCode } from 'lucide-react'
+import { BadgeCheck, UserPlus, Check, Pencil, Share2, QrCode } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
 import { InlineText } from './edit/InlineText'
 import { ChipEditor } from './edit/ChipEditor'
 import { ImageDrop } from './edit/ImageDrop'
 import type { EntityRow } from '@/types/database'
+import type { SaveStatus } from '@/hooks/use-vitrine-edit'
 
 interface VitrineHeaderProps {
   entity: EntityRow
@@ -13,13 +14,15 @@ interface VitrineHeaderProps {
   onShare: () => void
   onQR: () => void
   editing?: boolean
+  onToggleEdit?: () => void
+  saveStatus?: SaveStatus
   onField?: (patch: Record<string, unknown>) => void
   onAvatar?: (file: File) => Promise<void>
 }
 
 export function VitrineHeader({
-  entity, isOwner: _isOwner, isFollowing, onToggleFollow, onShare, onQR,
-  editing, onField, onAvatar,
+  entity, isOwner, isFollowing, onToggleFollow, onShare, onQR,
+  editing, onToggleEdit, saveStatus, onField, onAvatar,
 }: VitrineHeaderProps) {
   const subtitleParts: string[] = []
   if (entity.craft_type) subtitleParts.push(entity.craft_type)
@@ -66,7 +69,16 @@ export function VitrineHeader({
       </div>
 
       <div className="v-act">
-        {onToggleFollow && (
+        {isOwner && onToggleEdit ? (
+          <>
+            {saveStatus === 'saving' && <span className="v-save-pill">Enregistrement…</span>}
+            {saveStatus === 'saved' && <span className="v-save-pill is-ok">✓ Enregistré</span>}
+            {saveStatus === 'error' && <span className="v-save-pill is-err">Échec — réessaie</span>}
+            <button type="button" className={`v-btn v-btn-follow ${editing ? 'is-on' : 'v-btn-p'}`} onClick={onToggleEdit} aria-pressed={editing}>
+              {editing ? <Check /> : <Pencil />}<span>{editing ? 'Terminé' : 'Modifier'}</span>
+            </button>
+          </>
+        ) : onToggleFollow && (
           <button type="button" className={`v-btn v-btn-follow ${isFollowing ? 'is-on' : 'v-btn-p'}`} onClick={onToggleFollow} aria-pressed={isFollowing}>
             {isFollowing ? <Check /> : <UserPlus />}<span>{isFollowing ? 'Suivi' : 'Suivre'}</span>
           </button>

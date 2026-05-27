@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Pencil, Check } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { useVitrine } from '@/hooks/use-vitrine'
 import { useVitrineEdit } from '@/hooks/use-vitrine-edit'
@@ -96,23 +95,13 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
     <div className="v-page-root">
       <VitrineCover url={entity.banner_url} editing={editing} onUpload={uploadCover} />
       <div className="vitrine">
-        {canEdit && (
-          <div className="v-edit-bar">
-            <button type="button" className={`v-btn ${editing ? 'v-btn-p' : ''}`} onClick={() => setEditing(v => !v)}>
-              {editing ? <><Check /> Terminé</> : <><Pencil /> Modifier ma vitrine</>}
-            </button>
-            {edit.status === 'saving' && <span className="v-save-pill">Enregistrement…</span>}
-            {edit.status === 'saved' && <span className="v-save-pill is-ok">✓ Enregistré</span>}
-            {edit.status === 'error' && <span className="v-save-pill is-err">Échec — réessaie</span>}
-          </div>
-        )}
-
         <VitrineHeader
           entity={entity} isOwner={canEdit} isFollowing={isFollowing}
           onToggleFollow={canFollow ? toggleFollow : undefined}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
-          editing={editing} onField={patchEntity} onAvatar={uploadAvatar}
+          editing={editing} onToggleEdit={() => setEditing(v => !v)} saveStatus={edit.status}
+          onField={patchEntity} onAvatar={uploadAvatar}
         />
         <VitrineStats followers={data.followers} friends={data.friends} seasonCount={data.season.length} year={year} />
 
