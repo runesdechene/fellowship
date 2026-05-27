@@ -26,9 +26,9 @@ Sans le teaser, bâtir Communauté en premier perd son sens — il fait partie d
 - Carte « Suggestions pour toi » (heuristique simple, colonne droite uniquement).
 - **Teaser flouté** pour les gratuits (vraies convergences floutées + CTA Pro).
 - Segments (Tout / Où ils vont / Avis / Réseau), pagination, état vide, responsive.
+- **Mini-fil « Activité du réseau » dans la sidebar** (résumé compact, top 3, « Tout voir → » vers `/communaute`).
 
 **Reporté v1.1 (assumé) :**
-- Mini-fil « Activité du réseau » dans la sidebar (relève du chantier sidebar).
 - Barre de recherche d'exposant dans le fil (recouvre Explorer).
 - Groupage « +N dates » d'un même acteur sur une fenêtre.
 - Vrai moteur de recommandation (au-delà de l'heuristique).
@@ -84,7 +84,15 @@ Vivent **uniquement** dans la carte « Suggestions pour toi » (colonne droite).
   - `ActivityItem` — variantes `review` / `participation` / `follow` (mise en page maquette : avatar carré, texte, ★/chips/sous-ligne selon le type, bouton Suivre pour `follow`).
   - `ConvergenceList` + `SuggestionsCard` — cartes colonne droite.
   - `CommunauteTeaser` — préview gratuite.
+  - `SidebarNetworkActivity` — mini-fil dans la sidebar (cf. §5.1).
 - **Layout** : sidebar (existante/chantier sidebar) + `stage` ; grille `1fr 330px` ; colonne droite `sticky`.
+
+### 5.1 Mini-fil sidebar « Activité du réseau »
+Résumé compact dans la **sidebar partagée** (donc visible sur toutes les pages app, pas seulement `/communaute`) :
+- En-tête « Activité du réseau » + pastille `live` verte ; **top 3** items récents (avatar + « <b>Théo</b> a noté Pérouges »), lien « Tout voir → » vers `/communaute`.
+- **Données** : réutilise `get_community_feed(limit=3)` (mêmes règles de visibilité §3). Pas de nouveau RPC.
+- **Gating** : Pro → mini-fil réel ; gratuit → version compacte verrouillée (1 ligne floutée + nudge), cohérente avec le teaser de la page.
+- ⚠️ Touche le **composant sidebar partagé** : intégration minimale et isolée (un sous-composant `SidebarNetworkActivity`), pas de refonte de la sidebar.
 - **CSS** : `Communaute.css` sur le modèle Explorer/Vitrine (tokens DA, pas de styles inline).
 
 ### États
