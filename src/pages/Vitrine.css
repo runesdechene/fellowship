@@ -456,6 +456,23 @@ textarea.v-inp { resize: vertical; min-height: 60px; line-height: 1.5; }
 .v-qr-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; }
 .light .v-qr-btn.is-primary { box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20); }
 
+/* ── Modale Communauté ── */
+.v-net-modal { max-width: 420px; }
+.v-net-body { gap: 20px; padding-bottom: 16px; }
+.v-net-sec { display: flex; flex-direction: column; gap: 4px; }
+.v-net-h { font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.v-net-h span { font-weight: 500; }
+.v-net-empty { font-size: 13px; color: hsl(var(--muted-foreground)); opacity: .8; padding: 2px 2px 6px; }
+.v-net-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; text-decoration: none; color: inherit; cursor: pointer; transition: background .12s; }
+.v-net-row:hover { background: hsl(9 22% 16%); }
+.v-net-row.is-static { cursor: default; }
+.v-net-av { width: 40px; height: 40px; border-radius: 11px; overflow: hidden; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px; }
+.v-net-av img { width: 100%; height: 100%; object-fit: cover; }
+.v-net-id { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.v-net-id b { font-weight: 600; font-size: 14.5px; color: hsl(var(--foreground)); }
+.v-net-id span { font-size: 12.5px; color: hsl(var(--muted-foreground)); }
+.light .v-net-row:hover { background: hsl(var(--secondary)); }
+
 /* Centrage mobile des éléments du carnet définis ci-dessus (doit venir APRÈS leurs règles de base) */
 @media (max-width: 640px) {
   .v-punch { text-align: center; }

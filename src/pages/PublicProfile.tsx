@@ -14,6 +14,7 @@ import { VitrineTampons } from '@/components/vitrine/VitrineTampons'
 import { VitrineEmptyRoad } from '@/components/vitrine/VitrineEmptyRoad'
 import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
 import { VitrineQRModal } from '@/components/vitrine/VitrineQRModal'
+import { VitrineNetworkModal } from '@/components/vitrine/VitrineNetworkModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
 import type { EntityRow } from '@/types/database'
 import './Vitrine.css'
@@ -28,6 +29,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
   const { isFollowing, toggleFollow } = useFollowStatus(data.entity?.actor_id)
   const [showQR, setShowQR] = useState(false)
   const [showEmbed, setShowEmbed] = useState(false)
+  const [showNetwork, setShowNetwork] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
 
   const [entity, setEntity] = useState<EntityRow | null>(null)
@@ -72,6 +74,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
           entity={entity} canEdit={canEdit} isFollowing={isFollowing}
           followers={data.followers} friends={data.friends}
           onEdit={() => setEditOpen(true)}
+          onOpenSocial={() => setShowNetwork(true)}
           onToggleFollow={canFollow ? toggleFollow : undefined}
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
@@ -91,6 +94,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
       </div>
 
       {editOpen && <VitrineEditModal entity={entity} api={edit} onClose={() => setEditOpen(false)} onSaved={patch => setEntity(e => (e ? { ...e, ...patch } as EntityRow : e))} />}
+      {showNetwork && <VitrineNetworkModal followers={data.followers} friends={data.friends} onClose={() => setShowNetwork(false)} />}
       {showQR && entity.public_slug && <VitrineQRModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}
       {showEmbed && entity.public_slug && <EmbedModal slug={entity.public_slug} onClose={() => setShowEmbed(false)} />}
     </div>
