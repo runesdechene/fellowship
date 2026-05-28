@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { QRCodeSVG } from 'qrcode.react'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { Camera, Download, LogOut, Trash2, Check, Loader2, ExternalLink } from 'lucide-react'
+import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
 
 export function SettingsPage() {
@@ -28,12 +27,11 @@ export function SettingsPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // QR / partage : l'URL publique se résout sur le slug de l'ENTITÉ (cf. use-vitrine.ts),
-  // pas sur profiles. On prend l'entité active si on agit en tant qu'elle, sinon la première.
+  // L'URL publique se résout sur le slug de l'ENTITÉ (cf. use-vitrine.ts), pas sur profiles.
+  // On prend l'entité active si on agit en tant qu'elle, sinon la première.
   const entity: EntityRow | null =
     (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null) ?? entities[0] ?? null
   const entitySlug = entity?.public_slug ?? ''
-  const qrUrl = `https://flw.sh/@${entitySlug}`
 
   // Keep form in sync if profile loads after mount
   useEffect(() => {
@@ -95,21 +93,6 @@ export function SettingsPage() {
     } finally {
       setSaving(false)
     }
-  }
-
-  // ── QR download ───────────────────────────────────────────────────────────
-  function handleDownloadQR() {
-    const svg = document.getElementById('fellowship-qr') as unknown as SVGSVGElement | null
-    if (!svg) return
-    const serializer = new XMLSerializer()
-    const svgStr = serializer.serializeToString(svg)
-    const blob = new Blob([svgStr], { type: 'image/svg+xml' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `qr-${entitySlug || 'fellowship'}.svg`
-    a.click()
-    URL.revokeObjectURL(url)
   }
 
   // ── Delete account ─────────────────────────────────────────────────────────
@@ -248,34 +231,6 @@ export function SettingsPage() {
             </Button>
           </div>
         </section>
-
-        {/* ── Section: QR Code (partage de la vitrine) ────────────────────── */}
-        {entity && entitySlug && (
-          <section className="mb-6 rounded-2xl bg-card p-6">
-            <h2 className="mb-2 text-base font-semibold">QR Code</h2>
-            <p className="mb-5 text-sm text-muted-foreground">
-              Partagez votre vitrine publique via ce QR code.
-            </p>
-            <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-              <div className="flex-shrink-0 rounded-xl bg-white p-4">
-                <QRCodeSVG
-                  id="fellowship-qr"
-                  value={qrUrl}
-                  size={160}
-                  level="M"
-                  includeMargin={false}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <p className="text-sm font-medium break-all text-muted-foreground">{qrUrl}</p>
-                <Button variant="outline" onClick={handleDownloadQR} className="w-fit">
-                  <Download className="mr-2 h-4 w-4" />
-                  Télécharger (SVG)
-                </Button>
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ── Section: Compte ─────────────────────────────────────────────── */}
         <section className="rounded-2xl bg-card p-6">
