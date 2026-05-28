@@ -111,7 +111,6 @@ export function EventDashboard({
 
   return (
     <div className="event-suivi">
-      <div className="event-suivi-header">Ma participation à cet événement</div>
       <div className="event-suivi-body">
 
         <div className="event-suivi-grid">
