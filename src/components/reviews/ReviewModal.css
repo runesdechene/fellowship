@@ -52,6 +52,13 @@
 
 .review-form { display: flex; flex-direction: column; gap: 16px; }
 
+.review-form-loading {
+  padding: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+}
+
 .review-form-criteria { display: flex; flex-direction: column; gap: 12px; }
 .review-form-criterion {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;

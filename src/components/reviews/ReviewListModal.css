@@ -59,9 +59,23 @@
 }
 
 .review-list-item-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
 }
-.review-list-author { display: flex; flex-direction: column; gap: 1px; }
+.review-list-avatar {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-family: var(--font-heading); font-weight: 700; font-size: 14px;
+  text-decoration: none;
+}
+.review-list-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+.review-list-avatar.review-avatar-clickable { transition: transform 0.12s; }
+.review-list-avatar.review-avatar-clickable:hover { transform: scale(1.06); }
+
+.review-list-author { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
 .review-list-author-name {
   font-family: var(--font-body); font-size: 13.5px; font-weight: 700;
   color: hsl(var(--foreground));

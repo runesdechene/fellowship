@@ -4,7 +4,12 @@ import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import type { Review, ReviewInsert } from '@/types/database'
 
-export type ReviewWithActor = Review & { actor_label: string | null; actor_entity_type: string | null }
+export type ReviewWithActor = Review & {
+  actor_label: string | null
+  actor_entity_type: string | null
+  actor_avatar_url: string | null
+  actor_slug: string | null
+}
 
 export function useEventReviews(eventId: string | undefined) {
   const { currentActor, currentActorRow } = useAuth()
@@ -20,12 +25,30 @@ export function useEventReviews(eventId: string | undefined) {
       .order('created_at', { ascending: false })
     const list = (rows as Review[] | null) ?? []
     const actorIds = [...new Set(list.map(r => r.actor_id).filter(Boolean) as string[])]
-    let byId: Record<string, { label: string | null; entity_type: string | null }> = {}
+    let byId: Record<string, { label: string | null; entity_type: string | null; avatar_url: string | null; public_slug: string | null }> = {}
     if (actorIds.length > 0) {
-      const { data: actors } = await supabase.from('actor_public').select('actor_id, label, entity_type').in('actor_id', actorIds)
-      byId = Object.fromEntries((actors ?? []).filter(a => a.actor_id != null).map((a) => [a.actor_id as string, { label: a.label, entity_type: a.entity_type }]))
+      const { data: actors } = await supabase
+        .from('actor_public')
+        .select('actor_id, label, entity_type, avatar_url, public_slug')
+        .in('actor_id', actorIds)
+      byId = Object.fromEntries(
+        (actors ?? [])
+          .filter(a => a.actor_id != null)
+          .map((a) => [a.actor_id as string, {
+            label: a.label,
+            entity_type: a.entity_type,
+            avatar_url: a.avatar_url,
+            public_slug: a.public_slug,
+          }])
+      )
     }
-    setReviews(list.map(r => ({ ...r, actor_label: byId[r.actor_id ?? '']?.label ?? null, actor_entity_type: byId[r.actor_id ?? '']?.entity_type ?? null })))
+    setReviews(list.map(r => ({
+      ...r,
+      actor_label: byId[r.actor_id ?? '']?.label ?? null,
+      actor_entity_type: byId[r.actor_id ?? '']?.entity_type ?? null,
+      actor_avatar_url: byId[r.actor_id ?? '']?.avatar_url ?? null,
+      actor_slug: byId[r.actor_id ?? '']?.public_slug ?? null,
+    })))
     setLoading(false)
   }, [eventId])
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
 import { submitReview, useMyReview } from '@/hooks/use-reviews'
 import { Star } from 'lucide-react'
@@ -28,12 +28,24 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
 
 export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
   const { user, currentActor } = useAuth()
-  const { review: existing } = useMyReview(eventId)
-  const [affluence, setAffluence] = useState(existing?.affluence ?? 0)
-  const [organisation, setOrganisation] = useState(existing?.organisation ?? 0)
-  const [rentabilite, setRentabilite] = useState(existing?.rentabilite ?? 0)
-  const [comment, setComment] = useState(existing?.comment ?? '')
+  const { review: existing, loading: loadingExisting } = useMyReview(eventId)
+  const [affluence, setAffluence] = useState(0)
+  const [organisation, setOrganisation] = useState(0)
+  const [rentabilite, setRentabilite] = useState(0)
+  const [comment, setComment] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // Hydrate le formulaire quand l'avis existant arrive (fetch async dans
+  // useMyReview). Sans ce useEffect, useState(existing?.x ?? 0) gèle à 0
+  // parce qu'existing est null au premier render.
+  useEffect(() => {
+    if (existing) {
+      setAffluence(existing.affluence)
+      setOrganisation(existing.organisation)
+      setRentabilite(existing.rentabilite)
+      setComment(existing.comment ?? '')
+    }
+  }, [existing])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,6 +64,12 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
 
     setSaving(false)
     onReviewSubmitted()
+  }
+
+  // Skeleton léger pendant le fetch de l'avis existant — évite le flash
+  // 0-étoiles avant que les valeurs persistées se chargent dans le state.
+  if (loadingExisting) {
+    return <div className="review-form-loading">Chargement…</div>
   }
 
   return (

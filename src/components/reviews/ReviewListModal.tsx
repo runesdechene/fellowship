@@ -1,5 +1,6 @@
 import { X, Star, MessageSquare } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
+import { ReviewAvatar } from './ReviewAvatar'
 import './ReviewListModal.css'
 
 interface Props {
@@ -47,6 +48,12 @@ export function ReviewListModal({ reviews, onClose }: Props) {
             return (
               <article key={r.id} className="review-list-item">
                 <header className="review-list-item-head">
+                  <ReviewAvatar
+                    label={r.actor_label}
+                    avatarUrl={r.actor_avatar_url}
+                    slug={r.actor_slug}
+                    className="review-list-avatar"
+                  />
                   <div className="review-list-author">
                     <span className="review-list-author-name">{r.actor_label ?? 'Un exposant'}</span>
                     <span className="review-list-date">{ago(r.created_at ?? new Date().toISOString())}</span>

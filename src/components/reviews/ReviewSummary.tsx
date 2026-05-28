@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Star, Lock, MessageSquare } from 'lucide-react'
+import { Star, Lock } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
 import { ReviewListModal } from './ReviewListModal'
+import { ReviewAvatar } from './ReviewAvatar'
 import './ReviewSummary.css'
 
 interface ReviewSummaryProps {
@@ -92,7 +93,12 @@ export function ReviewSummary({ reviews, canSeeDetails, isPast, onLeaveReview }:
       {/* Commentaire vedette — visible Pro only */}
       {canSeeDetails && featured && (
         <div className="review-featured">
-          <MessageSquare className="review-featured-icon" strokeWidth={1.6} />
+          <ReviewAvatar
+            label={featured.actor_label}
+            avatarUrl={featured.actor_avatar_url}
+            slug={featured.actor_slug}
+            className="review-featured-avatar"
+          />
           <div className="review-featured-body">
             <p className="review-featured-quote">« {featured.comment} »</p>
             <p className="review-featured-meta">
