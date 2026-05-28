@@ -367,7 +367,8 @@
 }
 .landing .orga-waitlist-anchor,
 .landing #temoignages,
-.landing #tarifs {
+.landing #tarifs,
+.landing #apropos {
   scroll-margin-top: 90px;
 }
 /* Scroll fluide quand on clique une ancre depuis la nav */

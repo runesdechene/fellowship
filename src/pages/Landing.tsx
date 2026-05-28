@@ -67,7 +67,7 @@ export function LandingPage() {
             <span className="brand-name">Fellowship</span>
           </div>
           <div className="nav-links">
-            <a className="link" href="#temoignages">À propos</a>
+            <a className="link" href="#apropos">À propos</a>
             <a className="link" href="#tarifs">Tarifs</a>
             <ThemeToggle />
             <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
@@ -447,9 +447,10 @@ export function LandingPage() {
               <div className="per">Pour toujours</div>
               <ul>
                 <li><span className="ck">✓</span> Explorer des centaines de festivals</li>
-                <li><span className="ck">✓</span> Suivre jusqu'à 5 dates</li>
-                <li><span className="ck">✓</span> Voir sa communauté</li>
+                <li><span className="ck">✓</span> Suivre jusqu'à 5 dates en même temps</li>
+                <li><span className="ck">✓</span> Suivre ses collègues</li>
                 <li><span className="ck">✓</span> Page vitrine publique</li>
+                <li><span className="ck">✓</span> Etablir ses bilans post-festivals</li>
               </ul>
               <Link to="/login" className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
                 Commencer gratuitement
@@ -494,8 +495,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Org teaser card (visible in exposant view) ── */}
-      <section className="block v exposant">
+      {/* ── Org teaser card (visible in exposant view) — ancre "À propos" ── */}
+      <section id="apropos" className="block v exposant">
         <div className="wrap">
           <div className="org-card">
             <div>
