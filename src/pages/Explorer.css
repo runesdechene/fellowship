@@ -481,7 +481,8 @@
   flex-direction: column;
   align-items: center;
   gap: 11px;
-  padding: 40px 0 40px;
+  padding: 20px 0;
+  flex-shrink: 0;
 }
 
 .explorer .dock-cta {
@@ -518,36 +519,39 @@
   flex: 1;
   position: relative;
   min-height: 0;
+  /* Flex column : carrousel (.flow) prend l'espace restant, infozone
+     suit en flux normal, bottombar (sibling de stagebody) idem.
+     Plus de positionnement vh viewport → plus d'overlap. */
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Coverflow flow / deck ────────────────────────────────────────── */
 
 .explorer .flow {
-  position: absolute;
-  inset: 0;                 /* pleine hauteur → les flèches (top:50%) restent centrées sur toute la page */
+  position: relative;
+  flex: 1;
+  min-height: 0;
   display: flex;
-  align-items: flex-start;  /* le deck est monté vers le haut… */
+  align-items: center;
   justify-content: center;
-  padding-top: 8vh;         /* deck monté ; les flèches restent au centre vertical (top:50% du flow pleine hauteur) */
+  padding: 12px 0;
   perspective: 1700px;
 }
 
 .explorer .infozone {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 66vh;
-  bottom: 0;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
+  padding: 8px 20px 0;
+  flex-shrink: 0;
 }
 
 .explorer .deck {
   position: relative;
   width: 100%;
-  height: 52vh;
+  height: 100%;
   transform-style: preserve-3d;
 }
 
@@ -558,7 +562,9 @@
   left: 50%;
   top: 50%;
   width: 36vh;
-  height: 52vh;
+  height: auto;
+  aspect-ratio: 3/4;
+  max-height: 100%;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s, filter 0.5s;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
   will-change: transform;
@@ -1159,31 +1165,12 @@
   .explorer .seg-input { font-size: 14px; }
   .explorer .scrubber { display: none; }
 
-  /* === Layout flex column (pas de vh, pas d'overlap) === */
-  .explorer .stagebody { display: flex; flex-direction: column; }
-
-  /* Carrousel : prend l'espace restant ; les cartes se centrent dedans. */
-  .explorer .flow {
-    position: relative;
-    inset: auto;
-    flex: 1;
-    min-height: 0;
-    padding: 12px 0 4px;
-    perspective: 1100px;
-    align-items: center;
-  }
-  .explorer .deck {
-    touch-action: pan-y;
-    height: 100%;
-  }
-  /* Aspect-ratio 3/4 = même proportion poster que l'ancien 64vw × 44vh.
-     max-height: 100% empêche la carte de déborder sur paysage ou petit écran. */
-  .explorer .card {
-    width: 64vw;
-    height: auto;
-    aspect-ratio: 3/4;
-    max-height: 100%;
-  }
+  /* La base est déjà en flex column → on garde seulement les overrides
+     de TAILLE spécifiques mobile (carte plus large en vw, perspective
+     plus douce, paddings compacts). */
+  .explorer .flow { perspective: 1100px; padding: 12px 0 4px; }
+  .explorer .deck { touch-action: pan-y; }
+  .explorer .card { width: 64vw; }
 
   /* Flèches compactes aux bords */
   .explorer .arrow { width: 40px; height: 40px; }
@@ -1191,15 +1178,8 @@
   .explorer .arrow.l { left: 2px; }
   .explorer .arrow.r { right: 2px; }
 
-  /* Dock infos : flux normal sous le carrousel (plus de top: 49vh) */
-  .explorer .infozone {
-    position: relative;
-    inset: auto;
-    top: auto;
-    bottom: auto;
-    padding: 8px 14px 0;
-    flex-shrink: 0;
-  }
+  /* Dock infos : tailles compactes mobile */
+  .explorer .infozone { padding: 8px 14px 0; }
   .explorer .dockinfo { gap: 6px; max-width: 100%; }
   .explorer .dockinfo h2 { font-size: 20px; }
   .explorer .eh-meta { gap: 12px; }
@@ -1207,12 +1187,8 @@
   .explorer .eh-sub { font-size: 10px; }
   .explorer .eh-ico { font-size: 13px; }
 
-  /* Bottombar : flux normal en bas (plus de margin-bottom: 5vh) */
-  .explorer .bottombar {
-    padding: 8px 0 14px;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+  /* Bottombar : padding compact mobile */
+  .explorer .bottombar { padding: 8px 0 14px; gap: 8px; }
   .explorer .dock-cta { width: 100%; max-width: 360px; gap: 10px; padding: 0 16px; }
   .explorer .dock-cta .btn { flex: 1; justify-content: center; font-size: 13.5px; padding: 10px 12px; }
 
