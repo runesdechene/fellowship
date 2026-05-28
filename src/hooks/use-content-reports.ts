@@ -109,19 +109,22 @@ export function useAdminReports(filter: ReportStatus | 'all' = 'pending') {
     }
 
     // Enrich targets
+    // - 'event' : lookup events (id)
+    // - 'profile' : lookup entities (actor_id) — l'entité représente le compte exposant
+    //   et porte la vitrine publique
     const eventIds = list.filter(r => r.target_type === 'event').map(r => r.target_id)
-    const profileIds = list.filter(r => r.target_type === 'profile').map(r => r.target_id)
+    const entityIds = list.filter(r => r.target_type === 'profile').map(r => r.target_id)
     let eventsMap: Record<string, { name: string }> = {}
-    let profilesMap: Record<string, { display_name: string | null; brand_name: string | null; public_slug: string | null }> = {}
+    let entitiesMap: Record<string, { brand_name: string | null; public_slug: string | null }> = {}
     if (eventIds.length) {
       const { data } = await supabase.from('events').select('id, name').in('id', eventIds)
       eventsMap = Object.fromEntries(((data ?? []) as Array<{ id: string; name: string }>).map(e => [e.id, { name: e.name }]))
     }
-    if (profileIds.length) {
-      const { data } = await supabase.from('profiles').select('id, display_name, brand_name, public_slug').in('id', profileIds)
-      profilesMap = Object.fromEntries(
-        ((data ?? []) as Array<{ id: string; display_name: string | null; brand_name: string | null; public_slug: string | null }>)
-          .map(p => [p.id, { display_name: p.display_name, brand_name: p.brand_name, public_slug: p.public_slug }])
+    if (entityIds.length) {
+      const { data } = await supabase.from('entities').select('actor_id, brand_name, public_slug').in('actor_id', entityIds)
+      entitiesMap = Object.fromEntries(
+        ((data ?? []) as Array<{ actor_id: string; brand_name: string | null; public_slug: string | null }>)
+          .map(e => [e.actor_id, { brand_name: e.brand_name, public_slug: e.public_slug }])
       )
     }
 
@@ -130,10 +133,10 @@ export function useAdminReports(filter: ReportStatus | 'all' = 'pending') {
       const target = r.target_type === 'event'
         ? { label: eventsMap[r.target_id]?.name ?? '(événement supprimé)', url: `/evenement/${r.target_id}` }
         : (() => {
-            const p = profilesMap[r.target_id]
+            const e = entitiesMap[r.target_id]
             return {
-              label: p?.brand_name ?? p?.display_name ?? '(profil supprimé)',
-              url: p?.public_slug ? `/${p.public_slug}` : `/profil`,
+              label: e?.brand_name ?? '(profil supprimé)',
+              url: e?.public_slug ? `/${e.public_slug}` : `/explorer`,
             }
           })()
       return { ...r, reporter_label: rep.label, reporter_avatar_url: rep.avatar_url, target_label: target.label, target_url: target.url }

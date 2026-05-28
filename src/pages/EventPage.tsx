@@ -16,6 +16,7 @@ import { EventDashboard } from '@/components/events/EventDashboard'
 import { FestivalFacts } from '@/components/events/FestivalFacts'
 import { DiscussionTeaser } from '@/components/events/DiscussionTeaser'
 import { HowToApplyModal } from '@/components/events/HowToApplyModal'
+import { ReportButton } from '@/components/reports/ReportButton'
 import { candidatureState, mapsSearchUrl, daysUntilStart, editionLabel, hasApplyInfo } from '@/lib/festival'
 import { useDateQuota } from '@/hooks/use-date-quota'
 import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
@@ -504,6 +505,14 @@ export function EventPage() {
                     <Globe strokeWidth={2} />
                   </a>
                 )}
+                <ReportButton
+                  targetType="event"
+                  targetId={event.id}
+                  targetLabel={event.name}
+                  targetOwnerId={event.created_by_actor ?? null}
+                  className="fest-iconbtn"
+                  title="Signaler ce festival"
+                />
                 {creator && (
                   <Link to={`/@${creator.public_slug ?? creator.id}`} className="fest-org">
                     {creator.avatar_url ? (

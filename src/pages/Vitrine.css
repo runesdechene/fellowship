@@ -301,6 +301,25 @@
   font-family: var(--font-body);
   color: hsl(var(--foreground));
 }
+.v-footer-report {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  margin-left: 6px;
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  border-radius: 50%;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.v-footer-report:hover {
+  color: var(--status-refuse);
+  border-color: color-mix(in srgb, var(--status-refuse) 40%, transparent);
+  background: color-mix(in srgb, var(--status-refuse) 10%, transparent);
+}
+.v-footer-report svg { width: 13px; height: 13px; }
 
 /* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 1080px) {
