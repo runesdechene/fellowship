@@ -137,28 +137,30 @@ export function LandingPage() {
               </Link>
               <a href="#" className="btn btn-ghost">Voir comment ça marche</a>
             </div>
-            <div className="proof">
-              <span className="avatars">
-                {exposants.avatars.length > 0
-                  ? exposants.avatars.map(a => (
-                      <span
-                        key={a.actor_id}
-                        title={a.label ?? undefined}
-                        style={{
-                          backgroundImage: `url(${a.avatar_url})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                        }}
-                      />
-                    ))
-                  : (<><span /><span /><span /><span /><span /></>)}
-              </span>
-              Rejoins{' '}
-              <strong style={{ color: 'hsl(var(--foreground))', margin: '0 3px' }}>
-                {(exposants.count ?? 100)}+ exposants
-              </strong>{' '}
-              sur Fellowship
-            </div>
+            {!exposants.loading && exposants.count !== null && exposants.count > 0 && (
+              <div className="proof">
+                <span className="avatars">
+                  {exposants.avatars.length > 0
+                    ? exposants.avatars.map(a => (
+                        <span
+                          key={a.actor_id}
+                          title={a.label ?? undefined}
+                          style={{
+                            backgroundImage: `url(${a.avatar_url})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                          }}
+                        />
+                      ))
+                    : (<><span /><span /><span /><span /><span /></>)}
+                </span>
+                Rejoins{' '}
+                <strong style={{ color: 'hsl(var(--foreground))', margin: '0 3px' }}>
+                  {exposants.count}+ exposants
+                </strong>{' '}
+                sur Fellowship
+              </div>
+            )}
           </div>
 
           {/* Hero — Festivalier */}

@@ -14,7 +14,6 @@ export interface LandingStats {
 }
 
 const AVATAR_LIMIT = 5
-const COUNT_INFLATION = 100
 
 export function useLandingExposants(): LandingStats {
   const [stats, setStats] = useState<LandingStats>({ count: null, avatars: [], loading: true })
@@ -29,10 +28,9 @@ export function useLandingExposants(): LandingStats {
           .order('created_at', { ascending: false }).limit(AVATAR_LIMIT),
       ])
       if (cancelled) return
-      const realCount = countRes.count ?? null
       const rows = (avatarsRes.data ?? []) as Array<{ actor_id: string; brand_name: string | null; avatar_url: string | null }>
       setStats({
-        count: realCount === null ? null : realCount + COUNT_INFLATION,
+        count: countRes.count ?? null,
         avatars: rows.map(r => ({ actor_id: r.actor_id, label: r.brand_name, avatar_url: r.avatar_url })),
         loading: false,
       })
