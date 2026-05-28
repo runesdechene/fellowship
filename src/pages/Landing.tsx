@@ -495,7 +495,7 @@ export function LandingPage() {
               <ul>
                 <li><span className="ck">✓</span> Tout le plan Découverte</li>
                 <li><span className="ck">✓</span> Ta tribu : où vont tes amis, nouvelles connaissances...</li>
-                <li><span className="ck">✓</span> Tableau de bord complet</li>
+                <li><span className="ck">✓</span> Cockpit complet</li>
                 <li><span className="ck">✓</span> Accès aux discussions autour des événements</li>
                 <li><span className="ck">✓</span> Rappels de deadlines</li>
                 <li><span className="ck">✓</span> Avis détaillés des festivals</li>

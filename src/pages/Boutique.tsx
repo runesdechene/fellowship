@@ -9,7 +9,7 @@ import './Boutique.css'
 const FEATURES = [
   'Calendrier saison année complète',
   'Communauté — fil complet du réseau',
-  'Tableau de bord (cockpit pilotage)',
+  'Cockpit (pilotage exposant)',
   'Avis détaillés sur tes festivals',
   'Embed calendrier sur ton site',
   '14 jours d\'essai — annulable à tout moment',

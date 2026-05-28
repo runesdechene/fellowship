@@ -37,7 +37,7 @@ export function CGVPage() {
       <p>
         L'abonnement Pro donne accès, pour l'entité professionnelle qui en
         bénéficie, à l'ensemble des fonctionnalités marquées « Pro » dans
-        l'application : Calendrier complet, Communauté, Tableau de bord, et
+        l'application : Calendrier complet, Communauté, Cockpit, et
         toute fonctionnalité Pro qui pourrait être publiée ultérieurement par
         l'éditeur. Le plan Pro est attaché à l'entité professionnelle, non à
         la personne qui la gère.

@@ -106,7 +106,7 @@ function App() {
           <Route path="/mes-dates" element={<AuthenticatedApp><MesDatesPage /></AuthenticatedApp>} />
           <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
           <Route path="/communaute" element={<AuthenticatedApp><CommunautePage /></AuthenticatedApp>} />
-          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Tableau de bord"><ComingSoon title="Tableau de bord" /></ProGate></AuthenticatedApp>} />
+          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><ComingSoon title="Cockpit" /></ProGate></AuthenticatedApp>} />
           <Route path="/boutique" element={<AuthenticatedApp><BoutiquePage /></AuthenticatedApp>} />
           <Route path="/abonnement" element={<AuthenticatedApp><AbonnementPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
