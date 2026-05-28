@@ -19,7 +19,7 @@
 /* Header / logo */
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 16px; }
 .sidebar-logo { font-family: var(--font-heading); font-weight: 800; font-size: 20px; display: flex; align-items: center; gap: 9px; color: hsl(var(--foreground)); text-decoration: none; }
-.sidebar-logo .mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--copper), var(--amber)); display: flex; align-items: center; justify-content: center; color: #2a1810; font-size: 14px; flex-shrink: 0; }
+.sidebar-logo .mark { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; object-fit: cover; display: block; }
 .sidebar.collapsed .sidebar-logo-text { display: none; }
 .sidebar-collapse-btn { background: none; border: none; color: hsl(var(--muted-foreground)); cursor: pointer; display: flex; padding: 4px; border-radius: 8px; }
 .sidebar-collapse-btn:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }

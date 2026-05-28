@@ -305,11 +305,22 @@
   align-items: center;
   flex: 1;
   justify-content: center;
+  gap: 9px;
 }
-.search-bar-spacer img {
-  height: 26px;
-  width: auto;
-  opacity: 0.9;
+.search-bar-spacer .mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  object-fit: cover;
+  display: block;
+}
+.search-bar-brand {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: hsl(var(--foreground));
 }
 
 /* ── Panneau des résultats de recherche ───────────────────────────── */

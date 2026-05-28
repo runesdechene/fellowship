@@ -23,7 +23,7 @@ export function Sidebar() {
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <Link to="/explorer" className="sidebar-logo">
-          <span className="mark">✦</span>
+          <img className="mark" src="/icon.png" alt="" />
           {!collapsed && <span className="sidebar-logo-text">Fellowship</span>}
         </Link>
         {!collapsed && (
