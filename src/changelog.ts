@@ -7,6 +7,20 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.187',
+    date: '2026-05-28',
+    title: 'Tarifs Pro publics, landing peaufinée',
+    changes: [
+      'Tarifs visibles sur la page d\'accueil : Découverte gratuit, Pro 9,99 € HT (11,99 € TTC) / mois',
+      'Vrais avatars d\'exposants et compte en direct dans le hero exposant',
+      '« Rejoindre la liste d\'attente » côté organisateur scrolle vers le formulaire d\'inscription',
+      'Logo icône Fellowship adopté partout (haut et bas de page)',
+      'Mobile : marge fantôme à droite éliminée, prompt d\'installation PWA recentré, nav cliquable',
+      'Calendrier : 3 → 2 → 1 colonnes selon la largeur de l\'écran, plus de scroll horizontal',
+      'Cette modale « Quoi de neuf » s\'adapte enfin au mode nuit',
+    ],
+  },
+  {
     version: '0.7.122',
     date: '2026-05-28',
     title: 'Page festival — nouvelle direction artistique',
