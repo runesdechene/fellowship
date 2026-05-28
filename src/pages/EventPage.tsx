@@ -600,29 +600,17 @@ export function EventPage() {
               )}
             </div>
 
-            {/* Avis — affichée si l'event est passé (pour permettre d'en laisser un)
-                OU s'il y a déjà des avis OU si l'utilisateur a accès aux détails. */}
+            {/* Avis exposants — visible si event passé, ou avis existants, ou canSeeDetails.
+                Le bloc gère lui-même son titre (note moyenne), son CTA "Mon avis" et le
+                lock non-Pro. */}
             {(isPast || reviews.length > 0 || canSeeDetails) && (
               <div className="event-section-card">
-                <div className="event-section-title muted reviews-title">
-                  <span>Avis des exposants ({reviews.length})</span>
-                  {isPast && (
-                    <button
-                      className="reviews-cta"
-                      onClick={() => setShowReviewForm(true)}
-                    >
-                      <Star strokeWidth={2} /> Donner mon avis
-                    </button>
-                  )}
-                </div>
-                {reviews.length > 0 || canSeeDetails ? (
-                  <ReviewSummary reviews={reviews} canSeeDetails={canSeeDetails} />
-                ) : (
-                  <p className="reviews-empty">
-                    Aucun avis pour ce festival. Si tu y étais, ton retour aidera les autres
-                    exposants pour les éditions à venir.
-                  </p>
-                )}
+                <ReviewSummary
+                  reviews={reviews}
+                  canSeeDetails={canSeeDetails}
+                  isPast={isPast}
+                  onLeaveReview={() => setShowReviewForm(true)}
+                />
               </div>
             )}
 

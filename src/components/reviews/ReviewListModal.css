@@ -1,0 +1,121 @@
+/* ReviewListModal — modale liste des avis, style DA jour/nuit */
+
+.review-list-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 6, 5, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 16px;
+}
+
+.review-list-modal {
+  width: 100%; max-width: 560px;
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+.light .review-list-modal { box-shadow: 0 20px 60px rgba(120, 80, 40, 0.18); }
+
+.review-list-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid hsl(var(--border));
+  flex-shrink: 0;
+}
+.review-list-head h2 {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-heading); font-weight: 800; font-size: 17px;
+  color: hsl(var(--foreground));
+}
+.review-list-head h2 svg { width: 18px; height: 18px; color: var(--amber); }
+.review-list-head button {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 9px;
+  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground)); cursor: pointer;
+}
+.review-list-head button:hover { color: hsl(var(--foreground)); }
+.review-list-head button svg { width: 16px; height: 16px; }
+
+.review-list-body {
+  flex: 1; min-height: 0;
+  overflow-y: auto;
+  padding: 16px 22px 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* ── Item ── */
+.review-list-item {
+  padding: 14px 16px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.review-list-item-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.review-list-author { display: flex; flex-direction: column; gap: 1px; }
+.review-list-author-name {
+  font-family: var(--font-body); font-size: 13.5px; font-weight: 700;
+  color: hsl(var(--foreground));
+}
+.review-list-date {
+  font-size: 11.5px; color: hsl(var(--muted-foreground));
+}
+.review-list-overall {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--amber);
+  font-family: var(--font-heading); font-weight: 800; font-size: 15px;
+}
+.review-list-overall svg { width: 14px; height: 14px; }
+.review-list-overall b { color: hsl(var(--foreground)); }
+
+/* ── Critères avec étoiles ── */
+.review-list-criteria {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.rl-crit {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 12.5px;
+}
+.rl-crit > span {
+  color: hsl(var(--muted-foreground));
+}
+.review-list-stars {
+  display: inline-flex; gap: 1px;
+  color: hsl(var(--muted-foreground) / 0.4);
+}
+.review-list-stars svg {
+  width: 13px; height: 13px;
+}
+.review-list-stars svg.on {
+  color: var(--amber);
+}
+
+/* ── Commentaire ── */
+.review-list-comment {
+  display: flex; gap: 8px;
+  padding: 10px 12px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+}
+.review-list-comment svg {
+  flex-shrink: 0;
+  width: 14px; height: 14px;
+  color: var(--amber);
+  margin-top: 3px;
+}
+.review-list-comment p {
+  margin: 0;
+  font-family: var(--font-body); font-size: 13px; line-height: 1.55;
+  color: hsl(var(--foreground));
+  font-style: italic;
+}

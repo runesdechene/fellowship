@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import type { Review, ReviewInsert } from '@/types/database'
 
-type ReviewWithActor = Review & { actor_label: string | null; actor_entity_type: string | null }
+export type ReviewWithActor = Review & { actor_label: string | null; actor_entity_type: string | null }
 
 export function useEventReviews(eventId: string | undefined) {
   const { currentActor, currentActorRow } = useAuth()
