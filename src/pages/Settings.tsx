@@ -123,7 +123,7 @@ export function SettingsPage() {
     'w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <div className="page-width max-w-2xl page-padding">
         <h1 className="page-title mb-8">Paramètres</h1>
 
