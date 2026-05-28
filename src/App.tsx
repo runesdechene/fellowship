@@ -19,6 +19,11 @@ import { AuthCallbackPage } from '@/pages/AuthCallback'
 import { CalendarPage } from '@/pages/Calendar'
 import { MesDatesPage } from '@/pages/MesDates'
 import { CommunautePage } from '@/pages/Communaute'
+import { MentionsLegalesPage } from '@/pages/legal/MentionsLegales'
+import { ConfidentialitePage } from '@/pages/legal/Confidentialite'
+import { CGUPage } from '@/pages/legal/CGU'
+import { CGVPage } from '@/pages/legal/CGV'
+import { ChartePage } from '@/pages/legal/Charte'
 import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 import { AdminRoute } from '@/components/admin/AdminRoute'
 import { ComingSoon } from '@/components/layout/ComingSoon'
@@ -121,6 +126,13 @@ function App() {
             <Route path="tags" element={<Suspense fallback={<AdminFallback />}><AdminTags /></Suspense>} />
             <Route path="reports" element={<Suspense fallback={<AdminFallback />}><AdminReports /></Suspense>} />
           </Route>
+
+          {/* Pages légales — publiques, hors AuthenticatedApp */}
+          <Route path="/legal/mentions-legales" element={<MentionsLegalesPage />} />
+          <Route path="/legal/confidentialite" element={<ConfidentialitePage />} />
+          <Route path="/legal/cgu" element={<CGUPage />} />
+          <Route path="/legal/cgv" element={<CGVPage />} />
+          <Route path="/legal/charte-communautaire" element={<ChartePage />} />
 
           {/* Profile — with layout if authenticated, without if not */}
           <Route path="/:slug" element={<ProfileWithLayout />} />
