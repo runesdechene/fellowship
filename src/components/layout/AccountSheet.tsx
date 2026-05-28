@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
@@ -98,6 +98,15 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
           <LogOut strokeWidth={1.8} />
           <span className="sheet-item-lbl">Déconnexion</span>
         </button>
+
+        <div className="sheet-divider" />
+        <div className="sheet-legal">
+          <Link to="/legal/mentions-legales" onClick={onClose}>Mentions</Link>
+          <span>·</span>
+          <Link to="/legal/confidentialite" onClick={onClose}>Confidentialité</Link>
+          <span>·</span>
+          <Link to="/legal/cgv" onClick={onClose}>CGV</Link>
+        </div>
       </div>
     </div>
   )
