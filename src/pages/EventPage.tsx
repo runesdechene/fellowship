@@ -52,7 +52,8 @@ export function EventPage() {
   const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
   const { user, currentActor, profile } = useAuth()
   const { event, loading } = useEvent(id)
-  const { notes, refetch: refetchNotes } = useEventNotes(id)
+  // Notes personnelles (filtrées sur l'acteur actif) — privées, pas partagées.
+  const { notes, refetch: refetchNotes } = useEventNotes(id, currentActor?.id ?? null)
   const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
   const { friends: friendsOnEvent } = useFriendsOnEvent(id)
   const { canAdd } = useDateQuota()
@@ -569,12 +570,12 @@ export function EventPage() {
             {/* Notes communes */}
             <div className="event-section-card">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Notes communes ({notes.length})</div>
-                {isExposant && (
+                <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Mes notes privées ({notes.length})</div>
+                {currentActor && (
                   <button
                     onClick={() => setShowNoteModal(true)}
                     className="event-edit-btn"
-                    title="Ajouter une note"
+                    title="Ajouter une note privée"
                     style={{ width: 32, height: 32 }}
                   >
                     <MessageSquarePlus className="h-4 w-4" strokeWidth={1.5} />

@@ -680,6 +680,7 @@
 .event-stepper-btn.pay-active.inscrit { background: color-mix(in srgb, var(--status-accepte) 20%, transparent); color: var(--status-accepte); }
 .event-stepper-btn.pay-active.refuse { background: color-mix(in srgb, var(--status-refuse) 18%, transparent); color: var(--status-refuse); }
 .event-stepper-btn.pay-active.a_payer { background: color-mix(in srgb, var(--status-apayer) 18%, transparent); color: var(--status-apayer); }
+.event-stepper-btn.pay-active.acompte_verse { background: color-mix(in srgb, var(--lime) 22%, transparent); color: var(--lime); }
 .event-stepper-btn.pay-active.paye { background: color-mix(in srgb, var(--status-inscrit) 20%, transparent); color: var(--status-inscrit); }
 
 /* Info box éphémère */

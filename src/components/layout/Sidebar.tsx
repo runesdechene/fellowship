@@ -76,7 +76,9 @@ export function Sidebar() {
       <div className="sidebar-bottom">
         <SidebarNetworkActivity collapsed={collapsed} />
         <div className="side-foot">
-          <Link to="/reglages" className="av" aria-label="Mon compte" />
+          <Link to="/reglages" className="av" aria-label="Mon compte">
+            {person?.avatar_url && <img src={person.avatar_url} alt="" />}
+          </Link>
           {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
           <ThemeToggle />
         </div>

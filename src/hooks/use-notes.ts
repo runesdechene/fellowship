@@ -19,19 +19,29 @@ async function attachAuthors(rows: Array<{ actor_id: string | null; [k: string]:
   return rows.map(r => ({ ...r, actor_public: r.actor_id ? byId[r.actor_id] ?? null : null })) as unknown as NoteWithAuthor[]
 }
 
-export function useEventNotes(eventId: string | undefined) {
+/**
+ * Notes d'un événement.
+ *   - sans actorId  → toutes les notes (legacy / vue admin éventuelle)
+ *   - avec actorId  → uniquement les notes privées de cet acteur (notes personnelles)
+ *
+ * Le mode personnel est utilisé sur la page Festival : les notes y sont privées,
+ * lisibles seulement par leur auteur. Le « partagé » sera couvert plus tard par
+ * la Discussion du festival (threads pour abonnés/amis).
+ */
+export function useEventNotes(eventId: string | undefined, actorId?: string | null) {
   const [notes, setNotes] = useState<NoteWithAuthor[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchNotes = useCallback(async () => {
     if (!eventId) return
-    const { data } = await supabase
+    let q = supabase
       .from('notes').select('*')
       .eq('event_id', eventId)
-      .order('created_at', { ascending: false })
+    if (actorId) q = q.eq('actor_id', actorId)
+    const { data } = await q.order('created_at', { ascending: false })
     setNotes(await attachAuthors((data as Array<{ actor_id: string | null; [k: string]: unknown }> | null) ?? []))
     setLoading(false)
-  }, [eventId])
+  }, [eventId, actorId])
 
   useEffect(() => {
     if (!eventId) return
