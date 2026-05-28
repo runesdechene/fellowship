@@ -117,7 +117,6 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
 
   const hasResults = events.length > 0 || profiles.length > 0
 
-  const displayName = profile?.brand_name ?? profile?.display_name ?? ''
 
   return (
     <div className={`search-bar-wrapper ${searchExpanded ? 'search-expanded' : ''}`} ref={ref}>
@@ -232,16 +231,6 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         </div>
       )}
 
-      {/* Profile avatar */}
-      {profile && (
-        <Link to="/profil" className="search-bar-avatar">
-          {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt={displayName} />
-          ) : (
-            <span>{displayName[0]?.toUpperCase() ?? '?'}</span>
-          )}
-        </Link>
-      )}
       </div>{/* /search-bar-actions */}
 
       {open && (
