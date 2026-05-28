@@ -102,7 +102,9 @@ Deno.serve(async (req) => {
       automatic_tax: { enabled: true },
       customer_update: { name: 'auto', address: 'auto' },
       tax_id_collection: { enabled: true },
-      allow_promotion_codes: false,
+      // Programme Founder Friends (v0.7.174) : autorise la saisie d'un code promo
+      // au Checkout (ex: RUNE-2026 = 100% off pendant 2 mois). CB requise quand même.
+      allow_promotion_codes: true,
       success_url: `${appUrl}/abonnement?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/boutique?status=cancel`,
       metadata: { entity_actor_id: entity.actor_id },
