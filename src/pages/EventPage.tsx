@@ -616,7 +616,7 @@ export function EventPage() {
                   )}
                 </div>
                 {reviews.length > 0 || canSeeDetails ? (
-                  <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+                  <ReviewSummary reviews={reviews} canSeeDetails={canSeeDetails} />
                 ) : (
                   <p className="reviews-empty">
                     Aucun avis pour ce festival. Si tu y étais, ton retour aidera les autres

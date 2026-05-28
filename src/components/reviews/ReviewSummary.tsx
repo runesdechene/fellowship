@@ -1,34 +1,53 @@
 import { Star, Lock } from 'lucide-react'
-import type { EventWithScore } from '@/types/database'
+import type { Review } from '@/types/database'
 
 interface ReviewSummaryProps {
-  event: EventWithScore
+  reviews: Review[]
   canSeeDetails: boolean
 }
 
-export function ReviewSummary({ event, canSeeDetails }: ReviewSummaryProps) {
-  if (!event.review_count || event.review_count === 0) {
+function avg(values: number[]): number {
+  if (values.length === 0) return 0
+  const sum = values.reduce((s, v) => s + v, 0)
+  return Math.round((sum / values.length) * 10) / 10 // 1 décimale
+}
+
+/**
+ * Résumé des avis sur un événement — agrégats calculés client depuis la liste
+ * fournie. (Les colonnes event.avg_* ne sont pas alimentées côté DB, on les
+ * dérive ici pour avoir un affichage cohérent immédiatement après submit.)
+ */
+export function ReviewSummary({ reviews, canSeeDetails }: ReviewSummaryProps) {
+  if (reviews.length === 0) {
     return <p className="text-sm text-muted-foreground italic">Aucun avis pour le moment</p>
   }
+
+  const affluences = reviews.map(r => r.affluence)
+  const organisations = reviews.map(r => r.organisation)
+  const rentabilites = reviews.map(r => r.rentabilite)
+  const avgAffluence = avg(affluences)
+  const avgOrganisation = avg(organisations)
+  const avgRentabilite = avg(rentabilites)
+  const avgOverall = Math.round(((avgAffluence + avgOrganisation + avgRentabilite) / 3) * 10) / 10
 
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <Star className="h-5 w-5 fill-accent text-accent" />
-        <span className="text-lg font-bold">{event.avg_overall}</span>
-        <span className="text-sm text-muted-foreground">/ 5 ({event.review_count} avis)</span>
+        <Star className="h-5 w-5" fill="currentColor" style={{ color: 'var(--amber)' }} />
+        <span className="text-lg font-bold">{avgOverall.toLocaleString('fr-FR')}</span>
+        <span className="text-sm text-muted-foreground">/ 5 ({reviews.length} avis)</span>
       </div>
       <div className="grid grid-cols-3 gap-3 text-sm">
         <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_affluence}</p>
+          <p className="font-semibold">{avgAffluence.toLocaleString('fr-FR')}</p>
           <p className="text-xs text-muted-foreground">Affluence</p>
         </div>
         <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_organisation}</p>
+          <p className="font-semibold">{avgOrganisation.toLocaleString('fr-FR')}</p>
           <p className="text-xs text-muted-foreground">Organisation</p>
         </div>
         <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_rentabilite}</p>
+          <p className="font-semibold">{avgRentabilite.toLocaleString('fr-FR')}</p>
           <p className="text-xs text-muted-foreground">Rentabilité</p>
         </div>
       </div>
