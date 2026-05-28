@@ -103,6 +103,15 @@ export function Sidebar() {
           {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
           <ThemeToggle />
         </div>
+        {!collapsed && (
+          <div className="sidebar-legal">
+            <Link to="/legal/mentions-legales">Mentions</Link>
+            <span className="sep">·</span>
+            <Link to="/legal/confidentialite">Confidentialité</Link>
+            <span className="sep">·</span>
+            <Link to="/legal/cgv">CGV</Link>
+          </div>
+        )}
       </div>
 
       {collapsed && (

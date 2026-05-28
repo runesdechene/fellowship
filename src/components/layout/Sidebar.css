@@ -100,3 +100,19 @@
 .side-foot .nm span { font-size: 11px; color: hsl(var(--muted-foreground)); display: block; }
 .sidebar.collapsed .side-foot { justify-content: center; padding-left: 0; padding-right: 0; }
 .sidebar.collapsed .side-foot .nm, .sidebar.collapsed .side-foot .av { display: none; }
+
+/* Pied de sidebar — liens légaux minimalistes (Mentions · Confidentialité · CGV) */
+.sidebar-legal {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 6px 2px;
+  font-size: 10.5px;
+  color: hsl(var(--muted-foreground) / .65);
+  letter-spacing: .02em;
+}
+.sidebar-legal a {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px dotted hsl(var(--muted-foreground) / .35);
+}
+.sidebar-legal a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+.sidebar-legal .sep { opacity: .4; }
+.sidebar.collapsed .sidebar-legal { display: none; }
