@@ -28,17 +28,26 @@
   padding: 12px 14px 22px;
   pointer-events: none;
   flex-shrink: 0;
-  /* Voile en dégradé seul (pas de blur — pas natif en CSS pour un blur progressif).
-     Opaque haut → transparent bas : douce transition vers le contenu en-dessous. */
-  background: linear-gradient(
-    to bottom,
-    hsl(var(--background) / 0.75) 0%,
-    hsl(var(--background) / 0.48) 40%,
-    hsl(var(--background) / 0.15) 75%,
-    hsl(var(--background) / 0) 100%
-  );
 }
 .search-bar-wrapper > * { pointer-events: auto; }
+
+/* Fond du wrapper = page-backdrop FIXÉ au viewport (identique au body),
+   masqué en gradient pour s'effacer vers transparent au bottom.
+   → Au top, le wrapper est visuellement indistinct du body (zéro marge noire,
+     même quand on augmente le padding-top).
+   → Au bottom, il s'efface pour laisser passer le contenu qui scrolle.
+   Pseudo-élément ::before pour NE PAS masker les pills (children directs). */
+.search-bar-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--page-backdrop);
+  background-attachment: fixed;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 100%);
+  pointer-events: none;
+}
 
 /* ── Search pill (col 2, centrée, glass) ──────────────────────────── */
 
@@ -51,8 +60,8 @@
   gap: 8px;
   width: 360px;
   max-width: 100%;
-  padding: 14px 14px;
-  background: hsl(var(--card) / 0.85);
+  padding: 12px 16px;
+  background: hsl(var(--card) / 0.95);
   border: 1px solid hsl(var(--border) / 0.6);
   border-radius: 999px;
   box-shadow: 0 0 40px rgba(0,0,0,0.4);
@@ -113,11 +122,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px;
-  background: hsl(var(--card) / 0.55);
+  padding: 8px;
+  background: hsl(var(--card) / 0.85);
   border: 1px solid hsl(var(--border) / 0.6);
   border-radius: 999px;
-  box-shadow: none;
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
 
 /* ── Bouton « + Ajouter » desktop ─────────────────────────────────── */
@@ -405,17 +414,10 @@
     margin: 0;
     padding: 10px 12px 18px;
     border-radius: 0;
-    /* Même voile en dégradé qu'en desktop, sans blur */
-    background: linear-gradient(
-      to bottom,
-      hsl(var(--background) / 0.95) 0%,
-      hsl(var(--background) / 0.78) 55%,
-      hsl(var(--background) / 0.25) 90%,
-      hsl(var(--background) / 0) 100%
-    );
     border: none;
     box-shadow: none;
     pointer-events: auto;
+    /* Le ::before global (background = page-backdrop fixé + mask) prend le relais. */
   }
 
   /* Le cluster d'actions s'efface en layout mobile */
