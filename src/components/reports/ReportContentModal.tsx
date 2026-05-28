@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { X, Flag, Check, AlertTriangle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
@@ -94,6 +95,12 @@ export function ReportContentModal({ targetType, targetId, targetLabel, onClose 
               <p className="report-modal-error">Erreur lors de l'envoi. Réessaie.</p>
             )}
 
+            <p className="report-modal-charte">
+              Avant d'envoyer, jette un œil à la{' '}
+              <Link to="/legal/charte-communautaire" target="_blank" rel="noopener noreferrer">
+                charte communautaire
+              </Link>.
+            </p>
             <div className="report-modal-actions">
               <Button variant="ghost" onClick={onClose}>Annuler</Button>
               <Button onClick={submit} disabled={state === 'sending'}>

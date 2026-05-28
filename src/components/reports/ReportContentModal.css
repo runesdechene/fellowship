@@ -126,3 +126,15 @@
   font-size: 14px; color: hsl(var(--foreground));
   max-width: 320px;
 }
+
+.report-modal-charte {
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
+  margin: 6px 0 12px;
+  text-align: center;
+}
+.report-modal-charte a {
+  color: var(--amber);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
