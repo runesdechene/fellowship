@@ -5,6 +5,14 @@
    ══════════════════════════════════════════════════════════════════ */
 
 /* ── Layout ──────────────────────────────────────────────────────── */
+/* overflow-x: clip empêche les .glow décoratifs (320–420px en absolute)
+   de déborder du viewport. On utilise `clip` plutôt que `hidden` pour
+   ne PAS créer de conteneur de défilement (sinon position:sticky de la
+   nav casse). Et l'overflow-x du body héritait du débordement, ce qui
+   décalait position:fixed (PWA prompt) à droite sur iOS. */
+.landing {
+  overflow-x: clip;
+}
 .landing .wrap {
   max-width: 1080px;
   margin: 0 auto;
@@ -695,11 +703,19 @@
   }
 }
 
-/* Téléphones : on cache le wordmark "Fellowship" dans la nav,
-   l'icône suffit (on garde le wordmark dans le footer où il y a la place). */
+/* Téléphones : on rétrécit le lockup du logo dans la nav pour que
+   "Fellowship" reste lisible à côté de l'icône, du toggle thème et
+   du bouton Connexion. */
 @media (max-width: 480px) {
-  .landing .nav-in .logo .brand-name {
-    display: none;
+  .landing .nav-in .logo {
+    font-size: 17px;
+    gap: 7px;
+  }
+  .landing .nav-in .logo .mark-img {
+    height: 26px;
+  }
+  .landing .nav-links {
+    gap: 12px;
   }
 }
 
