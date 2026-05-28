@@ -70,7 +70,7 @@ export function LandingPage() {
             <a className="link" href="#">Tarifs</a>
             <ThemeToggle />
             <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
-              Se connecter
+              Connexion
             </Link>
           </div>
         </div>
