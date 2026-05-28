@@ -1,7 +1,7 @@
 {
   "name": "flwsh",
   "private": true,
-  "version": "0.7.172",
+  "version": "0.7.173",
   "type": "module",
   "scripts": {
     "dev": "vite",

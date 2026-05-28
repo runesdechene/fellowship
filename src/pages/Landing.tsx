@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useWaitlist } from '@/hooks/use-waitlist'
 import { useLandingExposants } from '@/hooks/use-landing-stats'
+import { testimonials } from '@/data/testimonials'
 import './Landing.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -372,6 +373,42 @@ export function LandingPage() {
               <p>Sachez qui recontacter, quand et comment. Automatisez les relances.</p>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* ── Témoignages — UGC social proof avant pricing ── */}
+      <section className="block v testimonials">
+        <div className="wrap">
+          <div className="sec-head" style={{ textAlign: 'center' }}>
+            <span className="eyebrow">Ils témoignent</span>
+            <h2>Des exposants comme toi.</h2>
+            <p style={{ color: 'hsl(var(--muted-foreground))', marginTop: '10px' }}>
+              Ce qui a changé pour eux depuis Fellowship.
+            </p>
+          </div>
+          <div className="testimonials-grid">
+            {testimonials.map((t) => {
+              const initials = t.name.slice(0, 1).toUpperCase()
+              const slug = t.entitySlug
+              const Card = (
+                <article className="testimonial">
+                  <div className="testimonial-head">
+                    {t.avatarUrl
+                      ? <img src={t.avatarUrl} alt="" className="testimonial-avatar" />
+                      : <div className="testimonial-avatar testimonial-avatar-fallback">{initials}</div>}
+                    <div className="testimonial-meta">
+                      <div className="testimonial-name">{t.name}</div>
+                      <div className="testimonial-craft">{t.craft}</div>
+                    </div>
+                  </div>
+                  <blockquote className="testimonial-quote">« {t.quote} »</blockquote>
+                </article>
+              )
+              return slug
+                ? <Link key={t.name + t.craft} to={`/${slug}`} className="testimonial-link">{Card}</Link>
+                : <div key={t.name + t.craft}>{Card}</div>
+            })}
           </div>
         </div>
       </section>

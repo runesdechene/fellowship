@@ -691,3 +691,58 @@
 .landing-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .landing-legal a:hover { color: var(--amber); }
 .landing-legal span { opacity: .4; }
+
+/* ── Section Témoignages — UGC social proof ─────────────────────────────── */
+.block.testimonials { padding: 60px 0; }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 36px;
+}
+@media (min-width: 720px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px) { .testimonials-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+.testimonial {
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--card));
+  padding: 22px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  height: 100%;
+}
+.testimonial-link { text-decoration: none; color: inherit; }
+.testimonial-link:hover .testimonial {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--copper) 40%, hsl(var(--border)));
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--copper) 14%, transparent);
+}
+
+.testimonial-head { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 1.5px solid color-mix(in srgb, var(--copper) 25%, hsl(var(--border)));
+}
+.testimonial-avatar-fallback {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gradient-primary); color: #fff;
+  font-family: var(--font-heading); font-weight: 800; font-size: 18px;
+}
+.testimonial-meta { min-width: 0; }
+.testimonial-name { font-weight: 800; font-family: var(--font-heading); font-size: 15px; }
+.testimonial-craft { color: hsl(var(--muted-foreground)); font-size: 12.5px; margin-top: 2px; }
+
+.testimonial-quote {
+  margin: 0; padding: 0;
+  font-size: 14.5px; line-height: 1.55;
+  color: hsl(var(--foreground));
+  border-left: 2px solid var(--lime);
+  padding-left: 14px;
+  font-style: italic;
+}
+
+.light .testimonial-link:hover .testimonial {
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 14%, transparent);
+}
