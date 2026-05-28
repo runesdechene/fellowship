@@ -90,18 +90,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      // Async pour attendre que profile/person soient chargés AVANT setLoading(false).
-      // Sinon les gates (ex: AdminRoute) voyaient loading=false + isAdmin=false momentanément
-      // et redirigeaient avant que les données arrivent → admin éjecté sur /explorer.
-      async (_event, session) => {
+      (_event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          await Promise.all([
-            fetchProfile(session.user.id).catch(() => {}),
-            fetchIdentity(session.user.id).catch(() => {}),
-          ])
+          fetchProfile(session.user.id).catch(() => {})
+          fetchIdentity(session.user.id).catch(() => {})
         } else {
           setProfile(null)
           setPerson(null)
