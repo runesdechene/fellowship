@@ -1,4 +1,4 @@
-/* ── Changelog Modal ────────────────────────────────────────────────── */
+/* ── Changelog Modal — DA « Nuit de Festival » (jour/nuit) ───────── */
 
 .changelog-backdrop {
   position: fixed;
@@ -7,8 +7,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(10, 6, 5, 0.6);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   padding: 16px;
 }
 
@@ -19,8 +20,13 @@
   display: flex;
   flex-direction: column;
   background: hsl(var(--card));
-  border-radius: 24px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+.light .changelog-modal {
+  box-shadow: 0 20px 60px rgba(120, 80, 40, 0.18);
 }
 
 /* Header */
@@ -32,14 +38,19 @@
 }
 
 .changelog-badge {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-body);
   font-size: 11px;
-  font-weight: 600;
-  color: hsl(var(--primary));
-  background: hsl(var(--primary) / 0.08);
-  padding: 3px 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber) 28%, transparent);
+  padding: 4px 10px;
   border-radius: 9999px;
 }
+.changelog-badge svg { color: var(--amber); }
 
 .changelog-close {
   display: flex;
@@ -47,11 +58,11 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: hsl(var(--background));
-  border: none;
+  border-radius: 9px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
-  color: rgba(61, 48, 40, 0.4);
   transition: background 0.2s, color 0.2s;
 }
 
@@ -72,13 +83,13 @@
   font-weight: 800;
   letter-spacing: -0.025em;
   color: hsl(var(--foreground));
-  padding: 12px 24px 0;
+  padding: 14px 24px 0;
 }
 
 .changelog-date {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(61, 48, 40, 0.3);
+  color: hsl(var(--muted-foreground));
   padding: 4px 24px 0;
 }
 
@@ -88,6 +99,7 @@
   overflow-y: auto;
   padding: 16px 24px 8px;
   list-style: none;
+  margin: 0;
 }
 
 .changelog-item {
@@ -97,7 +109,7 @@
   padding: 8px 0;
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(61, 48, 40, 0.65);
+  color: hsl(var(--foreground) / 0.85);
   line-height: 1.5;
 }
 
@@ -105,7 +117,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: hsl(var(--primary));
+  background: var(--copper);
   flex-shrink: 0;
   margin-top: 7px;
 }
@@ -118,21 +130,26 @@
 .changelog-cta {
   width: 100%;
   padding: 14px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, hsl(24 72% 48%), hsl(24 65% 38%));
-  color: white;
+  border-radius: 14px;
+  background: var(--gradient-primary);
+  color: #fff;
   font-family: var(--font-heading);
   font-size: 15px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  transition: transform 0.15s;
+  transition: filter 0.15s, transform 0.1s;
+  box-shadow: 0 6px 20px hsl(20 65% 32% / 0.45);
+}
+.light .changelog-cta {
+  box-shadow: 0 6px 16px hsl(24 70% 50% / 0.22);
 }
 
 .changelog-cta:hover {
-  transform: scale(1.02);
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }
 
 .changelog-cta:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
