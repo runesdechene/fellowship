@@ -24,7 +24,9 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   reglages:        { key: 'reglages',        to: '/reglages',        label: 'Réglages',       icon: 'Settings',        pro: false, built: true },
 }
 
-const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'profil', 'reglages']
+// Festivalier : pas d'entrée « Profil » — il n'a pas de vitrine.
+// (L'avatar perso + lien /reglages tient lieu d'accès au compte.)
+const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'reglages']
 // `mes-dates` est partagé : un exposant est aussi festivalier (et c'est la compensation gratuite du Calendrier Pro).
 const EXPOSANT_NAV: NavKey[] = ['explorer', 'mes-dates', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
 
@@ -58,7 +60,9 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
   return 'active'
 }
 
-const SHARED_PREFIXES = ['/explorer', '/profil', '/reglages', '/evenement', '/notifications']
+// /profil n'est PAS partagé : c'est la vitrine d'un exposant. Un festivalier qui y atterrit
+// par deep-link est redirigé sur /explorer (cf. isRouteValidFor → la nav exposant l'autorise).
+const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications']
 
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.

@@ -5,7 +5,7 @@ const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
 
 describe('navItemsFor', () => {
-  it('personne → festivalier', () => expect(navItemsFor(person)).toEqual(['explorer','mes-dates','mes-createurs','profil','reglages']))
+  it('personne → festivalier (sans profil — un festivalier n\'a pas de vitrine)', () => expect(navItemsFor(person)).toEqual(['explorer','mes-dates','mes-createurs','reglages']))
   it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','mes-dates','dashboard','calendrier','communaute','vitrine','reglages']))
   it('null → explorer seul', () => expect(navItemsFor(null)).toEqual(['explorer']))
 })
