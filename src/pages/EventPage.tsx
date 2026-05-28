@@ -24,7 +24,7 @@ import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send } from 'lucide-react'
-import { getTagIcon } from '@/components/ui/TagBadge'
+import { getTagIcon, getTagLandingColor } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
 
@@ -261,9 +261,10 @@ export function EventPage() {
   const jx = daysUntilStart(event)
   const applyAvailable = hasApplyInfo(event)
   const friendNames = friendsOnEvent.map((f) => f.label).filter(Boolean).slice(0, 3).join(', ')
+  const tagAccent = getTagLandingColor(event.tags?.[0] ?? '')
 
   return (
-    <div className="event-page">
+    <div className="event-page" style={{ ['--tag-accent' as string]: tagAccent } as React.CSSProperties}>
       {/* Ambient : affiche floutée derrière le hero */}
       {!editing && event.image_url && (
         <div className="event-ambient" aria-hidden="true">

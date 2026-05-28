@@ -29,30 +29,30 @@
   pointer-events: none;
 }
 
-/* Nuit : l'image floutée elle-même s'estompe vers transparent via un mask CSS.
-   Plus de jonction colorée — la page bg (radial --page-backdrop) reprend naturellement
-   en transparence sans qu'on essaie de la "matcher". */
+/* Nuit : double couche pour le rendu chaleureux qui se fond proprement :
+   1) mask sur l'image floutée → l'image s'estompe en transparence (pas de jonction d'image visible)
+   2) overlay ::after en dégradé brun → ramène la chaleur + matche --background au bottom */
 .event-ambient img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: blur(60px) brightness(0.5) saturate(1.05);
   transform: scale(1.35);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 92%);
-  mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 92%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 60%, transparent 96%);
+  mask-image: linear-gradient(180deg, black 0%, black 60%, transparent 96%);
 }
 
-/* Léger darkening neutre (noir alpha, pas de couleur de fond à matcher) en haut,
-   transparent dès la moitié pour laisser respirer. */
 .event-ambient::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.18) 0%,
-    rgba(0, 0, 0, 0.08) 35%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.05) 25%,
+    hsl(var(--background) / 0.35) 55%,
+    hsl(var(--background) / 0.82) 82%,
+    hsl(var(--background)) 100%
   );
 }
 
@@ -173,7 +173,7 @@
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--amber);
+  color: var(--tag-accent, var(--amber));
   margin-bottom: 9px;
 }
 
@@ -197,8 +197,19 @@
 }
 
 .fest-hmeta-item { display: flex; align-items: center; gap: 9px; }
-.fest-hmeta-item svg { width: 18px; height: 18px; color: var(--amber); flex-shrink: 0; }
-.fest-hmeta-item.tag { font-weight: 600; }
+.fest-hmeta-item svg { width: 18px; height: 18px; color: var(--tag-accent, var(--amber)); flex-shrink: 0; }
+/* Tag chip = pill colorée à la couleur du tag */
+.fest-hmeta-item.tag {
+  font-weight: 700;
+  padding: 4px 12px 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tag-accent, var(--amber)) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag-accent, var(--amber)) 35%, transparent);
+  color: var(--tag-accent, var(--amber));
+  font-size: 13px;
+  text-transform: capitalize;
+}
+.fest-hmeta-item.tag svg { width: 14px; height: 14px; color: var(--tag-accent, var(--amber)); }
 
 .fest-hactions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
@@ -366,7 +377,7 @@
   align-items: center;
   gap: 12px;
 }
-.fest-fact svg { width: 20px; height: 20px; color: var(--amber); flex-shrink: 0; }
+.fest-fact svg { width: 20px; height: 20px; color: var(--tag-accent, var(--amber)); flex-shrink: 0; }
 .fest-fact-text small {
   font-size: 11px; color: hsl(var(--muted-foreground));
   text-transform: uppercase; letter-spacing: 0.05em;
@@ -469,7 +480,7 @@
 .fest-jx b { font-family: var(--font-heading); font-size: 26px; color: hsl(var(--foreground)); line-height: 1; }
 .fest-jx span { font-size: 12px; color: hsl(var(--muted-foreground)); margin-top: 3px; }
 .fest-deadline { text-align: right; font-size: 12px; color: hsl(var(--muted-foreground)); }
-.fest-deadline b { display: block; font-family: var(--font-heading); color: var(--amber); font-size: 13.5px; }
+.fest-deadline b { display: block; font-family: var(--font-heading); color: var(--tag-accent, var(--amber)); font-size: 13.5px; }
 
 /* EventDashboard (« Mon suivi ») allégé dans le cockpit */
 .fest-cockpit .event-suivi {
@@ -509,7 +520,7 @@
 .fest-ckrow.click { cursor: pointer; }
 .fest-ckrow.click:hover .fest-ckrow-val { color: var(--amber); }
 .fest-ckrow-lab { color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 9px; }
-.fest-ckrow-lab svg { width: 16px; height: 16px; color: var(--amber); }
+.fest-ckrow-lab svg { width: 16px; height: 16px; color: var(--tag-accent, var(--amber)); }
 .fest-ckrow-val { font-weight: 600; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 6px; }
 .fest-ckrow-val.warn { color: var(--amber); }
 .fest-ckrow-val svg { width: 14px; height: 14px; }
