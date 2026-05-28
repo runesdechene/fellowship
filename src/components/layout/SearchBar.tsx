@@ -158,9 +158,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
           <button className="search-bar-clear" onClick={() => { setSearchExpanded(false); setQuery(''); setOpen(false) }}>
             <X strokeWidth={1.5} />
           </button>
-        ) : (
-          <span className="search-bar-shortcut">⌘K</span>
-        )}
+        ) : null}
       </div>
 
       {/* Cluster d'actions — desktop : pill glass à droite ; mobile : flow normal (display:contents) */}
