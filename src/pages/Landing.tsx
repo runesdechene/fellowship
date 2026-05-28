@@ -21,6 +21,13 @@ const marqueTags: { label: string; color: string }[] = [
   { label: '🪑 Brocante',             color: '#d4be8a' },
   { label: '🦸 Comic Con',            color: '#e89ab4' },
   { label: '🧺 Marché de producteurs', color: '#a8cc7a' },
+  { label: '🎭 Culturel',             color: '#c4a0c4' },
+  { label: '🌾 Terroir',              color: '#c4a06a' },
+  { label: '🎬 Cinéma',               color: '#8a98c4' },
+  { label: '🏍️ Biker',                color: '#9a9a9a' },
+  { label: '🏕️ Outdoor',              color: '#79c6a0' },
+  { label: '🥘 Gastronomique',        color: '#e89a6a' },
+  { label: '🌹 Tatouage',             color: '#c4768a' },
 ]
 
 export function LandingPage() {

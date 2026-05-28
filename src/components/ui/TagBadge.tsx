@@ -46,6 +46,7 @@ const TAG_EMOJIS: Record<string, string> = {
   'salon': '🛍️',
   'litteraire': '📚',
   'historique': '🏰',
+  'tatouage': '🌹',
   // Tags supplémentaires (admin doit créer ces slugs en DB pour brancher)
   'exposition': '🖼️',
   'marche-noel': '🎄',
@@ -77,6 +78,7 @@ const TAG_LANDING_COLORS: Record<string, string> = {
   'salon': '#7fc6b4',
   'litteraire': '#7fc6a0',
   'historique': '#d4be8a',
+  'tatouage': '#c4768a',
   // Tags supplémentaires — 4 premiers : couleurs copiées exactement de la
   // landing marquee. 6 suivants : couleurs warm/pastel cohérentes avec la DA.
   'exposition': '#7fc6a0',
