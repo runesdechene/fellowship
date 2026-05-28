@@ -67,8 +67,8 @@ export function LandingPage() {
             <span className="brand-name">Fellowship</span>
           </div>
           <div className="nav-links">
-            <a className="link" href="#">À propos</a>
-            <a className="link" href="#">Tarifs</a>
+            <a className="link" href="#temoignages">À propos</a>
+            <a className="link" href="#tarifs">Tarifs</a>
             <ThemeToggle />
             <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
               Connexion
@@ -393,7 +393,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Témoignages — UGC social proof avant pricing ── */}
-      <section className="block v testimonials">
+      <section id="temoignages" className="block v testimonials">
         <div className="wrap">
           <div className="sec-head" style={{ textAlign: 'center' }}>
             <span className="eyebrow">Ils témoignent</span>
@@ -429,7 +429,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Pricing — Exposant ── */}
-      <section className="block v exposant">
+      <section id="tarifs" className="block v exposant">
         <div className="wrap">
           <div className="sec-head" style={{ textAlign: 'center' }}>
             <span className="eyebrow">Tarifs</span>
@@ -446,10 +446,10 @@ export function LandingPage() {
               <div className="price">Gratuit</div>
               <div className="per">Pour toujours</div>
               <ul>
-                <li><span className="ck">✓</span> Gérer ses dates de festivals</li>
-                <li><span className="ck">✓</span> Calendrier annuel</li>
+                <li><span className="ck">✓</span> Explorer des centaines de festivals</li>
+                <li><span className="ck">✓</span> Suivre jusqu'à 5 dates</li>
                 <li><span className="ck">✓</span> Voir sa communauté</li>
-                <li><span className="ck">✓</span> Page exposant publique</li>
+                <li><span className="ck">✓</span> Page vitrine publique</li>
               </ul>
               <Link to="/login" className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
                 Commencer gratuitement

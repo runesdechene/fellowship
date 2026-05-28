@@ -365,9 +365,13 @@
 .landing .v {
   display: none;
 }
-.landing .orga-waitlist-anchor {
+.landing .orga-waitlist-anchor,
+.landing #temoignages,
+.landing #tarifs {
   scroll-margin-top: 90px;
 }
+/* Scroll fluide quand on clique une ancre depuis la nav */
+.landing { scroll-behavior: smooth; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
