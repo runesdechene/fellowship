@@ -4,11 +4,18 @@
 
 .event-page {
   position: relative;
+  padding: var(--page-padding) 0 80px;
+}
+
+/* Centre les blocs intérieurs pour laisser l'ambient s'étaler pleine largeur du stage */
+.event-topbar,
+.fest-grid,
+.event-two-col {
   max-width: 1080px;
   margin-left: auto;
   margin-right: auto;
-  padding: var(--page-padding);
-  padding-bottom: 80px;
+  padding-left: var(--page-padding);
+  padding-right: var(--page-padding);
 }
 
 .event-ambient {
@@ -16,11 +23,10 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 460px;
+  height: 540px;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  border-radius: 0 0 24px 24px;
 }
 
 .event-ambient img {
@@ -645,7 +651,13 @@
 }
 
 @media (max-width: 767px) {
-  .event-page { padding: 16px; padding-bottom: 80px; }
+  .event-page { padding: 16px 0 80px; }
+  .event-topbar,
+  .fest-grid,
+  .event-two-col {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
   .event-ambient { height: 320px; }
   .fest-title { font-size: 26px; }
   .fest-facts { grid-template-columns: 1fr; }
