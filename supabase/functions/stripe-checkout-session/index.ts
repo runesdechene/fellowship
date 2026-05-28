@@ -45,8 +45,9 @@ Deno.serve(async (req) => {
     }
 
     // Vérif owner via RPC Postgres (utilise auth.uid() de la session courante).
+    // ⚠️ Le param SQL s'appelle target_actor (pas target_actor_id) — sinon PGRST202.
     const { data: canAct, error: canActErr } = await userClient
-      .rpc('can_act_as', { target_actor_id: body.entityId })
+      .rpc('can_act_as', { target_actor: body.entityId })
     if (canActErr) {
       console.error('[checkout-session] can_act_as error', canActErr)
       return json({ error: 'authz_failed' }, 500)

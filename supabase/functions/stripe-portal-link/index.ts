@@ -31,8 +31,9 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as Body
     if (!body.entityId) return json({ error: 'invalid_body' }, 400)
 
+    // ⚠️ Le param SQL s'appelle target_actor (pas target_actor_id) — sinon PGRST202.
     const { data: canAct, error: canActErr } = await userClient
-      .rpc('can_act_as', { target_actor_id: body.entityId })
+      .rpc('can_act_as', { target_actor: body.entityId })
     if (canActErr) return json({ error: 'authz_failed' }, 500)
     if (!canAct) return json({ error: 'forbidden' }, 403)
 
