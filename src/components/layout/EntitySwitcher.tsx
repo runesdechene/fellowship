@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
-import { ChevronDown, Check } from 'lucide-react'
+import { ChevronDown, Check, Plus } from 'lucide-react'
 
 function initials(label: string): string {
   return label.split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('') || '?'
@@ -9,6 +10,7 @@ function initials(label: string): string {
 
 export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   const { person, profile, entities, currentActor, currentActorRow, switchActor } = useAuth()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -36,7 +38,8 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
     ? <img src={activeAvatar} alt="" />
     : <span className="av-initial">{initials(label)}</span>
 
-  if (!person || entities.length === 0) {
+  // Pas de personne chargée → pas de dropdown (étape de boot).
+  if (!person) {
     return (
       <div className="entity" style={{ cursor: 'default' }}>
         <div className="av">{avContent}</div>
@@ -64,6 +67,15 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
               {currentActor?.id === e.actor_id && <Check strokeWidth={2} />}
             </button>
           ))}
+          {/* Accès discret pour créer un compte exposant (utile si le user s'est trompé
+              en s'inscrivant, ou s'il développe une activité plus tard). */}
+          <button
+            className="entity-dropdown-create"
+            onClick={() => { navigate('/onboarding'); setOpen(false) }}
+          >
+            <Plus strokeWidth={2} />
+            <span style={{ flex: 1 }}>Créer un compte exposant</span>
+          </button>
         </div>
       )}
     </div>
