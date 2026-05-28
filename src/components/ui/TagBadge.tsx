@@ -32,7 +32,11 @@ export function getTagIcon(slug: string): LucideIcon {
 // Emojis alignés sur les libellés de la landing marquee (Landing.tsx > marqueTags).
 // Ex : 'foire' = 🛠️ (Foire artisanale), 'marche' = 🧺 (Marché de producteurs),
 // 'litteraire' = 📚 (Salon du livre).
+// Les slugs ci-dessous DOIVENT correspondre à ceux saisis dans /admin/tags —
+// si on ajoute un tag en DB sans ajouter sa ligne ici, l'Explorer tombe sur
+// le fallback générique '🎉'.
 const TAG_EMOJIS: Record<string, string> = {
+  // Set d'origine (= seed migration `20260408200001_create_tags_table.sql`)
   'fete-medievale': '⚔️',
   'fantastique': '🐉',
   'geek': '🎮',
@@ -42,6 +46,17 @@ const TAG_EMOJIS: Record<string, string> = {
   'salon': '🛍️',
   'litteraire': '📚',
   'historique': '🏰',
+  // Tags supplémentaires (admin doit créer ces slugs en DB pour brancher)
+  'exposition': '🖼️',
+  'marche-noel': '🎄',
+  'marche-createurs': '🎨',
+  'brocante': '🪑',
+  'culturel': '🎭',
+  'terroir': '🌾',
+  'cinema': '🎬',
+  'biker': '🏍️',
+  'outdoor': '🏕️',
+  'gastronomique': '🥘',
 }
 
 // eslint-disable-next-line react-refresh/only-export-components -- emoji helper colocated with TagBadge (festival-tag style, comme la landing)
@@ -50,7 +65,9 @@ export function getTagEmoji(slug: string): string {
 }
 
 // Couleurs EXACTES des tags de la landing (marquee .etag) mappées aux tags de l'app.
+// Voir [[TAG_EMOJIS]] ci-dessus pour la note sur la synchro slug/DB.
 const TAG_LANDING_COLORS: Record<string, string> = {
+  // Set d'origine (= seed migration)
   'fete-medievale': '#e8a06a',
   'fantastique': '#c4a0e0',
   'geek': '#79b4d6',
@@ -60,6 +77,18 @@ const TAG_LANDING_COLORS: Record<string, string> = {
   'salon': '#7fc6b4',
   'litteraire': '#7fc6a0',
   'historique': '#d4be8a',
+  // Tags supplémentaires — 4 premiers : couleurs copiées exactement de la
+  // landing marquee. 6 suivants : couleurs warm/pastel cohérentes avec la DA.
+  'exposition': '#7fc6a0',
+  'marche-noel': '#e8897a',
+  'marche-createurs': '#f0a86a',
+  'brocante': '#d4be8a',
+  'culturel': '#c4a0c4',
+  'terroir': '#c4a06a',
+  'cinema': '#8a98c4',
+  'biker': '#9a9a9a',
+  'outdoor': '#79c6a0',
+  'gastronomique': '#e89a6a',
 }
 
 // eslint-disable-next-line react-refresh/only-export-components -- helper colocated with TagBadge
