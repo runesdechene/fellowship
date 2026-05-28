@@ -1,3 +1,10 @@
+/* Hauteur effective de la navbar (incluant la zone de fade-out en bas).
+   Utilisée par les pages qui veulent étendre leur fond sous la navbar (ex: Festival ambient). */
+:root { --navbar-h: 80px; }
+@media (max-width: 767px) {
+  :root { --navbar-h: 68px; }
+}
+
 /* src/components/layout/SearchBar.css — Navbar DA « Nuit de Festival » V1 (two-zone glass)
  *
  * Desktop : sticky grid 3 colonnes (1fr | auto | 1fr).
