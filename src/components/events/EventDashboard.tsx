@@ -37,10 +37,12 @@ const PAYMENT_STEPS = [
   { key: 'paye', label: 'Payé' },
 ]
 
-const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
+// Messages contextuels selon le rôle (exposant vs festivalier) — affichés en
+// éphémère après chaque changement de statut.
+const INFO_MESSAGES_EXPOSANT: Record<string, { title: string; text: string }> = {
   interesse: {
     title: '★ Repéré',
-    text: 'Tes amis voient que tu as repéré cet événement. Tu recevras les notifications de mise à jour.',
+    text: 'Tu as repéré ce festival. Tes abonnés peuvent voir que tu y candidates peut-être. Tu recevras les mises à jour.',
   },
   en_cours: {
     title: '📨 Dossier envoyé',
@@ -53,6 +55,17 @@ const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
   refuse: {
     title: '✕ Refusé',
     text: 'Dossier refusé — gardé en historique. Clique à nouveau pour retirer.',
+  },
+}
+
+const INFO_MESSAGES_FESTIVALIER: Record<string, { title: string; text: string }> = {
+  interesse: {
+    title: '★ Repéré',
+    text: 'Tu as repéré ce festival. Tu recevras les mises à jour (dates, infos, etc.).',
+  },
+  inscrit: {
+    title: '🎉 J\'y vais',
+    text: 'Tu confirmes ta venue. Tes abonnés voient que tu y vas, et tu recevras les rappels avant le festival.',
   },
 }
 
@@ -170,13 +183,18 @@ export function EventDashboard({
           )}
         </div>
 
-        {/* Ephemeral info box */}
-        {infoBox && INFO_MESSAGES[infoBox] && (
-          <div className={`event-info-box ${infoBox}`} onClick={() => setInfoBox(null)}>
-            <div className="event-info-box-title">{INFO_MESSAGES[infoBox].title}</div>
-            <div className="event-info-box-text">{INFO_MESSAGES[infoBox].text}</div>
-          </div>
-        )}
+        {/* Ephemeral info box — message contextuel selon le rôle */}
+        {(() => {
+          const MESSAGES = isExposant ? INFO_MESSAGES_EXPOSANT : INFO_MESSAGES_FESTIVALIER
+          const msg = infoBox ? MESSAGES[infoBox] : null
+          if (!msg) return null
+          return (
+            <div className={`event-info-box ${infoBox}`} onClick={() => setInfoBox(null)}>
+              <div className="event-info-box-title">{msg.title}</div>
+              <div className="event-info-box-text">{msg.text}</div>
+            </div>
+          )
+        })()}
 
         {/* Bilan post-événement (exposant + passé) */}
         {isExposant && isPast && (
