@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getTagIcon } from '@/components/ui/TagBadge'
+import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
 import { PERIODS, type Period, type Zone } from '@/lib/explorer'
 
 // DynamicTag shape returned by useTags (value = slug, label = display name)
@@ -99,22 +99,19 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, q
         <div className="pop open" onClick={e => e.stopPropagation()}>
           <h4>Type de festival</h4>
           <div className="catgrid">
-            {tags.map(t => {
-              const Icon = getTagIcon(t.value)
-              return (
-                <button
-                  key={t.value}
-                  className={'catchip' + (selectedTags.has(t.value) ? ' on' : '')}
-                  // Couleur DB injectée via `color` : le CSS de .catchip s'appuie
-                  // sur `currentColor` pour le fond, la bordure et l'icône, donc
-                  // chaque chip prend sa couleur propre.
-                  style={{ color: t.color }}
-                  onClick={() => onToggleTag(t.value)}
-                >
-                  <Icon size={14} strokeWidth={2} /> {t.label}
-                </button>
-              )
-            })}
+            {tags.map(t => (
+              <button
+                key={t.value}
+                className={'catchip' + (selectedTags.has(t.value) ? ' on' : '')}
+                // Emoji + couleur du même registre que la landing marquee :
+                // currentColor (injecté inline) sert au fond / bordure / texte
+                // via le CSS de .catchip. L'emoji garde ses couleurs Unicode.
+                style={{ color: getTagLandingColor(t.value) }}
+                onClick={() => onToggleTag(t.value)}
+              >
+                <span aria-hidden="true">{getTagEmoji(t.value)}</span> {t.label}
+              </button>
+            ))}
           </div>
         </div>
       )}

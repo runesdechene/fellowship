@@ -29,12 +29,15 @@ export function getTagIcon(slug: string): LucideIcon {
   return TAG_ICONS[slug] ?? Tag
 }
 
+// Emojis alignés sur les libellés de la landing marquee (Landing.tsx > marqueTags).
+// Ex : 'foire' = 🛠️ (Foire artisanale), 'marche' = 🧺 (Marché de producteurs),
+// 'litteraire' = 📚 (Salon du livre).
 const TAG_EMOJIS: Record<string, string> = {
   'fete-medievale': '⚔️',
   'fantastique': '🐉',
   'geek': '🎮',
   'festival-musique': '🎵',
-  'foire': '🎪',
+  'foire': '🛠️',
   'marche': '🧺',
   'salon': '🛍️',
   'litteraire': '📚',
