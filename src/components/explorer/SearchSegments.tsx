@@ -102,7 +102,15 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, q
             {tags.map(t => {
               const Icon = getTagIcon(t.value)
               return (
-                <button key={t.value} className={'catchip' + (selectedTags.has(t.value) ? ' on' : '')} onClick={() => onToggleTag(t.value)}>
+                <button
+                  key={t.value}
+                  className={'catchip' + (selectedTags.has(t.value) ? ' on' : '')}
+                  // Couleur DB injectée via `color` : le CSS de .catchip s'appuie
+                  // sur `currentColor` pour le fond, la bordure et l'icône, donc
+                  // chaque chip prend sa couleur propre.
+                  style={{ color: t.color }}
+                  onClick={() => onToggleTag(t.value)}
+                >
                   <Icon size={14} strokeWidth={2} /> {t.label}
                 </button>
               )

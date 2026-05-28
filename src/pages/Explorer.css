@@ -386,9 +386,10 @@
   gap: 7px;
   padding: 10px 12px;
   border-radius: 10px;
-  background: hsl(var(--secondary));
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
+  /* currentColor = couleur du tag injectée inline (style={{color:t.color}}).
+     8 % de wash + bord 22 % → aperçu coloré par type même hors sélection. */
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -397,13 +398,12 @@
 }
 
 .explorer .catchip:hover {
-  border-color: var(--amber);
+  border-color: currentColor;
 }
 
 .explorer .catchip.on {
-  background: color-mix(in srgb, var(--copper) 20%, transparent);
-  border-color: var(--amber);
-  color: var(--amber);
+  background: color-mix(in srgb, currentColor 20%, transparent);
+  border-color: currentColor;
 }
 
 /* ── Pop line (date / location inputs) ───────────────────────────── */
