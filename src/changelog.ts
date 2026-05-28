@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.195',
+    date: '2026-05-28',
+    title: 'Explorer fluide et 10 nouveaux types de festival',
+    changes: [
+      '10 nouveaux types : Exposition, Marché de Noël, Marché de créateurs, Brocante, Culturel, Terroir, Cinéma, Biker, Outdoor, Gastronomique',
+      'Le filtre « Quoi » de l\'Explorer reprend les couleurs et emojis de la landing — chaque type est immédiatement reconnaissable',
+      'Le popover « Quoi » s\'adapte enfin à la largeur de l\'écran (3 → 2 → 1 colonnes) sans débordement',
+      'Tatouage repris dans la palette aussi (🌹) — plus de chip générique',
+      'Marquee de la landing enrichi : 19 types de festivals défilent désormais en haut de page',
+      'Refonte du layout Explorer en flex column → fini les chevauchements entre cartes, dock infos et boutons',
+    ],
+  },
+  {
     version: '0.7.187',
     date: '2026-05-28',
     title: 'Tarifs Pro publics, landing peaufinée',
