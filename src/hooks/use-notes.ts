@@ -20,25 +20,28 @@ async function attachAuthors(rows: Array<{ actor_id: string | null; [k: string]:
 }
 
 /**
- * Notes d'un événement.
- *   - sans actorId  → toutes les notes (legacy / vue admin éventuelle)
- *   - avec actorId  → uniquement les notes privées de cet acteur (notes personnelles)
+ * Notes d'un événement, scopées à un acteur (notes personnelles privées).
  *
- * Le mode personnel est utilisé sur la page Festival : les notes y sont privées,
- * lisibles seulement par leur auteur. Le « partagé » sera couvert plus tard par
- * la Discussion du festival (threads pour abonnés/amis).
+ * actorId est REQUIS pour fetcher : sans lui, on renvoie une liste vide. C'était
+ * un risque de leak — EventPage passe `currentActor?.id ?? null` qui pouvait
+ * brièvement laisser passer toutes les notes au boot (avant que currentActor
+ * arrive). Désormais aucune fetch tant qu'on n'a pas d'acteur — le rendu reste
+ * vide jusqu'à l'hydratation du contexte auth.
+ *
+ * Le « partagé » sera couvert plus tard par la Discussion du festival
+ * (threads pour abonnés/amis).
  */
 export function useEventNotes(eventId: string | undefined, actorId?: string | null) {
   const [notes, setNotes] = useState<NoteWithAuthor[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchNotes = useCallback(async () => {
-    if (!eventId) return
-    let q = supabase
+    if (!eventId || !actorId) { setNotes([]); setLoading(false); return }
+    const { data } = await supabase
       .from('notes').select('*')
       .eq('event_id', eventId)
-    if (actorId) q = q.eq('actor_id', actorId)
-    const { data } = await q.order('created_at', { ascending: false })
+      .eq('actor_id', actorId)
+      .order('created_at', { ascending: false })
     setNotes(await attachAuthors((data as Array<{ actor_id: string | null; [k: string]: unknown }> | null) ?? []))
     setLoading(false)
   }, [eventId, actorId])

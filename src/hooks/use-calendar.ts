@@ -39,8 +39,11 @@ export function buildCalendarMonths(participations: ParticipationWithEvent[], ye
 
     // Rattaché au mois de la DATE DE DÉBUT uniquement — jamais dupliqué sur les
     // mois suivants (un événement à cheval juillet→août n'apparaît qu'en juillet).
-    if (start.getFullYear() !== year) continue
-    months[start.getMonth()]?.events.push({
+    // Festivals à cheval sur deux années (ex. 30 déc → 5 jan) : on les rattache à
+    // l'année qui matche, sur le mois local correspondant. Sinon ils disparaissent.
+    if (start.getFullYear() !== year && end.getFullYear() !== year) continue
+    const monthIndex = start.getFullYear() === year ? start.getMonth() : end.getMonth()
+    months[monthIndex]?.events.push({
       id: p.events.id,
       name: p.events.name,
       startDate: start,

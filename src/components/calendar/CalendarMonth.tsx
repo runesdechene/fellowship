@@ -75,12 +75,14 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
               <button className="calendar-companions" onClick={e => { e.preventDefault(); onOpenFriends?.(ev.id, ev.name) }}>
                 <div className="calendar-pav">
                   {friendsAtEvent.slice(0, 4).map((fp, i) => {
-                    const nm = fp.actor_public?.label ?? '?'
+                    // ?? + || : un label '' (DB autorise les brand_name vides en legacy)
+                    // passe le ?? donc on enchaîne || pour retomber sur '?' aussi.
+                    const nm = (fp.actor_public?.label ?? '').trim() || '?'
                     const url = fp.actor_public?.avatar_url
                     return (
                       <span key={fp.actor_id} className="calendar-pav-item"
                         style={{ background: url ? 'transparent' : avatarGradient(nm), zIndex: 4 - i }}>
-                        {url ? <img src={url} alt={nm} /> : nm[0].toUpperCase()}
+                        {url ? <img src={url} alt={nm} /> : nm[0]!.toUpperCase()}
                       </span>
                     )
                   })}
@@ -96,7 +98,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
         <>
           <div className="calendar-friend-lbl">Tes compagnons ce mois-ci</div>
           {friendsOnly.map(ev => {
-            const fname = ev.friendName ?? 'Un ami'
+            const fname = (ev.friendName ?? '').trim() || 'Un ami'
             return (
               <Link key={ev.id} to={`/evenement/${ev.id}`} state={{ from: '/calendrier' }} className="calendar-evF">
                 {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
@@ -104,7 +106,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                   <div className="calendar-evF-name">{ev.name}</div>
                   <div className="calendar-evF-meta">{fname} y va · {ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</div>
                 </div>
-                <span className="calendar-evF-av" style={{ background: avatarGradient(fname) }}>{fname[0].toUpperCase()}</span>
+                <span className="calendar-evF-av" style={{ background: avatarGradient(fname) }}>{fname[0]!.toUpperCase()}</span>
               </Link>
             )
           })}

@@ -22,12 +22,16 @@ export function useVitrine(slug: string | undefined): VitrineData {
   useEffect(() => {
     if (!slug) return
     let cancelled = false
+    // Reset complet entre slugs : sinon naviguer de /@alice à /@bob laissait
+    // Alice (entité, network, season) visible pendant le refetch — pire, un
+    // 404 résiduel pouvait collisionner avec une entité valide à charger.
+    setData({ entity: null, season: [], friends: [], followers: [], loading: true, notFound: false }) // eslint-disable-line react-hooks/set-state-in-effect
     async function run() {
       let entity: EntityRow | null = null
-      const { data: bySlug } = await supabase.from('entities').select('*').eq('public_slug', slug!).single()
+      const { data: bySlug } = await supabase.from('entities').select('*').eq('public_slug', slug!).maybeSingle()
       if (bySlug) entity = bySlug as EntityRow
       else {
-        const { data: byId } = await supabase.from('entities').select('*').eq('actor_id', slug!).single()
+        const { data: byId } = await supabase.from('entities').select('*').eq('actor_id', slug!).maybeSingle()
         entity = (byId as EntityRow) ?? null
       }
       if (!entity) {

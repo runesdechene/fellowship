@@ -62,7 +62,9 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
 
 // /profil n'est PAS partagé : c'est la vitrine d'un exposant. Un festivalier qui y atterrit
 // par deep-link est redirigé sur /explorer (cf. isRouteValidFor → la nav exposant l'autorise).
-const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications']
+// /suivis est accessible aux deux acteurs (page FollowingPage commune) — il doit être ici
+// car il n'est dans aucune nav (entrée via l'avatar / lien profil), sinon AppLayout le bloque.
+const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications', '/suivis']
 
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
