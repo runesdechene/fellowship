@@ -72,6 +72,7 @@ const RESERVED_TOP = new Set([
   'explorer', 'calendrier', 'communaute', 'tableau-de-bord', 'dashboard',
   'mes-dates', 'mes-createurs', 'profil', 'reglages', 'suivis',
   'notifications', 'evenement', 'admin', 'onboarding', 'login', 'auth',
+  'legal',
 ])
 
 /** Route profil/vitrine public `/:slug` (ou `/:slug/embed`) : premier segment non réservé. */
