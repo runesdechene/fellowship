@@ -16,6 +16,19 @@
 }
 .boutique-tagline { color: hsl(var(--muted-foreground)); font-size: 1.05rem; margin-top: 6px; }
 
+.boutique-trial-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 18px; padding: 10px 18px; border-radius: 999px;
+  background: color-mix(in srgb, var(--lime) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lime) 38%, transparent);
+  color: var(--lime); font-weight: 700; font-size: 14px;
+}
+.boutique-trial-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
+.light .boutique-trial-badge {
+  background: color-mix(in srgb, var(--lime) 14%, transparent);
+  border-color: color-mix(in srgb, var(--lime) 50%, transparent);
+}
+
 .boutique-notice, .boutique-already-pro, .boutique-error {
   margin: 0 auto 20px; padding: 14px 18px; border-radius: 12px;
   border: 1px solid hsl(var(--border)); background: hsl(var(--card));
@@ -76,6 +89,11 @@
 .boutique-cta:disabled { opacity: .55; cursor: not-allowed; }
 .boutique-cta .animate-spin { animation: boutique-spin 1s linear infinite; }
 @keyframes boutique-spin { to { transform: rotate(360deg); } }
+
+.boutique-plan-trial {
+  margin: 0; padding-top: 8px;
+  font-size: 12.5px; color: hsl(var(--muted-foreground)); text-align: center;
+}
 
 .boutique-features { list-style: none; padding: 0; margin: 28px 0; display: grid; gap: 10px; }
 .boutique-features li { display: flex; align-items: center; gap: 10px; color: hsl(var(--foreground)); }

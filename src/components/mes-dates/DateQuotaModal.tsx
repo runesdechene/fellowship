@@ -12,7 +12,7 @@ export function DateQuotaModal({ onClose }: { onClose: () => void }) {
         <div className="dq-lock"><Lock strokeWidth={1.5} /></div>
         <h2 id="dq-title">Tu suis déjà {FREE_DATES_QUOTA} festivals à venir</h2>
         <p>C'est le maximum en gratuit. Passe Pro pour suivre un <b>nombre illimité</b> de dates — plus le Calendrier, la Communauté et ton Cockpit.</p>
-        <Link to="/reglages" className="dq-btn">Passer en Pro — dès 9,99 € HT/mois</Link>
+        <Link to="/boutique" className="dq-btn">Passer en Pro — dès 9,99 € HT/mois</Link>
         <button type="button" className="dq-later" onClick={onClose}>Plus tard</button>
       </div>
     </div>

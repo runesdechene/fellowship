@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Loader2, Check, Lock } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Loader2, Check, Lock, Gift } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { planForActor } from '@/lib/navModel'
 import { startCheckout, type BillingInterval } from '@/lib/stripe-client'
+import type { EntityRow } from '@/types/database'
 import './Boutique.css'
 
 const FEATURES = [
@@ -16,19 +16,29 @@ const FEATURES = [
 ]
 
 export function BoutiquePage() {
-  const { currentActor, currentActorRow } = useAuth()
+  const { currentActor, currentActorRow, entities } = useAuth()
+  const [params] = useSearchParams()
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const isEntity = currentActor?.kind === 'entity'
-  const isPro = planForActor(currentActor, currentActorRow) === 'pro'
+  // Cible de souscription : par défaut l'acteur actif s'il est entité,
+  // sinon override via ?entity=<actor_id> (depuis Settings multi-entités).
+  const overrideEntityId = params.get('entity')
+  const overrideEntity = overrideEntityId
+    ? entities.find(e => e.actor_id === overrideEntityId) ?? null
+    : null
+  const targetEntity: EntityRow | null = overrideEntity
+    ?? (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null)
+  const targetEntityId = targetEntity?.actor_id ?? null
+  const targetPlan = targetEntity?.plan ?? null
+  const isProTarget = targetPlan === 'pro'
 
   const handleClick = async (interval: BillingInterval) => {
-    if (!currentActor || !isEntity) return
+    if (!targetEntityId) return
     setError(null)
     setLoading(interval)
     try {
-      await startCheckout(currentActor.id, interval)
+      await startCheckout(targetEntityId, interval)
       // navigate: window.location.href dans startCheckout, on n'arrive jamais ici.
     } catch (e) {
       console.error('[Boutique] checkout failed', e)
@@ -42,17 +52,27 @@ export function BoutiquePage() {
       <header className="boutique-hero">
         <h1>Passer en Pro</h1>
         <p className="boutique-tagline">Pour vivre de ton art.</p>
+        <div className="boutique-trial-badge">
+          <Gift strokeWidth={2} /> 14 jours d'essai gratuits — annule à tout moment
+        </div>
       </header>
 
-      {!isEntity && (
+      {!targetEntity && (
         <div className="boutique-notice">
           Sélectionne ton entité exposant dans la navbar pour t'abonner à Pro.
         </div>
       )}
 
-      {isPro && (
+      {targetEntity && overrideEntity && (
+        <div className="boutique-notice">
+          Tu abonnes <strong>{overrideEntity.brand_name}</strong>{currentActor?.kind === 'entity' && currentActor.id !== overrideEntity.actor_id ? ' (pas ton entité active)' : ''}.
+        </div>
+      )}
+
+      {isProTarget && (
         <div className="boutique-already-pro">
-          ✓ Tu es déjà Pro. <Link to="/abonnement">Gérer mon abonnement →</Link>
+          ✓ {targetEntity?.brand_name ?? 'Cette entité'} est déjà Pro.{' '}
+          <Link to={`/abonnement${overrideEntityId ? `?entity=${overrideEntityId}` : ''}`}>Gérer l'abonnement →</Link>
         </div>
       )}
 
@@ -64,8 +84,9 @@ export function BoutiquePage() {
           priceHT="11,99 € HT"
           period="par mois"
           subline="Premium flexibilité"
+          trialNote="14j d'essai gratuit, puis 11,99 € HT/mois"
           loading={loading === 'month'}
-          disabled={!isEntity || isPro || loading !== null}
+          disabled={!targetEntity || isProTarget || loading !== null}
           onClick={() => handleClick('month')}
         />
         <PlanCard
@@ -73,9 +94,10 @@ export function BoutiquePage() {
           priceHT="9,99 € HT"
           period="par mois"
           subline="Facturé 119,88 € HT/an · économise 17 %"
+          trialNote="14j d'essai gratuit, puis 119,88 € HT/an"
           highlight
           loading={loading === 'year'}
-          disabled={!isEntity || isPro || loading !== null}
+          disabled={!targetEntity || isProTarget || loading !== null}
           onClick={() => handleClick('year')}
         />
       </div>
@@ -99,6 +121,7 @@ interface PlanCardProps {
   priceHT: string
   period: string
   subline: string
+  trialNote: string
   highlight?: boolean
   loading: boolean
   disabled: boolean
@@ -122,8 +145,9 @@ function PlanCard(p: PlanCardProps) {
         aria-busy={p.loading}
       >
         {p.loading ? <Loader2 className="animate-spin" /> : p.disabled && !p.loading ? <Lock strokeWidth={1.5} /> : null}
-        {p.loading ? 'Redirection…' : 'Choisir'}
+        {p.loading ? 'Redirection…' : 'Démarrer mon essai gratuit'}
       </button>
+      <p className="boutique-plan-trial">{p.trialNote}</p>
     </div>
   )
 }

@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
+import { openCustomerPortal } from '@/lib/stripe-client'
 import { Button } from '@/components/ui/button'
-import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink } from 'lucide-react'
+import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
 
 export function SettingsPage() {
@@ -245,14 +246,7 @@ export function SettingsPage() {
             />
           </div>
 
-          {currentActor?.kind === 'entity' && (
-            <div className="mb-4">
-              <Link to="/abonnement" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-                Mon abonnement Fellowship Pro
-                <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
-              </Link>
-            </div>
-          )}
+          {entities.length > 0 && <EntitySubscriptionsList entities={entities} />}
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button variant="outline" onClick={signOut} className="gap-2">
@@ -292,6 +286,96 @@ export function SettingsPage() {
           </div>
         </section>
       </div>
+    </div>
+  )
+}
+
+// ── Mes abonnements (multi-entités) ────────────────────────────────────────
+// Une ligne par entité du compte avec son statut + action :
+//  - free / canceled  → "Passer en Pro" → /boutique?entity=X
+//  - trialing/active/past_due → "Gérer" → portail Stripe (sans basculer d'acteur)
+
+type EntityWithSub = EntityRow & {
+  subscription_status?: string | null
+  billing_interval?: string | null
+}
+
+function EntitySubscriptionsList({ entities }: { entities: EntityRow[] }) {
+  return (
+    <div className="mb-6">
+      <h3 className="mb-3 text-sm font-semibold text-muted-foreground">Mes abonnements Fellowship Pro</h3>
+      <div className="flex flex-col gap-2">
+        {entities.map(entity => (
+          <EntitySubscriptionRow key={entity.actor_id} entity={entity as EntityWithSub} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function EntitySubscriptionRow({ entity }: { entity: EntityWithSub }) {
+  const [opening, setOpening] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
+  const status = entity.subscription_status ?? null
+  const isPro = entity.plan === 'pro'
+  const isActiveSub = !!status && ['trialing', 'active', 'past_due'].includes(status)
+
+  const handlePortal = async () => {
+    setErr(null)
+    setOpening(true)
+    try {
+      await openCustomerPortal(entity.actor_id)
+    } catch (e) {
+      console.error('[Settings] portal failed', e)
+      setErr("Impossible d'ouvrir le portail")
+      setOpening(false)
+    }
+  }
+
+  const label = (() => {
+    if (status === 'trialing') return { text: 'Essai gratuit', tone: 'pro' as const }
+    if (status === 'active') return { text: `Pro ${entity.billing_interval === 'year' ? 'annuel' : 'mensuel'}`, tone: 'pro' as const }
+    if (status === 'past_due') return { text: 'Paiement échoué', tone: 'warn' as const }
+    if (status === 'canceled') return { text: 'Annulé', tone: 'muted' as const }
+    if (isPro) return { text: 'Pro (legacy)', tone: 'pro' as const } // Pro hérité sans sub Stripe
+    return { text: 'Gratuit', tone: 'muted' as const }
+  })()
+
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 p-3">
+      {entity.avatar_url
+        ? <img src={entity.avatar_url} alt="" className="h-9 w-9 flex-shrink-0 rounded-full object-cover" />
+        : <div className="h-9 w-9 flex-shrink-0 rounded-full bg-muted" />}
+      <div className="min-w-0 flex-1">
+        <div className="truncate text-sm font-semibold">{entity.brand_name ?? '(sans nom)'}</div>
+        <div className="flex items-center gap-1.5 text-xs">
+          {label.tone === 'pro' && <Crown className="h-3 w-3 text-primary" strokeWidth={2} />}
+          <span className={
+            label.tone === 'pro' ? 'text-primary font-semibold'
+            : label.tone === 'warn' ? 'text-destructive font-semibold'
+            : 'text-muted-foreground'
+          }>{label.text}</span>
+        </div>
+        {err && <div className="mt-1 text-xs text-destructive">{err}</div>}
+      </div>
+      {isActiveSub ? (
+        <button
+          onClick={handlePortal}
+          disabled={opening}
+          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:bg-muted disabled:opacity-50"
+        >
+          {opening ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />}
+          {opening ? '…' : 'Gérer'}
+        </button>
+      ) : (
+        <Link
+          to={`/boutique?entity=${entity.actor_id}`}
+          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:opacity-90"
+        >
+          <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
+          Passer en Pro
+        </Link>
+      )}
     </div>
   )
 }

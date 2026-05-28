@@ -18,7 +18,7 @@ export function CommunauteTeaser() {
           <div className="comm-teaser-lock"><Lock strokeWidth={1.5} /></div>
           <h2>Vois où va ta tribu</h2>
           <p>Le fil de ton réseau — convergences, avis, nouvelles dates de tes compagnons.</p>
-          <Link to="/reglages" className="btn btn-p">Passer en Pro — dès 9,99 € HT/mois</Link>
+          <Link to="/boutique" className="btn btn-p">Passer en Pro — dès 9,99 € HT/mois</Link>
         </div>
       </div>
     </div>

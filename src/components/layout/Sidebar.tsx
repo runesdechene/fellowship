@@ -90,7 +90,7 @@ export function Sidebar() {
         <div className="sidebar-upsell">
           <b>Passe en Pro</b>
           <span>Saison complète, cockpit de pilotage &amp; fil de ta tribu.</span>
-          <Link className="ubtn" to="/reglages">Découvrir Pro — dès 9,99 € HT/mois</Link>
+          <Link className="ubtn" to="/boutique">Découvrir Pro — dès 9,99 € HT/mois</Link>
         </div>
       )}
 
