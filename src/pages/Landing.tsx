@@ -45,6 +45,17 @@ export function LandingPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function scrollToOrgaWaitlist() {
+    document.getElementById('orga-waitlist')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function goToOrgaWaitlist() {
+    setAudience('organisateur')
+    // Double-rAF : laisser le commit React passer + la règle CSS data-aud appliquer
+    // display:block sur .v.organisateur avant de calculer le scroll.
+    requestAnimationFrame(() => requestAnimationFrame(scrollToOrgaWaitlist))
+  }
+
   return (
     <div className="landing" data-aud={audience}>
 
@@ -177,16 +188,17 @@ export function LandingPage() {
               candidatures en un seul flux, et découvrez des centaines de créateurs pour vos événements.
             </p>
             <div className="hero-cta">
-              <Link
-                to="/login"
+              <button
+                type="button"
                 className="btn btn-primary"
                 style={{
                   background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
                   boxShadow: 'none',
                 }}
+                onClick={scrollToOrgaWaitlist}
               >
                 Rejoindre la liste d'attente
-              </Link>
+              </button>
             </div>
             <div className="proof">🌱 En développement · Lancement V2</div>
           </div>
@@ -489,7 +501,7 @@ export function LandingPage() {
                 background: 'linear-gradient(135deg,var(--lime),var(--lime-d))',
                 boxShadow: 'none',
               }}
-              onClick={() => switchAudience('organisateur')}
+              onClick={goToOrgaWaitlist}
             >
               Rejoindre la liste d'attente
             </button>
@@ -498,7 +510,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Organisateur waitlist ── */}
-      <section className="block v organisateur">
+      <section id="orga-waitlist" className="block v organisateur orga-waitlist-anchor">
         <div className="wrap" style={{ textAlign: 'center', maxWidth: '560px' }}>
           <h2 style={{ fontSize: '30px' }}>On vous prévient au lancement.</h2>
           <p style={{ color: 'hsl(var(--muted-foreground))', margin: '14px 0 24px' }}>

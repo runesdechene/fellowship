@@ -351,6 +351,9 @@
 .landing .v {
   display: none;
 }
+.landing .orga-waitlist-anchor {
+  scroll-margin-top: 90px;
+}
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
