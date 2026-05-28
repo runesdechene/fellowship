@@ -3,6 +3,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, type LucideIcon } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
+import { useMyParticipations } from '@/hooks/use-participations'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
@@ -18,6 +19,15 @@ export function Sidebar() {
   const keys = navItemsFor(currentActor)
   const isFreeEntity = currentActor?.kind === 'entity' && plan === 'free'
   const accountName = person?.display_name ?? profile?.display_name ?? 'Mon compte'
+
+  // Compteur « Mes dates » → nombre d'événements à venir (start_date >= aujourd'hui)
+  // dans les participations de l'acteur actif, hors refuse.
+  const { participations } = useMyParticipations()
+  const myDatesCount = participations.filter(p => {
+    if (p.status === 'refuse') return false
+    const start = p.events?.start_date
+    return start != null && new Date(start) >= new Date(new Date().toDateString())
+  }).length
   // Avatar perso : profile (legacy) gagne car c'est là que Settings écrit, fallback person.
   const personalAvatar = profile?.avatar_url ?? person?.avatar_url ?? null
   const personalInitial = (accountName !== 'Mon compte' ? accountName : 'M')[0]?.toUpperCase() ?? 'M'
@@ -43,11 +53,13 @@ export function Sidebar() {
           const state = entryState(key, plan)
           const to = key === 'vitrine' ? vitrineHref((currentActorRow as { public_slug?: string | null })?.public_slug) : def.to
           if (state === 'active') {
+            const showCount = key === 'mes-dates' && myDatesCount > 0
             return (
               <NavLink key={key} to={to} title={collapsed ? def.label : undefined}
                 className={({ isActive }) => (isActive ? 'active' : '')}>
                 <Icon strokeWidth={2} />
                 <span className="navlabel">{def.label}</span>
+                {showCount && <span className="nav-count">{myDatesCount}</span>}
               </NavLink>
             )
           }
