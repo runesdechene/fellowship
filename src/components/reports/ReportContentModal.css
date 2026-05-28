@@ -1,0 +1,128 @@
+/* ReportContentModal.css — modale signalement DA */
+
+.report-modal-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 6, 5, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 16px;
+}
+
+.report-modal {
+  width: 100%; max-width: 440px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+.light .report-modal { box-shadow: 0 20px 60px rgba(120, 80, 40, 0.18); }
+
+.report-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.report-modal-head h2 {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-heading); font-weight: 800; font-size: 17px;
+  color: hsl(var(--foreground));
+}
+.report-modal-head h2 svg { width: 18px; height: 18px; color: var(--amber); }
+.report-modal-head button {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 9px;
+  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  color: hsl(var(--muted-foreground)); cursor: pointer;
+}
+.report-modal-head button:hover { color: hsl(var(--foreground)); }
+.report-modal-head button svg { width: 16px; height: 16px; }
+
+.report-modal-target {
+  font-size: 13px; color: hsl(var(--muted-foreground));
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.report-modal-reasons {
+  border: none; padding: 0; margin: 0 0 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.report-modal-reasons legend {
+  font-size: 11px; font-weight: 800; color: hsl(var(--muted-foreground));
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+.report-modal-reasons label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 11px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  cursor: pointer;
+  font-size: 13.5px;
+  color: hsl(var(--foreground));
+  transition: background 0.15s, border-color 0.15s;
+}
+.report-modal-reasons label:hover { background: hsl(var(--foreground) / 0.05); }
+.report-modal-reasons label.on {
+  background: color-mix(in srgb, var(--amber) 14%, transparent);
+  border-color: color-mix(in srgb, var(--amber) 38%, transparent);
+  color: var(--amber);
+  font-weight: 600;
+}
+.report-modal-reasons input { accent-color: var(--amber); margin: 0; }
+
+.report-modal-comment {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 16px;
+}
+.report-modal-comment span {
+  font-size: 11px; font-weight: 800; color: hsl(var(--muted-foreground));
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+.report-modal-comment textarea {
+  resize: vertical; min-height: 60px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-body); font-size: 13.5px;
+}
+.report-modal-comment textarea:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--amber) 40%, hsl(var(--border)));
+}
+
+.report-modal-error {
+  font-size: 13px; color: var(--status-refuse);
+  margin-bottom: 10px;
+}
+
+.report-modal-actions {
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+
+.report-modal-success,
+.report-modal-info {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 20px 0 8px;
+  text-align: center;
+}
+.report-modal-success svg {
+  width: 46px; height: 46px; padding: 10px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--status-inscrit) 18%, transparent);
+  color: var(--status-inscrit);
+}
+.report-modal-info svg {
+  width: 46px; height: 46px; padding: 10px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--amber) 18%, transparent);
+  color: var(--amber);
+}
+.report-modal-success p,
+.report-modal-info p {
+  font-size: 14px; color: hsl(var(--foreground));
+  max-width: 320px;
+}
