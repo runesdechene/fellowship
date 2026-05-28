@@ -29,7 +29,8 @@ const STEPS_FESTIVALIER = [
 ]
 
 // Paiement en 3 étapes : a_payer → acompte_verse (= inscription validée) → paye.
-// payment_status est une colonne text libre, pas d'enum DB → aucune migration nécessaire.
+// payment_status a un CHECK constraint en DB ; la migration 20260528220000_payment_status_acompte
+// l'a étendu pour accepter 'acompte_verse'.
 const PAYMENT_STEPS = [
   { key: 'a_payer', label: 'À payer' },
   { key: 'acompte_verse', label: 'Acompte versé' },
