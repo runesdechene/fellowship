@@ -52,6 +52,51 @@ export type Database = {
         }
         Relationships: []
       }
+      content_reports: {
+        Row: {
+          id: string
+          reporter_actor_id: string
+          reporter_auth_id: string
+          target_type: string
+          target_id: string
+          reason: string
+          comment: string | null
+          status: string
+          admin_note: string | null
+          resolved_at: string | null
+          resolved_by_actor_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reporter_actor_id: string
+          reporter_auth_id: string
+          target_type: string
+          target_id: string
+          reason: string
+          comment?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_at?: string | null
+          resolved_by_actor_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reporter_actor_id?: string
+          reporter_auth_id?: string
+          target_type?: string
+          target_id?: string
+          reason?: string
+          comment?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_at?: string | null
+          resolved_by_actor_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       entities: {
         Row: {
           actor_id: string
