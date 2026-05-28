@@ -348,6 +348,10 @@
   opacity: 0;
   visibility: hidden;
   transition: 0.18s;
+  /* Mobile / petits écrans : la pop ne doit pas déborder verticalement.
+     `max-height` 70vh + scroll interne si trop de chips à afficher. */
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .explorer .pop.open {
@@ -375,10 +379,13 @@
 
 .explorer .catgrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  /* `auto-fit` choisit le nombre de colonnes selon la place dispo :
+     - Desktop (460px) → 3 colonnes de ~149px
+     - iPhone (~345px utile après clamp) → 2 colonnes de ~169px
+     - Très étroit → 1 colonne
+     Toujours assez large pour caser "Gastronomique" (le mot le plus long). */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 8px;
-  /* 460px = 3 × 140px + 2 × 8px gap + 16px de marge pour respirer.
-     Anciennement 395px : "Gastronomique" (1 mot, 13 chars) débordait sa cellule. */
   width: 460px;
   max-width: calc(100vw - 48px);
 }
