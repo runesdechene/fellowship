@@ -298,10 +298,15 @@
   border-radius: 50%;
   border: 2px solid hsl(var(--background));
   margin-left: -8px;
-  background: var(--forest);
+  background-color: var(--forest);
+  background-size: cover;
+  background-position: center;
 }
-.landing .avatars span:nth-child(2) { background: var(--copper); }
-.landing .avatars span:nth-child(3) { background: #d98a8a; }
+.landing .avatars span:first-child { margin-left: 0; }
+.landing .avatars span:nth-child(2) { background-color: var(--copper); }
+.landing .avatars span:nth-child(3) { background-color: #d98a8a; }
+.landing .avatars span:nth-child(4) { background-color: var(--amber); }
+.landing .avatars span:nth-child(5) { background-color: var(--lime); }
 
 /* ── Eyebrow ─────────────────────────────────────────────────────── */
 .landing .eyebrow {

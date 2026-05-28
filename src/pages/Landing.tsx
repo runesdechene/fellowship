@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useWaitlist } from '@/hooks/use-waitlist'
+import { useLandingExposants } from '@/hooks/use-landing-stats'
 import './Landing.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -25,6 +26,7 @@ export function LandingPage() {
   const [audience, setAudience] = useState<Audience>('exposant')
   const [email, setEmail] = useState('')
   const { status, error, submit } = useWaitlist()
+  const exposants = useLandingExposants()
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -124,8 +126,26 @@ export function LandingPage() {
               <a href="#" className="btn btn-ghost">Voir comment ça marche</a>
             </div>
             <div className="proof">
-              <span className="avatars"><span /><span /><span /></span>
-              Déjà <strong style={{ color: 'hsl(var(--foreground))', margin: '0 3px' }}>500+ exposants</strong> sur la liste d'attente
+              <span className="avatars">
+                {exposants.avatars.length > 0
+                  ? exposants.avatars.map(a => (
+                      <span
+                        key={a.actor_id}
+                        title={a.label ?? undefined}
+                        style={{
+                          backgroundImage: `url(${a.avatar_url})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }}
+                      />
+                    ))
+                  : (<><span /><span /><span /><span /><span /></>)}
+              </span>
+              Rejoins{' '}
+              <strong style={{ color: 'hsl(var(--foreground))', margin: '0 3px' }}>
+                {(exposants.count ?? 100)}+ exposants
+              </strong>{' '}
+              sur Fellowship
             </div>
           </div>
 
