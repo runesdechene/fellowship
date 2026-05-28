@@ -63,7 +63,7 @@ export function LandingPage() {
       <nav ref={navRef}>
         <div className="wrap nav-in">
           <div className="logo">
-            <span className="mark">✦</span> Fellowship
+            <img src="/icon.png" alt="" className="mark-img" /> Fellowship
           </div>
           <div className="nav-links">
             <a className="link" href="#">À propos</a>
@@ -556,7 +556,7 @@ export function LandingPage() {
       <footer>
         <div className="wrap">
           <div className="logo" style={{ justifyContent: 'center', marginBottom: '8px' }}>
-            <span className="mark">✦</span> Fellowship
+            <img src="/icon.png" alt="" className="mark-img" /> Fellowship
           </div>
           <p>Le réseau qui fait tourner les festivals · flw.sh · © 2026</p>
           <nav className="landing-legal" aria-label="Informations légales">
