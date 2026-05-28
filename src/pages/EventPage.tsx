@@ -50,7 +50,7 @@ export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
   const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
-  const { user, currentActor, profile } = useAuth()
+  const { user, currentActor } = useAuth()
   const { event, loading } = useEvent(id)
   // Notes personnelles (filtrées sur l'acteur actif) — privées, pas partagées.
   const { notes, refetch: refetchNotes } = useEventNotes(id, currentActor?.id ?? null)
@@ -238,7 +238,10 @@ export function EventPage() {
   }
 
   const isPast = event ? new Date(event.end_date) < new Date() : false
-  const isExposant = profile?.type === 'exposant'
+  // isExposant = on agit en tant qu'entity (exposant). Si on est sur le compte
+  // personne (festivalier), on voit le stepper court (Repéré / J'y vais) — peu
+  // importe que le profil legacy soit type='exposant'.
+  const isExposant = currentActor?.kind === 'entity'
 
   if (loading) {
     return (
