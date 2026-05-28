@@ -245,6 +245,15 @@ export function SettingsPage() {
             />
           </div>
 
+          {currentActor?.kind === 'entity' && (
+            <div className="mb-4">
+              <Link to="/abonnement" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+                Mon abonnement Fellowship Pro
+                <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
+              </Link>
+            </div>
+          )}
+
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button variant="outline" onClick={signOut} className="gap-2">
               <LogOut className="h-4 w-4" />

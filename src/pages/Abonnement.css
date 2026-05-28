@@ -1,0 +1,56 @@
+/* Abonnement — gestion du sub (v0.7.170). Spec §4.2. */
+
+.abo-page { max-width: 640px; margin: 0 auto; padding: 32px var(--page-padding) 48px; }
+.abo-page h1 { font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 22px; }
+
+.abo-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  padding: 22px;
+  background: hsl(var(--card));
+  margin-bottom: 22px;
+}
+.abo-card h2 { margin: 0 0 10px; font-family: var(--font-heading); font-size: 1.2rem; }
+.abo-card p { margin: 0; line-height: 1.5; }
+.abo-card p + p { margin-top: 10px; }
+.abo-muted { color: hsl(var(--muted-foreground)); font-size: 14px; }
+
+.abo-pending {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px; border-radius: 12px;
+  background: hsl(var(--card)); border: 1px solid hsl(var(--border));
+  margin-bottom: 18px;
+}
+.abo-pending .animate-spin { animation: abo-spin 1s linear infinite; width: 18px; height: 18px; }
+
+.abo-warning {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 14px 16px; border-radius: 12px;
+  background: color-mix(in srgb, var(--status-refuse) 12%, transparent);
+  color: var(--status-refuse);
+  border: 1px solid color-mix(in srgb, var(--status-refuse) 35%, transparent);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.abo-warning svg { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; }
+
+.abo-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 999px;
+  background: var(--gradient-primary); color: #fff;
+  border: none; font-weight: 700; cursor: pointer;
+  font-family: var(--font-heading); font-size: 14.5px;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.abo-cta:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--copper) 35%, transparent);
+}
+.abo-cta:disabled { opacity: .6; cursor: not-allowed; }
+.abo-cta .animate-spin { animation: abo-spin 1s linear infinite; width: 16px; height: 16px; }
+@keyframes abo-spin { to { transform: rotate(360deg); } }
+
+.light .abo-cta:hover:not(:disabled) {
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 22%, transparent);
+}

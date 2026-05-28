@@ -22,7 +22,7 @@ export function ProTeaser({ title, pitch, children }: { title: string; pitch: st
           <div className="pro-teaser-lock"><Lock strokeWidth={1.5} /></div>
           <h2>{title}</h2>
           <p>{pitch}</p>
-          <Link to="/reglages" className="pro-teaser-btn">Passer en Pro — dès 9,99 € HT/mois</Link>
+          <Link to="/boutique" className="pro-teaser-btn">Passer en Pro — dès 9,99 € HT/mois</Link>
         </div>
       </div>
     </div>

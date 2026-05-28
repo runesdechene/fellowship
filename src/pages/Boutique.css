@@ -1,0 +1,94 @@
+/* Boutique — page d'abonnement Pro (v0.7.170). DA Nuit de Festival, tokens existants.
+   Spec : docs/superpowers/specs/2026-05-28-stripe-mvp-design.md §4.1. */
+
+.boutique-page { max-width: 880px; margin: 0 auto; padding: 32px var(--page-padding) 48px; }
+
+.boutique-hero { text-align: center; margin-bottom: 28px; }
+.boutique-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 800;
+  margin: 0;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.boutique-tagline { color: hsl(var(--muted-foreground)); font-size: 1.05rem; margin-top: 6px; }
+
+.boutique-notice, .boutique-already-pro, .boutique-error {
+  margin: 0 auto 20px; padding: 14px 18px; border-radius: 12px;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--card));
+  text-align: center; font-size: 14px;
+}
+.boutique-already-pro {
+  color: var(--status-inscrit);
+  border-color: color-mix(in srgb, var(--status-inscrit) 30%, transparent);
+  background: color-mix(in srgb, var(--status-inscrit) 8%, hsl(var(--card)));
+}
+.boutique-already-pro a { color: inherit; font-weight: 700; text-decoration: underline; }
+.boutique-error {
+  color: var(--status-refuse);
+  border-color: color-mix(in srgb, var(--status-refuse) 35%, transparent);
+  background: color-mix(in srgb, var(--status-refuse) 10%, hsl(var(--card)));
+}
+
+.boutique-plans { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 12px; }
+@media (min-width: 720px) { .boutique-plans { grid-template-columns: 1fr 1fr; } }
+
+.boutique-plan {
+  position: relative;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  padding: 28px 24px;
+  background: hsl(var(--card));
+  display: flex; flex-direction: column; gap: 14px;
+}
+.boutique-plan.highlight {
+  border-color: var(--copper);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--copper) 10%, hsl(var(--card))), hsl(var(--card)) 60%);
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--copper) 22%, transparent);
+}
+.boutique-plan-badge {
+  position: absolute; top: -10px; right: 20px;
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--gradient-primary); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: .02em;
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--copper) 35%, transparent);
+}
+.boutique-plan h2 { margin: 0; font-size: 1.3rem; font-weight: 700; font-family: var(--font-heading); }
+.boutique-price { display: flex; align-items: baseline; gap: 8px; }
+.boutique-price-amount { font-size: 2.4rem; font-weight: 800; font-family: var(--font-heading); }
+.boutique-price-period { color: hsl(var(--muted-foreground)); font-size: 14px; }
+.boutique-plan-subline { color: hsl(var(--muted-foreground)); font-size: 14px; margin: 0; }
+
+.boutique-cta {
+  margin-top: 6px; padding: 14px 20px; border-radius: 999px; font-weight: 700;
+  background: var(--gradient-primary); color: #fff; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  font-family: var(--font-heading); font-size: 15px;
+}
+.boutique-cta:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--copper) 35%, transparent);
+}
+.boutique-cta:disabled { opacity: .55; cursor: not-allowed; }
+.boutique-cta .animate-spin { animation: boutique-spin 1s linear infinite; }
+@keyframes boutique-spin { to { transform: rotate(360deg); } }
+
+.boutique-features { list-style: none; padding: 0; margin: 28px 0; display: grid; gap: 10px; }
+.boutique-features li { display: flex; align-items: center; gap: 10px; color: hsl(var(--foreground)); }
+.boutique-features svg { color: var(--lime); flex-shrink: 0; width: 18px; height: 18px; }
+
+.boutique-footnote { color: hsl(var(--muted-foreground)); font-size: 12.5px; text-align: center; margin-top: 24px; line-height: 1.6; }
+.boutique-footnote a { color: inherit; text-decoration: underline; }
+
+/* Mode jour : ombres plus douces (cf. memory feedback_light_button_shadow). */
+.light .boutique-plan.highlight {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--copper) 14%, hsl(var(--card))), hsl(var(--card)) 60%);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--copper) 18%, transparent);
+}
+.light .boutique-cta:hover:not(:disabled) {
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 22%, transparent);
+}

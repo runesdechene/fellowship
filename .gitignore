@@ -43,3 +43,7 @@ src-tauri/target/
 # Graphify output — keep persistent graph + cache, ignore machine-specific
 graphify-out/cost.json
 graphify-out/.needs_update
+
+# Brouillons de secrets (ne JAMAIS commit en clair)
+Stripe.txt
+*.secrets.txt

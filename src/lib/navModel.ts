@@ -64,7 +64,9 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
 // par deep-link est redirigé sur /explorer (cf. isRouteValidFor → la nav exposant l'autorise).
 // /suivis est accessible aux deux acteurs (page FollowingPage commune) — il doit être ici
 // car il n'est dans aucune nav (entrée via l'avatar / lien profil), sinon AppLayout le bloque.
-const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications', '/suivis']
+// /boutique et /abonnement : accessibles aux 2 acteurs (la page elle-même affiche un
+// message si l'acteur actif n'est pas une entité — cf. v0.7.170 Stripe MVP).
+const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications', '/suivis', '/boutique', '/abonnement']
 
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
@@ -72,7 +74,7 @@ const RESERVED_TOP = new Set([
   'explorer', 'calendrier', 'communaute', 'tableau-de-bord', 'dashboard',
   'mes-dates', 'mes-createurs', 'profil', 'reglages', 'suivis',
   'notifications', 'evenement', 'admin', 'onboarding', 'login', 'auth',
-  'legal',
+  'legal', 'boutique', 'abonnement',
 ])
 
 /** Route profil/vitrine public `/:slug` (ou `/:slug/embed`) : premier segment non réservé. */

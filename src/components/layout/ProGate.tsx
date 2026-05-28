@@ -15,7 +15,7 @@ export function ProGate({ title, children }: { title: string; children: ReactNod
       </div>
       <h1 className="text-2xl font-extrabold">{title} — réservé au Pro</h1>
       <p className="max-w-sm text-muted-foreground">Pour vivre de ton art : passe en Pro pour débloquer cette section.</p>
-      <Link to="/reglages" className="mt-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Passer en Pro — dès 9,99 € HT/mois</Link>
+      <Link to="/boutique" className="mt-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Passer en Pro — dès 9,99 € HT/mois</Link>
     </div>
   )
 }
