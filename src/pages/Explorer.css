@@ -1140,12 +1140,13 @@
 }
 
 /* ── Mobile (téléphone) ──────────────────────────────────────────────
-   L'Explorer vit dans `100vh − 64px` (barre de nav appli, pb-16 sur <main>),
-   mais ses unités vh visent le plein viewport : on recale deck/dock pour
-   éviter chevauchement et clipping, et on fait tenir la barre de recherche. */
+   On bascule .stagebody en flex column : le carrousel (.flow) prend
+   l'espace restant via flex:1, l'infozone et la bottombar suivent en
+   flux normal. Plus de positionnement absolu en vh → plus de
+   chevauchement, peu importe la hauteur du téléphone. */
 @media (max-width: 640px) {
-  /* Barre de recherche : tient dans l'écran, segments à largeur égale, valeurs tronquées si besoin */
-  .explorer .top { padding: 16px 12px 28px; }
+  /* Barre de recherche : tient dans l'écran, segments à largeur égale */
+  .explorer .top { padding: 16px 12px 12px; }
   .explorer .searchbar { display: flex; width: 100%; max-width: 440px; padding: 5px 5px 5px 6px; }
   .explorer .seg-group { flex: 1; width: 100%; min-width: 0; }
   .explorer .seg { flex: 1 1 0; min-width: 0; align-items: stretch; padding: 7px 9px; }
@@ -1156,15 +1157,33 @@
   .explorer .seg-search svg { width: 16px; height: 16px; }
   .explorer .seg-searchfield { padding: 0 6px 0 10px; }
   .explorer .seg-input { font-size: 14px; }
-
-  /* Scrubber masqué : on swipe directement dans le carrousel (gain de place). */
   .explorer .scrubber { display: none; }
-  .explorer .top { padding: 16px 12px 12px; }
 
-  /* Deck / cartes : on swipe ; touch-action pan-y pour capter le geste horizontal. */
-  .explorer .deck { touch-action: pan-y; height: 46vh; }
-  .explorer .flow { padding-top: 3vh; perspective: 1100px; }
-  .explorer .card { width: 64vw; height: 44vh; }
+  /* === Layout flex column (pas de vh, pas d'overlap) === */
+  .explorer .stagebody { display: flex; flex-direction: column; }
+
+  /* Carrousel : prend l'espace restant ; les cartes se centrent dedans. */
+  .explorer .flow {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+    padding: 12px 0 4px;
+    perspective: 1100px;
+    align-items: center;
+  }
+  .explorer .deck {
+    touch-action: pan-y;
+    height: 100%;
+  }
+  /* Aspect-ratio 3/4 = même proportion poster que l'ancien 64vw × 44vh.
+     max-height: 100% empêche la carte de déborder sur paysage ou petit écran. */
+  .explorer .card {
+    width: 64vw;
+    height: auto;
+    aspect-ratio: 3/4;
+    max-height: 100%;
+  }
 
   /* Flèches compactes aux bords */
   .explorer .arrow { width: 40px; height: 40px; }
@@ -1172,49 +1191,45 @@
   .explorer .arrow.l { left: 2px; }
   .explorer .arrow.r { right: 2px; }
 
-  /* Dock remonté + collé à la carte (gain de hauteur sur mobile) */
-  .explorer .infozone { top: 49vh; padding: 0 14px; }
+  /* Dock infos : flux normal sous le carrousel (plus de top: 49vh) */
+  .explorer .infozone {
+    position: relative;
+    inset: auto;
+    top: auto;
+    bottom: auto;
+    padding: 8px 14px 0;
+    flex-shrink: 0;
+  }
   .explorer .dockinfo { gap: 6px; max-width: 100%; }
   .explorer .dockinfo h2 { font-size: 20px; }
-  /* Date / lieu : nettement plus petits que le titre */
   .explorer .eh-meta { gap: 12px; }
   .explorer .eh-strong { font-size: 13px; }
   .explorer .eh-sub { font-size: 10px; }
   .explorer .eh-ico { font-size: 13px; }
 
-  /* Bottombar : CTA compacts (moins hauts) + remontés vers le dock.
-     margin-bottom (et non margin-top négatif, absorbé par la .stagebody flex:1)
-     réserve un espace sous la barre → les boutons remontent d'autant. */
-  .explorer .bottombar { padding: 8px 0 14px; gap: 8px; margin-bottom: 5vh; }
+  /* Bottombar : flux normal en bas (plus de margin-bottom: 5vh) */
+  .explorer .bottombar {
+    padding: 8px 0 14px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
   .explorer .dock-cta { width: 100%; max-width: 360px; gap: 10px; padding: 0 16px; }
   .explorer .dock-cta .btn { flex: 1; justify-content: center; font-size: 13.5px; padding: 10px 12px; }
 
-  /* Compteur : sous la barre Quoi/Où/Quand (pas en bas) */
+  /* Compteur : sous la barre Quoi/Où/Quand */
   .explorer .counter--bottom { display: none; }
   .explorer .counter--top { display: block; text-align: center; padding: 6px 0 0; font-size: 11px; }
 }
 
-/* ── Écrans COURTS (petits téléphones, ~iPhone SE, paysage) ──────────
-   Le chrome fixe (barre recherche, compteur, nav appli 64px) prend une
-   part proportionnelle plus grande quand la hauteur est faible : les
-   couches vh (deck/dock/bottombar) se chevauchent. On compresse par
-   paliers. Additif — les grands écrans ne sont pas affectés. */
+/* ── Écrans COURTS (iPhone SE et compagnie) ──
+   Avec le layout flex, plus besoin de progressive vh-compression : on
+   ajuste juste les tailles de texte et paddings pour gagner un peu de
+   verticalité. */
 @media (max-width: 640px) and (max-height: 740px) {
   .explorer .top { padding: 12px 12px 8px; }
-  .explorer .flow { padding-top: 2vh; }
-  .explorer .deck { height: 38vh; }
-  .explorer .card { height: 36vh; }
-  .explorer .infozone { top: 42vh; }
   .explorer .dockinfo { gap: 4px; }
   .explorer .dockinfo h2 { font-size: 18px; }
   .explorer .counter--top { padding: 3px 0 0; }
-  .explorer .bottombar { margin-bottom: 3vh; padding: 6px 0 10px; }
+  .explorer .bottombar { padding: 6px 0 10px; }
   .explorer .dock-cta .btn { padding: 9px 12px; }
-}
-
-@media (max-width: 640px) and (max-height: 620px) {
-  .explorer .deck { height: 32vh; }
-  .explorer .card { height: 30vh; }
-  .explorer .infozone { top: 35vh; }
-  .explorer .bottombar { margin-bottom: 1vh; }
 }
