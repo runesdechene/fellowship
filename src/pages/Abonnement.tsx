@@ -19,13 +19,20 @@ import './Abonnement.css'
  * Spec : docs/superpowers/specs/2026-05-28-stripe-mvp-design.md §4.2-4.3.
  */
 export function AbonnementPage() {
-  const { currentActor, currentActorRow, refreshProfile } = useAuth()
+  const { currentActor, currentActorRow, entities, refreshProfile } = useAuth()
   const [params] = useSearchParams()
   const [opening, setOpening] = useState(false)
   const [polling, setPolling] = useState(false)
   const [portalErr, setPortalErr] = useState<string | null>(null)
 
-  const entity = currentActorRow as (EntityRow & {
+  // Cible : par défaut l'acteur actif (s'il est entité), sinon override via
+  // ?entity=<actor_id> (depuis la liste Settings multi-entités).
+  const overrideEntityId = params.get('entity')
+  const overrideEntity = overrideEntityId
+    ? entities.find(e => e.actor_id === overrideEntityId) ?? null
+    : null
+  const activeEntity = currentActor?.kind === 'entity' ? (currentActorRow as EntityRow | null) : null
+  const entity = (overrideEntity ?? activeEntity) as (EntityRow & {
     subscription_status?: string | null
     billing_interval?: string | null
     current_period_end?: string | null
@@ -33,6 +40,7 @@ export function AbonnementPage() {
     discount_end?: string | null
     discount_label?: string | null
   }) | null
+  const targetEntityId = entity?.actor_id ?? null
   const status = entity?.subscription_status ?? null
 
   // Polling au retour de Checkout : le webhook arrive en async, on attend qu'il
@@ -53,12 +61,12 @@ export function AbonnementPage() {
     return () => clearInterval(interval)
   }, [params, status, refreshProfile])
 
-  // Si l'acteur actif n'est pas une entité, message clair.
-  if (!currentActor || currentActor.kind !== 'entity') {
+  // Aucune entité à afficher : ni override, ni acteur actif type entité.
+  if (!targetEntityId) {
     return (
       <div className="abo-page">
         <h1>Mon abonnement</h1>
-        <p className="abo-muted">Sélectionne ton entité exposant dans la navbar pour gérer ton abonnement.</p>
+        <p className="abo-muted">Sélectionne ton entité exposant dans la navbar pour gérer son abonnement, ou choisis-la depuis <Link to="/reglages">tes réglages</Link>.</p>
       </div>
     )
   }
@@ -67,7 +75,7 @@ export function AbonnementPage() {
     setPortalErr(null)
     setOpening(true)
     try {
-      await openCustomerPortal(currentActor.id)
+      await openCustomerPortal(targetEntityId)
     } catch (e) {
       console.error('[Abonnement] portal failed', e)
       setPortalErr("Impossible d'ouvrir le portail. Réessaie dans un instant.")
@@ -87,8 +95,8 @@ export function AbonnementPage() {
         )}
         {!polling && (
           <>
-            <p className="abo-muted">Pas d'abonnement actif sur cette entité.</p>
-            <Link to="/boutique" className="abo-cta">Voir les offres Pro</Link>
+            <p className="abo-muted">Pas d'abonnement actif sur {overrideEntity?.brand_name ? <strong>{overrideEntity.brand_name}</strong> : 'cette entité'}.</p>
+            <Link to={overrideEntityId ? `/boutique?entity=${overrideEntityId}` : '/boutique'} className="abo-cta">Voir les offres Pro</Link>
           </>
         )}
       </div>

@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
-import { openCustomerPortal } from '@/lib/stripe-client'
 import { Button } from '@/components/ui/button'
 import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
@@ -314,23 +313,9 @@ function EntitySubscriptionsList({ entities }: { entities: EntityRow[] }) {
 }
 
 function EntitySubscriptionRow({ entity }: { entity: EntityWithSub }) {
-  const [opening, setOpening] = useState(false)
-  const [err, setErr] = useState<string | null>(null)
   const status = entity.subscription_status ?? null
   const isPro = entity.plan === 'pro'
   const isActiveSub = !!status && ['trialing', 'active', 'past_due'].includes(status)
-
-  const handlePortal = async () => {
-    setErr(null)
-    setOpening(true)
-    try {
-      await openCustomerPortal(entity.actor_id)
-    } catch (e) {
-      console.error('[Settings] portal failed', e)
-      setErr("Impossible d'ouvrir le portail")
-      setOpening(false)
-    }
-  }
 
   const label = (() => {
     if (status === 'trialing') return { text: 'Essai gratuit', tone: 'pro' as const }
@@ -356,17 +341,15 @@ function EntitySubscriptionRow({ entity }: { entity: EntityWithSub }) {
             : 'text-muted-foreground'
           }>{label.text}</span>
         </div>
-        {err && <div className="mt-1 text-xs text-destructive">{err}</div>}
       </div>
       {isActiveSub ? (
-        <button
-          onClick={handlePortal}
-          disabled={opening}
-          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:bg-muted disabled:opacity-50"
+        <Link
+          to={`/abonnement?entity=${entity.actor_id}`}
+          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:bg-muted"
         >
-          {opening ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />}
-          {opening ? '…' : 'Gérer'}
-        </button>
+          <ExternalLink className="h-3.5 w-3.5" strokeWidth={2} />
+          Gérer
+        </Link>
       ) : (
         <Link
           to={`/boutique?entity=${entity.actor_id}`}
