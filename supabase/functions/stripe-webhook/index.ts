@@ -107,6 +107,8 @@ async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
       subscription_status: 'canceled',
       plan: 'free',
       current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+      discount_end: null,
+      discount_label: null,
     })
     .eq('actor_id', entityActorId)
 }
@@ -165,6 +167,16 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
   const trialEnd = sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null
   const periodEnd = new Date(sub.current_period_end * 1000).toISOString()
 
+  // Coupon/discount éventuel (programme Founder Friends, etc.). On lit `discounts`
+  // (array, API moderne) en priorité, fallback sur `discount` (legacy singular).
+  // Discount avec `end` → on a une vraie date de fin du coupon, à afficher en UI.
+  type DiscountLike = { end?: number | null; coupon?: { name?: string | null; id?: string | null } | null } | null
+  const discounts = (sub as unknown as { discounts?: DiscountLike[] }).discounts
+  const legacyDiscount = (sub as unknown as { discount?: DiscountLike }).discount
+  const activeDiscount: DiscountLike = (discounts && discounts[0]) || legacyDiscount || null
+  const discountEnd = activeDiscount?.end ? new Date(activeDiscount.end * 1000).toISOString() : null
+  const discountLabel = activeDiscount?.coupon?.name ?? activeDiscount?.coupon?.id ?? null
+
   const { error } = await getSupabaseAdmin()
     .from('entities')
     .update({
@@ -173,6 +185,8 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
       billing_interval: interval,
       trial_end: trialEnd,
       current_period_end: periodEnd,
+      discount_end: discountEnd,
+      discount_label: discountLabel,
       plan,
     })
     .eq('actor_id', entityActorId)

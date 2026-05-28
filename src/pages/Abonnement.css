@@ -11,6 +11,11 @@
   margin-bottom: 22px;
 }
 .abo-card h2 { margin: 0 0 10px; font-family: var(--font-heading); font-size: 1.2rem; }
+.abo-promo {
+  border-color: color-mix(in srgb, var(--lime) 50%, hsl(var(--border)));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--lime) 8%, hsl(var(--card))), hsl(var(--card)) 60%);
+}
+.abo-promo h2 { color: var(--lime); }
 .abo-card p { margin: 0; line-height: 1.5; }
 .abo-card p + p { margin-top: 10px; }
 .abo-muted { color: hsl(var(--muted-foreground)); font-size: 14px; }

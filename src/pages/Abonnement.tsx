@@ -30,6 +30,8 @@ export function AbonnementPage() {
     billing_interval?: string | null
     current_period_end?: string | null
     trial_end?: string | null
+    discount_end?: string | null
+    discount_label?: string | null
   }) | null
   const status = entity?.subscription_status ?? null
 
@@ -96,6 +98,13 @@ export function AbonnementPage() {
   const trialEnd = entity?.trial_end ? new Date(entity.trial_end) : null
   const periodEnd = entity?.current_period_end ? new Date(entity.current_period_end) : null
   const interval = entity?.billing_interval
+  // Code promo actif (ex: GUILDEDESVOYAGEURS). discount_end = quand le coupon expire,
+  // après quoi la facturation pleine reprend. On affiche un bandeau dédié et on cache
+  // le bullet "tu seras prélevé" car trompeur tant que le coupon couvre.
+  const discountEnd = entity?.discount_end ? new Date(entity.discount_end) : null
+  const discountLabel = entity?.discount_label ?? null
+  const discountActive = discountEnd !== null && discountEnd > new Date()
+  const formatDate = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 
   return (
     <div className="abo-page">
@@ -110,16 +119,32 @@ export function AbonnementPage() {
         </div>
       )}
 
+      {discountActive && (
+        <div className="abo-card abo-promo">
+          <h2>🎁 Code promo actif</h2>
+          <p>
+            <strong>{discountLabel ?? 'Code promo'}</strong> appliqué — gratuit jusqu'au{' '}
+            <strong>{discountEnd && formatDate(discountEnd)}</strong>.
+          </p>
+          <p className="abo-muted">
+            Aucun débit avant cette date. Après, ta facturation normale reprend
+            ({interval === 'year' ? '9,99 € HT/mois en annuel' : '11,99 € HT/mois'}).
+          </p>
+        </div>
+      )}
+
       {status === 'trialing' && (
         <div className="abo-card">
           <h2>Essai gratuit Pro</h2>
           <p>
-            Ton essai se termine le <strong>{trialEnd?.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong>.
+            Ton essai se termine le <strong>{trialEnd && formatDate(trialEnd)}</strong>.
           </p>
-          <p className="abo-muted">
-            Tu seras prélevé de {interval === 'year' ? '119,88 € HT/an' : '11,99 € HT/mois'} à cette date.
-            Annule avant pour ne pas être débité.
-          </p>
+          {!discountActive && (
+            <p className="abo-muted">
+              Tu seras prélevé de {interval === 'year' ? '119,88 € HT/an' : '11,99 € HT/mois'} à cette date.
+              Annule avant pour ne pas être débité.
+            </p>
+          )}
         </div>
       )}
 
@@ -129,9 +154,9 @@ export function AbonnementPage() {
           <p>
             Facturé <strong>{interval === 'year' ? '9,99 € HT/mois (119,88 € HT/an)' : '11,99 € HT/mois'}</strong>.
           </p>
-          {periodEnd && (
+          {periodEnd && !discountActive && (
             <p className="abo-muted">
-              Prochain renouvellement le {periodEnd.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.
+              Prochain renouvellement le {formatDate(periodEnd)}.
             </p>
           )}
         </div>

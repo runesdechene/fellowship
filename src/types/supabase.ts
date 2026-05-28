@@ -106,6 +106,8 @@ export type Database = {
           created_at: string
           current_period_end: string | null
           department: string | null
+          discount_end: string | null
+          discount_label: string | null
           links: Json
           location: string | null
           plan: Database["public"]["Enums"]["user_plan"]
@@ -132,6 +134,8 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           department?: string | null
+          discount_end?: string | null
+          discount_label?: string | null
           links?: Json
           location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
@@ -158,6 +162,8 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           department?: string | null
+          discount_end?: string | null
+          discount_label?: string | null
           links?: Json
           location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
