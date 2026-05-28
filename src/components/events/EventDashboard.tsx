@@ -1,7 +1,6 @@
 // src/components/events/EventDashboard.tsx
 import { useState, useEffect } from 'react'
 import { FileText } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { updateParticipation } from '@/hooks/use-participations'
 import type { Participation } from '@/types/database'
 import type { ParticipationStatus } from '@/types/database'
@@ -17,10 +16,16 @@ interface EventDashboardProps {
   showReportForm: boolean
 }
 
-const PARTICIPATION_STEPS = [
+// Stepper exposant : 4 statuts (Refusé seulement quand on a déjà postulé).
+const STEPS_EXPOSANT = [
   { key: 'interesse' as const, label: 'Repéré' },
   { key: 'en_cours' as const, label: 'Dossier envoyé' },
   { key: 'inscrit' as const, label: 'Accepté' },
+]
+// Stepper festivalier : 2 toggles simples.
+const STEPS_FESTIVALIER = [
+  { key: 'interesse' as const, label: 'Repéré' },
+  { key: 'inscrit' as const, label: "J'y vais" },
 ]
 
 const PAYMENT_STEPS = [
@@ -43,7 +48,7 @@ const INFO_MESSAGES: Record<string, { title: string; text: string }> = {
   },
   refuse: {
     title: '✕ Refusé',
-    text: 'Dossier refusé — gardé en historique. Tu peux te retirer complètement avec « Se désinscrire ».',
+    text: 'Dossier refusé — gardé en historique. Clique à nouveau pour retirer.',
   },
 }
 
@@ -66,10 +71,25 @@ export function EventDashboard({
     return () => clearTimeout(timer)
   }, [infoBox])
 
-  const handleStatusChange = async (status: ParticipationStatus) => {
-    if (!participation) return
+  /**
+   * Logique toggle :
+   *   - clic sur le statut ACTIF → retire la participation (onLeave)
+   *   - clic sur un autre statut quand pas de participation → la crée (onJoin)
+   *   - clic sur un autre statut quand participation existe → update du status
+   */
+  const handleStatusToggle = async (status: ParticipationStatus) => {
+    if (participation && participation.status === status) {
+      onLeave()
+      setInfoBox(null)
+      return
+    }
+    if (!participation) {
+      const visibility: 'amis' | 'public' = status === 'inscrit' ? 'public' : 'amis'
+      onJoin(status, visibility)
+      setInfoBox(status)
+      return
+    }
     const update: { status: ParticipationStatus; visibility?: 'amis' | 'public' } = { status }
-    // Inscrit → automatically public (visible on embed widget / public profile)
     if (status === 'inscrit') update.visibility = 'public'
     const { data } = await updateParticipation(participation.id, update)
     if (data) {
@@ -84,131 +104,87 @@ export function EventDashboard({
     if (data) onUpdate(data)
   }
 
-  // CTA — no participation yet
-  if (!participation) {
-    return (
-      <div className="event-suivi">
-        <div className="event-suivi-header">Ma participation à cet événement</div>
-        <div className="event-suivi-body">
-          <div className="event-cta">
-            <p className="event-cta-title">Tu y vas ?</p>
-            <div className="event-cta-buttons">
-              {isExposant ? (
-                <>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Repéré</Button>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('en_cours', 'amis')}>Dossier envoyé</Button>
-                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>Accepté</Button>
-                </>
-              ) : (
-                <>
-                  <Button size="sm" variant="outline" onClick={() => onJoin('interesse', 'amis')}>Repéré</Button>
-                  <Button size="sm" onClick={() => onJoin('inscrit', 'public')}>J'y vais !</Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Public user — simple view
-  if (!isExposant) {
-    return (
-      <div className="event-suivi">
-        <div className="event-suivi-header">Ma participation à cet événement</div>
-        <div className="event-suivi-body">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="font-medium text-sm">
-              {participation.status === 'interesse' ? 'Repéré' : "J'y vais !"}
-            </span>
-          </div>
-          <button className="event-suivi-action destructive" onClick={onLeave}>
-            Retirer ma participation
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // Exposant — full dashboard
-  const currentPayment = (participation.payment_status as string) ?? 'a_payer'
+  const STEPS = isExposant ? STEPS_EXPOSANT : STEPS_FESTIVALIER
+  const currentPayment = (participation?.payment_status as string) ?? 'a_payer'
+  const showRefuse = isExposant && !!participation // Refusé seulement après avoir candidaté
+  const showPayment = isExposant && participation && (participation.status === 'confirme' || participation.status === 'inscrit')
 
   return (
     <div className="event-suivi">
-      <div className="event-suivi-header">
-        <span>Ma participation à cet événement</span>
-        <button className="event-suivi-unsubscribe" onClick={onLeave}>Se désinscrire</button>
-      </div>
+      <div className="event-suivi-header">Ma participation à cet événement</div>
       <div className="event-suivi-body">
 
-      <div className="event-suivi-grid">
-        {/* Participation stepper */}
-        <div className="event-suivi-block">
-          <div className="event-suivi-block-label">Participation</div>
-          <div className="event-stepper">
-            {PARTICIPATION_STEPS.map((step) => (
-              <button
-                key={step.key}
-                onClick={() => handleStatusChange(step.key)}
-                className={`event-stepper-btn ${
-                  step.key === participation.status
-                    ? `pay-active ${step.key}`
-                    : 'inactive'
-                }`}
-              >
-                {step.label}
-              </button>
-            ))}
-            <button
-              onClick={() => handleStatusChange('refuse' as ParticipationStatus)}
-              className={`event-stepper-btn ${ (participation.status as string) === 'refuse' ? 'pay-active refuse' : 'inactive'}`}
-            >
-              Refusé
-            </button>
-          </div>
-        </div>
-
-        {/* Payment stepper — when accepté or inscrit */}
-        {(participation.status === 'confirme' || participation.status === 'inscrit') && (
+        <div className="event-suivi-grid">
+          {/* Participation stepper — toggles cochables/décochables */}
           <div className="event-suivi-block">
-            <div className="event-suivi-block-label">Paiement</div>
+            <div className="event-suivi-block-label">Participation</div>
             <div className="event-stepper">
-              {PAYMENT_STEPS.map(step => (
+              {STEPS.map((step) => {
+                const active = participation?.status === step.key
+                return (
+                  <button
+                    key={step.key}
+                    onClick={() => handleStatusToggle(step.key)}
+                    aria-pressed={active}
+                    className={`event-stepper-btn ${active ? `pay-active ${step.key}` : 'inactive'}`}
+                  >
+                    {step.label}
+                  </button>
+                )
+              })}
+              {showRefuse && (
                 <button
-                  key={step.key}
-                  onClick={() => handlePaymentChange(step.key)}
-                  className={`event-stepper-btn ${
-                    currentPayment === step.key
-                      ? `pay-active ${step.key}`
-                      : 'inactive'
-                  }`}
+                  onClick={() => handleStatusToggle('refuse' as ParticipationStatus)}
+                  aria-pressed={(participation?.status as string) === 'refuse'}
+                  className={`event-stepper-btn ${(participation?.status as string) === 'refuse' ? 'pay-active refuse' : 'inactive'}`}
                 >
-                  {step.label}
+                  Refusé
                 </button>
-              ))}
+              )}
             </div>
           </div>
+
+          {/* Payment stepper — affiché seulement quand exposant + Accepté/Inscrit */}
+          {showPayment && (
+            <div className="event-suivi-block">
+              <div className="event-suivi-block-label">Paiement</div>
+              <div className="event-stepper">
+                {PAYMENT_STEPS.map(step => (
+                  <button
+                    key={step.key}
+                    onClick={() => handlePaymentChange(step.key)}
+                    className={`event-stepper-btn ${
+                      currentPayment === step.key
+                        ? `pay-active ${step.key}`
+                        : 'inactive'
+                    }`}
+                  >
+                    {step.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Ephemeral info box */}
+        {infoBox && INFO_MESSAGES[infoBox] && (
+          <div className={`event-info-box ${infoBox}`} onClick={() => setInfoBox(null)}>
+            <div className="event-info-box-title">{INFO_MESSAGES[infoBox].title}</div>
+            <div className="event-info-box-text">{INFO_MESSAGES[infoBox].text}</div>
+          </div>
         )}
-      </div>
 
-      {/* Ephemeral info box */}
-      {infoBox && INFO_MESSAGES[infoBox] && (
-        <div className={`event-info-box ${infoBox}`} onClick={() => setInfoBox(null)}>
-          <div className="event-info-box-title">{INFO_MESSAGES[infoBox].title}</div>
-          <div className="event-info-box-text">{INFO_MESSAGES[infoBox].text}</div>
-        </div>
-      )}
+        {/* Bilan post-événement (exposant + passé) */}
+        {isExposant && isPast && (
+          <div className="event-suivi-actions">
+            <button className="event-suivi-action" onClick={onToggleReport}>
+              <FileText style={{ width: 14, height: 14 }} strokeWidth={1.5} />
+              {showReportForm ? 'Fermer le bilan' : 'Bilan post-événement'}
+            </button>
+          </div>
+        )}
 
-      {/* Actions */}
-      {isPast && (
-        <div className="event-suivi-actions">
-          <button className="event-suivi-action" onClick={onToggleReport}>
-            <FileText style={{ width: 14, height: 14 }} strokeWidth={1.5} />
-            {showReportForm ? 'Fermer le bilan' : 'Bilan post-événement'}
-          </button>
-        </div>
-      )}
       </div>
     </div>
   )
