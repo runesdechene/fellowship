@@ -11,7 +11,7 @@ import { NoteForm } from '@/components/notes/NoteForm'
 import { NotesFeed } from '@/components/notes/NotesFeed'
 import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
-import { EventReportForm } from '@/components/reports/EventReportForm'
+import { BilanCard } from '@/components/reports/BilanCard'
 import { EventDashboard } from '@/components/events/EventDashboard'
 import { FestivalFacts } from '@/components/events/FestivalFacts'
 import { DiscussionTeaser } from '@/components/events/DiscussionTeaser'
@@ -62,7 +62,6 @@ export function EventPage() {
   const [participation, setParticipation] = useState<Participation | null>(null)
   const [friendCount, setFriendCount] = useState(0)
   const [showReviewForm, setShowReviewForm] = useState(false)
-  const [showReportForm, setShowReportForm] = useState(false)
   const [showNoteModal, setShowNoteModal] = useState(false)
   const [showParticipants, setShowParticipants] = useState(false)
   const [showHowTo, setShowHowTo] = useState(false)
@@ -609,8 +608,8 @@ export function EventPage() {
               </div>
             )}
 
-            {/* Report form */}
-            {showReportForm && <EventReportForm eventId={event.id} />}
+            {/* Bilan post-festival (exposant + passé). Pro lock géré dans BilanCard. */}
+            {isExposant && isPast && <BilanCard eventId={event.id} />}
           </div>
 
           {/* ── COLONNE LATÉRALE (cockpit) ── */}
@@ -642,12 +641,9 @@ export function EventPage() {
               <EventDashboard
                 participation={participation}
                 isExposant={isExposant}
-                isPast={isPast}
                 onUpdate={setParticipation}
                 onLeave={handleLeave}
                 onJoin={handleJoin}
-                onToggleReport={() => setShowReportForm(!showReportForm)}
-                showReportForm={showReportForm}
               />
 
               <div className="fest-ckrows">

@@ -1,6 +1,5 @@
 // src/components/events/EventDashboard.tsx
 import { useState, useEffect } from 'react'
-import { FileText } from 'lucide-react'
 import { updateParticipation } from '@/hooks/use-participations'
 import type { Participation } from '@/types/database'
 import type { ParticipationStatus } from '@/types/database'
@@ -8,12 +7,9 @@ import type { ParticipationStatus } from '@/types/database'
 interface EventDashboardProps {
   participation: Participation | null
   isExposant: boolean
-  isPast: boolean
   onUpdate: (p: Participation) => void
   onLeave: () => void
   onJoin: (status: ParticipationStatus, visibility: 'amis' | 'public') => void
-  onToggleReport: () => void
-  showReportForm: boolean
 }
 
 // Stepper exposant : 4 statuts (Refusé seulement quand on a déjà postulé).
@@ -72,12 +68,9 @@ const INFO_MESSAGES_FESTIVALIER: Record<string, { title: string; text: string }>
 export function EventDashboard({
   participation,
   isExposant,
-  isPast,
   onUpdate,
   onLeave,
   onJoin,
-  onToggleReport,
-  showReportForm,
 }: EventDashboardProps) {
   const [infoBox, setInfoBox] = useState<string | null>(null)
 
@@ -195,16 +188,6 @@ export function EventDashboard({
             </div>
           )
         })()}
-
-        {/* Bilan post-événement (exposant + passé) */}
-        {isExposant && isPast && (
-          <div className="event-suivi-actions">
-            <button className="event-suivi-action" onClick={onToggleReport}>
-              <FileText style={{ width: 14, height: 14 }} strokeWidth={1.5} />
-              {showReportForm ? 'Fermer le bilan' : 'Bilan post-événement'}
-            </button>
-          </div>
-        )}
 
       </div>
     </div>
