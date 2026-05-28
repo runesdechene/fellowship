@@ -56,6 +56,30 @@ export function LandingPage() {
     requestAnimationFrame(() => requestAnimationFrame(scrollToOrgaWaitlist))
   }
 
+  function scrollToHash(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  /** Tarifs vivent dans `.v.exposant` (cachée en vue festivalier/organisateur).
+   *  Si on n'y est pas, bascule + scroll après le repaint. */
+  function goToTarifs(e: React.MouseEvent) {
+    e.preventDefault()
+    if (audience === 'exposant') {
+      scrollToHash('tarifs')
+      return
+    }
+    setAudience('exposant')
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollToHash('tarifs')))
+  }
+
+  /** À propos = bloc d'avantages (features). L'ancre #apropos est un div invisible
+   *  posé AVANT les 3 sections features audience-aware, donc le scroll marche dans
+   *  toutes les vues (chaque audience rend SA section juste en dessous). */
+  function goToApropos(e: React.MouseEvent) {
+    e.preventDefault()
+    scrollToHash('apropos')
+  }
+
   return (
     <div className="landing" data-aud={audience}>
 
@@ -67,8 +91,8 @@ export function LandingPage() {
             <span className="brand-name">Fellowship</span>
           </div>
           <div className="nav-links">
-            <a className="link" href="#apropos">À propos</a>
-            <a className="link" href="#tarifs">Tarifs</a>
+            <a className="link" href="#apropos" onClick={goToApropos}>À propos</a>
+            <a className="link" href="#tarifs" onClick={goToTarifs}>Tarifs</a>
             <ThemeToggle />
             <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
               Connexion
