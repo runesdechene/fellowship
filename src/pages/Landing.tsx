@@ -459,6 +459,7 @@ export function LandingPage() {
               <div className="ttl">Pro</div>
               <div className="price">9,99 €</div>
               <div className="per">HT / mois</div>
+              <div className="per per-ttc">soit 11,99 € TTC</div>
               <ul>
                 <li><span className="ck">✓</span> Tout le plan Découverte</li>
                 <li><span className="ck">✓</span> Bilan de rentabilité (CA, coûts)</li>
