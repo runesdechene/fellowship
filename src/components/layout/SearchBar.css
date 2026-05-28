@@ -46,8 +46,11 @@
      Solide ici car le radial du body, sur la largeur de la colonne droite, finit
      toujours dans la zone sombre — du coup la nav paraissait noire. */
   background: #2e1e1a;
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
+  /* Fade resserré au bord inférieur : la nav reste opaque sur ~70% de sa hauteur,
+     seul le bord bas fade. Évite que les cartes scrollent longtemps en "fantôme"
+     sous la zone semi-transparente. */
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
   pointer-events: none;
 }
 .light .search-bar-wrapper::before { background: #f8f2e8; }
@@ -310,9 +313,9 @@
 .search-bar-spacer .mark {
   width: 28px;
   height: 28px;
-  border-radius: 8px;
+  border-radius: 0px;
   flex-shrink: 0;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 .search-bar-brand {
