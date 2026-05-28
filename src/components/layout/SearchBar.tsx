@@ -163,6 +163,8 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         )}
       </div>
 
+      {/* Cluster d'actions — desktop : pill glass à droite ; mobile : flow normal (display:contents) */}
+      <div className="search-bar-actions">
       {/* Desktop: add event button (after search bar) */}
       {profile && onCreateEvent && (
         <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
@@ -240,6 +242,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
           )}
         </Link>
       )}
+      </div>{/* /search-bar-actions */}
 
       {open && (
         <div className="search-results">
