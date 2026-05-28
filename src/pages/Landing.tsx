@@ -458,14 +458,16 @@ export function LandingPage() {
 
             {/* Pro */}
             <div className="tier pro">
-              <span className="pop">★ Pour vivre de ton art</span>
+              <span className="pop">★ Pour trouver toutes tes dates</span>
               <div className="ttl">Pro</div>
               <div className="price">9,99 €</div>
               <div className="per">HT / mois</div>
               <div className="per per-ttc">soit 11,99 € TTC</div>
               <ul>
                 <li><span className="ck">✓</span> Tout le plan Découverte</li>
-                <li><span className="ck">✓</span> Bilan de rentabilité (CA, coûts)</li>
+                <li><span className="ck">✓</span> Ta tribu : où vont tes amis, nouvelles connaissances...</li>
+                <li><span className="ck">✓</span> Tableau de bord complet</li>
+                <li><span className="ck">✓</span> Accès aux discussions autour des événements</li>
                 <li><span className="ck">✓</span> Rappels de deadlines</li>
                 <li><span className="ck">✓</span> Avis détaillés des festivals</li>
                 <li><span className="ck">✓</span> Calendrier en direct sur ton site</li>
