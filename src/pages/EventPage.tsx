@@ -9,7 +9,7 @@ import { useEventNotes } from '@/hooks/use-notes'
 import { useEventReviews } from '@/hooks/use-reviews'
 import { NoteForm } from '@/components/notes/NoteForm'
 import { NotesFeed } from '@/components/notes/NotesFeed'
-import { ReviewForm } from '@/components/reviews/ReviewForm'
+import { ReviewModal } from '@/components/reviews/ReviewModal'
 import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { BilanCard } from '@/components/reports/BilanCard'
 import { EventDashboard } from '@/components/events/EventDashboard'
@@ -724,17 +724,11 @@ export function EventPage() {
 
       {/* Modal: Donner mon avis */}
       {showReviewForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShowReviewForm(false)}>
-          <div className="w-full max-w-md rounded-2xl bg-card p-6" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700 }}>Mon avis</h2>
-              <button onClick={() => setShowReviewForm(false)} className="rounded-full p-2 text-muted-foreground hover:bg-muted">
-                <X className="h-4 w-4" strokeWidth={1.5} />
-              </button>
-            </div>
-            <ReviewForm eventId={event.id} onReviewSubmitted={() => { refetchReviews(); setShowReviewForm(false) }} />
-          </div>
-        </div>
+        <ReviewModal
+          eventId={event.id}
+          onClose={() => setShowReviewForm(false)}
+          onSubmitted={refetchReviews}
+        />
       )}
 
       {showQuotaModal && <DateQuotaModal onClose={() => setShowQuotaModal(false)} />}
