@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.196',
+    date: '2026-05-28',
+    title: 'Un mail pour nous joindre',
+    changes: [
+      'Un bloc « Une question ? Un bug ? » dans Réglages avec notre adresse directe (appfellowship@pm.me) — on lit tout, on répond',
+    ],
+  },
+  {
     version: '0.7.195',
     date: '2026-05-28',
     title: 'Explorer fluide et 10 nouveaux types de festival',

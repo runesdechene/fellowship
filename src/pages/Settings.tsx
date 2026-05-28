@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles } from 'lucide-react'
+import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles, Mail } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
 
 export function SettingsPage() {
@@ -283,6 +283,23 @@ export function SettingsPage() {
               </div>
             )}
           </div>
+        </section>
+
+        {/* ── Section: Contact ────────────────────────────────────────────── */}
+        {/* Filet de sécurité post-lancement : un mailto direct, pas de form, pas de chatbot.
+            Le mec qui hit un bug critique doit pouvoir nous joindre en deux clics. */}
+        <section className="mt-6 rounded-2xl bg-card p-6">
+          <h2 className="mb-1.5 text-base font-semibold">Une question ? Un bug ?</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Écris-nous en direct. On lit tout, on répond.
+          </p>
+          <a
+            href="mailto:appfellowship@pm.me?subject=Fellowship%20%E2%80%94%20Retour"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+          >
+            <Mail className="h-4 w-4" />
+            appfellowship@pm.me
+          </a>
         </section>
       </div>
     </div>
