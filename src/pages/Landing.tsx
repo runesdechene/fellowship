@@ -490,6 +490,17 @@ export function LandingPage() {
             <span className="mark">✦</span> Fellowship
           </div>
           <p>Le réseau qui fait tourner les festivals · flw.sh · © 2026</p>
+          <nav className="landing-legal" aria-label="Informations légales">
+            <Link to="/legal/mentions-legales">Mentions légales</Link>
+            <span>·</span>
+            <Link to="/legal/confidentialite">Confidentialité</Link>
+            <span>·</span>
+            <Link to="/legal/cgu">CGU</Link>
+            <span>·</span>
+            <Link to="/legal/cgv">CGV</Link>
+            <span>·</span>
+            <Link to="/legal/charte-communautaire">Charte</Link>
+          </nav>
         </div>
       </footer>
 

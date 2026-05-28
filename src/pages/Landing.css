@@ -675,3 +675,14 @@
     padding: 9px 14px;
   }
 }
+
+/* Footer landing : rang de liens légaux (les 5 docs visibles ici) */
+.landing-legal {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 8px; margin-top: 16px;
+  font-size: 12px;
+  color: hsl(var(--muted-foreground) / .8);
+}
+.landing-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.landing-legal a:hover { color: var(--amber); }
+.landing-legal span { opacity: .4; }
