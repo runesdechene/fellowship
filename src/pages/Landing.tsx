@@ -233,6 +233,10 @@ export function LandingPage() {
         </div>
       </div>
 
+      {/* Ancre "À propos" : pointe vers le bloc des avantages (features), peu importe
+          l'audience active (chaque vue rend SA propre section .block.v.<audience>). */}
+      <div id="apropos" aria-hidden="true" />
+
       {/* ── Features — Exposant ── */}
       <section className="block v exposant">
         <div className="wrap">
@@ -495,8 +499,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Org teaser card (visible in exposant view) — ancre "À propos" ── */}
-      <section id="apropos" className="block v exposant">
+      {/* ── Org teaser card (visible in exposant view) ── */}
+      <section className="block v exposant">
         <div className="wrap">
           <div className="org-card">
             <div>
