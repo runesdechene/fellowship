@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -22,6 +22,7 @@ export function OnboardingPage() {
   const [saving, setSaving] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const slugTouched = useRef(false)
 
   const flow = resolveOnboardingFlow(entities.length, chosenPath)
@@ -204,7 +205,13 @@ export function OnboardingPage() {
               <h2>Tu viens pour quoi&nbsp;?</h2>
               <div className="sub">Le réseau qui fait tourner les festivals.</div>
               <div className="choice">
-                <button type="button" className="cc" onClick={() => choose('exposant')}>
+                <button
+                  type="button"
+                  className="cc"
+                  onClick={() => choose('exposant')}
+                  disabled={!acceptedTerms}
+                  aria-disabled={!acceptedTerms}
+                >
                   <div className="cic">🎪</div>
                   <div className="ct">
                     <b>Je suis exposant / créateur</b>
@@ -214,7 +221,13 @@ export function OnboardingPage() {
                     <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
                   </span>
                 </button>
-                <button type="button" className="cc" onClick={() => choose('festivalier')}>
+                <button
+                  type="button"
+                  className="cc"
+                  onClick={() => choose('festivalier')}
+                  disabled={!acceptedTerms}
+                  aria-disabled={!acceptedTerms}
+                >
                   <div className="cic">🎟️</div>
                   <div className="ct">
                     <b>Je découvre des festivals</b>
@@ -225,6 +238,22 @@ export function OnboardingPage() {
                   </span>
                 </button>
               </div>
+
+              <label className="terms-consent">
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
+                />
+                <span>
+                  J'accepte les{' '}
+                  <Link to="/legal/cgu" target="_blank" rel="noopener noreferrer">CGU</Link>
+                  {' '}et la{' '}
+                  <Link to="/legal/confidentialite" target="_blank" rel="noopener noreferrer">Politique de confidentialité</Link>
+                  {' '}de Fellowship.
+                </span>
+              </label>
+
               <div className="addhint">
                 <svg viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" />

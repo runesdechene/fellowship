@@ -450,3 +450,29 @@
   height: 14px;
   color: var(--amber);
 }
+
+/* Consentement CGU + Confidentialité, étape choice de l'onboarding */
+.terms-consent {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 18px 4px 6px;
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  line-height: 1.45;
+}
+.terms-consent input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  margin-top: 1px;
+  accent-color: var(--amber);
+  cursor: pointer;
+}
+.terms-consent a { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
+.terms-consent a:hover { text-decoration-thickness: 2px; }
+
+/* Boutons de choix désactivés tant que la case n'est pas cochée */
+.cc:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
