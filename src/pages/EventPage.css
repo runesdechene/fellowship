@@ -23,35 +23,40 @@
   top: calc(-1 * var(--navbar-h, 80px));
   left: 0;
   right: 0;
-  height: 760px;
+  height: 980px;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
 
 /* Nuit : double couche pour le rendu chaleureux qui se fond proprement :
-   1) mask sur l'image floutée → l'image s'estompe en transparence (pas de jonction d'image visible)
-   2) overlay ::after en dégradé brun → ramène la chaleur + matche --background au bottom */
+   1) mask sur l'image floutée → l'image s'estompe en transparence à la moitié
+   2) overlay ::after en dégradé brun qui devient OPAQUE avant le bord visible,
+      ie. avant que les premières cartes (~y=290 de .event-page) couvrent l'ambient.
+      Du coup le brun est visiblement présent en bas du flou. */
 .event-ambient img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: blur(60px) brightness(0.5) saturate(1.05);
   transform: scale(1.35);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 60%, transparent 96%);
-  mask-image: linear-gradient(180deg, black 0%, black 60%, transparent 96%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 45%, transparent 88%);
+  mask-image: linear-gradient(180deg, black 0%, black 45%, transparent 88%);
 }
 
 .event-ambient::after {
   content: "";
   position: absolute;
   inset: 0;
+  /* Stops calibrés pour ambient height 880 : le brun doit être visiblement opaque
+     AVANT que les premières cartes (~y=290 de .event-page = ~42% de 880) couvrent. */
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.15) 0%,
-    rgba(0, 0, 0, 0.05) 25%,
-    hsl(var(--background) / 0.35) 55%,
-    hsl(var(--background) / 0.82) 82%,
+    rgba(0, 0, 0, 0.04) 14%,
+    hsl(var(--background) / 0.32) 26%,
+    hsl(var(--background) / 0.85) 38%,
+    hsl(var(--background)) 52%,
     hsl(var(--background)) 100%
   );
 }
@@ -167,14 +172,37 @@
 }
 .fest-statpill.closed .fest-statpill-dot { box-shadow: none; }
 
-.fest-eyebrow {
-  display: block;
+/* Row au-dessus du titre : tag chip coloré + édition en uppercase muet */
+.fest-eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.fest-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: capitalize;
+  background: color-mix(in srgb, var(--tag-accent, var(--amber)) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag-accent, var(--amber)) 35%, transparent);
+  color: var(--tag-accent, var(--amber));
+}
+.fest-tag-chip svg { width: 13px; height: 13px; color: var(--tag-accent, var(--amber)); }
+
+.fest-edition {
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--tag-accent, var(--amber));
-  margin-bottom: 9px;
+  color: hsl(var(--muted-foreground));
 }
 
 .fest-title {
@@ -198,18 +226,6 @@
 
 .fest-hmeta-item { display: flex; align-items: center; gap: 9px; }
 .fest-hmeta-item svg { width: 18px; height: 18px; color: var(--tag-accent, var(--amber)); flex-shrink: 0; }
-/* Tag chip = pill colorée à la couleur du tag */
-.fest-hmeta-item.tag {
-  font-weight: 700;
-  padding: 4px 12px 4px 10px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--tag-accent, var(--amber)) 16%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tag-accent, var(--amber)) 35%, transparent);
-  color: var(--tag-accent, var(--amber));
-  font-size: 13px;
-  text-transform: capitalize;
-}
-.fest-hmeta-item.tag svg { width: 14px; height: 14px; color: var(--tag-accent, var(--amber)); }
 
 .fest-hactions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
@@ -290,7 +306,7 @@
   align-items: center;
   gap: 9px;
 }
-.event-section-title svg { width: 15px; height: 15px; color: var(--amber); }
+.event-section-title svg { width: 15px; height: 15px; color: var(--tag-accent, var(--amber)); }
 .event-section-title.muted { color: hsl(var(--muted-foreground)); }
 
 /* Description rich text */
@@ -699,7 +715,7 @@
     padding-left: 16px;
     padding-right: 16px;
   }
-  .event-ambient { height: 520px; }
+  .event-ambient { height: 400px; }
   .fest-title { font-size: 26px; }
   .fest-facts { grid-template-columns: 1fr; }
   .event-section-card, .fest-discussion { padding: 18px; }

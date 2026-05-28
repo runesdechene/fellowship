@@ -257,7 +257,8 @@ export function EventPage() {
   }
 
   const cand = candidatureState(event)
-  const eyebrow = [event.tags?.[0], editionLabel(event.edition)].filter(Boolean).join(' · ')
+  const editionLbl = editionLabel(event.edition)
+  const primaryTag = event.tags?.[0] ?? null
   const jx = daysUntilStart(event)
   const applyAvailable = hasApplyInfo(event)
   const friendNames = friendsOnEvent.map((f) => f.label).filter(Boolean).slice(0, 3).join(', ')
@@ -466,7 +467,19 @@ export function EventPage() {
                   {cand === 'open' ? 'Candidatures ouvertes' : 'Candidatures clôturées'}
                 </span>
               )}
-              {eyebrow && <span className="fest-eyebrow">{eyebrow}</span>}
+              {(primaryTag || editionLbl) && (
+                <div className="fest-eyebrow-row">
+                  {primaryTag && (() => {
+                    const I = getTagIcon(primaryTag)
+                    return (
+                      <span className="fest-tag-chip">
+                        <I size={13} strokeWidth={2.2} /> {primaryTag}
+                      </span>
+                    )
+                  })()}
+                  {editionLbl && <span className="fest-edition">{editionLbl}</span>}
+                </div>
+              )}
               <h1 className="fest-title">{event.name}</h1>
               <div className="fest-hmeta">
                 <span className="fest-hmeta-item">
@@ -477,10 +490,6 @@ export function EventPage() {
                   <MapPin strokeWidth={2} />
                   {event.city} ({event.department})
                 </span>
-                {event.tags?.[0] && (() => {
-                  const I = getTagIcon(event.tags[0])
-                  return <span className="fest-hmeta-item tag"><I size={16} strokeWidth={2} /> {event.tags[0]}</span>
-                })()}
               </div>
               <div className="fest-hactions">
                 <button className="fest-iconbtn" onClick={sharePage} title="Partager">
