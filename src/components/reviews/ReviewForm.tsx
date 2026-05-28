@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import { submitReview, useMyReview } from '@/hooks/use-reviews'
 import { Star } from 'lucide-react'
@@ -36,16 +36,18 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
   const [saving, setSaving] = useState(false)
 
   // Hydrate le formulaire quand l'avis existant arrive (fetch async dans
-  // useMyReview). Sans ce useEffect, useState(existing?.x ?? 0) gèle à 0
-  // parce qu'existing est null au premier render.
-  useEffect(() => {
-    if (existing) {
-      setAffluence(existing.affluence)
-      setOrganisation(existing.organisation)
-      setRentabilite(existing.rentabilite)
-      setComment(existing.comment ?? '')
-    }
-  }, [existing])
+  // useMyReview). Pattern React 19 « adjust state during rendering » : on
+  // détecte le changement d'`existing` via une valeur miroir et on resynchronise
+  // sans useEffect. Sans ça, useState(existing?.x ?? 0) gèle à 0 parce qu'
+  // `existing` est null au premier render.
+  const [hydratedFor, setHydratedFor] = useState<string | null>(null)
+  if (existing && hydratedFor !== existing.id) {
+    setHydratedFor(existing.id)
+    setAffluence(existing.affluence)
+    setOrganisation(existing.organisation)
+    setRentabilite(existing.rentabilite)
+    setComment(existing.comment ?? '')
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
