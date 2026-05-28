@@ -64,8 +64,12 @@
   );
 }
 
-/* Tout le contenu passe au-dessus de l'ambient */
-.event-page > *:not(.event-ambient) { position: relative; z-index: 1; }
+/* Tout le contenu LAYOUT passe au-dessus de l'ambient.
+   Scope explicite — sinon le sélecteur global cassait les modales en surchargeant
+   leur position: fixed (elles tombaient en bas du flow). */
+.event-topbar,
+.fest-grid,
+.event-two-col { position: relative; z-index: 1; }
 
 /* ── Top bar (back + actions) ─────────────────────────────────────── */
 
@@ -377,24 +381,49 @@
 /* ── Discussion (placeholder « bientôt ») ─────────────────────────── */
 
 .fest-discussion {
+  position: relative;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: 18px;
   padding: 22px;
-  position: relative;
+  overflow: hidden; /* contient le flou + le badge */
 }
-.fest-soon-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-left: auto;
-  font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--amber);
-  background: color-mix(in srgb, var(--amber) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent);
-  padding: 3px 9px; border-radius: 999px;
-}
-.fest-soon-pill svg { width: 13px; height: 13px; color: var(--amber); }
 
-.fest-discussion-preview { opacity: 0.5; filter: saturate(0.8); }
+/* Contenu flouté (onglets, aperçus, caption) — non interactif */
+.fest-discussion-content {
+  filter: blur(4px) saturate(0.7);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Badge « Bientôt » centré par-dessus, NON flouté */
+.fest-discussion-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.fest-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 14%, hsl(var(--card)));
+  border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.fest-soon-badge svg { width: 16px; height: 16px; color: var(--amber); }
+.light .fest-soon-badge { box-shadow: 0 6px 18px rgba(120, 80, 40, 0.18); }
+
 .fest-disc-tabs { display: flex; gap: 7px; margin-bottom: 14px; }
 .fest-disc-tab {
   display: inline-flex; align-items: center; gap: 6px;

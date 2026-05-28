@@ -499,7 +499,7 @@ export function EventPage() {
                         {creatorName[0]?.toUpperCase() ?? '?'}
                       </span>
                     )}
-                    <span>Organisé par <b>{creatorName}</b></span>
+                    <span>Ajouté par <b>{creatorName}</b></span>
                   </Link>
                 )}
               </div>
