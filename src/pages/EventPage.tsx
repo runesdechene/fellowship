@@ -288,7 +288,7 @@ export function EventPage() {
           </Link>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
-          {isPast && !editing && (
+          {isExposant && isPast && !editing && (
             <button onClick={() => setShowReviewForm(!showReviewForm)} className="event-edit-btn" title="Donner mon avis">
               <Star className="h-4 w-4" strokeWidth={1.5} />
             </button>
@@ -600,10 +600,11 @@ export function EventPage() {
               )}
             </div>
 
-            {/* Avis exposants — visible si event passé, ou avis existants, ou canSeeDetails.
-                Le bloc gère lui-même son titre (note moyenne), son CTA "Mon avis" et le
-                lock non-Pro. */}
-            {(isPast || reviews.length > 0 || canSeeDetails) && (
+            {/* Avis exposants — réservé au mode exposant. Le mode festivalier
+                aura son propre bloc d'avis (spec à venir, cf. memory
+                project_reviews_duality_next) ; en attendant on ne montre rien
+                pour ne pas pousser un Pro-lock non-sens à un visiteur. */}
+            {isExposant && (isPast || reviews.length > 0 || canSeeDetails) && (
               <div className="event-section-card">
                 <ReviewSummary
                   reviews={reviews}
