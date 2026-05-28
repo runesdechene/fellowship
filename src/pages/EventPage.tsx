@@ -622,7 +622,7 @@ export function EventPage() {
                   {jx != null ? <b>J-{jx}</b> : <b>{isPast ? 'Passé' : 'En cours'}</b>}
                   <span>{formatDate(event.start_date)}</span>
                 </div>
-                {event.registration_deadline && cand && (
+                {isExposant && event.registration_deadline && cand && (
                   <div className="fest-deadline">
                     Candidatures<br />
                     <b>jusqu'au {new Date(event.registration_deadline).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</b>
@@ -642,13 +642,13 @@ export function EventPage() {
               />
 
               <div className="fest-ckrows">
-                {event.stand_price && (
+                {isExposant && event.stand_price && (
                   <div className="fest-ckrow">
                     <span className="fest-ckrow-lab"><Store strokeWidth={1.8} /> Emplacement</span>
                     <span className="fest-ckrow-val">{event.stand_price}</span>
                   </div>
                 )}
-                {applyAvailable && (
+                {isExposant && applyAvailable && (
                   <button className="fest-ckrow click" onClick={() => setShowHowTo(true)}>
                     <span className="fest-ckrow-lab"><FileText strokeWidth={1.8} /> Candidature</span>
                     <span className="fest-ckrow-val warn">Comment faire <ChevronRight strokeWidth={2.4} /></span>
@@ -661,7 +661,7 @@ export function EventPage() {
               </div>
 
               <div className="fest-ckcta">
-                {applyAvailable && (
+                {isExposant && applyAvailable && (
                   <button className="fest-btn primary" onClick={() => setShowHowTo(true)}>
                     <Send strokeWidth={2} /> Candidater
                   </button>
