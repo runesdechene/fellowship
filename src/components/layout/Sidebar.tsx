@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth'
 import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, type LucideIcon } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { useMyParticipations } from '@/hooks/use-participations'
+import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
@@ -28,6 +29,10 @@ export function Sidebar() {
     const start = p.events?.start_date
     return start != null && new Date(start) >= new Date(new Date().toDateString())
   }).length
+
+  // Compteur de signalements pending pour le badge rouge sur l'entrée Admin.
+  // Renvoie 0 si non-admin (RLS bloque la lecture côté DB anyway).
+  const { count: pendingReportsCount } = useAdminPendingReportsCount()
   // Avatar perso : profile (legacy) gagne car c'est là que Settings écrit, fallback person.
   const personalAvatar = profile?.avatar_url ?? person?.avatar_url ?? null
   const personalInitial = (accountName !== 'Mon compte' ? accountName : 'M')[0]?.toUpperCase() ?? 'M'
@@ -76,6 +81,7 @@ export function Sidebar() {
           <NavLink to="/admin" title={collapsed ? 'Admin' : undefined} className={({ isActive }) => (isActive ? 'active' : '')}>
             <Shield strokeWidth={2} />
             <span className="navlabel">Admin</span>
+            {pendingReportsCount > 0 && <span className="navbadge">{pendingReportsCount}</span>}
           </NavLink>
         )}
       </nav>
