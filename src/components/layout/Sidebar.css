@@ -8,6 +8,10 @@
   border-right: 1px solid hsl(var(--border));
   padding: 18px 14px;
   transition: width 0.3s ease-in-out;
+  /* Position + z-index : sinon une page utilisant un ambient en position:fixed
+     (ex: Festival) le verrait passer par-dessus le sidebar. */
+  position: relative;
+  z-index: 10;
 }
 @media (min-width: 768px) { .sidebar { display: flex; } }
 .sidebar.collapsed { width: 76px; padding-left: 6px; padding-right: 6px; }

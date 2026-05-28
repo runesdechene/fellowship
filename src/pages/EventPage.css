@@ -19,11 +19,14 @@
 }
 
 .event-ambient {
-  position: absolute;
-  top: calc(-1 * var(--navbar-h, 80px));
+  /* Fixé au viewport : l'image floutée reste cloue en haut pendant que le contenu
+     défile dessous. La navbar (sticky top:0, z-index 40) voile par-dessus en haut ;
+     le sidebar opaque masque à gauche. */
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
-  height: 980px;
+  height: 100vh;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
