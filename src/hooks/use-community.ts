@@ -65,13 +65,17 @@ export function useCommunityFeed(enabled = true): CommunityData {
           supabase.from('participations')
             .select('id, actor_id, event_id, status, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
+            // 'refuse' = dossier refusé : ne doit jamais s'afficher comme « va à X ».
+            .neq('status', 'refuse')
             .order('created_at', { ascending: false }).limit(FEED_LIMIT),
           // RPC SECURITY DEFINER : la RLS `follows` ne laisse pas lire les follows entre tiers.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (supabase.rpc as any)('get_network_follow_activity', { p_actor_id: me, p_since: since }),
           supabase.from('participations')
             .select('actor_id, event_id, events!inner(start_date)')
-            .in('actor_id', followingIds).gte('events.start_date', today),
+            .in('actor_id', followingIds).gte('events.start_date', today)
+            // Idem pour les convergences : on n'aligne pas les agendas sur un refus.
+            .neq('status', 'refuse'),
         ])
 
         const reviews = revRes.data ?? []

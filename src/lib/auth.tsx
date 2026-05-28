@@ -152,7 +152,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Garde anti-flash : on attend que `person` soit chargée avant de router vers l'onboarding.
   const needsOnboarding = !!user && person !== null && deriveNeedsOnboarding(personView)
-  const isAdmin = person?.role === 'admin'
+  // Fallback chain comme pour avatar_url : le rôle admin peut vivre côté profiles (legacy)
+  // ou côté users (nouveau modèle). Même bug que pour l'avatar — un admin restait bloqué
+  // hors de /admin si son rôle vivait dans profiles.
+  const isAdmin = person?.role === 'admin' || profile?.role === 'admin'
 
   // Debug admin : surcharge du plan perçu de l'entité active (n'écrit rien en base).
   const currentActorRow = (isAdmin && planOverride && currentActor?.kind === 'entity' && rawActorRow)

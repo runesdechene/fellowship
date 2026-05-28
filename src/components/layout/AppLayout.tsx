@@ -31,9 +31,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className={`flex-1 flex flex-col ${noScroll ? 'overflow-hidden' : 'overflow-y-auto'} pb-16 md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
-        <main className={noScroll ? 'flex-1 overflow-hidden pb-16 md:pb-0' : 'flex-1 overflow-y-auto pb-16 md:pb-0'}>
+        <main className="flex-1 min-h-0">
           {children}
         </main>
       </div>

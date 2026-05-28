@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { X, Users } from 'lucide-react'
+import { X, Users, UserCheck } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
+import './ParticipantsModal.css'
 
 const GRADIENTS = [
   ['#f0a060', '#e74c3c'],
@@ -19,16 +20,13 @@ function hashName(name: string): number {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  interesse: 'Intéressé',
-  en_cours: 'En cours',
-  inscrit: 'Inscrit',
+  interesse: 'Repéré',
+  en_cours: 'Dossier envoyé',
+  inscrit: 'Accepté',
+  refuse: 'Refusé',
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  inscrit: 'hsl(152 50% 38%)',
-  en_cours: 'hsl(210 60% 50%)',
-  interesse: 'hsl(38 90% 50%)',
-}
+const KNOWN_STATUSES = new Set(['interesse', 'en_cours', 'inscrit', 'refuse'])
 
 interface Participant {
   actor_id: string
@@ -104,52 +102,44 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
     fetch()
   }, [eventId, currentActor])
 
+  const friends = participants.filter(p => p.isFriend)
+  const others = participants.filter(p => !p.isFriend)
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onClick={onClose}>
-      <div
-        className="w-full max-w-md max-h-[70vh] flex flex-col rounded-2xl bg-card overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid hsl(var(--border))' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Users style={{ width: 18, height: 18, color: 'rgba(61,48,40,0.45)' }} strokeWidth={1.5} />
-            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 700 }}>
-              Participants ({participants.length})
-            </span>
+    <div className="participants-modal" onClick={onClose}>
+      <div className="participants-card" onClick={e => e.stopPropagation()}>
+        <div className="participants-head">
+          <div className="participants-head-title">
+            <Users strokeWidth={1.8} />
+            Participants
+            <span className="participants-head-count">({participants.length})</span>
           </div>
-          <button
-            onClick={onClose}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: 'hsl(var(--muted))', border: 'none', cursor: 'pointer', color: 'rgba(61,48,40,0.5)' }}
-          >
-            <X style={{ width: 16, height: 16 }} strokeWidth={1.5} />
+          <button className="participants-close" onClick={onClose} aria-label="Fermer">
+            <X strokeWidth={1.8} />
           </button>
         </div>
 
-        {/* List */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '8px 12px' }}>
+        <div className="participants-body">
           {loading ? (
-            <div style={{ padding: 24, textAlign: 'center', fontSize: 13, color: 'rgba(61,48,40,0.3)' }}>Chargement...</div>
+            <div className="participants-empty">Chargement…</div>
           ) : participants.length === 0 ? (
-            <div style={{ padding: 24, textAlign: 'center', fontSize: 13, color: 'rgba(61,48,40,0.3)' }}>Aucun participant</div>
+            <div className="participants-empty">Aucun participant pour l'instant</div>
           ) : (
             <>
-              {participants.some(p => p.isFriend) && (
-                <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'hsl(252 56% 58%)', padding: '8px 8px 4px', marginTop: 4 }}>
-                  👥 Amis
+              {friends.length > 0 && (
+                <div className="participants-section-label friends">
+                  <UserCheck strokeWidth={2.2} />
+                  Tes compagnons ({friends.length})
                 </div>
               )}
-              {participants.filter(p => p.isFriend).map(p => (
-                <ParticipantItem key={p.actor_id} participant={p} />
-              ))}
-              {participants.some(p => !p.isFriend) && (
-                <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(61,48,40,0.35)', padding: '12px 8px 4px' }}>
-                  Autres participants
+              {friends.map(p => <ParticipantItem key={p.actor_id} participant={p} />)}
+
+              {others.length > 0 && (
+                <div className="participants-section-label others">
+                  Autres participants ({others.length})
                 </div>
               )}
-              {participants.filter(p => !p.isFriend).map(p => (
-                <ParticipantItem key={p.actor_id} participant={p} />
-              ))}
+              {others.map(p => <ParticipantItem key={p.actor_id} participant={p} />)}
             </>
           )}
         </div>
@@ -161,27 +151,27 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
 function ParticipantItem({ participant: p }: { participant: Participant }) {
   const name = p.label ?? '?'
   const [from, to] = GRADIENTS[hashName(name) % GRADIENTS.length]
+  const statusClass = KNOWN_STATUSES.has(p.status) ? p.status : 'default'
 
   return (
-    <Link
-      to={`/@${p.public_slug ?? p.actor_id}`}
-      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px', borderRadius: 10, textDecoration: 'none', color: 'inherit', transition: 'background 0.15s' }}
-      className="hover:bg-muted"
-    >
+    <Link to={`/@${p.public_slug ?? p.actor_id}`} className="participants-item">
       {p.avatar_url ? (
-        <img src={p.avatar_url} alt={name} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+        <div className="participants-avatar">
+          <img src={p.avatar_url} alt={name} />
+        </div>
       ) : (
-        <div style={{ width: 36, height: 36, borderRadius: '50%', background: `linear-gradient(135deg, ${from}, ${to})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>
+        <div
+          className="participants-avatar"
+          style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
+        >
           {name[0]?.toUpperCase() ?? '?'}
         </div>
       )}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</div>
-        {p.entity_type && (
-          <div style={{ fontSize: 11, color: 'rgba(61,48,40,0.4)' }}>{p.entity_type}</div>
-        )}
+      <div className="participants-info">
+        <div className="participants-name">{name}</div>
+        {p.entity_type && <div className="participants-meta">{p.entity_type}</div>}
       </div>
-      <span style={{ fontSize: 10, fontWeight: 600, color: STATUS_COLORS[p.status] ?? 'rgba(61,48,40,0.4)', flexShrink: 0 }}>
+      <span className={`participants-status ${statusClass}`}>
         {STATUS_LABELS[p.status] ?? p.status}
       </span>
     </Link>

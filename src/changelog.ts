@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.122',
+    date: '2026-05-28',
+    title: 'Page festival — nouvelle direction artistique',
+    changes: [
+      'La page d\'un festival passe à la DA « Nuit de Festival » : affiche en ambiance, hero, cockpit latéral',
+      'Cockpit : compte à rebours, deadline candidatures, suivi (Repéré → Dossier → Accepté), accès carte',
+      'Nouvelle grille « Infos pratiques » : horaires, affluence attendue, emplacement (taille + prix), édition',
+      'Modale « Comment candidater » : email, lien d\'inscription et note de l\'organisateur réunis',
+      'Bande « Tes compagnons sur cette date » et partage du festival',
+      '« Discussion du festival » (questions entre exposants & rencontres) en aperçu — bientôt',
+    ],
+  },
+  {
     version: '0.7.37',
     date: '2026-05-26',
     title: 'Calendrier — nouvelle direction artistique',

@@ -7,6 +7,9 @@ import { useMyParticipations, addParticipation, removeParticipation } from '@/ho
 import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
+import { planForActor } from '@/lib/navModel'
+import { countActiveDates, canAddDate } from '@/lib/date-quota'
+import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { EventDeck } from '@/components/explorer/EventDeck'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { ScrubBar } from '@/components/explorer/ScrubBar'
@@ -63,7 +66,7 @@ function ExplorerEmpty() {
 export function ExplorerPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { profile, currentActor, isAdmin, user } = useAuth()
+  const { profile, currentActor, currentActorRow, isAdmin, user } = useAuth()
   const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
   const { tags: dynamicTags } = useTags()
   const { participations, refetch: refetchParticipations } = useMyParticipations()
@@ -91,6 +94,7 @@ export function ExplorerPage() {
 
   // ---------- Active index ----------
   const [activeIndex, setActiveIndex] = useState(0)
+  const [showQuotaModal, setShowQuotaModal] = useState(false)
 
   // Vrai pendant qu'on manipule le scrubber → met l'autoplay en pause
   const [scrubbing, setScrubbing] = useState(false)
@@ -213,6 +217,13 @@ export function ExplorerPage() {
     if (existing) {
       await removeParticipation(existing.id)
     } else {
+      // Quota dates : entité gratuite plafonnée aux dates à venir actives.
+      const plan = planForActor(currentActor, currentActorRow)
+      const actorKind: 'entity' | 'person' = currentActor.kind === 'entity' ? 'entity' : 'person'
+      if (!canAddDate(plan, actorKind, countActiveDates(participations, new Date()))) {
+        setShowQuotaModal(true)
+        return
+      }
       await addParticipation({
         actor_id: currentActor.id,
         acted_by_user_id: user.id,
@@ -222,7 +233,7 @@ export function ExplorerPage() {
       })
     }
     refetchParticipations()
-  }, [currentActor, user, participations, refetchParticipations])
+  }, [currentActor, currentActorRow, user, participations, refetchParticipations])
 
   // ---------- Add image ----------
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -369,6 +380,7 @@ export function ExplorerPage() {
           <div className="counter counter--bottom">{counterContent}</div>
         </div>
       </div>
+      {showQuotaModal && <DateQuotaModal onClose={() => setShowQuotaModal(false)} />}
     </div>
   )
 }

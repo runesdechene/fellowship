@@ -117,7 +117,6 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
 
   const hasResults = events.length > 0 || profiles.length > 0
 
-  const displayName = profile?.brand_name ?? profile?.display_name ?? ''
 
   return (
     <div className={`search-bar-wrapper ${searchExpanded ? 'search-expanded' : ''}`} ref={ref}>
@@ -137,7 +136,8 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
 
       {/* Mobile logo (centered) */}
       <div className="search-bar-spacer">
-        <img src="/logo.png" alt="Fellowship" />
+        <img className="mark" src="/icon.png" alt="" />
+        <span className="search-bar-brand">Fellowship</span>
       </div>
 
       {/* Search bar (always visible on desktop, expanded on mobile) */}
@@ -158,11 +158,11 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
           <button className="search-bar-clear" onClick={() => { setSearchExpanded(false); setQuery(''); setOpen(false) }}>
             <X strokeWidth={1.5} />
           </button>
-        ) : (
-          <span className="search-bar-shortcut">⌘K</span>
-        )}
+        ) : null}
       </div>
 
+      {/* Cluster d'actions — desktop : pill glass à droite ; mobile : flow normal (display:contents) */}
+      <div className="search-bar-actions">
       {/* Desktop: add event button (after search bar) */}
       {profile && onCreateEvent && (
         <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
@@ -230,16 +230,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         </div>
       )}
 
-      {/* Profile avatar */}
-      {profile && (
-        <Link to="/profil" className="search-bar-avatar">
-          {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt={displayName} />
-          ) : (
-            <span>{displayName[0]?.toUpperCase() ?? '?'}</span>
-          )}
-        </Link>
-      )}
+      </div>{/* /search-bar-actions */}
 
       {open && (
         <div className="search-results">

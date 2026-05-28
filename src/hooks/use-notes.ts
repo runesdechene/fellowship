@@ -19,19 +19,32 @@ async function attachAuthors(rows: Array<{ actor_id: string | null; [k: string]:
   return rows.map(r => ({ ...r, actor_public: r.actor_id ? byId[r.actor_id] ?? null : null })) as unknown as NoteWithAuthor[]
 }
 
-export function useEventNotes(eventId: string | undefined) {
+/**
+ * Notes d'un événement, scopées à un acteur (notes personnelles privées).
+ *
+ * actorId est REQUIS pour fetcher : sans lui, on renvoie une liste vide. C'était
+ * un risque de leak — EventPage passe `currentActor?.id ?? null` qui pouvait
+ * brièvement laisser passer toutes les notes au boot (avant que currentActor
+ * arrive). Désormais aucune fetch tant qu'on n'a pas d'acteur — le rendu reste
+ * vide jusqu'à l'hydratation du contexte auth.
+ *
+ * Le « partagé » sera couvert plus tard par la Discussion du festival
+ * (threads pour abonnés/amis).
+ */
+export function useEventNotes(eventId: string | undefined, actorId?: string | null) {
   const [notes, setNotes] = useState<NoteWithAuthor[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchNotes = useCallback(async () => {
-    if (!eventId) return
+    if (!eventId || !actorId) { setNotes([]); setLoading(false); return }
     const { data } = await supabase
       .from('notes').select('*')
       .eq('event_id', eventId)
+      .eq('actor_id', actorId)
       .order('created_at', { ascending: false })
     setNotes(await attachAuthors((data as Array<{ actor_id: string | null; [k: string]: unknown }> | null) ?? []))
     setLoading(false)
-  }, [eventId])
+  }, [eventId, actorId])
 
   useEffect(() => {
     if (!eventId) return

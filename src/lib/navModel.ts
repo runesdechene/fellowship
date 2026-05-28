@@ -14,7 +14,7 @@ export interface NavDef {
 
 export const NAV_DEFS: Record<NavKey, NavDef> = {
   explorer:        { key: 'explorer',        to: '/explorer',        label: 'Explorer',       icon: 'Compass',         pro: false, built: true },
-  'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: false },
+  'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: true },
   'mes-createurs': { key: 'mes-createurs',   to: '/mes-createurs',   label: 'Mes créateurs',  shortLabel: 'Créateurs', icon: 'Heart',           pro: false, built: false },
   dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Tableau de bord',shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: false },
   calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: true,  built: true },
@@ -24,8 +24,11 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   reglages:        { key: 'reglages',        to: '/reglages',        label: 'Réglages',       icon: 'Settings',        pro: false, built: true },
 }
 
-const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'profil', 'reglages']
-const EXPOSANT_NAV: NavKey[] = ['explorer', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
+// Festivalier : pas d'entrée « Profil » — il n'a pas de vitrine.
+// (L'avatar perso + lien /reglages tient lieu d'accès au compte.)
+const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'reglages']
+// `mes-dates` est partagé : un exposant est aussi festivalier (et c'est la compensation gratuite du Calendrier Pro).
+const EXPOSANT_NAV: NavKey[] = ['explorer', 'mes-dates', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
 
 // BottomBar mobile : 3 liens principaux par acteur (le reste → feuille de compte).
 const PERSON_PRIMARY: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs']
@@ -57,7 +60,11 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
   return 'active'
 }
 
-const SHARED_PREFIXES = ['/explorer', '/profil', '/reglages', '/evenement', '/notifications']
+// /profil n'est PAS partagé : c'est la vitrine d'un exposant. Un festivalier qui y atterrit
+// par deep-link est redirigé sur /explorer (cf. isRouteValidFor → la nav exposant l'autorise).
+// /suivis est accessible aux deux acteurs (page FollowingPage commune) — il doit être ici
+// car il n'est dans aucune nav (entrée via l'avatar / lien profil), sinon AppLayout le bloque.
+const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications', '/suivis']
 
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
@@ -73,8 +80,13 @@ export function isPublicProfilePath(path: string): boolean {
   return first !== '' && !RESERVED_TOP.has(first)
 }
 
-/** Une route est valide pour un acteur si elle est dans sa nav, une surface partagée, ou une vitrine publique. */
+/** Une route est valide pour un acteur si elle est dans sa nav, une surface partagée, ou une vitrine publique.
+ *  Note : /admin est traité comme valide ici — la véritable garde de rôle est faite par
+ *  <AdminRoute> côté React. Si un non-admin y atterrit, AdminRoute le redirige. Sans cette
+ *  exception, le useEffect d'AppLayout virait MÊME un admin sur /explorer (car /admin n'est
+ *  dans aucune nav). */
 export function isRouteValidFor(path: string, actor: { kind: string; entityType: string | null } | null): boolean {
+  if (path.startsWith('/admin')) return true
   const navPaths = navItemsFor(actor).map(k => NAV_DEFS[k].to)
   return navPaths.some(p => path.startsWith(p))
     || SHARED_PREFIXES.some(p => path.startsWith(p))

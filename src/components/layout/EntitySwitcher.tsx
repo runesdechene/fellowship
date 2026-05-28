@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
-import { ChevronDown, Check } from 'lucide-react'
+import { ChevronDown, Check, Plus } from 'lucide-react'
 
 function initials(label: string): string {
   return label.split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('') || '?'
 }
 
 export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
-  const { person, entities, currentActor, currentActorRow, switchActor } = useAuth()
+  const { person, profile, entities, currentActor, currentActorRow, switchActor } = useAuth()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -22,17 +24,25 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
     return () => document.removeEventListener('mousedown', onDown)
   }, [open])
 
-  const label = currentActor?.kind === 'entity'
-    ? entities.find(e => e.actor_id === currentActor.id)?.brand_name ?? 'Entité'
-    : person?.display_name ?? 'Moi'
+  const activeEntity = currentActor?.kind === 'entity'
+    ? entities.find(e => e.actor_id === currentActor.id) ?? null
+    : null
+  const label = activeEntity?.brand_name ?? person?.display_name ?? profile?.display_name ?? 'Moi'
   const sub = currentActor?.kind === 'entity'
     ? (planForActor(currentActor, currentActorRow) === 'pro' ? 'Exposant · toi' : 'Exposant · gratuit')
     : 'Festivalier'
+  // Avatar : entity active → entity.avatar_url ; sinon person/profile (legacy gagne car Settings écrit là).
+  const activeAvatar = activeEntity?.avatar_url ?? profile?.avatar_url ?? person?.avatar_url ?? null
 
-  if (!person || entities.length === 0) {
+  const avContent = activeAvatar
+    ? <img src={activeAvatar} alt="" />
+    : <span className="av-initial">{initials(label)}</span>
+
+  // Pas de personne chargée → pas de dropdown (étape de boot).
+  if (!person) {
     return (
       <div className="entity" style={{ cursor: 'default' }}>
-        <div className="av">{initials(label)}</div>
+        <div className="av">{avContent}</div>
         {!collapsed && <div className="nm"><b>{label}</b><span>{sub}</span></div>}
       </div>
     )
@@ -41,7 +51,7 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <div className="entity-menu" ref={menuRef}>
       <button className="entity" onClick={() => setOpen(o => !o)}>
-        <div className="av">{initials(label)}</div>
+        <div className="av">{avContent}</div>
         {!collapsed && <div className="nm"><b>{label}</b><span>{sub}</span></div>}
         {!collapsed && <ChevronDown className="chev" strokeWidth={1.5} width={16} height={16} />}
       </button>
@@ -57,6 +67,15 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
               {currentActor?.id === e.actor_id && <Check strokeWidth={2} />}
             </button>
           ))}
+          {/* Accès discret pour créer un compte exposant (utile si le user s'est trompé
+              en s'inscrivant, ou s'il développe une activité plus tard). */}
+          <button
+            className="entity-dropdown-create"
+            onClick={() => { navigate('/onboarding'); setOpen(false) }}
+          >
+            <Plus strokeWidth={2} />
+            <span style={{ flex: 1 }}>Créer un compte exposant</span>
+          </button>
         </div>
       )}
     </div>

@@ -692,7 +692,7 @@
   display: flex;
 }
 
-.explorer .cav span {
+.explorer .cav .cav-av {
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -703,10 +703,13 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #1c1310;
+  color: #fff;
+  overflow: hidden;
+  flex: none;
+  text-decoration: none;
 }
 
-.explorer .cav span:first-child {
+.explorer .cav .cav-av:first-child {
   margin-left: 0;
 }
 
@@ -959,12 +962,22 @@
   font-size: 13px;
 }
 
-.explorer .dockinfo .fr .cav span {
+.explorer .dockinfo .fr .cav .cav-av {
   width: 26px;
   height: 26px;
   font-size: 10px;
   border-color: hsl(var(--border));
 }
+
+/* Liens cliquables (nom + avatar des compagnons) dans le dock Explorer. */
+.explorer .actor-name {
+  color: hsl(var(--foreground));
+  font-weight: 700;
+  text-decoration: none;
+}
+.explorer .actor-name:hover { text-decoration: underline; }
+.explorer a.actor-clickable { cursor: pointer; }
+.explorer a.actor-clickable:hover { filter: brightness(1.08); }
 
 /* ── CTA buttons ──────────────────────────────────────────────────── */
 

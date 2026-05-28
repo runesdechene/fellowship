@@ -1,42 +1,133 @@
+import { useState } from 'react'
 import { Star, Lock } from 'lucide-react'
-import type { EventWithScore } from '@/types/database'
+import type { ReviewWithActor } from '@/hooks/use-reviews'
+import { ReviewListModal } from './ReviewListModal'
+import { ReviewAvatar } from './ReviewAvatar'
+import './ReviewSummary.css'
 
 interface ReviewSummaryProps {
-  event: EventWithScore
+  reviews: ReviewWithActor[]
   canSeeDetails: boolean
+  isPast: boolean
+  onLeaveReview: () => void
 }
 
-export function ReviewSummary({ event, canSeeDetails }: ReviewSummaryProps) {
-  if (!event.review_count || event.review_count === 0) {
-    return <p className="text-sm text-muted-foreground italic">Aucun avis pour le moment</p>
+function avg(values: number[]): number {
+  if (values.length === 0) return 0
+  const sum = values.reduce((s, v) => s + v, 0)
+  return Math.round((sum / values.length) * 10) / 10
+}
+
+function ago(iso: string): string {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
+  if (days <= 0) return "aujourd'hui"
+  if (days === 1) return 'hier'
+  if (days < 7) return `il y a ${days} j`
+  if (days < 30) return `il y a ${Math.floor(days / 7)} sem`
+  if (days < 365) return `il y a ${Math.floor(days / 30)} mois`
+  return `il y a ${Math.floor(days / 365)} an${Math.floor(days / 365) > 1 ? 's' : ''}`
+}
+
+function fmt(n: number): string {
+  return n.toLocaleString('fr-FR')
+}
+
+/**
+ * Bloc résumé d'avis exposants — note moyenne + critères + commentaire vedette.
+ * Remplace le titre "Avis des exposants" : c'est lui-même le header de section.
+ * Agrégats calculés client depuis la liste fournie (les colonnes event.avg_*
+ * ne sont pas alimentées côté DB).
+ */
+export function ReviewSummary({ reviews, canSeeDetails, isPast, onLeaveReview }: ReviewSummaryProps) {
+  const [listOpen, setListOpen] = useState(false)
+
+  // Empty state — uniquement si l'event est passé (sinon on n'affiche pas la section)
+  if (reviews.length === 0) {
+    return (
+      <div className="review-summary review-summary-empty">
+        <p>Aucun avis pour ce festival.</p>
+        {isPast && (
+          <p className="review-empty-hint">
+            Si tu y étais, ton retour aidera les autres exposants pour les éditions à venir.
+          </p>
+        )}
+      </div>
+    )
   }
 
+  const avgAffluence = avg(reviews.map(r => r.affluence))
+  const avgOrganisation = avg(reviews.map(r => r.organisation))
+  const avgRentabilite = avg(reviews.map(r => r.rentabilite))
+  const avgOverall = Math.round(((avgAffluence + avgOrganisation + avgRentabilite) / 3) * 10) / 10
+
+  // Commentaire vedette : le plus récent avec un commentaire non vide
+  const featured = reviews.find(r => r.comment && r.comment.trim().length > 0) ?? null
+
   return (
-    <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <Star className="h-5 w-5 fill-accent text-accent" />
-        <span className="text-lg font-bold">{event.avg_overall}</span>
-        <span className="text-sm text-muted-foreground">/ 5 ({event.review_count} avis)</span>
+    <div className="review-summary">
+      {/* Header : note + critères inline + CTA */}
+      <div className="review-summary-head">
+        <div className="review-summary-score">
+          <Star className="review-summary-star" fill="currentColor" />
+          <span className="review-summary-num">{fmt(avgOverall)}</span>
+          <span className="review-summary-out">/ 5</span>
+          <span className="review-summary-count">
+            · {reviews.length} avis exposant{reviews.length > 1 ? 's' : ''}
+          </span>
+        </div>
+        {isPast && (
+          <button className="review-summary-cta" onClick={onLeaveReview}>
+            <Star strokeWidth={2} /> Mon avis
+          </button>
+        )}
       </div>
-      <div className="grid grid-cols-3 gap-3 text-sm">
-        <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_affluence}</p>
-          <p className="text-xs text-muted-foreground">Affluence</p>
-        </div>
-        <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_organisation}</p>
-          <p className="text-xs text-muted-foreground">Organisation</p>
-        </div>
-        <div className="rounded-lg bg-muted p-3 text-center">
-          <p className="font-semibold">{event.avg_rentabilite}</p>
-          <p className="text-xs text-muted-foreground">Rentabilité</p>
-        </div>
+
+      <div className="review-summary-criteria">
+        <span><b>{fmt(avgAffluence)}</b> Affluence</span>
+        <span className="sep">·</span>
+        <span><b>{fmt(avgOrganisation)}</b> Orga</span>
+        <span className="sep">·</span>
+        <span><b>{fmt(avgRentabilite)}</b> Rentabilité</span>
       </div>
+
+      {/* Commentaire vedette — visible Pro only */}
+      {canSeeDetails && featured && (
+        <div className="review-featured">
+          <ReviewAvatar
+            label={featured.actor_label}
+            avatarUrl={featured.actor_avatar_url}
+            slug={featured.actor_slug}
+            className="review-featured-avatar"
+          />
+          <div className="review-featured-body">
+            <p className="review-featured-quote">« {featured.comment} »</p>
+            <p className="review-featured-meta">
+              {featured.actor_label ?? 'Un exposant'} · {ago(featured.created_at ?? new Date().toISOString())}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Lock pour les non-Pros */}
       {!canSeeDetails && (
-        <div className="flex items-center gap-2 rounded-lg bg-secondary p-3 text-sm">
-          <Lock className="h-4 w-4 text-primary" />
+        <div className="review-summary-lock">
+          <Lock strokeWidth={2} />
           <span>Passe en <strong>Pro</strong> pour lire les avis détaillés</span>
         </div>
+      )}
+
+      {/* CTA "Voir les N avis" — Pro only et au moins 1 review */}
+      {canSeeDetails && reviews.length > 0 && (
+        <button className="review-summary-seeall" onClick={() => setListOpen(true)}>
+          Voir les {reviews.length} avis →
+        </button>
+      )}
+
+      {listOpen && (
+        <ReviewListModal
+          reviews={reviews}
+          onClose={() => setListOpen(false)}
+        />
       )}
     </div>
   )

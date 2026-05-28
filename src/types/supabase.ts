@@ -52,6 +52,51 @@ export type Database = {
         }
         Relationships: []
       }
+      content_reports: {
+        Row: {
+          id: string
+          reporter_actor_id: string
+          reporter_auth_id: string
+          target_type: string
+          target_id: string
+          reason: string
+          comment: string | null
+          status: string
+          admin_note: string | null
+          resolved_at: string | null
+          resolved_by_actor_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reporter_actor_id: string
+          reporter_auth_id: string
+          target_type: string
+          target_id: string
+          reason: string
+          comment?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_at?: string | null
+          resolved_by_actor_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reporter_actor_id?: string
+          reporter_auth_id?: string
+          target_type?: string
+          target_id?: string
+          reason?: string
+          comment?: string | null
+          status?: string
+          admin_note?: string | null
+          resolved_at?: string | null
+          resolved_by_actor_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       entities: {
         Row: {
           actor_id: string
@@ -233,14 +278,19 @@ export type Database = {
           created_by_actor: string | null
           department: string
           description: string | null
+          edition: number | null
           end_date: string
+          expected_attendance: string | null
           external_url: string | null
           id: string
           image_url: string | null
           name: string
+          opening_hours: string | null
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
+          stand_price: string | null
+          stand_size: string | null
           start_date: string
           tags: string[] | null
         }
@@ -253,14 +303,19 @@ export type Database = {
           created_by_actor?: string | null
           department: string
           description?: string | null
+          edition?: number | null
           end_date: string
+          expected_attendance?: string | null
           external_url?: string | null
           id?: string
           image_url?: string | null
           name: string
+          opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          stand_price?: string | null
+          stand_size?: string | null
           start_date: string
           tags?: string[] | null
         }
@@ -273,14 +328,19 @@ export type Database = {
           created_by_actor?: string | null
           department?: string
           description?: string | null
+          edition?: number | null
           end_date?: string
+          expected_attendance?: string | null
           external_url?: string | null
           id?: string
           image_url?: string | null
           name?: string
+          opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          stand_price?: string | null
+          stand_size?: string | null
           start_date?: string
           tags?: string[] | null
         }

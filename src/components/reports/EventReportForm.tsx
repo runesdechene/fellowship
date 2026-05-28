@@ -7,9 +7,11 @@ import { Lock, Plus, X } from 'lucide-react'
 
 interface EventReportFormProps {
   eventId: string
+  /** Appelé après save réussi (utilisé par BilanModal pour fermer + refetch parent). */
+  onSaved?: () => void
 }
 
-export function EventReportForm({ eventId }: EventReportFormProps) {
+export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
   const { user, currentActor, currentActorRow } = useAuth()
   const { report: existing } = useEventReport(eventId)
   const [boothCost, setBoothCost] = useState('')
@@ -46,7 +48,7 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
   const handleSave = async () => {
     if (!user || !currentActor) return
     setSaving(true)
-    await saveEventReport({
+    const { error } = await saveEventReport({
       actor_id: currentActor.id,
       acted_by_user_id: user.id,
       event_id: eventId,
@@ -57,6 +59,7 @@ export function EventReportForm({ eventId }: EventReportFormProps) {
       improvements,
     })
     setSaving(false)
+    if (!error) onSaved?.()
   }
 
   const addItem = (list: string[], setList: (v: string[]) => void, value: string, clearFn: (v: string) => void) => {

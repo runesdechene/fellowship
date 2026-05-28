@@ -16,6 +16,7 @@ import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
 import { VitrineQRModal } from '@/components/vitrine/VitrineQRModal'
 import { VitrineNetworkModal } from '@/components/vitrine/VitrineNetworkModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
+import { ReportButton } from '@/components/reports/ReportButton'
 import type { EntityRow } from '@/types/database'
 import './Vitrine.css'
 
@@ -90,6 +91,14 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
         <div className="v-footer">
           <span className="v-footer-mark">✦</span>
           Carnet de route Fellowship{entity.public_slug ? <> · <code>flw.sh/{entity.public_slug}</code></> : null}
+          <ReportButton
+            targetType="profile"
+            targetId={entity.actor_id}
+            targetLabel={entity.brand_name}
+            targetOwnerId={entity.actor_id}
+            className="v-footer-report"
+            title="Signaler ce profil"
+          />
         </div>
       </div>
 

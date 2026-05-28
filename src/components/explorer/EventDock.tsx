@@ -1,5 +1,7 @@
 import { useFriendsOnEvent } from '@/hooks/use-participations'
 import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
+import { ActorAvatar, ActorName } from '@/components/community/ActorLinks'
+import type { FeedActor } from '@/lib/community'
 import type { EventWithScore } from '@/types/database'
 
 function dateRange(start: string, end: string): string {
@@ -22,6 +24,13 @@ interface EventDockProps {
 export function EventDock({ event, tagInfo, animate = true }: EventDockProps) {
   const { friends } = useFriendsOnEvent(event.id)
   const tag = event.tags?.[0] ?? 'autre'
+  // Acteurs (mapping vers FeedActor) : avatar photo OU pastille colorée, nom cliquable vers la vitrine.
+  const actors: FeedActor[] = friends.map(f => ({
+    actorId: f.actor_id,
+    label: f.label ?? 'Un compagnon',
+    avatarUrl: f.avatar_url,
+    slug: f.public_slug,
+  }))
   return (
     <div key={animate ? event.id : 'static'} className={'dockinfo' + (animate ? ' eh-fade' : '')}>
       {/* Tag — même recette graphique que les .etag de la landing (pilule teintée de --c) */}
@@ -50,14 +59,16 @@ export function EventDock({ event, tagInfo, animate = true }: EventDockProps) {
         </div>
       </div>
 
-      {friends.length > 0 && (
+      {actors.length > 0 && (
         <div className="fr">
           <span className="cav">
-            {friends.slice(0, 4).map(f => (
-              <span key={f.actor_id} title={f.label ?? ''}>{(f.label ?? '?').slice(0, 1).toUpperCase()}</span>
+            {actors.slice(0, 4).map(a => (
+              <ActorAvatar key={a.actorId} actor={a} className="cav-av" />
             ))}
           </span>
-          {friends.length === 1 ? `${friends[0].label ?? 'Un compagnon'} y va` : `${friends.length} compagnons y vont`}
+          {actors.length === 1
+            ? <span><ActorName actor={actors[0]} /> y va</span>
+            : `${actors.length} compagnons y vont`}
         </div>
       )}
     </div>
