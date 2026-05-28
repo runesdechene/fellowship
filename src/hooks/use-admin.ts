@@ -161,41 +161,7 @@ export function useAdminTags() {
 }
 
 // --- Reports ---
-
-interface ReportWithEvent {
-  id: string
-  event_id: string
-  user_id: string
-  created_at: string
-  revenue: number | null
-  booth_cost: number | null
-  charges: number | null
-  wins: string[] | null
-  improvements: string[] | null
-  event_name: string | null
-}
-
-export function useAdminReports() {
-  const [reports, setReports] = useState<ReportWithEvent[]>([])
-  const [loading, setLoading] = useState(true)
-
-  async function fetchReports() {
-    setLoading(true)
-    const { data } = await supabase
-      .from('event_reports')
-      .select('*, events(name)')
-      .order('created_at', { ascending: false })
-
-    const mapped = (data ?? []).map((r: Record<string, unknown>) => ({
-      ...(r as unknown as ReportWithEvent),
-      event_name: (r.events as { name: string } | null)?.name ?? null,
-    }))
-    setReports(mapped)
-    setLoading(false)
-  }
-
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { fetchReports() }, [])
-
-  return { reports, loading, refetch: fetchReports }
-}
+// useAdminReports (legacy, lisait event_reports) RETIRÉ : les bilans post-festival
+// sont désormais strictement privés à leur auteur (drop des policies admin sur
+// event_reports). Les vrais signalements vivent dans content_reports et leur hook
+// est dans @/hooks/use-content-reports.

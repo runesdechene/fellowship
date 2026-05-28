@@ -1,0 +1,119 @@
+/* AdminReports.css — DA */
+.admin-reports { display: flex; flex-direction: column; gap: 16px; }
+
+.admin-reports-tabs {
+  display: flex; gap: 6px;
+  background: hsl(var(--card)); border: 1px solid hsl(var(--border));
+  border-radius: 12px; padding: 4px; width: fit-content;
+}
+.admin-reports-tabs button {
+  padding: 6px 14px; border-radius: 9px;
+  background: transparent; border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  transition: background 0.15s, color 0.15s;
+}
+.admin-reports-tabs button:hover { color: hsl(var(--foreground)); }
+.admin-reports-tabs button.on {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+}
+
+.admin-reports-empty {
+  padding: 60px 24px; text-align: center;
+  color: hsl(var(--muted-foreground));
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  font-size: 14px;
+}
+.admin-reports-empty svg { width: 28px; height: 28px; }
+
+.admin-reports-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+
+.admin-report {
+  background: hsl(var(--card)); border: 1px solid hsl(var(--border));
+  border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.admin-report-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.admin-report-reporter { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.admin-report-reporter img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.admin-report-reporter .av-fallback {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.admin-report-reporter b { color: hsl(var(--foreground)); }
+
+.admin-report-reason {
+  font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.admin-report-reason.reason-spam { background: color-mix(in srgb, var(--status-refuse) 18%, transparent); color: var(--status-refuse); }
+.admin-report-reason.reason-inapproprie { background: color-mix(in srgb, var(--status-refuse) 18%, transparent); color: var(--status-refuse); }
+.admin-report-reason.reason-info_erronee { background: color-mix(in srgb, var(--status-apayer) 18%, transparent); color: var(--status-apayer); }
+.admin-report-reason.reason-doublon { background: hsl(var(--foreground) / 0.08); color: hsl(var(--muted-foreground)); }
+
+.admin-report-target { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-wrap: wrap; }
+.admin-report-target .label { color: hsl(var(--muted-foreground)); }
+.admin-report-target .link {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-body); font-weight: 600;
+  color: var(--amber); padding: 0;
+  font-size: 13px;
+}
+.admin-report-target .link:hover { text-decoration: underline; }
+.admin-report-target .link svg { width: 12px; height: 12px; }
+
+.admin-report-comment {
+  font-size: 13px;
+  color: hsl(var(--foreground) / 0.85);
+  font-style: italic;
+  padding-left: 10px;
+  border-left: 2px solid color-mix(in srgb, var(--amber) 30%, transparent);
+}
+
+.admin-report-actions { display: flex; gap: 8px; margin-top: 4px; }
+.admin-report-actions button {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 9px; border: 1px solid;
+  cursor: pointer; font-family: var(--font-body); font-size: 12.5px; font-weight: 600;
+  background: transparent;
+  transition: background 0.15s;
+}
+.admin-report-actions .btn-resolve {
+  color: var(--status-inscrit);
+  border-color: color-mix(in srgb, var(--status-inscrit) 45%, transparent);
+}
+.admin-report-actions .btn-resolve:hover {
+  background: color-mix(in srgb, var(--status-inscrit) 14%, transparent);
+}
+.admin-report-actions .btn-dismiss {
+  color: var(--status-refuse);
+  border-color: color-mix(in srgb, var(--status-refuse) 45%, transparent);
+}
+.admin-report-actions .btn-dismiss:hover {
+  background: color-mix(in srgb, var(--status-refuse) 14%, transparent);
+}
+.admin-report-actions button svg { width: 14px; height: 14px; }
+
+.admin-report-resolved {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  font-size: 12.5px; color: hsl(var(--muted-foreground));
+}
+.admin-report-resolved .badge {
+  padding: 3px 9px; border-radius: 99px; font-weight: 700;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.admin-report-resolved .badge.status-resolved {
+  background: color-mix(in srgb, var(--status-inscrit) 18%, transparent);
+  color: var(--status-inscrit);
+}
+.admin-report-resolved .badge.status-dismissed {
+  background: hsl(var(--foreground) / 0.08);
+  color: hsl(var(--muted-foreground));
+}
+.admin-report-resolved p { font-style: italic; margin: 0; }
