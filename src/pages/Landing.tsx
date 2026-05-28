@@ -440,7 +440,8 @@ export function LandingPage() {
             {/* Découverte */}
             <div className="tier">
               <div className="ttl">Découverte</div>
-              <div className="per">Tarifs bientôt</div>
+              <div className="price">Gratuit</div>
+              <div className="per">Pour toujours</div>
               <ul>
                 <li><span className="ck">✓</span> Gérer ses dates de festivals</li>
                 <li><span className="ck">✓</span> Calendrier annuel</li>
@@ -456,7 +457,8 @@ export function LandingPage() {
             <div className="tier pro">
               <span className="pop">★ Pour vivre de ton art</span>
               <div className="ttl">Pro</div>
-              <div className="per">Tarifs bientôt</div>
+              <div className="price">9,99 €</div>
+              <div className="per">HT / mois</div>
               <ul>
                 <li><span className="ck">✓</span> Tout le plan Découverte</li>
                 <li><span className="ck">✓</span> Bilan de rentabilité (CA, coûts)</li>
