@@ -12,6 +12,7 @@ interface CheckoutResponse {
   url?: string
   error?: string
   portal?: boolean
+  reason?: string
   message?: string
 }
 
@@ -23,7 +24,8 @@ export async function startCheckout(entityId: string, billingInterval: BillingIn
   )
   if (error) throw new Error(error.message || 'checkout_failed')
   if (!data) throw new Error('empty_response')
-  if (data.portal || data.error === 'already_subscribed') {
+  // Cas "déjà abonné" : edge function renvoie 200 + portal=true pour signaler le pivot.
+  if (data.portal) {
     return openCustomerPortal(entityId)
   }
   if (!data.url) throw new Error(data.error || 'checkout_failed')

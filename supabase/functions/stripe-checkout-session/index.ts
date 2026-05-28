@@ -66,10 +66,11 @@ Deno.serve(async (req) => {
       return json({ error: 'entity_not_found' }, 404)
     }
 
-    // Si déjà un sub actif/trialing/past_due, on refuse le re-checkout et signale
-    // que l'user doit passer par le portail pour gérer/changer.
+    // Si déjà un sub actif/trialing/past_due, on signale au client de rediriger
+    // vers le portail. 200 (pas 409) pour que supabase.functions.invoke laisse
+    // passer le body au lieu de throw une FunctionsHttpError.
     if (entity.subscription_status && ['active', 'trialing', 'past_due'].includes(entity.subscription_status)) {
-      return json({ error: 'already_subscribed', portal: true }, 409)
+      return json({ portal: true, reason: 'already_subscribed' }, 200)
     }
 
     const stripe = getStripe()
