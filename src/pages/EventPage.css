@@ -29,40 +29,36 @@
   pointer-events: none;
 }
 
+/* Nuit : l'image floutée elle-même s'estompe vers transparent via un mask CSS.
+   Plus de jonction colorée — la page bg (radial --page-backdrop) reprend naturellement
+   en transparence sans qu'on essaie de la "matcher". */
 .event-ambient img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(60px) brightness(0.45) saturate(1.1);
+  filter: blur(60px) brightness(0.5) saturate(1.05);
   transform: scale(1.35);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 92%);
+  mask-image: linear-gradient(180deg, black 0%, black 55%, transparent 92%);
 }
 
-/* Fade adouci : 5 stops pour étirer la transition vers le fond sans jonction visible */
+/* Léger darkening neutre (noir alpha, pas de couleur de fond à matcher) en haut,
+   transparent dès la moitié pour laisser respirer. */
 .event-ambient::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    hsl(var(--background) / 0.35) 0%,
-    hsl(var(--background) / 0.15) 25%,
-    hsl(var(--background) / 0.45) 55%,
-    hsl(var(--background) / 0.82) 82%,
-    hsl(var(--background)) 100%
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.08) 35%,
+    rgba(0, 0, 0, 0) 70%
   );
 }
 
-.light .event-ambient img { filter: blur(60px) brightness(1.05) saturate(1.1); }
-.light .event-ambient::after {
-  background: linear-gradient(
-    180deg,
-    hsl(var(--background) / 0.45) 0%,
-    hsl(var(--background) / 0.3) 25%,
-    hsl(var(--background) / 0.6) 55%,
-    hsl(var(--background) / 0.88) 82%,
-    hsl(var(--background)) 100%
-  );
-}
+/* Jour : pas d'ambient. Une affiche sombre floutée sur fond crème rendait mal,
+   et le radial --page-backdrop ne se matche pas avec une couleur unie au fond du dégradé. */
+.light .event-ambient { display: none; }
 
 /* Tout le contenu LAYOUT passe au-dessus de l'ambient.
    Scope explicite — sinon le sélecteur global cassait les modales en surchargeant
