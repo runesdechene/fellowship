@@ -63,7 +63,8 @@ export function LandingPage() {
       <nav ref={navRef}>
         <div className="wrap nav-in">
           <div className="logo">
-            <img src="/icon.png" alt="" className="mark-img" /> Fellowship
+            <img src="/icon.png" alt="Fellowship" className="mark-img" />
+            <span className="brand-name">Fellowship</span>
           </div>
           <div className="nav-links">
             <a className="link" href="#">À propos</a>

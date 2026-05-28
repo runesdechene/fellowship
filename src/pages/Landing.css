@@ -695,6 +695,14 @@
   }
 }
 
+/* Téléphones : on cache le wordmark "Fellowship" dans la nav,
+   l'icône suffit (on garde le wordmark dans le footer où il y a la place). */
+@media (max-width: 480px) {
+  .landing .nav-in .logo .brand-name {
+    display: none;
+  }
+}
+
 /* Footer landing : rang de liens légaux (les 5 docs visibles ici) */
 .landing-legal {
   display: flex; flex-wrap: wrap; justify-content: center;
