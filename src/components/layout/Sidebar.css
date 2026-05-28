@@ -19,7 +19,7 @@
 /* Header / logo */
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 16px; }
 .sidebar-logo { font-family: var(--font-heading); font-weight: 800; font-size: 20px; display: flex; align-items: center; gap: 9px; color: hsl(var(--foreground)); text-decoration: none; }
-.sidebar-logo .mark { width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; object-fit: cover; display: block; }
+.sidebar-logo .mark { width: 28px; height: 28px; border-radius: 0; flex-shrink: 0; object-fit: contain; display: block; }
 .sidebar.collapsed .sidebar-logo-text { display: none; }
 .sidebar-collapse-btn { background: none; border: none; color: hsl(var(--muted-foreground)); cursor: pointer; display: flex; padding: 4px; border-radius: 8px; }
 .sidebar-collapse-btn:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
@@ -28,7 +28,9 @@
 /* Carte entité */
 .entity { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid hsl(var(--border)); border-radius: 12px; background: hsl(var(--secondary)); margin-bottom: 16px; width: 100%; cursor: pointer; text-align: left; }
 .entity:hover { background: hsl(var(--muted)); }
-.entity .av { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6b4a2e, #3c2a1a); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #ffd9a8; font-size: 14px; flex-shrink: 0; }
+.entity .av { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, #6b4a2e, #3c2a1a); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #ffd9a8; font-size: 14px; flex-shrink: 0; overflow: hidden; }
+.entity .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.entity .av .av-initial { line-height: 1; }
 .entity .nm { flex: 1; min-width: 0; }
 .entity .nm b { font-family: var(--font-heading); font-size: 14px; display: block; color: hsl(var(--foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .entity .nm span { font-size: 11px; color: hsl(var(--muted-foreground)); }
@@ -83,8 +85,9 @@
 
 /* Pied compte + toggle */
 .side-foot { border-top: 1px solid hsl(var(--border)); padding: 12px 10px 0; margin-top: 12px; display: flex; align-items: center; gap: 10px; }
-.side-foot .av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--forest), hsl(92 40% 46%)); flex-shrink: 0; overflow: hidden; }
-.side-foot .av img { width: 100%; height: 100%; object-fit: cover; }
+.side-foot .av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--forest), hsl(92 40% 46%)); flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 13px; font-family: var(--font-heading); text-decoration: none; }
+.side-foot .av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.side-foot .av .av-initial { line-height: 1; }
 .side-foot .nm { flex: 1; min-width: 0; text-decoration: none; }
 .side-foot .nm b { font-size: 13px; font-family: var(--font-heading); color: hsl(var(--foreground)); display: block; }
 .side-foot .nm span { font-size: 11px; color: hsl(var(--muted-foreground)); display: block; }

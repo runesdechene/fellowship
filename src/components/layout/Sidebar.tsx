@@ -12,12 +12,15 @@ const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, Layou
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const { currentActor, currentActorRow, person, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, person, profile, isAdmin } = useAuth()
   const navigate = useNavigate()
   const plan = planForActor(currentActor, currentActorRow)
   const keys = navItemsFor(currentActor)
   const isFreeEntity = currentActor?.kind === 'entity' && plan === 'free'
-  const accountName = person?.display_name ?? 'Mon compte'
+  const accountName = person?.display_name ?? profile?.display_name ?? 'Mon compte'
+  // Avatar perso : profile (legacy) gagne car c'est là que Settings écrit, fallback person.
+  const personalAvatar = profile?.avatar_url ?? person?.avatar_url ?? null
+  const personalInitial = (accountName !== 'Mon compte' ? accountName : 'M')[0]?.toUpperCase() ?? 'M'
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
@@ -77,7 +80,7 @@ export function Sidebar() {
         <SidebarNetworkActivity collapsed={collapsed} />
         <div className="side-foot">
           <Link to="/reglages" className="av" aria-label="Mon compte">
-            {person?.avatar_url && <img src={person.avatar_url} alt="" />}
+            {personalAvatar ? <img src={personalAvatar} alt="" /> : <span className="av-initial">{personalInitial}</span>}
           </Link>
           {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
           <ThemeToggle />
