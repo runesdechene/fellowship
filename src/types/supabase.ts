@@ -7,30 +7,10 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
@@ -54,65 +34,87 @@ export type Database = {
       }
       content_reports: {
         Row: {
-          id: string
-          reporter_actor_id: string
-          reporter_auth_id: string
-          target_type: string
-          target_id: string
-          reason: string
-          comment: string | null
-          status: string
           admin_note: string | null
+          comment: string | null
+          created_at: string
+          id: string
+          reason: string
+          reporter_actor_id: string | null
+          reporter_auth_id: string | null
           resolved_at: string | null
           resolved_by_actor_id: string | null
-          created_at: string
+          status: string
+          target_id: string
+          target_type: string
         }
         Insert: {
-          id?: string
-          reporter_actor_id: string
-          reporter_auth_id: string
-          target_type: string
-          target_id: string
-          reason: string
-          comment?: string | null
-          status?: string
           admin_note?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_actor_id?: string | null
+          reporter_auth_id?: string | null
           resolved_at?: string | null
           resolved_by_actor_id?: string | null
-          created_at?: string
+          status?: string
+          target_id: string
+          target_type: string
         }
         Update: {
-          id?: string
-          reporter_actor_id?: string
-          reporter_auth_id?: string
-          target_type?: string
-          target_id?: string
-          reason?: string
-          comment?: string | null
-          status?: string
           admin_note?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_actor_id?: string | null
+          reporter_auth_id?: string | null
           resolved_at?: string | null
           resolved_by_actor_id?: string | null
-          created_at?: string
+          status?: string
+          target_id?: string
+          target_type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "content_reports_reporter_actor_id_fkey"
+            columns: ["reporter_actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_reports_resolved_by_actor_id_fkey"
+            columns: ["resolved_by_actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       entities: {
         Row: {
           actor_id: string
           avatar_url: string | null
+          banner_position: number
           banner_url: string | null
+          billing_interval: string | null
           bio: string | null
           brand_name: string
           city: string | null
           craft_type: string | null
           created_at: string
+          current_period_end: string | null
           department: string | null
           links: Json
+          location: string | null
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
-          specialties: string[]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
+          trial_end: string | null
           type: Database["public"]["Enums"]["entity_type"]
           verified: boolean
           website: string | null
@@ -120,18 +122,25 @@ export type Database = {
         Insert: {
           actor_id: string
           avatar_url?: string | null
+          banner_position?: number
           banner_url?: string | null
+          billing_interval?: string | null
           bio?: string | null
           brand_name: string
           city?: string | null
           craft_type?: string | null
           created_at?: string
+          current_period_end?: string | null
           department?: string | null
           links?: Json
+          location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
-          specialties?: string[]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          trial_end?: string | null
           type: Database["public"]["Enums"]["entity_type"]
           verified?: boolean
           website?: string | null
@@ -139,18 +148,25 @@ export type Database = {
         Update: {
           actor_id?: string
           avatar_url?: string | null
+          banner_position?: number
           banner_url?: string | null
+          billing_interval?: string | null
           bio?: string | null
           brand_name?: string
           city?: string | null
           craft_type?: string | null
           created_at?: string
+          current_period_end?: string | null
           department?: string | null
           links?: Json
+          location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
-          specialties?: string[]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          trial_end?: string | null
           type?: Database["public"]["Enums"]["entity_type"]
           verified?: boolean
           website?: string | null
@@ -162,38 +178,6 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "actors"
             referencedColumns: ["id"]
-          },
-        ]
-      }
-      entity_gallery: {
-        Row: {
-          created_at: string
-          entity_actor_id: string
-          id: string
-          image_url: string
-          position: number
-        }
-        Insert: {
-          created_at?: string
-          entity_actor_id: string
-          id?: string
-          image_url: string
-          position?: number
-        }
-        Update: {
-          created_at?: string
-          entity_actor_id?: string
-          id?: string
-          image_url?: string
-          position?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "entity_gallery_entity_actor_id_fkey"
-            columns: ["entity_actor_id"]
-            isOneToOne: false
-            referencedRelation: "entities"
-            referencedColumns: ["actor_id"]
           },
         ]
       }
@@ -825,6 +809,24 @@ export type Database = {
           },
         ]
       }
+      stripe_events_processed: {
+        Row: {
+          event_id: string
+          event_type: string
+          processed_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          processed_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          processed_at?: string
+        }
+        Relationships: []
+      }
       tags: {
         Row: {
           bg_color: string
@@ -985,12 +987,28 @@ export type Database = {
         }
         Returns: string
       }
+      get_follow_suggestions: {
+        Args: { p_actor_id: string }
+        Returns: {
+          shared_followers: number
+          suggested_actor: string
+        }[]
+      }
       get_friend_ids: { Args: { p_user_id: string }; Returns: string[] }
       get_friends_with_dates: {
         Args: { p_user_id: string }
         Returns: {
           friend_id: string
           friended_at: string
+        }[]
+      }
+      get_network_follow_activity: {
+        Args: { p_actor_id: string; p_since: string }
+        Returns: {
+          dst_actor: string
+          follow_id: string
+          occurred_at: string
+          src_actor: string
         }[]
       }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
@@ -1159,9 +1177,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       actor_kind: ["person", "entity"],
@@ -1193,4 +1208,3 @@ export const Constants = {
     },
   },
 } as const
-
