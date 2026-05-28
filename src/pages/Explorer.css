@@ -375,9 +375,12 @@
 
 .explorer .catgrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(115px, 1fr));
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
   gap: 8px;
-  width: 395px;
+  /* 460px = 3 × 140px + 2 × 8px gap + 16px de marge pour respirer.
+     Anciennement 395px : "Gastronomique" (1 mot, 13 chars) débordait sa cellule. */
+  width: 460px;
+  max-width: calc(100vw - 48px);
 }
 
 .explorer .catchip {
