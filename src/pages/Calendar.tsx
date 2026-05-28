@@ -13,8 +13,10 @@ export function CalendarPage() {
   const defaultStart = now.getMonth()
   const defaultYear = now.getFullYear()
 
-  const { profile } = useAuth()
-  const actorKind: 'entity' | 'person' = profile?.type === 'exposant' ? 'entity' : 'person'
+  // Le calendrier suit l'acteur ACTIF (entité ou personne), pas le type compte legacy
+  // (`profile.type`) qui ratait l'edge case d'un festivalier ayant aussi une entité.
+  const { currentActor } = useAuth()
+  const actorKind: 'entity' | 'person' = currentActor?.kind === 'entity' ? 'entity' : 'person'
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
   const [showMine, setShowMine] = useState(() => localStorage.getItem('fellowship-calendar-mine') !== 'false')

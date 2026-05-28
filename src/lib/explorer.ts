@@ -133,7 +133,7 @@ export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'popul
 export type ActorKind = 'person' | 'entity'
 
 export type StatusVariant =
-  | 'repere' | 'dossier' | 'accepte' | 'apayer' | 'inscrit'
+  | 'repere' | 'dossier' | 'accepte' | 'apayer' | 'acompte' | 'inscrit'
   | 'refuse' | 'termine' | 'going'
 
 export interface StatusChip { label: string; variant: StatusVariant }
@@ -164,7 +164,10 @@ export function participationChip(
   if (status === 'en_cours') return { label: '📨 Dossier envoyé', variant: 'dossier' }
 
   // Branche « accepté » : confirme (= Accepté) ou inscrit (legacy). Le paiement décide.
+  // Paiement en 3 étapes : a_payer → acompte_verse → paye. Le CHECK constraint DB
+  // (migration 20260528220000_payment_status_acompte) accepte les 3 valeurs.
   if (payment === 'paye') return { label: '✓ Inscrit', variant: 'inscrit' }
+  if (payment === 'acompte_verse') return { label: '€ Acompte versé', variant: 'acompte' }
   if (payment === 'a_payer') return { label: '€ À payer', variant: 'apayer' }
   return { label: '✦ Accepté', variant: 'accepte' }
 }

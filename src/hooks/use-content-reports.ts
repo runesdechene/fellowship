@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { ReportReason, ReportStatus, ReportTargetType } from '@/lib/content-reports'
@@ -87,13 +87,19 @@ export function useAdminReports(filter: ReportStatus | 'all' = 'pending') {
   const { isAdmin } = useAuth()
   const [reports, setReports] = useState<ContentReportEnriched[]>([])
   const [loading, setLoading] = useState(true)
+  // Token de cancellation : chaque refetch incrémente ; seuls les setState dont
+  // l'id matche encore la dernière requête s'appliquent. Évite la race au tab-switch
+  // (filter change → vieux fetch revient APRÈS le nouveau → état stale écrit).
+  const reqIdRef = useRef(0)
 
   const refetch = useCallback(async () => {
+    const myId = ++reqIdRef.current
     if (!isAdmin) { setReports([]); setLoading(false); return }
     setLoading(true)
     let q = supabase.from('content_reports').select('*').order('created_at', { ascending: false })
     if (filter !== 'all') q = q.eq('status', filter)
     const { data: rows } = await q
+    if (reqIdRef.current !== myId) return
     const list = (rows ?? []) as ContentReport[]
 
     // Enrich reporters via actor_public
@@ -142,6 +148,7 @@ export function useAdminReports(filter: ReportStatus | 'all' = 'pending') {
       return { ...r, reporter_label: rep.label, reporter_avatar_url: rep.avatar_url, target_label: target.label, target_url: target.url }
     })
 
+    if (reqIdRef.current !== myId) return
     setReports(enriched)
     setLoading(false)
   }, [filter, isAdmin])

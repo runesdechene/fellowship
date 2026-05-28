@@ -20,6 +20,10 @@ interface AuthContextType {
   // Rétro-compat : ligne `profiles` legacy, lue par les pages non encore recâblées (→ Plan 3).
   profile: Profile | null
   loading: boolean
+  /** true tant que fetchProfile+fetchIdentity n'ont pas tous deux résolu pour la session
+   *  courante. Découplé de `loading` (qui ne couvre que le boot session Supabase) et
+   *  utilisé par AdminRoute pour ne pas éjecter un admin avant que son rôle soit chargé. */
+  identityLoading: boolean
   signIn: (email: string) => Promise<{ error: Error | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
@@ -50,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [entities, setEntities] = useState<EntityRow[]>([])
   const [currentActorId, setCurrentActorId] = useState<string | null>(readStoredActorId())
   const [loading, setLoading] = useState(true)
+  const [identityLoading, setIdentityLoading] = useState(false)
   const [planOverride, setPlanOverrideState] = useState<PlanOverride>(() => readPlanOverride())
 
   const setPlanOverride = (v: PlanOverride) => {
@@ -95,12 +100,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null)
 
         if (session?.user) {
-          fetchProfile(session.user.id).catch(() => {})
-          fetchIdentity(session.user.id).catch(() => {})
+          // identityLoading reste vrai jusqu'à ce que les DEUX fetchs aient résolu
+          // (succès ou échec). Sans ça, AdminRoute ne savait pas si `isAdmin=false`
+          // signifie « pas admin » ou « rôle pas encore lu » → bandaid timer 1.5s.
+          setIdentityLoading(true)
+          Promise.allSettled([
+            fetchProfile(session.user.id),
+            fetchIdentity(session.user.id),
+          ]).finally(() => setIdentityLoading(false))
         } else {
           setProfile(null)
           setPerson(null)
           setEntities([])
+          setIdentityLoading(false)
         }
 
         setLoading(false)
@@ -167,7 +179,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user, session,
         person, entities, currentActor, currentActorRow, switchActor, can,
-        profile, loading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
+        profile, loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
         planOverride, setPlanOverride,
       }}
     >

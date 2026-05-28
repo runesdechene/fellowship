@@ -16,6 +16,7 @@ import { VitrineEditModal } from '@/components/vitrine/edit/VitrineEditModal'
 import { VitrineQRModal } from '@/components/vitrine/VitrineQRModal'
 import { VitrineNetworkModal } from '@/components/vitrine/VitrineNetworkModal'
 import { EmbedModal } from '@/components/profile/EmbedModal'
+import { EmailSignupPlaceholder } from '@/components/profile/EmailSignupPlaceholder'
 import { ReportButton } from '@/components/reports/ReportButton'
 import type { EntityRow } from '@/types/database'
 import './Vitrine.css'
@@ -25,7 +26,7 @@ interface PublicProfilePageProps { overrideSlug?: string }
 export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {}) {
   const { slug: paramSlug } = useParams<{ slug: string }>()
   const slug = overrideSlug ?? paramSlug?.replace(/^@/, '')
-  const { currentActor, entities } = useAuth()
+  const { user, currentActor, entities } = useAuth()
   const data = useVitrine(slug)
   const { isFollowing, toggleFollow } = useFollowStatus(data.entity?.actor_id)
   const [showQR, setShowQR] = useState(false)
@@ -87,6 +88,12 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
             <VitrineEscales events={upcoming} companions={companions} onEmbed={canEdit ? () => setShowEmbed(true) : undefined} />
             <VitrineTampons events={past} />
           </>
+        )}
+        {/* CTA acquisition : visible aux visiteurs anonymes (= prospects sans compte)
+            et au propriétaire (badge "vos visiteurs verront ce formulaire") pour qu'il
+            sache ce qu'il met en valeur. Caché aux autres utilisateurs Fellowship logués. */}
+        {(!user || canEdit) && (
+          <EmailSignupPlaceholder brandName={entity.brand_name ?? 'cet exposant'} isOwner={canEdit} />
         )}
         <div className="v-footer">
           <span className="v-footer-mark">✦</span>

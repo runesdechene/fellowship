@@ -41,14 +41,29 @@ export function useFollowStatus(targetId: string | undefined) {
 
   const toggleFollow = async () => {
     if (!me || !targetId) return
+    // Optimistic UI : on flip immédiatement, on rollback si l'écriture échoue.
+    // Sans rollback, un échec réseau laisse l'état mensonger (le bouton dit suivi mais
+    // la DB n'a rien enregistré, et le serveur renverra l'inverse au prochain reload).
+    const prev = { isFollowing, isFriend }
     if (isFollowing) {
-      await supabase.from('follows').delete()
-        .eq('follower_actor', me).eq('following_actor', targetId)
       setIsFollowing(false)
       setIsFriend(false)
+      const { error } = await supabase.from('follows').delete()
+        .eq('follower_actor', me).eq('following_actor', targetId)
+      if (error) {
+        setIsFollowing(prev.isFollowing)
+        setIsFriend(prev.isFriend)
+        console.error('[useFollowStatus] unfollow failed, rolled back', error)
+      }
     } else {
-      await supabase.from('follows').insert({ follower_actor: me, following_actor: targetId })
       setIsFollowing(true)
+      const { error } = await supabase.from('follows').insert({ follower_actor: me, following_actor: targetId })
+      if (error) {
+        setIsFollowing(prev.isFollowing)
+        console.error('[useFollowStatus] follow failed, rolled back', error)
+        return
+      }
+      // Vérifie la réciprocité pour le badge ami.
       const { data: theirFollow } = await supabase
         .from('follows').select('id')
         .eq('follower_actor', targetId).eq('following_actor', me).maybeSingle()
@@ -124,8 +139,14 @@ export function useFollowingSet() {
 
   const follow = async (actorId: string) => {
     if (!currentActor || following.has(actorId)) return
-    await supabase.from('follows').insert({ follower_actor: currentActor.id, following_actor: actorId })
+    // Optimistic add — rollback si l'insert échoue (sinon le Set ment et la prochaine
+    // tentative est silencieusement no-op à cause du `following.has(actorId)` guard).
     setFollowing(prev => new Set(prev).add(actorId))
+    const { error } = await supabase.from('follows').insert({ follower_actor: currentActor.id, following_actor: actorId })
+    if (error) {
+      setFollowing(prev => { const next = new Set(prev); next.delete(actorId); return next })
+      console.error('[useFollowingSet] follow failed, rolled back', error)
+    }
   }
 
   return { following, follow }

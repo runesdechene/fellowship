@@ -231,6 +231,16 @@ describe('participationChip', () => {
     expect(c?.label).toContain('Inscrit')
   })
 
+  it('exposant : confirme + acompte_verse → Acompte versé (étape intermédiaire entre À payer et Payé)', () => {
+    const c = participationChip('confirme', 'acompte_verse', 'entity')
+    expect(c?.variant).toBe('acompte')
+    expect(c?.label).toContain('Acompte')
+  })
+
+  it('exposant : inscrit legacy + acompte_verse → Acompte versé', () => {
+    expect(participationChip('inscrit', 'acompte_verse', 'entity')?.variant).toBe('acompte')
+  })
+
   it('exposant : inscrit legacy traité comme confirme (reflète le paiement)', () => {
     expect(participationChip('inscrit', 'paye', 'entity')?.variant).toBe('inscrit')
     expect(participationChip('inscrit', 'a_payer', 'entity')?.variant).toBe('apayer')

@@ -38,6 +38,7 @@
   --status-dossier: #86bce8;   /* bleu */
   --status-accepte: #5fd9a0;   /* émeraude */
   --status-apayer:  hsl(28 92% 62%);   /* orange (distinct du doré « Repéré ») */
+  --status-acompte: hsl(86 44% 64%);   /* lime (étape intermédiaire entre orange et forêt) */
   --status-inscrit: #34c98a;   /* forêt */
   --status-refuse:  #e8897a;   /* terracotta */
   --gradient-primary: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
@@ -81,6 +82,7 @@
   --status-dossier: hsl(210 55% 42%);
   --status-accepte: hsl(152 48% 32%);
   --status-apayer:  hsl(26 85% 46%);
+  --status-acompte: hsl(88 50% 36%);
   --status-inscrit: hsl(152 52% 28%);
   --status-refuse:  hsl(8 62% 46%);
   --page-backdrop: radial-gradient(120% 70% at 50% 0%, #f8f2e8, #ece3d4 60%);

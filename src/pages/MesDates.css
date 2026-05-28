@@ -40,6 +40,7 @@
 .md-badge.dossier { --chip: var(--status-dossier); }
 .md-badge.accepte { --chip: var(--status-accepte); }
 .md-badge.apayer  { --chip: var(--status-apayer); }
+.md-badge.acompte { --chip: var(--status-acompte); }
 .md-badge.inscrit { --chip: var(--status-inscrit); }
 .md-badge.going   { --chip: var(--status-inscrit); }
 .md-badge.refuse  { --chip: var(--status-refuse); }

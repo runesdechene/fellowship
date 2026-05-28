@@ -276,6 +276,7 @@
 .calendar-evst.dossier { background: color-mix(in srgb, var(--status-dossier) 18%, transparent); color: var(--status-dossier); }
 .calendar-evst.accepte { background: color-mix(in srgb, var(--status-accepte) 18%, transparent); color: var(--status-accepte); }
 .calendar-evst.apayer  { background: color-mix(in srgb, var(--status-apayer)  18%, transparent); color: var(--status-apayer); }
+.calendar-evst.acompte { background: color-mix(in srgb, var(--status-acompte) 20%, transparent); color: var(--status-acompte); }
 .calendar-evst.inscrit { background: color-mix(in srgb, var(--status-inscrit) 18%, transparent); color: var(--status-inscrit); }
 .calendar-evst.refuse  { background: color-mix(in srgb, var(--status-refuse)  16%, transparent); color: var(--status-refuse); }
 .calendar-evst.termine { background: rgba(255,240,225,.08); color: hsl(var(--muted-foreground)); }
@@ -695,6 +696,7 @@
 .mobile-event-pill-status.dossier { background: color-mix(in srgb, var(--status-dossier) 20%, transparent); color: var(--status-dossier); }
 .mobile-event-pill-status.accepte { background: color-mix(in srgb, var(--status-accepte) 20%, transparent); color: var(--status-accepte); }
 .mobile-event-pill-status.apayer  { background: color-mix(in srgb, var(--status-apayer)  20%, transparent); color: var(--status-apayer); }
+.mobile-event-pill-status.acompte { background: color-mix(in srgb, var(--status-acompte) 22%, transparent); color: var(--status-acompte); }
 .mobile-event-pill-status.inscrit { background: color-mix(in srgb, var(--status-inscrit) 20%, transparent); color: var(--status-inscrit); }
 .mobile-event-pill-status.refuse  { background: color-mix(in srgb, var(--status-refuse)  18%, transparent); color: var(--status-refuse); }
 .mobile-event-pill-status.termine { background: rgba(255,240,225,.10); color: hsl(var(--muted-foreground)); }

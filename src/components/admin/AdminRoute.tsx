@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { Loader2 } from 'lucide-react'
 
+/**
+ * Garde de la zone admin.
+ *
+ * Pourquoi un état `identityLoading` séparé de `loading` : le boot Supabase publie
+ * une session AVANT que `users.role` et `profiles.role` n'aient été lus en DB.
+ * Sans attendre, un admin se voit éjecté vers /explorer parce qu'au moment du rendu
+ * `loading=false && isAdmin=false` (faux négatif). L'ancien fix posait un setTimeout
+ * 1.5s wall-clock — bandaid : trop court sur connexion lente, gaspillé sur connexion
+ * rapide. La bonne primitive : `identityLoading` reste vrai jusqu'à ce que les fetchs
+ * d'identité (profile + person) aient tous deux résolu.
+ */
 export function AdminRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading, isAdmin } = useAuth()
+  const { user, loading, identityLoading, isAdmin } = useAuth()
 
-  // Délai de grâce avant de décider de rediriger : profile/person sont fetchés async
-  // dans le boot d'auth, et isAdmin reste momentanément false (rôle pas encore lu)
-  // alors que loading est déjà à false. Sans grâce, un admin est éjecté sur /explorer
-  // avant que son rôle n'arrive.
-  // Si dès que isAdmin devient true on rend immédiatement (pas d'attente).
-  // Si non-admin, on attend 1.5s par sécurité puis on redirige.
-  const [graceExpired, setGraceExpired] = useState(false)
-  useEffect(() => {
-    const t = setTimeout(() => setGraceExpired(true), 1500)
-    return () => clearTimeout(t)
-  }, [])
-
-  if (loading) {
+  // Attente : session pas finie de booter, ou (utilisateur logué et) identité pas encore lue.
+  if (loading || (user && identityLoading)) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -26,18 +25,6 @@ export function AdminRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
-  // Happy path : user admin chargé → on rend les enfants direct.
   if (user && isAdmin) return <>{children}</>
-
-  // Pas encore admin (race possible) → on attend un peu avant de juger.
-  if (!graceExpired) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
-  // Grace expirée, pas admin → redirect.
   return <Navigate to="/explorer" replace />
 }

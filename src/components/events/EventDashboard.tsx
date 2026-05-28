@@ -116,7 +116,14 @@ export function EventDashboard({
 
   const STEPS = isExposant ? STEPS_EXPOSANT : STEPS_FESTIVALIER
   const currentPayment = (participation?.payment_status as string) ?? 'a_payer'
-  const showRefuse = isExposant && !!participation // Refusé seulement après avoir candidaté
+  // Refusé n'a de sens qu'à partir d'une vraie candidature : dossier envoyé,
+  // accepté/inscrit, ou déjà refusé (pour pouvoir détoggler). Pas à 'interesse' (Repéré).
+  const showRefuse = isExposant && !!participation && (
+    participation.status === 'en_cours' ||
+    participation.status === 'confirme' ||
+    participation.status === 'inscrit' ||
+    (participation.status as string) === 'refuse'
+  )
   const showPayment = isExposant && participation && (participation.status === 'confirme' || participation.status === 'inscrit')
 
   return (
