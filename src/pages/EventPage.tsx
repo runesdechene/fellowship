@@ -600,11 +600,29 @@ export function EventPage() {
               )}
             </div>
 
-            {/* Avis */}
-            {(reviews.length > 0 || canSeeDetails) && (
+            {/* Avis — affichée si l'event est passé (pour permettre d'en laisser un)
+                OU s'il y a déjà des avis OU si l'utilisateur a accès aux détails. */}
+            {(isPast || reviews.length > 0 || canSeeDetails) && (
               <div className="event-section-card">
-                <div className="event-section-title muted">Avis des exposants ({reviews.length})</div>
-                <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+                <div className="event-section-title muted reviews-title">
+                  <span>Avis des exposants ({reviews.length})</span>
+                  {isPast && (
+                    <button
+                      className="reviews-cta"
+                      onClick={() => setShowReviewForm(true)}
+                    >
+                      <Star strokeWidth={2} /> Donner mon avis
+                    </button>
+                  )}
+                </div>
+                {reviews.length > 0 || canSeeDetails ? (
+                  <ReviewSummary event={event} canSeeDetails={canSeeDetails} />
+                ) : (
+                  <p className="reviews-empty">
+                    Aucun avis pour ce festival. Si tu y étais, ton retour aidera les autres
+                    exposants pour les éditions à venir.
+                  </p>
+                )}
               </div>
             )}
 

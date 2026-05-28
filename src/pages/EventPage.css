@@ -725,3 +725,31 @@
   .event-section-card, .fest-discussion { padding: 18px; }
   .fest-hmeta { font-size: 14px; gap: 8px 16px; }
 }
+
+/* ── Section Avis : titre + CTA aligné droite ─────────────────────── */
+.reviews-title {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.reviews-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 12px;
+  background: color-mix(in srgb, var(--amber) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber) 38%, transparent);
+  border-radius: 99px;
+  color: var(--amber);
+  font-family: var(--font-body); font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reviews-cta:hover { background: color-mix(in srgb, var(--amber) 26%, transparent); }
+.reviews-cta svg { width: 13px; height: 13px; }
+
+.reviews-empty {
+  font-size: 13.5px; line-height: 1.55;
+  color: hsl(var(--muted-foreground));
+  padding: 12px 0 4px;
+}

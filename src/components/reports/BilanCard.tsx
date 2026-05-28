@@ -20,7 +20,7 @@ interface Props {
 export function BilanCard({ eventId }: Props) {
   const { currentActor, currentActorRow } = useAuth()
   const isPro = planForActor(currentActor, currentActorRow) === 'pro'
-  const { report } = useEventReport(eventId)
+  const { report, refetch } = useEventReport(eventId)
   const [open, setOpen] = useState(false)
 
   // État non-Pro : invite à passer Pro, pas de bouton remplir.
@@ -108,7 +108,13 @@ export function BilanCard({ eventId }: Props) {
         )}
       </div>
 
-      {open && <BilanModal eventId={eventId} onClose={() => setOpen(false)} />}
+      {open && (
+        <BilanModal
+          eventId={eventId}
+          onClose={() => setOpen(false)}
+          onSaved={refetch}
+        />
+      )}
     </>
   )
 }
