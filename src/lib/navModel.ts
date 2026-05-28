@@ -78,8 +78,13 @@ export function isPublicProfilePath(path: string): boolean {
   return first !== '' && !RESERVED_TOP.has(first)
 }
 
-/** Une route est valide pour un acteur si elle est dans sa nav, une surface partagée, ou une vitrine publique. */
+/** Une route est valide pour un acteur si elle est dans sa nav, une surface partagée, ou une vitrine publique.
+ *  Note : /admin est traité comme valide ici — la véritable garde de rôle est faite par
+ *  <AdminRoute> côté React. Si un non-admin y atterrit, AdminRoute le redirige. Sans cette
+ *  exception, le useEffect d'AppLayout virait MÊME un admin sur /explorer (car /admin n'est
+ *  dans aucune nav). */
 export function isRouteValidFor(path: string, actor: { kind: string; entityType: string | null } | null): boolean {
+  if (path.startsWith('/admin')) return true
   const navPaths = navItemsFor(actor).map(k => NAV_DEFS[k].to)
   return navPaths.some(p => path.startsWith(p))
     || SHARED_PREFIXES.some(p => path.startsWith(p))
