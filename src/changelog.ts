@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.197',
+    date: '2026-06-01',
+    title: 'Le bon prénom dans les Réglages',
+    changes: [
+      'Les Réglages enregistrent enfin ton prénom/nom affiché sur ton vrai profil (modèle acteur) — fini le décalage où l\'app affichait un autre nom que celui saisi',
+    ],
+  },
+  {
     version: '0.7.196',
     date: '2026-05-28',
     title: 'Un mail pour nous joindre',

@@ -7,16 +7,19 @@ import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles, 
 import type { EntityRow } from '@/types/database'
 
 export function SettingsPage() {
-  const { user, profile, entities, currentActor, currentActorRow, signOut, refreshProfile } = useAuth()
+  const { user, person, entities, currentActor, currentActorRow, signOut, refreshProfile } = useAuth()
 
   // ── Infos personnelles (compte) ────────────────────────────────────────────
-  // Ne vivent QUE ici, sur `profiles`. L'identité publique (marque, métier, bio,
-  // lien, photos de la vitrine, slug) se modifie sur la vitrine → table `entities`.
-  const [displayName, setDisplayName] = useState(profile?.display_name ?? '')
-  const [city, setCity] = useState(profile?.city ?? '')
-  const [postalCode, setPostalCode] = useState(profile?.postal_code ?? '')
-  const [sex, setSex] = useState<string>(profile?.sex ?? 'indéfini')
-  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? '')
+  // Vivent sur la PERSONNE (table `users`, modèle acteur) — c'est cette ligne que
+  // l'app affiche partout (header, switcher, avatar). L'identité publique (marque,
+  // métier, bio, lien, photos, slug) se modifie sur la vitrine → table `entities`.
+  // NB: on lit/écrit `users`, PAS le `profiles` legacy, sinon le nom affiché diverge.
+  const normSex = (v: string | null | undefined) => (v === 'homme' || v === 'femme' ? v : 'indéfini')
+  const [displayName, setDisplayName] = useState(person?.display_name ?? '')
+  const [city, setCity] = useState(person?.city ?? '')
+  const [postalCode, setPostalCode] = useState(person?.postal_code ?? '')
+  const [sex, setSex] = useState<string>(normSex(person?.sex))
+  const [avatarUrl, setAvatarUrl] = useState(person?.avatar_url ?? '')
 
   // UI state
   const [saving, setSaving] = useState(false)
@@ -33,16 +36,17 @@ export function SettingsPage() {
     (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null) ?? entities[0] ?? null
   const entitySlug = entity?.public_slug ?? ''
 
-  // Keep form in sync if profile loads after mount
+  // Keep form in sync if the person loads after mount
   useEffect(() => {
-    if (profile) {
-      setDisplayName(profile.display_name ?? '')
-      setCity(profile.city ?? '')
-      setPostalCode(profile.postal_code ?? '')
-      setSex(profile.sex ?? 'indéfini')
-      setAvatarUrl(profile.avatar_url ?? '')
+    if (person) {
+      setDisplayName(person.display_name ?? '')
+      setCity(person.city ?? '')
+      setPostalCode(person.postal_code ?? '')
+      setSex(normSex(person.sex))
+      setAvatarUrl(person.avatar_url ?? '')
     }
-  }, [profile])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [person])
 
   // ── Avatar (photo personnelle) ───────────────────────────────────────────────
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -81,9 +85,9 @@ export function SettingsPage() {
         avatar_url: avatarUrl || null,
       }
       const { error } = await supabase
-        .from('profiles')
+        .from('users')
         .update(updates)
-        .eq('id', user.id)
+        .eq('actor_id', user.id)
       if (error) throw error
       await refreshProfile()
       setSaveSuccess(true)
