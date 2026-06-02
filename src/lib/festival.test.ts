@@ -8,7 +8,7 @@ const base = (o: Partial<Event> = {}): Event => ({
   description: null, image_url: null, tags: ['Médiéval'],
   contact_email: null, registration_url: null, external_url: null,
   registration_deadline: null, registration_note: null,
-  created_at: '', created_by: null, created_by_actor: null, acted_by_user_id: null,
+  created_at: '', created_by_actor: null, acted_by_user_id: null,
   edition: null, opening_hours: null, expected_attendance: null, stand_size: null, stand_price: null,
   ...o,
 } as Event)

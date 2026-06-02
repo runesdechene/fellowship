@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       actors: {
@@ -264,7 +289,6 @@ export type Database = {
           city: string
           contact_email: string | null
           created_at: string
-          created_by: string | null
           created_by_actor: string | null
           department: string
           description: string | null
@@ -289,7 +313,6 @@ export type Database = {
           city: string
           contact_email?: string | null
           created_at?: string
-          created_by?: string | null
           created_by_actor?: string | null
           department: string
           description?: string | null
@@ -314,7 +337,6 @@ export type Database = {
           city?: string
           contact_email?: string | null
           created_at?: string
-          created_by?: string | null
           created_by_actor?: string | null
           department?: string
           description?: string | null
@@ -347,13 +369,6 @@ export type Database = {
             columns: ["created_by_actor"]
             isOneToOne: false
             referencedRelation: "actors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "events_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1183,6 +1198,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       actor_kind: ["person", "entity"],
