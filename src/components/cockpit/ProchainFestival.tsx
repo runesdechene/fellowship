@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Compass, Route, Share2, FileText } from 'lucide-react'
+import { Compass, Route, Share2, FileText, MapPin } from 'lucide-react'
 import { participationChip } from '@/lib/explorer'
 import type { ParticipationWithEvent } from '@/types/database'
 
@@ -29,20 +29,27 @@ export function ProchainFestival({ participation }: Props) {
   const ev = participation.events
   const start = new Date(ev.start_date)
   const dleft = daysUntil(start, now)
+  const jLabel = dleft > 0 ? `J-${dleft}` : dleft === 0 ? 'Jour J' : 'En cours'
   const chip = participationChip(participation.status, participation.payment_status, 'entity')
-  const dateLabel = start.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+  const dateLabel = start.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
   const mapsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${ev.name}, ${ev.city}`)}`
 
   return (
     <div className="ck-card ck-next">
       <div className="ck-next-poster">
         {ev.image_url ? <img src={ev.image_url} alt={ev.name} /> : <div className="ck-next-noposter" />}
-        <span className="ck-jx">{dleft > 0 ? `J-${dleft}` : dleft === 0 ? "Aujourd'hui" : 'En cours'}</span>
       </div>
       <div className="ck-next-body">
-        {chip && <span className={'ck-badge ' + chip.variant}>{chip.label}</span>}
-        <h2>{ev.name}</h2>
-        <p className="ck-next-meta">{dateLabel} · {ev.city} ({ev.department})</p>
+        <div className="ck-next-head">
+          <span className="ck-next-eyebrow">Prochain festival</span>
+          {chip && <span className={'ck-badge ' + chip.variant}>{chip.label}</span>}
+        </div>
+        <h2 className="ck-next-name">{ev.name}</h2>
+        <div className="ck-next-when">
+          <span className="ck-jx-big">{jLabel}</span>
+          <span className="ck-next-date">{dateLabel}</span>
+        </div>
+        <p className="ck-next-meta"><MapPin strokeWidth={2} /> {ev.city} ({ev.department})</p>
         <div className="ck-next-actions">
           <Link to={`/evenement/${ev.id}`} className="ck-btn ck-btn-p"><FileText strokeWidth={2} /> Voir le dossier</Link>
           <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-g"><Route strokeWidth={2} /> Itinéraire</a>

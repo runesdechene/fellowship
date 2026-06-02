@@ -80,19 +80,23 @@ describe('selectAReglerItems', () => {
 })
 
 describe('aggregateSeason', () => {
-  it('compte les confirmés (inscrit) par mois de l\'année, 12 entrées, filled si > 0', () => {
+  // NOW = 2026-05-15 → la fenêtre glissante démarre en mai 2026 (mois courant).
+  it('frise glissante de 12 mois depuis le mois courant, confirmés uniquement', () => {
     const parts = [
-      part('1', '2026-03-10', '2026-03-11'),
-      part('2', '2026-03-20', '2026-03-21'),
-      part('3', '2026-07-01', '2026-07-02'),
-      part('4', '2026-04-01', '2026-04-02', 'en_cours', 'a_payer'), // non confirmé → ignoré
-      part('5', '2025-03-01', '2025-03-02'), // autre année → ignoré
+      part('1', '2026-05-20', '2026-05-21'),               // mai 2026 → idx 0
+      part('2', '2026-07-01', '2026-07-02'),               // juillet 2026 → idx 2
+      part('3', '2027-01-10', '2027-01-11'),               // janvier 2027 → idx 8 (rollover année)
+      part('4', '2026-06-01', '2026-06-02', 'en_cours', 'a_payer'), // non confirmé → ignoré
+      part('5', '2026-03-10', '2026-03-11'),               // mars 2026 = passé → hors fenêtre
     ]
-    const season = aggregateSeason(parts, 2026)
+    const season = aggregateSeason(parts, NOW)
     expect(season).toHaveLength(12)
-    expect(season[2]).toEqual({ month: 2, count: 2, filled: true })  // mars
-    expect(season[6]).toEqual({ month: 6, count: 1, filled: true })  // juillet
-    expect(season[3]).toEqual({ month: 3, count: 0, filled: false }) // avril (en_cours ignoré)
+    expect(season[0]).toEqual({ year: 2026, month: 4, count: 1, filled: true })   // mai
+    expect(season[2]).toEqual({ year: 2026, month: 6, count: 1, filled: true })   // juillet
+    expect(season[8]).toEqual({ year: 2027, month: 0, count: 1, filled: true })   // janvier 2027
+    expect(season[1]).toEqual({ year: 2026, month: 5, count: 0, filled: false })  // juin (en_cours ignoré)
+    // Aucun mois passé (mars) n'apparaît : le 1er mois est toujours le mois courant.
+    expect(season.every(m => !(m.year === 2026 && m.month < 4))).toBe(true)
   })
 })
 
@@ -112,6 +116,12 @@ describe('detectBilanPrompt', () => {
 
   it('retourne pending null quand tout est bilané ou rien de terminé', () => {
     const parts = [part('1', '2026-07-01', '2026-07-02')]
+    expect(detectBilanPrompt(parts, new Set(), NOW).pending).toBeNull()
+  })
+
+  it('ignore un festival terminé hors fenêtre de récence (trop vieux)', () => {
+    // Terminé ~4 mois avant NOW, jamais bilané → ne doit PAS harceler.
+    const parts = [part('1', '2026-01-10', '2026-01-12')]
     expect(detectBilanPrompt(parts, new Set(), NOW).pending).toBeNull()
   })
 })

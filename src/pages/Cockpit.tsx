@@ -20,12 +20,11 @@ export function CockpitPage() {
   const { reportedEventIds } = useMyReportedEventIds()
 
   const now = useMemo(() => new Date(), [])
-  const year = now.getFullYear()
 
   const nextFestival = useMemo(() => selectNextFestival(participations, now), [participations, now])
   const upcoming = useMemo(() => selectUpcomingFestivals(participations, now), [participations, now])
   const aRegler = useMemo(() => selectAReglerItems(participations, now), [participations, now])
-  const season = useMemo(() => aggregateSeason(participations, year), [participations, year])
+  const season = useMemo(() => aggregateSeason(participations, now), [participations, now])
   const bilanPrompt = useMemo(
     () => detectBilanPrompt(participations, reportedEventIds, now),
     [participations, reportedEventIds, now],
@@ -57,7 +56,7 @@ export function CockpitPage() {
               <CompagnonsDeRoute />
             </div>
             <div className="ck-col">
-              <SaisonFrise season={season} year={year} />
+              <SaisonFrise season={season} />
             </div>
           </div>
         </>

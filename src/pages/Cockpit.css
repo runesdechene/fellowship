@@ -38,10 +38,15 @@
 .ck-next-poster { position: relative; width: 150px; flex-shrink: 0; background: hsl(var(--secondary)); }
 .ck-next-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ck-next-noposter { width: 100%; height: 100%; min-height: 180px; background: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--card))); }
-.ck-jx { position: absolute; top: 10px; left: 10px; background: var(--copper); color: hsl(var(--primary-foreground)); font-weight: 700; font-size: 12px; padding: 4px 9px; border-radius: 8px; }
-.ck-next-body { padding: 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.ck-next-body h2 { font-size: 19px; font-weight: 800; color: hsl(var(--foreground)); }
-.ck-next-meta { color: hsl(var(--muted-foreground)); font-size: 13px; }
+.ck-next-body { padding: 18px; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+.ck-next-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.ck-next-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); padding-top: 3px; }
+.ck-next-name { font-size: 19px; font-weight: 800; line-height: 1.15; color: hsl(var(--foreground)); }
+.ck-next-when { display: flex; align-items: baseline; gap: 12px; }
+.ck-jx-big { font-family: var(--font-heading); font-size: 30px; font-weight: 800; line-height: 1; color: var(--copper); }
+.ck-next-date { font-size: 20px; font-weight: 700; color: hsl(var(--foreground)); }
+.ck-next-meta { color: hsl(var(--muted-foreground)); font-size: 13px; display: flex; align-items: center; gap: 5px; }
+.ck-next-meta svg { width: 14px; height: 14px; }
 .ck-next-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 
 .ck-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -69,15 +74,19 @@
 .ck-conv-txt small { color: hsl(var(--muted-foreground)); font-size: 12px; }
 .ck-conv-actions { display: flex; gap: 6px; }
 
-.ck-frise { display: flex; gap: 5px; align-items: flex-end; }
-.ck-month { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.ck-month-bar { width: 100%; height: 34px; border-radius: 5px; }
-.ck-month.filled .ck-month-bar { background: color-mix(in srgb, var(--forest) 55%, transparent); }
-.ck-month.empty .ck-month-bar { background: transparent; border: 1px dashed color-mix(in srgb, var(--amber) 55%, transparent); }
-.ck-month-lbl { font-size: 9px; color: hsl(var(--muted-foreground)); }
-.ck-month-count { font-size: 11px; font-weight: 700; color: var(--forest); }
-.ck-saison-hint { margin-top: 14px; font-size: 13px; color: hsl(var(--muted-foreground)); }
-.ck-saison-hint a { color: var(--amber); text-decoration: none; }
+.ck-season-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+.ck-season-head b { font-family: var(--font-heading); font-size: 30px; font-weight: 800; line-height: 1; color: hsl(var(--foreground)); }
+.ck-season-head span { font-size: 13px; color: hsl(var(--muted-foreground)); }
+.ck-season-months { display: flex; gap: 5px; margin-bottom: 14px; }
+.ck-sm { flex: 1; border-radius: 8px; background: hsl(var(--secondary)); border: 1px solid hsl(var(--border)); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 7px 0; gap: 2px; }
+.ck-sm-mn { font-size: 9px; font-weight: 600; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.ck-sm-ct { font-family: var(--font-heading); font-size: 15px; font-weight: 800; line-height: 1; color: hsl(var(--muted-foreground)); }
+.ck-sm.full { background: color-mix(in srgb, var(--forest) 26%, transparent); border-color: transparent; }
+.ck-sm.full .ck-sm-ct { color: hsl(var(--foreground)); }
+.ck-sm.gap { border: 1px dashed color-mix(in srgb, var(--amber) 55%, transparent); }
+.ck-sm.gap .ck-sm-ct { color: var(--amber); }
+.ck-season-note { display: flex; gap: 6px; font-size: 13px; color: hsl(var(--muted-foreground)); }
+.ck-season-note a { color: var(--amber); text-decoration: none; white-space: nowrap; }
 
 .ck-bilan-banner { display: flex; align-items: center; gap: 14px; padding: 16px 20px; margin-bottom: 20px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--copper) 22%, transparent), color-mix(in srgb, var(--forest) 12%, transparent)); border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent); }
 .ck-bilan-ic { width: 40px; height: 40px; border-radius: 11px; background: color-mix(in srgb, var(--amber) 22%, transparent); color: var(--amber); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }

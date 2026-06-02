@@ -49,21 +49,34 @@ export function selectAReglerItems(
 }
 
 export interface SeasonMonth {
+  year: number
   month: number   // 0-11
   count: number
   filled: boolean
 }
 
-/** Frise 12 mois : nb de participations CONFIRMÉES par mois (date de début) sur `year`. */
-export function aggregateSeason(parts: ParticipationWithEvent[], year: number): SeasonMonth[] {
-  const counts = new Array(12).fill(0)
+/**
+ * Frise des 12 prochains mois GLISSANTS à partir du mois courant (jamais Jan→Déc fixe :
+ * on ne montre pas de mois déjà passés). Compte les participations CONFIRMÉES (inscrit)
+ * tombant dans la fenêtre, par mois de date de début.
+ */
+export function aggregateSeason(parts: ParticipationWithEvent[], now: Date): SeasonMonth[] {
+  const startY = now.getFullYear()
+  const startM = now.getMonth()
+  const buckets: SeasonMonth[] = Array.from({ length: 12 }, (_, i) => {
+    const abs = startM + i
+    return { year: startY + Math.floor(abs / 12), month: abs % 12, count: 0, filled: false }
+  })
   for (const p of parts) {
     if (!p.events || p.status !== CONFIRMED) continue
     const start = new Date(p.events.start_date)
-    if (start.getFullYear() !== year) continue
-    counts[start.getMonth()]++
+    const idx = (start.getFullYear() - startY) * 12 + (start.getMonth() - startM)
+    if (idx >= 0 && idx < 12) {
+      buckets[idx].count++
+      buckets[idx].filled = true
+    }
   }
-  return counts.map((count, month) => ({ month, count, filled: count > 0 }))
+  return buckets
 }
 
 export interface BilanPrompt {
@@ -71,22 +84,28 @@ export interface BilanPrompt {
   extraCount: number
 }
 
+/** Fenêtre de récence du prompt bilan : on ne nag que pour un festival terminé
+ *  RÉCEMMENT (un bilan se renseigne à chaud ; une vieille ligne ne doit pas harceler). */
+export const BILAN_WINDOW_DAYS = 45
+
 /**
- * Festivals terminés (end_date < now), confirmés (inscrit), SANS event_report :
- * retourne le plus récent à proposer + le nombre des autres en attente.
+ * Festivals terminés RÉCEMMENT (end_date dans les BILAN_WINDOW_DAYS derniers jours),
+ * confirmés (inscrit), SANS event_report : retourne le plus récent à proposer +
+ * le nombre des autres en attente.
  */
 export function detectBilanPrompt(
   parts: ParticipationWithEvent[],
   reportedEventIds: Set<string>,
   now: Date,
 ): BilanPrompt {
+  const nowMs = now.getTime()
+  const sinceMs = nowMs - BILAN_WINDOW_DAYS * 86_400_000
   const pendingList = parts
-    .filter(p =>
-      p.events &&
-      p.status === CONFIRMED &&
-      new Date(p.events.end_date).getTime() < now.getTime() &&
-      !reportedEventIds.has(p.event_id),
-    )
+    .filter(p => {
+      if (!p.events || p.status !== CONFIRMED) return false
+      const end = new Date(p.events.end_date).getTime()
+      return end < nowMs && end >= sinceMs && !reportedEventIds.has(p.event_id)
+    })
     .sort((a, b) => new Date(b.events.end_date).getTime() - new Date(a.events.end_date).getTime())
   return { pending: pendingList[0] ?? null, extraCount: Math.max(0, pendingList.length - 1) }
 }

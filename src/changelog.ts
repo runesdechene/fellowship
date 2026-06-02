@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.207',
+    date: '2026-06-02',
+    title: 'Cockpit — polish hero & saison',
+    changes: [
+      'Prochain festival : statut en haut à droite, J-X et date en grand dans le corps',
+      'Saison : 12 mois glissants depuis le mois courant, chiffre dans le cadre, hauteurs égales',
+      'Bilan : ne propose plus que les festivals terminés récemment (fenêtre 45 j)',
+    ],
+  },
+  {
     version: '0.7.206',
     date: '2026-06-02',
     title: 'Cockpit — habillage DA',
