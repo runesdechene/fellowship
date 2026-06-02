@@ -71,8 +71,10 @@ Responsive : 3 → 2 → 1 colonne selon la largeur.
   **bandeau masqué entièrement** (pas de carte vide).
 
 ### 🎪 Prochain festival — Col 1, hero
-- **Donnée** : prochaine participation `inscrit`/`en_cours`/`paye`, `start_date >= today`,
-  la plus proche.
+- **Donnée** : prochaine participation **confirmée uniquement** (`inscrit`/`paye`),
+  `start_date >= today`, la plus proche. Les candidatures `en_cours` ne s'affichent
+  **jamais** comme « ton prochain festival » — elles vivent dans « Tes prochains
+  festivals » + « À régler & finaliser ».
 - **Affichage** : affiche portrait à gauche + infos à droite (J-X, dates, lieu, badge
   statut, compagnons présents via convergences). CTA : **Voir le dossier** (→ EventPage) ·
   **Itinéraire** (→ lien Maps externe, destination = ville) · **💬 Partager** (le chat est
@@ -136,7 +138,7 @@ Responsive : 3 → 2 → 1 colonne selon la largeur.
 Contrainte connue (`reference_react_test_infra`) : RTL `render()` ne flush pas en synchrone
 sur ce stack → on teste la **logique pure**, pas le rendu. Fonctions pures à extraire et
 tester :
-- `selectNextFestival(participations, today)` → la bonne participation à venir.
+- `selectNextFestival(participations, today)` → la bonne participation à venir (confirmée only).
 - `filterAReglerFinaliser(participations)` → items à payer + candidatures à boucler.
 - `aggregateSeason(participations, year)` → compte/mois + détection des mois vides.
 - `detectBilanPrompt(participations, reports, today)` → festivals terminés non bilanés.
