@@ -139,27 +139,30 @@ export async function searchSimilarEvents(name: string, startDate?: string) {
   return (data ?? []) as { id: string; name: string; city: string; department: string; start_date: string; end_date: string; score: number }[]
 }
 
-export function useEventCreator(createdBy: string | null | undefined) {
+export function useEventCreator(actorId: string | null | undefined) {
   const [creator, setCreator] = useState<{
     id: string
-    display_name: string | null
-    brand_name: string | null
+    label: string | null
     avatar_url: string | null
     public_slug: string | null
-    craft_type: string | null
   } | null>(null)
 
   useEffect(() => {
-    if (!createdBy) return
+    if (!actorId) {
+      setCreator(null)
+      return
+    }
     supabase
-      .from('profiles')
-      .select('id, display_name, brand_name, avatar_url, public_slug, craft_type')
-      .eq('id', createdBy)
+      .from('actor_public')
+      .select('actor_id, label, avatar_url, public_slug')
+      .eq('actor_id', actorId)
       .single()
       .then(({ data }) => {
-        if (data) setCreator(data)
+        if (data?.actor_id) {
+          setCreator({ id: data.actor_id, label: data.label, avatar_url: data.avatar_url, public_slug: data.public_slug })
+        }
       })
-  }, [createdBy])
+  }, [actorId])
 
   return creator
 }

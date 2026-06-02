@@ -69,8 +69,8 @@ export function EventPage() {
   const [editSaving, setEditSaving] = useState(false)
   const [editImage, setEditImage] = useState<File | null>(null)
   const [removeImage, setRemoveImage] = useState(false)
-  const creator = useEventCreator(event?.created_by)
-  const creatorName = creator?.brand_name ?? creator?.display_name ?? '?'
+  const creator = useEventCreator(event?.created_by_actor)
+  const creatorName = creator?.label ?? '?'
   const creatorGradient = GRADIENTS[hashName(creatorName) % GRADIENTS.length]
 
   const [editForm, setEditForm] = useState({
