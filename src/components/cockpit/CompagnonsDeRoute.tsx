@@ -4,6 +4,7 @@ import { Users, Share2 } from 'lucide-react'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { avatarColor } from '@/lib/community'
 import { ShareModal } from '@/components/ShareModal'
+import { eventShareUrl } from '@/lib/event-link'
 
 export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
@@ -26,7 +27,7 @@ export function CompagnonsDeRoute() {
       ) : (
         <ul className="ck-conv-list">
           {convergences.slice(0, 3).map(c => {
-            const url = `${window.location.origin}/evenement/${c.event.id}`
+            const url = eventShareUrl({ slug: c.event.slug, id: c.event.id }, window.location.origin)
             const message = `🎪 On sera ${c.count} créateurs réunis à ${c.event.name} ! → ${url}`
             return (
               <li key={c.event.id} className="ck-conv">

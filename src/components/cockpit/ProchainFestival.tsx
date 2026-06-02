@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Compass, Route, Share2, FileText, MapPin } from 'lucide-react'
 import { participationChip } from '@/lib/explorer'
 import { ShareModal } from '@/components/ShareModal'
+import { eventShareUrl } from '@/lib/event-link'
 import type { ParticipationWithEvent } from '@/types/database'
 
 interface Props {
@@ -36,7 +37,7 @@ export function ProchainFestival({ participation }: Props) {
   const chip = participationChip(participation.status, participation.payment_status, 'entity')
   const dateLabel = start.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
   const mapsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${ev.name}, ${ev.city}`)}`
-  const shareUrl = `${window.location.origin}/evenement/${ev.id}`
+  const shareUrl = eventShareUrl({ slug: ev.slug, id: ev.id }, window.location.origin)
   const shareMessage = `🎪 Je serai à ${ev.name}, le ${dateLabel} à ${ev.city}. Passe me voir sur mon stand ! → ${shareUrl}`
 
   return (
