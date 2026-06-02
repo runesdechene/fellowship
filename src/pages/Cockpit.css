@@ -1,5 +1,7 @@
 .ck-page { padding: 30px 38px 64px; }
-.ck-topbar { margin-bottom: 22px; }
+.ck-topbar { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+.ck-avatar { width: 56px; height: 56px; border-radius: 16px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--gradient-primary); color: hsl(var(--primary-foreground)); font-family: var(--font-heading); font-weight: 800; font-size: 20px; box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 30%, transparent); }
+.ck-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .ck-sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: 14px; }
 
 .ck-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }

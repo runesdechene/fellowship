@@ -15,8 +15,12 @@ import { SaisonFrise } from '@/components/cockpit/SaisonFrise'
 import { MesBilans } from '@/components/cockpit/MesBilans'
 import './Cockpit.css'
 
+function initials(label: string): string {
+  return label.split(/\s+/).slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('') || '?'
+}
+
 export function CockpitPage() {
-  const { currentActor, person } = useAuth()
+  const { currentActor, currentActorRow } = useAuth()
   const { participations, loading, refetch } = useMyParticipations()
   const { reportsByEvent, refetch: refetchReports } = useMyReports()
   const reportedEventIds = useMemo(() => new Set(reportsByEvent.keys()), [reportsByEvent])
@@ -32,14 +36,18 @@ export function CockpitPage() {
     [participations, reportedEventIds, now],
   )
 
-  const greeting = person?.display_name ? `Bonjour ${person.display_name}` : 'Bonjour'
+  const name = currentActor?.label ?? ''
+  const avatarUrl = currentActorRow?.avatar_url ?? null
 
   return (
     <div className="ck-page">
       <div className="ck-topbar">
+        <div className="ck-avatar">
+          {avatarUrl ? <img src={avatarUrl} alt="" /> : <span>{initials(name)}</span>}
+        </div>
         <div>
-          <h1 className="page-title">{greeting}</h1>
-          <p className="ck-sub">{currentActor?.label ?? 'Ton activité'} · ta saison d'un coup d'œil</p>
+          <h1 className="page-title">Bonjour {name}</h1>
+          <p className="ck-sub">La vision d'ensemble de ta saison</p>
         </div>
       </div>
 

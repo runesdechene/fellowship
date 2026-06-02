@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.210',
+    date: '2026-06-02',
+    title: 'Cockpit — accueil de l\'entité',
+    changes: [
+      'Cockpit : « Bonjour [ton enseigne] » avec ton avatar, et « La vision d\'ensemble de ta saison »',
+    ],
+  },
+  {
     version: '0.7.209',
     date: '2026-06-02',
     title: 'Bilan enrichi + Mes bilans',
