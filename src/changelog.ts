@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.212',
+    date: '2026-06-02',
+    title: 'Liens d\'événements lisibles',
+    changes: [
+      'Liens partagés en flw.sh/e/nom-du-festival (slug stable) ; les anciens liens /evenement/… restent valides',
+    ],
+  },
+  {
     version: '0.7.211',
     date: '2026-06-02',
     title: 'Partage — modale au lieu de WhatsApp forcé',
