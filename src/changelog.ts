@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.205',
+    date: '2026-06-02',
+    title: 'Cockpit exposant V1',
+    changes: [
+      'Cockpit exposant V1 (home Pro : prochain festival, à régler, compagnons, saison, bilan)',
+    ],
+  },
+  {
     version: '0.7.197',
     date: '2026-06-01',
     title: 'Le bon prénom dans les Réglages',
