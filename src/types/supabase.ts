@@ -376,26 +376,20 @@ export type Database = {
       follows: {
         Row: {
           created_at: string
-          follower_actor: string | null
-          follower_id: string | null
-          following_actor: string | null
-          following_id: string | null
+          follower_actor: string
+          following_actor: string
           id: string
         }
         Insert: {
           created_at?: string
-          follower_actor?: string | null
-          follower_id?: string | null
-          following_actor?: string | null
-          following_id?: string | null
+          follower_actor: string
+          following_actor: string
           id?: string
         }
         Update: {
           created_at?: string
-          follower_actor?: string | null
-          follower_id?: string | null
-          following_actor?: string | null
-          following_id?: string | null
+          follower_actor?: string
+          following_actor?: string
           id?: string
         }
         Relationships: [
@@ -407,24 +401,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "follows_follower_id_fkey"
-            columns: ["follower_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "follows_following_actor_fkey"
             columns: ["following_actor"]
             isOneToOne: false
             referencedRelation: "actors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "follows_following_id_fkey"
-            columns: ["following_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
