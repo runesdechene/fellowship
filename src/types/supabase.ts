@@ -607,69 +607,6 @@ export type Database = {
           },
         ]
       }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          banner_url: string | null
-          bio: string | null
-          brand_name: string | null
-          city: string | null
-          craft_type: string | null
-          created_at: string
-          department: string | null
-          display_name: string | null
-          email: string
-          id: string
-          plan: Database["public"]["Enums"]["user_plan"]
-          postal_code: string | null
-          public_slug: string | null
-          role: string
-          sex: Database["public"]["Enums"]["user_sex"] | null
-          type: Database["public"]["Enums"]["user_type"]
-          website: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          banner_url?: string | null
-          bio?: string | null
-          brand_name?: string | null
-          city?: string | null
-          craft_type?: string | null
-          created_at?: string
-          department?: string | null
-          display_name?: string | null
-          email: string
-          id: string
-          plan?: Database["public"]["Enums"]["user_plan"]
-          postal_code?: string | null
-          public_slug?: string | null
-          role?: string
-          sex?: Database["public"]["Enums"]["user_sex"] | null
-          type?: Database["public"]["Enums"]["user_type"]
-          website?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          banner_url?: string | null
-          bio?: string | null
-          brand_name?: string | null
-          city?: string | null
-          craft_type?: string | null
-          created_at?: string
-          department?: string | null
-          display_name?: string | null
-          email?: string
-          id?: string
-          plan?: Database["public"]["Enums"]["user_plan"]
-          postal_code?: string | null
-          public_slug?: string | null
-          role?: string
-          sex?: Database["public"]["Enums"]["user_sex"] | null
-          type?: Database["public"]["Enums"]["user_type"]
-          website?: string | null
-        }
-        Relationships: []
-      }
       push_subscriptions: {
         Row: {
           created_at: string
@@ -697,8 +634,8 @@ export type Database = {
             foreignKeyName: "push_subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
           },
         ]
       }

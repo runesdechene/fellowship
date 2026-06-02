@@ -15,7 +15,6 @@ export interface VitrineLink {
 }
 
 // Table row types
-export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Event = Database['public']['Tables']['events']['Row']
 export type Participation = Database['public']['Tables']['participations']['Row']
 export type Note = Database['public']['Tables']['notes']['Row']
@@ -25,7 +24,6 @@ export type Follow = Database['public']['Tables']['follows']['Row']
 export type Notification = Database['public']['Tables']['notifications']['Row']
 
 // Insert types
-export type ProfileInsert = Database['public']['Tables']['profiles']['Insert']
 export type EventInsert = Database['public']['Tables']['events']['Insert']
 export type ParticipationInsert = Database['public']['Tables']['participations']['Insert']
 export type NoteInsert = Database['public']['Tables']['notes']['Insert']
@@ -33,7 +31,6 @@ export type EventReportInsert = Database['public']['Tables']['event_reports']['I
 export type ReviewInsert = Database['public']['Tables']['reviews']['Insert']
 
 // Update types
-export type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
 export type EventUpdate = Database['public']['Tables']['events']['Update']
 export type ParticipationUpdate = Database['public']['Tables']['participations']['Update']
 
@@ -62,10 +59,6 @@ export interface EventWithScore extends Event {
 
 export interface ParticipationWithEvent extends Participation {
   events: Event
-}
-
-export interface ParticipationWithUser extends Participation {
-  profiles: Profile
 }
 
 export interface NoteWithAuthor extends Note {
