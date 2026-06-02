@@ -20,12 +20,10 @@ interface SearchEvent {
 }
 
 interface SearchProfile {
-  id: string
-  brand_name: string | null
-  display_name: string | null
-  city: string | null
+  actor_id: string
+  label: string | null
   public_slug: string | null
-  type: string
+  kind: 'person' | 'entity'
   avatar_url: string | null
 }
 
@@ -34,7 +32,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ onCreateEvent }: SearchBarProps) {
-  const { profile } = useAuth()
+  const { currentActor } = useAuth()
   const { personalNotifs, personalUnread, markAsRead, markAllAsRead } = useNotifications()
   const followingIds = useFollowingIds()
   const [query, setQuery] = useState('')
@@ -101,14 +99,15 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
           .order('start_date', { ascending: false })
           .limit(5),
         supabase
-          .from('profiles')
-          .select('id, brand_name, display_name, city, public_slug, avatar_url, type')
-          .or(`brand_name.ilike.%${query}%,display_name.ilike.%${query}%`)
+          .from('actor_public')
+          .select('actor_id, label, public_slug, avatar_url, kind')
+          .ilike('label', `%${query}%`)
           .limit(5),
       ])
 
       setEvents(eventsRes.data ?? [])
-      setProfiles(profilesRes.data ?? [])
+      // actor_public expose des colonnes nullable ; on ne garde que les lignes resolues.
+      setProfiles(((profilesRes.data ?? []) as SearchProfile[]).filter(p => p.actor_id))
       setLoading(false)
     }, 300)
 
@@ -128,7 +127,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         <Search strokeWidth={1.5} />
       </button>
 
-      {profile && onCreateEvent && (
+      {currentActor && onCreateEvent && (
         <button className="search-bar-add-btn search-bar-add-mobile" onClick={onCreateEvent} title="Ajouter un événement">
           <Plus strokeWidth={2} />
         </button>
@@ -164,7 +163,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       {/* Cluster d'actions — desktop : pill glass à droite ; mobile : flow normal (display:contents) */}
       <div className="search-bar-actions">
       {/* Desktop: add event button (after search bar) */}
-      {profile && onCreateEvent && (
+      {currentActor && onCreateEvent && (
         <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
           <Plus strokeWidth={2} />
           <span className="search-bar-add-label">Ajouter un événement</span>
@@ -175,7 +174,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       <DebugPlanSwitch />
 
       {/* Notification bell */}
-      {profile && (
+      {currentActor && (
         <div className="notif-bell-wrapper" ref={bellRef}>
           <button
             className="notif-bell-btn"
@@ -275,8 +274,8 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                   <div className="search-results-label">Personnes</div>
                   {profiles.map(p => (
                     <Link
-                      key={p.id}
-                      to={`/@${p.public_slug ?? p.id}`}
+                      key={p.actor_id}
+                      to={`/@${p.public_slug ?? p.actor_id}`}
                       className="search-result-item"
                       onClick={() => { setOpen(false); setQuery('') }}
                     >
@@ -288,14 +287,13 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                         )}
                       </div>
                       <div className="search-result-info">
-                        <div className="search-result-name">{p.brand_name ?? p.display_name ?? 'Utilisateur'}</div>
+                        <div className="search-result-name">{p.label ?? 'Utilisateur'}</div>
                         <div className="search-result-meta">
-                          {p.type === 'public' ? (
+                          {p.kind === 'person' ? (
                             <span>Visiteur</span>
                           ) : (
                             <span>Exposant</span>
                           )}
-                          {p.city && <><span>·</span><MapPin /><span>{p.city}</span></>}
                         </div>
                       </div>
                     </Link>

@@ -14,12 +14,12 @@ const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, Layou
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const { currentActor, currentActorRow, person, profile, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, person, isAdmin } = useAuth()
   const navigate = useNavigate()
   const plan = planForActor(currentActor, currentActorRow)
   const keys = navItemsFor(currentActor)
   const isFreeEntity = currentActor?.kind === 'entity' && plan === 'free'
-  const accountName = person?.display_name ?? profile?.display_name ?? 'Mon compte'
+  const accountName = person?.display_name ?? 'Mon compte'
 
   // Compteur « Mes dates » → nombre d'événements à venir (start_date >= aujourd'hui)
   // dans les participations de l'acteur actif, hors refuse.
@@ -33,8 +33,8 @@ export function Sidebar() {
   // Compteur de signalements pending pour le badge rouge sur l'entrée Admin.
   // Renvoie 0 si non-admin (RLS bloque la lecture côté DB anyway).
   const { count: pendingReportsCount } = useAdminPendingReportsCount()
-  // Avatar perso : profile (legacy) gagne car c'est là que Settings écrit, fallback person.
-  const personalAvatar = profile?.avatar_url ?? person?.avatar_url ?? null
+  // Avatar perso : la personne (users) est la source de vérité (Settings y écrit).
+  const personalAvatar = person?.avatar_url ?? null
   const personalInitial = (accountName !== 'Mon compte' ? accountName : 'M')[0]?.toUpperCase() ?? 'M'
 
   return (

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { supabase } from './supabase'
 import type { User, Session } from '@supabase/supabase-js'
-import type { Profile, UserRow, EntityRow } from '@/types/database'
+import type { UserRow, EntityRow } from '@/types/database'
 import {
   pickCurrentActor, deriveNeedsOnboarding, readStoredActorId, writeStoredActorId,
   actorCan, type ActorView, type ActorAction,
@@ -17,8 +17,6 @@ interface AuthContextType {
   currentActorRow: UserRow | EntityRow | null
   switchActor: (actorId: string | null) => void
   can: (action: ActorAction) => boolean
-  // Rétro-compat : ligne `profiles` legacy, lue par les pages non encore recâblées (→ Plan 3).
-  profile: Profile | null
   loading: boolean
   /** true tant que fetchProfile+fetchIdentity n'ont pas tous deux résolu pour la session
    *  courante. Découplé de `loading` (qui ne couvre que le boot session Supabase) et
@@ -49,7 +47,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
-  const [profile, setProfile] = useState<Profile | null>(null)
   const [person, setPerson] = useState<UserRow | null>(null)
   const [entities, setEntities] = useState<EntityRow[]>([])
   const [currentActorId, setCurrentActorId] = useState<string | null>(readStoredActorId())
@@ -70,13 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     writeStoredActorId(id)
   }
 
-  // Legacy : ligne profiles (rétro-compat tant que les pages ne sont pas recâblées).
-  const fetchProfile = async (userId: string) => {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
-    setProfile(data)
-    return data
-  }
-
   // Nouveau modèle : la personne + ses entités (via memberships).
   const fetchIdentity = async (authUid: string) => {
     const { data: u } = await supabase.from('users').select('*').eq('actor_id', authUid).single()
@@ -90,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const refreshProfile = async () => {
-    if (user) await Promise.all([fetchProfile(user.id), fetchIdentity(user.id)])
+    if (user) await fetchIdentity(user.id)
   }
 
   useEffect(() => {
@@ -104,12 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // (succès ou échec). Sans ça, AdminRoute ne savait pas si `isAdmin=false`
           // signifie « pas admin » ou « rôle pas encore lu » → bandaid timer 1.5s.
           setIdentityLoading(true)
-          Promise.allSettled([
-            fetchProfile(session.user.id),
-            fetchIdentity(session.user.id),
-          ]).finally(() => setIdentityLoading(false))
+          fetchIdentity(session.user.id).finally(() => setIdentityLoading(false))
         } else {
-          setProfile(null)
           setPerson(null)
           setEntities([])
           setIdentityLoading(false)
@@ -137,7 +123,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut({ scope: 'local' })
-    setProfile(null)
     setPerson(null)
     setEntities([])
     switchActor(null)
@@ -164,10 +149,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Garde anti-flash : on attend que `person` soit chargée avant de router vers l'onboarding.
   const needsOnboarding = !!user && person !== null && deriveNeedsOnboarding(personView)
-  // Fallback chain comme pour avatar_url : le rôle admin peut vivre côté profiles (legacy)
-  // ou côté users (nouveau modèle). Même bug que pour l'avatar — un admin restait bloqué
-  // hors de /admin si son rôle vivait dans profiles.
-  const isAdmin = person?.role === 'admin' || profile?.role === 'admin'
+  // Rôle admin : source de vérité = users.role (modèle acteur). Le legacy profiles.role a été
+  // backfillé vers users.role en Plan 4 / Phase 5a avant le retrait de la table profiles.
+  const isAdmin = person?.role === 'admin'
 
   // Debug admin : surcharge du plan perçu de l'entité active (n'écrit rien en base).
   const currentActorRow = (isAdmin && planOverride && currentActor?.kind === 'entity' && rawActorRow)
@@ -179,7 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user, session,
         person, entities, currentActor, currentActorRow, switchActor, can,
-        profile, loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
+        loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
         planOverride, setPlanOverride,
       }}
     >

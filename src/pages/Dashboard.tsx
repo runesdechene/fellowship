@@ -16,7 +16,7 @@ function daysUntil(dateStr: string): number {
 
 
 export function DashboardPage() {
-  const { profile } = useAuth()
+  const { currentActor } = useAuth()
   const currentYear = new Date().getFullYear()
   const { participations } = useMyParticipations(currentYear)
   const { participations: friendActivity } = useFriendsParticipations()
@@ -30,7 +30,7 @@ export function DashboardPage() {
     .slice(0, 3)
 
   const nextDate = upcoming[0]?.events
-  const displayName = profile?.brand_name ?? profile?.display_name ?? ''
+  const displayName = currentActor?.label ?? ''
 
   return (
     <div className="page-width max-w-2xl p-5 sm:p-8">

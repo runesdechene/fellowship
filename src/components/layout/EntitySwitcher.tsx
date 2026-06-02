@@ -9,7 +9,7 @@ function initials(label: string): string {
 }
 
 export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
-  const { person, profile, entities, currentActor, currentActorRow, switchActor } = useAuth()
+  const { person, entities, currentActor, currentActorRow, switchActor } = useAuth()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -27,12 +27,12 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   const activeEntity = currentActor?.kind === 'entity'
     ? entities.find(e => e.actor_id === currentActor.id) ?? null
     : null
-  const label = activeEntity?.brand_name ?? person?.display_name ?? profile?.display_name ?? 'Moi'
+  const label = activeEntity?.brand_name ?? person?.display_name ?? 'Moi'
   const sub = currentActor?.kind === 'entity'
     ? (planForActor(currentActor, currentActorRow) === 'pro' ? 'Exposant · toi' : 'Exposant · gratuit')
     : 'Festivalier'
-  // Avatar : entity active → entity.avatar_url ; sinon person/profile (legacy gagne car Settings écrit là).
-  const activeAvatar = activeEntity?.avatar_url ?? profile?.avatar_url ?? person?.avatar_url ?? null
+  // Avatar : entity active → entity.avatar_url ; sinon la personne (users, source de vérité perso).
+  const activeAvatar = activeEntity?.avatar_url ?? person?.avatar_url ?? null
 
   const avContent = activeAvatar
     ? <img src={activeAvatar} alt="" />

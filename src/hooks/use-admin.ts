@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Event, Profile, Tag } from '@/types/database'
+import type { Event, Tag } from '@/types/database'
+
+export interface AdminUserRow {
+  actor_id: string
+  display_name: string | null
+  email: string
+  role: string
+  created_at: string
+}
 
 // --- Metrics ---
 
@@ -26,18 +34,18 @@ export function useAdminMetrics() {
       const d30 = new Date(now.getTime() - 30 * 86400000).toISOString()
 
       const [exposants, visitors, events, participations, recent7, recent30] = await Promise.all([
-        supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('type', 'exposant'),
-        supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('type', 'public'),
+        supabase.from('entities').select('actor_id', { count: 'exact', head: true }).eq('type', 'exposant'),
+        supabase.from('users').select('actor_id', { count: 'exact', head: true }),
         supabase.from('events').select('id', { count: 'exact', head: true }).gte('end_date', now.toISOString().slice(0, 10)),
         supabase.from('participations').select('id', { count: 'exact', head: true }).gte('created_at', startOfMonth),
-        supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', d7),
-        supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', d30),
+        supabase.from('users').select('actor_id', { count: 'exact', head: true }).gte('created_at', d7),
+        supabase.from('users').select('actor_id', { count: 'exact', head: true }).gte('created_at', d30),
       ])
 
       setMetrics({
         totalExposants: exposants.count ?? 0,
         totalVisitors: visitors.count ?? 0,
-        totalUsers: (exposants.count ?? 0) + (visitors.count ?? 0),
+        totalUsers: visitors.count ?? 0,
         activeEvents: events.count ?? 0,
         participationsThisMonth: participations.count ?? 0,
         newUsers7d: recent7.count ?? 0,
@@ -61,13 +69,22 @@ export function useAdminEvents() {
     setLoading(true)
     const { data } = await supabase
       .from('events')
-      .select('*, profiles!events_created_by_fkey(display_name)')
+      .select('*')
       .order('created_at', { ascending: false })
 
-    const mapped = (data ?? []).map((e: Record<string, unknown>) => ({
-      ...(e as Event),
+    // Créateur résolu via le modèle acteur (created_by_actor -> actor_public).
+    // L'ancien join profiles!events_created_by_fkey est mort (FK droppée en Plan 4 ph.1).
+    const rows = (data ?? []) as Event[]
+    const actorIds = [...new Set(rows.map(e => e.created_by_actor).filter((id): id is string => !!id))]
+    let nameMap: Record<string, string | null> = {}
+    if (actorIds.length > 0) {
+      const { data: actors } = await supabase.from('actor_public').select('actor_id, label').in('actor_id', actorIds)
+      nameMap = Object.fromEntries((actors ?? []).map(a => [a.actor_id, a.label]))
+    }
+    const mapped = rows.map(e => ({
+      ...e,
       participant_count: 0,
-      creator_name: (e.profiles as { display_name: string | null } | null)?.display_name ?? null,
+      creator_name: e.created_by_actor ? (nameMap[e.created_by_actor] ?? null) : null,
     }))
 
     // Batch count participations per event
@@ -101,16 +118,16 @@ export async function adminDeleteEvent(id: string) {
 // --- Users ---
 
 export function useAdminUsers() {
-  const [users, setUsers] = useState<Profile[]>([])
+  const [users, setUsers] = useState<AdminUserRow[]>([])
   const [loading, setLoading] = useState(true)
 
   async function fetchUsers() {
     setLoading(true)
     const { data } = await supabase
-      .from('profiles')
-      .select('*')
+      .from('users')
+      .select('actor_id, display_name, email, role, created_at')
       .order('created_at', { ascending: false })
-    setUsers(data ?? [])
+    setUsers((data as AdminUserRow[] | null) ?? [])
     setLoading(false)
   }
 

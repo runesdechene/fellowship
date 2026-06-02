@@ -66,7 +66,7 @@ function ExplorerEmpty() {
 export function ExplorerPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { profile, currentActor, currentActorRow, isAdmin, user } = useAuth()
+  const { person, currentActor, currentActorRow, isAdmin, user } = useAuth()
   const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
   const { tags: dynamicTags } = useTags()
   const { participations, refetch: refetchParticipations } = useMyParticipations()
@@ -126,8 +126,8 @@ export function ExplorerPage() {
   const now = useMemo(() => new Date(), [])
 
   const displayed = useMemo(
-    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query, monthRange }, { department: profile?.department ?? null, now }),
-    [allEvents, selectedTags, zone, period, query, monthRange, profile?.department, now]
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query, monthRange }, { department: person?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, query, monthRange, person?.department, now]
   )
 
   // Clamp activeIndex when displayed shrinks
@@ -315,7 +315,7 @@ export function ExplorerPage() {
           period={period}
           monthLabel={monthLabel}
           query={query}
-          userDept={profile?.department ?? null}
+          userDept={person?.department ?? null}
           onToggleTag={toggleTag}
           onZone={handleZone}
           onPeriod={handlePeriod}
