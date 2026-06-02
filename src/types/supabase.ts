@@ -222,6 +222,8 @@ export type Database = {
           event_id: string
           id: string
           improvements: string[] | null
+          media_paths: string[]
+          note: string | null
           revenue: number | null
           wins: string[] | null
         }
@@ -234,6 +236,8 @@ export type Database = {
           event_id: string
           id?: string
           improvements?: string[] | null
+          media_paths?: string[]
+          note?: string | null
           revenue?: number | null
           wins?: string[] | null
         }
@@ -246,6 +250,8 @@ export type Database = {
           event_id?: string
           id?: string
           improvements?: string[] | null
+          media_paths?: string[]
+          note?: string | null
           revenue?: number | null
           wins?: string[] | null
         }
