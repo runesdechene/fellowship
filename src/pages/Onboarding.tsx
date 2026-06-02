@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
+import { defaultRouteForActor } from '@/lib/navModel'
 import { supabase } from '@/lib/supabase'
 import { ThemeToggle } from '@/components/theme-toggle'
 import {
@@ -12,7 +13,7 @@ import './Onboarding.css'
 type SlugStatus = 'idle' | 'checking' | 'available' | 'taken'
 
 export function OnboardingPage() {
-  const { person, entities, refreshProfile, switchActor } = useAuth()
+  const { person, entities, refreshProfile, switchActor, currentActor, currentActorRow } = useAuth()
   const navigate = useNavigate()
 
   const [chosenPath, setChosenPath] = useState<OnboardingPath | null>(null)
@@ -146,7 +147,7 @@ export function OnboardingPage() {
               <h2>Bienvenue, {form.prenom}&nbsp;!</h2>
               <div className="sub">Ton espace est prêt. Découvre les festivals et suis tes créateurs préférés.</div>
               <div className="spacer" />
-              <button className="btn btn-p" onClick={() => navigate('/explorer', { replace: true })}>
+              <button className="btn btn-p" onClick={() => navigate(defaultRouteForActor(currentActor, currentActorRow), { replace: true })}>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg> Explorer les festivals
               </button>
             </section>
@@ -162,7 +163,7 @@ export function OnboardingPage() {
               </div>
               <div className="person-line">rattachée à <b>{form.prenom}</b> · ton compte</div>
               <div className="spacer" />
-              <button className="btn btn-p" onClick={() => navigate('/explorer', { replace: true })}>
+              <button className="btn btn-p" onClick={() => navigate(defaultRouteForActor(currentActor, currentActorRow), { replace: true })}>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg> Entrer dans Fellowship
               </button>
               <div className="addhint"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg> Tu pourras ajouter d'autres entités via le sélecteur.</div>

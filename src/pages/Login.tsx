@@ -3,6 +3,7 @@ import { Navigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useAuth } from '@/lib/auth'
+import { defaultRouteForActor } from '@/lib/navModel'
 import { Mail, Loader2, ArrowLeft } from 'lucide-react'
 import { Toast } from '@/components/ui/toast'
 
@@ -36,7 +37,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
 }
 
 export function LoginPage() {
-  const { user, loading: authLoading, signIn, verifyOtp } = useAuth()
+  const { user, loading: authLoading, signIn, verifyOtp, currentActor, currentActorRow } = useAuth()
 
   const [email, setEmail] = useState('')
   const [code, setCode] = useState(['', '', '', '', '', ''])
@@ -62,7 +63,7 @@ export function LoginPage() {
   }
 
   if (user) {
-    return <Navigate to="/explorer" replace />
+    return <Navigate to={defaultRouteForActor(currentActor, currentActorRow)} replace />
   }
 
   const handleSendCode = async (e: React.FormEvent) => {

@@ -21,6 +21,7 @@ import { MesDatesPage } from '@/pages/MesDates'
 import { CommunautePage } from '@/pages/Communaute'
 import { BoutiquePage } from '@/pages/Boutique'
 import { AbonnementPage } from '@/pages/Abonnement'
+import { CockpitPage } from '@/pages/Cockpit'
 import { MentionsLegalesPage } from '@/pages/legal/MentionsLegales'
 import { ConfidentialitePage } from '@/pages/legal/Confidentialite'
 import { CGUPage } from '@/pages/legal/CGU'
@@ -106,7 +107,7 @@ function App() {
           <Route path="/mes-dates" element={<AuthenticatedApp><MesDatesPage /></AuthenticatedApp>} />
           <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
           <Route path="/communaute" element={<AuthenticatedApp><CommunautePage /></AuthenticatedApp>} />
-          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><ComingSoon title="Cockpit" /></ProGate></AuthenticatedApp>} />
+          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><CockpitPage /></ProGate></AuthenticatedApp>} />
           <Route path="/boutique" element={<AuthenticatedApp><BoutiquePage /></AuthenticatedApp>} />
           <Route path="/abonnement" element={<AuthenticatedApp><AbonnementPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
