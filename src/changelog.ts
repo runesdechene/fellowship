@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.209',
+    date: '2026-06-02',
+    title: 'Bilan enrichi + Mes bilans',
+    changes: [
+      'Bilan : note libre + photos souvenir privées (le ressenti et la mémoire du festival)',
+      'Cockpit : nouvelle section « Mes bilans » — tes festivals passés et leur bilan, par festival',
+    ],
+  },
+  {
     version: '0.7.208',
     date: '2026-06-02',
     title: 'Cockpit — le bandeau bilan disparaît après enregistrement',
