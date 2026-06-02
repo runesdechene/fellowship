@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Compass, Route, Share2, FileText, MapPin } from 'lucide-react'
 import { participationChip } from '@/lib/explorer'
+import { ShareModal } from '@/components/ShareModal'
 import type { ParticipationWithEvent } from '@/types/database'
 
 interface Props {
@@ -14,6 +16,7 @@ function daysUntil(start: Date, now: Date): number {
 }
 
 export function ProchainFestival({ participation }: Props) {
+  const [share, setShare] = useState<{ message: string; url: string } | null>(null)
   const now = new Date()
 
   if (!participation) {
@@ -33,8 +36,11 @@ export function ProchainFestival({ participation }: Props) {
   const chip = participationChip(participation.status, participation.payment_status, 'entity')
   const dateLabel = start.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
   const mapsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${ev.name}, ${ev.city}`)}`
+  const shareUrl = `${window.location.origin}/evenement/${ev.id}`
+  const shareMessage = `🎪 Je serai à ${ev.name}, le ${dateLabel} à ${ev.city}. Passe me voir sur mon stand ! → ${shareUrl}`
 
   return (
+    <>
     <div className="ck-card ck-next">
       <div className="ck-next-poster">
         {ev.image_url ? <img src={ev.image_url} alt={ev.name} /> : <div className="ck-next-noposter" />}
@@ -53,12 +59,11 @@ export function ProchainFestival({ participation }: Props) {
         <div className="ck-next-actions">
           <Link to={`/evenement/${ev.id}`} className="ck-btn ck-btn-p"><FileText strokeWidth={2} /> Voir le dossier</Link>
           <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-g"><Route strokeWidth={2} /> Itinéraire</a>
-          <a
-            href={`https://wa.me/?text=${encodeURIComponent(`${ev.name} — ${window.location.origin}/evenement/${ev.id}`)}`}
-            target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-g"
-          ><Share2 strokeWidth={2} /> Partager</a>
+          <button type="button" className="ck-btn ck-btn-g" onClick={() => setShare({ message: shareMessage, url: shareUrl })}><Share2 strokeWidth={2} /> Partager</button>
         </div>
       </div>
     </div>
+    {share && <ShareModal message={share.message} url={share.url} onClose={() => setShare(null)} />}
+    </>
   )
 }

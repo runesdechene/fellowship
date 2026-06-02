@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Users, Share2 } from 'lucide-react'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { avatarColor } from '@/lib/community'
+import { ShareModal } from '@/components/ShareModal'
 
 export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
+  const [share, setShare] = useState<{ message: string; url: string } | null>(null)
 
   return (
+    <>
     <div className="ck-card">
       <h3>
         <span className="ck-ic grn"><Users strokeWidth={1.8} /></span>
@@ -22,7 +26,8 @@ export function CompagnonsDeRoute() {
       ) : (
         <ul className="ck-conv-list">
           {convergences.slice(0, 3).map(c => {
-            const shareHref = `https://wa.me/?text=${encodeURIComponent(`${c.event.name} — ${window.location.origin}/evenement/${c.event.id}`)}`
+            const url = `${window.location.origin}/evenement/${c.event.id}`
+            const message = `🎪 On sera ${c.count} créateurs réunis à ${c.event.name} ! → ${url}`
             return (
               <li key={c.event.id} className="ck-conv">
                 <div className="ck-conv-avs">
@@ -38,7 +43,7 @@ export function CompagnonsDeRoute() {
                 </div>
                 <div className="ck-conv-actions">
                   <Link to={`/evenement/${c.event.id}`} className="ck-btn ck-btn-g ck-btn-sm">Voir</Link>
-                  <a href={shareHref} target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-g ck-btn-sm"><Share2 strokeWidth={2} /></a>
+                  <button type="button" className="ck-btn ck-btn-g ck-btn-sm" onClick={() => setShare({ message, url })} aria-label="Partager"><Share2 strokeWidth={2} /></button>
                 </div>
               </li>
             )
@@ -46,5 +51,7 @@ export function CompagnonsDeRoute() {
         </ul>
       )}
     </div>
+    {share && <ShareModal message={share.message} url={share.url} onClose={() => setShare(null)} />}
+    </>
   )
 }

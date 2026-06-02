@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.211',
+    date: '2026-06-02',
+    title: 'Partage — modale au lieu de WhatsApp forcé',
+    changes: [
+      'Bouton « Partager » : modale Fellowship avec un message pré-rédigé à copier-coller (plus de WhatsApp imposé). Bouton « Partager… » natif en bonus si le navigateur le supporte.',
+    ],
+  },
+  {
     version: '0.7.210',
     date: '2026-06-02',
     title: 'Cockpit — accueil de l\'entité',
