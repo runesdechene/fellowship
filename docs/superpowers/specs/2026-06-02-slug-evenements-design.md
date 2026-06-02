@@ -44,7 +44,7 @@ ALTER TABLE events ADD COLUMN IF NOT EXISTS slug TEXT;
 
 -- Génère un slug de base "nom-ville" sans accents, alphanumérique + tirets.
 CREATE OR REPLACE FUNCTION events_base_slug(p_name text, p_city text)
-RETURNS text LANGUAGE sql IMMUTABLE AS $$
+RETURNS text LANGUAGE sql STABLE AS $$  -- STABLE (pas IMMUTABLE) : unaccent() est STABLE
   SELECT trim(both '-' from regexp_replace(
     lower(extensions.unaccent(coalesce(p_name,'') || '-' || coalesce(p_city,''))),
     '[^a-z0-9]+', '-', 'g'
