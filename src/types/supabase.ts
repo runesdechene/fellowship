@@ -215,7 +215,7 @@ export type Database = {
       event_reports: {
         Row: {
           acted_by_user_id: string | null
-          actor_id: string | null
+          actor_id: string
           booth_cost: number | null
           charges: number | null
           created_at: string
@@ -223,12 +223,11 @@ export type Database = {
           id: string
           improvements: string[] | null
           revenue: number | null
-          user_id: string | null
           wins: string[] | null
         }
         Insert: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id: string
           booth_cost?: number | null
           charges?: number | null
           created_at?: string
@@ -236,12 +235,11 @@ export type Database = {
           id?: string
           improvements?: string[] | null
           revenue?: number | null
-          user_id?: string | null
           wins?: string[] | null
         }
         Update: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id?: string
           booth_cost?: number | null
           charges?: number | null
           created_at?: string
@@ -249,7 +247,6 @@ export type Database = {
           id?: string
           improvements?: string[] | null
           revenue?: number | null
-          user_id?: string | null
           wins?: string[] | null
         }
         Relationships: [
@@ -272,13 +269,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_reports_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -451,32 +441,29 @@ export type Database = {
       notes: {
         Row: {
           acted_by_user_id: string | null
-          actor_id: string | null
+          actor_id: string
           content: string
           created_at: string
           event_id: string
           id: string
-          user_id: string | null
           visibility: Database["public"]["Enums"]["note_visibility"]
         }
         Insert: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id: string
           content: string
           created_at?: string
           event_id: string
           id?: string
-          user_id?: string | null
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Update: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id?: string
           content?: string
           created_at?: string
           event_id?: string
           id?: string
-          user_id?: string | null
           visibility?: Database["public"]["Enums"]["note_visibility"]
         }
         Relationships: [
@@ -499,13 +486,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notes_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -569,7 +549,7 @@ export type Database = {
       participations: {
         Row: {
           acted_by_user_id: string | null
-          actor_id: string | null
+          actor_id: string
           created_at: string
           event_id: string
           id: string
@@ -577,12 +557,11 @@ export type Database = {
           payments: Json | null
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
-          user_id: string | null
           visibility: Database["public"]["Enums"]["participation_visibility"]
         }
         Insert: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id: string
           created_at?: string
           event_id: string
           id?: string
@@ -590,12 +569,11 @@ export type Database = {
           payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
-          user_id?: string | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Update: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id?: string
           created_at?: string
           event_id?: string
           id?: string
@@ -603,7 +581,6 @@ export type Database = {
           payments?: Json | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
-          user_id?: string | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
         }
         Relationships: [
@@ -626,13 +603,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "participations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -735,7 +705,7 @@ export type Database = {
       reviews: {
         Row: {
           acted_by_user_id: string | null
-          actor_id: string | null
+          actor_id: string
           affluence: number
           comment: string | null
           created_at: string
@@ -743,11 +713,10 @@ export type Database = {
           id: string
           organisation: number
           rentabilite: number
-          user_id: string | null
         }
         Insert: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id: string
           affluence: number
           comment?: string | null
           created_at?: string
@@ -755,11 +724,10 @@ export type Database = {
           id?: string
           organisation: number
           rentabilite: number
-          user_id?: string | null
         }
         Update: {
           acted_by_user_id?: string | null
-          actor_id?: string | null
+          actor_id?: string
           affluence?: number
           comment?: string | null
           created_at?: string
@@ -767,7 +735,6 @@ export type Database = {
           id?: string
           organisation?: number
           rentabilite?: number
-          user_id?: string | null
         }
         Relationships: [
           {
@@ -789,13 +756,6 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
