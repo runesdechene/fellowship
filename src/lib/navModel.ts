@@ -16,7 +16,7 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   explorer:        { key: 'explorer',        to: '/explorer',        label: 'Explorer',       icon: 'Compass',         pro: false, built: true },
   'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: true },
   'mes-createurs': { key: 'mes-createurs',   to: '/mes-createurs',   label: 'Mes créateurs',  shortLabel: 'Créateurs', icon: 'Heart',           pro: false, built: false },
-  dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Cockpit',        shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: false },
+  dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Cockpit',        shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: true },
   calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: true,  built: true },
   communaute:      { key: 'communaute',      to: '/communaute',      label: 'Communauté',     icon: 'Users',           pro: true,  built: true },
   vitrine:         { key: 'vitrine',         to: '/profil',          label: 'Ma vitrine',     icon: 'Store',           pro: false, built: true },
@@ -109,4 +109,13 @@ export function planForActor(actor: { kind: string } | null, entityRow: unknown)
   if (actor?.kind !== 'entity') return 'free'
   const plan = (entityRow as { plan?: Plan | null } | null | undefined)?.plan
   return plan === 'pro' ? 'pro' : 'free'
+}
+
+/**
+ * Route d'atterrissage après login / onboarding selon l'acteur actif.
+ * Une entité Pro atterrit sur son Cockpit ; tout le reste (personne, entité gratuite)
+ * sur Explorer (home universelle). Le plan est lu via planForActor (Pro = sur l'entité).
+ */
+export function defaultRouteForActor(actor: { kind: string } | null, entityRow: unknown): string {
+  return planForActor(actor, entityRow) === 'pro' ? '/tableau-de-bord' : '/explorer'
 }
