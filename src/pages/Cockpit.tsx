@@ -12,6 +12,7 @@ import { ProchainsFestivals } from '@/components/cockpit/ProchainsFestivals'
 import { AReglerFinaliser } from '@/components/cockpit/AReglerFinaliser'
 import { CompagnonsDeRoute } from '@/components/cockpit/CompagnonsDeRoute'
 import { SaisonFrise } from '@/components/cockpit/SaisonFrise'
+import { MesBilans } from '@/components/cockpit/MesBilans'
 import './Cockpit.css'
 
 export function CockpitPage() {
@@ -57,6 +58,7 @@ export function CockpitPage() {
             </div>
             <div className="ck-col">
               <SaisonFrise season={season} />
+              <MesBilans />
             </div>
           </div>
         </>
