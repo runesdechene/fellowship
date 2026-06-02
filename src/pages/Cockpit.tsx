@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations } from '@/hooks/use-participations'
-import { useMyReportedEventIds } from '@/hooks/use-reports'
+import { useMyReports } from '@/hooks/use-reports'
 import {
   selectNextFestival, selectUpcomingFestivals, selectAReglerItems,
   aggregateSeason, detectBilanPrompt,
@@ -18,7 +18,8 @@ import './Cockpit.css'
 export function CockpitPage() {
   const { currentActor, person } = useAuth()
   const { participations, loading, refetch } = useMyParticipations()
-  const { reportedEventIds, refetch: refetchReports } = useMyReportedEventIds()
+  const { reportsByEvent, refetch: refetchReports } = useMyReports()
+  const reportedEventIds = useMemo(() => new Set(reportsByEvent.keys()), [reportsByEvent])
 
   const now = useMemo(() => new Date(), [])
 
@@ -58,7 +59,7 @@ export function CockpitPage() {
             </div>
             <div className="ck-col">
               <SaisonFrise season={season} />
-              <MesBilans />
+              <MesBilans participations={participations} reportsByEvent={reportsByEvent} onSaved={refetchReports} />
             </div>
           </div>
         </>

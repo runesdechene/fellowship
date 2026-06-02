@@ -1,16 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClipboardList, Pencil, Plus } from 'lucide-react'
-import { useMyParticipations } from '@/hooks/use-participations'
-import { useMyReports } from '@/hooks/use-reports'
+import type { ParticipationWithEvent, EventReport } from '@/types/database'
 import { buildPastBilans, type PastBilan } from '@/lib/cockpit-bilans'
 import { signedUrlsFor } from '@/lib/bilan-media'
 import { BilanModal } from '@/components/reports/BilanModal'
 
 const MAX_ROWS = 5
 
-export function MesBilans() {
-  const { participations } = useMyParticipations()
-  const { reportsByEvent, refetch } = useMyReports()
+interface Props {
+  participations: ParticipationWithEvent[]
+  reportsByEvent: Map<string, EventReport>
+  onSaved: () => void
+}
+
+export function MesBilans({ participations, reportsByEvent, onSaved }: Props) {
   const now = useMemo(() => new Date(), [])
   const bilans = useMemo(() => buildPastBilans(participations, reportsByEvent, now), [participations, reportsByEvent, now])
   const rows = useMemo(() => bilans.slice(0, MAX_ROWS), [bilans])
@@ -76,7 +79,7 @@ export function MesBilans() {
         <BilanModal
           eventId={openEventId}
           onClose={() => setOpenEventId(null)}
-          onSaved={() => { setOpenEventId(null); refetch() }}
+          onSaved={() => { setOpenEventId(null); onSaved() }}
         />
       )}
     </div>
