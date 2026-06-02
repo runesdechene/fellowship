@@ -111,6 +111,7 @@ function App() {
           <Route path="/boutique" element={<AuthenticatedApp><BoutiquePage /></AuthenticatedApp>} />
           <Route path="/abonnement" element={<AuthenticatedApp><AbonnementPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
+          <Route path="/e/:slug" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
 
           {/* Admin routes */}
           <Route

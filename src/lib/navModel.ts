@@ -66,14 +66,14 @@ export function entryState(key: NavKey, plan: Plan): EntryState {
 // car il n'est dans aucune nav (entrée via l'avatar / lien profil), sinon AppLayout le bloque.
 // /boutique et /abonnement : accessibles aux 2 acteurs (la page elle-même affiche un
 // message si l'acteur actif n'est pas une entité — cf. v0.7.170 Stripe MVP).
-const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/notifications', '/suivis', '/boutique', '/abonnement']
+const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/e/', '/notifications', '/suivis', '/boutique', '/abonnement']
 
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
 const RESERVED_TOP = new Set([
   'explorer', 'calendrier', 'communaute', 'tableau-de-bord', 'dashboard',
   'mes-dates', 'mes-createurs', 'profil', 'reglages', 'suivis',
-  'notifications', 'evenement', 'admin', 'onboarding', 'login', 'auth',
+  'notifications', 'evenement', 'e', 'admin', 'onboarding', 'login', 'auth',
   'legal', 'boutique', 'abonnement',
 ])
 
