@@ -301,6 +301,7 @@ export type Database = {
           registration_url: string | null
           stand_price: string | null
           stand_size: string | null
+          slug: string | null
           start_date: string
           tags: string[] | null
         }
@@ -325,6 +326,7 @@ export type Database = {
           registration_url?: string | null
           stand_price?: string | null
           stand_size?: string | null
+          slug?: string | null
           start_date: string
           tags?: string[] | null
         }
@@ -349,6 +351,7 @@ export type Database = {
           registration_url?: string | null
           stand_price?: string | null
           stand_size?: string | null
+          slug?: string | null
           start_date?: string
           tags?: string[] | null
         }
