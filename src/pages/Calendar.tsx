@@ -72,6 +72,7 @@ export function CalendarPage() {
         city: (ev.city as string) ?? '',
         department: (ev.department as string) ?? '',
         imageUrl: (ev.image_url as string | null) ?? null,
+        slug: (ev.slug as string | null) ?? null,
         isFriend: true,
         friendName: fp.actor_public?.label ?? 'Un ami',
       }

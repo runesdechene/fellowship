@@ -13,6 +13,7 @@ export interface CalendarEvent {
   city: string
   department: string
   imageUrl: string | null
+  slug: string | null
   isFriend?: boolean
   friendName?: string
 }
@@ -55,6 +56,7 @@ export function buildCalendarMonths(participations: ParticipationWithEvent[], ye
       city: p.events.city,
       department: p.events.department,
       imageUrl: p.events.image_url,
+      slug: p.events.slug,
     })
   }
 
