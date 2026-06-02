@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.206',
+    date: '2026-06-02',
+    title: 'Cockpit — habillage DA',
+    changes: [
+      'Cockpit rebranché sur les vrais tokens DA (cartes, cadres, badges de statut) — fin de l\'effet « page à plat »',
+    ],
+  },
+  {
     version: '0.7.205',
     date: '2026-06-02',
     title: 'Cockpit exposant V1',
