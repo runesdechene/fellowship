@@ -4,7 +4,7 @@ import { Users, Share2 } from 'lucide-react'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { avatarColor } from '@/lib/community'
 import { ShareModal } from '@/components/ShareModal'
-import { eventShareUrl } from '@/lib/event-link'
+import { eventShareUrl, eventPath } from '@/lib/event-link'
 
 export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
@@ -43,7 +43,7 @@ export function CompagnonsDeRoute() {
                   <small>à {c.event.name}</small>
                 </div>
                 <div className="ck-conv-actions">
-                  <Link to={`/evenement/${c.event.id}`} className="ck-btn ck-btn-g ck-btn-sm">Voir</Link>
+                  <Link to={eventPath(c.event)} className="ck-btn ck-btn-g ck-btn-sm">Voir</Link>
                   <button type="button" className="ck-btn ck-btn-g ck-btn-sm" onClick={() => setShare({ message, url })} aria-label="Partager"><Share2 strokeWidth={2} /></button>
                 </div>
               </li>

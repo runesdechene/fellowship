@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 
 interface CalendarEvent {
   id: string
@@ -7,6 +8,7 @@ interface CalendarEvent {
   endDate: Date
   primaryTag: string
   status: string
+  slug?: string | null
 }
 
 interface MonthCellProps {
@@ -39,7 +41,7 @@ export function MonthCell({ label, events, onClick }: MonthCellProps) {
         {events.map((event) => (
           <Link
             key={event.id}
-            to={`/evenement/${event.id}`}
+            to={eventPath(event)}
             state={{ from: '/calendrier' }}
             onClick={(e) => e.stopPropagation()}
             title={event.name}

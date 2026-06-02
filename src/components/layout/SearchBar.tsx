@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { Search, X, Calendar, MapPin, User, Bell, Plus } from 'lucide-react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { supabase } from '@/lib/supabase'
@@ -17,6 +18,7 @@ interface SearchEvent {
   start_date: string
   tags: string[] | null
   image_url: string | null
+  slug: string | null
 }
 
 interface SearchProfile {
@@ -94,7 +96,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       const [eventsRes, profilesRes] = await Promise.all([
         supabase
           .from('events')
-          .select('id, name, city, start_date, tags, image_url')
+          .select('id, name, city, start_date, tags, image_url, slug')
           .ilike('name', `%${query}%`)
           .order('start_date', { ascending: false })
           .limit(5),
@@ -245,7 +247,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                   {events.map(ev => (
                     <Link
                       key={ev.id}
-                      to={`/evenement/${ev.id}`}
+                      to={eventPath(ev)}
                       className="search-result-item"
                       onClick={() => { setOpen(false); setQuery('') }}
                     >

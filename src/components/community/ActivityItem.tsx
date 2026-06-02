@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { type FeedItem } from '@/lib/community'
+import { eventPath } from '@/lib/event-link'
 import { ActorAvatar, ActorName } from './ActorLinks'
 
 function ago(iso: string): string {
@@ -22,7 +23,7 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
         {item.kind === 'review' && item.event && (
           <>
             <div className="act-t"><ActorName actor={a} /> a noté{' '}
-              <Link to={`/evenement/${item.event.id}`}>{item.event.name}</Link>{' '}
+              <Link to={eventPath(item.event)}>{item.event.name}</Link>{' '}
               <time>· {ago(item.occurredAt)}</time>
             </div>
             <div className="act-stars">{'★'.repeat(item.stars ?? 0)}{'☆'.repeat(5 - (item.stars ?? 0))}
@@ -32,7 +33,7 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
         )}
         {item.kind === 'participation' && item.event && (
           <div className="act-t"><ActorName actor={a} /> va à{' '}
-            <Link to={`/evenement/${item.event.id}`}>{item.event.name}</Link>{' '}
+            <Link to={eventPath(item.event)}>{item.event.name}</Link>{' '}
             <time>· {ago(item.occurredAt)}</time>
           </div>
         )}

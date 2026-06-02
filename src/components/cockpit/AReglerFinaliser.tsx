@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Wallet, CheckCircle2 } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { participationChip } from '@/lib/explorer'
 import type { ParticipationWithEvent } from '@/types/database'
 
@@ -24,7 +25,7 @@ export function AReglerFinaliser({ participations }: Props) {
             const chip = participationChip(p.status, p.payment_status, 'entity')
             return (
               <li key={p.id}>
-                <Link to={`/evenement/${ev.id}`} className="ck-list-row">
+                <Link to={eventPath(ev)} className="ck-list-row">
                   <span className="ck-list-info">
                     <b>{ev.name}</b>
                     <small>{ev.city} · {new Date(ev.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</small>

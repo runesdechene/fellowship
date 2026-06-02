@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CalendarClock, Plus } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { participationChip } from '@/lib/explorer'
 import type { ParticipationWithEvent } from '@/types/database'
 
@@ -26,7 +27,7 @@ export function ProchainsFestivals({ participations }: Props) {
             const chip = participationChip(p.status, p.payment_status, 'entity')
             return (
               <li key={p.id}>
-                <Link to={`/evenement/${ev.id}`} className="ck-list-row">
+                <Link to={eventPath(ev)} className="ck-list-row">
                   {ev.image_url
                     ? <span className="ck-list-thumb"><img src={ev.image_url} alt="" /></span>
                     : <span className="ck-list-thumb ck-list-thumb-ph" />}

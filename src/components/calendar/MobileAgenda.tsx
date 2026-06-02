@@ -1,5 +1,6 @@
 import { useMemo, type KeyboardEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { MonthBanner } from './MonthBanner'
@@ -71,7 +72,7 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
               return (
                 <div key={ev.id} className="agenda-event">
                   <Link
-                    to={`/evenement/${ev.id}`}
+                    to={eventPath(ev)}
                     state={{ from: '/calendrier' }}
                     className="mobile-event-pill"
                     style={{ background: tagStyle.bg }}
@@ -128,7 +129,7 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                 {friendsOnly.map(ev => {
                   const fname = ev.friendName ?? 'Un ami'
                   return (
-                    <Link key={ev.id} to={`/evenement/${ev.id}`} state={{ from: '/calendrier' }} className="mobile-event-pill fr">
+                    <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="mobile-event-pill fr">
                       <span className="agenda-fr-av" style={{ background: avatarGradient(fname) }}>{fname[0].toUpperCase()}</span>
                       <div className="mobile-event-pill-info">
                         <div className="mobile-event-pill-name">{ev.name}</div>

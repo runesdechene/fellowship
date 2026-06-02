@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTags } from '@/hooks/use-tags'
 import { eventDurationDays, type SeasonEvent, type CompanionRow } from '@/lib/vitrine'
+import { eventPath } from '@/lib/event-link'
 import { avatarGradient } from '@/lib/avatar-gradient'
 
 const MOIS = ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc']
@@ -35,7 +36,7 @@ export function VitrineEscales({ events, companions, onEmbed }: Props) {
           const geo = [e.city, e.department ? `(${e.department})` : null].filter(Boolean).join(' ')
           const dur = eventDurationDays(e.start_date, e.end_date)
           return (
-            <Link key={e.id} to={`/evenement/${e.id}`} state={{ from: '/' }} className="v-escale">
+            <Link key={e.id} to={eventPath(e)} state={{ from: '/' }} className="v-escale">
               <div className="v-edate"><b>{d.getDate()}</b><span>{MOIS[d.getMonth()]}</span><i>{d.getFullYear()}</i></div>
               <div className="v-eposter">{e.image_url && <img src={e.image_url} alt="" loading="lazy" />}</div>
               <div className="v-einfo">

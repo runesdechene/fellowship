@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations, type FriendParticipation } from '@/hooks/use-participations'
 import { useRecentEvents } from '@/hooks/use-events'
@@ -72,7 +73,7 @@ export function DashboardPage() {
             {upcoming.map(p => (
               <Link
                 key={p.id}
-                to={`/evenement/${p.event_id}`}
+                to={eventPath(p.events!)}
                 className="group relative flex-shrink-0 w-[220px] overflow-hidden rounded-3xl"
                 style={{ aspectRatio: '3/4' }}
               >
@@ -164,7 +165,7 @@ export function DashboardPage() {
             {recentEvents.slice(0, 4).map(event => (
               <Link
                 key={event.id}
-                to={`/evenement/${event.id}`}
+                to={eventPath(event)}
                 className="flex-shrink-0 w-[200px] overflow-hidden rounded-3xl relative"
                 style={{ aspectRatio: '3/4' }}
               >

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { avatarColor, type Convergence } from '@/lib/community'
+import { eventPath } from '@/lib/event-link'
 import { avatarImgStyle } from './ActorLinks'
 
 export function ConvergenceList({ items }: { items: Convergence[] }) {
@@ -8,7 +9,7 @@ export function ConvergenceList({ items }: { items: Convergence[] }) {
     <div className="card">
       <h2>Convergences à venir</h2>
       {items.map(c => (
-        <Link key={c.event.id} to={`/evenement/${c.event.id}`} className="conv-mini">
+        <Link key={c.event.id} to={eventPath(c.event)} className="conv-mini">
           <div className="cm-b">
             <b>{c.event.name}</b>
             <span>{new Date(c.event.startDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}{c.event.city ? ` · ${c.event.city}` : ''}</span>

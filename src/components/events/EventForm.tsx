@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { useAuth } from '@/lib/auth'
 import { createEvent, searchSimilarEvents } from '@/hooks/use-events'
 import { uploadEventImage } from '@/lib/event-image'
@@ -102,7 +103,7 @@ export function EventForm({ onClose }: EventFormProps) {
       }
       if (data) {
         onClose?.()
-        navigate(`/evenement/${data.id}`)
+        navigate(eventPath(data))
       }
     } catch (err) {
       console.error('Unexpected error:', err)

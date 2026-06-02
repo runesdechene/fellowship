@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { avatarColor, type Convergence } from '@/lib/community'
+import { eventPath } from '@/lib/event-link'
 import { avatarImgStyle } from './ActorLinks'
 
 function fmtRange(start: string, end: string): string {
@@ -15,11 +16,11 @@ export function ConvergenceCard({ conv }: { conv: Convergence }) {
   return (
     <div className="conv">
       {event.imageUrl && (
-        <Link to={`/evenement/${event.id}`} className="conv-affiche"><img src={event.imageUrl} alt="" /></Link>
+        <Link to={eventPath(event)} className="conv-affiche"><img src={event.imageUrl} alt="" /></Link>
       )}
       <div className="conv-body">
         <span className="conv-eyb">🎪 Ça se rassemble</span>
-        <Link to={`/evenement/${event.id}`} className="conv-title"><b>{event.name}</b></Link>
+        <Link to={eventPath(event)} className="conv-title"><b>{event.name}</b></Link>
         <div className="conv-meta">{fmtRange(event.startDate, event.endDate)}{event.city ? ` · ${event.city}` : ''}</div>
         <div className="conv-foot">
           <div className="avs">
@@ -33,7 +34,7 @@ export function ConvergenceCard({ conv }: { conv: Convergence }) {
           <span className="ftxt"><b>{count} de tes compagnons</b> y seront</span>
         </div>
       </div>
-      <Link className="btn btn-g" to={`/evenement/${event.id}`}>Voir le festival</Link>
+      <Link className="btn btn-g" to={eventPath(event)}>Voir le festival</Link>
     </div>
   )
 }

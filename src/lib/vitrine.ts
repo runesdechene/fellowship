@@ -9,6 +9,7 @@ export interface SeasonEvent {
   department?: string
   tags: string[] | null
   image_url?: string | null
+  slug?: string | null
 }
 
 /** Sépare les événements en à venir (début ≥ now, tri croissant) et passés (tri décroissant). */

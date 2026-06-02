@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Compass, Route, Share2, FileText, MapPin } from 'lucide-react'
 import { participationChip } from '@/lib/explorer'
 import { ShareModal } from '@/components/ShareModal'
-import { eventShareUrl } from '@/lib/event-link'
+import { eventShareUrl, eventPath } from '@/lib/event-link'
 import type { ParticipationWithEvent } from '@/types/database'
 
 interface Props {
@@ -58,7 +58,7 @@ export function ProchainFestival({ participation }: Props) {
         </div>
         <p className="ck-next-meta"><MapPin strokeWidth={2} /> {ev.city} ({ev.department})</p>
         <div className="ck-next-actions">
-          <Link to={`/evenement/${ev.id}`} className="ck-btn ck-btn-p"><FileText strokeWidth={2} /> Voir le dossier</Link>
+          <Link to={eventPath(ev)} className="ck-btn ck-btn-p"><FileText strokeWidth={2} /> Voir le dossier</Link>
           <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-g"><Route strokeWidth={2} /> Itinéraire</a>
           <button type="button" className="ck-btn ck-btn-g" onClick={() => setShare({ message: shareMessage, url: shareUrl })}><Share2 strokeWidth={2} /> Partager</button>
         </div>

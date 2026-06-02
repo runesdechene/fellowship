@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Star, Users } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './EventCard.css'
@@ -29,7 +30,7 @@ export function EventCard({ event, friendCount, variant = 'portrait', prospectio
 
   if (variant === 'horizontal') {
     return (
-      <Link to={`/evenement/${event.id}`} className="event-card-link horizontal">
+      <Link to={eventPath(event)} className="event-card-link horizontal">
         {img ? (
           <img src={event.image_url!} alt={event.name} className="event-card-bg" />
         ) : (
@@ -77,7 +78,7 @@ export function EventCard({ event, friendCount, variant = 'portrait', prospectio
     : undefined
 
   return (
-    <Link to={`/evenement/${event.id}`} className="event-card-link portrait">
+    <Link to={eventPath(event)} className="event-card-link portrait">
       {img ? (
         <img src={event.image_url!} alt={event.name} className="event-card-bg" />
       ) : (

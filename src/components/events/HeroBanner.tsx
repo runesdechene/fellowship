@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Calendar, ArrowRight } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './HeroBanner.css'
@@ -16,7 +17,7 @@ export function HeroBanner({ event }: HeroBannerProps) {
   const tagSlug = event.tags?.[0] ?? 'autre'
   const TagIcon = getTagIcon(tagSlug)
   return (
-    <Link to={`/evenement/${event.id}`} className="hero-banner">
+    <Link to={eventPath(event)} className="hero-banner">
       {event.image_url ? (
         <img src={event.image_url} alt={event.name} />
       ) : (

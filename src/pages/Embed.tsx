@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Calendar } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
+import { eventShareUrl } from '@/lib/event-link'
 import './EmbedPage.css'
 
 /* ── Tag icon map (inline — no Tailwind dependency) ── */
@@ -38,6 +39,7 @@ interface EmbedEvent {
     department: string | null
     tags: string[] | null
     image_url: string | null
+    slug: string | null
   } | null
 }
 
@@ -71,7 +73,7 @@ export function EmbedPage() {
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, events(id, name, start_date, end_date, city, department, tags, image_url)')
+        .select('id, events(id, name, start_date, end_date, city, department, tags, image_url, slug)')
         .eq('actor_id', (e as EntityRow).actor_id)
         .eq('visibility', 'public')
 
@@ -156,7 +158,7 @@ export function EmbedPage() {
             return (
               <a
                 key={ev.id}
-                href={`https://flw.sh/evenement/${ev.id}`}
+                href={eventShareUrl(ev, 'https://flw.sh')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`embed-card${i === 0 ? ' embed-card-featured' : ''}`}

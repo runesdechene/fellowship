@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { getTagColor } from '@/lib/constants'
 import { getTagIcon } from '@/components/ui/TagBadge'
 
@@ -12,6 +13,7 @@ interface CarouselEvent {
   department?: string
   tags: string[] | null
   image_url?: string | null
+  slug?: string | null
 }
 
 function formatDay(dateStr: string) {
@@ -30,7 +32,7 @@ function EventCardItem({ event, past = false }: { event: CarouselEvent; past?: b
 
   return (
     <Link
-      to={`/evenement/${event.id}`}
+      to={eventPath(event)}
       className={`profile-event-card ${past ? 'past' : ''}`}
     >
       {image && (

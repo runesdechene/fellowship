@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { participationChip, type ActorKind } from '@/lib/explorer'
 import { avatarGradient } from '@/lib/avatar-gradient'
@@ -31,7 +32,7 @@ export function DateRow({ participation, actorKind, now, companions, onOpenCompa
   return (
     <div className="md-row">
       {/* Lien « stretched » : couvre toute la carte pour le clic/clavier, sans imbriquer le bouton compagnons. */}
-      <Link to={`/evenement/${ev.id}`} className="md-row-link" aria-label={ev.name} />
+      <Link to={eventPath(ev)} className="md-row-link" aria-label={ev.name} />
 
       <div className="md-date">
         <b>{start.getDate()}</b>

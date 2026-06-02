@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { eventPath } from '@/lib/event-link'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
@@ -352,7 +353,7 @@ export function ExplorerPage() {
                 onPrev={() => go(-1)}
                 onNext={() => go(1)}
                 onSwipe={go}
-                onCardClick={ev => navigate(`/evenement/${ev.id}`)}
+                onCardClick={ev => navigate(eventPath(ev))}
                 onAddImage={onAddImage}
               />
               <div className="infozone" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
@@ -371,7 +372,7 @@ export function ExplorerPage() {
         <div className="bottombar" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
           {currentEvent && (
             <div className="dock-cta">
-              <Link to={`/evenement/${currentEvent.id}`} className="btn btn-ghost">Voir le festival</Link>
+              <Link to={eventPath(currentEvent)} className="btn btn-ghost">Voir le festival</Link>
               <button type="button" className="btn btn-star" onClick={() => toggleSave(currentEvent)} aria-pressed={isSaved(currentEvent.id)}>
                 {isSaved(currentEvent.id) ? '🚫 Ne plus repérer' : '★ Repérer'}
               </button>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { firstSeasonYear, type SeasonEvent } from '@/lib/vitrine'
+import { eventPath } from '@/lib/event-link'
 
 const MAX = 8
 
@@ -25,7 +26,7 @@ export function VitrineTampons({ events }: Props) {
           const yr = `'${String(new Date(e.start_date).getFullYear()).slice(2)}`
           const geo = e.city ?? ''
           return (
-            <Link key={e.id} to={`/evenement/${e.id}`} state={{ from: '/' }} className="v-stamp">
+            <Link key={e.id} to={eventPath(e)} state={{ from: '/' }} className="v-stamp">
               <div className="v-stamp-pm"><div className="v-stamp-ring">
                 {e.image_url && <div className="v-stamp-img" style={{ backgroundImage: `url(${e.image_url})` }} />}
                 <span className="v-stamp-yr">{yr}</span>

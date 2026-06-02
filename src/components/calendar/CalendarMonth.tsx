@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
+import { eventPath } from '@/lib/event-link'
 import { MonthBanner } from './MonthBanner'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
@@ -50,7 +51,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
         const days = dayCount(ev)
         return (
           <div key={ev.id} className="calendar-event-wrapper">
-            <Link to={`/evenement/${ev.id}`} state={{ from: '/calendrier' }} className="calendar-event-row">
+            <Link to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-event-row">
               {ev.imageUrl && (
                 <div className="calendar-event-image"><img src={ev.imageUrl} alt="" /></div>
               )}
@@ -100,7 +101,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
           {friendsOnly.map(ev => {
             const fname = (ev.friendName ?? '').trim() || 'Un ami'
             return (
-              <Link key={ev.id} to={`/evenement/${ev.id}`} state={{ from: '/calendrier' }} className="calendar-evF">
+              <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-evF">
                 {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
                 <div className="calendar-evF-info">
                   <div className="calendar-evF-name">{ev.name}</div>
