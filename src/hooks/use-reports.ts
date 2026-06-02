@@ -57,3 +57,25 @@ export function useMyReportedEventIds(): { reportedEventIds: Set<string>; loadin
 
   return { reportedEventIds, loading, refetch }
 }
+
+/** Tous les bilans de l'acteur actif, indexés par event_id. `refetch` après save. */
+export function useMyReports(): { reportsByEvent: Map<string, EventReport>; loading: boolean; refetch: () => Promise<void> } {
+  const { currentActor } = useAuth()
+  const [reportsByEvent, setReportsByEvent] = useState<Map<string, EventReport>>(new Map())
+  const [loading, setLoading] = useState(true)
+
+  const refetch = useCallback(async () => {
+    if (!currentActor) { setLoading(false); return }
+    const { data } = await supabase.from('event_reports').select('*').eq('actor_id', currentActor.id)
+    const rows = (data ?? []) as EventReport[]
+    setReportsByEvent(new Map(rows.map(r => [r.event_id, r])))
+    setLoading(false)
+  }, [currentActor])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refetch()
+  }, [refetch])
+
+  return { reportsByEvent, loading, refetch }
+}
