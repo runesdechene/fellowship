@@ -15,6 +15,7 @@ export interface FeedEventRef {
   startDate: string
   endDate: string
   imageUrl: string | null
+  slug: string | null
 }
 
 export interface FeedItem {

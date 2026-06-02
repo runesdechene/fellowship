@@ -6,7 +6,7 @@ import {
 } from './community'
 
 const ev = (id: string, start: string): FeedEventRef =>
-  ({ id, name: id, city: 'X', startDate: start, endDate: start, imageUrl: null })
+  ({ id, name: id, city: 'X', startDate: start, endDate: start, imageUrl: null, slug: null })
 const ac = (id: string): FeedActor => ({ actorId: id, label: id, avatarUrl: null, slug: id })
 
 describe('reviewStars', () => {

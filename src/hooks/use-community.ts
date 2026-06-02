@@ -92,13 +92,13 @@ export function useCommunityFeed(enabled = true): CommunityData {
         ])]
         const [eventsRes, actorMap] = await Promise.all([
           eventIds.length
-            ? supabase.from('events').select('id, name, city, start_date, end_date, image_url').in('id', eventIds)
+            ? supabase.from('events').select('id, name, city, start_date, end_date, image_url, slug').in('id', eventIds)
             : Promise.resolve({ data: [] as never[] }),
           loadActors(actorIds),
         ])
         const eventMap: Record<string, FeedEventRef> = {}
         for (const e of eventsRes.data ?? []) {
-          eventMap[e.id] = { id: e.id, name: e.name, city: e.city, startDate: e.start_date, endDate: e.end_date, imageUrl: e.image_url }
+          eventMap[e.id] = { id: e.id, name: e.name, city: e.city, startDate: e.start_date, endDate: e.end_date, imageUrl: e.image_url, slug: e.slug ?? null }
         }
         const unknownActor = (id: string | null): FeedActor =>
           (id && actorMap.get(id)) || { actorId: id ?? '?', label: '—', avatarUrl: null, slug: null }
