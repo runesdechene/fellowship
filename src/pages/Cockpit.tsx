@@ -17,7 +17,7 @@ import './Cockpit.css'
 export function CockpitPage() {
   const { currentActor, person } = useAuth()
   const { participations, loading, refetch } = useMyParticipations()
-  const { reportedEventIds } = useMyReportedEventIds()
+  const { reportedEventIds, refetch: refetchReports } = useMyReportedEventIds()
 
   const now = useMemo(() => new Date(), [])
 
@@ -45,7 +45,7 @@ export function CockpitPage() {
         <div className="ck-skel">{[0, 1, 2].map(i => <div key={i} className="ck-skel-col" />)}</div>
       ) : (
         <>
-          <BilanBanner prompt={bilanPrompt} onSaved={refetch} />
+          <BilanBanner prompt={bilanPrompt} onSaved={() => { refetch(); refetchReports() }} />
           <div className="ck-cols">
             <div className="ck-col">
               <ProchainFestival participation={nextFestival} />

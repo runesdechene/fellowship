@@ -32,31 +32,28 @@ export async function saveEventReport(report: EventReportInsert) {
   return { data, error }
 }
 
-/** Ensemble des event_id pour lesquels l'acteur actif a déjà rempli un bilan. */
-export function useMyReportedEventIds(): { reportedEventIds: Set<string>; loading: boolean } {
+/** Ensemble des event_id pour lesquels l'acteur actif a déjà rempli un bilan.
+ *  `refetch` à rappeler après l'enregistrement d'un bilan (sinon le prompt ne disparaît pas). */
+export function useMyReportedEventIds(): { reportedEventIds: Set<string>; loading: boolean; refetch: () => Promise<void> } {
   const { currentActor } = useAuth()
   const [reportedEventIds, setReportedEventIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    if (!currentActor) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLoading(false); return
-    }
-    let cancelled = false
-    async function run() {
-      const { data } = await supabase
-        .from('event_reports')
-        .select('event_id')
-        .eq('actor_id', currentActor!.id)
-      if (cancelled) return
-      const rows = (data ?? []) as Array<{ event_id: string }>
-      setReportedEventIds(new Set(rows.map(r => r.event_id)))
-      setLoading(false)
-    }
-    run()
-    return () => { cancelled = true }
+  const refetch = useCallback(async () => {
+    if (!currentActor) { setLoading(false); return }
+    const { data } = await supabase
+      .from('event_reports')
+      .select('event_id')
+      .eq('actor_id', currentActor.id)
+    const rows = (data ?? []) as Array<{ event_id: string }>
+    setReportedEventIds(new Set(rows.map(r => r.event_id)))
+    setLoading(false)
   }, [currentActor])
 
-  return { reportedEventIds, loading }
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refetch()
+  }, [refetch])
+
+  return { reportedEventIds, loading, refetch }
 }

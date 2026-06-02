@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.208',
+    date: '2026-06-02',
+    title: 'Cockpit — le bandeau bilan disparaît après enregistrement',
+    changes: [
+      'Après avoir rempli un bilan, le bandeau du Cockpit se met à jour et disparaît (refetch des bilans)',
+    ],
+  },
+  {
     version: '0.7.207',
     date: '2026-06-02',
     title: 'Cockpit — polish hero & saison',
