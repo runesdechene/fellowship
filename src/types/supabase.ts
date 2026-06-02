@@ -532,31 +532,28 @@ export type Database = {
       }
       notifications: {
         Row: {
-          actor_id: string | null
+          actor_id: string
           created_at: string
           data: Json
           id: string
           read: boolean
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string | null
         }
         Insert: {
-          actor_id?: string | null
+          actor_id: string
           created_at?: string
           data?: Json
           id?: string
           read?: boolean
           type: Database["public"]["Enums"]["notification_type"]
-          user_id?: string | null
         }
         Update: {
-          actor_id?: string | null
+          actor_id?: string
           created_at?: string
           data?: Json
           id?: string
           read?: boolean
           type?: Database["public"]["Enums"]["notification_type"]
-          user_id?: string | null
         }
         Relationships: [
           {
@@ -564,13 +561,6 @@ export type Database = {
             columns: ["actor_id"]
             isOneToOne: false
             referencedRelation: "actors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

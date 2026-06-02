@@ -149,6 +149,7 @@ export function useEventCreator(actorId: string | null | undefined) {
 
   useEffect(() => {
     if (!actorId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCreator(null)
       return
     }

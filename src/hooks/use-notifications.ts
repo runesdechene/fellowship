@@ -21,17 +21,25 @@ export const NOTIFICATION_TYPES = new Set([
 ])
 
 export function useNotifications() {
-  const { user } = useAuth()
+  const { person, entities } = useAuth()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  // Modèle acteur : le feed regroupe les notifs de TOUS les acteurs que l'utilisateur
+  // contrôle (sa personne + ses entités). Sur-ensemble du comportement legacy (user_id) :
+  // ne cache rien, et fait remonter les notifs d'entité (ex. « X suit ta marque »).
+  const actorIds = useMemo(
+    () => [person?.actor_id, ...entities.map(e => e.actor_id)].filter((id): id is string => !!id),
+    [person?.actor_id, entities]
+  )
+
   const fetchNotifications = useCallback(async () => {
-    if (!user) return
+    if (actorIds.length === 0) return
     const { data } = await supabase
       .from('notifications')
       .select('*')
-      .eq('user_id', user.id)
+      .in('actor_id', actorIds)
       .order('created_at', { ascending: false })
       .limit(50)
 
@@ -39,13 +47,13 @@ export function useNotifications() {
     setNotifications(notifs)
     setUnreadCount(notifs.filter(n => !n.read).length)
     setLoading(false)
-  }, [user])
+  }, [actorIds])
 
   useEffect(() => {
-    if (!user) return
+    if (actorIds.length === 0) return
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchNotifications()
-  }, [user, fetchNotifications])
+  }, [actorIds, fetchNotifications])
 
   async function markAsRead(id: string) {
     await supabase.from('notifications').update({ read: true }).eq('id', id)
@@ -54,8 +62,8 @@ export function useNotifications() {
   }
 
   async function markAllAsRead() {
-    if (!user) return
-    await supabase.from('notifications').update({ read: true }).eq('user_id', user.id).eq('read', false)
+    if (actorIds.length === 0) return
+    await supabase.from('notifications').update({ read: true }).in('actor_id', actorIds).eq('read', false)
     setNotifications(prev => prev.map(n => ({ ...n, read: true })))
     setUnreadCount(0)
   }
