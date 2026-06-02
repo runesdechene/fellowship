@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import { useEventReport, saveEventReport } from '@/hooks/use-reports'
+import { uploadBilanPhoto, signedUrlsFor, removeBilanPhoto } from '@/lib/bilan-media'
 import { Button } from '@/components/ui/button'
-import { Lock, Plus, X } from 'lucide-react'
+import { Lock, Plus, X, ImagePlus } from 'lucide-react'
 
 interface EventReportFormProps {
   eventId: string
@@ -17,10 +18,12 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
   const [boothCost, setBoothCost] = useState('')
   const [charges, setCharges] = useState('')
   const [revenue, setRevenue] = useState('')
-  const [wins, setWins] = useState<string[]>([])
   const [improvements, setImprovements] = useState<string[]>([])
-  const [newWin, setNewWin] = useState('')
   const [newImprovement, setNewImprovement] = useState('')
+  const [note, setNote] = useState('')
+  const [mediaPaths, setMediaPaths] = useState<string[]>([])
+  const [signedUrls, setSignedUrls] = useState<Map<string, string>>(new Map())
+  const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -29,10 +32,20 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
       setBoothCost(existing.booth_cost?.toString() ?? '')
       setCharges(existing.charges?.toString() ?? '')
       setRevenue(existing.revenue?.toString() ?? '')
-      setWins(existing.wins ?? [])
       setImprovements(existing.improvements ?? [])
+      setNote(existing.note ?? '')
+      setMediaPaths(existing.media_paths ?? [])
     }
   }, [existing])
+
+  // Signer les paths pour l'aperçu (bucket privé).
+  useEffect(() => {
+    let cancelled = false
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (mediaPaths.length === 0) { setSignedUrls(new Map()); return }
+    signedUrlsFor(mediaPaths).then(map => { if (!cancelled) setSignedUrls(map) })
+    return () => { cancelled = true }
+  }, [mediaPaths])
 
   if (planForActor(currentActor, currentActorRow) !== 'pro') {
     return (
@@ -45,6 +58,27 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
 
   const profit = (parseFloat(revenue) || 0) - (parseFloat(boothCost) || 0) - (parseFloat(charges) || 0)
 
+  const handlePhotos = async (files: FileList | null) => {
+    if (!files || !currentActor) return
+    setUploading(true)
+    try {
+      const added: string[] = []
+      for (const file of Array.from(files)) {
+        if (!file.type.startsWith('image/')) continue
+        added.push(await uploadBilanPhoto(file, currentActor.id, eventId))
+      }
+      if (added.length) setMediaPaths(prev => [...prev, ...added])
+    } catch (e) {
+      console.error('bilan photo upload failed', e)
+    }
+    setUploading(false)
+  }
+
+  const handleRemovePhoto = async (path: string) => {
+    setMediaPaths(prev => prev.filter(p => p !== path))
+    try { await removeBilanPhoto(path) } catch (e) { console.error('bilan photo remove failed', e) }
+  }
+
   const handleSave = async () => {
     if (!user || !currentActor) return
     setSaving(true)
@@ -55,22 +89,16 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
       booth_cost: boothCost ? parseFloat(boothCost) : null,
       charges: charges ? parseFloat(charges) : null,
       revenue: revenue ? parseFloat(revenue) : null,
-      wins,
       improvements,
+      note: note.trim() || null,
+      media_paths: mediaPaths,
     })
     setSaving(false)
     if (!error) onSaved?.()
   }
 
-  const addItem = (list: string[], setList: (v: string[]) => void, value: string, clearFn: (v: string) => void) => {
-    if (value.trim()) {
-      setList([...list, value.trim()])
-      clearFn('')
-    }
-  }
-
-  const removeItem = (list: string[], setList: (v: string[]) => void, index: number) => {
-    setList(list.filter((_, i) => i !== index))
+  const addImprovement = () => {
+    if (newImprovement.trim()) { setImprovements([...improvements, newImprovement.trim()]); setNewImprovement('') }
   }
 
   const inputClass = "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -105,38 +133,50 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-muted-foreground">Points réussis</label>
-        <div className="mt-1 flex flex-wrap gap-2">
-          {wins.map((w, i) => (
-            <span key={i} className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
-              {w}
-              <button onClick={() => removeItem(wins, setWins, i)}><X className="h-3 w-3" /></button>
-            </span>
-          ))}
-        </div>
-        <div className="mt-2 flex gap-2">
-          <input className={inputClass} placeholder="Ajouter un point réussi" value={newWin} onChange={e => setNewWin(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addItem(wins, setWins, newWin, setNewWin))} />
-          <Button size="icon" variant="ghost" onClick={() => addItem(wins, setWins, newWin, setNewWin)}><Plus className="h-4 w-4" /></Button>
-        </div>
+        <label className="text-xs font-medium text-muted-foreground">Note libre</label>
+        <textarea
+          className={inputClass}
+          rows={3}
+          placeholder="Comment ça s'est passé ? Ambiance, public, ce que tu retiens…"
+          value={note}
+          onChange={e => setNote(e.target.value)}
+        />
       </div>
 
       <div>
-        <label className="text-xs font-medium text-muted-foreground">Points à améliorer</label>
+        <label className="text-xs font-medium text-muted-foreground">À améliorer la prochaine fois</label>
         <div className="mt-1 flex flex-wrap gap-2">
           {improvements.map((im, i) => (
             <span key={i} className="flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs text-orange-700">
               {im}
-              <button onClick={() => removeItem(improvements, setImprovements, i)}><X className="h-3 w-3" /></button>
+              <button onClick={() => setImprovements(improvements.filter((_, j) => j !== i))}><X className="h-3 w-3" /></button>
             </span>
           ))}
         </div>
         <div className="mt-2 flex gap-2">
-          <input className={inputClass} placeholder="Ajouter un point à améliorer" value={newImprovement} onChange={e => setNewImprovement(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addItem(improvements, setImprovements, newImprovement, setNewImprovement))} />
-          <Button size="icon" variant="ghost" onClick={() => addItem(improvements, setImprovements, newImprovement, setNewImprovement)}><Plus className="h-4 w-4" /></Button>
+          <input className={inputClass} placeholder="Ajouter un point à améliorer" value={newImprovement} onChange={e => setNewImprovement(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addImprovement() } }} />
+          <Button size="icon" variant="ghost" onClick={addImprovement}><Plus className="h-4 w-4" /></Button>
         </div>
       </div>
 
-      <Button className="w-full" onClick={handleSave} disabled={saving}>
+      <div>
+        <label className="text-xs font-medium text-muted-foreground">Photos souvenir <span className="opacity-70">— privées, visibles uniquement par toi</span></label>
+        <div className="mt-1 flex flex-wrap gap-2">
+          {mediaPaths.map(path => (
+            <span key={path} className="relative h-16 w-16 overflow-hidden rounded-lg bg-card">
+              {signedUrls.get(path) && <img src={signedUrls.get(path)} alt="" className="h-full w-full object-cover" />}
+              <button onClick={() => handleRemovePhoto(path)} className="absolute right-0 top-0 bg-black/60 p-0.5 text-white" aria-label="Retirer la photo"><X className="h-3 w-3" /></button>
+            </span>
+          ))}
+          <label className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-lg border border-dashed border-input text-muted-foreground">
+            <ImagePlus className="h-5 w-5" />
+            <input type="file" accept="image/*" multiple className="hidden" onChange={e => handlePhotos(e.target.files)} />
+          </label>
+        </div>
+        {uploading && <p className="mt-1 text-xs text-muted-foreground">Envoi des photos…</p>}
+      </div>
+
+      <Button className="w-full" onClick={handleSave} disabled={saving || uploading}>
         {saving ? 'Sauvegarde...' : 'Sauvegarder le bilan'}
       </Button>
     </div>
