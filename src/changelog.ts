@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.213',
+    date: '2026-06-02',
+    title: 'Liens /e/slug partout',
+    changes: [
+      'Tous les liens d\'événements de l\'app utilisent désormais le lien lisible /e/nom-du-festival (cartes, calendrier, vitrine, communauté, cockpit, recherche, embed)',
+    ],
+  },
+  {
     version: '0.7.212',
     date: '2026-06-02',
     title: 'Liens d\'événements lisibles',

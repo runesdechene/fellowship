@@ -137,7 +137,7 @@ export function DashboardPage() {
             {friendActivity.slice(0, 5).map((p: FriendParticipation) => (
               <Link
                 key={p.id}
-                to={`/evenement/${p.event_id}`}
+                to={eventPath({ slug: (p.events?.slug as string | null | undefined) ?? null, id: p.event_id })}
                 className="flex items-center gap-4 py-1"
               >
                 <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
