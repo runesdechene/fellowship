@@ -52,16 +52,16 @@ export function useEvents(filters?: {
   return { events, loading, refetch: fetchEvents }
 }
 
-export function useEvent(id: string | undefined) {
+export function useEvent(key: string | undefined, by: 'id' | 'slug' = 'id') {
   const [event, setEvent] = useState<EventWithScore | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!id) return
+    if (!key) return
     supabase
       .from('events')
       .select('*')
-      .eq('id', id)
+      .eq(by, key)
       .single()
       .then(({ data }) => {
         if (data) {
@@ -76,7 +76,7 @@ export function useEvent(id: string | undefined) {
         }
         setLoading(false)
       })
-  }, [id])
+  }, [key, by])
 
   return { event, loading }
 }

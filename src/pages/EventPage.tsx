@@ -48,15 +48,15 @@ function formatDate(date: string) {
 }
 
 export function EventPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id, slug } = useParams<{ id?: string; slug?: string }>()
   const location = useLocation()
   const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
   const { user, currentActor } = useAuth()
-  const { event, loading } = useEvent(id)
+  const { event, loading } = useEvent(slug ?? id, slug ? 'slug' : 'id')
   // Notes personnelles (filtrées sur l'acteur actif) — privées, pas partagées.
-  const { notes, refetch: refetchNotes } = useEventNotes(id, currentActor?.id ?? null)
-  const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(id)
-  const { friends: friendsOnEvent } = useFriendsOnEvent(id)
+  const { notes, refetch: refetchNotes } = useEventNotes(event?.id, currentActor?.id ?? null)
+  const { reviews, canSeeDetails, refetch: refetchReviews } = useEventReviews(event?.id)
+  const { friends: friendsOnEvent } = useFriendsOnEvent(event?.id)
   const { canAdd } = useDateQuota()
   const [showQuotaModal, setShowQuotaModal] = useState(false)
   const [participation, setParticipation] = useState<Participation | null>(null)
@@ -94,37 +94,37 @@ export function EventPage() {
 
   // Fetch current actor's participation
   useEffect(() => {
-    if (!currentActor || !id) return
+    if (!currentActor || !event?.id) return
     supabase
       .from('participations')
       .select('*')
       .eq('actor_id', currentActor.id)
-      .eq('event_id', id)
+      .eq('event_id', event.id)
       .maybeSingle()
       .then(({ data }) => {
         setParticipation(data)
       })
-  }, [currentActor, id])
+  }, [currentActor, event?.id])
 
   // Friend count
   useEffect(() => {
-    if (!id) return
+    if (!event?.id) return
     supabase
       .from('participations')
       .select('id', { count: 'exact' })
-      .eq('event_id', id)
+      .eq('event_id', event.id)
       .in('visibility', ['amis', 'public'])
       .then(({ count }) => setFriendCount(count ?? 0))
-  }, [id])
+  }, [event?.id])
 
   const handleJoin = async (status: ParticipationStatus, visibility: ParticipationVisibility) => {
-    if (!user || !currentActor || !id) return
+    if (!user || !currentActor || !event?.id) return
     // Quota dates : bloque l'ajout d'une NOUVELLE date pour une entité gratuite au plafond.
     if (!canAdd) { setShowQuotaModal(true); return }
     const { data } = await addParticipation({
       actor_id: currentActor.id,
       acted_by_user_id: user.id,
-      event_id: id,
+      event_id: event.id,
       status,
       visibility,
     })
