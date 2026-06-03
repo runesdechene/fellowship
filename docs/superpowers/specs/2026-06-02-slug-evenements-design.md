@@ -15,7 +15,9 @@ pro, inspire confiance) sans casser les liens existants.
 
 1. **Format du slug = nom + ville**, en kebab sans accents : `slugify(name)-slugify(city)`
    (ex. `foire-medievale-de-provins`). Quasi pas de collisions ; suffixe `-2`, `-3`… seulement
-   en dernier recours.
+   en dernier recours. **La ville n'est ajoutée que si elle n'est PAS déjà dans le titre**
+   (match par segments entiers — évite `medievale-brignoles-brignoles`). Cf. migration
+   `20260603120000_event_slug_dedupe_city.sql`.
 2. **Slug figé à la création** : généré une fois, ne change JAMAIS, même si le festival est
    renommé. Les liens partagés restent valides à vie. (Pas de redirection de vieux slugs à gérer.)
 3. **Nouvelle route `/e/:slug`** qui résout vers l'événement. **`/evenement/:uuid` conservée**

@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.214',
+    date: '2026-06-03',
+    title: 'Slugs plus propres',
+    changes: [
+      'La ville n\'est ajoutée au lien que si elle n\'est pas déjà dans le nom du festival (fini medievale-brignoles-brignoles)',
+    ],
+  },
+  {
     version: '0.7.213',
     date: '2026-06-02',
     title: 'Liens /e/slug partout',
