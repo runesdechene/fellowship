@@ -109,6 +109,20 @@
   height: 14px;
 }
 
+/* Palier gratuit (#9 lot 1) : quota, filtres réseau verrouillés, empty hint */
+.calendar-filter-btn.locked { opacity: 0.65; }
+.calendar-quota {
+  display: inline-block; margin-top: 8px;
+  font-size: 12.5px; color: hsl(var(--muted-foreground)); text-decoration: none;
+  border: 1px solid hsl(var(--border)); border-radius: 99px; padding: 4px 12px; white-space: nowrap;
+}
+.calendar-quota b { color: hsl(var(--foreground)); }
+.calendar-quota.at-limit { border-color: var(--copper); color: var(--copper); }
+.calendar-empty-hint {
+  text-align: center; color: hsl(var(--muted-foreground)); font-size: 14px; padding: 14px 14px 4px;
+}
+.calendar-empty-hint a { color: var(--copper); font-weight: 600; text-decoration: none; }
+
 .calendar-year-label {
   font-family: var(--font-heading);
   font-size: 15px;

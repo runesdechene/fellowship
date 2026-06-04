@@ -1,11 +1,14 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations, useFriendsParticipations } from '@/hooks/use-participations'
 import { useCalendarYear, type CalendarEvent, type CalendarMonth as CalendarMonthType } from '@/hooks/use-calendar'
 import { CalendarMonth } from '@/components/calendar/CalendarMonth'
 import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal'
 import { MobileAgenda } from '@/components/calendar/MobileAgenda'
-import { ChevronLeft, ChevronRight, Users } from 'lucide-react'
+import { planForActor } from '@/lib/navModel'
+import { useDateQuota } from '@/hooks/use-date-quota'
+import { ChevronLeft, ChevronRight, Users, Lock } from 'lucide-react'
 import './Calendar.css'
 
 export function CalendarPage() {
@@ -15,13 +18,19 @@ export function CalendarPage() {
 
   // Le calendrier suit l'acteur ACTIF (entité ou personne), pas le type compte legacy
   // (`profile.type`) qui ratait l'edge case d'un festivalier ayant aussi une entité.
-  const { currentActor } = useAuth()
+  const { currentActor, currentActorRow } = useAuth()
+  const routerNav = useNavigate()
+  const isFree = planForActor(currentActor, currentActorRow) !== 'pro'
+  const quota = useDateQuota()
   const actorKind: 'entity' | 'person' = currentActor?.kind === 'entity' ? 'entity' : 'person'
   const [year, setYear] = useState(defaultYear)
   const [animating, setAnimating] = useState(false)
   const [showMine, setShowMine] = useState(() => localStorage.getItem('fellowship-calendar-mine') !== 'false')
   const [showPro, setShowPro] = useState(() => localStorage.getItem('fellowship-calendar-pro') === 'true')
   const [showVisiteurs, setShowVisiteurs] = useState(() => localStorage.getItem('fellowship-calendar-visiteurs') === 'true')
+  // Le gratuit ne peut pas activer l'overlay réseau (Pro) : valeurs effectives forcées à false.
+  const effShowPro = !isFree && showPro
+  const effShowVisiteurs = !isFree && showVisiteurs
   const containerRef = useRef<HTMLDivElement>(null)
   const [modalEvent, setModalEvent] = useState<{ id: string; name: string } | null>(null)
 
@@ -45,7 +54,7 @@ export function CalendarPage() {
   // Convert friend participations to CalendarEvents grouped by month
   const friendEventsByMonth = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {}
-    if (!showPro && !showVisiteurs) return map
+    if (!effShowPro && !effShowVisiteurs) return map
 
     for (const fp of friendActivity) {
       const ev = fp.events as Record<string, unknown> | undefined
@@ -53,8 +62,8 @@ export function CalendarPage() {
 
       // Filter by friend type
       const friendKind = fp.actor_public?.kind
-      if (friendKind === 'entity' && !showPro) continue
-      if (friendKind === 'person' && !showVisiteurs) continue
+      if (friendKind === 'entity' && !effShowPro) continue
+      if (friendKind === 'person' && !effShowVisiteurs) continue
 
       const startDate = new Date(ev.start_date as string)
       const endDate = new Date(ev.end_date as string)
@@ -90,13 +99,13 @@ export function CalendarPage() {
       }
     }
     return map
-  }, [friendActivity, showPro, showVisiteurs])
+  }, [friendActivity, effShowPro, effShowVisiteurs])
 
   // Merge friend events into months + filter own events
   const mergeWithFriends = useCallback((monthData: CalendarMonthType): CalendarMonthType => {
     let events = showMine ? monthData.events : []
 
-    if (showPro || showVisiteurs) {
+    if (effShowPro || effShowVisiteurs) {
       const key = `${monthData.year}-${monthData.month}`
       const friendEvents = friendEventsByMonth[key] ?? []
       // Only deduplicate if showing own events too
@@ -108,7 +117,7 @@ export function CalendarPage() {
     events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
     return { ...monthData, events }
-  }, [showMine, showPro, showVisiteurs, friendEventsByMonth])
+  }, [showMine, effShowPro, effShowVisiteurs, friendEventsByMonth])
 
   /* eslint-disable react-hooks/preserve-manual-memoization -- React Compiler can't track defaultStart across renders; manual useMemo is required here */
   const slidingMonths = useMemo(() => {
@@ -149,6 +158,11 @@ export function CalendarPage() {
 
   return (
     <div className="calendar-page">
+      {!loading && participations.length === 0 && partsNext.length === 0 && (
+        <div className="calendar-empty-hint">
+          Aucune date pour l'instant — <Link to="/explorer">Explorer les festivals</Link>
+        </div>
+      )}
       {/* En-tête + filtres : collants sur mobile via .calendar-topbar (neutre en desktop) */}
       <div className="calendar-topbar">
       {/* Header */}
@@ -158,6 +172,11 @@ export function CalendarPage() {
           <p className="calendar-subtitle">
             {firstMonth?.label} {firstMonth?.year} — {lastMonth?.label} {lastMonth?.year}
           </p>
+          {quota.isFreeEntity && (
+            <Link to="/reglages" className={'calendar-quota' + (quota.atLimit ? ' at-limit' : '')}>
+              <b>{quota.used} / {quota.limit}</b> dates · Pro = illimité
+            </Link>
+          )}
         </div>
 
         {/* Year navigation */}
@@ -189,17 +208,17 @@ export function CalendarPage() {
           Mes dates
         </button>
         <button
-          onClick={() => { const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
-          className={`calendar-filter-btn ${showPro ? 'active' : ''}`}
+          onClick={() => { if (isFree) { routerNav('/boutique'); return } const next = !showPro; setShowPro(next); localStorage.setItem('fellowship-calendar-pro', String(next)) }}
+          className={`calendar-filter-btn ${effShowPro ? 'active' : ''} ${isFree ? 'locked' : ''}`}
         >
-          <Users strokeWidth={1.5} />
+          {isFree ? <Lock strokeWidth={1.5} /> : <Users strokeWidth={1.5} />}
           Amis pro
         </button>
         <button
-          onClick={() => { const next = !showVisiteurs; setShowVisiteurs(next); localStorage.setItem('fellowship-calendar-visiteurs', String(next)) }}
-          className={`calendar-filter-btn ${showVisiteurs ? 'active' : ''}`}
+          onClick={() => { if (isFree) { routerNav('/boutique'); return } const next = !showVisiteurs; setShowVisiteurs(next); localStorage.setItem('fellowship-calendar-visiteurs', String(next)) }}
+          className={`calendar-filter-btn ${effShowVisiteurs ? 'active' : ''} ${isFree ? 'locked' : ''}`}
         >
-          <Users strokeWidth={1.5} />
+          {isFree ? <Lock strokeWidth={1.5} /> : <Users strokeWidth={1.5} />}
           Visiteurs
         </button>
       </div>
