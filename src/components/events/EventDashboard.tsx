@@ -81,6 +81,19 @@ export function EventDashboard({
     return () => clearTimeout(timer)
   }, [infoBox])
 
+  // Note « pourquoi ce refus » (#8) : capturée à chaud quand le dossier est Refusé, éditable.
+  const [refusalNote, setRefusalNote] = useState((participation?.refusal_note as string | null) ?? '')
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setRefusalNote((participation?.refusal_note as string | null) ?? '') }, [participation?.id])
+
+  const saveRefusalNote = async () => {
+    if (!participation) return
+    const cur = (participation.refusal_note as string | null) ?? ''
+    if (cur === refusalNote.trim()) return
+    const { data } = await updateParticipation(participation.id, { refusal_note: refusalNote.trim() || null })
+    if (data) onUpdate(data)
+  }
+
   /**
    * Logique toggle :
    *   - clic sur le statut ACTIF → retire la participation (onLeave)
@@ -159,6 +172,21 @@ export function EventDashboard({
               )}
             </div>
           </div>
+
+          {/* Note du refus (#8) — capturée à chaud, ré-éditable ici ou au Cockpit */}
+          {(participation?.status as string) === 'refuse' && (
+            <div className="event-suivi-block">
+              <div className="event-suivi-block-label">Pourquoi ce refus ? (optionnel)</div>
+              <textarea
+                className="event-refusal-note"
+                value={refusalNote}
+                onChange={e => setRefusalNote(e.target.value)}
+                onBlur={saveRefusalNote}
+                placeholder="Ex : trop cher, dates en conflit, pas le bon public…"
+                rows={2}
+              />
+            </div>
+          )}
 
           {/* Payment stepper — affiché seulement quand exposant + Accepté/Inscrit */}
           {showPayment && (

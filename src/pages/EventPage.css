@@ -651,6 +651,13 @@
   font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
   margin-bottom: 8px; color: hsl(var(--muted-foreground));
 }
+.event-refusal-note {
+  width: 100%; resize: vertical; border-radius: 12px;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--background));
+  color: hsl(var(--foreground)); padding: 8px 10px;
+  font-family: var(--font-body); font-size: 14px;
+}
+.event-refusal-note:focus { outline: none; border-color: var(--copper); }
 
 .event-cta { padding: 8px 0; text-align: center; }
 .event-cta-title { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: hsl(var(--foreground)); margin-bottom: 12px; }
