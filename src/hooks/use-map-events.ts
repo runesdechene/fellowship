@@ -20,7 +20,7 @@ export function useMapEvents() {
       setError(null)
       const { data: events, error: e1 } = await supabase
         .from('events')
-        .select('id, slug, name, city, start_date, end_date, tags, latitude, longitude')
+        .select('id, slug, name, city, start_date, end_date, tags, image_url, latitude, longitude')
         .not('latitude', 'is', null)
       if (e1) {
         if (!cancelled) { setError(e1.message); setLoading(false) }
