@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.224',
+    date: '2026-06-05',
+    title: 'La Carte, en grand',
+    changes: [
+      'Chaque festival apparaît avec son image et la couleur de sa catégorie ; clique pour un aperçu (date, ville, lien vers la fiche)',
+      'Filtres Quoi / Où / Quand comme l\'Explorer (catégories multi-sélection, période — à venir par défaut)',
+      'Tes festivals ressortent avec ton avatar ; en Pro, active « Mes amis » pour voir où va ton réseau (avatars groupés)',
+    ],
+  },
+  {
     version: '0.7.222',
     date: '2026-06-04',
     title: 'La Carte des festivals',
