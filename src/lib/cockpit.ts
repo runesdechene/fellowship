@@ -79,6 +79,13 @@ export function aggregateSeason(parts: ParticipationWithEvent[], now: Date): Sea
   return buckets
 }
 
+/** Dossiers refusés de l'acteur (statut 'refuse'), triés du plus récemment terminé au plus ancien (#8). */
+export function selectRefusedDossiers(parts: ParticipationWithEvent[]): ParticipationWithEvent[] {
+  return parts
+    .filter(p => p.events && (p.status as string) === 'refuse')
+    .sort((a, b) => new Date(b.events.end_date).getTime() - new Date(a.events.end_date).getTime())
+}
+
 export interface BilanPrompt {
   pending: ParticipationWithEvent | null
   extraCount: number

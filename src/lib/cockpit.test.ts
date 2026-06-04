@@ -5,6 +5,7 @@ import {
   selectAReglerItems,
   aggregateSeason,
   detectBilanPrompt,
+  selectRefusedDossiers,
 } from './cockpit'
 import type { ParticipationWithEvent } from '@/types/database'
 
@@ -138,5 +139,20 @@ describe('detectBilanPrompt', () => {
   it('pending null si le seul festival en attente est snoozé', () => {
     const parts = [part('1', '2026-05-01', '2026-05-02')]
     expect(detectBilanPrompt(parts, new Set(), NOW, new Set(['e1'])).pending).toBeNull()
+  })
+})
+
+describe('selectRefusedDossiers', () => {
+  it('ne garde que les refusés, triés par fin décroissante', () => {
+    const parts = [
+      part('1', '2026-04-01', '2026-04-02', 'refuse'),
+      part('2', '2026-05-01', '2026-05-02', 'inscrit'),
+      part('3', '2026-03-01', '2026-03-02', 'refuse'),
+    ]
+    expect(selectRefusedDossiers(parts).map(p => p.id)).toEqual(['1', '3'])
+  })
+  it('ignore les participations sans events', () => {
+    const parts = [{ id: 'x', status: 'refuse', events: null }] as unknown as ParticipationWithEvent[]
+    expect(selectRefusedDossiers(parts)).toEqual([])
   })
 })
