@@ -4,6 +4,7 @@ import { eventPath } from '@/lib/event-link'
 import { Search, X, Calendar, MapPin, User, Bell, Plus } from 'lucide-react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { supabase } from '@/lib/supabase'
+import { isSearchableActor } from '@/lib/search'
 import { useAuth } from '@/lib/auth'
 import { useNotifications } from '@/hooks/use-notifications'
 import { useFollowingIds } from '@/hooks/use-following-ids'
@@ -103,13 +104,15 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         supabase
           .from('actor_public')
           .select('actor_id, label, public_slug, avatar_url, kind')
+          .eq('kind', 'entity') // recherche : exposants uniquement (les festivaliers n'ont pas de vitrine)
           .ilike('label', `%${query}%`)
           .limit(5),
       ])
 
       setEvents(eventsRes.data ?? [])
-      // actor_public expose des colonnes nullable ; on ne garde que les lignes resolues.
-      setProfiles(((profilesRes.data ?? []) as SearchProfile[]).filter(p => p.actor_id))
+      // actor_public expose des colonnes nullable ; on ne garde que les lignes résolues ET
+      // searchables (entités/exposants) — défense en profondeur en plus du filtre SQL.
+      setProfiles(((profilesRes.data ?? []) as SearchProfile[]).filter(p => p.actor_id && isSearchableActor(p.kind)))
       setLoading(false)
     }, 300)
 
@@ -273,7 +276,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
               )}
               {profiles.length > 0 && (
                 <div className="search-results-section">
-                  <div className="search-results-label">Personnes</div>
+                  <div className="search-results-label">Exposants</div>
                   {profiles.map(p => (
                     <Link
                       key={p.actor_id}
@@ -291,11 +294,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                       <div className="search-result-info">
                         <div className="search-result-name">{p.label ?? 'Utilisateur'}</div>
                         <div className="search-result-meta">
-                          {p.kind === 'person' ? (
-                            <span>Visiteur</span>
-                          ) : (
-                            <span>Exposant</span>
-                          )}
+                          <span>Exposant</span>
                         </div>
                       </div>
                     </Link>
