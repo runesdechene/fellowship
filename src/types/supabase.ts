@@ -564,6 +564,7 @@ export type Database = {
           id: string
           payment_status: string | null
           payments: Json | null
+          refusal_note: string | null
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
           visibility: Database["public"]["Enums"]["participation_visibility"]
@@ -576,6 +577,7 @@ export type Database = {
           id?: string
           payment_status?: string | null
           payments?: Json | null
+          refusal_note?: string | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
@@ -588,6 +590,7 @@ export type Database = {
           id?: string
           payment_status?: string | null
           payments?: Json | null
+          refusal_note?: string | null
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
