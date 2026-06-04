@@ -6,13 +6,14 @@ import type { BilanPrompt } from '@/lib/cockpit'
 interface Props {
   prompt: BilanPrompt
   onSaved: () => void
+  /** « Plus tard » : snooze l'event affiché jusqu'au lendemain (persisté). */
+  onSnooze: (eventId: string) => void
 }
 
-export function BilanBanner({ prompt, onSaved }: Props) {
+export function BilanBanner({ prompt, onSaved, onSnooze }: Props) {
   const [open, setOpen] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
   const p = prompt.pending
-  if (!p || dismissed) return null
+  if (!p) return null
 
   return (
     <>
@@ -26,7 +27,7 @@ export function BilanBanner({ prompt, onSaved }: Props) {
           </small>
         </div>
         <button className="ck-btn ck-btn-p" onClick={() => setOpen(true)}>Remplir mon bilan</button>
-        <button className="ck-bilan-x" aria-label="Plus tard" onClick={() => setDismissed(true)}><X strokeWidth={2.2} /></button>
+        <button className="ck-bilan-x" aria-label="Plus tard" onClick={() => onSnooze(p.event_id)}><X strokeWidth={2.2} /></button>
       </div>
       {open && (
         <BilanModal

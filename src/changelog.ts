@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.216',
+    date: '2026-06-04',
+    title: 'Cockpit — « Plus tard » sur le bandeau bilan',
+    changes: [
+      'Quand tu mets le rappel de bilan « à plus tard », il ne réapparaît plus dans la même journée (il revient le lendemain)',
+    ],
+  },
+  {
     version: '0.7.215',
     date: '2026-06-04',
     title: 'Retours 1ʳᵉ cliente — corrections P0',

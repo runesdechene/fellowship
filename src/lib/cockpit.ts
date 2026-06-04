@@ -97,6 +97,7 @@ export function detectBilanPrompt(
   parts: ParticipationWithEvent[],
   reportedEventIds: Set<string>,
   now: Date,
+  snoozedEventIds: Set<string> = new Set(),
 ): BilanPrompt {
   const nowMs = now.getTime()
   const sinceMs = nowMs - BILAN_WINDOW_DAYS * 86_400_000
@@ -104,7 +105,9 @@ export function detectBilanPrompt(
     .filter(p => {
       if (!p.events || p.status !== CONFIRMED) return false
       const end = new Date(p.events.end_date).getTime()
-      return end < nowMs && end >= sinceMs && !reportedEventIds.has(p.event_id)
+      return end < nowMs && end >= sinceMs
+        && !reportedEventIds.has(p.event_id)
+        && !snoozedEventIds.has(p.event_id)  // snoozé « Plus tard » aujourd'hui (#7)
     })
     .sort((a, b) => new Date(b.events.end_date).getTime() - new Date(a.events.end_date).getTime())
   return { pending: pendingList[0] ?? null, extraCount: Math.max(0, pendingList.length - 1) }

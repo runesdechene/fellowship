@@ -124,4 +124,19 @@ describe('detectBilanPrompt', () => {
     const parts = [part('1', '2026-01-10', '2026-01-12')]
     expect(detectBilanPrompt(parts, new Set(), NOW).pending).toBeNull()
   })
+
+  it('exclut un festival snoozé aujourd’hui → le suivant devient pending (#7)', () => {
+    const parts = [
+      part('1', '2026-04-01', '2026-04-02'),  // terminé, non bilané
+      part('2', '2026-05-01', '2026-05-02'),  // terminé, plus récent → serait pending
+    ]
+    const res = detectBilanPrompt(parts, new Set(), NOW, new Set(['e2']))
+    expect(res.pending?.id).toBe('1')
+    expect(res.extraCount).toBe(0)
+  })
+
+  it('pending null si le seul festival en attente est snoozé', () => {
+    const parts = [part('1', '2026-05-01', '2026-05-02')]
+    expect(detectBilanPrompt(parts, new Set(), NOW, new Set(['e1'])).pending).toBeNull()
+  })
 })
