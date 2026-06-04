@@ -303,6 +303,10 @@ export type Database = {
           stand_size: string | null
           slug: string | null
           start_date: string
+          address: string | null
+          geo_precision: string | null
+          latitude: number | null
+          longitude: number | null
           tags: string[] | null
         }
         Insert: {
@@ -328,6 +332,10 @@ export type Database = {
           stand_size?: string | null
           slug?: string | null
           start_date: string
+          address?: string | null
+          geo_precision?: string | null
+          latitude?: number | null
+          longitude?: number | null
           tags?: string[] | null
         }
         Update: {
@@ -353,6 +361,10 @@ export type Database = {
           stand_size?: string | null
           slug?: string | null
           start_date?: string
+          address?: string | null
+          geo_precision?: string | null
+          latitude?: number | null
+          longitude?: number | null
           tags?: string[] | null
         }
         Relationships: [
