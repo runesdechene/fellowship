@@ -58,7 +58,7 @@ export function Sidebar() {
           const state = entryState(key, plan)
           const to = key === 'vitrine' ? vitrineHref((currentActorRow as { public_slug?: string | null })?.public_slug) : def.to
           if (state === 'active') {
-            const showCount = key === 'mes-dates' && myDatesCount > 0
+            const showCount = key === 'calendrier' && myDatesCount > 0
             return (
               <NavLink key={key} to={to} title={collapsed ? def.label : undefined}
                 className={({ isActive }) => (isActive ? 'active' : '')}>

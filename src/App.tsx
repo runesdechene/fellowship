@@ -17,7 +17,6 @@ import { PublicProfilePage } from '@/pages/PublicProfile'
 import { EmbedPage } from '@/pages/Embed'
 import { AuthCallbackPage } from '@/pages/AuthCallback'
 import { CalendarPage } from '@/pages/Calendar'
-import { MesDatesPage } from '@/pages/MesDates'
 import { CommunautePage } from '@/pages/Communaute'
 import { BoutiquePage } from '@/pages/Boutique'
 import { AbonnementPage } from '@/pages/Abonnement'
@@ -31,7 +30,6 @@ import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 import { AdminRoute } from '@/components/admin/AdminRoute'
 import { ComingSoon } from '@/components/layout/ComingSoon'
 import { ProGate } from '@/components/layout/ProGate'
-import { ProTeaser } from '@/components/layout/ProTeaser'
 
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
 const AdminDashboard = lazy(() => import('@/components/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })))
@@ -98,13 +96,13 @@ function App() {
 
           {/* Authenticated routes */}
           <Route path="/dashboard" element={<Navigate to="/explorer" replace />} />
-          <Route path="/calendrier" element={<AuthenticatedApp><ProTeaser title="Ta saison, en grand" pitch="Le calendrier année complète : toutes tes dates, leurs statuts et les festivals où tu retrouves ta tribu."><CalendarPage /></ProTeaser></AuthenticatedApp>} />
+          <Route path="/calendrier" element={<AuthenticatedApp><CalendarPage /></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />
           <Route path="/profil" element={<AuthenticatedApp><ProfilePage /></AuthenticatedApp>} />
           <Route path="/reglages" element={<AuthenticatedApp><SettingsPage /></AuthenticatedApp>} />
           <Route path="/suivis" element={<AuthenticatedApp><FollowingPage /></AuthenticatedApp>} />
-          <Route path="/mes-dates" element={<AuthenticatedApp><MesDatesPage /></AuthenticatedApp>} />
+          <Route path="/mes-dates" element={<Navigate to="/calendrier" replace />} />
           <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
           <Route path="/communaute" element={<AuthenticatedApp><CommunautePage /></AuthenticatedApp>} />
           <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><CockpitPage /></ProGate></AuthenticatedApp>} />
