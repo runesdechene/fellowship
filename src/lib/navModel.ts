@@ -17,7 +17,7 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   'mes-dates':     { key: 'mes-dates',       to: '/mes-dates',       label: 'Mes dates',      icon: 'CalendarClock',   pro: false, built: true },
   'mes-createurs': { key: 'mes-createurs',   to: '/mes-createurs',   label: 'Mes créateurs',  shortLabel: 'Créateurs', icon: 'Heart',           pro: false, built: false },
   dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Cockpit',        shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: true },
-  calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: true,  built: true },
+  calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: false, built: true },
   communaute:      { key: 'communaute',      to: '/communaute',      label: 'Communauté',     icon: 'Users',           pro: true,  built: true },
   vitrine:         { key: 'vitrine',         to: '/profil',          label: 'Ma vitrine',     icon: 'Store',           pro: false, built: true },
   profil:          { key: 'profil',          to: '/profil',          label: 'Profil',         icon: 'User',            pro: false, built: true },
@@ -26,12 +26,12 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
 
 // Festivalier : pas d'entrée « Profil » — il n'a pas de vitrine.
 // (L'avatar perso + lien /reglages tient lieu d'accès au compte.)
-const PERSON_NAV: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs', 'reglages']
-// `mes-dates` est partagé : un exposant est aussi festivalier (et c'est la compensation gratuite du Calendrier Pro).
-const EXPOSANT_NAV: NavKey[] = ['explorer', 'mes-dates', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
+// `calendrier` est la surface dates unique (gratuit nerfé / Pro complet) — a remplacé « Mes dates » (#9 lot 1).
+const PERSON_NAV: NavKey[] = ['explorer', 'calendrier', 'mes-createurs', 'reglages']
+const EXPOSANT_NAV: NavKey[] = ['explorer', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
 
 // BottomBar mobile : 3 liens principaux par acteur (le reste → feuille de compte).
-const PERSON_PRIMARY: NavKey[] = ['explorer', 'mes-dates', 'mes-createurs']
+const PERSON_PRIMARY: NavKey[] = ['explorer', 'calendrier', 'mes-createurs']
 const EXPOSANT_PRIMARY: NavKey[] = ['dashboard', 'calendrier', 'explorer'] // Cockpit · Calendrier · Explorer
 
 /** Items de nav selon le type d'acteur. (Toute entité = nav exposant en V1 ; festival/orga = V2.) */

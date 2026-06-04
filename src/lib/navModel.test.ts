@@ -5,14 +5,14 @@ const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
 
 describe('navItemsFor', () => {
-  it('personne → festivalier (sans profil — un festivalier n\'a pas de vitrine)', () => expect(navItemsFor(person)).toEqual(['explorer','mes-dates','mes-createurs','reglages']))
-  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','mes-dates','dashboard','calendrier','communaute','vitrine','reglages']))
+  it('personne → festivalier (sans profil — un festivalier n\'a pas de vitrine)', () => expect(navItemsFor(person)).toEqual(['explorer','calendrier','mes-createurs','reglages']))
+  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','dashboard','calendrier','communaute','vitrine','reglages']))
   it('null → explorer seul', () => expect(navItemsFor(null)).toEqual(['explorer']))
 })
 
 describe('entryState', () => {
-  it('item Pro + plan free → lock-pro', () => expect(entryState('calendrier','free')).toBe('lock-pro'))
-  it('item Pro + plan pro + construit → active', () => expect(entryState('calendrier','pro')).toBe('active'))
+  it('calendrier gratuit construit → active', () => expect(entryState('calendrier','free')).toBe('active'))
+  it('calendrier (plan pro) → active', () => expect(entryState('calendrier','pro')).toBe('active'))
   it('item Pro + plan pro + dashboard construit → active', () => expect(entryState('dashboard','pro')).toBe('active'))
   it('item Pro + plan free (même non construit) → lock-pro', () => expect(entryState('dashboard','free')).toBe('lock-pro'))
   it('item gratuit construit (mes-dates) → active', () => expect(entryState('mes-dates','free')).toBe('active'))
@@ -21,9 +21,7 @@ describe('entryState', () => {
 
 describe('isRouteValidFor', () => {
   it('calendrier valide pour exposant', () => expect(isRouteValidFor('/calendrier', exposant)).toBe(true))
-  it('calendrier invalide pour personne', () => expect(isRouteValidFor('/calendrier', person)).toBe(false))
-  it('mes-dates valide pour personne', () => expect(isRouteValidFor('/mes-dates', person)).toBe(true))
-  it('mes-dates valide pour exposant aussi', () => expect(isRouteValidFor('/mes-dates', exposant)).toBe(true))
+  it('calendrier valide pour personne (désormais gratuit)', () => expect(isRouteValidFor('/calendrier', person)).toBe(true))
   it('explorer valide pour les deux', () => {
     expect(isRouteValidFor('/explorer', person)).toBe(true)
     expect(isRouteValidFor('/explorer', exposant)).toBe(true)
@@ -34,9 +32,9 @@ describe('isRouteValidFor', () => {
     expect(isRouteValidFor('/une-marque', person)).toBe(true)
     expect(isRouteValidFor('/runes-de-chene/embed', person)).toBe(true)
   })
-  it('route applicative réservée non-valide reste bloquée', () => {
-    expect(isRouteValidFor('/calendrier', person)).toBe(false)
+  it('route Pro réservée reste bloquée pour personne', () => {
     expect(isRouteValidFor('/tableau-de-bord', person)).toBe(false)
+    expect(isRouteValidFor('/communaute', person)).toBe(false)
   })
 })
 
@@ -44,12 +42,12 @@ describe('mobilePrimaryFor / mobileSecondaryFor', () => {
   it('exposant : 3 primaires = Cockpit/Calendrier/Explorer', () => {
     expect(mobilePrimaryFor(exposant)).toEqual(['dashboard', 'calendrier', 'explorer'])
   })
-  it('visiteur : 3 primaires = Explorer/Mes dates/Mes créateurs', () => {
-    expect(mobilePrimaryFor(person)).toEqual(['explorer', 'mes-dates', 'mes-createurs'])
+  it('visiteur : 3 primaires = Explorer/Calendrier/Mes créateurs', () => {
+    expect(mobilePrimaryFor(person)).toEqual(['explorer', 'calendrier', 'mes-createurs'])
   })
   it('secondaire = nav de l\'acteur moins les primaires (sans doublon)', () => {
     const sec = mobileSecondaryFor(exposant)
-    expect(sec).toEqual(['mes-dates', 'communaute', 'vitrine', 'reglages'])
+    expect(sec).toEqual(['communaute', 'vitrine', 'reglages'])
     expect(sec.some(k => mobilePrimaryFor(exposant).includes(k))).toBe(false)
   })
 })
