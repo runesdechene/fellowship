@@ -40,10 +40,15 @@ function buildEventEl(p: MapFeatureProps): HTMLDivElement {
 function popupMarkup(p: MapFeatureProps): string {
   const date = formatDateRange(new Date(p.startDate), new Date(p.endDate))
   const safe = (s: string) => s.replace(/</g, '&lt;')
+  const img = p.imageUrl ? `<div class="map-pop-img" style="background-image:url('${p.imageUrl.replace(/['"\\]/g, '')}')"></div>` : ''
   return `<div class="map-pop">
-    <strong style="font-family:var(--font-heading);font-size:15px">${safe(p.name)}</strong>
-    <div style="color:#f0a154;font-weight:600;font-size:12.5px;margin-top:2px">${safe(date)}</div>
-    <div style="color:var(--font-color-lowtitle);font-size:12.5px">${safe(p.city)}</div>
+    ${img}
+    <div class="map-pop-body">
+      <strong style="font-family:var(--font-heading);font-size:15px;line-height:1.2">${safe(p.name)}</strong>
+      <div style="color:#f0a154;font-weight:600;font-size:12.5px;margin-top:3px">${safe(date)}</div>
+      <div style="color:var(--font-color-lowtitle);font-size:12.5px">${safe(p.city)}</div>
+      <button class="map-pop-link" type="button">Voir le festival →</button>
+    </div>
   </div>`
 }
 
@@ -51,6 +56,7 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }:
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markersRef = useRef<maplibregl.Marker[]>([])
+  const popupRef = useRef<maplibregl.Popup | null>(null)
   const dataRef = useRef({ features, avatarUrl, avatarLabel })
   const themeRef = useRef(theme)
   const onSelectRef = useRef(onSelect)
@@ -70,10 +76,16 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }:
     markersRef.current = feats.map(f => {
       const p = f.properties
       const el = p.accepted ? buildAvatarEl(url, label) : buildEventEl(p)
-      el.addEventListener('click', () => {
-        new maplibregl.Popup({ className: 'map-popup', offset: 24 })
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation()
+        // Clic = popup résumé (pas de navigation directe) ; le lien "Voir le festival" navigue.
+        // closeOnClick:false sinon le clic qui ouvre referme aussitôt. Un seul popup à la fois.
+        popupRef.current?.remove()
+        const popup = new maplibregl.Popup({ className: 'map-popup', offset: 24, maxWidth: '260px', closeOnClick: false })
           .setLngLat(f.geometry.coordinates).setHTML(popupMarkup(p)).addTo(map)
-        onSelectRef.current(p.slug ?? null, p.id)
+        popupRef.current = popup
+        const link = popup.getElement()?.querySelector('.map-pop-link')
+        link?.addEventListener('click', () => onSelectRef.current(p.slug ?? null, p.id))
       })
       return new maplibregl.Marker({ element: el }).setLngLat(f.geometry.coordinates).addTo(map)
     })
