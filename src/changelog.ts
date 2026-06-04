@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.219',
+    date: '2026-06-04',
+    title: 'Un seul Calendrier, plus clair',
+    changes: [
+      '« Mes dates » et « Calendrier » fusionnent : une seule page Calendrier pour tout le monde',
+      'En gratuit : tes dates, tes compagnons et ton quota ; Pro débloque la vue réseau (amis pro, visiteurs)',
+    ],
+  },
+  {
     version: '0.7.218',
     date: '2026-06-04',
     title: 'Calendrier — la date des copains sans cliquer',
