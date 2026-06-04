@@ -5,8 +5,8 @@ const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
 
 describe('navItemsFor', () => {
-  it('personne → festivalier (sans profil — un festivalier n\'a pas de vitrine)', () => expect(navItemsFor(person)).toEqual(['explorer','calendrier','mes-createurs','reglages']))
-  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','dashboard','calendrier','communaute','vitrine','reglages']))
+  it('personne → festivalier (sans profil — un festivalier n\'a pas de vitrine)', () => expect(navItemsFor(person)).toEqual(['explorer','calendrier','carte','mes-createurs','reglages']))
+  it('entité exposant → cockpit', () => expect(navItemsFor(exposant)).toEqual(['explorer','dashboard','calendrier','carte','communaute','vitrine','reglages']))
   it('null → explorer seul', () => expect(navItemsFor(null)).toEqual(['explorer']))
 })
 
@@ -47,7 +47,7 @@ describe('mobilePrimaryFor / mobileSecondaryFor', () => {
   })
   it('secondaire = nav de l\'acteur moins les primaires (sans doublon)', () => {
     const sec = mobileSecondaryFor(exposant)
-    expect(sec).toEqual(['communaute', 'vitrine', 'reglages'])
+    expect(sec).toEqual(['carte', 'communaute', 'vitrine', 'reglages'])
     expect(sec.some(k => mobilePrimaryFor(exposant).includes(k))).toBe(false)
   })
 })
@@ -75,7 +75,7 @@ describe('isCertified', () => {
 })
 
 it('NAV_DEFS couvre toutes les clés utilisées', () => {
-  const keys: NavKey[] = ['explorer','mes-dates','mes-createurs','profil','reglages','dashboard','calendrier','communaute','vitrine']
+  const keys: NavKey[] = ['explorer','mes-dates','mes-createurs','profil','reglages','dashboard','calendrier','carte','communaute','vitrine']
   keys.forEach(k => expect(NAV_DEFS[k]).toBeTruthy())
 })
 
