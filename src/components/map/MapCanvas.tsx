@@ -44,9 +44,14 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onBoundsCha
   const themeRef = useRef(theme)
   const onBoundsRef = useRef(onBoundsChange)
   const onSelectRef = useRef(onSelect)
-  dataRef.current = { features, avatarUrl, avatarLabel }
-  onBoundsRef.current = onBoundsChange
-  onSelectRef.current = onSelect
+
+  // Garde les callbacks/données à jour pour les handlers MapLibre (enregistrés une fois).
+  // Mis à jour en effet (pas pendant le render) — exécuté avant l'effet de refresh ci-dessous.
+  useEffect(() => {
+    dataRef.current = { features, avatarUrl, avatarLabel }
+    onBoundsRef.current = onBoundsChange
+    onSelectRef.current = onSelect
+  })
 
   function refresh() {
     const map = mapRef.current
@@ -119,7 +124,6 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onBoundsCha
     }
 
     return () => { map.remove(); mapRef.current = null }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -130,7 +134,6 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onBoundsCha
 
   useEffect(() => {
     refresh()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [features, avatarUrl, avatarLabel])
 
   return (
