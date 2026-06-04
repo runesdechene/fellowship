@@ -7,6 +7,24 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.222',
+    date: '2026-06-04',
+    title: 'La Carte des festivals',
+    changes: [
+      'Nouvelle page Carte : tous les festivals géolocalisés sur une vraie carte interactive, habillée aux couleurs Fellowship (jour comme nuit)',
+      'Tes festivals où tu es accepté ressortent avec ton avatar ; pins colorés par catégorie, regroupés quand on dézoome',
+      'Recherche par ville/festival, filtres par catégorie, et liste synchronisée avec ce que tu vois à l\'écran',
+    ],
+  },
+  {
+    version: '0.7.221',
+    date: '2026-06-04',
+    title: 'Badge Certifié',
+    changes: [
+      'Les comptes Pro affichent un badge « Certifié » sur leur vitrine et leur profil public — un gage de crédibilité auprès des organisateurs et du public',
+    ],
+  },
+  {
     version: '0.7.220',
     date: '2026-06-04',
     title: 'Événements géolocalisés',
