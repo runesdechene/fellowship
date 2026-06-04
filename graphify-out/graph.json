@@ -4954,7 +4954,7 @@
       "label": "openEvent()",
       "file_type": "code",
       "source_file": "src\\pages\\Carte.tsx",
-      "source_location": "L21",
+      "source_location": "L26",
       "id": "carte_openevent",
       "community": 170,
       "norm_label": "openevent()"
@@ -11106,7 +11106,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\pages\\Carte.tsx",
-      "source_location": "L21",
+      "source_location": "L26",
       "weight": 1.0,
       "_src": "src_pages_carte_tsx",
       "_tgt": "carte_openevent",

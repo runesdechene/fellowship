@@ -29,12 +29,12 @@ export function AddressAutocomplete({ value, onChange, onSelect, inputClass = ''
       skipNextSearch.current = false
       return
     }
-    if (value.trim().length < 3) {
-      setResults([])
-      setOpen(false)
-      return
-    }
     const timer = setTimeout(async () => {
+      if (value.trim().length < 3) {
+        setResults([])
+        setOpen(false)
+        return
+      }
       const found = await searchAddresses(value)
       setResults(found)
       setOpen(found.length > 0)
