@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.220',
+    date: '2026-06-04',
+    title: 'Événements géolocalisés',
+    changes: [
+      'À la création d\'un événement, une recherche d\'adresse propose des suggestions et place le lieu précisément (en vue de la future carte)',
+      'Les événements sans adresse précise sont situés au centre-ville, et tous les événements existants ont été géolocalisés',
+    ],
+  },
+  {
     version: '0.7.219',
     date: '2026-06-04',
     title: 'Un seul Calendrier, plus clair',
