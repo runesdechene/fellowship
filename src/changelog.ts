@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.218',
+    date: '2026-06-04',
+    title: 'Calendrier — la date des copains sans cliquer',
+    changes: [
+      'Les festivals où va un compagnon affichent maintenant la date complète (jour + mois) directement, sans avoir à ouvrir la fiche',
+    ],
+  },
+  {
     version: '0.7.217',
     date: '2026-06-04',
     title: 'Dossiers refusés — ton carnet de bord',

@@ -5,6 +5,7 @@ import { MonthBanner } from './MonthBanner'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { participationChip, type ActorKind } from '@/lib/explorer'
+import { formatDateRange } from '@/lib/calendar-format'
 import type { CalendarMonth as CalendarMonthType, CalendarEvent } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
 import { avatarGradient } from '@/lib/avatar-gradient'
@@ -105,7 +106,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                 {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
                 <div className="calendar-evF-info">
                   <div className="calendar-evF-name">{ev.name}</div>
-                  <div className="calendar-evF-meta">{fname} y va · {ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</div>
+                  <div className="calendar-evF-meta">{fname} y va · {formatDateRange(ev.startDate, ev.endDate)}</div>
                 </div>
                 <span className="calendar-evF-av" style={{ background: avatarGradient(fname) }}>{fname[0]!.toUpperCase()}</span>
               </Link>

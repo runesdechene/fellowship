@@ -136,7 +136,7 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                         <div className="mobile-event-pill-meta">
                           <span>{fname} y va</span>
                           <span>·</span>
-                          <span>{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
+                          <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
                         </div>
                       </div>
                     </Link>
