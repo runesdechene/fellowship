@@ -330,6 +330,16 @@ h1, h2, h3, .font-display {
   font-size: 17px; transition: transform .12s ease;
 }
 .map-event-marker:hover { transform: scale(1.18); z-index: 5; }
+/* Marqueur "amis" : avatars groupés (max 3 + badge +N). */
+.map-friends-marker { display: flex; align-items: center; cursor: pointer; }
+.map-friend-av {
+  width: 34px; height: 34px; border-radius: 50%; flex: none;
+  background-size: cover; background-position: center; background-color: #2a1c16;
+  border: 2px solid hsl(var(--copper, 24 85% 56%)); box-shadow: 0 1px 5px rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 13px;
+}
+.map-friend-av:not(:first-child) { margin-left: -12px; }
+.map-friend-more { background: hsl(var(--copper, 24 85% 56%)); color: #170f0e; font-size: 12px; }
 /* L'avatar "Accepté" passe au-dessus et un peu plus gros. */
 .map-avatar { z-index: 3; }
 .map-popup .maplibregl-popup-content {

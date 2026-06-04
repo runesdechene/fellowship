@@ -16,6 +16,7 @@ export type EventForMap = {
 }
 
 export type ParticipationLite = { event_id: string; status: string }
+export type FriendAvatar = { avatarUrl: string | null; label: string }
 
 // Statuts « je participe / accepté » : `confirme` (Accepté nouveau modèle) ET `inscrit`
 // (legacy = accepté pour un exposant, cf. participationChip). `interesse` = juste repéré,

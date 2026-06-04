@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { applyParchmentColors } from '@/lib/map-style'
-import type { MapFeature, MapFeatureProps } from '@/lib/map-data'
+import type { MapFeature, MapFeatureProps, FriendAvatar } from '@/lib/map-data'
 import type { Theme } from '@/lib/theme'
 import { formatDateRange } from '@/lib/calendar-format'
 import { getTagEmoji } from '@/components/ui/TagBadge'
@@ -15,29 +15,11 @@ interface MapCanvasProps {
   theme: Theme
   avatarUrl: string | null
   avatarLabel: string
+  friendsByEvent?: Record<string, FriendAvatar[]>
   onSelect: (slug: string | null, id: string) => void
 }
 
-// Marqueur "Accepté" : avatar de l'acteur (cerclé cuivre, pulse).
-function buildAvatarEl(url: string | null, label: string): HTMLDivElement {
-  const el = document.createElement('div')
-  el.className = 'map-avatar'
-  if (url) el.style.backgroundImage = `url("${url}")`
-  else el.textContent = (label.trim()[0] ?? '★').toUpperCase()
-  return el
-}
-
-// Marqueur event : pastille ronde, image du festival, bordure = couleur du tag (sinon emoji).
-function buildEventEl(p: MapFeatureProps): HTMLDivElement {
-  const el = document.createElement('div')
-  el.className = 'map-event-marker'
-  el.style.setProperty('--mk-color', p.color)
-  if (p.imageUrl) el.style.backgroundImage = `url("${p.imageUrl}")`
-  else el.textContent = getTagEmoji(p.primaryTag)
-  return el
-}
-
-// N'accepte qu'une URL https (les contenus events sont saisis par des utilisateurs).
+// N'accepte qu'une URL https (les contenus events/avatars sont saisis par des utilisateurs).
 function safeHttpsUrl(u: string | null): string | null {
   if (!u) return null
   try {
@@ -48,16 +30,57 @@ function safeHttpsUrl(u: string | null): string | null {
   }
 }
 
+function setBgImage(el: HTMLElement, url: string | null): boolean {
+  const safe = safeHttpsUrl(url)
+  if (!safe) return false
+  el.style.backgroundImage = `url(${JSON.stringify(safe)})`
+  return true
+}
+
+// Marqueur "Accepté" : avatar de l'acteur (cerclé cuivre, pulse).
+function buildAvatarEl(url: string | null, label: string): HTMLDivElement {
+  const el = document.createElement('div')
+  el.className = 'map-avatar'
+  if (!setBgImage(el, url)) el.textContent = (label.trim()[0] ?? '★').toUpperCase()
+  return el
+}
+
+// Marqueur event : pastille ronde, image du festival, bordure = couleur du tag (sinon emoji).
+function buildEventEl(p: MapFeatureProps): HTMLDivElement {
+  const el = document.createElement('div')
+  el.className = 'map-event-marker'
+  el.style.setProperty('--mk-color', p.color)
+  if (!setBgImage(el, p.imageUrl)) el.textContent = getTagEmoji(p.primaryTag)
+  return el
+}
+
+// Marqueur "amis" : avatars groupés (max 3 + badge +N) des amis qui y vont.
+function buildFriendsEl(friends: FriendAvatar[]): HTMLDivElement {
+  const el = document.createElement('div')
+  el.className = 'map-friends-marker'
+  for (const f of friends.slice(0, 3)) {
+    const a = document.createElement('div')
+    a.className = 'map-friend-av'
+    if (!setBgImage(a, f.avatarUrl)) a.textContent = (f.label.trim()[0] ?? '?').toUpperCase()
+    el.appendChild(a)
+  }
+  if (friends.length > 3) {
+    const more = document.createElement('div')
+    more.className = 'map-friend-av map-friend-more'
+    more.textContent = `+${friends.length - 3}`
+    el.appendChild(more)
+  }
+  return el
+}
+
 // Popup construit en DOM (pas de setHTML) : textContent échappe le texte, l'URL est validée.
-function buildPopupContent(p: MapFeatureProps, onLink: () => void): HTMLDivElement {
+function buildPopupContent(p: MapFeatureProps, friendCount: number, onLink: () => void): HTMLDivElement {
   const root = document.createElement('div')
   root.className = 'map-pop'
 
-  const safeUrl = safeHttpsUrl(p.imageUrl)
-  if (safeUrl) {
-    const img = document.createElement('div')
+  const img = document.createElement('div')
+  if (setBgImage(img, p.imageUrl)) {
     img.className = 'map-pop-img'
-    img.style.backgroundImage = `url(${JSON.stringify(safeUrl)})`
     root.appendChild(img)
   }
 
@@ -76,47 +99,57 @@ function buildPopupContent(p: MapFeatureProps, onLink: () => void): HTMLDivEleme
   city.textContent = p.city
   city.style.cssText = 'color:var(--font-color-lowtitle);font-size:12.5px'
 
+  body.append(name, date, city)
+
+  if (friendCount > 0) {
+    const friends = document.createElement('div')
+    friends.textContent = `👥 ${friendCount} ami${friendCount > 1 ? 's' : ''} y ${friendCount > 1 ? 'vont' : 'va'}`
+    friends.style.cssText = 'color:var(--font-color-lowtitle);font-size:12.5px;margin-top:4px'
+    body.appendChild(friends)
+  }
+
   const link = document.createElement('button')
   link.type = 'button'
   link.className = 'map-pop-link'
   link.textContent = 'Voir le festival →'
   link.addEventListener('click', onLink)
+  body.appendChild(link)
 
-  body.append(name, date, city, link)
   root.appendChild(body)
   return root
 }
 
-export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }: MapCanvasProps) {
+export function MapCanvas({ features, theme, avatarUrl, avatarLabel, friendsByEvent = {}, onSelect }: MapCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markersRef = useRef<maplibregl.Marker[]>([])
   const popupRef = useRef<maplibregl.Popup | null>(null)
-  const dataRef = useRef({ features, avatarUrl, avatarLabel })
+  const dataRef = useRef({ features, avatarUrl, avatarLabel, friendsByEvent })
   const themeRef = useRef(theme)
   const onSelectRef = useRef(onSelect)
 
   // Garde données/callback à jour pour les marqueurs (créés après le montage). En effet, pas au render.
   useEffect(() => {
-    dataRef.current = { features, avatarUrl, avatarLabel }
+    dataRef.current = { features, avatarUrl, avatarLabel, friendsByEvent }
     onSelectRef.current = onSelect
   })
 
-  // Un marqueur DOM par event (pas de clustering). Avatar si "Accepté", sinon pastille image+tag.
+  // Un marqueur DOM par event (pas de clustering). Amis groupés > avatar "Accepté" > pastille image+tag.
   function refresh() {
     const map = mapRef.current
     if (!map) return
-    const { features: feats, avatarUrl: url, avatarLabel: label } = dataRef.current
+    const { features: feats, avatarUrl: url, avatarLabel: label, friendsByEvent: friends } = dataRef.current
     markersRef.current.forEach(m => m.remove())
     markersRef.current = feats.map(f => {
       const p = f.properties
-      const el = p.accepted ? buildAvatarEl(url, label) : buildEventEl(p)
+      const evFriends = friends[p.id] ?? []
+      const el = evFriends.length > 0 ? buildFriendsEl(evFriends) : p.accepted ? buildAvatarEl(url, label) : buildEventEl(p)
       el.addEventListener('click', (ev) => {
         ev.stopPropagation()
         // Clic = popup résumé (pas de navigation directe) ; le lien "Voir le festival" navigue.
         // closeOnClick:false sinon le clic qui ouvre referme aussitôt. Un seul popup à la fois.
         popupRef.current?.remove()
-        const content = buildPopupContent(p, () => onSelectRef.current(p.slug ?? null, p.id))
+        const content = buildPopupContent(p, evFriends.length, () => onSelectRef.current(p.slug ?? null, p.id))
         popupRef.current = new maplibregl.Popup({ className: 'map-popup', offset: 24, maxWidth: '260px', closeOnClick: false })
           .setLngLat(f.geometry.coordinates).setDOMContent(content).addTo(map)
       })
@@ -171,7 +204,7 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }:
 
   useEffect(() => {
     refresh()
-  }, [features, avatarUrl, avatarLabel])
+  }, [features, avatarUrl, avatarLabel, friendsByEvent])
 
   // Le conteneur MapLibre DOIT être un enfant flex en flux (flex-1 min-h-0) : monté sur un
   // `absolute inset-0`, sa hauteur en % s'effondre à 0 sous la chaîne flex → carte invisible.
