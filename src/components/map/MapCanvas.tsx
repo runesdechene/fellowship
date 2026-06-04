@@ -179,6 +179,8 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, friendsByEv
       m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
       ro = new ResizeObserver(() => m.resize())
       ro.observe(container)
+      // Clic sur la carte (hors marqueur, qui fait stopPropagation) = ferme le popup ouvert.
+      m.on('click', () => { popupRef.current?.remove(); popupRef.current = null })
       m.on('style.load', () => {
         applyParchmentColors(m, themeRef.current)
         m.resize()

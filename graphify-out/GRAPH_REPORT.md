@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-06-04)
 
 ## Corpus Check
-- 231 files · ~330,897 words
+- 231 files · ~330,963 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 713 nodes · 531 edges · 238 communities detected
+- 711 nodes · 529 edges · 238 communities detected
 - Extraction: 94% EXTRACTED · 6% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -389,11 +389,11 @@ Nodes (2): handleSubmit(), update()
 
 ### Community 25 - "Community 25"
 Cohesion: 0.4
-Nodes (0): 
+Nodes (1): ErrorBoundary
 
 ### Community 26 - "Community 26"
 Cohesion: 0.4
-Nodes (1): ErrorBoundary
+Nodes (0): 
 
 ### Community 27 - "Community 27"
 Cohesion: 0.4
@@ -404,12 +404,12 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 29 - "Community 29"
-Cohesion: 0.4
-Nodes (0): 
-
-### Community 30 - "Community 30"
 Cohesion: 0.5
 Nodes (2): getTagIcon(), TagBadge()
+
+### Community 30 - "Community 30"
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 31 - "Community 31"
 Cohesion: 0.4
@@ -424,32 +424,32 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 34 - "Community 34"
-Cohesion: 0.4
-Nodes (0): 
-
-### Community 35 - "Community 35"
 Cohesion: 0.5
 Nodes (2): resolveUniqueHandle(), slugify()
 
-### Community 36 - "Community 36"
+### Community 35 - "Community 35"
 Cohesion: 0.5
 Nodes (2): hashName(), networkListItemDisplay()
 
-### Community 37 - "Community 37"
+### Community 36 - "Community 36"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 38 - "Community 38"
+### Community 37 - "Community 37"
 Cohesion: 0.5
 Nodes (2): persistFilters(), readStored()
 
-### Community 39 - "Community 39"
+### Community 38 - "Community 38"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 40 - "Community 40"
+### Community 39 - "Community 39"
 Cohesion: 0.6
 Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
+
+### Community 40 - "Community 40"
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 41 - "Community 41"
 Cohesion: 0.5
@@ -460,16 +460,16 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 43 - "Community 43"
-Cohesion: 0.5
-Nodes (0): 
-
-### Community 44 - "Community 44"
 Cohesion: 0.67
 Nodes (2): datesLabel(), shortDate()
 
-### Community 45 - "Community 45"
+### Community 44 - "Community 44"
 Cohesion: 0.67
 Nodes (2): addTag(), handleKeyDown()
+
+### Community 45 - "Community 45"
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 46 - "Community 46"
 Cohesion: 0.5
@@ -488,12 +488,12 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 50 - "Community 50"
-Cohesion: 0.5
-Nodes (0): 
-
-### Community 51 - "Community 51"
 Cohesion: 0.67
 Nodes (2): useCommunityFeed(), useNetworkActivityMini()
+
+### Community 51 - "Community 51"
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 52 - "Community 52"
 Cohesion: 0.5
@@ -508,7 +508,7 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 55 - "Community 55"
-Cohesion: 0.5
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 56 - "Community 56"
