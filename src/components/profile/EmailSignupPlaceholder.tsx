@@ -7,24 +7,24 @@ interface EmailSignupPlaceholderProps {
 
 export function EmailSignupPlaceholder({ brandName, isOwner }: EmailSignupPlaceholderProps) {
   return (
-    <div className="profile-email-card">
+    <div className="v-signup">
       {isOwner && (
-        <div className="profile-email-owner-badge">
+        <div className="v-signup-owner">
           Vos visiteurs verront ce formulaire ici
         </div>
       )}
-      <Mail className="profile-email-icon" strokeWidth={1.5} />
-      <p className="profile-email-text">
-         Découvrez des événements et suivez <b>{brandName}</b>
+      <Mail className="v-signup-icon" strokeWidth={1.5} />
+      <p className="v-signup-text">
+        Découvrez des événements et suivez <b>{brandName}</b>
       </p>
-      <div className="profile-email-form">
+      <div className="v-signup-form">
         <input
           type="email"
           placeholder="votre@email.com"
           disabled
-          className="profile-email-input"
+          className="v-signup-input"
         />
-        <button disabled className="profile-email-button">
+        <button disabled className="v-signup-btn">
           S'inscrire
         </button>
       </div>

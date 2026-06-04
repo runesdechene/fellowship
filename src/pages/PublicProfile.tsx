@@ -99,7 +99,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
           <EmailSignupPlaceholder brandName={entity.brand_name ?? 'cet exposant'} isOwner={canEdit} />
         )}
         <div className="v-footer">
-          <span className="v-footer-mark">✦</span>
+          <img className="v-footer-logo" src="/icon.png" alt="" />
           Carnet de route Fellowship{entity.public_slug ? <> · <code>flw.sh/{entity.public_slug}</code></> : null}
           <ReportButton
             targetType="profile"

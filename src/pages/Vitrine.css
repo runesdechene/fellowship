@@ -307,6 +307,79 @@
   box-shadow: 0 8px 22px hsl(24 70% 50% / 0.28);
 }
 
+/* ── Teaser capture email (visiteurs anonymes / aperçu propriétaire) ── */
+.v-signup {
+  position: relative;
+  margin-top: 28px;
+  border-radius: 18px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  padding: 22px 20px;
+  text-align: center;
+}
+.v-signup-owner {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--copper) 14%, hsl(var(--card)));
+  border: 1px solid color-mix(in srgb, var(--copper) 32%, transparent);
+  padding: 3px 12px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--copper);
+  white-space: nowrap;
+}
+.v-signup-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 2px;
+  color: hsl(var(--muted-foreground));
+  opacity: 0.7;
+}
+.v-signup-text {
+  margin-top: 6px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: hsl(var(--muted-foreground));
+}
+.v-signup-text b { color: hsl(var(--foreground)); font-weight: 650; }
+.v-signup-form {
+  margin: 14px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 280px;
+}
+.v-signup-input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 11px;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  padding: 9px 13px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
+  cursor: not-allowed;
+}
+.v-signup-btn {
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  border: none;
+  padding: 9px 16px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+.light .v-signup-btn { box-shadow: 0 4px 12px hsl(24 70% 50% / 0.18); }
+
 /* ── Footer partage (maquette .vfooter) ─────────────────────────────── */
 .v-footer {
   display: flex;
@@ -314,20 +387,16 @@
   justify-content: center;
   gap: 10px;
   margin-top: 34px;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--foreground));
   font-family: var(--font-body);
   font-size: 12.5px;
 }
-.v-footer-mark {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, var(--copper), var(--amber));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #2a1810;
-  font-size: 9px;
+.v-footer-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
 }
 .v-footer code {
   font-family: var(--font-body);
