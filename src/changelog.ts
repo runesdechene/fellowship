@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.217',
+    date: '2026-06-04',
+    title: 'Dossiers refusés — ton carnet de bord',
+    changes: [
+      'Quand tu marques un dossier « Refusé » sur un festival, tu peux noter pourquoi (trop cher, dates en conflit…)',
+      'Nouvelle section repliable « Dossiers refusés » dans le Cockpit : retrouve tes refus et leur raison',
+    ],
+  },
+  {
     version: '0.7.216',
     date: '2026-06-04',
     title: 'Cockpit — « Plus tard » sur le bandeau bilan',

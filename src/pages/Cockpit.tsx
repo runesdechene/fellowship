@@ -4,10 +4,11 @@ import { useMyParticipations } from '@/hooks/use-participations'
 import { useMyReports } from '@/hooks/use-reports'
 import {
   selectNextFestival, selectUpcomingFestivals, selectAReglerItems,
-  aggregateSeason, detectBilanPrompt,
+  aggregateSeason, detectBilanPrompt, selectRefusedDossiers,
 } from '@/lib/cockpit'
 import { todayKey, snoozedSetForDay, addSnooze, readSnoozeMap, writeSnoozeMap } from '@/lib/bilan-snooze'
 import { BilanBanner } from '@/components/cockpit/BilanBanner'
+import { DossiersRefuses } from '@/components/cockpit/DossiersRefuses'
 import { ProchainFestival } from '@/components/cockpit/ProchainFestival'
 import { ProchainsFestivals } from '@/components/cockpit/ProchainsFestivals'
 import { AReglerFinaliser } from '@/components/cockpit/AReglerFinaliser'
@@ -41,6 +42,7 @@ export function CockpitPage() {
   const upcoming = useMemo(() => selectUpcomingFestivals(participations, now), [participations, now])
   const aRegler = useMemo(() => selectAReglerItems(participations, now), [participations, now])
   const season = useMemo(() => aggregateSeason(participations, now), [participations, now])
+  const refused = useMemo(() => selectRefusedDossiers(participations), [participations])
   const bilanPrompt = useMemo(
     () => detectBilanPrompt(participations, reportedEventIds, now, snoozedToday),
     [participations, reportedEventIds, now, snoozedToday],
@@ -80,6 +82,7 @@ export function CockpitPage() {
               <MesBilans participations={participations} reportsByEvent={reportsByEvent} onSaved={refetchReports} />
             </div>
           </div>
+          <DossiersRefuses participations={refused} onUpdated={refetch} />
         </>
       )}
     </div>

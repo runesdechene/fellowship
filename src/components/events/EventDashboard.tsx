@@ -84,7 +84,7 @@ export function EventDashboard({
   // Note « pourquoi ce refus » (#8) : capturée à chaud quand le dossier est Refusé, éditable.
   const [refusalNote, setRefusalNote] = useState((participation?.refusal_note as string | null) ?? '')
   // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setRefusalNote((participation?.refusal_note as string | null) ?? '') }, [participation?.id])
+  useEffect(() => { setRefusalNote((participation?.refusal_note as string | null) ?? '') }, [participation?.id, participation?.refusal_note])
 
   const saveRefusalNote = async () => {
     if (!participation) return

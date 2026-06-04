@@ -60,6 +60,29 @@
 .ck-list-info { flex: 1; min-width: 0; }
 .ck-list-info b { display: block; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ck-list-info small { color: hsl(var(--muted-foreground)); font-size: 12px; }
+
+/* ── Dossiers refusés (#8) : section repliable, fermée par défaut, masquée si vide ── */
+.ck-refuses { margin-top: 18px; }
+.ck-refuses .ck-ic { color: hsl(var(--muted-foreground)); }
+.ck-refuses-head {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  background: none; border: none; cursor: pointer; padding: 0; color: inherit;
+}
+.ck-refuses-title { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-weight: 800; font-size: 15px; color: hsl(var(--foreground)); }
+.ck-refuses-chev { width: 18px; height: 18px; transition: transform 0.18s ease; color: hsl(var(--muted-foreground)); }
+.ck-refuses-chev.open { transform: rotate(180deg); }
+.ck-refuses-list { margin-top: 14px; }
+.ck-refuse-row { display: flex; flex-direction: column; gap: 6px; padding: 11px 0; border-bottom: 1px solid hsl(var(--border)); }
+.ck-refuse-row:last-child { border-bottom: none; padding-bottom: 0; }
+.ck-refuse-link { display: flex; flex-direction: column; text-decoration: none; color: hsl(var(--foreground)); }
+.ck-refuse-link b { font-size: 14px; font-weight: 700; }
+.ck-refuse-link small { color: hsl(var(--muted-foreground)); font-size: 12px; }
+.ck-refuse-note {
+  width: 100%; resize: vertical; border-radius: 10px; border: 1px solid hsl(var(--border));
+  background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 7px 9px;
+  font-family: var(--font-body); font-size: 13px;
+}
+.ck-refuse-note:focus { outline: none; border-color: var(--copper); }
 .ck-addrow { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--amber); text-decoration: none; }
 .ck-allset { display: flex; align-items: center; gap: 7px; color: var(--status-inscrit); }
 .ck-allset svg { width: 16px; height: 16px; }
