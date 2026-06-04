@@ -8,7 +8,7 @@ import {
 } from './geocode'
 
 const feature = (over: Record<string, unknown> = {}) => ({
-  geometry: { coordinates: [2.3488, 48.8534] }, // [lng, lat]
+  geometry: { coordinates: [2.3488, 48.8534] as [number, number] }, // [lng, lat]
   properties: { label: 'Paris', city: 'Paris', postcode: '75000', citycode: '75056', score: 0.9, ...over },
 })
 
