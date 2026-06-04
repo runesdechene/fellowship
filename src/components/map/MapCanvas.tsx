@@ -73,57 +73,76 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onBoundsCha
   }
 
   useEffect(() => {
-    if (!containerRef.current) return
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: STYLE_URL,
-      center: FRANCE_CENTER,
-      zoom: 5.15,
-      dragRotate: false,
-      attributionControl: { compact: true },
-    })
-    mapRef.current = map
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
+    const container = containerRef.current
+    if (!container) return
+    let map: maplibregl.Map | null = null
+    let ro: ResizeObserver | null = null
 
-    map.on('style.load', () => {
-      applyParchmentColors(map, themeRef.current)
-      if (!map.getSource('events')) {
-        map.addSource('events', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 46, clusterMaxZoom: 11 })
-        map.addLayer({ id: 'clusters', type: 'circle', source: 'events', filter: ['has', 'point_count'],
-          paint: { 'circle-color': '#e8833a', 'circle-radius': ['step', ['get', 'point_count'], 15, 10, 21, 30, 27], 'circle-stroke-width': 2, 'circle-stroke-color': '#ffd9a8' } })
-        map.addLayer({ id: 'cluster-count', type: 'symbol', source: 'events', filter: ['has', 'point_count'],
-          layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-size': 13 }, paint: { 'text-color': '#170f0e' } })
-        map.addLayer({ id: 'unclustered', type: 'circle', source: 'events', filter: ['!', ['has', 'point_count']],
-          paint: { 'circle-color': ['get', 'color'], 'circle-radius': 7, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff2e0' } })
-      }
-      refresh()
-    })
-
-    map.on('moveend', () => {
-      const b = map.getBounds()
-      onBoundsRef.current({ west: b.getWest(), south: b.getSouth(), east: b.getEast(), north: b.getNorth() })
-    })
-    map.on('click', 'clusters', (e) => {
-      const f = map.queryRenderedFeatures(e.point, { layers: ['clusters'] })[0]
-      const clusterId = f.properties?.cluster_id as number
-      ;(map.getSource('events') as maplibregl.GeoJSONSource).getClusterExpansionZoom(clusterId).then(zoom => {
-        map.easeTo({ center: (f.geometry as { coordinates: [number, number] }).coordinates, zoom })
+    // Création différée d'une frame : dans le cycle de montage React (StrictMode + layout
+    // pas encore stabilisé), le conteneur flex est parfois mesuré à 0 de hauteur au moment
+    // exact du `new Map()` → MapLibre fige un canvas de 300px et ne charge AUCUNE tuile
+    // (carte vide, sans erreur). En requestAnimationFrame, la hauteur réelle est stable.
+    const raf = requestAnimationFrame(() => {
+      const m = new maplibregl.Map({
+        container,
+        style: STYLE_URL,
+        center: FRANCE_CENTER,
+        zoom: 5.15,
+        dragRotate: false,
+        attributionControl: { compact: true },
       })
-    })
-    map.on('click', 'unclustered', (e) => {
-      const f = e.features?.[0]
-      if (!f) return
-      const p = f.properties as unknown as MapFeatureProps
-      new maplibregl.Popup({ className: 'map-popup', offset: 14 })
-        .setLngLat((f.geometry as { coordinates: [number, number] }).coordinates).setHTML(popupMarkup(p)).addTo(map)
-      onSelectRef.current(p.slug ?? null, p.id)
-    })
-    for (const layer of ['clusters', 'unclustered']) {
-      map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer' })
-      map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = '' })
-    }
+      map = m
+      mapRef.current = m
+      m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
+      ro = new ResizeObserver(() => m.resize())
+      ro.observe(container)
 
-    return () => { map.remove(); mapRef.current = null }
+      m.on('style.load', () => {
+        applyParchmentColors(m, themeRef.current)
+        if (!m.getSource('events')) {
+          m.addSource('events', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 46, clusterMaxZoom: 11 })
+          m.addLayer({ id: 'clusters', type: 'circle', source: 'events', filter: ['has', 'point_count'],
+            paint: { 'circle-color': '#e8833a', 'circle-radius': ['step', ['get', 'point_count'], 15, 10, 21, 30, 27], 'circle-stroke-width': 2, 'circle-stroke-color': '#ffd9a8' } })
+          m.addLayer({ id: 'cluster-count', type: 'symbol', source: 'events', filter: ['has', 'point_count'],
+            layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-size': 13, 'text-font': ['Noto Sans Bold'] }, paint: { 'text-color': '#170f0e' } })
+          m.addLayer({ id: 'unclustered', type: 'circle', source: 'events', filter: ['!', ['has', 'point_count']],
+            paint: { 'circle-color': ['get', 'color'], 'circle-radius': 7, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff2e0' } })
+        }
+        m.resize()
+        refresh()
+      })
+
+      m.on('moveend', () => {
+        const b = m.getBounds()
+        onBoundsRef.current({ west: b.getWest(), south: b.getSouth(), east: b.getEast(), north: b.getNorth() })
+      })
+      m.on('click', 'clusters', (e) => {
+        const f = m.queryRenderedFeatures(e.point, { layers: ['clusters'] })[0]
+        const clusterId = f.properties?.cluster_id as number
+        ;(m.getSource('events') as maplibregl.GeoJSONSource).getClusterExpansionZoom(clusterId).then(zoom => {
+          m.easeTo({ center: (f.geometry as { coordinates: [number, number] }).coordinates, zoom })
+        })
+      })
+      m.on('click', 'unclustered', (e) => {
+        const f = e.features?.[0]
+        if (!f) return
+        const p = f.properties as unknown as MapFeatureProps
+        new maplibregl.Popup({ className: 'map-popup', offset: 14 })
+          .setLngLat((f.geometry as { coordinates: [number, number] }).coordinates).setHTML(popupMarkup(p)).addTo(m)
+        onSelectRef.current(p.slug ?? null, p.id)
+      })
+      for (const layer of ['clusters', 'unclustered']) {
+        m.on('mouseenter', layer, () => { m.getCanvas().style.cursor = 'pointer' })
+        m.on('mouseleave', layer, () => { m.getCanvas().style.cursor = '' })
+      }
+    })
+
+    return () => {
+      cancelAnimationFrame(raf)
+      ro?.disconnect()
+      map?.remove()
+      mapRef.current = null
+    }
   }, [])
 
   useEffect(() => {
@@ -136,10 +155,12 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onBoundsCha
     refresh()
   }, [features, avatarUrl, avatarLabel])
 
+  // Le conteneur MapLibre DOIT être un enfant flex en flux (flex-1 min-h-0) : monté sur un
+  // `absolute inset-0`, sa hauteur en % s'effondre à 0 sous la chaîne flex → canvas 300px,
+  // carte invisible (cf. diagnostic). En flux, il tient sa hauteur du flex.
   return (
-    <>
-      <div ref={containerRef} className="absolute inset-0" />
+    <div ref={containerRef} className="relative flex-1 min-h-0">
       <div className="map-vignette" />
-    </>
+    </div>
   )
 }

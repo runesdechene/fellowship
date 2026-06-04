@@ -37,7 +37,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           recouvre la dernière section et le scroll ne peut pas la révéler (#5 : contact Réglages). */}
       <div className={`flex-1 flex flex-col ${noScroll ? 'overflow-hidden' : 'overflow-y-auto'} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
-        <main className="flex-1 min-h-0">
+        <main className={`flex-1 min-h-0 ${isCarte ? 'flex flex-col' : ''}`}>
           {children}
         </main>
       </div>

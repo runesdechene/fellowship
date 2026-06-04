@@ -26,7 +26,7 @@ export default function Carte() {
   const openEvent = (slug: string | null, id: string) => navigate(slug ? `/e/${slug}` : `/evenement/${id}`)
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative flex flex-col flex-1 min-h-0">
       <MapCanvas
         features={visible}
         theme={theme}
