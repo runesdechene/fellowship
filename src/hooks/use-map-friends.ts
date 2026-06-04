@@ -33,7 +33,9 @@ export function useMapFriends(enabled: boolean) {
       const [partRes, pubRes] = await Promise.all([
         supabase.from('participations')
           .select('actor_id, event_id, events!inner(start_date)')
-          .in('actor_id', ids).gte('events.start_date', today).neq('status', 'refuse'),
+          .in('actor_id', ids).gte('events.start_date', today)
+          // « où vont mes amis » = statuts going (confirme/inscrit), pas interesse (repéré).
+          .in('status', ['confirme', 'inscrit']),
         supabase.from('actor_public').select('actor_id, label, avatar_url').in('actor_id', ids),
       ])
 

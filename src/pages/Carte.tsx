@@ -37,10 +37,13 @@ export default function Carte() {
       { tags: selectedTags, zone, period, query, monthRange: null },
       { department: person?.department ?? null, now },
     )
-    let fc = eventsToGeoJSON(filtered as unknown as EventForMap[], parts).features
-    if (mineOnly) fc = fc.filter(f => f.properties.accepted)
-    if (friendsMode && isPro) fc = fc.filter(f => (friendsByEvent[f.properties.id]?.length ?? 0) > 0)
-    return fc
+    const fc = eventsToGeoJSON(filtered as unknown as EventForMap[], parts).features
+    // « Mes festivals » et « Mes amis » s'additionnent (UNION) : les deux cochés = mes events
+    // OU ceux de mes amis, pas l'intersection.
+    const lenses: Array<(f: (typeof fc)[number]) => boolean> = []
+    if (mineOnly) lenses.push(f => f.properties.accepted)
+    if (friendsMode && isPro) lenses.push(f => (friendsByEvent[f.properties.id]?.length ?? 0) > 0)
+    return lenses.length ? fc.filter(f => lenses.some(fn => fn(f))) : fc
   }, [events, parts, selectedTags, zone, period, query, mineOnly, friendsMode, isPro, friendsByEvent, person?.department, now])
 
   const toggleTag = (value: string) =>
