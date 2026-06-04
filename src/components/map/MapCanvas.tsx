@@ -37,19 +37,54 @@ function buildEventEl(p: MapFeatureProps): HTMLDivElement {
   return el
 }
 
-function popupMarkup(p: MapFeatureProps): string {
-  const date = formatDateRange(new Date(p.startDate), new Date(p.endDate))
-  const safe = (s: string) => s.replace(/</g, '&lt;')
-  const img = p.imageUrl ? `<div class="map-pop-img" style="background-image:url('${p.imageUrl.replace(/['"\\]/g, '')}')"></div>` : ''
-  return `<div class="map-pop">
-    ${img}
-    <div class="map-pop-body">
-      <strong style="font-family:var(--font-heading);font-size:15px;line-height:1.2">${safe(p.name)}</strong>
-      <div style="color:#f0a154;font-weight:600;font-size:12.5px;margin-top:3px">${safe(date)}</div>
-      <div style="color:var(--font-color-lowtitle);font-size:12.5px">${safe(p.city)}</div>
-      <button class="map-pop-link" type="button">Voir le festival →</button>
-    </div>
-  </div>`
+// N'accepte qu'une URL https (les contenus events sont saisis par des utilisateurs).
+function safeHttpsUrl(u: string | null): string | null {
+  if (!u) return null
+  try {
+    const url = new URL(u)
+    return url.protocol === 'https:' ? url.href : null
+  } catch {
+    return null
+  }
+}
+
+// Popup construit en DOM (pas de setHTML) : textContent échappe le texte, l'URL est validée.
+function buildPopupContent(p: MapFeatureProps, onLink: () => void): HTMLDivElement {
+  const root = document.createElement('div')
+  root.className = 'map-pop'
+
+  const safeUrl = safeHttpsUrl(p.imageUrl)
+  if (safeUrl) {
+    const img = document.createElement('div')
+    img.className = 'map-pop-img'
+    img.style.backgroundImage = `url(${JSON.stringify(safeUrl)})`
+    root.appendChild(img)
+  }
+
+  const body = document.createElement('div')
+  body.className = 'map-pop-body'
+
+  const name = document.createElement('strong')
+  name.textContent = p.name
+  name.style.cssText = 'font-family:var(--font-heading);font-size:15px;line-height:1.2'
+
+  const date = document.createElement('div')
+  date.textContent = formatDateRange(new Date(p.startDate), new Date(p.endDate))
+  date.style.cssText = 'color:#f0a154;font-weight:600;font-size:12.5px;margin-top:3px'
+
+  const city = document.createElement('div')
+  city.textContent = p.city
+  city.style.cssText = 'color:var(--font-color-lowtitle);font-size:12.5px'
+
+  const link = document.createElement('button')
+  link.type = 'button'
+  link.className = 'map-pop-link'
+  link.textContent = 'Voir le festival →'
+  link.addEventListener('click', onLink)
+
+  body.append(name, date, city, link)
+  root.appendChild(body)
+  return root
 }
 
 export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }: MapCanvasProps) {
@@ -81,11 +116,9 @@ export function MapCanvas({ features, theme, avatarUrl, avatarLabel, onSelect }:
         // Clic = popup résumé (pas de navigation directe) ; le lien "Voir le festival" navigue.
         // closeOnClick:false sinon le clic qui ouvre referme aussitôt. Un seul popup à la fois.
         popupRef.current?.remove()
-        const popup = new maplibregl.Popup({ className: 'map-popup', offset: 24, maxWidth: '260px', closeOnClick: false })
-          .setLngLat(f.geometry.coordinates).setHTML(popupMarkup(p)).addTo(map)
-        popupRef.current = popup
-        const link = popup.getElement()?.querySelector('.map-pop-link')
-        link?.addEventListener('click', () => onSelectRef.current(p.slug ?? null, p.id))
+        const content = buildPopupContent(p, () => onSelectRef.current(p.slug ?? null, p.id))
+        popupRef.current = new maplibregl.Popup({ className: 'map-popup', offset: 24, maxWidth: '260px', closeOnClick: false })
+          .setLngLat(f.geometry.coordinates).setDOMContent(content).addTo(map)
       })
       return new maplibregl.Marker({ element: el }).setLngLat(f.geometry.coordinates).addTo(map)
     })

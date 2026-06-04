@@ -19,11 +19,13 @@ describe('eventsToGeoJSON', () => {
     expect(fc.features[0].properties.color).toBe(getTagLandingColor('geek'))
     expect(fc.features[0].properties.imageUrl).toBe('u.jpg')
   })
-  it("accepted=true seulement si participation 'confirme' sur cet event", () => {
+  it("accepted=true si statut 'confirme' OU 'inscrit' (legacy accepté)", () => {
     expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'confirme' }]).features[0].properties.accepted).toBe(true)
+    expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'inscrit' }]).features[0].properties.accepted).toBe(true)
   })
-  it("accepted=false si statut 'interesse'", () => {
+  it("accepted=false si statut 'interesse' (repéré) ou 'en_cours'", () => {
     expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'interesse' }]).features[0].properties.accepted).toBe(false)
+    expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'en_cours' }]).features[0].properties.accepted).toBe(false)
   })
   it('ignore les events sans coords', () => {
     expect(eventsToGeoJSON([ev({ latitude: null })], []).features).toHaveLength(0)

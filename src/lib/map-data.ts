@@ -17,6 +17,11 @@ export type EventForMap = {
 
 export type ParticipationLite = { event_id: string; status: string }
 
+// Statuts « je participe / accepté » : `confirme` (Accepté nouveau modèle) ET `inscrit`
+// (legacy = accepté pour un exposant, cf. participationChip). `interesse` = juste repéré,
+// `en_cours` = dossier envoyé, `refuse` = refusé → exclus.
+const GOING_STATUSES = new Set(['confirme', 'inscrit'])
+
 export type MapFeatureProps = {
   id: string
   slug: string | null
@@ -41,7 +46,7 @@ export type MapFeatureCollection = { type: 'FeatureCollection'; features: MapFea
 // Convertit des events (déjà filtrés) en FeatureCollection pour la carte.
 // `accepted` = l'acteur actif a une participation 'confirme' sur cet event.
 export function eventsToGeoJSON(events: EventForMap[], parts: ParticipationLite[]): MapFeatureCollection {
-  const acceptedIds = new Set(parts.filter(p => p.status === 'confirme').map(p => p.event_id))
+  const acceptedIds = new Set(parts.filter(p => GOING_STATUSES.has(p.status)).map(p => p.event_id))
   const features: MapFeature[] = []
   for (const e of events) {
     if (e.latitude == null || e.longitude == null) continue
