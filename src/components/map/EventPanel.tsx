@@ -9,9 +9,9 @@ interface EventPanelProps {
 
 export function EventPanel({ features, onSelect }: EventPanelProps) {
   return (
-    <div className="absolute z-10 bg-card/85 backdrop-blur border border-border shadow-2xl
-        md:top-20 md:right-3 md:w-80 md:rounded-2xl md:max-h-[70vh]
-        bottom-0 left-0 right-0 rounded-t-2xl max-h-[45vh] overflow-y-auto p-4">
+    <div className="absolute z-10 bg-card/85 backdrop-blur border border-border shadow-2xl overflow-y-auto p-4
+        bottom-0 left-0 right-0 rounded-t-2xl max-h-[45vh]
+        md:top-20 md:right-3 md:left-auto md:bottom-auto md:w-80 md:rounded-2xl md:max-h-[70vh]">
       <h2 className="text-xs uppercase tracking-wider text-muted-foreground font-bold mb-3">
         {features.length} festival{features.length > 1 ? 's' : ''} dans la vue
       </h2>
