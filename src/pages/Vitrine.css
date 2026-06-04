@@ -166,6 +166,38 @@
   stroke-width: 2.4;
 }
 
+/* Nudge « Passez Pro pour certifier » — vitrine d'un propriétaire non certifié (décision 0004) */
+.v-certify {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--copper) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--copper) 32%, transparent);
+}
+.v-certify-ic {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--copper) 16%, transparent);
+  color: var(--amber);
+}
+.v-certify-ic svg { width: 18px; height: 18px; }
+.v-certify-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.v-certify-txt strong { font-size: 14px; font-weight: 650; color: hsl(var(--foreground)); }
+.v-certify-txt span { font-size: 12.5px; color: hsl(var(--muted-foreground)); line-height: 1.4; }
+.v-certify-cta { margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 560px) {
+  .v-certify { flex-wrap: wrap; }
+  .v-certify-cta { margin-left: 0; width: 100%; }
+}
+
 /* Subtitle (craft · city) */
 .v-sub {
   font-size: 13.5px;

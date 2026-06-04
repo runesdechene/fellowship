@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navItemsFor, entryState, isRouteValidFor, planForActor, mobilePrimaryFor, mobileSecondaryFor, NAV_DEFS, vitrineHref, type NavKey } from './navModel'
+import { navItemsFor, entryState, isRouteValidFor, planForActor, isCertified, mobilePrimaryFor, mobileSecondaryFor, NAV_DEFS, vitrineHref, type NavKey } from './navModel'
 
 const person = { kind: 'person' as const, entityType: null }
 const exposant = { kind: 'entity' as const, entityType: 'exposant' as const }
@@ -61,6 +61,17 @@ describe('planForActor', () => {
   })
   it('personne → free quelle que soit la valeur', () => expect(planForActor({ kind: 'person' }, { plan: 'pro' })).toBe('free'))
   it('acteur null → free', () => expect(planForActor(null, null)).toBe('free'))
+})
+
+describe('isCertified', () => {
+  it('plan pro → certifié', () => expect(isCertified({ plan: 'pro', verified: false })).toBe(true))
+  it('verified true (plan free) → certifié (override manuel)', () => expect(isCertified({ plan: 'free', verified: true })).toBe(true))
+  it('plan free + non verified → non certifié', () => expect(isCertified({ plan: 'free', verified: false })).toBe(false))
+  it('valeurs nulles/absentes → non certifié', () => {
+    expect(isCertified({ plan: null, verified: null })).toBe(false)
+    expect(isCertified({})).toBe(false)
+  })
+  it('pro ET verified → certifié', () => expect(isCertified({ plan: 'pro', verified: true })).toBe(true))
 })
 
 it('NAV_DEFS couvre toutes les clés utilisées', () => {

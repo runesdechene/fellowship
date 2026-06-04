@@ -37,6 +37,8 @@ const AdminEvents = lazy(() => import('@/components/admin/AdminEvents').then(m =
 const AdminUsers = lazy(() => import('@/components/admin/AdminUsers').then(m => ({ default: m.AdminUsers })))
 const AdminTags = lazy(() => import('@/components/admin/AdminTags').then(m => ({ default: m.AdminTags })))
 const AdminReports = lazy(() => import('@/components/admin/AdminReports').then(m => ({ default: m.AdminReports })))
+// Carte = lazy : MapLibre (~200 kB) ne charge que sur /carte.
+const Carte = lazy(() => import('@/pages/Carte'))
 
 function AdminFallback() {
   return (
@@ -97,6 +99,7 @@ function App() {
           {/* Authenticated routes */}
           <Route path="/dashboard" element={<Navigate to="/explorer" replace />} />
           <Route path="/calendrier" element={<AuthenticatedApp><CalendarPage /></AuthenticatedApp>} />
+          <Route path="/carte" element={<AuthenticatedApp><Suspense fallback={<div className="absolute inset-0" />}><Carte /></Suspense></AuthenticatedApp>} />
           <Route path="/explorer" element={<AuthenticatedApp><ExplorerPage /></AuthenticatedApp>} />
           <Route path="/notifications" element={<AuthenticatedApp><NotificationsPage /></AuthenticatedApp>} />
           <Route path="/profil" element={<AuthenticatedApp><ProfilePage /></AuthenticatedApp>} />

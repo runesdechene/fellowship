@@ -6,9 +6,11 @@ import { useVitrineEdit } from '@/hooks/use-vitrine-edit'
 import { useFollowStatus } from '@/hooks/use-follows'
 import { useSeasonCompanions } from '@/hooks/use-season-companions'
 import { canEditVitrine } from '@/lib/vitrine-edit'
+import { isCertified } from '@/lib/navModel'
 import { splitSeason } from '@/lib/vitrine'
 import { VitrineCover } from '@/components/vitrine/VitrineCover'
 import { VitrineHeader } from '@/components/vitrine/VitrineHeader'
+import { VitrineCertifyNudge } from '@/components/vitrine/VitrineCertifyNudge'
 import { VitrineEscales } from '@/components/vitrine/VitrineEscales'
 import { VitrineTampons } from '@/components/vitrine/VitrineTampons'
 import { VitrineEmptyRoad } from '@/components/vitrine/VitrineEmptyRoad'
@@ -81,6 +83,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
           onShare={() => { navigator.share?.({ url: window.location.href }).catch(() => {}) }}
           onQR={() => setShowQR(true)}
         />
+        {canEdit && !isCertified(entity) && <VitrineCertifyNudge />}
         {upcoming.length === 0 && past.length === 0 ? (
           <VitrineEmptyRoad canEdit={canEdit} />
         ) : (

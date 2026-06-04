@@ -1,4 +1,4 @@
-export type NavKey = 'explorer' | 'mes-dates' | 'mes-createurs' | 'profil' | 'reglages' | 'dashboard' | 'calendrier' | 'communaute' | 'vitrine'
+export type NavKey = 'explorer' | 'mes-dates' | 'mes-createurs' | 'profil' | 'reglages' | 'dashboard' | 'calendrier' | 'communaute' | 'vitrine' | 'carte'
 export type EntryState = 'active' | 'lock-pro' | 'bientot'
 export type Plan = 'free' | 'pro'
 
@@ -18,6 +18,7 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   'mes-createurs': { key: 'mes-createurs',   to: '/mes-createurs',   label: 'Mes créateurs',  shortLabel: 'Créateurs', icon: 'Heart',           pro: false, built: false },
   dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Cockpit',        shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: true },
   calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: false, built: true },
+  carte:           { key: 'carte',           to: '/carte',           label: 'Carte',          icon: 'Map',             pro: false, built: true },
   communaute:      { key: 'communaute',      to: '/communaute',      label: 'Communauté',     icon: 'Users',           pro: true,  built: true },
   vitrine:         { key: 'vitrine',         to: '/profil',          label: 'Ma vitrine',     icon: 'Store',           pro: false, built: true },
   profil:          { key: 'profil',          to: '/profil',          label: 'Profil',         icon: 'User',            pro: false, built: true },
@@ -27,8 +28,8 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
 // Festivalier : pas d'entrée « Profil » — il n'a pas de vitrine.
 // (L'avatar perso + lien /reglages tient lieu d'accès au compte.)
 // `calendrier` est la surface dates unique (gratuit nerfé / Pro complet) — a remplacé « Mes dates » (#9 lot 1).
-const PERSON_NAV: NavKey[] = ['explorer', 'calendrier', 'mes-createurs', 'reglages']
-const EXPOSANT_NAV: NavKey[] = ['explorer', 'dashboard', 'calendrier', 'communaute', 'vitrine', 'reglages']
+const PERSON_NAV: NavKey[] = ['explorer', 'calendrier', 'carte', 'mes-createurs', 'reglages']
+const EXPOSANT_NAV: NavKey[] = ['explorer', 'dashboard', 'calendrier', 'carte', 'communaute', 'vitrine', 'reglages']
 
 // BottomBar mobile : 3 liens principaux par acteur (le reste → feuille de compte).
 const PERSON_PRIMARY: NavKey[] = ['explorer', 'calendrier', 'mes-createurs']
@@ -71,7 +72,7 @@ const SHARED_PREFIXES = ['/explorer', '/reglages', '/evenement', '/e/', '/notifi
 // Premiers segments réservés aux routes applicatives (cf. App.tsx). Tout autre
 // chemin à un seul segment (`/{slug}`) est une vitrine/profil public.
 const RESERVED_TOP = new Set([
-  'explorer', 'calendrier', 'communaute', 'tableau-de-bord', 'dashboard',
+  'explorer', 'calendrier', 'carte', 'communaute', 'tableau-de-bord', 'dashboard',
   'mes-dates', 'mes-createurs', 'profil', 'reglages', 'suivis',
   'notifications', 'evenement', 'e', 'admin', 'onboarding', 'login', 'auth',
   'legal', 'boutique', 'abonnement',
@@ -109,6 +110,15 @@ export function planForActor(actor: { kind: string } | null, entityRow: unknown)
   if (actor?.kind !== 'entity') return 'free'
   const plan = (entityRow as { plan?: Plan | null } | null | undefined)?.plan
   return plan === 'pro' ? 'pro' : 'free'
+}
+
+/**
+ * Une entité est « Certifiée » (badge public) si elle est Pro, OU si `verified` a été posé
+ * à la main (override : certifier un compte officiel non-payant, garde-fou anti-usurpation).
+ * Dérivation pure → aucune logique back, l'essai (trialing) suit `plan`. Cf. décision 0004.
+ */
+export function isCertified(entity: { plan?: Plan | string | null; verified?: boolean | null } | null | undefined): boolean {
+  return entity?.plan === 'pro' || entity?.verified === true
 }
 
 /**

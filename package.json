@@ -1,7 +1,7 @@
 {
   "name": "flwsh",
   "private": true,
-  "version": "0.7.220",
+  "version": "0.7.221",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,6 +21,7 @@
     "clsx": "^2.1.1",
     "dompurify": "^3.3.3",
     "lucide-react": "^0.555.0",
+    "maplibre-gl": "^5.24.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

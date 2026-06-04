@@ -1,6 +1,8 @@
 import { UserPlus, Check, Share2, QrCode, Pencil, Link2 } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
 import { linkHost } from '@/lib/vitrine'
+import { isCertified } from '@/lib/navModel'
+import { CertifiedBadge } from '@/components/ui/CertifiedBadge'
 import { VitrineSocialStrip } from './VitrineSocialStrip'
 import type { EntityRow, VitrineLink } from '@/types/database'
 import type { NetworkMember } from '@/lib/profile-network'
@@ -31,7 +33,7 @@ export function VitrineHeader({ entity, canEdit, isFollowing, followers, friends
           {entity.avatar_url ? <img src={entity.avatar_url} alt={entity.brand_name} /> : <span className="v-av-fallback">{initials}</span>}
         </div>
         <div className="v-id">
-          <div className="v-brand">{entity.brand_name}</div>
+          <div className="v-brand">{entity.brand_name}{isCertified(entity) && <CertifiedBadge size="md" />}</div>
           {subtitle && <div className="v-sub">{subtitle}</div>}
         </div>
         <div className="v-act">

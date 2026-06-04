@@ -16,12 +16,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   // L'Explorer (coverflow) est immersif plein écran : pas de SearchBar + main sans scroll.
   const isExplorer = location.pathname === '/explorer'
+  // La Carte est immersive plein écran (comme l'Explorer) : pas de SearchBar, pas de scroll.
+  const isCarte = location.pathname === '/carte'
   // La vitrine publique (/:slug) commence par une cover plein-bord en haut du stage :
   // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
   const isVitrine = isPublicProfilePath(location.pathname)
-  const hideSearchBar = isExplorer || isVitrine
-  const noScroll = isExplorer
+  const hideSearchBar = isExplorer || isVitrine || isCarte
+  const noScroll = isExplorer || isCarte
   useEffect(() => {
     if (currentActor && !isRouteValidFor(location.pathname, currentActor)) {
       navigate('/explorer', { replace: true })

@@ -3,14 +3,14 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
-  Shield, Check, LogOut, Lock, Sparkles, type LucideIcon,
+  Shield, Check, LogOut, Lock, Sparkles, Map, type LucideIcon,
 } from 'lucide-react'
 import { mobileSecondaryFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { ThemeToggle } from '@/components/theme-toggle'
 import './AccountSheet.css'
 
 const ICONS: Record<string, LucideIcon> = {
-  Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
+  Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings, Map,
 }
 
 function initials(label: string): string {

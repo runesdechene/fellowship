@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, type LucideIcon } from 'lucide-react'
+import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, type LucideIcon } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { useMyParticipations } from '@/hooks/use-participations'
 import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
 import './Sidebar.css'
 
-const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings }
+const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings, Map }
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
