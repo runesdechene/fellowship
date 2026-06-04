@@ -172,6 +172,23 @@ export function participationChip(
   return { label: '✦ Accepté', variant: 'accepte' }
 }
 
+/**
+ * L'autoplay du coverflow ne tourne que là où il peut être mis en pause proprement.
+ * Sur pointeur tactile (`coarse`) il n'y a pas de hover → la pause-au-survol ne se
+ * déclenche jamais et la carte défilerait pendant qu'on vise un tap (#4). On le coupe donc
+ * sur tactile : sur mobile on swipe soi-même. Reste actif sur desktop (pause au survol/scrub).
+ */
+export function shouldAutoplay(opts: {
+  reducedMotion: boolean
+  count: number
+  scrubbing: boolean
+  hoverPause: boolean
+  coarsePointer: boolean
+}): boolean {
+  const { reducedMotion, count, scrubbing, hoverPause, coarsePointer } = opts
+  return !reducedMotion && !coarsePointer && count > 1 && !scrubbing && !hoverPause
+}
+
 export function composeFilter(
   events: EventWithScore[],
   filters: ExplorerFilters,

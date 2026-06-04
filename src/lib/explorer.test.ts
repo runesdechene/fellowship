@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -257,6 +257,29 @@ describe('participationChip', () => {
     expect(participationChip('confirme', 'paye', 'entity', { isPast: true })?.variant).toBe('termine')
     expect(participationChip('interesse', null, 'person', { isPast: true })?.variant).toBe('termine')
     expect(participationChip('refuse', null, 'entity', { isPast: true })?.variant).toBe('termine')
+  })
+})
+
+describe('shouldAutoplay', () => {
+  const base = { reducedMotion: false, count: 5, scrubbing: false, hoverPause: false, coarsePointer: false }
+  it('autoplay sur desktop (pointeur fin), plusieurs cartes, aucune pause', () => {
+    expect(shouldAutoplay(base)).toBe(true)
+  })
+  it('PAS d’autoplay sur pointeur tactile (coarse) — #4 : pas de hover pour mettre en pause au tap', () => {
+    expect(shouldAutoplay({ ...base, coarsePointer: true })).toBe(false)
+  })
+  it('PAS d’autoplay si prefers-reduced-motion', () => {
+    expect(shouldAutoplay({ ...base, reducedMotion: true })).toBe(false)
+  })
+  it('PAS d’autoplay avec une seule carte (ou zéro)', () => {
+    expect(shouldAutoplay({ ...base, count: 1 })).toBe(false)
+    expect(shouldAutoplay({ ...base, count: 0 })).toBe(false)
+  })
+  it('PAS d’autoplay pendant le scrub', () => {
+    expect(shouldAutoplay({ ...base, scrubbing: true })).toBe(false)
+  })
+  it('PAS d’autoplay quand la souris survole le contenu/les boutons (hoverPause)', () => {
+    expect(shouldAutoplay({ ...base, hoverPause: true })).toBe(false)
   })
 })
 

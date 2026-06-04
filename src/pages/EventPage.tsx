@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useLocation } from 'react-router-dom'
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 import { useEvent, updateEvent, useEventCreator } from '@/hooks/use-events'
@@ -18,6 +18,7 @@ import { DiscussionTeaser } from '@/components/events/DiscussionTeaser'
 import { HowToApplyModal } from '@/components/events/HowToApplyModal'
 import { ReportButton } from '@/components/reports/ReportButton'
 import { candidatureState, mapsSearchUrl, daysUntilStart, editionLabel, hasApplyInfo } from '@/lib/festival'
+import { canGoBackInApp } from '@/lib/nav-back'
 import { useDateQuota } from '@/hooks/use-date-quota'
 import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
@@ -50,7 +51,15 @@ function formatDate(date: string) {
 export function EventPage() {
   const { id, slug } = useParams<{ id?: string; slug?: string }>()
   const location = useLocation()
+  const navigate = useNavigate()
+  // Fallback si on est arrivé directement (lien partagé) : pas d'historique à remonter.
   const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
+  // Retour = vrai historique du navigateur quand on a navigué dans l'app (depuis Cockpit,
+  // Mes dates, Communauté…), au lieu de toujours retomber sur Explorer (#1).
+  const handleBack = () => {
+    if (canGoBackInApp(location.key)) navigate(-1)
+    else navigate(backTo)
+  }
   const { user, currentActor } = useAuth()
   const { event, loading } = useEvent(slug ?? id, slug ? 'slug' : 'id')
   // Notes personnelles (filtrées sur l'acteur actif) — privées, pas partagées.
@@ -283,9 +292,9 @@ export function EventPage() {
             <ArrowLeft />
           </button>
         ) : (
-          <Link to={backTo} className="event-back" title="Retour">
+          <button onClick={handleBack} className="event-back" title="Retour">
             <ArrowLeft /> Retour
-          </Link>
+          </button>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
           {isExposant && isPast && !editing && (

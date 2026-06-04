@@ -5,7 +5,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, shouldAutoplay, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { planForActor } from '@/lib/navModel'
@@ -155,14 +155,19 @@ export function ExplorerPage() {
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
   )
+  // Pointeur tactile : pas de hover → la pause-au-survol ne marche pas → on coupe l'autoplay (#4).
+  const coarsePointer = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
+    []
+  )
 
   useEffect(() => {
-    if (reducedMotion || displayed.length <= 1 || scrubbing || hoverPause) return
+    if (!shouldAutoplay({ reducedMotion, count: displayed.length, scrubbing, hoverPause, coarsePointer })) return
     const id = setInterval(() => {
       setActiveIndex(i => (i + 1) % displayed.length)
     }, 4500)
     return () => clearInterval(id)
-  }, [displayed.length, reducedMotion, scrubbing, hoverPause])
+  }, [displayed.length, reducedMotion, scrubbing, hoverPause, coarsePointer])
 
   // ---------- Keyboard ----------
   useEffect(() => {

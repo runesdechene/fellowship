@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.215',
+    date: '2026-06-04',
+    title: 'Retours 1ʳᵉ cliente — corrections P0',
+    changes: [
+      'Bouton « Retour » : revient à l\'écran d\'où tu viens (Cockpit, Mes dates, Communauté…) au lieu de toujours rouvrir l\'Explorer',
+      'Explorateur sur mobile : le carrousel ne défile plus tout seul pendant que tu tapes une carte',
+      'Réglages : la section « Une question ? Un bug ? » est de nouveau atteignable en bas de page sur mobile',
+    ],
+  },
+  {
     version: '0.7.214',
     date: '2026-06-03',
     title: 'Slugs plus propres',
