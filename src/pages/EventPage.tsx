@@ -54,15 +54,16 @@ export function EventPage() {
   const { id, slug } = useParams<{ id?: string; slug?: string }>()
   const location = useLocation()
   const navigate = useNavigate()
+  const { user, currentActor } = useAuth()
   // Fallback si on est arrivé directement (lien partagé) : pas d'historique à remonter.
-  const backTo = (location.state as { from?: string } | null)?.from ?? '/explorer'
+  // Anonyme (arrivé via embed/lien partagé) : pas d'app à explorer → on ramène à l'accueil.
+  const backTo = (location.state as { from?: string } | null)?.from ?? (user ? '/explorer' : '/')
   // Retour = vrai historique du navigateur quand on a navigué dans l'app (depuis Cockpit,
   // Mes dates, Communauté…), au lieu de toujours retomber sur Explorer (#1).
   const handleBack = () => {
     if (canGoBackInApp(location.key)) navigate(-1)
     else navigate(backTo)
   }
-  const { user, currentActor } = useAuth()
   const { event, loading } = useEvent(slug ?? id, slug ? 'slug' : 'id')
   // Notes personnelles (filtrées sur l'acteur actif) — privées, pas partagées.
   const { notes, refetch: refetchNotes } = useEventNotes(event?.id, currentActor?.id ?? null)
@@ -316,16 +317,9 @@ export function EventPage() {
           <button onClick={() => setEditing(false)} className="event-back" title="Annuler l'édition">
             <ArrowLeft />
           </button>
-        ) : user ? (
+        ) : (
           <button onClick={handleBack} className="event-back" title="Retour">
             <ArrowLeft /> Retour
-          </button>
-        ) : (
-          // Visiteur anonyme (arrivé via embed / lien partagé) : pas de retour utile dans l'app
-          // → CTA d'acquisition vers l'accueil.
-          <button onClick={() => navigate('/')} className="event-back" title="Découvrir Fellowship">
-            <img src="/icon.png" alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />
-            Découvrir Fellowship
           </button>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
@@ -731,6 +725,20 @@ export function EventPage() {
           </aside>
         </div>
 
+      )}
+
+      {/* CTA d'acquisition en bas de page — visiteur anonyme uniquement */}
+      {!user && (
+        <div style={{ maxWidth: 520, margin: '8px auto 40px', padding: 24, borderRadius: 18, background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, textAlign: 'center' }}>
+          <img src="/icon.png" alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
+          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>Le réseau qui fait tourner les festivals</strong>
+          <span style={{ fontSize: 13.5, color: 'hsl(var(--muted-foreground))', maxWidth: 380 }}>
+            Fellowship aide artisans et organisateurs à gérer leurs événements et leur communauté.
+          </span>
+          <button className="fest-btn primary" onClick={() => navigate('/')} style={{ marginTop: 6 }}>
+            Découvrir Fellowship
+          </button>
+        </div>
       )}
 
       {showParticipants && (
