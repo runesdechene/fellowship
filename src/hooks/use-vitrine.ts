@@ -43,7 +43,8 @@ export function useVitrine(slug: string | undefined): VitrineData {
       const { data: parts } = await supabase
         .from('participations')
         .select('events(id, name, start_date, end_date, city, department, tags, image_url, slug)')
-        .eq('actor_id', entity.actor_id).eq('status', 'inscrit')
+        // « Accepté » = on y va (présence acquise), payé ou pas. `confirme` inclus par robustesse.
+        .eq('actor_id', entity.actor_id).in('status', ['inscrit', 'confirme'])
       const season = ((parts ?? []) as Array<{ events: SeasonEvent | null }>)
         .map(p => p.events).filter((e): e is SeasonEvent => !!e)
 

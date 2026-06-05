@@ -69,6 +69,8 @@ export function EmbedPage() {
         .select('id, events(id, name, start_date, end_date, city, department, tags, image_url, slug)')
         .eq('actor_id', (e as EntityRow).actor_id)
         .eq('visibility', 'public')
+        // « Accepté » = on y va (présence acquise), payé ou pas. On exclut interesse/en_cours/refuse.
+        .in('status', ['inscrit', 'confirme'])
 
       setParticipations((parts as EmbedEvent[] | null) ?? [])
       setLoading(false)
@@ -252,11 +254,11 @@ export function EmbedPage() {
                 rel="noopener noreferrer"
                 className="embed-fcard"
               >
-                {ev.image_url && (
-                  <div className="embed-fposter">
-                    <img src={ev.image_url} alt="" loading="lazy" />
-                  </div>
-                )}
+                <div className="embed-fposter">
+                  {ev.image_url
+                    ? <img src={ev.image_url} alt="" loading="lazy" />
+                    : <span className="embed-fposter-ph">{ev.name?.[0]?.toUpperCase() ?? '✦'}</span>}
+                </div>
                 <div className="embed-fbody">
                   <div className="embed-fdate">
                     <b>{d.getDate()}</b>

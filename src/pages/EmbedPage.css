@@ -533,20 +533,37 @@ html:has(.embed-page) body::-webkit-scrollbar {
   box-shadow: 0 14px 30px rgba(0,0,0,0.45);
 }
 
-/* Affiche en grand, pleine largeur de la carte, non rognée (hauteur naturelle) */
+/* Affiche en grand, pleine largeur, ratio FIXE 3/4 (cover) → toutes les cartes harmonisées */
 .embed-fposter {
   width: 100%;
+  aspect-ratio: 3 / 4;
   background: rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .embed-fposter img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
+}
+
+/* Placeholder neutre (event sans affiche) — initiale en filigrane, pas de couleur */
+.embed-fposter-ph {
+  font-size: 46px;
+  font-weight: 800;
+  color: rgba(0,0,0,0.12);
 }
 
 .embed-page[data-theme="dark"] .embed-fposter {
   background: rgba(255,255,255,0.04);
+}
+
+.embed-page[data-theme="dark"] .embed-fposter-ph {
+  color: rgba(255,255,255,0.13);
 }
 
 /* Corps sous l'affiche : date à gauche + infos */
