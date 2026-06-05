@@ -47,6 +47,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Les routes /:slug/embed sont des iframes embarquées sur des sites tiers.
+        // Sans cette denylist, le navigateFallback (index.html) du SW sert le shell
+        // précaché depuis `/` — qui porte `frame-ancestors 'none'` — et bloque l'iframe.
+        // En les excluant, la navigation va au réseau et reçoit `frame-ancestors *`.
+        navigateFallbackDenylist: [/\/embed(?:$|\?)/],
       },
     }),
   ],
