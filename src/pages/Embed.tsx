@@ -53,6 +53,13 @@ export function EmbedPage() {
     () => parseEmbedParams(searchParams),
     [searchParams],
   )
+
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+    if (themeParam === 'dark') return 'dark'
+    if (themeParam === 'light') return 'light'
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+
   const [entity, setEntity] = useState<EntityRow | null>(null)
   const [participations, setParticipations] = useState<EmbedEvent[]>([])
   const [loading, setLoading] = useState(true)
@@ -92,6 +99,41 @@ export function EmbedPage() {
       .slice(0, max)
   }, [participations, max])
 
+  useEffect(() => {
+    if (themeParam !== 'auto') return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const onMq = (e: MediaQueryListEvent) => setResolvedTheme(e.matches ? 'dark' : 'light')
+    mq.addEventListener('change', onMq)
+    const onMsg = (e: MessageEvent) => {
+      const d = e.data
+      if (d && d.source === 'flwsh-embed' && d.type === 'theme'
+          && (d.theme === 'light' || d.theme === 'dark')) {
+        setResolvedTheme(d.theme)
+      }
+    }
+    window.addEventListener('message', onMsg)
+    window.parent.postMessage({ source: 'flwsh-embed', type: 'ready' }, '*')
+    return () => {
+      mq.removeEventListener('change', onMq)
+      window.removeEventListener('message', onMsg)
+    }
+  }, [themeParam])
+
+  useEffect(() => {
+    const postHeight = () => {
+      const h = document.documentElement.scrollHeight
+      window.parent.postMessage({ source: 'flwsh-embed', type: 'resize', height: h }, '*')
+    }
+    postHeight()
+    const ro = new ResizeObserver(postHeight)
+    ro.observe(document.body)
+    window.addEventListener('load', postHeight)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('load', postHeight)
+    }
+  }, [events.length, loading])
+
   const formatDate = (start: string, end: string) => {
     const s = new Date(start)
     const e = new Date(end)
@@ -109,7 +151,7 @@ export function EmbedPage() {
 
   if (loading) {
     return (
-      <div className="embed-page" data-theme={themeParam} data-view={view}>
+      <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
         <div className="embed-cards">
           {[1, 2].map(i => (
             <div key={i} className="embed-skeleton">
@@ -134,7 +176,7 @@ export function EmbedPage() {
   const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
   return (
-    <div className="embed-page" data-theme={themeParam} data-view={view}>
+    <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
      <div className="embed-page-container">
       {/* Header */}
       <div className="embed-header">
