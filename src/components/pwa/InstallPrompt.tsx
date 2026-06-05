@@ -12,6 +12,8 @@ export function InstallPrompt() {
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
+    // Jamais dans une iframe (widget embed sur un site tiers) — inutile et intrusif
+    if (window.self !== window.top) return
     // Déjà installé en PWA
     if (window.matchMedia('(display-mode: standalone)').matches) return
 

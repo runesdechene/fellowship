@@ -7,27 +7,14 @@ import { eventShareUrl } from '@/lib/event-link'
 import { parseEmbedParams } from '@/lib/embed-params'
 import './EmbedPage.css'
 
-/* ── Tag icon map (inline — no Tailwind dependency) ── */
-const TAG_EMOJI: Record<string, string> = {
-  'fete-medievale': '⚔️',
-  'fantastique': '✨',
-  'geek': '🎮',
-  'festival-musique': '🎵',
-  'foire': '🎪',
-  'marche': '🧺',
-  'salon': '🎤',
-  'litteraire': '📖',
-  'historique': '🏛️',
-}
+/* Mois abrégés (rendu date façon Vitrine, sans dépendance) */
+const MOIS = ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc']
 
-/* ── Fallback gradient colors for events without images ── */
-const FALLBACK_GRADIENTS = [
-  'linear-gradient(135deg, #2c1810, #8B4513)',
-  'linear-gradient(135deg, #1a3a2a, #3CB371)',
-  'linear-gradient(135deg, #3a2a1a, #DAA520)',
-  'linear-gradient(135deg, #1a2a3a, #4682B4)',
-  'linear-gradient(135deg, #3a1a2a, #8B3A62)',
-]
+/* Durée en jours, bornes incluses (1 jour minimum) */
+function durationDays(start: string, end: string): number {
+  const ms = new Date(end).getTime() - new Date(start).getTime()
+  return Math.max(1, Math.round(ms / 86_400_000) + 1)
+}
 
 interface EmbedEvent {
   id: string
@@ -149,13 +136,6 @@ export function EmbedPage() {
     }
   }, [events.length, loading])
 
-  const formatDate = (start: string, end: string) => {
-    const s = new Date(start)
-    const e = new Date(end)
-    const fmt = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
-    return start === end ? fmt(s) : `${fmt(s)} — ${fmt(e)}`
-  }
-
   const formatDayMonth = (start: string) => {
     const d = new Date(start)
     return {
@@ -198,19 +178,35 @@ export function EmbedPage() {
     <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
      <div className="embed-page-container" style={{ maxWidth: maxWidth ? `${maxWidth}px` : '100%' }}>
       {/* Header */}
-      <div className="embed-header">
-        {entity.avatar_url ? (
-          <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
-        ) : (
-          <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
-            {displayName[0]?.toUpperCase()}
-          </div>
-        )}
-        <div className="embed-header-info">
-          <div className="embed-header-name">{displayName}</div>
-          {subtitle && <div className="embed-header-sub">{subtitle}</div>}
+      {view === 'full' ? (
+        <div className="embed-hero">
+          <h1 className="embed-hero-title">
+            Les événements de <span className="embed-hero-name">{displayName}</span>
+          </h1>
+          <a
+            className="embed-hero-follow"
+            href={`https://flw.sh/${slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Suivre ses événements sur Fellowship
+          </a>
         </div>
-      </div>
+      ) : (
+        <div className="embed-header">
+          {entity.avatar_url ? (
+            <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
+          ) : (
+            <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
+              {displayName[0]?.toUpperCase()}
+            </div>
+          )}
+          <div className="embed-header-info">
+            <div className="embed-header-name">{displayName}</div>
+            {subtitle && <div className="embed-header-sub">{subtitle}</div>}
+          </div>
+        </div>
+      )}
 
       {/* Events */}
       {events.length === 0 ? (
@@ -243,42 +239,45 @@ export function EmbedPage() {
           })}
         </div>
       ) : (
-        <div className="embed-cards">
-          {events.map((ev, i) => {
-            const tag = ev.tags?.[0] ?? 'autre'
-            const emoji = TAG_EMOJI[tag] ?? '📌'
+        <div className="embed-grid">
+          {events.map((ev) => {
+            const d = new Date(ev.start_date)
+            const tags = (ev.tags ?? []).slice(0, 3)
+            const dur = durationDays(ev.start_date, ev.end_date)
             return (
               <a
                 key={ev.id}
                 href={eventShareUrl(ev, 'https://flw.sh')}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`embed-card${i === 0 ? ' embed-card-featured' : ''}`}
+                className="embed-fcard"
               >
-                {i === 0 && <span className="embed-card-badge">En vedette</span>}
-                <div className="embed-card-image">
-                  {ev.image_url ? (
-                    <img src={ev.image_url} alt={ev.name} />
-                  ) : (
-                    <div
-                      className="embed-card-image-fallback"
-                      style={{ background: FALLBACK_GRADIENTS[i % FALLBACK_GRADIENTS.length] }}
-                    >
-                      {emoji}
+                <div className="embed-fdate">
+                  <b>{d.getDate()}</b>
+                  <span>{MOIS[d.getMonth()]}</span>
+                  <i>{d.getFullYear()}</i>
+                </div>
+                {ev.image_url && (
+                  <div className="embed-fposter">
+                    <img src={ev.image_url} alt="" loading="lazy" />
+                  </div>
+                )}
+                <div className="embed-finfo">
+                  <div className="embed-fname">{ev.name}</div>
+                  {tags.length > 0 && (
+                    <div className="embed-ftags">
+                      {tags.map(t => (
+                        <span key={t} className="embed-ftag">{t.replace(/-/g, ' ')}</span>
+                      ))}
                     </div>
                   )}
-                  <span className="embed-card-tag">{tag}</span>
-                </div>
-                <div className="embed-card-body">
-                  <div className="embed-card-name">{ev.name}</div>
-                  <div className="embed-card-meta">
-                    <span className="embed-card-date">
-                      {formatDate(ev.start_date, ev.end_date)}
-                    </span>
-                    <span className="embed-card-city">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
+                  <div className="embed-floc">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                    {ev.city}{ev.department ? ` (${ev.department})` : ''}
                   </div>
-                  <div className="embed-card-link">
-                    Voir l'événement →
+                  <div className="embed-fdur">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                    {dur} jour{dur !== 1 ? 's' : ''}
                   </div>
                 </div>
               </a>
@@ -287,16 +286,19 @@ export function EmbedPage() {
         </div>
       )}
 
-      {/* Footer — Fellowship branding */}
-      <a
-        href={`https://flw.sh/@${slug}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="embed-footer"
-      >
-        <img src="/logo.png" alt="Fellowship" className="embed-footer-logo" />
-        <span className="embed-footer-text">Calendrier propulsé par Fellowship</span>
-      </a>
+      {/* Footer — marque Fellowship (icône + mot + point) + slogan */}
+      <div className="embed-foot">
+        <a
+          className="embed-foot-brand"
+          href={`https://flw.sh/${slug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="/icon.png" alt="" className="embed-foot-mark" />
+          <span className="embed-foot-word">Fellowship<span className="embed-foot-dot">.</span></span>
+        </a>
+        <div className="embed-foot-slogan">Propulsé par Fellowship — le réseau qui fait tourner les festivals</div>
+      </div>
       </div>
     </div>
   )
