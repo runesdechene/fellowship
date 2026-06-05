@@ -119,9 +119,20 @@ export function EmbedPage() {
     }
   }, [themeParam])
 
+  // Fond transparent : le widget doit laisser transparaître le fond du site hôte.
+  // On neutralise le fond global (body a `var(--page-backdrop)`) + html, sinon l'iframe
+  // n'est pas traversante. Restauré au démontage (body est partagé avec le reste de l'app).
   useEffect(() => {
-    document.documentElement.style.background = resolvedTheme === 'dark' ? '#1a1a1a' : '#faf8f5'
-  }, [resolvedTheme])
+    const html = document.documentElement
+    const prevHtml = html.style.background
+    const prevBody = document.body.style.background
+    html.style.background = 'transparent'
+    document.body.style.background = 'transparent'
+    return () => {
+      html.style.background = prevHtml
+      document.body.style.background = prevBody
+    }
+  }, [])
 
   useEffect(() => {
     const postHeight = () => {

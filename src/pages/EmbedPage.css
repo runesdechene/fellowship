@@ -13,15 +13,16 @@
     margin: auto;
 }
 
-/* Light theme (default) */
+/* Fond transparent dans tous les cas (auto/clair/sombre) : le fond du site hôte
+   transparaît. Le thème ne pilote plus que le texte et les cartes. */
 .embed-page {
-  background: #faf8f5;
+  background: transparent;
   color: #1a1a1a;
 }
 
-/* Dark theme */
+/* Dark theme — texte clair, fond toujours transparent */
 .embed-page[data-theme="dark"] {
-  background: #1a1a1a;
+  background: transparent;
   color: #f0f0f0;
 }
 

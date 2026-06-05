@@ -14,7 +14,7 @@ export function buildEmbedSnippet({ slug, view, theme }: SnippetOpts): string {
   const height = FALLBACK_HEIGHT[view]
   return [
     `<iframe src="${src}"`,
-    `        data-flwsh-embed style="width:100%;border:0;height:${height}px"`,
+    `        data-flwsh-embed style="width:100%;border:0;height:${height}px;display:block;margin:auto"`,
     `        loading="lazy" title="Calendrier ${slug}"></iframe>`,
     `<script src="${EMBED_ORIGIN}/embed.js" async></script>`,
   ].join('\n')
