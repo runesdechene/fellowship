@@ -81,11 +81,11 @@ export function EmbedPage() {
   const events = useMemo(() => {
     const now = new Date()
     now.setHours(0, 0, 0, 0)
-    return participations
+    const list = participations
       .filter(p => p.events && new Date(p.events.start_date) >= now)
       .map(p => p.events!)
       .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
-      .slice(0, max)
+    return max == null ? list : list.slice(0, max)
   }, [participations, max])
 
   useEffect(() => {

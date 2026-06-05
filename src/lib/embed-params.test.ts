@@ -4,16 +4,15 @@ import { parseEmbedParams } from './embed-params'
 const P = (qs: string) => new URLSearchParams(qs)
 
 describe('parseEmbedParams', () => {
-  it('défauts (aucun param) → full, light, max 10, accent cuivre, pleine largeur', () => {
+  it('défauts (aucun param) → full, light, max tous (null), accent cuivre, pleine largeur', () => {
     expect(parseEmbedParams(P(''))).toEqual({
-      view: 'full', theme: 'light', max: 10, accent: '#c87941', maxWidth: null,
+      view: 'full', theme: 'light', max: null, accent: '#c87941', maxWidth: null,
     })
   })
 
-  it('view=mini → max par défaut 4', () => {
-    const r = parseEmbedParams(P('view=mini'))
-    expect(r.view).toBe('mini')
-    expect(r.max).toBe(4)
+  it('view=mini → max par défaut 4 ; full sans max → null (tous)', () => {
+    expect(parseEmbedParams(P('view=mini')).max).toBe(4)
+    expect(parseEmbedParams(P('view=full')).max).toBeNull()
   })
 
   it('view inconnu → full', () => {

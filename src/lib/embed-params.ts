@@ -4,13 +4,12 @@ export type EmbedTheme = 'light' | 'dark' | 'auto'
 export interface EmbedParams {
   view: EmbedView
   theme: EmbedTheme
-  max: number
+  /** Nombre max d'événements ; null = tous (défaut en pleine page, comme la vitrine). */
+  max: number | null
   accent: string
   /** Largeur max du contenu en px ; null = pleine largeur du parent (100%). */
   maxWidth: number | null
 }
-
-const DEFAULT_MAX: Record<EmbedView, number> = { mini: 4, full: 10 }
 
 export function parseEmbedParams(params: URLSearchParams): EmbedParams {
   const view: EmbedView = params.get('view') === 'mini' ? 'mini' : 'full'
@@ -20,9 +19,10 @@ export function parseEmbedParams(params: URLSearchParams): EmbedParams {
     themeRaw === 'dark' ? 'dark' : themeRaw === 'auto' ? 'auto' : 'light'
 
   const maxRaw = parseInt(params.get('max') ?? '', 10)
+  // `max` explicite → clampé [1,50]. Sinon : mini cadré à 4, full = TOUS (null) comme la vitrine.
   const max = Number.isFinite(maxRaw)
     ? Math.min(Math.max(maxRaw, 1), 50)
-    : DEFAULT_MAX[view]
+    : view === 'mini' ? 4 : null
 
   const accentRaw = params.get('accent') ?? ''
   const accent = /^[0-9a-fA-F]{3,8}$/.test(accentRaw) ? `#${accentRaw}` : '#c87941'
