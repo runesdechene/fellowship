@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.229',
+    date: '2026-06-05',
+    title: 'Carte : boutons mobile sur une ligne',
+    changes: [
+      'Sur mobile, « Mes festivals » et « Mes amis » sont alignés sur une même ligne horizontale, un peu plus bas sous la barre de recherche',
+    ],
+  },
+  {
     version: '0.7.228',
     date: '2026-06-05',
     title: 'Carte : boutons mobile dégagés',

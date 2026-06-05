@@ -90,7 +90,7 @@ export default function Carte() {
           occupe toute la largeur en haut : on descend les pills sous elle pour
           ne pas bloquer le clic. Sur desktop (≥640px) la barre est centrée à
           800px, donc le coin haut-gauche est libre. */}
-      <div className="absolute top-[68px] left-3 z-20 flex flex-col gap-2 items-start sm:top-3">
+      <div className="absolute top-[78px] left-3 z-20 flex flex-row gap-2 items-start sm:top-3 sm:flex-col">
         <button onClick={() => setMineOnly(v => !v)} className={pill(mineOnly)}>
           <Star size={14} className={mineOnly ? '' : 'text-primary'} /> Mes festivals
         </button>
