@@ -41,19 +41,36 @@ describe('departmentFromCitycode', () => {
 })
 
 describe('searchAddresses', () => {
+  const banJson = { features: [feature()] } // Paris (BAN)
+  const photonJson = { features: [photonFeature()] } // Fribourg CH (Photon)
+  const routedFetch = (async (url: string) => {
+    const isPhoton = String(url).includes('photon.komoot')
+    return { ok: true, json: async () => (isPhoton ? photonJson : banJson) }
+  }) as unknown as typeof fetch
+
   it('renvoie [] sous 3 caractères (sans fetch)', async () => {
     const r = await searchAddresses('ab', (() => { throw new Error('no fetch') }) as unknown as typeof fetch)
     expect(r).toEqual([])
   })
-  it('parse les features BAN', async () => {
-    const fakeFetch = (async () => ({ ok: true, json: async () => ({ features: [feature()] }) })) as unknown as typeof fetch
-    const r = await searchAddresses('paris', fakeFetch)
-    expect(r).toHaveLength(1)
-    expect(r[0].lat).toBe(48.8534)
+  it('fusionne BAN (en tête) puis Photon', async () => {
+    const r = await searchAddresses('frib', routedFetch)
+    expect(r).toHaveLength(2)
+    expect(r[0].country).toBe('fr') // BAN d'abord
+    expect(r[1].country).toBe('ch') // Photon ensuite
   })
-  it('renvoie [] sur erreur réseau', async () => {
-    const fakeFetch = (async () => { throw new Error('boom') }) as unknown as typeof fetch
-    expect(await searchAddresses('paris', fakeFetch)).toEqual([])
+  it('une source en échec ne casse pas l’autre', async () => {
+    const banOnlyFails = (async (url: string) => {
+      if (String(url).includes('photon.komoot')) return { ok: true, json: async () => photonJson }
+      throw new Error('BAN down')
+    }) as unknown as typeof fetch
+    const r = await searchAddresses('frib', banOnlyFails)
+    expect(r).toHaveLength(1)
+    expect(r[0].country).toBe('ch')
+  })
+  it('dédoublonne par coordonnées', async () => {
+    const dupFetch = (async () => ({ ok: true, json: async () => ({ features: [feature(), feature()] }) })) as unknown as typeof fetch
+    const r = await searchAddresses('paris', dupFetch)
+    expect(r).toHaveLength(1)
   })
 })
 

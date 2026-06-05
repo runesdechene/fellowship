@@ -81,10 +81,8 @@ export function filterByDepartment(results: GeocodeResult[], department: string)
     .sort((a, b) => b.score - a.score)
 }
 
-// Autocomplete : adresses correspondant à la requête (>= 3 caractères).
-export async function searchAddresses(q: string, fetchFn: typeof fetch = fetch): Promise<GeocodeResult[]> {
-  const query = q.trim()
-  if (query.length < 3) return []
+// Autocomplete BAN (France). Privé.
+async function searchBan(query: string, fetchFn: typeof fetch): Promise<GeocodeResult[]> {
   try {
     const res = await fetchFn(`${BAN_SEARCH}?q=${encodeURIComponent(query)}&limit=5`)
     if (!res.ok) return []
@@ -93,6 +91,42 @@ export async function searchAddresses(q: string, fetchFn: typeof fetch = fetch):
   } catch {
     return []
   }
+}
+
+// Autocomplete Photon (mondial). Privé.
+async function searchPhoton(query: string, fetchFn: typeof fetch): Promise<GeocodeResult[]> {
+  try {
+    const res = await fetchFn(`${PHOTON_SEARCH}?q=${encodeURIComponent(query)}&limit=5`)
+    if (!res.ok) return []
+    const data = await res.json()
+    return (data.features ?? []).map((f: PhotonFeature, i: number) => parsePhotonFeature(f, i))
+  } catch {
+    return []
+  }
+}
+
+// Dédoublonne par coordonnées arrondies (garde la 1re occurrence = BAN prioritaire).
+function dedupeResults(rs: GeocodeResult[]): GeocodeResult[] {
+  const seen = new Set<string>()
+  const out: GeocodeResult[] = []
+  for (const r of rs) {
+    const key = `${r.lat.toFixed(4)},${r.lng.toFixed(4)}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(r)
+  }
+  return out
+}
+
+// Autocomplete : BAN (France, précis) en tête + Photon (mondial) ensuite.
+export async function searchAddresses(q: string, fetchFn: typeof fetch = fetch): Promise<GeocodeResult[]> {
+  const query = q.trim()
+  if (query.length < 3) return []
+  const [ban, photon] = await Promise.all([
+    searchBan(query, fetchFn),
+    searchPhoton(query, fetchFn),
+  ])
+  return dedupeResults([...ban, ...photon])
 }
 
 // Fallback centre-ville : géocode une commune, désambiguïsée par département.
