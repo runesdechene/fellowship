@@ -1,7 +1,7 @@
 /* ── Embed Widget — Isolated styles (no Tailwind, no Fellowship vars) ── */
 
 .embed-page {
-  padding: 20px;
+  padding: 0;
   font-family: -apple-system, 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
