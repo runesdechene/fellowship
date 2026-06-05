@@ -252,32 +252,34 @@ export function EmbedPage() {
                 rel="noopener noreferrer"
                 className="embed-fcard"
               >
-                <div className="embed-fdate">
-                  <b>{d.getDate()}</b>
-                  <span>{MOIS[d.getMonth()]}</span>
-                  <i>{d.getFullYear()}</i>
-                </div>
                 {ev.image_url && (
                   <div className="embed-fposter">
                     <img src={ev.image_url} alt="" loading="lazy" />
                   </div>
                 )}
-                <div className="embed-finfo">
-                  <div className="embed-fname">{ev.name}</div>
-                  {tags.length > 0 && (
-                    <div className="embed-ftags">
-                      {tags.map(t => (
-                        <span key={t} className="embed-ftag">{t.replace(/-/g, ' ')}</span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="embed-floc">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
-                    {ev.city}{ev.department ? ` (${ev.department})` : ''}
+                <div className="embed-fbody">
+                  <div className="embed-fdate">
+                    <b>{d.getDate()}</b>
+                    <span>{MOIS[d.getMonth()]}</span>
+                    <i>{d.getFullYear()}</i>
                   </div>
-                  <div className="embed-fdur">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-                    {dur} jour{dur !== 1 ? 's' : ''}
+                  <div className="embed-finfo">
+                    <div className="embed-fname">{ev.name}</div>
+                    {tags.length > 0 && (
+                      <div className="embed-ftags">
+                        {tags.map(t => (
+                          <span key={t} className="embed-ftag">{t.replace(/-/g, ' ')}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="embed-floc">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                      {ev.city}{ev.department ? ` (${ev.department})` : ''}
+                    </div>
+                    <div className="embed-fdur">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                      {dur} jour{dur !== 1 ? 's' : ''}
+                    </div>
                   </div>
                 </div>
               </a>

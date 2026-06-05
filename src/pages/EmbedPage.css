@@ -26,6 +26,14 @@
   color: #f0f0f0;
 }
 
+/* L'app peint un fond décoratif (halos radial-gradient) sur html/body. Dans l'embed,
+   on le neutralise totalement pour laisser transparaître le site hôte. !important +
+   :has() pour ne dépendre ni du timing JS ni de la spécificité. */
+html:has(.embed-page),
+body:has(.embed-page) {
+  background: transparent !important;
+}
+
 /* ── Header ── */
 
 .embed-header {
@@ -476,18 +484,18 @@
 
 .embed-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  align-items: start;
+  gap: 16px;
 }
 
 .embed-fcard {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
   background: #fff;
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 16px;
-  padding: 14px 16px;
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
   transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
@@ -506,6 +514,30 @@
 
 .embed-page[data-theme="dark"] .embed-fcard:hover {
   box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+}
+
+/* Affiche en grand, pleine largeur de la carte, non rognée (hauteur naturelle) */
+.embed-fposter {
+  width: 100%;
+  background: rgba(0,0,0,0.04);
+}
+
+.embed-fposter img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.embed-page[data-theme="dark"] .embed-fposter {
+  background: rgba(255,255,255,0.04);
+}
+
+/* Corps sous l'affiche : date à gauche + infos */
+.embed-fbody {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
 }
 
 .embed-fdate {
@@ -539,21 +571,6 @@
   font-size: 11px;
   color: #999;
   opacity: 0.75;
-}
-
-.embed-fposter {
-  width: 74px;
-  height: 100px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
-
-.embed-fposter img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .embed-finfo {
