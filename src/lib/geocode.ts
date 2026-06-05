@@ -129,12 +129,10 @@ export async function searchAddresses(q: string, fetchFn: typeof fetch = fetch):
   return dedupeResults([...ban, ...photon])
 }
 
-// Fallback centre-ville : géocode une commune, désambiguïsée par département.
-export async function geocodeCity(city: string, department: string, fetchFn: typeof fetch = fetch): Promise<GeocodeResult | null> {
-  const c = city.trim()
-  if (!c) return null
+// Fallback centre-ville BAN, désambiguïsé par département. Privé.
+async function geocodeCityBan(city: string, department: string, fetchFn: typeof fetch): Promise<GeocodeResult | null> {
   try {
-    const res = await fetchFn(`${BAN_SEARCH}?q=${encodeURIComponent(c)}&type=municipality&limit=5`)
+    const res = await fetchFn(`${BAN_SEARCH}?q=${encodeURIComponent(city)}&type=municipality&limit=5`)
     if (!res.ok) return null
     const data = await res.json()
     const results: GeocodeResult[] = (data.features ?? []).map(parseBanFeature)
@@ -143,4 +141,24 @@ export async function geocodeCity(city: string, department: string, fetchFn: typ
   } catch {
     return null
   }
+}
+
+// Fallback centre-ville Photon (mondial). Privé.
+async function geocodeCityPhoton(city: string, fetchFn: typeof fetch): Promise<GeocodeResult | null> {
+  try {
+    const res = await fetchFn(`${PHOTON_SEARCH}?q=${encodeURIComponent(city)}&limit=1`)
+    if (!res.ok) return null
+    const data = await res.json()
+    const f = (data.features ?? [])[0]
+    return f ? parsePhotonFeature(f, 0) : null
+  } catch {
+    return null
+  }
+}
+
+// Fallback centre-ville : BAN (France) puis Photon (reste du monde).
+export async function geocodeCity(city: string, department: string, fetchFn: typeof fetch = fetch): Promise<GeocodeResult | null> {
+  const c = city.trim()
+  if (!c) return null
+  return (await geocodeCityBan(c, department, fetchFn)) ?? (await geocodeCityPhoton(c, fetchFn))
 }

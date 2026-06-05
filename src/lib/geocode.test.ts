@@ -87,6 +87,15 @@ describe('geocodeCity', () => {
     const fakeFetch = (async () => ({ ok: true, json: async () => ({ features: [] }) })) as unknown as typeof fetch
     expect(await geocodeCity('Nowhere', '99', fakeFetch)).toBeNull()
   })
+  it('bascule sur Photon quand la BAN ne renvoie rien (ville étrangère)', async () => {
+    const routed = (async (url: string) => {
+      if (String(url).includes('photon.komoot')) return { ok: true, json: async () => ({ features: [photonFeature()] }) }
+      return { ok: true, json: async () => ({ features: [] }) } // BAN vide
+    }) as unknown as typeof fetch
+    const r = await geocodeCity('Fribourg', '1700 (CH)', routed)
+    expect(r?.country).toBe('ch')
+    expect(r?.lat).toBe(46.8065)
+  })
 })
 
 const photonFeature = (props: Record<string, unknown> = {}) => ({
