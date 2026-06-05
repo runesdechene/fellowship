@@ -52,7 +52,7 @@ export function AddressAutocomplete({ value, onChange, onSelect, inputClass = ''
       lat: r.lat,
       lng: r.lng,
       city: r.city,
-      department: departmentFromCitycode(r.citycode),
+      department: r.country && r.country !== 'fr' ? (r.department ?? '') : departmentFromCitycode(r.citycode),
       postcode: r.postcode,
     })
   }
