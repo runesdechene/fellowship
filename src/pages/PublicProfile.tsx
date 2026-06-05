@@ -113,7 +113,7 @@ export function PublicProfilePage({ overrideSlug }: PublicProfilePageProps = {})
       </div>
 
       {editOpen && <VitrineEditModal entity={entity} api={edit} onClose={() => setEditOpen(false)} onSaved={patch => setEntity(e => (e ? { ...e, ...patch } as EntityRow : e))} />}
-      {showNetwork && <VitrineNetworkModal followers={data.followers} friends={data.friends} onClose={() => setShowNetwork(false)} />}
+      {showNetwork && <VitrineNetworkModal followers={data.followers} following={data.following} onClose={() => setShowNetwork(false)} />}
       {showQR && entity.public_slug && <VitrineQRModal slug={entity.public_slug} onClose={() => setShowQR(false)} />}
       {showEmbed && entity.public_slug && <EmbedModal slug={entity.public_slug} onClose={() => setShowEmbed(false)} />}
     </div>

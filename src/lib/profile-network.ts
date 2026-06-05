@@ -23,19 +23,6 @@ export function shouldShowFollowBack(
   return isOwner && !friendIds.has(memberId)
 }
 
-/**
- * Abonnés « simples » : ceux qui suivent sans réciprocité (= followers privés des
- * compagnons). Évite qu'un compagnon exposant apparaisse à la fois dans la section
- * « Compagnons » et dans « Abonnés » de la modale réseau. Ordre d'entrée préservé.
- */
-export function oneWayFollowers(
-  followers: NetworkMember[],
-  friends: NetworkMember[],
-): NetworkMember[] {
-  const friendIds = new Set(friends.map(f => f.id))
-  return followers.filter(f => !friendIds.has(f.id))
-}
-
 export const AVATAR_GRADIENTS: ReadonlyArray<readonly [string, string]> = [
   ['#f0a060', '#e74c3c'],
   ['#6c5ce7', '#a29bfe'],

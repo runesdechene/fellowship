@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
-import { oneWayFollowers, type NetworkMember } from '@/lib/profile-network'
+import type { NetworkMember } from '@/lib/profile-network'
 
 interface Props {
   followers: NetworkMember[]
-  friends: NetworkMember[]
+  following: NetworkMember[]
   onClose: () => void
 }
 
@@ -29,17 +29,26 @@ function MemberRow({ m, onNavigate }: { m: NetworkMember; onNavigate: () => void
     : <div className="v-net-row is-static">{inner}</div>
 }
 
-/** Modale de découverte : abonnés + compagnons exposants, cliquables vers leur vitrine. */
-export function VitrineNetworkModal({ followers, friends, onClose }: Props) {
-  // Abonnés = ceux qui suivent SANS réciprocité. Les compagnons (follow mutuel) ont
-  // déjà leur section dédiée ci-dessus → on les retire d'ici pour éviter le doublon.
-  const simpleFollowers = oneWayFollowers(followers, friends)
+type Tab = 'abonnes' | 'abonnements'
+
+/**
+ * Modale réseau façon Instagram : deux onglets indépendants — « Abonnés » (qui suit
+ * la vitrine) et « Abonnements » (qui la vitrine suit). Un compagnon (follow mutuel)
+ * apparaît volontairement dans les deux : ce sont deux relations distinctes.
+ */
+export function VitrineNetworkModal({ followers, following, onClose }: Props) {
+  const [tab, setTab] = useState<Tab>('abonnes')
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
+
+  const list = tab === 'abonnes' ? followers : following
+  const emptyLabel = tab === 'abonnes'
+    ? 'Pas encore d’abonnés.'
+    : 'Ne suit personne pour le moment.'
 
   return (
     <div className="v-backdrop" onClick={onClose}>
@@ -48,19 +57,24 @@ export function VitrineNetworkModal({ followers, friends, onClose }: Props) {
           <h3>Communauté</h3>
           <button type="button" className="v-mx" onClick={onClose} aria-label="Fermer"><X /></button>
         </div>
+        <div className="v-net-tabs" role="tablist">
+          <button
+            type="button" role="tab" aria-selected={tab === 'abonnes'}
+            className="v-net-tab" onClick={() => setTab('abonnes')}
+          >
+            Abonnés <span>{followers.length}</span>
+          </button>
+          <button
+            type="button" role="tab" aria-selected={tab === 'abonnements'}
+            className="v-net-tab" onClick={() => setTab('abonnements')}
+          >
+            Abonnements <span>{following.length}</span>
+          </button>
+        </div>
         <div className="v-mbody v-net-body">
-          <div className="v-net-sec">
-            <div className="v-net-h">Compagnons exposants <span>{friends.length}</span></div>
-            {friends.length === 0
-              ? <p className="v-net-empty">Pas encore de compagnon exposant.</p>
-              : <div className="v-net-grid">{friends.map(m => <MemberRow key={`c-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
-          </div>
-          <div className="v-net-sec">
-            <div className="v-net-h">Abonnés <span>{simpleFollowers.length}</span></div>
-            {simpleFollowers.length === 0
-              ? <p className="v-net-empty">Pas encore d'abonnés.</p>
-              : <div className="v-net-grid">{simpleFollowers.map(m => <MemberRow key={`f-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
-          </div>
+          {list.length === 0
+            ? <p className="v-net-empty">{emptyLabel}</p>
+            : <div className="v-net-grid">{list.map(m => <MemberRow key={m.id} m={m} onNavigate={onClose} />)}</div>}
         </div>
       </div>
     </div>

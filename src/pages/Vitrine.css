@@ -590,6 +590,11 @@ textarea.v-inp { resize: vertical; min-height: 60px; line-height: 1.5; }
 /* ── Modale Communauté ── */
 .v-net-modal { max-width: 420px; }
 .v-net-body { gap: 20px; padding-bottom: 16px; }
+/* Onglets façon Instagram : Abonnés / Abonnements. */
+.v-net-tabs { display: flex; gap: 4px; padding: 0 4px; margin: -2px 0 8px; border-bottom: 1px solid hsl(var(--border)); }
+.v-net-tab { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: none; border: none; cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 700; color: hsl(var(--muted-foreground)); padding: 11px 0; margin-bottom: -1px; border-bottom: 2px solid transparent; transition: color .12s, border-color .12s; }
+.v-net-tab span { font-weight: 500; opacity: .75; }
+.v-net-tab[aria-selected="true"] { color: var(--copper); border-bottom-color: var(--copper); }
 .v-net-sec { display: flex; flex-direction: column; gap: 4px; }
 .v-net-h { font-family: var(--font-heading); font-weight: 700; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .v-net-h span { font-weight: 500; }

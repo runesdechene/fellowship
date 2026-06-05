@@ -9,13 +9,14 @@ export interface VitrineData {
   season: SeasonEvent[]
   friends: NetworkMember[]
   followers: NetworkMember[]
+  following: NetworkMember[]
   loading: boolean
   notFound: boolean
 }
 
 export function useVitrine(slug: string | undefined): VitrineData {
   const [data, setData] = useState<VitrineData>({
-    entity: null, season: [], friends: [], followers: [],
+    entity: null, season: [], friends: [], followers: [], following: [],
     loading: true, notFound: false,
   })
 
@@ -25,7 +26,7 @@ export function useVitrine(slug: string | undefined): VitrineData {
     // Reset complet entre slugs : sinon naviguer de /@alice à /@bob laissait
     // Alice (entité, network, season) visible pendant le refetch — pire, un
     // 404 résiduel pouvait collisionner avec une entité valide à charger.
-    setData({ entity: null, season: [], friends: [], followers: [], loading: true, notFound: false }) // eslint-disable-line react-hooks/set-state-in-effect
+    setData({ entity: null, season: [], friends: [], followers: [], following: [], loading: true, notFound: false }) // eslint-disable-line react-hooks/set-state-in-effect
     async function run() {
       let entity: EntityRow | null = null
       const { data: bySlug } = await supabase.from('entities').select('*').eq('public_slug', slug!).maybeSingle()
@@ -46,11 +47,11 @@ export function useVitrine(slug: string | undefined): VitrineData {
       const season = ((parts ?? []) as Array<{ events: SeasonEvent | null }>)
         .map(p => p.events).filter((e): e is SeasonEvent => !!e)
 
-      const { friends, followers } = await fetchNetwork(entity.actor_id)
+      const { friends, followers, following } = await fetchNetwork(entity.actor_id)
 
       if (!cancelled) setData({
         entity, season,
-        friends, followers, loading: false, notFound: false,
+        friends, followers, following, loading: false, notFound: false,
       })
     }
     run()
@@ -60,7 +61,7 @@ export function useVitrine(slug: string | undefined): VitrineData {
   return data
 }
 
-async function fetchNetwork(actorId: string): Promise<{ friends: NetworkMember[]; followers: NetworkMember[] }> {
+async function fetchNetwork(actorId: string): Promise<{ friends: NetworkMember[]; followers: NetworkMember[]; following: NetworkMember[] }> {
   const toMember = (
     a: { actor_id: string | null; label: string | null; avatar_url: string | null; public_slug: string | null },
     joinedAt: string,
@@ -104,6 +105,22 @@ async function fetchNetwork(actorId: string): Promise<{ friends: NetworkMember[]
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       followers = ((actors ?? []) as any[]).map(a => toMember(a, dm.get(a.actor_id ?? '') ?? new Date(0).toISOString()))
     }
-    return { friends, followers }
-  } catch { return { friends: [], followers: [] } }
+
+    // Abonnements (qui CET acteur suit) — onglet « Abonnements ». Même rail RPC
+    // SECURITY DEFINER que les abonnés : la lecture directe serait filtrée par la RLS.
+    type FollowingRow = { following_id: string; followed_at: string }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: followingRows } = await (supabase.rpc as any)('get_following_with_dates', { p_actor_id: actorId })
+    const followingDates = (followingRows as FollowingRow[] | null) ?? []
+    let following: NetworkMember[] = []
+    if (followingDates.length) {
+      const { data: actors } = await supabase.from('actor_public')
+        .select('actor_id, label, avatar_url, public_slug').in('actor_id', followingDates.map(f => f.following_id))
+      const dm = new Map(followingDates.map(f => [f.following_id, f.followed_at]))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      following = ((actors ?? []) as any[]).map(a => toMember(a, dm.get(a.actor_id ?? '') ?? new Date(0).toISOString()))
+    }
+
+    return { friends, followers, following }
+  } catch { return { friends: [], followers: [], following: [] } }
 }

@@ -9,9 +9,9 @@ export const changelog: ChangelogEntry[] = [
   {
     version: '0.7.227',
     date: '2026-06-05',
-    title: 'Communauté de la vitrine : plus de doublons',
+    title: 'Communauté de la vitrine : deux onglets',
     changes: [
-      'Dans la communauté d\'une vitrine, un compagnon exposant n\'apparaît plus à la fois dans « Compagnons » et dans « Abonnés » : les abonnés ne listent que ceux qui suivent sans réciprocité',
+      'La communauté d\'une vitrine se présente en deux onglets façon Instagram : « Abonnés » (qui suit) et « Abonnements » (qui la vitrine suit)',
     ],
   },
   {
