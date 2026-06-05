@@ -141,7 +141,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       {/* Mobile logo (centered) */}
       <div className="search-bar-spacer">
         <img className="mark" src="/icon.png" alt="" />
-        <span className="search-bar-brand">Fellowship</span>
+        <span className="search-bar-brand">Fellowship<span className="brand-dot">.</span></span>
       </div>
 
       {/* Search bar (always visible on desktop, expanded on mobile) */}

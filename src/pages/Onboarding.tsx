@@ -136,7 +136,7 @@ export function OnboardingPage() {
 
       <div className="ob-wrap">
         <div className="ob-logo">
-          <span className="mark">✦</span> Fellowship
+          <span className="mark">✦</span> Fellowship<span className="brand-dot">.</span>
         </div>
 
         <div className="ob-card">

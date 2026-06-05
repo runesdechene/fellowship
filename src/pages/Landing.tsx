@@ -95,7 +95,7 @@ export function LandingPage() {
         <div className="wrap nav-in">
           <div className="logo">
             <img src="/icon.png" alt="Fellowship" className="mark-img" />
-            <span className="brand-name">Fellowship</span>
+            <span className="brand-name">Fellowship<span className="brand-dot">.</span></span>
           </div>
           <div className="nav-links">
             <a className="link" href="#apropos" onClick={goToApropos}>À propos</a>
@@ -600,7 +600,7 @@ export function LandingPage() {
       <footer>
         <div className="wrap">
           <div className="logo" style={{ justifyContent: 'center', marginBottom: '8px' }}>
-            <img src="/icon.png" alt="" className="mark-img" /> Fellowship
+            <img src="/icon.png" alt="" className="mark-img" /> Fellowship<span className="brand-dot">.</span>
           </div>
           <p>Le réseau qui fait tourner les festivals · flw.sh · © 2026</p>
           <nav className="landing-legal" aria-label="Informations légales">

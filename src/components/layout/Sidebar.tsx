@@ -42,7 +42,7 @@ export function Sidebar() {
       <div className="sidebar-header">
         <Link to="/explorer" className="sidebar-logo">
           <img className="mark" src="/icon.png" alt="" />
-          {!collapsed && <span className="sidebar-logo-text">Fellowship</span>}
+          {!collapsed && <span className="sidebar-logo-text">Fellowship<span className="brand-dot">.</span></span>}
         </Link>
         {!collapsed && (
           <button className="sidebar-collapse-btn" onClick={() => setCollapsed(true)} aria-label="Replier"><PanelLeftClose strokeWidth={1.5} /></button>

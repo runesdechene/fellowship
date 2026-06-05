@@ -304,6 +304,9 @@ h1, h2, h3, .font-display {
 .bgfx .b5 { width: 360px; height: 360px; background: hsl(24 85% 50% / 0.24); right: -5%; bottom: -50px; }
 .light .bgfx .b { opacity: 0.5; mix-blend-mode: multiply; }
 
+/* Point cuivre signature après le wordmark « Fellowship ». */
+.brand-dot { color: var(--copper); }
+
 /* ── Carte (MapLibre) ───────────────────────────────────────── */
 /* Marqueur "Accepté" : avatar de l'acteur, cerclé cuivre, qui pulse. */
 .map-avatar {

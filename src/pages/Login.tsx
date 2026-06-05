@@ -26,7 +26,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
           >
             ✦
           </span>
-          Fellowship
+          Fellowship<span className="brand-dot">.</span>
         </Link>
         <div className="rounded-[22px] border border-border bg-card p-8 shadow-[0_30px_80px_rgba(0,0,0,0.55)] light:shadow-[0_10px_30px_rgba(60,45,35,0.07)]">
           {children}
