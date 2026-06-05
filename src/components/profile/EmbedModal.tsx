@@ -70,14 +70,14 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
         {/* Onglets format */}
         <div style={{ display: 'flex', gap: 4, background: 'rgba(61,48,40,0.05)', borderRadius: 10, padding: 4, marginBottom: 8 }}>
           {VIEW_TABS.map(t => (
-            <button key={t.id} style={segBtn(view === t.id)} onClick={() => setView(t.id)}>{t.label}</button>
+            <button key={t.id} aria-pressed={view === t.id} style={segBtn(view === t.id)} onClick={() => setView(t.id)}>{t.label}</button>
           ))}
         </div>
 
         {/* Sélecteur thème */}
         <div style={{ display: 'flex', gap: 4, background: 'rgba(61,48,40,0.05)', borderRadius: 10, padding: 4, marginBottom: 16 }}>
           {THEME_TABS.map(t => (
-            <button key={t.id} style={segBtn(theme === t.id)} onClick={() => setTheme(t.id)}>{t.label}</button>
+            <button key={t.id} aria-pressed={theme === t.id} style={segBtn(theme === t.id)} onClick={() => setTheme(t.id)}>{t.label}</button>
           ))}
         </div>
 

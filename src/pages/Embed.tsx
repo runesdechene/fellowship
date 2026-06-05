@@ -120,13 +120,17 @@ export function EmbedPage() {
   }, [themeParam])
 
   useEffect(() => {
+    document.documentElement.style.background = resolvedTheme === 'dark' ? '#1a1a1a' : '#faf8f5'
+  }, [resolvedTheme])
+
+  useEffect(() => {
     const postHeight = () => {
       const h = document.documentElement.scrollHeight
       window.parent.postMessage({ source: 'flwsh-embed', type: 'resize', height: h }, '*')
     }
     postHeight()
     const ro = new ResizeObserver(postHeight)
-    ro.observe(document.body)
+    ro.observe(document.documentElement)
     window.addEventListener('load', postHeight)
     return () => {
       ro.disconnect()
@@ -169,7 +173,11 @@ export function EmbedPage() {
   }
 
   if (notFound || !entity) {
-    return <div className="embed-centered">Profil introuvable</div>
+    return (
+      <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
+        <div className="embed-centered">Profil introuvable</div>
+      </div>
+    )
   }
 
   const displayName = entity.brand_name
