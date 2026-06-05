@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { avatarGradient } from '@/lib/avatar-gradient'
-import type { NetworkMember } from '@/lib/profile-network'
+import { oneWayFollowers, type NetworkMember } from '@/lib/profile-network'
 
 interface Props {
   followers: NetworkMember[]
@@ -31,6 +31,10 @@ function MemberRow({ m, onNavigate }: { m: NetworkMember; onNavigate: () => void
 
 /** Modale de découverte : abonnés + compagnons exposants, cliquables vers leur vitrine. */
 export function VitrineNetworkModal({ followers, friends, onClose }: Props) {
+  // Abonnés = ceux qui suivent SANS réciprocité. Les compagnons (follow mutuel) ont
+  // déjà leur section dédiée ci-dessus → on les retire d'ici pour éviter le doublon.
+  const simpleFollowers = oneWayFollowers(followers, friends)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
@@ -52,10 +56,10 @@ export function VitrineNetworkModal({ followers, friends, onClose }: Props) {
               : <div className="v-net-grid">{friends.map(m => <MemberRow key={`c-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
           </div>
           <div className="v-net-sec">
-            <div className="v-net-h">Abonnés <span>{followers.length}</span></div>
-            {followers.length === 0
+            <div className="v-net-h">Abonnés <span>{simpleFollowers.length}</span></div>
+            {simpleFollowers.length === 0
               ? <p className="v-net-empty">Pas encore d'abonnés.</p>
-              : <div className="v-net-grid">{followers.map(m => <MemberRow key={`f-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
+              : <div className="v-net-grid">{simpleFollowers.map(m => <MemberRow key={`f-${m.id}`} m={m} onNavigate={onClose} />)}</div>}
           </div>
         </div>
       </div>

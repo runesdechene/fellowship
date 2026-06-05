@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   getRecentPreview,
   shouldShowFollowBack,
+  oneWayFollowers,
   networkListItemDisplay,
   AVATAR_GRADIENTS,
   type NetworkMember,
@@ -57,6 +58,39 @@ describe('shouldShowFollowBack', () => {
 
   it('returns false when not the owner (visiting another profile)', () => {
     expect(shouldShowFollowBack('x', new Set(['a']), false)).toBe(false)
+  })
+})
+
+describe('oneWayFollowers', () => {
+  it('removes followers that are also friends (mutual follow)', () => {
+    const followers = [make('a', '1'), make('b', '2'), make('c', '3')]
+    const friends = [make('b', '2')]
+    expect(oneWayFollowers(followers, friends).map(m => m.id)).toEqual(['a', 'c'])
+  })
+
+  it('preserves the order of the followers array', () => {
+    const followers = [make('c', '3'), make('a', '1'), make('b', '2')]
+    const friends = [make('a', '1')]
+    expect(oneWayFollowers(followers, friends).map(m => m.id)).toEqual(['c', 'b'])
+  })
+
+  it('returns all followers when there are no friends', () => {
+    const followers = [make('a', '1'), make('b', '2')]
+    expect(oneWayFollowers(followers, []).map(m => m.id)).toEqual(['a', 'b'])
+  })
+
+  it('returns empty when every follower is a friend', () => {
+    const followers = [make('a', '1'), make('b', '2')]
+    const friends = [make('a', '1'), make('b', '2')]
+    expect(oneWayFollowers(followers, friends)).toEqual([])
+  })
+
+  it('does not mutate the input arrays', () => {
+    const followers = [make('a', '1'), make('b', '2')]
+    const friends = [make('a', '1')]
+    oneWayFollowers(followers, friends)
+    expect(followers.map(m => m.id)).toEqual(['a', 'b'])
+    expect(friends.map(m => m.id)).toEqual(['a'])
   })
 })
 
