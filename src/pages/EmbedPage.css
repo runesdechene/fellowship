@@ -347,6 +347,87 @@
   color: #888;
 }
 
+/* ── Vignette (view=mini) ── */
+
+.embed-page[data-view="mini"] .embed-page-container {
+  max-width: 360px;
+}
+
+.embed-page[data-view="mini"] .embed-header {
+  padding-bottom: 12px;
+}
+
+.embed-page[data-view="mini"] .embed-header-name {
+  font-size: 15px;
+}
+
+.embed-mini-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.embed-mini-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 4px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+
+.embed-mini-row:hover { opacity: 0.7; }
+
+.embed-page[data-theme="dark"] .embed-mini-row {
+  border-top-color: rgba(255,255,255,0.08);
+}
+
+.embed-mini-date {
+  width: 40px;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1;
+}
+
+.embed-mini-day {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.embed-mini-month {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #999;
+}
+
+.embed-mini-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.embed-mini-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.embed-page[data-theme="dark"] .embed-mini-name { color: #f0f0f0; }
+
+.embed-mini-loc {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #999;
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 360px) {
