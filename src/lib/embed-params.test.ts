@@ -4,9 +4,9 @@ import { parseEmbedParams } from './embed-params'
 const P = (qs: string) => new URLSearchParams(qs)
 
 describe('parseEmbedParams', () => {
-  it('défauts (aucun param) → full, light, max 10, accent cuivre', () => {
+  it('défauts (aucun param) → full, light, max 10, accent cuivre, pleine largeur', () => {
     expect(parseEmbedParams(P(''))).toEqual({
-      view: 'full', theme: 'light', max: 10, accent: '#c87941',
+      view: 'full', theme: 'light', max: 10, accent: '#c87941', maxWidth: null,
     })
   })
 
@@ -36,5 +36,18 @@ describe('parseEmbedParams', () => {
   it('accent hex valide accepté, sinon défaut', () => {
     expect(parseEmbedParams(P('accent=e74c3c')).accent).toBe('#e74c3c')
     expect(parseEmbedParams(P('accent=zzz')).accent).toBe('#c87941')
+  })
+
+  it('maxWidth : full = pleine largeur (null), mini = 360 par défaut', () => {
+    expect(parseEmbedParams(P('view=full')).maxWidth).toBeNull()
+    expect(parseEmbedParams(P('view=mini')).maxWidth).toBe(360)
+  })
+
+  it('maxw explicite est clampé [240,2000] et prime sur le défaut de vue', () => {
+    expect(parseEmbedParams(P('view=full&maxw=720')).maxWidth).toBe(720)
+    expect(parseEmbedParams(P('view=mini&maxw=500')).maxWidth).toBe(500)
+    expect(parseEmbedParams(P('maxw=99')).maxWidth).toBe(240)
+    expect(parseEmbedParams(P('maxw=5000')).maxWidth).toBe(2000)
+    expect(parseEmbedParams(P('view=full&maxw=abc')).maxWidth).toBeNull()
   })
 })

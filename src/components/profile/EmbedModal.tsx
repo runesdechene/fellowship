@@ -117,6 +117,12 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
           }}>
             {snippet}
           </pre>
+
+          {view === 'full' && (
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'hsl(var(--muted-foreground))', margin: 0 }}>
+              Pleine largeur du parent par défaut. Pour la limiter, ajoute <code>&amp;maxw=720</code> à l'URL (largeur max en pixels).
+            </p>
+          )}
         </div>
 
         <div className="v-mfoot">

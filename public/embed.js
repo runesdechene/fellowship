@@ -7,7 +7,10 @@
     return Array.prototype.slice.call(document.querySelectorAll('iframe[data-flwsh-embed]'))
   }
 
-  /* Remonte les ancêtres jusqu'à un fond opaque → 'light' | 'dark' | null */
+  /* Remonte les ancêtres (jusqu'à html/body) à la recherche du premier fond OPAQUE,
+     calcule sa luminance → 'light' | 'dark'. Si rien d'opaque n'est trouvé, le fond réel
+     du parent est le canvas par défaut du navigateur (blanc) → 'light'. On suit donc le
+     SITE et non le mode OS du visiteur. */
   function hostThemeFor(iframe) {
     try {
       var el = iframe.parentElement
@@ -22,13 +25,13 @@
         el = el.parentElement
       }
     } catch (e) { /* ignore */ }
-    return null
+    return 'light'
   }
 
   function sendTheme(iframe) {
     if (!/theme=auto/.test(iframe.src)) return
+    if (!iframe.contentWindow) return
     var theme = hostThemeFor(iframe)
-    if (!theme || !iframe.contentWindow) return
     iframe.contentWindow.postMessage({ source: 'flwsh-embed', type: 'theme', theme: theme }, ORIGIN)
   }
 

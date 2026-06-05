@@ -49,7 +49,7 @@ export function EmbedPage() {
   const slug = rawSlug?.replace(/^@/, '')
   const [searchParams] = useSearchParams()
 
-  const { view, theme: themeParam, max, accent } = useMemo(
+  const { view, theme: themeParam, max, accent, maxWidth } = useMemo(
     () => parseEmbedParams(searchParams),
     [searchParams],
   )
@@ -185,7 +185,7 @@ export function EmbedPage() {
 
   return (
     <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
-     <div className="embed-page-container">
+     <div className="embed-page-container" style={{ maxWidth: maxWidth ? `${maxWidth}px` : '100%' }}>
       {/* Header */}
       <div className="embed-header">
         {entity.avatar_url ? (
