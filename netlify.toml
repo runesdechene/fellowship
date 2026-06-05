@@ -37,12 +37,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Embed loader — cache court pour propager les améliorations sans re-collage client
-[[headers]]
-  for = "/embed.js"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"
-
 [[headers]]
   for = "/*.js"
   [headers.values]
@@ -52,3 +46,11 @@
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Embed loader — cache court pour propager les améliorations sans re-collage client.
+# DOIT rester APRÈS la règle /*.js : sur Netlify, à match multiple, la DERNIÈRE règle
+# du fichier gagne (pas la plus spécifique). Avant /*.js, l'immutable l'écrasait.
+[[headers]]
+  for = "/embed.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
