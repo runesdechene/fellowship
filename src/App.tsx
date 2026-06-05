@@ -78,6 +78,22 @@ function ProfileWithLayout() {
   return <PublicProfilePage />
 }
 
+// Page événement PUBLIQUE (lien partagé / embed / calendrier d'un site tiers).
+// Connecté → dans le shell de l'app ; anonyme → page nue (comme la vitrine).
+// La RLS autorise déjà la lecture anonyme des events + participations publiques ;
+// EventPage garde toutes ses actions derrière `currentActor`/`user`.
+function EventWithLayout() {
+  const { user } = useAuth()
+  if (user) {
+    return (
+      <AppLayout>
+        <EventPage />
+      </AppLayout>
+    )
+  }
+  return <EventPage />
+}
+
 function App() {
   return (
     <>
@@ -111,8 +127,8 @@ function App() {
           <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><CockpitPage /></ProGate></AuthenticatedApp>} />
           <Route path="/boutique" element={<AuthenticatedApp><BoutiquePage /></AuthenticatedApp>} />
           <Route path="/abonnement" element={<AuthenticatedApp><AbonnementPage /></AuthenticatedApp>} />
-          <Route path="/evenement/:id" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
-          <Route path="/e/:slug" element={<AuthenticatedApp><EventPage /></AuthenticatedApp>} />
+          <Route path="/evenement/:id" element={<EventWithLayout />} />
+          <Route path="/e/:slug" element={<EventWithLayout />} />
 
           {/* Admin routes */}
           <Route
