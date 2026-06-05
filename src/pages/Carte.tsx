@@ -86,8 +86,11 @@ export default function Carte() {
         />
       </div>
 
-      {/* Toggles Carte (hors menu Explorer). */}
-      <div className="absolute top-3 left-3 z-20 flex flex-col gap-2 items-start">
+      {/* Toggles Carte (hors menu Explorer). Sur mobile la barre de recherche
+          occupe toute la largeur en haut : on descend les pills sous elle pour
+          ne pas bloquer le clic. Sur desktop (≥640px) la barre est centrée à
+          800px, donc le coin haut-gauche est libre. */}
+      <div className="absolute top-[68px] left-3 z-20 flex flex-col gap-2 items-start sm:top-3">
         <button onClick={() => setMineOnly(v => !v)} className={pill(mineOnly)}>
           <Star size={14} className={mineOnly ? '' : 'text-primary'} /> Mes festivals
         </button>

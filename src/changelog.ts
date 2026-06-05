@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.228',
+    date: '2026-06-05',
+    title: 'Carte : boutons mobile dégagés',
+    changes: [
+      'Sur mobile, les boutons « Mes festivals » et « Mes amis » ne recouvrent plus la barre de recherche : ils passent juste en dessous, la recherche redevient cliquable',
+    ],
+  },
+  {
     version: '0.7.227',
     date: '2026-06-05',
     title: 'Communauté de la vitrine : deux onglets',
