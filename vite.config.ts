@@ -47,11 +47,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        // Les routes /:slug/embed sont des iframes embarquées sur des sites tiers.
-        // Sans cette denylist, le navigateFallback (index.html) du SW sert le shell
-        // précaché depuis `/` — qui porte `frame-ancestors 'none'` — et bloque l'iframe.
-        // En les excluant, la navigation va au réseau et reçoit `frame-ancestors *`.
-        navigateFallbackDenylist: [/\/embed(?:$|\?)/],
+        // Pages PUBLIQUES partagées (embed iframe + pages événement) : toujours servies
+        // fraîches depuis le réseau, jamais le shell précaché du SW.
+        //  - /:slug/embed : sinon le shell racine porte `frame-ancestors 'none'` → iframe bloquée.
+        //  - /e/:slug & /evenement/:id : liens partagés/embed → éviter de servir une version périmée.
+        navigateFallbackDenylist: [/\/embed(?:$|\?)/, /\/e\//, /\/evenement\//],
       },
     }),
   ],
