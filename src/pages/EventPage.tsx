@@ -617,6 +617,20 @@ export function EventPage() {
             {/* Discussion du festival (placeholder) */}
             <DiscussionTeaser />
 
+            {/* CTA d'acquisition — visiteur anonyme uniquement, juste sous le contenu (pas de pied de page perdu) */}
+            {!user && (
+              <div style={{ padding: 24, borderRadius: 18, background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, textAlign: 'center' }}>
+                <img src="/icon.png" alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
+                <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>Le réseau qui fait tourner les festivals</strong>
+                <span style={{ fontSize: 13.5, color: 'hsl(var(--muted-foreground))', maxWidth: 380 }}>
+                  Fellowship aide artisans et organisateurs à gérer leurs événements et leur communauté.
+                </span>
+                <button className="fest-btn primary" onClick={() => navigate('/')} style={{ marginTop: 6 }}>
+                  Découvrir Fellowship
+                </button>
+              </div>
+            )}
+
             {/* Notes privées — réservées à l'acteur connecté (perso, jamais visibles en anonyme) */}
             {currentActor && (
               <div className="event-section-card">
@@ -725,20 +739,6 @@ export function EventPage() {
           </aside>
         </div>
 
-      )}
-
-      {/* CTA d'acquisition en bas de page — visiteur anonyme uniquement */}
-      {!user && (
-        <div style={{ maxWidth: 520, margin: '8px auto 40px', padding: 24, borderRadius: 18, background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, textAlign: 'center' }}>
-          <img src="/icon.png" alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
-          <strong style={{ fontFamily: 'var(--font-heading)', fontSize: 18 }}>Le réseau qui fait tourner les festivals</strong>
-          <span style={{ fontSize: 13.5, color: 'hsl(var(--muted-foreground))', maxWidth: 380 }}>
-            Fellowship aide artisans et organisateurs à gérer leurs événements et leur communauté.
-          </span>
-          <button className="fest-btn primary" onClick={() => navigate('/')} style={{ marginTop: 6 }}>
-            Découvrir Fellowship
-          </button>
-        </div>
       )}
 
       {showParticipants && (
