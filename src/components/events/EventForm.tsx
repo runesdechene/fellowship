@@ -7,7 +7,7 @@ import { uploadEventImage } from '@/lib/event-image'
 import { Button } from '@/components/ui/button'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { DeduplicateSuggestions } from './DeduplicateSuggestions'
-import { AddressAutocomplete, type AddressSelection } from './AddressAutocomplete'
+import { LocationField, type LocationValue } from './LocationField'
 import { geocodeCity } from '@/lib/geocode'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
@@ -32,22 +32,18 @@ export function EventForm({ onClose }: EventFormProps) {
   const [form, setForm] = useState({
     name: '',
     description: '',
-    city: '',
-    department: '',
     start_date: '',
     end_date: '',
     registration_deadline: '',
     registration_url: '',
     external_url: '',
-    address: '',
     contact_email: '',
     registration_note: '',
     image: null as File | null,
   })
-  const [geo, setGeo] = useState<{ latitude: number | null; longitude: number | null; geo_precision: 'precise' | 'city' | null }>({
-    latitude: null,
-    longitude: null,
-    geo_precision: null,
+  const [location, setLocation] = useState<LocationValue>({
+    address: '', city: '', department: '', postcode: '',
+    latitude: null, longitude: null, geo_precision: null,
   })
 
   useEffect(() => {
@@ -69,19 +65,6 @@ export function EventForm({ onClose }: EventFormProps) {
 
   const [error, setError] = useState<string | null>(null)
 
-  const handleAddressSelect = (sel: AddressSelection) => {
-    update('address', sel.address)
-    if (sel.city) update('city', sel.city)
-    if (sel.department) update('department', sel.department)
-    setGeo({ latitude: sel.lat, longitude: sel.lng, geo_precision: 'precise' })
-  }
-
-  // L'utilisateur édite l'adresse à la main après une sélection -> on invalide les coords précises.
-  const handleAddressChange = (v: string) => {
-    update('address', v)
-    setGeo(prev => (prev.geo_precision === 'precise' ? { latitude: null, longitude: null, geo_precision: null } : prev))
-  }
-
   const handleSubmit = async () => {
     if (!currentActor || !user) return
     setSaving(true)
@@ -98,12 +81,12 @@ export function EventForm({ onClose }: EventFormProps) {
         }
       }
 
-      // Coords : précises si une adresse a été choisie, sinon fallback centre-ville.
-      let latitude = geo.latitude
-      let longitude = geo.longitude
-      let geo_precision: 'precise' | 'city' | null = geo.geo_precision
-      if (geo_precision !== 'precise' && form.city && form.department) {
-        const c = await geocodeCity(form.city, form.department)
+      // Coords : précises si adresse/pin choisis, sinon fallback centre-ville (mondial).
+      let latitude = location.latitude
+      let longitude = location.longitude
+      let geo_precision: 'precise' | 'city' | null = location.geo_precision
+      if (geo_precision !== 'precise' && location.city && location.department) {
+        const c = await geocodeCity(location.city, location.department)
         if (c) {
           latitude = c.lat
           longitude = c.lng
@@ -114,14 +97,14 @@ export function EventForm({ onClose }: EventFormProps) {
       const eventData: EventInsert = {
         name: form.name,
         description: form.description || null,
-        city: form.city,
-        department: form.department,
+        city: location.city,
+        department: location.department,
         start_date: form.start_date,
         end_date: form.end_date || form.start_date,
         registration_deadline: form.registration_deadline || null,
         registration_url: form.registration_url || null,
         external_url: form.external_url || null,
-        address: form.address || null,
+        address: location.address || null,
         latitude,
         longitude,
         geo_precision,
@@ -157,7 +140,7 @@ export function EventForm({ onClose }: EventFormProps) {
   const inputClass = "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
 
   const canProceedStep0 = form.name.length >= 3 && suggestions.length === 0
-  const canProceedStep1 = form.city && form.department && form.start_date
+  const canProceedStep1 = location.city && location.department && form.start_date
   const canProceedStep2 = selectedTags.length > 0
 
   const steps = [
@@ -208,22 +191,17 @@ export function EventForm({ onClose }: EventFormProps) {
       </div>
       <div>
         <label className="text-xs font-medium text-muted-foreground mb-1 block">Adresse ou lieu (optionnel)</label>
-        <AddressAutocomplete
-          value={form.address}
-          onChange={handleAddressChange}
-          onSelect={handleAddressSelect}
-          inputClass={inputClass}
-        />
-        <p className="text-[11px] text-muted-foreground mt-1">Choisis une suggestion pour un placement précis sur la carte. Sinon, on situe au centre-ville.</p>
+        <LocationField value={location} onChange={setLocation} inputClass={inputClass} />
+        <p className="text-[11px] text-muted-foreground mt-1">Choisis une suggestion pour un placement précis, ou ajuste le pin sur la carte. Sinon, on situe au centre-ville.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
-          <input type="text" className={inputClass} placeholder="Ville" value={form.city} onChange={e => update('city', e.target.value)} />
+          <input type="text" className={inputClass} placeholder="Ville" value={location.city} onChange={e => setLocation(l => ({ ...l, city: e.target.value }))} />
         </div>
         <div>
           <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
-          <input type="text" className={inputClass} placeholder="Département (ex: 77)" value={form.department} onChange={e => update('department', e.target.value)} />
+          <input type="text" className={inputClass} placeholder="Département (ex: 77)" value={location.department} onChange={e => setLocation(l => ({ ...l, department: e.target.value }))} />
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
