@@ -24,6 +24,8 @@ import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import DOMPurify from 'dompurify'
 import { ParticipantsModal } from '@/components/events/ParticipantsModal'
+import { LocationField, type LocationValue } from '@/components/events/LocationField'
+import { geocodeCity } from '@/lib/geocode'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send } from 'lucide-react'
 import { getTagIcon, getTagLandingColor } from '@/components/ui/TagBadge'
@@ -85,8 +87,6 @@ export function EventPage() {
   const [editForm, setEditForm] = useState({
     name: '',
     description: '',
-    city: '',
-    department: '',
     start_date: '',
     end_date: '',
     registration_deadline: '',
@@ -99,6 +99,10 @@ export function EventPage() {
     expected_attendance: '',
     stand_size: '',
     stand_price: '',
+  })
+  const [editLocation, setEditLocation] = useState<LocationValue>({
+    address: '', city: '', department: '', postcode: '',
+    latitude: null, longitude: null, geo_precision: null,
   })
 
   // Fetch current actor's participation
@@ -172,8 +176,6 @@ export function EventPage() {
     setEditForm({
       name: event.name,
       description: event.description ?? '',
-      city: event.city,
-      department: event.department,
       start_date: event.start_date,
       end_date: event.end_date,
       registration_deadline: event.registration_deadline ?? '',
@@ -186,6 +188,15 @@ export function EventPage() {
       expected_attendance: event.expected_attendance ?? '',
       stand_size: event.stand_size ?? '',
       stand_price: event.stand_price ?? '',
+    })
+    setEditLocation({
+      address: event.address ?? '',
+      city: event.city,
+      department: event.department,
+      postcode: '',
+      latitude: event.latitude ?? null,
+      longitude: event.longitude ?? null,
+      geo_precision: (event.geo_precision as 'precise' | 'city' | null) ?? null,
     })
     setEditImage(null)
     setRemoveImage(false)
@@ -219,8 +230,12 @@ export function EventPage() {
     const updates: Parameters<typeof updateEvent>[1] = {
       name: editForm.name,
       description: editForm.description || null,
-      city: editForm.city,
-      department: editForm.department,
+      city: editLocation.city,
+      department: editLocation.department,
+      address: editLocation.address || null,
+      latitude: editLocation.latitude,
+      longitude: editLocation.longitude,
+      geo_precision: editLocation.geo_precision,
       start_date: editForm.start_date,
       end_date: editForm.end_date || editForm.start_date,
       registration_deadline: editForm.registration_deadline || null,
@@ -236,6 +251,16 @@ export function EventPage() {
     }
     if (image_url !== undefined) {
       updates.image_url = image_url
+    }
+
+    // Pas de point précis -> fallback centre-ville (mondial) pour ne pas garder un vieux pin.
+    if (editLocation.geo_precision !== 'precise' && editLocation.city && editLocation.department) {
+      const c = await geocodeCity(editLocation.city, editLocation.department)
+      if (c) {
+        updates.latitude = c.lat
+        updates.longitude = c.lng
+        updates.geo_precision = 'city'
+      }
     }
 
     const { error } = await updateEvent(event.id, updates)
@@ -387,14 +412,18 @@ export function EventPage() {
                   placeholder="Décrivez l'événement..."
                 />
               </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground mb-1 block">Adresse ou lieu</label>
+                <LocationField value={editLocation} onChange={setEditLocation} inputClass="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">Ville <span className="text-destructive">*</span></label>
-                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editForm.city} onChange={e => setEditForm(f => ({ ...f, city: e.target.value }))} />
+                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Ville" value={editLocation.city} onChange={e => setEditLocation(l => ({ ...l, city: e.target.value }))} />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">Département <span className="text-destructive">*</span></label>
-                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département (ex: 77)" value={editForm.department} onChange={e => setEditForm(f => ({ ...f, department: e.target.value }))} />
+                  <input type="text" className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Département (ex: 77)" value={editLocation.department} onChange={e => setEditLocation(l => ({ ...l, department: e.target.value }))} />
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -460,7 +489,7 @@ export function EventPage() {
 
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
-                <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editForm.city || !editForm.start_date}>
+                <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editLocation.city || !editForm.start_date}>
                   <Save className="mr-2 h-4 w-4" />
                   {editSaving ? 'Enregistrement...' : 'Enregistrer'}
                 </Button>
