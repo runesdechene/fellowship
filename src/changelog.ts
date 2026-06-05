@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.225',
+    date: '2026-06-05',
+    title: 'Petite touche',
+    changes: [
+      'Un point cuivre signature après le logo Fellowship',
+    ],
+  },
+  {
     version: '0.7.224',
     date: '2026-06-05',
     title: 'La Carte, en grand',
