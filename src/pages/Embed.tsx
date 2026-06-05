@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { Calendar } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
 import { eventShareUrl } from '@/lib/event-link'
+import { parseEmbedParams } from '@/lib/embed-params'
 import './EmbedPage.css'
 
 /* ── Tag icon map (inline — no Tailwind dependency) ── */
@@ -48,11 +49,11 @@ export function EmbedPage() {
   const slug = rawSlug?.replace(/^@/, '')
   const [searchParams] = useSearchParams()
 
-  const theme = searchParams.get('theme') === 'dark' ? 'dark' : 'light'
-  const max = Math.min(Math.max(parseInt(searchParams.get('max') ?? '10', 10) || 10, 1), 50)
-  const accent = /^[0-9a-fA-F]{3,8}$/.test(searchParams.get('accent') ?? '')
-    ? `#${searchParams.get('accent')}`
-    : '#c87941'
+  const { view, theme: themeParam, max, accent } = useMemo(
+    () => parseEmbedParams(searchParams),
+    [searchParams],
+  )
+  void view // used in Task 5 (mini rendering)
 
   const [entity, setEntity] = useState<EntityRow | null>(null)
   const [participations, setParticipations] = useState<EmbedEvent[]>([])
@@ -102,7 +103,7 @@ export function EmbedPage() {
 
   if (loading) {
     return (
-      <div className="embed-page" data-theme={theme}>
+      <div className="embed-page" data-theme={themeParam}>
         <div className="embed-cards">
           {[1, 2].map(i => (
             <div key={i} className="embed-skeleton">
@@ -127,7 +128,7 @@ export function EmbedPage() {
   const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
   return (
-    <div className="embed-page" data-theme={theme}>
+    <div className="embed-page" data-theme={themeParam}>
      <div className="embed-page-container">
       {/* Header */}
       <div className="embed-header">
