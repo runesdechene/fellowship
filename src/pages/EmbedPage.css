@@ -34,6 +34,23 @@ body:has(.embed-page) {
   background: transparent !important;
 }
 
+/* Le calque d'ambiance global (Bgfx — halos chauds) ne doit jamais apparaître dans l'embed.
+   (Doublon de la garde iframe dans Bgfx.tsx, couvre aussi l'aperçu plein écran « Voir en vrai ».) */
+body:has(.embed-page) .bgfx {
+  display: none !important;
+}
+
+/* Masquer la scrollbar de l'embed (l'iframe s'auto-dimensionne, le sliver résiduel est inutile). */
+html:has(.embed-page),
+html:has(.embed-page) body {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Edge legacy */
+}
+html:has(.embed-page)::-webkit-scrollbar,
+html:has(.embed-page) body::-webkit-scrollbar {
+  display: none;                /* WebKit */
+}
+
 /* ── Header ── */
 
 .embed-header {
