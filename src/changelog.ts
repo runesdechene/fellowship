@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.226',
+    date: '2026-06-05',
+    title: 'Abonnés visibles sur chaque vitrine',
+    changes: [
+      'Correction : le compteur et la liste des abonnés d\'une vitrine s\'affichent désormais correctement pour tous les visiteurs (et non plus seulement pour le propriétaire)',
+    ],
+  },
+  {
     version: '0.7.225',
     date: '2026-06-05',
     title: 'Petite touche',

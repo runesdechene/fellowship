@@ -88,16 +88,19 @@ async function fetchNetwork(actorId: string): Promise<{ friends: NetworkMember[]
       friends = ((actors ?? []) as any[]).map(a => toMember(a, dm.get(a.actor_id ?? '') ?? new Date(0).toISOString()))
     }
 
-    const { data: links } = await supabase.from('follows')
-      .select('created_at, follower_actor').eq('following_actor', actorId).order('created_at', { ascending: false })
-    type FollowerLink = { created_at: string; follower_actor: string | null }
-    const fl = (links as FollowerLink[] | null) ?? []
-    const ids = fl.map(l => l.follower_actor).filter((id): id is string => !!id)
+    // Abonnés via RPC SECURITY DEFINER : la RLS `follows_select` ne laisse un tiers
+    // lire que les follows dont il est partie prenante. Une lecture directe ici
+    // renvoyait donc une liste quasi vide (compteur faux) à tout visiteur non-membre.
+    // get_followers_with_dates contourne la RLS de façon bornée (= preuve sociale publique).
+    type FollowerRow = { follower_id: string; followed_at: string }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: followerRows } = await (supabase.rpc as any)('get_followers_with_dates', { p_actor_id: actorId })
+    const followerDates = (followerRows as FollowerRow[] | null) ?? []
     let followers: NetworkMember[] = []
-    if (ids.length) {
+    if (followerDates.length) {
       const { data: actors } = await supabase.from('actor_public')
-        .select('actor_id, label, avatar_url, public_slug').in('actor_id', ids)
-      const dm = new Map(fl.map(l => [l.follower_actor ?? '', l.created_at]))
+        .select('actor_id, label, avatar_url, public_slug').in('actor_id', followerDates.map(f => f.follower_id))
+      const dm = new Map(followerDates.map(f => [f.follower_id, f.followed_at]))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       followers = ((actors ?? []) as any[]).map(a => toMember(a, dm.get(a.actor_id ?? '') ?? new Date(0).toISOString()))
     }
