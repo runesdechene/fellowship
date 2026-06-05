@@ -316,9 +316,16 @@ export function EventPage() {
           <button onClick={() => setEditing(false)} className="event-back" title="Annuler l'édition">
             <ArrowLeft />
           </button>
-        ) : (
+        ) : user ? (
           <button onClick={handleBack} className="event-back" title="Retour">
             <ArrowLeft /> Retour
+          </button>
+        ) : (
+          // Visiteur anonyme (arrivé via embed / lien partagé) : pas de retour utile dans l'app
+          // → CTA d'acquisition vers l'accueil.
+          <button onClick={() => navigate('/')} className="event-back" title="Découvrir Fellowship">
+            <img src="/icon.png" alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />
+            Découvrir Fellowship
           </button>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
@@ -616,11 +623,11 @@ export function EventPage() {
             {/* Discussion du festival (placeholder) */}
             <DiscussionTeaser />
 
-            {/* Notes communes */}
-            <div className="event-section-card">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Mes notes privées ({notes.length})</div>
-                {currentActor && (
+            {/* Notes privées — réservées à l'acteur connecté (perso, jamais visibles en anonyme) */}
+            {currentActor && (
+              <div className="event-section-card">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Mes notes privées ({notes.length})</div>
                   <button
                     onClick={() => setShowNoteModal(true)}
                     className="event-edit-btn"
@@ -629,14 +636,14 @@ export function EventPage() {
                   >
                     <MessageSquarePlus className="h-4 w-4" strokeWidth={1.5} />
                   </button>
+                </div>
+                {notes.length > 0 && (
+                  <div style={{ marginTop: 12 }}>
+                    <NotesFeed notes={notes} onRefresh={refetchNotes} />
+                  </div>
                 )}
               </div>
-              {notes.length > 0 && (
-                <div style={{ marginTop: 12 }}>
-                  <NotesFeed notes={notes} onRefresh={refetchNotes} />
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Avis exposants — réservé au mode exposant. Le mode festivalier
                 aura son propre bloc d'avis (spec à venir, cf. memory
