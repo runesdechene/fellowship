@@ -53,8 +53,6 @@ export function EmbedPage() {
     () => parseEmbedParams(searchParams),
     [searchParams],
   )
-  void view // used in Task 5 (mini rendering)
-
   const [entity, setEntity] = useState<EntityRow | null>(null)
   const [participations, setParticipations] = useState<EmbedEvent[]>([])
   const [loading, setLoading] = useState(true)
@@ -101,9 +99,17 @@ export function EmbedPage() {
     return start === end ? fmt(s) : `${fmt(s)} — ${fmt(e)}`
   }
 
+  const formatDayMonth = (start: string) => {
+    const d = new Date(start)
+    return {
+      day: d.toLocaleDateString('fr-FR', { day: '2-digit' }),
+      month: d.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', ''),
+    }
+  }
+
   if (loading) {
     return (
-      <div className="embed-page" data-theme={themeParam}>
+      <div className="embed-page" data-theme={themeParam} data-view={view}>
         <div className="embed-cards">
           {[1, 2].map(i => (
             <div key={i} className="embed-skeleton">
@@ -128,7 +134,7 @@ export function EmbedPage() {
   const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
   return (
-    <div className="embed-page" data-theme={themeParam}>
+    <div className="embed-page" data-theme={themeParam} data-view={view}>
      <div className="embed-page-container">
       {/* Header */}
       <div className="embed-header">
@@ -150,6 +156,30 @@ export function EmbedPage() {
         <div className="embed-empty">
           <Calendar className="embed-empty-icon" strokeWidth={1.5} />
           <p className="embed-empty-text">Aucun événement à venir</p>
+        </div>
+      ) : view === 'mini' ? (
+        <div className="embed-mini-list">
+          {events.map((ev) => {
+            const { day, month } = formatDayMonth(ev.start_date)
+            return (
+              <a
+                key={ev.id}
+                href={eventShareUrl(ev, 'https://flw.sh')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="embed-mini-row"
+              >
+                <div className="embed-mini-date">
+                  <span className="embed-mini-day" style={{ color: accent }}>{day}</span>
+                  <span className="embed-mini-month">{month}</span>
+                </div>
+                <div className="embed-mini-info">
+                  <span className="embed-mini-name">{ev.name}</span>
+                  <span className="embed-mini-loc">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
+                </div>
+              </a>
+            )
+          })}
         </div>
       ) : (
         <div className="embed-cards">
