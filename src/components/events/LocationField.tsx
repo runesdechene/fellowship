@@ -1,7 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Map as MapIcon, X } from 'lucide-react'
 import { AddressAutocomplete, type AddressSelection } from './AddressAutocomplete'
-import { PointPickerMap } from '@/components/map/PointPickerMap'
+
+// Lazy : MapLibre (~1 Mo) ne doit pas entrer dans le chunk principal (EventForm est chargé
+// eagerly par AppLayout). La carte n'est montée qu'au clic « Ajuster sur la carte ».
+const PointPickerMap = lazy(() =>
+  import('@/components/map/PointPickerMap').then(m => ({ default: m.PointPickerMap }))
+)
+
+const MapFallback = () => (
+  <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+    Chargement de la carte…
+  </div>
+)
 
 export type LocationValue = {
   address: string
@@ -82,7 +93,9 @@ export function LocationField({ value, onChange, inputClass = '' }: LocationFiel
       {pickerOpen && isDesktop && (
         <div className="mt-2">
           <div className="flex h-64 flex-col">
-            <PointPickerMap center={center} onMove={handlePinMove} />
+            <Suspense fallback={<MapFallback />}>
+              <PointPickerMap center={center} onMove={handlePinMove} />
+            </Suspense>
           </div>
           <p className="mt-1 text-[11px] text-muted-foreground">Glisse la carte pour centrer le pin sur le lieu.</p>
         </div>
@@ -97,7 +110,9 @@ export function LocationField({ value, onChange, inputClass = '' }: LocationFiel
               <X className="h-5 w-5" />
             </button>
           </div>
-          <PointPickerMap center={center} onMove={handlePinMove} />
+          <Suspense fallback={<MapFallback />}>
+            <PointPickerMap center={center} onMove={handlePinMove} />
+          </Suspense>
           <div className="p-4">
             <button
               type="button"
