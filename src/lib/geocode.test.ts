@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   parseBanFeature,
+  parsePhotonFeature,
   filterByDepartment,
   departmentFromCitycode,
   searchAddresses,
@@ -68,5 +69,33 @@ describe('geocodeCity', () => {
   it('renvoie null si aucune feature', async () => {
     const fakeFetch = (async () => ({ ok: true, json: async () => ({ features: [] }) })) as unknown as typeof fetch
     expect(await geocodeCity('Nowhere', '99', fakeFetch)).toBeNull()
+  })
+})
+
+const photonFeature = (props: Record<string, unknown> = {}) => ({
+  geometry: { coordinates: [7.1620, 46.8065] as [number, number] }, // [lng, lat] = Fribourg CH
+  properties: { name: 'Fribourg', city: 'Fribourg', postcode: '1700', state: 'Fribourg', countrycode: 'CH', ...props },
+})
+
+describe('parsePhotonFeature', () => {
+  it('inverse [lng, lat] et mappe ville/postcode/pays', () => {
+    const r = parsePhotonFeature(photonFeature())
+    expect(r.lat).toBe(46.8065)
+    expect(r.lng).toBe(7.1620)
+    expect(r.city).toBe('Fribourg')
+    expect(r.postcode).toBe('1700')
+    expect(r.country).toBe('ch') // minuscule
+    expect(r.citycode).toBe('') // pas d'INSEE hors France
+  })
+  it('département = state pour l’étranger', () => {
+    expect(parsePhotonFeature(photonFeature()).department).toBe('Fribourg')
+  })
+  it('label avec numéro + rue quand présents', () => {
+    const r = parsePhotonFeature(photonFeature({ housenumber: '12', street: 'Rue de Lausanne' }))
+    expect(r.label).toContain('12 Rue de Lausanne')
+    expect(r.label).toContain('1700 Fribourg')
+  })
+  it('score décroît avec le rang', () => {
+    expect(parsePhotonFeature(photonFeature(), 0).score).toBeGreaterThan(parsePhotonFeature(photonFeature(), 3).score)
   })
 })
