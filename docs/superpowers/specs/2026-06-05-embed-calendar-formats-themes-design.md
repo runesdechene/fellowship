@@ -111,7 +111,13 @@ window.parent.postMessage({ source: 'flwsh-embed', type: 'resize', height: <numb
 iframe  ──▶  { source:'flwsh-embed', type:'ready' }           (à parent, au montage)
 parent  ──▶  { source:'flwsh-embed', type:'theme', theme }    (à iframe.contentWindow)
 ```
-L'iframe valide `event.origin === 'https://flw.sh'` sur le message entrant `theme`.
+⚠️ Le message `theme` vient de `embed.js`, qui tourne **sur le site du client** : son
+`origin` est celui du site hôte (`monatelier.fr`…), **pas** `flw.sh`. L'iframe ne peut donc
+**pas** valider l'origine sur ce message. Elle valide uniquement
+`data.source === 'flwsh-embed' && data.type === 'theme' && theme ∈ {light, dark}`. C'est
+acceptable car le thème est une donnée **non sensible** (au pire le widget s'affiche dans le
+mauvais mode). Robustesse de livraison : `embed.js` envoie le thème à la fois à la réception
+du `ready` **et** proactivement à son `init` (gère les deux ordres de chargement script/iframe).
 
 ## Snippets livrés
 
@@ -134,8 +140,10 @@ Hauteurs de repli : `mini ≈ 360px`, `full ≈ 600px` (utilisées si `embed.js`
 
 ## Sécurité
 
-- `embed.js` ne fait confiance qu'aux messages `origin === 'https://flw.sh'` + `source === 'flwsh-embed'`.
-- La page embed valide l'origine du message `theme` entrant.
+- **Sens iframe → parent (hauteur) :** `embed.js` valide `event.origin === 'https://flw.sh'`
+  + `source === 'flwsh-embed'` (l'émetteur EST flw.sh → validation d'origine correcte et utile).
+- **Sens parent → iframe (thème) :** l'émetteur est le site hôte → pas de validation d'origine
+  possible ; on valide `source` + `type` + valeur du thème. Donnée non sensible → acceptable.
 - Aucune donnée sensible n'est échangée (hauteur, thème).
 - `frame-ancestors *` déjà en place sur `/*/embed` (netlify.toml) — pas de changement.
 - **Pas de Subresource Integrity (`integrity=`) sur le `<script src=embed.js>`** : c'est un
