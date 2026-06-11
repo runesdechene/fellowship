@@ -1,0 +1,26 @@
+/* Pill flottante des actions globales (+ Ajouter, cloche) — affichée sur les
+ * pages immersives qui masquent la SearchBar (Explorer, Carte, vitrine).
+ * Reprend le look « glass pill » de .search-bar-actions, mais en position fixe
+ * haut-droite (hors flux) pour ne pas rogner la hauteur des pages immersives. */
+.floating-actions {
+  position: fixed;
+  top: 12px;
+  right: 14px;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: hsl(var(--card) / 0.85);
+  border: 1px solid hsl(var(--border) / 0.6);
+  border-radius: 999px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+}
+.light .floating-actions { box-shadow: 0 10px 28px rgba(60, 45, 35, 0.14); }
+
+/* Mobile : la pill haut-droite chevaucherait la barre de recherche centrée
+ * d'Explorer/Carte. On la masque ici ; l'accès « Ajouter » mobile sur ces
+ * pages immersives reste à traiter à part (FAB bas-droite). */
+@media (max-width: 767px) {
+  .floating-actions { display: none; }
+}

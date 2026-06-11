@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { eventPath } from '@/lib/event-link'
-import { Search, X, Calendar, MapPin, User, Bell, Plus } from 'lucide-react'
+import { Search, X, Calendar, MapPin, User, Plus } from 'lucide-react'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { supabase } from '@/lib/supabase'
 import { isSearchableActor } from '@/lib/search'
 import { useAuth } from '@/lib/auth'
-import { useNotifications } from '@/hooks/use-notifications'
-import { useFollowingIds } from '@/hooks/use-following-ids'
-import { NotificationItem } from '@/components/notifications/NotificationItem'
+import { NotifBell } from './NotifBell'
 import { DebugPlanSwitch } from './DebugPlanSwitch'
 import './SearchBar.css'
 
@@ -36,28 +34,20 @@ interface SearchBarProps {
 
 export function SearchBar({ onCreateEvent }: SearchBarProps) {
   const { currentActor } = useAuth()
-  const { personalNotifs, personalUnread, markAsRead, markAllAsRead } = useNotifications()
-  const followingIds = useFollowingIds()
   const [query, setQuery] = useState('')
   const [events, setEvents] = useState<SearchEvent[]>([])
   const [profiles, setProfiles] = useState<SearchProfile[]>([])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
-  const [bellOpen, setBellOpen] = useState(false)
-  const [bellSnapshot, setBellSnapshot] = useState<Set<string>>(new Set())
   const [searchExpanded, setSearchExpanded] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const bellRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  // Close on click outside
+  // Close on click outside (la cloche gère son propre click-outside dans NotifBell)
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false)
-      }
-      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
-        setBellOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -180,65 +170,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
       <DebugPlanSwitch />
 
       {/* Notification bell */}
-      {currentActor && (
-        <div className="notif-bell-wrapper" ref={bellRef}>
-          <button
-            className="notif-bell-btn"
-            onClick={() => {
-              setBellOpen(prev => {
-                const next = !prev
-                if (next) {
-                  setBellSnapshot(new Set(personalNotifs.filter(n => !n.read).map(n => n.id)))
-                  if (personalUnread > 0) markAllAsRead()
-                }
-                return next
-              })
-            }}
-          >
-            <Bell strokeWidth={1.5} />
-            {personalUnread > 0 && (
-              <span className="notif-bell-badge">
-                {personalUnread > 9 ? '9+' : personalUnread}
-              </span>
-            )}
-          </button>
-
-          {bellOpen && (
-            <div className="notif-dropdown">
-              <div className="notif-dropdown-header">
-                <span className="notif-dropdown-title">Notifications</span>
-              </div>
-              {personalNotifs.length === 0 ? (
-                <p className="notif-dropdown-empty">Aucune notification</p>
-              ) : (
-                <div className="notif-dropdown-list">
-                  {personalNotifs.slice(0, 8).map(n => {
-                    const data = (n.data ?? {}) as Record<string, unknown>
-                    const actorId = typeof data.actor_id === 'string' ? data.actor_id : undefined
-                    return (
-                      <NotificationItem
-                        key={n.id}
-                        notification={n}
-                        isFriend={!!actorId && followingIds.has(actorId)}
-                        onRead={markAsRead}
-                        compact
-                        forceUnreadStyle={bellSnapshot.has(n.id)}
-                      />
-                    )
-                  })}
-                </div>
-              )}
-              <Link
-                to="/notifications"
-                className="notif-dropdown-see-all"
-                onClick={() => setBellOpen(false)}
-              >
-                Voir toutes les notifications →
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
+      {currentActor && <NotifBell />}
 
       </div>{/* /search-bar-actions */}
 

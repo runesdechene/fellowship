@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { BottomBar } from './BottomBar'
 import { SearchBar } from './SearchBar'
+import { FloatingActions } from './FloatingActions'
 import { ChangelogModal } from './ChangelogModal'
 import { EventForm } from '@/components/events/EventForm'
 import { useAuth } from '@/lib/auth'
@@ -42,6 +43,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </main>
       </div>
       <BottomBar />
+
+      {/* Sur les pages immersives la SearchBar est masquée : on garde quand même
+          le flotteur « + Ajouter / 🔔 » disponible partout (desktop). */}
+      {hideSearchBar && <FloatingActions onCreateEvent={() => setShowCreate(true)} />}
 
       <ChangelogModal />
 
