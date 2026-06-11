@@ -47,11 +47,8 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
             className={'sheet-actor' + (currentActor?.kind === 'person' ? ' on' : '')}
             onClick={() => { switchActor(null); onClose() }}
           >
-            <span
-              className="sheet-av person"
-              style={person.avatar_url ? { backgroundImage: `url(${person.avatar_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-            >
-              {person.avatar_url ? null : <User strokeWidth={2} />}
+            <span className="sheet-av sav-person">
+              {person.avatar_url ? <img src={person.avatar_url} alt="" /> : <User strokeWidth={2} />}
             </span>
             <span className="sheet-actor-nm"><b>{person.display_name ?? 'Moi'}</b><span>Festivalier</span></span>
             {currentActor?.kind === 'person' && <Check className="sheet-check" strokeWidth={2.5} />}
@@ -63,11 +60,8 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
             className={'sheet-actor' + (currentActor?.id === e.actor_id ? ' on' : '')}
             onClick={() => { switchActor(e.actor_id); onClose() }}
           >
-            <span
-              className="sheet-av entity"
-              style={e.avatar_url ? { backgroundImage: `url(${e.avatar_url})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-            >
-              {e.avatar_url ? null : initials(e.brand_name)}
+            <span className="sheet-av sav-entity">
+              {e.avatar_url ? <img src={e.avatar_url} alt="" /> : initials(e.brand_name)}
             </span>
             <span className="sheet-actor-nm"><b>{e.brand_name}</b><span>Exposant · {e.type}</span></span>
             {currentActor?.id === e.actor_id && <Check className="sheet-check" strokeWidth={2.5} />}

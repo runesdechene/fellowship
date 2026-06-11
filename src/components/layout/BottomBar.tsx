@@ -55,11 +55,8 @@ export function BottomBar() {
           onClick={() => setSheetOpen(true)}
           aria-label="Compte et options"
         >
-          <span
-            className="bottom-bar-avatar"
-            style={acctAvatar ? { backgroundImage: `url(${acctAvatar})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-          >
-            {acctAvatar ? null : initials(acctLabel)}
+          <span className="bottom-bar-avatar">
+            {acctAvatar ? <img src={acctAvatar} alt="" /> : initials(acctLabel)}
           </span>
           <span>Compte</span>
         </button>

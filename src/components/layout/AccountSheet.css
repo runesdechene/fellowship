@@ -60,13 +60,14 @@
   width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-heading); font-weight: 700; font-size: 14px;
-  /* Avatar peint en background-image (style inline, size+position inclus pour ne pas être
-     réinitialisés par le raccourci `background` de .entity/.person) plutôt qu'une <img>
-     flex-item : WebKit iOS mésize/décale une img dans un flex centré. Span = boîte → centrée. */
 }
-.sheet-av.person { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
-.sheet-av.person svg { width: 18px; height: 18px; }
-.sheet-av.entity { background: linear-gradient(135deg, #6b4a2e, #3c2a1a); color: #ffd9a8; }
+.sheet-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Modificateurs renommés sav-* : `entity`/`person` nus entraient en collision avec la
+   classe globale .entity de Sidebar.css (margin-bottom:16px + padding + border), qui
+   décalait/rétrécissait l'avatar entité sur mobile. */
+.sheet-av.sav-person { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+.sheet-av.sav-person svg { width: 18px; height: 18px; }
+.sheet-av.sav-entity { background: linear-gradient(135deg, #6b4a2e, #3c2a1a); color: #ffd9a8; }
 .sheet-actor-nm { flex: 1; min-width: 0; }
 .sheet-actor-nm b { display: block; font-family: var(--font-heading); font-size: 14px; color: hsl(var(--foreground)); }
 .sheet-actor-nm span { font-size: 11.5px; color: hsl(var(--muted-foreground)); }
