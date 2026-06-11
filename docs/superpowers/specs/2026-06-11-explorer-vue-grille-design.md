@@ -23,13 +23,15 @@ Le slideshow reste le mode par défaut.
 - **Pastilles de statut et badges réutilisés à l'identique** (`participationChip` →
   classes `.card-status.*` ; `eventBadge` → `.card-badge.*`). Pas de re-design.
 - **Compagnons qui y vont** affichés sur la carte (avatars empilés + « X compagnons y vont »).
+- **Bouton « Repérer » accessible sur la carte** (étoile seule, en bas à droite de l'overlay).
 
 ### Anatomie de la carte grille (overlay, bas de l'affiche)
 
 1. Affiche en fond (`object-fit: cover`, ratio 2/3) + dégradé bas pour la lisibilité.
 2. Coin haut-gauche : pastille de statut de participation (`.card-status`, si l'acteur a une participation).
 3. Coin haut-droite : badge `Nouveau` / `Populaire` (`.card-badge`, si applicable).
-4. Overlay bas : pilule tag → nom (Plus Jakarta 800) → ligne date 📅 + lieu 📍 → rangée compagnons.
+4. Overlay bas : pilule tag → nom (Plus Jakarta 800) → ligne date 📅 + lieu 📍 →
+   **rangée du bas** : compagnons à gauche + **bouton Repérer (étoile seule) à droite**.
 
 ## Architecture & composants
 
@@ -96,10 +98,18 @@ nommé « map ». Le map consomme désormais le même hook (comportement inchang
 Comme le dock du slideshow, la grille affiche « X compagnons y vont » à **tout le monde**
 (pas de gating Pro sur les avatars). Validé 2026-06-11.
 
+## Repérer (action de carte)
+
+Étoile **icône-seule** en bas à droite de l'overlay (sur la rangée des compagnons :
+compagnons à gauche, étoile à droite). Toggle :
+- défaut = étoile contour sur fond glass ;
+- repéré = étoile pleine **jaune** (`hsl(44 89% 71%)`, couleur du statut « Repéré »).
+
+Réutilise la logique existante `toggleSave` / `isSaved` de l'Explorer. Le clic sur
+l'étoile fait `stopPropagation` (le clic carte ouvre toujours le festival).
+
 ## Hors-scope (v1)
 
-- Pas d'action « Repérer » directement sur la carte grille (clic → page festival, où le
-  Repérer existe). À rediscuter si tu le veux en accès direct.
 - Pas d'avatars compagnons cliquables en grille (décoratifs en v1).
 - Pas de virtualisation de la grille (le volume actuel d'events ne le justifie pas ;
   fenêtrage à prévoir si la liste devient très grande).
