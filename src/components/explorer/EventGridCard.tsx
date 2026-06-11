@@ -24,10 +24,12 @@ export function EventGridCard({ event, now, part, actorKind, friends, saved, onT
   // « Repéré » est déjà signalé par l'étoile jaune en haut à droite → on n'affiche la
   // pastille de statut que pour les autres états (Accepté, Dossier, Inscrit…).
   const showChip = chip && chip.variant !== 'repere'
+  // Pas de participation (ni « Repéré » ni plus fort) → carte atténuée (désat. + transp.).
+  const muted = !part
   const shown = friends.slice(0, 4)
 
   return (
-    <div className="egrid-card" onClick={() => onClick(event)}>
+    <div className={'egrid-card' + (muted ? ' egrid-card--muted' : '')} onClick={() => onClick(event)}>
       {(badge || showChip) && (
         <div className="egrid-corner">
           {badge && <span className={'egrid-badge ' + badge}>{badge === 'nouveau' ? '✨ Nouveau' : '🔥 Populaire'}</span>}
@@ -56,8 +58,8 @@ export function EventGridCard({ event, now, part, actorKind, friends, saved, onT
       <div className="egrid-ov">
         <div className="egrid-name">{event.name}</div>
         <div className="egrid-meta">
-          <span aria-hidden="true">📅</span><b>{formatEventDateRange(event.start_date, event.end_date)}</b>
-          <span aria-hidden="true">📍</span><b>{event.city}</b>
+          <span className="egrid-meta-item"><span aria-hidden="true">📅</span><b>{formatEventDateRange(event.start_date, event.end_date)}</b></span>
+          <span className="egrid-meta-item"><span aria-hidden="true">📍</span><b>{event.city}</b></span>
         </div>
         {friends.length > 0 && (
           <div className="egrid-friends">
