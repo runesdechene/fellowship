@@ -24,6 +24,8 @@ export function BottomBar() {
   const plan = planForActor(currentActor, currentActorRow)
   const keys = mobilePrimaryFor(currentActor)   // 3 liens principaux
   const acctLabel = currentActor?.label ?? person?.display_name ?? 'Moi'
+  // Avatar de l'acteur actif (entité ou personne) — comme le sélecteur desktop (EntitySwitcher).
+  const acctAvatar = (currentActorRow as { avatar_url?: string | null } | null)?.avatar_url ?? null
 
   return (
     <>
@@ -53,7 +55,9 @@ export function BottomBar() {
           onClick={() => setSheetOpen(true)}
           aria-label="Compte et options"
         >
-          <span className="bottom-bar-avatar">{initials(acctLabel)}</span>
+          <span className="bottom-bar-avatar">
+            {acctAvatar ? <img src={acctAvatar} alt="" /> : initials(acctLabel)}
+          </span>
           <span>Compte</span>
         </button>
       </nav>
