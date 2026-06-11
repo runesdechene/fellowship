@@ -45,6 +45,12 @@ export function ActivityItem({ item, isFollowed, onFollow }: {
             {item.target.slug && <div className="act-sub"><Link to={`/${item.target.slug}`}>Voir la vitrine</Link></div>}
           </>
         )}
+        {item.kind === 'event_created' && item.event && (
+          <div className="act-t"><ActorName actor={a} /> a ajouté{' '}
+            <Link to={eventPath(item.event)}>{item.event.name}</Link>{' '}
+            <time>· {ago(item.occurredAt)}</time>
+          </div>
+        )}
       </div>
       {item.kind === 'follow' && item.target && onFollow && (
         <button
