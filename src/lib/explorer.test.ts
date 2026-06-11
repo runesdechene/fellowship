@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay, formatEventDateRange } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -293,5 +293,17 @@ describe('eventBadge', () => {
   })
   it('rien si ni récent ni populaire', () => {
     expect(eventBadge(ev({ created_at: '2025-01-01', review_count: 0 }), now)).toBeNull()
+  })
+})
+
+describe('formatEventDateRange', () => {
+  it('un seul jour', () => {
+    expect(formatEventDateRange('2026-06-12', '2026-06-12')).toBe('12 juin')
+  })
+  it('même mois', () => {
+    expect(formatEventDateRange('2026-06-12', '2026-06-14')).toBe('12–14 juin')
+  })
+  it('mois différents', () => {
+    expect(formatEventDateRange('2026-07-31', '2026-08-02')).toBe('31 juil – 2 août')
   })
 })

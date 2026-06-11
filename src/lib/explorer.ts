@@ -121,6 +121,23 @@ export function normalizeText(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 }
 
+/** Parse 'YYYY-MM-DD' comme date LOCALE (évite le décalage UTC→tz qui changeait le jour). */
+function parseLocalDate(d: string): Date {
+  const [y, m, day] = d.split('-').map(Number)
+  return new Date(y, (m || 1) - 1, day || 1)
+}
+
+/** Plage de dates affichée façon dock (« 12 juin », « 12–14 juin », « 31 juil – 2 août »). */
+export function formatEventDateRange(start: string, end: string): string {
+  const s = parseLocalDate(start), e = parseLocalDate(end)
+  const day = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric' })
+  const month = (d: Date) => d.toLocaleDateString('fr-FR', { month: 'long' })
+  if (start === end) return `${day(s)} ${month(s)}`
+  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) return `${day(s)}–${day(e)} ${month(s)}`
+  const sm = (d: Date) => d.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
+  return `${day(s)} ${sm(s)} – ${day(e)} ${sm(e)}`
+}
+
 /** Compose tags ∩ zone ∩ période, puis tri (chronologique ; created_at desc si 'recent'). */
 export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'populaire' | null {
   const created = new Date(event.created_at).getTime()

@@ -3,16 +3,7 @@ import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
 import { ActorAvatar, ActorName } from '@/components/community/ActorLinks'
 import type { FeedActor } from '@/lib/community'
 import type { EventWithScore } from '@/types/database'
-
-function dateRange(start: string, end: string): string {
-  const s = new Date(start), e = new Date(end)
-  const day = (d: Date) => d.toLocaleDateString('fr-FR', { day: 'numeric' })
-  const month = (d: Date) => d.toLocaleDateString('fr-FR', { month: 'long' })
-  if (start === end) return `${day(s)} ${month(s)}`
-  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) return `${day(s)}–${day(e)} ${month(s)}`
-  const sm = (d: Date) => d.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
-  return `${day(s)} ${sm(s)} – ${day(e)} ${sm(e)}`
-}
+import { formatEventDateRange } from '@/lib/explorer'
 
 interface EventDockProps {
   event: EventWithScore
@@ -45,7 +36,7 @@ export function EventDock({ event, tagInfo, animate = true }: EventDockProps) {
         <div className="eh-item">
           <span className="eh-ico" aria-hidden="true">📅</span>
           <div className="eh-lines">
-            <div className="eh-strong">{dateRange(event.start_date, event.end_date)}</div>
+            <div className="eh-strong">{formatEventDateRange(event.start_date, event.end_date)}</div>
             <div className="eh-sub">{new Date(event.start_date).getFullYear()}</div>
           </div>
         </div>
