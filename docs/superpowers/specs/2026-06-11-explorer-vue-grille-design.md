@@ -91,12 +91,10 @@ nommé « map ». Le map consomme désormais le même hook (comportement inchang
 - **Gratuit/Pro** : l'Explorer est gratuit ; la grille est la même donnée, **aucun
   nouveau gating**.
 
-## Point à confirmer (relecture)
+## Décision : compagnons visibles pour tous
 
-- **Compagnons visibles pour tous, ou levier Pro ?** Le dock du slideshow affiche déjà
-  « X compagnons y vont » à tout le monde → par cohérence, la grille fait pareil
-  (recommandation). À valider : si tu veux en faire un teaser Pro, on gate l'affichage
-  des avatars en grille.
+Comme le dock du slideshow, la grille affiche « X compagnons y vont » à **tout le monde**
+(pas de gating Pro sur les avatars). Validé 2026-06-11.
 
 ## Hors-scope (v1)
 
