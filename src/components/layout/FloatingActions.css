@@ -4,8 +4,8 @@
  * haut-droite (hors flux) pour ne pas rogner la hauteur des pages immersives. */
 .floating-actions {
   position: fixed;
-  top: 12px;
-  right: 14px;
+  top: 35px;
+  right: 34px;
   z-index: 45;
   display: flex;
   align-items: center;

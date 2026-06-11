@@ -304,7 +304,7 @@ export function ViewToggle({ mode, onChange }: ViewToggleProps) {
 /* ── Sélecteur de vue (haut-gauche) ───────────────────────────────── */
 .explorer .view-toggle {
   position: absolute;
-  top: 14px;
+  top: px;
   left: 14px;
   z-index: 30;
   display: inline-flex;

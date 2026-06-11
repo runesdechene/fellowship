@@ -23,14 +23,17 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
   const color = getTagLandingColor(tag)
   const badge = eventBadge(event, now)
   const chip = participationChip(part?.status, part?.payment_status, actorKind, { isPast: new Date(event.end_date) < now })
+  // « Repéré » est déjà signalé par l'étoile jaune en haut à droite → on n'affiche la
+  // pastille de statut que pour les autres états (Accepté, Dossier, Inscrit…).
+  const showChip = chip && chip.variant !== 'repere'
   const shown = friends.slice(0, 4)
 
   return (
     <div className="egrid-card" onClick={() => onClick(event)}>
-      {(badge || chip) && (
+      {(badge || showChip) && (
         <div className="egrid-corner">
           {badge && <span className={'egrid-badge ' + badge}>{badge === 'nouveau' ? '✨ Nouveau' : '🔥 Populaire'}</span>}
-          {chip && <span className={'card-status ' + chip.variant}>{chip.label}</span>}
+          {showChip && <span className={'card-status ' + chip.variant}>{chip.label}</span>}
         </div>
       )}
       <button
@@ -45,7 +48,7 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
 
       {event.image_url
         ? <img className="egrid-img" src={event.image_url} alt={event.name} loading="lazy" />
-        : <div className="egrid-img egrid-img--empty" aria-hidden="true">{getTagEmoji(tag)}</div>}
+        : <div className="egrid-img egrid-img--empty" style={{ '--c': color } as React.CSSProperties} aria-hidden="true">{getTagEmoji(tag)}</div>}
       <div className="egrid-scrim" aria-hidden="true" />
 
       <div className="egrid-ov">

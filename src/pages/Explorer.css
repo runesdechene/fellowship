@@ -88,7 +88,7 @@
 .explorer .top {
   display: flex;
   justify-content: center;
-  padding: 30px 0 60px;
+  padding: 25px 0 60px;
   position: relative;
 }
 
@@ -1116,13 +1116,13 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 16px;
+  padding: 4px 10px;
   border-radius: 99px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
-  background: color-mix(in srgb, var(--c) 16%, transparent);
+  background: color-mix(in srgb, var(--c) 26%, transparent);
   color: var(--c);
-  border: 1px solid color-mix(in srgb, var(--c) 38%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 88%, transparent);
 }
 .light .explorer .dock-tag {
   color: color-mix(in srgb, var(--c) 58%, #2a2018);
@@ -1213,7 +1213,7 @@
 /* ── Sélecteur de vue (haut-gauche) ───────────────────────────────── */
 .explorer .view-toggle {
   position: absolute;
-  top: 14px;
+  top: 35px;
   left: 14px;
   z-index: 30;
   display: inline-flex;
@@ -1271,9 +1271,14 @@
 .light .explorer .egrid-card { box-shadow: 0 14px 34px rgba(60, 45, 35, 0.16); }
 
 .explorer .egrid-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Affiche manquante : dégradé teinté par la couleur du tag + emoji (interim, en
+   attendant des affiches vectorielles générées par tag — cf. roadmap). */
 .explorer .egrid-img--empty {
   display: flex; align-items: center; justify-content: center;
-  font-size: 52px; background: hsl(var(--secondary));
+  font-size: 64px;
+  background:
+    radial-gradient(120% 88% at 50% 6%, color-mix(in srgb, var(--c, #e8a06a) 38%, transparent), transparent 68%),
+    linear-gradient(160deg, color-mix(in srgb, var(--c, #e8a06a) 20%, #1a120f), #130c09);
 }
 .explorer .egrid-scrim {
   position: absolute; inset: 0;
@@ -1340,11 +1345,10 @@
    couleur vive (l'override .light du dock, prévu pour fond clair, le rendait fade/illisible). */
 .light .explorer .egrid-card .dock-tag {
   color: var(--c);
-  border-color: color-mix(in srgb, var(--c) 38%, transparent);
 }
 
 /* ── Grille : conteneur (scroll PAGE, pas interne) + colonnes responsives (max 6) ──── */
-.explorer .egrid-wrap { padding: 4px 14px 28px; }
+.explorer .egrid-wrap { padding: 4px 20px 28px; }
 .explorer .egrid-count {
   color: hsl(var(--muted-foreground)); font-size: 13px; font-weight: 600;
   padding: 0 2px 12px;
@@ -1354,15 +1358,15 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 20px;
 }
-@media (max-width: 1400px) { .explorer .egrid { grid-template-columns: repeat(5, 1fr); } }
-@media (max-width: 1150px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 880px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 640px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@media (max-width: 1500px) { .explorer .egrid { grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 1240px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 960px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 680px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
 
 /* ── Mode grille : la PAGE scrolle (pas de scroll interne) ─────────── */
 .explorer.is-grid { height: auto; min-height: 100%; overflow: visible; }
 .explorer.is-grid .stagewrap { height: auto; }
 .explorer.is-grid .stagebody { display: block; flex: none; min-height: 0; }
-.explorer.is-grid .top { padding: 30px 0 14px; }
+.explorer.is-grid .top { padding: 25px 0 14px; }
 .explorer.is-grid .bottombar { display: none; }
 .explorer.is-grid .counter { display: none; }
