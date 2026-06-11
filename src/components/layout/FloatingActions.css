@@ -18,9 +18,8 @@
 }
 .light .floating-actions { box-shadow: 0 10px 28px rgba(60, 45, 35, 0.14); }
 
-/* Mobile : la pill haut-droite chevaucherait la barre de recherche centrée
- * d'Explorer/Carte. On la masque ici ; l'accès « Ajouter » mobile sur ces
- * pages immersives reste à traiter à part (FAB bas-droite). */
+/* Mobile : version compacte (add icône-only + cloche), haut-droite. Au-dessus
+ * de la recherche centrée (z-index) — peut la serrer mais reste tappable. */
 @media (max-width: 767px) {
-  .floating-actions { display: none; }
+  .floating-actions { top: 10px; right: 10px; gap: 6px; padding: 6px; }
 }

@@ -16,14 +16,25 @@ export function FloatingActions({ onCreateEvent }: { onCreateEvent?: () => void 
   return (
     <div className="floating-actions">
       {onCreateEvent && (
-        <button
-          className="search-bar-add-btn search-bar-add-desktop"
-          onClick={onCreateEvent}
-          title="Ajouter un événement"
-        >
-          <Plus strokeWidth={2} />
-          <span className="search-bar-add-label">Ajouter un événement</span>
-        </button>
+        <>
+          {/* Mobile : variante ronde icône-only (les media queries globales basculent
+              mobile <-> desktop, cf. SearchBar.css). */}
+          <button
+            className="search-bar-add-btn search-bar-add-mobile"
+            onClick={onCreateEvent}
+            title="Ajouter un événement"
+          >
+            <Plus strokeWidth={2} />
+          </button>
+          <button
+            className="search-bar-add-btn search-bar-add-desktop"
+            onClick={onCreateEvent}
+            title="Ajouter un événement"
+          >
+            <Plus strokeWidth={2} />
+            <span className="search-bar-add-label">Ajouter un événement</span>
+          </button>
+        </>
       )}
       <DebugPlanSwitch />
       <NotifBell />
