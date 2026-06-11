@@ -5,16 +5,19 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, readExplorerView, writeExplorerView, type Zone, type Period, type ActorKind, type ExplorerView } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { planForActor } from '@/lib/navModel'
 import { countActiveDates, canAddDate } from '@/lib/date-quota'
 import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
 import { EventDeck } from '@/components/explorer/EventDeck'
+import { EventGrid } from '@/components/explorer/EventGrid'
+import { ViewToggle } from '@/components/explorer/ViewToggle'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
 import { ScrubBar } from '@/components/explorer/ScrubBar'
 import { EventDock } from '@/components/explorer/EventDock'
+import { useFriendsByEvent } from '@/hooks/use-friends-by-event'
 import { getTagLandingColor } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
@@ -99,6 +102,12 @@ export function ExplorerPage() {
 
   // Vrai pendant qu'on manipule le scrubber (fige l'animation des cartes le temps du drag).
   const [scrubbing, setScrubbing] = useState(false)
+
+  // ---------- Mode de vue (slideshow / grille), persisté ----------
+  const [viewMode, setViewMode] = useState<ExplorerView>(() => readExplorerView())
+  const changeView = (v: ExplorerView) => { setViewMode(v); writeExplorerView(v) }
+  // Compagnons groupés : chargés uniquement en mode grille (le dock a son propre fetch).
+  const friendsByEvent = useFriendsByEvent(viewMode === 'grid')
 
   // Défaut « Quand » selon l'acteur : un EXPOSANT veut découvrir les nouveautés (« Ajoutés
   // récemment ») ; un visiteur garde l'agenda à venir (« all »). Dérivé → pas de setState en effet.
@@ -260,6 +269,10 @@ export function ExplorerPage() {
     () => new Map(participations.map(p => [p.event_id, { status: p.status as string, payment_status: (p.payment_status as string | null) ?? null }])),
     [participations]
   )
+  const tagLabelOf = useCallback(
+    (slug: string) => dynamicTags.find(d => d.value === slug)?.label ?? slug,
+    [dynamicTags],
+  )
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
@@ -290,6 +303,8 @@ export function ExplorerPage() {
         onChange={handleFileChange}
       />
 
+      <ViewToggle mode={viewMode} onChange={changeView} />
+
       <div className="stagewrap">
         <SearchSegments
           tags={dynamicTags}
@@ -308,7 +323,7 @@ export function ExplorerPage() {
         {/* Compteur : sous la barre sur mobile (gain de hauteur), en bas sur desktop. */}
         <div className="counter counter--top">{counterContent}</div>
 
-        {!loading && displayed.length > 1 && (
+        {viewMode === 'slideshow' && !loading && displayed.length > 1 && (
           <ScrubBar
             count={displayed.length}
             index={safeIndex}
@@ -322,7 +337,21 @@ export function ExplorerPage() {
         <div className="stagebody">
           {loading ? (
             <DeckSkeleton />
-          ) : displayed.length > 0 && currentEvent ? (
+          ) : displayed.length === 0 ? (
+            <ExplorerEmpty />
+          ) : viewMode === 'grid' ? (
+            <EventGrid
+              events={displayed}
+              now={now}
+              partByEvent={partByEvent}
+              actorKind={actorKind}
+              friendsByEvent={friendsByEvent}
+              tagLabel={tagLabelOf}
+              isSaved={isSaved}
+              onToggleSave={toggleSave}
+              onCardClick={ev => navigate(eventPath(ev))}
+            />
+          ) : currentEvent ? (
             <>
               <EventDeck
                 events={displayed}
@@ -352,7 +381,7 @@ export function ExplorerPage() {
         </div>
 
         <div className="bottombar">
-          {currentEvent && (
+          {viewMode === 'slideshow' && currentEvent && (
             <div className="dock-cta">
               <Link to={eventPath(currentEvent)} className="btn btn-ghost">Voir le festival</Link>
               <button type="button" className="btn btn-star" onClick={() => toggleSave(currentEvent)} aria-pressed={isSaved(currentEvent.id)}>
