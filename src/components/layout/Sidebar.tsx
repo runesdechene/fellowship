@@ -5,6 +5,7 @@ import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDash
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { useMyParticipations } from '@/hooks/use-participations'
 import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
+import { useCommunityBadge } from '@/hooks/use-community-badge'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
@@ -29,6 +30,8 @@ export function Sidebar() {
     const start = p.events?.start_date
     return start != null && new Date(start) >= new Date(new Date().toDateString())
   }).length
+
+  const communityBadge = useCommunityBadge()
 
   // Compteur de signalements pending pour le badge rouge sur l'entrée Admin.
   // Renvoie 0 si non-admin (RLS bloque la lecture côté DB anyway).
@@ -59,12 +62,14 @@ export function Sidebar() {
           const to = key === 'vitrine' ? vitrineHref((currentActorRow as { public_slug?: string | null })?.public_slug) : def.to
           if (state === 'active') {
             const showCount = key === 'calendrier' && myDatesCount > 0
+            const showCommBadge = key === 'communaute' && communityBadge > 0
             return (
               <NavLink key={key} to={to} title={collapsed ? def.label : undefined}
                 className={({ isActive }) => (isActive ? 'active' : '')}>
                 <Icon strokeWidth={2} />
                 <span className="navlabel">{def.label}</span>
                 {showCount && <span className="nav-count">{myDatesCount}</span>}
+                {showCommBadge && <span className="navbadge">{communityBadge > 9 ? '9+' : communityBadge}</span>}
               </NavLink>
             )
           }

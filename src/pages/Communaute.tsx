@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
+import { markSeenNow } from '@/lib/community-seen'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { useFollowingSet } from '@/hooks/use-follows'
 import { filterBySegment, type Segment } from '@/lib/community'
@@ -33,6 +34,10 @@ function CommunauteEmpty() {
 export function CommunautePage() {
   const { currentActor, currentActorRow } = useAuth()
   const isPro = planForActor(currentActor, currentActorRow) === 'pro'
+
+  useEffect(() => {
+    if (currentActor) markSeenNow(currentActor.id)
+  }, [currentActor])
   const { feed, convergences, suggestions, loading, error } = useCommunityFeed()
   const { following, follow } = useFollowingSet()
   const [segment, setSegment] = useState<Segment>('tout')

@@ -13,7 +13,7 @@ export function useCommunityBadge(): number {
 
   useEffect(() => {
     const isPro = planForActor(currentActor, currentActorRow) === 'pro'
-    if (!currentActor || !isPro) { setCount(0); return } // eslint-disable-line react-hooks/exhaustive-deps
+    if (!currentActor || !isPro) { setCount(0); return } // eslint-disable-line react-hooks/set-state-in-effect
     let cancelled = false
     const me = currentActor.id
     const lastSeen = getLastSeen(me)
