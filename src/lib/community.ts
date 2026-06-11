@@ -6,6 +6,7 @@ export interface FeedActor {
   label: string
   avatarUrl: string | null
   slug: string | null
+  kind?: 'person' | 'entity'
 }
 
 export interface FeedEventRef {

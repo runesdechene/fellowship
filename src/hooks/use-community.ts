@@ -23,11 +23,12 @@ async function loadActors(ids: string[]): Promise<Map<string, FeedActor>> {
   if (ids.length === 0) return map
   const { data } = await supabase
     .from('actor_public')
-    .select('actor_id, label, avatar_url, public_slug')
+    .select('actor_id, label, avatar_url, public_slug, kind')
     .in('actor_id', ids)
   for (const a of data ?? []) {
     if (a.actor_id) map.set(a.actor_id, {
       actorId: a.actor_id, label: a.label ?? '—', avatarUrl: a.avatar_url, slug: a.public_slug,
+      kind: a.kind === 'person' || a.kind === 'entity' ? a.kind : undefined,
     })
   }
   return map
@@ -180,11 +181,16 @@ export function useCommunityFeed(enabled = true): CommunityData {
         }
 
         const suggActors = await loadActors([...suggMap.keys()])
+        // Garde de sûreté : on ne suggère QUE des comptes exposants (entités), jamais des
+        // festivaliers (personnes) — une suggestion mène à une vitrine qu'eux seuls ont.
+        // Les RPC filtrent déjà kind='entity' ; ceci couvre le cas d'une DB pas encore migrée.
         const ranked = rankSuggestions(
-          [...suggMap.entries()].map(([actorId, s]) => ({
-            actor: suggActors.get(actorId) ?? unknownActor(actorId),
-            sharedFollowers: s.sharedFollowers, sharedEvents: s.sharedEvents,
-          }))
+          [...suggMap.entries()]
+            .map(([actorId, s]) => ({
+              actor: suggActors.get(actorId) ?? unknownActor(actorId),
+              sharedFollowers: s.sharedFollowers, sharedEvents: s.sharedEvents,
+            }))
+            .filter(c => c.actor.kind === 'entity')
         )
         // 3 suggestions, mélangées à chaque chargement de page : on varie les profils mis en
         // avant plutôt que de figer le top-3 (découverte > classement strict au cold-start).
