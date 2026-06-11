@@ -87,3 +87,18 @@ describe('rankSuggestions', () => {
     expect(s.reason).toContain('4')
   })
 })
+
+describe('filterBySegment — event_created', () => {
+  const items: FeedItem[] = [
+    { id: 'evc-1', kind: 'event_created', occurredAt: '2026-06-10', actor: ac('a'), event: ev('e1', '2026-07-01') },
+    { id: 'part-1', kind: 'participation', occurredAt: '2026-06-09', actor: ac('b'), event: ev('e2', '2026-07-02') },
+  ]
+  it("apparaît sous 'tout'", () => {
+    expect(filterBySegment(items, 'tout').map(i => i.id)).toContain('evc-1')
+  })
+  it("est exclu des segments avis / reseau / ou-ils-vont", () => {
+    expect(filterBySegment(items, 'avis').some(i => i.id === 'evc-1')).toBe(false)
+    expect(filterBySegment(items, 'reseau').some(i => i.id === 'evc-1')).toBe(false)
+    expect(filterBySegment(items, 'ou-ils-vont').some(i => i.id === 'evc-1')).toBe(false)
+  })
+})

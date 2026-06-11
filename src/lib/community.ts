@@ -1,4 +1,4 @@
-export type FeedKind = 'review' | 'participation' | 'follow'
+export type FeedKind = 'review' | 'participation' | 'follow' | 'event_created'
 export type Segment = 'tout' | 'ou-ils-vont' | 'avis' | 'reseau'
 
 export interface FeedActor {
