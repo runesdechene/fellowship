@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay, formatEventDateRange } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay, formatEventDateRange, parseExplorerView } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -306,4 +306,11 @@ describe('formatEventDateRange', () => {
   it('mois différents', () => {
     expect(formatEventDateRange('2026-07-31', '2026-08-02')).toBe('31 juil – 2 août')
   })
+})
+
+describe('parseExplorerView', () => {
+  it('"grid" → grid', () => { expect(parseExplorerView('grid')).toBe('grid') })
+  it('"slideshow" → slideshow', () => { expect(parseExplorerView('slideshow')).toBe('slideshow') })
+  it('null → slideshow (défaut)', () => { expect(parseExplorerView(null)).toBe('slideshow') })
+  it('valeur inconnue → slideshow', () => { expect(parseExplorerView('xxx')).toBe('slideshow') })
 })

@@ -149,6 +149,21 @@ export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'popul
 
 export type ActorKind = 'person' | 'entity'
 
+export type ExplorerView = 'slideshow' | 'grid'
+
+/** Pur (testable) : tolère null / valeurs inconnues → défaut 'slideshow'. */
+export function parseExplorerView(raw: string | null): ExplorerView {
+  return raw === 'grid' ? 'grid' : 'slideshow'
+}
+
+export function readExplorerView(): ExplorerView {
+  try { return parseExplorerView(localStorage.getItem('explorer-view')) } catch { return 'slideshow' }
+}
+
+export function writeExplorerView(v: ExplorerView): void {
+  try { localStorage.setItem('explorer-view', v) } catch { /* ignore */ }
+}
+
 export type StatusVariant =
   | 'repere' | 'dossier' | 'accepte' | 'apayer' | 'acompte' | 'inscrit'
   | 'refuse' | 'termine' | 'going'
