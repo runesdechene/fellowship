@@ -27,7 +27,12 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
 
   return (
     <div className="egrid-card" onClick={() => onClick(event)}>
-      {chip && <span className={'card-status ' + chip.variant}>{chip.label}</span>}
+      {(badge || chip) && (
+        <div className="egrid-corner">
+          {badge && <span className={'egrid-badge ' + badge}>{badge === 'nouveau' ? '✨ Nouveau' : '🔥 Populaire'}</span>}
+          {chip && <span className={'card-status ' + chip.variant}>{chip.label}</span>}
+        </div>
+      )}
       <button
         type="button"
         className={'egrid-star' + (saved ? ' on' : '')}
@@ -48,7 +53,6 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
           <span className="dock-tag" style={{ '--c': color } as React.CSSProperties}>
             <span aria-hidden="true">{getTagEmoji(tag)}</span>{tagLabel}
           </span>
-          {badge && <span className={'egrid-badge ' + badge}>{badge === 'nouveau' ? '✨ Nouveau' : '🔥 Populaire'}</span>}
         </div>
         <div className="egrid-name">{event.name}</div>
         <div className="egrid-meta">

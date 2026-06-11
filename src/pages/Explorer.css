@@ -1327,9 +1327,21 @@
 .explorer .egrid-star:hover { background: rgba(18, 12, 10, 0.72); }
 .explorer .egrid-star.on { background: hsl(44 89% 71%); border-color: hsl(44 89% 71%); color: #41351c; }
 
-/* Statut en coin haut-gauche : réutilise les COULEURS .card-status mais repositionné
-   (la version coverflow déborde à -7px, ce qui serait clippé ici par overflow:hidden). */
-.explorer .egrid-card .card-status { top: 11px; left: 11px; }
+/* Coin haut-gauche : badge Nouveau/Populaire EMPILÉ au-dessus du statut.
+   Le statut .card-status (positionné en absolu à -7px sur le coverflow) passe en
+   static ici pour s'empiler dans la colonne du coin (et ne pas être clippé). */
+.explorer .egrid-corner {
+  position: absolute; top: 11px; left: 11px; z-index: 4;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+}
+.explorer .egrid-corner .card-status { position: static; top: auto; left: auto; }
+
+/* La carte grille garde un scrim SOMBRE même en mode jour → le tag conserve sa
+   couleur vive (l'override .light du dock, prévu pour fond clair, le rendait fade/illisible). */
+.light .explorer .egrid-card .dock-tag {
+  color: var(--c);
+  border-color: color-mix(in srgb, var(--c) 38%, transparent);
+}
 
 /* ── Grille : conteneur (scroll PAGE, pas interne) + colonnes responsives (max 6) ──── */
 .explorer .egrid-wrap { padding: 4px 14px 28px; }
