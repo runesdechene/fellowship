@@ -1291,7 +1291,16 @@
 .explorer .egrid-meta { display: flex; align-items: center; gap: 11px; color: rgba(255, 255, 255, 0.92); font-size: 13px; }
 .explorer .egrid-meta b { font-family: var(--font-heading); font-weight: 800; }
 
-.explorer .egrid-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+/* Tag (largeur du texte) + badge Nouveau/Populaire en ligne, dans l'overlay. */
+.explorer .egrid-tags { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.explorer .egrid-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 99px;
+  font-family: var(--font-heading); font-size: 11px; font-weight: 800; white-space: nowrap;
+}
+.explorer .egrid-badge.nouveau { background: rgb(56, 51, 48); color: #f9fff6; }
+.explorer .egrid-badge.populaire { background: var(--amber); color: #3a2410; }
+
 .explorer .egrid-friends { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .explorer .egrid-avs { display: flex; flex: none; }
 .explorer .egrid-av {
@@ -1307,26 +1316,26 @@
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
+/* Bouton Repérer : coin HAUT-DROITE, au-dessus de l'affiche. */
 .explorer .egrid-star {
-  flex: none; width: 38px; height: 38px; border-radius: 50%;
+  position: absolute; top: 11px; right: 11px; z-index: 4;
+  width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
-  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(18, 12, 10, 0.5); border: 1px solid rgba(255, 255, 255, 0.28);
   backdrop-filter: blur(6px); color: #fff; transition: 0.15s;
 }
-.explorer .egrid-star:hover { background: rgba(255, 255, 255, 0.24); }
+.explorer .egrid-star:hover { background: rgba(18, 12, 10, 0.72); }
 .explorer .egrid-star.on { background: hsl(44 89% 71%); border-color: hsl(44 89% 71%); color: #41351c; }
 
-/* Statut/badge en coin : on réutilise les COULEURS .card-status/.card-badge mais on
-   repositionne (les versions coverflow débordent à -7px, ce qui serait clippé ici par
-   overflow:hidden). Spécificité .egrid-card > base .explorer .card-status. */
+/* Statut en coin haut-gauche : réutilise les COULEURS .card-status mais repositionné
+   (la version coverflow déborde à -7px, ce qui serait clippé ici par overflow:hidden). */
 .explorer .egrid-card .card-status { top: 11px; left: 11px; }
 
-/* ── Grille : conteneur scrollable + colonnes responsives (max 6) ──── */
-.explorer .egrid-scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 4px 4px 24px;
+/* ── Grille : conteneur (scroll PAGE, pas interne) + colonnes responsives (max 6) ──── */
+.explorer .egrid-wrap { padding: 4px 14px 28px; }
+.explorer .egrid-count {
+  color: hsl(var(--muted-foreground)); font-size: 13px; font-weight: 600;
+  padding: 0 2px 12px;
 }
 .explorer .egrid {
   display: grid;
@@ -1337,4 +1346,11 @@
 @media (max-width: 1150px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 880px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 640px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
-.explorer .egrid-card .card-badge { top: 11px; right: 11px; }
+
+/* ── Mode grille : la PAGE scrolle (pas de scroll interne) ─────────── */
+.explorer.is-grid { height: auto; min-height: 100%; overflow: visible; }
+.explorer.is-grid .stagewrap { height: auto; }
+.explorer.is-grid .stagebody { display: block; flex: none; min-height: 0; }
+.explorer.is-grid .top { padding: 30px 0 14px; }
+.explorer.is-grid .bottombar { display: none; }
+.explorer.is-grid .counter { display: none; }

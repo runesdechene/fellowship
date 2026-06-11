@@ -28,7 +28,15 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
   return (
     <div className="egrid-card" onClick={() => onClick(event)}>
       {chip && <span className={'card-status ' + chip.variant}>{chip.label}</span>}
-      {badge && <span className={'card-badge ' + badge}>{badge === 'nouveau' ? '✨  Nouveau' : '🔥 Populaire'}</span>}
+      <button
+        type="button"
+        className={'egrid-star' + (saved ? ' on' : '')}
+        aria-label={saved ? 'Ne plus repérer' : 'Repérer'}
+        aria-pressed={saved}
+        onClick={(e) => { e.stopPropagation(); onToggleSave(event) }}
+      >
+        <Star size={17} strokeWidth={2} fill={saved ? 'currentColor' : 'none'} />
+      </button>
 
       {event.image_url
         ? <img className="egrid-img" src={event.image_url} alt={event.name} loading="lazy" />
@@ -36,15 +44,18 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
       <div className="egrid-scrim" aria-hidden="true" />
 
       <div className="egrid-ov">
-        <span className="dock-tag" style={{ '--c': color } as React.CSSProperties}>
-          <span aria-hidden="true">{getTagEmoji(tag)}</span>{tagLabel}
-        </span>
+        <div className="egrid-tags">
+          <span className="dock-tag" style={{ '--c': color } as React.CSSProperties}>
+            <span aria-hidden="true">{getTagEmoji(tag)}</span>{tagLabel}
+          </span>
+          {badge && <span className={'egrid-badge ' + badge}>{badge === 'nouveau' ? '✨ Nouveau' : '🔥 Populaire'}</span>}
+        </div>
         <div className="egrid-name">{event.name}</div>
         <div className="egrid-meta">
           <span aria-hidden="true">📅</span><b>{formatEventDateRange(event.start_date, event.end_date)}</b>
           <span aria-hidden="true">📍</span><b>{event.city}</b>
         </div>
-        <div className="egrid-bottom">
+        {friends.length > 0 && (
           <div className="egrid-friends">
             {shown.length > 0 && (
               <span className="egrid-avs">
@@ -59,22 +70,11 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
                 ))}
               </span>
             )}
-            {friends.length > 0 && (
-              <span className="egrid-fcount">
-                {friends.length === 1 ? `${friends[0].label} y va` : `${friends.length} compagnons y vont`}
-              </span>
-            )}
+            <span className="egrid-fcount">
+              {friends.length === 1 ? `${friends[0].label} y va` : `${friends.length} compagnons y vont`}
+            </span>
           </div>
-          <button
-            type="button"
-            className={'egrid-star' + (saved ? ' on' : '')}
-            aria-label={saved ? 'Ne plus repérer' : 'Repérer'}
-            aria-pressed={saved}
-            onClick={(e) => { e.stopPropagation(); onToggleSave(event) }}
-          >
-            <Star size={17} strokeWidth={2} fill={saved ? 'currentColor' : 'none'} />
-          </button>
-        </div>
+        )}
       </div>
     </div>
   )

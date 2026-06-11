@@ -285,7 +285,7 @@ export function ExplorerPage() {
   )
 
   return (
-    <div className={'explorer' + (scrubbing ? ' is-scrubbing' : '')} style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
+    <div className={'explorer' + (scrubbing ? ' is-scrubbing' : '') + (viewMode === 'grid' ? ' is-grid' : '')} style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
       {/* Halos d'ambiance (teintes landing ; le halo principal suit la couleur de l'affiche active) */}
       <div className="xhalos" aria-hidden="true">
         <span className="xb xb1" />

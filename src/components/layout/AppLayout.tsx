@@ -24,7 +24,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
   const isVitrine = isPublicProfilePath(location.pathname)
   const hideSearchBar = isExplorer || isVitrine || isCarte
-  const noScroll = isExplorer || isCarte
+  // L'Explorer scrolle au niveau page (mode grille = liste longue ; le slideshow reste
+  // calé à 100% via `.explorer { height:100%; overflow:hidden }`, donc pas de scroll).
+  // Seule la Carte reste vraiment sans scroll (carte plein écran).
+  const noScroll = isCarte
   useEffect(() => {
     if (currentActor && !isRouteValidFor(location.pathname, currentActor)) {
       navigate('/explorer', { replace: true })
