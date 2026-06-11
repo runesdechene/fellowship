@@ -5,7 +5,7 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, monthRangeFor, shouldAutoplay, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { planForActor } from '@/lib/navModel'
@@ -97,12 +97,8 @@ export function ExplorerPage() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [showQuotaModal, setShowQuotaModal] = useState(false)
 
-  // Vrai pendant qu'on manipule le scrubber → met l'autoplay en pause
+  // Vrai pendant qu'on manipule le scrubber (fige l'animation des cartes le temps du drag).
   const [scrubbing, setScrubbing] = useState(false)
-
-  // Vrai quand la souris est sur le contenu/les boutons du bas → met l'autoplay en pause
-  // (sinon le slide change pile quand on veut cliquer un bouton).
-  const [hoverPause, setHoverPause] = useState(false)
 
   // Défaut « Quand » selon l'acteur : un EXPOSANT veut découvrir les nouveautés (« Ajoutés
   // récemment ») ; un visiteur garde l'agenda à venir (« all »). Dérivé → pas de setState en effet.
@@ -149,25 +145,6 @@ export function ExplorerPage() {
     if (displayed.length === 0) return
     setActiveIndex(i => Math.max(0, Math.min(displayed.length - 1, i + d)))
   }, [displayed.length])
-
-  // ---------- Autoplay ----------
-  const reducedMotion = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    []
-  )
-  // Pointeur tactile : pas de hover → la pause-au-survol ne marche pas → on coupe l'autoplay (#4).
-  const coarsePointer = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
-    []
-  )
-
-  useEffect(() => {
-    if (!shouldAutoplay({ reducedMotion, count: displayed.length, scrubbing, hoverPause, coarsePointer })) return
-    const id = setInterval(() => {
-      setActiveIndex(i => (i + 1) % displayed.length)
-    }, 4500)
-    return () => clearInterval(id)
-  }, [displayed.length, reducedMotion, scrubbing, hoverPause, coarsePointer])
 
   // ---------- Keyboard ----------
   useEffect(() => {
@@ -361,7 +338,7 @@ export function ExplorerPage() {
                 onCardClick={ev => navigate(eventPath(ev))}
                 onAddImage={onAddImage}
               />
-              <div className="infozone" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
+              <div className="infozone">
                 <EventDock
                   event={currentEvent}
                   tagInfo={activeTagInfo}
@@ -374,7 +351,7 @@ export function ExplorerPage() {
           )}
         </div>
 
-        <div className="bottombar" onMouseEnter={() => setHoverPause(true)} onMouseLeave={() => setHoverPause(false)}>
+        <div className="bottombar">
           {currentEvent && (
             <div className="dock-cta">
               <Link to={eventPath(currentEvent)} className="btn btn-ghost">Voir le festival</Link>
