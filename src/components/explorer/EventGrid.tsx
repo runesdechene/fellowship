@@ -10,14 +10,12 @@ interface EventGridProps {
   partByEvent: Map<string, PartLite>
   actorKind: ActorKind
   friendsByEvent: Record<string, FriendAvatar[]>
-  /** Résout le label affiché d'un slug de tag. */
-  tagLabel: (slug: string) => string
   isSaved: (eventId: string) => boolean
   onToggleSave: (event: EventWithScore) => void
   onCardClick: (event: EventWithScore) => void
 }
 
-export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent, tagLabel, isSaved, onToggleSave, onCardClick }: EventGridProps) {
+export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent, isSaved, onToggleSave, onCardClick }: EventGridProps) {
   return (
     <div className="egrid-wrap">
       <div className="egrid-count">
@@ -29,7 +27,6 @@ export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent,
             key={ev.id}
             event={ev}
             now={now}
-            tagLabel={tagLabel(ev.tags?.[0] ?? 'autre')}
             part={partByEvent.get(ev.id)}
             actorKind={actorKind}
             friends={friendsByEvent[ev.id] ?? []}

@@ -8,8 +8,6 @@ import type { EventWithScore } from '@/types/database'
 interface EventGridCardProps {
   event: EventWithScore
   now: Date
-  /** Label affiché du tag (résolu depuis la table tags ; fallback = slug). */
-  tagLabel: string
   part?: PartLite
   actorKind: ActorKind
   friends: FriendAvatar[]
@@ -18,7 +16,7 @@ interface EventGridCardProps {
   onClick: (event: EventWithScore) => void
 }
 
-export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, saved, onToggleSave, onClick }: EventGridCardProps) {
+export function EventGridCard({ event, now, part, actorKind, friends, saved, onToggleSave, onClick }: EventGridCardProps) {
   const tag = event.tags?.[0] ?? 'autre'
   const color = getTagLandingColor(tag)
   const badge = eventBadge(event, now)
@@ -56,11 +54,6 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
       <div className="egrid-scrim" aria-hidden="true" />
 
       <div className="egrid-ov">
-        <div className="egrid-tags">
-          <span className="dock-tag" style={{ '--c': color } as React.CSSProperties}>
-            <span aria-hidden="true">{getTagEmoji(tag)}</span>{tagLabel}
-          </span>
-        </div>
         <div className="egrid-name">{event.name}</div>
         <div className="egrid-meta">
           <span aria-hidden="true">📅</span><b>{formatEventDateRange(event.start_date, event.end_date)}</b>

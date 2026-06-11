@@ -1287,7 +1287,7 @@
   line-height: 1;
   color: transparent;
   text-shadow: 0 0 0 #fff;
-  opacity: 0.12;
+  opacity: 0.07;
 }
 .explorer .egrid-scrim {
   position: absolute; inset: 0;
@@ -1299,18 +1299,19 @@
   padding: 16px; display: flex; flex-direction: column; gap: 9px;
 }
 .explorer .egrid-name {
-  font-family: var(--font-heading); font-weight: 800; font-size: 20px;
+  font-family: var(--font-heading); font-weight: 600; font-size: 16px;
   line-height: 1.1; color: #fff; letter-spacing: -0.01em;
+  text-transform: capitalize;
 }
 .explorer .egrid-meta { display: flex; align-items: center; gap: 11px; color: rgba(255, 255, 255, 0.92); font-size: 13px; }
 .explorer .egrid-meta b { font-family: var(--font-heading); font-weight: 800; }
 
-/* Tag (largeur du texte) + badge Nouveau/Populaire en ligne, dans l'overlay. */
-.explorer .egrid-tags { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+/* Badge Nouveau/Populaire (en coin haut-gauche, cf. .egrid-corner). */
 .explorer .egrid-badge {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 10px; border-radius: 99px;
-  font-family: var(--font-heading); font-size: 11px; font-weight: 800; white-space: nowrap;
+  text-transform: uppercase;
+  font-family: var(--font-heading); font-size: 9px; font-weight: 800; white-space: nowrap;
 }
 .explorer .egrid-badge.nouveau { background: rgb(56, 51, 48); color: #f9fff6; }
 .explorer .egrid-badge.populaire { background: var(--amber); color: #3a2410; }
@@ -1357,7 +1358,7 @@
 }
 
 /* ── Grille : conteneur (scroll PAGE, pas interne) + colonnes responsives (max 6) ──── */
-.explorer .egrid-wrap { padding: 4px 20px 28px; }
+.explorer .egrid-wrap { padding: 4px 20px 28px; container-type: inline-size; }
 .explorer .egrid-count {
   color: hsl(var(--muted-foreground)); font-size: 13px; font-weight: 600;
   padding: 0 2px 12px;
@@ -1367,10 +1368,10 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 20px;
 }
-@media (max-width: 1500px) { .explorer .egrid { grid-template-columns: repeat(5, 1fr); } }
-@media (max-width: 1240px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 960px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 680px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@container (max-width: 1340px) { .explorer .egrid { grid-template-columns: repeat(5, 1fr); } }
+@container (max-width: 1110px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
+@container (max-width: 860px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
+@container (max-width: 600px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
 
 /* ── Mode grille : la PAGE scrolle (pas de scroll interne) ─────────── */
 .explorer.is-grid { height: auto; min-height: 100%; overflow: visible; }

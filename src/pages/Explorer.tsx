@@ -269,10 +269,6 @@ export function ExplorerPage() {
     () => new Map(participations.map(p => [p.event_id, { status: p.status as string, payment_status: (p.payment_status as string | null) ?? null }])),
     [participations]
   )
-  const tagLabelOf = useCallback(
-    (slug: string) => dynamicTags.find(d => d.value === slug)?.label ?? slug,
-    [dynamicTags],
-  )
   // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
   const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
@@ -346,7 +342,6 @@ export function ExplorerPage() {
               partByEvent={partByEvent}
               actorKind={actorKind}
               friendsByEvent={friendsByEvent}
-              tagLabel={tagLabelOf}
               isSaved={isSaved}
               onToggleSave={toggleSave}
               onCardClick={ev => navigate(eventPath(ev))}
