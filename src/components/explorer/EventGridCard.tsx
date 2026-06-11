@@ -48,7 +48,11 @@ export function EventGridCard({ event, now, tagLabel, part, actorKind, friends, 
 
       {event.image_url
         ? <img className="egrid-img" src={event.image_url} alt={event.name} loading="lazy" />
-        : <div className="egrid-img egrid-img--empty" style={{ '--c': color } as React.CSSProperties} aria-hidden="true">{getTagEmoji(tag)}</div>}
+        : (
+          <div className="egrid-img egrid-img--empty" style={{ '--c': color } as React.CSSProperties} aria-hidden="true">
+            <span className="egrid-img-label">{tagLabel}</span>
+          </div>
+        )}
       <div className="egrid-scrim" aria-hidden="true" />
 
       <div className="egrid-ov">
