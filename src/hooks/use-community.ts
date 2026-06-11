@@ -57,7 +57,7 @@ export function useCommunityFeed(enabled = true): CommunityData {
           return
         }
 
-        const [revRes, partRes, folRes, upcomingRes] = await Promise.all([
+        const [revRes, partRes, folRes, upcomingRes, evtRes] = await Promise.all([
           supabase.from('reviews')
             .select('id, actor_id, event_id, affluence, organisation, rentabilite, comment, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
@@ -76,19 +76,31 @@ export function useCommunityFeed(enabled = true): CommunityData {
             .in('actor_id', followingIds).gte('events.start_date', today)
             // Idem pour les convergences : on n'aligne pas les agendas sur un refus.
             .neq('status', 'refuse'),
+          supabase.from('events')
+            .select('id, name, city, start_date, end_date, image_url, slug, created_by_actor, created_at')
+            .gte('created_at', since)
+            .neq('created_by_actor', me)
+            .order('created_at', { ascending: false })
+            .limit(FEED_LIMIT),
         ])
 
         const reviews = revRes.data ?? []
         const parts = partRes.data ?? []
         const fols = (folRes.data ?? []) as Array<{ follow_id: string; src_actor: string; dst_actor: string; occurred_at: string }>
         const upcoming = (upcomingRes.data ?? []) as Array<{ actor_id: string | null; event_id: string }>
+        const newEvents = (evtRes.data ?? []) as Array<{
+          id: string; name: string; city: string | null; start_date: string; end_date: string;
+          image_url: string | null; slug: string | null; created_by_actor: string | null; created_at: string
+        }>
 
         const eventIds = [...new Set([
-          ...reviews.map(r => r.event_id), ...parts.map(p => p.event_id), ...upcoming.map(u => u.event_id),
+          ...reviews.map(r => r.event_id), ...parts.map(p => p.event_id),
+          ...upcoming.map(u => u.event_id), ...newEvents.map(e => e.id),
         ])]
         const actorIds = [...new Set([
           ...followingIds,
           ...fols.flatMap(f => [f.src_actor, f.dst_actor]).filter((x): x is string => !!x),
+          ...newEvents.map(e => e.created_by_actor).filter((x): x is string => !!x),
         ])]
         const [eventsRes, actorMap] = await Promise.all([
           eventIds.length
@@ -99,6 +111,9 @@ export function useCommunityFeed(enabled = true): CommunityData {
         const eventMap: Record<string, FeedEventRef> = {}
         for (const e of eventsRes.data ?? []) {
           eventMap[e.id] = { id: e.id, name: e.name, city: e.city, startDate: e.start_date, endDate: e.end_date, imageUrl: e.image_url, slug: e.slug ?? null }
+        }
+        for (const e of newEvents) {
+          eventMap[e.id] ??= { id: e.id, name: e.name, city: e.city, startDate: e.start_date, endDate: e.end_date, imageUrl: e.image_url, slug: e.slug ?? null }
         }
         const unknownActor = (id: string | null): FeedActor =>
           (id && actorMap.get(id)) || { actorId: id ?? '?', label: '—', avatarUrl: null, slug: null }
@@ -124,6 +139,13 @@ export function useCommunityFeed(enabled = true): CommunityData {
           items.push({
             id: `fol-${f.follow_id}`, kind: 'follow', occurredAt: f.occurred_at,
             actor: unknownActor(f.src_actor), target: unknownActor(f.dst_actor),
+          })
+        }
+        for (const e of newEvents) {
+          if (!e.created_by_actor || !eventMap[e.id]) continue
+          items.push({
+            id: `evc-${e.id}`, kind: 'event_created', occurredAt: e.created_at,
+            actor: unknownActor(e.created_by_actor), event: eventMap[e.id],
           })
         }
 
