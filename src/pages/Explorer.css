@@ -1280,15 +1280,14 @@
     radial-gradient(120% 88% at 50% 6%, color-mix(in srgb, var(--c, #e8a06a) 38%, transparent), transparent 68%),
     linear-gradient(160deg, color-mix(in srgb, var(--c, #e8a06a) 20%, #1a120f), #130c09);
 }
-.explorer .egrid-img-label {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: clamp(20px, 3vw, 34px);
-  line-height: 1.04;
-  text-align: center;
-  color: #fff;
-  opacity: 0.1;
-  letter-spacing: -0.01em;
+/* Emoji du tag en SILHOUETTE monochrome (pas ses couleurs) : color:transparent +
+   text-shadow 0 0 0 peint la forme pleine en blanc. Très faible opacité = filigrane. */
+.explorer .egrid-img-emoji {
+  font-size: clamp(54px, 7.5vw, 92px);
+  line-height: 1;
+  color: transparent;
+  text-shadow: 0 0 0 #fff;
+  opacity: 0.12;
 }
 .explorer .egrid-scrim {
   position: absolute; inset: 0;
