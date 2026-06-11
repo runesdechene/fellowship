@@ -1151,8 +1151,10 @@
    flux normal. Plus de positionnement absolu en vh → plus de
    chevauchement, peu importe la hauteur du téléphone. */
 @media (max-width: 640px) {
-  /* Barre de recherche : tient dans l'écran, segments à largeur égale */
-  .explorer .top { padding: 16px 12px 12px; }
+  /* Barre de recherche : tient dans l'écran, segments à largeur égale.
+     Padding-top élevé : passe SOUS la rangée toggle (gauche) + actions (droite) → plus
+     de superposition des contrôles en haut (slideshow ET grille). */
+  .explorer .top { padding: 64px 12px 12px; }
   .explorer .searchbar { display: flex; width: 100%; max-width: 440px; padding: 5px 5px 5px 6px; }
   .explorer .seg-group { flex: 1; width: 100%; min-width: 0; }
   .explorer .seg { flex: 1 1 0; min-width: 0; align-items: stretch; padding: 7px 9px; }
@@ -1202,7 +1204,7 @@
    ajuste juste les tailles de texte et paddings pour gagner un peu de
    verticalité. */
 @media (max-width: 640px) and (max-height: 740px) {
-  .explorer .top { padding: 12px 12px 8px; }
+  .explorer .top { padding: 58px 12px 8px; }
   .explorer .dockinfo { gap: 4px; }
   .explorer .dockinfo h2 { font-size: 18px; }
   .explorer .counter--top { padding: 3px 0 0; }
