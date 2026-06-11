@@ -1255,3 +1255,69 @@
   .explorer .view-toggle-label { display: none; }
   .explorer .view-toggle-btn { padding: 8px; }
 }
+
+/* ── Carte grille (affiche pleine + overlay) ──────────────────────── */
+.explorer .egrid-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  background: hsl(var(--card));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.14s;
+}
+.explorer .egrid-card:hover { transform: translateY(-4px); }
+.light .explorer .egrid-card { box-shadow: 0 14px 34px rgba(60, 45, 35, 0.16); }
+
+.explorer .egrid-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.explorer .egrid-img--empty {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px; background: hsl(var(--secondary));
+}
+.explorer .egrid-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10, 7, 5, 0.95) 6%, rgba(10, 7, 5, 0.55) 38%, transparent 62%);
+}
+
+.explorer .egrid-ov {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 16px; display: flex; flex-direction: column; gap: 9px;
+}
+.explorer .egrid-name {
+  font-family: var(--font-heading); font-weight: 800; font-size: 20px;
+  line-height: 1.1; color: #fff; letter-spacing: -0.01em;
+}
+.explorer .egrid-meta { display: flex; align-items: center; gap: 11px; color: rgba(255, 255, 255, 0.92); font-size: 13px; }
+.explorer .egrid-meta b { font-family: var(--font-heading); font-weight: 800; }
+
+.explorer .egrid-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.explorer .egrid-friends { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.explorer .egrid-avs { display: flex; flex: none; }
+.explorer .egrid-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid hsl(var(--copper, 24 85% 56%));
+  background: #2a1c16 center / cover;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #f3d9b8; flex: none;
+}
+.explorer .egrid-av:not(:first-child) { margin-left: -9px; }
+.explorer .egrid-fcount {
+  color: rgba(255, 255, 255, 0.92); font-size: 12.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.explorer .egrid-star {
+  flex: none; width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(6px); color: #fff; transition: 0.15s;
+}
+.explorer .egrid-star:hover { background: rgba(255, 255, 255, 0.24); }
+.explorer .egrid-star.on { background: hsl(44 89% 71%); border-color: hsl(44 89% 71%); color: #41351c; }
+
+/* Statut/badge en coin : on réutilise les COULEURS .card-status/.card-badge mais on
+   repositionne (les versions coverflow débordent à -7px, ce qui serait clippé ici par
+   overflow:hidden). Spécificité .egrid-card > base .explorer .card-status. */
+.explorer .egrid-card .card-status { top: 11px; left: 11px; }
+.explorer .egrid-card .card-badge { top: 11px; right: 11px; }
