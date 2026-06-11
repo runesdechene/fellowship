@@ -56,7 +56,6 @@
 /* Tête de compte (à droite) — ouvre la feuille d'options secondaires. */
 .bottom-bar-account { background: none; border: none; cursor: pointer; }
 .bottom-bar-avatar {
-  position: relative;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -71,4 +70,3 @@
   background: linear-gradient(135deg, var(--copper), var(--amber));
   color: #2a1810;
 }
-.bottom-bar-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
