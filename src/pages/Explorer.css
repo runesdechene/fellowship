@@ -1342,8 +1342,8 @@
   position: absolute; top: 11px; right: 11px; z-index: 4;
   width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
-  background: rgba(18, 12, 10, 0.5); border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(6px); color: #fff; transition: 0.15s;
+  background: rgba(18, 12, 10, 0.62); border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff; transition: 0.15s;
 }
 .explorer .egrid-star:hover { background: rgba(18, 12, 10, 0.72); }
 .explorer .egrid-star.on { background: hsl(44 89% 71%); border-color: hsl(44 89% 71%); color: #41351c; }
@@ -1385,14 +1385,20 @@
 .explorer.is-grid .top { padding: 25px 0 14px; }
 .explorer.is-grid .bottombar { display: none; }
 .explorer.is-grid .counter { display: none; }
+/* Perf : en grille la page est longue et scrolle → les halos flous (blur 85px) sur une
+   grande surface se repeignent au scroll et rament (surtout mobile). On les coupe ici. */
+.explorer.is-grid .xhalos { display: none; }
 
 /* ── Mode grille — mobile ──────────────────────────────────────────────
    Cartes nettement plus hautes (l'info ne se chevauche plus), padding latéral
    réduit, et la recherche descend SOUS la rangée toggle (gauche) + actions
    (droite) pour stopper la superposition des contrôles en haut. */
 @media (max-width: 640px) {
-  .explorer .egrid-wrap { padding: 4px 10px 24px; }
+  /* Padding bas renforcé : la dernière carte ne passe plus sous la BottomBar. */
+  .explorer .egrid-wrap { padding: 4px 10px 96px; }
   .explorer.is-grid .top { padding: 64px 10px 12px; }
+  /* Ombres plus légères sur mobile (les grandes ombres floues × N cartes coûtent cher). */
+  .explorer .egrid-card { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); }
 }
 @container (max-width: 600px) {
   .explorer .egrid-card { aspect-ratio: 9 / 16; border-radius: 12px; }
