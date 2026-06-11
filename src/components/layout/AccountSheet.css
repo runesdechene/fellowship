@@ -57,11 +57,14 @@
 }
 .sheet-actor.on { background: hsl(var(--secondary)); border-color: hsl(var(--border)); }
 .sheet-actor .sheet-av {
+  position: relative;
   width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-heading); font-weight: 700; font-size: 14px;
 }
-.sheet-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* position:absolute plutôt que width/height:100% en flex item : WebKit mobile ne
+   résout pas la hauteur % d'une img flex-item (align-items:center) → image rétrécie. */
+.sheet-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .sheet-av.person { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
 .sheet-av.person svg { width: 18px; height: 18px; }
 .sheet-av.entity { background: linear-gradient(135deg, #6b4a2e, #3c2a1a); color: #ffd9a8; }
