@@ -44,7 +44,7 @@ export function CommunautePage() {
     return (
       <div className="comm-page">
         <div className="comm-head"><h1>Communauté</h1>
-          <div className="comm-sub">Le fil de ton réseau — où vont tes compagnons, ce qu'ils en disent.</div>
+          <div className="comm-sub">Ce que vit ta tribu, et les nouveaux festivals sur Fellowship.</div>
         </div>
         <CommunauteTeaser />
       </div>
@@ -55,7 +55,7 @@ export function CommunautePage() {
     <div className="comm-page">
       <div className="comm-head">
         <h1>Communauté</h1>
-        <div className="comm-sub">Le fil de ton réseau — où vont tes compagnons, ce qu'ils en disent.</div>
+        <div className="comm-sub">Ce que vit ta tribu, et les nouveaux festivals sur Fellowship.</div>
         <div className="comm-segs">
           {SEGMENTS.map(s => (
             <button key={s.key} className={`seg ${segment === s.key ? 'on' : ''}`} onClick={() => setSegment(s.key)}>{s.label}</button>
