@@ -373,6 +373,10 @@ h1, h2, h3, .font-display {
   position: absolute; top: 0; left: 0; right: 0;
   height: auto; overflow: visible; z-index: 10; pointer-events: none;
 }
+/* En jour, `.light .explorer { background:#f1ebe1 }` (fond plein page de l'Explorer)
+   fuirait sur cet overlay et poserait un bandeau clair opaque en haut de la carte.
+   On neutralise : la barre de filtres reste transparente, la carte passe dessous. */
+.light .carte-filterbar.explorer { background: transparent; }
 .carte-filterbar .top { padding: 14px 0 0; pointer-events: none; }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
