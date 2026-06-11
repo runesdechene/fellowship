@@ -52,30 +52,32 @@ export function useCommunityFeed(enabled = true): CommunityData {
           .from('follows').select('following_actor').eq('follower_actor', me)
         const followingIds = [...new Set((follows ?? [])
           .map(f => f.following_actor).filter((x): x is string => !!x))]
-        if (followingIds.length === 0) {
-          if (!cancelled) setData({ feed: [], convergences: [], suggestions: [], loading: false, error: false })
-          return
-        }
+        // Les nouveaux festivals (events) sont plateforme-wide : ils doivent s'afficher MÊME
+        // pour un Pro qui ne suit encore personne (cold-start). On ne court-circuite donc plus
+        // tout quand followingIds est vide — seules les sources DÉPENDANTES du réseau (avis,
+        // participations, follows d'amis) sont sautées, pas la source events.
+        const hasFollows = followingIds.length > 0
+        const empty = Promise.resolve({ data: null })
 
         const [revRes, partRes, folRes, upcomingRes, evtRes] = await Promise.all([
-          supabase.from('reviews')
+          hasFollows ? supabase.from('reviews')
             .select('id, actor_id, event_id, affluence, organisation, rentabilite, comment, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
-            .order('created_at', { ascending: false }).limit(FEED_LIMIT),
-          supabase.from('participations')
+            .order('created_at', { ascending: false }).limit(FEED_LIMIT) : empty,
+          hasFollows ? supabase.from('participations')
             .select('id, actor_id, event_id, status, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
             // 'refuse' = dossier refusé : ne doit jamais s'afficher comme « va à X ».
             .neq('status', 'refuse')
-            .order('created_at', { ascending: false }).limit(FEED_LIMIT),
+            .order('created_at', { ascending: false }).limit(FEED_LIMIT) : empty,
           // RPC SECURITY DEFINER : la RLS `follows` ne laisse pas lire les follows entre tiers.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (supabase.rpc as any)('get_network_follow_activity', { p_actor_id: me, p_since: since }),
-          supabase.from('participations')
+          hasFollows ? (supabase.rpc as any)('get_network_follow_activity', { p_actor_id: me, p_since: since }) : empty,
+          hasFollows ? supabase.from('participations')
             .select('actor_id, event_id, events!inner(start_date)')
             .in('actor_id', followingIds).gte('events.start_date', today)
             // Idem pour les convergences : on n'aligne pas les agendas sur un refus.
-            .neq('status', 'refuse'),
+            .neq('status', 'refuse') : empty,
           supabase.from('events')
             .select('id, name, city, start_date, end_date, image_url, slug, created_by_actor, created_at')
             .gte('created_at', since)
