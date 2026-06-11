@@ -131,12 +131,14 @@ interface NotificationItemProps {
   isFriend: boolean
   onRead: (id: string) => void
   compact?: boolean
+  forceUnreadStyle?: boolean
 }
 
-export function NotificationItem({ notification, isFriend, onRead, compact = false }: NotificationItemProps) {
+export function NotificationItem({ notification, isFriend, onRead, compact = false, forceUnreadStyle = false }: NotificationItemProps) {
   const navigate = useNavigate()
   const { currentActor } = useAuth()
   const data = (notification.data ?? {}) as NotificationData
+  const showUnread = !notification.read || forceUnreadStyle
   const config = TYPE_CONFIG[notification.type] ?? TYPE_CONFIG.event_created
   const Icon = config.icon
   const link = config.link(data)
@@ -170,7 +172,7 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
       onClick={() => !notification.read && onRead(notification.id)}
       className={`flex items-start gap-2.5 rounded-lg transition-colors hover:bg-muted ${
         compact ? 'px-2 py-1.5' : 'p-3'
-      } ${!notification.read ? 'bg-primary/5' : ''}`}
+      } ${showUnread ? 'bg-primary/5' : ''}`}
     >
       {actorName ? (
         <ActorAvatar name={actorName} avatarUrl={data.actor_avatar_url} />
@@ -180,7 +182,7 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
         </div>
       )}
       <div className="flex-1 min-w-0">
-        <p className={`${compact ? 'text-xs' : 'text-sm'} ${!notification.read ? 'font-medium' : 'text-muted-foreground'} leading-snug`}>
+        <p className={`${compact ? 'text-xs' : 'text-sm'} ${showUnread ? 'font-medium' : 'text-muted-foreground'} leading-snug`}>
           {nameText && actorId ? (
             <><span onClick={handleNameClick} className="font-semibold underline decoration-primary/30 hover:decoration-primary cursor-pointer">{nameText}</span>{suffixText}</>
           ) : nameText ? (
@@ -217,7 +219,7 @@ export function NotificationItem({ notification, isFriend, onRead, compact = fal
           )
         )}
       </div>
-      {!notification.read && <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 mt-2" />}
+      {showUnread && <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 mt-2" />}
     </Link>
   )
 }
