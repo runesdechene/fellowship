@@ -1304,7 +1304,7 @@
   text-transform: capitalize;
 }
 .explorer .egrid-meta { display: flex; align-items: center; gap: 11px; color: rgba(255, 255, 255, 0.92); font-size: 13px; }
-.explorer .egrid-meta b { font-family: var(--font-heading); font-weight: 800; }
+.explorer .egrid-meta b { font-family: var(--font-heading); font-weight: 500; }
 
 /* Badge Nouveau/Populaire (en coin haut-gauche, cf. .egrid-corner). */
 .explorer .egrid-badge {
@@ -1365,10 +1365,9 @@
 }
 .explorer .egrid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
-@container (max-width: 1340px) { .explorer .egrid { grid-template-columns: repeat(5, 1fr); } }
 @container (max-width: 1110px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
 @container (max-width: 860px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
 @container (max-width: 600px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
