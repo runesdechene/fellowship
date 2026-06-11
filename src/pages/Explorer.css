@@ -1379,3 +1379,20 @@
 .explorer.is-grid .top { padding: 25px 0 14px; }
 .explorer.is-grid .bottombar { display: none; }
 .explorer.is-grid .counter { display: none; }
+
+/* ── Mode grille — mobile ──────────────────────────────────────────────
+   Cartes nettement plus hautes (l'info ne se chevauche plus), padding latéral
+   réduit, et la recherche descend SOUS la rangée toggle (gauche) + actions
+   (droite) pour stopper la superposition des contrôles en haut. */
+@media (max-width: 640px) {
+  .explorer .egrid-wrap { padding: 4px 10px 24px; }
+  .explorer.is-grid .top { padding: 64px 10px 12px; }
+}
+@container (max-width: 600px) {
+  .explorer .egrid-card { aspect-ratio: 9 / 16; }
+  .explorer .egrid-ov { padding: 12px; gap: 6px; }
+  .explorer .egrid-name { font-size: 16px; line-height: 1.12; }
+  .explorer .egrid-meta { font-size: 11.5px; gap: 8px; }
+  .explorer .egrid-fcount { font-size: 11px; }
+  .explorer .egrid-av { width: 24px; height: 24px; }
+}
