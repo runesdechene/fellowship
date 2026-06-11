@@ -44,6 +44,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [bellOpen, setBellOpen] = useState(false)
+  const [bellSnapshot, setBellSnapshot] = useState<Set<string>>(new Set())
   const [searchExpanded, setSearchExpanded] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLDivElement>(null)
@@ -183,7 +184,16 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         <div className="notif-bell-wrapper" ref={bellRef}>
           <button
             className="notif-bell-btn"
-            onClick={() => setBellOpen(!bellOpen)}
+            onClick={() => {
+              setBellOpen(prev => {
+                const next = !prev
+                if (next) {
+                  setBellSnapshot(new Set(personalNotifs.filter(n => !n.read).map(n => n.id)))
+                  if (personalUnread > 0) markAllAsRead()
+                }
+                return next
+              })
+            }}
           >
             <Bell strokeWidth={1.5} />
             {personalUnread > 0 && (
@@ -197,11 +207,6 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
             <div className="notif-dropdown">
               <div className="notif-dropdown-header">
                 <span className="notif-dropdown-title">Notifications</span>
-                {personalUnread > 0 && (
-                  <button onClick={markAllAsRead} className="notif-dropdown-mark-all">
-                    Tout lire
-                  </button>
-                )}
               </div>
               {personalNotifs.length === 0 ? (
                 <p className="notif-dropdown-empty">Aucune notification</p>
@@ -217,6 +222,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
                         isFriend={!!actorId && followingIds.has(actorId)}
                         onRead={markAsRead}
                         compact
+                        forceUnreadStyle={bellSnapshot.has(n.id)}
                       />
                     )
                   })}
