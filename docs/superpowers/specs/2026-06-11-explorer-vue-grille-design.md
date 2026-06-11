@@ -59,22 +59,23 @@ Nouveau découpage, dans `src/components/explorer/` :
 | Pastille statut | `participationChip(...)` + `.card-status.*` |
 | Badge Nouveau/Populaire | `eventBadge(event, now)` + `.card-badge.*` |
 | Tag (emoji/label/couleur) | `getTagEmoji` / `getTagLandingColor` (TagBadge.tsx) |
-| Compagnons par event (groupé) | hook batché type `useMapFriends` (voir ci-dessous) |
+| Compagnons par event (groupé) | nouveau hook batché `useFriendsByEvent` (miroir du dock, voir ci-dessous) |
 | Ouverture festival | `onCardClick` → `navigate(eventPath(ev))` |
 | État vide | `<ExplorerEmpty />` |
 
 ### Chargement groupé des compagnons
 
-Le dock charge les amis **d'un seul** event (`useFriendsOnEvent`). Une grille en
-chargerait N → on réutilise le **pattern batché de `useMapFriends`** (1 requête :
-participations « going » des acteurs suivis sur les events à venir → `friendsByEvent`).
+Le dock charge les amis **d'un seul** event (`useFriendsOnEvent` : `get_friend_ids` →
+participations des amis sur cet event). Une grille en chargerait N → nouveau hook
+**`useFriendsByEvent(enabled)`** dans `src/hooks/use-friends-by-event.ts` qui **mirror
+la sémantique du dock** mais en **batch** : `get_friend_ids` une fois → participations
+des amis sur **tous** leurs events → `actor_public` pour les avatars → groupé par
+`event_id` (`Record<eventId, FriendAvatar[]>`). Activé uniquement en mode grille
+(`enabled = viewMode === 'grid'`) ; le dock garde son propre fetch en mode slideshow.
 
-Refactor léger : extraire ce hook sous un nom neutre **`use-friends-by-event.ts`**
-(`useFriendsByEvent`) partagé par la carte ET la grille, plutôt que de le laisser
-nommé « map ». Le map consomme désormais le même hook (comportement inchangé).
-
-> Les avatars de la grille sont **décoratifs** en v1 (clic sur la carte = ouverture du
-> festival). On pourra les rendre cliquables (→ vitrine) plus tard si besoin.
+> On mirror le dock (amis = `get_friend_ids`, tous statuts) et **non** `useMapFriends`
+> (qui utilise `follows` + statuts « going ») → cohérence stricte avec le slideshow.
+> Les avatars de la grille sont **décoratifs** en v1 (clic carte = ouverture du festival).
 
 ## Comportements
 
@@ -118,9 +119,10 @@ l'étoile fait `stopPropagation` (le clic carte ouvre toujours le festival).
 
 - **Nouveaux** : `src/components/explorer/ViewToggle.tsx`, `EventGrid.tsx`,
   `EventGridCard.tsx`, `src/hooks/use-friends-by-event.ts`, CSS associé.
-- **Modifiés** : `src/pages/Explorer.tsx` (état viewMode + rendu conditionnel),
-  `src/pages/Explorer.css` (styles grille + toggle), `src/hooks/use-map-friends.ts`
-  (réexporte / migre vers le hook partagé), `src/components/map/...` (import du hook renommé).
+- **Modifiés** : `src/pages/Explorer.tsx` (état viewMode + rendu conditionnel + hook amis),
+  `src/pages/Explorer.css` (styles grille + toggle), `src/lib/explorer.ts`
+  (+ `formatEventDateRange` extrait), `src/components/explorer/EventDock.tsx` (consomme
+  le formateur extrait). `useMapFriends` **n'est pas touché** (sémantique différente).
 
 ## Tests
 
