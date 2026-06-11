@@ -156,16 +156,44 @@ export function useCommunityFeed(enabled = true): CommunityData {
           .map(u => ({ eventId: u.event_id, actor: unknownActor(u.actor_id) }))
         const convergences = rankConvergences(convParts, eventMap).slice(0, 5)
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data: suggRows } = await (supabase.rpc as any)('get_follow_suggestions', { p_actor_id: me })
-        const suggList = (suggRows ?? []) as Array<{ suggested_actor: string; shared_followers: number }>
-        const suggActors = await loadActors(suggList.map(s => s.suggested_actor))
-        const suggestions = rankSuggestions(
-          suggList.map(s => ({
-            actor: suggActors.get(s.suggested_actor) ?? unknownActor(s.suggested_actor),
-            sharedFollowers: Number(s.shared_followers), sharedEvents: 0,
+        // Deux sources de suggestions, fusionnées par acteur :
+        //  - get_follow_suggestions : amis d'amis (vide tant qu'on ne suit personne)
+        //  - get_coevent_suggestions : gens qui vont aux mêmes festivals que moi (cold-start)
+        const [followSugg, coeventSugg] = await Promise.all([
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (supabase.rpc as any)('get_follow_suggestions', { p_actor_id: me }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (supabase.rpc as any)('get_coevent_suggestions', { p_actor_id: me }),
+        ])
+        const followList = (followSugg.data ?? []) as Array<{ suggested_actor: string; shared_followers: number }>
+        const coeventList = (coeventSugg.data ?? []) as Array<{ suggested_actor: string; shared_events: number }>
+
+        const suggMap = new Map<string, { sharedFollowers: number; sharedEvents: number }>()
+        for (const s of followList) {
+          if (s.suggested_actor) suggMap.set(s.suggested_actor, { sharedFollowers: Number(s.shared_followers), sharedEvents: 0 })
+        }
+        for (const s of coeventList) {
+          if (!s.suggested_actor) continue
+          const cur = suggMap.get(s.suggested_actor) ?? { sharedFollowers: 0, sharedEvents: 0 }
+          cur.sharedEvents = Number(s.shared_events)
+          suggMap.set(s.suggested_actor, cur)
+        }
+
+        const suggActors = await loadActors([...suggMap.keys()])
+        const ranked = rankSuggestions(
+          [...suggMap.entries()].map(([actorId, s]) => ({
+            actor: suggActors.get(actorId) ?? unknownActor(actorId),
+            sharedFollowers: s.sharedFollowers, sharedEvents: s.sharedEvents,
           }))
-        ).slice(0, 5)
+        )
+        // 3 suggestions, mélangées à chaque chargement de page : on varie les profils mis en
+        // avant plutôt que de figer le top-3 (découverte > classement strict au cold-start).
+        // Mélange non biaisé : clé aléatoire par élément puis tri (≠ sort(()=>random-0.5)).
+        const suggestions = ranked
+          .map(s => ({ s, r: Math.random() }))
+          .sort((a, b) => a.r - b.r)
+          .slice(0, 3)
+          .map(x => x.s)
 
         if (!cancelled) setData({ feed: sortFeed(items), convergences, suggestions, loading: false, error: false })
       } catch {

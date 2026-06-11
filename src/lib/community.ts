@@ -103,6 +103,6 @@ export function rankSuggestions(
       reason:
         c.sharedFollowers > 0
           ? `Suivi par ${c.sharedFollowers} compagnon${c.sharedFollowers > 1 ? 's' : ''}`
-          : `Va à ${c.sharedEvents} festival${c.sharedEvents > 1 ? 's' : ''} que tu suis`,
+          : `${c.sharedEvents} festival${c.sharedEvents > 1 ? 's' : ''} en commun avec toi`,
     }))
 }
