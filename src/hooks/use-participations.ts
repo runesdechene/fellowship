@@ -60,13 +60,20 @@ export function useFriendsParticipations() {
     const friendIds = friendRows as string[] | null
     if (!friendIds || friendIds.length === 0) { setParticipations([]); setLoading(false); return }
 
+    // On ne récupère que les participations d'amis sur des events À VENIR (end_date >= aujourd'hui),
+    // triées par date d'event. L'ancien `.order('created_at').limit(50)` plafonnait à 50 lignes par
+    // ordre de CRÉATION : dès qu'un acteur avait >50 amis-participations, toute inscription plus
+    // ancienne (saison ajoutée tôt) tombait hors fenêtre et disparaissait silencieusement — d'où
+    // les compagnons manquants sur les festivals « anciens » (bug Plane'R Fest, créé en avril).
+    const today = new Date().toISOString().slice(0, 10)
     const { data: parts } = await supabase
       .from('participations')
-      .select('*, events(*)')
+      .select('*, events!inner(*)')
       .in('actor_id', friendIds)
       .in('visibility', ['amis', 'public'])
-      .order('created_at', { ascending: false })
-      .limit(50)
+      .gte('events.end_date', today)
+      .order('start_date', { referencedTable: 'events', ascending: true })
+      .limit(200)
 
     const rows = (parts ?? []) as Array<{ id: string; event_id: string; actor_id: string; status: string; events?: { name: string; [key: string]: unknown } }>
     const actorIds = [...new Set(rows.map(r => r.actor_id))]
