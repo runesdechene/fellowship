@@ -7,6 +7,25 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.248',
+    date: '2026-06-11',
+    title: 'Communauté & notifications remises au propre',
+    changes: [
+      'La cloche se marque comme lue dès que tu l\'ouvres — fini le bouton « Tout lire »',
+      'Les nouveaux festivals ajoutés sur Fellowship apparaissent dans le fil Communauté',
+      'Une pastille rouge sur « Communauté » signale l\'activité que tu n\'as pas encore vue',
+      'Communauté te suggère des gens à suivre selon les festivals où tu vas (3 profils, renouvelés à chaque visite)',
+    ],
+  },
+  {
+    version: '0.7.246',
+    date: '2026-06-11',
+    title: 'Calendrier : compagnons visibles partout',
+    changes: [
+      'Le « X compagnons sur cette date » s\'affiche désormais sur tous les festivals, et plus seulement sur le premier de chaque mois',
+    ],
+  },
+  {
     version: '0.7.229',
     date: '2026-06-05',
     title: 'Carte : boutons mobile sur une ligne',
