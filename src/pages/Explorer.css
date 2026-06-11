@@ -1273,7 +1273,6 @@
 /* Événements sans participation (ni « Repéré » ni plus fort) : légèrement désaturés
    + transparents pour faire ressortir ceux que tu as engagés. Reviennent au survol. */
 .explorer .egrid-card--muted { filter: saturate(0.7); opacity: 0.82; }
-.explorer .egrid-card--muted:hover { filter: saturate(1); opacity: 1; }
 
 .explorer .egrid-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 /* Affiche manquante : fond dégradé teinté par la couleur du tag + nom du tag en
