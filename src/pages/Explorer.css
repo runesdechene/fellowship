@@ -1396,7 +1396,7 @@
   .explorer.is-grid .top { padding: 64px 10px 12px; }
 }
 @container (max-width: 600px) {
-  .explorer .egrid-card { aspect-ratio: 9 / 16; }
+  .explorer .egrid-card { aspect-ratio: 9 / 16; border-radius: 12px; }
   .explorer .egrid-ov { padding: 12px; gap: 6px; }
   .explorer .egrid-name { font-size: 16px; line-height: 1.12; }
   /* Date + lieu sur DEUX lignes (pas la place côte à côte sur une carte étroite). */
