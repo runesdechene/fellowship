@@ -34,6 +34,7 @@ export function useMapFriends(enabled: boolean) {
         supabase.from('participations')
           .select('actor_id, event_id, events!inner(start_date)')
           .in('actor_id', ids).gte('events.start_date', today)
+          .eq('events.is_private', false)   // jamais l'event privé d'un ami sur ma carte
           // « où vont mes amis » = statuts going (confirme/inscrit), pas interesse (repéré).
           .in('status', ['confirme', 'inscrit']),
         supabase.from('actor_public').select('actor_id, label, avatar_url').in('actor_id', ids),

@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.278',
+    date: '2026-06-13',
+    title: 'Événements privés visibles partout chez toi + avatars des amis',
+    changes: [
+      'Tes événements privés apparaissent maintenant sur ta carte et ton cockpit, avec un cadenas (ceux des autres restent invisibles)',
+      'Sur le calendrier, les avatars de tes amis s\'affichent vraiment et sont cliquables vers leur profil',
+    ],
+  },
+  {
     version: '0.7.277',
     date: '2026-06-13',
     title: 'Événements privés',
