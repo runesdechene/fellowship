@@ -332,6 +332,7 @@ export type Database = {
           geo_precision: string | null
           id: string
           image_url: string | null
+          is_private: boolean
           latitude: number | null
           longitude: number | null
           name: string
@@ -361,6 +362,7 @@ export type Database = {
           geo_precision?: string | null
           id?: string
           image_url?: string | null
+          is_private?: boolean
           latitude?: number | null
           longitude?: number | null
           name: string
@@ -390,6 +392,7 @@ export type Database = {
           geo_precision?: string | null
           id?: string
           image_url?: string | null
+          is_private?: boolean
           latitude?: number | null
           longitude?: number | null
           name?: string
