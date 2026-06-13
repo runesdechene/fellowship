@@ -20,6 +20,7 @@ export function useMapEvents() {
       const { data: rows, error: e1 } = await supabase
         .from('events')
         .select('id, slug, name, city, department, start_date, end_date, created_at, tags, image_url, latitude, longitude')
+        .eq('is_private', false)   // events privés jamais listés (Carte)
         .not('latitude', 'is', null)
       if (e1) {
         if (!cancelled) { setError(e1.message); setLoading(false) }

@@ -16,6 +16,7 @@ export function useEvents(filters?: {
     let query = supabase
       .from('events')
       .select('*')
+      .eq('is_private', false)   // events privés jamais listés (Explorer)
       .order('start_date', { ascending: true })
 
     if (filters?.department) {
@@ -108,6 +109,7 @@ export function useRecentEvents(limit = 6) {
     supabase
       .from('events')
       .select('*')
+      .eq('is_private', false)   // events privés jamais listés (Explorer)
       .order('created_at', { ascending: false })
       .limit(limit)
       .then(({ data }) => {

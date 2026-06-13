@@ -36,7 +36,7 @@ export function useAdminMetrics() {
       const [exposants, visitors, events, participations, recent7, recent30] = await Promise.all([
         supabase.from('entities').select('actor_id', { count: 'exact', head: true }).eq('type', 'exposant'),
         supabase.from('users').select('actor_id', { count: 'exact', head: true }),
-        supabase.from('events').select('id', { count: 'exact', head: true }).gte('end_date', now.toISOString().slice(0, 10)),
+        supabase.from('events').select('id', { count: 'exact', head: true }).eq('is_private', false).gte('end_date', now.toISOString().slice(0, 10)),
         supabase.from('participations').select('id', { count: 'exact', head: true }).gte('created_at', startOfMonth),
         supabase.from('users').select('actor_id', { count: 'exact', head: true }).gte('created_at', d7),
         supabase.from('users').select('actor_id', { count: 'exact', head: true }).gte('created_at', d30),
@@ -70,6 +70,7 @@ export function useAdminEvents() {
     const { data } = await supabase
       .from('events')
       .select('*')
+      .eq('is_private', false)   // events privés exclus du back-office
       .order('created_at', { ascending: false })
 
     // Créateur résolu via le modèle acteur (created_by_actor -> actor_public).
