@@ -76,15 +76,11 @@ Règle unique : **toute lecture d'`events` qui n'est ni une surface de suivi per
 - Centraliser dans un helper/commentaire : tout `from('events').select()` de découverte ajoute `.eq('is_private', false)`. Les RPC concernées sont recréées avec le garde SQL.
 - Test de non-régression : un event privé créé par A n'apparaît pas dans (a) `search_similar_events`, (b) les dates réseau vues par un follower B, (c) la vitrine de A. Ces trois là sont les chemins « non évidents » — les couvrir en priorité.
 
-## Durcissement optionnel (recommandé vu l'exigence « aucune fuite »)
+## Durcissement anti-énumération — CONSIDÉRÉ PUIS ÉCARTÉ (décision Uriel 2026-06-13)
 
-Le modèle unlisted ci-dessus ferme **tous les listings et toutes les recherches** (le besoin exprimé). Reste un trou théorique : la RLS lecture étant permissive (`USING(true)` pour authentifiés + accès anon), un utilisateur **techniquement averti** pourrait appeler `supabase.from('events').select().eq('is_private', true)` et **énumérer** les events privés d'autrui (noms/dates/lieux — jamais le bilan).
+On a évalué une option de durcissement (resserrer la RLS table à `is_private=false OR can_act_as(created_by_actor)` + RPC `get_event_by_slug` `SECURITY DEFINER` pour l'accès par lien, le slug devenant la capability). **Écartée** : on reste sur l'**unlisted pur** — plus simple, moins de surface DB touchée.
 
-**Fermeture propre sans casser l'accès par lien :**
-1. **Resserrer la RLS table** : authentifiés ne lisent que `is_private = false OR can_act_as(created_by_actor)` ; anon ne lit que `is_private = false`. → l'énumération directe de la table ne renvoie plus les privés d'autrui.
-2. **RPC `get_event_by_slug(slug)` `SECURITY DEFINER`** (grant anon + authenticated) : renvoie n'importe quel event par **slug exact** (privé inclus). La page `/e/:slug` charge via cette RPC. Le **slug suffixé non devinable devient la capability** : on a le lien → on voit ; on ne l'a pas → on ne peut pas deviner ni énumérer.
-
-Coût : recréer la RLS events + 1 RPC + router la page event par slug sur la RPC. Les listings (déjà filtrés `is_private=false`) deviennent doublement sûrs. **Recommandé** : ça aligne la sécurité réelle sur l'intention « ça ne fuite nulle part ». Si écarté, on reste sur l'unlisted pur (obscurité du slug + filtrage applicatif), à assumer.
+**Conséquence assumée :** le filtrage applicatif + les RPC gardées couvrent **toutes les recherches et tous les listings** (le besoin exprimé). Le seul résidu accepté : un utilisateur authentifié techniquement averti pourrait énumérer via l'API directe (`from('events').eq('is_private', true)`) les noms/dates/lieux des events privés d'autrui (**jamais** le bilan/paiement, eux restant privés par RLS `can_act_as`). Risque jugé acceptable au regard du besoin (de petits événements non sensibles). Réouvrir le durcissement si un cas d'usage sensible apparaît.
 
 ## Flux de données (résumé)
 
