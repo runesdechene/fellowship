@@ -81,6 +81,7 @@ export function useCommunityFeed(enabled = true): CommunityData {
             .neq('status', 'refuse') : empty,
           supabase.from('events')
             .select('id, name, city, start_date, end_date, image_url, slug, created_by_actor, created_at')
+            .eq('is_private', false)
             .gte('created_at', since)
             .neq('created_by_actor', me)
             .order('created_at', { ascending: false })
@@ -107,7 +108,7 @@ export function useCommunityFeed(enabled = true): CommunityData {
         ])]
         const [eventsRes, actorMap] = await Promise.all([
           eventIds.length
-            ? supabase.from('events').select('id, name, city, start_date, end_date, image_url, slug').in('id', eventIds)
+            ? supabase.from('events').select('id, name, city, start_date, end_date, image_url, slug').eq('is_private', false).in('id', eventIds)
             : Promise.resolve({ data: [] as never[] }),
           loadActors(actorIds),
         ])
