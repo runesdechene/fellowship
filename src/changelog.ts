@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.276',
+    date: '2026-06-13',
+    title: 'Suivi financier des festivals',
+    changes: [
+      'Quand tu marques « Payé » (ou « Reçu »), on te demande le montant — il atterrit direct dans ton bilan, tu n\'oublieras plus le prix de ton stand',
+      'Nouveau réglage par festival : « je paie ma place » ou « on me paie pour venir » (le suivi s\'adapte)',
+      'Le bilan devient un registre de lignes : ajoute essence, péage, hébergement, cachet, ventes… dans les deux sens, le bénéfice se calcule tout seul',
+      'Ton cockpit récapitule tes cachets reçus et tes emplacements payés',
+    ],
+  },
+  {
     version: '0.7.248',
     date: '2026-06-11',
     title: 'Communauté & notifications remises au propre',
