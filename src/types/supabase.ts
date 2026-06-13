@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       actors: {
@@ -212,6 +187,67 @@ export type Database = {
           },
         ]
       }
+      event_ledger_entries: {
+        Row: {
+          actor_id: string
+          amount: number
+          category: string
+          created_at: string
+          direction: string
+          event_id: string
+          id: string
+          label: string | null
+          report_id: string
+          source: string
+        }
+        Insert: {
+          actor_id: string
+          amount: number
+          category: string
+          created_at?: string
+          direction: string
+          event_id: string
+          id?: string
+          label?: string | null
+          report_id: string
+          source?: string
+        }
+        Update: {
+          actor_id?: string
+          amount?: number
+          category?: string
+          created_at?: string
+          direction?: string
+          event_id?: string
+          id?: string
+          label?: string | null
+          report_id?: string
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ledger_entries_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ledger_entries_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ledger_entries_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "event_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_reports: {
         Row: {
           acted_by_user_id: string | null
@@ -282,6 +318,7 @@ export type Database = {
       events: {
         Row: {
           acted_by_user_id: string | null
+          address: string | null
           city: string
           contact_email: string | null
           created_at: string
@@ -292,25 +329,25 @@ export type Database = {
           end_date: string
           expected_attendance: string | null
           external_url: string | null
+          geo_precision: string | null
           id: string
           image_url: string | null
+          latitude: number | null
+          longitude: number | null
           name: string
           opening_hours: string | null
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
+          slug: string | null
           stand_price: string | null
           stand_size: string | null
-          slug: string | null
           start_date: string
-          address: string | null
-          geo_precision: string | null
-          latitude: number | null
-          longitude: number | null
           tags: string[] | null
         }
         Insert: {
           acted_by_user_id?: string | null
+          address?: string | null
           city: string
           contact_email?: string | null
           created_at?: string
@@ -321,25 +358,25 @@ export type Database = {
           end_date: string
           expected_attendance?: string | null
           external_url?: string | null
+          geo_precision?: string | null
           id?: string
           image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name: string
           opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          slug?: string | null
           stand_price?: string | null
           stand_size?: string | null
-          slug?: string | null
           start_date: string
-          address?: string | null
-          geo_precision?: string | null
-          latitude?: number | null
-          longitude?: number | null
           tags?: string[] | null
         }
         Update: {
           acted_by_user_id?: string | null
+          address?: string | null
           city?: string
           contact_email?: string | null
           created_at?: string
@@ -350,21 +387,20 @@ export type Database = {
           end_date?: string
           expected_attendance?: string | null
           external_url?: string | null
+          geo_precision?: string | null
           id?: string
           image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           opening_hours?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
+          slug?: string | null
           stand_price?: string | null
           stand_size?: string | null
-          slug?: string | null
           start_date?: string
-          address?: string | null
-          geo_precision?: string | null
-          latitude?: number | null
-          longitude?: number | null
           tags?: string[] | null
         }
         Relationships: [
@@ -574,6 +610,7 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
+          payment_orientation: string
           payment_status: string | null
           payments: Json | null
           refusal_note: string | null
@@ -587,6 +624,7 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
+          payment_orientation?: string
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
@@ -600,6 +638,7 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
+          payment_orientation?: string
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
@@ -899,11 +938,36 @@ export type Database = {
         }
         Returns: string
       }
+      events_base_slug: {
+        Args: { p_city: string; p_name: string }
+        Returns: string
+      }
+      get_coevent_suggestions: {
+        Args: { p_actor_id: string }
+        Returns: {
+          shared_events: number
+          suggested_actor: string
+        }[]
+      }
       get_follow_suggestions: {
         Args: { p_actor_id: string }
         Returns: {
           shared_followers: number
           suggested_actor: string
+        }[]
+      }
+      get_followers_with_dates: {
+        Args: { p_actor_id: string }
+        Returns: {
+          followed_at: string
+          follower_id: string
+        }[]
+      }
+      get_following_with_dates: {
+        Args: { p_actor_id: string }
+        Returns: {
+          followed_at: string
+          following_id: string
         }[]
       }
       get_friend_ids: { Args: { p_user_id: string }; Returns: string[] }
@@ -1089,9 +1153,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       actor_kind: ["person", "entity"],
