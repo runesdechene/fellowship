@@ -22,6 +22,7 @@ export function TagInput({ value, onChange, placeholder = 'Ajouter un tag...' }:
       const { data } = await supabase
         .from('events')
         .select('tags')
+        .eq('is_private', false)   // ne pas suggérer les tags d'events privés
         .not('tags', 'eq', '{}')
         .limit(50)
 

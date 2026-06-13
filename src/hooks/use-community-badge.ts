@@ -23,6 +23,7 @@ export function useCommunityBadge(): number {
     const me = currentActor.id
     const lastSeen = getLastSeen(me)
     supabase.from('events').select('id', { count: 'exact', head: true })
+      .eq('is_private', false)   // ne pas compter les events privés (cohérent avec le fil)
       .gt('created_at', lastSeen).neq('created_by_actor', me)
       .then(({ count: c }) => { if (!cancelled) setCount(c ?? 0) })
     return () => { cancelled = true }

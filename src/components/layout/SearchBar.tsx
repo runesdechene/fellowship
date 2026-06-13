@@ -89,6 +89,7 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         supabase
           .from('events')
           .select('id, name, city, start_date, tags, image_url, slug')
+          .eq('is_private', false)   // events privés jamais dans la recherche globale
           .ilike('name', `%${query}%`)
           .order('start_date', { ascending: false })
           .limit(5),

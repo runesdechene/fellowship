@@ -73,7 +73,7 @@ export function EmbedPage() {
 
       const { data: parts } = await supabase
         .from('participations')
-        .select('id, events(id, name, start_date, end_date, city, department, tags, image_url, slug)')
+        .select('id, events(id, name, start_date, end_date, city, department, tags, image_url, slug, is_private)')
         .eq('actor_id', (e as EntityRow).actor_id)
         .eq('visibility', 'public')
         // « Accepté » = on y va (présence acquise), payé ou pas. On exclut interesse/en_cours/refuse.
@@ -89,7 +89,7 @@ export function EmbedPage() {
     const now = new Date()
     now.setHours(0, 0, 0, 0)
     const list = participations
-      .filter(p => p.events && new Date(p.events.start_date) >= now)
+      .filter(p => p.events && !(p.events as { is_private?: boolean }).is_private && new Date(p.events.start_date) >= now)
       .map(p => p.events!)
       .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
     return max == null ? list : list.slice(0, max)

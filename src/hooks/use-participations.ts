@@ -71,6 +71,7 @@ export function useFriendsParticipations() {
       .select('*, events!inner(*)')
       .in('actor_id', friendIds)
       .in('visibility', ['amis', 'public'])
+      .eq('events.is_private', false)   // jamais l'event privé d'un ami sur mon calendrier
       .gte('events.end_date', today)
       .order('start_date', { referencedTable: 'events', ascending: true })
       .limit(200)
