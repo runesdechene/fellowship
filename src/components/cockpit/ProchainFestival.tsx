@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Compass, Route, Share2, FileText, MapPin } from 'lucide-react'
+import { Compass, Route, Share2, FileText, MapPin, Lock } from 'lucide-react'
 import { participationChip } from '@/lib/explorer'
 import { ShareModal } from '@/components/ShareModal'
 import { eventShareUrl, eventPath } from '@/lib/event-link'
@@ -51,7 +51,7 @@ export function ProchainFestival({ participation }: Props) {
           <span className="ck-next-eyebrow">Prochain festival</span>
           {chip && <span className={'ck-badge ' + chip.variant}>{chip.label}</span>}
         </div>
-        <h2 className="ck-next-name">{ev.name}</h2>
+        <h2 className="ck-next-name">{ev.name}{ev.is_private && <Lock className="inline h-4 w-4 opacity-70 ml-1.5" strokeWidth={2.2} />}</h2>
         <div className="ck-next-when">
           <span className="ck-jx-big">{jLabel}</span>
           <span className="ck-next-date">{dateLabel}</span>

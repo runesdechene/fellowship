@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ClipboardList, Pencil, Plus } from 'lucide-react'
+import { ClipboardList, Pencil, Plus, Lock } from 'lucide-react'
 import type { ParticipationWithEvent, LedgerEntry } from '@/types/database'
 import { buildPastBilans, splitOrientation, type PastBilan } from '@/lib/cockpit-bilans'
 import { BilanModal } from '@/components/reports/BilanModal'
@@ -46,7 +46,7 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
                   ? <span className="ck-bilan-thumb"><img src={ev.image_url} alt="" /></span>
                   : <span className="ck-bilan-thumb ck-bilan-thumb-ph" />}
                 <span className="ck-bilan-bd">
-                  <b>{ev.name}</b>
+                  <b>{ev.name}{ev.is_private && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}</b>
                   <small>{fmtDate(ev.start_date)} · {ev.city}</small>
                   {hasEntries ? (
                     <span className="ck-bilan-stats">

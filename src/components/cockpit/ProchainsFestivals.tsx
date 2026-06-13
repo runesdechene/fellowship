@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CalendarClock, Plus } from 'lucide-react'
+import { CalendarClock, Plus, Lock } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
 import { participationChip } from '@/lib/explorer'
 import type { ParticipationWithEvent } from '@/types/database'
@@ -32,7 +32,7 @@ export function ProchainsFestivals({ participations }: Props) {
                     ? <span className="ck-list-thumb"><img src={ev.image_url} alt="" /></span>
                     : <span className="ck-list-thumb ck-list-thumb-ph" />}
                   <span className="ck-list-info">
-                    <b>{ev.name}</b>
+                    <b>{ev.name}{ev.is_private && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}</b>
                     <small>{d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} · {ev.city}</small>
                   </span>
                   {chip && <span className={'ck-badge sm ' + chip.variant}>{chip.label}</span>}

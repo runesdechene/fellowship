@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Wallet, CheckCircle2 } from 'lucide-react'
+import { Wallet, CheckCircle2, Lock } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
 import { participationChip } from '@/lib/explorer'
 import type { ParticipationWithEvent } from '@/types/database'
@@ -27,7 +27,7 @@ export function AReglerFinaliser({ participations }: Props) {
               <li key={p.id}>
                 <Link to={eventPath(ev)} className="ck-list-row">
                   <span className="ck-list-info">
-                    <b>{ev.name}</b>
+                    <b>{ev.name}{ev.is_private && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}</b>
                     <small>{ev.city} · {new Date(ev.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}</small>
                   </span>
                   {chip && <span className={'ck-badge sm ' + chip.variant}>{chip.label}</span>}
