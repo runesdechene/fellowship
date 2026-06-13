@@ -1,46 +1,55 @@
-/* ── Embed Widget — Isolated styles (no Tailwind, no Fellowship vars) ── */
+/* ── Embed Widget — styles isolés. Reproduit le design des « escales » de la Vitrine.
+   Les tokens (--card/--border/--foreground/--muted-foreground/--background) sont
+   redéfinis ici, scopés par data-theme, pour que l'embed gère son propre jour/nuit
+   indépendamment du :root de l'app. Polices (--font-heading/--font-body) viennent
+   du :root global (index.html), dispo car l'embed est une route de l'app. ── */
 
 .embed-page {
   padding: 0;
-  font-family: -apple-system, 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: var(--font-body);
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
-}
-
-.embed-page-container 
-{
-    max-width: 480px;
-    margin: auto;
-}
-
-/* Fond transparent dans tous les cas (auto/clair/sombre) : le fond du site hôte
-   transparaît. Le thème ne pilote plus que le texte et les cartes. */
-.embed-page {
   background: transparent;
-  color: #1a1a1a;
 }
 
-/* Dark theme — texte clair, fond toujours transparent */
+/* Tokens — mode JOUR */
+.embed-page[data-theme="light"] {
+  --background: 35 29% 92%;
+  --foreground: 24 21% 20%;
+  --card: 39 40% 94%;
+  --muted-foreground: 28 11% 44%;
+  --border: 30 14% 84%;
+  color: hsl(var(--foreground));
+}
+
+/* Tokens — mode NUIT */
 .embed-page[data-theme="dark"] {
-  background: transparent;
-  color: #f0f0f0;
+  --background: 9 24% 7%;
+  --foreground: 35 60% 95%;
+  --card: 9 22% 12%;
+  --muted-foreground: 28 17% 64%;
+  --border: 33 16% 20%;
+  color: hsl(var(--foreground));
 }
 
-/* L'app peint un fond décoratif (halos radial-gradient) sur html/body. Dans l'embed,
-   on le neutralise totalement pour laisser transparaître le site hôte. !important +
-   :has() pour ne dépendre ni du timing JS ni de la spécificité. */
+.embed-page-container {
+  margin: auto;
+}
+
+/* L'app peint un fond décoratif (halos) sur html/body. Dans l'embed, on le neutralise
+   totalement pour laisser transparaître le site hôte. !important + :has() pour ne dépendre
+   ni du timing JS ni de la spécificité. */
 html:has(.embed-page),
 body:has(.embed-page) {
   background: transparent !important;
 }
 
-/* Le calque d'ambiance global (Bgfx — halos chauds) ne doit jamais apparaître dans l'embed.
-   (Doublon de la garde iframe dans Bgfx.tsx, couvre aussi l'aperçu plein écran « Voir en vrai ».) */
+/* Le calque d'ambiance global (Bgfx — halos chauds) ne doit jamais apparaître dans l'embed. */
 body:has(.embed-page) .bgfx {
   display: none !important;
 }
 
-/* Masquer la scrollbar de l'embed (l'iframe s'auto-dimensionne, le sliver résiduel est inutile). */
+/* Masquer la scrollbar de l'embed (l'iframe s'auto-dimensionne). */
 html:has(.embed-page),
 html:has(.embed-page) body {
   scrollbar-width: none;        /* Firefox */
@@ -51,221 +60,237 @@ html:has(.embed-page) body::-webkit-scrollbar {
   display: none;                /* WebKit */
 }
 
-/* ── Header ── */
+/* ── En-tête identité : avatar + nom + description, centré ── */
 
 .embed-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding-bottom: 20px;
+  text-align: center;
+  gap: 8px;
+  padding-bottom: 18px;
 }
 
 .embed-avatar {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .embed-avatar-fallback {
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 24px;
   font-weight: 800;
   color: white;
 }
 
-.embed-header-sub {
-  font-size: 11px;
-  color: #888;
+.embed-header-name {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: hsl(var(--foreground));
 }
 
-/* ── Event card ── */
+.embed-header-sub {
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+  margin-top: -4px;
+}
 
-.embed-cards {
+/* ── Cartes « escales » (port exact du design Vitrine) ── */
+
+.embed-escales {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.embed-card {
-  display: flex;
-  height: 150px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.01);
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.4s;
-  opacity: 0.9;
-}
-
-.embed-card:hover {
-  box-shadow:0 4px 40px rgba(0,0,0,0.07);
-  opacity: 1;
-}
-
-.embed-page[data-theme="dark"] .embed-card {
-  background: #242424;
-}
-
-.embed-card-image {
-  width: 130px;
-  flex-shrink: 0;
-  position: relative;
+.embed-escale {
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 18px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, transform 0.15s;
 }
 
-/* ── Featured badge ── */
-
-.embed-card-featured {
-  position: relative;
-  outline: 2px solid rgba(200,121,65,0.4);
-  outline-offset: -2px;
-  box-shadow: 0 2px 8px rgba(200,121,65,0.15), 0 4px 20px rgba(0,0,0,0.06);
+.embed-escale:hover {
+  border-color: hsl(33 16% 34%);
+  transform: translateY(-1px);
 }
 
-.embed-card-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: linear-gradient(135deg, #c87941, #e8a665);
-  color: white;
-  font-size: 9px;
+.embed-edate {
+  flex-shrink: 0;
+  width: 58px;
+  text-align: center;
+}
+
+.embed-edate b {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 28px;
+  color: hsl(var(--foreground));
+  line-height: 1;
+  display: block;
+}
+
+.embed-edate span {
+  font-size: 11px;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
-  z-index: 2;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  box-shadow: 0 2px 6px rgba(200,121,65,0.3);
+  color: hsl(var(--muted-foreground));
+  margin-top: 4px;
+  display: block;
 }
 
-.embed-page[data-theme="dark"] .embed-card-badge {
-  box-shadow: 0 2px 6px rgba(200,121,65,0.5);
+.embed-edate i {
+  font-style: normal;
+  font-size: 11px;
+  color: hsl(var(--muted-foreground));
+  opacity: 0.7;
+  margin-top: 3px;
+  display: block;
 }
 
-.embed-card-image img {
+.embed-eposter {
+  width: 86px;
+  height: 116px;
+  border-radius: 11px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: hsl(var(--background));
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+}
+
+.embed-eposter img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.embed-card-image-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.embed-card-tag {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 8px;
-  color: white;
-  font-weight: 600;
-}
-
-.embed-card-body {
-  padding: 14px 16px;
+.embed-einfo {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-width: 0;
 }
 
-.embed-card-name {
+.embed-en {
+  font-family: var(--font-heading);
+  font-weight: 700;
   font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
   line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  color: hsl(var(--foreground));
 }
 
-.embed-page[data-theme="dark"] .embed-card-name {
-  color: #f0f0f0;
+.embed-etags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
 }
 
-.embed-card-meta {
-  margin-top: 6px;
+.embed-etag {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: hsl(var(--background));
+  color: hsl(var(--muted-foreground));
+}
+
+.embed-eloc {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 13px;
+  gap: 6px;
+  color: hsl(var(--foreground));
+  opacity: 0.82;
+  font-size: 14px;
+  margin-top: 9px;
 }
 
-.embed-card-date {
-  font-weight: 600;
-  color: rgba(146, 126, 69, 0.856)
+.embed-eloc svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  color: hsl(var(--muted-foreground));
 }
 
-.embed-card-city {
-  color: #888;
+.embed-edur {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: hsl(var(--muted-foreground));
+  font-size: 12.5px;
+  margin-top: 5px;
 }
 
-.embed-card-link {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #bbaea3;
+.embed-edur svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
 }
 
-/* ── Footer ── */
+.embed-echev {
+  color: hsl(var(--muted-foreground));
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+}
 
-.embed-footer {
+/* ── Footer — marque Fellowship + slogan ── */
+
+.embed-foot {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid hsl(var(--border));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 32px 0 16px;
+  text-align: center;
+}
+
+.embed-foot-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
-  color: inherit;
+  color: hsl(var(--foreground));
 }
 
-.embed-footer:hover .embed-footer-text {
-  opacity: 1;
+.embed-foot-mark {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
-.embed-footer-logo {
-  height: 28px;
-  opacity: 0.6;
-  transition: opacity 0.2s;
+.embed-foot-word {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
-.embed-footer:hover .embed-footer-logo {
-  opacity: 0.9;
+.embed-foot-dot {
+  color: #c87941;
 }
 
-.embed-footer-text {
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.5;
-  transition: opacity 0.2s;
-}
-
-.embed-page[data-theme="dark"] .embed-footer-text {
-  color: #888;
+.embed-foot-slogan {
+  font-size: 12.5px;
+  color: hsl(var(--muted-foreground));
 }
 
 /* ── Empty state ── */
@@ -279,47 +304,36 @@ html:has(.embed-page) body::-webkit-scrollbar {
   width: 40px;
   height: 40px;
   margin: 0 auto 12px;
-  color: #ccc;
-}
-
-.embed-page[data-theme="dark"] .embed-empty-icon {
-  color: #555;
+  color: hsl(var(--muted-foreground));
+  opacity: 0.6;
 }
 
 .embed-empty-text {
   font-size: 14px;
-  color: #888;
+  color: hsl(var(--muted-foreground));
 }
 
-/* ── Skeleton loading ── */
+/* ── Skeleton (calé sur la forme d'une carte escale) ── */
 
 .embed-skeleton {
   display: flex;
-  height: 110px;
-  border-radius: 16px;
+  height: 116px;
+  border-radius: 18px;
   overflow: hidden;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-
-.embed-page[data-theme="dark"] .embed-skeleton {
-  background: #242424;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
 }
 
 .embed-skeleton-image {
-  width: 110px;
+  width: 86px;
   flex-shrink: 0;
-  background: #eee;
+  background: hsl(var(--background));
   animation: embed-pulse 1.5s ease-in-out infinite;
-}
-
-.embed-page[data-theme="dark"] .embed-skeleton-image {
-  background: #333;
 }
 
 .embed-skeleton-body {
   flex: 1;
-  padding: 14px 16px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -329,15 +343,11 @@ html:has(.embed-page) body::-webkit-scrollbar {
 .embed-skeleton-line {
   height: 12px;
   border-radius: 6px;
-  background: #eee;
+  background: hsl(var(--background));
   animation: embed-pulse 1.5s ease-in-out infinite;
 }
 
-.embed-page[data-theme="dark"] .embed-skeleton-line {
-  background: #333;
-}
-
-.embed-skeleton-line:nth-child(1) { width: 75%; }
+.embed-skeleton-line:nth-child(1) { width: 70%; }
 .embed-skeleton-line:nth-child(2) { width: 50%; }
 .embed-skeleton-line:nth-child(3) { width: 30%; }
 
@@ -346,7 +356,7 @@ html:has(.embed-page) body::-webkit-scrollbar {
   50% { opacity: 0.4; }
 }
 
-/* ── Centered message (loading/error) ── */
+/* ── Message centré (erreur) ── */
 
 .embed-centered {
   display: flex;
@@ -354,382 +364,14 @@ html:has(.embed-page) body::-webkit-scrollbar {
   justify-content: center;
   min-height: 100vh;
   font-size: 14px;
-  color: #888;
+  color: hsl(var(--muted-foreground));
 }
 
-/* ── Vignette (view=mini) ── */
+/* ── Garde-fou conteneur étroit (sidebar) : on resserre date + affiche ── */
 
-/* En-tête mini : avatar + description, centrés, sans nom. */
-.embed-page[data-view="mini"] .embed-header {
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 8px;
-  padding-bottom: 18px;
-}
-
-.embed-page[data-view="mini"] .embed-avatar {
-  width: 64px;
-  height: 64px;
-}
-
-.embed-page[data-view="mini"] .embed-avatar-fallback {
-  width: 64px;
-  height: 64px;
-  font-size: 24px;
-}
-
-.embed-page[data-view="mini"] .embed-header-name {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.4px;
-}
-
-/* Description collée sous le nom (l'en-tête est en colonne avec gap). */
-.embed-page[data-view="mini"] .embed-header-sub {
-  margin-top: -4px;
-}
-
-.embed-mini-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.embed-mini-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 4px;
-  border-top: 1px solid rgba(0,0,0,0.06);
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s;
-}
-
-.embed-mini-row:hover { opacity: 0.7; }
-
-.embed-page[data-theme="dark"] .embed-mini-row {
-  border-top-color: rgba(255,255,255,0.08);
-}
-
-.embed-mini-date {
-  width: 40px;
-  flex-shrink: 0;
-  text-align: center;
-  line-height: 1;
-}
-
-.embed-mini-day {
-  display: block;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.embed-mini-month {
-  display: block;
-  margin-top: 2px;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #999;
-}
-
-/* Titre de l'event : prend la place, plus grand, s'ellipse si trop long. */
-.embed-mini-name {
-  flex: 1;
-  min-width: 0;
-  font-size: 15px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.embed-page[data-theme="dark"] .embed-mini-name { color: #f0f0f0; }
-
-/* Lieu : repoussé à droite de la ligne. */
-.embed-mini-loc {
-  flex-shrink: 0;
-  font-size: 12px;
-  color: #999;
-  white-space: nowrap;
-}
-
-/* ── Full page : hero (titre + bouton suivre) ── */
-
-.embed-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin-bottom: 26px;
-}
-
-.embed-hero-title {
-  margin: 0;
-  font-size: clamp(24px, 3.4vw, 38px);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.6px;
-}
-
-.embed-hero-name {
-  color: #c87941;
-}
-
-.embed-hero-follow {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  background: #c87941;
-  color: #fff;
-  padding: 11px 18px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-  box-shadow: 0 6px 18px rgba(200,121,65,0.28);
-  transition: filter 0.15s, transform 0.15s;
-}
-
-.embed-hero-follow:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
-}
-
-/* ── Full page : grille 2 colonnes, cartes style Vitrine ── */
-
-.embed-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  align-items: start;
-  gap: 16px;
-}
-
-.embed-fcard {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
-}
-
-.embed-fcard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 30px rgba(0,0,0,0.10);
-  border-color: rgba(200,121,65,0.5);
-}
-
-.embed-page[data-theme="dark"] .embed-fcard {
-  background: #242424;
-  border-color: rgba(255,255,255,0.08);
-}
-
-.embed-page[data-theme="dark"] .embed-fcard:hover {
-  box-shadow: 0 14px 30px rgba(0,0,0,0.45);
-}
-
-/* Affiche en grand, pleine largeur, ratio FIXE 3/4 (cover) → toutes les cartes harmonisées */
-.embed-fposter {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  background: rgba(0,0,0,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.embed-fposter img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Placeholder neutre (event sans affiche) — initiale en filigrane, pas de couleur */
-.embed-fposter-ph {
-  font-size: 46px;
-  font-weight: 800;
-  color: rgba(0,0,0,0.12);
-}
-
-.embed-page[data-theme="dark"] .embed-fposter {
-  background: rgba(255,255,255,0.04);
-}
-
-.embed-page[data-theme="dark"] .embed-fposter-ph {
-  color: rgba(255,255,255,0.13);
-}
-
-/* Corps sous l'affiche : date à gauche + infos */
-.embed-fbody {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 16px;
-}
-
-.embed-fdate {
-  flex-shrink: 0;
-  width: 52px;
-  text-align: center;
-  line-height: 1;
-}
-
-.embed-fdate b {
-  display: block;
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.embed-fdate span {
-  display: block;
-  margin-top: 3px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #999;
-}
-
-.embed-fdate i {
-  display: block;
-  margin-top: 2px;
-  font-style: normal;
-  font-size: 11px;
-  color: #999;
-  opacity: 0.75;
-}
-
-.embed-finfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.embed-fname {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.22;
-}
-
-.embed-ftags {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.embed-ftag {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.05);
-  color: #888;
-  text-transform: capitalize;
-}
-
-.embed-page[data-theme="dark"] .embed-ftag {
-  background: rgba(255,255,255,0.08);
-  color: #b0b0b0;
-}
-
-.embed-floc {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 9px;
-  font-size: 13px;
-  opacity: 0.85;
-}
-
-.embed-floc svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  fill: none;
-  stroke: currentColor;
-  color: #999;
-}
-
-.embed-fdur {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-  font-size: 12px;
-  color: #999;
-}
-
-.embed-fdur svg {
-  width: 13px;
-  height: 13px;
-  flex-shrink: 0;
-  fill: none;
-  stroke: currentColor;
-}
-
-/* ── Footer marque (icône + mot + point) + slogan ── */
-
-.embed-foot {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(0,0,0,0.07);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-}
-
-.embed-page[data-theme="dark"] .embed-foot {
-  border-top-color: rgba(255,255,255,0.08);
-}
-
-.embed-foot-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.embed-foot-mark {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.embed-foot-word {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-}
-
-.embed-foot-dot {
-  color: #c87941;
-}
-
-.embed-foot-slogan {
-  font-size: 12.5px;
-  color: #999;
-}
-
-/* ── Responsive ── */
-
-@media (max-width: 360px) {
-  .embed-card-image {
-    width: 80px;
-  }
-  .embed-card-name {
-    font-size: 13px;
-  }
+@media (max-width: 380px) {
+  .embed-escale { gap: 12px; padding: 14px; }
+  .embed-edate { width: 46px; }
+  .embed-edate b { font-size: 24px; }
+  .embed-eposter { width: 64px; height: 86px; }
 }

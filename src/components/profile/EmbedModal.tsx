@@ -1,17 +1,12 @@
 import { useState, useEffect, type CSSProperties } from 'react'
 import { X, Copy, Check, ExternalLink } from 'lucide-react'
 import { buildEmbedSnippet } from '@/lib/embed-snippet'
-import type { EmbedView, EmbedTheme } from '@/lib/embed-params'
+import type { EmbedTheme } from '@/lib/embed-params'
 
 interface EmbedModalProps {
   slug: string
   onClose: () => void
 }
-
-const VIEW_TABS: { id: EmbedView; label: string }[] = [
-  { id: 'mini', label: 'Vignette' },
-  { id: 'full', label: 'Pleine page' },
-]
 
 const THEME_TABS: { id: EmbedTheme; label: string }[] = [
   { id: 'light', label: 'Clair' },
@@ -22,10 +17,9 @@ const THEME_TABS: { id: EmbedTheme; label: string }[] = [
 /** Modale « Intégrer mon calendrier », au style DA carnet (classes v-* de Vitrine.css). */
 export function EmbedModal({ slug, onClose }: EmbedModalProps) {
   const [copied, setCopied] = useState(false)
-  const [view, setView] = useState<EmbedView>('mini')
   const [theme, setTheme] = useState<EmbedTheme>('auto')
 
-  const snippet = buildEmbedSnippet({ slug, view, theme })
+  const snippet = buildEmbedSnippet({ slug, theme })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -85,15 +79,6 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
           </p>
 
           <div>
-            <div style={fieldLabel}>Format</div>
-            <div style={track}>
-              {VIEW_TABS.map(t => (
-                <button key={t.id} type="button" aria-pressed={view === t.id} style={seg(view === t.id)} onClick={() => setView(t.id)}>{t.label}</button>
-              ))}
-            </div>
-          </div>
-
-          <div>
             <div style={fieldLabel}>Thème</div>
             <div style={track}>
               {THEME_TABS.map(t => (
@@ -118,11 +103,9 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
             {snippet}
           </pre>
 
-          {view === 'full' && (
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'hsl(var(--muted-foreground))', margin: 0 }}>
-              Pleine largeur du parent par défaut. Pour la limiter, ajoute <code>&amp;maxw=720</code> à l'URL (largeur max en pixels).
-            </p>
-          )}
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'hsl(var(--muted-foreground))', margin: 0 }}>
+            Pleine largeur du conteneur par défaut. Pour la limiter, ajoute <code>&amp;maxw=720</code> à l'URL (largeur max en pixels).
+          </p>
         </div>
 
         <div className="v-mfoot">
@@ -131,7 +114,7 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
           </button>
           <a
             className="v-qr-btn is-primary"
-            href={`/@${slug}/embed?view=${view}&theme=${theme}`}
+            href={`/@${slug}/embed?theme=${theme}`}
             target="_blank"
             rel="noopener noreferrer"
           >

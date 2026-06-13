@@ -5,6 +5,7 @@ import { Calendar } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
 import { eventShareUrl } from '@/lib/event-link'
 import { parseEmbedParams } from '@/lib/embed-params'
+import { useTags } from '@/hooks/use-tags'
 import './EmbedPage.css'
 
 /* Mois abrégés (rendu date façon Vitrine, sans dépendance) */
@@ -36,10 +37,14 @@ export function EmbedPage() {
   const slug = rawSlug?.replace(/^@/, '')
   const [searchParams] = useSearchParams()
 
-  const { view, theme: themeParam, max, accent, maxWidth } = useMemo(
+  const { theme: themeParam, max, accent, maxWidth } = useMemo(
     () => parseEmbedParams(searchParams),
     [searchParams],
   )
+
+  // Tags dynamiques (mêmes couleurs par tag que la Vitrine).
+  const { tags } = useTags()
+  const tagOf = (name: string) => tags.find(t => t.value === name || t.label === name)
 
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
     if (themeParam === 'dark') return 'dark'
@@ -138,28 +143,22 @@ export function EmbedPage() {
     }
   }, [events.length, loading])
 
-  const formatDayMonth = (start: string) => {
-    const d = new Date(start)
-    return {
-      day: d.toLocaleDateString('fr-FR', { day: '2-digit' }),
-      month: d.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', ''),
-    }
-  }
-
   if (loading) {
     return (
-      <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
-        <div className="embed-cards">
-          {[1, 2].map(i => (
-            <div key={i} className="embed-skeleton">
-              <div className="embed-skeleton-image" />
-              <div className="embed-skeleton-body">
-                <div className="embed-skeleton-line" />
-                <div className="embed-skeleton-line" />
-                <div className="embed-skeleton-line" />
+      <div className="embed-page" data-theme={resolvedTheme}>
+        <div className="embed-page-container" style={{ maxWidth: maxWidth ? `${maxWidth}px` : '100%' }}>
+          <div className="embed-escales">
+            {[1, 2].map(i => (
+              <div key={i} className="embed-skeleton">
+                <div className="embed-skeleton-image" />
+                <div className="embed-skeleton-body">
+                  <div className="embed-skeleton-line" />
+                  <div className="embed-skeleton-line" />
+                  <div className="embed-skeleton-line" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -167,7 +166,7 @@ export function EmbedPage() {
 
   if (notFound || !entity) {
     return (
-      <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
+      <div className="embed-page" data-theme={resolvedTheme}>
         <div className="embed-centered">Profil introuvable</div>
       </div>
     )
@@ -177,109 +176,80 @@ export function EmbedPage() {
   const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
   return (
-    <div className="embed-page" data-theme={resolvedTheme} data-view={view}>
+    <div className="embed-page" data-theme={resolvedTheme}>
      <div className="embed-page-container" style={{ maxWidth: maxWidth ? `${maxWidth}px` : '100%' }}>
-      {/* Header */}
-      {view === 'full' ? (
-        <div className="embed-hero">
-          <h1 className="embed-hero-title">
-            Les événements de <span className="embed-hero-name">{displayName}</span>
-          </h1>
-          <a
-            className="embed-hero-follow"
-            href={`https://flw.sh/${slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Suivre ses événements sur Fellowship
-          </a>
-        </div>
-      ) : (
-        <div className="embed-header">
-          {entity.avatar_url ? (
-            <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
-          ) : (
-            <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
-              {displayName[0]?.toUpperCase()}
-            </div>
-          )}
-          <div className="embed-header-name">{displayName}</div>
-          {subtitle && <div className="embed-header-sub">{subtitle}</div>}
-        </div>
-      )}
+      {/* En-tête identité : avatar + nom + description, centré */}
+      <div className="embed-header">
+        {entity.avatar_url ? (
+          <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
+        ) : (
+          <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
+            {displayName[0]?.toUpperCase()}
+          </div>
+        )}
+        <div className="embed-header-name">{displayName}</div>
+        {subtitle && <div className="embed-header-sub">{subtitle}</div>}
+      </div>
 
-      {/* Events */}
+      {/* Événements — cartes « escales » (design exact de la Vitrine) */}
       {events.length === 0 ? (
         <div className="embed-empty">
           <Calendar className="embed-empty-icon" strokeWidth={1.5} />
           <p className="embed-empty-text">Aucun événement à venir</p>
         </div>
-      ) : view === 'mini' ? (
-        <div className="embed-mini-list">
-          {events.map((ev) => {
-            const { day, month } = formatDayMonth(ev.start_date)
-            return (
-              <a
-                key={ev.id}
-                href={eventShareUrl(ev, 'https://flw.sh')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="embed-mini-row"
-              >
-                <div className="embed-mini-date">
-                  <span className="embed-mini-day" style={{ color: accent }}>{day}</span>
-                  <span className="embed-mini-month">{month}</span>
-                </div>
-                <span className="embed-mini-name">{ev.name}</span>
-                <span className="embed-mini-loc">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
-              </a>
-            )
-          })}
-        </div>
       ) : (
-        <div className="embed-grid">
+        <div className="embed-escales">
           {events.map((ev) => {
             const d = new Date(ev.start_date)
-            const tags = (ev.tags ?? []).slice(0, 3)
             const dur = durationDays(ev.start_date, ev.end_date)
+            const geo = [ev.city, ev.department ? `(${ev.department})` : null].filter(Boolean).join(' ')
+            const evTags = (ev.tags ?? []).slice(0, 3)
             return (
               <a
                 key={ev.id}
                 href={eventShareUrl(ev, 'https://flw.sh')}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="embed-fcard"
+                className="embed-escale"
               >
-                <div className="embed-fposter">
-                  {ev.image_url
-                    ? <img src={ev.image_url} alt="" loading="lazy" />
-                    : <span className="embed-fposter-ph">{ev.name?.[0]?.toUpperCase() ?? '✦'}</span>}
+                <div className="embed-edate">
+                  <b>{d.getDate()}</b>
+                  <span>{MOIS[d.getMonth()]}</span>
+                  <i>{d.getFullYear()}</i>
                 </div>
-                <div className="embed-fbody">
-                  <div className="embed-fdate">
-                    <b>{d.getDate()}</b>
-                    <span>{MOIS[d.getMonth()]}</span>
-                    <i>{d.getFullYear()}</i>
-                  </div>
-                  <div className="embed-finfo">
-                    <div className="embed-fname">{ev.name}</div>
-                    {tags.length > 0 && (
-                      <div className="embed-ftags">
-                        {tags.map(t => (
-                          <span key={t} className="embed-ftag">{t.replace(/-/g, ' ')}</span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="embed-floc">
+                <div className="embed-eposter">
+                  {ev.image_url && <img src={ev.image_url} alt="" loading="lazy" />}
+                </div>
+                <div className="embed-einfo">
+                  <div className="embed-en">{ev.name}</div>
+                  {evTags.length > 0 && (
+                    <div className="embed-etags">
+                      {evTags.map(name => {
+                        const t = tagOf(name)
+                        return (
+                          <span
+                            key={name}
+                            className="embed-etag"
+                            style={t ? { background: t.bg, color: t.color } : undefined}
+                          >
+                            {t?.label ?? name.replace(/-/g, ' ')}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  )}
+                  {geo && (
+                    <div className="embed-eloc">
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
-                      {ev.city}{ev.department ? ` (${ev.department})` : ''}
+                      {geo}
                     </div>
-                    <div className="embed-fdur">
-                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-                      {dur} jour{dur !== 1 ? 's' : ''}
-                    </div>
+                  )}
+                  <div className="embed-edur">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                    {dur} jour{dur !== 1 ? 's' : ''}
                   </div>
                 </div>
+                <span className="embed-echev" aria-hidden="true">›</span>
               </a>
             )
           })}
@@ -299,7 +269,7 @@ export function EmbedPage() {
         </a>
         <div className="embed-foot-slogan">Propulsé par Fellowship — le réseau qui fait tourner les festivals</div>
       </div>
-      </div>
+     </div>
     </div>
   )
 }
