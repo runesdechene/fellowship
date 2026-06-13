@@ -379,6 +379,17 @@ html:has(.embed-page) body::-webkit-scrollbar {
   font-size: 24px;
 }
 
+.embed-page[data-view="mini"] .embed-header-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+/* Description collée sous le nom (l'en-tête est en colonne avec gap). */
+.embed-page[data-view="mini"] .embed-header-sub {
+  margin-top: -4px;
+}
+
 .embed-mini-list {
   display: flex;
   flex-direction: column;

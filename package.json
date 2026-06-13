@@ -1,7 +1,7 @@
 {
   "name": "flwsh",
   "private": true,
-  "version": "0.7.272",
+  "version": "0.7.273",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -46,6 +46,7 @@
     "globals": "^16.5.0",
     "jsdom": "^29.0.1",
     "pg": "^8.20.0",
+    "playwright-core": "^1.60.0",
     "sharp": "^0.34.5",
     "sharp-cli": "^5.2.0",
     "supabase": "^2.88.1",

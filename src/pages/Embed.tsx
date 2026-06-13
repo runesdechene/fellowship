@@ -203,6 +203,7 @@ export function EmbedPage() {
               {displayName[0]?.toUpperCase()}
             </div>
           )}
+          <div className="embed-header-name">{displayName}</div>
           {subtitle && <div className="embed-header-sub">{subtitle}</div>}
         </div>
       )}
