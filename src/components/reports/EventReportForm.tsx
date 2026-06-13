@@ -3,6 +3,9 @@ import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import { useEventReport, saveEventReport } from '@/hooks/use-reports'
 import { uploadBilanPhoto, signedUrlsFor, removeBilanPhoto } from '@/lib/bilan-media'
+import { LEDGER_CATEGORIES, defaultDirectionFor, ledgerProfit, categoryLabel } from '@/lib/ledger'
+import type { LedgerCategory, LedgerDirection } from '@/types/database'
+import { useEventLedger, insertLedgerEntry, updateLedgerEntry, deleteLedgerEntry, ensureReportId } from '@/hooks/use-ledger'
 import { Button } from '@/components/ui/button'
 import { Lock, Plus, X, ImagePlus } from 'lucide-react'
 
@@ -15,9 +18,11 @@ interface EventReportFormProps {
 export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
   const { user, currentActor, currentActorRow } = useAuth()
   const { report: existing } = useEventReport(eventId)
-  const [boothCost, setBoothCost] = useState('')
-  const [charges, setCharges] = useState('')
-  const [revenue, setRevenue] = useState('')
+  const { entries, refetch: refetchEntries } = useEventLedger(eventId)
+  const [adding, setAdding] = useState(false)
+  const [newCat, setNewCat] = useState<LedgerCategory>('essence')
+  const [newAmount, setNewAmount] = useState('')
+  const [newLabel, setNewLabel] = useState('')
   const [improvements, setImprovements] = useState<string[]>([])
   const [newImprovement, setNewImprovement] = useState('')
   const [note, setNote] = useState('')
@@ -29,9 +34,6 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
   useEffect(() => {
     if (existing) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setBoothCost(existing.booth_cost?.toString() ?? '')
-      setCharges(existing.charges?.toString() ?? '')
-      setRevenue(existing.revenue?.toString() ?? '')
       setImprovements(existing.improvements ?? [])
       setNote(existing.note ?? '')
       setMediaPaths(existing.media_paths ?? [])
@@ -56,7 +58,31 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
     )
   }
 
-  const profit = (parseFloat(revenue) || 0) - (parseFloat(boothCost) || 0) - (parseFloat(charges) || 0)
+  const profit = ledgerProfit(entries)
+
+  const addEntry = async () => {
+    const amt = parseFloat(newAmount) || 0
+    if (!currentActor || amt <= 0) return
+    const reportId = await ensureReportId(currentActor.id, eventId)
+    if (!reportId) return
+    await insertLedgerEntry({
+      report_id: reportId, actor_id: currentActor.id, event_id: eventId,
+      label: newLabel.trim() || null, amount: amt,
+      direction: defaultDirectionFor(newCat), category: newCat, source: 'manual',
+    })
+    setNewAmount(''); setNewLabel(''); setAdding(false)
+    await refetchEntries()
+  }
+
+  const toggleDirection = async (id: string, dir: LedgerDirection) => {
+    await updateLedgerEntry(id, { direction: dir === 'in' ? 'out' : 'in' })
+    await refetchEntries()
+  }
+
+  const removeEntry = async (id: string) => {
+    await deleteLedgerEntry(id)
+    await refetchEntries()
+  }
 
   const handlePhotos = async (files: FileList | null) => {
     if (!files || !currentActor) return
@@ -86,9 +112,6 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
       actor_id: currentActor.id,
       acted_by_user_id: user.id,
       event_id: eventId,
-      booth_cost: boothCost ? parseFloat(boothCost) : null,
-      charges: charges ? parseFloat(charges) : null,
-      revenue: revenue ? parseFloat(revenue) : null,
       improvements,
       note: note.trim() || null,
       media_paths: mediaPaths,
@@ -110,19 +133,39 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
         <h3 className="font-semibold">Bilan privé</h3>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Coût emplacement (€)</label>
-          <input type="number" className={inputClass} value={boothCost} onChange={e => setBoothCost(e.target.value)} />
-        </div>
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Charges (€)</label>
-          <input type="number" className={inputClass} value={charges} onChange={e => setCharges(e.target.value)} />
-        </div>
-        <div>
-          <label className="text-xs font-medium text-muted-foreground">Chiffre d'affaires (€)</label>
-          <input type="number" className={inputClass} value={revenue} onChange={e => setRevenue(e.target.value)} />
-        </div>
+      <div className="bilan-ledger">
+        <div className="bilan-ledger-label">Mes lignes (dépenses &amp; recettes)</div>
+        <ul className="bilan-ledger-list">
+          {entries.map(e => (
+            <li key={e.id} className={`bilan-ledger-row ${e.direction}`}>
+              <button
+                type="button"
+                className="bilan-ledger-sign"
+                onClick={() => toggleDirection(e.id, e.direction)}
+                title="Basculer dépense / recette"
+              >{e.direction === 'in' ? '+' : '−'}</button>
+              <span className="bilan-ledger-cat">{e.label || categoryLabel(e.category)}</span>
+              <span className="bilan-ledger-amt">{e.amount.toLocaleString('fr-FR')} €</span>
+              {e.source === 'stepper'
+                ? <span className="bilan-ledger-auto" title="Saisi depuis le suivi de paiement">auto</span>
+                : <button type="button" className="bilan-ledger-del" onClick={() => removeEntry(e.id)} aria-label="Supprimer"><X className="h-3 w-3" /></button>}
+            </li>
+          ))}
+          {entries.length === 0 && <li className="bilan-ledger-empty">Aucune ligne pour l'instant.</li>}
+        </ul>
+
+        {adding ? (
+          <div className="bilan-ledger-add">
+            <select value={newCat} onChange={e => setNewCat(e.target.value as LedgerCategory)}>
+              {LEDGER_CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.emoji} {c.label}</option>)}
+            </select>
+            <input className={inputClass} placeholder="Libellé (optionnel)" value={newLabel} onChange={e => setNewLabel(e.target.value)} />
+            <input className={inputClass} type="number" inputMode="decimal" placeholder="Montant €" value={newAmount} onChange={e => setNewAmount(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addEntry() }} />
+            <Button size="sm" onClick={addEntry}>Ajouter</Button>
+          </div>
+        ) : (
+          <Button size="sm" variant="ghost" onClick={() => setAdding(true)}><Plus className="h-4 w-4" /> Ajouter une ligne</Button>
+        )}
       </div>
 
       <div className="rounded-lg bg-card p-3 text-center">
