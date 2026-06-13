@@ -27,6 +27,10 @@ describe('eventsToGeoJSON', () => {
     expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'interesse' }]).features[0].properties.accepted).toBe(false)
     expect(eventsToGeoJSON([ev()], [{ event_id: 'e1', status: 'en_cours' }]).features[0].properties.accepted).toBe(false)
   })
+  it('isPrivate repris depuis is_private (défaut false)', () => {
+    expect(eventsToGeoJSON([ev()], []).features[0].properties.isPrivate).toBe(false)
+    expect(eventsToGeoJSON([ev({ is_private: true })], []).features[0].properties.isPrivate).toBe(true)
+  })
   it('ignore les events sans coords', () => {
     expect(eventsToGeoJSON([ev({ latitude: null })], []).features).toHaveLength(0)
   })

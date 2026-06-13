@@ -13,6 +13,7 @@ export type EventForMap = {
   image_url: string | null
   latitude: number | null
   longitude: number | null
+  is_private?: boolean
 }
 
 export type ParticipationLite = { event_id: string; status: string }
@@ -34,6 +35,7 @@ export type MapFeatureProps = {
   color: string
   imageUrl: string | null
   accepted: boolean
+  isPrivate: boolean
 }
 
 export type MapFeature = {
@@ -59,6 +61,7 @@ export function eventsToGeoJSON(events: EventForMap[], parts: ParticipationLite[
         id: e.id, slug: e.slug, name: e.name, city: e.city,
         startDate: e.start_date, endDate: e.end_date,
         primaryTag, color: getTagLandingColor(primaryTag), imageUrl: e.image_url, accepted: acceptedIds.has(e.id),
+        isPrivate: e.is_private ?? false,
       },
     })
   }

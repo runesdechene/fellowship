@@ -51,6 +51,12 @@ function buildEventEl(p: MapFeatureProps): HTMLDivElement {
   el.className = 'map-event-marker'
   el.style.setProperty('--mk-color', p.color)
   if (!setBgImage(el, p.imageUrl)) el.textContent = getTagEmoji(p.primaryTag)
+  if (p.isPrivate) {
+    const lock = document.createElement('div')
+    lock.className = 'map-event-lock'
+    lock.textContent = '🔒'
+    el.appendChild(lock)
+  }
   return el
 }
 

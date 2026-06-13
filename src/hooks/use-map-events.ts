@@ -17,11 +17,15 @@ export function useMapEvents() {
     async function load() {
       setLoading(true)
       setError(null)
-      const { data: rows, error: e1 } = await supabase
+      let q = supabase
         .from('events')
-        .select('id, slug, name, city, department, start_date, end_date, created_at, tags, image_url, latitude, longitude')
-        .eq('is_private', false)   // events privés jamais listés (Carte)
+        .select('id, slug, name, city, department, start_date, end_date, created_at, tags, image_url, latitude, longitude, is_private')
         .not('latitude', 'is', null)
+      // Mes events privés sont visibles sur MA carte (avec cadenas) ; ceux des autres restent exclus.
+      q = currentActor
+        ? q.or(`is_private.eq.false,created_by_actor.eq.${currentActor.id}`)
+        : q.eq('is_private', false)
+      const { data: rows, error: e1 } = await q
       if (e1) {
         if (!cancelled) { setError(e1.message); setLoading(false) }
         return
