@@ -131,7 +131,14 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                   const fname = ev.friendName ?? 'Un ami'
                   return (
                     <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="mobile-event-pill fr">
-                      <span className="agenda-fr-av" style={{ background: avatarGradient(fname) }}>{fname[0].toUpperCase()}</span>
+                      <span
+                        className="agenda-fr-av"
+                        title={`Voir le profil de ${fname}`}
+                        onClick={e => { e.preventDefault(); e.stopPropagation(); navigate(`/@${ev.friendSlug ?? ''}`) }}
+                        style={ev.friendAvatarUrl ? undefined : { background: avatarGradient(fname) }}
+                      >
+                        {ev.friendAvatarUrl ? <img src={ev.friendAvatarUrl} alt={fname} /> : fname[0].toUpperCase()}
+                      </span>
                       <div className="mobile-event-pill-info">
                         <div className="mobile-event-pill-name">{ev.name}</div>
                         <div className="mobile-event-pill-meta">

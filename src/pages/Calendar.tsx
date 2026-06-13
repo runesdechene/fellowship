@@ -84,6 +84,8 @@ export function CalendarPage() {
         slug: (ev.slug as string | null) ?? null,
         isFriend: true,
         friendName: fp.actor_public?.label ?? 'Un ami',
+        friendAvatarUrl: fp.actor_public?.avatar_url ?? null,
+        friendSlug: fp.actor_public?.public_slug ?? fp.actor_id,
       }
 
       if (!map[key]) map[key] = []

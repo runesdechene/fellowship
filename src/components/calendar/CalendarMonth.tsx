@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MapPin, Lock } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
 import { MonthBanner } from './MonthBanner'
@@ -28,6 +28,7 @@ interface CalendarMonthProps {
 export function CalendarMonth({ data, actorKind, friendParticipations = [], onOpenFriends }: CalendarMonthProps) {
   const { month, label, events } = data
   const getTagColor = useTagColor()
+  const navigate = useNavigate()
   const now = new Date()
 
   const mine = events.filter(e => !e.isFriend)
@@ -108,7 +109,14 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                   <div className="calendar-evF-name">{ev.name}</div>
                   <div className="calendar-evF-meta">{fname} y va · {formatDateRange(ev.startDate, ev.endDate)}</div>
                 </div>
-                <span className="calendar-evF-av" style={{ background: avatarGradient(fname) }}>{fname[0]!.toUpperCase()}</span>
+                <span
+                  className="calendar-evF-av"
+                  title={`Voir le profil de ${fname}`}
+                  onClick={e => { e.preventDefault(); e.stopPropagation(); navigate(`/@${ev.friendSlug ?? ''}`) }}
+                  style={ev.friendAvatarUrl ? undefined : { background: avatarGradient(fname) }}
+                >
+                  {ev.friendAvatarUrl ? <img src={ev.friendAvatarUrl} alt={fname} /> : fname[0]!.toUpperCase()}
+                </span>
               </Link>
             )
           })}

@@ -17,6 +17,8 @@ export interface CalendarEvent {
   isPrivate?: boolean
   isFriend?: boolean
   friendName?: string
+  friendAvatarUrl?: string | null
+  friendSlug?: string | null
 }
 
 export interface CalendarMonth {

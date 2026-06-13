@@ -323,7 +323,8 @@
 .calendar-evF-info { flex: 1; min-width: 0; }
 .calendar-evF-name { font-family: var(--font-heading); font-size: 12px; font-weight: 600; line-height: 1.2; color: hsl(var(--foreground)); }
 .calendar-evF-meta { font-size: 11px; color: hsl(var(--muted-foreground)); }
-.calendar-evF-av { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1c1310; flex-shrink: 0; }
+.calendar-evF-av { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1c1310; flex-shrink: 0; overflow: hidden; cursor: pointer; }
+.calendar-evF-av img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ── Presence row (legacy — kept for compat) ───────────────────────── */
 
@@ -823,7 +824,9 @@
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-heading); font-size: 12px; font-weight: 700;
   color: #fff;
+  overflow: hidden; cursor: pointer;
 }
+.agenda-fr-av img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Mois vide : mini-bandeau réduit (reprend le carré arrondi des mois pleins). */
 .agenda-empty {
