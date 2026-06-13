@@ -72,6 +72,15 @@ Règle unique : **toute lecture d'`events` qui n'est ni une surface de suivi per
 8. **RPC de dates du réseau** (fuite indirecte via la participation du créateur) — `get_followers_with_dates`, `get_following_with_dates`, `get_friends_with_dates`, `get_coevent_suggestions`, et l'agrégation « X compagnons sur cette date » du calendrier : **exclure les events privés** (`JOIN events ... WHERE is_private = false`). La participation du créateur à un event privé ne doit JAMAIS remonter à ses abonnés.
 9. **AdminEvents** (back-office) — décision : l'admin **ne voit pas** les events privés des exposants (cohérent avec « aucun admin n'accède aux données perso », cf. bilans privés). Filtrer `is_private = false` côté admin aussi. (À confirmer au plan ; défaut = exclus.)
 
+### Surfaces SUPPLÉMENTAIRES trouvées en revue adversariale finale (le plan initial les avait ratées)
+10. **Triggers de notification DB** `notify_friend_going` / `notify_friend_note` (`AFTER INSERT` participations/notes) : fan-out du **nom + lien** de l'event aux abonnés du créateur. L'auto-participation à la création d'un event privé les déclenchait → **fuite haute gravité**. Garde `IF event_is_private THEN RETURN NEW` (migration `20260613140000`).
+11. **Embed public** (`Embed.tsx`, widget Shopify) — jumeau public de la vitrine, à filtrer (select imbriqué + client-side).
+12. **« Où vont mes amis »** sur le Calendrier (`useFriendsParticipations`) — la participation d'un ami à son event privé y remontait → `.eq('events.is_private', false)`.
+13. **Recherche globale** (`SearchBar.tsx`) — cherchait bien dans les events (≠ hypothèse initiale « entités only ») → filtre ajouté.
+14. **Badge « nouveaux festivals »** (`use-community-badge`) + **autocomplétion de tags** (`TagInput`) — filtres ajoutés.
+
+> Leçon : l'invariant « aucune fuite » doit énumérer **toutes** les lectures d'`events` (y compris triggers DB et nested selects), pas seulement les hooks de listing évidents. Une revue adversariale dédiée est indispensable pour une feature de confidentialité.
+
 ### Implémentation de l'invariant
 - Centraliser dans un helper/commentaire : tout `from('events').select()` de découverte ajoute `.eq('is_private', false)`. Les RPC concernées sont recréées avec le garde SQL.
 - Test de non-régression : un event privé créé par A n'apparaît pas dans (a) `search_similar_events`, (b) les dates réseau vues par un follower B, (c) la vitrine de A. Ces trois là sont les chemins « non évidents » — les couvrir en priorité.

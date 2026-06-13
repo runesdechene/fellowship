@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.277',
+    date: '2026-06-13',
+    title: 'Événements privés',
+    changes: [
+      'Crée un événement privé (🔒) : visible seulement de toi et de qui a le lien',
+      'Un événement privé n\'apparaît dans aucune recherche, ni l\'Explorer, ni la carte, ni ta vitrine — parfait pour tes petites dates non publiques',
+      'Tu peux suivre ton paiement et faire ton bilan dessus comme sur n\'importe quel festival',
+      'Tu peux le rendre public plus tard s\'il grandit',
+    ],
+  },
+  {
     version: '0.7.276',
     date: '2026-06-13',
     title: 'Suivi financier des festivals',
