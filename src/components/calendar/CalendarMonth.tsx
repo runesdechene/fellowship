@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin } from 'lucide-react'
+import { MapPin, Lock } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
 import { MonthBanner } from './MonthBanner'
 import { useTags } from '@/hooks/use-tags'
@@ -57,7 +57,7 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
                 <div className="calendar-event-image"><img src={ev.imageUrl} alt="" /></div>
               )}
               <div className="calendar-event-info">
-                <div className="calendar-event-name">{ev.name}</div>
+                <div className="calendar-event-name">{ev.name}{ev.isPrivate && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}</div>
                 <span className="calendar-event-tag" style={{ background: tc.bg, color: tc.color }}>
                   <I size={10} strokeWidth={2} />{ev.primaryTag}
                 </span>

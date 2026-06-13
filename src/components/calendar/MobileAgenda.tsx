@@ -1,4 +1,5 @@
 import { useMemo, type KeyboardEvent } from 'react'
+import { Lock } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { eventPath } from '@/lib/event-link'
 import { useTags } from '@/hooks/use-tags'
@@ -82,7 +83,7 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                     )}
                     <div className="mobile-event-pill-info">
                       <div className="mobile-event-pill-name">
-                        <Icon size={12} strokeWidth={2} className="inline -mt-px shrink-0" />{' '}{ev.name}
+                        <Icon size={12} strokeWidth={2} className="inline -mt-px shrink-0" />{' '}{ev.name}{ev.isPrivate && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}
                       </div>
                       <div className="mobile-event-pill-meta">
                         <span>{formatDateRange(ev.startDate, ev.endDate)}</span>

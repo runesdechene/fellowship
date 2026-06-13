@@ -14,6 +14,7 @@ export interface CalendarEvent {
   department: string
   imageUrl: string | null
   slug: string | null
+  isPrivate?: boolean
   isFriend?: boolean
   friendName?: string
 }
@@ -57,6 +58,7 @@ export function buildCalendarMonths(participations: ParticipationWithEvent[], ye
       department: p.events.department,
       imageUrl: p.events.image_url,
       slug: p.events.slug,
+      isPrivate: (p.events as { is_private?: boolean }).is_private ?? false,
     })
   }
 
