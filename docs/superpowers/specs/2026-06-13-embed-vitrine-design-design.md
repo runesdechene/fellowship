@@ -70,6 +70,17 @@ globalement (`index.html`) — l'embed est une route de l'app, donc dispo. On le
 - Compagnons.
 - Sous-titre « Prochaines escales — N dates » : l'en-tête identité suffit (peut s'ajouter plus tard).
 
+## Addendum 2026-06-13 — Repli « Voir plus » + masquer l'identité
+
+- **Repli** : par défaut on n'affiche que les **4 prochaines** dates + bouton **« Voir les N autres dates »**
+  (et **« Voir moins »** pour replier). Param `?preview=N` (clampé [0,50]) change le seuil ; `?preview=0`
+  affiche tout (pas de repli). Pas de bouton si ≤ seuil. État client (`expanded`) ; l'auto-resize iframe suit.
+- **Masquer l'identité** : `?header=0` masque avatar + nom + description. Exposé aussi via une **case à cocher
+  « Masquer l'identité »** dans `EmbedModal` (génère `&header=0` dans le snippet + le lien « Voir en vrai »).
+- Params ajoutés à `embed-params.ts` : `preview: number` (défaut 4), `showHeader: boolean` (défaut true).
+  `buildEmbedSnippet` accepte `hideHeader?`. Bouton stylé `.embed-more` (DA, pleine largeur).
+- Vérifié headless : défaut = 4 cartes + « Voir les 8 autres dates » ; clic → 12 + « Voir moins » ; `header=0` → 0 en-tête.
+
 ## Vérification
 
 - `pnpm build` vert ; tests `embed-params` + `embed-snippet` verts.

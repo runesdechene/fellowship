@@ -7,6 +7,10 @@ export interface EmbedParams {
   accent: string
   /** Largeur max du contenu en px ; null = pleine largeur du parent (100%). */
   maxWidth: number | null
+  /** Nb de dates visibles avant « Voir plus » ; 0 = tout afficher (pas de repli). Défaut 4. */
+  preview: number
+  /** Affiche l'en-tête identité (avatar + nom + description) ; `header=0` le masque. */
+  showHeader: boolean
 }
 
 export function parseEmbedParams(params: URLSearchParams): EmbedParams {
@@ -27,5 +31,12 @@ export function parseEmbedParams(params: URLSearchParams): EmbedParams {
     ? Math.min(Math.max(maxwRaw, 240), 2000)
     : null
 
-  return { theme, max, accent, maxWidth }
+  // Repli : `preview` dates visibles avant « Voir plus » (clampé [0,50]) ; défaut 4. 0 = tout afficher.
+  const previewRaw = parseInt(params.get('preview') ?? '', 10)
+  const preview = Number.isFinite(previewRaw) ? Math.min(Math.max(previewRaw, 0), 50) : 4
+
+  // En-tête identité affiché sauf `header=0`.
+  const showHeader = params.get('header') !== '0'
+
+  return { theme, max, accent, maxWidth, preview, showHeader }
 }

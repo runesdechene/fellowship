@@ -18,8 +18,9 @@ const THEME_TABS: { id: EmbedTheme; label: string }[] = [
 export function EmbedModal({ slug, onClose }: EmbedModalProps) {
   const [copied, setCopied] = useState(false)
   const [theme, setTheme] = useState<EmbedTheme>('auto')
+  const [hideHeader, setHideHeader] = useState(false)
 
-  const snippet = buildEmbedSnippet({ slug, theme })
+  const snippet = buildEmbedSnippet({ slug, theme, hideHeader })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -87,6 +88,16 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
             </div>
           </div>
 
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 13, color: 'hsl(var(--foreground))' }}>
+            <input
+              type="checkbox"
+              checked={hideHeader}
+              onChange={e => setHideHeader(e.target.checked)}
+              style={{ width: 16, height: 16, accentColor: 'var(--copper)', cursor: 'pointer' }}
+            />
+            Masquer l'identité (avatar, nom, description)
+          </label>
+
           <pre style={{
             background: 'hsl(var(--border) / 0.35)',
             borderRadius: 12,
@@ -114,7 +125,7 @@ export function EmbedModal({ slug, onClose }: EmbedModalProps) {
           </button>
           <a
             className="v-qr-btn is-primary"
-            href={`/@${slug}/embed?theme=${theme}`}
+            href={`/@${slug}/embed?theme=${theme}${hideHeader ? '&header=0' : ''}`}
             target="_blank"
             rel="noopener noreferrer"
           >

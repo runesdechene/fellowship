@@ -14,4 +14,11 @@ describe('buildEmbedSnippet', () => {
     const s = buildEmbedSnippet({ slug: 'rune-de-chene', theme: 'light' })
     expect(s).toContain('/embed?theme=light')
   })
+
+  it('hideHeader → ajoute &header=0', () => {
+    expect(buildEmbedSnippet({ slug: 'rune-de-chene', theme: 'auto', hideHeader: true }))
+      .toContain('?theme=auto&header=0')
+    expect(buildEmbedSnippet({ slug: 'rune-de-chene', theme: 'auto', hideHeader: false }))
+      .not.toContain('header=0')
+  })
 })

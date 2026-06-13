@@ -4,10 +4,25 @@ import { parseEmbedParams } from './embed-params'
 const P = (qs: string) => new URLSearchParams(qs)
 
 describe('parseEmbedParams', () => {
-  it('défauts (aucun param) → light, max tous (null), accent cuivre, pleine largeur', () => {
+  it('défauts (aucun param) → light, max tous, accent cuivre, pleine largeur, preview 4, en-tête visible', () => {
     expect(parseEmbedParams(P(''))).toEqual({
-      theme: 'light', max: null, accent: '#c87941', maxWidth: null,
+      theme: 'light', max: null, accent: '#c87941', maxWidth: null, preview: 4, showHeader: true,
     })
+  })
+
+  it('preview : défaut 4, clampé [0,50], 0 = tout afficher', () => {
+    expect(parseEmbedParams(P('')).preview).toBe(4)
+    expect(parseEmbedParams(P('preview=8')).preview).toBe(8)
+    expect(parseEmbedParams(P('preview=0')).preview).toBe(0)
+    expect(parseEmbedParams(P('preview=999')).preview).toBe(50)
+    expect(parseEmbedParams(P('preview=-3')).preview).toBe(0)
+    expect(parseEmbedParams(P('preview=abc')).preview).toBe(4)
+  })
+
+  it('header=0 masque l\'en-tête, sinon visible', () => {
+    expect(parseEmbedParams(P('header=0')).showHeader).toBe(false)
+    expect(parseEmbedParams(P('header=1')).showHeader).toBe(true)
+    expect(parseEmbedParams(P('')).showHeader).toBe(true)
   })
 
   it('theme dark / auto / inconnu', () => {

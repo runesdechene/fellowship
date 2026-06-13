@@ -37,10 +37,12 @@ export function EmbedPage() {
   const slug = rawSlug?.replace(/^@/, '')
   const [searchParams] = useSearchParams()
 
-  const { theme: themeParam, max, accent, maxWidth } = useMemo(
+  const { theme: themeParam, max, accent, maxWidth, preview, showHeader } = useMemo(
     () => parseEmbedParams(searchParams),
     [searchParams],
   )
+
+  const [expanded, setExpanded] = useState(false)
 
   // Tags dynamiques (mêmes couleurs par tag que la Vitrine).
   const { tags } = useTags()
@@ -141,7 +143,7 @@ export function EmbedPage() {
       ro.disconnect()
       window.removeEventListener('load', postHeight)
     }
-  }, [events.length, loading])
+  }, [events.length, loading, expanded])
 
   if (loading) {
     return (
@@ -175,21 +177,28 @@ export function EmbedPage() {
   const displayName = entity.brand_name
   const subtitle = [entity.craft_type, entity.city].filter(Boolean).join(' · ')
 
+  // Repli : on n'affiche que `preview` dates, le reste derrière « Voir plus » (preview=0 → tout).
+  const collapsible = preview > 0 && events.length > preview
+  const visibleEvents = collapsible && !expanded ? events.slice(0, preview) : events
+  const hiddenCount = events.length - preview
+
   return (
     <div className="embed-page" data-theme={resolvedTheme}>
      <div className="embed-page-container" style={{ maxWidth: maxWidth ? `${maxWidth}px` : '100%' }}>
-      {/* En-tête identité : avatar + nom + description, centré */}
-      <div className="embed-header">
-        {entity.avatar_url ? (
-          <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
-        ) : (
-          <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
-            {displayName[0]?.toUpperCase()}
-          </div>
-        )}
-        <div className="embed-header-name">{displayName}</div>
-        {subtitle && <div className="embed-header-sub">{subtitle}</div>}
-      </div>
+      {/* En-tête identité : avatar + nom + description, centré (masquable via ?header=0) */}
+      {showHeader && (
+        <div className="embed-header">
+          {entity.avatar_url ? (
+            <img src={entity.avatar_url} alt={displayName} className="embed-avatar" />
+          ) : (
+            <div className="embed-avatar-fallback" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}dd)` }}>
+              {displayName[0]?.toUpperCase()}
+            </div>
+          )}
+          <div className="embed-header-name">{displayName}</div>
+          {subtitle && <div className="embed-header-sub">{subtitle}</div>}
+        </div>
+      )}
 
       {/* Événements — cartes « escales » (design exact de la Vitrine) */}
       {events.length === 0 ? (
@@ -199,7 +208,7 @@ export function EmbedPage() {
         </div>
       ) : (
         <div className="embed-escales">
-          {events.map((ev) => {
+          {visibleEvents.map((ev) => {
             const d = new Date(ev.start_date)
             const dur = durationDays(ev.start_date, ev.end_date)
             const geo = [ev.city, ev.department ? `(${ev.department})` : null].filter(Boolean).join(' ')
@@ -254,6 +263,14 @@ export function EmbedPage() {
             )
           })}
         </div>
+      )}
+
+      {collapsible && (
+        <button type="button" className="embed-more" onClick={() => setExpanded(v => !v)}>
+          {expanded
+            ? 'Voir moins'
+            : `Voir les ${hiddenCount} autre${hiddenCount > 1 ? 's' : ''} date${hiddenCount > 1 ? 's' : ''}`}
+        </button>
       )}
 
       {/* Footer — marque Fellowship (icône + mot + point) + slogan */}
