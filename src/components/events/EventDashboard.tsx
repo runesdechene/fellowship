@@ -1,8 +1,10 @@
 // src/components/events/EventDashboard.tsx
 import { useState, useEffect } from 'react'
 import { updateParticipation } from '@/hooks/use-participations'
+import { useAuth } from '@/lib/auth'
+import { upsertStepperLedgerLine, ensureReportId } from '@/hooks/use-ledger'
 import type { Participation } from '@/types/database'
-import type { ParticipationStatus } from '@/types/database'
+import type { ParticipationStatus, PaymentOrientation } from '@/types/database'
 
 interface EventDashboardProps {
   participation: Participation | null
@@ -24,13 +26,19 @@ const STEPS_FESTIVALIER = [
   { key: 'inscrit' as const, label: "J'y vais" },
 ]
 
-// Paiement en 3 étapes : a_payer → acompte_verse (= inscription validée) → paye.
+// Paiement en 3 étapes : a_payer → acompte_verse → paye.
 // payment_status a un CHECK constraint en DB ; la migration 20260528220000_payment_status_acompte
 // l'a étendu pour accepter 'acompte_verse'.
-const PAYMENT_STEPS = [
+// Labels selon l'orientation : je paie ma place vs on me paie pour venir.
+const PAYMENT_STEPS_PAYEUR = [
   { key: 'a_payer', label: 'À payer' },
   { key: 'acompte_verse', label: 'Acompte versé' },
   { key: 'paye', label: 'Payé' },
+]
+const PAYMENT_STEPS_PAYE = [
+  { key: 'a_payer', label: 'À recevoir' },
+  { key: 'acompte_verse', label: 'Acompte reçu' },
+  { key: 'paye', label: 'Reçu' },
 ]
 
 // Messages contextuels selon le rôle (exposant vs festivalier) — affichés en
@@ -73,6 +81,12 @@ export function EventDashboard({
   onJoin,
 }: EventDashboardProps) {
   const [infoBox, setInfoBox] = useState<string | null>(null)
+  const { currentActor } = useAuth()
+  const orientation: PaymentOrientation =
+    (((participation as { payment_orientation?: PaymentOrientation } | null)?.payment_orientation) ?? 'payeur')
+  // Champ montant inline ouvert quand on clique acompte/payé.
+  const [amountDraft, setAmountDraft] = useState('')
+  const [amountOpen, setAmountOpen] = useState(false)
 
   // Auto-hide info box after 5 seconds
   useEffect(() => {
@@ -121,13 +135,45 @@ export function EventDashboard({
     }
   }
 
+  const handleOrientationChange = async (next: PaymentOrientation) => {
+    if (!participation || next === orientation) return
+    const { data } = await updateParticipation(participation.id, { payment_orientation: next } as never)
+    if (data) {
+      onUpdate(data)
+      // Ré-oriente la ligne stepper existante (montant préservé) si un montant est saisi.
+      if (currentActor) {
+        const reportId = await ensureReportId(currentActor.id, participation.event_id)
+        const amt = parseFloat(amountDraft) || 0
+        if (reportId && amt > 0) {
+          await upsertStepperLedgerLine({ reportId, actorId: currentActor.id, eventId: participation.event_id, amount: amt, orientation: next })
+        }
+      }
+    }
+  }
+
   const handlePaymentChange = async (paymentStatus: string) => {
     if (!participation) return
     const { data } = await updateParticipation(participation.id, { payment_status: paymentStatus })
     if (data) onUpdate(data)
+    // Ouvre la capture du montant quand on marque acompte/payé.
+    if (paymentStatus === 'acompte_verse' || paymentStatus === 'paye') setAmountOpen(true)
+  }
+
+  const saveAmount = async () => {
+    if (!participation || !currentActor) return
+    const amt = parseFloat(amountDraft) || 0
+    const reportId = await ensureReportId(currentActor.id, participation.event_id)
+    if (reportId) {
+      await upsertStepperLedgerLine({
+        reportId, actorId: currentActor.id, eventId: participation.event_id,
+        amount: amt, orientation,
+      })
+    }
+    setAmountOpen(false)
   }
 
   const STEPS = isExposant ? STEPS_EXPOSANT : STEPS_FESTIVALIER
+  const PAYMENT_STEPS = orientation === 'paye' ? PAYMENT_STEPS_PAYE : PAYMENT_STEPS_PAYEUR
   const currentPayment = (participation?.payment_status as string) ?? 'a_payer'
   // Refusé n'a de sens qu'à partir d'une vraie candidature : dossier envoyé,
   // accepté/inscrit, ou déjà refusé (pour pouvoir détoggler). Pas à 'interesse' (Repéré).
@@ -192,6 +238,17 @@ export function EventDashboard({
           {showPayment && (
             <div className="event-suivi-block">
               <div className="event-suivi-block-label">Paiement</div>
+              {/* Toggle orientation : je paie ma place / on me paie pour venir */}
+              <div className="event-orientation-toggle">
+                <button
+                  className={`event-orient-btn ${orientation === 'payeur' ? 'active' : ''}`}
+                  onClick={() => handleOrientationChange('payeur')}
+                >Je paie ma place</button>
+                <button
+                  className={`event-orient-btn ${orientation === 'paye' ? 'active' : ''}`}
+                  onClick={() => handleOrientationChange('paye')}
+                >On me paie pour venir</button>
+              </div>
               <div className="event-stepper">
                 {PAYMENT_STEPS.map(step => (
                   <button
@@ -207,6 +264,22 @@ export function EventDashboard({
                   </button>
                 ))}
               </div>
+              {amountOpen && (
+                <div className="event-amount-capture">
+                  <label>{orientation === 'paye' ? 'Montant du cachet (€)' : 'Prix total de la place (€)'}</label>
+                  <div className="event-amount-row">
+                    <input
+                      type="number" inputMode="decimal" autoFocus
+                      value={amountDraft}
+                      onChange={e => setAmountDraft(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') saveAmount() }}
+                      placeholder="Ex : 120"
+                    />
+                    <button className="event-amount-save" onClick={saveAmount}>OK</button>
+                  </div>
+                  <small>Enregistré dans ton bilan, tu ne l'oublieras pas.</small>
+                </div>
+              )}
             </div>
           )}
         </div>

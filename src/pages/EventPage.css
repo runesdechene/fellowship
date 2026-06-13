@@ -736,3 +736,14 @@
 /* (Anciens styles .reviews-title / .reviews-cta / .reviews-empty supprimés —
    le bloc avis gère désormais lui-même son header et son état vide via
    src/components/reviews/ReviewSummary.css.) */
+
+/* Orientation du paiement + capture du montant (suivi financier) */
+.event-orientation-toggle { display: flex; gap: 6px; margin-bottom: 8px; }
+.event-orient-btn { flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); font-size: 12px; cursor: pointer; }
+.event-orient-btn.active { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); font-weight: 600; }
+.event-amount-capture { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.event-amount-capture label { font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+.event-amount-row { display: flex; gap: 6px; }
+.event-amount-row input { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); }
+.event-amount-save { padding: 8px 14px; border-radius: 10px; border: none; background: var(--copper); color: #fff; font-weight: 600; cursor: pointer; }
+.event-amount-capture small { color: var(--muted-foreground); font-size: 11px; }
