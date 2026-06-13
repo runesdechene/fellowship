@@ -3,6 +3,8 @@ import { Lock, Pencil, ClipboardCheck, TrendingUp, TrendingDown, Sparkles, Plus 
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
 import { useEventReport } from '@/hooks/use-reports'
+import { useEventLedger } from '@/hooks/use-ledger'
+import { ledgerProfit } from '@/lib/ledger'
 import { BilanModal } from './BilanModal'
 import './BilanCard.css'
 
@@ -21,6 +23,7 @@ export function BilanCard({ eventId }: Props) {
   const { currentActor, currentActorRow } = useAuth()
   const isPro = planForActor(currentActor, currentActorRow) === 'pro'
   const { report, refetch } = useEventReport(eventId)
+  const { entries, refetch: refetchEntries } = useEventLedger(eventId)
   const [open, setOpen] = useState(false)
 
   // État non-Pro : invite à passer Pro, pas de bouton remplir.
@@ -40,11 +43,10 @@ export function BilanCard({ eventId }: Props) {
     )
   }
 
-  const hasReport = report != null
-  const revenue = report?.revenue ?? 0
-  const boothCost = report?.booth_cost ?? 0
-  const charges = report?.charges ?? 0
-  const profit = revenue - boothCost - charges
+  const hasReport = report != null || entries.length > 0
+  const revenue = entries.filter(e => e.direction === 'in').reduce((s, e) => s + e.amount, 0)
+  const costs = entries.filter(e => e.direction === 'out').reduce((s, e) => s + e.amount, 0)
+  const profit = ledgerProfit(entries)
   const wins = report?.wins ?? []
   const improvements = report?.improvements ?? []
 
@@ -75,7 +77,7 @@ export function BilanCard({ eventId }: Props) {
               </div>
               <div className="bilan-fig">
                 <small>Coûts (stand + frais)</small>
-                <b>{(boothCost + charges).toLocaleString('fr-FR')} €</b>
+                <b>{costs.toLocaleString('fr-FR')} €</b>
               </div>
               <div className={`bilan-fig bilan-fig-profit ${profit >= 0 ? 'pos' : 'neg'}`}>
                 <small>Bénéfice</small>
@@ -112,7 +114,7 @@ export function BilanCard({ eventId }: Props) {
         <BilanModal
           eventId={eventId}
           onClose={() => setOpen(false)}
-          onSaved={refetch}
+          onSaved={() => { refetch(); refetchEntries() }}
         />
       )}
     </>

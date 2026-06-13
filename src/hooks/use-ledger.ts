@@ -5,6 +5,11 @@ import type { LedgerEntry, LedgerCategory, LedgerDirection } from '@/types/datab
 
 const TABLE = 'event_ledger_entries'
 
+// event_ledger_entries n'est pas encore dans les types générés (régén après push migration).
+// Accès non typé centralisé (précédent projet pour nouvelles tables).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const sb = supabase as any
+
 /** Lignes du registre d'un event pour l'acteur actif. `refetch` après mutation. */
 export function useEventLedger(eventId: string | undefined) {
   const { currentActor } = useAuth()
@@ -13,7 +18,7 @@ export function useEventLedger(eventId: string | undefined) {
 
   const refetch = useCallback(async () => {
     if (!eventId || !currentActor) { setLoading(false); return }
-    const { data } = await (supabase as any).from(TABLE).select('*')
+    const { data } = await sb.from(TABLE).select('*')
       .eq('event_id', eventId).eq('actor_id', currentActor.id)
       .order('created_at', { ascending: true })
     setEntries((data ?? []) as LedgerEntry[])
@@ -33,7 +38,7 @@ export function useMyLedger(): { entriesByEvent: Map<string, LedgerEntry[]>; loa
 
   const refetch = useCallback(async () => {
     if (!currentActor) { setLoading(false); return }
-    const { data } = await (supabase as any).from(TABLE).select('*').eq('actor_id', currentActor.id)
+    const { data } = await sb.from(TABLE).select('*').eq('actor_id', currentActor.id)
     const map = new Map<string, LedgerEntry[]>()
     for (const e of (data ?? []) as LedgerEntry[]) {
       const arr = map.get(e.event_id) ?? []
@@ -53,15 +58,15 @@ export async function insertLedgerEntry(row: {
   label: string | null; amount: number; direction: LedgerDirection
   category: LedgerCategory; source: 'stepper' | 'manual'
 }) {
-  return await (supabase as any).from(TABLE).insert(row).select().single()
+  return await sb.from(TABLE).insert(row).select().single()
 }
 
 export async function updateLedgerEntry(id: string, patch: Partial<Pick<LedgerEntry, 'label' | 'amount' | 'direction' | 'category'>>) {
-  return await (supabase as any).from(TABLE).update(patch).eq('id', id).select().single()
+  return await sb.from(TABLE).update(patch).eq('id', id).select().single()
 }
 
 export async function deleteLedgerEntry(id: string) {
-  return await (supabase as any).from(TABLE).delete().eq('id', id)
+  return await sb.from(TABLE).delete().eq('id', id)
 }
 
 /**
@@ -76,17 +81,17 @@ export async function upsertStepperLedgerLine(args: {
   const category: LedgerCategory = orientation === 'paye' ? 'cachet' : 'emplacement'
   const direction: LedgerDirection = orientation === 'paye' ? 'in' : 'out'
 
-  const { data: existing } = await (supabase as any).from(TABLE).select('id')
+  const { data: existing } = await sb.from(TABLE).select('id')
     .eq('report_id', reportId).eq('source', 'stepper').maybeSingle()
 
   if (!amount || amount <= 0) {
-    if (existing) await (supabase as any).from(TABLE).delete().eq('id', existing.id)
+    if (existing) await sb.from(TABLE).delete().eq('id', existing.id)
     return
   }
   if (existing) {
-    await (supabase as any).from(TABLE).update({ amount, category, direction }).eq('id', existing.id)
+    await sb.from(TABLE).update({ amount, category, direction }).eq('id', existing.id)
   } else {
-    await (supabase as any).from(TABLE).insert({
+    await sb.from(TABLE).insert({
       report_id: reportId, actor_id: actorId, event_id: eventId,
       label: null, amount, direction, category, source: 'stepper',
     })
@@ -102,8 +107,8 @@ export async function ensureReportId(actorId: string, eventId: string): Promise<
   const { data: existing } = await supabase.from('event_reports').select('id')
     .eq('actor_id', actorId).eq('event_id', eventId).maybeSingle()
   if (existing) return (existing as { id: string }).id
-  const { data: created } = await supabase.from('event_reports')
-    .upsert({ actor_id: actorId, event_id: eventId } as any, { onConflict: 'actor_id,event_id' })
+  const { data: created } = await sb.from('event_reports')
+    .upsert({ actor_id: actorId, event_id: eventId }, { onConflict: 'actor_id,event_id' })
     .select('id').single()
   return created ? (created as { id: string }).id : null
 }

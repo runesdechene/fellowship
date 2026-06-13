@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import { useMyParticipations } from '@/hooks/use-participations'
 import { useMyReports } from '@/hooks/use-reports'
+import { useMyLedger } from '@/hooks/use-ledger'
 import {
   selectNextFestival, selectUpcomingFestivals, selectAReglerItems,
   aggregateSeason, detectBilanPrompt, selectRefusedDossiers,
@@ -25,7 +26,19 @@ export function CockpitPage() {
   const { currentActor, currentActorRow } = useAuth()
   const { participations, loading, refetch } = useMyParticipations()
   const { reportsByEvent, refetch: refetchReports } = useMyReports()
-  const reportedEventIds = useMemo(() => new Set(reportsByEvent.keys()), [reportsByEvent])
+  const { entriesByEvent, refetch: refetchLedger } = useMyLedger()
+  // Un bilan compte comme « fait » (stoppe le nudge) seulement s'il a du contenu qualitatif
+  // OU au moins une ligne MANUELLE — la seule ligne auto issue de la capture au stepper ne suffit pas.
+  const reportedEventIds = useMemo(() => {
+    const ids = new Set<string>()
+    for (const [eventId, r] of reportsByEvent) {
+      if ((r.note && r.note.trim()) || (r.improvements?.length) || (r.media_paths?.length)) ids.add(eventId)
+    }
+    for (const [eventId, list] of entriesByEvent) {
+      if (list.some(e => e.source === 'manual')) ids.add(eventId)
+    }
+    return ids
+  }, [reportsByEvent, entriesByEvent])
 
   const now = useMemo(() => new Date(), [])
 
@@ -79,7 +92,7 @@ export function CockpitPage() {
             </div>
             <div className="ck-col">
               <SaisonFrise season={season} />
-              <MesBilans participations={participations} reportsByEvent={reportsByEvent} onSaved={refetchReports} />
+              <MesBilans participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} />
             </div>
           </div>
           <DossiersRefuses participations={refused} onUpdated={refetch} />
