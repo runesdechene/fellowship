@@ -19,6 +19,32 @@ export type Event = Database['public']['Tables']['events']['Row']
 export type Participation = Database['public']['Tables']['participations']['Row']
 export type Note = Database['public']['Tables']['notes']['Row']
 export type EventReport = Database['public']['Tables']['event_reports']['Row']
+
+// Registre financier (event_ledger_entries) — types manuels tant que supabase.ts
+// n'est pas régénéré. source/direction/category alignés sur le CHECK SQL.
+export type LedgerDirection = 'in' | 'out'
+export type LedgerCategory =
+  | 'emplacement' | 'cachet' | 'essence' | 'peage'
+  | 'hebergement' | 'repas' | 'remboursement' | 'ventes' | 'autre'
+export type PaymentOrientation = 'payeur' | 'paye'
+
+export interface LedgerEntry {
+  id: string
+  report_id: string
+  actor_id: string
+  event_id: string
+  label: string | null
+  amount: number
+  direction: LedgerDirection
+  category: LedgerCategory
+  source: 'stepper' | 'manual'
+  created_at: string
+}
+
+export type LedgerEntryInsert = Omit<LedgerEntry, 'id' | 'created_at'> & {
+  id?: string
+  created_at?: string
+}
 export type Review = Database['public']['Tables']['reviews']['Row']
 export type Follow = Database['public']['Tables']['follows']['Row']
 export type Notification = Database['public']['Tables']['notifications']['Row']

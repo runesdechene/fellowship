@@ -1,30 +1,44 @@
-import type { ParticipationWithEvent, EventReport } from '@/types/database'
+import type { ParticipationWithEvent, LedgerEntry } from '@/types/database'
+import { ledgerProfit } from '@/lib/ledger'
 
 export interface PastBilan {
   participation: ParticipationWithEvent
-  report: EventReport | null
-  profit: number | null   // null si pas de bilan rempli
-}
-
-/** Bénéfice = CA − coût stand − charges. null traités comme 0. */
-export function bilanProfit(r: { revenue: number | null; booth_cost: number | null; charges: number | null }): number {
-  return (r.revenue ?? 0) - (r.booth_cost ?? 0) - (r.charges ?? 0)
+  entries: LedgerEntry[]
+  profit: number | null     // null si aucune ligne
+  revenueIn: number         // somme des entrants (pour affichage « CA / Reçu »)
 }
 
 /**
  * Festivals PASSÉS confirmés (inscrit, end_date < now), triés du plus récent au plus ancien,
- * chacun joint à son bilan (event_reports) s'il existe + le bénéfice calculé.
+ * chacun joint à ses lignes de registre + le bénéfice calculé.
  */
 export function buildPastBilans(
   parts: ParticipationWithEvent[],
-  reportsByEvent: Map<string, EventReport>,
+  entriesByEvent: Map<string, LedgerEntry[]>,
   now: Date,
 ): PastBilan[] {
   return parts
     .filter(p => p.events && p.status === 'inscrit' && new Date(p.events.end_date).getTime() < now.getTime())
     .sort((a, b) => new Date(b.events.end_date).getTime() - new Date(a.events.end_date).getTime())
     .map(p => {
-      const report = reportsByEvent.get(p.event_id) ?? null
-      return { participation: p, report, profit: report ? bilanProfit(report) : null }
+      const entries = entriesByEvent.get(p.event_id) ?? []
+      const revenueIn = entries.filter(e => e.direction === 'in').reduce((s, e) => s + e.amount, 0)
+      return {
+        participation: p,
+        entries,
+        profit: entries.length ? ledgerProfit(entries) : null,
+        revenueIn,
+      }
     })
+}
+
+/** Total des cachets reçus (orientation payé) vs emplacements payés (orientation payeur). */
+export function splitOrientation(bilans: PastBilan[]): { recu: number; paye: number } {
+  let recu = 0, paye = 0
+  for (const b of bilans) {
+    const orientation = (b.participation as { payment_orientation?: string }).payment_orientation ?? 'payeur'
+    if (orientation === 'paye') recu += b.entries.filter(e => e.direction === 'in').reduce((s, e) => s + e.amount, 0)
+    else paye += b.entries.filter(e => e.direction === 'out').reduce((s, e) => s + e.amount, 0)
+  }
+  return { recu, paye }
 }
