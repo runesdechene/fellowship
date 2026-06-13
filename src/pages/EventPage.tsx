@@ -27,7 +27,7 @@ import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { LocationField, type LocationValue } from '@/components/events/LocationField'
 import { geocodeCity } from '@/lib/geocode'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send, Lock } from 'lucide-react'
 import { getTagIcon, getTagLandingColor } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
@@ -79,6 +79,7 @@ export function EventPage() {
   const [showHowTo, setShowHowTo] = useState(false)
   const [editing, setEditing] = useState(false)
   const [editSaving, setEditSaving] = useState(false)
+  const [editError, setEditError] = useState<string | null>(null)
   const [editImage, setEditImage] = useState<File | null>(null)
   const [removeImage, setRemoveImage] = useState(false)
   const creator = useEventCreator(event?.created_by_actor)
@@ -100,6 +101,7 @@ export function EventPage() {
     expected_attendance: '',
     stand_size: '',
     stand_price: '',
+    is_private: false,
   })
   const [editLocation, setEditLocation] = useState<LocationValue>({
     address: '', city: '', department: '', postcode: '',
@@ -189,6 +191,7 @@ export function EventPage() {
       expected_attendance: event.expected_attendance ?? '',
       stand_size: event.stand_size ?? '',
       stand_price: event.stand_price ?? '',
+      is_private: (event as { is_private?: boolean }).is_private ?? false,
     })
     setEditLocation({
       address: event.address ?? '',
@@ -207,6 +210,21 @@ export function EventPage() {
   const handleSaveEdit = async () => {
     if (!event) return
     setEditSaving(true)
+    setEditError(null)
+    // Bascule public → privé : interdite si d'autres exposants ont déjà rejoint l'event
+    // (on ne fait pas disparaître un event sous les pieds des autres).
+    const wasPrivate = (event as { is_private?: boolean }).is_private ?? false
+    if (!wasPrivate && editForm.is_private) {
+      const { count } = await supabase
+        .from('participations')
+        .select('id', { count: 'exact', head: true })
+        .eq('event_id', event.id)
+      if ((count ?? 0) > 1) {
+        setEditSaving(false)
+        setEditError('Impossible de rendre privé : d\'autres exposants y participent déjà.')
+        return
+      }
+    }
 
     let image_url: string | null | undefined = undefined
 
@@ -249,6 +267,7 @@ export function EventPage() {
       expected_attendance: editForm.expected_attendance || null,
       stand_size: editForm.stand_size || null,
       stand_price: editForm.stand_price || null,
+      is_private: editForm.is_private,
     }
     if (image_url !== undefined) {
       updates.image_url = image_url
@@ -488,6 +507,19 @@ export function EventPage() {
                 </div>
               </div>
 
+              <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card/50 px-4 py-3 cursor-pointer">
+                <span className="flex items-center gap-2 text-sm">
+                  <Lock className="h-4 w-4 text-primary" />
+                  <span>
+                    <span className="font-medium">Événement privé</span>
+                    <span className="block text-xs text-muted-foreground">Privé → public : entre au répertoire. Public → privé : disparaît des recherches.</span>
+                  </span>
+                </span>
+                <input type="checkbox" checked={editForm.is_private} onChange={e => setEditForm(f => ({ ...f, is_private: e.target.checked }))} className="h-5 w-5 accent-[var(--copper)]" />
+              </label>
+
+              {editError && <p className="text-sm text-destructive">{editError}</p>}
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setEditing(false)}>Annuler</Button>
                 <Button onClick={handleSaveEdit} disabled={editSaving || !editForm.name || !editLocation.city || !editForm.start_date}>
@@ -524,6 +556,11 @@ export function EventPage() {
                 </div>
               )}
               <h1 className="fest-title">{event.name}</h1>
+              {(event as { is_private?: boolean }).is_private && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                  <Lock className="h-3 w-3" /> Privé
+                </span>
+              )}
               <div className="fest-hmeta">
                 <span className="fest-hmeta-item">
                   <Calendar strokeWidth={2} />
