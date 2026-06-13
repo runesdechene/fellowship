@@ -36,8 +36,8 @@ CREATE INDEX IF NOT EXISTS idx_events_private_creator
 
 ### Slug non devinable (privés)
 
-- À la création d'un event privé, le slug reçoit un **suffixe aléatoire court** : `petit-marche-3f9a2c` (6 hex). C'est ce qui rend le lien non devinable (le modèle unlisted repose dessus).
-- Helper pur `privateSlugSuffix()` (testable, source d'aléa injectable — `Math.random` interdit dans le code testé, passer un générateur). Le slug public reste inchangé (logique existante `2026-06-02-slug-evenements`).
+- À la création d'un event privé, le slug reçoit un **suffixe aléatoire à forte entropie** : `petit-marche-<32 hex>` (~122 bits, UUID v4 sans tirets). C'est la **capability** du lien (le modèle unlisted repose entièrement dessus) — il doit être infaisable à deviner/brute-forcer. **Jamais** de compteur prévisible pour les privés.
+- Réalisé **côté serveur dans le trigger `events_set_slug`** (le slug y est déjà généré), pas via un helper JS — évite tout `Math.random` et garde la logique slug en un seul endroit. `gen_random_uuid()` est core (pas de dépendance pgcrypto). Le slug public reste inchangé.
 
 ### Création (gratuite, tout exposant)
 

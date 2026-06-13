@@ -68,8 +68,16 @@ BEGIN
   base := events_base_slug(NEW.name, NEW.city);
   IF base = '' THEN base := 'festival'; END IF;
   IF NEW.is_private THEN
-    base := base || '-' || substr(md5(gen_random_uuid()::text), 1, 6);
+    -- Slug privé = la capability du lien (modèle unlisted) : ~122 bits d'entropie
+    -- (UUID v4 sans tirets), JAMAIS de compteur prévisible. Régénère en cas de collision.
+    LOOP
+      candidate := base || '-' || replace(gen_random_uuid()::text, '-', '');
+      EXIT WHEN NOT EXISTS (SELECT 1 FROM events WHERE slug = candidate AND id <> NEW.id);
+    END LOOP;
+    NEW.slug := candidate;
+    RETURN NEW;
   END IF;
+  -- Public : slug lisible « nom-ville » + compteur d'unicité (comportement existant inchangé).
   candidate := base;
   WHILE EXISTS (SELECT 1 FROM events WHERE slug = candidate AND id <> NEW.id) LOOP
     n := n + 1; candidate := base || '-' || n;
