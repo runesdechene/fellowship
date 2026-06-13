@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { eventPath } from '@/lib/event-link'
 import { useAuth } from '@/lib/auth'
 import { createEvent, searchSimilarEvents } from '@/hooks/use-events'
+import { addParticipation } from '@/hooks/use-participations'
 import { uploadEventImage } from '@/lib/event-image'
 import { Button } from '@/components/ui/button'
 import { RichTextEditor } from '@/components/ui/RichTextEditor'
@@ -11,7 +12,7 @@ import { LocationField, type LocationValue } from './LocationField'
 import { geocodeCity } from '@/lib/geocode'
 import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
-import { ChevronRight, ChevronLeft, MapPin, Calendar, Tag, Image, Link as LinkIcon, Check, X } from 'lucide-react'
+import { ChevronRight, ChevronLeft, MapPin, Calendar, Tag, Image, Link as LinkIcon, Check, X, Lock } from 'lucide-react'
 import type { EventInsert } from '@/types/database'
 
 type EventSuggestion = { id: string; name: string; city: string; department: string; start_date: string; end_date: string; score?: number }
@@ -25,6 +26,7 @@ export function EventForm({ onClose }: EventFormProps) {
   const navigate = useNavigate()
   const { tags: dynamicTags } = useTags()
   const [step, setStep] = useState(0)
+  const [isPrivate, setIsPrivate] = useState(false)
   const [saving, setSaving] = useState(false)
   const [suggestions, setSuggestions] = useState<EventSuggestion[]>([])
   const [dismissed, setDismissed] = useState(false)
@@ -47,7 +49,9 @@ export function EventForm({ onClose }: EventFormProps) {
   })
 
   useEffect(() => {
-    if (form.name.length < 3 || dismissed) {
+    if (form.name.length < 3 || dismissed || isPrivate) {
+      // En privé : pas de dédup (l'event n'entre pas au répertoire, et search_similar_events
+      // exclut déjà le privé — on évite juste le bruit de suggestions).
       setSuggestions([])
       return
     }
@@ -56,7 +60,7 @@ export function EventForm({ onClose }: EventFormProps) {
       setSuggestions(results)
     }, 500)
     return () => clearTimeout(timer)
-  }, [form.name, form.start_date, dismissed])
+  }, [form.name, form.start_date, dismissed, isPrivate])
 
   const handleSelectExisting = (eventId: string) => {
     onClose?.()
@@ -114,6 +118,7 @@ export function EventForm({ onClose }: EventFormProps) {
         image_url: image_url ?? null,
         created_by_actor: currentActor.id,
         acted_by_user_id: user.id,
+        is_private: isPrivate,
       }
 
       const { data, error: createError } = await createEvent(eventData)
@@ -123,6 +128,17 @@ export function EventForm({ onClose }: EventFormProps) {
         return
       }
       if (data) {
+        if (isPrivate) {
+          // Event privé = suivi perso solo : on auto-crée la participation du créateur
+          // (statut « j'y vais ») pour que le paiement + le bilan soient dispo direct.
+          await addParticipation({
+            event_id: data.id,
+            actor_id: currentActor.id,
+            acted_by_user_id: user.id,
+            status: 'inscrit',
+            visibility: 'amis',
+          })
+        }
         onClose?.()
         navigate(eventPath(data))
       }
@@ -139,9 +155,9 @@ export function EventForm({ onClose }: EventFormProps) {
 
   const inputClass = "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
 
-  const canProceedStep0 = form.name.length >= 3 && suggestions.length === 0
+  const canProceedStep0 = form.name.length >= 3 && (isPrivate || suggestions.length === 0)
   const canProceedStep1 = location.city && location.department && form.start_date
-  const canProceedStep2 = selectedTags.length > 0
+  const canProceedStep2 = isPrivate || selectedTags.length > 0   // tags optionnels en privé
 
   const steps = [
     // Step 0: Name + deduplication
@@ -166,6 +182,16 @@ export function EventForm({ onClose }: EventFormProps) {
           autoFocus
         />
       </div>
+      <label className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card/50 px-4 py-3 cursor-pointer">
+        <span className="flex items-center gap-2 text-sm">
+          <Lock className="h-4 w-4 text-primary" />
+          <span>
+            <span className="font-medium">Événement privé</span>
+            <span className="block text-xs text-muted-foreground">Visible seulement de toi et de qui a le lien — jamais dans les recherches</span>
+          </span>
+        </span>
+        <input type="checkbox" checked={isPrivate} onChange={e => setIsPrivate(e.target.checked)} className="h-5 w-5 accent-[var(--copper)]" />
+      </label>
       <DeduplicateSuggestions
         suggestions={suggestions}
         onSelect={handleSelectExisting}
