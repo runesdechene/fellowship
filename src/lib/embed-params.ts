@@ -27,12 +27,12 @@ export function parseEmbedParams(params: URLSearchParams): EmbedParams {
   const accentRaw = params.get('accent') ?? ''
   const accent = /^[0-9a-fA-F]{3,8}$/.test(accentRaw) ? `#${accentRaw}` : '#c87941'
 
-  // Largeur : `maxw` explicite (clampé) sinon défaut par vue — mini cadré à 360px,
-  // full en pleine largeur du parent (null → 100%).
+  // Largeur : `maxw` explicite (clampé) = plafond optionnel. Sinon, mini ET full sont
+  // fluides (null → 100% du parent) : l'hôte contraint la largeur via son propre conteneur.
   const maxwRaw = parseInt(params.get('maxw') ?? '', 10)
   const maxWidth = Number.isFinite(maxwRaw)
     ? Math.min(Math.max(maxwRaw, 240), 2000)
-    : view === 'mini' ? 360 : null
+    : null
 
   return { view, theme, max, accent, maxWidth }
 }

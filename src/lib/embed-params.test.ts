@@ -37,9 +37,9 @@ describe('parseEmbedParams', () => {
     expect(parseEmbedParams(P('accent=zzz')).accent).toBe('#c87941')
   })
 
-  it('maxWidth : full = pleine largeur (null), mini = 360 par défaut', () => {
+  it('maxWidth : full ET mini = pleine largeur (null) par défaut', () => {
     expect(parseEmbedParams(P('view=full')).maxWidth).toBeNull()
-    expect(parseEmbedParams(P('view=mini')).maxWidth).toBe(360)
+    expect(parseEmbedParams(P('view=mini')).maxWidth).toBeNull()
   })
 
   it('maxw explicite est clampé [240,2000] et prime sur le défaut de vue', () => {

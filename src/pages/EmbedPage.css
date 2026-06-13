@@ -79,21 +79,6 @@ html:has(.embed-page) body::-webkit-scrollbar {
   color: white;
 }
 
-.embed-header-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.embed-header-name {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-
-.embed-page[data-theme="dark"] .embed-header-name {
-  color: #f0f0f0;
-}
-
 .embed-header-sub {
   font-size: 11px;
   color: #888;
@@ -374,16 +359,24 @@ html:has(.embed-page) body::-webkit-scrollbar {
 
 /* ── Vignette (view=mini) ── */
 
-.embed-page[data-view="mini"] .embed-page-container {
-  max-width: 360px;
-}
-
+/* En-tête mini : avatar + description, centrés, sans nom. */
 .embed-page[data-view="mini"] .embed-header {
-  padding-bottom: 12px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding-bottom: 18px;
 }
 
-.embed-page[data-view="mini"] .embed-header-name {
-  font-size: 15px;
+.embed-page[data-view="mini"] .embed-avatar {
+  width: 64px;
+  height: 64px;
+}
+
+.embed-page[data-view="mini"] .embed-avatar-fallback {
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
 }
 
 .embed-mini-list {
@@ -394,8 +387,8 @@ html:has(.embed-page) body::-webkit-scrollbar {
 .embed-mini-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 4px;
+  gap: 14px;
+  padding: 13px 4px;
   border-top: 1px solid rgba(0,0,0,0.06);
   text-decoration: none;
   color: inherit;
@@ -430,15 +423,12 @@ html:has(.embed-page) body::-webkit-scrollbar {
   color: #999;
 }
 
-.embed-mini-info {
+/* Titre de l'event : prend la place, plus grand, s'ellipse si trop long. */
+.embed-mini-name {
   flex: 1;
   min-width: 0;
-}
-
-.embed-mini-name {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -446,11 +436,12 @@ html:has(.embed-page) body::-webkit-scrollbar {
 
 .embed-page[data-theme="dark"] .embed-mini-name { color: #f0f0f0; }
 
+/* Lieu : repoussé à droite de la ligne. */
 .embed-mini-loc {
-  display: block;
-  margin-top: 2px;
-  font-size: 11px;
+  flex-shrink: 0;
+  font-size: 12px;
   color: #999;
+  white-space: nowrap;
 }
 
 /* ── Full page : hero (titre + bouton suivre) ── */

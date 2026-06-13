@@ -203,10 +203,7 @@ export function EmbedPage() {
               {displayName[0]?.toUpperCase()}
             </div>
           )}
-          <div className="embed-header-info">
-            <div className="embed-header-name">{displayName}</div>
-            {subtitle && <div className="embed-header-sub">{subtitle}</div>}
-          </div>
+          {subtitle && <div className="embed-header-sub">{subtitle}</div>}
         </div>
       )}
 
@@ -232,10 +229,8 @@ export function EmbedPage() {
                   <span className="embed-mini-day" style={{ color: accent }}>{day}</span>
                   <span className="embed-mini-month">{month}</span>
                 </div>
-                <div className="embed-mini-info">
-                  <span className="embed-mini-name">{ev.name}</span>
-                  <span className="embed-mini-loc">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
-                </div>
+                <span className="embed-mini-name">{ev.name}</span>
+                <span className="embed-mini-loc">📍 {ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
               </a>
             )
           })}
