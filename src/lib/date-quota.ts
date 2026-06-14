@@ -3,7 +3,7 @@ import type { ActorKind } from '@/lib/explorer'
 import type { Plan } from '@/lib/navModel'
 
 /** Plafond de dates à venir actives pour une entité gratuite (curseur monétisation). */
-export const FREE_DATES_QUOTA = 5
+export const FREE_DATES_QUOTA = 10
 
 /**
  * « Dates à venir actives » : participations dont l'événement n'est pas passé

@@ -481,7 +481,7 @@ export function LandingPage() {
               <div className="per">Pour toujours</div>
               <ul>
                 <li><span className="ck">✓</span> Explorer des centaines de festivals</li>
-                <li><span className="ck">✓</span> Suivre jusqu'à 5 dates en même temps</li>
+                <li><span className="ck">✓</span> Suivre jusqu'à 10 dates en même temps</li>
                 <li><span className="ck">✓</span> Suivre ses collègues</li>
                 <li><span className="ck">✓</span> Page vitrine publique</li>
                 <li><span className="ck">✓</span> Etablir ses bilans post-festivals</li>

@@ -12,7 +12,7 @@ function part(id: string, end: string, status = 'interesse'): ParticipationWithE
 }
 
 describe('FREE_DATES_QUOTA', () => {
-  it('vaut 5', () => expect(FREE_DATES_QUOTA).toBe(5))
+  it('vaut 10', () => expect(FREE_DATES_QUOTA).toBe(10))
 })
 
 describe('countActiveDates', () => {
@@ -44,9 +44,9 @@ describe('countActiveDates', () => {
 })
 
 describe('canAddDate', () => {
-  it('entité gratuite sous le quota → true', () => expect(canAddDate('free', 'entity', 4)).toBe(true))
-  it('entité gratuite pile au quota → false', () => expect(canAddDate('free', 'entity', 5)).toBe(false))
-  it('entité gratuite au-delà → false', () => expect(canAddDate('free', 'entity', 6)).toBe(false))
+  it('entité gratuite sous le quota → true', () => expect(canAddDate('free', 'entity', 9)).toBe(true))
+  it('entité gratuite pile au quota → false', () => expect(canAddDate('free', 'entity', 10)).toBe(false))
+  it('entité gratuite au-delà → false', () => expect(canAddDate('free', 'entity', 11)).toBe(false))
   it('entité Pro → true quel que soit used', () => expect(canAddDate('pro', 'entity', 99)).toBe(true))
   it('personne → true quel que soit used', () => expect(canAddDate('free', 'person', 99)).toBe(true))
 })

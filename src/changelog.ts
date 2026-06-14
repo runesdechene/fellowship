@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.281',
+    date: '2026-06-14',
+    title: '10 dates en gratuit',
+    changes: [
+      'Le plan Découverte (gratuit) permet maintenant de suivre jusqu\'à 10 festivals à venir en même temps, au lieu de 5',
+    ],
+  },
+  {
     version: '0.7.280',
     date: '2026-06-14',
     title: 'Page d\'accès clarifiée + social proof',
