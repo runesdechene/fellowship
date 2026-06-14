@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.280',
+    date: '2026-06-14',
+    title: 'Page d\'accès clarifiée + social proof',
+    changes: [
+      'La page de connexion s\'intitule maintenant « Accéder à Fellowship » (plus accueillant pour les nouveaux)',
+    ],
+  },
+  {
     version: '0.7.279',
     date: '2026-06-14',
     title: 'Bouton « S\'inscrire » sur la page d\'accueil',

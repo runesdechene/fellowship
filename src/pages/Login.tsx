@@ -222,7 +222,7 @@ export function LoginPage() {
     <AuthShell>
       <div className="space-y-8">
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold">Se connecter</h1>
+          <h1 className="text-2xl font-extrabold">Accéder à Fellowship</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Entre ton email pour recevoir un code de connexion
           </p>

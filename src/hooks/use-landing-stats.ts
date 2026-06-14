@@ -14,6 +14,9 @@ export interface LandingStats {
 }
 
 const AVATAR_LIMIT = 5
+/** Coup de pouce social proof : on gonfle le groupe affiché sur la landing.
+ *  Appliqué seulement quand le vrai count a pu être lu (pas sur null/erreur). */
+const VIRTUAL_BOOST = 50
 
 export function useLandingExposants(): LandingStats {
   const [stats, setStats] = useState<LandingStats>({ count: null, avatars: [], loading: true })
@@ -30,7 +33,7 @@ export function useLandingExposants(): LandingStats {
       if (cancelled) return
       const rows = (avatarsRes.data ?? []) as Array<{ actor_id: string; brand_name: string | null; avatar_url: string | null }>
       setStats({
-        count: countRes.count ?? null,
+        count: countRes.count != null ? countRes.count + VIRTUAL_BOOST : null,
         avatars: rows.map(r => ({ actor_id: r.actor_id, label: r.brand_name, avatar_url: r.avatar_url })),
         loading: false,
       })
