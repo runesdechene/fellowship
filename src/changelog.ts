@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.279',
+    date: '2026-06-14',
+    title: 'Bouton « S\'inscrire » sur la page d\'accueil',
+    changes: [
+      'La page d\'accueil affiche maintenant un bouton « S\'inscrire » bien visible en haut à droite, à côté d\'un lien « Connexion » discret',
+    ],
+  },
+  {
     version: '0.7.278',
     date: '2026-06-13',
     title: 'Événements privés visibles partout chez toi + avatars des amis',

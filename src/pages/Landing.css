@@ -147,6 +147,24 @@
 .landing .nav-links a.link:hover {
   color: hsl(var(--foreground));
 }
+/* Connexion = lien texte discret (le revenant). Reste visible sur mobile,
+   contrairement aux liens .link (À propos / Tarifs) masqués en dessous. */
+.landing .nav-links .nav-login {
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.landing .nav-links .nav-login:hover {
+  color: hsl(var(--foreground));
+}
+/* S'inscrire = primary compact dans la nav (l'action par défaut du nouveau). */
+.landing .nav-links .nav-cta {
+  padding: 9px 18px;
+  font-size: 14px;
+  border-radius: 10px;
+}
 
 /* ── Audience switcher ───────────────────────────────────────────── */
 .landing .switch-wrap {
@@ -709,8 +727,8 @@
 }
 
 /* Téléphones : on rétrécit le lockup du logo dans la nav pour que
-   "Fellowship" reste lisible à côté de l'icône, du toggle thème et
-   du bouton Connexion. */
+   "Fellowship" reste lisible à côté de l'icône, du toggle thème,
+   du lien Connexion et du bouton S'inscrire. */
 @media (max-width: 480px) {
   .landing .nav-in .logo {
     font-size: 17px;

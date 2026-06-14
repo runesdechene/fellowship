@@ -101,9 +101,8 @@ export function LandingPage() {
             <a className="link" href="#apropos" onClick={goToApropos}>À propos</a>
             <a className="link" href="#tarifs" onClick={goToTarifs}>Tarifs</a>
             <ThemeToggle />
-            <Link to="/login" className="btn btn-ghost" style={{ padding: '9px 18px' }}>
-              Connexion
-            </Link>
+            <Link to="/login" className="nav-login">Connexion</Link>
+            <Link to="/login" className="btn btn-primary nav-cta">S'inscrire</Link>
           </div>
         </div>
       </nav>
