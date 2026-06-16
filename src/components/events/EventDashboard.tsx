@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { updateParticipation } from '@/hooks/use-participations'
 import { useAuth } from '@/lib/auth'
-import { upsertStepperLedgerLine, ensureReportId } from '@/hooks/use-ledger'
+import { upsertStepperLedgerLine, ensureReportId, useEventLedger } from '@/hooks/use-ledger'
 import type { Participation } from '@/types/database'
 import type { ParticipationStatus, PaymentOrientation } from '@/types/database'
 
@@ -87,6 +87,12 @@ export function EventDashboard({
   // Champ montant inline ouvert quand on clique acompte/payé.
   const [amountDraft, setAmountDraft] = useState('')
   const [amountOpen, setAmountOpen] = useState(false)
+  // Montant déjà saisi (ligne « stepper » du registre) — relu pour l'afficher en permanence.
+  const { entries: ledgerEntries, refetch: refetchLedger } = useEventLedger(participation?.event_id)
+  const paidAmount = ledgerEntries.find(e => e.source === 'stepper')?.amount ?? 0
+  // Pré-remplit la saisie avec le montant existant pour qu'il soit éditable, pas à ressaisir.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (paidAmount > 0) setAmountDraft(String(paidAmount)) }, [paidAmount])
 
   // Auto-hide info box after 5 seconds
   useEffect(() => {
@@ -146,6 +152,7 @@ export function EventDashboard({
         const amt = parseFloat(amountDraft) || 0
         if (reportId && amt > 0) {
           await upsertStepperLedgerLine({ reportId, actorId: currentActor.id, eventId: participation.event_id, amount: amt, orientation: next })
+          await refetchLedger()
         }
       }
     }
@@ -168,6 +175,7 @@ export function EventDashboard({
         reportId, actorId: currentActor.id, eventId: participation.event_id,
         amount: amt, orientation,
       })
+      await refetchLedger()
     }
     setAmountOpen(false)
   }
@@ -266,7 +274,7 @@ export function EventDashboard({
               </div>
               {amountOpen && (
                 <div className="event-amount-capture">
-                  <label>{orientation === 'paye' ? 'Montant du cachet (€)' : 'Prix total de la place (€)'}</label>
+                  <label>{orientation === 'paye' ? 'Montant du cachet (€)' : 'Prix versé de la place (€)'}</label>
                   <div className="event-amount-row">
                     <input
                       type="number" inputMode="decimal" autoFocus
@@ -279,6 +287,20 @@ export function EventDashboard({
                   </div>
                   <small>Enregistré dans ton bilan, tu ne l'oublieras pas.</small>
                 </div>
+              )}
+              {/* Montant payé/reçu — toujours visible dès qu'un acompte/paiement est posé. Clic = éditer. */}
+              {!amountOpen && (currentPayment === 'acompte_verse' || currentPayment === 'paye') && paidAmount > 0 && (
+                <button
+                  type="button"
+                  className={`event-amount-paid ${currentPayment}`}
+                  onClick={() => { setAmountDraft(String(paidAmount)); setAmountOpen(true) }}
+                  title="Modifier le montant"
+                >
+                  <span className="event-amount-paid-label">
+                    {PAYMENT_STEPS.find(s => s.key === currentPayment)?.label}
+                  </span>
+                  <span className="event-amount-paid-value">{paidAmount.toLocaleString('fr-FR')} €</span>
+                </button>
               )}
             </div>
           )}

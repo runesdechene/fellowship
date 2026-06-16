@@ -747,3 +747,17 @@
 .event-amount-row input { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); }
 .event-amount-save { padding: 8px 14px; border-radius: 10px; border: none; background: var(--copper); color: #fff; font-weight: 600; cursor: pointer; }
 .event-amount-capture small { color: var(--muted-foreground); font-size: 11px; }
+/* Bloc montant : reprend la couleur du bouton de paiement actif au-dessus (sans bordure, comme eux). */
+.event-amount-paid { margin-top: 8px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 10px; border: none; cursor: pointer; text-align: left; }
+.event-amount-paid-label { font-size: 12px; font-weight: 600; }
+.event-amount-paid-value { font-size: 15px; font-weight: 700; }
+/* Acompte versé → vert pomme (--lime), aligné sur .pay-active.acompte_verse */
+.event-amount-paid.acompte_verse { background: color-mix(in srgb, var(--lime) 18%, transparent); }
+.event-amount-paid.acompte_verse:hover { background: color-mix(in srgb, var(--lime) 26%, transparent); }
+.event-amount-paid.acompte_verse .event-amount-paid-label,
+.event-amount-paid.acompte_verse .event-amount-paid-value { color: var(--lime); }
+/* Payé → vert (--status-inscrit), aligné sur .pay-active.paye */
+.event-amount-paid.paye { background: color-mix(in srgb, var(--status-inscrit) 16%, transparent); }
+.event-amount-paid.paye:hover { background: color-mix(in srgb, var(--status-inscrit) 24%, transparent); }
+.event-amount-paid.paye .event-amount-paid-label,
+.event-amount-paid.paye .event-amount-paid-value { color: var(--status-inscrit); }
