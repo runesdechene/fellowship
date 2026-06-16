@@ -90,6 +90,17 @@ Deno.serve(async (req) => {
         .eq('actor_id', entity.actor_id)
     }
 
+    // Parrainage : le filleul parrainé (rattachement en attente, cadeau non encore consommé)
+    // bénéficie d'un essai de 30 jours au lieu de 14. Pas de coupon (qui buggerait sur l'annuel).
+    const { data: pendingRef } = await admin
+      .from('referrals')
+      .select('id')
+      .eq('filleul_entity_id', entity.actor_id)
+      .eq('status', 'attributed')
+      .eq('filleul_gift_granted', false)
+      .maybeSingle()
+    const trialDays = pendingRef ? 30 : 14
+
     const price = body.billingInterval === 'month' ? STRIPE_PRICE_MONTHLY : STRIPE_PRICE_YEARLY
 
     const session = await stripe.checkout.sessions.create({
@@ -97,7 +108,7 @@ Deno.serve(async (req) => {
       customer: customerId,
       line_items: [{ price, quantity: 1 }],
       subscription_data: {
-        trial_period_days: 14,
+        trial_period_days: trialDays,
         metadata: { entity_actor_id: entity.actor_id },
       },
       automatic_tax: { enabled: true },
