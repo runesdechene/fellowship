@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { Loader2, ExternalLink, AlertTriangle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { openCustomerPortal } from '@/lib/stripe-client'
+import { ReferralCard } from '@/components/abonnement/ReferralCard'
 import type { EntityRow } from '@/types/database'
 import './Abonnement.css'
 
@@ -171,6 +172,8 @@ export function AbonnementPage() {
       )}
 
       {portalErr && <div className="abo-warning">{portalErr}</div>}
+
+      {targetEntityId && <ReferralCard entityId={targetEntityId} brandName={entity?.brand_name ?? null} />}
 
       <button onClick={handlePortal} disabled={opening} className="abo-cta">
         {opening ? <Loader2 className="animate-spin" /> : <ExternalLink strokeWidth={2} />}
