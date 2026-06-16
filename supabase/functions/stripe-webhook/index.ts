@@ -87,6 +87,14 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const sub = await getStripe().subscriptions.retrieve(session.subscription as string)
   await syncSubscriptionToDB(entityActorId, sub)
+
+  // Cadeau filleul (essai 30j) consommé : on le verrouille pour ne pas le ré-octroyer
+  // si le filleul résilie pendant l'essai puis se réabonne.
+  await getSupabaseAdmin()
+    .from('referrals')
+    .update({ filleul_gift_granted: true })
+    .eq('filleul_entity_id', entityActorId)
+    .eq('status', 'attributed')
 }
 
 async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
@@ -132,6 +140,9 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const entityActorId = await lookupEntityIdFromSubscription(sub)
   if (!entityActorId) return
   await syncSubscriptionToDB(entityActorId, sub)
+
+  // Récompense parrain : déclenchée par la 1ʳᵉ facture RÉELLEMENT payée du filleul.
+  await rewardReferrerIfAny(entityActorId, invoice)
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────
@@ -191,4 +202,72 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
     })
     .eq('actor_id', entityActorId)
   if (error) throw error
+}
+
+// Récompense le parrain quand CE filleul paie sa 1ʳᵉ vraie facture (anti-fraude).
+// Claim-first (transition attributed→rewarded atomique) → idempotent, jamais de double crédit.
+async function rewardReferrerIfAny(filleulEntityId: string, invoice: Stripe.Invoice) {
+  // amount_paid > 0 : ignore les factures à 0 (l'essai ne génère pas de paiement réel).
+  if ((invoice.amount_paid ?? 0) <= 0) return
+  const admin = getSupabaseAdmin()
+
+  // Parrainage en attente où cette entité est le filleul ?
+  const { data: ref } = await admin
+    .from('referrals')
+    .select('id, parrain_entity_id')
+    .eq('filleul_entity_id', filleulEntityId)
+    .eq('status', 'attributed')
+    .maybeSingle()
+  if (!ref) return
+
+  // Claim atomique : on ne récompense que si on fait nous-mêmes la transition.
+  const now = new Date().toISOString()
+  const { data: claimed } = await admin
+    .from('referrals')
+    .update({ status: 'rewarded', filleul_first_paid_at: now, parrain_rewarded_at: now })
+    .eq('id', ref.id)
+    .eq('status', 'attributed')
+    .select('id')
+    .maybeSingle()
+  if (!claimed) return // déjà récompensé par un autre passage
+
+  // Charge le parrain (entité).
+  const { data: parrain } = await admin
+    .from('entities')
+    .select('actor_id, plan, stripe_customer_id, stripe_subscription_id, comped_pro_until')
+    .eq('actor_id', ref.parrain_entity_id)
+    .maybeSingle()
+  if (!parrain) return
+
+  const parrainIsPro = parrain.plan === 'pro' && !!parrain.stripe_subscription_id
+  if (parrainIsPro) {
+    // Parrain Pro → crédit d'un mois de son plan sur son customer balance (négatif = crédit).
+    const sub = await getStripe().subscriptions.retrieve(parrain.stripe_subscription_id as string)
+    const price = sub.items.data[0]?.price
+    const unit = price?.unit_amount ?? 0
+    const interval = price?.recurring?.interval ?? 'month'
+    // monthlyCreditCents (cf. src/lib/referral.ts, dupliqué ici : edge runtime isolé).
+    const creditCents = unit <= 0 ? 0 : (interval === 'year' ? Math.round(unit / 12) : unit)
+    if (creditCents > 0 && parrain.stripe_customer_id) {
+      await getStripe().customers.createBalanceTransaction(parrain.stripe_customer_id, {
+        amount: -creditCents,
+        currency: price?.currency ?? 'eur',
+        description: 'Parrainage Fellowship — 1 mois offert',
+      })
+    }
+  } else {
+    // Parrain gratuit → 1 mois de Pro offert (hors Stripe) via comped_pro_until.
+    const base = parrain.comped_pro_until && new Date(parrain.comped_pro_until) > new Date()
+      ? new Date(parrain.comped_pro_until)
+      : new Date()
+    base.setMonth(base.getMonth() + 1)
+    await admin.from('entities')
+      .update({ comped_pro_until: base.toISOString() })
+      .eq('actor_id', parrain.actor_id)
+  }
+
+  // Badge Ambassadeur permanent (1er filleul payant).
+  await admin.from('entities')
+    .update({ is_ambassador: true })
+    .eq('actor_id', parrain.actor_id)
 }
