@@ -108,8 +108,11 @@ export function vitrineHref(publicSlug: string | null | undefined): string {
  */
 export function planForActor(actor: { kind: string } | null, entityRow: unknown): Plan {
   if (actor?.kind !== 'entity') return 'free'
-  const plan = (entityRow as { plan?: Plan | null } | null | undefined)?.plan
-  return plan === 'pro' ? 'pro' : 'free'
+  const e = entityRow as { plan?: Plan | null; comped_pro_until?: string | null } | null | undefined
+  if (e?.plan === 'pro') return 'pro'
+  // Pro offert via parrainage (hors Stripe) : actif tant que la date n'est pas passée.
+  if (e?.comped_pro_until && new Date(e.comped_pro_until) > new Date()) return 'pro'
+  return 'free'
 }
 
 /**

@@ -61,6 +61,20 @@ describe('planForActor', () => {
   })
   it('personne → free quelle que soit la valeur', () => expect(planForActor({ kind: 'person' }, { plan: 'pro' })).toBe('free'))
   it('acteur null → free', () => expect(planForActor(null, null)).toBe('free'))
+
+  // parrainage: comped_pro_until
+  const future = new Date(Date.now() + 86_400_000).toISOString() // +1j
+  const past = new Date(Date.now() - 86_400_000).toISOString()   // -1j
+
+  it('entité gratuite mais comped_pro_until futur = pro', () => {
+    expect(planForActor({ kind: 'entity' }, { plan: 'free', comped_pro_until: future })).toBe('pro')
+  })
+  it('comped_pro_until expiré = free', () => {
+    expect(planForActor({ kind: 'entity' }, { plan: 'free', comped_pro_until: past })).toBe('free')
+  })
+  it('pas de comped = free', () => {
+    expect(planForActor({ kind: 'entity' }, { plan: 'free' })).toBe('free')
+  })
 })
 
 describe('isCertified', () => {
