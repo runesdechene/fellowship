@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
-  Shield, Check, LogOut, Lock, Sparkles, Map, type LucideIcon,
+  Shield, Check, LogOut, Lock, Sparkles, Map, Gift, type LucideIcon,
 } from 'lucide-react'
 import { mobileSecondaryFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -67,6 +67,18 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
             {currentActor?.id === e.actor_id && <Check className="sheet-check" strokeWidth={2.5} />}
           </button>
         ))}
+
+        {/* Parrainage — mis en avant (entité gratuite OU Pro), accent cuivre */}
+        {currentActor?.kind === 'entity' && (
+          <>
+            <div className="sheet-divider" />
+            <button className="sheet-item sheet-referral" onClick={() => go('/abonnement')}>
+              <Gift strokeWidth={1.8} />
+              <span className="sheet-item-lbl">Parrainage</span>
+              <span className="sheet-referral-pill">1 mois offert</span>
+            </button>
+          </>
+        )}
 
         {/* Liens secondaires (hors BottomBar) */}
         {secondary.length > 0 && <div className="sheet-divider" />}

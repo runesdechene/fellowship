@@ -97,6 +97,12 @@
 .sheet-badge { width: 15px !important; height: 15px !important; opacity: 0.6; }
 .sheet-logout { color: hsl(var(--destructive)); }
 
+/* Entrée Parrainage mise en avant (accent cuivre, pendant mobile de l'entrée Sidebar) */
+.sheet-referral { color: var(--copper); background: color-mix(in srgb, var(--copper) 10%, transparent); border: 1px solid color-mix(in srgb, var(--copper) 24%, transparent); }
+.sheet-referral:hover { background: color-mix(in srgb, var(--copper) 18%, transparent); }
+.light .sheet-referral { color: hsl(22 78% 42%); }
+.sheet-referral-pill { font-size: 10px; font-weight: 800; letter-spacing: .02em; background: linear-gradient(135deg, var(--copper), var(--copper-d)); color: #fff; padding: 3px 9px; border-radius: 99px; flex-shrink: 0; }
+
 /* Thème */
 .sheet-theme {
   display: flex;

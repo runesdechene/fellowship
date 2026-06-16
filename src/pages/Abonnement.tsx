@@ -178,7 +178,7 @@ export function AbonnementPage() {
 
       {targetEntityId && <ReferralCard entityId={targetEntityId} brandName={entity?.brand_name ?? null} />}
 
-      <button onClick={handlePortal} disabled={opening} className="abo-cta">
+      <button onClick={handlePortal} disabled={opening} className="abo-manage">
         {opening ? <Loader2 className="animate-spin" /> : <ExternalLink strokeWidth={2} />}
         {opening ? 'Redirection…' : 'Gérer mon abonnement (factures, CB, résiliation)'}
       </button>

@@ -59,3 +59,16 @@
 .light .abo-cta:hover:not(:disabled) {
   box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 22%, transparent);
 }
+
+/* Lien « Gérer mon abonnement » — volontairement discret (action de gestion, pas un CTA). */
+.abo-manage {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: none; border: none; cursor: pointer;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body); font-size: 13.5px;
+  padding: 6px 2px;
+}
+.abo-manage:hover:not(:disabled) { color: hsl(var(--foreground)); text-decoration: underline; text-underline-offset: 3px; }
+.abo-manage:disabled { opacity: .6; cursor: not-allowed; }
+.abo-manage svg { width: 15px; height: 15px; }
+.abo-manage .animate-spin { animation: abo-spin 1s linear infinite; }
