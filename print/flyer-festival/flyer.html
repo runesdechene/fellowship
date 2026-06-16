@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Fellowship — Flyer A6 (recto-verso)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Flyer Fellowship — A6 recto-verso, inspiré de la landing ───────────────
+     Trim A6 = 105 × 148 mm. Fonds perdus 3 mm → page 111 × 154 mm.
+     Zone de sécurité : contenu à ≥ 8 mm du bord de page (≈ 5 mm du trait de coupe). */
+  @page { size: 111mm 154mm; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { background: #555; }
+
+  .page {
+    width: 111mm; height: 154mm; position: relative; overflow: hidden;
+    background: #170f0e; color: #fbf3e8;
+    font-family: 'Inter', system-ui, sans-serif;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .pad { position: absolute; inset: 0; z-index: 3; padding: 11mm 10mm; display: flex; flex-direction: column; }
+  .glow { position: absolute; border-radius: 50%; filter: blur(15mm); z-index: 1; }
+  .dotdec { position: absolute; width: 1.4mm; height: 1.4mm; border-radius: 50%; z-index: 2; }
+
+  .mk { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12pt; letter-spacing: -.01em; }
+  .dot { color: #e8893f; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 1.6mm; margin-top: 8mm; }
+  .tag { font-size: 6.5pt; font-weight: 600; border-radius: 99px; padding: 0.9mm 2.4mm; white-space: nowrap; line-height: 1; }
+
+  .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .eyb { font-size: 7.5pt; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #a3cf78; }
+  .hd { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; line-height: 1.02; letter-spacing: -.02em; }
+  .grad { background: linear-gradient(135deg, #f0a35a, #db5a2a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: 9.5pt; line-height: 1.42; color: #d8c9ba; }
+  .bul { font-size: 9.5pt; line-height: 1.95; color: #d8c9ba; }
+  .bul b { color: #fbf3e8; font-weight: 600; }
+
+  .foot { display: flex; align-items: center; gap: 4mm; }
+  .qrbox { width: 21mm; height: 21mm; flex-shrink: 0; background: #fff; border-radius: 2.5mm; padding: 1.6mm; }
+  .qrbox svg { width: 100%; height: 100%; display: block; }
+  .cta b { font-size: 12pt; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .cta { font-size: 9pt; line-height: 1.4; }
+  .url { color: #e8893f; font-weight: 800; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ RECTO · festivaliers ══════════ -->
+<section class="page">
+  <div class="glow" style="width:48mm;height:48mm;background:#e8893f;opacity:.32;left:-12mm;top:16mm"></div>
+  <div class="glow" style="width:44mm;height:44mm;background:#7f5fb0;opacity:.24;right:-14mm;top:52mm"></div>
+  <div class="glow" style="width:42mm;height:42mm;background:#4cbd8a;opacity:.16;left:24mm;bottom:-14mm"></div>
+  <div class="dotdec" style="background:#e8893f;opacity:.55;left:14mm;top:46mm"></div>
+  <div class="dotdec" style="background:#b89ae0;opacity:.55;right:16mm;top:34mm"></div>
+  <div class="dotdec" style="background:#7fc6a0;opacity:.5;left:48mm;top:28mm"></div>
+
+  <div class="pad">
+    <div class="mk">✦ Fellowship<span class="dot">.</span></div>
+
+    <div class="tags">
+      <span class="tag" style="background:rgba(232,160,106,.15);color:#e8a06a;border:0.3mm solid rgba(232,160,106,.45)">⚔️ Médiéval</span>
+      <span class="tag" style="background:rgba(184,154,224,.15);color:#b89ae0;border:0.3mm solid rgba(184,154,224,.45)">🎵 Musique</span>
+      <span class="tag" style="background:rgba(127,198,160,.15);color:#7fc6a0;border:0.3mm solid rgba(127,198,160,.45)">🎨 Créateurs</span>
+      <span class="tag" style="background:rgba(232,137,122,.15);color:#e8897a;border:0.3mm solid rgba(232,137,122,.45)">🎄 Noël</span>
+      <span class="tag" style="background:rgba(121,180,214,.15);color:#79b4d6;border:0.3mm solid rgba(121,180,214,.45)">🎮 Geek</span>
+      <span class="tag" style="background:rgba(168,204,122,.15);color:#a8cc7a;border:0.3mm solid rgba(168,204,122,.45)">🧺 Terroir</span>
+    </div>
+
+    <div class="mid">
+      <h1 class="hd" style="font-size:30pt">Tes créateurs<br>préférés,<br><span class="grad">partout.</span></h1>
+      <p class="lead" style="margin-top:4mm">Suis tes exposants favoris, découvre les festivals près de chez toi — toute l'année, dans toute la France.</p>
+    </div>
+
+    <div class="foot">
+      <div class="qrbox">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h29v29H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h4m2 0h7M4 5.5h1m5 0h1m4 0h1m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m3 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m2 0h1M4 12.5h1m3 0h1m1 0h4m3 0h5m2 0h1M6 13.5h1m1 0h1m3 0h1m1 0h1m5 0h3M4 14.5h1m1 0h2m2 0h2m5 0h5m1 0h1M4 15.5h1m3 0h1m4 0h1m2 0h2M4 16.5h2m4 0h3m1 0h1m1 0h2m1 0h3m1 0h1M12 17.5h1m1 0h2m2 0h1m1 0h4M4 18.5h7m1 0h1m1 0h1m3 0h4m1 0h1M4 19.5h1m5 0h1m4 0h3m1 0h1m4 0h1M4 20.5h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h2M4 21.5h1m1 0h3m1 0h1m3 0h1m4 0h2m1 0h3M4 22.5h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h3M4 23.5h1m5 0h1m5 0h2M4 24.5h7m1 0h1m1 0h3m4 0h1m2 0h1"/></svg>
+      </div>
+      <div class="cta">
+        <b>Scanne &amp; rejoins</b><br>
+        <span class="url">flw.sh</span> · gratuit, sans carte
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VERSO · exposants ══════════ -->
+<section class="page">
+  <div class="glow" style="width:48mm;height:48mm;background:#e8893f;opacity:.32;right:-12mm;top:16mm"></div>
+  <div class="glow" style="width:44mm;height:44mm;background:#4cbd8a;opacity:.22;left:-14mm;top:58mm"></div>
+  <div class="glow" style="width:42mm;height:42mm;background:#db5a2a;opacity:.16;right:22mm;bottom:-14mm"></div>
+  <div class="dotdec" style="background:#e8893f;opacity:.55;right:14mm;top:46mm"></div>
+  <div class="dotdec" style="background:#7fc6a0;opacity:.5;left:16mm;top:36mm"></div>
+
+  <div class="pad">
+    <div class="mk">✦ Fellowship<span class="dot">.</span></div>
+
+    <div class="mid">
+      <span class="eyb">Pour les exposants</span>
+      <h1 class="hd" style="font-size:31pt;margin-top:3mm">Les festivals,<br><span class="grad">ensemble.</span></h1>
+      <div class="bul" style="margin-top:5mm">
+        <div><b>✓ Gère toute ta saison</b> &amp; tes bilans</div>
+        <div><b>✓ Retrouve ta tribu</b> sur la route</div>
+        <div><b>✓ Des centaines de dates</b> où t'inscrire</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="qrbox">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h29v29H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h4m2 0h7M4 5.5h1m5 0h1m4 0h1m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m3 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m2 0h1M4 12.5h1m3 0h1m1 0h4m3 0h5m2 0h1M6 13.5h1m1 0h1m3 0h1m1 0h1m5 0h3M4 14.5h1m1 0h2m2 0h2m5 0h5m1 0h1M4 15.5h1m3 0h1m4 0h1m2 0h2M4 16.5h2m4 0h3m1 0h1m1 0h2m1 0h3m1 0h1M12 17.5h1m1 0h2m2 0h1m1 0h4M4 18.5h7m1 0h1m1 0h1m3 0h4m1 0h1M4 19.5h1m5 0h1m4 0h3m1 0h1m4 0h1M4 20.5h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h2M4 21.5h1m1 0h3m1 0h1m3 0h1m4 0h2m1 0h3M4 22.5h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h3M4 23.5h1m5 0h1m5 0h2M4 24.5h7m1 0h1m1 0h3m4 0h1m2 0h1"/></svg>
+      </div>
+      <div class="cta">
+        <b>Tu exposes&nbsp;?</b><br>
+        Commence gratuitement sur <span class="url">flw.sh</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
