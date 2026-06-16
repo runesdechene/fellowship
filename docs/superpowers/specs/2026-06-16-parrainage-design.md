@@ -32,6 +32,7 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 | 6 | Attribution | **Lien + code lisible** | Lien pour le digital (WhatsApp/stories/groupes FB), code dicible à voix haute pour le physique au stand. |
 | 7 | Génération du code | **Dérivé du nom/marque + suffixe si collision** (ex. `RUNEDECHENE`, puis `RUNEDECHENE2`) | Mémorable et dicible ; un code aléatoire imprononçable saboterait l'usage physique. |
 | 8 | Emplacement UI | **Section dans la page Abonnement + bandeau au mur du quota** | L'argent vit dans Abonnement ; le bandeau transforme le mur frustrant du quota en opportunité. |
+| 9 | Titre « Ambassadeur Fellowship » | **Débloqué au 1er filleul payant, permanent à vie, binaire en V1** | Le statut est le motivateur le moins cher qui existe ; dans un milieu où la réputation entre pairs pèse, un titre public peut dépasser le mois offert. Même registre que le badge Certifié (décision 0004). |
 
 ---
 
@@ -126,6 +127,29 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 
 ---
 
+## 5bis. Titre « Ambassadeur Fellowship »
+
+Couche de **statut public** par-dessus la récompense matérielle. Même registre que le
+badge Certifié (décision 0004) : on vend la crédibilité, pas une feature.
+
+- **Déclencheur :** débloqué dès le **premier filleul `rewarded`** (= qui a payé une vraie
+  facture). Réutilise *exactement* le signal anti-fraude déjà posé — aucune nouvelle
+  plomberie ni nouvelle faille.
+- **Permanent à vie :** si le filleul résilie plus tard, le parrain **garde** son titre.
+  Il a réellement ramené un membre payant ; le retirer serait punitif et découragerait le
+  parrainage.
+- **Binaire en V1 :** « Ambassadeur Fellowship », point. Les paliers (Bronze/Argent/Or à
+  1/5/10 filleuls) appartiennent au système de cagnotte gamifiée noté en **V2** (§9).
+- **Affichage :** sur la **vitrine** (identité publique = `entities`, cf. split
+  Réglages/Vitrine). Dérivé en lecture : `EXISTS (referrals WHERE parrain = moi AND
+  status = 'rewarded')` — pas besoin d'une colonne dédiée a priori (à arbitrer au plan
+  selon le coût de la lecture sur la vitrine).
+- **Point d'attention lead dev :** sur la vitrine on pourra avoir **Certifié + Ambassadeur**
+  côte à côte. Penser la **hiérarchie visuelle** pour ne pas transformer le profil en sapin
+  de Noël.
+
+---
+
 ## 6. UI / points d'entrée
 
 - **Section « Parrainage » dans la page Abonnement** : le code, le lien à copier en un clic,
@@ -155,6 +179,8 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 - Calcul du crédit « un mois » correct en **mensuel ET annuel**.
 - Filleul déjà abonné / déjà-parrainé → non éligible au cadeau filleul.
 - Gating Pro lit bien `comped_pro_until` (parrain gratuit récompensé devient Pro).
+- **Titre Ambassadeur** débloqué dès le 1er filleul `rewarded`, et **conservé** même si ce
+  filleul résilie ensuite (permanence à vie).
 
 ---
 
@@ -173,6 +199,7 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 ## 9. Évolutions notées (hors scope V1)
 
 - **Cagnotte gamifiée / super-parrains** (Piste 3 du brainstorm) : paliers visibles, badges
-  « top parrain ». À considérer en V2 une fois la mécanique de base validée — cible les
-  leaders d'opinion du milieu. Voir [[project_certified_badge_pro_lever]] pour la logique
-  « vendre la crédibilité / le statut ».
+  « top parrain », **et les paliers du titre Ambassadeur (Bronze/Argent/Or à 1/5/10
+  filleuls)**. À considérer en V2 une fois la mécanique de base validée — cible les leaders
+  d'opinion du milieu. Voir la décision 0004 (badge Certifié) pour la logique « vendre la
+  crédibilité / le statut ».
