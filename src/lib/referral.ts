@@ -4,7 +4,7 @@
 /** Normalise un nom de marque en code de parrainage : MAJ, sans accents, alphanumérique, ≤20. */
 export function normalizeReferralCode(input: string): string {
   return input
-    .normalize('NFD').replace(/[̀-ͯ]/g, '') // retire les accents (Chêne → Chene)
+    .normalize('NFD').replace(/\p{M}/gu, '') // retire les accents (Chêne → Chene)
     .toUpperCase().replace(/[^A-Z0-9]/g, '')
     .slice(0, 20)
 }
