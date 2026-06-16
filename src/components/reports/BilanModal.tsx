@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { X, Lock } from 'lucide-react'
 import { EventReportForm } from './EventReportForm'
+import { ReviewModal } from '@/components/reviews/ReviewModal'
 
 interface Props {
   eventId: string
@@ -8,8 +10,26 @@ interface Props {
   onSaved?: () => void
 }
 
-/** Modale plein écran qui wrappe l'EventReportForm. Après save : ferme + déclenche onSaved. */
+/**
+ * Modale plein écran qui wrappe l'EventReportForm. Après save du bilan (privé),
+ * on enchaîne sur la modale d'avis (publique) — deux étapes distinctes pour ne
+ * pas mélanger privé/public. La fermeture de l'avis termine le flux.
+ */
 export function BilanModal({ eventId, onClose, onSaved }: Props) {
+  const [showReview, setShowReview] = useState(false)
+
+  // Étape 2 : avis public (sans cadenas, rappel public porté par ReviewModal).
+  if (showReview) {
+    return (
+      <ReviewModal
+        eventId={eventId}
+        onClose={() => { onSaved?.(); onClose() }}
+        onSubmitted={() => {}}
+      />
+    )
+  }
+
+  // Étape 1 : bilan privé.
   return (
     <div className="bilan-modal-overlay" onClick={onClose}>
       <div className="bilan-modal" onClick={(e) => e.stopPropagation()}>
@@ -23,7 +43,7 @@ export function BilanModal({ eventId, onClose, onSaved }: Props) {
         <div className="bilan-modal-body">
           <EventReportForm
             eventId={eventId}
-            onSaved={() => { onSaved?.(); onClose() }}
+            onSaved={() => setShowReview(true)}
           />
         </div>
       </div>

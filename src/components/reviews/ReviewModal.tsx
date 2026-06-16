@@ -1,4 +1,4 @@
-import { X, Star } from 'lucide-react'
+import { X, Star, Globe } from 'lucide-react'
 import { ReviewForm } from './ReviewForm'
 import './ReviewModal.css'
 
@@ -18,6 +18,10 @@ export function ReviewModal({ eventId, onClose, onSubmitted }: Props) {
           <button onClick={onClose} aria-label="Fermer"><X strokeWidth={1.8} /></button>
         </div>
         <div className="review-modal-body">
+          <div className="review-modal-public">
+            <Globe strokeWidth={2} />
+            <span>Avis <strong>public</strong> — visible des autres exposants pour les aider à choisir.</span>
+          </div>
           <ReviewForm eventId={eventId} onReviewSubmitted={() => { onSubmitted(); onClose() }} />
         </div>
       </div>

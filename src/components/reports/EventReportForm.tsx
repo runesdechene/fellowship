@@ -22,7 +22,6 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
   const [adding, setAdding] = useState(false)
   const [newCat, setNewCat] = useState<LedgerCategory>('essence')
   const [newAmount, setNewAmount] = useState('')
-  const [newLabel, setNewLabel] = useState('')
   const [improvements, setImprovements] = useState<string[]>([])
   const [newImprovement, setNewImprovement] = useState('')
   const [note, setNote] = useState('')
@@ -67,10 +66,10 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
     if (!reportId) return
     await insertLedgerEntry({
       report_id: reportId, actor_id: currentActor.id, event_id: eventId,
-      label: newLabel.trim() || null, amount: amt,
+      label: null, amount: amt,
       direction: defaultDirectionFor(newCat), category: newCat, source: 'manual',
     })
-    setNewAmount(''); setNewLabel(''); setAdding(false)
+    setNewAmount(''); setAdding(false)
     await refetchEntries()
   }
 
@@ -156,12 +155,23 @@ export function EventReportForm({ eventId, onSaved }: EventReportFormProps) {
 
         {adding ? (
           <div className="bilan-ledger-add">
-            <select value={newCat} onChange={e => setNewCat(e.target.value as LedgerCategory)}>
-              {LEDGER_CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.emoji} {c.label}</option>)}
-            </select>
-            <input className={inputClass} placeholder="Libellé (optionnel)" value={newLabel} onChange={e => setNewLabel(e.target.value)} />
-            <input className={inputClass} type="number" inputMode="decimal" placeholder="Montant €" value={newAmount} onChange={e => setNewAmount(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addEntry() }} />
-            <Button size="sm" onClick={addEntry}>Ajouter</Button>
+            {/* Le sens est intrinsèque à la catégorie : +/− devant chaque option
+                (− = dépense, + = recette). Pas de toggle, l'essence reste une dépense. */}
+            <div className="bilan-ledger-add-row">
+              <select
+                className="bilan-ledger-select"
+                value={newCat}
+                onChange={e => setNewCat(e.target.value as LedgerCategory)}
+              >
+                {LEDGER_CATEGORIES.map(c => (
+                  <option key={c.key} value={c.key}>
+                    {c.defaultDirection === 'in' ? '+' : '−'} {c.emoji} {c.label}
+                  </option>
+                ))}
+              </select>
+              <input className={`${inputClass} bilan-ledger-amount`} type="number" inputMode="decimal" placeholder="Montant €" value={newAmount} onChange={e => setNewAmount(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addEntry() }} />
+              <Button size="sm" onClick={addEntry}>Ajouter</Button>
+            </div>
           </div>
         ) : (
           <Button size="sm" variant="ghost" onClick={() => setAdding(true)}><Plus className="h-4 w-4" /> Ajouter une ligne</Button>

@@ -120,6 +120,11 @@
 
 .event-edit-btn:hover { background: hsl(var(--foreground) / 0.15); }
 
+/* Variante labellisée « Laisser mon avis » : pilule (pas un carré étoile qu'on confond avec Repérer). */
+.event-review-btn { width: auto; gap: 7px; padding: 0 14px; font-size: 13px; font-weight: 600; }
+.event-review-btn-label { white-space: nowrap; }
+@media (max-width: 480px) { .event-review-btn-label { display: none; } .event-review-btn { width: 38px; padding: 0; } }
+
 /* ── Grille festival ──────────────────────────────────────────────── */
 
 .fest-grid {

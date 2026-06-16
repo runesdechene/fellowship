@@ -27,7 +27,7 @@ import { ParticipantsModal } from '@/components/events/ParticipantsModal'
 import { LocationField, type LocationValue } from '@/components/events/LocationField'
 import { geocodeCity } from '@/lib/geocode'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, Star, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send, Lock } from 'lucide-react'
+import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send, Lock } from 'lucide-react'
 import { getTagIcon, getTagLandingColor } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
@@ -343,8 +343,9 @@ export function EventPage() {
         )}
         <div style={{ display: 'flex', gap: 8 }}>
           {isExposant && isPast && !editing && (
-            <button onClick={() => setShowReviewForm(!showReviewForm)} className="event-edit-btn" title="Donner mon avis">
-              <Star className="h-4 w-4" strokeWidth={1.5} />
+            <button onClick={() => setShowReviewForm(!showReviewForm)} className="event-edit-btn event-review-btn" title="Laisser mon avis sur cet événement">
+              <MessageSquarePlus className="h-4 w-4" strokeWidth={1.6} />
+              <span className="event-review-btn-label">Laisser mon avis</span>
             </button>
           )}
           {isExposant && !editing && (
