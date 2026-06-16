@@ -1,5 +1,5 @@
 // stripe-checkout-session : crée une session Stripe Checkout pour souscrire au plan Pro
-// d'une entité, avec trial 14j et Stripe Tax. Retourne l'URL Checkout à laquelle
+// d'une entité, avec trial 14j (30j si filleul parrainé) et Stripe Tax. Retourne l'URL Checkout à laquelle
 // rediriger l'utilisateur.
 //
 // Auth : verify_jwt = true côté config.toml → la gateway Supabase valide déjà le JWT.
