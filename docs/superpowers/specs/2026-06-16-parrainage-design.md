@@ -27,7 +27,7 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 | 1 | Sens de la récompense | **Bilatéral** (parrain ET filleul gagnent) | Le filleul doit avoir une raison de sortir la CB ; le parrain a alors un argument de vente, pas juste un lien. |
 | 2 | Forme | **Symétrique : un mois de chaque côté** | Message imbattable de simplicité, se raconte en une phrase au stand. |
 | 3 | Déclenchement récompense parrain | **À la 1ʳᵉ facture réellement payée du filleul** | Tue le farming (faux comptes auto-parrainés). On ne récompense que sur du revenu encaissé. |
-| 4 | Éligibilité parrain | **Tout le monde** (gratuit ET Pro) | Les gratuits sont la plus grosse armée d'ambassadeurs. Bonus : le gratuit qui parraine goûte au Pro → levier d'activation. |
+| 4 | Éligibilité parrain | **Toute entité, gratuite ET Pro** (jamais une personne sans vitrine) | Le Pro / le code / le badge vivent sur l'entité ; une personne sans entité n'a aucun usage du Pro. « Gratuit » ici = entité au plan gratuit (pas besoin d'être abonné payant). Le parrain entité gratuit goûte au Pro → levier d'activation. |
 | 5 | Plafond | **Aucun** | Grâce au verrou anti-fraude, chaque mois offert = un abonné payant réel acquis. Plafonner = brider ses meilleurs ambassadeurs. |
 | 6 | Attribution | **Lien + code lisible** | Lien pour le digital (WhatsApp/stories/groupes FB), code dicible à voix haute pour le physique au stand. |
 | 7 | Génération du code | **Dérivé du nom/marque + suffixe si collision** (ex. `RUNEDECHENE`, puis `RUNEDECHENE2`) | Mémorable et dicible ; un code aléatoire imprononçable saboterait l'usage physique. |
@@ -39,14 +39,18 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
 ## 3. Les trois récompenses (mécanique précise)
 
 ### 3.1 Filleul — 1er mois offert (immédiat)
-- À la souscription, on applique un **coupon Stripe « 100% off, 1 mois »** (même nature que
-  le coupon existant `GUILDEDESVOYAGEURS`, déjà géré par le webhook et les colonnes
-  `discount_end` / `discount_label`).
-- **Ce coupon REMPLACE les 14 jours d'essai par défaut** (`trial_period_days: 14` dans
-  `stripe-checkout-session`). On ne stacke pas : un seul cadeau net de 30 jours, une seule
-  date de 1ʳᵉ facture claire — qui est précisément le déclencheur de la récompense parrain.
-- **Une seule fois par entité, à vie.** Une entité déjà abonnée (ou ayant déjà consommé un
-  cadeau filleul) n'est pas éligible.
+- Le cadeau = **un essai de 30 jours** : à la souscription d'un filleul parrainé, on passe
+  `trial_period_days` de **14 à 30** dans `stripe-checkout-session`.
+- **Pourquoi un essai plutôt qu'un coupon** (arbitrage du plan, 2026-06-16) : un coupon
+  Stripe « 100% off, 1 mois » (`duration: once`) s'applique à la **1ʳᵉ facture entière** —
+  pour un filleul qui prend l'**annuel**, ça offrirait **toute l'année**. L'essai de 30 jours
+  donne 30 jours gratuits **identiquement en mensuel ET annuel**, puis la 1ʳᵉ facture pleine.
+  Bonus : zéro objet Stripe à créer, et l'UI « Essai gratuit Pro » existe déjà.
+- **Un seul cadeau net de 30 jours**, donc une seule date de 1ʳᵉ facture claire — qui est
+  précisément le déclencheur de la récompense parrain.
+- **Une seule fois par entité, à vie** (flag `filleul_gift_granted`) : on ne ré-octroie pas
+  les 30 jours si le filleul résilie pendant l'essai puis se réabonne. Une entité déjà
+  abonnée n'est pas éligible.
 
 ### 3.2 Parrain Pro — crédit d'un mois (différé)
 - Crédit **Stripe natif sur le `customer balance`**, d'une valeur égale à **un mois de son
@@ -80,9 +84,9 @@ Le message est identique pour tout le monde — gratuit comme Pro, on gagne un m
    - code inexistant/invalide → simplement ignoré (le filleul s'inscrit normalement).
 
 ### 4.2 Récompense filleul (immédiate, à la souscription)
-- Au checkout Stripe du filleul attribué : on injecte le coupon « 1er mois offert » (§3.1)
-  à la place du trial 14j.
-- Le webhook persiste `discount_end` / `discount_label` comme pour les codes promo actuels.
+- Au checkout Stripe du filleul attribué : `trial_period_days = 30` au lieu de 14 (§3.1).
+- `handleCheckoutCompleted` marque `filleul_gift_granted = true` pour éviter de ré-octroyer
+  l'essai long en cas de résiliation puis réabonnement.
 
 ### 4.3 Récompense parrain (différée, anti-fraude)
 - Le webhook `stripe-webhook` écoute la **1ʳᵉ vraie facture payée** du filleul :
@@ -190,8 +194,8 @@ badge Certifié (décision 0004) : on vend la crédibilité, pas une feature.
    entité support pour le code et la récompense (modèle « Pro par entité »).
 2. **Stripe : meilleure primitive pour le crédit parrain** — `customer balance` credit vs
    coupon vs autre ; valider l'idempotence et l'affichage sur la prochaine facture.
-3. **Réconciliation coupon « 1er mois offert » ↔ trial 14j** dans `stripe-checkout-session`
-   (retirer le trial pour les filleuls attribués, appliquer le coupon à la place).
+3. ~~Réconciliation coupon ↔ trial~~ **RÉSOLU** : le cadeau filleul = essai 30 jours (au lieu
+   de 14) — pas de coupon (qui buggait sur l'annuel). Cf. §3.1.
 4. **Emplacement exact du bandeau** (confirmer le mur du quota comme point d'ancrage principal).
 
 ---
