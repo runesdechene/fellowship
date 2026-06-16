@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, type LucideIcon } from 'lucide-react'
+import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, Gift, type LucideIcon } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { useMyParticipations } from '@/hooks/use-participations'
 import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
@@ -90,6 +90,18 @@ export function Sidebar() {
           </NavLink>
         )}
       </nav>
+
+      {currentActor?.kind === 'entity' && (
+        <NavLink
+          to="/abonnement"
+          className={({ isActive }) => `sidebar-referral${isActive ? ' active' : ''}`}
+          title={collapsed ? 'Parrainage — 1 mois offert' : undefined}
+        >
+          <Gift strokeWidth={2} />
+          <span className="navlabel">Parrainage</span>
+          <span className="ref-pill">1 mois offert</span>
+        </NavLink>
+      )}
 
       {isFreeEntity && !collapsed && (
         <div className="sidebar-upsell">

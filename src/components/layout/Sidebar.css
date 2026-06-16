@@ -65,6 +65,18 @@
 .lock { margin-left: auto; display: inline-flex; }
 .lock svg { width: 14px; height: 14px; stroke-width: 2.2; }
 
+/* Entrée Parrainage — toujours visible (entité gratuite OU Pro), accent cuivre pour se
+   démarquer des items de nav neutres. Cf. badge Ambassadeur (même registre cuivre). */
+.sidebar-referral { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding: 10px 12px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; font-family: var(--font-body); color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); border: 1px solid color-mix(in srgb, var(--copper) 28%, transparent); }
+.sidebar-referral:hover { background: color-mix(in srgb, var(--copper) 20%, transparent); }
+.sidebar-referral.active { background: color-mix(in srgb, var(--copper) 24%, transparent); }
+.light .sidebar-referral { color: hsl(22 78% 42%); }
+.sidebar-referral svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; flex-shrink: 0; }
+.sidebar-referral .navlabel { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-referral .ref-pill { font-size: 10px; font-weight: 800; letter-spacing: .02em; background: linear-gradient(135deg, var(--copper), var(--copper-d)); color: #fff; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+.sidebar.collapsed .sidebar-referral { justify-content: center; padding-left: 0; padding-right: 0; }
+.sidebar.collapsed .sidebar-referral .navlabel, .sidebar.collapsed .sidebar-referral .ref-pill { display: none; }
+
 /* Upsell (entité free) */
 .sidebar-upsell { margin-top: 10px; background: linear-gradient(150deg, color-mix(in srgb, var(--copper) 22%, hsl(var(--secondary))), hsl(var(--secondary))); border: 1px solid color-mix(in srgb, var(--copper) 32%, transparent); border-radius: 13px; padding: 13px; }
 .sidebar-upsell b { font-family: var(--font-heading); font-size: 13px; color: hsl(var(--foreground)); display: block; margin-bottom: 3px; }
