@@ -98,6 +98,9 @@ export function AbonnementPage() {
           <>
             <p className="abo-muted">Pas d'abonnement actif sur {overrideEntity?.brand_name ? <strong>{overrideEntity.brand_name}</strong> : 'cette entité'}.</p>
             <Link to={overrideEntityId ? `/boutique?entity=${overrideEntityId}` : '/boutique'} className="abo-cta">Voir les offres Pro</Link>
+            {/* Parrainage visible AUSSI pour les entités gratuites (cible #1 : le parrain gratuit
+                qui goûte au Pro). Sans ça, le bandeau du quota renverrait vers un cul-de-sac. */}
+            {targetEntityId && <ReferralCard entityId={targetEntityId} brandName={entity?.brand_name ?? null} />}
           </>
         )}
       </div>
