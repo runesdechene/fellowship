@@ -8,6 +8,7 @@ import {
   slugify, deriveDepartment, resolveOnboardingFlow, resolveUniqueHandle,
   type OnboardingPath,
 } from '@/lib/onboarding'
+import { getStoredReferralCode, clearStoredReferralCode } from '@/lib/referral-capture'
 import './Onboarding.css'
 
 type SlugStatus = 'idle' | 'checking' | 'available' | 'taken'
@@ -18,7 +19,7 @@ export function OnboardingPage() {
 
   const [chosenPath, setChosenPath] = useState<OnboardingPath | null>(null)
   const [stepIndex, setStepIndex] = useState(0)
-  const [form, setForm] = useState({ prenom: '', brand: '', craft: '', city: '', postal: '', slug: '' })
+  const [form, setForm] = useState({ prenom: '', brand: '', craft: '', city: '', postal: '', slug: '', referral: '' })
   const [slugStatus, setSlugStatus] = useState<SlugStatus>('idle')
   const [saving, setSaving] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -39,6 +40,12 @@ export function OnboardingPage() {
       setForm((f) => ({ ...f, slug: slugify(f.brand) }))
     }
   }, [form.brand, chosenPath])
+
+  // Pré-remplit le code de parrainage s'il a été capturé via un lien ?r=.
+  useEffect(() => {
+    const stored = getStoredReferralCode()
+    if (stored) setForm((f) => ({ ...f, referral: stored }))
+  }, [])
 
   // Slug entité : vérif live débouncée d'unicité.
   useEffect(() => {
@@ -106,6 +113,19 @@ export function OnboardingPage() {
           throw er
         }
         switchActor(newId as string)
+
+        // Parrainage : rattache le filleul à son parrain. Best-effort — un échec ne doit
+        // jamais bloquer la fin de l'onboarding (l'entité est déjà créée).
+        const refCode = form.referral.trim() || getStoredReferralCode() || ''
+        if (refCode) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await (supabase.rpc as any)('attribute_referral', { p_code: refCode, p_filleul_entity_id: newId })
+            clearStoredReferralCode()
+          } catch (e) {
+            console.error('[onboarding] referral attribution failed', e)
+          }
+        }
       }
 
       await refreshProfile()
@@ -444,6 +464,16 @@ export function OnboardingPage() {
                 {slugStatus === 'checking' && <div className="hint">Vérification…</div>}
                 {slugStatus === 'available' && <div className="hint" style={{ color: 'var(--lime)' }}>✓ Disponible</div>}
                 {slugStatus === 'taken' && <div className="hint" style={{ color: 'salmon' }}>Ce lien est déjà pris.</div>}
+              </div>
+              <div className="field">
+                <label>Code de parrainage <span style={{ opacity: 0.6, fontWeight: 400 }}>(facultatif)</span></label>
+                <input
+                  type="text"
+                  value={form.referral}
+                  onChange={(e) => update({ referral: e.target.value })}
+                  placeholder="RUNEDECHENE"
+                />
+                <div className="hint">Un ami exposant t'a parrainé ? Saisis son code : 30 jours de Pro offerts.</div>
               </div>
               <div className="spacer" />
               <button
