@@ -131,7 +131,10 @@ Deno.serve(async (req) => {
         metadata: { entity_actor_id: entity.actor_id },
       },
       automatic_tax: { enabled: true },
-      customer_update: { address: 'auto' },
+      // ⚠️ tax_id_collection EXIGE customer_update[name]='auto' pour un Customer existant
+      // (sinon Stripe renvoie 500). Le champ nom au Checkout est pré-rempli avec la raison
+      // sociale déjà posée par syncCustomerBilling → elle est conservée si l'utilisateur confirme.
+      customer_update: { name: 'auto', address: 'auto' },
       tax_id_collection: { enabled: true },
       // Programme Founder Friends (v0.7.174) : autorise la saisie d'un code promo
       // au Checkout (ex: RUNE-2026 = 100% off pendant 2 mois). CB requise quand même.
