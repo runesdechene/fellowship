@@ -1,0 +1,27 @@
+.billing-backdrop {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+}
+.billing-modal {
+  background: hsl(var(--card)); color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border)); border-radius: 16px;
+  width: min(440px, 100%); padding: 1.5rem; box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+.billing-modal h2 { margin: 0 0 .25rem; font-size: 1.15rem; }
+.billing-intro { margin: 0 0 1rem; color: hsl(var(--muted-foreground)); font-size: .9rem; }
+.billing-form { display: flex; flex-direction: column; gap: .9rem; }
+.billing-field { display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; }
+.billing-field input[type="text"] {
+  padding: .6rem .7rem; border-radius: 10px;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground));
+}
+.billing-error { color: hsl(var(--status-refuse, 0 70% 55%)); font-style: normal; font-size: .8rem; }
+.billing-check { display: flex; align-items: center; gap: .5rem; font-size: .85rem; color: hsl(var(--muted-foreground)); }
+.billing-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1.25rem; }
+.billing-cancel, .billing-submit {
+  padding: .55rem 1rem; border-radius: 10px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem;
+}
+.billing-cancel { background: transparent; border: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); }
+.billing-submit { background: var(--copper); border: none; color: #fff; }
+.billing-submit:disabled { opacity: .5; cursor: not-allowed; }

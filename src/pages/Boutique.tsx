@@ -4,6 +4,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { startCheckout, type BillingInterval } from '@/lib/stripe-client'
 import type { EntityRow } from '@/types/database'
+import { BillingInfoModal } from '@/components/billing/BillingInfoModal'
+import type { BillingInfoState } from '@/components/billing/BillingInfoForm'
 import './Boutique.css'
 
 const FEATURES = [
@@ -20,6 +22,7 @@ export function BoutiquePage() {
   const [params] = useSearchParams()
   const [loading, setLoading] = useState<BillingInterval | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [pendingInterval, setPendingInterval] = useState<BillingInterval | null>(null)
 
   // Cible de souscription : par défaut l'acteur actif s'il est entité,
   // sinon override via ?entity=<actor_id> (depuis Settings multi-entités).
@@ -30,16 +33,32 @@ export function BoutiquePage() {
   const targetEntity: EntityRow | null = overrideEntity
     ?? (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null)
   const targetEntityId = targetEntity?.actor_id ?? null
+  const billingEntity = targetEntity as (EntityRow & { legal_name?: string | null; siren?: string | null; billing_no_siren?: boolean | null }) | null
+  const hasBilling = !!billingEntity && !!billingEntity.legal_name && (!!billingEntity.siren || billingEntity.billing_no_siren === true)
   const targetPlan = targetEntity?.plan ?? null
   const isProTarget = targetPlan === 'pro'
 
   const handleClick = async (interval: BillingInterval) => {
     if (!targetEntityId) return
     setError(null)
+    if (!hasBilling) { setPendingInterval(interval); return }
     setLoading(interval)
     try {
       await startCheckout(targetEntityId, interval)
-      // navigate: window.location.href dans startCheckout, on n'arrive jamais ici.
+    } catch (e) {
+      console.error('[Boutique] checkout failed', e)
+      setError("Impossible de démarrer le paiement. Réessaie dans un instant.")
+      setLoading(null)
+    }
+  }
+
+  const handleBillingSubmit = async (v: BillingInfoState) => {
+    if (!targetEntityId || !pendingInterval) return
+    const interval = pendingInterval
+    setLoading(interval)
+    setPendingInterval(null)
+    try {
+      await startCheckout(targetEntityId, interval, { legalName: v.legalName.trim(), siren: v.noSiren ? null : v.siren, noSiren: v.noSiren })
     } catch (e) {
       console.error('[Boutique] checkout failed', e)
       setError("Impossible de démarrer le paiement. Réessaie dans un instant.")
@@ -112,6 +131,16 @@ export function BoutiquePage() {
         Essai gratuit 14 jours · TVA en sus calculée au paiement selon ton pays · résiliable à tout moment depuis « Mon abonnement ».
         Voir nos <Link to="/legal/cgv">CGV</Link>.
       </p>
+
+      {pendingInterval && billingEntity && (
+        <BillingInfoModal
+          initial={{ legalName: billingEntity.legal_name ?? billingEntity.brand_name ?? '', siren: billingEntity.siren ?? '', noSiren: billingEntity.billing_no_siren === true }}
+          submitLabel="Continuer vers le paiement"
+          busy={loading !== null}
+          onCancel={() => setPendingInterval(null)}
+          onSubmit={handleBillingSubmit}
+        />
+      )}
     </div>
   )
 }
