@@ -25,6 +25,12 @@ export function BillingInfoModal({ initial, onSubmit, onCancel, submitLabel, bus
             : 'Indique ton SIREN pour une facture conforme. Ta raison sociale te sera demandée à l’étape de paiement.'}
         </p>
         <BillingInfoForm value={value} onChange={setValue} showLegalName={showLegalName} />
+        {!showLegalName && (
+          <p className="billing-hint">
+            En franchise en base de TVA ? À l'étape de paiement, ne coche pas « J'achète en tant qu'entreprise » :
+            ton SIREN suffit, le n° de TVA ne te concerne pas.
+          </p>
+        )}
         <div className="billing-actions">
           <button className="billing-cancel" onClick={onCancel} disabled={busy}>Annuler</button>
           <button

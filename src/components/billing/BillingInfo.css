@@ -17,6 +17,7 @@
   border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground));
 }
 .billing-error { color: hsl(var(--status-refuse, 0 70% 55%)); font-style: normal; font-size: .8rem; }
+.billing-hint { margin: .9rem 0 0; padding: .6rem .7rem; border-radius: 10px; background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); font-size: .78rem; line-height: 1.4; }
 /* align-self + fit-content : la zone cliquable se limite à la case + son texte
    (sinon le label s'étire sur toute la largeur de la modale = clic dans le vide coche la case). */
 .billing-check { display: inline-flex; align-self: flex-start; width: fit-content; align-items: center; gap: .5rem; font-size: .85rem; color: hsl(var(--muted-foreground)); cursor: pointer; }
