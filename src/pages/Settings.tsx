@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Camera, LogOut, Trash2, Check, Loader2, ExternalLink, Crown, Sparkles, Mail } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
+import { normalizeSex } from '@/lib/user-sex'
 
 export function SettingsPage() {
   const { user, person, entities, currentActor, currentActorRow, signOut, refreshProfile } = useAuth()
@@ -14,11 +15,10 @@ export function SettingsPage() {
   // l'app affiche partout (header, switcher, avatar). L'identité publique (marque,
   // métier, bio, lien, photos, slug) se modifie sur la vitrine → table `entities`.
   // NB: on lit/écrit `users`, PAS le `profiles` legacy, sinon le nom affiché diverge.
-  const normSex = (v: string | null | undefined) => (v === 'homme' || v === 'femme' ? v : 'indéfini')
   const [displayName, setDisplayName] = useState(person?.display_name ?? '')
   const [city, setCity] = useState(person?.city ?? '')
   const [postalCode, setPostalCode] = useState(person?.postal_code ?? '')
-  const [sex, setSex] = useState<string>(normSex(person?.sex))
+  const [sex, setSex] = useState<string>(normalizeSex(person?.sex))
   const [avatarUrl, setAvatarUrl] = useState(person?.avatar_url ?? '')
 
   // UI state
@@ -42,7 +42,7 @@ export function SettingsPage() {
       setDisplayName(person.display_name ?? '')
       setCity(person.city ?? '')
       setPostalCode(person.postal_code ?? '')
-      setSex(normSex(person.sex))
+      setSex(normalizeSex(person.sex))
       setAvatarUrl(person.avatar_url ?? '')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,7 +211,7 @@ export function SettingsPage() {
                 value={sex}
                 onChange={(e) => setSex(e.target.value)}
               >
-                <option value="indéfini">Indéfini</option>
+                <option value="indefini">Indéfini</option>
                 <option value="homme">Homme</option>
                 <option value="femme">Femme</option>
               </select>
