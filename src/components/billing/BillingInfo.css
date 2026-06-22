@@ -17,7 +17,10 @@
   border: 1px solid hsl(var(--border)); background: hsl(var(--background)); color: hsl(var(--foreground));
 }
 .billing-error { color: hsl(var(--status-refuse, 0 70% 55%)); font-style: normal; font-size: .8rem; }
-.billing-check { display: flex; align-items: center; gap: .5rem; font-size: .85rem; color: hsl(var(--muted-foreground)); }
+/* align-self + fit-content : la zone cliquable se limite à la case + son texte
+   (sinon le label s'étire sur toute la largeur de la modale = clic dans le vide coche la case). */
+.billing-check { display: inline-flex; align-self: flex-start; width: fit-content; align-items: center; gap: .5rem; font-size: .85rem; color: hsl(var(--muted-foreground)); cursor: pointer; }
+.billing-check input[type="checkbox"] { cursor: pointer; }
 .billing-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1.25rem; }
 .billing-cancel, .billing-submit {
   padding: .55rem 1rem; border-radius: 10px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem;
