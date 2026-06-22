@@ -1,8 +1,12 @@
 // src/lib/onboarding.ts
 export type OnboardingPath = 'festivalier' | 'exposant'
 
+/** Pourquoi on arrive sur l'onboarding : première inscription vs compte existant
+ * qui ajoute une casquette exposant (depuis le sélecteur d'entités). */
+export type OnboardingIntent = 'first-run' | 'add-exposant'
+
 export interface OnboardingFlow {
-  case: 'completion' | 'festivalier' | 'exposant'
+  case: 'completion' | 'festivalier' | 'exposant' | 'add-entity'
   needsChoice: boolean
   createsEntity: boolean
   steps: string[]
@@ -26,8 +30,20 @@ export function deriveDepartment(postalCode: string): string | null {
   return cp.slice(0, 2)
 }
 
-/** Détermine le parcours selon le nb d'entités existantes et le choix de l'utilisateur. */
-export function resolveOnboardingFlow(entityCount: number, chosenPath: OnboardingPath | null): OnboardingFlow {
+/** Détermine le parcours selon le nb d'entités existantes, le choix de l'utilisateur,
+ * et l'intention d'arrivée. */
+export function resolveOnboardingFlow(
+  entityCount: number,
+  chosenPath: OnboardingPath | null,
+  intent: OnboardingIntent = 'first-run',
+): OnboardingFlow {
+  // Compte EXISTANT qui ajoute une casquette exposant : flux dédié qui ne touche
+  // JAMAIS la personne (pas d'étape prénom). Prioritaire sur tout le reste — sinon
+  // le court-circuit `entityCount > 0` (completion) ou le défaut `choice` (qui écrase
+  // la personne) reprendraient la main et casseraient « Créer un compte exposant ».
+  if (intent === 'add-exposant') {
+    return { case: 'add-entity', needsChoice: false, createsEntity: true, steps: ['brand', 'craft', 'location', 'slug'] }
+  }
   if (entityCount > 0) {
     return { case: 'completion', needsChoice: false, createsEntity: false, steps: ['name'] }
   }

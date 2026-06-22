@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { defaultRouteForActor } from '@/lib/navModel'
 import { supabase } from '@/lib/supabase'
@@ -16,6 +16,10 @@ type SlugStatus = 'idle' | 'checking' | 'available' | 'taken'
 export function OnboardingPage() {
   const { person, entities, refreshProfile, switchActor, currentActor, currentActorRow } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  // Intention d'arrivée : « add-exposant » = compte existant qui ajoute une casquette
+  // (depuis le sélecteur d'entités) → flux dédié qui ne touche jamais la personne.
+  const intent = searchParams.get('intent') === 'add-exposant' ? 'add-exposant' : 'first-run'
 
   const [chosenPath, setChosenPath] = useState<OnboardingPath | null>(null)
   const [stepIndex, setStepIndex] = useState(0)
@@ -27,7 +31,7 @@ export function OnboardingPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const slugTouched = useRef(false)
 
-  const flow = resolveOnboardingFlow(entities.length, chosenPath)
+  const flow = resolveOnboardingFlow(entities.length, chosenPath, intent)
   const steps = flow.steps
   const currentStep = steps[stepIndex]
   const isLastInputStep = stepIndex === steps.length - 1
@@ -64,6 +68,8 @@ export function OnboardingPage() {
   const goNext = () => setStepIndex((i) => Math.min(i + 1, steps.length - 1))
   const goBack = () => {
     if (stepIndex > 0) setStepIndex((i) => i - 1)
+    // Ajout d'une casquette : pas d'écran de choix derrière → on quitte l'onboarding.
+    else if (intent === 'add-exposant') navigate(-1)
     else if (flow.needsChoice === false && entities.length === 0) { setChosenPath(null); setStepIndex(0) }
   }
 
@@ -76,7 +82,8 @@ export function OnboardingPage() {
         const { data } = await supabase.from('users').select('actor_id').eq('handle', h).maybeSingle()
         return !!data
       }
-      const handle = await resolveUniqueHandle(form.prenom, isHandleTaken)
+      // En add-entity, la personne existe déjà → on ne (re)calcule pas de handle ni ne la touche.
+      const handle = flow.case === 'add-entity' ? '' : await resolveUniqueHandle(form.prenom, isHandleTaken)
 
       if (flow.case === 'completion') {
         // Exposant migré : on complète juste la personne, l'entité existe déjà.
@@ -91,10 +98,15 @@ export function OnboardingPage() {
         }).eq('actor_id', person.actor_id)
         if (e) throw e
       } else {
-        // Exposant : personne d'abord, puis création ATOMIQUE de l'entité (slug inclus dans la RPC).
-        const { error: eu } = await supabase.from('users')
-          .update({ display_name: form.prenom, handle }).eq('actor_id', person.actor_id)
-        if (eu) throw eu
+        // Exposant (first-run) OU ajout d'une casquette (add-entity).
+        // First-run : on (re)nomme la personne d'abord. Add-entity : la personne
+        // existe déjà → on NE TOUCHE PAS la ligne `users` (sinon on écrase le compte).
+        if (flow.case === 'exposant') {
+          const { error: eu } = await supabase.from('users')
+            .update({ display_name: form.prenom, handle }).eq('actor_id', person.actor_id)
+          if (eu) throw eu
+        }
+        // Création ATOMIQUE de l'entité (slug inclus dans la RPC).
         const { data: newId, error: er } = await supabase.rpc('create_owned_entity', {
           p_type: 'exposant', p_brand_name: form.brand,
           p_craft_type: form.craft, p_city: form.city,
@@ -161,7 +173,7 @@ export function OnboardingPage() {
 
         <div className="ob-card">
           {/* ── SUCCESS SCREEN ── */}
-          {submitted && flow.case !== 'exposant' && (
+          {submitted && !flow.createsEntity && (
             <section className="step">
               <div className="done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
               <h2>Bienvenue, {form.prenom}&nbsp;!</h2>
@@ -172,7 +184,7 @@ export function OnboardingPage() {
               </button>
             </section>
           )}
-          {submitted && flow.case === 'exposant' && (
+          {submitted && flow.createsEntity && (
             <section className="step">
               <div className="done-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
               <h2>Ta vitrine est prête&nbsp;!</h2>
@@ -181,7 +193,7 @@ export function OnboardingPage() {
                 <div className="eav">{initials}</div>
                 <div className="et"><b>{form.brand}</b><span>Exposant · {form.craft} · {form.city}</span></div>
               </div>
-              <div className="person-line">rattachée à <b>{form.prenom}</b> · ton compte</div>
+              <div className="person-line">rattachée à <b>{form.prenom || person?.display_name}</b> · ton compte</div>
               <div className="spacer" />
               <button className="btn btn-p" onClick={() => navigate(defaultRouteForActor(currentActor, currentActorRow), { replace: true })}>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg> Entrer dans Fellowship
@@ -191,7 +203,7 @@ export function OnboardingPage() {
           )}
 
           {/* Back button */}
-          {!submitted && currentStep !== 'choice' && (stepIndex > 0 || entities.length === 0) && (
+          {!submitted && currentStep !== 'choice' && (stepIndex > 0 || entities.length === 0 || intent === 'add-exposant') && (
             <button className="ob-back" onClick={goBack}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
             </button>

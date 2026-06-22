@@ -47,6 +47,33 @@ describe('resolveOnboardingFlow', () => {
     expect(f.case).toBe('completion')
     expect(f.createsEntity).toBe(false)
   })
+
+  // Utilisateur EXISTANT qui ajoute une casquette exposant via le sélecteur d'entités.
+  // Ne doit JAMAIS repasser par l'onboarding première-inscription (qui écrase la personne).
+  describe('intent add-exposant (compte existant ajoute une casquette)', () => {
+    it('festivalier (0 entité) → crée l’entité, PAS d’étape prénom/choix', () => {
+      const f = resolveOnboardingFlow(0, null, 'add-exposant')
+      expect(f.case).toBe('add-entity')
+      expect(f.needsChoice).toBe(false)
+      expect(f.createsEntity).toBe(true)
+      expect(f.steps).toEqual(['brand', 'craft', 'location', 'slug'])
+    })
+    it('déjà ≥1 entité → crée quand même une nouvelle entité (prioritaire sur le court-circuit completion)', () => {
+      const f = resolveOnboardingFlow(2, null, 'add-exposant')
+      expect(f.case).toBe('add-entity')
+      expect(f.createsEntity).toBe(true)
+      expect(f.steps).toEqual(['brand', 'craft', 'location', 'slug'])
+    })
+    it('l’intent prime sur un chosenPath éventuel', () => {
+      const f = resolveOnboardingFlow(0, 'festivalier', 'add-exposant')
+      expect(f.case).toBe('add-entity')
+    })
+  })
+
+  it('intent first-run par défaut (paramètre omis) = comportement inchangé', () => {
+    expect(resolveOnboardingFlow(0, null).steps).toEqual(['choice'])
+    expect(resolveOnboardingFlow(1, null).case).toBe('completion')
+  })
 })
 
 describe('resolveUniqueHandle', () => {

@@ -71,7 +71,7 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
               en s'inscrivant, ou s'il développe une activité plus tard). */}
           <button
             className="entity-dropdown-create"
-            onClick={() => { navigate('/onboarding'); setOpen(false) }}
+            onClick={() => { navigate('/onboarding?intent=add-exposant'); setOpen(false) }}
           >
             <Plus strokeWidth={2} />
             <span style={{ flex: 1 }}>Créer un compte exposant</span>
