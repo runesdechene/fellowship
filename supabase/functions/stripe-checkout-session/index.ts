@@ -10,6 +10,7 @@ import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { getStripe } from '../_shared/stripe.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { corsHeaders } from '../_shared/cors.ts'
+import { syncCustomerBilling } from '../_shared/billing.ts'
 
 const STRIPE_PRICE_MONTHLY = Deno.env.get('STRIPE_PRICE_MONTHLY')!
 const STRIPE_PRICE_YEARLY = Deno.env.get('STRIPE_PRICE_YEARLY')!
@@ -17,6 +18,9 @@ const STRIPE_PRICE_YEARLY = Deno.env.get('STRIPE_PRICE_YEARLY')!
 interface Body {
   entityId: string
   billingInterval: 'month' | 'year'
+  legalName?: string
+  siren?: string | null
+  noSiren?: boolean
 }
 
 Deno.serve(async (req) => {
@@ -66,6 +70,12 @@ Deno.serve(async (req) => {
       return json({ error: 'entity_not_found' }, 404)
     }
 
+    // Infos de facturation (optionnelles ici : la modale Boutique les fournit, mais une
+    // entité déjà renseignée peut souscrire sans les renvoyer).
+    const legalName = (body.legalName ?? '').trim() || (entity?.brand_name ?? '')
+    const noSiren = body.noSiren === true
+    const siren = noSiren ? null : ((body.siren ?? '').replace(/\D/g, '') || null)
+
     // Si déjà un sub actif/trialing/past_due, on signale au client de rediriger
     // vers le portail. 200 (pas 409) pour que supabase.functions.invoke laisse
     // passer le body au lieu de throw une FunctionsHttpError.
@@ -75,12 +85,18 @@ Deno.serve(async (req) => {
 
     const stripe = getStripe()
 
+    // Persistance des infos de facturation sur l'entité.
+    await admin
+      .from('entities')
+      .update({ legal_name: legalName, siren, billing_no_siren: noSiren })
+      .eq('actor_id', entity.actor_id)
+
     // Récupère ou crée le Customer Stripe pour cette entité.
     let customerId = entity.stripe_customer_id
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: user.email,
-        name: entity.brand_name ?? undefined,
+        name: legalName || entity.brand_name || undefined,
         metadata: { entity_actor_id: entity.actor_id },
       })
       customerId = customer.id
@@ -89,6 +105,9 @@ Deno.serve(async (req) => {
         .update({ stripe_customer_id: customerId })
         .eq('actor_id', entity.actor_id)
     }
+
+    // Synchronise la raison sociale et le SIREN sur le Customer Stripe.
+    await syncCustomerBilling(stripe, customerId, { legalName: legalName || entity.brand_name || '', siren, noSiren })
 
     // Parrainage : le filleul parrainé (rattachement en attente, cadeau non encore consommé)
     // bénéficie d'un essai de 30 jours au lieu de 14. Pas de coupon (qui buggerait sur l'annuel).
@@ -112,7 +131,7 @@ Deno.serve(async (req) => {
         metadata: { entity_actor_id: entity.actor_id },
       },
       automatic_tax: { enabled: true },
-      customer_update: { name: 'auto', address: 'auto' },
+      customer_update: { address: 'auto' },
       tax_id_collection: { enabled: true },
       // Programme Founder Friends (v0.7.174) : autorise la saisie d'un code promo
       // au Checkout (ex: RUNE-2026 = 100% off pendant 2 mois). CB requise quand même.

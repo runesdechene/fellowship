@@ -16,11 +16,17 @@ interface CheckoutResponse {
   message?: string
 }
 
+export interface BillingInfo { legalName: string; siren: string | null; noSiren: boolean }
+
 /** Démarre Stripe Checkout. Si l'entité est déjà abonnée, redirige vers le portail. */
-export async function startCheckout(entityId: string, billingInterval: BillingInterval): Promise<void> {
+export async function startCheckout(
+  entityId: string,
+  billingInterval: BillingInterval,
+  billing?: BillingInfo,
+): Promise<void> {
   const { data, error } = await supabase.functions.invoke<CheckoutResponse>(
     'stripe-checkout-session',
-    { body: { entityId, billingInterval } },
+    { body: { entityId, billingInterval, ...(billing ?? {}) } },
   )
   if (error) throw new Error(error.message || 'checkout_failed')
   if (!data) throw new Error('empty_response')
