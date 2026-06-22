@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { Loader2, ExternalLink, AlertTriangle } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
-import { openCustomerPortal } from '@/lib/stripe-client'
+import { openCustomerPortal, updateBillingInfo } from '@/lib/stripe-client'
 import { ReferralCard } from '@/components/abonnement/ReferralCard'
+import { BillingInfoModal } from '@/components/billing/BillingInfoModal'
+import type { BillingInfoState } from '@/components/billing/BillingInfoForm'
 import type { EntityRow } from '@/types/database'
 import './Abonnement.css'
 
@@ -25,6 +27,8 @@ export function AbonnementPage() {
   const [opening, setOpening] = useState(false)
   const [polling, setPolling] = useState(false)
   const [portalErr, setPortalErr] = useState<string | null>(null)
+  const [editBilling, setEditBilling] = useState(false)
+  const [savingBilling, setSavingBilling] = useState(false)
 
   // Cible : par défaut l'acteur actif (s'il est entité), sinon override via
   // ?entity=<actor_id> (depuis la liste Settings multi-entités).
@@ -43,6 +47,12 @@ export function AbonnementPage() {
   }) | null
   const targetEntityId = entity?.actor_id ?? null
   const status = entity?.subscription_status ?? null
+  // Champs de facturation (hors types générés → cast local, cf. reference_supabase_rpc_types).
+  const billing = entity as (typeof entity & {
+    legal_name?: string | null
+    siren?: string | null
+    billing_no_siren?: boolean | null
+  }) | null
 
   // Polling au retour de Checkout : le webhook arrive en async, on attend qu'il
   // ait setté entities.subscription_status avant d'afficher l'état "Pro".
@@ -81,6 +91,20 @@ export function AbonnementPage() {
       console.error('[Abonnement] portal failed', e)
       setPortalErr("Impossible d'ouvrir le portail. Réessaie dans un instant.")
       setOpening(false)
+    }
+  }
+
+  const handleSaveBilling = async (v: BillingInfoState) => {
+    if (!targetEntityId) return
+    setSavingBilling(true)
+    try {
+      await updateBillingInfo(targetEntityId, { legalName: v.legalName.trim(), siren: v.noSiren ? null : v.siren, noSiren: v.noSiren })
+      await refreshProfile()
+      setEditBilling(false)
+    } catch (e) {
+      console.error('[Abonnement] save billing failed', e)
+    } finally {
+      setSavingBilling(false)
     }
   }
 
@@ -172,6 +196,24 @@ export function AbonnementPage() {
             </p>
           )}
         </div>
+      )}
+
+      <div className="abo-card abo-billing">
+        <h2>Informations de facturation</h2>
+        {billing?.legal_name
+          ? <p>{billing.legal_name}{billing.siren ? <> · SIREN {billing.siren}</> : billing.billing_no_siren ? <> · sans SIREN</> : null}</p>
+          : <p className="abo-muted">Aucune info de facturation. Ajoute ta raison sociale et ton SIREN pour des factures conformes.</p>}
+        <button className="abo-billing-edit" onClick={() => setEditBilling(true)}>Modifier</button>
+      </div>
+
+      {editBilling && (
+        <BillingInfoModal
+          initial={{ legalName: billing?.legal_name ?? entity?.brand_name ?? '', siren: billing?.siren ?? '', noSiren: billing?.billing_no_siren === true }}
+          submitLabel="Enregistrer"
+          busy={savingBilling}
+          onCancel={() => setEditBilling(false)}
+          onSubmit={handleSaveBilling}
+        />
       )}
 
       {portalErr && <div className="abo-warning">{portalErr}</div>}

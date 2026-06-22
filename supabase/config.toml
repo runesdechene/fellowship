@@ -409,6 +409,9 @@ verify_jwt = true
 [functions.stripe-portal-link]
 verify_jwt = true
 
+[functions.stripe-update-billing]
+verify_jwt = true
+
 [functions.stripe-webhook]
 # Auth = vérification de signature Stripe (pas JWT Supabase).
 verify_jwt = false

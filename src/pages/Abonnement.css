@@ -72,3 +72,9 @@
 .abo-manage:disabled { opacity: .6; cursor: not-allowed; }
 .abo-manage svg { width: 15px; height: 15px; }
 .abo-manage .animate-spin { animation: abo-spin 1s linear infinite; }
+
+.abo-billing-edit {
+  margin-top: .5rem; padding: .4rem .9rem; border-radius: 10px;
+  background: transparent; border: 1px solid hsl(var(--border)); color: hsl(var(--foreground));
+  font-weight: 600; cursor: pointer;
+}

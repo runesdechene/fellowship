@@ -48,3 +48,13 @@ export async function openCustomerPortal(entityId: string): Promise<void> {
   if (!data?.url) throw new Error(data?.error || 'portal_failed')
   window.location.href = data.url
 }
+
+/** Persiste raison sociale + SIREN et synchronise le Customer Stripe (édition hors checkout). */
+export async function updateBillingInfo(entityId: string, billing: BillingInfo): Promise<void> {
+  const { data, error } = await supabase.functions.invoke<{ ok?: boolean; error?: string }>(
+    'stripe-update-billing',
+    { body: { entityId, ...billing } },
+  )
+  if (error) throw new Error(error.message || 'update_billing_failed')
+  if (!data?.ok) throw new Error(data?.error || 'update_billing_failed')
+}
