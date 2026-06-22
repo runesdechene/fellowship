@@ -88,6 +88,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const sub = await getStripe().subscriptions.retrieve(session.subscription as string)
   await syncSubscriptionToDB(entityActorId, sub)
 
+  // Raison sociale : collectée par Stripe au Checkout (customer_update[name]=auto). On la
+  // recopie dans notre base pour garder entities.legal_name juste (la modale ne la demande
+  // plus au checkout pour éviter la double saisie).
+  const collectedName = session.customer_details?.name?.trim()
+  if (collectedName) {
+    await getSupabaseAdmin()
+      .from('entities')
+      .update({ legal_name: collectedName })
+      .eq('actor_id', entityActorId)
+  }
+
   // Cadeau filleul (essai 30j) consommé : on le verrouille pour ne pas le ré-octroyer
   // si le filleul résilie pendant l'essai puis se réabonne.
   await getSupabaseAdmin()

@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
     const admin = getSupabaseAdmin()
     const { data: entity, error: entityErr } = await admin
       .from('entities')
-      .select('actor_id, stripe_customer_id, brand_name, subscription_status')
+      .select('actor_id, stripe_customer_id, brand_name, subscription_status, legal_name, siren, billing_no_siren')
       .eq('actor_id', body.entityId)
       .maybeSingle()
     if (entityErr || !entity) {
@@ -70,11 +70,18 @@ Deno.serve(async (req) => {
       return json({ error: 'entity_not_found' }, 404)
     }
 
-    // Infos de facturation (optionnelles ici : la modale Boutique les fournit, mais une
-    // entité déjà renseignée peut souscrire sans les renvoyer).
-    const legalName = (body.legalName ?? '').trim() || (entity?.brand_name ?? '')
-    const noSiren = body.noSiren === true
-    const siren = noSiren ? null : ((body.siren ?? '').replace(/\D/g, '') || null)
+    // Le body apporte-t-il des infos de facturation ? (modale checkout = SIREN seul).
+    // Si NON (clic direct « déjà renseigné »), on ne touche À RIEN de stocké — sinon on
+    // écraserait le SIREN avec du vide (bug : la modale rouvrait à chaque clic).
+    const hasBodyBilling = body.siren !== undefined || body.noSiren !== undefined || body.legalName !== undefined
+    const bodyNoSiren = body.noSiren === true
+    const bodySiren = bodyNoSiren ? null : ((body.siren ?? '').replace(/\D/g, '') || null)
+
+    // Valeurs effectives pour Stripe : ce que le body fournit, sinon le déjà-stocké.
+    const e = entity as typeof entity & { legal_name?: string | null; siren?: string | null; billing_no_siren?: boolean | null }
+    const effSiren = hasBodyBilling ? bodySiren : (e.siren ?? null)
+    const effNoSiren = hasBodyBilling ? bodyNoSiren : (e.billing_no_siren === true)
+    const effLegalName = (body.legalName ?? '').trim() || e.legal_name || entity.brand_name || ''
 
     // Si déjà un sub actif/trialing/past_due, on signale au client de rediriger
     // vers le portail. 200 (pas 409) pour que supabase.functions.invoke laisse
@@ -85,18 +92,20 @@ Deno.serve(async (req) => {
 
     const stripe = getStripe()
 
-    // Persistance des infos de facturation sur l'entité.
-    await admin
-      .from('entities')
-      .update({ legal_name: legalName, siren, billing_no_siren: noSiren })
-      .eq('actor_id', entity.actor_id)
+    // Persistance : UNIQUEMENT les champs réellement fournis par le body. La raison sociale
+    // n'est PAS persistée ici (Stripe la collecte au checkout → recopiée via le webhook).
+    if (hasBodyBilling) {
+      const update: Record<string, unknown> = { siren: bodySiren, billing_no_siren: bodyNoSiren }
+      if (body.legalName !== undefined) update.legal_name = (body.legalName ?? '').trim() || null
+      await admin.from('entities').update(update).eq('actor_id', entity.actor_id)
+    }
 
     // Récupère ou crée le Customer Stripe pour cette entité.
     let customerId = entity.stripe_customer_id
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: user.email,
-        name: legalName || entity.brand_name || undefined,
+        name: effLegalName || entity.brand_name || undefined,
         metadata: { entity_actor_id: entity.actor_id },
       })
       customerId = customer.id
@@ -106,8 +115,9 @@ Deno.serve(async (req) => {
         .eq('actor_id', entity.actor_id)
     }
 
-    // Synchronise la raison sociale et le SIREN sur le Customer Stripe.
-    await syncCustomerBilling(stripe, customerId, { legalName: legalName || entity.brand_name || '', siren, noSiren })
+    // Synchronise le SIREN (custom field) + un nom de base sur le Customer Stripe.
+    // Le nom définitif sera celui collecté au Checkout (customer_update[name]=auto).
+    await syncCustomerBilling(stripe, customerId, { legalName: effLegalName || entity.brand_name || '', siren: effSiren, noSiren: effNoSiren })
 
     // Parrainage : le filleul parrainé (rattachement en attente, cadeau non encore consommé)
     // bénéficie d'un essai de 30 jours au lieu de 14. Pas de coupon (qui buggerait sur l'annuel).

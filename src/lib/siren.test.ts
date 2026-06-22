@@ -33,4 +33,17 @@ describe('billingFormReady', () => {
   it('pas prêt si SIREN invalide et case décochée', () => {
     expect(billingFormReady({ legalName: 'X', siren: '123456789', noSiren: false })).toBe(false)
   })
+
+  // Mode checkout : la raison sociale est collectée par Stripe → on n'exige que le SIREN.
+  describe('requireLegalName: false (modale checkout, SIREN seul)', () => {
+    it('prêt si SIREN valide même sans raison sociale', () => {
+      expect(billingFormReady({ legalName: '', siren: '552100554', noSiren: false }, { requireLegalName: false })).toBe(true)
+    })
+    it('prêt si « pas de SIREN » même sans raison sociale', () => {
+      expect(billingFormReady({ legalName: '', siren: '', noSiren: true }, { requireLegalName: false })).toBe(true)
+    })
+    it('pas prêt si SIREN invalide', () => {
+      expect(billingFormReady({ legalName: '', siren: '123456789', noSiren: false }, { requireLegalName: false })).toBe(false)
+    })
+  })
 })

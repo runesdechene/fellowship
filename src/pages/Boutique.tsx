@@ -34,7 +34,9 @@ export function BoutiquePage() {
     ?? (currentActor?.kind === 'entity' ? (currentActorRow as EntityRow) : null)
   const targetEntityId = targetEntity?.actor_id ?? null
   const billingEntity = targetEntity as (EntityRow & { legal_name?: string | null; siren?: string | null; billing_no_siren?: boolean | null }) | null
-  const hasBilling = !!billingEntity && !!billingEntity.legal_name && (!!billingEntity.siren || billingEntity.billing_no_siren === true)
+  // Au checkout on ne collecte que le SIREN (la raison sociale vient de Stripe) → l'entité
+  // a « son billing » dès qu'elle a un SIREN ou a coché « pas de SIREN ».
+  const hasBilling = !!billingEntity && (!!billingEntity.siren || billingEntity.billing_no_siren === true)
   const targetPlan = targetEntity?.plan ?? null
   const isProTarget = targetPlan === 'pro'
 
@@ -58,7 +60,9 @@ export function BoutiquePage() {
     setLoading(interval)
     setPendingInterval(null)
     try {
-      await startCheckout(targetEntityId, interval, { legalName: v.legalName.trim(), siren: v.noSiren ? null : v.siren, noSiren: v.noSiren })
+      // Mode checkout : on n'envoie QUE le SIREN. La raison sociale est collectée par Stripe
+      // (et recopiée chez nous via le webhook) → on ne la persiste pas ici.
+      await startCheckout(targetEntityId, interval, { siren: v.noSiren ? null : v.siren, noSiren: v.noSiren })
     } catch (e) {
       console.error('[Boutique] checkout failed', e)
       setError("Impossible de démarrer le paiement. Réessaie dans un instant.")
@@ -136,6 +140,7 @@ export function BoutiquePage() {
         <BillingInfoModal
           initial={{ legalName: billingEntity.legal_name ?? billingEntity.brand_name ?? '', siren: billingEntity.siren ?? '', noSiren: billingEntity.billing_no_siren === true }}
           submitLabel="Continuer vers le paiement"
+          showLegalName={false}
           busy={loading !== null}
           onCancel={() => setPendingInterval(null)}
           onSubmit={handleBillingSubmit}

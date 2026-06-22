@@ -23,9 +23,15 @@ function luhnValid(digits: string): boolean {
   return sum % 10 === 0
 }
 
-/** Le formulaire de facturation est prêt à soumettre. */
-export function billingFormReady(v: { legalName: string; siren: string; noSiren: boolean }): boolean {
-  if (v.legalName.trim().length === 0) return false
+/** Le formulaire de facturation est prêt à soumettre.
+ * `requireLegalName` : au checkout, la raison sociale est collectée par Stripe (pas chez nous),
+ * donc on n'exige que le SIREN (ou la case « pas de SIREN »). À l'édition (Abonnement), on l'exige. */
+export function billingFormReady(
+  v: { legalName: string; siren: string; noSiren: boolean },
+  opts?: { requireLegalName?: boolean },
+): boolean {
+  const requireLegalName = opts?.requireLegalName ?? true
+  if (requireLegalName && v.legalName.trim().length === 0) return false
   if (v.noSiren) return true
   return validateSiren(v.siren).valid
 }

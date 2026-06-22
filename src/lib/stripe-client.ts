@@ -16,7 +16,8 @@ interface CheckoutResponse {
   message?: string
 }
 
-export interface BillingInfo { legalName: string; siren: string | null; noSiren: boolean }
+// legalName optionnel : envoyé par l'édition Abonnement, omis au checkout (Stripe le collecte).
+export interface BillingInfo { legalName?: string; siren: string | null; noSiren: boolean }
 
 /** Démarre Stripe Checkout. Si l'entité est déjà abonnée, redirige vers le portail. */
 export async function startCheckout(
