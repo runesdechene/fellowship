@@ -31,11 +31,13 @@ export function EntitySwitcher({ collapsed = false }: { collapsed?: boolean }) {
   const sub = currentActor?.kind === 'entity'
     ? (planForActor(currentActor, currentActorRow) === 'pro' ? 'Exposant · toi' : 'Exposant · gratuit')
     : 'Festivalier'
-  // Avatar : entity active → entity.avatar_url ; sinon la personne (users, source de vérité perso).
-  const activeAvatar = activeEntity?.avatar_url ?? person?.avatar_url ?? null
+  // Avatar de l'acteur ACTIF uniquement. Une entité sans photo NE DOIT PAS emprunter
+  // l'avatar de la personne → on retombe sur la pastille initiale (dégradé cuivré de
+  // `.entity .av`, façon vitrine). En mode personne, l'avatar perso reste la source.
+  const ownAvatar = activeEntity ? (activeEntity.avatar_url ?? null) : (person?.avatar_url ?? null)
 
-  const avContent = activeAvatar
-    ? <img src={activeAvatar} alt="" />
+  const avContent = ownAvatar
+    ? <img src={ownAvatar} alt="" />
     : <span className="av-initial">{initials(label)}</span>
 
   // Pas de personne chargée → pas de dropdown (étape de boot).
