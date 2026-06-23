@@ -48,10 +48,9 @@
   /* Layout tokens */
   --page-padding: 24px;
 
-  /* Font tokens — Geist (importé d'Ixo/XO) */
-  --font-heading: 'Geist', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-body: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  /* Font tokens */
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
   --font-color-lowtitle: #b3a293;
