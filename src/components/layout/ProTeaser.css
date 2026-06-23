@@ -36,7 +36,7 @@
 .light .pro-teaser-cta { box-shadow: 0 20px 50px rgba(60, 45, 35, 0.12); }
 
 .pro-teaser-cta h2 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.02em;
