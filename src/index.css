@@ -19,8 +19,8 @@
   --accent-foreground: 36 40% 87%;
   --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 33 13% 20%;              /* approx rgba blanc sur dark, désaturé ~20% */
-  --input: 33 13% 24%;
+  --border: 30 6% 22%;               /* hairline neutralisée (fin du trait brun) — précision */
+  --input: 30 6% 26%;
   --primary: 24 68% 53%;             /* cuivre légèrement adouci (moins vif) */
   --primary-foreground: 0 0% 100%;
   --ring: 24 68% 53%;
@@ -51,6 +51,8 @@
   /* Font tokens */
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Mono : data uniquement (chiffres/dates/montants) — touche « outil pro », pas le logo/titres */
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
 
   /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
   --font-color-lowtitle: #b3a293;
@@ -131,6 +133,24 @@ body {
   background-attachment: fixed;
   font-family: var(--font-body);
   font-size: 15px;
+  font-variant-numeric: tabular-nums;   /* chiffres alignés (lisibilité « pro ») */
+}
+
+/* ── Utilitaires « pro » ───────────────────────────────────────────── */
+/* Micro-label majuscule espacé (en-tête de section, eyebrow) — signal panneau de contrôle */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+/* Donnée numérique : monospace + chiffres tabulaires (montants, dates, compteurs) */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
 h1, h2, h3, .font-display {

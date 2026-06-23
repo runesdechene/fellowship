@@ -57,7 +57,7 @@
 .sidebar.collapsed .sidebar-nav .navlabel, .sidebar.collapsed .navbadge, .sidebar.collapsed .lock { display: none; }
 .navbadge { margin-left: auto; background: #e5484d; color: #fff; font-size: 10.5px; font-weight: 800; min-width: 19px; height: 19px; border-radius: 99px; display: flex; align-items: center; justify-content: center; padding: 0 5px; }
 /* Compteur subtil (Mes dates) — neutre, pas une alerte */
-.nav-count { margin-left: auto; background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground) / 0.75); font-size: 11px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 99px; display: flex; align-items: center; justify-content: center; padding: 0 6px; font-family: var(--font-body); }
+.nav-count { margin-left: auto; background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground) / 0.75); font-size: 11px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 99px; display: flex; align-items: center; justify-content: center; padding: 0 6px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .sidebar-nav a.active .nav-count { background: color-mix(in srgb, var(--amber) 22%, transparent); color: var(--amber); }
 .sidebar.collapsed .nav-count { display: none; }
 .navlink.locked { opacity: .5; }
