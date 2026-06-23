@@ -82,9 +82,10 @@
   font-weight: 600;
 }
 .bilan-fig b {
-  font-family: var(--font-heading);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 600;
   color: hsl(var(--foreground));
   display: flex; align-items: center; gap: 5px;
 }
@@ -215,7 +216,7 @@
   color: var(--amber);
 }
 .bilan-ledger-cat { flex: 1; font-size: 13px; color: hsl(var(--foreground)); }
-.bilan-ledger-amt { font-weight: 700; font-size: 13px; color: hsl(var(--foreground)); }
+.bilan-ledger-amt { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 13px; color: hsl(var(--foreground)); }
 .bilan-ledger-auto {
   font-size: 9.5px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em;
 }
