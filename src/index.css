@@ -5,30 +5,30 @@
 
 :root {
   /* Fellowship — DA « Nuit de Festival » (nuit = défaut) */
-  --background: 9 24% 7%;            /* #170f0e */
-  --foreground: 35 60% 95%;          /* #fbf3e8 */
-  --card: 9 22% 12%;                 /* #241917 */
-  --card-foreground: 35 60% 95%;
-  --popover: 9 22% 12%;
-  --popover-foreground: 35 60% 95%;
-  --secondary: 11 22% 10%;           /* #1e1513 */
-  --secondary-foreground: 35 60% 95%;
-  --muted: 11 22% 10%;
-  --muted-foreground: 28 17% 64%;    /* #b3a293 */
-  --accent: 9 22% 12%;               /* surface de survol neutre ; le vert de marque = --forest */
-  --accent-foreground: 35 60% 95%;
+  --background: 9 19% 7%;            /* marron désaturé ~20% */
+  --foreground: 36 40% 87%;          /* blanc chaud adouci (ex #fbf3e8 L95, trop éclatant) */
+  --card: 9 18% 12%;                 /* #241917 */
+  --card-foreground: 36 40% 87%;
+  --popover: 9 18% 12%;
+  --popover-foreground: 36 40% 87%;
+  --secondary: 11 18% 10%;           /* #1e1513 */
+  --secondary-foreground: 36 40% 87%;
+  --muted: 11 18% 10%;
+  --muted-foreground: 28 14% 64%;    /* gris brun désaturé ~20% */
+  --accent: 9 18% 12%;               /* surface de survol neutre ; le vert de marque = --forest */
+  --accent-foreground: 36 40% 87%;
   --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 33 16% 20%;              /* opaque approx of rgba(255,240,225,.10) on dark */
-  --input: 33 16% 24%;
-  --primary: 25 78% 52%;
+  --border: 33 13% 20%;              /* approx rgba blanc sur dark, désaturé ~20% */
+  --input: 33 13% 24%;
+  --primary: 24 68% 53%;             /* cuivre légèrement adouci (moins vif) */
   --primary-foreground: 0 0% 100%;
-  --ring: 25 78% 52%;
+  --ring: 24 68% 53%;
   --radius: 0.75rem;
 
   /* Tokens de marque (DA) */
-  --copper: hsl(24 85% 56%);
-  --copper-d: hsl(16 80% 48%);
+  --copper: hsl(24 72% 55%);
+  --copper-d: hsl(16 68% 47%);
   --forest: hsl(152 42% 52%);
   --lime: hsl(86 44% 64%);
   --lime-d: hsl(92 40% 46%);
@@ -41,9 +41,9 @@
   --status-acompte: hsl(86 44% 64%);   /* lime (étape intermédiaire entre orange et forêt) */
   --status-inscrit: #34c98a;   /* forêt */
   --status-refuse:  #e8897a;   /* terracotta */
-  --gradient-primary: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
-  --gradient-pro: linear-gradient(155deg, hsl(25 78% 52%), hsl(18 72% 41%) 62%, hsl(12 64% 32%));
-  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2e1e1a, #170f0e 60%);
+  --gradient-primary: linear-gradient(135deg, hsl(24 70% 54%), hsl(15 62% 42%));
+  --gradient-pro: linear-gradient(155deg, hsl(24 70% 54%), hsl(17 64% 43%) 62%, hsl(12 58% 34%));
+  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2c1f1c, #15100e 60%);
 
   /* Layout tokens */
   --page-padding: 24px;
@@ -54,7 +54,7 @@
 
   /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
   --font-color-lowtitle: #b3a293;
-  --font-color-text: #fbf3e8;
+  --font-color-text: #e7ddce;
 }
 
 /* Mode JOUR (inversé) — override sur la classe .light */
