@@ -115,7 +115,7 @@ export function SettingsPage() {
         <h1 className="page-title mb-8">Paramètres</h1>
 
         {/* ── Section: Infos personnelles ──────────────────────────────────── */}
-        <section className="mb-6 rounded-2xl bg-card p-6">
+        <section className="mb-6 glass-card p-6">
           <h2 className="mb-1.5 text-base font-semibold">Infos personnelles</h2>
           {entity && (
             <p className="mb-5 text-sm text-muted-foreground">
@@ -229,7 +229,7 @@ export function SettingsPage() {
         </section>
 
         {/* ── Section: Compte ─────────────────────────────────────────────── */}
-        <section className="rounded-2xl bg-card p-6">
+        <section className="glass-card p-6">
           <h2 className="mb-5 text-base font-semibold">Compte</h2>
 
           <div className="mb-4">
@@ -284,7 +284,7 @@ export function SettingsPage() {
         {/* ── Section: Contact ────────────────────────────────────────────── */}
         {/* Filet de sécurité post-lancement : un mailto direct, pas de form, pas de chatbot.
             Le mec qui hit un bug critique doit pouvoir nous joindre en deux clics. */}
-        <section className="mt-6 rounded-2xl bg-card p-6">
+        <section className="mt-6 glass-card p-6">
           <h2 className="mb-1.5 text-base font-semibold">Une question ? Un bug ?</h2>
           <p className="mb-4 text-sm text-muted-foreground">
             Écris-nous en direct. On lit tout, on répond.
