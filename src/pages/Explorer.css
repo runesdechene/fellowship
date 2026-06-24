@@ -494,7 +494,7 @@
 /* ── Filtre géo (localisation + rayon km) dans le popover « Où » ───── */
 .explorer .geo-filter { display: flex; flex-direction: column; gap: 13px; width: 300px; max-width: calc(100vw - 48px); }
 .explorer .geo-addr-input {
-  width: 100%; padding: 9px 12px; border-radius: 10px;
+  width: 100%; padding: 9px 12px 9px 34px; border-radius: 10px;
   background: var(--field); border: 1px solid var(--hair); color: hsl(var(--foreground));
   font-family: var(--font-body); font-size: 14px; outline: none;
 }
