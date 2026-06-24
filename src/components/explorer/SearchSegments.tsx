@@ -86,9 +86,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
               <div className="pop open" onClick={e => e.stopPropagation()}>
                 <h4>Localisation</h4>
                 <div className="peropts">
-                  <button className={'peropt' + (zone === 'mine' ? ' on' : '')} onClick={() => { onZone('mine'); setOpen(null) }} disabled={!userDept}>
-                    📍 Mon coin{userDept ? ` (${userDept})` : ''}
-                  </button>
+                  {/* « Mon coin » masqué tant que le filtre par département n'est pas fiable. */}
                   <button className={'peropt' + (zone === 'france' ? ' on' : '')} onClick={() => { onZone('france'); setOpen(null) }}>🇫🇷 Toute la France</button>
                 </div>
               </div>
