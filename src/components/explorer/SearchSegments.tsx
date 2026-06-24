@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
+import { getTagEmoji } from '@/components/ui/TagBadge'
 import { PERIODS, type Period, type Zone } from '@/lib/explorer'
 
 // DynamicTag shape returned by useTags (value = slug, label = display name)
@@ -68,10 +68,6 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
                     <button
                       key={t.value}
                       className={'catchip' + (selectedTags.has(t.value) ? ' on' : '')}
-                      // Emoji + couleur du même registre que la landing marquee :
-                      // currentColor (injecté inline) sert au fond / bordure / texte
-                      // via le CSS de .catchip. L'emoji garde ses couleurs Unicode.
-                      style={{ color: getTagLandingColor(t.value) }}
                       onClick={() => onToggleTag(t.value)}
                     >
                       <span aria-hidden="true">{getTagEmoji(t.value)}</span> {t.label}

@@ -350,7 +350,8 @@
   top: calc(100% + 8px);
   left: 50%;
   transform: translate(-50%, 8px);
-  background: hsl(var(--card));
+  /* Surface NEUTRE (convention SearchBar) — pas les tokens shadcn qui sont tous bruns. */
+  background: #2a2725;
   border: 1px solid var(--hair);
   border-radius: 18px;
   padding: 18px;
@@ -381,8 +382,9 @@
   margin-bottom: 12px;
 }
 
-/* Day-mode */
+/* Day-mode : surface neutre claire (convention SearchBar), pas le card brun. */
 .light .explorer .pop {
+  background: #faf6ef;
   box-shadow: 0 16px 40px rgba(60, 45, 35, 0.14);
 }
 
@@ -407,10 +409,9 @@
   gap: 7px;
   padding: 10px 12px;
   border-radius: 10px;
-  /* currentColor = couleur du tag injectée inline (style={{color:t.color}}).
-     8 % de wash + bord 22 % → aperçu coloré par type même hors sélection. */
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  background: var(--field);
+  border: 1px solid var(--hair);
+  color: hsl(var(--foreground));
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -419,12 +420,13 @@
 }
 
 .explorer .catchip:hover {
-  border-color: currentColor;
+  border-color: var(--accent-app);
 }
 
 .explorer .catchip.on {
-  background: color-mix(in srgb, currentColor 20%, transparent);
-  border-color: currentColor;
+  background: color-mix(in srgb, var(--accent-app) 18%, transparent);
+  border-color: var(--accent-app);
+  color: var(--accent-app);
 }
 
 /* ── Pop line (date / location inputs) ───────────────────────────── */
