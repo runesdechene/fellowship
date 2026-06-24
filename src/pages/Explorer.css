@@ -15,7 +15,9 @@
 
 .explorer {
   position: relative;
-  height: 100%;
+  /* Hauteur viewport propre : le slideshow reste plein écran sans dépendre de
+     l'ancêtre h-screen (retiré en scroll document). */
+  height: 100dvh;
   overflow: hidden;
 }
 /* Mode jour : fond clair chaud sous les halos (pas trop pâle, garde un peu de profondeur). */
@@ -1381,7 +1383,7 @@
 @container (max-width: 600px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
 
 /* ── Mode grille : la PAGE scrolle (pas de scroll interne) ─────────── */
-.explorer.is-grid { height: auto; min-height: 100%; overflow: visible; }
+.explorer.is-grid { height: auto; min-height: 100dvh; overflow: visible; }
 .explorer.is-grid .stagewrap { height: auto; }
 .explorer.is-grid .stagebody { display: block; flex: none; min-height: 0; }
 .explorer.is-grid .top { padding: 25px 0 14px; }
