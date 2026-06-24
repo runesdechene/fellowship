@@ -197,6 +197,39 @@ body {
 .grain { position: relative; }
 .grain > * { position: relative; z-index: 1; }
 
+/* ── Boutons DA (plein mat / fantôme / neutre) — ZÉRO dégradé ── */
+.da-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--font-body); font-weight: 600; font-size: 13px;
+  border-radius: 11px; padding: 10px 18px; border: none; cursor: pointer;
+  text-decoration: none; white-space: nowrap;
+  transition: filter .15s, transform .1s, border-color .15s, background .15s;
+}
+.da-btn svg { width: 16px; height: 16px; }
+.da-btn:active { transform: translateY(1px); }
+.da-btn-flat { background: var(--accent-app); color: var(--accent-app-ink); }
+.da-btn-flat:hover { filter: brightness(1.08); }
+.light .da-btn-flat { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-app) 26%, transparent); }
+.da-btn-ghost { background: transparent; border: 1px solid color-mix(in srgb, var(--accent-app) 48%, transparent); color: var(--accent-app); }
+.da-btn-ghost:hover { background: color-mix(in srgb, var(--accent-app) 12%, transparent); }
+.da-btn-2 { background: var(--field); border: 1px solid var(--hair); color: hsl(var(--muted-foreground)); }
+.da-btn-2:hover { color: hsl(var(--foreground)); }
+.da-btn-sm { padding: 6px 11px; font-size: 13px; }
+
+/* ── Eyebrow mono (en-tête de section panneau de contrôle) ── */
+.da-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--faint);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+
+/* ── Statut : point coloré + label mono neutre (pas d'aplat coloré) ── */
+.da-status { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 12px; color: hsl(var(--muted-foreground)); }
+.da-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--dot-color, hsl(var(--muted-foreground))); box-shadow: 0 0 7px color-mix(in srgb, var(--dot-color, transparent) 70%, transparent); }
+.light .da-dot { box-shadow: 0 0 4px color-mix(in srgb, var(--dot-color, transparent) 45%, transparent); }
+.da-dot.pulse { animation: da-pulse 2.6s ease-in-out infinite; }
+@keyframes da-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
 h1, h2, h3, .font-display {
   font-family: var(--font-heading);
   font-weight: 700;
