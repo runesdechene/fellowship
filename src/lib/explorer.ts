@@ -204,6 +204,35 @@ export function participationChip(
   return { label: '✦ Accepté', variant: 'accepte' }
 }
 
+/** Variant de statut → token couleur + label court (sans emoji) pour le point DA. */
+const DOT_BY_VARIANT: Record<StatusVariant, { colorVar: string; label: string }> = {
+  termine: { colorVar: 'var(--muted-foreground)', label: 'Terminé' },
+  repere:  { colorVar: 'var(--status-repere)',    label: 'Repéré' },
+  refuse:  { colorVar: 'var(--status-refuse)',    label: 'Refusé' },
+  going:   { colorVar: 'var(--status-inscrit)',   label: 'J\'y vais' },
+  dossier: { colorVar: 'var(--status-dossier)',   label: 'Dossier' },
+  inscrit: { colorVar: 'var(--status-inscrit)',   label: 'Inscrit' },
+  acompte: { colorVar: 'var(--status-acompte)',   label: 'Acompte' },
+  apayer:  { colorVar: 'var(--status-apayer)',    label: 'À payer' },
+  accepte: { colorVar: 'var(--status-accepte)',   label: 'Accepté' },
+}
+
+/**
+ * Point coloré + label court pour le Calendrier (DA). Dérive du même arbre de
+ * décision que participationChip ; retourne null quand il n'y a pas de chip
+ * (ex. date amie sans statut perso).
+ */
+export function participationDot(
+  status: string | null | undefined,
+  payment: string | null | undefined,
+  kind: ActorKind,
+  ctx?: ChipContext,
+): { colorVar: string; label: string } | null {
+  const chip = participationChip(status, payment, kind, ctx)
+  if (!chip) return null
+  return DOT_BY_VARIANT[chip.variant]
+}
+
 /**
  * L'autoplay du coverflow ne tourne que là où il peut être mis en pause proprement.
  * Sur pointeur tactile (`coarse`) il n'y a pas de hover → la pause-au-survol ne se

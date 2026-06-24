@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay, formatEventDateRange, parseExplorerView } from './explorer'
+import { applyViewMode, deckCardStyle, periodToRange, composeFilter, monthRangeFor, eventBadge, participationChip, shouldAutoplay, formatEventDateRange, parseExplorerView, participationDot } from './explorer'
 import type { EventWithScore } from '@/types/database'
 
 const NOW = new Date('2026-05-09T12:00:00Z')
@@ -313,4 +313,45 @@ describe('parseExplorerView', () => {
   it('"slideshow" → slideshow', () => { expect(parseExplorerView('slideshow')).toBe('slideshow') })
   it('null → slideshow (défaut)', () => { expect(parseExplorerView(null)).toBe('slideshow') })
   it('valeur inconnue → slideshow', () => { expect(parseExplorerView('xxx')).toBe('slideshow') })
+})
+
+describe('participationDot', () => {
+  it('exposant accepté impayé → point À payer orange', () => {
+    expect(participationDot('confirme', 'a_payer', 'entity')).toEqual({
+      colorVar: 'var(--status-apayer)', label: 'À payer',
+    })
+  })
+  it('exposant payé → point Inscrit', () => {
+    expect(participationDot('confirme', 'paye', 'entity')).toEqual({
+      colorVar: 'var(--status-inscrit)', label: 'Inscrit',
+    })
+  })
+  it('dossier envoyé → point Dossier bleu', () => {
+    expect(participationDot('en_cours', null, 'entity')).toEqual({
+      colorVar: 'var(--status-dossier)', label: 'Dossier',
+    })
+  })
+  it('repéré → point Repéré', () => {
+    expect(participationDot('interesse', null, 'entity')).toEqual({
+      colorVar: 'var(--status-repere)', label: 'Repéré',
+    })
+  })
+  it('refusé → point Refusé', () => {
+    expect(participationDot('refuse', null, 'entity')).toEqual({
+      colorVar: 'var(--status-refuse)', label: 'Refusé',
+    })
+  })
+  it('personne (festivalier) → point J\'y vais', () => {
+    expect(participationDot('inscrit', null, 'person')).toEqual({
+      colorVar: 'var(--status-inscrit)', label: 'J\'y vais',
+    })
+  })
+  it('passé → point Terminé neutre (prioritaire)', () => {
+    expect(participationDot('confirme', 'paye', 'entity', { isPast: true })).toEqual({
+      colorVar: 'var(--muted-foreground)', label: 'Terminé',
+    })
+  })
+  it('statut vide (date amie) → null', () => {
+    expect(participationDot('', null, 'entity')).toBeNull()
+  })
 })
