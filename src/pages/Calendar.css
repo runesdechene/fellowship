@@ -171,6 +171,39 @@
 .calendar-month-card.empty { opacity: 0.5; }
 .calendar-month-empty-note { display: flex; align-items: center; justify-content: center; text-align: center; color: hsl(var(--muted-foreground)); font-size: 12.5px; padding: 18px 10px; }
 
+/* En-tête de mois */
+.calendar-month-head { display:flex; align-items:center; gap:8px; margin-bottom:2px; padding:2px 0 6px; }
+.calendar-month-picto { color:hsl(var(--muted-foreground)); flex-shrink:0; }
+.calendar-month-name { font-family:var(--font-heading); font-weight:800; font-size:14px; color:hsl(var(--foreground)); }
+.calendar-month-count { font-family:var(--font-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-left:auto; }
+
+/* Ligne d'événement */
+.calendar-event-row { display:flex; align-items:center; gap:9px; padding:8px 0; text-decoration:none; color:inherit; }
+.calendar-event-wrapper + .calendar-event-wrapper .calendar-event-row,
+.calendar-event-row + .calendar-event-row { border-top:1px solid var(--hair); }
+.calendar-event-image { width:26px; height:35px; border-radius:5px; overflow:hidden; flex-shrink:0; }
+.calendar-event-image img { width:100%; height:100%; object-fit:cover; }
+.calendar-event-image.placeholder { background:var(--field); display:flex; align-items:center; justify-content:center; color:var(--faint); }
+.calendar-event-info { flex:1; min-width:0; }
+.calendar-event-name { color:var(--name); font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.calendar-event-meta { display:flex; align-items:center; gap:5px; color:hsl(var(--muted-foreground)); font-size:10.5px; margin-top:1px; }
+.calendar-event-meta svg { flex-shrink:0; }
+
+/* Statut : .da-status/.da-dot fournissent l'essentiel ; ajustement de taille local */
+.calendar-status { font-size:9.5px; flex-shrink:0; }
+
+/* Ligne amie (fusion, atténuée) */
+.calendar-event-row.friend { opacity:.72; }
+.calendar-event-av { width:26px; height:26px; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
+.calendar-event-av img { width:100%; height:100%; object-fit:cover; }
+.calendar-event-tag-amis { font-family:var(--font-mono); font-size:8.5px; color:var(--status-dossier); border:1px solid color-mix(in srgb, var(--status-dossier) 30%, transparent); border-radius:5px; padding:1px 5px; flex-shrink:0; }
+
+/* Pile de compagnons sur ma date */
+.calendar-pav { display:flex; background:none; border:none; cursor:pointer; padding:0; flex-shrink:0; }
+.calendar-pav-item { width:22px; height:22px; border-radius:50%; margin-left:-7px; border:1px solid var(--hair); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+.calendar-pav-item:first-child { margin-left:0; }
+.calendar-pav-item img { width:100%; height:100%; object-fit:cover; }
+
 /* ── Month banner ──────────────────────────────────────────────────── */
 
 .calendar-month-banner {
