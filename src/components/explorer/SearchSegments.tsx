@@ -31,14 +31,18 @@ type Pop = 'quoi' | 'ou' | 'quand' | null
  */
 export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, userDept, onToggleTag, onZone, onPeriod }: SearchSegmentsProps) {
   const [open, setOpen] = useState<Pop>(null)
-  const topRef = useRef<HTMLDivElement>(null)
+  // Ancre du clic-extérieur = le groupe de chips (collé aux boutons), PAS `.top`
+  // qui est une bande pleine largeur (cliquer dans son vide à gauche/droite ne
+  // fermait pas). Les popovers sont des descendants DOM de .seg-group → un clic
+  // dedans ne ferme pas.
+  const groupRef = useRef<HTMLDivElement>(null)
   const toggle = (p: Pop) => setOpen(o => (o === p ? null : p))
 
-  // Fermer le popover au clic en dehors de la barre de filtres.
+  // Fermer le popover au clic en dehors du groupe de chips.
   useEffect(() => {
     if (!open) return
     const onDown = (e: MouseEvent) => {
-      if (topRef.current && !topRef.current.contains(e.target as Node)) setOpen(null)
+      if (groupRef.current && !groupRef.current.contains(e.target as Node)) setOpen(null)
     }
     document.addEventListener('mousedown', onDown)
     return () => document.removeEventListener('mousedown', onDown)
@@ -49,9 +53,9 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
   const quandLabel = monthLabel ?? (PERIODS.find(p => p.value === period)?.label ?? '')
 
   return (
-    <div className="top" ref={topRef}>
+    <div className="top">
       <div className="searchbar">
-        <div className="seg-group">
+        <div className="seg-group" ref={groupRef}>
           <div className="seg-wrap">
             <button className={'seg' + (open === 'quoi' ? ' active' : '')} onClick={() => toggle('quoi')}>
               <span className="seg-l">Quoi</span><span className="seg-v">{quoiLabel}</span>

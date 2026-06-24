@@ -467,8 +467,8 @@
 .explorer .peropt {
   padding: 9px 14px;
   border-radius: 99px;
-  background: hsl(var(--secondary));
-  border: 1px solid hsl(var(--border));
+  background: var(--field);
+  border: 1px solid var(--hair);
   color: hsl(var(--foreground));
   font-size: 13px;
   font-weight: 600;
@@ -476,13 +476,13 @@
 }
 
 .explorer .peropt:hover {
-  border-color: var(--amber);
+  border-color: var(--accent-app);
 }
 
 .explorer .peropt.on {
-  background: color-mix(in srgb, var(--copper) 20%, transparent);
-  border-color: var(--amber);
-  color: var(--amber);
+  background: color-mix(in srgb, var(--accent-app) 18%, transparent);
+  border-color: var(--accent-app);
+  color: var(--accent-app);
 }
 
 /* ── Bottom bar ───────────────────────────────────────────────────── */
