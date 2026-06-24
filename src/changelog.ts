@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.304',
+    date: '2026-06-24',
+    title: 'Sidebar : fond raccord cockpit',
+    changes: [
+      'En mode sombre, la barre de gauche partage désormais le même fond gris sombre + grain léger que le cockpit (continu)',
+    ],
+  },
+  {
     version: '0.7.303',
     date: '2026-06-24',
     title: 'DA sci-fi chaud : finitions & barre du haut',

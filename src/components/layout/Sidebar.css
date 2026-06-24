@@ -4,9 +4,8 @@
   flex-direction: column;
   width: 262px;
   height: 100vh;
-  background: linear-gradient(180deg, rgba(255,255,255,.022), rgba(255,255,255,.008));
+  background: transparent;
   border-right: 1px solid var(--hair);
-  backdrop-filter: blur(10px);
   padding: 20px 14px;
   transition: width 0.3s ease-in-out;
   /* Position + z-index : sinon une page utilisant un ambient en position:fixed
@@ -14,13 +13,27 @@
   position: relative;
   z-index: 10;
 }
+/* Fond de la sidebar = même gris sombre + grain léger que le cockpit (nuit).
+   ::before = couleur (--app-bg, fixée au viewport → continue avec la page) ; ::after = grain.
+   Les deux derrière le contenu (z-index négatifs), sans toucher au z-index des items. */
+.sidebar::before {
+  content: ""; position: absolute; inset: 0; z-index: -2;
+  background: var(--app-bg); background-attachment: fixed;
+}
+.sidebar::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 @media (min-width: 768px) { .sidebar { display: flex; } }
 .sidebar.collapsed { width: 76px; padding-left: 6px; padding-right: 6px; }
 
-/* Mode JOUR */
-.light .sidebar {
+/* Mode JOUR : voile blanc translucide (inchangé), pas de grain */
+.light .sidebar::before {
   background: linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,.22));
+  background-attachment: scroll;
 }
+.light .sidebar::after { display: none; }
 
 /* Header / logo */
 .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 16px; }
