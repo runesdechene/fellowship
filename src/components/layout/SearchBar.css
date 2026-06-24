@@ -74,7 +74,7 @@
   border-color: color-mix(in srgb, var(--accent) 45%, var(--hair));
 }
 /* Zone recherche (icône + input + clear) ; le bouton Ajouter est relié à sa droite. */
-.search-bar-field { display: flex; align-items: center; gap: 8px; padding: 16.5px 16px; width: 360px; max-width: 46vw; }
+.search-bar-field { display: flex; align-items: center; gap: 8px; padding: 12.5px 16px; width: 360px; max-width: 46vw; }
 
 .search-bar-icon {
   width: 16px; height: 16px;
