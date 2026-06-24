@@ -61,15 +61,14 @@
   display: flex;
   align-items: stretch;
   max-width: 100%;
-  background: var(--glass);
+  background: #2a2725;            /* aplat plein (pas de dégradé) */
   border: 1px solid var(--hair);
   border-radius: 999px;
-  backdrop-filter: blur(12px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.28);
   overflow: hidden;
   transition: border-color 0.18s;
 }
-.light .search-bar { box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
+.light .search-bar { background: #faf6ef; box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
 .search-bar:focus-within {
   border-color: color-mix(in srgb, var(--accent) 45%, var(--hair));
 }
