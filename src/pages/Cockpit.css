@@ -8,9 +8,10 @@
 .cockpit-stage { background: var(--app-bg); background-attachment: fixed; }
 .cockpit-stage .search-bar-wrapper::before { display: none; }
 .ck-topbar { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
-.ck-avatar { width: 52px; height: 52px; border-radius: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 75%, #000), color-mix(in srgb, var(--accent) 40%, #000)); color: var(--accent-ink); font-family: var(--font-heading); font-weight: 800; font-size: 18px; box-shadow: 0 8px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.15); }
+.ck-avatar { width: 52px; height: 52px; border-radius: 15px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 75%, #000), color-mix(in srgb, var(--accent) 40%, #000)); color: var(--accent-ink); font-family: var(--font-heading); font-weight: 800; font-size: 18px; box-shadow: 0 8px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.15); }
 .light .ck-avatar { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
 .ck-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ck-topbar .page-title { margin: 0; font-size: 28px; line-height: 1; letter-spacing: -.025em; }
 .ck-sub { color: hsl(var(--muted-foreground)); margin-top: 6px; font-size: 12px; font-family: var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
 
 /* ── Step 2 : Layout — hero, strip, colonnes ── */
