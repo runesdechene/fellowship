@@ -975,3 +975,24 @@
 
 .calendar-empty-hint { color:hsl(var(--muted-foreground)); font-size:13px; margin-bottom:12px; }
 .calendar-empty-hint a { color:var(--accent-app); }
+
+/* ── DA Refonte — Task 5 : agenda mobile (cascade : après tout le legacy ci-dessus) ── */
+.mobile-agenda { display:flex; flex-direction:column; gap:14px; }
+.agenda-empty { display:flex; align-items:center; gap:8px; padding:11px 14px; border-radius:12px; background:var(--field); border:1px solid var(--hair); opacity:.6; cursor:pointer; }
+.agenda-empty-nm { font-family:var(--font-heading); font-weight:800; color:hsl(var(--foreground)); font-size:14px; }
+.agenda-empty-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-left:auto; }
+.agenda-mh { display:flex; align-items:center; gap:8px; padding:4px 2px 8px; cursor:pointer; }
+.agenda-mh .calendar-month-picto { color:hsl(var(--muted-foreground)); }
+.agenda-mh-name { font-family:var(--font-heading); font-weight:800; font-size:16px; color:hsl(var(--foreground)); }
+.agenda-count { font-family:var(--font-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-left:auto; }
+.agenda-event { }
+.agenda-row { display:flex; align-items:center; gap:10px; padding:9px 0; text-decoration:none; color:inherit; }
+.agenda-row + .agenda-row, .agenda-event + .agenda-event .agenda-row { border-top:1px solid var(--hair); }
+.agenda-row-img { width:30px; height:40px; border-radius:5px; overflow:hidden; flex-shrink:0; }
+.agenda-row-img img { width:100%; height:100%; object-fit:cover; }
+.agenda-row-img.placeholder { background:var(--field); display:flex; align-items:center; justify-content:center; color:var(--faint); }
+.agenda-row-info { flex:1; min-width:0; }
+.agenda-row-name { color:var(--name); font-size:13px; font-weight:600; }
+.agenda-row-meta { color:hsl(var(--muted-foreground)); font-size:11px; margin-top:1px; }
+.agenda-row.friend { opacity:.72; }
+.agenda-fr-av { width:30px; height:30px; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12px; }
