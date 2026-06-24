@@ -14,7 +14,8 @@
 /* ── Page root (full-bleed cover wrapper) ───────────────────────────── */
 .v-page-root {
   min-height: 100vh;
-  background: hsl(var(--background));
+  background: var(--app-bg);
+  background-attachment: fixed;
   position: relative;
 }
 
@@ -241,9 +242,8 @@
 
 /* Primary (follow) */
 .v-btn-p {
-  background: linear-gradient(135deg, var(--copper), var(--copper-d));
-  color: #fff;
-  box-shadow: 0 8px 24px hsl(20 65% 32% / 0.45);
+  background: var(--accent-app);
+  color: var(--accent-app-ink);
 }
 
 .v-btn-p:hover {
@@ -368,7 +368,7 @@
 .v-signup-btn {
   flex-shrink: 0;
   border-radius: 11px;
-  background: linear-gradient(135deg, var(--copper), var(--copper-d));
+  background: var(--accent-app);
   border: none;
   padding: 9px 16px;
   font-family: var(--font-body);
@@ -500,8 +500,16 @@
 .v-embed:hover { border-color: color-mix(in srgb, hsl(var(--foreground)) 50%, transparent); }
 .v-embed svg { width: 13px; height: 13px; fill: none; stroke: currentColor; }
 .v-escales { display: flex; flex-direction: column; gap: 14px; }
-.v-escale { display: flex; align-items: center; gap: 18px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 18px; padding: 16px 18px; text-decoration: none; color: inherit; transition: border-color .15s, transform .15s; }
-.v-escale:hover { border-color: hsl(33 16% 34%); transform: translateY(-1px); }
+.v-escale { position: relative; overflow: hidden; display: flex; align-items: center; gap: 18px; background: var(--glass); border: 1px solid var(--hair); border-radius: 18px; padding: 16px 18px; text-decoration: none; color: inherit; transition: border-color .15s, transform .15s; }
+.v-escale:hover { border-color: color-mix(in srgb, var(--accent-app) 35%, var(--hair)); transform: translateY(-1px); }
+/* Grain « grunge » comme le Cockpit (sans blur lourd). */
+.v-escale > * { position: relative; z-index: 1; }
+.v-escale::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.light .v-escale::before { opacity: .05; mix-blend-mode: multiply; }
 .v-edate { flex-shrink: 0; width: 58px; text-align: center; }
 .v-edate b { font-family: var(--font-heading); font-weight: 800; font-size: 28px; color: hsl(var(--foreground)); line-height: 1; display: block; }
 .v-edate span { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-top: 4px; display: block; }
