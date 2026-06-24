@@ -3,7 +3,7 @@
   display: none;
   flex-direction: column;
   width: 262px;
-  height: 100vh;
+  height: 100dvh;
   /* Fond = même surface que les cartes du cockpit : grain grisé léger (calque) sur verre greige
      sur fond sombre. Le grain est un calque de background (toujours rendu, toujours derrière le contenu). */
   background:
@@ -12,9 +12,11 @@
   border-right: 1px solid var(--hair);
   padding: 20px 14px;
   transition: width 0.3s ease-in-out;
-  /* Position + z-index : sinon une page utilisant un ambient en position:fixed
-     (ex: Festival) le verrait passer par-dessus le sidebar. */
-  position: relative;
+  /* Hors flux (scroll document) : la sidebar reste fixe pendant que le document
+     scrolle. z-index 10 pour couvrir un ambient en position:fixed (ex: Festival). */
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 10;
 }
 @media (min-width: 768px) { .sidebar { display: flex; } }

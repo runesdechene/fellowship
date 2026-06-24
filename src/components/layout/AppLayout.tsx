@@ -42,13 +42,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
   }, [currentActor, location.pathname, navigate])
 
   return (
-    <div className="flex h-screen">
+    <div>
       <Sidebar />
-      {/* Padding bas = hauteur réelle de la BottomBar (~70px) + safe-area iPhone, sinon la nav fixe
-          recouvre la dernière section et le scroll ne peut pas la révéler (#5 : contact Réglages). */}
-      <div className={`flex-1 flex flex-col ${noScroll ? 'overflow-hidden' : 'overflow-y-auto'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
+      {/* Le DOCUMENT scrolle (scrollbar native) ; la sidebar fixe décale le contenu via
+          --sidebar-w (0 en mobile, sidebar masquée). Réserve basse = hauteur BottomBar fixe
+          (~70px) + safe-area iPhone, sinon elle masque la dernière section (#5 contact Réglages).
+          noScroll (Carte) = hauteur viewport figée, pas de scroll. */}
+      <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
-        <main className={`flex-1 min-h-0 ${isCarte ? 'flex flex-col' : ''}`}>
+        <main className={isCarte ? 'flex flex-col flex-1 min-h-0' : ''}>
           {children}
         </main>
       </div>
