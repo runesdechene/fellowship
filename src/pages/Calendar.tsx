@@ -280,6 +280,7 @@ export function CalendarPage() {
                 {...(isEmpty ? {
                   role: 'button', tabIndex: 0,
                   onClick: () => routerNav('/explorer', { state: { month: { year: month.year, month: month.month } } }),
+                  onKeyDown: (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); routerNav('/explorer', { state: { month: { year: month.year, month: month.month } } }) } },
                 } : {})}
               >
                 <CalendarMonth data={month} actorKind={actorKind} friendParticipations={friendActivity} onOpenFriends={(id, name) => setModalEvent({ id, name })} />

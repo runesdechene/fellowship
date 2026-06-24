@@ -964,6 +964,8 @@
 .calendar-grid { display:grid; grid-template-columns:1fr; gap:11px; margin-top:16px; }
 @media (min-width:760px){ .calendar-grid{ grid-template-columns:repeat(2,1fr); } }
 @media (min-width:1200px){ .calendar-grid{ grid-template-columns:repeat(3,1fr); } }
+/* Re-cache la grille desktop sur mobile (rule précédente l.683 annulée par .calendar-grid display:grid ci-dessus) */
+@media (max-width:639px){ .calendar-grid{ display:none; } }
 
 /* Carte-mois : .glass-card fournit le verre/grain ; on ajoute padding + états */
 .calendar-month-card { padding:12px 14px; }
