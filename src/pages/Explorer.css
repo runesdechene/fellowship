@@ -21,6 +21,18 @@
   background-attachment: fixed;
 }
 
+/* ── Haut de page (titre + sous-titre + compteur) ─────────────────── */
+.explorer .xplr-head { padding: 26px 20px 12px; }
+.explorer .xplr-title {
+  font-family: var(--font-heading); font-weight: 650; font-size: 26px;
+  line-height: 1.1; color: hsl(var(--foreground)); letter-spacing: -0.01em;
+}
+.explorer .xplr-sub { margin-top: 5px; color: hsl(var(--muted-foreground)); font-size: 14px; }
+.explorer .xplr-count {
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--faint);
+  padding: 2px 20px 14px;
+}
+
 /* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
 .explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 .explorer .xb { position: absolute; border-radius: 50%; filter: blur(85px); }
@@ -90,7 +102,7 @@
 .explorer .top {
   display: flex;
   justify-content: center;
-  padding: 25px 0 60px;
+  padding: 6px 20px 14px;
   position: relative;
 }
 
@@ -1373,12 +1385,11 @@
 }
 .explorer .egrid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
 }
-@container (max-width: 1110px) { .explorer .egrid { grid-template-columns: repeat(4, 1fr); } }
-@container (max-width: 860px)  { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
-@container (max-width: 600px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@container (max-width: 1000px) { .explorer .egrid { grid-template-columns: repeat(3, 1fr); } }
+@container (max-width: 680px)  { .explorer .egrid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
 
 /* ── Mode grille : la PAGE scrolle (pas de scroll interne) ─────────── */
 .explorer.is-grid { height: auto; min-height: 100dvh; overflow: visible; }
