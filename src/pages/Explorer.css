@@ -15,13 +15,11 @@
 
 .explorer {
   position: relative;
-  /* Hauteur viewport propre : le slideshow reste plein écran sans dépendre de
-     l'ancêtre h-screen (retiré en scroll document). */
-  height: 100dvh;
-  overflow: hidden;
+  /* Catalogue en grille = scroll de PAGE (plus de plein écran slideshow). */
+  min-height: 100dvh;
+  background: var(--app-bg);
+  background-attachment: fixed;
 }
-/* Mode jour : fond clair chaud sous les halos (pas trop pâle, garde un peu de profondeur). */
-.light .explorer { background: #f1ebe1; }
 
 /* ── Halos d'ambiance (mêmes teintes que la landing) ; le halo principal prend la couleur de l'affiche active ── */
 .explorer .xhalos { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
@@ -80,7 +78,9 @@
 .explorer .stagewrap {
   position: relative;
   z-index: 2;
-  height: 100%;
+  height: auto;
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
@@ -1267,7 +1267,7 @@
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
-  background: var(--field);
+  background: hsl(var(--card));
   border: 1px solid var(--hair);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
   transition: transform 0.14s, border-color 0.15s;
@@ -1282,7 +1282,15 @@
 .explorer .egrid-img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #0d0a08; }
 .light .explorer .egrid-img { background: hsl(var(--muted)); }
 .explorer .egrid-imgel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.explorer .egrid-imgfade { position: absolute; inset: 0; background: linear-gradient(transparent 72%, rgba(10, 7, 5, 0.3)); }
+/* Fondu fort : le bas de l'affiche devient pleinement la couleur du panneau →
+   le texte (qui remonte par-dessus) se lit quelle que soit l'image. Plus de coupe nette. */
+.explorer .egrid-imgfade {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 165px; pointer-events: none;
+  background: linear-gradient(to top,
+    hsl(var(--card)) 0%, hsl(var(--card)) 44%,
+    color-mix(in srgb, hsl(var(--card)) 72%, transparent) 66%,
+    transparent 100%);
+}
 
 /* Fallback sans affiche : surface chaude DA + emoji catégorie en filigrane monochrome. */
 .explorer .egrid-img--empty {
@@ -1308,8 +1316,8 @@
 .explorer .egrid-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-app); }
 .light .explorer .egrid-badge { background: rgba(248, 242, 232, 0.72); color: var(--name); }
 
-/* Corps verre. */
-.explorer .egrid-body { padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 6px; }
+/* Corps : remonte SOUS le fondu de l'affiche (chevauchement), texte par-dessus. */
+.explorer .egrid-body { position: relative; z-index: 2; margin-top: -72px; padding: 0 13px 13px; display: flex; flex-direction: column; gap: 6px; }
 .explorer .egrid-titlerow { display: flex; align-items: flex-start; gap: 8px; }
 .explorer .egrid-name {
   flex: 1; min-width: 0;
@@ -1340,8 +1348,8 @@
 .explorer .egrid-meta-item svg { width: 12px; height: 12px; opacity: 0.85; flex: none; }
 .explorer .egrid-meta-item b { font-family: var(--font-heading); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Pied : statut .da-dot OU compagnons OU « À découvrir ». */
-.explorer .egrid-foot { margin-top: 3px; padding-top: 9px; border-top: 1px solid var(--hair); min-height: 21px; display: flex; align-items: center; }
+/* Pied : statut .da-dot OU compagnons OU « À découvrir ». Pas de ligne (le fondu suffit). */
+.explorer .egrid-foot { margin-top: 5px; min-height: 21px; display: flex; align-items: center; }
 .explorer .egrid-status { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 11.5px; color: hsl(var(--foreground)); }
 .explorer .egrid-foot-empty { font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
 
