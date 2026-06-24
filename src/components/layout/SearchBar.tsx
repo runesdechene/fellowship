@@ -136,43 +136,42 @@ export function SearchBar({ onCreateEvent }: SearchBarProps) {
         <span className="search-bar-brand">Fellowship<span className="brand-dot">.</span></span>
       </div>
 
-      {/* Search bar (always visible on desktop, expanded on mobile) */}
+      {/* Switch admin (Réel/Pro/Gratuit) — sorti du coin droit, à gauche (admins only) */}
+      <div className="search-bar-admin"><DebugPlanSwitch /></div>
+
+      {/* Recherche + Ajouter réunis dans un seul bloc (col 2) */}
       <div className="search-bar">
-        <Search className="search-bar-icon" strokeWidth={1.5} />
-        <input
-          className="search-bar-input"
-          placeholder="Rechercher un événement ou un exposant..."
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          onFocus={() => query.length >= 2 && setOpen(true)}
-        />
-        {query ? (
-          <button className="search-bar-clear" onClick={() => { setQuery(''); setOpen(false) }}>
-            <X strokeWidth={1.5} />
+        <div className="search-bar-field">
+          <Search className="search-bar-icon" strokeWidth={1.5} />
+          <input
+            className="search-bar-input"
+            placeholder="Rechercher un événement ou un exposant..."
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onFocus={() => query.length >= 2 && setOpen(true)}
+          />
+          {query ? (
+            <button className="search-bar-clear" onClick={() => { setQuery(''); setOpen(false) }}>
+              <X strokeWidth={1.5} />
+            </button>
+          ) : searchExpanded ? (
+            <button className="search-bar-clear" onClick={() => { setSearchExpanded(false); setQuery(''); setOpen(false) }}>
+              <X strokeWidth={1.5} />
+            </button>
+          ) : null}
+        </div>
+        {/* Desktop: bouton Ajouter relié, à droite de la recherche */}
+        {currentActor && onCreateEvent && (
+          <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
+            <Plus strokeWidth={2} />
+            <span className="search-bar-add-label">Ajouter un événement</span>
           </button>
-        ) : searchExpanded ? (
-          <button className="search-bar-clear" onClick={() => { setSearchExpanded(false); setQuery(''); setOpen(false) }}>
-            <X strokeWidth={1.5} />
-          </button>
-        ) : null}
+        )}
       </div>
 
-      {/* Cluster d'actions — desktop : pill glass à droite ; mobile : flow normal (display:contents) */}
+      {/* Coin droit : notifications seules */}
       <div className="search-bar-actions">
-      {/* Desktop: add event button (after search bar) */}
-      {currentActor && onCreateEvent && (
-        <button className="search-bar-add-btn search-bar-add-desktop" onClick={onCreateEvent} title="Ajouter un événement">
-          <Plus strokeWidth={2} />
-          <span className="search-bar-add-label">Ajouter un événement</span>
-        </button>
-      )}
-
-      {/* Debug admin : switch de plan (Réel/Pro/Gratuit) */}
-      <DebugPlanSwitch />
-
-      {/* Notification bell */}
-      {currentActor && <NotifBell />}
-
+        {currentActor && <NotifBell />}
       </div>{/* /search-bar-actions */}
 
       {open && (
