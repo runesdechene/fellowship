@@ -7,6 +7,9 @@
 /* La zone scrollable du cockpit porte le fond DA continu ; la barre de recherche n'a AUCUN fond propre. */
 .cockpit-stage { background: var(--app-bg); background-attachment: fixed; }
 .cockpit-stage .search-bar-wrapper::before { display: none; }
+/* Statut « inscrit/accepté » au vert sauge doux de la maquette (scoped cockpit). */
+.ck-page { --status-inscrit: #8fc7a8; --status-accepte: #8fc7a8; }
+.light .ck-page { --status-inscrit: #2f9d6a; --status-accepte: #2f9d6a; }
 .ck-topbar { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
 .ck-avatar { width: 52px; height: 52px; border-radius: 15px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 75%, #000), color-mix(in srgb, var(--accent) 40%, #000)); color: var(--accent-ink); font-family: var(--font-heading); font-weight: 800; font-size: 18px; box-shadow: 0 8px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.15); }
 .light .ck-avatar { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
@@ -87,7 +90,7 @@
 
 /* statut héros : chip visible — consomme --chip posé en inline par ProchainFestival */
 .ck-status-hero { display: inline-flex; align-items: center; gap: 8px; width: fit-content; margin-bottom: 20px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 9px; background: color-mix(in srgb, var(--chip, var(--status-inscrit)) 15%, transparent); color: var(--chip, var(--status-inscrit)); border: 1px solid color-mix(in srgb, var(--chip, var(--status-inscrit)) 34%, transparent); }
-.ck-status-hero .ck-dot { background: var(--chip, var(--status-inscrit)); box-shadow: 0 0 10px var(--chip, var(--status-inscrit)); }
+.ck-status-hero .ck-dot { width: 8px; height: 8px; background: var(--chip, var(--status-inscrit)); box-shadow: 0 0 10px var(--chip, var(--status-inscrit)); }
 
 .ck-next-actions { display: flex; gap: 9px; margin-top: auto; }
 
