@@ -1,24 +1,19 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { useState, useMemo, useCallback, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { eventPath } from '@/lib/event-link'
 import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, monthRangeFor, readExplorerView, writeExplorerView, type Zone, type Period, type ActorKind, type ExplorerView } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { planForActor } from '@/lib/navModel'
 import { countActiveDates, canAddDate } from '@/lib/date-quota'
 import { DateQuotaModal } from '@/components/mes-dates/DateQuotaModal'
-import { EventDeck } from '@/components/explorer/EventDeck'
 import { EventGrid } from '@/components/explorer/EventGrid'
-import { ViewToggle } from '@/components/explorer/ViewToggle'
 import { SearchSegments } from '@/components/explorer/SearchSegments'
-import { ScrubBar } from '@/components/explorer/ScrubBar'
-import { EventDock } from '@/components/explorer/EventDock'
 import { useFriendsByEvent } from '@/hooks/use-friends-by-event'
-import { getTagLandingColor } from '@/components/ui/TagBadge'
 import type { EventWithScore } from '@/types/database'
 import './Explorer.css'
 
@@ -33,22 +28,19 @@ function persistFilters(patch: Record<string, unknown>) {
   } catch { /* ignore */ }
 }
 
-// ---------- Skeleton ----------
-function DeckSkeleton() {
+// ---------- Grid Skeleton ----------
+function GridSkeleton() {
   return (
-    <div className="flow">
-      <div className="deck">
-        {[0, 1, 2].map(i => (
-          <div
-            key={i}
-            className="card"
-            style={{
-              transform: `translate(-50%,-50%) translateX(${(i - 1) * 104}%) scale(${i === 1 ? 1 : 0.74})`,
-              opacity: i === 1 ? 1 : 0.4,
-              background: 'hsl(var(--card))',
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }}
-          />
+    <div className="egrid-wrap">
+      <div className="egrid">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="egrid-card egrid-skel" aria-hidden="true">
+            <div className="egrid-img egrid-skel-img" />
+            <div className="egrid-body">
+              <div className="egrid-skel-line" style={{ width: '70%' }} />
+              <div className="egrid-skel-line" style={{ width: '45%' }} />
+            </div>
+          </div>
         ))}
       </div>
     </div>
@@ -70,7 +62,7 @@ function ExplorerEmpty() {
 export function ExplorerPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { person, currentActor, currentActorRow, isAdmin, user } = useAuth()
+  const { person, currentActor, currentActorRow, user } = useAuth()
   const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
   const { tags: dynamicTags } = useTags()
   const { participations, refetch: refetchParticipations } = useMyParticipations()
@@ -93,21 +85,11 @@ export function ExplorerPage() {
 
   // ---------- Recherche texte (transient, non persistée) ----------
   const [query, setQuery] = useState('')
-  // Event à recentrer après recomposition de la liste (préserve la position à l'annulation de recherche).
-  const [focusEventId, setFocusEventId] = useState<string | null>(null)
 
-  // ---------- Active index ----------
-  const [activeIndex, setActiveIndex] = useState(0)
   const [showQuotaModal, setShowQuotaModal] = useState(false)
 
-  // Vrai pendant qu'on manipule le scrubber (fige l'animation des cartes le temps du drag).
-  const [scrubbing, setScrubbing] = useState(false)
-
-  // ---------- Mode de vue (slideshow / grille), persisté ----------
-  const [viewMode, setViewMode] = useState<ExplorerView>(() => readExplorerView())
-  const changeView = (v: ExplorerView) => { setViewMode(v); writeExplorerView(v) }
-  // Compagnons groupés : chargés uniquement en mode grille (le dock a son propre fetch).
-  const friendsByEvent = useFriendsByEvent(viewMode === 'grid')
+  // Compagnons groupés : toujours chargés (grille = seul mode).
+  const friendsByEvent = useFriendsByEvent(true)
 
   // Défaut « Quand » selon l'acteur : un EXPOSANT veut découvrir les nouveautés (« Ajoutés
   // récemment ») ; un visiteur garde l'agenda à venir (« all »). Dérivé → pas de setState en effet.
@@ -136,35 +118,6 @@ export function ExplorerPage() {
     [allEvents, selectedTags, zone, period, query, monthRange, person?.department, now]
   )
 
-  // Clamp activeIndex when displayed shrinks
-  const safeIndex = displayed.length > 0 ? Math.min(activeIndex, displayed.length - 1) : 0
-
-  // Après recomposition de la liste, recentre sur le festival mémorisé (annulation de recherche
-  // → on reste sur le même festival au lieu de revenir à la première carte).
-  // setState pendant le rendu, guardé (motif getDerivedStateFromProps comme DeckCard) :
-  // React re-rend immédiatement avant peinture, donc pas de flash ni d'effet.
-  if (focusEventId != null && displayed.length > 0) {
-    const idx = displayed.findIndex(e => e.id === focusEventId)
-    setFocusEventId(null)
-    setActiveIndex(idx >= 0 ? idx : 0)
-  }
-
-  // ---------- Navigation ----------
-  const go = useCallback((d: number) => {
-    if (displayed.length === 0) return
-    setActiveIndex(i => Math.max(0, Math.min(displayed.length - 1, i + d)))
-  }, [displayed.length])
-
-  // ---------- Keyboard ----------
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1) }
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(1) }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [go])
-
   // ---------- Filter setters with reset + persist ----------
   const toggleTag = (value: string) => {
     setSelectedTags(prev => {
@@ -174,26 +127,20 @@ export function ExplorerPage() {
       persistFilters({ tags: [...next] })
       return next
     })
-    setActiveIndex(0)
   }
 
   const handleZone = (z: Zone) => {
     setZone(z)
     persistFilters({ zone: z })
-    setActiveIndex(0)
   }
 
   const handlePeriod = (p: Period) => {
     setMonthFilter(null)   // choisir une période sort du mode "mois précis"
     setPeriodChoice(p)
     persistFilters({ period: p })
-    setActiveIndex(0)
   }
 
-  // Avant un changement de recherche, on mémorise le festival affiché pour le
-  // retrouver dans la nouvelle liste (ne pas rebooter le carrousel à l'annulation).
   const handleQuery = (q: string) => {
-    setFocusEventId(displayed[safeIndex]?.id ?? null)
     setQuery(q)
   }
 
@@ -231,11 +178,6 @@ export function ExplorerPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pendingEventRef = useRef<EventWithScore | null>(null)
 
-  const onAddImage = useCallback((event: EventWithScore) => {
-    pendingEventRef.current = event
-    fileInputRef.current?.click()
-  }, [])
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     const event = pendingEventRef.current
@@ -251,17 +193,8 @@ export function ExplorerPage() {
     }
   }
 
-  // ---------- canAddImage ----------
-  const canAddImage = currentActor?.kind === 'entity' || isAdmin
-
-  // ---------- Current event (safely indexed) ----------
-  const currentEvent = displayed.length > 0 ? displayed[safeIndex] : null
-
-  // ---------- Tag info for dock ----------
-  const activeTagInfo = useMemo(() => {
-    const t = currentEvent?.tags?.[0]
-    return t ? dynamicTags.find(d => d.value === t) : undefined
-  }, [currentEvent, dynamicTags])
+  // canAddImage / onAddImage : câblage futur sur les cartes grille (dormant).
+  // TODO(coverflow): réactiver quand les cartes grille exposent onAddImage.
 
   // ---------- Participation status (par event, adapté à l'acteur) ----------
   const actorKind: ActorKind = currentActor?.kind === 'entity' ? 'entity' : 'person'
@@ -269,39 +202,21 @@ export function ExplorerPage() {
     () => new Map(participations.map(p => [p.event_id, { status: p.status as string, payment_status: (p.payment_status as string | null) ?? null }])),
     [participations]
   )
-  // ---------- Halo accent (couleur de la catégorie de l'affiche active) ----------
-  const haloAccent = currentEvent ? getTagLandingColor(currentEvent.tags?.[0] ?? 'autre') : '#e8a06a'
 
-  const counterContent = (
-    <>
-      <b>{displayed.length > 0 ? safeIndex + 1 : 0}</b>
-      {' / '}
-      {displayed.length} festival{displayed.length !== 1 ? 's' : ''} trouvé{displayed.length !== 1 ? 's' : ''}
-    </>
-  )
-
+  // TODO(coverflow): EventDeck/DeckCard/ScrubBar/EventDock/ViewToggle sont conservés
+  // mais débranchés (slideshow en sommeil). À SUPPRIMER après déploiement & test de la
+  // refonte grille (cf. spec 2026-06-24-explorer-da-refonte).
   return (
-    <div className={'explorer' + (scrubbing ? ' is-scrubbing' : '') + (viewMode === 'grid' ? ' is-grid' : '')} style={{ '--xh-accent': haloAccent } as React.CSSProperties}>
-      {/* Halos d'ambiance (teintes landing ; le halo principal suit la couleur de l'affiche active) */}
-      <div className="xhalos" aria-hidden="true">
-        <span className="xb xb1" />
-        <span className="xb xb2" />
-        <span className="xb xb3" />
-        <span className="xb xb4" />
-      </div>
-
+    <div className="explorer">
       {/* Hidden file input for add-image */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
-
-      <ViewToggle mode={viewMode} onChange={changeView} />
+      <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
       <div className="stagewrap">
+        <header className="xplr-head">
+          <h1 className="xplr-title">Explorer</h1>
+          <p className="xplr-sub">Découvre les festivals et repère tes prochaines dates.</p>
+        </header>
+
         <SearchSegments
           tags={dynamicTags}
           selectedTags={selectedTags}
@@ -316,76 +231,26 @@ export function ExplorerPage() {
           onQuery={handleQuery}
         />
 
-        {/* Compteur : sous la barre sur mobile (gain de hauteur), en bas sur desktop. */}
-        <div className="counter counter--top">{counterContent}</div>
+        <div className="xplr-count">
+          {displayed.length} festival{displayed.length !== 1 ? 's' : ''} trouvé{displayed.length !== 1 ? 's' : ''}
+        </div>
 
-        {viewMode === 'slideshow' && !loading && displayed.length > 1 && (
-          <ScrubBar
-            count={displayed.length}
-            index={safeIndex}
-            labels={displayed.map(e => e.name)}
-            onScrub={setActiveIndex}
-            onScrubStart={() => setScrubbing(true)}
-            onScrubEnd={() => setScrubbing(false)}
+        {loading ? (
+          <GridSkeleton />
+        ) : displayed.length === 0 ? (
+          <ExplorerEmpty />
+        ) : (
+          <EventGrid
+            events={displayed}
+            now={now}
+            partByEvent={partByEvent}
+            actorKind={actorKind}
+            friendsByEvent={friendsByEvent}
+            isSaved={isSaved}
+            onToggleSave={toggleSave}
+            onCardClick={ev => navigate(eventPath(ev))}
           />
         )}
-
-        <div className="stagebody">
-          {loading ? (
-            <DeckSkeleton />
-          ) : displayed.length === 0 ? (
-            <ExplorerEmpty />
-          ) : viewMode === 'grid' ? (
-            <EventGrid
-              events={displayed}
-              now={now}
-              partByEvent={partByEvent}
-              actorKind={actorKind}
-              friendsByEvent={friendsByEvent}
-              isSaved={isSaved}
-              onToggleSave={toggleSave}
-              onCardClick={ev => navigate(eventPath(ev))}
-            />
-          ) : currentEvent ? (
-            <>
-              <EventDeck
-                events={displayed}
-                activeIndex={safeIndex}
-                canAddImage={canAddImage}
-                now={now}
-                partByEvent={partByEvent}
-                actorKind={actorKind}
-                onSelect={i => setActiveIndex(i)}
-                onPrev={() => go(-1)}
-                onNext={() => go(1)}
-                onSwipe={go}
-                onCardClick={ev => navigate(eventPath(ev))}
-                onAddImage={onAddImage}
-              />
-              <div className="infozone">
-                <EventDock
-                  event={currentEvent}
-                  tagInfo={activeTagInfo}
-                  animate={!scrubbing}
-                />
-              </div>
-            </>
-          ) : (
-            <ExplorerEmpty />
-          )}
-        </div>
-
-        <div className="bottombar">
-          {viewMode === 'slideshow' && currentEvent && (
-            <div className="dock-cta">
-              <Link to={eventPath(currentEvent)} className="btn btn-ghost">Voir le festival</Link>
-              <button type="button" className="btn btn-star" onClick={() => toggleSave(currentEvent)} aria-pressed={isSaved(currentEvent.id)}>
-                {isSaved(currentEvent.id) ? '🚫 Ne plus repérer' : '★ Repérer'}
-              </button>
-            </div>
-          )}
-          <div className="counter counter--bottom">{counterContent}</div>
-        </div>
       </div>
       {showQuotaModal && <DateQuotaModal onClose={() => setShowQuotaModal(false)} />}
     </div>

@@ -18,9 +18,6 @@ interface EventGridProps {
 export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent, isSaved, onToggleSave, onCardClick }: EventGridProps) {
   return (
     <div className="egrid-wrap">
-      <div className="egrid-count">
-        {events.length} festival{events.length !== 1 ? 's' : ''} trouvé{events.length !== 1 ? 's' : ''}
-      </div>
       <div className="egrid">
         {events.map(ev => (
           <EventGridCard
