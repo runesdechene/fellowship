@@ -59,8 +59,8 @@
   --font-color-text: #e7ddce;
 
   /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
-  --accent: #d6896a;                 /* terracotta (NUIT) — ne PAS confondre avec --copper festif */
-  --accent-ink: #fff;                /* texte sur bouton plein accent (nuit) — blanc, raccord jour */
+  --accent-app: #d6896a;             /* terracotta DA app (NUIT) — distinct de --accent (survol neutre HSL) et de --copper festif */
+  --accent-app-ink: #fff;            /* texte sur bouton plein accent DA (nuit & jour) */
   --app-bg: radial-gradient(120% 70% at 30% 0%, #252222, #171414 64%);
   --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
   --hair: rgba(255,255,255,.085);    /* hairline verre */
@@ -104,8 +104,8 @@
   --font-color-text: rgb(66, 39, 39);
 
   /* ── DA « sci-fi chaud » — overrides JOUR ── */
-  --accent: #b65f3f;                 /* terracotta assombri (lisible sur clair) */
-  --accent-ink: #fff;
+  --accent-app: #b65f3f;             /* terracotta DA app (JOUR, assombri pour lisibilité) */
+  --accent-app-ink: #fff;
   --app-bg: radial-gradient(120% 70% at 30% 0%, #f6efe4, #e8dfd0 64%);
   --glass: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
   --hair: rgba(60,40,25,.11);

@@ -70,7 +70,7 @@
 }
 .light .search-bar { background: #faf6ef; box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
 .search-bar:focus-within {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--hair));
+  border-color: color-mix(in srgb, var(--accent-app) 45%, var(--hair));
 }
 /* Zone recherche (icône + input + clear) ; le bouton Ajouter est relié à sa droite. */
 .search-bar-field { display: flex; align-items: center; gap: 8px; padding: 12.5px 16px; width: 360px; max-width: 46vw; }
@@ -140,8 +140,8 @@
   gap: 7px;
   height: 34px;
   padding: 0 14px;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--accent-app);
+  color: var(--accent-app-ink);
   border: none;
   border-radius: 999px;
   font-family: var(--font-body);
@@ -199,8 +199,8 @@
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--accent-app);
+  color: var(--accent-app-ink);
   border: 2px solid hsl(var(--card));
   border-radius: 999px;
   font-size: 10px;
