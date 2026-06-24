@@ -66,38 +66,36 @@ export function CockpitPage() {
 
   return (
     <div className="ck-page">
-      <div className="ck-topbar">
-        <div className="ck-avatar">
-          {avatarUrl ? <img src={avatarUrl} alt="" /> : <span>{initials(name)}</span>}
-        </div>
-        <div>
-          <h1 className="page-title">Bonjour {name}</h1>
-          <p className="ck-sub">La vision d'ensemble de ta saison</p>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="ck-skel">{[0, 1, 2].map(i => <div key={i} className="ck-skel-col" />)}</div>
-      ) : (
-        <>
-          <BilanBanner prompt={bilanPrompt} onSaved={() => { refetch(); refetchReports() }} onSnooze={onSnooze} />
-          <div className="ck-cols">
-            <div className="ck-col">
-              <ProchainFestival participation={nextFestival} />
-              <ProchainsFestivals participations={upcoming} />
-            </div>
-            <div className="ck-col">
-              <AReglerFinaliser participations={aRegler} />
-              <CompagnonsDeRoute />
-            </div>
-            <div className="ck-col">
-              <SaisonFrise season={season} />
-              <MesBilans participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} />
-            </div>
+      <div className="ck-page-inner">
+        <div className="ck-topbar">
+          <div className="ck-avatar">
+            {avatarUrl ? <img src={avatarUrl} alt="" /> : <span>{initials(name)}</span>}
           </div>
-          <DossiersRefuses participations={refused} onUpdated={refetch} />
-        </>
-      )}
+          <div>
+            <h1 className="page-title">Bonjour {name}</h1>
+            <p className="ck-sub">Ta prochaine action</p>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="ck-skel">{[0, 1, 2].map(i => <div key={i} className="ck-skel-col" />)}</div>
+        ) : (
+          <>
+            <BilanBanner prompt={bilanPrompt} onSaved={() => { refetch(); refetchReports() }} onSnooze={onSnooze} />
+            <div className="ck-hero">
+              <ProchainFestival participation={nextFestival} />
+              <SaisonFrise season={season} />
+            </div>
+            <ProchainsFestivals participations={upcoming} />
+            <div className="ck-cols">
+              <div className="ck-col"><AReglerFinaliser participations={aRegler} entriesByEvent={entriesByEvent} /></div>
+              <div className="ck-col"><CompagnonsDeRoute /></div>
+              <div className="ck-col"><MesBilans participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} /></div>
+            </div>
+            <DossiersRefuses participations={refused} onUpdated={refetch} />
+          </>
+        )}
+      </div>
     </div>
   )
 }

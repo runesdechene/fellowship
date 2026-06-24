@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ClipboardList, Pencil, Plus, Lock } from 'lucide-react'
+import { Pencil, Plus, Lock } from 'lucide-react'
 import type { ParticipationWithEvent, LedgerEntry } from '@/types/database'
 import { buildPastBilans, splitOrientation, type PastBilan } from '@/lib/cockpit-bilans'
 import { BilanModal } from '@/components/reports/BilanModal'
@@ -16,6 +16,7 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
   const now = useMemo(() => new Date(), [])
   const bilans = useMemo(() => buildPastBilans(participations, entriesByEvent, now), [participations, entriesByEvent, now])
   const rows = useMemo(() => bilans.slice(0, MAX_ROWS), [bilans])
+  const extra = bilans.length - rows.length
 
   const [openEventId, setOpenEventId] = useState<string | null>(null)
 
@@ -26,12 +27,19 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
 
   return (
     <div className="ck-card">
-      <h3><span className="ck-ic cop"><ClipboardList strokeWidth={1.8} /></span> Mes bilans</h3>
+      <div className="ck-eyebrow">
+        MES BILANS
+        {bilans.length > 0 && (
+          <span className="ck-seeall" style={{ cursor: 'default' }}>
+            {extra > 0 ? `${bilans.length} ›` : 'tous ›'}
+          </span>
+        )}
+      </div>
 
       {(split.recu > 0 || split.paye > 0) && (
-        <div className="ck-bilan-split">
-          {split.recu > 0 && <span>Cachets reçus : <b>{split.recu.toLocaleString('fr-FR')} €</b></span>}
-          {split.paye > 0 && <span>Emplacements payés : <b>{split.paye.toLocaleString('fr-FR')} €</b></span>}
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '12px', fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: '12px', color: 'hsl(var(--muted-foreground))' }}>
+          {split.recu > 0 && <span>Cachets : <b style={{ color: 'var(--status-inscrit)' }}>{split.recu.toLocaleString('fr-FR')} €</b></span>}
+          {split.paye > 0 && <span>Emplt. payés : <b style={{ color: 'hsl(var(--foreground))' }}>{split.paye.toLocaleString('fr-FR')} €</b></span>}
         </div>
       )}
 

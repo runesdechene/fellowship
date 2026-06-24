@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
-import { CalendarRange } from 'lucide-react'
 import type { SeasonMonth } from '@/lib/cockpit'
 
-// Initiale du mois pour la frise compacte (J F M A M J J A S O N D).
-const MONTH_LETTER = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+// Abréviation 3 lettres du mois pour la frise (grille 6 colonnes × 2 lignes = 12 mois).
+const MONTH_ABBR = ['JANV', 'FÉV', 'MARS', 'AVR', 'MAI', 'JUIN', 'JUIL', 'AOÛT', 'SEPT', 'OCT', 'NOV', 'DÉC']
 const MONTH_NAME = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
 
 function cap(s: string): string {
@@ -17,13 +16,11 @@ interface Props {
 export function SaisonFrise({ season }: Props) {
   const total = season.reduce((s, m) => s + m.count, 0)
   const emptyNames = season.filter(m => !m.filled).map(m => MONTH_NAME[m.month])
+  const seasonYear = season[0]?.year ?? new Date().getFullYear()
 
   return (
     <div className="ck-card">
-      <h3>
-        <span className="ck-ic grn"><CalendarRange strokeWidth={1.8} /></span>
-        Ta saison
-      </h3>
+      <div className="ck-eyebrow">SAISON {seasonYear}</div>
 
       <div className="ck-season-head">
         <b>{total}</b>
@@ -33,7 +30,7 @@ export function SaisonFrise({ season }: Props) {
       <div className="ck-season-months">
         {season.map(m => (
           <div key={`${m.year}-${m.month}`} className={'ck-sm' + (m.filled ? ' full' : ' gap')}>
-            <span className="ck-sm-mn">{MONTH_LETTER[m.month]}</span>
+            <span className="ck-sm-mn">{MONTH_ABBR[m.month]}</span>
             <span className="ck-sm-ct">{m.count}</span>
           </div>
         ))}

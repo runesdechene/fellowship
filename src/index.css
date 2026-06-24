@@ -5,30 +5,30 @@
 
 :root {
   /* Fellowship — DA « Nuit de Festival » (nuit = défaut) */
-  --background: 9 24% 7%;            /* #170f0e */
-  --foreground: 35 60% 95%;          /* #fbf3e8 */
-  --card: 9 22% 12%;                 /* #241917 */
-  --card-foreground: 35 60% 95%;
-  --popover: 9 22% 12%;
-  --popover-foreground: 35 60% 95%;
-  --secondary: 11 22% 10%;           /* #1e1513 */
-  --secondary-foreground: 35 60% 95%;
-  --muted: 11 22% 10%;
-  --muted-foreground: 28 17% 64%;    /* #b3a293 */
-  --accent: 9 22% 12%;               /* surface de survol neutre ; le vert de marque = --forest */
-  --accent-foreground: 35 60% 95%;
+  --background: 9 19% 7%;            /* marron désaturé ~20% */
+  --foreground: 36 40% 87%;          /* blanc chaud adouci (ex #fbf3e8 L95, trop éclatant) */
+  --card: 9 18% 12%;                 /* #241917 */
+  --card-foreground: 36 40% 87%;
+  --popover: 9 18% 12%;
+  --popover-foreground: 36 40% 87%;
+  --secondary: 11 18% 10%;           /* #1e1513 */
+  --secondary-foreground: 36 40% 87%;
+  --muted: 11 18% 10%;
+  --muted-foreground: 28 14% 64%;    /* gris brun désaturé ~20% */
+  --accent: 9 18% 12%;               /* surface de survol neutre ; le vert de marque = --forest */
+  --accent-foreground: 36 40% 87%;
   --destructive: 0 65% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 33 16% 20%;              /* opaque approx of rgba(255,240,225,.10) on dark */
-  --input: 33 16% 24%;
-  --primary: 25 78% 52%;
+  --border: 30 6% 22%;               /* hairline neutralisée (fin du trait brun) — précision */
+  --input: 30 6% 26%;
+  --primary: 24 68% 53%;             /* cuivre légèrement adouci (moins vif) */
   --primary-foreground: 0 0% 100%;
-  --ring: 25 78% 52%;
+  --ring: 24 68% 53%;
   --radius: 0.75rem;
 
   /* Tokens de marque (DA) */
-  --copper: hsl(24 85% 56%);
-  --copper-d: hsl(16 80% 48%);
+  --copper: hsl(24 72% 55%);
+  --copper-d: hsl(16 68% 47%);
   --forest: hsl(152 42% 52%);
   --lime: hsl(86 44% 64%);
   --lime-d: hsl(92 40% 46%);
@@ -41,9 +41,9 @@
   --status-acompte: hsl(86 44% 64%);   /* lime (étape intermédiaire entre orange et forêt) */
   --status-inscrit: #34c98a;   /* forêt */
   --status-refuse:  #e8897a;   /* terracotta */
-  --gradient-primary: linear-gradient(135deg, hsl(25 78% 52%), hsl(16 70% 40%));
-  --gradient-pro: linear-gradient(155deg, hsl(25 78% 52%), hsl(18 72% 41%) 62%, hsl(12 64% 32%));
-  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2e1e1a, #170f0e 60%);
+  --gradient-primary: linear-gradient(135deg, hsl(24 70% 54%), hsl(15 62% 42%));
+  --gradient-pro: linear-gradient(155deg, hsl(24 70% 54%), hsl(17 64% 43%) 62%, hsl(12 58% 34%));
+  --page-backdrop: radial-gradient(120% 70% at 50% 0%, #2c1f1c, #15100e 60%);
 
   /* Layout tokens */
   --page-padding: 24px;
@@ -51,10 +51,22 @@
   /* Font tokens */
   --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Mono : data uniquement (chiffres/dates/montants) — touche « outil pro », pas le logo/titres */
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
 
   /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
   --font-color-lowtitle: #b3a293;
-  --font-color-text: #fbf3e8;
+  --font-color-text: #e7ddce;
+
+  /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
+  --accent: #d6896a;                 /* terracotta (NUIT) — ne PAS confondre avec --copper festif */
+  --accent-ink: #1c1109;             /* texte sur bouton plein accent (nuit) */
+  --app-bg: radial-gradient(120% 70% at 30% 0%, #1d1a18, #0f0e0d 64%);
+  --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
+  --hair: rgba(255,255,255,.085);    /* hairline verre */
+  --field: rgba(255,255,255,.04);    /* cellule/champ interne */
+  --name: #d3c5b3;                   /* noms/titres de listes (moins blancs que --foreground) */
+  --faint: #6f6258;                  /* micro-labels mono très discrets */
 }
 
 /* Mode JOUR (inversé) — override sur la classe .light */
@@ -90,6 +102,16 @@
   /* Font color — day overrides (original values) */
   --font-color-lowtitle: rgb(190, 171, 171);
   --font-color-text: rgb(66, 39, 39);
+
+  /* ── DA « sci-fi chaud » — overrides JOUR ── */
+  --accent: #b65f3f;                 /* terracotta assombri (lisible sur clair) */
+  --accent-ink: #fff;
+  --app-bg: radial-gradient(120% 70% at 30% 0%, #f6efe4, #e8dfd0 64%);
+  --glass: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
+  --hair: rgba(60,40,25,.11);
+  --field: rgba(60,40,25,.045);
+  --name: #4a3c31;
+  --faint: #9a8b7d;
 }
 
 @theme inline {
@@ -131,7 +153,49 @@ body {
   background-attachment: fixed;
   font-family: var(--font-body);
   font-size: 15px;
+  font-variant-numeric: tabular-nums;   /* chiffres alignés (lisibilité « pro ») */
 }
+
+/* ── Utilitaires « pro » ───────────────────────────────────────────── */
+/* Micro-label majuscule espacé (en-tête de section, eyebrow) — signal panneau de contrôle */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+/* Donnée numérique : monospace + chiffres tabulaires (montants, dates, compteurs) */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ── Carte de verre DA (sci-fi chaud) ── */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--glass);
+  border: 1px solid var(--hair);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 44px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.light .glass-card {
+  box-shadow: 0 4px 14px rgba(120,90,60,.06), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.glass-card > * { position: relative; z-index: 1; }
+/* Grain : overlay réutilisable (cartes via ::before, bandes via .grain::before) */
+.glass-card::before, .grain::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.light .glass-card::before, .light .grain::before { opacity: .05; mix-blend-mode: multiply; }
+.grain { position: relative; }
+.grain > * { position: relative; z-index: 1; }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-heading);

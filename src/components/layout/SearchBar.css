@@ -45,7 +45,7 @@
   /* Marron chaud foncé = couleur center du radial du body (--page-backdrop, nuit).
      Solide ici car le radial du body, sur la largeur de la colonne droite, finit
      toujours dans la zone sombre — du coup la nav paraissait noire. */
-  background: #2e1e1a;
+  background: #2c1f1c;
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
   pointer-events: none;
@@ -59,21 +59,22 @@
   justify-self: center;
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 360px;
+  align-items: stretch;
   max-width: 100%;
-  padding: 12px 16px;
-  background: hsl(var(--card) / 0.95);
-  border: 1px solid hsl(var(--border) / 0.6);
+  background: var(--glass);
+  border: 1px solid var(--hair);
   border-radius: 999px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
-  transition: border-color 0.18s, background 0.18s;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  overflow: hidden;
+  transition: border-color 0.18s;
 }
+.light .search-bar { box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
 .search-bar:focus-within {
-  background: hsl(var(--card) / 0.85);
-  border-color: color-mix(in srgb, var(--amber) 35%, hsl(var(--border)));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--hair));
 }
+/* Zone recherche (icône + input + clear) ; le bouton Ajouter est relié à sa droite. */
+.search-bar-field { display: flex; align-items: center; gap: 8px; padding: 12.5px 16px; width: 360px; max-width: 46vw; }
 
 .search-bar-icon {
   width: 16px; height: 16px;
@@ -89,12 +90,14 @@
   font-family: var(--font-body);
   font-size: 13.5px;
   color: hsl(var(--foreground));
+  padding-right: 30px;
 }
 .search-bar-input::placeholder { color: hsl(var(--muted-foreground)); }
 
 .search-bar-shortcut {
+  font-family: var(--font-mono);
   font-size: 10.5px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.04em;
   color: hsl(var(--muted-foreground));
   background: hsl(var(--foreground) / 0.08);
@@ -125,12 +128,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px;
-  background: hsl(var(--card) / 0.85);
-  border: 1px solid hsl(var(--border) / 0.6);
-  border-radius: 999px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
+/* Switch admin (Réel/Pro/Gratuit) — col 1, à gauche, hors du coin droit */
+.search-bar-admin { grid-column: 1; justify-self: start; display: flex; align-items: center; }
 
 /* ── Bouton « + Ajouter » desktop ─────────────────────────────────── */
 
@@ -141,8 +141,8 @@
   gap: 7px;
   height: 34px;
   padding: 0 14px;
-  background: var(--gradient-primary);
-  color: hsl(var(--primary-foreground));
+  background: var(--accent);
+  color: var(--accent-ink);
   border: none;
   border-radius: 999px;
   font-family: var(--font-body);
@@ -168,8 +168,8 @@
 }
 .search-bar-add-mobile .search-bar-add-label { display: none; }
 
-/* Show desktop variant by default */
-.search-bar-add-desktop { display: inline-flex; }
+/* Show desktop variant by default — segment terracotta relié à droite de la recherche */
+.search-bar-add-desktop { display: inline-flex; align-self: stretch; height: auto; padding: 0 18px; border-radius: 0; border-left: 1px solid color-mix(in srgb, #000 10%, transparent); box-shadow: none; }
 
 /* ── Cloche notifications ─────────────────────────────────────────── */
 
@@ -180,13 +180,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: hsl(var(--foreground) / 0.08);
-  border: 1px solid hsl(var(--border));
+  width: 38px;
+  height: 38px;
+  background: var(--field);
+  border: 1px solid var(--hair);
   border-radius: 50%;
   color: hsl(var(--foreground));
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   transition: background 0.15s;
 }
 .notif-bell-btn:hover { background: hsl(var(--foreground) / 0.16); }
@@ -199,13 +200,14 @@
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  background: var(--gradient-primary);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-ink);
   border: 2px solid hsl(var(--card));
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
-  font-family: var(--font-body);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -452,6 +454,8 @@
     box-shadow: none;
   }
   .search-bar-wrapper.search-expanded .search-bar { display: flex; }
+  .search-bar-field { width: auto; flex: 1; padding: 12px 14px; }
+  .search-bar-admin { display: none; }
   .search-bar-shortcut { display: none; }
 
   /* Mobile-only items visibles */

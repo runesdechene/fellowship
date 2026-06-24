@@ -755,7 +755,7 @@
 /* Bloc montant : reprend la couleur du bouton de paiement actif au-dessus (sans bordure, comme eux). */
 .event-amount-paid { margin-top: 8px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 10px; border: none; cursor: pointer; text-align: left; }
 .event-amount-paid-label { font-size: 12px; font-weight: 600; }
-.event-amount-paid-value { font-size: 15px; font-weight: 700; }
+.event-amount-paid-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 600; }
 /* Acompte versé → vert pomme (--lime), aligné sur .pay-active.acompte_verse */
 .event-amount-paid.acompte_verse { background: color-mix(in srgb, var(--lime) 18%, transparent); }
 .event-amount-paid.acompte_verse:hover { background: color-mix(in srgb, var(--lime) 26%, transparent); }

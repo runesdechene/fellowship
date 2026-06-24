@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Share2 } from 'lucide-react'
+import { Share2 } from 'lucide-react'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { avatarColor } from '@/lib/community'
 import { ShareModal } from '@/components/ShareModal'
@@ -10,13 +10,20 @@ export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
   const [share, setShare] = useState<{ message: string; url: string } | null>(null)
 
+  const visible = convergences.slice(0, 5)
+  const extra = convergences.length - visible.length
+
   return (
     <>
     <div className="ck-card">
-      <h3>
-        <span className="ck-ic grn"><Users strokeWidth={1.8} /></span>
-        Mes compagnons de route
-      </h3>
+      <div className="ck-eyebrow">
+        COMPAGNONS
+        {convergences.length > 0 && (
+          <Link to="/communaute" className="ck-seeall">
+            {extra > 0 ? `${convergences.length} ›` : 'tout ›'}
+          </Link>
+        )}
+      </div>
 
       {loading ? (
         <p className="ck-empty-txt">Chargement…</p>
@@ -26,7 +33,7 @@ export function CompagnonsDeRoute() {
         </p>
       ) : (
         <ul className="ck-conv-list">
-          {convergences.slice(0, 3).map(c => {
+          {visible.map(c => {
             const url = eventShareUrl({ slug: c.event.slug, id: c.event.id }, window.location.origin)
             const message = `🎪 On sera ${c.count} créateurs réunis à ${c.event.name} ! → ${url}`
             return (
@@ -40,7 +47,7 @@ export function CompagnonsDeRoute() {
                 </div>
                 <div className="ck-conv-txt">
                   <b>Vous serez {c.count} réunis</b>
-                  <small>à {c.event.name}</small>
+                  <small>{c.event.name.toUpperCase()}</small>
                 </div>
                 <div className="ck-conv-actions">
                   <Link to={eventPath(c.event)} className="ck-btn ck-btn-g ck-btn-sm">Voir</Link>
