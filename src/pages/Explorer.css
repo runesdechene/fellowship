@@ -1310,7 +1310,9 @@
 }
 .explorer .egrid-img-emoji {
   font-size: clamp(44px, 7vw, 74px); line-height: 1;
-  color: transparent; text-shadow: 0 0 0 #fff; opacity: 0.16;
+  /* Silhouette teintée par la couleur du tag (var --c) → lisible en jour ET nuit
+     (avant : blanc en dur, invisible sur le fond clair). */
+  color: transparent; text-shadow: 0 0 0 var(--c, hsl(var(--muted-foreground))); opacity: 0.5;
 }
 
 /* Badge Nouveau / Populaire — gélule verre DA, coin haut-gauche. */

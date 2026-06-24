@@ -1,5 +1,5 @@
 import { Star, Calendar, MapPin } from 'lucide-react'
-import { getTagEmoji } from '@/components/ui/TagBadge'
+import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
 import { eventBadge, participationChip, participationDot, formatEventDateRange, type ActorKind } from '@/lib/explorer'
 import type { PartLite } from './EventDeck'
 import type { FriendAvatar } from '@/lib/map-data'
@@ -36,7 +36,7 @@ export function EventGridCard({ event, now, part, actorKind, friends, saved, onT
         {event.image_url
           ? <img className="egrid-imgel" src={event.image_url} alt={event.name} loading="lazy" />
           : (
-            <div className="egrid-img--empty" aria-hidden="true">
+            <div className="egrid-img--empty" aria-hidden="true" style={{ '--c': getTagLandingColor(tag) } as React.CSSProperties}>
               <span className="egrid-img-emoji">{getTagEmoji(tag)}</span>
             </div>
           )}
