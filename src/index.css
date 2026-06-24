@@ -57,6 +57,16 @@
   /* Font color — used in EventPage.css (night = défaut; day overrides in .light) */
   --font-color-lowtitle: #b3a293;
   --font-color-text: #e7ddce;
+
+  /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
+  --accent: #d6896a;                 /* terracotta (NUIT) — ne PAS confondre avec --copper festif */
+  --accent-ink: #1c1109;             /* texte sur bouton plein accent (nuit) */
+  --app-bg: radial-gradient(120% 70% at 30% 0%, #1d1a18, #0f0e0d 64%);
+  --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
+  --hair: rgba(255,255,255,.085);    /* hairline verre */
+  --field: rgba(255,255,255,.04);    /* cellule/champ interne */
+  --name: #d3c5b3;                   /* noms/titres de listes (moins blancs que --foreground) */
+  --faint: #6f6258;                  /* micro-labels mono très discrets */
 }
 
 /* Mode JOUR (inversé) — override sur la classe .light */
@@ -92,6 +102,16 @@
   /* Font color — day overrides (original values) */
   --font-color-lowtitle: rgb(190, 171, 171);
   --font-color-text: rgb(66, 39, 39);
+
+  /* ── DA « sci-fi chaud » — overrides JOUR ── */
+  --accent: #b65f3f;                 /* terracotta assombri (lisible sur clair) */
+  --accent-ink: #fff;
+  --app-bg: radial-gradient(120% 70% at 30% 0%, #f6efe4, #e8dfd0 64%);
+  --glass: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
+  --hair: rgba(60,40,25,.11);
+  --field: rgba(60,40,25,.045);
+  --name: #4a3c31;
+  --faint: #9a8b7d;
 }
 
 @theme inline {
@@ -152,6 +172,30 @@ body {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
 }
+
+/* ── Carte de verre DA (sci-fi chaud) ── */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--glass);
+  border: 1px solid var(--hair);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 44px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.light .glass-card {
+  box-shadow: 0 4px 14px rgba(120,90,60,.06), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.glass-card > * { position: relative; z-index: 1; }
+/* Grain : overlay réutilisable (cartes via ::before, bandes via .grain::before) */
+.glass-card::before, .grain::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.light .glass-card::before, .light .grain::before { opacity: .05; mix-blend-mode: multiply; }
+.grain { position: relative; }
+.grain > * { position: relative; z-index: 1; }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-heading);
