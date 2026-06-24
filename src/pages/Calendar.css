@@ -920,3 +920,56 @@
   .agenda-mh .calendar-month-banner-text { left: var(--page-padding); }
   .agenda-count { right: var(--page-padding); }
 }
+
+/* ── DA Refonte — Task 4 (cascade : après tout le legacy ci-dessus) ── */
+
+.calendar-page { background:var(--app-bg); background-attachment:fixed; min-height:100%; padding:28px 40px 80px; }
+@media (max-width:639px){ .calendar-page{ padding:16px 14px 90px; } }
+
+.calendar-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.calendar-subtitle { font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:hsl(var(--muted-foreground)); margin-top:3px; }
+.calendar-quota { display:inline-block; margin-top:8px; font-size:12px; color:hsl(var(--muted-foreground)); text-decoration:none; }
+.calendar-quota b { color:hsl(var(--foreground)); }
+.calendar-quota.at-limit b { color:var(--accent-app); }
+
+.calendar-year-nav { display:inline-flex; align-items:center; gap:10px; font-family:var(--font-mono); color:var(--name); }
+.calendar-year-label { font-size:14px; }
+.calendar-nav-btn { width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; background:var(--field); border:1px solid var(--hair); border-radius:8px; color:hsl(var(--muted-foreground)); cursor:pointer; }
+.calendar-nav-btn svg { width:16px; height:16px; }
+.calendar-nav-btn:disabled { opacity:.5; }
+
+/* Ancre saison */
+.calendar-anchor { display:flex; align-items:baseline; gap:12px; padding:13px 0 5px; border-top:1px solid var(--hair); margin-top:14px; }
+.calendar-anchor-big { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:32px; font-weight:600; line-height:1; color:var(--accent-app); }
+.calendar-anchor-eyebrow { margin-bottom:2px; }
+.calendar-anchor-next { color:hsl(var(--muted-foreground)); font-size:12px; }
+.calendar-anchor-next strong { color:var(--accent-app); font-weight:600; }
+
+/* Teaser Pro */
+.calendar-teaser { display:flex; align-items:center; gap:14px; margin:12px 0 4px; padding:13px 16px; border-radius:13px; text-decoration:none;
+  background:linear-gradient(150deg, color-mix(in srgb, var(--accent-app) 16%, transparent), var(--field));
+  border:1px solid color-mix(in srgb, var(--accent-app) 30%, transparent); }
+.calendar-teaser-title { color:hsl(var(--foreground)); font-weight:600; font-size:13.5px; }
+.calendar-teaser-sub { color:hsl(var(--muted-foreground)); font-size:12px; margin-top:2px; }
+.calendar-teaser .da-btn { margin-left:auto; flex-shrink:0; }
+
+/* Filtres */
+.calendar-filters { display:flex; gap:7px; margin:12px 0 0; flex-wrap:wrap; }
+.calendar-filter-btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:6px 11px; border-radius:999px; border:1px solid var(--hair); background:var(--field); color:var(--name); cursor:pointer; }
+.calendar-filter-btn svg { width:14px; height:14px; }
+.calendar-filter-btn.active { background:color-mix(in srgb, var(--accent-app) 15%, transparent); border-color:color-mix(in srgb, var(--accent-app) 40%, transparent); color:var(--accent-app); }
+.calendar-filter-btn.locked { opacity:.6; }
+
+/* Grille saison */
+.calendar-grid { display:grid; grid-template-columns:1fr; gap:11px; margin-top:16px; }
+@media (min-width:760px){ .calendar-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1200px){ .calendar-grid{ grid-template-columns:repeat(3,1fr); } }
+
+/* Carte-mois : .glass-card fournit le verre/grain ; on ajoute padding + états */
+.calendar-month-card { padding:12px 14px; }
+.calendar-month-card.current { border-left:2.5px solid var(--accent-app); box-shadow:0 0 0 1px color-mix(in srgb, var(--accent-app) 12%, transparent), 0 18px 44px rgba(0,0,0,.32); }
+.light .calendar-month-card.current { box-shadow:0 0 0 1px color-mix(in srgb, var(--accent-app) 14%, transparent), 0 4px 14px rgba(120,90,60,.06); }
+.calendar-month-card.empty { opacity:.4; cursor:pointer; }
+
+.calendar-empty-hint { color:hsl(var(--muted-foreground)); font-size:13px; margin-bottom:12px; }
+.calendar-empty-hint a { color:var(--accent-app); }

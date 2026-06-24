@@ -8,6 +8,7 @@ import { CalendarFriendsModal } from '@/components/calendar/CalendarFriendsModal
 import { MobileAgenda } from '@/components/calendar/MobileAgenda'
 import { planForActor } from '@/lib/navModel'
 import { useDateQuota } from '@/hooks/use-date-quota'
+import { seasonSummary } from '@/lib/calendar-season'
 import { ChevronLeft, ChevronRight, Users, Lock } from 'lucide-react'
 import './Calendar.css'
 
@@ -130,6 +131,7 @@ export function CalendarPage() {
 
   const firstMonth = slidingMonths[0]
   const lastMonth = slidingMonths[11]
+  const summary = seasonSummary(slidingMonths, now)
 
   const navigate = useCallback((dir: 'prev' | 'next') => {
     if (animating) return
@@ -201,6 +203,31 @@ export function CalendarPage() {
         </div>
       </div>
 
+      {/* Ancre saison — point focal léger (pas un héros) */}
+      <div className="calendar-anchor">
+        <span className="calendar-anchor-big">{summary.total}</span>
+        <div>
+          <div className="eyebrow calendar-anchor-eyebrow">dates cette saison</div>
+          {summary.next && (
+            <div className="calendar-anchor-next">
+              prochaine dans <strong>{summary.next.daysUntil === 0 ? "aujourd'hui" : `${summary.next.daysUntil} jour${summary.next.daysUntil > 1 ? 's' : ''}`}</strong>
+              {summary.next.daysUntil !== 0 && ' — '}{summary.next.daysUntil !== 0 && summary.next.name}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Teaser Pro — uniquement en free */}
+      {isFree && (
+        <Link to="/boutique" className="calendar-teaser">
+          <div>
+            <div className="calendar-teaser-title">Vois où vont tes amis et les festivaliers</div>
+            <div className="calendar-teaser-sub">Tes dates restent gratuites. Le réseau « qui va où » est réservé au Pro.</div>
+          </div>
+          <span className="da-btn da-btn-flat da-btn-sm">Passer Pro</span>
+        </Link>
+      )}
+
       {/* Filters bar */}
       <div className="calendar-filters">
         <button
@@ -249,7 +276,11 @@ export function CalendarPage() {
             return (
               <div
                 key={`${month.year}-${month.month}`}
-                className={`calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
+                className={`glass-card calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
+                {...(isEmpty ? {
+                  role: 'button', tabIndex: 0,
+                  onClick: () => routerNav('/explorer', { state: { month: { year: month.year, month: month.month } } }),
+                } : {})}
               >
                 <CalendarMonth data={month} actorKind={actorKind} friendParticipations={friendActivity} onOpenFriends={(id, name) => setModalEvent({ id, name })} />
               </div>
