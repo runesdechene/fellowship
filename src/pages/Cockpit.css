@@ -135,7 +135,10 @@
 .ck-season-head b { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 40px; font-weight: 600; line-height: 1; color: hsl(var(--foreground)); }
 .ck-season-head span { font-size: 12.5px; color: hsl(var(--muted-foreground)); }
 .ck-season-months { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 14px; }
-.ck-sm { flex: 1; border-radius: 8px; background: var(--field); border: 1px solid var(--hair); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 0; gap: 3px; }
+.ck-sm { flex: 1; border-radius: 8px; background: var(--field); border: 1px solid var(--hair); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 0; gap: 3px; transition: border-color .18s ease, background .18s ease, transform .14s ease, box-shadow .18s ease; }
+.ck-sm:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 55%, transparent); background: color-mix(in srgb, var(--accent) 12%, var(--field)); box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 18%, transparent); }
+.ck-sm:hover .ck-sm-ct { color: var(--accent); }
+.ck-sm:hover .ck-sm-mn { color: hsl(var(--foreground)); }
 .ck-sm-mn { font-size: 8px; font-weight: 700; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 .ck-sm-ct { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 600; line-height: 1; color: hsl(var(--muted-foreground)); }
 .ck-sm.full { background: color-mix(in srgb, var(--accent) 22%, transparent); border-color: transparent; }
