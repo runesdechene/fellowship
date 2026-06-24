@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.303',
+    date: '2026-06-24',
+    title: 'DA sci-fi chaud : finitions & barre du haut',
+    changes: [
+      'Cockpit & Sidebar fidélité maquette : polices, marges, compteurs mono, parrainage, activité réseau, avatars carrés arrondis',
+      'Saison 2026 : 12 mois en grille 6 colonnes avec survol qui réagit',
+      'À régler : prix affiché et label de statut réduit sur une seule ligne',
+      'Barre du haut refondue : recherche + « Ajouter un événement » réunis, notifications seules à droite, fond continu sans bandeau',
+    ],
+  },
+  {
     version: '0.7.302',
     date: '2026-06-24',
     title: 'DA sci-fi chaud : Cockpit & Sidebar',
