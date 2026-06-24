@@ -476,6 +476,11 @@ h1, h2, h3, .font-display {
 /* Réutilise le menu Explorer (Quoi/Où/Quand, classes .explorer .seg/.pop/.catchip…) en
    overlay sur la carte. On neutralise le box de base .explorer (height/overflow) et on rend
    la carte cliquable autour de la barre (pointer-events). */
+/* Carte : la SearchBar globale flotte en OVERLAY transparent au-dessus de la carte
+   plein écran (esprit Explorer, mais la carte reste immersive et ne se fait pas pousser). */
+.carte-shell { position: relative; }
+.carte-shell .search-bar-wrapper { position: absolute; top: 0; left: 0; right: 0; z-index: 30; }
+
 .carte-filterbar.explorer {
   position: absolute; top: 0; left: 0; right: 0;
   /* ⚠️ NE PAS hériter du fond plein écran de .explorer (background:--app-bg + min-height:100dvh) :
@@ -487,7 +492,8 @@ h1, h2, h3, .font-display {
    fuirait sur cet overlay et poserait un bandeau clair opaque en haut de la carte.
    On neutralise : la barre de filtres reste transparente, la carte passe dessous. */
 .light .carte-filterbar.explorer { background: transparent; }
-.carte-filterbar .top { padding: 14px 0 0; pointer-events: none; }
+/* Chips Quoi/Où/Quand décalés SOUS la SearchBar overlay (esprit Explorer). */
+.carte-filterbar .top { padding: 84px 0 0; pointer-events: none; }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
 

@@ -29,8 +29,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
   const isVitrine = isPublicProfilePath(location.pathname)
-  // Explorer garde la SearchBar globale ; la Carte (immersive) et la vitrine la masquent.
-  const hideSearchBar = isVitrine || isCarte
+  // Seule la vitrine publique masque la SearchBar (Explorer et Carte la gardent en haut).
+  const hideSearchBar = isVitrine
   // Seule la Carte reste vraiment sans scroll (carte plein écran).
   const noScroll = isCarte
   useEffect(() => {
@@ -46,7 +46,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           --sidebar-w (0 en mobile, sidebar masquée). Réserve basse = hauteur BottomBar fixe
           (~70px) + safe-area iPhone, sinon elle masque la dernière section (#5 contact Réglages).
           noScroll (Carte) = hauteur viewport figée, pas de scroll. */}
-      <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
+      <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} ${isCarte ? 'carte-shell' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
         <main className={isCarte ? 'flex flex-col flex-1 min-h-0' : ''}>
           {children}
