@@ -5,6 +5,11 @@
 .event-page {
   position: relative;
   padding: var(--page-padding) 0 80px;
+  /* Fond DA « sci-fi chaud » : --app-bg fixé au viewport. L'affiche floutée
+     (.event-ambient, couche fixe au-dessus) fond dans ce fond en haut. */
+  background: var(--app-bg);
+  background-attachment: fixed;
+  min-height: 100%;
 }
 
 /* Centre les blocs intérieurs pour laisser l'ambient s'étaler pleine largeur du stage */
@@ -26,7 +31,9 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 100vh;
+  /* Bande en haut seulement (~400px), pas tout le viewport : l'affiche floutée
+     habille le héros puis se fond dans le --app-bg. */
+  height: 400px;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -43,24 +50,21 @@
   object-fit: cover;
   filter: blur(60px) brightness(0.5) saturate(1.05);
   transform: scale(1.35);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 45%, transparent 88%);
-  mask-image: linear-gradient(180deg, black 0%, black 45%, transparent 88%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 30%, transparent 100%);
+  mask-image: linear-gradient(180deg, black 0%, black 30%, transparent 100%);
 }
 
 .event-ambient::after {
   content: "";
   position: absolute;
   inset: 0;
-  /* Stops calibrés pour ambient height 880 : le brun doit être visiblement opaque
-     AVANT que les premières cartes (~y=290 de .event-page = ~42% de 880) couvrent. */
+  /* L'affiche floutée se fond vers TRANSPARENT (révèle le --app-bg de .event-page
+     dessous), avec un léger assombrissement en haut pour la lisibilité du héros. */
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.15) 0%,
-    rgba(0, 0, 0, 0.04) 14%,
-    hsl(var(--background) / 0.32) 26%,
-    hsl(var(--background) / 0.85) 38%,
-    hsl(var(--background)) 52%,
-    hsl(var(--background)) 100%
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0.12) 18%,
+    transparent 58%
   );
 }
 
