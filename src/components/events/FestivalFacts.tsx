@@ -40,7 +40,7 @@ export function FestivalFacts({ event }: { event: Event }) {
   }
 
   return (
-    <div className="event-section-card">
+    <div className="glass-card event-section-card">
       <div className="event-section-title">Infos pratiques</div>
       <div className="fest-facts">
         {facts.map((f) => {

@@ -32,7 +32,7 @@ export function HowToApplyModal({ event, onClose, onMarkApplied }: HowToApplyMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="howto-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="glass-card howto-modal" onClick={(e) => e.stopPropagation()}>
         <div className="howto-head">
           <h2>Comment candidater</h2>
           <button onClick={onClose} className="howto-x" aria-label="Fermer">

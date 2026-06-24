@@ -8,7 +8,11 @@
      sur fond sombre. Le grain est un calque de background (toujours rendu, toujours derrière le contenu). */
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='ng'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ng)' opacity='0.08'/%3E%3C/svg%3E"),
-    var(--glass), var(--app-bg);
+    var(--glass);
+  /* Verre translucide (pas de couche --app-bg opaque) : l'affiche floutée des pages
+     event passe dessous, frostée par le blur — effet glace de la prod. */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-right: 1px solid var(--hair);
   padding: 20px 14px;
   transition: width 0.3s ease-in-out;

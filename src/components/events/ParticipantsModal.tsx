@@ -107,7 +107,7 @@ export function ParticipantsModal({ eventId, onClose }: ParticipantsModalProps) 
 
   return (
     <div className="participants-modal" onClick={onClose}>
-      <div className="participants-card" onClick={e => e.stopPropagation()}>
+      <div className="glass-card participants-card" onClick={e => e.stopPropagation()}>
         <div className="participants-head">
           <div className="participants-head-title">
             <Users strokeWidth={1.8} />

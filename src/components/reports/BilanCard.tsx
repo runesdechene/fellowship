@@ -29,7 +29,7 @@ export function BilanCard({ eventId }: Props) {
   // État non-Pro : invite à passer Pro, pas de bouton remplir.
   if (!isPro) {
     return (
-      <div className="event-section-card bilan-card bilan-card-locked">
+      <div className="glass-card event-section-card bilan-card bilan-card-locked">
         <div className="event-section-title"><ClipboardCheck strokeWidth={1.8} /> Mon bilan post-festival</div>
         <div className="bilan-locked">
           <Lock strokeWidth={1.8} />
@@ -52,7 +52,7 @@ export function BilanCard({ eventId }: Props) {
 
   return (
     <>
-      <div className="event-section-card bilan-card">
+      <div className="glass-card event-section-card bilan-card">
         <div className="event-section-title bilan-title">
           <span><ClipboardCheck strokeWidth={1.8} /> Mon bilan post-festival</span>
           <span className="bilan-privacy"><Lock strokeWidth={2.2} /> Visible uniquement par toi</span>

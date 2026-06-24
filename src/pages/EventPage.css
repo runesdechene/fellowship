@@ -31,9 +31,9 @@
   top: 0;
   left: 0;
   right: 0;
-  /* Bande en haut seulement (~400px), pas tout le viewport : l'affiche floutée
-     habille le héros puis se fond dans le --app-bg. */
-  height: 400px;
+  /* 100% de la hauteur : l'affiche floutée habille tout le viewport puis se fond
+     progressivement (dégradé) vers le --app-bg de la page. */
+  height: 100dvh;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -50,21 +50,23 @@
   object-fit: cover;
   filter: blur(60px) brightness(0.5) saturate(1.05);
   transform: scale(1.35);
-  -webkit-mask-image: linear-gradient(180deg, black 0%, black 30%, transparent 100%);
-  mask-image: linear-gradient(180deg, black 0%, black 30%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 16%, transparent 72%);
+  mask-image: linear-gradient(180deg, black 0%, black 16%, transparent 72%);
 }
 
 .event-ambient::after {
   content: "";
   position: absolute;
   inset: 0;
-  /* L'affiche floutée se fond vers TRANSPARENT (révèle le --app-bg de .event-page
-     dessous), avec un léger assombrissement en haut pour la lisibilité du héros. */
+  /* LE dégradé visible : voile qui monte en opacité jusqu'à la teinte du --app-bg
+     NEUF (#171414, là où le radial se pose à ~50dvh) → fondu progressif vers le fond. */
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.28) 0%,
-    rgba(0, 0, 0, 0.12) 18%,
-    transparent 58%
+    rgba(0, 0, 0, 0.18) 0%,
+    rgba(0, 0, 0, 0.05) 10%,
+    rgba(23, 20, 20, 0.45) 34%,
+    rgba(23, 20, 20, 0.95) 60%,
+    rgba(23, 20, 20, 1) 82%
   );
 }
 
@@ -116,7 +118,7 @@
   height: 38px;
   border-radius: 11px;
   background: hsl(var(--foreground) / 0.08);
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--hair);
   cursor: pointer;
   color: hsl(var(--foreground));
   transition: background 0.15s, color 0.15s;
@@ -154,35 +156,8 @@
 
 .fest-hero { padding: 4px 0 2px; }
 
-.fest-statpill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 999px;
-  margin-bottom: 14px;
-}
-
-.fest-statpill.open {
-  background: color-mix(in srgb, var(--forest) 22%, transparent);
-  color: var(--forest);
-  border: 1px solid color-mix(in srgb, var(--forest) 40%, transparent);
-}
-
-.fest-statpill.closed {
-  background: hsl(var(--muted-foreground) / 0.14);
-  color: hsl(var(--muted-foreground));
-  border: 1px solid hsl(var(--muted-foreground) / 0.25);
-}
-
-.fest-statpill-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 8px currentColor;
-}
-.fest-statpill.closed .fest-statpill-dot { box-shadow: none; }
+/* Statut = bille DA (.da-status/.da-dot, cf. index.css) ; ici juste l'espacement. */
+.fest-statpill { margin-bottom: 14px; }
 
 /* Row au-dessus du titre : tag chip coloré + édition en uppercase muet */
 .fest-eyebrow-row {
@@ -203,11 +178,11 @@
   font-size: 12.5px;
   font-weight: 700;
   text-transform: capitalize;
-  background: color-mix(in srgb, var(--tag-accent, var(--amber)) 16%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tag-accent, var(--amber)) 35%, transparent);
-  color: var(--tag-accent, var(--amber));
+  background: color-mix(in srgb, var(--tag-accent, hsl(var(--muted-foreground))) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag-accent, hsl(var(--muted-foreground))) 35%, transparent);
+  color: var(--tag-accent, hsl(var(--muted-foreground)));
 }
-.fest-tag-chip svg { width: 13px; height: 13px; color: var(--tag-accent, var(--amber)); }
+.fest-tag-chip svg { width: 13px; height: 13px; color: var(--tag-accent, hsl(var(--muted-foreground))); }
 
 .fest-edition {
   font-size: 11px;
@@ -237,21 +212,21 @@
 }
 
 .fest-hmeta-item { display: flex; align-items: center; gap: 9px; }
-.fest-hmeta-item svg { width: 18px; height: 18px; color: var(--tag-accent, var(--amber)); flex-shrink: 0; }
+.fest-hmeta-item svg { width: 18px; height: 18px; color: hsl(var(--muted-foreground)); flex-shrink: 0; }
 
 .fest-hactions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
 .fest-iconbtn {
   width: 42px; height: 42px;
   border-radius: 11px;
-  background: hsl(var(--foreground) / 0.08);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
+  background: var(--field);
+  border: 1px solid var(--hair);
+  color: hsl(var(--muted-foreground));
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
-.fest-iconbtn:hover { background: hsl(var(--foreground) / 0.16); }
+.fest-iconbtn:hover { background: hsl(var(--foreground) / 0.10); color: hsl(var(--foreground)); }
 .fest-iconbtn svg { width: 19px; height: 19px; }
 
 .fest-org {
@@ -293,32 +268,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, hsl(var(--primary)), hsl(16 70% 30%));
+  background: linear-gradient(160deg, var(--accent-app), color-mix(in srgb, var(--accent-app) 45%, #000));
   color: #fff;
 }
 .event-poster-empty svg { width: 48px; height: 48px; opacity: 0.25; }
 
 /* ── Cartes de section ────────────────────────────────────────────── */
 
+/* Carte de section = .glass-card (verre/grain Fondation) ; ici juste le padding. */
 .event-section-card {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 18px;
   padding: 22px;
 }
 
 .event-section-title {
-  font-family: var(--font-heading);
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   color: hsl(var(--muted-foreground));
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 9px;
 }
-.event-section-title svg { width: 15px; height: 15px; color: var(--tag-accent, var(--amber)); }
+.event-section-title svg { width: 15px; height: 15px; color: hsl(var(--muted-foreground)); }
 .event-section-title.muted { color: hsl(var(--muted-foreground)); }
 
 /* Description rich text */
@@ -332,7 +306,7 @@
 .event-description strong { font-weight: 700; color: hsl(var(--foreground)); }
 .event-description em { font-style: italic; }
 .event-description blockquote {
-  border-left: 3px solid color-mix(in srgb, var(--amber) 40%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--accent-app) 40%, transparent);
   padding-left: 14px;
   margin: 8px 0;
   color: hsl(var(--muted-foreground));
@@ -359,7 +333,7 @@
 .fest-avs { display: flex; }
 .fest-av {
   width: 40px; height: 40px; border-radius: 50%;
-  border: 2.5px solid hsl(var(--card));
+  border: 2.5px solid var(--hair);
   margin-left: -12px;
   object-fit: cover;
   display: flex; align-items: center; justify-content: center;
@@ -367,7 +341,7 @@
 }
 .fest-av:first-child { margin-left: 0; }
 .fest-av.fallback { color: #fff; }
-.fest-av.more { background: hsl(var(--secondary)); color: var(--amber); font-size: 11px; }
+.fest-av.more { background: var(--field); color: hsl(var(--muted-foreground)); font-size: 11px; }
 
 .fest-friends-txt { flex: 1; min-width: 160px; }
 .fest-friends-txt b { font-family: var(--font-heading); font-size: 15px; color: hsl(var(--foreground)); display: block; }
@@ -375,8 +349,8 @@
 
 .fest-rally {
   margin-top: 16px;
-  background: color-mix(in srgb, var(--copper) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--copper) 26%, transparent);
+  background: var(--field);
+  border: 1px solid var(--hair);
   border-radius: 13px;
   padding: 13px 15px;
   display: flex;
@@ -394,18 +368,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1px;
-  background: hsl(var(--border));
+  background: var(--hair);
   border-radius: 13px;
   overflow: hidden;
 }
 .fest-fact {
-  background: hsl(var(--card));
+  background: hsl(var(--foreground) / 0.05);
   padding: 15px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.fest-fact svg { width: 20px; height: 20px; color: var(--tag-accent, var(--amber)); flex-shrink: 0; }
+.fest-fact svg { width: 20px; height: 20px; color: hsl(var(--muted-foreground)); flex-shrink: 0; }
 .fest-fact-text small {
   font-size: 11px; color: hsl(var(--muted-foreground));
   text-transform: uppercase; letter-spacing: 0.05em;
@@ -417,8 +391,8 @@
 
 .fest-discussion {
   position: relative;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  background: var(--field);
+  border: 1px solid var(--hair);
   border-radius: 18px;
   padding: 22px;
   overflow: hidden; /* contient le flou + le badge */
@@ -450,32 +424,32 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--amber);
-  background: color-mix(in srgb, var(--amber) 14%, hsl(var(--card)));
-  border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
+  color: var(--accent-app);
+  background: color-mix(in srgb, var(--accent-app) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-app) 35%, transparent);
   border-radius: 999px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
-.fest-soon-badge svg { width: 16px; height: 16px; color: var(--amber); }
+.fest-soon-badge svg { width: 16px; height: 16px; color: var(--accent-app); }
 .light .fest-soon-badge { box-shadow: 0 6px 18px rgba(120, 80, 40, 0.18); }
 
 .fest-disc-tabs { display: flex; gap: 7px; margin-bottom: 14px; }
 .fest-disc-tab {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 7px 13px; border-radius: 999px;
-  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  background: var(--field); border: 1px solid var(--hair);
   color: hsl(var(--muted-foreground)); font-size: 12.5px; font-weight: 600;
 }
 .fest-disc-tab svg { width: 14px; height: 14px; }
 .fest-disc-tab.on {
-  background: color-mix(in srgb, var(--copper) 18%, transparent);
-  border-color: color-mix(in srgb, var(--amber) 40%, transparent);
-  color: var(--amber);
+  background: color-mix(in srgb, var(--accent-app) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent-app) 40%, transparent);
+  color: var(--accent-app);
 }
 .fest-disc-ghost {
   height: 44px; border-radius: 13px;
-  background: hsl(var(--secondary));
-  border: 1px solid hsl(var(--border));
+  background: var(--field);
+  border: 1px solid var(--hair);
   margin-bottom: 10px;
 }
 .fest-disc-ghost.short { width: 70%; }
@@ -487,16 +461,14 @@
 
 /* ── Cockpit ──────────────────────────────────────────────────────── */
 
+/* Cockpit = .glass-card (verre/grain/ombre Fondation) ; ici sticky + bordure accent. */
 .fest-cockpit {
   position: sticky;
   top: 22px;
-  background: linear-gradient(165deg, hsl(var(--secondary)), hsl(var(--card)));
-  border: 1px solid color-mix(in srgb, var(--copper) 22%, hsl(var(--border)));
+  border: 1px solid var(--hair);
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
 }
-.light .fest-cockpit { box-shadow: 0 14px 36px rgba(120, 80, 40, 0.14); }
 
 .fest-cockpit-head {
   display: flex;
@@ -505,10 +477,10 @@
   margin-bottom: 16px;
 }
 .fest-jx { display: flex; flex-direction: column; }
-.fest-jx b { font-family: var(--font-heading); font-size: 26px; color: hsl(var(--foreground)); line-height: 1; }
-.fest-jx span { font-size: 12px; color: hsl(var(--muted-foreground)); margin-top: 3px; }
-.fest-deadline { text-align: right; font-size: 12px; color: hsl(var(--muted-foreground)); }
-.fest-deadline b { display: block; font-family: var(--font-heading); color: var(--tag-accent, var(--amber)); font-size: 13.5px; }
+.fest-jx b { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 26px; font-weight: 600; color: var(--accent-app); line-height: 1; }
+.fest-jx span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: hsl(var(--muted-foreground)); margin-top: 4px; }
+.fest-deadline { text-align: right; font-size: 11px; font-family: var(--font-mono); color: hsl(var(--muted-foreground)); }
+.fest-deadline b { display: block; font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); font-size: 13px; }
 
 /* EventDashboard (« Mon suivi ») allégé dans le cockpit */
 .fest-cockpit .event-suivi {
@@ -536,7 +508,7 @@
   justify-content: space-between;
   width: 100%;
   padding: 11px 0;
-  border-top: 1px solid hsl(var(--border));
+  border-top: 1px solid var(--hair);
   font-size: 13.5px;
   background: none;
   border-left: none; border-right: none; border-bottom: none;
@@ -546,11 +518,11 @@
   font-family: var(--font-body);
 }
 .fest-ckrow.click { cursor: pointer; }
-.fest-ckrow.click:hover .fest-ckrow-val { color: var(--amber); }
+.fest-ckrow.click:hover .fest-ckrow-val { color: var(--accent-app); }
 .fest-ckrow-lab { color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 9px; }
-.fest-ckrow-lab svg { width: 16px; height: 16px; color: var(--tag-accent, var(--amber)); }
+.fest-ckrow-lab svg { width: 16px; height: 16px; color: hsl(var(--muted-foreground)); }
 .fest-ckrow-val { font-weight: 600; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 6px; }
-.fest-ckrow-val.warn { color: var(--amber); }
+.fest-ckrow-val.warn { color: var(--accent-app); }
 .fest-ckrow-val svg { width: 14px; height: 14px; }
 
 .fest-ckcta { display: flex; flex-direction: column; gap: 9px; margin-top: 16px; }
@@ -574,7 +546,7 @@
 }
 .fest-btn svg { width: 17px; height: 17px; }
 .fest-btn.primary {
-  background: var(--gradient-primary);
+  background: var(--accent-app);
   color: #fff;
   box-shadow: 0 8px 24px hsl(20 65% 32% / 0.45);
 }
@@ -590,8 +562,7 @@
 /* ── Modale « Comment candidater » ────────────────────────────────── */
 
 .howto-modal {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  /* Coquille = .glass-card (verre Fondation) ; ici dimensions + radius. */
   border-radius: 20px;
   width: 100%;
   max-width: 480px;
@@ -605,7 +576,7 @@
 .howto-head h2 { font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: hsl(var(--foreground)); }
 .howto-x {
   width: 32px; height: 32px; border-radius: 9px;
-  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  background: var(--field); border: 1px solid var(--hair);
   color: hsl(var(--muted-foreground)); cursor: pointer; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
 }
@@ -614,11 +585,11 @@
 .howto-list { display: flex; flex-direction: column; gap: 9px; padding: 0 22px; }
 .howto-item {
   display: flex; align-items: center; gap: 13px;
-  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  background: var(--field); border: 1px solid var(--hair);
   border-radius: 13px; padding: 13px 15px;
   text-decoration: none; color: inherit;
 }
-.howto-item-ic { width: 20px; height: 20px; color: var(--amber); flex-shrink: 0; }
+.howto-item-ic { width: 20px; height: 20px; color: var(--accent-app); flex-shrink: 0; }
 .howto-item-cc { flex: 1; min-width: 0; }
 .howto-item-cc small {
   font-size: 10.5px; color: hsl(var(--muted-foreground));
@@ -628,17 +599,17 @@
 .howto-note { font-weight: 500 !important; font-family: var(--font-body) !important; }
 .howto-item-btn {
   display: inline-flex; align-items: center; gap: 5px;
-  background: hsl(var(--foreground) / 0.08); border: 1px solid hsl(var(--border));
+  background: hsl(var(--foreground) / 0.08); border: 1px solid var(--hair);
   color: hsl(var(--foreground)); border-radius: 8px; padding: 6px 11px;
   font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
 }
 .howto-item-btn svg { width: 13px; height: 13px; }
-.howto-item-btn:hover { border-color: color-mix(in srgb, var(--amber) 50%, transparent); color: var(--amber); }
+.howto-item-btn:hover { border-color: color-mix(in srgb, var(--accent-app) 50%, transparent); color: var(--accent-app); }
 .howto-foot {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   margin-top: 18px; padding: 16px 22px;
-  border-top: 1px solid hsl(var(--border));
-  background: hsl(var(--secondary));
+  border-top: 1px solid var(--hair);
+  background: var(--field);
 }
 .howto-foot span { font-size: 13px; color: hsl(var(--muted-foreground)); }
 
@@ -662,11 +633,11 @@
 }
 .event-refusal-note {
   width: 100%; resize: vertical; border-radius: 12px;
-  border: 1px solid hsl(var(--border)); background: hsl(var(--background));
+  border: 1px solid var(--hair); background: var(--field);
   color: hsl(var(--foreground)); padding: 8px 10px;
   font-family: var(--font-body); font-size: 14px;
 }
-.event-refusal-note:focus { outline: none; border-color: var(--copper); }
+.event-refusal-note:focus { outline: none; border-color: var(--accent-app); }
 
 .event-cta { padding: 8px 0; text-align: center; }
 .event-cta-title { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: hsl(var(--foreground)); margin-bottom: 12px; }
@@ -674,12 +645,12 @@
 
 .event-suivi-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .event-suivi-action {
-  padding: 6px 14px; border: 1px solid hsl(var(--border)); border-radius: 8px;
+  padding: 6px 14px; border: 1px solid var(--hair); border-radius: 8px;
   background: transparent; font-family: var(--font-body); font-size: 12px; cursor: pointer;
   transition: border-color 0.15s, color 0.15s; color: hsl(var(--muted-foreground));
   display: inline-flex; align-items: center; gap: 6px;
 }
-.event-suivi-action:hover { border-color: color-mix(in srgb, var(--amber) 40%, transparent); color: var(--amber); }
+.event-suivi-action:hover { border-color: color-mix(in srgb, var(--accent-app) 40%, transparent); color: var(--accent-app); }
 .event-suivi-action.destructive { border-color: hsl(var(--destructive) / 0.5); color: hsl(var(--destructive)); }
 .event-suivi-action.destructive:hover { background: hsl(var(--destructive) / 0.08); }
 
@@ -696,7 +667,7 @@
 .event-stepper-btn.pay-active.inscrit { background: color-mix(in srgb, var(--status-accepte) 20%, transparent); color: var(--status-accepte); }
 .event-stepper-btn.pay-active.refuse { background: color-mix(in srgb, var(--status-refuse) 18%, transparent); color: var(--status-refuse); }
 .event-stepper-btn.pay-active.a_payer { background: color-mix(in srgb, var(--status-apayer) 18%, transparent); color: var(--status-apayer); }
-.event-stepper-btn.pay-active.acompte_verse { background: color-mix(in srgb, var(--lime) 22%, transparent); color: var(--lime); }
+.event-stepper-btn.pay-active.acompte_verse { background: color-mix(in srgb, var(--status-acompte) 22%, transparent); color: var(--status-acompte); }
 .event-stepper-btn.pay-active.paye { background: color-mix(in srgb, var(--status-inscrit) 20%, transparent); color: var(--status-inscrit); }
 
 /* Info box éphémère */
@@ -748,25 +719,36 @@
 
 /* Orientation du paiement + capture du montant (suivi financier) */
 .event-orientation-toggle { display: flex; gap: 6px; margin-bottom: 8px; }
-.event-orient-btn { flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--foreground); font-size: 12px; cursor: pointer; }
-.event-orient-btn.active { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); font-weight: 600; }
+.event-orient-btn { flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--hair); background: var(--field); color: hsl(var(--muted-foreground)); font-size: 12px; cursor: pointer; }
+.event-orient-btn.active { border-color: var(--accent-app); background: color-mix(in srgb, var(--accent-app) 12%, transparent); color: var(--accent-app); font-weight: 600; }
 .event-amount-capture { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
-.event-amount-capture label { font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+.event-amount-capture label { font-size: 12px; font-weight: 600; color: hsl(var(--muted-foreground)); }
 .event-amount-row { display: flex; gap: 6px; }
-.event-amount-row input { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); }
-.event-amount-save { padding: 8px 14px; border-radius: 10px; border: none; background: var(--copper); color: #fff; font-weight: 600; cursor: pointer; }
-.event-amount-capture small { color: var(--muted-foreground); font-size: 11px; }
+.event-amount-row input { flex: 1; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--hair); background: var(--field); color: hsl(var(--foreground)); }
+.event-amount-save { padding: 8px 14px; border-radius: 10px; border: none; background: var(--accent-app); color: var(--accent-app-ink); font-weight: 600; cursor: pointer; }
+.event-amount-capture small { color: hsl(var(--muted-foreground)); font-size: 11px; }
 /* Bloc montant : reprend la couleur du bouton de paiement actif au-dessus (sans bordure, comme eux). */
 .event-amount-paid { margin-top: 8px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 10px; border: none; cursor: pointer; text-align: left; }
 .event-amount-paid-label { font-size: 12px; font-weight: 600; }
 .event-amount-paid-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 600; }
 /* Acompte versé → vert pomme (--lime), aligné sur .pay-active.acompte_verse */
-.event-amount-paid.acompte_verse { background: color-mix(in srgb, var(--lime) 18%, transparent); }
-.event-amount-paid.acompte_verse:hover { background: color-mix(in srgb, var(--lime) 26%, transparent); }
+.event-amount-paid.acompte_verse { background: color-mix(in srgb, var(--status-acompte) 18%, transparent); }
+.event-amount-paid.acompte_verse:hover { background: color-mix(in srgb, var(--status-acompte) 26%, transparent); }
 .event-amount-paid.acompte_verse .event-amount-paid-label,
-.event-amount-paid.acompte_verse .event-amount-paid-value { color: var(--lime); }
+.event-amount-paid.acompte_verse .event-amount-paid-value { color: var(--status-acompte); }
 /* Payé → vert (--status-inscrit), aligné sur .pay-active.paye */
 .event-amount-paid.paye { background: color-mix(in srgb, var(--status-inscrit) 16%, transparent); }
 .event-amount-paid.paye:hover { background: color-mix(in srgb, var(--status-inscrit) 24%, transparent); }
 .event-amount-paid.paye .event-amount-paid-label,
 .event-amount-paid.paye .event-amount-paid-value { color: var(--status-inscrit); }
+
+/* ── Verre plus translucide sur l'EventPage (page immersive) ───────────
+   Les modules laissent transparaître les couleurs de l'affiche floutée
+   derrière (comme la navbar verre). Scopé .event-page → ne touche PAS le
+   --glass global (qui casserait le Cockpit). Jour + nuit. */
+.event-page .glass-card {
+  background: linear-gradient(180deg, rgba(52, 48, 44, 0.32), rgba(34, 31, 28, 0.22));
+}
+.light .event-page .glass-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.30));
+}

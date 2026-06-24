@@ -19,11 +19,9 @@
   max-height: 76vh;
   display: flex;
   flex-direction: column;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  /* Coquille = .glass-card (verre Fondation) ; ici dimensions + radius. */
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 .light .participants-card { box-shadow: 0 20px 60px rgba(120, 80, 40, 0.18); }
 
@@ -34,7 +32,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid var(--hair);
   flex-shrink: 0;
 }
 
@@ -50,7 +48,7 @@
 .participants-head-title svg {
   width: 18px;
   height: 18px;
-  color: var(--amber);
+  color: var(--accent-app);
 }
 .participants-head-count {
   color: hsl(var(--muted-foreground));
@@ -66,8 +64,8 @@
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: hsl(var(--secondary));
-  border: 1px solid hsl(var(--border));
+  background: var(--field);
+  border: 1px solid var(--hair);
   color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
@@ -106,7 +104,7 @@
   padding: 12px 12px 6px;
 }
 .participants-section-label svg { width: 13px; height: 13px; }
-.participants-section-label.friends { color: var(--amber); }
+.participants-section-label.friends { color: var(--accent-app); }
 .participants-section-label.others { color: hsl(var(--muted-foreground)); }
 
 /* ── Participant item ────────────────────────────────────────────── */

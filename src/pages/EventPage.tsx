@@ -538,8 +538,8 @@ export function EventPage() {
             {/* Hero */}
             <div className="fest-hero">
               {cand && (
-                <span className={`fest-statpill ${cand}`}>
-                  <span className="fest-statpill-dot" />
+                <span className="da-status fest-statpill" style={{ ['--dot-color' as string]: cand === 'open' ? 'var(--status-inscrit)' : 'var(--muted-foreground)' }}>
+                  <span className="da-dot" />
                   {cand === 'open' ? 'Candidatures ouvertes' : 'Candidatures clôturées'}
                 </span>
               )}
@@ -553,12 +553,12 @@ export function EventPage() {
                       </span>
                     )
                   })()}
-                  {editionLbl && <span className="fest-edition">{editionLbl}</span>}
+                  {editionLbl && <span className="fest-edition da-eyebrow">{editionLbl}</span>}
                 </div>
               )}
               <h1 className="fest-title">{event.name}</h1>
               {(event as { is_private?: boolean }).is_private && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ background: 'color-mix(in srgb, var(--accent-app) 12%, transparent)', color: 'var(--accent-app)' }}>
                   <Lock className="h-3 w-3" /> Privé
                 </span>
               )}
@@ -606,7 +606,7 @@ export function EventPage() {
 
             {/* Compagnons sur cette date */}
             {friendCount > 0 && (
-              <div className="event-section-card fest-companions">
+              <div className="glass-card event-section-card fest-companions">
                 <div className="event-section-title">
                   <Users strokeWidth={1.8} /> Tes compagnons sur cette date
                 </div>
@@ -643,7 +643,7 @@ export function EventPage() {
             )}
             {/* À propos */}
             {event.description && (
-              <div className="event-section-card">
+              <div className="glass-card event-section-card">
                 <div className="event-section-title">À propos de l'événement</div>
                 <div className="event-description" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.description) }} />
               </div>
@@ -671,7 +671,7 @@ export function EventPage() {
 
             {/* Notes privées — réservées à l'acteur connecté (perso, jamais visibles en anonyme) */}
             {currentActor && (
-              <div className="event-section-card">
+              <div className="glass-card event-section-card">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div className="event-section-title muted" style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Mes notes privées ({notes.length})</div>
                   <button
@@ -696,7 +696,7 @@ export function EventPage() {
                 project_reviews_duality_next) ; en attendant on ne montre rien
                 pour ne pas pousser un Pro-lock non-sens à un visiteur. */}
             {isExposant && (isPast || reviews.length > 0 || canSeeDetails) && (
-              <div className="event-section-card">
+              <div className="glass-card event-section-card">
                 <ReviewSummary
                   reviews={reviews}
                   canSeeDetails={canSeeDetails}
@@ -722,7 +722,7 @@ export function EventPage() {
               )}
             </div>
 
-            <div className="fest-cockpit">
+            <div className="glass-card fest-cockpit">
               <div className="fest-cockpit-head">
                 <div className="fest-jx">
                   {jx != null ? <b>J-{jx}</b> : <b>{isPast ? 'Passé' : 'En cours'}</b>}
