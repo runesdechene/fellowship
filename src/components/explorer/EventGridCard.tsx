@@ -13,9 +13,11 @@ interface EventGridCardProps {
   saved: boolean
   onToggleSave: (event: EventWithScore) => void
   onClick: (event: EventWithScore) => void
+  canAddImage: boolean
+  onAddImage: (event: EventWithScore) => void
 }
 
-export function EventGridCard({ event, now, part, actorKind, friends, saved, onToggleSave, onClick }: EventGridCardProps) {
+export function EventGridCard({ event, now, part, actorKind, friends, saved, onToggleSave, onClick, canAddImage, onAddImage }: EventGridCardProps) {
   const tag = event.tags?.[0] ?? 'autre'
   const badge = eventBadge(event, now)
   const isPast = new Date(event.end_date) < now
@@ -39,6 +41,15 @@ export function EventGridCard({ event, now, part, actorKind, friends, saved, onT
               <span className="egrid-img-emoji">{getTagEmoji(tag)}</span>
             </div>
           )}
+        {!event.image_url && canAddImage && (
+          <button
+            type="button"
+            className="egrid-addimg"
+            onClick={(e) => { e.stopPropagation(); onAddImage(event) }}
+          >
+            + Ajouter une affiche
+          </button>
+        )}
         <div className="egrid-imgfade" aria-hidden="true" />
         {badge && (
           <span className={'egrid-badge ' + badge}>

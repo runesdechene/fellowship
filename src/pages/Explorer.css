@@ -1317,6 +1317,16 @@
   color: transparent; text-shadow: 0 0 0 var(--c, hsl(var(--muted-foreground))); opacity: 0.5;
 }
 
+/* Bouton « Ajouter une affiche » sur les cartes sans image (exposant/admin). */
+.explorer .egrid-addimg {
+  position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%); z-index: 3;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: 999px; cursor: pointer;
+  background: var(--field); border: 1px solid var(--hair); color: hsl(var(--foreground));
+  font-size: 12px; font-weight: 600; backdrop-filter: blur(6px); transition: 0.15s;
+}
+.explorer .egrid-addimg:hover { border-color: var(--accent-app); color: var(--accent-app); }
+
 /* Badge Nouveau / Populaire — gélule verre DA, coin haut-gauche. */
 .explorer .egrid-badge {
   position: absolute; top: 10px; left: 10px; z-index: 3;

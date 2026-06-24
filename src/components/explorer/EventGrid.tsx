@@ -12,9 +12,11 @@ interface EventGridProps {
   isSaved: (eventId: string) => boolean
   onToggleSave: (event: EventWithScore) => void
   onCardClick: (event: EventWithScore) => void
+  canAddImage: boolean
+  onAddImage: (event: EventWithScore) => void
 }
 
-export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent, isSaved, onToggleSave, onCardClick }: EventGridProps) {
+export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent, isSaved, onToggleSave, onCardClick, canAddImage, onAddImage }: EventGridProps) {
   return (
     <div className="egrid-wrap">
       <div className="egrid">
@@ -29,6 +31,8 @@ export function EventGrid({ events, now, partByEvent, actorKind, friendsByEvent,
             saved={isSaved(ev.id)}
             onToggleSave={onToggleSave}
             onClick={onCardClick}
+            canAddImage={canAddImage}
+            onAddImage={onAddImage}
           />
         ))}
       </div>

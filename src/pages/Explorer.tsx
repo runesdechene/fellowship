@@ -62,7 +62,7 @@ function ExplorerEmpty() {
 export function ExplorerPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { person, currentActor, currentActorRow, user } = useAuth()
+  const { person, currentActor, currentActorRow, user, isAdmin } = useAuth()
   const { events: allEvents, loading, refetch: refetchEvents } = useEvents()
   const { tags: dynamicTags } = useTags()
   const { participations, refetch: refetchParticipations } = useMyParticipations()
@@ -186,8 +186,13 @@ export function ExplorerPage() {
     }
   }
 
-  // canAddImage / onAddImage : câblage futur sur les cartes grille (dormant).
-  // TODO(coverflow): réactiver quand les cartes grille exposent onAddImage.
+  // Ajout d'affiche collaboratif : tout exposant (+ admin) peut poser une image
+  // sur un event qui n'en a pas (édition collaborative existante, pas de nouvelle RPC).
+  const canAddImage = currentActor?.kind === 'entity' || isAdmin
+  const onAddImage = useCallback((event: EventWithScore) => {
+    pendingEventRef.current = event
+    fileInputRef.current?.click()
+  }, [])
 
   // ---------- Participation status (par event, adapté à l'acteur) ----------
   const actorKind: ActorKind = currentActor?.kind === 'entity' ? 'entity' : 'person'
@@ -232,6 +237,8 @@ export function ExplorerPage() {
             isSaved={isSaved}
             onToggleSave={toggleSave}
             onCardClick={ev => navigate(eventPath(ev))}
+            canAddImage={canAddImage}
+            onAddImage={onAddImage}
           />
         )}
       </div>
