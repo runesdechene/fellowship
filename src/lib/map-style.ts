@@ -6,14 +6,16 @@ export type Palette = {
   road: string; roadMajor: string; text: string; halo: string; boundary: string
 }
 
+// Palette DA neutre (« moins marron ») : terres gris-chaud très désaturées,
+// eau bleu-gris (et non sépia), routes neutres, pointe terracotta sur les frontières.
 export const PALETTES: Record<Theme, Palette> = {
   night: {
-    land: '#1a120f', landAlt: '#1f1714', water: '#100c0b', green: '#1f261d', building: '#241a16',
-    road: '#3a2a20', roadMajor: '#5a3c26', text: '#cbb9a8', halo: '#120b09', boundary: 'rgba(232,131,58,0.18)',
+    land: '#191717', landAlt: '#201d1d', water: '#10161b', green: '#1a201b', building: '#231f1f',
+    road: '#322d2d', roadMajor: '#473f3c', text: '#bcb5ad', halo: '#0f0e0e', boundary: 'rgba(214,137,106,0.16)',
   },
   day: {
-    land: '#efe7d8', landAlt: '#e8dcc6', water: '#dcc7ad', green: '#d8d2bc', building: '#e3d6bf',
-    road: '#cdbfa6', roadMajor: '#c2a988', text: '#5a4636', halo: '#f3ecdf', boundary: 'rgba(184,90,46,0.25)',
+    land: '#eeeae4', landAlt: '#e6e1d9', water: '#cdd9e1', green: '#dde4d6', building: '#e2ddd4',
+    road: '#d4cdc3', roadMajor: '#c3bbb0', text: '#5a534b', halo: '#f2efe9', boundary: 'rgba(182,95,63,0.22)',
   },
 }
 
