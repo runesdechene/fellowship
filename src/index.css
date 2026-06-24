@@ -149,7 +149,9 @@ html {
 }
 body {
   @apply text-foreground antialiased;
-  background: var(--page-backdrop);
+  /* App connectée = fond DA purifié (--app-bg). Le festif --page-backdrop ne vit
+     plus QUE sur la Landing publique (.landing le pose en propre). */
+  background: var(--app-bg);
   background-attachment: fixed;
   font-family: var(--font-body);
   font-size: 15px;

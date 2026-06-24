@@ -12,6 +12,11 @@
    décalait position:fixed (PWA prompt) à droite sur iOS. */
 .landing {
   overflow-x: clip;
+  /* Le brun festif (--page-backdrop) ne vit QUE sur la Landing publique désormais —
+     le body de l'app est purifié en --app-bg. La Landing le pose donc en propre. */
+  min-height: 100dvh;
+  background: var(--page-backdrop);
+  background-attachment: fixed;
 }
 .landing .wrap {
   max-width: 1080px;
