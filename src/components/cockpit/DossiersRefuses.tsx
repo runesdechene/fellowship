@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { XCircle, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
 import { updateParticipation } from '@/hooks/use-participations'
 import type { ParticipationWithEvent } from '@/types/database'
@@ -47,7 +47,6 @@ export function DossiersRefuses({ participations, onUpdated }: Props) {
     <div className="ck-card ck-refuses">
       <button className="ck-refuses-head" onClick={() => setOpen(o => !o)} aria-expanded={open}>
         <span className="ck-refuses-title">
-          <span className="ck-ic"><XCircle strokeWidth={1.8} /></span>
           Dossiers refusés ({participations.length})
         </span>
         <ChevronDown className={'ck-refuses-chev' + (open ? ' open' : '')} strokeWidth={2} />

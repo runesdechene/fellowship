@@ -27,7 +27,8 @@ export function BilanBanner({ prompt, onSaved, onSnooze }: Props) {
           </small>
         </div>
         <button className="ck-btn ck-btn-p" onClick={() => setOpen(true)}>Remplir mon bilan</button>
-        <button className="ck-bilan-x" aria-label="Plus tard" onClick={() => onSnooze(p.event_id)}><X strokeWidth={2.2} /></button>
+        <button className="ck-btn ck-btn-g" aria-label="Plus tard" onClick={() => onSnooze(p.event_id)}>Plus tard</button>
+        <button className="ck-bilan-x" aria-label="Fermer" onClick={() => onSnooze(p.event_id)}><X strokeWidth={2.2} /></button>
       </div>
       {open && (
         <BilanModal
