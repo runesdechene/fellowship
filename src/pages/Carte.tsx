@@ -55,11 +55,10 @@ export default function Carte() {
 
   const openEvent = (slug: string | null, id: string) => navigate(slug ? `/e/${slug}` : `/evenement/${id}`)
 
-  const pill = (active: boolean) =>
-    `pointer-events-auto flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold shadow-lg backdrop-blur ${active ? 'bg-primary text-primary-foreground border-primary' : 'bg-card/85 text-muted-foreground border-border'}`
+  const pill = (active: boolean) => 'carte-pill' + (active ? ' is-active' : '')
 
   return (
-    <div className="relative flex flex-col h-dvh min-h-0">
+    <div className="relative flex flex-col flex-1 min-h-0">
       <MapCanvas
         features={features}
         theme={theme}
@@ -88,15 +87,15 @@ export default function Carte() {
           800px, donc le coin haut-gauche est libre. */}
       <div className="absolute top-[78px] left-3 z-20 flex flex-row gap-2 items-start sm:top-3 sm:flex-col">
         <button onClick={() => setMineOnly(v => !v)} className={pill(mineOnly)}>
-          <Star size={14} className={mineOnly ? '' : 'text-primary'} /> Mes festivals
+          <Star size={14} /> Mes festivals
         </button>
         <button
           onClick={() => { if (isPro) setFriendsMode(v => !v); else navigate('/abonnement') }}
           className={pill(friendsMode && isPro)}
           title={isPro ? 'Festivals où vont tes amis' : 'Réservé aux abonnés Pro'}
         >
-          <Users size={14} className={friendsMode && isPro ? '' : 'text-primary'} /> Mes amis
-          {!isPro && <Lock size={12} className="text-muted-foreground" />}
+          <Users size={14} /> Mes amis
+          {!isPro && <Lock size={12} />}
         </button>
       </div>
 

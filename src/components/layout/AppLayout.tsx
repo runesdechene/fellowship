@@ -15,7 +15,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const { currentActor } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
-  // La Carte est immersive plein écran : pas de SearchBar, pas de scroll.
+  // La Carte est plein écran sans scroll, mais garde la SearchBar globale en haut
+  // (comme l'Explorer) — seule la vitrine publique masque la SearchBar.
   const isCarte = location.pathname === '/carte'
   // Cockpit : la zone scrollable porte le fond DA (--app-bg, fixé) pour que la navbar
   // et la page partagent UN SEUL fond continu (sinon la navbar fait une bande visible).
@@ -28,9 +29,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
   const isVitrine = isPublicProfilePath(location.pathname)
-  // Explorer = page normale désormais (catalogue grille) : SearchBar globale en haut,
-  // scroll de page. Seules la Carte et la vitrine masquent la SearchBar.
-  const hideSearchBar = isVitrine || isCarte
+  // Seule la vitrine publique masque la SearchBar (Explorer et Carte la gardent en haut).
+  const hideSearchBar = isVitrine
   // Seule la Carte reste vraiment sans scroll (carte plein écran).
   const noScroll = isCarte
   useEffect(() => {

@@ -487,3 +487,15 @@ h1, h2, h3, .font-display {
 .carte-filterbar .top { padding: 14px 0 0; pointer-events: none; }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
+
+/* Toggles Carte « Mes festivals / Mes amis » — chips DA neutres (surface SearchBar). */
+.carte-pill {
+  pointer-events: auto; display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 999px; padding: 8px 13px; font-size: 12px; font-weight: 600;
+  background: #2a2725; border: 1px solid var(--hair); color: hsl(var(--muted-foreground));
+  box-shadow: 0 6px 18px rgba(0,0,0,.3); backdrop-filter: blur(6px); cursor: pointer; transition: .15s;
+}
+.light .carte-pill { background: rgba(250,246,239,.88); }
+.carte-pill svg { width: 14px; height: 14px; }
+.carte-pill:hover { border-color: var(--accent-app); color: hsl(var(--foreground)); }
+.carte-pill.is-active { background: var(--accent-app); border-color: var(--accent-app); color: var(--accent-app-ink); }
