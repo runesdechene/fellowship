@@ -61,7 +61,7 @@
   /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
   --accent: #d6896a;                 /* terracotta (NUIT) — ne PAS confondre avec --copper festif */
   --accent-ink: #1c1109;             /* texte sur bouton plein accent (nuit) */
-  --app-bg: radial-gradient(120% 70% at 30% 0%, #1d1a18, #0f0e0d 64%);
+  --app-bg: radial-gradient(120% 70% at 30% 0%, #262220, #17140f 64%);
   --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
   --hair: rgba(255,255,255,.085);    /* hairline verre */
   --field: rgba(255,255,255,.04);    /* cellule/champ interne */
