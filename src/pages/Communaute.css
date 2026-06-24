@@ -23,7 +23,11 @@
   padding: 26px 32px 60px;
   color: hsl(var(--foreground));
   font-family: var(--font-body);
+  /* Ring des avatars empilés = couleur de la surface des cartes ; bulle « +X » = fond opaque. */
+  --av-ring: #2a2725;
+  --av-more: #34302d;
 }
+.light .comm-page { --av-ring: #faf6ef; --av-more: #ece4d6; }
 
 /* ── SVG baseline (mandatory) ─────────────────────────────────────────── */
 .comm-page svg {
@@ -131,7 +135,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2.5px solid hsl(var(--background));
+  border: 2.5px solid var(--av-ring);
   margin-left: -10px;
   display: flex;
   align-items: center;
@@ -142,7 +146,7 @@
 }
 .comm-page .avs span:first-child { margin-left: 0; }
 .comm-page .avs .avs-more {
-  background: var(--field);
+  background: var(--av-more);
   color: var(--accent-app);
   font-size: 10px;
 }
@@ -232,6 +236,13 @@
   background: color-mix(in srgb, hsl(86 44% 64%) 20%, transparent);
   border-color: color-mix(in srgb, hsl(86 44% 64%) 45%, transparent);
   color: hsl(86 44% 64%);
+}
+/* En jour le vert clair + fond transparent rendait le bouton « Suivi » illisible :
+   on renforce le verre (base card opaque + teinte verte) + une bordure verte nette. */
+.light .comm-page .btn-follow.is-on {
+  background: color-mix(in srgb, hsl(140 46% 42%) 15%, hsl(var(--card)));
+  border-color: color-mix(in srgb, hsl(140 46% 42%) 55%, transparent);
+  color: hsl(140 50% 30%);
 }
 
 /* ── Right column cards ───────────────────────────────────────────────── */
