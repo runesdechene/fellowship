@@ -103,7 +103,7 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, g
               <span className="seg-l">Où</span><span className="seg-v">{ouLabel}</span>
             </button>
             {open === 'ou' && (
-              <div className="pop open" onClick={e => e.stopPropagation()}>
+              <div className={'pop open' + (onGeo ? ' pop--geo' : '')} onClick={e => e.stopPropagation()}>
                 <h4>Localisation</h4>
                 {onGeo ? (
                   <div className="geo-filter">

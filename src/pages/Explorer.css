@@ -487,6 +487,10 @@
   color: var(--accent-app);
 }
 
+/* Popover « Où » géo : pas de scroll interne (la liste d'autocomplétion est
+   absolue → l'overflow:auto du popover la piégeait en créant d'énormes scrollbars). */
+.explorer .pop--geo { max-height: none; overflow: visible; }
+
 /* ── Filtre géo (localisation + rayon km) dans le popover « Où » ───── */
 .explorer .geo-filter { display: flex; flex-direction: column; gap: 13px; width: 300px; max-width: calc(100vw - 48px); }
 .explorer .geo-addr-input {
