@@ -212,11 +212,6 @@ export function ExplorerPage() {
       <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
       <div className="stagewrap">
-        <header className="xplr-head">
-          <h1 className="xplr-title">Explorer</h1>
-          <p className="xplr-sub">Découvre les festivals et repère tes prochaines dates.</p>
-        </header>
-
         <SearchSegments
           tags={dynamicTags}
           selectedTags={selectedTags}

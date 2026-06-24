@@ -99,10 +99,13 @@
 
 /* ── Top bar / searchbar ──────────────────────────────────────────── */
 
+/* Barre de filtres de la grille (Quoi/Où/Quand en chips, alignés à gauche). */
 .explorer .top {
   display: flex;
-  justify-content: center;
-  padding: 6px 20px 14px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 20px 4px;
   position: relative;
 }
 
@@ -110,11 +113,11 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 99px;
-  padding: 6px 6px 6px 10px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
 }
 
 /* Couche segments : tient la largeur de la barre ; se fond pendant la recherche. */
@@ -136,46 +139,46 @@
 /* ── Segments ─────────────────────────────────────────────────────── */
 
 .explorer .seg {
-  background: none;
-  border: none;
+  background: var(--field);
+  border: 1px solid var(--hair);
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  padding: 8px 22px;
-  border-radius: 99px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
   transition: 0.15s;
 }
 
 .explorer .seg:hover {
-  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--accent-app);
 }
 
 .explorer .seg.active {
-  background: rgba(255, 255, 255, 0.2);
+  background: color-mix(in srgb, var(--accent-app) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent-app) 40%, transparent);
 }
 
 .explorer .seg-l {
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--amber);
+  color: var(--accent-app);
 }
 
 .explorer .seg-v {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: hsl(var(--foreground));
   white-space: nowrap;
 }
 
-.explorer .seg-sep {
-  width: 1px;
-  height: 30px;
-  background: hsl(var(--border));
-}
+/* Plus de séparateurs ni de recherche texte interne (la SearchBar globale s'en charge). */
+.explorer .seg-sep,
+.explorer .seg-search,
+.explorer .seg-searchfield { display: none; }
 
 .explorer .seg-search {
   width: 44px;
@@ -350,11 +353,11 @@
 
 .explorer .pop {
   position: absolute;
-  top: 84px;
-  left: 50%;
-  transform: translate(-50%, 8px);
+  top: calc(100% + 6px);
+  left: 20px;
+  transform: translate(0, 8px);
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--hair);
   border-radius: 18px;
   padding: 18px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
@@ -371,7 +374,7 @@
 .explorer .pop.open {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  transform: translate(0, 0);
 }
 
 /* Surface (not media) — use semantic tokens */
@@ -1291,7 +1294,7 @@
 .explorer .egrid-card--muted:hover { filter: none; opacity: 1; }
 
 /* Zone affiche (cover, jamais recouverte par le texte). */
-.explorer .egrid-img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #0d0a08; }
+.explorer .egrid-img { position: relative; aspect-ratio: 2 / 3; overflow: hidden; background: #0d0a08; }
 .light .explorer .egrid-img { background: hsl(var(--muted)); }
 .explorer .egrid-imgel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 /* Fondu fort : le bas de l'affiche devient pleinement la couleur du panneau →
