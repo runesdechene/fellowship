@@ -1,33 +1,50 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Share2 } from 'lucide-react'
 import { useCommunityFeed } from '@/hooks/use-community'
+import { useMyParticipations } from '@/hooks/use-participations'
 import { avatarColor } from '@/lib/community'
 import { ShareModal } from '@/components/ShareModal'
 import { eventShareUrl, eventPath } from '@/lib/event-link'
 
 export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
+  const { participations } = useMyParticipations()
   const [share, setShare] = useState<{ message: string; url: string } | null>(null)
 
-  const visible = convergences.slice(0, 5)
-  const extra = convergences.length - visible.length
+  // Cockpit : ne garder que les convergences sur MES festivals engagés (inscrit /
+  // accepté / en attente de paiement), pas les simplement repérés ni dossier en cours.
+  const engagedEventIds = useMemo(
+    () => new Set(
+      participations
+        .filter(p => !['interesse', 'refuse', 'en_cours'].includes(p.status as string))
+        .map(p => p.event_id),
+    ),
+    [participations],
+  )
+  const filtered = useMemo(
+    () => convergences.filter(c => engagedEventIds.has(c.event.id)),
+    [convergences, engagedEventIds],
+  )
+
+  const visible = filtered.slice(0, 5)
+  const extra = filtered.length - visible.length
 
   return (
     <>
     <div className="glass-card ck-card">
       <div className="da-eyebrow">
         COMPAGNONS
-        {convergences.length > 0 && (
+        {filtered.length > 0 && (
           <Link to="/communaute" className="ck-seeall">
-            {extra > 0 ? `${convergences.length} ›` : 'tout ›'}
+            {extra > 0 ? `${filtered.length} ›` : 'tout ›'}
           </Link>
         )}
       </div>
 
       {loading ? (
         <p className="ck-empty-txt">Chargement…</p>
-      ) : convergences.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <p className="ck-empty-txt">
           Suis des compagnons pour voir où ils exposent. <Link to="/communaute">Suggestions →</Link>
         </p>
