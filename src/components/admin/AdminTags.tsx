@@ -141,7 +141,7 @@ export function AdminTags() {
       </div>
 
       {showNew && (
-        <div className="rounded-2xl border border-border bg-card p-4 mb-4">
+        <div className="glass-card p-4 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <input
               placeholder="Nom (ex: Médiéval)"
@@ -178,7 +178,7 @@ export function AdminTags() {
         </div>
       )}
 
-      <div className="rounded-2xl border border-border bg-card divide-y divide-border/50">
+      <div className="glass-card divide-y divide-[var(--hair)]">
         {tags.map(tag => (
           <div key={tag.id} className="flex items-center gap-4 p-4">
             {editing === tag.id ? (

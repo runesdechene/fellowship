@@ -30,7 +30,7 @@ export function AdminLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-t-lg transition-colors whitespace-nowrap ${
                 isActive
-                  ? 'bg-card text-foreground border-b-2 border-primary'
+                  ? 'glass-card text-foreground border-b-2 border-[var(--accent-app)]'
                   : 'text-muted-foreground hover:text-foreground'
               }`
             }

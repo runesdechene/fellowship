@@ -40,11 +40,11 @@ export function AdminEvents() {
           placeholder="Rechercher un événement..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-xl bg-card border border-border text-sm"
+          className="w-full pl-10 pr-4 py-2 rounded-xl bg-[var(--field)] border border-[var(--hair)] text-sm"
         />
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+      <div className="overflow-x-auto glass-card">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
