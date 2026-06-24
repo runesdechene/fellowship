@@ -496,6 +496,15 @@ h1, h2, h3, .font-display {
    Sélecteur compound (.carte-filterbar.explorer) pour BATTRE `.explorer .top` (même
    spécificité sinon → Explorer.css gagne et colle les chips à 14px sous la barre). */
 .carte-filterbar.explorer .top { padding: 108px 0 0; pointer-events: none; }
+
+/* Sur la Carte les chips flottent au-dessus de la carte → fond lisible (comme les toggles),
+   contrairement à l'Explorer où ils sont transparents sur fond uni. */
+.carte-filterbar.explorer .seg {
+  background: #2a2725;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+}
+.light .carte-filterbar.explorer .seg { background: rgba(250, 246, 239, 0.88); }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
 
