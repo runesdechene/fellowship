@@ -58,7 +58,7 @@ export default function Carte() {
   const pill = (active: boolean) => 'carte-pill' + (active ? ' is-active' : '')
 
   return (
-    <div className="absolute inset-0 flex flex-col">
+    <div className="flex flex-col h-dvh min-h-0">
       <MapCanvas
         features={features}
         theme={theme}
