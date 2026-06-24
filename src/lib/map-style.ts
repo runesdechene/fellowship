@@ -10,8 +10,8 @@ export type Palette = {
 // eau bleu-gris (et non sépia), routes neutres, pointe terracotta sur les frontières.
 export const PALETTES: Record<Theme, Palette> = {
   night: {
-    land: '#191717', landAlt: '#201d1d', water: '#10161b', green: '#1a201b', building: '#231f1f',
-    road: '#322d2d', roadMajor: '#473f3c', text: '#bcb5ad', halo: '#0f0e0e', boundary: 'rgba(214,137,106,0.16)',
+    land: '#26282b', landAlt: '#2c2f33', water: '#1a2832', green: '#283129', building: '#31353b',
+    road: '#3e4247', roadMajor: '#545a61', text: '#cbc4bb', halo: '#1a1c1f', boundary: 'rgba(214,137,106,0.32)',
   },
   day: {
     land: '#eeeae4', landAlt: '#e6e1d9', water: '#cdd9e1', green: '#dde4d6', building: '#e2ddd4',
