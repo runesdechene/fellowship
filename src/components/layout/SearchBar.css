@@ -45,10 +45,12 @@
   /* Marron chaud foncé = couleur center du radial du body (--page-backdrop, nuit).
      Solide ici car le radial du body, sur la largeur de la colonne droite, finit
      toujours dans la zone sombre — du coup la nav paraissait noire. */
-  background: #1d1a18;
+  background: #2c1f1c;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
   pointer-events: none;
 }
-.light .search-bar-wrapper::before { background: #f6efe4; }
+.light .search-bar-wrapper::before { background: #f8f2e8; }
 
 /* ── Search pill (col 2, centrée, glass) ──────────────────────────── */
 

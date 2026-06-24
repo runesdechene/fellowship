@@ -19,6 +19,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const isExplorer = location.pathname === '/explorer'
   // La Carte est immersive plein écran (comme l'Explorer) : pas de SearchBar, pas de scroll.
   const isCarte = location.pathname === '/carte'
+  // Cockpit : la zone scrollable porte le fond DA (--app-bg, fixé) pour que la navbar
+  // et la page partagent UN SEUL fond continu (sinon la navbar fait une bande visible).
+  const isDashboard = location.pathname === '/tableau-de-bord'
   // La vitrine publique (/:slug) commence par une cover plein-bord en haut du stage :
   // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
@@ -39,7 +42,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <Sidebar />
       {/* Padding bas = hauteur réelle de la BottomBar (~70px) + safe-area iPhone, sinon la nav fixe
           recouvre la dernière section et le scroll ne peut pas la révéler (#5 : contact Réglages). */}
-      <div className={`flex-1 flex flex-col ${noScroll ? 'overflow-hidden' : 'overflow-y-auto'} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
+      <div className={`flex-1 flex flex-col ${noScroll ? 'overflow-hidden' : 'overflow-y-auto'} ${isDashboard ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
         <main className={`flex-1 min-h-0 ${isCarte ? 'flex flex-col' : ''}`}>
           {children}

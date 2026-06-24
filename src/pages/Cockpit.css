@@ -4,6 +4,9 @@
 
 .ck-page { padding: 34px 48px 80px; display: flex; justify-content: center; background: var(--app-bg); background-attachment: fixed; min-height: 100%; }
 .ck-page-inner { max-width: 1200px; width: 100%; margin: 0 auto; }
+/* La zone scrollable du cockpit porte le fond DA continu ; la barre de recherche n'a AUCUN fond propre. */
+.cockpit-stage { background: var(--app-bg); background-attachment: fixed; }
+.cockpit-stage .search-bar-wrapper::before { display: none; }
 .ck-topbar { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
 .ck-avatar { width: 52px; height: 52px; border-radius: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 75%, #000), color-mix(in srgb, var(--accent) 40%, #000)); color: var(--accent-ink); font-family: var(--font-heading); font-weight: 800; font-size: 18px; box-shadow: 0 8px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.15); }
 .light .ck-avatar { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 22%, transparent), inset 0 1px 0 rgba(255,255,255,.35); }
