@@ -87,8 +87,10 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: linear-gradient(120deg, color-mix(in srgb, var(--accent-app) 13%, var(--glass)), var(--glass));
-  border: 1px solid color-mix(in srgb, var(--accent-app) 26%, var(--hair));
+  /* Voile accent (calque valide) PAR-DESSUS le verre — color-mix avec --glass (un dégradé)
+     est invalide et cassait le fond. Bordure hairline, plus de bordure terracotta. */
+  background: linear-gradient(120deg, color-mix(in srgb, var(--accent-app) 12%, transparent), transparent 60%), var(--glass);
+  border: 1px solid var(--hair);
   border-radius: 18px;
   padding: 16px 18px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
