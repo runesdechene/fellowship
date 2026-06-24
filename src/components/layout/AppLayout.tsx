@@ -29,8 +29,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   // pas de SearchBar globale (sinon la cover démarre sous la navbar et le scroll ne prend
   // pas toute la hauteur). Mais elle scrolle normalement (contrairement à l'Explorer).
   const isVitrine = isPublicProfilePath(location.pathname)
-  // Seule la vitrine publique masque la SearchBar (Explorer et Carte la gardent en haut).
-  const hideSearchBar = isVitrine
+  // Explorer garde la SearchBar globale ; la Carte (immersive) et la vitrine la masquent.
+  const hideSearchBar = isVitrine || isCarte
   // Seule la Carte reste vraiment sans scroll (carte plein écran).
   const noScroll = isCarte
   useEffect(() => {
