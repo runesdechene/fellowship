@@ -15,8 +15,8 @@ export function CompagnonsDeRoute() {
 
   return (
     <>
-    <div className="ck-card">
-      <div className="ck-eyebrow">
+    <div className="glass-card ck-card">
+      <div className="da-eyebrow">
         COMPAGNONS
         {convergences.length > 0 && (
           <Link to="/communaute" className="ck-seeall">
@@ -50,8 +50,8 @@ export function CompagnonsDeRoute() {
                   <small>{c.event.name.toUpperCase()}</small>
                 </div>
                 <div className="ck-conv-actions">
-                  <Link to={eventPath(c.event)} className="ck-btn ck-btn-g ck-btn-sm">Voir</Link>
-                  <button type="button" className="ck-btn ck-btn-g ck-btn-sm" onClick={() => setShare({ message, url })} aria-label="Partager"><Share2 strokeWidth={2} /></button>
+                  <Link to={eventPath(c.event)} className="da-btn da-btn-2 da-btn-sm">Voir</Link>
+                  <button type="button" className="da-btn da-btn-2 da-btn-sm" onClick={() => setShare({ message, url })} aria-label="Partager"><Share2 strokeWidth={2} /></button>
                 </div>
               </li>
             )

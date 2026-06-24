@@ -19,11 +19,11 @@ export function ProchainFestival({ participation }: Props) {
 
   if (!participation) {
     return (
-      <div className="ck-card ck-next-empty">
-        <div className="ck-eyebrow">PROCHAIN FESTIVAL</div>
+      <div className="glass-card ck-card ck-next-empty">
+        <div className="da-eyebrow">PROCHAIN FESTIVAL</div>
         <p className="ck-empty-txt">Aucun festival confirmé à venir.</p>
         <div className="ck-next-actions" style={{ marginTop: '16px' }}>
-          <Link to="/explorer" className="ck-btn ck-btn-p"><Compass strokeWidth={2} /> Explorer les festivals</Link>
+          <Link to="/explorer" className="da-btn da-btn-flat"><Compass strokeWidth={2} /> Explorer les festivals</Link>
         </div>
       </div>
     )
@@ -42,12 +42,12 @@ export function ProchainFestival({ participation }: Props) {
   const statusVariant = chip?.variant ?? null
 
   return (
-    <div className="ck-card ck-next">
+    <div className="glass-card ck-card ck-next">
       <div className="ck-next-poster">
         {ev.image_url ? <img src={ev.image_url} alt={ev.name} /> : <div className="ck-next-noposter" />}
       </div>
       <div className="ck-next-body">
-        <div className="ck-eyebrow" style={{ marginBottom: 0 }}>PROCHAIN · DANS</div>
+        <div className="da-eyebrow" style={{ marginBottom: 0 }}>PROCHAIN · DANS</div>
         <div className="ck-next-when">
           <span className="ck-jx-big">
             {dleft > 0
@@ -72,8 +72,8 @@ export function ProchainFestival({ participation }: Props) {
           </span>
         )}
         <div className="ck-next-actions">
-          <Link to={eventPath(ev)} className="ck-btn ck-btn-p"><FileText strokeWidth={2} /> Voir la fiche</Link>
-          <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="ck-btn ck-btn-ghost"><Route strokeWidth={2} /> Itinéraire</a>
+          <Link to={eventPath(ev)} className="da-btn da-btn-flat"><FileText strokeWidth={2} /> Voir la fiche</Link>
+          <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="da-btn da-btn-ghost"><Route strokeWidth={2} /> Itinéraire</a>
         </div>
       </div>
     </div>

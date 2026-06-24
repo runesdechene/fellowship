@@ -28,8 +28,8 @@ export function AReglerFinaliser({ participations, entriesByEvent }: Props) {
   const extra = participations.length - visible.length
 
   return (
-    <div className="ck-card">
-      <div className="ck-eyebrow">
+    <div className="glass-card ck-card">
+      <div className="da-eyebrow">
         À RÉGLER &amp; FINALISER
         {participations.length > 0 && (
           <Link to="/calendrier" className="ck-seeall">

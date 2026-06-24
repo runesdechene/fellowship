@@ -44,7 +44,7 @@ export function DossiersRefuses({ participations, onUpdated }: Props) {
   if (participations.length === 0) return null
 
   return (
-    <div className="ck-card ck-refuses">
+    <div className="glass-card ck-card ck-refuses">
       <button className="ck-refuses-head" onClick={() => setOpen(o => !o)} aria-expanded={open}>
         <span className="ck-refuses-title">
           Dossiers refusés ({participations.length})

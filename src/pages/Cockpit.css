@@ -29,24 +29,9 @@
 
 /* ── Step 3 : Carte de base + en-têtes + eyebrow + boutons ── */
 
-.ck-card { border-radius: 18px; padding: 22px; position: relative; overflow: hidden; background: var(--glass); border: 1px solid var(--hair); backdrop-filter: blur(16px); box-shadow: 0 18px 44px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05); }
-.light .ck-card { box-shadow: 0 4px 14px rgba(120,90,60,.06), inset 0 1px 0 rgba(255,255,255,.55); }
-.ck-card::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .18; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.light .ck-card::before { opacity: .05; mix-blend-mode: multiply; }
-.ck-card > * { position: relative; z-index: 1; }
-
-/* eyebrow mono (remplace les h3 + ck-ic colorés) */
-.ck-eyebrow { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+/* .ck-card n'ajoute QUE le padding ; le verre/grain vient de .glass-card (cf. index.css). */
+.ck-card { padding: 22px; }
 .ck-seeall { margin-left: auto; font-size: 11px; color: hsl(var(--muted-foreground)); text-decoration: none; font-family: var(--font-body); letter-spacing: 0; text-transform: none; }
-
-/* boutons : plein mat (CTA) + fantôme — ZÉRO dégradé */
-.ck-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-weight: 600; font-size: 13px; border-radius: 11px; padding: 10px 18px; border: none; cursor: pointer; text-decoration: none; white-space: nowrap; font-family: var(--font-body); }
-.ck-btn svg { width: 16px; height: 16px; }
-.ck-btn-p { background: var(--accent-app); color: var(--accent-app-ink); }
-.light .ck-btn-p { box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-app) 26%, transparent); }
-.ck-btn-ghost { background: transparent; border: 1px solid color-mix(in srgb, var(--accent-app) 48%, transparent); color: var(--accent-app); }
-.ck-btn-g { background: var(--field); border: 1px solid var(--hair); color: hsl(var(--muted-foreground)); }
-.ck-btn-sm { padding: 6px 11px; font-size: 13px; }
 .ck-ic { display: none; }   /* pastilles d'icône colorées remplacées par eyebrows mono */
 
 /* ── Step 4 : Statuts, héros, saison, listes, bilans, refusés, bandeau ── */

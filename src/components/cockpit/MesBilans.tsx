@@ -26,8 +26,8 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
   const split = splitOrientation(bilans)
 
   return (
-    <div className="ck-card">
-      <div className="ck-eyebrow">
+    <div className="glass-card ck-card">
+      <div className="da-eyebrow">
         MES BILANS
         {bilans.length > 0 && (
           <span className="ck-seeall" style={{ cursor: 'default' }}>

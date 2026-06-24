@@ -26,8 +26,8 @@ export function BilanBanner({ prompt, onSaved, onSnooze }: Props) {
             {prompt.extraCount > 0 && ` +${prompt.extraCount} autre${prompt.extraCount > 1 ? 's' : ''} en attente.`}
           </small>
         </div>
-        <button className="ck-btn ck-btn-p" onClick={() => setOpen(true)}>Remplir mon bilan</button>
-        <button className="ck-btn ck-btn-g" aria-label="Plus tard" onClick={() => onSnooze(p.event_id)}>Plus tard</button>
+        <button className="da-btn da-btn-flat" onClick={() => setOpen(true)}>Remplir mon bilan</button>
+        <button className="da-btn da-btn-2" aria-label="Plus tard" onClick={() => onSnooze(p.event_id)}>Plus tard</button>
         <button className="ck-bilan-x" aria-label="Fermer" onClick={() => onSnooze(p.event_id)}><X strokeWidth={2.2} /></button>
       </div>
       {open && (

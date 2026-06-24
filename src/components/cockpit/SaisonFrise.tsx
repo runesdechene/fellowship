@@ -19,8 +19,8 @@ export function SaisonFrise({ season }: Props) {
   const seasonYear = season[0]?.year ?? new Date().getFullYear()
 
   return (
-    <div className="ck-card">
-      <div className="ck-eyebrow">SAISON {seasonYear}</div>
+    <div className="glass-card ck-card">
+      <div className="da-eyebrow">SAISON {seasonYear}</div>
 
       <div className="ck-season-head">
         <b>{total}</b>
