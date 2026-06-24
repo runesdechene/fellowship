@@ -27,7 +27,7 @@
   gap: 14px;
   /* Padding horizontal = standard des pages (--page-padding) pour aligner les
      bords gauche (admin réel/pro/gratuit) et droite (notif) sur le contenu. */
-  padding: 12px var(--page-padding) 22px;
+  padding: 26px var(--page-padding) 22px;
   pointer-events: none;
   flex-shrink: 0;
 }

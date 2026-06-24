@@ -83,9 +83,6 @@ export function ExplorerPage() {
     () => validPeriods.includes(stored.period as Period) ? stored.period as Period : null
   )
 
-  // ---------- Recherche texte (transient, non persistée) ----------
-  const [query, setQuery] = useState('')
-
   const [showQuotaModal, setShowQuotaModal] = useState(false)
 
   // Compagnons groupés : toujours chargés (grille = seul mode).
@@ -114,8 +111,8 @@ export function ExplorerPage() {
   const now = useMemo(() => new Date(), [])
 
   const displayed = useMemo(
-    () => composeFilter(allEvents, { tags: selectedTags, zone, period, query, monthRange }, { department: person?.department ?? null, now }),
-    [allEvents, selectedTags, zone, period, query, monthRange, person?.department, now]
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period, monthRange }, { department: person?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, monthRange, person?.department, now]
   )
 
   // ---------- Filter setters with reset + persist ----------
@@ -138,10 +135,6 @@ export function ExplorerPage() {
     setMonthFilter(null)   // choisir une période sort du mode "mois précis"
     setPeriodChoice(p)
     persistFilters({ period: p })
-  }
-
-  const handleQuery = (q: string) => {
-    setQuery(q)
   }
 
   // ---------- Repérer (save) ----------
@@ -218,12 +211,10 @@ export function ExplorerPage() {
           zone={zone}
           period={period}
           monthLabel={monthLabel}
-          query={query}
           userDept={person?.department ?? null}
           onToggleTag={toggleTag}
           onZone={handleZone}
           onPeriod={handlePeriod}
-          onQuery={handleQuery}
         />
 
         <div className="xplr-count">

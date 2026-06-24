@@ -99,12 +99,12 @@
 
 /* ── Top bar / searchbar ──────────────────────────────────────────── */
 
-/* Barre de filtres de la grille (Quoi/Où/Quand en chips, alignés à gauche). */
+/* Barre de filtres de la grille (Quoi/Où/Quand en chips, centrés). */
 .explorer .top {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   padding: 14px 20px 4px;
   position: relative;
 }
@@ -124,22 +124,20 @@
 .explorer .seg-group {
   display: inline-flex;
   align-items: center;
-  transition: opacity 0.22s ease;
+  gap: 15px;
 }
+
+/* Chaque chip ancre son propre popover (centré dessous). */
+.explorer .seg-wrap { position: relative; }
 .explorer .searchbar.is-searching .seg-group {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Day-mode : le sélecteur Quoi/Où/Quand sur fond card (couleur sidebar). */
-.light .explorer .searchbar {
-  box-shadow: 0 10px 28px rgba(60, 45, 35, 0.12);
-}
-
-/* ── Segments ─────────────────────────────────────────────────────── */
+/* ── Segments (chips transparents — pas de fond ; seul l'actif se teinte) ── */
 
 .explorer .seg {
-  background: var(--field);
+  background: transparent;
   border: 1px solid var(--hair);
   cursor: pointer;
   display: inline-flex;
@@ -175,10 +173,6 @@
   white-space: nowrap;
 }
 
-/* Plus de séparateurs ni de recherche texte interne (la SearchBar globale s'en charge). */
-.explorer .seg-sep,
-.explorer .seg-search,
-.explorer .seg-searchfield { display: none; }
 
 .explorer .seg-search {
   width: 44px;
@@ -353,9 +347,9 @@
 
 .explorer .pop {
   position: absolute;
-  top: calc(100% + 6px);
-  left: 20px;
-  transform: translate(0, 8px);
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, 8px);
   background: hsl(var(--card));
   border: 1px solid var(--hair);
   border-radius: 18px;
@@ -374,7 +368,7 @@
 .explorer .pop.open {
   opacity: 1;
   visibility: visible;
-  transform: translate(0, 0);
+  transform: translate(-50%, 0);
 }
 
 /* Surface (not media) — use semantic tokens */

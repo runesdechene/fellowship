@@ -24,7 +24,6 @@ export default function Carte() {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
   const [zone, setZone] = useState<Zone>('france')
   const [period, setPeriod] = useState<Period>('all') // 'all' = à venir (composeFilter exclut les passés)
-  const [query, setQuery] = useState('')
   const [mineOnly, setMineOnly] = useState(false)
   const [friendsMode, setFriendsMode] = useState(false)
   const now = useMemo(() => new Date(), [])
@@ -34,7 +33,7 @@ export default function Carte() {
   const features = useMemo(() => {
     const filtered = composeFilter(
       events as unknown as EventWithScore[],
-      { tags: selectedTags, zone, period, query, monthRange: null },
+      { tags: selectedTags, zone, period, monthRange: null },
       { department: person?.department ?? null, now },
     )
     const fc = eventsToGeoJSON(filtered as unknown as EventForMap[], parts).features
@@ -44,7 +43,7 @@ export default function Carte() {
     if (mineOnly) lenses.push(f => f.properties.accepted)
     if (friendsMode && isPro) lenses.push(f => (friendsByEvent[f.properties.id]?.length ?? 0) > 0)
     return lenses.length ? fc.filter(f => lenses.some(fn => fn(f))) : fc
-  }, [events, parts, selectedTags, zone, period, query, mineOnly, friendsMode, isPro, friendsByEvent, person?.department, now])
+  }, [events, parts, selectedTags, zone, period, mineOnly, friendsMode, isPro, friendsByEvent, person?.department, now])
 
   const toggleTag = (value: string) =>
     setSelectedTags(prev => {
@@ -77,12 +76,10 @@ export default function Carte() {
           selectedTags={selectedTags}
           zone={zone}
           period={period}
-          query={query}
           userDept={person?.department ?? null}
           onToggleTag={toggleTag}
           onZone={setZone}
           onPeriod={setPeriod}
-          onQuery={setQuery}
         />
       </div>
 
