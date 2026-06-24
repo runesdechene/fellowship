@@ -32,7 +32,7 @@ export function EventGridCard({ event, now, part, actorKind, friends, saved, onT
   const friendsLabel = friends.length === 1 ? `${friends[0].label} y va` : `${friends.length} compagnons y vont`
 
   return (
-    <div className={'egrid-card' + (muted ? ' egrid-card--muted' : '')} onClick={() => onClick(event)}>
+    <div className={'egrid-card grain' + (muted ? ' egrid-card--muted' : '')} onClick={() => onClick(event)}>
       <div className="egrid-img">
         {event.image_url
           ? <img className="egrid-imgel" src={event.image_url} alt={event.name} loading="lazy" />

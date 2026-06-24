@@ -1303,7 +1303,7 @@
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
   transition: transform 0.14s, border-color 0.15s;
 }
-.explorer .egrid-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent-app) 50%, transparent); }
+.explorer .egrid-card:hover { transform: translateY(-3px); }
 .light .explorer .egrid-card { box-shadow: 0 8px 20px rgba(60, 45, 35, 0.12); }
 /* Sans participation : désaturée + transparente (revient au survol). */
 .explorer .egrid-card--muted { filter: saturate(0.62); opacity: 0.78; }
