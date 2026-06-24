@@ -17,6 +17,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   // La Carte est immersive plein écran : pas de SearchBar, pas de scroll.
   const isCarte = location.pathname === '/carte'
+  // Explorer = catalogue grille : comme Cockpit/Calendrier, fond DA continu
+  // (--app-bg fixé via cockpit-stage) pour que la navbar et la page partagent
+  // UN SEUL fond — sinon le --page-backdrop brun du body fait une bande en haut.
+  const isExplorer = location.pathname === '/explorer'
   // Cockpit : la zone scrollable porte le fond DA (--app-bg, fixé) pour que la navbar
   // et la page partagent UN SEUL fond continu (sinon la navbar fait une bande visible).
   const isDashboard = location.pathname === '/tableau-de-bord'
@@ -46,7 +50,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           --sidebar-w (0 en mobile, sidebar masquée). Réserve basse = hauteur BottomBar fixe
           (~70px) + safe-area iPhone, sinon elle masque la dernière section (#5 contact Réglages).
           noScroll (Carte) = hauteur viewport figée, pas de scroll. */}
-      <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
+      <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar || isExplorer ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
         <main className={isCarte ? 'flex flex-col flex-1 min-h-0' : ''}>
           {children}
