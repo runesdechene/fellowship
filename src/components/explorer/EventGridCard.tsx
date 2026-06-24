@@ -1,7 +1,6 @@
 import { Star, Calendar, MapPin } from 'lucide-react'
 import { getTagEmoji, getTagLandingColor } from '@/components/ui/TagBadge'
-import { eventBadge, participationChip, participationDot, formatEventDateRange, type ActorKind } from '@/lib/explorer'
-import type { PartLite } from './EventDeck'
+import { eventBadge, participationChip, participationDot, formatEventDateRange, type ActorKind, type PartLite } from '@/lib/explorer'
 import type { FriendAvatar } from '@/lib/map-data'
 import type { EventWithScore } from '@/types/database'
 

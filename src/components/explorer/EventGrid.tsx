@@ -1,6 +1,5 @@
 import { EventGridCard } from './EventGridCard'
-import type { PartLite } from './EventDeck'
-import type { ActorKind } from '@/lib/explorer'
+import type { ActorKind, PartLite } from '@/lib/explorer'
 import type { FriendAvatar } from '@/lib/map-data'
 import type { EventWithScore } from '@/types/database'
 

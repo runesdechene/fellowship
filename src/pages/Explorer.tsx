@@ -196,9 +196,6 @@ export function ExplorerPage() {
     [participations]
   )
 
-  // TODO(coverflow): EventDeck/DeckCard/ScrubBar/EventDock/ViewToggle sont conservés
-  // mais débranchés (slideshow en sommeil). À SUPPRIMER après déploiement & test de la
-  // refonte grille (cf. spec 2026-06-24-explorer-da-refonte).
   return (
     <div className="explorer">
       {/* Hidden file input for add-image */}

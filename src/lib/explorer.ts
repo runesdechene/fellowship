@@ -149,6 +149,9 @@ export function eventBadge(event: EventWithScore, now: Date): 'nouveau' | 'popul
 
 export type ActorKind = 'person' | 'entity'
 
+/** Participation allégée par event (statut + paiement) pour les pastilles de statut. */
+export interface PartLite { status: string; payment_status: string | null }
+
 export type ExplorerView = 'slideshow' | 'grid'
 
 /** Pur (testable) : tolère null / valeurs inconnues → défaut 'slideshow'. */
