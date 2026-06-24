@@ -1,33 +1,59 @@
 /* Abonnement — gestion du sub (v0.7.170). Spec §4.2. */
+/* DA re-skin : verre+grain, accents terracotta --accent-app. */
 
 .abo-page { max-width: 640px; margin: 0 auto; padding: 32px var(--page-padding) 48px; }
 .abo-page h1 { font-family: var(--font-heading); font-size: 1.8rem; margin: 0 0 22px; }
 
+/* ── Cartes verre+grain ───────────────────────────────────────────────── */
 .abo-card {
-  border: 1px solid hsl(var(--border));
+  border: 1px solid var(--hair);
   border-radius: 16px;
   padding: 22px;
-  background: hsl(var(--card));
+  background: var(--glass);
   margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
 }
+.abo-card > * { position: relative; z-index: 1; }
+.abo-card::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 0;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.light .abo-card::before { opacity: .05; mix-blend-mode: multiply; }
+
 .abo-card h2 { margin: 0 0 10px; font-family: var(--font-heading); font-size: 1.2rem; }
-.abo-promo {
-  border-color: color-mix(in srgb, var(--lime) 50%, hsl(var(--border)));
-  background: linear-gradient(180deg, color-mix(in srgb, var(--lime) 8%, hsl(var(--card))), hsl(var(--card)) 60%);
-}
-.abo-promo h2 { color: var(--lime); }
 .abo-card p { margin: 0; line-height: 1.5; }
 .abo-card p + p { margin-top: 10px; }
 .abo-muted { color: hsl(var(--muted-foreground)); font-size: 14px; }
 
+/* Code promo : voile accent par-dessus le verre */
+.abo-promo {
+  border-color: color-mix(in srgb, var(--accent-app) 35%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-app) 10%, transparent), transparent 60%), var(--glass);
+}
+.abo-promo h2 { color: var(--accent-app); }
+
+/* Pending (attente webhook checkout) */
 .abo-pending {
   display: flex; align-items: center; gap: 10px;
   padding: 14px; border-radius: 12px;
-  background: hsl(var(--card)); border: 1px solid hsl(var(--border));
+  background: var(--glass); border: 1px solid var(--hair);
   margin-bottom: 18px;
+  position: relative; overflow: hidden;
 }
+.abo-pending > * { position: relative; z-index: 1; }
+.abo-pending::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  pointer-events: none; z-index: 0;
+  opacity: .18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.light .abo-pending::before { opacity: .05; mix-blend-mode: multiply; }
 .abo-pending .animate-spin { animation: abo-spin 1s linear infinite; width: 18px; height: 18px; }
 
+/* Warning (paiement échoué, erreur portail) */
 .abo-warning {
   display: flex; align-items: flex-start; gap: 10px;
   padding: 14px 16px; border-radius: 12px;
@@ -39,10 +65,11 @@
 }
 .abo-warning svg { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; }
 
+/* CTA principal (voir les offres) */
 .abo-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 20px; border-radius: 999px;
-  background: var(--gradient-primary); color: #fff;
+  background: var(--accent-app); color: var(--accent-app-ink);
   border: none; font-weight: 700; cursor: pointer;
   font-family: var(--font-heading); font-size: 14.5px;
   text-decoration: none;
@@ -50,14 +77,15 @@
 }
 .abo-cta:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--copper) 35%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-app) 35%, transparent);
 }
 .abo-cta:disabled { opacity: .6; cursor: not-allowed; }
 .abo-cta .animate-spin { animation: abo-spin 1s linear infinite; width: 16px; height: 16px; }
 @keyframes abo-spin { to { transform: rotate(360deg); } }
 
+.light .abo-cta { box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-app) 20%, transparent); }
 .light .abo-cta:hover:not(:disabled) {
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--copper) 22%, transparent);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent-app) 28%, transparent);
 }
 
 /* Lien « Gérer mon abonnement » — volontairement discret (action de gestion, pas un CTA). */
@@ -75,6 +103,6 @@
 
 .abo-billing-edit {
   margin-top: .5rem; padding: .4rem .9rem; border-radius: 10px;
-  background: transparent; border: 1px solid hsl(var(--border)); color: hsl(var(--foreground));
+  background: transparent; border: 1px solid var(--hair); color: hsl(var(--foreground));
   font-weight: 600; cursor: pointer;
 }
