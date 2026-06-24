@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, Gift, type LucideIcon } from 'lucide-react'
@@ -15,6 +15,11 @@ const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, Layou
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  // Publie la largeur courante de la sidebar pour que le contenu (scroll document)
+  // se décale via margin-left: var(--sidebar-w). Cf. plan scroll document.
+  useEffect(() => {
+    document.documentElement.style.setProperty('--sidebar-w', collapsed ? '76px' : '262px')
+  }, [collapsed])
   const { currentActor, currentActorRow, person, isAdmin } = useAuth()
   const navigate = useNavigate()
   const plan = planForActor(currentActor, currentActorRow)
