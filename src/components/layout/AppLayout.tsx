@@ -48,7 +48,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           noScroll (Carte) = hauteur viewport figée, pas de scroll. */}
       <div className={`flex flex-col ml-[var(--sidebar-w,262px)] max-md:ml-0 ${noScroll ? 'h-dvh overflow-hidden' : 'min-h-dvh'} ${isDashboard || isCalendar ? 'cockpit-stage' : ''} pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0`}>
         {!hideSearchBar && <SearchBar onCreateEvent={() => setShowCreate(true)} />}
-        <main className={isCarte ? 'flex flex-col flex-1 min-h-0' : ''}>
+        <main className={isCarte ? 'relative flex flex-col flex-1 min-h-0' : ''}>
           {children}
         </main>
       </div>
