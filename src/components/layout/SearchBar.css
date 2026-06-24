@@ -25,7 +25,9 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 14px;
-  padding: 12px 14px 22px;
+  /* Padding horizontal = standard des pages (--page-padding) pour aligner les
+     bords gauche (admin réel/pro/gratuit) et droite (notif) sur le contenu. */
+  padding: 12px var(--page-padding) 22px;
   pointer-events: none;
   flex-shrink: 0;
 }
@@ -37,20 +39,11 @@
      même quand on augmente le padding-top).
    → Au bottom, il s'efface pour laisser passer le contenu qui scrolle.
    Pseudo-élément ::before pour NE PAS masker les pills (children directs). */
-.search-bar-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  /* Marron chaud foncé = couleur center du radial du body (--page-backdrop, nuit).
-     Solide ici car le radial du body, sur la largeur de la colonne droite, finit
-     toujours dans la zone sombre — du coup la nav paraissait noire. */
-  background: #2c1f1c;
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
-  pointer-events: none;
-}
-.light .search-bar-wrapper::before { background: #f8f2e8; }
+/* Pas de bande de fond : la SearchBar n'apparaît JAMAIS sur une page festive
+   (Landing/Vitrine la masquent), donc une bande brune calée sur --page-backdrop
+   ne sert à rien et tranche sur le fond gris des pages app (« bandeau coupé »).
+   Navbar transparente → elle épouse toujours le fond de sa page. */
+.search-bar-wrapper::before { content: none; }
 
 /* ── Search pill (col 2, centrée, glass) ──────────────────────────── */
 

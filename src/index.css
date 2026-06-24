@@ -369,11 +369,11 @@ h1, h2, h3, .font-display {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: var(--accent-app);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--accent-app-ink);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.35);
 }

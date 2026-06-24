@@ -1,13 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { MapPin, Lock } from 'lucide-react'
 import { eventPath } from '@/lib/event-link'
-import { SeasonGlyph } from './SeasonGlyph'
+import { MonthBanner } from './MonthBanner'
+import { useTags } from '@/hooks/use-tags'
 import { getTagIcon } from '@/components/ui/TagBadge'
 import { participationDot, type ActorKind } from '@/lib/explorer'
 import { formatDateRange } from '@/lib/calendar-format'
 import type { CalendarMonth as CalendarMonthType, CalendarEvent } from '@/hooks/use-calendar'
 import type { FriendParticipation } from '@/hooks/use-participations'
 import { avatarGradient } from '@/lib/avatar-gradient'
+
+function useTagColor() {
+  const { tags } = useTags()
+  return (slug: string) => {
+    const t = tags.find(t => t.value === slug)
+    return t ? { bg: t.bg, color: t.color } : { bg: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }
+  }
+}
 
 interface CalendarMonthProps {
   data: CalendarMonthType
@@ -18,49 +27,25 @@ interface CalendarMonthProps {
 
 export function CalendarMonth({ data, actorKind, friendParticipations = [], onOpenFriends }: CalendarMonthProps) {
   const { month, label, events } = data
+  const getTagColor = useTagColor()
   const navigate = useNavigate()
   const now = new Date()
+
+  const mine = events.filter(e => !e.isFriend)
+  const friendsOnly = events.filter(e => e.isFriend)
   const isEmpty = events.length === 0
-  const mineCount = events.filter(e => !e.isFriend).length
-  const friendCount = events.length - mineCount
 
   const dayCount = (ev: CalendarEvent) =>
     Math.max(1, Math.round((ev.endDate.getTime() - ev.startDate.getTime()) / 86400000) + 1)
 
   return (
-    <>
-      <div className="calendar-month-head">
-        <SeasonGlyph month={month} />
-        <span className="calendar-month-name">{label}</span>
-        <span className="calendar-month-count">
-          {isEmpty ? 'libre'
-            : friendCount > 0 ? `${mineCount} · ${friendCount} ami${friendCount > 1 ? 's' : ''}`
-            : `${mineCount} date${mineCount > 1 ? 's' : ''}`}
-        </span>
-      </div>
+    <div>
+      <MonthBanner month={month} label={label} year={data.year} />
 
-      {events.map(ev => {
-        // Date amie (fusion chronologique) : ligne atténuée, avatar, pas de point statut.
-        if (ev.isFriend) {
-          const fname = (ev.friendName ?? '').trim() || 'Un ami'
-          return (
-            <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-event-row friend">
-              <span className="calendar-event-av"
-                title={`Voir le profil de ${fname}`}
-                onClick={e => { e.preventDefault(); e.stopPropagation(); navigate(`/@${ev.friendSlug ?? ''}`) }}
-                style={ev.friendAvatarUrl ? undefined : { background: avatarGradient(fname) }}>
-                {ev.friendAvatarUrl ? <img src={ev.friendAvatarUrl} alt={fname} /> : fname[0]!.toUpperCase()}
-              </span>
-              <div className="calendar-event-info">
-                <div className="calendar-event-name">{ev.name}</div>
-                <div className="calendar-event-meta">{fname} y va · {formatDateRange(ev.startDate, ev.endDate)}</div>
-              </div>
-              <span className="calendar-event-tag-amis">amis</span>
-            </Link>
-          )
-        }
+      {isEmpty && <div className="calendar-month-empty-note">Ce mois est libre</div>}
 
-        // Ma date.
+      {mine.map(ev => {
+        const tc = getTagColor(ev.primaryTag)
         const I = getTagIcon(ev.primaryTag)
         const isPast = ev.endDate < now
         const dot = participationDot(ev.status, ev.paymentStatus, actorKind, { isPast })
@@ -68,43 +53,94 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
         const days = dayCount(ev)
         return (
           <div key={ev.id} className="calendar-event-wrapper">
-            <Link to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-event-row">
-              {ev.imageUrl
-                ? <div className="calendar-event-image"><img src={ev.imageUrl} alt="" /></div>
-                : <div className="calendar-event-image placeholder"><I size={14} strokeWidth={2} /></div>}
+            <Link to={eventPath(ev)} state={{ from: '/calendrier' }} className={`glass-card calendar-event-row${isPast ? ' past' : ''}`}>
+              {ev.imageUrl && (
+                <div className="calendar-event-image"><img src={ev.imageUrl} alt="" /></div>
+              )}
               <div className="calendar-event-info">
                 <div className="calendar-event-name">{ev.name}{ev.isPrivate && <Lock className="inline h-3 w-3 opacity-70 ml-1" strokeWidth={2.2} />}</div>
+                <span className="calendar-event-tag" style={{ background: tc.bg, color: tc.color }}>
+                  <I size={10} strokeWidth={2} />{ev.primaryTag}
+                </span>
                 <div className="calendar-event-meta">
-                  <MapPin size={11} strokeWidth={2} /><span>{ev.city}{ev.department ? ` (${ev.department})` : ''}</span>
-                  <span>·</span><span>{ev.startDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }).replace('.', '')}</span>
-                  {days > 1 && <><span>·</span><span>{days} j</span></>}
+                  <MapPin /><span>{ev.city} ({ev.department})</span><span>—</span>
+                  <span>{days} jour{days > 1 ? 's' : ''}</span>
                 </div>
               </div>
-              {friendsAtEvent.length > 0 && (
-                <button className="calendar-pav" onClick={e => { e.preventDefault(); onOpenFriends?.(ev.id, ev.name) }}
-                  aria-label={`${friendsAtEvent.length} compagnon(s) sur cette date`}>
-                  {friendsAtEvent.slice(0, 3).map((fp, i) => {
-                    const nm = (fp.actor_public?.label ?? '').trim() || '?'
-                    const url = fp.actor_public?.avatar_url
-                    return (
-                      <span key={fp.actor_id} className="calendar-pav-item"
-                        style={{ background: url ? 'transparent' : avatarGradient(nm), zIndex: 3 - i }}>
-                        {url ? <img src={url} alt={nm} /> : nm[0]!.toUpperCase()}
-                      </span>
-                    )
-                  })}
-                </button>
+              {(friendsAtEvent.length > 0 || dot) && (
+                <div className="calendar-event-end">
+                  {friendsAtEvent.length > 0 && (
+                    <span
+                      className="calendar-pav"
+                      role="button"
+                      tabIndex={0}
+                      title={`${friendsAtEvent.length} compagnon${friendsAtEvent.length > 1 ? 's' : ''} sur cette date`}
+                      onClick={e => { e.preventDefault(); e.stopPropagation(); onOpenFriends?.(ev.id, ev.name) }}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onOpenFriends?.(ev.id, ev.name) } }}
+                    >
+                      {friendsAtEvent.slice(0, 3).map((fp, i) => {
+                        // ?? + || : un label '' (DB autorise les brand_name vides en legacy)
+                        // passe le ?? donc on enchaîne || pour retomber sur '?' aussi.
+                        const nm = (fp.actor_public?.label ?? '').trim() || '?'
+                        const url = fp.actor_public?.avatar_url
+                        return (
+                          <span key={fp.actor_id} className="calendar-pav-item"
+                            style={{ background: url ? 'transparent' : avatarGradient(nm), zIndex: 4 - i }}>
+                            {url ? <img src={url} alt={nm} /> : nm[0]!.toUpperCase()}
+                          </span>
+                        )
+                      })}
+                    </span>
+                  )}
+                  {dot && (
+                    <span className="calendar-status da-status" style={{ ['--dot-color' as string]: dot.colorVar }}>
+                      <span className="da-dot" />{dot.label}
+                    </span>
+                  )}
+                </div>
               )}
-              {dot && (
-                <span className="da-status calendar-status">
-                  <span className="da-dot" style={{ ['--dot-color' as string]: dot.colorVar }} />
-                  {dot.label}
-                </span>
-              )}
+              <div className="calendar-event-date">
+                <b>{ev.startDate.getDate()}</b>
+                <span>{ev.startDate.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span>
+              </div>
             </Link>
           </div>
         )
       })}
-    </>
+
+      {friendsOnly.length > 0 && (
+        <>
+          <div className="calendar-friend-lbl">Tes compagnons ce mois-ci</div>
+          {friendsOnly.map(ev => {
+            const friends = ev.friends && ev.friends.length > 0
+              ? ev.friends
+              : [{ name: (ev.friendName ?? '').trim() || 'Un ami', avatarUrl: ev.friendAvatarUrl ?? null, slug: ev.friendSlug ?? '' }]
+            const names = friends.map(f => f.name).join(', ')
+            return (
+              <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-evF">
+                {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
+                <div className="calendar-evF-info">
+                  <div className="calendar-evF-name">{ev.name}</div>
+                  <div className="calendar-evF-meta">{names} {friends.length > 1 ? 'y vont' : 'y va'} · {formatDateRange(ev.startDate, ev.endDate)}</div>
+                </div>
+                <span className="calendar-pav calendar-evF-pile">
+                  {friends.slice(0, 3).map((f, i) => (
+                    <span key={f.slug || i} className="calendar-pav-item"
+                      role="button" tabIndex={0}
+                      title={`Voir le profil de ${f.name}`}
+                      onClick={e => { e.preventDefault(); e.stopPropagation(); navigate(`/@${f.slug}`) }}
+                      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); navigate(`/@${f.slug}`) } }}
+                      style={{ background: f.avatarUrl ? 'transparent' : avatarGradient(f.name), zIndex: 4 - i }}>
+                      {f.avatarUrl ? <img src={f.avatarUrl} alt={f.name} /> : f.name[0]!.toUpperCase()}
+                    </span>
+                  ))}
+                  {friends.length > 3 && <span className="calendar-evF-more">+{friends.length - 3}</span>}
+                </span>
+              </Link>
+            )
+          })}
+        </>
+      )}
+    </div>
   )
 }

@@ -87,15 +87,25 @@ export function CalendarPage() {
         friendName: fp.actor_public?.label ?? 'Un ami',
         friendAvatarUrl: fp.actor_public?.avatar_url ?? null,
         friendSlug: fp.actor_public?.public_slug ?? fp.actor_id,
+        friends: [{
+          name: fp.actor_public?.label ?? 'Un ami',
+          avatarUrl: fp.actor_public?.avatar_url ?? null,
+          slug: fp.actor_public?.public_slug ?? fp.actor_id,
+        }],
       }
 
       if (!map[key]) map[key] = []
-      // If same event from multiple friends, append name
+      // Même event venant de plusieurs amis : on cumule noms ET avatars (pile).
       const existing = map[key].find(e => e.id === calEvent.id)
       if (existing) {
         const newName = fp.actor_public?.label ?? 'Un ami'
+        const newSlug = fp.actor_public?.public_slug ?? fp.actor_id
         if (existing.friendName && !existing.friendName.includes(newName)) {
           existing.friendName += `, ${newName}`
+        }
+        existing.friends = existing.friends ?? []
+        if (!existing.friends.some(f => f.slug === newSlug)) {
+          existing.friends.push({ name: newName, avatarUrl: fp.actor_public?.avatar_url ?? null, slug: newSlug })
         }
       } else {
         map[key].push(calEvent)
@@ -131,7 +141,8 @@ export function CalendarPage() {
 
   const firstMonth = slidingMonths[0]
   const lastMonth = slidingMonths[11]
-  const summary = seasonSummary(slidingMonths, now)
+  // X/Y sur l'ANNÉE en cours (months = Jan→Déc de `year`), pas la fenêtre glissante.
+  const summary = seasonSummary(months, now)
 
   const navigate = useCallback((dir: 'prev' | 'next') => {
     if (animating) return
@@ -200,14 +211,15 @@ export function CalendarPage() {
           >
             <ChevronRight strokeWidth={1.5} />
           </button>
+          <span className="calendar-year-pill">{summary.total} date{summary.total > 1 ? 's' : ''} cette année</span>
         </div>
       </div>
 
       {/* Ancre saison — point focal léger (pas un héros) */}
       <div className="calendar-anchor">
-        <span className="calendar-anchor-big">{summary.total}</span>
+        <span className="calendar-anchor-big">{summary.remaining}</span>
         <div>
-          <div className="eyebrow calendar-anchor-eyebrow">dates cette saison</div>
+          <div className="eyebrow calendar-anchor-eyebrow">à venir cette année</div>
           {summary.next && (
             <div className="calendar-anchor-next">
               prochaine dans <strong>{summary.next.daysUntil === 0 ? "aujourd'hui" : `${summary.next.daysUntil} jour${summary.next.daysUntil > 1 ? 's' : ''}`}</strong>
@@ -276,7 +288,7 @@ export function CalendarPage() {
             return (
               <div
                 key={`${month.year}-${month.month}`}
-                className={`glass-card calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
+                className={`calendar-month-card ${isCurrentMonth ? 'current' : ''} ${isEmpty ? 'empty' : ''}`}
                 {...(isEmpty ? {
                   role: 'button', tabIndex: 0,
                   onClick: () => routerNav('/explorer', { state: { month: { year: month.year, month: month.month } } }),

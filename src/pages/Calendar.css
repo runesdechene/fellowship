@@ -163,7 +163,9 @@
 }
 
 /* ── Carte-mois (DA) ──────────────────────────────────────────────── */
-.calendar-month-card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 18px; padding: 15px; }
+/* Pas de fond/bordure plein ici : .glass-card (verre + grain/grunge) doit ressortir,
+   comme les éléments du Cockpit. Un fond --card opaque masquait la grunge. */
+.calendar-month-card { padding: 15px; }
 .calendar-month-card.current {
   outline: 2px solid hsl(var(--primary) / 0.15);
   outline-offset: -2px;
@@ -185,7 +187,7 @@
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 16px;
-  background: hsl(var(--secondary));
+  background: transparent;
 }
 
 .calendar-month-banner-text {
@@ -231,7 +233,13 @@
 /* ── Event wrapper (card + presence below) ─────────────────────────── */
 
 .calendar-event-wrapper { margin-bottom: 12px; }
-.calendar-event-row { display: flex; gap: 11px; align-items: center; text-decoration: none; color: hsl(var(--foreground)); background: hsl(var(--secondary)); border-radius: 12px; padding: 10px 12px; }
+/* L'événement EST le bloc verre (.glass-card en TSX) : verre + grain + blur du Cockpit.
+   border-radius 12px override le 18px de .glass-card (bloc compact). */
+.calendar-event-row { display: flex; gap: 11px; align-items: center; text-decoration: none; color: hsl(var(--foreground)); border-radius: 12px; padding: 10px 12px; box-shadow: none; backdrop-filter: none; }
+/* Opacité : actifs 0.9 par défaut, terminés 0.6, plein (1) au survol. */
+.calendar-event-row, .mobile-event-pill:not(.fr) { opacity: 0.9; transition: opacity .15s; }
+.calendar-event-row.past, .mobile-event-pill.past { opacity: 0.6; }
+.calendar-event-row:hover, .mobile-event-pill:not(.fr):hover { opacity: 1; }
 .calendar-event-image { width: 54px; height: 74px; flex-shrink: 0; border-radius: 9px; overflow: hidden; border: 1px solid hsl(var(--border)); }
 .calendar-event-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -318,42 +326,18 @@
 /* ── Compagnons sur une de mes dates ──────────────────────────────── */
 .calendar-companions { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: hsl(var(--muted-foreground)); padding: 9px 2px 0; background: none; border: none; cursor: pointer; width: 100%; text-align: left; }
 .calendar-pav { display: flex; }
-.calendar-pav-item { width: 24px; height: 24px; border-radius: 50%; border: 2px solid hsl(var(--card)); margin-left: -7px; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1c1310; overflow: hidden; }
+.calendar-pav-item { width: 24px; height: 24px; border-radius: 50%; border: 2px solid hsl(var(--card)); margin-left: -7px; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1c1310; overflow: hidden; flex-shrink: 0; position: relative; }
 .calendar-pav-item:first-child { margin-left: 0; }
 .calendar-pav-item img { width: 100%; height: 100%; object-fit: cover; }
-
-/* ── Carte-mois DA — nouvelles règles (cascade : après le legacy ci-dessus) ── */
-
-/* Ligne d'événement */
-.calendar-event-row { display:flex; align-items:center; gap:9px; padding:8px 0; text-decoration:none; color:inherit; }
-.calendar-event-wrapper + .calendar-event-wrapper .calendar-event-row,
-.calendar-event-row + .calendar-event-row { border-top:1px solid var(--hair); }
-.calendar-event-image { width:26px; height:35px; border-radius:5px; overflow:hidden; flex-shrink:0; }
-.calendar-event-image img { width:100%; height:100%; object-fit:cover; }
-.calendar-event-image.placeholder { background:var(--field); display:flex; align-items:center; justify-content:center; color:var(--faint); }
-.calendar-event-info { flex:1; min-width:0; }
-.calendar-event-name { color:var(--name); font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.calendar-event-meta { display:flex; align-items:center; gap:5px; color:hsl(var(--muted-foreground)); font-size:10.5px; margin-top:1px; }
-.calendar-event-meta svg { flex-shrink:0; }
-
-/* Statut : .da-status/.da-dot fournissent l'essentiel ; ajustement de taille local */
-.calendar-status { font-size:9.5px; flex-shrink:0; }
-
-/* Ligne amie (fusion, atténuée) */
-.calendar-event-row.friend { opacity:.72; }
-.calendar-event-av { width:26px; height:26px; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; }
-.calendar-event-av img { width:100%; height:100%; object-fit:cover; }
-.calendar-event-tag-amis { font-family:var(--font-mono); font-size:8.5px; color:var(--status-dossier); border:1px solid color-mix(in srgb, var(--status-dossier) 30%, transparent); border-radius:5px; padding:1px 5px; flex-shrink:0; }
-
-/* Pile de compagnons sur ma date */
-.calendar-pav { display:flex; background:none; border:none; cursor:pointer; padding:0; flex-shrink:0; }
-.calendar-pav-item { width:22px; height:22px; border-radius:50%; margin-left:-7px; border:1px solid var(--hair); overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
-.calendar-pav-item:first-child { margin-left:0; }
-.calendar-pav-item img { width:100%; height:100%; object-fit:cover; }
+/* Pile d'amis dans la section « Tes compagnons » */
+.calendar-evF-pile { display: flex; flex-shrink: 0; align-items: center; }
+.calendar-evF-pile .calendar-pav-item { cursor: pointer; width: 22px; height: 22px; }
+.calendar-evF-more { font-family: var(--font-mono); font-size: 9px; color: hsl(var(--muted-foreground)); margin-left: 4px; flex-shrink: 0; }
 
 /* ── Section « Tes compagnons ce mois-ci » ────────────────────────── */
 .calendar-friend-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: hsl(var(--muted-foreground)); opacity: 0.7; margin-top: 14px; padding-top: 13px; border-top: 1px solid hsl(var(--border)); }
-.calendar-evF { display: flex; gap: 9px; align-items: center; padding: 8px 2px; opacity: 0.72; text-decoration: none; }
+.calendar-evF { display: flex; gap: 9px; align-items: center; padding: 8px 2px; opacity: 0.72; text-decoration: none; transition: opacity .15s; }
+.calendar-evF:hover { opacity: 0.9; }
 .calendar-evF img { width: 32px; height: 42px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid hsl(var(--border)); }
 .calendar-evF-info { flex: 1; min-width: 0; }
 .calendar-evF-name { font-family: var(--font-heading); font-size: 12px; font-weight: 600; line-height: 1.2; color: hsl(var(--foreground)); }
@@ -923,7 +907,11 @@
 
 /* ── DA Refonte — Task 4 (cascade : après tout le legacy ci-dessus) ── */
 
-.calendar-page { background:var(--app-bg); background-attachment:fixed; min-height:100%; padding:28px 40px 80px; }
+/* Comme .ck-page du Cockpit : --app-bg porté ICI *et* par .cockpit-stage. Les deux
+   sont fixés et identiques → zéro couture (la bande navbar brune est tuée par
+   ailleurs). Indispensable : le backdrop-filter des cartes verre a besoin de ce
+   fond fiable derrière elles, sinon la grunge paraît plus claire qu'au Cockpit. */
+.calendar-page { background: var(--app-bg); background-attachment: fixed; min-height:100%; padding:28px 40px 80px; }
 @media (max-width:639px){ .calendar-page{ padding:16px 14px 90px; } }
 
 .calendar-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
@@ -932,14 +920,15 @@
 .calendar-quota b { color:hsl(var(--foreground)); }
 .calendar-quota.at-limit b { color:var(--accent-app); }
 
-.calendar-year-nav { display:inline-flex; align-items:center; gap:10px; font-family:var(--font-mono); color:var(--name); }
+.calendar-year-nav { display:inline-flex; align-items:center; gap:10px; font-family:var(--font-mono); color:var(--name); flex-wrap:wrap; }
+.calendar-year-pill { font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em; color:hsl(var(--muted-foreground)); background:var(--field); border:1px solid var(--hair); border-radius:999px; padding:4px 10px; white-space:nowrap; }
 .calendar-year-label { font-size:14px; }
 .calendar-nav-btn { width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; background:var(--field); border:1px solid var(--hair); border-radius:8px; color:hsl(var(--muted-foreground)); cursor:pointer; }
 .calendar-nav-btn svg { width:16px; height:16px; }
 .calendar-nav-btn:disabled { opacity:.5; }
 
 /* Ancre saison */
-.calendar-anchor { display:flex; align-items:baseline; gap:12px; padding:13px 0 5px; border-top:1px solid var(--hair); margin-top:14px; }
+.calendar-anchor { display:flex; align-items:center; gap:12px; padding:13px 0 5px; border-top:1px solid var(--hair); margin-top:14px; }
 .calendar-anchor-big { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:32px; font-weight:600; line-height:1; color:var(--accent-app); }
 .calendar-anchor-eyebrow { margin-bottom:2px; }
 .calendar-anchor-next { color:hsl(var(--muted-foreground)); font-size:12px; }
@@ -967,32 +956,25 @@
 /* Re-cache la grille desktop sur mobile (rule précédente l.683 annulée par .calendar-grid display:grid ci-dessus) */
 @media (max-width:639px){ .calendar-grid{ display:none; } }
 
-/* Carte-mois : .glass-card fournit le verre/grain ; on ajoute padding + états */
-.calendar-month-card { padding:12px 14px; }
-.calendar-month-card.current { border-left:2.5px solid var(--accent-app); box-shadow:0 0 0 1px color-mix(in srgb, var(--accent-app) 12%, transparent), 0 18px 44px rgba(0,0,0,.32); }
-.light .calendar-month-card.current { box-shadow:0 0 0 1px color-mix(in srgb, var(--accent-app) 14%, transparent), 0 4px 14px rgba(120,90,60,.06); }
+/* Carte-mois = cadre transparent avec bordure (PAS de verre : le verre vit sur
+   les événements). Le mois courant teinte sa bordure en accent. */
+/* Voile léger (plus clair) pour détacher les mois du fond. Sombre = blanc 4% ;
+   clair = surface --card (override ci-dessous). */
+.calendar-month-card { padding:12px 14px; background:hsl(var(--foreground) / 0.04); border:1px solid var(--hair); border-radius:16px; }
+.light .calendar-month-card { background:hsl(var(--card)); }
+.calendar-month-card.current { outline:none; }
 .calendar-month-card.empty { opacity:.4; cursor:pointer; }
 
 .calendar-empty-hint { color:hsl(var(--muted-foreground)); font-size:13px; margin-bottom:12px; }
 .calendar-empty-hint a { color:var(--accent-app); }
 
-/* ── DA Refonte — Task 5 : agenda mobile (cascade : après tout le legacy ci-dessus) ── */
-.mobile-agenda { display:flex; flex-direction:column; gap:14px; }
-.agenda-empty { display:flex; align-items:center; gap:8px; padding:11px 14px; border-radius:12px; background:var(--field); border:1px solid var(--hair); opacity:.6; cursor:pointer; }
-.agenda-empty-nm { font-family:var(--font-heading); font-weight:800; color:hsl(var(--foreground)); font-size:14px; }
-.agenda-empty-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-left:auto; }
-.agenda-mh { display:flex; align-items:center; gap:8px; padding:4px 2px 8px; cursor:pointer; }
-.agenda-mh .calendar-month-picto { color:hsl(var(--muted-foreground)); }
-.agenda-mh-name { font-family:var(--font-heading); font-weight:800; font-size:16px; color:hsl(var(--foreground)); }
-.agenda-count { font-family:var(--font-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-left:auto; }
-.agenda-event { }
-.agenda-row { display:flex; align-items:center; gap:10px; padding:9px 0; text-decoration:none; color:inherit; }
-.agenda-row + .agenda-row, .agenda-event + .agenda-event .agenda-row { border-top:1px solid var(--hair); }
-.agenda-row-img { width:30px; height:40px; border-radius:5px; overflow:hidden; flex-shrink:0; }
-.agenda-row-img img { width:100%; height:100%; object-fit:cover; }
-.agenda-row-img.placeholder { background:var(--field); display:flex; align-items:center; justify-content:center; color:var(--faint); }
-.agenda-row-info { flex:1; min-width:0; }
-.agenda-row-name { color:var(--name); font-size:13px; font-weight:600; }
-.agenda-row-meta { color:hsl(var(--muted-foreground)); font-size:11px; margin-top:1px; }
-.agenda-row.friend { opacity:.72; }
-.agenda-fr-av { width:30px; height:30px; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12px; }
+/* ── Statut bille (style Cockpit, via .da-status/.da-dot) + avatars présents inline ── */
+/* Greffe DA sur l'intérieur prod : bille colorée à droite, avatars des présents à sa gauche. */
+.calendar-event-end { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.calendar-status { font-size:11px; flex-shrink:0; white-space:nowrap; }
+.calendar-event-end .calendar-pav { display:flex; cursor:pointer; flex-shrink:0; }
+/* Empêche les avatars de se compresser/écraser dans le groupe de droite serré
+   (carte étroite 3 colonnes) → sinon un seul avatar visible. */
+.calendar-event-end .calendar-pav-item { flex-shrink:0; position:relative; }
+.mobile-event-end { display:flex; align-items:center; gap:9px; flex-shrink:0; }
+.mobile-event-end .agenda-pav { display:flex; cursor:pointer; flex-shrink:0; }

@@ -14,9 +14,11 @@ const month = (events: ReturnType<typeof ev>[]): CalendarMonth =>
 describe('seasonSummary', () => {
   const now = new Date('2026-06-10T12:00:00')
 
-  it('compte mes dates, ignore les dates amies', () => {
-    const months = [month([ev('A', '2026-06-20'), ev('Ami', '2026-06-25', true), ev('B', '2026-07-05')])]
-    expect(seasonSummary(months, now).total).toBe(2)
+  it('compte restant/passées (date de fin), ignore les dates amies', () => {
+    const months = [month([ev('Passé', '2026-06-01'), ev('A', '2026-06-20'), ev('Ami', '2026-06-25', true), ev('B', '2026-07-05')])]
+    const s = seasonSummary(months, now)
+    expect(s.remaining).toBe(2)
+    expect(s.total).toBe(3)
   })
   it('prochaine date = 1re à venir (mienne), en jours pleins', () => {
     const months = [month([ev('Passé', '2026-06-01'), ev('Avalon', '2026-06-17')])]
@@ -26,7 +28,7 @@ describe('seasonSummary', () => {
     const months = [month([ev('Passé', '2026-06-01')])]
     expect(seasonSummary(months, now).next).toBeNull()
   })
-  it('saison vide → total 0, next null', () => {
-    expect(seasonSummary([month([])], now)).toEqual({ total: 0, next: null })
+  it('saison vide → 0/0, next null', () => {
+    expect(seasonSummary([month([])], now)).toEqual({ remaining: 0, total: 0, next: null })
   })
 })

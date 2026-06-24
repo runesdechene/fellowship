@@ -19,6 +19,8 @@ export interface CalendarEvent {
   friendName?: string
   friendAvatarUrl?: string | null
   friendSlug?: string | null
+  /** Tous les amis qui vont sur cette date amie (pas seulement le 1er). */
+  friends?: { name: string; avatarUrl: string | null; slug: string }[]
 }
 
 export interface CalendarMonth {

@@ -24,8 +24,9 @@ export function DebugPlanSwitch() {
           key={o.label}
           onClick={() => setPlanOverride(o.v)}
           className={`rounded-full px-2 py-0.5 transition ${
-            planOverride === o.v ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+            planOverride === o.v ? '' : 'text-muted-foreground hover:text-foreground'
           }`}
+          style={planOverride === o.v ? { background: 'var(--accent-app)', color: 'var(--accent-app-ink)' } : undefined}
         >
           {o.label}
         </button>
