@@ -17,11 +17,7 @@
   background: var(--app-bg);
   background-attachment: fixed;
   position: relative;
-  /* Couleur vers laquelle la couverture se fond = couleur de --app-bg EN HAUT de page
-     (le centre du radial, pas la base sombre) — sinon le dégradé paraît trop noir. */
-  --v-fade: #252222;
 }
-.light .v-page-root { --v-fade: #f6efe4; }
 
 /* ── Loading & 404 ─────────────────────────────────────────────────── */
 .profile-loading {
@@ -92,9 +88,13 @@
 /* ── Cover ──────────────────────────────────────────────────────────── */
 .v-cover { position: relative; width: 100%; height: 400px; }
 .v-cover img { width: 100%; height: 100%; object-fit: cover; object-position: center 32%; display: block; }
-.v-cover-fallback { width: 100%; height: 100%; background: linear-gradient(135deg, #2a2725, var(--v-fade)); }
+.v-cover-fallback { width: 100%; height: 100%; background: var(--app-bg); background-attachment: fixed; }
+/* Voile = le MÊME --app-bg fixé au viewport que la page, masqué en alpha (transparent en
+   haut → opaque en bas). Même dégradé fixe que la page → raccord parfait, zéro couture. */
 .v-cover::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, transparent 8%, color-mix(in srgb, var(--v-fade) 55%, transparent) 42%, var(--v-fade) 78%, var(--v-fade) 100%); }
+  background: var(--app-bg); background-attachment: fixed;
+  -webkit-mask-image: linear-gradient(180deg, transparent 6%, #000 76%);
+  mask-image: linear-gradient(180deg, transparent 6%, #000 76%); }
 .vitrine { max-width: 800px; margin: -64px auto 0; padding: 0 28px 64px; position: relative; z-index: 1; }
 /* Repositionnement de la bannière (propriétaire) */
 .v-cover.is-repositioning img { cursor: grab; touch-action: none; }
