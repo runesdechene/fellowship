@@ -478,7 +478,10 @@ h1, h2, h3, .font-display {
    la carte cliquable autour de la barre (pointer-events). */
 .carte-filterbar.explorer {
   position: absolute; top: 0; left: 0; right: 0;
-  height: auto; overflow: visible; z-index: 10; pointer-events: none;
+  /* ⚠️ NE PAS hériter du fond plein écran de .explorer (background:--app-bg + min-height:100dvh) :
+     sinon cet overlay recouvre toute la carte (invisible en nuit, fond app par-dessus). */
+  height: auto; min-height: 0; background: transparent;
+  overflow: visible; z-index: 10; pointer-events: none;
 }
 /* En jour, `.light .explorer { background:#f1ebe1 }` (fond plein page de l'Explorer)
    fuirait sur cet overlay et poserait un bandeau clair opaque en haut de la carte.
