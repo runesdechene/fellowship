@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { CalendarRange } from 'lucide-react'
 import type { SeasonMonth } from '@/lib/cockpit'
 
 // Initiale du mois pour la frise compacte (J F M A M J J A S O N D).
@@ -17,13 +16,11 @@ interface Props {
 export function SaisonFrise({ season }: Props) {
   const total = season.reduce((s, m) => s + m.count, 0)
   const emptyNames = season.filter(m => !m.filled).map(m => MONTH_NAME[m.month])
+  const seasonYear = season[0]?.year ?? new Date().getFullYear()
 
   return (
     <div className="ck-card">
-      <h3>
-        <span className="ck-ic grn"><CalendarRange strokeWidth={1.8} /></span>
-        Ta saison
-      </h3>
+      <div className="ck-eyebrow">SAISON {seasonYear}</div>
 
       <div className="ck-season-head">
         <b>{total}</b>
