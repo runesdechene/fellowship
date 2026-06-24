@@ -1289,13 +1289,16 @@
 }
 
 /* ── Carte grille B v2 (image + corps verre DA) ───────────────────── */
+/* Surface NEUTRE de la carte (convention SearchBar) — pas hsl(var(--card)) qui est brun. */
+.explorer { --egrid-surf: #2a2725; }
+.light .explorer { --egrid-surf: #faf6ef; }
 .explorer .egrid-card {
   display: flex;
   flex-direction: column;
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
-  background: hsl(var(--card));
+  background: var(--egrid-surf);
   border: 1px solid var(--hair);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
   transition: transform 0.14s, border-color 0.15s;
@@ -1315,8 +1318,8 @@
 .explorer .egrid-imgfade {
   position: absolute; left: 0; right: 0; bottom: 0; height: 165px; pointer-events: none;
   background: linear-gradient(to top,
-    hsl(var(--card)) 0%, hsl(var(--card)) 44%,
-    color-mix(in srgb, hsl(var(--card)) 72%, transparent) 66%,
+    var(--egrid-surf) 0%, var(--egrid-surf) 44%,
+    color-mix(in srgb, var(--egrid-surf) 72%, transparent) 66%,
     transparent 100%);
 }
 
