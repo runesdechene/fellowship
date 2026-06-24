@@ -110,15 +110,7 @@ export function SettingsPage() {
     'w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
 
   return (
-    <div
-      className="min-h-screen"
-      style={{
-        // Top transparent (laisse la nav fader proprement dans le radial du body),
-        // puis bascule en --background opaque avant les cartes pour cacher le radial
-        // qui sinon créait une zone gradient visible derrière le 1er container.
-        background: 'linear-gradient(to bottom, transparent 0, hsl(var(--background)) 120px)',
-      }}
-    >
+    <div className="min-h-screen">{/* fond = --app-bg du body (page purifiée, plus de hack dégradé) */}
       <div className="page-width max-w-2xl page-padding">
         <h1 className="page-title mb-8">Paramètres</h1>
 
