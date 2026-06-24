@@ -492,8 +492,8 @@ h1, h2, h3, .font-display {
    fuirait sur cet overlay et poserait un bandeau clair opaque en haut de la carte.
    On neutralise : la barre de filtres reste transparente, la carte passe dessous. */
 .light .carte-filterbar.explorer { background: transparent; }
-/* Chips Quoi/Où/Quand décalés SOUS la SearchBar overlay (esprit Explorer). */
-.carte-filterbar .top { padding: 84px 0 0; pointer-events: none; }
+/* Chips Quoi/Où/Quand décalés SOUS la SearchBar overlay (~90px) — clairement dessous. */
+.carte-filterbar .top { padding: 108px 0 0; pointer-events: none; }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
 
