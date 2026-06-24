@@ -45,12 +45,12 @@
   /* Marron chaud foncé = couleur center du radial du body (--page-backdrop, nuit).
      Solide ici car le radial du body, sur la largeur de la colonne droite, finit
      toujours dans la zone sombre — du coup la nav paraissait noire. */
-  background: #2c1f1c;
+  background: #1d1a18;
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 0%, black 15%, transparent 100%);
   pointer-events: none;
 }
-.light .search-bar-wrapper::before { background: #f8f2e8; }
+.light .search-bar-wrapper::before { background: #f6efe4; }
 
 /* ── Search pill (col 2, centrée, glass) ──────────────────────────── */
 
@@ -64,15 +64,16 @@
   width: 360px;
   max-width: 100%;
   padding: 12px 16px;
-  background: hsl(var(--card) / 0.95);
-  border: 1px solid hsl(var(--border) / 0.6);
+  background: var(--glass);
+  border: 1px solid var(--hair);
   border-radius: 999px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
   transition: border-color 0.18s, background 0.18s;
 }
+.light .search-bar { box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
 .search-bar:focus-within {
-  background: hsl(var(--card) / 0.85);
-  border-color: color-mix(in srgb, var(--amber) 35%, hsl(var(--border)));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--hair));
 }
 
 .search-bar-icon {
@@ -142,8 +143,8 @@
   gap: 7px;
   height: 34px;
   padding: 0 14px;
-  background: var(--gradient-primary);
-  color: hsl(var(--primary-foreground));
+  background: var(--accent);
+  color: var(--accent-ink);
   border: none;
   border-radius: 999px;
   font-family: var(--font-body);
@@ -200,8 +201,8 @@
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  background: var(--gradient-primary);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-ink);
   border: 2px solid hsl(var(--card));
   border-radius: 999px;
   font-size: 10px;
