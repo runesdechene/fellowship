@@ -102,6 +102,9 @@ export function periodToRange(period: Period, now: Date): PeriodRange {
 }
 
 export type Zone = 'mine' | 'france'
+
+/** Filtre géo de l'UI Explorer : point choisi (label affichable) + rayon km. */
+export interface GeoFilter { lat: number; lng: number; label: string; radiusKm: number }
 export interface ExplorerFilters {
   tags: Set<string>
   zone: Zone
@@ -109,6 +112,20 @@ export interface ExplorerFilters {
   query?: string
   /** Filtre "mois précis" (depuis le calendrier) : prend le pas sur `period`. */
   monthRange?: { from: Date; to: Date } | null
+  /** Filtre géographique « autour d'un point » : prend le pas sur `zone`. */
+  geo?: { lat: number; lng: number; radiusKm: number } | null
+}
+
+/** Distance à vol d'oiseau entre deux points (km), formule de haversine. */
+export function haversineKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const R = 6371
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const dLat = toRad(bLat - aLat)
+  const dLng = toRad(bLng - aLng)
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(s)))
 }
 
 /** Plage [1er du mois, 1er du mois suivant) pour un mois calendaire précis. */
@@ -263,7 +280,14 @@ export function composeFilter(
   const searching = q.length > 0
   let result = events.filter(ev => {
     if (filters.tags.size > 0 && !ev.tags?.some(t => filters.tags.has(t))) return false
-    if (filters.zone === 'mine' && ctx.department && ev.department !== ctx.department) return false
+    // Filtre géo (rayon autour d'un point) : prend le pas sur la zone département.
+    // Un event sans coordonnées est exclu quand le filtre rayon est actif.
+    if (filters.geo) {
+      if (ev.latitude == null || ev.longitude == null) return false
+      if (haversineKm(filters.geo.lat, filters.geo.lng, ev.latitude, ev.longitude) > filters.geo.radiusKm) return false
+    } else if (filters.zone === 'mine' && ctx.department && ev.department !== ctx.department) {
+      return false
+    }
     // Recherche texte (nom + ville) : on cherche dans tout le temps, période ignorée.
     if (searching) {
       return normalizeText(ev.name).includes(q) || normalizeText(ev.city ?? '').includes(q)

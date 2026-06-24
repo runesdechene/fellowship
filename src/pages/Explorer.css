@@ -487,6 +487,19 @@
   color: var(--accent-app);
 }
 
+/* ── Filtre géo (localisation + rayon km) dans le popover « Où » ───── */
+.explorer .geo-filter { display: flex; flex-direction: column; gap: 13px; width: 300px; max-width: calc(100vw - 48px); }
+.explorer .geo-addr-input {
+  width: 100%; padding: 9px 12px; border-radius: 10px;
+  background: var(--field); border: 1px solid var(--hair); color: hsl(var(--foreground));
+  font-family: var(--font-body); font-size: 14px; outline: none;
+}
+.explorer .geo-addr-input:focus { border-color: var(--accent-app); }
+.explorer .geo-radius { display: flex; align-items: center; gap: 10px; }
+.explorer .geo-radius-l { font-size: 12px; color: hsl(var(--muted-foreground)); white-space: nowrap; }
+.explorer .geo-radius input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent-app); cursor: pointer; }
+.explorer .geo-radius-v { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent-app); min-width: 54px; text-align: right; }
+
 /* ── Bottom bar ───────────────────────────────────────────────────── */
 
 .explorer .bottombar {

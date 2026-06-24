@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { getTagEmoji } from '@/components/ui/TagBadge'
-import { PERIODS, type Period, type Zone } from '@/lib/explorer'
+import { AddressAutocomplete, type AddressSelection } from '@/components/events/AddressAutocomplete'
+import { PERIODS, type Period, type Zone, type GeoFilter } from '@/lib/explorer'
 
 // DynamicTag shape returned by useTags (value = slug, label = display name)
 interface DynamicTag {
@@ -17,10 +18,15 @@ interface SearchSegmentsProps {
   period: Period
   /** Si défini (arrivée depuis le calendrier), « Quand » affiche ce mois au lieu du preset. */
   monthLabel?: string | null
-  userDept: string | null
+  /** Filtre géo (Explorer) : localisation + rayon. Si `onGeo` est fourni, « Où » devient
+   *  un sélecteur localisation+rayon ; sinon il reste un simple « Toute la France » (Carte). */
+  geo?: GeoFilter | null
   onToggleTag: (value: string) => void
   onZone: (zone: Zone) => void
   onPeriod: (period: Period) => void
+  onGeo?: (sel: AddressSelection, radiusKm: number) => void
+  onRadius?: (km: number) => void
+  onClearGeo?: () => void
 }
 
 type Pop = 'quoi' | 'ou' | 'quand' | null
@@ -29,7 +35,7 @@ type Pop = 'quoi' | 'ou' | 'quand' | null
  * Barre de filtres Quoi / Où / Quand (chips + popovers centrés sous le chip).
  * Pur filtre : la recherche texte vit ailleurs (SearchBar globale sur l'Explorer).
  */
-export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, userDept, onToggleTag, onZone, onPeriod }: SearchSegmentsProps) {
+export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, geo, onToggleTag, onZone, onPeriod, onGeo, onRadius, onClearGeo }: SearchSegmentsProps) {
   const [open, setOpen] = useState<Pop>(null)
   // Ancre du clic-extérieur = le groupe de chips (collé aux boutons), PAS `.top`
   // qui est une bande pleine largeur (cliquer dans son vide à gauche/droite ne
@@ -37,6 +43,10 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
   // dedans ne ferme pas.
   const groupRef = useRef<HTMLDivElement>(null)
   const toggle = (p: Pop) => setOpen(o => (o === p ? null : p))
+
+  // État local du sélecteur de localisation (champ adresse + rayon courant).
+  const [addr, setAddr] = useState(geo?.label ?? '')
+  const [radius, setRadius] = useState(geo?.radiusKm ?? 50)
 
   // Fermer le popover au clic en dehors du groupe de chips.
   useEffect(() => {
@@ -49,8 +59,18 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
   }, [open])
 
   const quoiLabel = selectedTags.size === 0 ? 'Tous les festivals' : `${selectedTags.size} catégorie${selectedTags.size > 1 ? 's' : ''}`
-  const ouLabel = zone === 'france' ? 'Toute la France' : (userDept ? `Mon coin (${userDept})` : 'Près de moi')
+  const ouLabel = geo ? `${geo.label} · ${geo.radiusKm} km` : 'Toute la France'
   const quandLabel = monthLabel ?? (PERIODS.find(p => p.value === period)?.label ?? '')
+
+  const changeRadius = (km: number) => {
+    setRadius(km)
+    if (geo) onRadius?.(km)
+  }
+  const clearLocation = () => {
+    setAddr('')
+    onClearGeo?.()
+    onZone('france')
+  }
 
   return (
     <div className="top">
@@ -85,10 +105,30 @@ export function SearchSegments({ tags, selectedTags, zone, period, monthLabel, u
             {open === 'ou' && (
               <div className="pop open" onClick={e => e.stopPropagation()}>
                 <h4>Localisation</h4>
-                <div className="peropts">
-                  {/* « Mon coin » masqué tant que le filtre par département n'est pas fiable. */}
-                  <button className={'peropt' + (zone === 'france' ? ' on' : '')} onClick={() => { onZone('france'); setOpen(null) }}>🇫🇷 Toute la France</button>
-                </div>
+                {onGeo ? (
+                  <div className="geo-filter">
+                    <AddressAutocomplete
+                      value={addr}
+                      onChange={setAddr}
+                      onSelect={(sel) => onGeo(sel, radius)}
+                      inputClass="geo-addr-input"
+                    />
+                    <label className="geo-radius">
+                      <span className="geo-radius-l">Rayon</span>
+                      <input
+                        type="range" min={5} max={300} step={5}
+                        value={radius}
+                        onChange={e => changeRadius(Number(e.target.value))}
+                      />
+                      <b className="geo-radius-v">{radius} km</b>
+                    </label>
+                    <button className={'peropt' + (!geo ? ' on' : '')} onClick={clearLocation}>🇫🇷 Toute la France</button>
+                  </div>
+                ) : (
+                  <div className="peropts">
+                    <button className={'peropt' + (zone === 'france' ? ' on' : '')} onClick={() => { onZone('france'); setOpen(null) }}>🇫🇷 Toute la France</button>
+                  </div>
+                )}
               </div>
             )}
           </div>

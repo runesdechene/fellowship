@@ -5,7 +5,8 @@ import { useEvents } from '@/hooks/use-events'
 import { useAuth } from '@/lib/auth'
 import { useTags } from '@/hooks/use-tags'
 import { useMyParticipations, addParticipation, removeParticipation } from '@/hooks/use-participations'
-import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind } from '@/lib/explorer'
+import { composeFilter, monthRangeFor, type Zone, type Period, type ActorKind, type GeoFilter } from '@/lib/explorer'
+import type { AddressSelection } from '@/components/events/AddressAutocomplete'
 import { uploadEventImage } from '@/lib/event-image'
 import { supabase } from '@/lib/supabase'
 import { planForActor } from '@/lib/navModel'
@@ -76,6 +77,11 @@ export function ExplorerPage() {
   const [zone, setZone] = useState<Zone>(
     () => (stored.zone === 'mine' || stored.zone === 'france') ? stored.zone as Zone : 'france'
   )
+  // Filtre géo (localisation + rayon km) — prend le pas sur `zone` quand défini.
+  const [geo, setGeo] = useState<GeoFilter | null>(() => {
+    const g = stored.geo as GeoFilter | undefined
+    return g && typeof g.lat === 'number' && typeof g.lng === 'number' && typeof g.radiusKm === 'number' ? g : null
+  })
   const validPeriods: Period[] = ['all', 'this-month', 'next-3', 'next-6', 'next-12', 'recent', 'past']
   // `periodChoice` = choix explicite de l'utilisateur (persisté) ; null = pas encore choisi → on
   // applique le défaut selon l'acteur (dérivé plus bas), sans state à synchroniser.
@@ -111,8 +117,8 @@ export function ExplorerPage() {
   const now = useMemo(() => new Date(), [])
 
   const displayed = useMemo(
-    () => composeFilter(allEvents, { tags: selectedTags, zone, period, monthRange }, { department: person?.department ?? null, now }),
-    [allEvents, selectedTags, zone, period, monthRange, person?.department, now]
+    () => composeFilter(allEvents, { tags: selectedTags, zone, period, monthRange, geo: geo ? { lat: geo.lat, lng: geo.lng, radiusKm: geo.radiusKm } : null }, { department: person?.department ?? null, now }),
+    [allEvents, selectedTags, zone, period, monthRange, geo, person?.department, now]
   )
 
   // ---------- Filter setters with reset + persist ----------
@@ -129,6 +135,25 @@ export function ExplorerPage() {
   const handleZone = (z: Zone) => {
     setZone(z)
     persistFilters({ zone: z })
+  }
+
+  // ---------- Filtre géo (localisation + rayon) ----------
+  const handleGeo = (sel: AddressSelection, radiusKm: number) => {
+    const g: GeoFilter = { lat: sel.lat, lng: sel.lng, label: sel.city || sel.address, radiusKm }
+    setGeo(g)
+    persistFilters({ geo: g })
+  }
+  const handleRadius = (km: number) => {
+    setGeo(prev => {
+      if (!prev) return prev
+      const g = { ...prev, radiusKm: km }
+      persistFilters({ geo: g })
+      return g
+    })
+  }
+  const clearGeo = () => {
+    setGeo(null)
+    persistFilters({ geo: null })
   }
 
   const handlePeriod = (p: Period) => {
@@ -213,10 +238,13 @@ export function ExplorerPage() {
           zone={zone}
           period={period}
           monthLabel={monthLabel}
-          userDept={person?.department ?? null}
+          geo={geo}
           onToggleTag={toggleTag}
           onZone={handleZone}
           onPeriod={handlePeriod}
+          onGeo={handleGeo}
+          onRadius={handleRadius}
+          onClearGeo={clearGeo}
         />
 
         <div className="xplr-count">

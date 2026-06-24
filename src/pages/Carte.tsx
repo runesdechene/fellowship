@@ -76,7 +76,6 @@ export default function Carte() {
           selectedTags={selectedTags}
           zone={zone}
           period={period}
-          userDept={person?.department ?? null}
           onToggleTag={toggleTag}
           onZone={setZone}
           onPeriod={setPeriod}
