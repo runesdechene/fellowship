@@ -20,7 +20,7 @@ export function CompagnonsDeRoute() {
         COMPAGNONS
         {convergences.length > 0 && (
           <Link to="/communaute" className="ck-seeall">
-            {extra > 0 ? 'tout ›' : 'tout ›'}
+            {extra > 0 ? `${convergences.length} ›` : 'tout ›'}
           </Link>
         )}
       </div>

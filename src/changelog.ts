@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.302',
+    date: '2026-06-24',
+    title: 'DA sci-fi chaud : Cockpit & Sidebar',
+    changes: [
+      'DA sci-fi chaud : Cockpit & Sidebar (accent terracotta, surfaces de verre, hiérarchie clarté) — jour & nuit',
+    ],
+  },
+  {
     version: '0.7.281',
     date: '2026-06-14',
     title: '10 dates en gratuit',
