@@ -4,7 +4,7 @@ import type { ParticipationWithEvent, LedgerEntry } from '@/types/database'
 import { buildPastBilans, splitOrientation, type PastBilan } from '@/lib/cockpit-bilans'
 import { BilanModal } from '@/components/reports/BilanModal'
 
-const MAX_ROWS = 3
+const MAX_ROWS = 5
 
 interface Props {
   participations: ParticipationWithEvent[]

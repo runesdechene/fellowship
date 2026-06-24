@@ -24,7 +24,7 @@ function dueAmount(entries: LedgerEntry[] | undefined): number | null {
 }
 
 export function AReglerFinaliser({ participations, entriesByEvent }: Props) {
-  const visible = participations.slice(0, 3)
+  const visible = participations.slice(0, 5)
   const extra = participations.length - visible.length
 
   return (

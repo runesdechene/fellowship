@@ -10,7 +10,7 @@ export function CompagnonsDeRoute() {
   const { convergences, loading } = useCommunityFeed()
   const [share, setShare] = useState<{ message: string; url: string } | null>(null)
 
-  const visible = convergences.slice(0, 3)
+  const visible = convergences.slice(0, 5)
   const extra = convergences.length - visible.length
 
   return (
