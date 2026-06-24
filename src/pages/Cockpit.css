@@ -113,6 +113,10 @@
 .ck-list-info b { display: block; font-size: 13px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--name); }
 .ck-list-info small { color: hsl(var(--muted-foreground)); font-size: 10.5px; font-family: var(--font-mono); letter-spacing: .04em; }
 .ck-amt { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; }
+/* À régler : prix (mono) au-dessus, label de statut réduit en dessous */
+.ck-areg-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.ck-areg-right .ck-amt { font-size: 14px; }
+.ck-areg-lbl { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); white-space: nowrap; }
 
 /* Avatars compagnons */
 .ck-conv-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }

@@ -88,7 +88,7 @@ export function CockpitPage() {
             </div>
             <ProchainsFestivals participations={upcoming} />
             <div className="ck-cols">
-              <div className="ck-col"><AReglerFinaliser participations={aRegler} /></div>
+              <div className="ck-col"><AReglerFinaliser participations={aRegler} entriesByEvent={entriesByEvent} /></div>
               <div className="ck-col"><CompagnonsDeRoute /></div>
               <div className="ck-col"><MesBilans participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} /></div>
             </div>
