@@ -550,14 +550,13 @@
   flex-direction: column;
 }
 .landing .tier.pro {
-  background: var(--gradient-pro);
-  color: #fff;
-  border: none;
+  background: hsl(var(--card));
+  border: 1.5px solid var(--la-accent);
   position: relative;
-  box-shadow: 0 16px 42px hsl(20 70% 36% / .44);
+  box-shadow: 0 0 0 1px hsl(18 50% 42% / .22), 0 20px 52px hsl(16 55% 28% / .38);
 }
 .light .landing .tier.pro {
-  box-shadow: 0 14px 36px hsl(24 60% 50% / .16);
+  box-shadow: 0 0 0 1px hsl(20 55% 55% / .28), 0 16px 40px hsl(24 60% 50% / .18);
 }
 .landing .tier .ttl {
   font-size: 12px;
@@ -567,7 +566,7 @@
   color: hsl(var(--muted-foreground));
 }
 .landing .tier.pro .ttl {
-  color: rgba(255,255,255,.82);
+  color: var(--la-accent);
 }
 .landing .tier .price {
   font-family: var(--font-heading);
@@ -577,14 +576,14 @@
   color: hsl(var(--foreground));
 }
 .landing .tier.pro .price {
-  color: #fff;
+  color: var(--la-accent);
 }
 .landing .tier .per {
   font-size: 13px;
   color: hsl(var(--muted-foreground));
 }
 .landing .tier.pro .per {
-  color: rgba(255,255,255,.8);
+  color: hsl(var(--muted-foreground));
 }
 .landing .tier .per-ttc {
   font-size: 11px;
@@ -607,7 +606,7 @@
   color: hsl(var(--foreground));
 }
 .landing .tier.pro li {
-  color: rgba(255,255,255,.94);
+  color: hsl(var(--foreground));
 }
 .landing .tier li .ck {
   color: var(--forest);
@@ -615,17 +614,22 @@
   flex-shrink: 0;
 }
 .landing .tier.pro li .ck {
-  color: #ffe0ad;
+  color: var(--la-accent);
 }
 .landing .pop {
   position: absolute;
   top: 18px;
   right: 18px;
-  background: rgba(255,255,255,.22);
+  background: var(--la-accent);
+  color: #fff;
   font-size: 11px;
   font-weight: 700;
   padding: 5px 12px;
   border-radius: 99px;
+}
+.landing .tier.pro .btn-white {
+  background: var(--la-accent);
+  color: var(--la-accent-ink);
 }
 
 /* ── Org card ────────────────────────────────────────────────────── */
