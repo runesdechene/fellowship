@@ -90,6 +90,22 @@ export function LandingPage() {
   return (
     <div className="landing" data-aud={audience}>
 
+      {/* Halos multicolores + lumières — nuit de festival, calque PLEINE PAGE (fond) */}
+      <div className="hero-halos" aria-hidden="true">
+        <span className="glow h-terra" />
+        <span className="glow h-violet" />
+        <span className="glow h-blue" />
+        <span className="glow h-green" />
+        <span className="glow h-amber" />
+        <span className="glow h-pink" />
+        <span className="glow h-magenta" />
+        <div className="hero-bokeh">
+          {Array.from({ length: 22 }).map((_, i) => (
+            <i key={i} className={`bk bk-${i}`} />
+          ))}
+        </div>
+      </div>
+
       {/* ── Nav ── */}
       <nav ref={navRef}>
         <div className="wrap nav-in">
@@ -109,22 +125,6 @@ export function LandingPage() {
 
       {/* ── Hero ── */}
       <header className="hero">
-        {/* Halos multicolores + lumières — nuit de festival */}
-        <div className="hero-halos" aria-hidden="true">
-          <span className="glow h-terra" />
-          <span className="glow h-violet" />
-          <span className="glow h-blue" />
-          <span className="glow h-green" />
-          <span className="glow h-amber" />
-          <span className="glow h-pink" />
-          <span className="glow h-magenta" />
-          <div className="hero-bokeh">
-            {Array.from({ length: 18 }).map((_, i) => (
-              <i key={i} className={`bk bk-${i}`} />
-            ))}
-          </div>
-        </div>
-
         <div className="wrap">
           {/* Audience switcher */}
           <div className="switch-wrap">
