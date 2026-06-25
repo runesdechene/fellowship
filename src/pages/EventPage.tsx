@@ -291,6 +291,33 @@ export function EventPage() {
     }
   }
 
+  // Ajout d'affiche rapide (collaboratif, depuis la fausse affiche) — tout exposant peut
+  // poser une image sur un event qui n'en a pas, comme sur l'Explorer (RLS update exposant).
+  const [addingPoster, setAddingPoster] = useState(false)
+  const handleAddPoster = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !event) return
+    e.target.value = ''
+    setAddingPoster(true)
+    try {
+      const compressed = await compressImage(file)
+      const ext = compressed.type === 'image/webp' ? 'webp' : (compressed.name.split('.').pop() ?? 'jpg')
+      const path = `${crypto.randomUUID()}.${ext}`
+      const { data: uploadData } = await supabase.storage
+        .from('event-images')
+        .upload(path, compressed, { contentType: compressed.type || 'image/webp' })
+      if (uploadData) {
+        const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(uploadData.path)
+        await updateEvent(event.id, { image_url: urlData.publicUrl })
+        window.location.reload()
+        return
+      }
+    } catch (err) {
+      console.error('Add poster failed:', err)
+    }
+    setAddingPoster(false)
+  }
+
   const isPast = event ? new Date(event.end_date) < new Date() : false
   // isExposant = on agit en tant qu'entity (exposant). Si on est sur le compte
   // personne (festivalier), on voit le stepper court (Repéré / J'y vais) — peu
@@ -716,8 +743,15 @@ export function EventPage() {
               {event.image_url ? (
                 <img src={event.image_url} alt={event.name} />
               ) : (
-                <div className="event-poster-empty" style={{ '--c': tagAccent } as React.CSSProperties} aria-hidden="true">
-                  <span className="event-poster-emoji">{getTagEmoji(event.tags?.[0] ?? 'autre')}</span>
+                <div className="event-poster-empty" style={{ '--c': tagAccent } as React.CSSProperties}>
+                  <span className="event-poster-emoji" aria-hidden="true">{getTagEmoji(event.tags?.[0] ?? 'autre')}</span>
+                  {isExposant && !editing && (
+                    <label className="event-poster-add">
+                      <Image className="h-4 w-4" strokeWidth={2} />
+                      {addingPoster ? 'Envoi…' : 'Ajouter une affiche'}
+                      <input type="file" accept="image/*" className="hidden" onChange={handleAddPoster} disabled={addingPoster} />
+                    </label>
+                  )}
                 </div>
               )}
             </div>
