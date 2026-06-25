@@ -1310,6 +1310,11 @@
 /* Sans participation : désaturée + transparente (revient au survol). */
 .explorer .egrid-card--muted { filter: saturate(0.62); opacity: 0.78; }
 .explorer .egrid-card--muted:hover { filter: none; opacity: 1; }
+/* Tactile (pas de hover pour ré-saturer) : on désature à peine, sinon les affiches non
+   repérées restent ternes en permanence. La distinction se fait via l'étoile, pas la couleur. */
+@media (hover: none) {
+  .explorer .egrid-card--muted { filter: saturate(0.92); opacity: 1; }
+}
 
 /* Zone affiche (cover, jamais recouverte par le texte). */
 .explorer .egrid-img { position: relative; aspect-ratio: 2 / 3; overflow: hidden; background: #0d0a08; }
