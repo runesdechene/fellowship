@@ -897,19 +897,31 @@
   }
 }
 
-/* Téléphones : on rétrécit le lockup du logo dans la nav pour que
-   "Fellowship" reste lisible à côté de l'icône, du toggle thème,
-   du lien Connexion et du bouton S'inscrire. */
-@media (max-width: 480px) {
-  .landing .nav-in .logo {
-    font-size: 17px;
-    gap: 7px;
-  }
+/* Téléphones : nav compacte. Le lockup "Fellowship" + toggle + Connexion + S'inscrire
+   ne tient pas sur 390px → on garde l'ICÔNE SEULE (texte masqué) pour libérer la place
+   et empêcher le toggle de chevaucher le logo. */
+@media (max-width: 560px) {
   .landing .nav-in .logo .mark-img {
     height: 26px;
   }
+  .landing .brand-name {
+    display: none;
+  }
   .landing .nav-links {
     gap: 12px;
+  }
+  /* Switcher d'audience : trop large en mobile (collé au bord droit) → on resserre. */
+  .landing .seg {
+    padding: 4px;
+    gap: 2px;
+  }
+  .landing .seg button {
+    padding: 8px 11px;
+    font-size: 12.5px;
+  }
+  .landing .seg .mini {
+    padding: 2px 5px;
+    font-size: 8px;
   }
 }
 
