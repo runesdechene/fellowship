@@ -170,7 +170,7 @@ export function LandingPage() {
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </Link>
-              <a href="#" className="btn btn-ghost">Voir comment ça marche</a>
+              <a href="#apropos" className="btn btn-ghost" onClick={goToApropos}>Voir comment ça marche</a>
             </div>
             {!exposants.loading && exposants.count !== null && exposants.count > 0 && (
               <div className="proof">
@@ -212,7 +212,7 @@ export function LandingPage() {
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </Link>
-              <a href="#" className="btn btn-ghost">Explorer les festivals</a>
+              <a href="#apropos" className="btn btn-ghost" onClick={goToApropos}>Explorer les festivals</a>
             </div>
             <div className="proof">Gratuit, pour toujours · Aucune carte requise</div>
           </div>

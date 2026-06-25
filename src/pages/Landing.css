@@ -123,9 +123,9 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.15);
   border-bottom-color: var(--hair);
   box-shadow: 0 6px 22px rgba(0,0,0,.20);
-  /* Au scroll : barre glossy plus compacte — padding-top réduit de moitié, un peu de bottom. */
-  padding-top: 8px;
-  padding-bottom: 10px;
+  /* Au scroll : barre glossy plus compacte. */
+  padding-top: 3px;
+  padding-bottom: 5px;
 }
 .light .landing nav.scrolled {
   box-shadow: 0 3px 14px rgba(60,45,35,.07);
