@@ -133,7 +133,7 @@
   gap: 7px;
   height: 34px;
   padding: 0 14px;
-  background: var(--accent-app);
+  background: var(--accent-grad);
   color: var(--accent-app-ink);
   border: none;
   border-radius: 999px;

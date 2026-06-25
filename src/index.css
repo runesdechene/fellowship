@@ -61,6 +61,7 @@
   /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
   --accent-app: #d6896a;             /* terracotta DA app (NUIT) — distinct de --accent (survol neutre HSL) et de --copper festif */
   --accent-app-ink: #fff;            /* texte sur bouton plein accent DA (nuit & jour) */
+  --accent-grad: linear-gradient(135deg, #ee8a52, #c4592e); /* dégradé chaud CTA primaires (raccord Landing --la-grad) */
   --app-bg: radial-gradient(120% 70% at 30% 0%, #252222, #171414 64%);
   --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
   --surface: #2a2725;                /* surface NEUTRE opaque (popovers, dropdowns, cartes Explorer, fausse affiche) */
