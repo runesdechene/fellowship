@@ -501,6 +501,84 @@
   border-color: color-mix(in srgb, var(--c) 34%, transparent);
 }
 
+/* ── Hero 2 colonnes + maquettes devices ─────────────────────────── */
+.landing .hero .wrap.hero-grid {
+  max-width: 1180px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 540px);
+  align-items: center;
+  gap: 26px;
+}
+.landing .hero-left { min-width: 0; }
+
+.landing .hero-devices { perspective: 1600px; position: relative; min-width: 0; }
+.landing .dv-stage {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(-18deg) rotateX(7deg) rotateZ(1deg);
+  margin-left: 12px;
+}
+
+/* Desktop (fenêtre navigateur + Cockpit stylisé) */
+.landing .dv-desktop {
+  width: 540px; max-width: 100%;
+  border-radius: 14px; overflow: hidden;
+  background: #15110f;
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 50px 90px -28px rgba(0,0,0,.7), 0 16px 40px rgba(0,0,0,.45);
+}
+.landing .dv-bar {
+  height: 30px; display: flex; align-items: center; gap: 7px; padding: 0 12px;
+  background: #221c19; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.landing .dv-bar i { width: 9px; height: 9px; border-radius: 50%; }
+.landing .dv-bar i:nth-child(1) { background: #e0795a; }
+.landing .dv-bar i:nth-child(2) { background: #e3b75a; }
+.landing .dv-bar i:nth-child(3) { background: #86c06a; }
+.landing .dv-url { flex: 1; height: 13px; margin-left: 10px; border-radius: 7px; background: rgba(255,255,255,.06); }
+.landing .dv-screen { display: flex; height: 320px; background: radial-gradient(120% 100% at 20% 0%, #241d1a, #16110f); }
+.landing .dv-side { width: 52px; padding: 14px 0; display: flex; flex-direction: column; align-items: center; gap: 14px; border-right: 1px solid rgba(255,255,255,.05); }
+.landing .dv-logo { width: 24px; height: 24px; border-radius: 7px; background: var(--la-grad); }
+.landing .dv-nav { width: 22px; height: 22px; border-radius: 7px; background: rgba(255,255,255,.06); }
+.landing .dv-nav.on { background: rgba(226,155,118,.32); }
+.landing .dv-main { flex: 1; padding: 16px; min-width: 0; }
+.landing .dv-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.landing .dv-htitle { width: 120px; height: 14px; border-radius: 6px; background: rgba(255,255,255,.16); }
+.landing .dv-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--la-grad); }
+.landing .dv-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.landing .dv-stats span { height: 46px; border-radius: 10px; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border: 1px solid rgba(255,255,255,.05); }
+.landing .dv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.landing .dv-card { position: relative; border-radius: 10px; padding: 10px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.06); }
+.landing .dv-strip { display: block; height: 30px; border-radius: 7px; margin-bottom: 9px; background: color-mix(in srgb, var(--c) 58%, #2a201b); }
+.landing .dv-l1 { display: block; height: 8px; border-radius: 4px; background: rgba(255,255,255,.18); margin-bottom: 6px; }
+.landing .dv-l2 { display: block; height: 7px; width: 45%; border-radius: 4px; background: rgba(255,255,255,.10); }
+.landing .dv-chip { position: absolute; top: 10px; right: 10px; width: 26px; height: 12px; border-radius: 99px; background: color-mix(in srgb, var(--c) 72%, transparent); }
+
+/* Mobile (téléphone en avant, chevauche le desktop) */
+.landing .dv-phone {
+  position: absolute; right: -26px; bottom: -32px;
+  width: 156px; border-radius: 26px; padding: 7px;
+  background: #0f0c0b; border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 36px 60px -18px rgba(0,0,0,.78);
+  transform: translateZ(70px) rotate(-1deg);
+}
+.landing .dv-notch { position: absolute; top: 13px; left: 50%; transform: translateX(-50%); width: 44px; height: 5px; border-radius: 99px; background: rgba(255,255,255,.18); z-index: 2; }
+.landing .dv-pscreen { border-radius: 20px; overflow: hidden; padding: 24px 10px 12px; background: radial-gradient(120% 80% at 30% 0%, #241d1a, #15100e); }
+.landing .dv-phead { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.landing .dv-pt { width: 52px; height: 11px; border-radius: 5px; background: rgba(255,255,255,.18); }
+.landing .dv-search { flex: 1; height: 22px; border-radius: 99px; background: rgba(255,255,255,.06); }
+.landing .dv-pcard { display: flex; gap: 8px; padding: 8px; border-radius: 12px; margin-bottom: 8px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.05); }
+.landing .dv-pimg { width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0; background: color-mix(in srgb, var(--c) 55%, #2a201b); }
+.landing .dv-ptxt { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; }
+.landing .dv-pl1 { height: 8px; border-radius: 4px; background: rgba(255,255,255,.18); }
+.landing .dv-pl2 { height: 7px; width: 55%; border-radius: 4px; background: rgba(255,255,255,.10); }
+
+@media (max-width: 980px) {
+  .landing .hero .wrap.hero-grid { grid-template-columns: 1fr; max-width: 1080px; }
+  .landing .hero-devices { display: none; }
+}
+
 /* ── Sections ────────────────────────────────────────────────────── */
 .landing section.block {
   padding: 80px 0;

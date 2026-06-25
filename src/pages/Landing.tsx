@@ -125,7 +125,8 @@ export function LandingPage() {
 
       {/* ── Hero ── */}
       <header className="hero">
-        <div className="wrap">
+        <div className="wrap hero-grid">
+          <div className="hero-left">
           {/* Audience switcher */}
           <div className="switch-wrap">
             <div className="seg">
@@ -238,6 +239,55 @@ export function LandingPage() {
               </button>
             </div>
             <div className="proof">🌱 En développement · Lancement V2</div>
+          </div>
+          </div>{/* /hero-left */}
+
+          {/* ── Maquettes devices (desktop + mobile) en perspective ── */}
+          <div className="hero-devices" aria-hidden="true">
+            <div className="dv-stage">
+              {/* Desktop : fenêtre navigateur + UI Cockpit stylisée */}
+              <div className="dv-desktop">
+                <div className="dv-bar"><i /><i /><i /><span className="dv-url" /></div>
+                <div className="dv-screen">
+                  <aside className="dv-side">
+                    <span className="dv-logo" />
+                    <span className="dv-nav on" /><span className="dv-nav" /><span className="dv-nav" />
+                    <span className="dv-nav" /><span className="dv-nav" />
+                  </aside>
+                  <main className="dv-main">
+                    <div className="dv-head"><span className="dv-htitle" /><span className="dv-avatar" /></div>
+                    <div className="dv-stats"><span /><span /><span /></div>
+                    <div className="dv-grid">
+                      {[['#f0a86a','75%'],['#c4a0e0','60%'],['#79b4d6','80%'],['#7fc6b4','55%']].map(([c, w], i) => (
+                        <div className="dv-card" key={i} style={{ ['--c' as string]: c }}>
+                          <span className="dv-strip" />
+                          <span className="dv-l1" style={{ width: w }} />
+                          <span className="dv-l2" />
+                          <span className="dv-chip" />
+                        </div>
+                      ))}
+                    </div>
+                  </main>
+                </div>
+              </div>
+
+              {/* Mobile : téléphone en avant, chevauche le desktop */}
+              <div className="dv-phone">
+                <span className="dv-notch" />
+                <div className="dv-pscreen">
+                  <div className="dv-phead"><span className="dv-pt" /><span className="dv-search" /></div>
+                  {[['#e8897a','70%'],['#f0a86a','85%'],['#b89ae0','62%']].map(([c, w], i) => (
+                    <div className="dv-pcard" key={i} style={{ ['--c' as string]: c }}>
+                      <span className="dv-pimg" />
+                      <span className="dv-ptxt">
+                        <span className="dv-pl1" style={{ width: w }} />
+                        <span className="dv-pl2" />
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
