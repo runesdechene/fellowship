@@ -63,6 +63,8 @@
   --accent-app-ink: #fff;            /* texte sur bouton plein accent DA (nuit & jour) */
   --app-bg: radial-gradient(120% 70% at 30% 0%, #252222, #171414 64%);
   --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
+  --surface: #2a2725;                /* surface NEUTRE opaque (popovers, dropdowns, cartes Explorer, fausse affiche) */
+  --surface-2: #34302d;              /* surface neutre secondaire (bulle « +X », légèrement plus claire) */
   --hair: rgba(255,255,255,.085);    /* hairline verre */
   --field: rgba(255,255,255,.04);    /* cellule/champ interne */
   --name: #d3c5b3;                   /* noms/titres de listes (moins blancs que --foreground) */
@@ -108,6 +110,8 @@
   --accent-app-ink: #fff;
   --app-bg: radial-gradient(120% 70% at 30% 0%, #f6efe4, #e8dfd0 64%);
   --glass: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
+  --surface: #faf6ef;
+  --surface-2: #ece4d6;
   --hair: rgba(60,40,25,.11);
   --field: rgba(60,40,25,.045);
   --name: #4a3c31;
@@ -500,11 +504,10 @@ h1, h2, h3, .font-display {
 /* Sur la Carte les chips flottent au-dessus de la carte → fond lisible (comme les toggles),
    contrairement à l'Explorer où ils sont transparents sur fond uni. */
 .carte-filterbar.explorer .seg {
-  background: #2a2725;
+  background: var(--surface);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px);
 }
-.light .carte-filterbar.explorer .seg { background: rgba(250, 246, 239, 0.88); }
 .carte-filterbar .searchbar,
 .carte-filterbar .pop { pointer-events: auto; }
 
@@ -512,10 +515,9 @@ h1, h2, h3, .font-display {
 .carte-pill {
   pointer-events: auto; display: inline-flex; align-items: center; gap: 6px;
   border-radius: 999px; padding: 8px 13px; font-size: 12px; font-weight: 600;
-  background: #2a2725; border: 1px solid var(--hair); color: hsl(var(--muted-foreground));
+  background: var(--surface); border: 1px solid var(--hair); color: hsl(var(--muted-foreground));
   box-shadow: 0 6px 18px rgba(0,0,0,.3); backdrop-filter: blur(6px); cursor: pointer; transition: .15s;
 }
-.light .carte-pill { background: rgba(250,246,239,.88); }
 .carte-pill svg { width: 14px; height: 14px; }
 .carte-pill:hover { border-color: var(--accent-app); color: hsl(var(--foreground)); }
 .carte-pill.is-active { background: var(--accent-app); border-color: var(--accent-app); color: var(--accent-app-ink); }

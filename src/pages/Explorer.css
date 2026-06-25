@@ -351,7 +351,7 @@
   left: 50%;
   transform: translate(-50%, 8px);
   /* Surface NEUTRE (convention SearchBar) — pas les tokens shadcn qui sont tous bruns. */
-  background: #2a2725;
+  background: var(--surface);
   border: 1px solid var(--hair);
   border-radius: 18px;
   padding: 18px;
@@ -384,7 +384,7 @@
 
 /* Day-mode : surface neutre claire (convention SearchBar), pas le card brun. */
 .light .explorer .pop {
-  background: #faf6ef;
+  background: var(--surface);
   box-shadow: 0 16px 40px rgba(60, 45, 35, 0.14);
 }
 
@@ -1290,8 +1290,8 @@
 
 /* ── Carte grille B v2 (image + corps verre DA) ───────────────────── */
 /* Surface NEUTRE de la carte (convention SearchBar) — pas hsl(var(--card)) qui est brun. */
-.explorer { --egrid-surf: #2a2725; }
-.light .explorer { --egrid-surf: #faf6ef; }
+.explorer { --egrid-surf: var(--surface); }
+.light .explorer { --egrid-surf: var(--surface); }
 .explorer .egrid-card {
   display: flex;
   flex-direction: column;

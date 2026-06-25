@@ -54,14 +54,14 @@
   display: flex;
   align-items: stretch;
   max-width: 100%;
-  background: #2a2725;            /* aplat plein (pas de dégradé) */
+  background: var(--surface);            /* aplat plein (pas de dégradé) */
   border: 1px solid var(--hair);
   border-radius: 999px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.28);
   overflow: hidden;
   transition: border-color 0.18s;
 }
-.light .search-bar { background: #faf6ef; box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
+.light .search-bar { background: var(--surface); box-shadow: 0 4px 14px rgba(120,90,60,0.08); }
 .search-bar:focus-within {
   border-color: color-mix(in srgb, var(--accent-app) 45%, var(--hair));
 }
@@ -217,14 +217,14 @@
   display: flex;
   flex-direction: column;
   /* Surface NEUTRE (convention SearchBar) — pas le card brun. */
-  background: #2a2725;
+  background: var(--surface);
   border: 1px solid var(--hair);
   border-radius: 16px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
   overflow: hidden;
   z-index: 50;
 }
-.light .notif-dropdown { background: #faf6ef; box-shadow: 0 16px 40px rgba(120, 80, 40, 0.16); }
+.light .notif-dropdown { background: var(--surface); box-shadow: 0 16px 40px rgba(120, 80, 40, 0.16); }
 
 .notif-dropdown-header {
   display: flex;
@@ -328,14 +328,14 @@
   max-height: 460px;
   overflow-y: auto;
   /* Surface NEUTRE (convention SearchBar) — pas le card brun. */
-  background: #2a2725;
+  background: var(--surface);
   border: 1px solid var(--hair);
   border-radius: 16px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
   z-index: 50;
   padding: 6px 0;
 }
-.light .search-results { background: #faf6ef; }
+.light .search-results { background: var(--surface); }
 .light .search-results { box-shadow: 0 16px 40px rgba(120, 80, 40, 0.16); }
 
 .search-results-section { padding: 8px 4px; }

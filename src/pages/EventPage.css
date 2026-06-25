@@ -271,7 +271,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), #2a2725;
+  background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), var(--surface);
 }
 /* Bouton « Ajouter une affiche » sur la fausse affiche (collaboratif, exposant). */
 .event-poster-add {
@@ -283,7 +283,7 @@
 }
 .event-poster-add:hover { border-color: var(--accent-app); color: var(--accent-app); }
 .event-poster-add svg { fill: none; stroke: currentColor; }
-.light .event-poster-empty { background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), #faf6ef; }
+.light .event-poster-empty { background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), var(--surface); }
 .event-poster-emoji {
   font-size: clamp(64px, 11vw, 120px); line-height: 1;
   color: transparent; text-shadow: 0 0 0 var(--c, hsl(var(--muted-foreground))); opacity: 0.5;

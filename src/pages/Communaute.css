@@ -24,10 +24,10 @@
   color: hsl(var(--foreground));
   font-family: var(--font-body);
   /* Ring des avatars empilés = couleur de la surface des cartes ; bulle « +X » = fond opaque. */
-  --av-ring: #2a2725;
-  --av-more: #34302d;
+  --av-ring: var(--surface);
+  --av-more: var(--surface-2);
 }
-.light .comm-page { --av-ring: #faf6ef; --av-more: #ece4d6; }
+.light .comm-page { --av-ring: var(--surface); --av-more: var(--surface-2); }
 
 /* ── SVG baseline (mandatory) ─────────────────────────────────────────── */
 .comm-page svg {
