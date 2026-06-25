@@ -105,14 +105,10 @@
   top: 0;
   z-index: 50;
   padding-top: 16px;
-  /* En haut : pas de barre solide — juste un voile dégradé qui s'estompe vers le bas
-     pour garder le texte lisible au-dessus des halos. */
-  background: linear-gradient(180deg, rgba(16,12,11,.50), transparent);
-  border-bottom: 1px solid transparent;
+  /* En haut : totalement transparent, aucune bordure. Le fond glossy n'apparaît qu'au scroll. */
+  background: transparent;
+  border-bottom: none;
   transition: background .25s, border-color .25s, box-shadow .25s, padding .25s;
-}
-.light .landing nav {
-  background: linear-gradient(180deg, rgba(255,252,247,.55), transparent);
 }
 .landing nav.scrolled {
   background: var(--glass);
@@ -134,14 +130,15 @@
 }
 
 /* ── Logo ────────────────────────────────────────────────────────── */
+/* Logo = mesures EXACTES de la maquette /newaccueil : texte léger (700), petit, gap 9 */
 .landing .logo {
   font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 17px;
   color: hsl(var(--foreground));
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 .landing .logo .mark {
   width: 30px;
@@ -155,7 +152,7 @@
   font-size: 15px;
 }
 .landing .logo .mark-img {
-  height: 25px;
+  height: 24px;
   width: auto;
   display: block;
 }
@@ -164,7 +161,7 @@
 .landing .nav-links {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 22px;
   font-size: 14px;
   font-weight: 500;
 }
@@ -189,9 +186,9 @@
 }
 /* S'inscrire = primary compact dans la nav (l'action par défaut du nouveau). */
 .landing .nav-links .nav-cta {
-  padding: 9px 18px;
-  font-size: 14px;
-  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  border-radius: 11px;
 }
 
 /* ── Audience switcher ───────────────────────────────────────────── */
