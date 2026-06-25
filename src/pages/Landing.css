@@ -19,7 +19,7 @@
   background-attachment: fixed;
   /* Accent propre à la page d'accueil — orange chaud accordé au héros « ensemble. »
      (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
-  --la-accent: #ec7e52;
+  --la-accent: #c47352;
   --la-accent-ink: #fff;
 }
 .landing .wrap {
