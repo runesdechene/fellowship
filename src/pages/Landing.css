@@ -18,7 +18,9 @@
   position: relative;
   z-index: 0; /* contexte d'empilement : .hero-halos en z-index:-1 passe sous le contenu, au-dessus du fond */
   min-height: 100dvh;
-  background: var(--app-bg);
+  /* Radial de l'app MAIS centre descendu (y 22% au lieu de 0%) : le tout-en-haut derrière
+     la nav reste sombre/uniforme — fini la bande plus claire au sommet. (scoped Landing) */
+  background: radial-gradient(125% 88% at 30% 22%, #252222, #171414 60%);
   background-attachment: fixed;
   /* Accent propre à la page d'accueil — orange chaud accordé au héros « ensemble. »
      (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
@@ -163,7 +165,7 @@
   align-items: center;
   gap: 22px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
 }
 .landing .nav-links a.link {
   color: hsl(var(--muted-foreground));
@@ -178,7 +180,7 @@
   color: hsl(var(--muted-foreground));
   text-decoration: none;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   white-space: nowrap;
 }
 .landing .nav-links .nav-login:hover {
