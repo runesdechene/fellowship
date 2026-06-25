@@ -21,6 +21,8 @@
      (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
   --la-accent: #c47352;
   --la-accent-ink: #fff;
+  /* Dégradé chaud ancré sur la brique — pétant mais pas néon, rime avec « ensemble. » */
+  --la-grad: linear-gradient(135deg, #ee8a52, #c4592e);
 }
 .landing .wrap {
   max-width: 1080px;
@@ -45,7 +47,7 @@
   transition: .2s;
 }
 .landing .btn-primary {
-  background: var(--la-accent);
+  background: var(--la-grad);
   color: var(--la-accent-ink);
   box-shadow: 0 6px 24px hsl(20 65% 32% / .45);
 }
@@ -213,7 +215,7 @@
 }
 .landing[data-aud="exposant"] .seg button[data-a="exposant"].on,
 .landing[data-aud="festivalier"] .seg button[data-a="festivalier"].on {
-  background: var(--la-accent);
+  background: var(--la-grad);
   color: var(--la-accent-ink);
 }
 .landing[data-aud="organisateur"] .seg button[data-a="organisateur"].on {
@@ -637,7 +639,7 @@
   position: absolute;
   top: 18px;
   right: 18px;
-  background: var(--la-accent);
+  background: var(--la-grad);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -645,7 +647,7 @@
   border-radius: 99px;
 }
 .landing .tier.pro .btn-white {
-  background: var(--la-accent);
+  background: var(--la-grad);
   color: var(--la-accent-ink);
 }
 
