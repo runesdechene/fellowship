@@ -61,7 +61,7 @@
   /* ── DA « sci-fi chaud » (tokens additifs, app de travail uniquement) ── */
   --accent-app: #d6896a;             /* terracotta DA app (NUIT) — distinct de --accent (survol neutre HSL) et de --copper festif */
   --accent-app-ink: #fff;            /* texte sur bouton plein accent DA (nuit & jour) */
-  --accent-grad: linear-gradient(135deg, #ee8a52, #c4592e); /* dégradé chaud CTA primaires (raccord Landing --la-grad) */
+  --accent-grad: linear-gradient(135deg, #e29b76, #c06846); /* gloss terracotta du CTA primaire — même famille que --accent-app (#d6896a), pas l'orange festif Landing */
   --app-bg: radial-gradient(120% 70% at 30% 0%, #252222, #171414 64%);
   --glass: linear-gradient(180deg, rgba(46,43,40,.52), rgba(28,26,25,.42));
   --surface: #2a2725;                /* surface NEUTRE opaque (popovers, dropdowns, cartes Explorer, fausse affiche) */
@@ -108,6 +108,7 @@
 
   /* ── DA « sci-fi chaud » — overrides JOUR ── */
   --accent-app: #b65f3f;             /* terracotta DA app (JOUR, assombri pour lisibilité) */
+  --accent-grad: linear-gradient(135deg, #c87a55, #ab5532); /* gloss terracotta CTA primaire (JOUR, assombri) */
   --accent-app-ink: #fff;
   --app-bg: radial-gradient(120% 70% at 30% 0%, #f6efe4, #e8dfd0 64%);
   --glass: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
