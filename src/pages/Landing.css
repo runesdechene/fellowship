@@ -24,8 +24,9 @@
      (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
   --la-accent: #c47352;
   --la-accent-ink: #fff;
-  /* Dégradé chaud ancré sur la brique — pétant mais pas néon, rime avec « ensemble. » */
-  --la-grad: linear-gradient(135deg, #ee8a52, #c4592e);
+  /* Dégradé des boutons = EXACTEMENT celui de la maquette /newaccueil (gloss terracotta,
+     même valeur que --accent-grad de l'app). Un seul point pour tous les CTA de la Landing. */
+  --la-grad: linear-gradient(135deg, #e29b76, #c06846);
 }
 .landing .wrap {
   max-width: 1080px;
