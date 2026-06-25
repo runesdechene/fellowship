@@ -111,6 +111,7 @@
   top: 0;
   z-index: 50;
   padding-top: 16px;
+  padding-bottom: 16px;
   /* En haut : totalement transparent, aucune bordure. Le fond glossy n'apparaît qu'au scroll. */
   background: transparent;
   border-bottom: none;
@@ -122,6 +123,9 @@
   -webkit-backdrop-filter: blur(16px) saturate(1.15);
   border-bottom-color: var(--hair);
   box-shadow: 0 6px 22px rgba(0,0,0,.20);
+  /* Au scroll : barre glossy plus compacte — padding-top réduit de moitié, un peu de bottom. */
+  padding-top: 8px;
+  padding-bottom: 10px;
 }
 .light .landing nav.scrolled {
   box-shadow: 0 3px 14px rgba(60,45,35,.07);
@@ -345,7 +349,9 @@
   color: transparent;
 }
 .light .landing .grad {
-  background: linear-gradient(90deg, hsl(20 78% 46%), hsl(6 70% 52%), hsl(36 82% 46%));
+  /* Accordé au bouton terracotta (--la-grad), juste assez foncé pour rester lisible sur le crème.
+     (l'ancien dégradé festif saturé jurait avec le bouton mat) */
+  background: linear-gradient(100deg, #c87a55, #b05f3d 50%, #a4542f);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -714,6 +720,10 @@
   justify-content: space-between;
   gap: 30px;
   flex-wrap: wrap;
+}
+/* Mode JOUR : ombre douce chaude, accordée aux autres cartes (feat/témoignages/tiers) */
+.light .landing .org-card {
+  box-shadow: 0 8px 24px rgba(120,90,60,.08), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .landing .org-card::before {
   content: "";
