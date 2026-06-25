@@ -1452,8 +1452,10 @@
   .explorer .xplr-count { text-align: center; padding-left: 0; padding-right: 0; }
 }
 @container (max-width: 600px) {
-  /* Affiches plus hautes (~+50px) : ratio plus portrait pour ne plus « bouffer » l'image. */
+  /* Affiches plus hautes (~+50px) : carte plus portrait ET l'affiche remplit la hauteur
+     dispo (flex:1) au lieu de rester en aspect 2/3 fixe (sinon vide sombre en bas). */
   .explorer .egrid-card { aspect-ratio: 0.48; border-radius: 12px; }
+  .explorer .egrid-img { flex: 1; aspect-ratio: auto; }
   .explorer .egrid-ov { padding: 12px; gap: 6px; }
   .explorer .egrid-name { font-size: 16px; line-height: 1.12; }
   /* Date + lieu sur DEUX lignes (pas la place côte à côte sur une carte étroite). */
