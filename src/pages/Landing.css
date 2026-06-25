@@ -17,9 +17,10 @@
   min-height: 100dvh;
   background: var(--page-backdrop);
   background-attachment: fixed;
-  /* Accent propre à la page d'accueil (doré festif, distinct du terracotta de l'app). */
-  --la-accent: #e6aa49;
-  --la-accent-ink: #3a2410;
+  /* Accent propre à la page d'accueil — orange chaud accordé au héros « ensemble. »
+     (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
+  --la-accent: #ec7e52;
+  --la-accent-ink: #fff;
 }
 .landing .wrap {
   max-width: 1080px;
