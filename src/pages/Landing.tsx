@@ -109,17 +109,21 @@ export function LandingPage() {
 
       {/* ── Hero ── */}
       <header className="hero">
-        {/* Glow blobs */}
-        <div className="glow g-a" aria-hidden="true" />
-        <div className="glow g-b" aria-hidden="true" />
-        <div className="glow g-c" aria-hidden="true" />
-
-        {/* Decorative dots */}
-        <div className="dot" style={{ left: '18%', top: '26%' }} aria-hidden="true" />
-        <div className="dot" style={{ left: '31%', top: '16%', animationDelay: '-1s' }} aria-hidden="true" />
-        <div className="dot" style={{ left: '69%', top: '22%', animationDelay: '-2s' }} aria-hidden="true" />
-        <div className="dot" style={{ left: '84%', top: '38%', animationDelay: '-.5s' }} aria-hidden="true" />
-        <div className="dot" style={{ left: '50%', top: '12%', animationDelay: '-1.5s' }} aria-hidden="true" />
+        {/* Halos multicolores + lumières — nuit de festival */}
+        <div className="hero-halos" aria-hidden="true">
+          <span className="glow h-terra" />
+          <span className="glow h-violet" />
+          <span className="glow h-blue" />
+          <span className="glow h-green" />
+          <span className="glow h-amber" />
+          <span className="glow h-pink" />
+          <span className="glow h-magenta" />
+          <div className="hero-bokeh">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <i key={i} className={`bk bk-${i}`} />
+            ))}
+          </div>
+        </div>
 
         <div className="wrap">
           {/* Audience switcher */}
