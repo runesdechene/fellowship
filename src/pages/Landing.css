@@ -30,6 +30,10 @@
      même valeur que --accent-grad de l'app). Un seul point pour tous les CTA de la Landing. */
   --la-grad: linear-gradient(135deg, #e29b76, #c06846);
 }
+/* Mode JOUR : même radial mais teintes claires (--app-bg light) — sinon la Landing reste sombre. */
+.light .landing {
+  background: radial-gradient(125% 88% at 30% 22%, #f6efe4, #e8dfd0 60%);
+}
 .landing .wrap {
   max-width: 1080px;
   margin: 0 auto;
@@ -274,6 +278,10 @@
   opacity: .14; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+/* Mode JOUR : grain plus discret (multiply), et halos en multiply adouci (screen laverait en blanc) */
+.light .landing .hero-halos::after { opacity: .05; mix-blend-mode: multiply; }
+.light .landing .glow { mix-blend-mode: multiply; opacity: .5; }
+.light .landing .hero-bokeh { opacity: .4; }
 .landing .glow { position: absolute; border-radius: 50%; filter: blur(72px); mix-blend-mode: screen; will-change: transform; }
 .landing .h-terra   { width: 520px; height: 520px; left: -60px;  top: -120px; background: radial-gradient(circle, rgba(240,150,95,.62), transparent 70%);  animation: drift1 14s ease-in-out infinite; }
 .landing .h-violet  { width: 480px; height: 480px; right: -50px; top: -20px;  background: radial-gradient(circle, rgba(180,120,235,.50), transparent 70%); animation: drift2 17s ease-in-out infinite; }

@@ -5,7 +5,6 @@ import { useAuth } from '@/lib/auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LandingPage } from '@/pages/Landing'
-import { NewAccueilPage } from '@/pages/NewAccueil'
 import { LoginPage } from '@/pages/Login'
 import { OnboardingPage } from '@/pages/Onboarding'
 import { ExplorerPage } from '@/pages/Explorer'
@@ -102,7 +101,6 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/newaccueil" element={<NewAccueilPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route
