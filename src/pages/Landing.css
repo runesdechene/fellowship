@@ -123,18 +123,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 66px;
+  height: 58px;
 }
 
 /* ── Logo ────────────────────────────────────────────────────────── */
 .landing .logo {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 22px;
+  font-size: 18px;
   color: hsl(var(--foreground));
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
 }
 .landing .logo .mark {
   width: 30px;
@@ -148,7 +148,7 @@
   font-size: 15px;
 }
 .landing .logo .mark-img {
-  height: 32px;
+  height: 25px;
   width: auto;
   display: block;
 }
@@ -157,7 +157,7 @@
 .landing .nav-links {
   display: flex;
   align-items: center;
-  gap: 26px;
+  gap: 30px;
   font-size: 14px;
   font-weight: 500;
 }
