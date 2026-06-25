@@ -41,8 +41,8 @@
   transition: .2s;
 }
 .landing .btn-primary {
-  background: var(--gradient-primary);
-  color: #fff;
+  background: var(--accent-app);
+  color: var(--accent-app-ink);
   box-shadow: 0 6px 24px hsl(20 65% 32% / .45);
 }
 .landing .btn-primary:hover {
@@ -62,8 +62,8 @@
   border: 1.5px solid rgba(255,255,255,.18);
 }
 .landing .btn-ghost:hover {
-  border-color: var(--copper);
-  color: var(--amber);
+  border-color: var(--accent-app);
+  color: var(--accent-app);
 }
 .landing .btn-white {
   background: #fff;
