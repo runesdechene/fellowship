@@ -52,8 +52,10 @@ export function NewAccueilPage() {
         <span className="nwa-glow h-blue" />
         <span className="nwa-glow h-green" />
         <span className="nwa-glow h-amber" />
+        <span className="nwa-glow h-pink" />
+        <span className="nwa-glow h-magenta" />
         <div className="nwa-bokeh">
-          {Array.from({ length: 14 }).map((_, i) => (
+          {Array.from({ length: 18 }).map((_, i) => (
             <i key={i} className={`bk bk-${i}`} />
           ))}
         </div>
@@ -95,14 +97,14 @@ export function NewAccueilPage() {
           <span className="nwa-ava"><span /><span /><span /><span /></span>
           45+ exposants déjà sur Fellowship
         </div>
-      </div>
 
-      {/* marquee de tags colorés */}
-      <div className="nwa-marquee">
-        <div className="nwa-track">
-          {[...MARQUEE, ...MARQUEE].map((t, i) => (
-            <Chip key={i} slug={t.slug} label={t.label} />
-          ))}
+        {/* marquee de tags colorés — juste sous la preuve sociale */}
+        <div className="nwa-marquee">
+          <div className="nwa-track">
+            {[...MARQUEE, ...MARQUEE].map((t, i) => (
+              <Chip key={i} slug={t.slug} label={t.label} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
