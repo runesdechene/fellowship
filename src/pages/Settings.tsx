@@ -366,7 +366,7 @@ function EntitySubscriptionRow({ entity }: { entity: EntityWithSub }) {
       ) : (
         <Link
           to={`/boutique?entity=${entity.actor_id}`}
-          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:opacity-90"
+          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full bg-[var(--accent-app)] px-3 py-1.5 text-xs font-bold text-[var(--accent-app-ink)] hover:brightness-110"
         >
           <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
           Passer en Pro
