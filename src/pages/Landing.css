@@ -104,9 +104,15 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: transparent;
+  padding-top: 16px;
+  /* En haut : pas de barre solide — juste un voile dégradé qui s'estompe vers le bas
+     pour garder le texte lisible au-dessus des halos. */
+  background: linear-gradient(180deg, rgba(16,12,11,.50), transparent);
   border-bottom: 1px solid transparent;
-  transition: background .25s, border-color .25s, box-shadow .25s;
+  transition: background .25s, border-color .25s, box-shadow .25s, padding .25s;
+}
+.light .landing nav {
+  background: linear-gradient(180deg, rgba(255,252,247,.55), transparent);
 }
 .landing nav.scrolled {
   background: var(--glass);
