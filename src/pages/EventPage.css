@@ -262,16 +262,21 @@
 
 .event-poster img { width: 100%; height: 100%; object-fit: cover; }
 
+/* Fausse affiche (sans image) — UNIFORMISÉ avec le fallback Explorer :
+   dégradé radial teinté par la couleur de catégorie (--c) + emoji en filigrane. */
 .event-poster-empty {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--accent-app), color-mix(in srgb, var(--accent-app) 45%, #000));
-  color: #fff;
+  background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), #2a2725;
 }
-.event-poster-empty svg { width: 48px; height: 48px; opacity: 0.25; }
+.light .event-poster-empty { background: radial-gradient(80% 55% at 50% 14%, color-mix(in srgb, var(--c, var(--accent-app)) 30%, transparent), transparent 62%), #faf6ef; }
+.event-poster-emoji {
+  font-size: clamp(64px, 11vw, 120px); line-height: 1;
+  color: transparent; text-shadow: 0 0 0 var(--c, hsl(var(--muted-foreground))); opacity: 0.5;
+}
 
 /* ── Cartes de section ────────────────────────────────────────────── */
 

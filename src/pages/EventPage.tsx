@@ -28,7 +28,7 @@ import { LocationField, type LocationValue } from '@/components/events/LocationF
 import { geocodeCity } from '@/lib/geocode'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Pencil, X, Save, Image, Trash2, Calendar, MapPin, Users, FileText, MessageSquarePlus, Share2, Globe, Map, Store, ChevronRight, Send, Lock } from 'lucide-react'
-import { getTagIcon, getTagLandingColor } from '@/components/ui/TagBadge'
+import { getTagIcon, getTagLandingColor, getTagEmoji } from '@/components/ui/TagBadge'
 import type { ParticipationVisibility, ParticipationStatus, Participation } from '@/types/database'
 import './EventPage.css'
 
@@ -716,8 +716,8 @@ export function EventPage() {
               {event.image_url ? (
                 <img src={event.image_url} alt={event.name} />
               ) : (
-                <div className="event-poster-empty">
-                  <Image strokeWidth={1} />
+                <div className="event-poster-empty" style={{ '--c': tagAccent } as React.CSSProperties} aria-hidden="true">
+                  <span className="event-poster-emoji">{getTagEmoji(event.tags?.[0] ?? 'autre')}</span>
                 </div>
               )}
             </div>
