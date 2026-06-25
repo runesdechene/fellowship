@@ -483,11 +483,11 @@ export function LandingPage() {
       </section>
 
       {/* ── Témoignages — UGC social proof avant pricing ── */}
-      <section id="temoignages" className="block v testimonials">
+      <section id="temoignages" className="block v exposant testimonials">
         <div className="wrap">
           <div className="sec-head" style={{ textAlign: 'center' }}>
             <span className="eyebrow">Ils témoignent</span>
-            <h2>Des exposants comme toi.</h2>
+            <h2>Ils en parlent mieux que nous.</h2>
             <p style={{ color: 'hsl(var(--muted-foreground))', marginTop: '10px' }}>
               Ce qui a changé pour eux depuis Fellowship.
             </p>
