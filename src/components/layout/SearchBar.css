@@ -423,12 +423,24 @@
     position: sticky;
     top: 0;
     margin: 0;
-    padding: 10px 12px 18px;
+    padding: 10px 12px 14px;
     border-radius: 0;
+    /* Fond verre + blur : au scroll, le contenu passe dessous proprement (avant : transparent = moche). */
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+    backdrop-filter: blur(16px) saturate(1.1);
     border: none;
-    box-shadow: none;
+    border-bottom: 1px solid var(--hair);
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
     pointer-events: auto;
-    /* Le ::before global (background = page-backdrop fixé + mask) prend le relais. */
+  }
+  /* Cockpit & Calendrier : fond DA continu voulu → on garde la barre transparente (pas de bande). */
+  .cockpit-stage .search-bar-wrapper {
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: none;
+    box-shadow: none;
   }
 
   /* Le cluster d'actions s'efface en layout mobile */

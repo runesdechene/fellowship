@@ -1448,9 +1448,12 @@
   .explorer .xhalos { display: none; }
   /* Ombres plus légères sur mobile (les grandes ombres floues × N cartes coûtent cher). */
   .explorer .egrid-card { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); }
+  /* Compteur « N festivals trouvés » centré */
+  .explorer .xplr-count { text-align: center; padding-left: 0; padding-right: 0; }
 }
 @container (max-width: 600px) {
-  .explorer .egrid-card { aspect-ratio: 9 / 16; border-radius: 12px; }
+  /* Affiches plus hautes (~+50px) : ratio plus portrait pour ne plus « bouffer » l'image. */
+  .explorer .egrid-card { aspect-ratio: 0.48; border-radius: 12px; }
   .explorer .egrid-ov { padding: 12px; gap: 6px; }
   .explorer .egrid-name { font-size: 16px; line-height: 1.12; }
   /* Date + lieu sur DEUX lignes (pas la place côte à côte sur une carte étroite). */
