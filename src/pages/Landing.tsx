@@ -117,8 +117,10 @@ export function LandingPage() {
             <a className="link" href="#apropos" onClick={goToApropos}>À propos</a>
             <a className="link" href="#tarifs" onClick={goToTarifs}>Tarifs</a>
             <ThemeToggle />
-            <Link to="/login" className="nav-login">Connexion</Link>
-            <Link to="/login" className="btn btn-primary nav-cta">S'inscrire</Link>
+            <Link to="/login" className="btn btn-primary nav-cta">
+              <span className="cta-full">Accéder à l'appli</span>
+              <span className="cta-short">Accéder</span>
+            </Link>
           </div>
         </div>
       </nav>

@@ -200,6 +200,8 @@
   font-size: 13.5px;
   border-radius: 11px;
 }
+/* Bouton unique « Accéder » : libellé long en desktop, court réservé au mobile */
+.landing .nav-cta .cta-short { display: none; }
 
 /* ── Audience switcher ───────────────────────────────────────────── */
 .landing .switch-wrap {
@@ -904,25 +906,21 @@
   .landing .nav-in .logo .mark-img {
     height: 26px;
   }
-  .landing .brand-name {
-    display: none;
-  }
   .landing .nav-links {
     gap: 12px;
   }
-  /* Switcher d'audience : trop large en mobile (collé au bord droit) → on resserre. */
-  .landing .seg {
-    padding: 4px;
-    gap: 2px;
-  }
-  .landing .seg button {
-    padding: 8px 11px;
-    font-size: 12.5px;
-  }
-  .landing .seg .mini {
-    padding: 2px 5px;
-    font-size: 8px;
-  }
+  /* CTA unique : libellé court sur mobile */
+  .landing .nav-cta .cta-full { display: none; }
+  .landing .nav-cta .cta-short { display: inline; }
+  /* Switcher d'audience : pleine largeur (moins les paddings), 3 boutons répartis */
+  .landing .switch-wrap { width: 100%; }
+  .landing .seg { display: flex; width: 100%; padding: 4px; gap: 3px; }
+  .landing .seg button { flex: 1; justify-content: center; padding: 9px 4px; font-size: 12.5px; }
+  .landing .seg .mini { padding: 2px 4px; font-size: 8px; }
+  /* Titre plus grand sur mobile */
+  .landing h1 { font-size: 44px; }
+  /* Preuve sociale : autoriser le passage sur 2 lignes */
+  .landing .proof { flex-wrap: wrap; row-gap: 4px; }
 }
 
 /* Footer landing : rang de liens légaux (les 5 docs visibles ici) */
