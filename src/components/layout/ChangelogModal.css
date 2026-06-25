@@ -19,8 +19,8 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  background: var(--surface);
+  border: 1px solid var(--hair);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
@@ -44,13 +44,13 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: var(--amber);
-  background: color-mix(in srgb, var(--amber) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--amber) 28%, transparent);
+  color: var(--accent-app);
+  background: color-mix(in srgb, var(--accent-app) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-app) 28%, transparent);
   padding: 4px 10px;
   border-radius: 9999px;
 }
-.changelog-badge svg { color: var(--amber); }
+.changelog-badge svg { color: var(--accent-app); }
 
 .changelog-close {
   display: flex;
@@ -59,15 +59,15 @@
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: hsl(var(--secondary));
-  border: 1px solid hsl(var(--border));
+  background: var(--field);
+  border: 1px solid var(--hair);
   color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
 .changelog-close:hover {
-  background: hsl(var(--muted));
+  background: var(--surface-2);
   color: hsl(var(--foreground));
 }
 
@@ -117,7 +117,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--copper);
+  background: var(--accent-app);
   flex-shrink: 0;
   margin-top: 7px;
 }
@@ -131,7 +131,7 @@
   width: 100%;
   padding: 14px;
   border-radius: 14px;
-  background: var(--gradient-primary);
+  background: var(--accent-grad);
   color: #fff;
   font-family: var(--font-heading);
   font-size: 15px;

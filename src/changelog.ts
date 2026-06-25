@@ -7,6 +7,18 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.361',
+    date: '2026-06-25',
+    title: 'Grande refonte graphique ✨',
+    changes: [
+      'Nouvelle page d\'accueil : ambiance « nuit de festival » avec halos de lumières colorées — plus immersive, plus vivante',
+      'Toute l\'app harmonisée sur la nouvelle identité (verre, terracotta chaud, jour & nuit)',
+      'Mobile repris de fond en comble : navigation, Cockpit, et affiches d\'événements plus grandes et plus nettes',
+      'Barre de navigation du bas et menu repensés au nouveau design',
+      'Mille détails peaufinés : marges, tailles, boutons, transparences',
+    ],
+  },
+  {
     version: '0.7.304',
     date: '2026-06-24',
     title: 'Sidebar : fond raccord cockpit',
