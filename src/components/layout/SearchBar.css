@@ -434,14 +434,6 @@
     box-shadow: 0 6px 18px rgba(0,0,0,.18);
     pointer-events: auto;
   }
-  /* Cockpit & Calendrier : fond DA continu voulu → on garde la barre transparente (pas de bande). */
-  .cockpit-stage .search-bar-wrapper {
-    background: transparent;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    border-bottom: none;
-    box-shadow: none;
-  }
 
   /* Le cluster d'actions s'efface en layout mobile */
   .search-bar-actions {
