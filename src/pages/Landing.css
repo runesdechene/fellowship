@@ -209,7 +209,7 @@
 }
 .landing[data-aud="exposant"] .seg button[data-a="exposant"].on,
 .landing[data-aud="festivalier"] .seg button[data-a="festivalier"].on {
-  background: var(--gradient-primary);
+  background: var(--accent-app);
 }
 .landing[data-aud="organisateur"] .seg button[data-a="organisateur"].on {
   background: linear-gradient(135deg, var(--lime), var(--lime-d));
