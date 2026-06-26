@@ -40,10 +40,14 @@ src-tauri/target/
 # Graphify temp working files (root)
 .graphify_*
 
-# Graphify output — keep persistent graph + cache, ignore machine-specific
+# Graphify output — keep persistent graph + report, ignore le cache régénérable
+# (cache content-addressed reconstruit par le hook post-commit, inutile à versionner)
 graphify-out/cost.json
 graphify-out/.needs_update
+graphify-out/cache/
 
 # Brouillons de secrets (ne JAMAIS commit en clair)
 Stripe.txt
 *.secrets.txt
+.mcp.json
+.xo/
