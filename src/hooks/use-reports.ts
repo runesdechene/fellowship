@@ -32,6 +32,19 @@ export async function saveEventReport(report: EventReportInsert) {
   return { data, error }
 }
 
+/** Supprime le bilan de l'acteur sur cet event. Le FK `report_id` des écritures
+ *  du registre est en CASCADE → les lignes `event_ledger_entries` liées partent
+ *  avec, remettant la carte « Mon bilan » entièrement à zéro. RLS
+ *  (`event_reports_write_actor` = ALL, `can_act_as(actor_id)`) borne au sien. */
+export async function deleteEventReport(actorId: string, eventId: string) {
+  const { error } = await supabase
+    .from('event_reports')
+    .delete()
+    .eq('actor_id', actorId)
+    .eq('event_id', eventId)
+  return { error }
+}
+
 /** Ensemble des event_id pour lesquels l'acteur actif a déjà rempli un bilan.
  *  `refetch` à rappeler après l'enregistrement d'un bilan (sinon le prompt ne disparaît pas). */
 export function useMyReportedEventIds(): { reportedEventIds: Set<string>; loading: boolean; refetch: () => Promise<void> } {

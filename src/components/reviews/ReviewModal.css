@@ -143,3 +143,45 @@
   cursor: not-allowed;
 }
 .light .review-form-submit { box-shadow: 0 4px 14px hsl(25 78% 52% / 0.28); }
+
+/* ── Suppression de l'avis ── */
+.review-form-delete {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  align-self: center;
+  background: none; border: none; padding: 4px 8px;
+  font-family: var(--font-body); font-size: 12.5px; font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.review-form-delete svg { width: 14px; height: 14px; }
+.review-form-delete:hover { color: var(--destructive, hsl(0 70% 55%)); }
+
+.review-form-delete-confirm {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, hsl(0 70% 50%) 8%, transparent);
+  border: 1px solid color-mix(in srgb, hsl(0 70% 50%) 28%, hsl(var(--border)));
+}
+.review-form-delete-confirm > span {
+  font-size: 13px; font-weight: 600; color: hsl(var(--foreground));
+}
+.review-form-delete-actions { display: flex; gap: 8px; }
+.review-form-delete-cancel,
+.review-form-delete-yes {
+  flex: 1; height: 36px; border-radius: 10px;
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: filter 0.15s, background 0.15s;
+}
+.review-form-delete-cancel {
+  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+.review-form-delete-cancel:hover { background: hsl(var(--muted) / 0.5); }
+.review-form-delete-yes {
+  background: hsl(0 70% 48%); border: none; color: #fff;
+}
+.review-form-delete-yes:hover:not(:disabled) { filter: brightness(1.08); }
+.review-form-delete-yes:disabled,
+.review-form-delete-cancel:disabled { opacity: 0.6; cursor: not-allowed; }

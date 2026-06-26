@@ -85,3 +85,14 @@ export async function submitReview(review: ReviewInsert) {
     .select().single()
   return { data, error }
 }
+
+/** Supprime l'avis de l'acteur sur cet event. RLS (`reviews_write_actor` = ALL,
+ *  `can_act_as(actor_id)`) garantit qu'on ne peut effacer que le sien. */
+export async function deleteReview(actorId: string, eventId: string) {
+  const { error } = await supabase
+    .from('reviews')
+    .delete()
+    .eq('actor_id', actorId)
+    .eq('event_id', eventId)
+  return { error }
+}

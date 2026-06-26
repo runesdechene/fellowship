@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Lock, Pencil, ClipboardCheck, TrendingUp, TrendingDown, Sparkles, Plus } from 'lucide-react'
+import { Lock, Pencil, ClipboardCheck, TrendingUp, TrendingDown, Sparkles, Plus, Trash2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { planForActor } from '@/lib/navModel'
-import { useEventReport } from '@/hooks/use-reports'
+import { useEventReport, deleteEventReport } from '@/hooks/use-reports'
 import { useEventLedger } from '@/hooks/use-ledger'
 import { ledgerProfit } from '@/lib/ledger'
 import { BilanModal } from './BilanModal'
@@ -25,6 +25,18 @@ export function BilanCard({ eventId }: Props) {
   const { report, refetch } = useEventReport(eventId)
   const { entries, refetch: refetchEntries } = useEventLedger(eventId)
   const [open, setOpen] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = async () => {
+    if (!currentActor) return
+    setDeleting(true)
+    await deleteEventReport(currentActor.id, eventId)
+    setDeleting(false)
+    setConfirmDelete(false)
+    // Le DELETE cascade sur les écritures du registre — on refetch les deux.
+    refetch(); refetchEntries()
+  }
 
   // État non-Pro : invite à passer Pro, pas de bouton remplir.
   if (!isPro) {
@@ -103,9 +115,28 @@ export function BilanCard({ eventId }: Props) {
               </div>
             )}
 
-            <button className="bilan-cta-edit" onClick={() => setOpen(true)}>
-              <Pencil strokeWidth={2} /> Modifier mon bilan
-            </button>
+            {confirmDelete ? (
+              <div className="bilan-delete-confirm">
+                <span>Supprimer ton bilan et ses chiffres ? Cette action est définitive.</span>
+                <div className="bilan-delete-actions">
+                  <button className="bilan-delete-cancel" onClick={() => setConfirmDelete(false)} disabled={deleting}>
+                    Annuler
+                  </button>
+                  <button className="bilan-delete-yes" onClick={handleDelete} disabled={deleting}>
+                    {deleting ? 'Suppression…' : 'Oui, supprimer'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="bilan-summary-actions">
+                <button className="bilan-cta-edit" onClick={() => setOpen(true)}>
+                  <Pencil strokeWidth={2} /> Modifier mon bilan
+                </button>
+                <button className="bilan-cta-delete" onClick={() => setConfirmDelete(true)}>
+                  <Trash2 strokeWidth={2} /> Supprimer
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { submitReview, useMyReview } from '@/hooks/use-reviews'
-import { Star } from 'lucide-react'
+import { submitReview, deleteReview, useMyReview } from '@/hooks/use-reviews'
+import { Star, Trash2 } from 'lucide-react'
 
 interface ReviewFormProps {
   eventId: string
@@ -34,6 +34,8 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
   const [rentabilite, setRentabilite] = useState(0)
   const [comment, setComment] = useState('')
   const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   // Hydrate le formulaire quand l'avis existant arrive (fetch async dans
   // useMyReview). Pattern React 19 « adjust state during rendering » : on
@@ -65,6 +67,14 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
     })
 
     setSaving(false)
+    onReviewSubmitted()
+  }
+
+  const handleDelete = async () => {
+    if (!currentActor || !existing) return
+    setDeleting(true)
+    await deleteReview(currentActor.id, eventId)
+    setDeleting(false)
     onReviewSubmitted()
   }
 
@@ -105,10 +115,31 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
       <button
         type="submit"
         className="review-form-submit"
-        disabled={!affluence || !organisation || !rentabilite || saving}
+        disabled={!affluence || !organisation || !rentabilite || saving || deleting}
       >
         {saving ? 'Envoi…' : existing ? 'Modifier mon avis' : 'Envoyer mon avis'}
       </button>
+
+      {/* Suppression — uniquement si un avis existe déjà. Confirmation en 2 clics. */}
+      {existing && (
+        confirmDelete ? (
+          <div className="review-form-delete-confirm">
+            <span>Supprimer définitivement ton avis ?</span>
+            <div className="review-form-delete-actions">
+              <button type="button" className="review-form-delete-cancel" onClick={() => setConfirmDelete(false)} disabled={deleting}>
+                Annuler
+              </button>
+              <button type="button" className="review-form-delete-yes" onClick={handleDelete} disabled={deleting}>
+                {deleting ? 'Suppression…' : 'Oui, supprimer'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button type="button" className="review-form-delete" onClick={() => setConfirmDelete(true)}>
+            <Trash2 strokeWidth={1.8} /> Supprimer mon avis
+          </button>
+        )
+      )}
     </form>
   )
 }

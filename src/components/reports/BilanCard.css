@@ -117,6 +117,49 @@
 .bilan-cta-edit:hover { background: hsl(var(--foreground) / 0.12); }
 .bilan-cta-edit svg { width: 14px; height: 14px; }
 
+/* ── Actions sur bilan rempli : Modifier + Supprimer ── */
+.bilan-summary-actions { display: flex; align-items: center; gap: 10px; }
+
+.bilan-cta-delete {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 12px;
+  background: none; border: none; border-radius: 10px;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: color 0.15s, background 0.15s;
+}
+.bilan-cta-delete svg { width: 14px; height: 14px; }
+.bilan-cta-delete:hover {
+  color: hsl(0 70% 55%);
+  background: color-mix(in srgb, hsl(0 70% 50%) 10%, transparent);
+}
+
+.bilan-delete-confirm {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px 14px; border-radius: 12px;
+  background: color-mix(in srgb, hsl(0 70% 50%) 8%, transparent);
+  border: 1px solid color-mix(in srgb, hsl(0 70% 50%) 28%, hsl(var(--border)));
+}
+.bilan-delete-confirm > span {
+  font-size: 13px; font-weight: 600; color: hsl(var(--foreground)); line-height: 1.45;
+}
+.bilan-delete-actions { display: flex; gap: 8px; }
+.bilan-delete-cancel,
+.bilan-delete-yes {
+  flex: 1; height: 36px; border-radius: 10px;
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: filter 0.15s, background 0.15s;
+}
+.bilan-delete-cancel {
+  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+.bilan-delete-cancel:hover { background: hsl(var(--muted) / 0.5); }
+.bilan-delete-yes { background: hsl(0 70% 48%); border: none; color: #fff; }
+.bilan-delete-yes:hover:not(:disabled) { filter: brightness(1.08); }
+.bilan-delete-yes:disabled,
+.bilan-delete-cancel:disabled { opacity: 0.6; cursor: not-allowed; }
+
 /* ── État Pro lock (non-Pro voit le teaser) ─────────────────────── */
 
 .bilan-card-locked .bilan-locked {
