@@ -1,51 +1,6 @@
-/* ReviewListModal — modale liste des avis, style DA jour/nuit */
+/* ReviewList — liste des avis dépliée inline dans la section, style DA jour/nuit */
 
-.review-list-overlay {
-  position: fixed; inset: 0; z-index: 60;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(10, 6, 5, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  padding: 16px;
-}
-
-.review-list-modal {
-  width: 100%; max-width: 560px;
-  max-height: 85vh;
-  display: flex; flex-direction: column;
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
-}
-.light .review-list-modal { box-shadow: 0 20px 60px rgba(120, 80, 40, 0.18); }
-
-.review-list-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 22px;
-  border-bottom: 1px solid hsl(var(--border));
-  flex-shrink: 0;
-}
-.review-list-head h2 {
-  display: flex; align-items: center; gap: 9px;
-  font-family: var(--font-heading); font-weight: 800; font-size: 17px;
-  color: hsl(var(--foreground));
-}
-.review-list-head h2 svg { width: 18px; height: 18px; color: var(--amber); }
-.review-list-head button {
-  display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 9px;
-  background: hsl(var(--secondary)); border: 1px solid hsl(var(--border));
-  color: hsl(var(--muted-foreground)); cursor: pointer;
-}
-.review-list-head button:hover { color: hsl(var(--foreground)); }
-.review-list-head button svg { width: 16px; height: 16px; }
-
-.review-list-body {
-  flex: 1; min-height: 0;
-  overflow-y: auto;
-  padding: 16px 22px 22px;
+.review-list {
   display: flex; flex-direction: column; gap: 14px;
 }
 

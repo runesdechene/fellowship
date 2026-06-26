@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Star, Lock } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
-import { ReviewListModal } from './ReviewListModal'
+import { ReviewList } from './ReviewList'
 import { ReviewAvatar } from './ReviewAvatar'
 import './ReviewSummary.css'
 
@@ -116,19 +116,19 @@ export function ReviewSummary({ reviews, canSeeDetails, isPast, onLeaveReview }:
         </div>
       )}
 
-      {/* CTA "Voir les N avis" — Pro only et au moins 1 review */}
+      {/* Toggle "Voir / Masquer les N avis" — Pro only et au moins 1 review.
+          La liste se déplie inline et étire la section (pas de modale). */}
       {canSeeDetails && reviews.length > 0 && (
-        <button className="review-summary-seeall" onClick={() => setListOpen(true)}>
-          Voir les {reviews.length} avis →
+        <button
+          className="review-summary-seeall"
+          onClick={() => setListOpen(o => !o)}
+          aria-expanded={listOpen}
+        >
+          {listOpen ? 'Masquer les avis ↑' : `Voir les ${reviews.length} avis →`}
         </button>
       )}
 
-      {listOpen && (
-        <ReviewListModal
-          reviews={reviews}
-          onClose={() => setListOpen(false)}
-        />
-      )}
+      {listOpen && canSeeDetails && <ReviewList reviews={reviews} />}
     </div>
   )
 }
