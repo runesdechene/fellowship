@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Calendar } from 'lucide-react'
 import type { EntityRow } from '@/types/database'
+import { PUBLIC_ENTITY_COLUMNS } from '@/lib/vitrine'
 import { eventShareUrl } from '@/lib/event-link'
 import { parseEmbedParams } from '@/lib/embed-params'
 import { useTags } from '@/hooks/use-tags'
@@ -64,17 +65,17 @@ export function EmbedPage() {
     async function fetchData() {
       const { data: e } = await supabase
         .from('entities')
-        .select('*')
+        .select(PUBLIC_ENTITY_COLUMNS)
         .eq('public_slug', slug!)
         .single()
 
       if (!e) { setNotFound(true); setLoading(false); return }
-      setEntity(e as EntityRow)
+      setEntity(e as unknown as EntityRow)
 
       const { data: parts } = await supabase
         .from('participations')
         .select('id, events(id, name, start_date, end_date, city, department, tags, image_url, slug, is_private)')
-        .eq('actor_id', (e as EntityRow).actor_id)
+        .eq('actor_id', (e as unknown as EntityRow).actor_id)
         .eq('visibility', 'public')
         // « Accepté » = on y va (présence acquise), payé ou pas. On exclut interesse/en_cours/refuse.
         .in('status', ['inscrit', 'confirme'])

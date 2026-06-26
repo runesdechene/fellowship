@@ -1,5 +1,18 @@
 import type { VitrineLink } from '@/types/database'
 
+/**
+ * Colonnes d'`entities` lisibles PUBLIQUEMENT (vitrine, embed). Liste blanche : exclut
+ * volontairement tout le bloc facturation/identité (stripe_*, subscription_status,
+ * billing_interval, current_period_end, trial_end, discount_*, legal_name, siren,
+ * billing_no_siren) qui ne doit JAMAIS partir vers un visiteur. Ces colonnes sont aussi
+ * `revoke`-ées à `anon` en DB (défense en profondeur) — donc un `select('*')` anonyme
+ * échouerait : toute lecture publique d'entities DOIT passer par cette liste.
+ */
+export const PUBLIC_ENTITY_COLUMNS =
+  'actor_id, type, brand_name, craft_type, bio, website, banner_url, avatar_url, ' +
+  'public_slug, city, department, postal_code, created_at, plan, links, verified, ' +
+  'banner_position, location, comped_pro_until, is_ambassador'
+
 export interface SeasonEvent {
   id: string
   name: string

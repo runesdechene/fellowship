@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { EntityRow } from '@/types/database'
 import type { NetworkMember } from '@/lib/profile-network'
-import type { SeasonEvent } from '@/lib/vitrine'
+import { PUBLIC_ENTITY_COLUMNS, type SeasonEvent } from '@/lib/vitrine'
 
 export interface VitrineData {
   entity: EntityRow | null
@@ -29,11 +29,11 @@ export function useVitrine(slug: string | undefined): VitrineData {
     setData({ entity: null, season: [], friends: [], followers: [], following: [], loading: true, notFound: false }) // eslint-disable-line react-hooks/set-state-in-effect
     async function run() {
       let entity: EntityRow | null = null
-      const { data: bySlug } = await supabase.from('entities').select('*').eq('public_slug', slug!).maybeSingle()
-      if (bySlug) entity = bySlug as EntityRow
+      const { data: bySlug } = await supabase.from('entities').select(PUBLIC_ENTITY_COLUMNS).eq('public_slug', slug!).maybeSingle()
+      if (bySlug) entity = bySlug as unknown as EntityRow
       else {
-        const { data: byId } = await supabase.from('entities').select('*').eq('actor_id', slug!).maybeSingle()
-        entity = (byId as EntityRow) ?? null
+        const { data: byId } = await supabase.from('entities').select(PUBLIC_ENTITY_COLUMNS).eq('actor_id', slug!).maybeSingle()
+        entity = (byId as unknown as EntityRow) ?? null
       }
       if (!entity) {
         if (!cancelled) setData(d => ({ ...d, loading: false, notFound: true }))
