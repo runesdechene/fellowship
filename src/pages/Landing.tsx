@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useWaitlist } from '@/hooks/use-waitlist'
-import { useLandingExposants } from '@/hooks/use-landing-stats'
-import { testimonials } from '@/data/testimonials'
+import { useLandingExposants, useTestimonials } from '@/hooks/use-landing-stats'
 import './Landing.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -35,6 +34,7 @@ export function LandingPage() {
   const [email, setEmail] = useState('')
   const { status, error, submit } = useWaitlist()
   const exposants = useLandingExposants()
+  const { testimonials } = useTestimonials()
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -482,41 +482,52 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Témoignages — UGC social proof avant pricing ── */}
-      <section id="temoignages" className="block v exposant testimonials">
-        <div className="wrap">
-          <div className="sec-head" style={{ textAlign: 'center' }}>
-            <span className="eyebrow">Ils témoignent</span>
-            <h2>Ils en parlent mieux que nous.</h2>
-            <p style={{ color: 'hsl(var(--muted-foreground))', marginTop: '10px' }}>
-              Ce qui a changé pour eux depuis Fellowship.
-            </p>
+      {/* ── Témoignages — UGC social proof avant pricing. Gérés depuis l'admin,
+            lus en anonyme. Section masquée tant qu'aucun témoignage actif. ── */}
+      {testimonials.length > 0 && (
+        <section id="temoignages" className="block v exposant testimonials">
+          <div className="wrap">
+            <div className="sec-head" style={{ textAlign: 'center' }}>
+              <span className="eyebrow">Ils témoignent</span>
+              <h2>Ils en parlent mieux que nous.</h2>
+              <p style={{ color: 'hsl(var(--muted-foreground))', marginTop: '10px' }}>
+                Ce qui a changé pour eux depuis Fellowship.
+              </p>
+            </div>
           </div>
-          <div className="testimonials-grid">
-            {testimonials.map((t) => {
-              const initials = t.name.slice(0, 1).toUpperCase()
-              const slug = t.entitySlug
-              const Card = (
-                <article className="testimonial">
-                  <div className="testimonial-head">
-                    {t.avatarUrl
-                      ? <img src={t.avatarUrl} alt="" className="testimonial-avatar" />
-                      : <div className="testimonial-avatar testimonial-avatar-fallback">{initials}</div>}
-                    <div className="testimonial-meta">
-                      <div className="testimonial-name">{t.name}</div>
-                      <div className="testimonial-craft">{t.craft}</div>
+          {/* Marquee une ligne : défilement auto + fondu sur les bords + pause au survol.
+              Liste dupliquée ×2 pour une boucle sans couture (cf. marquee des tags). */}
+          <div className="t-marquee">
+            <div
+              className="t-mtrack"
+              style={{ ['--t-count' as string]: testimonials.length }}
+            >
+              {[...testimonials, ...testimonials].map((t, i) => {
+                const initials = t.name.slice(0, 1).toUpperCase()
+                const slug = t.resolvedSlug
+                const Card = (
+                  <article className="testimonial">
+                    <div className="testimonial-head">
+                      {t.resolvedAvatar
+                        ? <img src={t.resolvedAvatar} alt="" className="testimonial-avatar" />
+                        : <div className="testimonial-avatar testimonial-avatar-fallback">{initials}</div>}
+                      <div className="testimonial-meta">
+                        <div className="testimonial-name">{t.name}</div>
+                        <div className="testimonial-craft">{t.craft}</div>
+                      </div>
                     </div>
-                  </div>
-                  <blockquote className="testimonial-quote">« {t.quote} »</blockquote>
-                </article>
-              )
-              return slug
-                ? <Link key={t.name + t.craft} to={`/${slug}`} className="testimonial-link">{Card}</Link>
-                : <div key={t.name + t.craft}>{Card}</div>
-            })}
+                    <blockquote className="testimonial-quote">« {t.quote} »</blockquote>
+                  </article>
+                )
+                const key = t.id + '-' + i
+                return slug
+                  ? <Link key={key} to={`/${slug}`} className="testimonial-link" aria-hidden={i >= testimonials.length}>{Card}</Link>
+                  : <div key={key} aria-hidden={i >= testimonials.length}>{Card}</div>
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Pricing — Exposant ── */}
       <section id="tarifs" className="block v exposant">

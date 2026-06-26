@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Event, Tag } from '@/types/database'
+import type { Event, Tag, Testimonial, TestimonialInsert, TestimonialUpdate } from '@/types/database'
 
 export interface AdminUserRow {
   actor_id: string
@@ -176,6 +176,58 @@ export function useAdminTags() {
   }
 
   return { tags, loading, refetch: fetchTags, createTag, updateTag, deleteTag }
+}
+
+// --- Testimonials ---
+
+/** Upload une photo de témoignage dans le bucket public `testimonials`,
+ *  retourne l'URL publique. Même pattern que `event-images` : upload à la racine,
+ *  RLS storage = `bucket_id='testimonials'` pour tout authentifié. */
+export async function uploadTestimonialAvatar(file: File): Promise<string> {
+  const ext = file.name.split('.').pop()
+  const path = `${Date.now()}.${ext}`
+  const { error } = await supabase.storage.from('testimonials').upload(path, file, { upsert: true })
+  if (error) throw error
+  return supabase.storage.from('testimonials').getPublicUrl(path).data.publicUrl
+}
+
+export function useAdminTestimonials() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [loading, setLoading] = useState(true)
+
+  async function fetchTestimonials() {
+    setLoading(true)
+    // Admin : on lit TOUT (actifs + inactifs) via la policy admin_select.
+    const { data } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('sort_order', { ascending: true })
+    setTestimonials(data ?? [])
+    setLoading(false)
+  }
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchTestimonials() }, [])
+
+  async function createTestimonial(t: TestimonialInsert) {
+    const { error } = await supabase.from('testimonials').insert(t)
+    if (!error) await fetchTestimonials()
+    return { error }
+  }
+
+  async function updateTestimonial(id: string, updates: TestimonialUpdate) {
+    const { error } = await supabase.from('testimonials').update(updates).eq('id', id)
+    if (!error) await fetchTestimonials()
+    return { error }
+  }
+
+  async function deleteTestimonial(id: string) {
+    const { error } = await supabase.from('testimonials').delete().eq('id', id)
+    if (!error) await fetchTestimonials()
+    return { error }
+  }
+
+  return { testimonials, loading, refetch: fetchTestimonials, createTestimonial, updateTestimonial, deleteTestimonial }
 }
 
 // --- Reports ---

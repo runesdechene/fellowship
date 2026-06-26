@@ -5,6 +5,7 @@ import {
   Users,
   Tag,
   Flag,
+  MessageSquareQuote,
 } from 'lucide-react'
 
 const adminTabs = [
@@ -12,6 +13,7 @@ const adminTabs = [
   { to: '/admin/events', icon: CalendarDays, label: 'Événements' },
   { to: '/admin/users', icon: Users, label: 'Utilisateurs' },
   { to: '/admin/tags', icon: Tag, label: 'Tags' },
+  { to: '/admin/testimonials', icon: MessageSquareQuote, label: 'Témoignages' },
   { to: '/admin/reports', icon: Flag, label: 'Signalements' },
 ]
 

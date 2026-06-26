@@ -65,6 +65,11 @@ export type Tag = Database['public']['Tables']['tags']['Row']
 export type TagInsert = Database['public']['Tables']['tags']['Insert']
 export type TagUpdate = Database['public']['Tables']['tags']['Update']
 
+// Testimonial types
+export type Testimonial = Database['public']['Tables']['testimonials']['Row']
+export type TestimonialInsert = Database['public']['Tables']['testimonials']['Insert']
+export type TestimonialUpdate = Database['public']['Tables']['testimonials']['Update']
+
 // Enum types
 export type UserType = Database['public']['Enums']['user_type']
 export type UserSex = Database['public']['Enums']['user_sex']

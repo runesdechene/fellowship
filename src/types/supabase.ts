@@ -102,6 +102,7 @@ export type Database = {
           bio: string | null
           brand_name: string
           city: string | null
+          comped_pro_until: string | null
           craft_type: string | null
           created_at: string
           current_period_end: string | null
@@ -130,6 +131,7 @@ export type Database = {
           bio?: string | null
           brand_name: string
           city?: string | null
+          comped_pro_until?: string | null
           craft_type?: string | null
           created_at?: string
           current_period_end?: string | null
@@ -158,6 +160,7 @@ export type Database = {
           bio?: string | null
           brand_name?: string
           city?: string | null
+          comped_pro_until?: string | null
           craft_type?: string | null
           created_at?: string
           current_period_end?: string | null
@@ -808,6 +811,45 @@ export type Database = {
           slug?: string
           sort_order?: number
           text_color?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          actor_id: string | null
+          avatar_url: string | null
+          craft: string
+          created_at: string
+          entity_slug: string | null
+          id: string
+          is_active: boolean
+          name: string
+          quote: string
+          sort_order: number
+        }
+        Insert: {
+          actor_id?: string | null
+          avatar_url?: string | null
+          craft: string
+          created_at?: string
+          entity_slug?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          quote: string
+          sort_order?: number
+        }
+        Update: {
+          actor_id?: string | null
+          avatar_url?: string | null
+          craft?: string
+          created_at?: string
+          entity_slug?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          quote?: string
+          sort_order?: number
         }
         Relationships: []
       }

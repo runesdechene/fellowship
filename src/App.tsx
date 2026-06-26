@@ -36,6 +36,7 @@ const AdminDashboard = lazy(() => import('@/components/admin/AdminDashboard').th
 const AdminEvents = lazy(() => import('@/components/admin/AdminEvents').then(m => ({ default: m.AdminEvents })))
 const AdminUsers = lazy(() => import('@/components/admin/AdminUsers').then(m => ({ default: m.AdminUsers })))
 const AdminTags = lazy(() => import('@/components/admin/AdminTags').then(m => ({ default: m.AdminTags })))
+const AdminTestimonials = lazy(() => import('@/components/admin/AdminTestimonials').then(m => ({ default: m.AdminTestimonials })))
 const AdminReports = lazy(() => import('@/components/admin/AdminReports').then(m => ({ default: m.AdminReports })))
 // Carte = lazy : MapLibre (~200 kB) ne charge que sur /carte.
 const Carte = lazy(() => import('@/pages/Carte'))
@@ -147,6 +148,7 @@ function App() {
             <Route path="events" element={<Suspense fallback={<AdminFallback />}><AdminEvents /></Suspense>} />
             <Route path="users" element={<Suspense fallback={<AdminFallback />}><AdminUsers /></Suspense>} />
             <Route path="tags" element={<Suspense fallback={<AdminFallback />}><AdminTags /></Suspense>} />
+            <Route path="testimonials" element={<Suspense fallback={<AdminFallback />}><AdminTestimonials /></Suspense>} />
             <Route path="reports" element={<Suspense fallback={<AdminFallback />}><AdminReports /></Suspense>} />
           </Route>
 
