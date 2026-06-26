@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useAdminTags } from '@/hooks/use-admin'
+import { Button } from '@/components/ui/button'
 import { Loader2, Plus, Trash2, Pencil, X, Check } from 'lucide-react'
 
 function TagPreview({ name, bg, color }: { name: string; bg: string; color: string }) {
@@ -131,13 +132,10 @@ export function AdminTags() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-muted-foreground">{tags.length} tags</p>
-        <button
-          onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-medium"
-        >
-          <Plus className="h-4 w-4" strokeWidth={1.5} />
+        <Button variant="outline" size="sm" onClick={() => setShowNew(true)}>
+          <Plus strokeWidth={1.5} />
           Nouveau tag
-        </button>
+        </Button>
       </div>
 
       {showNew && (
@@ -168,12 +166,12 @@ export function AdminTags() {
             <TagPreview name={newTag.name || 'Aperçu'} bg={newTag.bg_color} color={newTag.text_color} />
           </div>
           <div className="flex gap-2 justify-end">
-            <button onClick={() => setShowNew(false)} className="px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:bg-muted">
+            <Button variant="ghost" size="sm" onClick={() => setShowNew(false)}>
               Annuler
-            </button>
-            <button onClick={handleCreate} className="px-3 py-1.5 rounded-lg text-sm bg-primary text-primary-foreground font-medium">
+            </Button>
+            <Button size="sm" onClick={handleCreate}>
               Créer
-            </button>
+            </Button>
           </div>
         </div>
       )}
