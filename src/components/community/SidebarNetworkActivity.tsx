@@ -9,6 +9,7 @@ import { avatarImgStyle } from './ActorLinks'
 function miniText(item: FeedItem): string {
   if (item.kind === 'review') return `a noté ${item.event?.name ?? ''}`
   if (item.kind === 'participation') return `va à ${item.event?.name ?? ''}`
+  if (item.kind === 'event_created') return `a ajouté ${item.event?.name ?? ''}`
   return `suit ${item.target?.label ?? ''}`
 }
 
