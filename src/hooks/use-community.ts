@@ -139,7 +139,7 @@ export function useCommunityFeed(enabled = true): CommunityData {
           })
         }
         for (const f of fols) {
-          if (!f.src_actor || !f.dst_actor) continue
+          if (!f.src_actor || !f.dst_actor || f.src_actor === f.dst_actor) continue // ignore self-follow (donnée fautive)
           items.push({
             id: `fol-${f.follow_id}`, kind: 'follow', occurredAt: f.occurred_at,
             actor: unknownActor(f.src_actor), target: unknownActor(f.dst_actor),
@@ -172,10 +172,10 @@ export function useCommunityFeed(enabled = true): CommunityData {
 
         const suggMap = new Map<string, { sharedFollowers: number; sharedEvents: number }>()
         for (const s of followList) {
-          if (s.suggested_actor) suggMap.set(s.suggested_actor, { sharedFollowers: Number(s.shared_followers), sharedEvents: 0 })
+          if (s.suggested_actor && s.suggested_actor !== me) suggMap.set(s.suggested_actor, { sharedFollowers: Number(s.shared_followers), sharedEvents: 0 })
         }
         for (const s of coeventList) {
-          if (!s.suggested_actor) continue
+          if (!s.suggested_actor || s.suggested_actor === me) continue // jamais se suggérer soi-même
           const cur = suggMap.get(s.suggested_actor) ?? { sharedFollowers: 0, sharedEvents: 0 }
           cur.sharedEvents = Number(s.shared_events)
           suggMap.set(s.suggested_actor, cur)

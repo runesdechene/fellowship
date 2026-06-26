@@ -40,7 +40,7 @@ export function useFollowStatus(targetId: string | undefined) {
   }, [me, targetId])
 
   const toggleFollow = async () => {
-    if (!me || !targetId) return
+    if (!me || !targetId || me === targetId) return // jamais se suivre soi-même
     // Optimistic UI : on flip immédiatement, on rollback si l'écriture échoue.
     // Sans rollback, un échec réseau laisse l'état mensonger (le bouton dit suivi mais
     // la DB n'a rien enregistré, et le serveur renverra l'inverse au prochain reload).
@@ -138,7 +138,7 @@ export function useFollowingSet() {
   }, [currentActor])
 
   const follow = async (actorId: string) => {
-    if (!currentActor || following.has(actorId)) return
+    if (!currentActor || actorId === currentActor.id || following.has(actorId)) return // pas de self-follow
     // Optimistic add — rollback si l'insert échoue (sinon le Set ment et la prochaine
     // tentative est silencieusement no-op à cause du `following.has(actorId)` guard).
     setFollowing(prev => new Set(prev).add(actorId))
