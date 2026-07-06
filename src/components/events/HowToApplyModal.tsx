@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { X, Mail, ExternalLink, StickyNote, Copy, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import type { Event } from '@/types/database'
 
 interface HowToApplyModalProps {
@@ -31,8 +30,8 @@ export function HowToApplyModal({ event, onClose, onMarkApplied }: HowToApplyMod
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="glass-card howto-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="howto-overlay" onClick={onClose}>
+      <div className="howto-modal" onClick={(e) => e.stopPropagation()}>
         <div className="howto-head">
           <h2>Comment candidater</h2>
           <button onClick={onClose} className="howto-x" aria-label="Fermer">
@@ -87,9 +86,9 @@ export function HowToApplyModal({ event, onClose, onMarkApplied }: HowToApplyMod
 
         <div className="howto-foot">
           <span>Tu as envoyé ta candidature ?</span>
-          <Button size="sm" onClick={() => { onMarkApplied(); onClose() }}>
-            <Check className="mr-1.5 h-4 w-4" strokeWidth={2} /> Marquer comme candidaté
-          </Button>
+          <button className="da-btn da-btn-flat da-btn-sm" onClick={() => { onMarkApplied(); onClose() }}>
+            <Check strokeWidth={2} /> Marquer comme candidaté
+          </button>
         </div>
       </div>
     </div>

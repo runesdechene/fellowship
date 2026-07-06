@@ -577,13 +577,26 @@
 
 /* ── Modale « Comment candidater » ────────────────────────────────── */
 
+.howto-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(10, 6, 5, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 16px;
+}
 .howto-modal {
-  /* Coquille = .glass-card (verre Fondation) ; ici dimensions + radius. */
-  border-radius: 20px;
+  /* Carte OPAQUE, comme .bilan-modal / .review-modal (pas .glass-card : sous
+     .event-page le verre devient trop translucide et la modale disparaît). */
   width: 100%;
   max-width: 480px;
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  overflow: hidden auto;
 }
 .howto-head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
