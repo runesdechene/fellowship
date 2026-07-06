@@ -285,3 +285,82 @@
 }
 .bilan-ledger-select:focus { outline: none; border-color: color-mix(in srgb, var(--copper) 45%, hsl(var(--border))); }
 .bilan-ledger-amount { flex: 0 0 96px; width: 96px; }
+
+/* ── Formulaire bilan : sections hors registre (repeintes DA nuit) ── */
+
+.bilan-form { display: flex; flex-direction: column; gap: 20px; }
+
+.bilan-field { display: flex; flex-direction: column; gap: 8px; }
+.bilan-field-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+.bilan-field-label .hint { text-transform: none; letter-spacing: 0; font-weight: 500; opacity: 0.7; }
+
+.bilan-input, .bilan-textarea {
+  width: 100%; border-radius: 11px;
+  border: 1px solid hsl(var(--border)); background: var(--field);
+  color: hsl(var(--foreground)); padding: 10px 13px;
+  font-family: var(--font-body); font-size: 13.5px;
+}
+.bilan-textarea { resize: vertical; min-height: 74px; line-height: 1.5; }
+.bilan-input::placeholder, .bilan-textarea::placeholder { color: hsl(var(--muted-foreground)); }
+.bilan-input:focus, .bilan-textarea:focus { outline: none; border-color: var(--accent-app); }
+.bilan-row { display: flex; gap: 7px; align-items: center; }
+.bilan-row .bilan-input { flex: 1; }
+
+/* Bénéfice — bloc data mono, couleur statut (jamais de vert/rouge bruts) */
+.bilan-benefit {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 14px; border-radius: 13px;
+  background: var(--field); border: 1px solid var(--hair);
+}
+.bilan-benefit small { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: hsl(var(--muted-foreground)); }
+.bilan-benefit b { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 23px; font-weight: 600; }
+.bilan-benefit.pos b { color: var(--status-inscrit); }
+.bilan-benefit.neg b { color: var(--status-refuse); }
+
+/* Chips « à améliorer » — terracotta DA (remplace bg-orange-100 clair) */
+.bilan-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.bilan-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500;
+  background: color-mix(in srgb, var(--accent-app) 15%, transparent);
+  color: var(--accent-app);
+  border: 1px solid color-mix(in srgb, var(--accent-app) 30%, transparent);
+}
+.bilan-chip button { display: inline-flex; background: none; border: none; color: inherit; cursor: pointer; opacity: 0.7; padding: 0; }
+.bilan-chip button:hover { opacity: 1; }
+.bilan-chip svg { width: 12px; height: 12px; }
+
+/* Photos souvenir */
+.bilan-photos { display: flex; flex-wrap: wrap; gap: 8px; }
+.bilan-photo, .bilan-photo-add { width: 64px; height: 64px; border-radius: 11px; flex-shrink: 0; }
+.bilan-photo { position: relative; overflow: hidden; background: var(--field); }
+.bilan-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bilan-photo-rm {
+  position: absolute; top: 3px; right: 3px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 6px; border: none; cursor: pointer;
+  background: rgba(0,0,0,0.55); color: #fff;
+}
+.bilan-photo-rm svg { width: 12px; height: 12px; }
+.bilan-photo-add {
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  border: 1px dashed color-mix(in srgb, var(--accent-app) 35%, var(--hair));
+  color: hsl(var(--muted-foreground)); background: var(--field);
+}
+.bilan-photo-add:hover { color: var(--accent-app); border-color: var(--accent-app); }
+.bilan-photo-add svg { width: 20px; height: 20px; }
+
+/* Bouton sauvegarder — plein, pleine largeur */
+.bilan-save { width: 100%; justify-content: center; padding: 12px; font-size: 14px; }
+
+/* Gate Pro */
+.bilan-pro-gate {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px; border-radius: 13px;
+  background: var(--field); border: 1px solid color-mix(in srgb, var(--accent-app) 30%, transparent);
+  font-size: 13.5px; color: hsl(var(--foreground));
+}
+.bilan-pro-gate svg { color: var(--accent-app); flex-shrink: 0; }
