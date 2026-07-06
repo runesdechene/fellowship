@@ -26,6 +26,7 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
   const split = splitOrientation(bilans)
 
   return (
+    <>
     <div className="glass-card ck-card">
       <div className="da-eyebrow">
         MES BILANS
@@ -71,14 +72,17 @@ export function MesBilans({ participations, entriesByEvent, onSaved }: Props) {
           )
         })}
       </ul>
-
-      {openEventId && (
-        <BilanModal
-          eventId={openEventId}
-          onClose={() => setOpenEventId(null)}
-          onSaved={() => { setOpenEventId(null); onSaved() }}
-        />
-      )}
     </div>
+
+    {/* Modale HORS de la carte : .glass-card (backdrop-filter) piège les position:fixed
+        → rendue en frère du .glass-card, comme les autres modales cockpit. */}
+    {openEventId && (
+      <BilanModal
+        eventId={openEventId}
+        onClose={() => setOpenEventId(null)}
+        onSaved={() => { setOpenEventId(null); onSaved() }}
+      />
+    )}
+    </>
   )
 }
