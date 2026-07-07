@@ -1,4 +1,6 @@
 {
-  "name": "fellowship",
-  "color": "#6f8fcf"
+  "name": "App - Fellowship",
+  "color": "#6f8fcf",
+  "logo": "",
+  "image": ".xo/cover.png"
 }
