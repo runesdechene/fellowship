@@ -733,8 +733,11 @@ export function EventPage() {
               </div>
             )}
 
-            {/* Bilan post-festival (exposant + passé). Pro lock géré dans BilanCard. */}
-            {isExposant && isPast && <BilanCard eventId={event.id} />}
+            {/* Bilan post-festival : exposant + festival passé + présence acquise
+                (participation « inscrit », même critère que le Cockpit). Sans ça la
+                carte « Tu y étais » s'affichait sur tout festival passé, même sans y
+                avoir exposé. Pro lock géré dans BilanCard. */}
+            {isExposant && isPast && participation?.status === 'inscrit' && <BilanCard eventId={event.id} />}
           </div>
 
           {/* ── COLONNE LATÉRALE (cockpit) ── */}
