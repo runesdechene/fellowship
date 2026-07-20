@@ -21,7 +21,9 @@
   /* Radial de l'app MAIS centre descendu (y 22% au lieu de 0%) : le tout-en-haut derrière
      la nav reste sombre/uniforme — fini la bande plus claire au sommet. (scoped Landing) */
   background: radial-gradient(125% 88% at 30% 22%, #252222, #171414 60%);
-  background-attachment: fixed;
+  /* Perf : PAS de background-attachment: fixed — il forçait un repaint plein écran
+     du gradient à chaque pixel scrollé (jank au scroll sur portable). La couche
+     .hero-halos est déjà en absolute et scrolle naturellement. */
   /* Accent propre à la page d'accueil — orange chaud accordé au héros « ensemble. »
      (distinct du terracotta de l'app). Un seul point à changer pour reteinter la Landing. */
   --la-accent: #c47352;
@@ -288,7 +290,12 @@
 .light .landing .hero-halos::after { opacity: .05; mix-blend-mode: multiply; }
 .light .landing .glow { mix-blend-mode: multiply; opacity: .5; }
 .light .landing .hero-bokeh { opacity: .4; }
-.landing .glow { position: absolute; border-radius: 50%; filter: blur(72px); mix-blend-mode: screen; will-change: transform; }
+/* Perf : PAS de mix-blend-mode: screen ici. Sur fond quasi-noir, screen(noir, couleur) ≈ couleur,
+   donc le rendu est quasi identique — MAIS le blend-mode annulait le cache de calque et forçait
+   le compositeur à re-mélanger 7 grandes surfaces floutées avec le fond à CHAQUE frame de `drift`
+   (jank permanent, page immobile comprise). Sans blend, chaque halo est un calque GPU caché que
+   `drift` ne fait que déplacer → coût quasi nul. (Le mode jour garde multiply, cf. .light .glow.) */
+.landing .glow { position: absolute; border-radius: 50%; filter: blur(72px); will-change: transform; }
 .landing .h-terra   { width: 520px; height: 520px; left: -60px;  top: -120px; background: radial-gradient(circle, rgba(240,150,95,.62), transparent 70%);  animation: drift1 14s ease-in-out infinite; }
 .landing .h-violet  { width: 480px; height: 480px; right: -50px; top: -20px;  background: radial-gradient(circle, rgba(180,120,235,.50), transparent 70%); animation: drift2 17s ease-in-out infinite; }
 .landing .h-pink    { width: 380px; height: 380px; left: 56%;    top: 8%;     background: radial-gradient(circle, rgba(240,120,170,.44), transparent 70%); animation: drift3 18s ease-in-out infinite; }
@@ -327,6 +334,16 @@
 .landing .bk-19{width:3px;height:3px;left:88%;top:56%;--bc:#a8c8ec;animation-delay:2.3s}
 .landing .bk-20{width:5px;height:5px;left:20%;top:52%;--bc:#f0a86a;animation-delay:.7s}
 .landing .bk-21{width:4px;height:4px;left:70%;top:58%;--bc:#7fc6a0;animation-delay:1.7s}
+
+/* Respect de l'accessibilité + filet de perf : si l'utilisateur a demandé « moins d'animations »,
+   on fige TOUTE la couche décorative (halos, bokeh, marquees). Rien ne tourne plus en boucle. */
+@media (prefers-reduced-motion: reduce) {
+  .landing .glow,
+  .landing .hero-bokeh .bk,
+  .landing .mtrack {
+    animation: none !important;
+  }
+}
 
 .landing .hero .wrap {
   position: relative;
