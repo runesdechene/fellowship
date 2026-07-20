@@ -10,6 +10,7 @@ export const NOTIFICATION_TYPES = new Set([
   // 'friend_note' retiré : les notes d'événement sont strictement privées,
   // notifier les abonnés d'une note qu'ils ne peuvent pas lire = spam. Le
   // trigger DB émetteur est supprimé (cf. migration drop_private_note_notif).
+  'review_reply',
   'deadline_reminder',
   'event_updated',
 ])

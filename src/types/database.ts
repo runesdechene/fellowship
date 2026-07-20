@@ -114,4 +114,5 @@ export interface NotificationData {
   friend_name?: string
   follower_name?: string
   status?: string
+  review_id?: string
 }
