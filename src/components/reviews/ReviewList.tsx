@@ -1,6 +1,7 @@
 import { Star, MessageSquare } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
 import { ReviewAvatar } from './ReviewAvatar'
+import { ReviewReplies } from './ReviewReplies'
 import './ReviewList.css'
 
 interface Props {
@@ -69,6 +70,8 @@ export function ReviewList({ reviews }: Props) {
                 <p>« {r.comment} »</p>
               </div>
             )}
+
+            <ReviewReplies reviewId={r.id} />
           </article>
         )
       })}

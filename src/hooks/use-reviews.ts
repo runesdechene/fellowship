@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
-import { planForActor } from '@/lib/navModel'
 import type { Review, ReviewInsert } from '@/types/database'
 
 export type ReviewWithActor = Review & {
@@ -12,7 +11,7 @@ export type ReviewWithActor = Review & {
 }
 
 export function useEventReviews(eventId: string | undefined) {
-  const { currentActor, currentActorRow } = useAuth()
+  const { currentActor } = useAuth()
   const [reviews, setReviews] = useState<ReviewWithActor[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -58,7 +57,10 @@ export function useEventReviews(eventId: string | undefined) {
     fetchReviews()
   }, [eventId, fetchReviews])
 
-  const canSeeDetails = planForActor(currentActor, currentActorRow) === 'pro'
+  // Les avis sont un bien commun exposants : tout exposant (entité) lit le détail,
+  // plus seulement le Pro (décision 0005). Une personne/festivalier ne voit de
+  // toute façon pas le bloc avis (gating amont dans EventPage).
+  const canSeeDetails = currentActor?.kind === 'entity'
 
   return { reviews, loading, canSeeDetails, refetch: fetchReviews }
 }
