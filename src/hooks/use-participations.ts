@@ -60,19 +60,26 @@ export function useFriendsParticipations() {
     const friendIds = friendRows as string[] | null
     if (!friendIds || friendIds.length === 0) { setParticipations([]); setLoading(false); return }
 
-    // On ne récupère que les participations d'amis sur des events À VENIR (end_date >= aujourd'hui),
-    // triées par date d'event. L'ancien `.order('created_at').limit(50)` plafonnait à 50 lignes par
-    // ordre de CRÉATION : dès qu'un acteur avait >50 amis-participations, toute inscription plus
-    // ancienne (saison ajoutée tôt) tombait hors fenêtre et disparaissait silencieusement — d'où
-    // les compagnons manquants sur les festivals « anciens » (bug Plane'R Fest, créé en avril).
-    const today = new Date().toISOString().slice(0, 10)
+    // Fenêtre glissante de ~13 mois en arrière → futur, triée par date d'event.
+    // Avant on bornait à end_date >= aujourd'hui (events À VENIR seulement) : la
+    // présence d'un ami sur un festival PASSÉ n'apparaissait donc jamais sur le
+    // calendrier, alors que tes propres dates passées, elles, s'affichent (fetch
+    // sans borne de date) — asymétrie visible dès qu'on navigue sur un mois passé
+    // (bug Pouka aux Médiévales du Grand Fauconnier). 13 mois couvre la navigation
+    // « année précédente » du calendrier tout en restant borné (pas de troncature).
+    // L'ancien `.order('created_at').limit(50)` plafonnait par ordre de CRÉATION :
+    // dès >50 amis-participations, les plus anciennes tombaient hors fenêtre → on
+    // ordonne par date d'event avec une limite large.
+    const since = new Date()
+    since.setMonth(since.getMonth() - 13)
+    const sinceStr = since.toISOString().slice(0, 10)
     const { data: parts } = await supabase
       .from('participations')
       .select('*, events!inner(*)')
       .in('actor_id', friendIds)
       .in('visibility', ['amis', 'public'])
       .eq('events.is_private', false)   // jamais l'event privé d'un ami sur mon calendrier
-      .gte('events.end_date', today)
+      .gte('events.end_date', sinceStr)
       .order('start_date', { referencedTable: 'events', ascending: true })
       .limit(200)
 
