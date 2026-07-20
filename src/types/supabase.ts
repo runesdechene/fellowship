@@ -99,6 +99,7 @@ export type Database = {
           banner_position: number
           banner_url: string | null
           billing_interval: string | null
+          billing_no_siren: boolean
           bio: string | null
           brand_name: string
           city: string | null
@@ -109,11 +110,14 @@ export type Database = {
           department: string | null
           discount_end: string | null
           discount_label: string | null
+          is_ambassador: boolean
+          legal_name: string | null
           links: Json
           location: string | null
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
+          siren: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
           subscription_status: string | null
@@ -128,6 +132,7 @@ export type Database = {
           banner_position?: number
           banner_url?: string | null
           billing_interval?: string | null
+          billing_no_siren?: boolean
           bio?: string | null
           brand_name: string
           city?: string | null
@@ -138,11 +143,14 @@ export type Database = {
           department?: string | null
           discount_end?: string | null
           discount_label?: string | null
+          is_ambassador?: boolean
+          legal_name?: string | null
           links?: Json
           location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          siren?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_status?: string | null
@@ -157,6 +165,7 @@ export type Database = {
           banner_position?: number
           banner_url?: string | null
           billing_interval?: string | null
+          billing_no_siren?: boolean
           bio?: string | null
           brand_name?: string
           city?: string | null
@@ -167,11 +176,14 @@ export type Database = {
           department?: string | null
           discount_end?: string | null
           discount_label?: string | null
+          is_ambassador?: boolean
+          legal_name?: string | null
           links?: Json
           location?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          siren?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_status?: string | null
@@ -708,6 +720,132 @@ export type Database = {
           },
         ]
       }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          owner_entity_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          owner_entity_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          owner_entity_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_codes_owner_entity_id_fkey"
+            columns: ["owner_entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          attributed_at: string
+          filleul_entity_id: string
+          filleul_first_paid_at: string | null
+          filleul_gift_granted: boolean
+          id: string
+          parrain_entity_id: string
+          parrain_rewarded_at: string | null
+          status: string
+        }
+        Insert: {
+          attributed_at?: string
+          filleul_entity_id: string
+          filleul_first_paid_at?: string | null
+          filleul_gift_granted?: boolean
+          id?: string
+          parrain_entity_id: string
+          parrain_rewarded_at?: string | null
+          status?: string
+        }
+        Update: {
+          attributed_at?: string
+          filleul_entity_id?: string
+          filleul_first_paid_at?: string | null
+          filleul_gift_granted?: boolean
+          id?: string
+          parrain_entity_id?: string
+          parrain_rewarded_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_filleul_entity_id_fkey"
+            columns: ["filleul_entity_id"]
+            isOneToOne: true
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "referrals_parrain_entity_id_fkey"
+            columns: ["parrain_entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      review_replies: {
+        Row: {
+          acted_by_user_id: string | null
+          actor_id: string
+          body: string
+          created_at: string
+          id: string
+          review_id: string
+          updated_at: string
+        }
+        Insert: {
+          acted_by_user_id?: string | null
+          actor_id: string
+          body: string
+          created_at?: string
+          id?: string
+          review_id: string
+          updated_at?: string
+        }
+        Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          review_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_replies_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "review_replies_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_replies_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           acted_by_user_id: string | null
@@ -851,7 +989,15 @@ export type Database = {
           quote?: string
           sort_order?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -970,6 +1116,10 @@ export type Database = {
         Args: { user_a: string; user_b: string }
         Returns: boolean
       }
+      attribute_referral: {
+        Args: { p_code: string; p_filleul_entity_id: string }
+        Returns: string
+      }
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
       create_owned_entity: {
         Args: {
@@ -981,6 +1131,10 @@ export type Database = {
           p_public_slug?: string
           p_type: Database["public"]["Enums"]["entity_type"]
         }
+        Returns: string
+      }
+      ensure_referral_code: {
+        Args: { p_base_code: string; p_entity_id: string }
         Returns: string
       }
       events_base_slug: {
@@ -1032,6 +1186,16 @@ export type Database = {
           src_actor: string
         }[]
       }
+      get_referral_overview: {
+        Args: { p_entity_id: string }
+        Returns: {
+          code: string
+          is_ambassador: boolean
+          pending_count: number
+          rewarded_count: number
+        }[]
+      }
+      is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
       search_similar_events: {
         Args: { search_name: string; search_year?: number; threshold?: number }
@@ -1063,6 +1227,7 @@ export type Database = {
         | "event_image_added"
         | "event_info_added"
         | "new_exposant"
+        | "review_reply"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -1214,6 +1379,7 @@ export const Constants = {
         "event_image_added",
         "event_info_added",
         "new_exposant",
+        "review_reply",
       ],
       participation_status: [
         "interesse",
