@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Users, UserPlus, Clock, MessageSquare, Calendar, ImagePlus, FileEdit, Info, UserCheck } from 'lucide-react'
+import { Users, UserPlus, Clock, Calendar, ImagePlus, FileEdit, Info, UserCheck } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Notification, NotificationData } from '@/types/database'
@@ -76,13 +76,6 @@ const TYPE_CONFIG: Record<string, TypeConfigEntry> = {
     color: 'text-destructive',
     actorName: () => null,
     suffix: (d) => `Inscription pour ${d.event_name ?? 'un événement'} bientôt`,
-    link: (d) => d.event_id ? `/evenement/${d.event_id}` : '/explorer',
-  },
-  friend_note: {
-    icon: MessageSquare,
-    color: 'text-primary',
-    actorName: (d) => d.actor_name ?? d.friend_name ?? 'Un ami',
-    suffix: (d) => ` a laissé une note sur ${d.event_name ?? 'un événement'}`,
     link: (d) => d.event_id ? `/evenement/${d.event_id}` : '/explorer',
   },
   event_created: {

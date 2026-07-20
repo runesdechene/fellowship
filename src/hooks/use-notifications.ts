@@ -7,7 +7,9 @@ import type { Notification } from '@/types/database'
 export const NOTIFICATION_TYPES = new Set([
   'new_follower',
   'friend_going',
-  'friend_note',
+  // 'friend_note' retiré : les notes d'événement sont strictement privées,
+  // notifier les abonnés d'une note qu'ils ne peuvent pas lire = spam. Le
+  // trigger DB émetteur est supprimé (cf. migration drop_private_note_notif).
   'deadline_reminder',
   'event_updated',
 ])
