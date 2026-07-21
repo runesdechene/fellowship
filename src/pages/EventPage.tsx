@@ -14,7 +14,7 @@ import { ReviewSummary } from '@/components/reviews/ReviewSummary'
 import { BilanCard } from '@/components/reports/BilanCard'
 import { EventDashboard } from '@/components/events/EventDashboard'
 import { FestivalFacts } from '@/components/events/FestivalFacts'
-import { DiscussionTeaser } from '@/components/events/DiscussionTeaser'
+import { DiscussionFestival } from '@/components/events/DiscussionFestival'
 import { HowToApplyModal } from '@/components/events/HowToApplyModal'
 import { ReportButton } from '@/components/reports/ReportButton'
 import { candidatureState, mapsSearchUrl, daysUntilStart, editionLabel, hasApplyInfo } from '@/lib/festival'
@@ -679,8 +679,8 @@ export function EventPage() {
             {/* Infos pratiques */}
             <FestivalFacts event={event} />
 
-            {/* Discussion du festival (placeholder) */}
-            <DiscussionTeaser />
+            {/* Discussion du festival */}
+            <DiscussionFestival event={event} />
 
             {/* CTA d'acquisition — visiteur anonyme uniquement, juste sous le contenu (pas de pied de page perdu) */}
             {!user && (
