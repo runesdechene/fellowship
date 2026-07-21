@@ -61,10 +61,11 @@ export function useCommunityFeed(enabled = true): CommunityData {
         const empty = Promise.resolve({ data: null })
 
         const [revRes, partRes, folRes, upcomingRes, evtRes] = await Promise.all([
-          hasFollows ? supabase.from('reviews')
-            .select('id, actor_id, event_id, affluence, organisation, rentabilite, comment, created_at')
-            .in('actor_id', followingIds).gte('created_at', since)
-            .order('created_at', { ascending: false }).limit(FEED_LIMIT) : empty,
+          // Avis du réseau via RPC à identité gatée (ami mutuel + non-anonyme seulement) :
+          // la lecture directe de `reviews` laissait fuiter l'actor_id d'autrui (cf. avis à
+          // identité protégée). Le feed ne montre que les avis attribuables au lecteur.
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          hasFollows ? (supabase.rpc as any)('get_network_reviews', { p_actor_id: me, p_since: since }) : empty,
           hasFollows ? supabase.from('participations')
             .select('id, actor_id, event_id, status, created_at')
             .in('actor_id', followingIds).gte('created_at', since)
@@ -88,7 +89,11 @@ export function useCommunityFeed(enabled = true): CommunityData {
             .limit(FEED_LIMIT),
         ])
 
-        const reviews = revRes.data ?? []
+        const reviews = (revRes.data ?? []) as Array<{
+          id: string; actor_id: string; event_id: string
+          affluence: number; organisation: number; rentabilite: number
+          comment: string | null; created_at: string
+        }>
         const parts = partRes.data ?? []
         const fols = (folRes.data ?? []) as Array<{ follow_id: string; src_actor: string; dst_actor: string; occurred_at: string }>
         const upcoming = (upcomingRes.data ?? []) as Array<{ actor_id: string | null; event_id: string }>
