@@ -131,8 +131,9 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                 <div className="agenda-frlbl">Tes compagnons</div>
                 {friendsOnly.map(ev => {
                   const fname = ev.friendName ?? 'Un ami'
+                  const isPast = ev.endDate < now
                   return (
-                    <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="mobile-event-pill fr">
+                    <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className={`mobile-event-pill fr${isPast ? ' past' : ''}`}>
                       <span
                         className="agenda-fr-av"
                         title={`Voir le profil de ${fname}`}
@@ -142,9 +143,9 @@ export function MobileAgenda({ months, actorKind, friendParticipations, onOpenFr
                         {ev.friendAvatarUrl ? <img src={ev.friendAvatarUrl} alt={fname} /> : fname[0].toUpperCase()}
                       </span>
                       <div className="mobile-event-pill-info">
-                        <div className="mobile-event-pill-name">{ev.name}</div>
+                        <div className="mobile-event-pill-name">{ev.name}{isPast && <span className="cal-past-badge">Passé</span>}</div>
                         <div className="mobile-event-pill-meta">
-                          <span>{fname} y va</span>
+                          <span>{fname} {isPast ? 'y a été' : 'y va'}</span>
                           <span>·</span>
                           <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
                         </div>

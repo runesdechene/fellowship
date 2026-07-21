@@ -116,12 +116,17 @@ export function CalendarMonth({ data, actorKind, friendParticipations = [], onOp
               ? ev.friends
               : [{ name: (ev.friendName ?? '').trim() || 'Un ami', avatarUrl: ev.friendAvatarUrl ?? null, slug: ev.friendSlug ?? '' }]
             const names = friends.map(f => f.name).join(', ')
+            const isPast = ev.endDate < now
+            // Participe invariable (« a/ont été ») : pas d'accord de genre à deviner.
+            const verb = isPast
+              ? (friends.length > 1 ? 'y ont été' : 'y a été')
+              : (friends.length > 1 ? 'y vont' : 'y va')
             return (
-              <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className="calendar-evF">
+              <Link key={ev.id} to={eventPath(ev)} state={{ from: '/calendrier' }} className={`calendar-evF${isPast ? ' past' : ''}`}>
                 {ev.imageUrl && <img src={ev.imageUrl} alt="" />}
                 <div className="calendar-evF-info">
-                  <div className="calendar-evF-name">{ev.name}</div>
-                  <div className="calendar-evF-meta">{names} {friends.length > 1 ? 'y vont' : 'y va'} · {formatDateRange(ev.startDate, ev.endDate)}</div>
+                  <div className="calendar-evF-name">{ev.name}{isPast && <span className="cal-past-badge">Passé</span>}</div>
+                  <div className="calendar-evF-meta">{names} {verb} · {formatDateRange(ev.startDate, ev.endDate)}</div>
                 </div>
                 <span className="calendar-pav calendar-evF-pile">
                   {friends.slice(0, 3).map((f, i) => (
