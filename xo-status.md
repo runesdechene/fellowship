@@ -1,7 +1,7 @@
 ---
-updated: 2026-07-21T09:00:00Z
-summary: "Feature « répondre à un avis de festival » déployée et validée par Uriel (v0.7.377). En prime, les dates amies passées du calendrier sont maintenant distinguées (pastille « Passé » + « y a été », v0.7.378)."
-next_step: "Attaquer le module Discussion du festival (sa propre spec). Et ne pas oublier les 2 vérifs prod laissées ouvertes sur les réponses aux avis : smoke réel à 2 comptes + revue sécu RLS."
+updated: 2026-07-21T16:00:00Z
+summary: "Grosse session : le module Discussion du festival (onglet Questions) est en prod (v0.7.380, avec avatars), ET les avis de festival ont maintenant une identité protégée (v0.7.381) — ton nom n'est visible que de tes amis pro, jamais des organisateurs, avec une option anonymat total. Tout est déployé et prêt à tester."
+next_step: "Tester en vrai : (1) la Discussion (poser/répondre/élire une meilleure réponse, avatars, toggles de canaux) ; (2) les avis à identité protégée (un non-ami voit « Un exposant vérifié », un ami voit ton nom, la case anonymat, le formulaire bloqué si pas inscrit). Puis me donner le feu vert pour poser le DERNIER verrou DB des avis (que j'ai gardé exprès en attente)."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -10,28 +10,39 @@ next_step: "Attaquer le module Discussion du festival (sa propre spec). Et ne pa
 
 ## Mémoire de session
 
-Bugs page événement (2026-07-20) :
-1. Bilan post-festival (v0.7.374) : s'affichait sur tout festival passé pour n'importe quel exposant. Fix EventPage.tsx:737 — ajout `participation?.status === 'inscrit'` (même critère « présence acquise » que le Cockpit, cf. cockpit.ts:4).
-2. Notif notes privées (v0.7.375) : trigger DB `on_new_note` → `notify_friend_note` spammait les abonnés à chaque note privée (illisible par eux). Fix = migration 20260720120000 (DROP trigger+fonction + purge notifs friend_note) APPLIQUÉE EN PROD via CLI ; front = retrait de friend_note des types affichés (mitigation immédiate).
+--- AVIS À IDENTITÉ PROTÉGÉE (front déployé v0.7.381, 2026-07-21) — VERROU FINAL DIFFÉRÉ ---
+Spec `docs/superpowers/specs/2026-07-21-avis-identite-protegee-design.md`, plan
+`docs/superpowers/plans/2026-07-21-avis-identite-protegee.md`, décision 0005 (addendum).
+Déclencheur : une exposante craint qu'un orga voie son avis attribué (représailles). Fondé :
+la RLS laissait tout compte lire les avis attribués.
+Modèle livré : **contenu public / identité protégée**. Nom révélé aux **amis pro** (follow
+mutuel) uniquement, **jamais à un compte type `festival`** (carve-out orga par type d'acteur),
+sinon « Un exposant vérifié · présent à cette édition ». **Opt-in anonymat total** (caché même
+des amis). **Gate participation** : écrire un avis exige `participations.status='inscrit'`.
+DB EN PROD (migrations 160000 + 160100) : colonne `reviews.anonymous`, policies d'écriture
+gatées, RPC `get_event_reviews` / `get_review_replies` (SECURITY DEFINER, masquent l'actor_id,
+anti-usurpation via `can_act_as(p_viewer_actor)`). Front (use-reviews/use-review-replies via RPC,
+`lib/review-visibility.ts`, UI anonyme + case + gate) EN PROD.
+Revue finale opus : **0 Critical/Important**. Minor : un auteur en anonyme-total qui répond dans
+le fil révèle son nom à ses amis sur cette réponse (limitation documentée).
+⚠️ **VERROU FINAL NON POUSSÉ** (Task 8 du plan) : migration `160200_reviews_lock_direct_read`
+qui coupe la lecture directe de `reviews` (via policy RLS `reviews_select_own`, PAS un revoke
+SELECT brut — sinon `useMyReview` casse). Je l'ai gardée exprès : à pousser SEULEMENT après que
+tu as vérifié les avis en prod, pour ne pas risquer de casser une feature revenue-critique en ton
+absence. Avant ce verrou : protection UI active, mais un client technique peut encore lire
+`actor_id` en direct (bypass DB). C'est ce verrou qui ferme définitivement la fuite.
 
-Note migration : l'OAuth du MCP Supabase échoue (« Unrecognized client_id » systématique) → passé par le CLI. Divergence d'historique préexistante (20260622/20260626 jumelées) résolue au passage : repair --status reverted <jumelles distantes> puis --status applied <locales>, puis db push. Historique 100% synchro maintenant.
+--- MODULE DISCUSSION FESTIVAL — onglet Questions (prod v0.7.379, avatars v0.7.380) ---
+Spec/plan `...discussion-festival-questions...`. Q&R multi-publics (festivalier/exposant, orga
+réservé), mono-événement, meilleure réponse verte, notifs thread_reply/best_reply, signalement,
+gratuit. Avatars des participants ajoutés (v0.7.380, `ReviewAvatar`). Revue opus : 0 Critical.
+⚠️ À tester : smoke réel 2 comptes + revue sécu RLS live (`set role`) pas encore passée.
+Prochain gros chantier attendu : **onglet Rencontres** (spec 2).
 
-3. Calendrier amis passés (v0.7.376) : `useFriendsParticipations` bornait à `.gte('events.end_date', today)` (amis À VENIR seulement) alors que `useMyParticipations` n'a aucune borne → un ami sur un festival passé (Pouka aux Médiévales) n'apparaissait jamais. Fenêtre élargie à ~13 mois glissants (borne `end_date >= today-13mo`, limit 200 conservée).
-
---- FEATURE NUIT 2026-07-21 : Réponses aux avis de festival (v0.7.377, DÉPLOYÉE) ---
-Spec `docs/superpowers/specs/2026-07-20-reponses-avis-festival-design.md`, plan `docs/superpowers/plans/2026-07-20-reponses-avis-festival.md`, décision freemium `docs/decisions/0005`.
-- DB (EN PROD via CLI, historique synchro) : table `review_replies` (FK reviews, RLS `can_act_as` + entité only à l'INSERT, SELECT ouvert, DELETE auteur|is_admin), enum `notification_type += review_reply`, trigger `notify_review_reply` (gardes anti-auto-notif + event privé). Types Supabase régénérés.
-- Front : `lib/review-replies.ts` (helpers purs + 12 tests), `hooks/use-review-replies.ts`, composants `ReviewReplies`/`ReviewReplyItem` (fil plat, composer, édition/suppression) branchés dans `ReviewList`. Notif `review_reply` dans le feed.
-- Décision 0005 : **lecture des avis ouverte à tout exposant** (plus Pro-locked) — `canSeeDetails = currentActor?.kind === 'entity'`. Mémoire `project_freemium_matrix` mise à jour.
-- Vérifs faites : `pnpm build` OK, 354 tests verts, typecheck + lint clean.
-
-⚠️ À VÉRIFIER AU RÉVEIL (je n'ai pas pu le faire sans session exposant authentifiée) :
-  1. Smoke réel : page d'un festival PASSÉ, en mode exposant → déplier les avis → répondre. Un 2ᵉ compte exposant doit voir le fil ; l'auteur de l'avis doit recevoir la notif.
-  2. Revue sécu RLS (role-sim SQL) : qu'un acteur ne puisse pas éditer/supprimer la réponse d'un autre, ni une personne (non-entité) insérer. RLS calquée sur le pattern `can_act_as` éprouvé, mais non testée en role-sim faute d'accès psql/MCP cette nuit.
-  3. Rendu jour/nuit + mobile du fil.
-DÉFÉRÉ v1.1 (assumé, noté dans le plan) : **signalement des réponses** (extension `content_reports.target_type += review_reply` + câblage ReportButton). La spec le prévoyait ; sorti du périmètre nuit pour livrer un cœur solide.
-PROCHAIN GROS CHANTIER attendu par Uriel : **module Discussion du festival** (spec dédiée à faire — plus lourd : qui poste, modération, notifs de masse).
-
-Landing perf (v0.7.373, rappel) : couche décorative jamais au repos (mix-blend-mode:screen + drift + bg fixed). Corrigé.
-
-À décider (dette qui traîne) : gitignore graphify-out/cache + committer la migration event_ledger non suivie.
+--- À VÉRIFIER / DÉFÉRÉ (récap global) ---
+1. Tester Discussion + Avis identité en conditions réelles (2 comptes, canaux, jour/nuit, mobile).
+2. Feu vert pour le VERROU final des avis (voir ci-dessus).
+3. Revue sécu RLS live (`set role`) : Discussion + Avis (RPC role-sim) — pas encore faite en base.
+4. Vérifs restées ouvertes sur les réponses aux avis (v0.7.377) : idem smoke 2 comptes.
+Rappels infra : OAuth MCP Supabase KO → CLI (`db push`) ; régén types Supabase KO (token) → `as any`.
+Dette : gitignore graphify-out/cache + committer la migration event_ledger non suivie.
