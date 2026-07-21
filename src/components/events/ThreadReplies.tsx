@@ -8,12 +8,12 @@ import {
 import { markBestReply, type ThreadWithActor } from '@/hooks/use-event-threads'
 import { canReply, canEdit, canDelete, canMarkBest, sortReplies } from '@/lib/event-threads'
 
-function timeAgo(iso: string): string {
+function shortDate(iso: string): string {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
 export function ThreadReplies({ thread, onChanged }: { thread: ThreadWithActor; onChanged: () => void }) {
-  const { currentActor, isAdmin } = useAuth()
+  const { currentActor, person, isAdmin } = useAuth()
   const { replies, loading, refetch } = useThreadReplies(thread.id)
   const [draft, setDraft] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -27,7 +27,7 @@ export function ThreadReplies({ thread, onChanged }: { thread: ThreadWithActor; 
     if (!body || !currentActor) return
     await createThreadReply({
       thread_id: thread.id, actor_id: currentActor.id,
-      acted_by_user_id: currentActor.kind === 'entity' ? null : currentActor.id, body,
+      acted_by_user_id: person?.actor_id ?? null, body,
     })
     setDraft(''); await refetch(); onChanged()
   }
@@ -100,7 +100,7 @@ function ReplyRow(props: {
         <div className="r-name" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
           {r.actor_label ?? 'Quelqu\'un'}
           {isBest && <span style={{ fontSize: 10, color: 'var(--forest)', border: '1px solid color-mix(in srgb,var(--forest) 45%,transparent)', borderRadius: 999, padding: '1px 7px' }}>✓ meilleure réponse</span>}
-          <span style={{ color: 'var(--font-color-lowtitle)', fontWeight: 500, fontSize: 11 }}>{timeAgo(r.created_at)}{edited ? ' · modifié' : ''}</span>
+          <span style={{ color: 'var(--font-color-lowtitle)', fontWeight: 500, fontSize: 11 }}>{shortDate(r.created_at)}{edited ? ' · modifié' : ''}</span>
           {!isBest && props.canMarkThis && <span className="disc-mark" onClick={props.onElect}>✓ marquer la bonne</span>}
         </div>
         {props.editing ? (
