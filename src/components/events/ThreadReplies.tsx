@@ -118,7 +118,7 @@ function ReplyRow(props: {
         <div style={{ display: 'flex', gap: 10, marginTop: 6, fontSize: 11 }}>
           {props.canEditThis && !props.editing && <button className="disc-mark" onClick={props.onStartEdit}>Éditer</button>}
           {props.canDeleteThis && <button className="disc-mark" onClick={props.onDelete}>Supprimer</button>}
-          <ReportButton targetType={'event_thread_reply' as any} targetId={r.id} targetLabel="cette réponse"
+          <ReportButton targetType="event_thread_reply" targetId={r.id} targetLabel="cette réponse"
             targetOwnerId={r.actor_id} title="Signaler cette réponse" />
         </div>
       </div>

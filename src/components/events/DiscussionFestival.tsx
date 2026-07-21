@@ -119,7 +119,7 @@ function ThreadCard({ thread, open, onToggle, onChanged }: {
             : <span>Sans réponse · sois le premier à aider</span>}
           <span>· {thread.actor_label ?? 'Quelqu\'un'}</span>
           <span style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-            <ReportButton targetType={'event_thread' as any} targetId={thread.id} targetLabel="cette question" targetOwnerId={thread.actor_id} title="Signaler" />
+            <ReportButton targetType="event_thread" targetId={thread.id} targetLabel="cette question" targetOwnerId={thread.actor_id} title="Signaler" />
           </span>
         </div>
       </div>

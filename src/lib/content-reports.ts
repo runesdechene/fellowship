@@ -2,7 +2,7 @@
 // Distinct des bilans post-festival (table event_reports) qui sont privés à leur auteur.
 
 export type ReportReason = 'spam' | 'inapproprie' | 'info_erronee' | 'doublon'
-export type ReportTargetType = 'event' | 'profile'
+export type ReportTargetType = 'event' | 'profile' | 'event_thread' | 'event_thread_reply'
 export type ReportStatus = 'pending' | 'resolved' | 'dismissed'
 
 export const REPORT_REASONS: Array<{ value: ReportReason; label: string }> = [
