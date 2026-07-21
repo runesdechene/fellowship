@@ -1,7 +1,7 @@
 ---
-updated: 2026-07-21T00:20:00Z
-summary: "Nuit productive : la feature « répondre à un avis de festival » est construite, testée et déployée (v0.7.377). Tout exposant peut lire les avis et y répondre ; l'auteur de l'avis reçoit une notification. Prête à tester au réveil."
-next_step: "Tester le fil de réponses sous un avis (page d'un festival passé, en mode exposant), valider le rendu jour/nuit et sur mobile, puis me dire si on enchaîne sur le module Discussion du festival."
+updated: 2026-07-21T09:00:00Z
+summary: "Feature « répondre à un avis de festival » déployée et validée par Uriel (v0.7.377). En prime, les dates amies passées du calendrier sont maintenant distinguées (pastille « Passé » + « y a été », v0.7.378)."
+next_step: "Attaquer le module Discussion du festival (sa propre spec). Et ne pas oublier les 2 vérifs prod laissées ouvertes sur les réponses aux avis : smoke réel à 2 comptes + revue sécu RLS."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
