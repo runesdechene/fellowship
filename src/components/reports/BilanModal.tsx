@@ -19,10 +19,13 @@ export function BilanModal({ eventId, onClose, onSaved }: Props) {
   const [showReview, setShowReview] = useState(false)
 
   // Étape 2 : avis public (sans cadenas, rappel public porté par ReviewModal).
+  // BilanCard (parent) n'est montée par EventPage que si participation.status
+  // === 'inscrit' (présence acquise) : invariant garanti à ce stade du flux.
   if (showReview) {
     return (
       <ReviewModal
         eventId={eventId}
+        participationStatus="inscrit"
         onClose={() => { onSaved?.(); onClose() }}
         onSubmitted={() => {}}
       />

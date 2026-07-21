@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import type { ReplyWithActor } from '@/hooks/use-review-replies'
 import { canEditReply, canDeleteReply, type ReplyActor } from '@/lib/review-replies'
+import { reviewerDisplay } from '@/lib/review-visibility'
 import { ReviewAvatar } from './ReviewAvatar'
 
 function ago(iso: string): string {
@@ -34,17 +35,25 @@ export function ReviewReplyItem({ reply, actor, isAdmin, onEdit, onDelete }: Pro
     setBusy(true); await onEdit(reply.id, body); setBusy(false); setEditing(false)
   }
 
+  // Réponses : pas de « présent à cette édition » (réservé aux auteurs d'avis
+  // vérifiés) ; anonyme = « Un exposant » (moins spécifique que pour un avis).
+  const who = reviewerDisplay(
+    { is_self: reply.is_self, identity_visible: reply.identity_visible, author_label: reply.actor_label, author_avatar_url: reply.actor_avatar_url, author_slug: reply.actor_slug },
+    { anonLabel: 'Un exposant' },
+  )
+  const avatarLabel = who.mode === 'anonymous' ? null : who.label
+
   return (
     <div className="review-reply">
       <ReviewAvatar
-        label={reply.actor_label}
-        avatarUrl={reply.actor_avatar_url}
-        slug={reply.actor_slug}
+        label={avatarLabel}
+        avatarUrl={who.avatarUrl}
+        slug={who.slug}
         className="review-reply-avatar"
       />
       <div className="review-reply-body">
         <div className="review-reply-meta">
-          <span className="review-reply-name">{reply.actor_label ?? 'Un exposant'}</span>
+          <span className="review-reply-name">{who.label}</span>
           <span className="review-reply-date">{ago(reply.created_at)}{edited ? ' · modifié' : ''}</span>
         </div>
         {editing ? (

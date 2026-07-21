@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import { submitReview, deleteReview, useMyReview } from '@/hooks/use-reviews'
+import { canReview } from '@/lib/review-visibility'
 import { Star, Trash2 } from 'lucide-react'
 
 interface ReviewFormProps {
   eventId: string
+  participationStatus: string | null | undefined
   onReviewSubmitted: () => void
 }
 
@@ -26,13 +28,14 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
   )
 }
 
-export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
+export function ReviewForm({ eventId, participationStatus, onReviewSubmitted }: ReviewFormProps) {
   const { user, currentActor } = useAuth()
   const { review: existing, loading: loadingExisting } = useMyReview(eventId)
   const [affluence, setAffluence] = useState(0)
   const [organisation, setOrganisation] = useState(0)
   const [rentabilite, setRentabilite] = useState(0)
   const [comment, setComment] = useState('')
+  const [anonymous, setAnonymous] = useState(false)
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -49,6 +52,7 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
     setOrganisation(existing.organisation)
     setRentabilite(existing.rentabilite)
     setComment(existing.comment ?? '')
+    setAnonymous(existing.anonymous ?? false)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,6 +68,7 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
       organisation,
       rentabilite,
       comment: comment || null,
+      anonymous,
     })
 
     setSaving(false)
@@ -82,6 +87,16 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
   // 0-étoiles avant que les valeurs persistées se chargent dans le state.
   if (loadingExisting) {
     return <div className="review-form-loading">Chargement…</div>
+  }
+
+  // Vérification : laisser un avis suppose une présence acquise (participation
+  // `inscrit`, même critère que le Cockpit) — garde-fou anti-trashing anonyme.
+  if (!canReview(participationStatus)) {
+    return (
+      <div className="review-form-gate">
+        Tu pourras laisser un avis une fois ta participation à ce festival confirmée.
+      </div>
+    )
   }
 
   return (
@@ -111,6 +126,20 @@ export function ReviewForm({ eventId, onReviewSubmitted }: ReviewFormProps) {
           maxLength={500}
         />
       </div>
+
+      <label className="review-form-anon">
+        <input
+          type="checkbox"
+          checked={anonymous}
+          onChange={(e) => setAnonymous(e.target.checked)}
+        />
+        <span className="review-form-anon-text">
+          <span className="review-form-anon-label">Publier en anonyme total (caché même de mes amis pro)</span>
+          <span className="review-form-anon-hint">
+            Par défaut, seuls tes amis pro voient ton nom ; jamais les organisateurs.
+          </span>
+        </span>
+      </label>
 
       <button
         type="submit"

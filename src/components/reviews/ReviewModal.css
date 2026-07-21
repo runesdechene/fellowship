@@ -123,6 +123,39 @@
 }
 .review-form-comment textarea::placeholder { color: hsl(var(--muted-foreground)); }
 
+/* ── Case anonymat total ── */
+.review-form-anon {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  cursor: pointer;
+}
+.review-form-anon input[type='checkbox'] {
+  margin-top: 2px; width: 16px; height: 16px; flex-shrink: 0;
+  accent-color: var(--accent-app);
+}
+.review-form-anon-text { display: flex; flex-direction: column; gap: 3px; }
+.review-form-anon-label {
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.review-form-anon-hint {
+  font-size: 11.5px; line-height: 1.4; color: hsl(var(--muted-foreground));
+}
+
+/* ── Gate : pas encore de participation confirmée ── */
+.review-form-gate {
+  padding: 16px;
+  border-radius: 12px;
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  font-size: 13px; line-height: 1.5;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+}
+
 .review-form-submit {
   height: 42px;
   background: var(--accent-app);

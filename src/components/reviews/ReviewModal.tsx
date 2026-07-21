@@ -4,12 +4,13 @@ import './ReviewModal.css'
 
 interface Props {
   eventId: string
+  participationStatus: string | null | undefined
   onClose: () => void
   onSubmitted: () => void
 }
 
 /** Modale DA pour donner / modifier son avis. Wrappe ReviewForm. */
-export function ReviewModal({ eventId, onClose, onSubmitted }: Props) {
+export function ReviewModal({ eventId, participationStatus, onClose, onSubmitted }: Props) {
   return (
     <div className="review-modal-overlay" onClick={onClose}>
       <div className="review-modal" onClick={(e) => e.stopPropagation()}>
@@ -22,7 +23,11 @@ export function ReviewModal({ eventId, onClose, onSubmitted }: Props) {
             <Globe strokeWidth={2} />
             <span>Avis <strong>public</strong> — visible des autres exposants pour les aider à choisir.</span>
           </div>
-          <ReviewForm eventId={eventId} onReviewSubmitted={() => { onSubmitted(); onClose() }} />
+          <ReviewForm
+            eventId={eventId}
+            participationStatus={participationStatus}
+            onReviewSubmitted={() => { onSubmitted(); onClose() }}
+          />
         </div>
       </div>
     </div>

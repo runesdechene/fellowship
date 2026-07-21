@@ -843,6 +843,7 @@ export function EventPage() {
       {showReviewForm && (
         <ReviewModal
           eventId={event.id}
+          participationStatus={participation?.status ?? null}
           onClose={() => setShowReviewForm(false)}
           onSubmitted={refetchReviews}
         />

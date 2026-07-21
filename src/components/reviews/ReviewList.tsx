@@ -1,5 +1,6 @@
-import { Star, MessageSquare } from 'lucide-react'
+import { Star, MessageSquare, BadgeCheck } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
+import { reviewerDisplay } from '@/lib/review-visibility'
 import { ReviewAvatar } from './ReviewAvatar'
 import { ReviewReplies } from './ReviewReplies'
 import './ReviewList.css'
@@ -39,18 +40,39 @@ export function ReviewList({ reviews }: Props) {
     <div className="review-list">
       {reviews.map((r) => {
         const overall = Math.round(((r.affluence + r.organisation + r.rentabilite) / 3) * 10) / 10
+        const who = reviewerDisplay({
+          is_self: r.is_self,
+          identity_visible: r.identity_visible,
+          author_label: r.author_label,
+          author_avatar_url: r.author_avatar_url,
+          author_slug: r.author_slug,
+        })
+        // Pastille neutre en mode anonyme : pas de nom/photo réels, initiale générique.
+        const avatarLabel = who.mode === 'anonymous' ? null : who.label
         return (
           <article key={r.id} className="review-list-item">
             <header className="review-list-item-head">
               <ReviewAvatar
-                label={r.author_label}
-                avatarUrl={r.author_avatar_url}
-                slug={r.author_slug}
+                label={avatarLabel}
+                avatarUrl={who.avatarUrl}
+                slug={who.slug}
                 className="review-list-avatar"
               />
               <div className="review-list-author">
-                <span className="review-list-author-name">{r.author_label ?? 'Un exposant'}</span>
+                <span className="review-list-author-name">{who.label}</span>
                 <span className="review-list-date">{ago(r.created_at ?? new Date().toISOString())}</span>
+                {who.mode === 'anonymous' && (
+                  <span className="review-list-verified-badge">
+                    <BadgeCheck strokeWidth={2} /> présent à cette édition
+                  </span>
+                )}
+                {who.mode === 'self' && (
+                  <span className="review-list-visibility-hint">
+                    {r.anonymous
+                      ? 'Anonyme pour tous'
+                      : 'Visible sous ton nom par tes amis pro · anonyme pour les autres'}
+                  </span>
+                )}
               </div>
               <div className="review-list-overall">
                 <Star strokeWidth={2} fill="currentColor" />

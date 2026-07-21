@@ -38,6 +38,16 @@
 .review-list-date {
   font-size: 11.5px; color: hsl(var(--muted-foreground));
 }
+.review-list-verified-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 600; color: var(--accent-app);
+  margin-top: 1px;
+}
+.review-list-verified-badge svg { width: 12px; height: 12px; }
+.review-list-visibility-hint {
+  font-size: 10.5px; color: hsl(var(--muted-foreground)); font-style: italic;
+  margin-top: 1px;
+}
 .review-list-overall {
   display: inline-flex; align-items: center; gap: 4px;
   color: var(--amber);

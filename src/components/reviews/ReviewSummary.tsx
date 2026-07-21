@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Star, Lock } from 'lucide-react'
 import type { ReviewWithActor } from '@/hooks/use-reviews'
+import { reviewerDisplay } from '@/lib/review-visibility'
 import { ReviewList } from './ReviewList'
 import { ReviewAvatar } from './ReviewAvatar'
 import './ReviewSummary.css'
@@ -91,22 +92,32 @@ export function ReviewSummary({ reviews, canSeeDetails, isPast, onLeaveReview }:
       </div>
 
       {/* Commentaire vedette — visible Pro only */}
-      {canSeeDetails && featured && (
-        <div className="review-featured">
-          <ReviewAvatar
-            label={featured.author_label}
-            avatarUrl={featured.author_avatar_url}
-            slug={featured.author_slug}
-            className="review-featured-avatar"
-          />
-          <div className="review-featured-body">
-            <p className="review-featured-quote">« {featured.comment} »</p>
-            <p className="review-featured-meta">
-              {featured.author_label ?? 'Un exposant'} · {ago(featured.created_at ?? new Date().toISOString())}
-            </p>
+      {canSeeDetails && featured && (() => {
+        const who = reviewerDisplay({
+          is_self: featured.is_self,
+          identity_visible: featured.identity_visible,
+          author_label: featured.author_label,
+          author_avatar_url: featured.author_avatar_url,
+          author_slug: featured.author_slug,
+        })
+        const avatarLabel = who.mode === 'anonymous' ? null : who.label
+        return (
+          <div className="review-featured">
+            <ReviewAvatar
+              label={avatarLabel}
+              avatarUrl={who.avatarUrl}
+              slug={who.slug}
+              className="review-featured-avatar"
+            />
+            <div className="review-featured-body">
+              <p className="review-featured-quote">« {featured.comment} »</p>
+              <p className="review-featured-meta">
+                {who.label} · {ago(featured.created_at ?? new Date().toISOString())}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {/* Lock pour les non-Pros */}
       {!canSeeDetails && (
