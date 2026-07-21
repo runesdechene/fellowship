@@ -94,15 +94,15 @@ export function ReviewSummary({ reviews, canSeeDetails, isPast, onLeaveReview }:
       {canSeeDetails && featured && (
         <div className="review-featured">
           <ReviewAvatar
-            label={featured.actor_label}
-            avatarUrl={featured.actor_avatar_url}
-            slug={featured.actor_slug}
+            label={featured.author_label}
+            avatarUrl={featured.author_avatar_url}
+            slug={featured.author_slug}
             className="review-featured-avatar"
           />
           <div className="review-featured-body">
             <p className="review-featured-quote">« {featured.comment} »</p>
             <p className="review-featured-meta">
-              {featured.actor_label ?? 'Un exposant'} · {ago(featured.created_at ?? new Date().toISOString())}
+              {featured.author_label ?? 'Un exposant'} · {ago(featured.created_at ?? new Date().toISOString())}
             </p>
           </div>
         </div>

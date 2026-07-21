@@ -43,13 +43,13 @@ export function ReviewList({ reviews }: Props) {
           <article key={r.id} className="review-list-item">
             <header className="review-list-item-head">
               <ReviewAvatar
-                label={r.actor_label}
-                avatarUrl={r.actor_avatar_url}
-                slug={r.actor_slug}
+                label={r.author_label}
+                avatarUrl={r.author_avatar_url}
+                slug={r.author_slug}
                 className="review-list-avatar"
               />
               <div className="review-list-author">
-                <span className="review-list-author-name">{r.actor_label ?? 'Un exposant'}</span>
+                <span className="review-list-author-name">{r.author_label ?? 'Un exposant'}</span>
                 <span className="review-list-date">{ago(r.created_at ?? new Date().toISOString())}</span>
               </div>
               <div className="review-list-overall">
