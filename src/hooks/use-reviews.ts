@@ -3,11 +3,22 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Review, ReviewInsert } from '@/types/database'
 
-export type ReviewWithActor = Review & {
-  actor_label: string | null
-  actor_entity_type: string | null
-  actor_avatar_url: string | null
-  actor_slug: string | null
+/** Ligne d'avis renvoyée par la RPC `get_event_reviews` — identité déjà gatée
+ *  côté DB (ami pro non-anonyme OU soi-même ; jamais un lecteur festival). */
+export type ReviewWithActor = {
+  id: string
+  event_id: string
+  affluence: number
+  organisation: number
+  rentabilite: number
+  comment: string | null
+  created_at: string
+  anonymous: boolean
+  is_self: boolean
+  identity_visible: boolean
+  author_label: string | null
+  author_avatar_url: string | null
+  author_slug: string | null
 }
 
 export function useEventReviews(eventId: string | undefined) {
@@ -17,39 +28,28 @@ export function useEventReviews(eventId: string | undefined) {
 
   const fetchReviews = useCallback(async () => {
     if (!eventId) return
-    const { data: rows } = await supabase
-      .from('reviews')
-      .select('*')
-      .eq('event_id', eventId)
-      .order('created_at', { ascending: false })
-    const list = (rows as Review[] | null) ?? []
-    const actorIds = [...new Set(list.map(r => r.actor_id).filter(Boolean) as string[])]
-    let byId: Record<string, { label: string | null; entity_type: string | null; avatar_url: string | null; public_slug: string | null }> = {}
-    if (actorIds.length > 0) {
-      const { data: actors } = await supabase
-        .from('actor_public')
-        .select('actor_id, label, entity_type, avatar_url, public_slug')
-        .in('actor_id', actorIds)
-      byId = Object.fromEntries(
-        (actors ?? [])
-          .filter(a => a.actor_id != null)
-          .map((a) => [a.actor_id as string, {
-            label: a.label,
-            entity_type: a.entity_type,
-            avatar_url: a.avatar_url,
-            public_slug: a.public_slug,
-          }])
-      )
-    }
-    setReviews(list.map(r => ({
-      ...r,
-      actor_label: byId[r.actor_id ?? '']?.label ?? null,
-      actor_entity_type: byId[r.actor_id ?? '']?.entity_type ?? null,
-      actor_avatar_url: byId[r.actor_id ?? '']?.avatar_url ?? null,
-      actor_slug: byId[r.actor_id ?? '']?.public_slug ?? null,
-    })))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: rows } = await (supabase.rpc as any)('get_event_reviews', {
+      p_event_id: eventId, p_viewer_actor: currentActor?.id ?? null,
+    })
+    const list = ((rows as Array<Record<string, unknown>> | null) ?? []).map(r => ({
+      id: r.review_id as string,
+      event_id: r.event_id as string,
+      affluence: r.affluence as number,
+      organisation: r.organisation as number,
+      rentabilite: r.rentabilite as number,
+      comment: (r.comment as string | null) ?? null,
+      created_at: r.created_at as string,
+      anonymous: r.anonymous as boolean,
+      is_self: r.is_self as boolean,
+      identity_visible: r.identity_visible as boolean,
+      author_label: (r.author_label as string | null) ?? null,
+      author_avatar_url: (r.author_avatar_url as string | null) ?? null,
+      author_slug: (r.author_slug as string | null) ?? null,
+    }))
+    setReviews(list)
     setLoading(false)
-  }, [eventId])
+  }, [eventId, currentActor?.id])
 
   useEffect(() => {
     if (!eventId) return
@@ -65,22 +65,29 @@ export function useEventReviews(eventId: string | undefined) {
   return { reviews, loading, canSeeDetails, refetch: fetchReviews }
 }
 
+/** Avis de l'acteur courant sur cet event — lecture directe (RLS `can_act_as`),
+ *  utilisée pour préremplir/éditer/supprimer SON PROPRE avis. `anonymous` existe
+ *  en base mais pas encore dans les types Supabase générés : on l'ajoute en local. */
+type ReviewRow = Review & { anonymous: boolean }
+
 export function useMyReview(eventId: string | undefined) {
   const { currentActor } = useAuth()
-  const [review, setReview] = useState<Review | null>(null)
+  const [review, setReview] = useState<ReviewRow | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!eventId || !currentActor) return
     supabase.from('reviews').select('*')
       .eq('event_id', eventId).eq('actor_id', currentActor.id).maybeSingle()
-      .then(({ data }) => { setReview(data); setLoading(false) })
+      .then(({ data }) => { setReview(data as ReviewRow | null); setLoading(false) })
   }, [eventId, currentActor])
 
   return { review, loading }
 }
 
-export async function submitReview(review: ReviewInsert) {
+type ReviewSubmitInput = ReviewInsert & { anonymous?: boolean }
+
+export async function submitReview(review: ReviewSubmitInput) {
   const { data, error } = await supabase
     .from('reviews')
     .upsert(review, { onConflict: 'actor_id,event_id' })
@@ -88,8 +95,8 @@ export async function submitReview(review: ReviewInsert) {
   return { data, error }
 }
 
-/** Supprime l'avis de l'acteur sur cet event. RLS (`reviews_write_actor` = ALL,
- *  `can_act_as(actor_id)`) garantit qu'on ne peut effacer que le sien. */
+/** Supprime l'avis de l'acteur sur cet event. RLS (`reviews_delete_own`) garantit
+ *  qu'on ne peut effacer que le sien (ou en admin). */
 export async function deleteReview(actorId: string, eventId: string) {
   const { error } = await supabase
     .from('reviews')
