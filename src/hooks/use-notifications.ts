@@ -13,6 +13,8 @@ export const NOTIFICATION_TYPES = new Set([
   'review_reply',
   'deadline_reminder',
   'event_updated',
+  'thread_reply',
+  'best_reply',
 ])
 
 export function useNotifications() {

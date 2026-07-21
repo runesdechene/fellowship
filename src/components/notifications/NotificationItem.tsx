@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Users, UserPlus, Clock, MessageSquare, Calendar, ImagePlus, FileEdit, Info, UserCheck } from 'lucide-react'
+import { Users, UserPlus, Clock, MessageSquare, Calendar, ImagePlus, FileEdit, Info, UserCheck, CheckCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/lib/auth'
 import type { Notification, NotificationData } from '@/types/database'
@@ -119,6 +119,20 @@ const TYPE_CONFIG: Record<string, TypeConfigEntry> = {
     actorName: (d) => d.actor_name ?? 'Un nouvel exposant',
     suffix: () => ' a rejoint Fellowship !',
     link: (d) => d.actor_id ? `/@${d.actor_id}` : '/explorer',
+  },
+  thread_reply: {
+    icon: MessageSquare,
+    color: 'text-primary',
+    actorName: (d) => d.actor_name ?? 'Quelqu\'un',
+    suffix: (d) => ` a répondu à ta question sur ${d.event_name ?? 'un festival'}`,
+    link: (d) => d.event_id ? `/evenement/${d.event_id}` : '/explorer',
+  },
+  best_reply: {
+    icon: CheckCircle,
+    color: 'text-primary',
+    actorName: (d) => d.actor_name ?? 'L\'auteur',
+    suffix: (d) => ` a choisi ta réponse comme la meilleure sur ${d.event_name ?? 'un festival'}`,
+    link: (d) => d.event_id ? `/evenement/${d.event_id}` : '/explorer',
   },
 }
 
