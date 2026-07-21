@@ -781,3 +781,45 @@
 .light .event-page .glass-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.30));
 }
+
+/* ---- Discussion du festival (onglet Questions) ---- */
+.disc { display:flex; flex-direction:column; gap:14px; }
+.disc-toggles { display:flex; gap:8px; flex-wrap:wrap; }
+.disc-tg { display:inline-flex; align-items:center; gap:7px; background:var(--surface);
+  border:1px solid var(--border-color, hsl(var(--border))); border-radius:999px; padding:7px 13px;
+  font-size:12.5px; font-weight:600; color:var(--font-color-lowtitle); cursor:pointer; transition:.16s; }
+.disc-tg.on { color:var(--font-color-text);
+  border-color:color-mix(in srgb, var(--accent-app) 55%, transparent);
+  background:color-mix(in srgb, var(--accent-app) 12%, var(--surface)); }
+.disc-tg .sw { width:8px; height:8px; border-radius:50%; }
+.disc-ask { display:flex; align-items:center; gap:11px; padding:13px 15px; border-radius:14px; cursor:text; }
+.disc-ask .ph { color:var(--font-color-lowtitle); flex:1; font-size:14px; }
+.disc-thread { border-radius:16px; overflow:hidden; }
+.disc-t-main { padding:15px 16px; }
+.disc-t-top { display:flex; align-items:center; gap:8px; margin-bottom:9px; font-size:11px; }
+.disc-chan { font-weight:700; padding:2px 9px; border-radius:999px; display:inline-flex; align-items:center; gap:5px; }
+.disc-chan .sw { width:7px; height:7px; border-radius:50%; }
+.disc-chan.festivalier { color:#8bb5e0; border:1px solid color-mix(in srgb,#8bb5e0 40%, transparent); }
+.disc-chan.festivalier .sw { background:#8bb5e0; }
+.disc-chan.exposant { color:var(--copper); border:1px solid color-mix(in srgb,var(--copper) 40%, transparent); }
+.disc-chan.exposant .sw { background:var(--copper); }
+.disc-chan.organisateur { color:var(--forest); border:1px solid color-mix(in srgb,var(--forest) 40%, transparent); }
+.disc-chan.organisateur .sw { background:var(--forest); }
+.disc-solved { margin-left:auto; display:inline-flex; align-items:center; gap:5px; color:var(--forest);
+  font-weight:700; border:1px solid color-mix(in srgb,var(--forest) 42%, transparent); border-radius:999px; padding:2px 9px; }
+.disc-q-title { font-family:var(--font-heading); font-weight:700; font-size:17px; line-height:1.32; margin-bottom:5px; }
+.disc-q-body { color:var(--font-color-lowtitle); font-size:13.5px; line-height:1.55; margin-bottom:11px; }
+.disc-q-foot { display:flex; align-items:center; gap:9px; font-size:12px; color:var(--font-color-lowtitle); }
+.disc-replies { border-top:1px solid color-mix(in srgb, hsl(var(--border)) 70%, transparent);
+  background:rgba(0,0,0,.14); padding:6px 16px 14px; }
+.light .disc-replies { background:rgba(0,0,0,.03); }
+.disc-best { background:color-mix(in srgb,var(--forest) 11%, transparent);
+  border:1px solid color-mix(in srgb,var(--forest) 30%, transparent); border-radius:12px; padding:11px 12px; margin:8px 0 4px; }
+.disc-mark { font-size:11px; font-weight:600; color:var(--font-color-lowtitle);
+  border:1px solid hsl(var(--border)); border-radius:999px; padding:3px 9px; cursor:pointer; transition:.15s; }
+.disc-mark:hover { color:var(--forest); border-color:color-mix(in srgb,var(--forest) 45%, transparent); }
+.disc-compose { display:flex; align-items:center; gap:9px; margin-top:12px; background:var(--surface);
+  border:1px solid hsl(var(--border)); border-radius:999px; padding:6px 7px 6px 13px; }
+.disc-compose input { flex:1; background:none; border:none; color:var(--font-color-text);
+  font-family:var(--font-body); font-size:13px; outline:none; }
+.disc-ctx { font-size:10.5px; color:var(--font-color-lowtitle); text-align:right; margin-top:6px; }
