@@ -46,7 +46,29 @@ tout le monde peut y lire ET y répondre.
   les avis.
 - À répercuter dans la mémoire projet `project_freemium_matrix`.
 
+## Addendum 2026-07-21 — Identité protégée (anti-représailles)
+
+Retour terrain : une exposante craint de laisser un avis honnête, de peur qu'un
+**organisateur** (ou une taupe) voie son avis attribué et ne la réinvite pas. La peur
+était fondée : la RLS laissait tout compte authentifié — orga inclus — lire les avis
+**attribués**.
+
+**Décision (livrée, v0.7.381, spec `docs/superpowers/specs/2026-07-21-avis-identite-protegee-design.md`) :**
+on **sépare le contenu de l'identité**.
+- Le **contenu** de l'avis (notes + commentaire) reste **public** → découverte préservée.
+- Le **nom de l'auteur** n'est révélé qu'aux **amis pro** (follow mutuel)…
+- …**jamais à un compte organisateur** (entité type `festival`) — carve-out dur.
+- Sinon l'avis s'affiche **« Un exposant vérifié · présent à cette édition »**.
+- **Opt-in anonymat total** (caché même des amis).
+- **Vérification** : écrire un avis exige une **participation `inscrit`** (rend « vérifié »
+  vrai + coupe le trashing anonyme).
+
+Enforcement : RPC `SECURITY DEFINER` (`get_event_reviews` / `get_review_replies`) qui masque
+l'`actor_id` ; **verrou de la lecture directe** de `reviews` = dernière étape (différée à la
+validation d'Uriel pour ne pas risquer la prod). Ne change pas le principe « bien commun » :
+les avis restent ouverts en **contenu** ; c'est l'**identité** qui est protégée.
+
 ## Hors périmètre
 
-- **Discussion générale du festival** : chantier distinct, sa propre spec à venir.
+- **Discussion générale du festival** : livré séparément (onglet Questions, v0.7.380).
 - **Signalement des réponses** : différé en v1.1 (extension de `content_reports`).
