@@ -18,6 +18,7 @@ export function useThreadReplies(threadId: string) {
   const [loading, setLoading] = useState(true)
 
   const fetchReplies = useCallback(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase as any).from('event_thread_replies')
       .select('*').eq('thread_id', threadId)
     const rows = (data as Array<Record<string, unknown>> | null) ?? []
@@ -57,17 +58,20 @@ export function useThreadReplies(threadId: string) {
 export async function createThreadReply(input: {
   thread_id: string; actor_id: string; acted_by_user_id: string | null; body: string
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any).from('event_thread_replies').insert(input).select('*').single()
   return { data, error }
 }
 
 export async function updateThreadReply(id: string, body: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any).from('event_thread_replies')
     .update({ body, updated_at: new Date().toISOString() }).eq('id', id).select('*').single()
   return { data, error }
 }
 
 export async function deleteThreadReply(id: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any).from('event_thread_replies').delete().eq('id', id)
   return { error }
 }

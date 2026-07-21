@@ -35,6 +35,7 @@ export function useEventThreads(eventId: string) {
   const [loading, setLoading] = useState(true)
 
   const fetchThreads = useCallback(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase as any).from('event_threads')
       .select('*').eq('event_id', eventId)
     const rows = (data as Array<Record<string, unknown>> | null) ?? []
@@ -43,6 +44,7 @@ export function useEventThreads(eventId: string) {
     const threadIds = rows.map(r => r.id as string)
     const counts: Record<string, number> = {}
     if (threadIds.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: rep } = await (supabase as any).from('event_thread_replies')
         .select('thread_id').in('thread_id', threadIds)
       for (const r of (rep as Array<{ thread_id: string }> | null) ?? []) {
@@ -82,23 +84,27 @@ export async function createThread(input: {
   event_id: string; actor_id: string; acted_by_user_id: string | null
   audience: ThreadAudience; title: string; body: string | null
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any).from('event_threads').insert(input).select('*').single()
   return { data, error }
 }
 
 export async function updateThread(id: string, patch: { title?: string; body?: string | null }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any).from('event_threads')
     .update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id).select('*').single()
   return { data, error }
 }
 
 export async function deleteThread(id: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any).from('event_threads').delete().eq('id', id)
   return { error }
 }
 
 /** Élire (ou changer) la meilleure réponse. replyId null = désélectionner. */
 export async function markBestReply(threadId: string, replyId: string | null) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any).from('event_threads')
     .update({ best_reply_id: replyId }).eq('id', threadId).select('*').single()
   return { data, error }
