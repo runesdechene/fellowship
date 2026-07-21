@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import { ReportButton } from '@/components/reports/ReportButton'
+import { ReviewAvatar } from '@/components/reviews/ReviewAvatar'
 import {
   useThreadReplies, createThreadReply, updateThreadReply, deleteThreadReply,
   type ThreadReplyWithActor,
@@ -96,6 +97,7 @@ function ReplyRow(props: {
   const edited = r.updated_at !== r.created_at
   return (
     <div className={isBest ? 'disc-best' : 'disc-reply'} style={{ padding: isBest ? undefined : '11px 0', display: 'flex', gap: 10 }}>
+      <ReviewAvatar label={r.actor_label} avatarUrl={r.actor_avatar_url} slug={r.actor_slug} className="disc-avatar" />
       <div className="r-body" style={{ flex: 1 }}>
         <div className="r-name" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 7, flexWrap: 'wrap' }}>
           {r.actor_label ?? 'Quelqu\'un'}

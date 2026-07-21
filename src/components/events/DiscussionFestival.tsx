@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { MessageSquare } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { ReportButton } from '@/components/reports/ReportButton'
+import { ReviewAvatar } from '@/components/reviews/ReviewAvatar'
 import { ThreadReplies } from '@/components/events/ThreadReplies'
 import {
   useEventThreads, createThread, updateThread, deleteThread, type ThreadWithActor,
@@ -156,10 +157,15 @@ function ThreadCard({ thread, open, onToggle, onChanged, actor, isAdmin }: {
           </>
         )}
         <div className="disc-q-foot">
-          {thread.reply_count > 0
-            ? <span><b style={{ color: 'var(--accent-app)' }}>{thread.reply_count}</b> réponse{thread.reply_count > 1 ? 's' : ''}</span>
-            : <span>Sans réponse · sois le premier à aider</span>}
-          <span>· {thread.actor_label ?? 'Quelqu\'un'}</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <ReviewAvatar label={thread.actor_label} avatarUrl={thread.actor_avatar_url} slug={thread.actor_slug} className="disc-avatar disc-avatar-sm" />
+            {thread.actor_label ?? 'Quelqu\'un'}
+          </span>
+          <span>·&nbsp;
+            {thread.reply_count > 0
+              ? <><b style={{ color: 'var(--accent-app)' }}>{thread.reply_count}</b> réponse{thread.reply_count > 1 ? 's' : ''}</>
+              : 'Sans réponse'}
+          </span>
           <span style={{ marginLeft: 'auto', display: 'flex', gap: 8 }} onClick={e => e.stopPropagation()}>
             {canEditThis && !editing && <button className="disc-mark" onClick={startEdit}>Éditer</button>}
             {canDeleteThis && <button className="disc-mark" onClick={remove}>Supprimer</button>}
