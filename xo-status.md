@@ -1,7 +1,7 @@
 ---
-updated: 2026-07-21T16:00:00Z
-summary: "Grosse session : le module Discussion du festival (onglet Questions) est en prod (v0.7.380, avec avatars), ET les avis de festival ont maintenant une identité protégée (v0.7.381) — ton nom n'est visible que de tes amis pro, jamais des organisateurs, avec une option anonymat total. Tout est déployé et prêt à tester."
-next_step: "Tester en vrai : (1) la Discussion (poser/répondre/élire une meilleure réponse, avatars, toggles de canaux) ; (2) les avis à identité protégée (un non-ami voit « Un exposant vérifié », un ami voit ton nom, la case anonymat, le formulaire bloqué si pas inscrit). Puis me donner le feu vert pour poser le DERNIER verrou DB des avis (que j'ai gardé exprès en attente)."
+updated: 2026-07-21T17:15:00Z
+summary: "Grosse session : le module Discussion du festival (onglet Questions) est en prod (v0.7.380, avec avatars), ET les avis de festival ont une identité protégée COMPLÈTE, verrou final inclus (v0.7.382) — ton nom n'est visible que de tes amis pro, jamais des organisateurs, option anonymat total, et la fuite est définitivement fermée côté base. Tout est déployé."
+next_step: "Tester en vrai : (1) la Discussion (poser/répondre/élire une meilleure réponse, avatars, toggles) ; (2) les avis (un non-ami voit « Un exposant vérifié », un ami voit ton nom, la case anonymat, le formulaire bloqué si pas inscrit, et vérifier que les notes moyennes + le fil Communauté s'affichent toujours). Puis : revue sécu RLS live (`set role`) sur les deux features, à faire ensemble. Ensuite, prochain chantier : onglet Rencontres."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -25,12 +25,12 @@ anti-usurpation via `can_act_as(p_viewer_actor)`). Front (use-reviews/use-review
 `lib/review-visibility.ts`, UI anonyme + case + gate) EN PROD.
 Revue finale opus : **0 Critical/Important**. Minor : un auteur en anonyme-total qui répond dans
 le fil révèle son nom à ses amis sur cette réponse (limitation documentée).
-⚠️ **VERROU FINAL NON POUSSÉ** (Task 8 du plan) : migration `160200_reviews_lock_direct_read`
-qui coupe la lecture directe de `reviews` (via policy RLS `reviews_select_own`, PAS un revoke
-SELECT brut — sinon `useMyReview` casse). Je l'ai gardée exprès : à pousser SEULEMENT après que
-tu as vérifié les avis en prod, pour ne pas risquer de casser une feature revenue-critique en ton
-absence. Avant ce verrou : protection UI active, mais un client technique peut encore lire
-`actor_id` en direct (bypass DB). C'est ce verrou qui ferme définitivement la fuite.
+✅ **VERROU FINAL POUSSÉ** (feu vert Uriel, v0.7.382, migration `170100_reviews_lock_direct_read`) :
+`drop reviews_select_scores` + `reviews_select_own` (can_act_as). La fuite d'`actor_id` d'autrui
+est fermée ; l'identité ne passe plus que par les RPC gatées. **Piège évité au contrôle sécu** :
+`use-community` lisait `reviews` en direct (aurait cassé) → migré sur une RPC dédiée
+`get_network_reviews` (identité gatée, ami mutuel + non-anonyme, règle A validée, migration `170000`).
+`event_scores` (vue) contourne la RLS → notes moyennes publiques intactes.
 
 --- MODULE DISCUSSION FESTIVAL — onglet Questions (prod v0.7.379, avatars v0.7.380) ---
 Spec/plan `...discussion-festival-questions...`. Q&R multi-publics (festivalier/exposant, orga
