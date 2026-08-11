@@ -404,7 +404,7 @@ export function LandingV2Page() {
                     <button type="button" className="btn btn-ghost" onClick={() => setShowOrgaWaitlist(true)}>Être prévenu au lancement</button>
                   )}
                   {waitlistStatus === 'error' && waitlistError && (
-                    <p className="waitlist-error" role="alert" aria-live="assertive">{waitlistError}</p>
+                    <p className="waitlist-error" role="alert">{waitlistError}</p>
                   )}
                 </div>
               </div>
