@@ -66,8 +66,15 @@
   .note { font-size: .9375rem; color: var(--ink-soft); }
   .faint { font-size: .875rem; color: var(--ink-faint); }
 
-  nav.site { position: sticky; top: 0; z-index: 40; background: var(--parchment); border-bottom: 1px solid transparent; transition: border-color .25s; }
-  nav.site.scrolled { border-bottom-color: var(--hairline-2); }
+  /* Transparente en haut de page : elle laisserait sinon une bande
+     opaque en travers des halos. Le fond n'apparaît qu'au défilement,
+     quand du contenu risque de passer dessous. */
+  nav.site {
+    position: sticky; top: 0; z-index: 40;
+    background: transparent; border-bottom: 1px solid transparent;
+    transition: background .3s ease, border-color .3s ease;
+  }
+  nav.site.scrolled { background: var(--parchment); border-bottom-color: var(--hairline-2); }
   .nav-in { display: flex; align-items: center; justify-content: space-between; gap: 22px; height: 76px; }
   .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.022em; font-size: 1.0625rem; }
   .logo img { width: 30px; height: 30px; border-radius: 9px; display: block; }
