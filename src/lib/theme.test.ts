@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getInitialTheme, applyTheme, THEME_STORAGE_KEY } from './theme'
+import { getInitialTheme, applyTheme, hasExplicitThemeChoice, THEME_STORAGE_KEY } from './theme'
 
 describe('theme', () => {
   beforeEach(() => {
@@ -32,5 +32,21 @@ describe('theme', () => {
     applyTheme('night')
     expect(document.documentElement.classList.contains('light')).toBe(false)
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('night')
+  })
+
+  it('hasExplicitThemeChoice("day") = true', () => {
+    expect(hasExplicitThemeChoice('day')).toBe(true)
+  })
+
+  it('hasExplicitThemeChoice("night") = true', () => {
+    expect(hasExplicitThemeChoice('night')).toBe(true)
+  })
+
+  it('hasExplicitThemeChoice(null) = false', () => {
+    expect(hasExplicitThemeChoice(null)).toBe(false)
+  })
+
+  it('hasExplicitThemeChoice("oui") = false', () => {
+    expect(hasExplicitThemeChoice('oui')).toBe(false)
   })
 })

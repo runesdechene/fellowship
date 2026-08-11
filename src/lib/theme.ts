@@ -19,11 +19,8 @@ export function applyTheme(theme: Theme): void {
   }
 }
 
-/** La V2 est en parchemin : clair par défaut, mais un choix explicite déjà
- *  persisté par l'utilisateur reste roi. Aucune lecture de prefers-color-scheme
- *  (décision 0007). */
-export function applyThemeDefaultDay(): void {
-  if (typeof window === 'undefined') return
-  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
-  applyTheme(stored === 'night' ? 'night' : 'day')
+/** Un choix de thème explicitement persisté par l'utilisateur. Tout le reste
+ *  (absence de clé, valeur inconnue) veut dire « il n'a jamais choisi ». */
+export function hasExplicitThemeChoice(stored: string | null): boolean {
+  return stored === 'day' || stored === 'night'
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { applyThemeDefaultDay } from '@/lib/theme'
+import { hasExplicitThemeChoice, THEME_STORAGE_KEY } from '@/lib/theme'
+import { useTheme } from '@/hooks/use-theme'
 import './LandingV2.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -7,8 +8,19 @@ type Audience = 'festivalier' | 'exposant' | 'organisateur'
 export function LandingV2Page() {
   const [audience] = useState<Audience>('exposant')
   const navRef = useRef<HTMLElement>(null)
+  const { setTheme } = useTheme()
 
-  useEffect(() => { applyThemeDefaultDay() }, [])
+  // Lu au PREMIER rendu, avant que l'effet de ThemeProvider ne persiste son
+  // propre défaut : c'est le seul moment où l'on sait si l'utilisateur avait
+  // vraiment choisi. Les effets enfants passent avant ceux du parent.
+  const [hadChoice] = useState(() => hasExplicitThemeChoice(
+    typeof window === 'undefined' ? null : window.localStorage.getItem(THEME_STORAGE_KEY)))
+
+  useEffect(() => {
+    // Parchemin par défaut (décision 0007). Un choix explicite reste roi, et on
+    // ne lit jamais prefers-color-scheme.
+    if (!hadChoice) setTheme('day')
+  }, [hadChoice, setTheme])
 
   useEffect(() => {
     const nav = navRef.current
