@@ -251,7 +251,8 @@ export function LandingV2Page() {
               </button>
             ))}
             {activeTag && (
-              <button type="button" className="chip on" onClick={() => setActiveTag(null)}>
+              <button type="button" className="chip on" onClick={() => setActiveTag(null)}
+                aria-label={`Retirer le filtre ${tagLabels[activeTag] ?? activeTag}`}>
                 {tagLabels[activeTag] ?? activeTag} ✕
               </button>
             )}
@@ -402,7 +403,9 @@ export function LandingV2Page() {
                   ) : (
                     <button type="button" className="btn btn-ghost" onClick={() => setShowOrgaWaitlist(true)}>Être prévenu au lancement</button>
                   )}
-                  {waitlistStatus === 'error' && waitlistError && <p className="waitlist-error">{waitlistError}</p>}
+                  {waitlistStatus === 'error' && waitlistError && (
+                    <p className="waitlist-error" role="alert" aria-live="assertive">{waitlistError}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -438,7 +441,7 @@ export function LandingV2Page() {
             </div>
             <div className="quotes">
               {testimonials.map(t => {
-                const initials = (t.name ?? '?').trim().charAt(0).toUpperCase()
+                const initials = (t.name?.trim() || '?').charAt(0).toUpperCase()
                 const card = (
                   <div className="q">
                     <div className="q-head">
@@ -451,7 +454,10 @@ export function LandingV2Page() {
                   </div>
                 )
                 return t.resolvedSlug
-                  ? <Link key={t.id} to={`/${t.resolvedSlug}`} className="q-link">{card}</Link>
+                  ? (
+                    <Link key={t.id} to={`/${t.resolvedSlug}`} className="q-link"
+                      aria-label={`Voir la vitrine de ${t.name || 'cet exposant'}`}>{card}</Link>
+                  )
                   : <div key={t.id}>{card}</div>
               })}
             </div>
