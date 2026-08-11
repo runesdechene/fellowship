@@ -18,3 +18,12 @@ export function applyTheme(theme: Theme): void {
     window.localStorage.setItem(THEME_STORAGE_KEY, theme)
   }
 }
+
+/** La V2 est en parchemin : clair par défaut, mais un choix explicite déjà
+ *  persisté par l'utilisateur reste roi. Aucune lecture de prefers-color-scheme
+ *  (décision 0007). */
+export function applyThemeDefaultDay(): void {
+  if (typeof window === 'undefined') return
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
+  applyTheme(stored === 'night' ? 'night' : 'day')
+}
