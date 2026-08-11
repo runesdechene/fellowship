@@ -17,13 +17,33 @@
     --ink-soft:  #8C7B72;
     --ink-faint: #B0A197;
     --hairline:  rgba(89,72,72,.13);
-    --hairline-2:rgba(89,72,72,.07);
+    --hairline-2:rgba(89,72,72,.09);
     --shade:     rgba(89,72,72,.045);
-    --tooth:     rgba(120,96,72,.026);
+    --tooth:     rgba(120,96,72,.03);
     --sky-1:#F2D9A8; --sky-2:#E8B98C;
     --hill-far:#B79A78; --hill-mid:#93795E; --hill-near:#6E5843;
     --mark-1:#4E3E30; --glow:#F6E2B4;
     --sidebar-w: 232px;
+
+    /* ── Matière : c'est ce qui fait le premium ─────────────────────
+       Une carte n'est pas un rectangle plat : c'est une feuille posée.
+       Un dégradé imperceptible, un liseré de lumière en haut, et une
+       ombre large et très diffuse — jamais l'ombre dure d'avant.    */
+    --paper: linear-gradient(178deg, #FDFAF4 0%, #F7F1E5 100%);
+    --paper-2: linear-gradient(178deg, #FBF6EC 0%, #F3ECDE 100%);
+    --lift:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      0 1px 2px rgba(84,62,44,.045),
+      0 10px 26px -8px rgba(84,62,44,.10);
+    --lift-hi:
+      inset 0 1px 0 rgba(255,255,255,.8),
+      0 2px 5px rgba(84,62,44,.06),
+      0 20px 44px -12px rgba(84,62,44,.16);
+
+    /* Statuts : les billes de couleur reviennent, elles portaient
+       l'information plus vite qu'une forme. */
+    --ok: #4E7355;  --ok-wash: rgba(78,115,85,.13);
+    --wait: #B98032; --wait-wash: rgba(185,128,50,.14);
   }
 
   * { box-sizing: border-box; }
@@ -54,13 +74,28 @@
   .a-terracotta { background:#C06846; } .a-bordeaux { background:#8A2B41; }
   .a-violet { background:#5B3FA8; } .a-bleu { background:#2340E8; }
 
+  /* ── Halos : l'âme « nuit de festival », transposée en plein jour.
+     Des lavis colorés très dilués, fixés au fond. C'est eux qui
+     empêchent le parchemin d'être un mur de carton. ─────────────── */
+  .halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .halos i { position: absolute; border-radius: 50%; filter: blur(90px); display: block; }
+  /* Réglage : le chaud domine, le froid ne fait que ponctuer. Un halo
+     bleu ou vert trop présent grise le parchemin et le fait paraître
+     sale — c'est le piège du halo coloré sur fond clair. */
+  .h1 { width: 680px; height: 560px; top: -200px; left: -140px; background: rgba(226,155,118,.34); }
+  .h2 { width: 520px; height: 460px; top: 2%;  right: -160px; background: rgba(186,152,214,.15); }
+  .h3 { width: 620px; height: 520px; top: 52%; left: 18%;    background: rgba(232,180,120,.16); }
+  .h4 { width: 520px; height: 440px; bottom: -170px; right: 6%; background: rgba(214,146,120,.16); }
+
   /* ── Coque applicative ───────────────────────────────────────── */
   .app { display: flex; min-height: 100vh; }
 
   .side {
     width: var(--sidebar-w); flex: none;
     border-right: 1px solid var(--hairline-2);
-    background: var(--rail);
+    background: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 22px 14px 20px;
     display: flex; flex-direction: column; gap: 26px;
     position: sticky; top: 0; height: 100vh;
@@ -79,7 +114,11 @@
   }
   .nav a svg { width: 18px; height: 18px; }
   .nav a:hover { background: var(--shade); color: var(--ink); }
-  .nav a.on { background: var(--surface); color: var(--ink); border-color: var(--hairline-2); font-weight: 600; }
+  .nav a.on {
+    background: var(--paper); color: var(--ink);
+    border-color: var(--hairline-2); font-weight: 600;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 2px 6px rgba(84,62,44,.07);
+  }
   .nav a.on svg { color: var(--accent); }
   .nav .lock { margin-left: auto; font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
   .side-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-top: 1px solid var(--hairline-2); }
@@ -107,7 +146,21 @@
   }
 
   /* ── Cartes ──────────────────────────────────────────────────── */
-  .card { border: 1px solid var(--hairline-2); border-radius: 18px; background: var(--surface); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    border: 1px solid var(--hairline-2); border-radius: 18px;
+    background: var(--paper); box-shadow: var(--lift);
+    padding: 24px; display: flex; flex-direction: column; gap: 14px;
+    position: relative;
+  }
+  /* Grain de papier PAR CARTE : la matière se voit là où l'œil se
+     pose, pas en fond d'écran. */
+  .card::after, .ecard::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    pointer-events: none; opacity: .5;
+    background-image:
+      repeating-linear-gradient(97deg, rgba(120,96,72,.05) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(4deg, rgba(120,96,72,.05) 0 1px, transparent 1px 6px);
+  }
   .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .muted { color: var(--ink-soft); font-size: .875rem; }
   .faint { color: var(--ink-faint); font-size: .8125rem; }
@@ -124,8 +177,9 @@
   .next .ttl { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; }
   .badge {
     display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
-    padding: 5px 12px; border-radius: 999px; font-size: .75rem; font-weight: 600;
-    background: var(--accent-wash); color: var(--accent);
+    padding: 6px 14px; border-radius: 999px; font-size: .75rem; font-weight: 600;
+    background: var(--accent); color: var(--accent-ink);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 4px 12px -3px color-mix(in srgb, var(--accent) 55%, transparent);
   }
 
   /* Frise de saison */
@@ -153,12 +207,29 @@
   .thumb { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; border: 1px solid var(--hairline-2); flex: none; }
   .thumb svg { display: block; width: 100%; height: 100%; }
 
-  .dot { width: 9px; height: 9px; border-radius: 999px; display: inline-block; flex: none; }
-  .dot.ok { background: var(--accent); }
-  .dot.wait { background: transparent; border: 1.5px solid var(--ink-faint); }
+  /* Billes de statut : la couleur revient. Elle disait l'état plus
+     vite que n'importe quelle forme. Halo doux autour de la bille. */
+  .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; flex: none; }
+  .dot.ok { background: var(--ok); box-shadow: 0 0 0 4px var(--ok-wash); }
+  .dot.wait { background: var(--wait); box-shadow: 0 0 0 4px var(--wait-wash); }
+
+  .stat {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 12px 5px 10px; border-radius: 999px;
+    font-size: .75rem; font-weight: 600;
+  }
+  .stat.ok { background: var(--ok-wash); color: var(--ok); }
+  .stat.wait { background: var(--wait-wash); color: var(--wait); }
+  .stat .dot { width: 7px; height: 7px; box-shadow: none; }
 
   .faces { display: flex; }
-  .face { width: 24px; height: 24px; border-radius: 999px; background: var(--surface-2); border: 1.5px solid var(--surface); margin-left: -7px; display: grid; place-items: center; font-size: .625rem; font-weight: 700; color: var(--ink-soft); }
+  .face {
+    width: 25px; height: 25px; border-radius: 999px;
+    background: var(--paper-2); border: 1.5px solid #FBF7EF;
+    margin-left: -8px; display: grid; place-items: center;
+    font-size: .625rem; font-weight: 700; color: var(--ink-soft);
+    box-shadow: 0 1px 3px rgba(84,62,44,.14);
+  }
   .face:first-child { margin-left: 0; }
 
   .amount { font-variant-numeric: tabular-nums; font-weight: 600; font-size: .9375rem; }
@@ -166,8 +237,13 @@
 
   /* Cartes événement */
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
-  .ecard { border: 1px solid var(--hairline-2); border-radius: 18px; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; cursor: pointer; }
-  .ecard:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .ecard {
+    border: 1px solid var(--hairline-2); border-radius: 18px;
+    background: var(--paper); box-shadow: var(--lift);
+    overflow: hidden; display: flex; flex-direction: column; position: relative;
+    transition: box-shadow .24s ease, transform .24s ease; cursor: pointer;
+  }
+  .ecard:hover { transform: translateY(-4px); box-shadow: var(--lift-hi); }
   .ecard .art { aspect-ratio: 4/3; overflow: hidden; }
   .ecard .art svg { display: block; width: 100%; height: 100%; }
   .ecard .b { padding: 16px 17px 18px; display: flex; flex-direction: column; gap: 4px; }
@@ -178,8 +254,9 @@
   /* Barre de recherche + filtres */
   .search {
     display: flex; align-items: center; gap: 11px;
-    padding: 13px 18px; border-radius: 999px;
-    border: 1px solid var(--hairline); background: var(--surface); color: var(--ink-faint);
+    padding: 14px 20px; border-radius: 999px;
+    border: 1px solid var(--hairline-2); background: var(--paper);
+    box-shadow: var(--lift); color: var(--ink-faint);
     font-size: .9375rem; max-width: 460px;
   }
   .search svg { width: 17px; height: 17px; }
@@ -190,7 +267,12 @@
     border: 1px solid var(--hairline); background: transparent; color: var(--ink-soft); cursor: pointer;
   }
   .chip svg { width: 14px; height: 14px; }
-  .chip.on { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+  .chip { background: var(--paper-2); }
+  .chip.on {
+    background: linear-gradient(178deg, color-mix(in srgb, var(--accent) 92%, white), var(--accent));
+    color: var(--accent-ink); border-color: transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.26), 0 4px 12px -3px color-mix(in srgb, var(--accent) 50%, transparent);
+  }
 
   /* Calendrier */
   .month { display: flex; flex-direction: column; gap: 2px; }
@@ -204,7 +286,14 @@
   .dsub { font-size: .6875rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
   .empty-month { padding: 22px 8px; border-top: 1px solid var(--hairline-2); font-size: .875rem; color: var(--ink-faint); }
 
-  .quota { display: flex; align-items: center; gap: 12px; padding: 15px 20px; border-radius: 14px; background: var(--accent-wash); color: var(--accent); font-size: .875rem; font-weight: 500; }
+  .quota {
+    display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-radius: 16px;
+    background: var(--accent-wash); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    font-size: .875rem; font-weight: 500;
+  }
+  .drow { background: transparent; transition: background .18s ease, box-shadow .18s ease; }
+  .drow:hover { background: var(--paper); box-shadow: var(--lift); border-top-color: transparent; }
   .quota svg { width: 17px; height: 17px; }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -342,6 +431,8 @@
   <button class="acc a-bleu" type="button" data-acc="bleu" aria-pressed="false" title="Bleu électrique" aria-label="Bleu électrique"></button>
 </div>
 
+<div class="halos" aria-hidden="true"><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i></div>
+
 <div class="app">
 
   <aside class="side">
@@ -449,7 +540,7 @@
           <div class="thumb"><svg><use href="#art-castle" /></svg></div>
           <div class="daycol"><div class="dnum">24</div><div class="dsub">sam</div></div>
           <div class="txt"><span class="t">Trolls &amp; Légendes</span><span class="s">Mons, Belgique · 3 jours</span></div>
-          <div class="row"><span class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></span><span class="dot ok"></span></div>
+          <div class="row"><span class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></span><span class="stat ok"><span class="dot"></span>Confirmé</span></div>
         </div>
       </div>
 
@@ -459,13 +550,13 @@
           <div class="thumb"><svg><use href="#art-hall" /></svg></div>
           <div class="daycol"><div class="dnum">07</div><div class="dsub">ven</div></div>
           <div class="txt"><span class="t">Convention Tattoo Nantes</span><span class="s">Nantes · 3 jours</span></div>
-          <div class="row"><span class="dot wait"></span></div>
+          <div class="row"><span class="stat wait"><span class="dot"></span>En attente</span></div>
         </div>
         <div class="drow">
           <div class="thumb"><svg><use href="#art-castle" /></svg></div>
           <div class="daycol"><div class="dnum">22</div><div class="dsub">sam</div></div>
           <div class="txt"><span class="t">Fête médiévale de Provins</span><span class="s">Provins · 2 jours</span></div>
-          <div class="row"><span class="faces"><span class="face">A</span><span class="face">M</span></span><span class="dot ok"></span></div>
+          <div class="row"><span class="faces"><span class="face">A</span><span class="face">M</span></span><span class="stat ok"><span class="dot"></span>Confirmé</span></div>
         </div>
       </div>
 
@@ -475,7 +566,7 @@
           <div class="thumb"><svg><use href="#art-stage" /></svg></div>
           <div class="daycol"><div class="dnum">18</div><div class="dsub">jeu</div></div>
           <div class="txt"><span class="t">Hellfest — Village artisans</span><span class="s">Clisson · 4 jours</span></div>
-          <div class="row"><span class="faces"><span class="face">P</span></span><span class="dot wait"></span></div>
+          <div class="row"><span class="faces"><span class="face">P</span></span><span class="stat wait"><span class="dot"></span>En attente</span></div>
         </div>
       </div>
 
