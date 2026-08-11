@@ -476,7 +476,10 @@ export function LandingV2Page() {
 
       <footer>
         <div className="wrap">
-          <div className="foot-mark">Fellowship<span>.</span></div>
+          {/* Décoratif — signature d'affiche, redondante avec le lien nav et
+              le « © 2026 Fellowship » juste en dessous : masquée aux
+              lecteurs d'écran comme le reste des éléments décoratifs. */}
+          <div className="foot-mark" aria-hidden="true">Fellowship<span>.</span></div>
 
           <div className="foot-grid">
             <div className="foot-brand">
@@ -506,6 +509,7 @@ export function LandingV2Page() {
               <a href="#gratuit">Pour les exposants</a>
               <button type="button" onClick={goToOrganisateurs}>Pour les organisateurs</button>
               <Link to="/login">Ajouter un événement</Link>
+              <a href="#tarifs">Tarifs</a>
               <a href={`mailto:${LEGAL.email}`}>Nous écrire</a>
             </nav>
           </div>

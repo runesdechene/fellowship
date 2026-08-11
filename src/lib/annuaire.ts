@@ -133,7 +133,9 @@ export function toCard(e: PublicEvent, today: Date, tagLabels: Record<string, st
 
 /** Les univers du pied de page : seulement ceux qui ont au moins un
  *  événement à venir (une porte qui ouvre sur du vide est pire que pas de
- *  porte), triés par nombre d'événements décroissant, plafonnés à `limit`. */
+ *  porte), triés par nombre d'événements décroissant, plafonnés à `limit`.
+ *  Égalité de compte → l'ordre d'apparition dans `list` est conservé (tri
+ *  stable de JS), sans signification particulière : pas besoin de plus. */
 export function topUniverses(list: PublicEvent[], limit = 8): string[] {
   const counts = new Map<string, number>()
   for (const e of list) {

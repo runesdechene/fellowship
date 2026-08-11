@@ -125,6 +125,20 @@ describe('topUniverses', () => {
     const list = [ev({ id: 'a', tags: ['medieval'] })]
     expect(topUniverses(list)).not.toContain('fantasy')
   })
+  it('plafond par défaut à 8, en respectant le tri décroissant (pas d\'appel avec limit)', () => {
+    // 9 univers distincts, comptes tous différents : le 9e (le moins
+    // fréquent) doit être coupé, et l'ordre des 8 retenus doit suivre le
+    // compte décroissant — pas seulement leur nombre.
+    const counts: Array<[string, number]> = [
+      ['medieval', 9], ['fantasy', 8], ['geek', 7], ['tatouage', 6],
+      ['noel', 5], ['musique', 4], ['livre', 3], ['brocante', 2], ['biker', 1],
+    ]
+    const list = counts.flatMap(([slug, n]) =>
+      Array.from({ length: n }, (_, i) => ev({ id: `${slug}-${i}`, tags: [slug] })))
+    expect(topUniverses(list)).toEqual([
+      'medieval', 'fantasy', 'geek', 'tatouage', 'noel', 'musique', 'livre', 'brocante',
+    ])
+  })
 })
 
 describe('todayIso', () => {
