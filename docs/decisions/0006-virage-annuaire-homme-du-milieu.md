@@ -146,6 +146,16 @@ Et la vraie bataille n'est pas la saisie : c'est **le réflexe** « je poste mon
 
 Aucune mécanique d'engagement à inventer.
 
+### 🎯 Ce sur quoi on se concentre MAINTENANT (arrêté par Uriel, 2026-08-11)
+
+> **Le meilleur calendrier connecté exposant : chiner des festivals et des dates, et rejoindre ses potes exposants. Gratuit, avec la petite version payante actuelle inchangée.**
+
+Un seul produit, fait bien. Les orgas viennent **plus tard**, quand la masse d'exposants existe.
+
+**Condition non négociable :** la feature la plus critique de ce plan est la moins glamour — **l'ajout d'un événement par un exposant**. Geste de 30 secondes sur téléphone, produisant une fiche exploitable par les autres (c'est ce qui a donné le HeroFest à Uriel). Ratée, tout le plan n'est qu'un joli calendrier vide.
+
+**Vigilance :** ne plus investir une heure dans du **Pro de gestion** (quotas, confort, rangement) — cette moitié se dévalue avec la contraction du marché (voir « Le vent du marché » plus bas). Le payant devra migrer vers **la décision** (métriques, rentabilité). Ne rien construire qui aille dans l'autre sens.
+
 ### Ordre des chantiers
 
 | # | Chantier | Nature |

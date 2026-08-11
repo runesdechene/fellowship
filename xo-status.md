@@ -1,7 +1,7 @@
 ---
 updated: 2026-08-11T00:00:00Z
 summary: "Session de fond : on a redéfini ce qu'est Fellowship. Le constat de départ — trop social, pas assez utile — a débouché sur un virage clair : Fellowship devient l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers (médiéval, métal, tatouage, créateurs, Noël), avec le calendrier, le carnet de réseau et les threads de périple autour. Les organisateurs entrent par cette porte gratuite et deviennent clients ensuite, facturés uniquement sur les dossiers qu'ils valident. Tout est écrit et figé dans la décision 0006."
-next_step: "Relire la décision 0006 et dire si quelque chose cloche. Ensuite on écrit la spec du premier chantier : l'annuaire public — la page d'accueil déconnectée devient un lieu où l'on découvre des événements, avec une page par festival visible sur Google. Deux points à trancher avant de coder : comment on remplit l'annuaire (l'automatisation de collecte) et le fait que l'app soit aujourd'hui mal référencée par Google."
+next_step: "Écrire la spec du chantier retenu : le meilleur calendrier exposant pour chiner des dates et retrouver ses potes, gratuit. Deux questions à trancher dedans, et elles sont produit et non techniques — quelles informations sont obligatoires quand on ajoute un festival pour que la fiche serve aussi aux autres sans alourdir la saisie, et comment présenter quatre cents événements à quelqu'un qui n'en cherche que dix. Point le plus critique du plan : ajouter un événement doit tenir en trente secondes sur un téléphone."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
