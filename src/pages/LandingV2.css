@@ -189,6 +189,72 @@ html:not(.light) .lv2 {
 .lv2 .ev-skeleton .art { background: var(--block); }
 .lv2 .annuaire-empty { padding: 40px 0; color: var(--ink-soft); font-size: .9375rem; }
 
+/* ── Le gratuit : c'est l'argument d'acquisition ──────────────── */
+.lv2 .free-block {
+  border-radius: 26px; background: var(--block); padding: 40px 38px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start;
+}
+.lv2 .free-block ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.lv2 .free-block li { display: flex; gap: 12px; font-size: .9375rem; align-items: flex-start; }
+.lv2 .free-block li strong { color: var(--ink); font-weight: 600; }
+.lv2 .free-block li span.txt { color: var(--ink-soft); }
+.lv2 .free-left { display: flex; flex-direction: column; gap: 16px; }
+.lv2 .free-price { font-size: 3rem; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+.lv2 .free-price small { display: block; font-size: .875rem; font-weight: 400; letter-spacing: 0; color: var(--ink-soft); margin-top: 8px; }
+.lv2 .pro-note { font-size: .875rem; color: var(--ink-faint); padding-top: 4px; }
+/* Le payant est nommé franchement, pas caché en petites lignes :
+   une page qui plaide l'honnêteté ne peut pas enterrer son prix. */
+.lv2 .pro-line {
+  margin-top: 20px; border-radius: 22px; padding: 28px 30px;
+  background: linear-gradient(178deg, var(--accent-wash), transparent);
+  display: flex; align-items: center; justify-content: space-between; gap: 26px; flex-wrap: wrap;
+}
+.lv2 .pro-l { display: flex; flex-direction: column; gap: 9px; max-width: 62ch; }
+.lv2 .pro-tag { font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-lv2); }
+.lv2 .pro-line .btn { flex: none; }
+
+/* Les avantages : ce que ça FAIT. Distinct du bloc gratuit, qui dit
+   ce que ça COÛTE — deux travaux différents, deux sections. */
+.lv2 .feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.lv2 .feat { border-radius: 20px; background: var(--block-2); padding: 26px; display: flex; flex-direction: column; gap: 11px; }
+.lv2 .feat .ico {
+  width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+  background: var(--accent-wash); color: var(--accent-lv2); margin-bottom: 3px;
+}
+.lv2 .feat .ico svg { width: 21px; height: 21px; }
+.lv2 .feat p { font-size: .9375rem; color: var(--ink-soft); }
+.lv2 .soon {
+  font-size: .625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px; background: var(--wait-wash); color: var(--wait);
+  margin-left: 8px; vertical-align: middle;
+}
+
+@media (max-width: 860px) { .lv2 .free-block { grid-template-columns: 1fr; padding: 30px 24px; } }
+
+/* ── Les deux portes : festivalier et organisateur ─────────────── */
+.lv2 .two-doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 22px; }
+.lv2 .door { border-radius: 24px; background: var(--block); padding: 32px 30px; display: flex; flex-direction: column; gap: 15px; }
+.lv2 .door.accented { background: linear-gradient(178deg, var(--accent-wash), transparent); }
+.lv2 .door ul { list-style: none; margin: 3px 0 6px; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+.lv2 .door li { display: flex; gap: 11px; font-size: .9375rem; color: var(--ink-soft); align-items: flex-start; }
+.lv2 .ck { color: var(--accent-lv2); flex: none; margin-top: 3px; }
+.lv2 .ck svg { width: 15px; height: 15px; display: block; }
+.lv2 .door .btn { align-self: flex-start; margin-top: auto; }
+
+/* Liste d'attente organisateur : le bouton se remplace par le formulaire
+   au clic (même mécanisme que Landing.tsx, réutilise useWaitlist). */
+.lv2 .waitlist-inline { margin-top: auto; display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
+.lv2 .waitlist-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.lv2 .waitlist-input {
+  flex: 1; min-width: 200px; padding: 13px 18px; border-radius: 999px;
+  border: 1px solid var(--hairline); background: var(--block-2); font: inherit; font-size: .9375rem;
+  color: var(--ink);
+}
+.lv2 .waitlist-input::placeholder { color: var(--ink-faint); }
+.lv2 .waitlist-input:focus-visible { outline: 2px solid var(--accent-lv2); outline-offset: 2px; }
+.lv2 .waitlist-error { font-size: .8125rem; color: var(--wait); }
+.lv2 .waitlist-success { font-size: .9375rem; color: var(--ok); font-weight: 600; }
+
 @media (prefers-reduced-motion: reduce) {
   .lv2 *, .lv2 *::before, .lv2 *::after { transition: none !important; animation: none !important; }
 }

@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Check, Compass, Tent } from 'lucide-react'
+import {
+  Search, Check, Compass, Tent, LayoutGrid, Users, CreditCard, Bell, Code, Send, ArrowRight, Scroll, Plus,
+} from 'lucide-react'
 import { useLandingExposants } from '@/hooks/use-landing-stats'
 import { usePublicEvents } from '@/hooks/use-public-events'
+import { useWaitlist } from '@/hooks/use-waitlist'
 import { toPublicList, countCounters, searchEvents, toCard, applicationStatus } from '@/lib/annuaire'
 import type { PublicEvent } from '@/lib/annuaire'
 import './LandingV2.css'
@@ -32,6 +36,22 @@ const MARQUEE_TAGS: Array<[string, string]> = [
   ['🏍️ Biker', '#9a9a9a'], ['🏕️ Outdoor', '#79c6a0'], ['🥘 Gastronomique', '#e89a6a'], ['🌹 Tatouage', '#c4768a'],
 ]
 
+/** Les six avantages exposant (maquette 630‑659), copie validée client. */
+const EXPOSANT_FEATS: Array<{ icon: ReactNode; title: string; text: string; soon?: boolean }> = [
+  { icon: <LayoutGrid aria-hidden="true" />, title: 'Vision d\'ensemble',
+    text: 'Toute ton année en un coup d\'œil. Prévois tes dates et déniche de nouvelles dates où t\'inscrire, facilement.' },
+  { icon: <Users aria-hidden="true" />, title: 'L\'esprit de camaraderie',
+    text: 'Vois où vont tes amis, organisez vos covoiturages, collaborez, et soyez prévenus quand l\'un de vous galère.' },
+  { icon: <CreditCard aria-hidden="true" />, title: 'Inscriptions, paiements & rentabilité',
+    text: 'Suis tes inscriptions, tes paiements et ton bilan. Sache enfin quels festivals valent vraiment le coup.' },
+  { icon: <Bell aria-hidden="true" />, title: 'Rappels de deadlines',
+    text: 'Ne rate plus jamais une date limite d\'inscription. Fellowship te prévient au bon moment.' },
+  { icon: <Code aria-hidden="true" />, title: 'Calendrier intégrable, toujours à jour',
+    text: 'Affiche ton agenda en direct sur ton site. Relié à Fellowship, il se met à jour tout seul — tu ne le réédites jamais.' },
+  { icon: <Send aria-hidden="true" />, title: 'Postuler en 1 clic', soon: true,
+    text: 'Vois un festival, clique « Postuler », ton dossier part direct à l\'organisateur.' },
+]
+
 // Le clair par défaut (décision 0007) est décidé en deux endroits qui doivent s'accorder :
 // le script anti-flash d'index.html pose la classe .light avant le premier paint, et
 // getInitialTheme() (src/lib/theme.ts) lit CETTE MÊME décision au lieu d'en réinventer une —
@@ -52,6 +72,13 @@ export function LandingV2Page() {
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [activeFilters, setActiveFilters] = useState<string[]>([])
   const [showAll, setShowAll] = useState(false)
+
+  // Liste d'attente organisateur : même mécanisme que Landing.tsx (useWaitlist,
+  // table organizer_waitlist) — pas un second système. Le bouton « Être prévenu
+  // au lancement » se remplace par le formulaire au clic, sous la porte.
+  const [showOrgaWaitlist, setShowOrgaWaitlist] = useState(false)
+  const [waitlistEmail, setWaitlistEmail] = useState('')
+  const { status: waitlistStatus, error: waitlistError, submit: submitWaitlist } = useWaitlist()
 
   // FILTERS capture `today` : déclaré dans le composant, juste au-dessus du
   // useMemo qui le consomme. Réduit à ce qui est réellement calculable sur
@@ -226,6 +253,134 @@ export function LandingV2Page() {
               Aucun événement ne correspond. <button type="button" className="link" onClick={resetFilters}>Tout afficher</button>
             </p>
           )}
+        </div>
+      </section>
+
+      <section id="gratuit">
+        <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+
+          <div className="v exposant">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 26 }}>
+              <p className="eyebrow"><Tent aria-hidden="true" />Pour les exposants</p>
+              <h2>Ton année de festivals, maîtrisée.</h2>
+              <p className="lede">Trouver la date n'est que le début. Fellowship porte toute ta saison, du repérage au bilan du dimanche soir.</p>
+            </div>
+
+            <div className="feats" style={{ marginBottom: 46 }}>
+              {EXPOSANT_FEATS.map(f => (
+                <div className="feat" key={f.title}>
+                  <span className="ico">{f.icon}</span>
+                  <h3>{f.title}{f.soon && <span className="soon">Bientôt</span>}</h3>
+                  <p>{f.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 22 }}>
+              <p className="eyebrow"><Check aria-hidden="true" />Ce que ça coûte</p>
+              <h2>Tenir sa saison ne coûte rien.</h2>
+              <p className="lede">Pas une version d'essai, pas un quota qui se referme au bout de trois dates. Tout ce qui sert à trouver, planifier et se retrouver est gratuit — et le restera.</p>
+            </div>
+
+            <div className="free-block">
+              <div className="free-left">
+                <span className="free-price">0 €<small>Sans limite de temps · aucune carte bancaire</small></span>
+                <Link className="btn btn-primary" to="/login">Créer mon compte <ArrowRight aria-hidden="true" /></Link>
+              </div>
+              <ul>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Chercher dans {publicEvents.length} événements</strong> et suivre ceux qui t'intéressent</span></li>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Ton calendrier de saison</strong>, et le même agenda en direct sur ton site</span></li>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Voir qui de ton réseau va où</strong>, et t'organiser avec eux</span></li>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Les alertes de date limite</strong> avant chaque clôture de candidature</span></li>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Ta vitrine publique</strong> — tes clients savent où te retrouver, festival après festival</span></li>
+                <li><span className="ck"><Check aria-hidden="true" /></span><span className="txt"><strong>Ajouter un événement</strong> qui manque, pour toi et pour les autres</span></li>
+              </ul>
+            </div>
+
+            <div className="pro-line" id="tarifs">
+              <div className="pro-l">
+                <span className="pro-tag">Pro · 9,99 € HT / mois</span>
+                <h3>Et si tu veux savoir ce que ta saison rapporte vraiment</h3>
+                <p className="note">Le bilan de chaque événement, tes budgets, ta rentabilité réelle, et les avis détaillés des autres exposants. C'est la seule partie payante — <strong>et rien de ce qui est listé au-dessus n'en dépend.</strong></p>
+              </div>
+              <Link className="btn btn-ghost" to="/login">Voir ce que ça contient</Link>
+            </div>
+          </div>
+
+          <div className="v festivalier">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 26 }}>
+              <p className="eyebrow"><Compass aria-hidden="true" />Pour les festivaliers</p>
+              <h2>Ne rate plus jamais tes créateurs.</h2>
+              <p className="lede">Gratuit, pour toujours. Aucune carte bancaire, jamais.</p>
+            </div>
+            <div className="two-doors">
+              <div className="door">
+                <h3>Découvre</h3>
+                <ul>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Tous les festivals, marchés et conventions près de chez toi</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Filtre par univers, par date, par distance</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Vois quels créateurs seront présents avant d'y aller</li>
+                </ul>
+                <Link className="btn btn-primary" to="/login">Créer mon compte gratuit <ArrowRight aria-hidden="true" /></Link>
+              </div>
+              <div className="door accented">
+                <h3>Suis tes artisans</h3>
+                <ul>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Abonne-toi aux créateurs rencontrés sur un stand</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Sache où ils passent, toute l'année</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Planifie tes sorties à partir de leur calendrier</li>
+                </ul>
+                <Link className="btn btn-ghost" to="/runes-de-chene">Voir un exemple de vitrine</Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="v organisateur">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 11, marginBottom: 26 }}>
+              <p className="eyebrow"><Scroll aria-hidden="true" />Pour les organisateurs</p>
+              <h2>Montrez votre festival aux bons exposants.</h2>
+              <p className="lede">Le référencement est gratuit et le restera. Ce qui arrive ensuite ne se paie qu'à l'usage.</p>
+            </div>
+            <div className="two-doors">
+              <div className="door accented">
+                <h3>Référencez votre festival — gratuitement</h3>
+                <ul>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Votre page dans l'annuaire, visible des exposants <em>et</em> du public</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Vous voyez combien d'exposants suivent votre événement</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Vos dates, vos tarifs d'emplacement et votre date limite, à jour</li>
+                </ul>
+                <Link className="btn btn-primary" to="/login">Ajouter mon festival <Plus aria-hidden="true" /></Link>
+              </div>
+              <div className="door">
+                <h3>Recevoir les candidatures <span className="stat soon" style={{ marginLeft: 6 }}>Bientôt</span></h3>
+                <ul>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Fini les 200 mails et les PDF : des dossiers propres et comparables</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Vous ne payez que les dossiers que vous validez</li>
+                  <li><span className="ck"><Check aria-hidden="true" /></span>Relances, frais et plan d'emplacements au même endroit</li>
+                </ul>
+                <div className="waitlist-inline">
+                  {waitlistStatus === 'success' ? (
+                    <p className="waitlist-success">Merci ! On te prévient au lancement.</p>
+                  ) : showOrgaWaitlist ? (
+                    <form className="waitlist-row" onSubmit={e => { e.preventDefault(); submitWaitlist(waitlistEmail) }}>
+                      <input
+                        type="email" className="waitlist-input" placeholder="votre@email.fr" aria-label="Votre email"
+                        value={waitlistEmail} onChange={e => setWaitlistEmail(e.target.value)}
+                        disabled={waitlistStatus === 'submitting'} required
+                      />
+                      <button type="submit" className="btn btn-ghost btn-sm" disabled={waitlistStatus === 'submitting'}>
+                        {waitlistStatus === 'submitting' ? 'Envoi…' : 'Je m\'inscris'}
+                      </button>
+                    </form>
+                  ) : (
+                    <button type="button" className="btn btn-ghost" onClick={() => setShowOrgaWaitlist(true)}>Être prévenu au lancement</button>
+                  )}
+                  {waitlistStatus === 'error' && waitlistError && <p className="waitlist-error">{waitlistError}</p>}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
     </div>
