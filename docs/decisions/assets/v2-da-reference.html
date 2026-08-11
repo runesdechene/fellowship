@@ -1,0 +1,551 @@
+<title>Fellowship V2 — direction artistique</title>
+
+<style>
+  /* ─── Tokens : clair (défaut) ───────────────────────────────── */
+  :root {
+    --parchment:   #F4EEE1;
+    --surface:     #FBF7EE;
+    --surface-alt: #EFE7D8;
+    --ink:         #594848;
+    --ink-soft:    #8C7B72;
+    --ink-faint:   #B0A197;
+    --hairline:    rgba(89, 72, 72, .12);
+    --hairline-2:  rgba(89, 72, 72, .07);
+    --gold:        #C9974A;
+    --gold-wash:   rgba(201, 151, 74, .13);
+    --forest:      #47614C;
+    --clay:        #A8593F;
+    --on-gold:     #33261B;
+    --photo-a:     #C9B79A;
+    --photo-b:     #8E7C68;
+    --shade:       rgba(89, 72, 72, .05);
+  }
+  /* ─── Tokens : sombre via préférence système ─────────────────── */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --parchment:   #191411;
+      --surface:     #211B17;
+      --surface-alt: #2A221D;
+      --ink:         #EDE2D3;
+      --ink-soft:    #A2938A;
+      --ink-faint:   #7A6C64;
+      --hairline:    rgba(237, 226, 211, .13);
+      --hairline-2:  rgba(237, 226, 211, .07);
+      --gold:        #E0BE7A;
+      --gold-wash:   rgba(224, 190, 122, .14);
+      --forest:      #8FB396;
+      --clay:        #D89478;
+      --on-gold:     #241A12;
+      --photo-a:     #6B5B49;
+      --photo-b:     #3B322A;
+      --shade:       rgba(237, 226, 211, .04);
+    }
+  }
+  /* ─── Tokens : sombre via bascule explicite ──────────────────── */
+  :root[data-theme="dark"] {
+    --parchment:   #191411;
+    --surface:     #211B17;
+    --surface-alt: #2A221D;
+    --ink:         #EDE2D3;
+    --ink-soft:    #A2938A;
+    --ink-faint:   #7A6C64;
+    --hairline:    rgba(237, 226, 211, .13);
+    --hairline-2:  rgba(237, 226, 211, .07);
+    --gold:        #E0BE7A;
+    --gold-wash:   rgba(224, 190, 122, .14);
+    --forest:      #8FB396;
+    --clay:        #D89478;
+    --on-gold:     #241A12;
+    --photo-a:     #6B5B49;
+    --photo-b:     #3B322A;
+    --shade:       rgba(237, 226, 211, .04);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    transition: background .35s ease, color .35s ease;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px 140px; }
+
+  /* ─── Typographie ────────────────────────────────────────────── */
+  .display {
+    font-size: clamp(2.6rem, 6.5vw, 4.25rem);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.02;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .display .dim { color: var(--ink-faint); }
+
+  h2 {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -.025em;
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; margin: 0; }
+
+  .eyebrow {
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+  .lede { font-size: 1.0625rem; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .note { font-size: .875rem; color: var(--ink-soft); max-width: 66ch; margin: 0; }
+  p { margin: 0; }
+
+  /* ─── Rythme vertical ────────────────────────────────────────── */
+  header.hero { padding: 132px 0 104px; display: flex; flex-direction: column; gap: 26px; }
+  section { padding: 88px 0; border-top: 1px solid var(--hairline-2); display: flex; flex-direction: column; gap: 40px; }
+  .section-head { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ─── Bascule de thème ───────────────────────────────────────── */
+  .switch {
+    position: fixed; top: 22px; right: 22px; z-index: 20;
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 9px 17px; border-radius: 999px;
+    border: 1px solid var(--hairline);
+    background: var(--surface); color: var(--ink);
+    font: inherit; font-size: .8125rem; font-weight: 500;
+    cursor: pointer;
+  }
+  .switch:hover { border-color: var(--gold); }
+  .switch:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ─── Palette ────────────────────────────────────────────────── */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 14px; }
+  .sw { border: 1px solid var(--hairline); border-radius: 16px; overflow: hidden; background: var(--surface); }
+  .sw .chip { height: 76px; }
+  .sw .meta { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 2px; }
+  .sw .name { font-size: .8125rem; font-weight: 600; }
+  .sw .hex { font-size: .75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+
+  /* ─── Grille générique ───────────────────────────────────────── */
+  .cols-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; align-items: start; }
+  .cols-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 20px; }
+
+  .panel {
+    border: 1px solid var(--hairline); border-radius: 20px;
+    background: var(--surface); padding: 26px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .panel-label { display: flex; align-items: center; gap: 9px; }
+  .verdict { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .verdict.bad { color: var(--clay); }
+  .verdict.good { color: var(--forest); }
+
+  /* ─── LA CARTE ÉVÉNEMENT — version 2 ─────────────────────────── */
+  .card {
+    border: 1px solid var(--hairline); border-radius: 16px;
+    background: var(--surface); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .card .photo { aspect-ratio: 4 / 3; background: linear-gradient(148deg, var(--photo-a), var(--photo-b)); }
+  .card .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 5px; }
+  .card .title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
+  .card .when { font-size: .875rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .card .who { display: flex; align-items: center; gap: 7px; margin-top: 9px; }
+
+  .faces { display: flex; }
+  .face {
+    width: 23px; height: 23px; border-radius: 999px;
+    background: var(--surface-alt); border: 1.5px solid var(--surface);
+    margin-left: -7px; display: grid; place-items: center;
+    font-size: .625rem; font-weight: 700; color: var(--ink-soft);
+  }
+  .face:first-child { margin-left: 0; }
+  .who-text { font-size: .8125rem; color: var(--ink-soft); }
+
+  /* ─── LA CARTE ÉVÉNEMENT — version actuelle (reconstitution) ─── */
+  .card-old {
+    border-radius: 14px; overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 10px 24px var(--shade), 0 2px 6px var(--shade);
+    display: flex; flex-direction: column;
+  }
+  .card-old .photo { aspect-ratio: 16 / 9; background: linear-gradient(148deg, var(--photo-a), var(--photo-b)); position: relative; }
+  .card-old .float { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; gap: 6px; }
+  .card-old .body { padding: 14px; display: flex; flex-direction: column; gap: 9px; }
+  .card-old .title { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
+  .card-old .rows { display: flex; flex-direction: column; gap: 5px; font-size: .8125rem; color: var(--ink-soft); }
+  .card-old .row { display: flex; gap: 7px; align-items: center; }
+  .card-old .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .card-old .foot { display: flex; gap: 8px; padding-top: 4px; border-top: 1px solid var(--hairline-2); margin-top: 2px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: .6875rem; font-weight: 600;
+    background: var(--surface-alt); color: var(--ink-soft);
+    border: 1px solid var(--hairline-2);
+  }
+  .pill.on-photo { background: rgba(25, 20, 17, .62); color: #F0E7D9; border-color: transparent; backdrop-filter: blur(6px); }
+  .pill.gold { background: var(--gold-wash); color: var(--gold); border-color: transparent; }
+  .pill.forest { background: var(--gold-wash); color: var(--forest); border-color: transparent; }
+
+  .btn-mini {
+    flex: 1; text-align: center; padding: 7px 10px; border-radius: 9px;
+    font-size: .75rem; font-weight: 600;
+    border: 1px solid var(--hairline); background: transparent; color: var(--ink);
+  }
+
+  /* ─── Boutons V2 ─────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 24px; border-radius: 999px;
+    font: inherit; font-size: .9375rem; font-weight: 600; letter-spacing: -.005em;
+    border: 1px solid transparent; cursor: pointer;
+    transition: opacity .18s ease, border-color .18s ease;
+  }
+  .btn-primary { background: var(--gold); color: var(--on-gold); }
+  .btn-primary:hover { opacity: .88; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--hairline); }
+  .btn-ghost:hover { border-color: var(--gold); }
+  .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ─── Écran : chiner ─────────────────────────────────────────── */
+  .screen {
+    border: 1px solid var(--hairline); border-radius: 22px;
+    background: var(--parchment); padding: 40px 34px 46px;
+    display: flex; flex-direction: column; gap: 34px;
+    overflow: hidden;
+  }
+  .screen-top { display: flex; flex-direction: column; gap: 20px; }
+  .screen-title { font-size: 2rem; font-weight: 500; letter-spacing: -.03em; line-height: 1.1; }
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip-f {
+    padding: 8px 16px; border-radius: 999px; font-size: .8125rem; font-weight: 500;
+    border: 1px solid var(--hairline); background: transparent; color: var(--ink-soft);
+  }
+  .chip-f.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+
+  /* ─── Écran : ma saison ──────────────────────────────────────── */
+  .month { display: flex; flex-direction: column; gap: 4px; }
+  .month-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); padding-bottom: 14px; }
+  .date-row {
+    display: grid; grid-template-columns: 76px 1fr auto;
+    gap: 22px; align-items: center;
+    padding: 20px 4px;
+    border-top: 1px solid var(--hairline-2);
+  }
+  .date-row:hover { background: var(--shade); }
+  .d-num { font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .d-sub { font-size: .75rem; color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; margin-top: 3px; }
+  .d-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .d-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.015em; }
+  .d-place { font-size: .875rem; color: var(--ink-soft); }
+  .dot { width: 7px; height: 7px; border-radius: 999px; display: inline-block; }
+  .dot.ok { background: var(--forest); }
+  .dot.wait { background: var(--gold); }
+
+  /* ─── Règles ─────────────────────────────────────────────────── */
+  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(288px, 1fr)); gap: 16px; }
+  .rule { border: 1px solid var(--hairline); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 8px; background: var(--surface); }
+  .rule .mark { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .rule.out .mark { color: var(--clay); }
+  .rule.in .mark { color: var(--forest); }
+  .rule p { font-size: .875rem; color: var(--ink-soft); }
+
+  .scale-demo { display: flex; flex-direction: column; gap: 22px; }
+  .scale-row { display: flex; flex-direction: column; gap: 4px; padding-bottom: 20px; border-bottom: 1px solid var(--hairline-2); }
+  .scale-meta { font-size: .75rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 20px 96px; }
+    header.hero { padding: 104px 0 72px; }
+    section { padding: 64px 0; }
+    .screen { padding: 26px 20px 32px; }
+    .date-row { grid-template-columns: 60px 1fr auto; gap: 16px; }
+  }
+</style>
+
+<button class="switch" id="themeToggle" type="button" aria-label="Changer de thème">
+  <span id="themeIcon">☾</span><span id="themeLabel">Nuit</span>
+</button>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Fellowship · direction artistique V2</p>
+    <h1 class="display">Moins d'informations.<br /><span class="dim">Beaucoup plus d'espace.</span></h1>
+    <p class="lede">La structure de Vowen, la palette de Runes de Chêne. Une page de référence : les valeurs exactes, la carte événement avant et après, et deux écrans à l'échelle réelle.</p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; padding-top:8px;">
+      <button class="btn btn-primary" type="button">Ajouter une date</button>
+      <button class="btn btn-ghost" type="button">Voir l'annuaire</button>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Palette</p>
+      <h2>Du parchemin, un brun doux, un or. Jamais de noir.</h2>
+      <p class="note">Le texte n'est jamais noir : c'est ce qui produit la douceur. Le fond n'est jamais blanc pur : c'est ce qui produit le parchemin. L'or ne sert qu'à une chose par écran.</p>
+    </div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--parchment); border-bottom:1px solid var(--hairline);"></div><div class="meta"><span class="name">Parchemin</span><span class="hex">fond de page</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--surface); border-bottom:1px solid var(--hairline);"></div><div class="meta"><span class="name">Surface</span><span class="hex">cartes, panneaux</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--ink);"></div><div class="meta"><span class="name">Encre</span><span class="hex">titres, texte</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--ink-soft);"></div><div class="meta"><span class="name">Encre douce</span><span class="hex">secondaire</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--gold);"></div><div class="meta"><span class="name">Or</span><span class="hex">action unique</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--forest);"></div><div class="meta"><span class="name">Forêt</span><span class="hex">confirmé</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Typographie</p>
+      <h2>Grand, léger, serré.</h2>
+      <p class="note">Le réflexe habituel est d'agrandir <em>et</em> de graisser. Vowen fait l'inverse : 64 px en graisse 500, avec un interlettrage négatif. C'est ce contraste qui lit « moderne ». Les capitales espacées, héritage de Runes de Chêne, sont réservées aux micro-libellés.</p>
+    </div>
+    <div class="scale-demo">
+      <div class="scale-row">
+        <span class="scale-meta">Titre · 64 px · graisse 500 · interlettrage −0,035 em</span>
+        <span class="display" style="font-size:3.25rem;">Ta saison, en dix dates</span>
+      </div>
+      <div class="scale-row">
+        <span class="scale-meta">Section · 32 px · graisse 500 · −0,025 em</span>
+        <h2>Trois cent quarante festivals cherchent des exposants</h2>
+      </div>
+      <div class="scale-row">
+        <span class="scale-meta">Courant · 16 px · interligne 1,65 · 65 caractères</span>
+        <p class="lede">Le confort de lecture ne vient pas de la taille du texte mais de la largeur de la colonne et de l'air entre les lignes.</p>
+      </div>
+      <div class="scale-row">
+        <span class="scale-meta">Micro-libellé · 11 px · graisse 600 · +0,16 em · capitales</span>
+        <p class="eyebrow">Candidatures ouvertes</p>
+      </div>
+    </div>
+    <p class="note"><strong>À décider :</strong> cette maquette utilise la police système. En production, la police de Runes de Chêne est <strong>Cabin</strong> — à embarquer pour que les gens reconnaissent la marque.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Le cœur du problème</p>
+      <h2>Une carte porte deux informations. Pas huit.</h2>
+      <p class="note">C'est ici que se joue le reproche de « trop d'infos partout ». À gauche, la logique actuelle : tout ce qu'on sait est affiché. À droite, la règle V2 : le nom, la date et le lieu — plus la seule chose qu'aucun annuaire ne saura jamais dire, qui d'autre y va.</p>
+    </div>
+    <div class="cols-2">
+
+      <div class="panel">
+        <div class="panel-label"><span class="verdict bad">Aujourd'hui</span><span class="note" style="font-size:.8125rem;">reconstitution · onze informations</span></div>
+        <div class="card-old">
+          <div class="photo">
+            <div class="float">
+              <span class="pill on-photo">◆ Inscrit</span>
+              <span class="pill on-photo">★ 4,2</span>
+            </div>
+          </div>
+          <div class="body">
+            <span class="title">Trolls &amp; Légendes 2027</span>
+            <div class="tags">
+              <span class="pill">Médiéval</span><span class="pill">Fantasy</span><span class="pill">Artisanat</span>
+            </div>
+            <div class="rows">
+              <span class="row">24 – 26 avril 2027 · 3 jours</span>
+              <span class="row">Mons, Belgique · à 412 km</span>
+              <span class="row">Emplacement 145 € · électricité incluse</span>
+              <span class="row">Candidatures : clôture le 30 novembre</span>
+              <span class="row">86 exposants · 4 de ton réseau</span>
+            </div>
+            <div class="foot">
+              <button class="btn-mini" type="button">Ajouter</button>
+              <button class="btn-mini" type="button">Candidater</button>
+              <button class="btn-mini" type="button">Partager</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label"><span class="verdict good">V2</span><span class="note" style="font-size:.8125rem;">deux informations, plus la présence</span></div>
+        <div class="card">
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Trolls &amp; Légendes</span>
+            <span class="when">24 – 26 avril · Mons</span>
+            <div class="who">
+              <div class="faces">
+                <span class="face">M</span><span class="face">J</span><span class="face">L</span>
+              </div>
+              <span class="who-text">4 de ton réseau y vont</span>
+            </div>
+          </div>
+        </div>
+        <p class="note" style="font-size:.8125rem;">Le tarif, la distance, la date limite, la note : tout cela existe toujours — <strong>sur la fiche</strong>, pas dans la liste. On ne décide pas dans une grille, on y trie.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Écran · chiner</p>
+      <h2>Quatre cents événements, pour quelqu'un qui en cherche dix.</h2>
+    </div>
+    <div class="screen">
+      <div class="screen-top">
+        <span class="screen-title">Où poser ton stand</span>
+        <div class="chips">
+          <span class="chip-f active">Prend des exposants</span>
+          <span class="chip-f">Printemps 2027</span>
+          <span class="chip-f">Moins de 300 km</span>
+          <span class="chip-f">Où vont mes potes</span>
+        </div>
+      </div>
+      <div class="cols-3">
+        <div class="card">
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Trolls &amp; Légendes</span>
+            <span class="when">24 – 26 avril · Mons</span>
+            <div class="who">
+              <div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div>
+              <span class="who-text">4 de ton réseau</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Hellfest — Village</span>
+            <span class="when">18 – 20 juin · Clisson</span>
+            <div class="who">
+              <div class="faces"><span class="face">A</span><span class="face">P</span></div>
+              <span class="who-text">2 de ton réseau</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Convention Tattoo Nantes</span>
+            <span class="when">7 – 9 mai · Nantes</span>
+            <div class="who">
+              <span class="who-text">Personne pour l'instant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Écran · ma saison</p>
+      <h2>Dix dates tiennent sur un écran. Qu'elles respirent.</h2>
+      <p class="note">Vingt pixels d'air au-dessus et en dessous de chaque ligne, un filet d'un pixel pour séparer, et rien d'autre. La pastille dit l'état, les visages disent la compagnie.</p>
+    </div>
+    <div class="screen">
+      <div class="screen-top">
+        <span class="screen-title">Ma saison 2027</span>
+        <p class="note" style="font-size:.875rem;">9 dates · 3 en attente de réponse</p>
+      </div>
+
+      <div class="month">
+        <span class="month-label">Avril</span>
+        <div class="date-row">
+          <div><div class="d-num">24</div><div class="d-sub">sam</div></div>
+          <div class="d-main"><span class="d-title">Trolls &amp; Légendes</span><span class="d-place">Mons, Belgique · 3 jours</span></div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div>
+            <span class="dot ok" title="Confirmé"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="month">
+        <span class="month-label">Mai</span>
+        <div class="date-row">
+          <div><div class="d-num">07</div><div class="d-sub">ven</div></div>
+          <div class="d-main"><span class="d-title">Convention Tattoo Nantes</span><span class="d-place">Nantes · 3 jours</span></div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <span class="dot wait" title="En attente"></span>
+          </div>
+        </div>
+        <div class="date-row">
+          <div><div class="d-num">22</div><div class="d-sub">sam</div></div>
+          <div class="d-main"><span class="d-title">Fête médiévale de Provins</span><span class="d-place">Provins · 2 jours</span></div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="faces"><span class="face">A</span><span class="face">M</span></div>
+            <span class="dot ok" title="Confirmé"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="month">
+        <span class="month-label">Juin</span>
+        <div class="date-row">
+          <div><div class="d-num">18</div><div class="d-sub">jeu</div></div>
+          <div class="d-main"><span class="d-title">Hellfest — Village artisans</span><span class="d-place">Clisson · 4 jours</span></div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="faces"><span class="face">P</span></div>
+            <span class="dot wait" title="En attente"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Les règles</p>
+      <h2>Ce qui disparaît, ce qui reste.</h2>
+    </div>
+    <div class="rules">
+      <div class="rule out"><span class="mark">Disparaît</span><h3>Le verre et le grain</h3><p>Les fonds translucides, le flou d'arrière-plan et la texture de grain. C'est le socle de la DA actuelle, et c'est la première source de bruit visuel.</p></div>
+      <div class="rule out"><span class="mark">Disparaît</span><h3>Les ombres portées</h3><p>Une carte se détache par un filet d'un pixel, jamais par une ombre. C'est la différence la plus visible entre « fait maison » et « moderne ».</p></div>
+      <div class="rule out"><span class="mark">Disparaît</span><h3>Les gélules décoratives</h3><p>Les étiquettes de thème, les compteurs, les notes en surimpression sur les photos. Une gélule ne survit que si elle porte un état sur lequel on agit.</p></div>
+      <div class="rule out"><span class="mark">Disparaît</span><h3>Trois boutons par carte</h3><p>Une carte entière est un lien. L'action se prend sur la fiche, pas dans la liste.</p></div>
+      <div class="rule in"><span class="mark">Reste</span><h3>La chaleur</h3><p>Le parchemin, l'encre brune, l'or. On ne va pas vers le gris froid : c'est ce que les gens reconnaissent de Runes de Chêne.</p></div>
+      <div class="rule in"><span class="mark">Reste</span><h3>La présence</h3><p>Qui d'autre y va. C'est la seule information qu'aucun annuaire concurrent ne pourra jamais afficher — elle mérite sa place dans la liste.</p></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+
+    function systemIsDark() {
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    function paint(isDark) {
+      icon.textContent = isDark ? '☀' : '☾';
+      label.textContent = isDark ? 'Jour' : 'Nuit';
+    }
+    paint(systemIsDark());
+
+    btn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme');
+      var isDark = current ? current === 'dark' : systemIsDark();
+      var next = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      paint(next === 'dark');
+    });
+  })();
+</script>
