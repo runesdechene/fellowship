@@ -1,7 +1,7 @@
 ---
 updated: 2026-08-11T00:00:00Z
 summary: "Deux grandes décisions en une session. D'abord ce qu'est Fellowship — l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers, les organisateurs devenant clients ensuite. Ensuite à quoi il ressemble — une apparence claire et reposante inspirée du site Runes de Chêne, validée sur maquettes pour l'application comme pour la page d'accueil. Tout est écrit dans les décisions 0006 et 0007, avec des maquettes cliquables. Rien n'est encore intégré dans le vrai code."
-next_step: "Le chantier prioritaire a changé en fin de session : ce sont les gros festivals qui paient, pas les exposants. Prochaine étape, appeler deux ou trois organisateurs qu'Uriel connaît, sans rien vendre — juste comprendre comment ils gèrent leurs dossiers d'exposants aujourd'hui et ce que ça leur coûte en temps. Ensuite construire la boîte de réception des candidatures (quatre à huit semaines) avec un ou deux d'entre eux comme pilotes, et la leur prévendre au tarif fondateur. Le reste — intégrer la nouvelle apparence, la spec du calendrier — passe derrière."
+next_step: "La page d'accueil et l'apparence sont validées sur maquette, et la Communauté est déjà ouverte à tous en production. Deux chantiers ensuite, dans cet ordre : brancher la nouvelle apparence sur la vraie page d'accueil derrière un interrupteur, pour la voir en local avec les vraies données ; puis appeler deux ou trois organisateurs de gros festivals — sans rien vendre — pour comprendre comment ils gèrent leurs dossiers d'exposants, avant de leur construire la boîte de réception des candidatures. Il manque encore deux choses d'Uriel : le contenu réel d'un dossier de candidature, et quelques photos de festivals pour remplacer les emplacements gris."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -35,6 +35,28 @@ Mise sur le marché : **prévente de 2-3 pilotes** « saison 2027, tarif fondate
 cœur, il le donnera plus tard). Bloquant pour spécifier le formulaire configurable.
 ⚠️ Honnêteté due : **ça ne fait pas 1 500 €/mois en 6 mois.** Le pont de trésorerie reste non résolu.
 ⚠️ Ne pas re-proposer : salariat, prestation de projet aux festivals, hausse du prix Pro exposant.
+
+--- PAGE D'ACCUEIL V2 « ANNUAIRE » — VALIDÉE (2026-08-11) ---
+Maquette : `assets/v2-landing-annuaire.html`. Structure retenue : l'annuaire d'abord
+(recherche en héros + compteurs + grille filtrable), **sélecteur d'audience conservé et
+FONCTIONNEL** (festivalier / exposant / organisateur — il change ce que la fiche montre :
+créateurs attendus / état des candidatures / exposants qui suivent), bandeau des 19 univers
+en couleurs, les 6 avantages exposant de l'ancienne page, le bloc gratuit puis le Pro dit
+franchement, « fait par un exposant » (Runes de Chêne), les portes orga, les témoignages,
+une bande de dernier appel, et un pied de page à 4 colonnes (PAR UNIVERS / PAR RÉGION =
+portes SEO longue traîne).
+⚠️ **Règles de marque apprises à la dure — ne pas les refaire :**
+• Le logo = `public/icon.png` (pictogramme SEUL, 458x389). **Jamais** `pwa-192x192.png`
+  (c'est l'icône PWA, carrée et rembourrée). Hauteur fixée, largeur libre, **JAMAIS de
+  border-radius ni de recadrage**. Le nom est du texte à côté.
+• **Pas d'illustrations SVG dessinées à la main** : rendu naïf, rejeté (« on dirait un dessin
+  d'enfant »). Les vignettes d'événement sont des emplacements neutres → vraies photos/affiches.
+  À demander à Uriel : ses propres photos de festivals.
+• **Boutons à plat** : pas de liseré blanc en surimpression ni d'ombre colorée (« vieillot »).
+  Le relief `--lift` des cartes reste, lui.
+• Barre de navigation transparente en haut, fond au défilement, **sans filet**.
+Reste à décider : les vrais compteurs à afficher, le texte Runes de Chêne à valider,
+et l'onglet Organisateur (« Soon » ou « Référencez votre festival »).
 
 --- DA V2 « PARCHEMIN » — décision 0007 (2026-08-11) ---
 Validée par Uriel après ~8 itérations. Maquettes : `assets/v2-app-clair.html` (Cockpit /
