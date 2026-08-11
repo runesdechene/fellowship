@@ -52,6 +52,11 @@
     --halo-blur: 90px;
     --rail-bg: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
     --nav-on: rgba(255,252,245,.92);
+    /* Bloc : un fond a peine plus clair que le parchemin. Aucune
+       bordure, aucune ombre — la separation se fait par la teinte.
+       Legerement translucide pour capter les halos qui passent. */
+    --block: rgba(255,252,246,.58);
+    --block-2: rgba(255,252,246,.38);
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -92,6 +97,8 @@
     --halo-blur: 110px;
     --rail-bg: linear-gradient(180deg, rgba(30,25,23,.88), rgba(23,19,18,.94));
     --nav-on: rgba(255,240,225,.075);
+    --block: rgba(255,238,222,.042);
+    --block-2: rgba(255,238,222,.028);
 
     /* Palettes d'illustration en nuit */
     --sky-1:#4A3A32; --sky-2:#2C2421;
@@ -228,8 +235,8 @@
      visuels arrondis, de l'espace et de la hiérarchie typographique.
      ══════════════════════════════════════════════════════════════ */
   .card {
-    border: 0; border-radius: 0; background: none; box-shadow: none;
-    padding: 0; display: flex; flex-direction: column; gap: 16px;
+    border: 0; border-radius: 20px; background: var(--block); box-shadow: none;
+    padding: 24px 26px 26px; display: flex; flex-direction: column; gap: 16px;
     position: relative;
   }
   .card-head {
@@ -239,18 +246,18 @@
   .muted { color: var(--ink-soft); font-size: .875rem; }
   .faint { color: var(--ink-faint); font-size: .8125rem; }
 
-  .grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 52px; }
+  .grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
   .row { display: flex; align-items: center; gap: 12px; }
 
   /* Prochain festival : l'image est le seul objet qui a un bord. */
-  .next { display: grid; grid-template-columns: 200px 1fr; gap: 26px; align-items: center; }
+  .next { display: grid; grid-template-columns: 190px 1fr; gap: 24px; align-items: center; }
   .next .art {
     overflow: hidden; border-radius: 18px; aspect-ratio: 4/3.4;
     box-shadow: var(--lift);
   }
   .next .art svg { display: block; width: 100%; height: 100%; }
-  .next .in { padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .next .in { padding: 2px 0; display: flex; flex-direction: column; gap: 9px; }
   .next .ttl { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; }
   .badge {
     display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
@@ -313,21 +320,23 @@
   .amount.pos { color: var(--accent); }
 
   /* Cartes événement */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 34px 28px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
   /* Carte événement : plus de conteneur. Une image arrondie, et le
      texte posé dessous à même la page. */
   .ecard {
-    border: 0; border-radius: 0; background: none; box-shadow: none;
-    display: flex; flex-direction: column; position: relative; cursor: pointer;
+    border: 0; border-radius: 20px; background: var(--block-2); box-shadow: none;
+    padding: 10px 10px 4px; display: flex; flex-direction: column;
+    position: relative; cursor: pointer;
+    transition: background .22s ease;
   }
+  .ecard:hover { background: var(--block); }
   .ecard .art {
-    aspect-ratio: 4/3; overflow: hidden; border-radius: 16px;
-    box-shadow: var(--lift);
-    transition: box-shadow .24s ease, transform .24s ease;
+    aspect-ratio: 4/3; overflow: hidden; border-radius: 13px;
+    transition: transform .24s ease;
   }
-  .ecard:hover .art { transform: translateY(-4px); box-shadow: var(--lift-hi); }
+  .ecard:hover .art { transform: translateY(-2px); }
   .ecard .art svg { display: block; width: 100%; height: 100%; }
-  .ecard .b { padding: 14px 2px 0; display: flex; flex-direction: column; gap: 4px; }
+  .ecard .b { padding: 14px 8px 12px; display: flex; flex-direction: column; gap: 4px; }
   .ecard .t { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; }
   .ecard .w { font-size: .8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
   .ecard .who { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .8125rem; color: var(--ink-soft); }
@@ -361,12 +370,12 @@
   .month-h { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; }
   .month-h .m { font-size: 1.125rem; font-weight: 500; letter-spacing: -.022em; }
   .month-h .c { font-size: .75rem; color: var(--ink-faint); letter-spacing: .1em; text-transform: uppercase; }
-  .drow { display: grid; grid-template-columns: 44px 64px 1fr auto; gap: 18px; align-items: center; padding: 16px 8px; border-top: 1px solid var(--hairline-2); border-radius: 10px; }
+  .drow { display: grid; grid-template-columns: 44px 64px 1fr auto; gap: 18px; align-items: center; padding: 16px 18px; border-top: 0; border-radius: 16px; background: var(--block-2); margin-bottom: 8px; }
   .drow:hover { background: var(--shade); }
   .drow .thumb { width: 44px; height: 44px; }
   .dnum { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
   .dsub { font-size: .6875rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
-  .empty-month { padding: 22px 8px; border-top: 1px solid var(--hairline-2); font-size: .875rem; color: var(--ink-faint); }
+  .empty-month { padding: 22px 18px; border-radius: 16px; background: var(--block-2); font-size: .875rem; color: var(--ink-faint); }
 
   .quota {
     display: inline-flex; align-items: center; gap: 10px; padding: 0;
@@ -374,7 +383,7 @@
     font-size: .875rem; font-weight: 600;
   }
   .drow { background: transparent; transition: background .18s ease, box-shadow .18s ease; }
-  .drow:hover { background: var(--shade); box-shadow: none; }
+  .drow:hover { background: var(--block); box-shadow: none; }
   .quota svg { width: 17px; height: 17px; }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
