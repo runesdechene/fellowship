@@ -77,7 +77,7 @@
   nav.site.scrolled { background: var(--parchment); border-bottom-color: var(--hairline-2); }
   .nav-in { display: flex; align-items: center; justify-content: space-between; gap: 22px; height: 76px; }
   .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.022em; font-size: 1.0625rem; }
-  .logo img { width: 30px; height: 30px; border-radius: 9px; display: block; }
+  .logo img { width: 30px; height: 30px; display: block; }  /* JAMAIS de border-radius sur le logo : il a déjà sa forme. */
   .logo .dot { color: var(--accent); }
   .nav-links { display: flex; align-items: center; gap: 26px; }
   .link { color: var(--ink-soft); text-decoration: none; font-size: .9375rem; }
@@ -279,22 +279,29 @@
   /* ── Dernier appel : une bande illustrée pleine largeur ────────── */
   .cta-band {
     position: relative; overflow: hidden; border-radius: 34px;
-    margin: 30px 0 0; padding: 96px 48px;
+    margin: 30px 0 0; padding: 74px 48px 300px;
     display: flex; flex-direction: column; align-items: center;
     gap: 20px; text-align: center;
   }
   .cta-band .bg { position: absolute; inset: 0; z-index: 0; }
   .cta-band .bg svg { display: block; width: 100%; height: 100%; }
+  /* Le voile ne couvre QUE la zone du texte. Plus bas il s'efface,
+     sinon l'illustration disparaît et la bande ne sert plus à rien. */
   .cta-band .veil {
     position: absolute; inset: 0; z-index: 1;
-    background:
-      radial-gradient(120% 100% at 50% 45%, color-mix(in srgb, var(--parchment) 78%, transparent), transparent 70%),
-      linear-gradient(to bottom, color-mix(in srgb, var(--parchment) 55%, transparent), color-mix(in srgb, var(--parchment) 92%, transparent));
+    background: linear-gradient(to bottom,
+      color-mix(in srgb, var(--parchment) 90%, transparent) 0%,
+      color-mix(in srgb, var(--parchment) 74%, transparent) 32%,
+      color-mix(in srgb, var(--parchment) 24%, transparent) 62%,
+      transparent 82%);
   }
   .cta-band > *:not(.bg):not(.veil) { position: relative; z-index: 2; }
   .cta-band h2 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.035em; }
   .cta-band .sub { font-size: 1.0625rem; color: var(--ink-soft); max-width: 46ch; }
   .cta-band .acts { display: flex; gap: 13px; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
+  /* Sur l'illustration, le bouton fantôme a besoin d'un fond : sinon la
+     grande roue se lit au travers du libellé. */
+  .cta-band .btn-ghost { background: color-mix(in srgb, var(--parchment) 84%, transparent); }
 
   /* ── Pied de page : navigation et référencement, pas une formalité ─ */
   footer { margin-top: 78px; padding: 0; }
@@ -484,6 +491,55 @@
     <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <!-- La route vers la prochaine date : campagne, pas Moyen Âge.
+         Aucun donjon, aucune oriflamme — le sujet est le trajet. -->
+    <symbol id="art-road" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice">
+      <rect width="1200" height="400" fill="url(#sky)" />
+      <circle cx="852" cy="150" r="46" fill="var(--glow)" opacity=".75" />
+      <g stroke="var(--mark-1)" stroke-width="2.4" fill="none" opacity=".34">
+        <path d="M232 96 q11 -9 22 0 q11 9 22 0" /><path d="M300 74 q9 -7 18 0 q9 7 18 0" />
+        <path d="M980 108 q10 -8 20 0 q10 8 20 0" />
+      </g>
+      <!-- collines douces, jamais de montagnes -->
+      <path d="M0 232 q150 -30 300 -6 q150 24 300 -12 q150 -36 300 -4 q150 32 300 6 L1200 400 L0 400Z" fill="var(--hill-far)" />
+      <path d="M0 262 q170 -22 340 2 q170 24 330 -10 q170 -34 330 4 q100 22 200 10 L1200 400 L0 400Z" fill="var(--hill-mid)" />
+      <!-- l'événement au loin : chapiteaux, grande roue, halo -->
+      <g opacity=".92">
+        <ellipse cx="600" cy="238" rx="120" ry="26" fill="var(--glow)" opacity=".5" />
+        <g fill="var(--mark-1)">
+          <path d="M528 240 L546 210 L564 240Z" /><path d="M566 240 L588 202 L610 240Z" />
+          <path d="M612 240 L630 212 L648 240Z" />
+          <rect x="518" y="224" width="3" height="16" /><rect x="660" y="222" width="3" height="18" />
+        </g>
+        <g stroke="var(--mark-1)" stroke-width="2.2" fill="none">
+          <circle cx="692" cy="212" r="22" />
+          <path d="M692 190 V234 M670 212 H714 M676 196 L708 228 M708 196 L676 228" />
+          <path d="M692 234 L684 244 M692 234 L700 244" />
+        </g>
+        <circle cx="518" cy="222" r="3" fill="var(--glow)" /><circle cx="661" cy="220" r="3" fill="var(--glow)" />
+      </g>
+      <!-- champs -->
+      <path d="M0 286 q200 -18 400 0 q200 18 400 -2 q200 -20 400 4 L1200 400 L0 400Z" fill="var(--hill-near)" opacity=".55" />
+      <!-- la route -->
+      <path d="M597 240 L603 240 L688 400 L512 400 Z" fill="var(--mark-1)" opacity=".42" />
+      <g stroke="var(--glow)" stroke-width="3" opacity=".75" stroke-linecap="round">
+        <path d="M600 252 V262" /><path d="M600 276 V292" /><path d="M600 310 V334" /><path d="M600 356 V392" />
+      </g>
+      <!-- haies et arbres, silhouettes simples -->
+      <g fill="var(--hill-near)">
+        <path d="M110 316 q22 -46 44 0 Z" /><path d="M158 322 q18 -36 36 0 Z" />
+        <path d="M1010 320 q24 -50 48 0 Z" /><path d="M1064 326 q18 -34 36 0 Z" />
+        <rect x="128" y="312" width="4" height="16" /><rect x="1032" y="316" width="4" height="16" />
+      </g>
+      <!-- la camionnette qui monte vers l'événement -->
+      <g transform="translate(572 330) scale(0.78)">
+        <rect x="0" y="6" width="46" height="22" rx="4" fill="var(--mark-1)" />
+        <path d="M46 12 h14 l8 10 v6 h-22 Z" fill="var(--mark-1)" />
+        <rect x="48" y="14" width="12" height="8" rx="2" fill="var(--glow)" opacity=".8" />
+        <circle cx="12" cy="30" r="5" fill="var(--mark-1)" /><circle cx="56" cy="30" r="5" fill="var(--mark-1)" />
+      </g>
+      <path d="M0 372 L1200 372 L1200 400 L0 400Z" fill="var(--mark-1)" opacity=".42" />
+    </symbol>
   </defs>
 </svg>
 
@@ -720,7 +776,7 @@
 
   <div class="wrap">
     <section class="cta-band">
-      <div class="bg" aria-hidden="true"><svg><use href="#art-pano" /></svg></div>
+      <div class="bg" aria-hidden="true"><svg><use href="#art-road" /></svg></div>
       <div class="veil" aria-hidden="true"></div>
       <p class="eyebrow"><svg><use href="#i-tent" /></svg>Il reste de la place</p>
       <h2>Ta prochaine date t'attend quelque part.</h2>
