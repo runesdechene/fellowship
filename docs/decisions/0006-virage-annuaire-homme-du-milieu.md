@@ -106,14 +106,41 @@ C'est le champ le plus précieux de la base, précisément parce que c'est **cel
 |---|---|---|
 | **Exposant — gratuit** | L'annuaire, son calendrier, son **calendrier embarqué**, son dossier de candidature réutilisable, les alertes deadlines, les threads de périple, ses compagnons de saison, **son carnet de réseau pro qui se remplit tout seul** | 0 € |
 | **Exposant — Pro** | Ses **métriques et ses budgets** (le Bilan, déjà codé et déjà gaté Pro) | inchangé |
-| **Organisateur** | Entre gratuitement (dépose son festival, voit son audience), ressort client : boîte de réception des candidatures + outils de gestion | **Forfait de base + facturation aux dossiers validés** |
+| **Organisateur** | Entre gratuitement (dépose son festival, voit son audience), ressort client : boîte de réception des candidatures + outils de gestion | **1,5 % du tarif d'emplacement par dossier validé** — plancher 4 €, plafond 30 € |
 
-**Facturation orga : aux dossiers _validés_, jamais aux dossiers _reçus_.**
-L'orga ne paie que pour les exposants qu'il retient — ceux qui vont lui payer un emplacement. Il paie donc sur son revenu, pas sur son volume de candidatures.
+### Tarification organisateur — arrêtée le 2026-08-11
 
-- ❌ **Rejeté — commission sur les dossiers reçus** : punit l'orga quand le produit marche, et lui donne une échappatoire gratuite (« envoyez-moi ça par mail »), donc une incitation à nous contourner.
-- ⚠️ **Risque résiduel** : tant que les outils aval n'existent pas, rien n'empêche l'orga de valider ses habitués hors plateforme. **La parade est le lock-in en aval** (gestion des frais, plans d'emplacement, communication aux exposants) → **ces outils doivent arriver _avec_ la facturation, pas après.**
-- 💡 **Piste v2+** : commission sur **l'encaissement des emplacements** (80 × 120 € = 9 600 € qui transitent réellement ; 3-5 % ≈ 350 €/festival). Règle en prime les relances d'impayés et les désistements. Chantier lourd (Stripe Connect, remboursements, légal).
+> **1,5 % du tarif d'emplacement, par dossier validé. Minimum 4 €, maximum 30 €.**
+
+Sur un festival de 150 exposants :
+
+| Tarif d'emplacement | Ce que le festival encaisse | Frais / dossier | Facture par édition | Part prélevée |
+|---|---|---|---|---|
+| 150 € | 22 500 € | 4 € *(plancher)* | 600 € | 2,7 % |
+| 400 € | 60 000 € | 6 € | 900 € | 1,5 % |
+| 800 € | 120 000 € | 12 € | 1 800 € | 1,5 % |
+| 2 400 € | 360 000 € | 30 € *(plafond)* | 4 500 € | 1,3 % |
+
+**Pourquoi cette forme :**
+- **Aux dossiers _validés_, jamais _reçus_** — l'orga ne paie que pour les exposants qu'il retient, donc sur son revenu et non sur son volume de candidatures. Facturer les dossiers reçus le punirait quand le produit marche et l'inciterait à nous contourner (« envoyez-moi ça par mail »).
+- **Indexé sur le tarif d'emplacement**, parce qu'un dossier va de 300 € à 2 400 € selon les festivals : un forfait plat laisserait tout le haut du marché sur la table.
+- **Rien à déclarer : le contrat passe par Fellowship.** Quand l'orga valide un dossier, il émet une **offre d'emplacement** (emplacement, tarif, dates, conditions) que l'exposant accepte dans l'outil. Le tarif n'est donc pas *déclaré* par l'orga, il est **transacté** — Fellowship le connaît par construction. Sous-déclarer reviendrait à mentir à l'exposant dans le contrat lui-même : ce n'est plus un risque de réputation, c'est un problème juridique pour l'orga. **Le risque de sous-déclaration est structurellement nul, sans avoir besoin d'encaisser quoi que ce soit.**
+- **Plancher** pour ne pas perdre d'argent sous 30 stands ; **plafond** pour éviter le chiffre qui fait peur sur les très gros (à 2 % sans plafond, un gros festival verrait 7 200 € — prix d'un ERP, refus assuré).
+- **Argument de vente** : *« moins de 2 % de vos recettes d'emplacement, contre trois semaines de travail récupérées. »*
+
+**Contrainte produit qui en découle :** le concurrent (Google Forms) est gratuit. Le logiciel doit donc **rendre le temps gagné visible** — « 147 dossiers traités, 12 h économisées » — sinon l'orga compare à zéro et il a raison.
+
+**Ce que ça avance dans la feuille de route — et ce n'est PAS l'encaissement.**
+
+Le verrou de facturation, c'est **l'offre d'emplacement acceptée**, pas le paiement. C'est infiniment plus léger : un tarif porté par la validation, et une acceptation par l'exposant. **Ça entre dans le produit minimal.**
+
+Et ce n'est pas de la plomberie de facturation : c'est la fonctionnalité que les exposants réclament depuis toujours — **une réponse claire et une confirmation écrite**, au lieu du silence ou d'un mail perdu. Elle sert les deux côtés, et elle déclenche la facture au passage.
+
+> **L'offre d'emplacement acceptée = l'événement facturable.**
+
+L'encaissement des emplacements reste une piste ultérieure (Stripe Connect, remboursements, légal). Il apporterait la trésorerie sécurisée à l'orga et une commission collectée à la source — mais il n'est **plus nécessaire** pour que le modèle tienne.
+
+⚠️ **Risque résiduel** : tant que les outils aval n'existent pas, rien n'empêche l'orga de valider ses habitués hors plateforme. La parade reste le lock-in en aval — **ces outils doivent arriver _avec_ la facturation, pas après.**
 
 ### Quatre principes directeurs
 
@@ -146,11 +173,25 @@ Et la vraie bataille n'est pas la saisie : c'est **le réflexe** « je poste mon
 
 Aucune mécanique d'engagement à inventer.
 
-### 🎯 Ce sur quoi on se concentre MAINTENANT (arrêté par Uriel, 2026-08-11)
+### 🎯 Ce sur quoi on se concentre MAINTENANT (révisé le 2026-08-11, fin de session)
 
-> **Le meilleur calendrier connecté exposant : chiner des festivals et des dates, et rejoindre ses potes exposants. Gratuit, avec la petite version payante actuelle inchangée.**
+> **La boîte de réception des candidatures, vendue aux gros festivals.**
 
-Un seul produit, fait bien. Les orgas viennent **plus tard**, quand la masse d'exposants existe.
+**Révision majeure du même jour.** Le plan initial — « le meilleur calendrier exposant, gratuit, les orgas plus tard » — a été retourné en fin de session par une contrainte de trésorerie (plancher 1 500 €/mois, six mois) et par une correction d'Uriel : *« Fellowship Orga nous fait causer avec des entités qui brassent des millions et qui galèrent à gérer leurs dossiers. »*
+
+Ce qui a changé dans l'analyse :
+- **Il y a deux marchés orga, pas un.** Les petits et moyens veulent de la **visibilité** (annuaire, gratuit). Les gros veulent de l'**outillage** — ils n'ont aucun besoin de notre audience, ils ont besoin de traiter 300 dossiers. **Ce sont eux qui paient tout.**
+- **L'exposant ne peut pas payer** : les clients actuels trouvent déjà 19 €/mois trop cher. Le côté solvable du produit était l'autre.
+- **Le concurrent est Google Forms**, des mails et des interfaces PHP maison que les exposants détestent. La barre à dépasser est très basse.
+- **L'avantage décisif** : le formulaire est du côté de l'orga, mais **le dossier est du côté de l'exposant** — il candidate avec ses pièces déjà remplies. L'orga reçoit des dossiers complets et comparables. Personne d'autre ne peut le faire, parce que personne d'autre n'a les exposants.
+
+**Ordre de grandeur :** ~7 festivals couvrent le trou de trésorerie, ~15 couvrent le plancher entier.
+
+**Produit minimal (4 à 8 semaines)** : formulaire de candidature configurable · boîte de réception avec statuts (reçu / présélectionné / accepté / refusé / liste d'attente) · dossier exposant pré-rempli · **offre d'emplacement acceptée par l'exposant** (le verrou de facturation, et la confirmation écrite que les exposants réclament) · réponses groupées et mails automatiques · export tableur. **Pas** de plan de stands, **pas** d'encaissement — battre Google Forms suffit.
+
+**Mise sur le marché : par prévente.** Deux ou trois pilotes « saison 2027, tarif fondateur gelé deux ans », construits **avec** eux. Cash avant de tout bâtir, et certitude de construire ce qu'ils veulent.
+
+*Le calendrier exposant gratuit n'est pas abandonné : il reste ce qui produit le vivier, donc ce qui donne sa valeur à l'outil orga. Mais il n'est plus la priorité de revenu.*
 
 **Condition non négociable :** la feature la plus critique de ce plan est la moins glamour — **l'ajout d'un événement par un exposant**. Geste de 30 secondes sur téléphone, produisant une fiche exploitable par les autres (c'est ce qui a donné le HeroFest à Uriel). Ratée, tout le plan n'est qu'un joli calendrier vide.
 

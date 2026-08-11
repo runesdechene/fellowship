@@ -1,7 +1,7 @@
 ---
 updated: 2026-08-11T00:00:00Z
 summary: "Deux grandes décisions en une session. D'abord ce qu'est Fellowship — l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers, les organisateurs devenant clients ensuite. Ensuite à quoi il ressemble — une apparence claire et reposante inspirée du site Runes de Chêne, validée sur maquettes pour l'application comme pour la page d'accueil. Tout est écrit dans les décisions 0006 et 0007, avec des maquettes cliquables. Rien n'est encore intégré dans le vrai code."
-next_step: "Deux chantiers prêts à démarrer, dans cet ordre. D'abord intégrer la nouvelle apparence dans le code, en gardant l'ancienne accessible par un interrupteur le temps de comparer : la page d'accueil d'abord, l'application ensuite. Puis écrire la spec du calendrier — comment on ajoute un festival en trente secondes depuis un téléphone, et comment on présente quatre cents événements à quelqu'un qui n'en cherche que dix. Restent en attente : embarquer la police Cabin (celle du site Runes de Chêne), et maquetter les écrans pas encore repris (Carte, Communauté, Vitrine, Réglages)."
+next_step: "Le chantier prioritaire a changé en fin de session : ce sont les gros festivals qui paient, pas les exposants. Prochaine étape, appeler deux ou trois organisateurs qu'Uriel connaît, sans rien vendre — juste comprendre comment ils gèrent leurs dossiers d'exposants aujourd'hui et ce que ça leur coûte en temps. Ensuite construire la boîte de réception des candidatures (quatre à huit semaines) avec un ou deux d'entre eux comme pilotes, et la leur prévendre au tarif fondateur. Le reste — intégrer la nouvelle apparence, la spec du calendrier — passe derrière."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -9,6 +9,26 @@ next_step: "Deux chantiers prêts à démarrer, dans cet ordre. D'abord intégre
   de Claude, jamais affichée. Les tâches affichées viennent de la note Obsidian reliée (✎). -->
 
 ## Mémoire de session
+
+--- 🔴 RETOURNEMENT DE FIN DE SESSION : LE PAYEUR, C'EST LE GROS FESTIVAL ---
+Contexte vital : Uriel a **6 mois**, plancher **1 500 €/mois**, Runes de Chêne rapporte **700 €/mois**
+et décline. Trou = 800 €/mois. **Salariat exclu catégoriquement** (ne plus le proposer).
+Prestation projet morte (ses clients la font eux-mêmes avec Claude Code, il l'a constaté).
+Il trouve 19 €/mois trop cher **pour ses propres clients exposants** → le côté exposant ne paiera pas.
+**Sa correction, décisive** : les gros festivals brassent des MILLIONS et galèrent sur leurs
+dossiers exposants (mail, Google Forms, interfaces PHP maison que les exposants détestent).
+→ **Deux marchés orga** : petits/moyens = visibilité (annuaire gratuit) ; **gros = outillage, et
+ils paient tout**. Ils n'ont aucun besoin de notre audience.
+**Tarif arrêté : 1,5 % du tarif d'emplacement par dossier VALIDÉ, plancher 4 €, plafond 30 €.**
+(Les emplacements vont de 300 € à 2 400 € selon les festivals — un forfait plat ratait le haut.)
+**Verrou de facturation = l'OFFRE D'EMPLACEMENT acceptée dans Fellowship, pas l'encaissement.**
+Le tarif n'est pas déclaré, il est transacté → sous-déclaration structurellement impossible.
+L'encaissement (Stripe Connect) n'est **plus nécessaire** au modèle.
+Avantage imbattable : le formulaire est côté orga, **le dossier est côté exposant** (pré-rempli).
+Ordre de grandeur : ~7 festivals comblent le trou, ~15 couvrent le plancher entier.
+Mise sur le marché : **prévente de 2-3 pilotes** « saison 2027, tarif fondateur gelé 2 ans ».
+⚠️ Honnêteté due : **ça ne fait pas 1 500 €/mois en 6 mois.** Le pont de trésorerie reste non résolu.
+⚠️ Ne pas re-proposer : salariat, prestation de projet aux festivals, hausse du prix Pro exposant.
 
 --- DA V2 « PARCHEMIN » — décision 0007 (2026-08-11) ---
 Validée par Uriel après ~8 itérations. Maquettes : `assets/v2-app-clair.html` (Cockpit /
