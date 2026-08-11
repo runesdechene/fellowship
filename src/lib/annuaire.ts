@@ -37,6 +37,18 @@ function daysBetween(from: Date, to: Date): number {
   return Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / 86_400_000)
 }
 
+/** `today` au format ISO `YYYY-MM-DD`, en heure LOCALE — jamais via
+ *  `toISOString()` (UTC) : dans un fuseau positif (UTC+1/+2), juste après
+ *  minuit local, `toISOString()` retomberait encore sur la veille en UTC et
+ *  ferait déborder d'un jour le filtre `.gte('end_date', today)` côté serveur.
+ *  Miroir de `parseDay`/`startOfDay` qui appliquent la même règle. */
+export function todayIso(today: Date): string {
+  const y = today.getFullYear()
+  const m = String(today.getMonth() + 1).padStart(2, '0')
+  const d = String(today.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 /** Les seuls événements que l'annuaire public a le droit de montrer :
  *  jamais un privé (modèle unlisted : la RLS ne les cache pas, c'est à nous
  *  de ne pas les lister), jamais un événement terminé. Triés par date. */

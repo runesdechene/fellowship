@@ -1,6 +1,6 @@
 // src/lib/annuaire.test.ts
 import { describe, it, expect } from 'vitest'
-import { toPublicList, applicationStatus, formatWhen, searchEvents, countCounters } from './annuaire'
+import { toPublicList, applicationStatus, formatWhen, searchEvents, countCounters, toCard, todayIso } from './annuaire'
 import type { PublicEvent } from './annuaire'
 
 const TODAY = new Date('2026-08-11T00:00:00Z')
@@ -102,5 +102,49 @@ describe('countCounters', () => {
   })
   it('compte des exposants inconnu → la troisième pastille disparaît', () => {
     expect(countCounters([ev()], null)).toHaveLength(2)
+  })
+})
+
+describe('todayIso', () => {
+  it('formate en heure locale, jamais via toISOString (UTC)', () => {
+    // 11 août 2026, 00h30 heure locale : passer par toISOString() ferait
+    // retomber sur la veille en UTC dans tout fuseau positif (UTC+1/+2) —
+    // exactement le bug que ce helper existe pour éviter.
+    const justAfterMidnight = new Date(2026, 7, 11, 0, 30)
+    expect(todayIso(justAfterMidnight)).toBe('2026-08-11')
+  })
+  it('complète les zéros du mois et du jour', () => {
+    expect(todayIso(new Date(2026, 0, 5, 14, 0))).toBe('2026-01-05')
+  })
+})
+
+describe('toCard', () => {
+  it('événement avec slug → href vers /e/<slug>', () => {
+    expect(toCard(ev(), TODAY, {}).href).toBe('/e/fete-medievale-provins')
+  })
+  it('événement sans slug → href de repli vers /evenement/<id>', () => {
+    expect(toCard(ev({ slug: null }), TODAY, {}).href).toBe('/evenement/x')
+  })
+  it('tag connu → emoji + libellé de la table, couleur du tag', () => {
+    const card = toCard(ev({ tags: ['foire'] }), TODAY, { foire: 'Foire artisanale' })
+    expect(card.tagSlug).toBe('foire')
+    expect(card.tagLabel).toBe('🛠️ Foire artisanale')
+    expect(card.tagColor).toBe('#e8c06a')
+  })
+  it('tag présent mais absent de la table des libellés → repli sur le slug', () => {
+    const card = toCard(ev({ tags: ['foire'] }), TODAY, {})
+    expect(card.tagLabel).toBe('🛠️ foire')
+  })
+  it('aucun tag → pas de badge, couleur par défaut', () => {
+    const card = toCard(ev({ tags: null }), TODAY, {})
+    expect(card.tagSlug).toBeNull()
+    expect(card.tagLabel).toBe('')
+    expect(card.tagColor).toBe('#e8a06a')
+  })
+  it('when et status reprennent formatWhen / applicationStatus pour le même événement', () => {
+    const e = ev({ registration_url: 'https://x.fr' })
+    const card = toCard(e, TODAY, {})
+    expect(card.when).toBe(formatWhen(e))
+    expect(card.status).toEqual(applicationStatus(e, TODAY))
   })
 })

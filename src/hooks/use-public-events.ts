@@ -1,6 +1,7 @@
 // src/hooks/use-public-events.ts
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { todayIso } from '@/lib/annuaire'
 import type { PublicEvent } from '@/lib/annuaire'
 
 /** Colonnes strictement nécessaires à l'annuaire public. On ne fait jamais
@@ -21,7 +22,7 @@ export function usePublicEvents(): PublicEventsState {
   useEffect(() => {
     let cancelled = false
     async function run() {
-      const today = new Date().toISOString().slice(0, 10)
+      const today = todayIso(new Date())
       const [evs, tags] = await Promise.all([
         supabase.from('events').select(PUBLIC_EVENT_COLUMNS)
           // Double garde : le filtre serveur évite de faire transiter les privés,
