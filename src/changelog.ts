@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '0.7.383',
+    date: '2026-08-11',
+    title: 'La Communauté devient gratuite 🤝',
+    changes: [
+      'Le fil de ta tribu — où vont tes compagnons, leurs avis, leurs nouvelles dates — est maintenant accessible à tout le monde, sans abonnement',
+      'L\'activité de ton réseau réapparaît dans la barre latérale, quel que soit ton plan',
+      'Le badge des nouveaux festivals fonctionne aussi pour les comptes gratuits',
+      'Le Pro se concentre désormais sur tes chiffres : bilans, budgets, rentabilité et avis détaillés',
+    ],
+  },
+  {
     version: '0.7.361',
     date: '2026-06-25',
     title: 'Grande refonte graphique ✨',

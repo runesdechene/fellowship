@@ -1,5 +1,5 @@
 /* ── Communauté — Fil du réseau ──────────────────────────────────────── */
-/* Scoped to .comm-page / .comm-teaser (lives inside AppLayout <main>).   */
+/* Scoped to .comm-page (lives inside AppLayout <main>).                  */
 /* Every selector is ancestor-scoped so the bare classNames the community */
 /* components render (.conv / .act / .card / .btn …) don't collide with    */
 /* global classes elsewhere.                                              */
@@ -329,56 +329,6 @@
 .comm-page .conv-mini .cm-b span { font-size: 11.5px; color: hsl(var(--muted-foreground)); }
 .comm-page .conv-mini .avs span { width: 24px; height: 24px; font-size: 9px; border-width: 2px; }
 .comm-page .conv-mini .avs .avs-more { font-size: 9px; }
-
-/* ── Teaser (free plan) ───────────────────────────────────────────────── */
-.comm-teaser { position: relative; }
-.comm-teaser-feed {
-  filter: blur(5px);
-  pointer-events: none;
-  user-select: none;
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-.comm-teaser-veil {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, transparent, hsl(var(--background)) 75%);
-}
-.comm-teaser-cta {
-  text-align: center;
-  max-width: 360px;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.comm-teaser-cta h2 {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  font-size: 22px;
-  color: hsl(var(--foreground));
-}
-.comm-teaser-cta p { font-size: 14px; color: hsl(var(--muted-foreground)); line-height: 1.5; }
-.comm-teaser-cta .btn { margin-top: 4px; }
-.comm-teaser-lock {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, var(--accent-app) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent-app) 32%, transparent);
-  color: var(--accent-app);
-  margin-bottom: 4px;
-}
-.comm-teaser-lock svg { width: 26px; height: 26px; }
 
 /* ── States: empty / inline-empty / skeleton ──────────────────────────── */
 .comm-empty {

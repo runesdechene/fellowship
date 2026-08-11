@@ -19,7 +19,10 @@ export const NAV_DEFS: Record<NavKey, NavDef> = {
   dashboard:       { key: 'dashboard',       to: '/tableau-de-bord', label: 'Cockpit',        shortLabel: 'Cockpit',   icon: 'LayoutDashboard', pro: true,  built: true },
   calendrier:      { key: 'calendrier',      to: '/calendrier',      label: 'Calendrier',     icon: 'CalendarDays',    pro: false, built: true },
   carte:           { key: 'carte',           to: '/carte',           label: 'Carte',          icon: 'Map',             pro: false, built: true },
-  communaute:      { key: 'communaute',      to: '/communaute',      label: 'Communauté',     icon: 'Users',           pro: true,  built: true },
+  // Communauté OUVERTE AU GRATUIT (décision 0006, 2026-08-11) : c'est la surface qui fait
+  // circuler le produit — preuve sociale et déclencheur de bouche-à-oreille. On ne verrouille
+  // que ce qui a une valeur strictement personnelle (bilans, métriques, avis détaillés).
+  communaute:      { key: 'communaute',      to: '/communaute',      label: 'Communauté',     icon: 'Users',           pro: false, built: true },
   vitrine:         { key: 'vitrine',         to: '/profil',          label: 'Ma vitrine',     icon: 'Store',           pro: false, built: true },
   profil:          { key: 'profil',          to: '/profil',          label: 'Profil',         icon: 'User',            pro: false, built: true },
   reglages:        { key: 'reglages',        to: '/reglages',        label: 'Réglages',       icon: 'Settings',        pro: false, built: true },

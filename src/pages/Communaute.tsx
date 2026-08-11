@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { planForActor } from '@/lib/navModel'
 import { markSeenNow } from '@/lib/community-seen'
 import { useCommunityFeed } from '@/hooks/use-community'
 import { useFollowingSet } from '@/hooks/use-follows'
@@ -10,7 +9,6 @@ import { ConvergenceCard } from '@/components/community/ConvergenceCard'
 import { ActivityItem } from '@/components/community/ActivityItem'
 import { ConvergenceList } from '@/components/community/ConvergenceList'
 import { SuggestionsCard } from '@/components/community/SuggestionsCard'
-import { CommunauteTeaser } from '@/components/community/CommunauteTeaser'
 import './Communaute.css'
 
 const SEGMENTS: { key: Segment; label: string }[] = [
@@ -32,8 +30,7 @@ function CommunauteEmpty() {
 }
 
 export function CommunautePage() {
-  const { currentActor, currentActorRow } = useAuth()
-  const isPro = planForActor(currentActor, currentActorRow) === 'pro'
+  const { currentActor } = useAuth()
 
   useEffect(() => {
     if (currentActor) markSeenNow(currentActor.id)
@@ -44,17 +41,6 @@ export function CommunautePage() {
 
   const visible = useMemo(() => filterBySegment(feed, segment), [feed, segment])
   const isFollowed = (id: string) => following.has(id)
-
-  if (!isPro) {
-    return (
-      <div className="comm-page">
-        <div className="comm-head"><h1>Communauté</h1>
-          <div className="comm-sub">Ce que vit ta tribu, et les nouveaux festivals sur Fellowship.</div>
-        </div>
-        <CommunauteTeaser />
-      </div>
-    )
-  }
 
   return (
     <div className="comm-page">

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Activity } from 'lucide-react'
-import { useAuth } from '@/lib/auth'
-import { planForActor } from '@/lib/navModel'
 import { useNetworkActivityMini } from '@/hooks/use-community'
 import { avatarColor, type FeedItem } from '@/lib/community'
 import { avatarImgStyle } from './ActorLinks'
@@ -14,13 +12,9 @@ function miniText(item: FeedItem): string {
 }
 
 export function SidebarNetworkActivity({ collapsed }: { collapsed: boolean }) {
-  const { currentActor, currentActorRow } = useAuth()
-  const isPro = planForActor(currentActor, currentActorRow) === 'pro'
-  // Perf : on ne lance le feed réseau que pour un Pro avec sidebar déployée (pas sur chaque page pour tous).
-  const items = useNetworkActivityMini(isPro && !collapsed)
-
-  // Pas de teaser réseau pour les non-Pro : on ne montre rien (les gens n'ont pas à savoir).
-  if (!isPro) return null
+  // Ouvert au gratuit depuis la décision 0006 — c'est la surface qui fait circuler le produit.
+  // Perf : on ne lance le feed réseau que sidebar déployée (pas sur chaque page, replié).
+  const items = useNetworkActivityMini(!collapsed)
 
   if (collapsed) {
     return <Link to="/communaute" className="sa-bell" aria-label="Activité du réseau"><Activity strokeWidth={1.5} /></Link>
