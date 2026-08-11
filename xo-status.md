@@ -1,7 +1,7 @@
 ---
 updated: 2026-08-11T00:00:00Z
-summary: "Session de fond : on a redéfini ce qu'est Fellowship. Le constat de départ — trop social, pas assez utile — a débouché sur un virage clair : Fellowship devient l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers (médiéval, métal, tatouage, créateurs, Noël), avec le calendrier, le carnet de réseau et les threads de périple autour. Les organisateurs entrent par cette porte gratuite et deviennent clients ensuite, facturés uniquement sur les dossiers qu'ils valident. Tout est écrit et figé dans la décision 0006."
-next_step: "Écrire la spec du chantier retenu : le meilleur calendrier exposant pour chiner des dates et retrouver ses potes, gratuit. Deux questions à trancher dedans, et elles sont produit et non techniques — quelles informations sont obligatoires quand on ajoute un festival pour que la fiche serve aussi aux autres sans alourdir la saisie, et comment présenter quatre cents événements à quelqu'un qui n'en cherche que dix. Point le plus critique du plan : ajouter un événement doit tenir en trente secondes sur un téléphone."
+summary: "Deux grandes décisions en une session. D'abord ce qu'est Fellowship — l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers, les organisateurs devenant clients ensuite. Ensuite à quoi il ressemble — une apparence claire et reposante inspirée du site Runes de Chêne, validée sur maquettes pour l'application comme pour la page d'accueil. Tout est écrit dans les décisions 0006 et 0007, avec des maquettes cliquables. Rien n'est encore intégré dans le vrai code."
+next_step: "Deux chantiers prêts à démarrer, dans cet ordre. D'abord intégrer la nouvelle apparence dans le code, en gardant l'ancienne accessible par un interrupteur le temps de comparer : la page d'accueil d'abord, l'application ensuite. Puis écrire la spec du calendrier — comment on ajoute un festival en trente secondes depuis un téléphone, et comment on présente quatre cents événements à quelqu'un qui n'en cherche que dix. Restent en attente : embarquer la police Cabin (celle du site Runes de Chêne), et maquetter les écrans pas encore repris (Carte, Communauté, Vitrine, Réglages)."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -9,6 +9,26 @@ next_step: "Écrire la spec du chantier retenu : le meilleur calendrier exposant
   de Claude, jamais affichée. Les tâches affichées viennent de la note Obsidian reliée (✎). -->
 
 ## Mémoire de session
+
+--- DA V2 « PARCHEMIN » — décision 0007 (2026-08-11) ---
+Validée par Uriel après ~8 itérations. Maquettes : `assets/v2-app-clair.html` (Cockpit /
+Calendrier / Explorer navigables, jour-nuit, halos commutables, 4 accents) et
+`assets/v2-landing-parchemin.html` (comparateur avant/après sur le rendu RÉEL de flw.sh).
+Le calque prêt à fusionner : `assets/landing-parchemin.css`.
+Le langage : parchemin `#F4EEE1` / `#171414`, encre `#594848` (jamais de noir), titres en
+graisse **500** à interlettrage négatif, **blocs séparés par la teinte (`--block`) et non par
+le trait**, seules les images ont rayon + ombre douce, halos à 17 %, statuts en billes
+colorées, accent **terracotta** (acté « pour l'instant »).
+⚠️ **Clair par défaut, aucune bascule auto sur `prefers-color-scheme`.**
+⚠️ Livraison **V2 commutable sur `main`**, jamais une branche longue.
+Erreurs commises et corrigées, à ne pas refaire : (1) minimal ≠ plat — le premium vient de la
+matière maîtrisée, pas de son absence ; (2) trames tissées = effet grillagé, rejetées ;
+(3) un `inset 0 1px 0 rgba(255,255,255,…)` en dur se voit comme un trait blanc en sombre —
+tout liseré passe par un jeton par thème ; (4) en clair, un halo bleu ou vert trop présent
+grise le parchemin.
+Bug prod repéré : en mode jour, les maquettes d'appareils du hero restaient SOMBRES.
+Reste : embarquer **Cabin**, maquetter Carte/Communauté/Vitrine/Réglages, réauditer le
+vocabulaire médiéval (« Guilde »).
 
 --- VIRAGE ANNUAIRE — décision 0006 (2026-08-11), commit e984d1d ---
 Brainstorm de fond, déclencheur : « Fellowship est trop social, si ça n'aboutit pas on abandonne ».
