@@ -161,6 +161,22 @@
   .pro-tag { font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
   .pro-line .btn { flex: none; }
 
+  /* Les avantages : ce que ça FAIT. Distinct du bloc gratuit, qui dit
+     ce que ça COÛTE — deux travaux différents, deux sections. */
+  .feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .feat { border-radius: 20px; background: var(--block-2); padding: 26px; display: flex; flex-direction: column; gap: 11px; }
+  .feat .ico {
+    width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+    background: var(--accent-wash); color: var(--accent); margin-bottom: 3px;
+  }
+  .feat .ico svg { width: 21px; height: 21px; }
+  .feat p { font-size: .9375rem; color: var(--ink-soft); }
+  .soon {
+    font-size: .625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px; background: var(--wait-wash); color: var(--wait);
+    margin-left: 8px; vertical-align: middle;
+  }
+
   .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
   .why-card { border-radius: 20px; background: var(--block-2); padding: 26px; display: flex; flex-direction: column; gap: 10px; }
   .why-card .n { font-size: .6875rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
@@ -389,6 +405,12 @@
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.4v13.2M5.4 12h13.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
       <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 20l-3.8-3.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 20v-1a6 6 0 0113 0v1M16 4a4 4 0 010 7M21.5 20v-1a6 6 0 00-3.5-5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a1 1 0 001-1v-4M2 9V7a2 2 0 012-2h13a1 1 0 011 1v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17" cy="13" r="1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </defs>
 </svg>
 
@@ -467,6 +489,45 @@
       <div class="v exposant">
         <div style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px">
           <p class="eyebrow"><svg><use href="#i-tent" /></svg>Pour les exposants</p>
+          <h2>Ton année de festivals, maîtrisée.</h2>
+          <p class="lede">Trouver la date n'est que le début. Fellowship porte toute ta saison, du repérage au bilan du dimanche soir.</p>
+        </div>
+
+        <div class="feats" style="margin-bottom:46px">
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-grid" /></svg></span>
+            <h3>Vision d'ensemble</h3>
+            <p>Toute ton année en un coup d'œil. Prévois tes dates et déniche de nouvelles dates où t'inscrire, facilement.</p>
+          </div>
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-people" /></svg></span>
+            <h3>L'esprit de camaraderie</h3>
+            <p>Vois où vont tes amis, organisez vos covoiturages, collaborez, et soyez prévenus quand l'un de vous galère.</p>
+          </div>
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-card" /></svg></span>
+            <h3>Inscriptions, paiements &amp; rentabilité</h3>
+            <p>Suis tes inscriptions, tes paiements et ton bilan. Sache enfin quels festivals valent vraiment le coup.</p>
+          </div>
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-bell" /></svg></span>
+            <h3>Rappels de deadlines</h3>
+            <p>Ne rate plus jamais une date limite d'inscription. Fellowship te prévient au bon moment.</p>
+          </div>
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-code" /></svg></span>
+            <h3>Calendrier intégrable, toujours à jour</h3>
+            <p>Affiche ton agenda en direct sur ton site. Relié à Fellowship, il se met à jour tout seul — tu ne le réédites jamais.</p>
+          </div>
+          <div class="feat">
+            <span class="ico"><svg><use href="#i-send" /></svg></span>
+            <h3>Postuler en 1 clic <span class="soon">Bientôt</span></h3>
+            <p>Vois un festival, clique « Postuler », ton dossier part direct à l'organisateur.</p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:11px; margin-bottom:22px">
+          <p class="eyebrow"><svg><use href="#i-check" /></svg>Ce que ça coûte</p>
           <h2>Tenir sa saison ne coûte rien.</h2>
           <p class="lede">Pas une version d'essai, pas un quota qui se referme au bout de trois dates. Tout ce qui sert à trouver, planifier et se retrouver est gratuit — et le restera.</p>
         </div>
@@ -552,38 +613,6 @@
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <section class="v exposant festivalier">
-    <div class="wrap" style="display:flex; flex-direction:column; gap:26px">
-      <div class="l" style="display:flex; flex-direction:column; gap:11px">
-        <p class="eyebrow"><svg><use href="#i-drop" /></svg>La question qu'on nous pose</p>
-        <h2>Pourquoi c'est gratuit ?</h2>
-        <p class="lede">Parce que ce n'est pas toi qu'on facture. Autant le dire tout de suite.</p>
-      </div>
-      <div class="why">
-        <div class="why-card">
-          <span class="n">Qui paie</span>
-          <h3>Les gros festivals</h3>
-          <p>Ils gèrent 300 dossiers d'exposants à la main, sur tableur et par mail. On leur vend l'outil qui traite ça. Eux ont un budget — toi non, et on le sait.</p>
-        </div>
-        <div class="why-card">
-          <span class="n">Ce qu'on y gagne</span>
-          <h3>Que tu sois là</h3>
-          <p>Un annuaire sans exposants ne vaut rien pour un organisateur. Plus vous êtes nombreux, plus l'outil a de valeur pour eux. Ton inscription <em>est</em> le modèle économique.</p>
-        </div>
-        <div class="why-card">
-          <span class="n">Ce qui est payant</span>
-          <h3>Uniquement tes chiffres</h3>
-          <p>Le bilan, les budgets, la rentabilité, les avis détaillés : 9,99 € HT/mois. On le dit ici plutôt qu'en petites lignes — rien de ce qui est gratuit aujourd'hui ne basculera derrière.</p>
-        </div>
-        <div class="why-card">
-          <span class="n">Ce qu'on ne fera pas</span>
-          <h3>Vendre tes données</h3>
-          <p>Ni revendre ton fichier, ni afficher de la publicité. Tes chiffres ne sortent jamais de ton compte, et ton nom n'est visible que de qui tu choisis.</p>
-        </div>
-      </div>
     </div>
   </section>
 
