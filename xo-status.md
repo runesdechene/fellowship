@@ -1,7 +1,7 @@
 ---
-updated: 2026-07-21T17:15:00Z
-summary: "Grosse session : le module Discussion du festival (onglet Questions) est en prod (v0.7.380, avec avatars), ET les avis de festival ont une identité protégée COMPLÈTE, verrou final inclus (v0.7.382) — ton nom n'est visible que de tes amis pro, jamais des organisateurs, option anonymat total, et la fuite est définitivement fermée côté base. Tout est déployé."
-next_step: "Tester en vrai : (1) la Discussion (poser/répondre/élire une meilleure réponse, avatars, toggles) ; (2) les avis (un non-ami voit « Un exposant vérifié », un ami voit ton nom, la case anonymat, le formulaire bloqué si pas inscrit, et vérifier que les notes moyennes + le fil Communauté s'affichent toujours). Puis : revue sécu RLS live (`set role`) sur les deux features, à faire ensemble. Ensuite, prochain chantier : onglet Rencontres."
+updated: 2026-08-11T00:00:00Z
+summary: "Session de fond : on a redéfini ce qu'est Fellowship. Le constat de départ — trop social, pas assez utile — a débouché sur un virage clair : Fellowship devient l'annuaire de référence des événements où poser son stand, gratuit et ouvert à tous les univers (médiéval, métal, tatouage, créateurs, Noël), avec le calendrier, le carnet de réseau et les threads de périple autour. Les organisateurs entrent par cette porte gratuite et deviennent clients ensuite, facturés uniquement sur les dossiers qu'ils valident. Tout est écrit et figé dans la décision 0006."
+next_step: "Relire la décision 0006 et dire si quelque chose cloche. Ensuite on écrit la spec du premier chantier : l'annuaire public — la page d'accueil déconnectée devient un lieu où l'on découvre des événements, avec une page par festival visible sur Google. Deux points à trancher avant de coder : comment on remplit l'annuaire (l'automatisation de collecte) et le fait que l'app soit aujourd'hui mal référencée par Google."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -9,6 +9,30 @@ next_step: "Tester en vrai : (1) la Discussion (poser/répondre/élire une meill
   de Claude, jamais affichée. Les tâches affichées viennent de la note Obsidian reliée (✎). -->
 
 ## Mémoire de session
+
+--- VIRAGE ANNUAIRE — décision 0006 (2026-08-11), commit e984d1d ---
+Brainstorm de fond, déclencheur : « Fellowship est trop social, si ça n'aboutit pas on abandonne ».
+Décision figée dans `docs/decisions/0006-virage-annuaire-homme-du-milieu.md` (à relire par Uriel).
+Points saillants à ne pas perdre :
+• **Le Bilan existe déjà** (`event_reports` + `event_ledger_entries`) et est verrouillé privé par
+  `20260602160001_fix_event_reports_private.sql` → la machine à fossé est construite, le fil est coupé.
+• **Niche PROFESSIONNELLE, pas thématique** — Uriel a explicitement rejeté le cadrage médiéval/geek
+  (il fait métal + tatouage). Critère : « accueille des exposants indépendants vivant de la vente
+  sur stand ». Exclut B2B/congrès/foires.
+• **Facturation orga aux dossiers VALIDÉS, jamais reçus** (correction d'Uriel, il a raison).
+  Lock-in = les outils aval (frais, plans d'emplacement) → doivent arriver AVEC la facturation.
+• **Mediefest est rempli par les orgas et visiteurs eux-mêmes** → l'annuaire est aussi le canal
+  d'acquisition ORGA, entrant et gratuit. Le plafond « 2-3 orgas » est levé.
+• **Retours terrain enthousiastes (les seuls) : calendrier embarqué + threads de périple.**
+  Point commun : ça sort de l'app et ça touche le réel → critère de tri des features.
+  L'embed est aussi l'arme SEO (backlinks depuis les sites des exposants).
+• **Anti-scope explicite** : pas de groupes de discussion, pas de DM, pas de feed de posts,
+  pas de feature covoiturage, Rencontres déprioritisé.
+⚠️ Deux coûts cachés du chantier 1 : **prérendu/SSG obligatoire** (SPA React mal indexée) et
+**réaudit des surfaces de fuite events privés** avant d'ouvrir l'Explorer au public.
+Reste ouvert : le contenu réel d'un dossier de candidature (Uriel n'a pas encore raconté sa
+dernière candidature — BLOQUANT pour le chantier 2) ; acceptabilité du partage des chiffres ;
+tarif orga ; audit du vocabulaire médiéval (« Guilde ») qui ne passe pas en convention tatouage.
 
 --- AVIS À IDENTITÉ PROTÉGÉE (front déployé v0.7.381, 2026-07-21) — VERROU FINAL DIFFÉRÉ ---
 Spec `docs/superpowers/specs/2026-07-21-avis-identite-protegee-design.md`, plan

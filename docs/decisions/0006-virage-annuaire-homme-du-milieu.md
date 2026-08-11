@@ -58,6 +58,8 @@ L'esprit de camaraderie est très fort dans le milieu. Le social n'est donc pas 
 
 ### Positionnement
 
+> **Un vrai annuaire : simple, pratique, communautaire.** *(formulation d'Uriel — chaque mot est un arbitrage : « simple » = on refuse ; « pratique » = ça sert dès le jour 1, seul ; « communautaire » = la présence, pas le contenu.)*
+>
 > **Fellowship est le système d'exploitation de la saison d'un exposant nomade — édité par Runes de Chêne.**
 
 « Fait par des exposants, pour des exposants » : aucun éditeur SaaS ne peut acheter cet argument. Il règle le problème de confiance qui bloque le partage des chiffres et des avis.
@@ -147,6 +149,19 @@ Aucune mécanique d'engagement à inventer.
 | **3** | **Fil de saison + threads de périple + carnet de réseau** — mouvements au lieu de posts ; valoriser le thread existant ; le carnet pro qui se remplit via les participations | Produit |
 | **4** | **Boîte de réception orga** — offerte à 2-3 pilotes, construite avec eux | Produit |
 | **5** | **Métriques agrégées + facturation orga** — brancher le Bilan sur l'Explorer ; forfait + dossiers validés | Produit + business |
+
+### Ce qu'on ne fera pas (anti-scope)
+
+Aussi structurant que le scope. **On se concentre sur une chose et on la fait bien.**
+
+| Refusé | Pourquoi |
+|---|---|
+| **Groupes de discussion** (demandé par des utilisateurs) | Les gens ont déjà WhatsApp et Facebook, gratuits et meilleurs. **Une demande d'utilisateur est une solution, pas un besoin** : ce qu'ils expriment, c'est « ne pas être seul ». On y répond par **la présence** (compagnons de saison, thread accroché à une date, carnet de réseau) — le seul terrain où l'on gagne, parce que ni Meta ni personne ne sait qui va à quel festival. |
+| **Messagerie générale / DM ouverts** | Même raison. Sans objet partagé et daté, on retombe sur la forme de social qui exige une masse qu'on n'a pas. |
+| **Fil de posts à produire** | Voir principe 3. Remplacé par les mouvements de saison. |
+| **Feature de covoiturage / hébergement dédiée** | Le besoin est réel, mais **il se règle tout seul dans le thread de périple**. On a la solution sans construire le produit. |
+| **Onglet Rencontres** (annoncé comme prochain chantier avant cette décision) | Déprioritisé au profit de l'annuaire. |
+| **Back-office orga complet en amont** | Option B rejetée : six mois de chantier pour 2-3 prospects. Il vient après l'annuaire, avec des pilotes. |
 
 ---
 
