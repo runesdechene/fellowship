@@ -150,6 +150,16 @@
   .free-price { font-size: 3rem; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
   .free-price small { display: block; font-size: .875rem; font-weight: 400; letter-spacing: 0; color: var(--ink-soft); margin-top: 8px; }
   .pro-note { font-size: .875rem; color: var(--ink-faint); padding-top: 4px; }
+  /* Le payant est nommé franchement, pas caché en petites lignes :
+     une page qui plaide l'honnêteté ne peut pas enterrer son prix. */
+  .pro-line {
+    margin-top: 20px; border-radius: 22px; padding: 28px 30px;
+    background: linear-gradient(178deg, var(--accent-wash), transparent);
+    display: flex; align-items: center; justify-content: space-between; gap: 26px; flex-wrap: wrap;
+  }
+  .pro-l { display: flex; flex-direction: column; gap: 9px; max-width: 62ch; }
+  .pro-tag { font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .pro-line .btn { flex: none; }
 
   .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
   .why-card { border-radius: 20px; background: var(--block-2); padding: 26px; display: flex; flex-direction: column; gap: 10px; }
@@ -429,7 +439,7 @@
       <div class="counts" id="counts"></div>
 
       <div class="signature">
-        <span class="badge-free"><svg><use href="#i-check" /></svg>100 % gratuit pour les exposants</span>
+        <span class="badge-free"><svg><use href="#i-check" /></svg>Gratuit : chercher, planifier, se retrouver</span>
         <span class="by">Édité par <strong>Runes de Chêne</strong> — on expose, comme vous.</span>
       </div>
     </div>
@@ -457,24 +467,32 @@
       <div class="v exposant">
         <div style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px">
           <p class="eyebrow"><svg><use href="#i-tent" /></svg>Pour les exposants</p>
-          <h2>Tout ça, gratuitement.</h2>
-          <p class="lede">Pas une version d'essai, pas une version bridée. Ce qui compte pour tenir une saison est gratuit, et le restera.</p>
+          <h2>Tenir sa saison ne coûte rien.</h2>
+          <p class="lede">Pas une version d'essai, pas un quota qui se referme au bout de trois dates. Tout ce qui sert à trouver, planifier et se retrouver est gratuit — et le restera.</p>
         </div>
 
         <div class="free-block">
           <div class="free-left">
-            <span class="free-price">0 €<small>Pour toujours · aucune carte bancaire</small></span>
+            <span class="free-price">0 €<small>Sans limite de temps · aucune carte bancaire</small></span>
             <a class="btn btn-primary" href="#">Créer mon compte <svg><use href="#i-arrow" /></svg></a>
-            <p class="pro-note">Un abonnement Pro à 9,99 € HT/mois existe pour les métriques de rentabilité et les avis détaillés. Tu peux ne jamais le prendre — l'annuaire, le calendrier et le réseau ne sont pas dedans.</p>
           </div>
           <ul>
             <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Chercher dans 412 événements</strong> et suivre ceux qui t'intéressent</span></li>
             <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Ton calendrier de saison</strong>, et le même agenda en direct sur ton site</span></li>
             <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Voir qui de ton réseau va où</strong>, et t'organiser avec eux</span></li>
             <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Les alertes de date limite</strong> avant chaque clôture de candidature</span></li>
-            <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Ta vitrine publique</strong>, pour que tes clients sachent où te trouver</span></li>
+            <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Ta vitrine publique</strong> — tes clients savent où te retrouver, festival après festival</span></li>
             <li><span class="ck"><svg><use href="#i-check" /></svg></span><span class="txt"><strong>Ajouter un événement</strong> qui manque, pour toi et pour les autres</span></li>
           </ul>
+        </div>
+
+        <div class="pro-line">
+          <div class="pro-l">
+            <span class="pro-tag">Pro · 9,99 € HT / mois</span>
+            <h3>Et si tu veux savoir ce que ta saison rapporte vraiment</h3>
+            <p class="note">Le bilan de chaque événement, tes budgets, ta rentabilité réelle, et les avis détaillés des autres exposants. C'est la seule partie payante — <strong>et rien de ce qui est listé au-dessus n'en dépend.</strong></p>
+          </div>
+          <a class="btn btn-ghost" href="#">Voir ce que ça contient</a>
         </div>
       </div>
 
@@ -556,9 +574,14 @@
           <p>Un annuaire sans exposants ne vaut rien pour un organisateur. Plus vous êtes nombreux, plus l'outil a de valeur pour eux. Ton inscription <em>est</em> le modèle économique.</p>
         </div>
         <div class="why-card">
+          <span class="n">Ce qui est payant</span>
+          <h3>Uniquement tes chiffres</h3>
+          <p>Le bilan, les budgets, la rentabilité, les avis détaillés : 9,99 € HT/mois. On le dit ici plutôt qu'en petites lignes — rien de ce qui est gratuit aujourd'hui ne basculera derrière.</p>
+        </div>
+        <div class="why-card">
           <span class="n">Ce qu'on ne fera pas</span>
           <h3>Vendre tes données</h3>
-          <p>Ni revendre ton fichier, ni afficher de la publicité, ni brider ce qui est gratuit aujourd'hui. C'est écrit, et tes chiffres ne sortent jamais de ton compte.</p>
+          <p>Ni revendre ton fichier, ni afficher de la publicité. Tes chiffres ne sortent jamais de ton compte, et ton nom n'est visible que de qui tu choisis.</p>
         </div>
       </div>
     </div>
