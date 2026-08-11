@@ -157,6 +157,28 @@ L'encaissement des emplacements reste une piste ultérieure (Stripe Connect, rem
 
 ⚠️ **Risque résiduel** : tant que les outils aval n'existent pas, rien n'empêche l'orga de valider ses habitués hors plateforme. La parade reste le lock-in en aval — **ces outils doivent arriver _avec_ la facturation, pas après.**
 
+### Le découpage gratuit / payant — arrêté le 2026-08-11
+
+> **On fait payer ce qui a de la valeur pour soi seul. On n'enferme jamais ce qui fait circuler le produit.**
+
+| | Traitement | Pourquoi |
+|---|---|---|
+| Communauté, voir qui va où | **gratuit** | preuve sociale et déclencheur de bouche-à-oreille |
+| Annuaire, vitrine, calendrier embarqué | **gratuit** | ça sort de l'app et ça ramène du monde |
+| **Bilans, métriques, budgets, rentabilité** | **payant** | valeur strictement personnelle, aucun effet de diffusion |
+| Avis détaillés | **payant** | idem |
+
+**Le raisonnement, parce qu'il compte plus que la règle.** ~4 payants sur ~88 inscrits = **4,5 % de conversion**, ce qui est la norme d'un SaaS en libre-service (2-5 %). **Le Pro convertit correctement : le problème n'est pas le découpage, c'est le nombre d'inscrits.** Ouvrir tout ferait gagner ~1 client (3× plus d'inscrits à 2 % de conversion) ; distribuer vraiment en ferait gagner ~8 (3× plus d'inscrits à taux constant).
+
+**D'où la séquence, et l'ordre est capital :**
+1. **N'ouvrir que ce qui bloque la circulation** — la Communauté. Un nouvel inscrit qui ne voit aucun collègue et tombe sur un cadenas repart : cette barrière étouffait le dénominateur qu'on cherche à faire grossir. *(Fait — v0.7.383.)*
+2. **Lancer vraiment le produit pendant huit semaines.** Fellowship n'a jamais été distribué : Uriel croise 100+ exposants par week-end et compte 88 inscrits. On ne peut pas conclure que le packaging est mauvais quand la distribution n'a jamais été tentée.
+3. **Redécider ensuite, avec des données.**
+
+⚠️ **Ne pas sacrifier le Pro avant l'étape 2.** Si le problème était la distribution, on aurait détruit le revenu pour rien — et **une barrière s'enlève facilement, se remet très difficilement** (il faudrait faire payer des gens qui avaient déjà tout).
+
+**Reste à trancher :** le quota de 10 dates du calendrier. Un exposant en fait 12 à 25, donc la limite mord exactement quand l'outil devient utile — elle peut créer le désir de passer Pro ou faire fuir avant que l'habitude s'installe. Seule une mesure tranchera.
+
 ### Quatre principes directeurs
 
 1. **Égoïsme utile** — *chaque geste égoïste de l'utilisateur remplit un actif collectif.* Je candidate pour moi → l'annuaire se remplit. Je fais mon bilan pour moi → les métriques de rentabilité se remplissent. Je partage ma vitrine pour moi → Fellowship se fait connaître. **Aucune feature ne doit demander à l'utilisateur de « contribuer ».**
