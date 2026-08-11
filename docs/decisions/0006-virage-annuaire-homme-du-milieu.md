@@ -36,8 +36,13 @@ Uriel chine sur les stands et sur les agendas régionaux, pas sur les réseaux. 
 **4. Le concurrent est faible, mais pas là où on croyait.**
 [Mediefest](https://mediefest.org/) : liste / calendrier / carte, financé par la publicité et les bannières « en vedette », **397 abonnés newsletter**, **aucun compte utilisateur**. Et — correction d'Uriel en séance — **il est rempli par les orgas et les visiteurs eux-mêmes**, pas par son éditeur.
 
-**5. Les orgas déposent spontanément leurs événements dans un annuaire.**
-Uriel n'a que 2-3 organisateurs dans son téléphone, ce qui condamnait une stratégie orga-first. Mais le point 4 le retourne : **on n'a pas besoin de les connaître, ils viennent d'eux-mêmes** chercher de la visibilité gratuite.
+**5. Ce sont les EXPOSANTS qui remplissent l'annuaire, pas les orgas.** *(corrigé en séance — voir l'avertissement ci-dessous)*
+L'annuaire se remplit parce qu'un exposant ajoute un événement **pour l'avoir dans son propre calendrier**. Preuve vécue : la dernière candidature d'Uriel (**le HeroFest**) a été trouvée sur Fellowship, sur une fiche **créée par un autre exposant**, et il a pu candidater grâce aux infos que celui-ci avait saisies pour lui-même. **Le principe d'égoïsme utile a déjà fonctionné en production, sans avoir été conçu pour.** On industrialise un mécanisme prouvé, pas une hypothèse.
+
+> ⚠️ **Erreur corrigée : « les orgas viendront déposer leur festival tout seuls » est FAUX.**
+> Un organisateur dépose sur un agenda **pour toucher le public**, pas les exposants. Sur une plateforme qui n'a que des professionnels, il n'a aucune raison de venir. L'analogie avec Mediefest était trompeuse : leur audience est publique, la nôtre est métier.
+> **Conséquence sur l'ordre : exposants → masse → orgas.** L'orga viendra pour **les candidatures** (un vivier qu'il n'a nulle part ailleurs), pas pour la visibilité.
+> **Gain caché de cette correction :** la cible SEO n'est plus le festivalier mais l'exposant. On cesse d'affronter Mediefest sur « festival médiéval 2026 » (20 ans d'avance) pour viser « candidature exposant fête médiévale 2027 », « tarif emplacement marché créateurs », « exposer convention tatouage » — **longue traîne, intention commerciale, zéro concurrent.**
 
 **6. Pour une partie des exposants, Fellowship est déjà « la constitution de mon réseau pro ».**
 L'esprit de camaraderie est très fort dans le milieu. Le social n'est donc pas un placage marketing : il est culturellement juste. **Le problème n'a jamais été le social, c'était sa forme.**
@@ -61,6 +66,8 @@ L'esprit de camaraderie est très fort dans le milieu. Le social n'est donc pas 
 > **Un vrai annuaire : simple, pratique, communautaire.** *(formulation d'Uriel — chaque mot est un arbitrage : « simple » = on refuse ; « pratique » = ça sert dès le jour 1, seul ; « communautaire » = la présence, pas le contenu.)*
 >
 > **Fellowship est le système d'exploitation de la saison d'un exposant nomade — édité par Runes de Chêne.**
+
+**Le produit, c'est le calendrier.** Vision annuelle, simple, connectée à ses amis **et à son site web**. Tout le reste est à son service : **l'annuaire le remplit**, **l'embed le diffuse**, **les compagnons le rendent vivant**, **les métriques le rendent intelligent**. Ne jamais reprendre l'annuaire pour une finalité — c'est le moyen.
 
 « Fait par des exposants, pour des exposants » : aucun éditeur SaaS ne peut acheter cet argument. Il règle le problème de confiance qui bloque le partage des chiffres et des avis.
 
@@ -185,9 +192,27 @@ Aussi structurant que le scope. **On se concentre sur une chose et on la fait bi
 
 ---
 
+## Le vent du marché : 25 dates → moins de 12
+
+**Constat terrain d'Uriel** : les exposants gagnent de moins en moins sur les festivals ; beaucoup veulent passer de ~25 dates annuelles à moins de 12, pour se concentrer sur la vente en ligne.
+
+**Analyse : c'est un vent favorable, pas une menace.**
+
+1. **La sélectivité multiplie la valeur de l'information.** À 25 dates, on encaisse cinq week-ends morts — la masse compense, on candidate partout. À 12 dates, un week-end raté coûte 8 % de l'année. **On n'a plus le droit à l'erreur.** L'annuaire + les métriques de rentabilité sont *l'outil de la sélectivité* : ils n'auraient eu aucun sens dans un marché en expansion. **Le marché vient vers le produit qu'on définit ici.**
+2. **Les 12 dates qui restent ne sont pas un reliquat, ce sont les 12 meilleures.** Si l'exposant bascule vers le web, ses dates physiques deviennent son **canal d'acquisition client** : on rencontre au stand, on achète en ligne toute l'année. Les choisir devient la décision business de l'année.
+3. **Le calendrier embarqué devient le pont entre les deux moitiés du métier** (*« retrouvez-moi ici »*). Il cesse d'être un gadget viral. Ça explique pourquoi c'est le retour le plus enthousiaste reçu : les utilisateurs ont senti avant nous où allait leur métier.
+4. **La douleur orga explose.** Si tout le monde réduit, les festivals ne remplissent plus leurs allées. Un organisateur qui galère à composer son plateau paiera pour accéder à un vivier d'exposants. **La contraction rend les deux côtés plus demandeurs à la fois.**
+
+**Risques assumés, non minimisés :**
+- Le marché adressable rétrécit (moins de dates/exposant, à terme moins de festivals viables). **Renforce encore « gratuit exposant, payant orga »** — un exposant à 12 dates paiera moins volontiers 8 €/mois.
+- **Horloge** : des festivals vont mourir dans les trois ans ; les survivants seront ceux qui savent recruter. Fenêtre ouverte, pas éternelle.
+- **Risque de fond** : si le métier bascule massivement en ligne, on outille une activité en déclin. Le contre-argument (le stand reste le canal d'acquisition) est une **hypothèse, pas un fait**. → **Indicateur à surveiller dans les chiffres de Runes de Chêne : la part du CA en ligne attribuable à des clients rencontrés en festival. Si elle s'effondre, la thèse tombe.**
+
+---
+
 ## Ce qui reste ouvert
 
-- **Le contenu réel d'un dossier de candidature** — ce qu'on fournit, dans quel format, par quel canal. Uriel n'a pas encore raconté sa dernière candidature. **Bloquant pour le chantier 2.**
+- **Le contenu réel d'un dossier de candidature** — ce qu'on fournit, dans quel format, par quel canal, et combien de temps ça prend. Toujours pas documenté (la dernière candidature d'Uriel, le HeroFest, s'est faite *depuis* Fellowship, mais on ne sait pas ce qu'il a dû fournir ensuite). **Bloquant pour le chantier 2.**
 - **L'acceptabilité du partage des chiffres** (CA par événement, même agrégé et anonymisé) — tabou réel chez les exposants, à tester avant le chantier 5. La couche de confiance de [0005](0005-avis-bien-commun-exposants.md) est l'atout ici.
 - **Le tarif orga** — forfait de base et prix au dossier validé, à calibrer.
 - **La segmentation des métriques** — un stand de bijoux n'est pas un stand de restauration ; comparer des CA bruts produit du bruit trompeur.
