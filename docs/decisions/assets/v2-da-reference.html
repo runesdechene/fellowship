@@ -8,44 +8,41 @@
      demande explicitement (data-theme="dark").
      ══════════════════════════════════════════════════════════════ */
   :root {
-    --parchment:   #F4EEE1;   /* relevé sur runesdechene.com */
-    --parchment-2: #EDE5D4;
-    --surface:     #FBF7EF;
-    --ink:         #594848;   /* relevé sur runesdechene.com */
-    --ink-soft:    #8D7C73;
-    --ink-faint:   #B3A599;
-    --hairline:    rgba(89, 72, 72, .14);
+    --parchment:   #F4EEE1;
+    --surface:     #FBF7EE;
+    --surface-alt: #EFE7D8;
+    --ink:         #594848;
+    --ink-soft:    #8C7B72;
+    --ink-faint:   #B0A197;
+    --hairline:    rgba(89, 72, 72, .12);
     --hairline-2:  rgba(89, 72, 72, .07);
-    --sand:        #E9CE94;   /* le bouton doré de RdC */
-    --sand-deep:   #C39A4E;
-    --on-sand:     #493826;
-    --forest:      #4B6B51;
-    --clay:        #A85B3E;
-    --photo-a:     #C3AF92;
-    --photo-b:     #7E6D5B;
-    --veil:        linear-gradient(to top, rgba(48, 38, 30, .88) 0%, rgba(48, 38, 30, .45) 42%, rgba(48, 38, 30, 0) 78%);
-    --shade:       rgba(89, 72, 72, .045);
-    --on-photo:    #F6F0E4;
+    --gold:        #C9974A;
+    --gold-wash:   rgba(201, 151, 74, .13);
+    --forest:      #47614C;
+    --clay:        #A8593F;
+    --on-gold:     #33261B;
+    --photo-a:     #C9B79A;
+    --photo-b:     #8E7C68;
+    --shade:       rgba(89, 72, 72, .05);
   }
 
   :root[data-theme="dark"] {
-    --parchment:   #17120F;
-    --parchment-2: #1F1915;
-    --surface:     #201A16;
-    --ink:         #F0E6D7;
-    --ink-soft:    #A6968B;
-    --ink-faint:   #7B6D64;
-    --hairline:    rgba(240, 230, 215, .14);
-    --hairline-2:  rgba(240, 230, 215, .07);
-    --sand:        #E9CE94;
-    --sand-deep:   #E9CE94;
-    --on-sand:     #33261A;
-    --forest:      #93B899;
-    --clay:        #DC9375;
-    --photo-a:     #695B4B;
-    --photo-b:     #362E27;
-    --shade:       rgba(240, 230, 215, .045);
-    --on-photo:    #F6F0E4;
+    --parchment:   #191411;
+    --surface:     #211B17;
+    --surface-alt: #2A221D;
+    --ink:         #EDE2D3;
+    --ink-soft:    #A2938A;
+    --ink-faint:   #7A6C64;
+    --hairline:    rgba(237, 226, 211, .13);
+    --hairline-2:  rgba(237, 226, 211, .07);
+    --gold:        #E0BE7A;
+    --gold-wash:   rgba(224, 190, 122, .14);
+    --forest:      #8FB396;
+    --clay:        #D89478;
+    --on-gold:     #241A12;
+    --photo-a:     #6B5B49;
+    --photo-b:     #3B322A;
+    --shade:       rgba(237, 226, 211, .04);
   }
 
   * { box-sizing: border-box; }
@@ -56,50 +53,48 @@
     color: var(--ink);
     font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
     font-size: 16px;
-    line-height: 1.68;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     transition: background .4s ease, color .4s ease;
   }
 
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px 180px; }
 
-  /* ─── Typographie : capitales RdC pour les titres ────────────── */
+  /* ─── Typographie : grande, légère, serrée ───────────────────── */
   .display {
-    font-size: clamp(2.75rem, 7vw, 4.75rem);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .005em;
-    line-height: .98;
+    font-size: clamp(2.6rem, 6.5vw, 4.25rem);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.02;
     margin: 0;
     text-wrap: balance;
   }
   .display .dim { color: var(--ink-faint); }
 
   h2 {
-    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .015em;
-    line-height: 1.12;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -.025em;
+    line-height: 1.15;
     margin: 0;
     text-wrap: balance;
   }
-  h3 { font-size: .9375rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin: 0; }
+  h3 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; margin: 0; }
 
   .eyebrow {
-    font-size: .6875rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase;
-    color: var(--sand-deep); margin: 0;
+    font-size: .6875rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0;
   }
-  .lede { font-size: 1.125rem; color: var(--ink-soft); max-width: 60ch; margin: 0; line-height: 1.6; }
-  .note { font-size: .9375rem; color: var(--ink-soft); max-width: 68ch; margin: 0; }
+  .lede { font-size: 1.0625rem; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .note { font-size: .875rem; color: var(--ink-soft); max-width: 68ch; margin: 0; }
   p { margin: 0; }
   em { font-style: italic; }
 
   /* ─── Rythme : beaucoup d'air ────────────────────────────────── */
-  header.hero { padding: 152px 0 128px; display: flex; flex-direction: column; gap: 30px; }
-  section { padding: 116px 0; border-top: 1px solid var(--hairline-2); display: flex; flex-direction: column; gap: 52px; }
-  .section-head { display: flex; flex-direction: column; gap: 16px; }
+  header.hero { padding: 152px 0 128px; display: flex; flex-direction: column; gap: 28px; }
+  section { padding: 112px 0; border-top: 1px solid var(--hairline-2); display: flex; flex-direction: column; gap: 48px; }
+  .section-head { display: flex; flex-direction: column; gap: 15px; }
 
   /* ─── Bascule ────────────────────────────────────────────────── */
   .switch {
@@ -108,61 +103,50 @@
     padding: 10px 18px; border-radius: 999px;
     border: 1px solid var(--hairline);
     background: var(--surface); color: var(--ink);
-    font: inherit; font-size: .75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .1em;
+    font: inherit; font-size: .8125rem; font-weight: 500;
     cursor: pointer;
   }
-  .switch:hover { border-color: var(--sand-deep); }
-  .switch:focus-visible { outline: 2px solid var(--sand-deep); outline-offset: 3px; }
+  .switch:hover { border-color: var(--gold); }
+  .switch:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
   /* ─── Palette ────────────────────────────────────────────────── */
-  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 16px; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
   .sw { border: 1px solid var(--hairline); border-radius: 16px; overflow: hidden; background: var(--surface); }
-  .sw .chip { height: 84px; }
-  .sw .meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 3px; }
-  .sw .name { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
-  .sw .hex { font-size: .75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .sw .chip { height: 80px; }
+  .sw .meta { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 2px; }
+  .sw .name { font-size: .8125rem; font-weight: 600; }
+  .sw .hex { font-size: .75rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
 
   .cols-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 32px; align-items: start; }
   .cols-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(262px, 1fr)); gap: 22px; }
 
   .panel { display: flex; flex-direction: column; gap: 20px; }
   .panel-label { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-  .verdict { font-size: .6875rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .verdict { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
   .verdict.bad { color: var(--clay); }
   .verdict.good { color: var(--forest); }
   .tiny { font-size: .8125rem; color: var(--ink-faint); }
 
-  /* ═══ LA CARTE V2 — signature Runes de Chêne : titre sur l'image ═══ */
+  /* ═══ LA CARTE ÉVÉNEMENT — V2 ═══ */
   .card {
-    border-radius: 16px; overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--hairline-2);
-    display: block; text-decoration: none; color: inherit;
-    transition: transform .22s ease, border-color .22s ease;
+    border: 1px solid var(--hairline); border-radius: 16px;
+    background: var(--surface); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color .22s ease, transform .22s ease;
   }
-  .card:hover { transform: translateY(-3px); border-color: var(--sand-deep); }
-  .card .photo {
-    aspect-ratio: 4 / 3.1; position: relative;
-    background: linear-gradient(152deg, var(--photo-a), var(--photo-b));
-    display: flex; align-items: flex-end;
-  }
-  .card .photo::after { content: ""; position: absolute; inset: 0; background: var(--veil); }
-  .card .overlay { position: relative; z-index: 1; padding: 20px; display: flex; flex-direction: column; gap: 3px; }
-  .card .title {
-    font-size: 1.0625rem; font-weight: 800;
-    text-transform: uppercase; letter-spacing: .035em;
-    line-height: 1.2; color: var(--on-photo);
-  }
-  .card .when { font-size: .8125rem; color: rgba(246, 240, 228, .82); font-variant-numeric: tabular-nums; }
-  .card .who { padding: 13px 20px 15px; display: flex; align-items: center; gap: 8px; }
+  .card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .card .photo { aspect-ratio: 4 / 3; background: linear-gradient(148deg, var(--photo-a), var(--photo-b)); }
+  .card .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 5px; }
+  .card .title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
+  .card .when { font-size: .875rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .card .who { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
 
   .faces { display: flex; }
   .face {
-    width: 22px; height: 22px; border-radius: 999px;
-    background: var(--parchment-2); border: 1.5px solid var(--surface);
+    width: 23px; height: 23px; border-radius: 999px;
+    background: var(--surface-alt); border: 1.5px solid var(--surface);
     margin-left: -7px; display: grid; place-items: center;
-    font-size: .625rem; font-weight: 800; color: var(--ink-soft);
+    font-size: .625rem; font-weight: 700; color: var(--ink-soft);
   }
   .face:first-child { margin-left: 0; }
   .who-text { font-size: .8125rem; color: var(--ink-soft); }
@@ -171,97 +155,95 @@
   .card-old {
     border-radius: 14px; overflow: hidden; background: var(--surface);
     border: 1px solid var(--hairline);
-    box-shadow: 0 12px 28px var(--shade), 0 3px 8px var(--shade);
+    box-shadow: 0 10px 24px var(--shade), 0 2px 6px var(--shade);
     display: flex; flex-direction: column;
   }
-  .card-old .photo { aspect-ratio: 16 / 9; background: linear-gradient(152deg, var(--photo-a), var(--photo-b)); position: relative; }
+  .card-old .photo { aspect-ratio: 16 / 9; background: linear-gradient(148deg, var(--photo-a), var(--photo-b)); position: relative; }
   .card-old .float { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; gap: 6px; }
-  .card-old .body { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-  .card-old .title { font-size: 1rem; font-weight: 700; }
+  .card-old .body { padding: 14px; display: flex; flex-direction: column; gap: 9px; }
+  .card-old .title { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
   .card-old .rows { display: flex; flex-direction: column; gap: 5px; font-size: .8125rem; color: var(--ink-soft); }
   .card-old .tags { display: flex; flex-wrap: wrap; gap: 5px; }
   .card-old .foot { display: flex; gap: 8px; padding-top: 6px; border-top: 1px solid var(--hairline-2); }
 
   .pill {
     display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px; border-radius: 999px;
+    padding: 3px 9px; border-radius: 999px;
     font-size: .6875rem; font-weight: 600;
-    background: var(--parchment-2); color: var(--ink-soft);
+    background: var(--surface-alt); color: var(--ink-soft);
     border: 1px solid var(--hairline-2);
   }
-  .pill.on-photo { background: rgba(35, 27, 21, .6); color: #F0E7D9; border-color: transparent; }
+  .pill.on-photo { background: rgba(25, 20, 17, .62); color: #F0E7D9; border-color: transparent; }
   .btn-mini {
-    flex: 1; text-align: center; padding: 8px 10px; border-radius: 9px;
-    font-size: .75rem; font-weight: 700;
+    flex: 1; text-align: center; padding: 7px 10px; border-radius: 9px;
+    font-size: .75rem; font-weight: 600;
     border: 1px solid var(--hairline); background: transparent; color: var(--ink);
   }
 
   /* ─── Boutons ────────────────────────────────────────────────── */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 14px 30px; border-radius: 999px;
-    font: inherit; font-size: .8125rem; font-weight: 800;
-    text-transform: uppercase; letter-spacing: .1em;
+    padding: 13px 26px; border-radius: 999px;
+    font: inherit; font-size: .9375rem; font-weight: 600; letter-spacing: -.005em;
     border: 1px solid transparent; cursor: pointer;
     transition: opacity .18s ease, border-color .18s ease;
   }
-  .btn-primary { background: var(--sand); color: var(--on-sand); }
-  .btn-primary:hover { opacity: .87; }
+  .btn-primary { background: var(--gold); color: var(--on-gold); }
+  .btn-primary:hover { opacity: .88; }
   .btn-ghost { background: transparent; color: var(--ink); border-color: var(--hairline); }
-  .btn-ghost:hover { border-color: var(--sand-deep); }
-  .btn:focus-visible { outline: 2px solid var(--sand-deep); outline-offset: 3px; }
+  .btn-ghost:hover { border-color: var(--gold); }
+  .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
   /* ─── Écrans ─────────────────────────────────────────────────── */
   .screen {
     border: 1px solid var(--hairline); border-radius: 24px;
-    background: var(--parchment); padding: 52px 42px 58px;
-    display: flex; flex-direction: column; gap: 44px; overflow: hidden;
+    background: var(--parchment); padding: 50px 40px 56px;
+    display: flex; flex-direction: column; gap: 40px; overflow: hidden;
   }
-  .screen-top { display: flex; flex-direction: column; gap: 24px; }
-  .screen-title { font-size: clamp(1.75rem, 3.4vw, 2.5rem); font-weight: 800; text-transform: uppercase; letter-spacing: .01em; line-height: 1.05; }
+  .screen-top { display: flex; flex-direction: column; gap: 22px; }
+  .screen-title { font-size: clamp(1.75rem, 3.2vw, 2.25rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.1; }
   .chips { display: flex; flex-wrap: wrap; gap: 10px; }
   .chip-f {
-    padding: 9px 18px; border-radius: 999px;
-    font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    padding: 9px 17px; border-radius: 999px; font-size: .8125rem; font-weight: 500;
     border: 1px solid var(--hairline); background: transparent; color: var(--ink-soft);
   }
   .chip-f.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
 
   .month { display: flex; flex-direction: column; }
-  .month-label { font-size: .6875rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--sand-deep); padding: 0 0 18px; }
+  .month-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); padding: 0 0 16px; }
   .date-row {
     display: grid; grid-template-columns: 78px 1fr auto;
     gap: 24px; align-items: center; padding: 24px 6px;
     border-top: 1px solid var(--hairline-2);
   }
   .date-row:hover { background: var(--shade); }
-  .d-num { font-size: 1.625rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1; }
-  .d-sub { font-size: .6875rem; color: var(--ink-faint); letter-spacing: .14em; text-transform: uppercase; margin-top: 5px; }
-  .d-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .d-title { font-size: .9375rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+  .d-num { font-size: 1.5rem; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .d-sub { font-size: .75rem; color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; margin-top: 4px; }
+  .d-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .d-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.015em; }
   .d-place { font-size: .875rem; color: var(--ink-soft); }
   .dot { width: 7px; height: 7px; border-radius: 999px; display: inline-block; }
   .dot.ok { background: var(--forest); }
-  .dot.wait { background: var(--sand-deep); }
+  .dot.wait { background: var(--gold); }
 
   /* ─── Règles ─────────────────────────────────────────────────── */
   .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(292px, 1fr)); gap: 18px; }
-  .rule { border: 1px solid var(--hairline-2); border-radius: 16px; padding: 26px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); }
-  .rule .mark { font-size: .6875rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .rule { border: 1px solid var(--hairline); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 9px; background: var(--surface); }
+  .rule .mark { font-size: .6875rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
   .rule.out .mark { color: var(--clay); }
   .rule.in .mark { color: var(--forest); }
   .rule p { font-size: .875rem; color: var(--ink-soft); }
 
-  .scale-demo { display: flex; flex-direction: column; gap: 26px; }
-  .scale-row { display: flex; flex-direction: column; gap: 8px; padding-bottom: 26px; border-bottom: 1px solid var(--hairline-2); }
-  .scale-meta { font-size: .6875rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+  .scale-demo { display: flex; flex-direction: column; gap: 24px; }
+  .scale-row { display: flex; flex-direction: column; gap: 6px; padding-bottom: 24px; border-bottom: 1px solid var(--hairline-2); }
+  .scale-meta { font-size: .75rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   @media (max-width: 640px) {
     .wrap { padding: 0 22px 110px; }
-    header.hero { padding: 112px 0 84px; }
-    section { padding: 76px 0; gap: 36px; }
-    .screen { padding: 30px 22px 36px; gap: 32px; }
+    header.hero { padding: 112px 0 80px; }
+    section { padding: 72px 0; gap: 36px; }
+    .screen { padding: 28px 20px 34px; gap: 30px; }
     .date-row { grid-template-columns: 62px 1fr auto; gap: 16px; }
   }
 </style>
@@ -276,7 +258,7 @@
     <p class="eyebrow">Fellowship · direction artistique V2</p>
     <h1 class="display">Moins d'informations.<br /><span class="dim">Beaucoup plus d'espace.</span></h1>
     <p class="lede">Le parchemin de Runes de Chêne, la respiration de Vowen. Le clair est le défaut — le sombre n'apparaît que si on le demande.</p>
-    <div style="display:flex; gap:14px; flex-wrap:wrap; padding-top:12px;">
+    <div style="display:flex; gap:14px; flex-wrap:wrap; padding-top:10px;">
       <button class="btn btn-primary" type="button">Ajouter une date</button>
       <button class="btn btn-ghost" type="button">Voir l'annuaire</button>
     </div>
@@ -285,51 +267,51 @@
   <section>
     <div class="section-head">
       <p class="eyebrow">Palette</p>
-      <h2>Du parchemin, une encre brune, un doré</h2>
-      <p class="note">Les deux valeurs de gauche sont relevées directement sur runesdechene.com. Le texte n'est jamais noir — c'est ce qui produit la douceur. Le fond n'est jamais blanc — c'est ce qui produit le parchemin. Le doré ne sert qu'à une seule action par écran.</p>
+      <h2>Du parchemin, un brun doux, un or. Jamais de noir.</h2>
+      <p class="note">Le texte n'est jamais noir : c'est ce qui produit la douceur. Le fond n'est jamais blanc pur : c'est ce qui produit le parchemin. L'or ne sert qu'à une seule action par écran.</p>
     </div>
     <div class="swatches">
-      <div class="sw"><div class="chip" style="background:#F4EEE1;"></div><div class="meta"><span class="name">Parchemin</span><span class="hex">#F4EEE1</span></div></div>
-      <div class="sw"><div class="chip" style="background:#594848;"></div><div class="meta"><span class="name">Encre</span><span class="hex">#594848</span></div></div>
-      <div class="sw"><div class="chip" style="background:#FBF7EF;"></div><div class="meta"><span class="name">Surface</span><span class="hex">#FBF7EF</span></div></div>
-      <div class="sw"><div class="chip" style="background:#8D7C73;"></div><div class="meta"><span class="name">Encre douce</span><span class="hex">#8D7C73</span></div></div>
-      <div class="sw"><div class="chip" style="background:#E9CE94;"></div><div class="meta"><span class="name">Doré</span><span class="hex">#E9CE94</span></div></div>
-      <div class="sw"><div class="chip" style="background:#4B6B51;"></div><div class="meta"><span class="name">Forêt</span><span class="hex">#4B6B51</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--parchment); border-bottom:1px solid var(--hairline);"></div><div class="meta"><span class="name">Parchemin</span><span class="hex">fond de page</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--surface); border-bottom:1px solid var(--hairline);"></div><div class="meta"><span class="name">Surface</span><span class="hex">cartes, panneaux</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--ink);"></div><div class="meta"><span class="name">Encre</span><span class="hex">titres, texte</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--ink-soft);"></div><div class="meta"><span class="name">Encre douce</span><span class="hex">secondaire</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--gold);"></div><div class="meta"><span class="name">Or</span><span class="hex">action unique</span></div></div>
+      <div class="sw"><div class="chip" style="background:var(--forest);"></div><div class="meta"><span class="name">Forêt</span><span class="hex">confirmé</span></div></div>
     </div>
   </section>
 
   <section>
     <div class="section-head">
       <p class="eyebrow">Typographie</p>
-      <h2>Capitales pour les titres, minuscules pour lire</h2>
-      <p class="note">C'est la signature la plus reconnaissable de Runes de Chêne : des titres en capitales grasses, légèrement espacées. Le texte courant reste en minuscules, avec beaucoup d'interligne. Ce contraste porte toute l'identité.</p>
+      <h2>Grand, léger, serré.</h2>
+      <p class="note">Le réflexe habituel est d'agrandir <em>et</em> de graisser. Vowen fait l'inverse : 64 px en graisse 500, avec un interlettrage négatif. C'est ce contraste qui lit « moderne ». Les capitales espacées sont réservées aux micro-libellés.</p>
     </div>
     <div class="scale-demo">
       <div class="scale-row">
-        <span class="scale-meta">Titre · capitales · graisse 800 · interligne 0,98</span>
-        <span class="display" style="font-size:3rem;">Ta saison, en dix dates</span>
+        <span class="scale-meta">Titre · 64 px · graisse 500 · interlettrage −0,035 em</span>
+        <span class="display" style="font-size:3.25rem;">Ta saison, en dix dates</span>
       </div>
       <div class="scale-row">
-        <span class="scale-meta">Section · capitales · graisse 800</span>
+        <span class="scale-meta">Section · 32 px · graisse 500 · −0,025 em</span>
         <h2>Trois cent quarante festivals cherchent des exposants</h2>
       </div>
       <div class="scale-row">
-        <span class="scale-meta">Courant · minuscules · interligne 1,68 · 60 caractères</span>
+        <span class="scale-meta">Courant · 16 px · interligne 1,65 · 62 caractères</span>
         <p class="lede">Le confort de lecture ne vient pas de la taille du texte, mais de la largeur de la colonne et de l'air entre les lignes.</p>
       </div>
       <div class="scale-row">
-        <span class="scale-meta">Micro-libellé · doré · espacement 0,2 em</span>
+        <span class="scale-meta">Micro-libellé · 11 px · graisse 600 · +0,16 em · capitales</span>
         <p class="eyebrow">Candidatures ouvertes</p>
       </div>
     </div>
-    <p class="note"><strong>Une seule chose manque :</strong> cette maquette tourne en police système. La police de Runes de Chêne est <strong>Cabin</strong> — c'est elle qu'il faut embarquer pour que les gens reconnaissent la marque au premier coup d'œil.</p>
+    <p class="note"><strong>À décider :</strong> cette maquette utilise la police système. En production, la police de Runes de Chêne est <strong>Cabin</strong> — à embarquer pour que les gens reconnaissent la marque.</p>
   </section>
 
   <section>
     <div class="section-head">
       <p class="eyebrow">Le cœur du problème</p>
-      <h2>Une carte porte deux informations, pas onze</h2>
-      <p class="note">C'est ici que se joue le reproche de « trop d'infos partout ». À gauche, la logique actuelle : tout ce qu'on sait est affiché. À droite, la carte V2 — construite comme les cartes produit de Runes de Chêne, titre posé sur l'image — avec la seule chose qu'aucun annuaire concurrent ne pourra jamais montrer : qui d'autre y va.</p>
+      <h2>Une carte porte deux informations. Pas onze.</h2>
+      <p class="note">C'est ici que se joue le reproche de « trop d'infos partout ». À gauche, la logique actuelle : tout ce qu'on sait est affiché. À droite, la règle V2 : le nom, la date et le lieu — plus la seule chose qu'aucun annuaire concurrent ne saura jamais dire, qui d'autre y va.</p>
     </div>
     <div class="cols-2">
 
@@ -364,18 +346,17 @@
       <div class="panel">
         <div class="panel-label"><span class="verdict good">V2</span><span class="tiny">deux informations, plus la présence</span></div>
         <div class="card">
-          <div class="photo">
-            <div class="overlay">
-              <span class="title">Trolls &amp; Légendes</span>
-              <span class="when">24 – 26 avril · Mons</span>
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Trolls &amp; Légendes</span>
+            <span class="when">24 – 26 avril · Mons</span>
+            <div class="who">
+              <div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div>
+              <span class="who-text">4 de ton réseau y vont</span>
             </div>
           </div>
-          <div class="who">
-            <div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div>
-            <span class="who-text">4 de ton réseau y vont</span>
-          </div>
         </div>
-        <p class="note" style="font-size:.875rem;">Le tarif, la distance, la date limite, la note : tout cela existe toujours — <strong>sur la fiche, pas dans la liste</strong>. On ne décide pas dans une grille, on y trie.</p>
+        <p class="note"><strong>Le tarif, la distance, la date limite, la note existent toujours — sur la fiche, pas dans la liste.</strong> On ne décide pas dans une grille, on y trie.</p>
       </div>
 
     </div>
@@ -384,7 +365,7 @@
   <section>
     <div class="section-head">
       <p class="eyebrow">Écran · chiner</p>
-      <h2>Quatre cents événements, pour quelqu'un qui en cherche dix</h2>
+      <h2>Quatre cents événements, pour quelqu'un qui en cherche dix.</h2>
     </div>
     <div class="screen">
       <div class="screen-top">
@@ -398,16 +379,28 @@
       </div>
       <div class="cols-3">
         <div class="card">
-          <div class="photo"><div class="overlay"><span class="title">Trolls &amp; Légendes</span><span class="when">24 – 26 avril · Mons</span></div></div>
-          <div class="who"><div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div><span class="who-text">4 de ton réseau</span></div>
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Trolls &amp; Légendes</span>
+            <span class="when">24 – 26 avril · Mons</span>
+            <div class="who"><div class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></div><span class="who-text">4 de ton réseau</span></div>
+          </div>
         </div>
         <div class="card">
-          <div class="photo"><div class="overlay"><span class="title">Hellfest — Village</span><span class="when">18 – 20 juin · Clisson</span></div></div>
-          <div class="who"><div class="faces"><span class="face">A</span><span class="face">P</span></div><span class="who-text">2 de ton réseau</span></div>
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Hellfest — Village</span>
+            <span class="when">18 – 20 juin · Clisson</span>
+            <div class="who"><div class="faces"><span class="face">A</span><span class="face">P</span></div><span class="who-text">2 de ton réseau</span></div>
+          </div>
         </div>
         <div class="card">
-          <div class="photo"><div class="overlay"><span class="title">Convention Tattoo</span><span class="when">7 – 9 mai · Nantes</span></div></div>
-          <div class="who"><span class="who-text">Personne pour l'instant</span></div>
+          <div class="photo"></div>
+          <div class="body">
+            <span class="title">Convention Tattoo Nantes</span>
+            <span class="when">7 – 9 mai · Nantes</span>
+            <div class="who"><span class="who-text">Personne pour l'instant</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -416,13 +409,13 @@
   <section>
     <div class="section-head">
       <p class="eyebrow">Écran · ma saison</p>
-      <h2>Dix dates tiennent sur un écran — qu'elles respirent</h2>
+      <h2>Dix dates tiennent sur un écran. Qu'elles respirent.</h2>
       <p class="note">Vingt-quatre pixels d'air au-dessus et en dessous de chaque ligne, un filet d'un pixel pour séparer, et rien d'autre. La pastille dit l'état, les visages disent la compagnie.</p>
     </div>
     <div class="screen">
       <div class="screen-top">
         <span class="screen-title">Ma saison 2027</span>
-        <p class="note" style="font-size:.9375rem;">9 dates · 3 en attente de réponse</p>
+        <p class="note">9 dates · 3 en attente de réponse</p>
       </div>
 
       <div class="month">
@@ -471,7 +464,7 @@
   <section>
     <div class="section-head">
       <p class="eyebrow">Les règles</p>
-      <h2>Ce qui disparaît, ce qui reste</h2>
+      <h2>Ce qui disparaît, ce qui reste.</h2>
     </div>
     <div class="rules">
       <div class="rule out"><span class="mark">Disparaît</span><h3>Le verre et le grain</h3><p>Les fonds translucides, le flou d'arrière-plan, la texture de grain. C'est le socle de la DA actuelle, et la première source de bruit visuel.</p></div>
