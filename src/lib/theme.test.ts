@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getInitialTheme, applyTheme, hasExplicitThemeChoice, THEME_STORAGE_KEY } from './theme'
+import { getInitialTheme, applyTheme, THEME_STORAGE_KEY } from './theme'
 
 describe('theme', () => {
   beforeEach(() => {
@@ -21,6 +21,26 @@ describe('theme', () => {
     expect(getInitialTheme()).toBe('night')
   })
 
+  it('storage vide + classe .light déjà posée (script anti-flash V2) -> day, pas de divergence', () => {
+    document.documentElement.classList.add('light')
+    expect(getInitialTheme()).toBe('day')
+  })
+
+  it('storage vide + pas de classe .light -> night (V1, défaut historique inchangé)', () => {
+    expect(getInitialTheme()).toBe('night')
+  })
+
+  it('storage = "day" prime toujours sur la classe DOM (cohérent par construction, mais vérifié)', () => {
+    localStorage.setItem(THEME_STORAGE_KEY, 'day')
+    expect(getInitialTheme()).toBe('day')
+  })
+
+  it('storage = "night" prime toujours sur la classe DOM (cohérent par construction, mais vérifié)', () => {
+    localStorage.setItem(THEME_STORAGE_KEY, 'night')
+    document.documentElement.classList.add('light')
+    expect(getInitialTheme()).toBe('night')
+  })
+
   it('applyTheme("day") ajoute la classe light et persiste', () => {
     applyTheme('day')
     expect(document.documentElement.classList.contains('light')).toBe(true)
@@ -32,21 +52,5 @@ describe('theme', () => {
     applyTheme('night')
     expect(document.documentElement.classList.contains('light')).toBe(false)
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('night')
-  })
-
-  it('hasExplicitThemeChoice("day") = true', () => {
-    expect(hasExplicitThemeChoice('day')).toBe(true)
-  })
-
-  it('hasExplicitThemeChoice("night") = true', () => {
-    expect(hasExplicitThemeChoice('night')).toBe(true)
-  })
-
-  it('hasExplicitThemeChoice(null) = false', () => {
-    expect(hasExplicitThemeChoice(null)).toBe(false)
-  })
-
-  it('hasExplicitThemeChoice("oui") = false', () => {
-    expect(hasExplicitThemeChoice('oui')).toBe(false)
   })
 })
