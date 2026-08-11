@@ -1,0 +1,144 @@
+/* ══════════════════════════════════════════════════════════════════
+   Calque « Parchemin » — Landing V2
+   ------------------------------------------------------------------
+   NE CHANGE NI LA STRUCTURE NI LA COMPOSITION de la landing actuelle.
+   N'apporte que les quatre choses retenues de la maquette V2 :
+     1. les teintes de parchemin
+     2. les teintes d'encre (jamais de noir)
+     3. la typographie (grande, LÉGÈRE, serrée)
+     4. l'aération
+
+   À appliquer par-dessus Landing.css. Portée : `.light .landing`
+   pour les couleurs, `.landing` pour la typo et l'espacement.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Parchemin ────────────────────────────────────────────────── */
+.light .landing {
+  /* Plus chaud et plus jaune que le crème rosé actuel. Relevé sur
+     runesdechene.com : #F4EEE1. */
+  background: radial-gradient(125% 88% at 30% 22%, #FBF7EF, #F1E9D9 62%);
+
+  /* Encre : brun doux, jamais de noir. #594848 → hsl(0 11% 32%) */
+  --foreground: 0 11% 32%;
+  /* Secondaire : #8C7B72 → hsl(21 10% 50%) */
+  --muted-foreground: 21 10% 50%;
+
+  /* Surfaces et filets : le parchemin monte, les bordures s'effacent */
+  --card: 40 40% 97%;
+  --hair: rgba(89, 72, 72, .10);
+  --glass: rgba(251, 247, 239, .82);
+}
+
+/* Trame de papier : deux passes très faibles. Assez pour qu'on la
+   sente, jamais assez pour qu'on la voie. Posée SOUS les halos. */
+.light .landing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(97deg, rgba(120, 96, 72, .026) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(4deg,  rgba(120, 96, 72, .026) 0 1px, transparent 1px 6px);
+}
+
+/* Halos : en clair ils doivent effleurer, pas tacher. */
+.light .landing .glow { opacity: .34; filter: blur(90px); }
+.light .landing .hero-bokeh { opacity: .45; }
+
+/* ── 2. Typographie : grande, légère, serrée ─────────────────────── */
+/* Le réflexe est d'agrandir ET de graisser. On fait l'inverse :
+   même corps, graisse 500, interlettrage négatif, interligne resserré.
+   C'est le changement le plus visible de tout le calque. */
+.landing h1 {
+  font-weight: 500;
+  letter-spacing: -.036em;
+  line-height: 1.04;
+}
+.landing h2 {
+  font-weight: 500;
+  letter-spacing: -.028em;
+  line-height: 1.12;
+}
+.landing h3 {
+  font-weight: 600;
+  letter-spacing: -.012em;
+}
+.landing .tier .price,
+.landing .tier.pro .price {
+  font-weight: 500;
+  letter-spacing: -.04em;
+}
+.landing .lead {
+  line-height: 1.62;
+  max-width: 54ch;
+}
+/* Les capitales espacées restent, mais réservées aux micro-libellés. */
+.landing .eyebrow {
+  letter-spacing: .16em;
+  font-weight: 600;
+}
+
+/* ── 3. Aération ─────────────────────────────────────────────────── */
+.landing .block { padding-top: 104px; padding-bottom: 104px; }
+.landing .hero { padding-top: 72px; padding-bottom: 84px; }
+.landing .sec-head { margin-bottom: 48px; }
+.landing .features { gap: 20px; }
+.landing .feat { padding: 26px; }
+.landing .tiers { gap: 22px; }
+.landing .tier { padding: 32px 28px 30px; }
+.landing .marquee { padding-top: 34px; padding-bottom: 34px; }
+.landing .hero-cta { gap: 13px; margin-top: 30px; }
+.landing .proof { margin-top: 26px; }
+
+/* ── 4. Cartes : filet d'un pixel, aucune ombre ──────────────────── */
+.light .landing .feat,
+.light .landing .tier,
+.light .landing .org-card,
+.light .landing .testimonial {
+  background: #FBF7EF;
+  border: 1px solid rgba(89, 72, 72, .10);
+  box-shadow: none;
+}
+.light .landing .btn-primary { box-shadow: none; }
+.light .landing .btn-primary:hover { box-shadow: none; opacity: .9; transform: none; }
+.light .landing .btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(89, 72, 72, .14);
+  color: hsl(var(--foreground));
+}
+
+/* ── 5. Les maquettes d'appareils passent en clair ───────────────── */
+/* En mode jour elles restaient sombres : un trou noir au milieu du
+   parchemin. Elles doivent montrer l'app telle qu'elle sera. */
+.light .landing .dv-desktop,
+.light .landing .dv-phone {
+  background: #FBF7EF;
+  border-color: rgba(89, 72, 72, .12);
+  box-shadow: 0 24px 60px rgba(90, 70, 50, .12);
+}
+.light .landing .dv-bar,
+.light .landing .dv-side,
+.light .landing .dv-phead { background: #F1E9D9; }
+.light .landing .dv-screen,
+.light .landing .dv-main,
+.light .landing .dv-pscreen { background: #FBF7EF; }
+.light .landing .dv-url,
+.light .landing .dv-htitle,
+.light .landing .dv-nav,
+.light .landing .dv-l1,
+.light .landing .dv-l2,
+.light .landing .dv-pt,
+.light .landing .dv-search,
+.light .landing .dv-pl1,
+.light .landing .dv-pl2,
+.light .landing .dv-chip { background: rgba(89, 72, 72, .13); }
+.light .landing .dv-nav.on { background: rgba(89, 72, 72, .26); }
+.light .landing .dv-card,
+.light .landing .dv-pcard,
+.light .landing .dv-stats span {
+  background: #F6F0E4;
+  border: 1px solid rgba(89, 72, 72, .09);
+}
+.light .landing .dv-notch { background: rgba(89, 72, 72, .18); }
+.light .landing .dv-avatar { background: rgba(89, 72, 72, .16); }
