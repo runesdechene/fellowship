@@ -1,10 +1,12 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LandingPage } from '@/pages/Landing'
+import { LandingV2Page } from '@/pages/LandingV2'
+import { readLandingV2 } from '@/lib/landing-v2'
 import { LoginPage } from '@/pages/Login'
 import { OnboardingPage } from '@/pages/Onboarding'
 import { ExplorerPage } from '@/pages/Explorer'
@@ -95,13 +97,19 @@ function EventWithLayout() {
   return <EventPage />
 }
 
+function LandingRoute() {
+  // Lu une seule fois au montage : l'interrupteur ne change pas en cours de visite.
+  const [v2] = useState(readLandingV2)
+  return v2 ? <LandingV2Page /> : <LandingPage />
+}
+
 function App() {
   return (
     <>
         <InstallPrompt />
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingRoute />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route
