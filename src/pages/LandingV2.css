@@ -262,7 +262,14 @@ html:not(.light) .lv2 {
 }
 .lv2 .feat .ico svg { width: 21px; height: 21px; }
 .lv2 .feat p { font-size: .9375rem; color: var(--ink-soft); }
-.lv2 .soon {
+/* :not(.stat) exclut la pastille de statut des cartes événement (qui porte
+   `class="stat soon"`, cf. .events plus haut) : sans lui, ce ruleset et
+   `.stat` ont la même spécificité (une classe) et celui-ci arrive après dans
+   la cascade — il gagnait le padding/font-size/uppercase/margin, et la
+   pastille « Clôture dans N jours » rendait différemment de sa sœur
+   « Candidatures ouvertes ». Ici seuls les deux badges autonomes (feature
+   « Postuler en 1 clic », porte organisateur) doivent porter ce style. */
+.lv2 .soon:not(.stat) {
   font-size: .625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   padding: 3px 9px; border-radius: 999px; background: var(--wait-wash); color: var(--wait);
   margin-left: 8px; vertical-align: middle;
@@ -421,4 +428,20 @@ html:not(.light) .lv2 {
   .lv2 .wrap { padding: 0 20px; }
   .lv2 section { padding: 48px 0; }
   .lv2 .nav-links .link { display: none; }
+}
+/* Régression du toggle jour/nuit (ajouté en nav sans reprendre la largeur
+   qu'il occupe) : mesuré sur la capture 1440px, la rangée a besoin de
+   125(logo) + 22(gap .nav-in) + 58(toggle) + 26(gap .nav-links) + 162(CTA) +
+   2×20(padding .wrap) = 433px pour tenir avec le libellé complet. En dessous,
+   au lieu de masquer le toggle — c'est justement le seul accès au thème
+   sombre pour un visiteur anonyme, et le mobile est l'endroit où il sert le
+   plus — on raccourcit le SEUL bouton CTA (la cible /login ne change pas) et
+   on resserre les deux entrefilets pour laisser respirer le nécessaire. */
+.lv2 .nav-links .cta-nav .cta-short { display: none; }
+@media (max-width: 480px) {
+  .lv2 .nav-in { gap: 12px; }
+  .lv2 .nav-links { gap: 14px; }
+  .lv2 .nav-links .cta-nav { padding-left: 15px; padding-right: 15px; }
+  .lv2 .nav-links .cta-nav .cta-full { display: none; }
+  .lv2 .nav-links .cta-nav .cta-short { display: inline; }
 }

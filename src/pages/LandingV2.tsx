@@ -222,7 +222,14 @@ export function LandingV2Page() {
                 demande explicite » — encore faut-il pouvoir demander. Composant
                 partagé, repeint aux jetons parchemin dans LandingV2.css. */}
             <ThemeToggle />
-            <Link className="btn btn-primary btn-sm" to="/login">Créer mon compte</Link>
+            {/* Sous 480px, le libellé se raccourcit (pas la cible /login) :
+                sans ça la rangée déborde de tous les téléphones — le bouton
+                garde priorité sur le toggle, qu'on tient à garder visible
+                (cf. commentaire ThemeToggle ci-dessus). */}
+            <Link className="btn btn-primary btn-sm cta-nav" to="/login">
+              <span className="cta-full">Créer mon compte</span>
+              <span className="cta-short">S'inscrire</span>
+            </Link>
           </div>
         </div>
       </nav>
@@ -234,7 +241,7 @@ export function LandingV2Page() {
               <button key={a} type="button" className={audience === a ? 'on' : undefined}
                 aria-pressed={audience === a} onClick={() => switchAudience(a)}>
                 {a === 'festivalier' ? 'Festivalier' : a === 'exposant' ? 'Exposant' : 'Organisateur'}
-                {a === 'organisateur' && <span className="mini">Soon</span>}
+                {a === 'organisateur' && <span className="mini">Bientôt</span>}
               </button>
             ))}
           </div>
