@@ -131,6 +131,21 @@ export function toCard(e: PublicEvent, today: Date, tagLabels: Record<string, st
   }
 }
 
+/** Les univers du pied de page : seulement ceux qui ont au moins un
+ *  événement à venir (une porte qui ouvre sur du vide est pire que pas de
+ *  porte), triés par nombre d'événements décroissant, plafonnés à `limit`. */
+export function topUniverses(list: PublicEvent[], limit = 8): string[] {
+  const counts = new Map<string, number>()
+  for (const e of list) {
+    const slug = e.tags?.[0]
+    if (slug) counts.set(slug, (counts.get(slug) ?? 0) + 1)
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([slug]) => slug)
+}
+
 /** Compteurs du hero. Uniquement des nombres mesurés : la page plaide
  *  l'honnêteté, elle ne peut pas s'ouvrir sur un chiffre gonflé. */
 export function countCounters(list: PublicEvent[], exposants: number | null): Array<{ n: string; label: string }> {

@@ -293,6 +293,66 @@ html:not(.light) .lv2 {
 .lv2 .cta-band .sub { font-size: 1.0625rem; color: var(--ink-soft); max-width: 46ch; }
 .lv2 .cta-band .acts { display: flex; gap: 13px; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
 
+/* ── Pied de page : navigation et référencement, pas une formalité.
+   Écart maquette : 3 colonnes, pas 4 — « Par région » n'est pas livrée, la
+   colonne department est trop sale en base pour des liens honnêtes (cf.
+   brief Task 8). Grille 1.6fr 1fr 1fr au lieu de 1.6fr 1fr 1fr 1fr. ── */
+.lv2 footer { margin-top: 78px; padding: 0; }
+
+/* Logotype géant : il ferme la page comme une signature d'affiche.
+   Dégradé vers le transparent pour qu'il pose l'ambiance sans crier. */
+.lv2 .foot-mark {
+  font-size: clamp(3.4rem, 14vw, 11.5rem);
+  font-weight: 500; letter-spacing: -.055em; line-height: .82;
+  margin: 0 0 8px; user-select: none; white-space: nowrap;
+  background: linear-gradient(178deg, var(--ink-faint) 8%, transparent 96%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lv2 .foot-mark span { color: transparent; background: linear-gradient(178deg, var(--accent-lv2) 8%, transparent 92%); -webkit-background-clip: text; background-clip: text; }
+.lv2 .foot-grid {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 44px; padding-bottom: 48px;
+}
+.lv2 .foot-brand { display: flex; flex-direction: column; gap: 14px; max-width: 34ch; }
+.lv2 .foot-brand .tag { font-size: .9375rem; color: var(--ink-soft); }
+.lv2 .foot-by {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  border-radius: 16px; background: var(--block-2); margin-top: 2px;
+}
+.lv2 .foot-by .av { width: 36px; height: 36px; border-radius: 999px; background: var(--accent-lv2); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; font-size: .8125rem; flex: none; }
+.lv2 .foot-by .t { font-size: .8125rem; color: var(--ink-soft); line-height: 1.45; }
+.lv2 .foot-by .t strong { color: var(--ink); font-weight: 600; }
+
+.lv2 .foot-col { display: flex; flex-direction: column; gap: 12px; }
+.lv2 .foot-col h4 {
+  font-size: .6875rem; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-faint); margin: 0 0 2px;
+}
+/* .foot-col a couvre les vrais liens (Fellowship, légal) ; .foot-col button
+   couvre les univers, qui filtrent au clic plutôt que de naviguer — même
+   habillage visuel, sémantique honnête (ce n'est pas un lien). */
+.lv2 .foot-col a, .lv2 .foot-col button {
+  font-size: .875rem; color: var(--ink-soft); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+  background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer;
+}
+.lv2 .foot-col a:hover, .lv2 .foot-col button:hover { color: var(--accent-lv2); }
+.lv2 .foot-col a i, .lv2 .foot-col button i { width: 7px; height: 7px; border-radius: 999px; background: var(--c); display: block; flex: none; font-style: normal; }
+
+.lv2 .foot-bar {
+  border-top: 1px solid var(--hairline-2); padding: 22px 0 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+}
+.lv2 .foot-bar .c { font-size: .8125rem; color: var(--ink-faint); }
+.lv2 .legal { display: flex; gap: 10px; flex-wrap: wrap; font-size: .8125rem; }
+.lv2 .legal a { color: var(--ink-faint); text-decoration: none; }
+.lv2 .legal a:hover { color: var(--ink); }
+.lv2 .legal span { color: var(--ink-faint); opacity: .55; }
+
+@media (max-width: 900px) { .lv2 .foot-grid { grid-template-columns: 1fr 1fr; gap: 34px; } }
+@media (max-width: 560px) { .lv2 .foot-grid { grid-template-columns: 1fr; } }
+
 @media (prefers-reduced-motion: reduce) {
   .lv2 *, .lv2 *::before, .lv2 *::after { transition: none !important; animation: none !important; }
 }

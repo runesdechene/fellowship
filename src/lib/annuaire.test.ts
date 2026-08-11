@@ -1,6 +1,6 @@
 // src/lib/annuaire.test.ts
 import { describe, it, expect } from 'vitest'
-import { toPublicList, applicationStatus, formatWhen, searchEvents, countCounters, toCard, todayIso } from './annuaire'
+import { toPublicList, applicationStatus, formatWhen, searchEvents, countCounters, toCard, todayIso, topUniverses } from './annuaire'
 import type { PublicEvent } from './annuaire'
 
 const TODAY = new Date('2026-08-11T00:00:00Z')
@@ -102,6 +102,28 @@ describe('countCounters', () => {
   })
   it('compte des exposants inconnu → la troisième pastille disparaît', () => {
     expect(countCounters([ev()], null)).toHaveLength(2)
+  })
+})
+
+describe('topUniverses', () => {
+  it('compte par premier tag et trie par nombre décroissant', () => {
+    const list = [
+      ev({ id: 'a', tags: ['medieval'] }),
+      ev({ id: 'b', tags: ['medieval'] }),
+      ev({ id: 'c', tags: ['noel'] }),
+    ]
+    expect(topUniverses(list)).toEqual(['medieval', 'noel'])
+  })
+  it('ignore les événements sans tag', () => {
+    expect(topUniverses([ev({ tags: null }), ev({ tags: [] })])).toEqual([])
+  })
+  it('plafonne au nombre demandé', () => {
+    const list = ['a', 'b', 'c', 'd'].map(slug => ev({ id: slug, tags: [slug] }))
+    expect(topUniverses(list, 2)).toHaveLength(2)
+  })
+  it('un univers absent des événements à venir ne peut pas apparaître', () => {
+    const list = [ev({ id: 'a', tags: ['medieval'] })]
+    expect(topUniverses(list)).not.toContain('fantasy')
   })
 })
 

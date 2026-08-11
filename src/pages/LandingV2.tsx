@@ -7,8 +7,10 @@ import {
 import { useLandingExposants, useTestimonials } from '@/hooks/use-landing-stats'
 import { usePublicEvents } from '@/hooks/use-public-events'
 import { useWaitlist } from '@/hooks/use-waitlist'
-import { toPublicList, countCounters, searchEvents, toCard, applicationStatus } from '@/lib/annuaire'
+import { toPublicList, countCounters, searchEvents, toCard, applicationStatus, topUniverses } from '@/lib/annuaire'
 import type { PublicEvent } from '@/lib/annuaire'
+import { getTagLandingColor } from '@/components/ui/TagBadge'
+import { LEGAL } from '@/lib/legal'
 import './LandingV2.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
@@ -132,6 +134,23 @@ export function LandingV2Page() {
   function switchAudience(a: Audience) {
     setAudience(a)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Pied de page — « Par univers » : seuls les univers avec au moins un
+  // événement à venir (cf. topUniverses), triés par fréquence.
+  const universes = useMemo(() => topUniverses(publicEvents), [publicEvents])
+
+  function filterByUniverse(slug: string) {
+    setActiveTag(slug)
+    document.getElementById('annuaire')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  // La maquette pointait « Pour les organisateurs » vers #organisateurs, une
+  // ancre qui n'existe pas : ce contenu vit DANS #gratuit, visible seulement
+  // avec le sélecteur d'audience sur « organisateur ». On bascule les deux.
+  function goToOrganisateurs() {
+    setAudience('organisateur')
+    document.getElementById('gratuit')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
@@ -454,6 +473,55 @@ export function LandingV2Page() {
           </div>
         </section>
       </div>
+
+      <footer>
+        <div className="wrap">
+          <div className="foot-mark">Fellowship<span>.</span></div>
+
+          <div className="foot-grid">
+            <div className="foot-brand">
+              <p className="tag">L'annuaire des événements où poser son stand — et l'outil qui porte toute ta saison.</p>
+              <div className="foot-by">
+                <span className="av">RC</span>
+                <span className="t">Édité par <strong>Runes de Chêne</strong><br />Fait par des exposants, pour des exposants.</span>
+              </div>
+            </div>
+
+            {/* Écart maquette (assumé) : ces liens pointaient sur # — ici ils
+                filtrent réellement la grille et y ramènent le visiteur. Seuls
+                les univers avec au moins un événement à venir apparaissent. */}
+            <nav className="foot-col" aria-label="Par univers">
+              <h4>Par univers</h4>
+              {universes.map(slug => (
+                <button key={slug} type="button" onClick={() => filterByUniverse(slug)}>
+                  <i style={{ '--c': getTagLandingColor(slug) } as React.CSSProperties} />
+                  {tagLabels[slug] ?? slug}
+                </button>
+              ))}
+            </nav>
+
+            <nav className="foot-col" aria-label="Fellowship">
+              <h4>Fellowship</h4>
+              <a href="#annuaire">L'annuaire</a>
+              <a href="#gratuit">Pour les exposants</a>
+              <button type="button" onClick={goToOrganisateurs}>Pour les organisateurs</button>
+              <Link to="/login">Ajouter un événement</Link>
+              <a href={`mailto:${LEGAL.email}`}>Nous écrire</a>
+            </nav>
+          </div>
+
+          <div className="foot-bar">
+            <span className="c">© 2026 Fellowship · flw.sh</span>
+            <nav className="legal" aria-label="Informations légales">
+              <Link to="/legal/mentions-legales">Mentions légales</Link><span>·</span>
+              <Link to="/legal/confidentialite">Confidentialité</Link><span>·</span>
+              <Link to="/legal/cgu">CGU</Link><span>·</span>
+              <Link to="/legal/cgv">CGV</Link><span>·</span>
+              <Link to="/legal/charte-communautaire">Charte</Link>
+            </nav>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
