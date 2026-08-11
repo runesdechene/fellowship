@@ -51,6 +51,7 @@
     --halo-4: rgba(214,146,120,.16);
     --halo-blur: 90px;
     --rail-bg: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
+    --nav-on: rgba(255,252,245,.92);
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -90,6 +91,7 @@
     --halo-4: rgba(196,96,80,.24);
     --halo-blur: 110px;
     --rail-bg: linear-gradient(180deg, rgba(30,25,23,.88), rgba(23,19,18,.94));
+    --nav-on: rgba(255,240,225,.075);
 
     /* Palettes d'illustration en nuit */
     --sky-1:#4A3A32; --sky-2:#2C2421;
@@ -146,7 +148,8 @@
   /* ── Halos : l'âme « nuit de festival », transposée en plein jour.
      Des lavis colorés très dilués, fixés au fond. C'est eux qui
      empêchent le parchemin d'être un mur de carton. ─────────────── */
-  .halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; transition: opacity .45s ease; }
+  :root[data-halos="off"] .halos { opacity: 0; }
   .halos i { position: absolute; border-radius: 50%; filter: blur(var(--halo-blur)); display: block; }
   /* En clair, le chaud domine et le froid ne fait que ponctuer : un
      halo bleu ou vert trop présent grise le parchemin et le fait
@@ -185,10 +188,12 @@
   }
   .nav a svg { width: 18px; height: 18px; }
   .nav a:hover { background: var(--shade); color: var(--ink); }
+  /* Actif = un simple fond plus clair. Ni bordure, ni liseré de
+     lumière : sur fond sombre le liseré blanc se voyait comme un
+     trait, et c'est plus calme comme ça dans les deux thèmes. */
   .nav a.on {
-    background: var(--paper); color: var(--ink);
-    border-color: var(--hairline-2); font-weight: 600;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 2px 6px rgba(84,62,44,.07);
+    background: var(--nav-on); color: var(--ink);
+    border-color: transparent; font-weight: 600; box-shadow: none;
   }
   .nav a.on svg { color: var(--accent); }
   .nav .lock { margin-left: auto; font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
@@ -491,6 +496,9 @@
   <button class="switch" id="themeToggle" type="button" aria-label="Changer de thème">
     <span id="themeIcon">☾</span><span id="themeLabel">Nuit</span>
   </button>
+  <button class="switch" id="halosToggle" type="button" aria-pressed="true">
+    <span id="halosIcon">◍</span><span id="halosLabel">Halos</span>
+  </button>
   <span class="lbl">Accent</span>
   <button class="acc a-terracotta" type="button" data-acc="terracotta" aria-pressed="true" title="Terracotta (actuel)" aria-label="Terracotta"></button>
   <button class="acc a-bordeaux" type="button" data-acc="bordeaux" aria-pressed="false" title="Bordeaux" aria-label="Bordeaux"></button>
@@ -719,6 +727,17 @@
       root.setAttribute('data-theme', isDark ? 'light' : 'dark');
       icon.textContent = isDark ? '☾' : '☀';
       label.textContent = isDark ? 'Nuit' : 'Jour';
+    });
+
+    var hb = document.getElementById('halosToggle');
+    var hIcon = document.getElementById('halosIcon');
+    var hLabel = document.getElementById('halosLabel');
+    hb.addEventListener('click', function () {
+      var off = root.getAttribute('data-halos') === 'off';
+      root.setAttribute('data-halos', off ? 'on' : 'off');
+      hb.setAttribute('aria-pressed', off ? 'true' : 'false');
+      hIcon.textContent = off ? '◍' : '○';
+      hLabel.textContent = off ? 'Halos' : 'Sans halos';
     });
 
     var links = document.querySelectorAll('.nav a[data-scr]');
