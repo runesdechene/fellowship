@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import {
   Search, Check, Compass, Tent, LayoutGrid, Users, CreditCard, Bell, Code, Send, ArrowRight, Scroll, Plus,
 } from 'lucide-react'
-import { useLandingExposants } from '@/hooks/use-landing-stats'
+import { useLandingExposants, useTestimonials } from '@/hooks/use-landing-stats'
 import { usePublicEvents } from '@/hooks/use-public-events'
 import { useWaitlist } from '@/hooks/use-waitlist'
 import { toPublicList, countCounters, searchEvents, toCard, applicationStatus } from '@/lib/annuaire'
@@ -68,6 +68,14 @@ export function LandingV2Page() {
   const today = useMemo(() => new Date(), [])
   const publicEvents = useMemo(() => toPublicList(rawEvents, today), [rawEvents, today])
   const counters = useMemo(() => countCounters(publicEvents, exposantsCount), [publicEvents, exposantsCount])
+  const { testimonials } = useTestimonials()
+  // Même prédicat que countCounters() en interne (src/lib/annuaire.ts) : un
+  // événement « prend des exposants » s'il a une URL de candidature ou une
+  // date limite. countCounters ne l'exposait pas (Task 4) — on le redérive
+  // ici plutôt que de figer le chiffre en dur dans la bande de dernier appel.
+  const withApplications = useMemo(
+    () => publicEvents.filter(e => e.registration_url || e.registration_deadline).length,
+    [publicEvents])
 
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [activeFilters, setActiveFilters] = useState<string[]>([])
@@ -383,6 +391,69 @@ export function LandingV2Page() {
 
         </div>
       </section>
+
+      <section>
+        <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+          <div className="founder">
+            <p className="eyebrow"><Tent aria-hidden="true" />Qui est derrière</p>
+            <h2>Fait par un exposant, pour des exposants.</h2>
+            <p className="note">Fellowship est édité par <strong>Runes de Chêne</strong>, atelier d'impression textile qui écume les festivals médiévaux, les fests de métal et les conventions. L'outil n'a pas été pensé dans un bureau : il est né parce qu'on en avait besoin nous-mêmes, un dimanche soir, en remballant.</p>
+            <p className="note">Ce qui veut dire deux choses. On connaît le problème de l'intérieur — et on est les premiers à subir nos propres mauvaises décisions.</p>
+            <div className="sig">
+              <span className="av">U</span>
+              <span><span className="n">Uriel</span><br /><span className="r">Runes de Chêne · exposant</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* On ne rend cette section que si des témoignages existent réellement en
+          base (RLS = actifs seulement) — jamais les trois cartes « Exemple
+          d'affichage » de la maquette en production. */}
+      {testimonials.length > 0 && (
+        <section>
+          <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+            <div className="l" style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
+              <p className="eyebrow"><Scroll aria-hidden="true" />Ils y sont déjà</p>
+              <h2>Ils en parlent mieux que nous.</h2>
+            </div>
+            <div className="quotes">
+              {testimonials.map(t => {
+                const initials = (t.name ?? '?').trim().charAt(0).toUpperCase()
+                const card = (
+                  <div className="q">
+                    <div className="q-head">
+                      {t.resolvedAvatar
+                        ? <img className="q-av" src={t.resolvedAvatar} alt="" />
+                        : <span className="q-av">{initials}</span>}
+                      <div><div className="q-n">{t.name}</div><div className="q-c">{t.craft}</div></div>
+                    </div>
+                    <blockquote>« {t.quote} »</blockquote>
+                  </div>
+                )
+                return t.resolvedSlug
+                  ? <Link key={t.id} to={`/${t.resolvedSlug}`} className="q-link">{card}</Link>
+                  : <div key={t.id}>{card}</div>
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="wrap">
+        <section className="cta-band">
+          <p className="eyebrow"><Tent aria-hidden="true" />Il reste de la place</p>
+          <h2>Ta prochaine date t'attend quelque part.</h2>
+          <p className="sub">
+            {publicEvents.length} événements à venir, {withApplications} qui prennent des exposants.
+            Le compte est gratuit et se crée en trente secondes.
+          </p>
+          <div className="acts">
+            <Link className="btn btn-primary" to="/login">Créer mon compte <ArrowRight aria-hidden="true" /></Link>
+            <a className="btn btn-ghost" href="#annuaire">Parcourir l'annuaire</a>
+          </div>
+        </section>
+      </div>
     </div>
   )
 }

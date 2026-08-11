@@ -255,6 +255,44 @@ html:not(.light) .lv2 {
 .lv2 .waitlist-error { font-size: .8125rem; color: var(--wait); }
 .lv2 .waitlist-success { font-size: .9375rem; color: var(--ok); font-weight: 600; }
 
+/* ── Fait par un exposant : bloc édito + signature ─────────────── */
+.lv2 .founder {
+  border-radius: 26px; background: linear-gradient(178deg, var(--accent-wash), transparent);
+  padding: 38px 36px; display: flex; flex-direction: column; gap: 16px; max-width: 780px;
+}
+.lv2 .founder .sig { display: flex; align-items: center; gap: 13px; padding-top: 4px; }
+.lv2 .founder .sig .av { width: 44px; height: 44px; border-radius: 999px; background: var(--accent-lv2); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; font-size: .9375rem; }
+.lv2 .founder .sig .n { font-weight: 600; font-size: .9375rem; }
+.lv2 .founder .sig .r { font-size: .8125rem; color: var(--ink-faint); }
+
+/* ── Témoignages : vrais avis lus en base (useTestimonials), jamais les
+   cartes « Exemple d'affichage » de la maquette ─────────────────── */
+.lv2 .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.lv2 .q { border-radius: 20px; background: var(--block-2); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.lv2 .q-head { display: flex; align-items: center; gap: 12px; }
+.lv2 .q-av { width: 38px; height: 38px; border-radius: 999px; background: var(--accent-wash); color: var(--accent-lv2); display: grid; place-items: center; font-weight: 700; font-size: .875rem; }
+.lv2 img.q-av { object-fit: cover; }
+.lv2 .q-n { font-weight: 600; font-size: .9375rem; }
+.lv2 .q-c { font-size: .8125rem; color: var(--ink-faint); }
+.lv2 .q blockquote { margin: 0; font-size: .9375rem; color: var(--ink-soft); line-height: 1.6; }
+.lv2 .q-link { text-decoration: none; color: inherit; display: block; }
+
+/* ── Dernier appel : bande pleine largeur, dégradé d'accent seul.
+   La maquette portait une illustration dessinée (.bg + .veil, calques
+   absolus empilés par-dessus) — bannie (cf. brief Task 7). Sans elle,
+   il n'y a plus rien à empiler : pas de position/overflow sur .cta-band,
+   pas de fond spécial sur .btn-ghost pour rester lisible « au-dessus »
+   d'un dessin qui n'existe plus. */
+.lv2 .cta-band {
+  border-radius: 34px; margin: 30px 0 0; padding: 84px 48px 92px;
+  background: linear-gradient(178deg, var(--accent-wash), transparent 70%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 20px; text-align: center;
+}
+.lv2 .cta-band h2 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.035em; }
+.lv2 .cta-band .sub { font-size: 1.0625rem; color: var(--ink-soft); max-width: 46ch; }
+.lv2 .cta-band .acts { display: flex; gap: 13px; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
+
 @media (prefers-reduced-motion: reduce) {
   .lv2 *, .lv2 *::before, .lv2 *::after { transition: none !important; animation: none !important; }
 }
