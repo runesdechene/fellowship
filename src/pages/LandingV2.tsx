@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Search, Check } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Search, Check, Compass, Tent } from 'lucide-react'
 import { useLandingExposants } from '@/hooks/use-landing-stats'
 import { usePublicEvents } from '@/hooks/use-public-events'
-import { toPublicList, countCounters } from '@/lib/annuaire'
+import { toPublicList, countCounters, searchEvents, toCard, applicationStatus } from '@/lib/annuaire'
+import type { PublicEvent } from '@/lib/annuaire'
 import './LandingV2.css'
 
 type Audience = 'festivalier' | 'exposant' | 'organisateur'
+
+const ANNUAIRE_TITLE: Record<Audience, string> = {
+  exposant: 'Les prochaines dates où candidater',
+  festivalier: 'Les prochaines sorties',
+  organisateur: 'Ces festivals sont déjà référencés',
+}
 
 const SEARCH_PLACEHOLDER: Record<Audience, string> = {
   exposant: 'Chercher un festival, une ville, une date…',
@@ -36,10 +44,47 @@ export function LandingV2Page() {
   // (cf. use-landing-stats.ts). Cette page plaide l'honnêteté, elle ne peut
   // pas afficher un chiffre gonflé pour se vendre elle-même.
   const { realCount: exposantsCount } = useLandingExposants()
-  const { events: rawEvents } = usePublicEvents()
+  const { events: rawEvents, tagLabels, loading } = usePublicEvents()
   const today = useMemo(() => new Date(), [])
   const publicEvents = useMemo(() => toPublicList(rawEvents, today), [rawEvents, today])
   const counters = useMemo(() => countCounters(publicEvents, exposantsCount), [publicEvents, exposantsCount])
+
+  const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [activeFilters, setActiveFilters] = useState<string[]>([])
+  const [showAll, setShowAll] = useState(false)
+
+  // FILTERS capture `today` : déclaré dans le composant, juste au-dessus du
+  // useMemo qui le consomme. Réduit à ce qui est réellement calculable sur
+  // les données existantes — pas de puce qui ne filtre rien (cf. brief).
+  const FILTERS: Array<{ key: string; label: string; icon?: React.ReactNode; test: (e: PublicEvent) => boolean }> = [
+    { key: 'expo', label: 'Prend des exposants', icon: <Tent aria-hidden="true" />,
+      test: e => Boolean(e.registration_url || e.registration_deadline) },
+    { key: 'open', label: 'Candidatures ouvertes',
+      test: e => applicationStatus(e, today).kind === 'open' },
+    { key: 'photo', label: 'Avec affiche', test: e => Boolean(e.image_url) },
+  ]
+
+  function toggleFilter(key: string) {
+    setActiveFilters(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key])
+  }
+  function resetFilters() {
+    setActiveFilters([]); setActiveTag(null); setQuery('')
+  }
+
+  const filtered = useMemo(() => {
+    const byTag = activeTag ? publicEvents.filter(e => e.tags?.includes(activeTag)) : publicEvents
+    // Filtres cumulatifs : cocher deux puces resserre, ça n'élargit jamais.
+    const byChips = FILTERS
+      .filter(f => activeFilters.includes(f.key))
+      .reduce((list, f) => list.filter(e => f.test(e)), byTag)
+    return searchEvents(byChips, query)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- FILTERS est recréé à chaque rendu (il capture `today`), l'inclure boucle le memo pour rien.
+  }, [publicEvents, activeTag, activeFilters, query])
+
+  const cards = useMemo(
+    () => filtered.map(e => toCard(e, today, tagLabels)),
+    [filtered, today, tagLabels])
+  const visible = showAll ? cards : cards.slice(0, 12)
 
   useEffect(() => {
     const nav = navRef.current
@@ -129,6 +174,60 @@ export function LandingV2Page() {
           )))}
         </div>
       </div>
+
+      <section id="annuaire">
+        <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+          <div className="sec-head">
+            <div className="l">
+              <p className="eyebrow"><Compass aria-hidden="true" />L'annuaire</p>
+              <h2>{ANNUAIRE_TITLE[audience]}</h2>
+            </div>
+            {cards.length > 12 && !showAll && (
+              <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowAll(true)}>
+                Voir les {cards.length} événements
+              </button>
+            )}
+          </div>
+
+          <div className="filters">
+            {FILTERS.map(f => (
+              <button key={f.key} type="button" className={`chip${activeFilters.includes(f.key) ? ' on' : ''}`}
+                aria-pressed={activeFilters.includes(f.key)} onClick={() => toggleFilter(f.key)}>
+                {f.icon}{f.label}
+              </button>
+            ))}
+            {activeTag && (
+              <button type="button" className="chip on" onClick={() => setActiveTag(null)}>
+                {tagLabels[activeTag] ?? activeTag} ✕
+              </button>
+            )}
+          </div>
+
+          <div className="events">
+            {loading
+              ? Array.from({ length: 8 }, (_, i) => <div key={i} className="ev-skeleton"><div className="art" /></div>)
+              : visible.map(c => (
+                <Link key={c.id} to={c.href} className="ev">
+                  <div className="art">{c.image && <img src={c.image} alt="" loading="lazy" />}</div>
+                  <div className="b">
+                    <span className="t">{c.title}</span>
+                    <span className="w">{c.when}</span>
+                    <div className="meta">
+                      {c.tagSlug && <span className="uni-tag" style={{ '--c': c.tagColor } as React.CSSProperties}>{c.tagLabel}</span>}
+                      <span className={`stat ${c.status.kind}`}>{c.status.label}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+          </div>
+
+          {!loading && cards.length === 0 && (
+            <p className="annuaire-empty">
+              Aucun événement ne correspond. <button type="button" className="link" onClick={resetFilters}>Tout afficher</button>
+            </p>
+          )}
+        </div>
+      </section>
     </div>
   )
 }

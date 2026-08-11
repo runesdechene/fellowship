@@ -149,6 +149,46 @@ html:not(.light) .lv2 {
 }
 .lv2 .etag:hover { transform: translateY(-2px); }
 
+/* ── L'annuaire : filtres, grille, cartes ──────────────────────── */
+.lv2 .filters { display: flex; flex-wrap: wrap; gap: 9px; }
+.lv2 .chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; border-radius: 999px; font-size: .8125rem; font-weight: 500;
+  border: 0; background: var(--block-2); color: var(--ink-soft); cursor: pointer;
+}
+.lv2 .chip svg { width: 14px; height: 14px; }
+.lv2 .chip:hover { background: var(--block); color: var(--ink); }
+.lv2 .chip.on { background: var(--accent-lv2); color: var(--accent-ink); }
+
+/* La grille : mêmes événements, trois lectures. */
+.lv2 .events { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 20px; }
+.lv2 .ev { display: flex; flex-direction: column; border-radius: 20px; background: var(--block-2); padding: 10px 10px 4px; text-decoration: none; color: inherit; transition: background .22s; }
+.lv2 .ev:hover { background: var(--block); }
+/* La photo réelle quand l'orga en a fourni une (29 événements sur 42 en ont
+   une aujourd'hui) ; le dégradé neutre sinon. Jamais d'illustration dessinée. */
+.lv2 .ev .art { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 13px; transition: transform .24s; background: linear-gradient(152deg, var(--photo-a), var(--photo-b)); }
+.lv2 .ev .art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lv2 .ev:hover .art { transform: translateY(-2px); }
+.lv2 .ev .b { padding: 14px 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+.lv2 .ev .t { font-size: 1rem; font-weight: 600; letter-spacing: -.016em; line-height: 1.25; }
+.lv2 .ev .w { font-size: .8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.lv2 .ev .meta { display: flex; align-items: center; gap: 8px; margin-top: 7px; flex-wrap: wrap; }
+.lv2 .uni-tag {
+  display: inline-flex; align-items: center; gap: 6px; font-size: .75rem; font-weight: 500;
+  padding: 4px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--c) var(--tag-bg), transparent);
+  color: color-mix(in srgb, var(--c) var(--tag-ink), var(--ink));
+}
+.lv2 .stat { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: .6875rem; font-weight: 700; }
+.lv2 .stat.open { background: var(--ok-wash); color: var(--ok); }
+.lv2 .stat.soon { background: var(--wait-wash); color: var(--wait); }
+.lv2 .stat.info { background: var(--block); color: var(--ink-soft); }
+
+/* Squelettes pendant le chargement : la grille ne doit pas sauter. */
+.lv2 .ev-skeleton { border-radius: 20px; background: var(--block-2); padding: 10px 10px 4px; }
+.lv2 .ev-skeleton .art { background: var(--block); }
+.lv2 .annuaire-empty { padding: 40px 0; color: var(--ink-soft); font-size: .9375rem; }
+
 @media (prefers-reduced-motion: reduce) {
   .lv2 *, .lv2 *::before, .lv2 *::after { transition: none !important; animation: none !important; }
 }
