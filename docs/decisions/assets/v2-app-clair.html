@@ -51,10 +51,10 @@
     margin: 0; color: var(--ink);
     font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
     font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    /* Parchemin nu. La trame tissée est retirée : elle produisait un
+       effet grillagé. La matière vient désormais uniquement des
+       dégradés, du liseré de lumière et des ombres diffuses. */
     background-color: var(--parchment);
-    background-image:
-      repeating-linear-gradient(97deg, var(--tooth) 0 1px, transparent 1px 4px),
-      repeating-linear-gradient(4deg, var(--tooth) 0 1px, transparent 1px 6px);
   }
   p { margin: 0; }
   svg { flex: none; }
@@ -152,15 +152,8 @@
     padding: 24px; display: flex; flex-direction: column; gap: 14px;
     position: relative;
   }
-  /* Grain de papier PAR CARTE : la matière se voit là où l'œil se
-     pose, pas en fond d'écran. */
-  .card::after, .ecard::after {
-    content: ""; position: absolute; inset: 0; border-radius: inherit;
-    pointer-events: none; opacity: .5;
-    background-image:
-      repeating-linear-gradient(97deg, rgba(120,96,72,.05) 0 1px, transparent 1px 4px),
-      repeating-linear-gradient(4deg, rgba(120,96,72,.05) 0 1px, transparent 1px 6px);
-  }
+  /* (Le grain par carte a été retiré lui aussi : mêmes hachures,
+     même effet grillagé.) */
   .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .muted { color: var(--ink-soft); font-size: .875rem; }
   .faint { color: var(--ink-faint); font-size: .8125rem; }
