@@ -20,9 +20,17 @@
   <body>
     <script>
       // Anti-flash : applique le thème persisté avant le premier paint. Nuit = défaut (aucune classe).
+      // Cas particulier V2 (décision 0007) : une visite neuve (aucun thème stocké) sur l'annuaire
+      // atterrit en clair — il faut le savoir ICI, en synchrone, sinon le premier paint est sombre
+      // avant que React ne rattrape via setTheme('day'). Un choix de thème déjà stocké reste roi.
       try {
-        if (localStorage.getItem('flwsh-theme') === 'day') {
+        var theme = localStorage.getItem('flwsh-theme');
+        if (theme === 'day') {
           document.documentElement.classList.add('light');
+        } else if (theme === null) {
+          var isV2 = new URLSearchParams(location.search).get('v2') === '1'
+            || localStorage.getItem('flwsh-landing-v2') === '1';
+          if (isV2) document.documentElement.classList.add('light');
         }
       } catch (e) {}
     </script>
