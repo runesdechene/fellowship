@@ -128,6 +128,21 @@ Sur un festival de 150 exposants :
 - **Plancher** pour ne pas perdre d'argent sous 30 stands ; **plafond** pour éviter le chiffre qui fait peur sur les très gros (à 2 % sans plafond, un gros festival verrait 7 200 € — prix d'un ERP, refus assuré).
 - **Argument de vente** : *« moins de 2 % de vos recettes d'emplacement, contre trois semaines de travail récupérées. »*
 
+### Qui paie les frais : l'orga choisit
+
+**L'organisateur décide, à la création de l'événement, s'il répercute les frais de dossier sur le tarif d'emplacement ou s'il les absorbe.** C'est le standard du métier (Eventbrite, HelloAsso, Billetweb) — les orgas connaissent ce choix et l'attendent.
+
+**Ce que ça débloque :** le prix cesse d'être une objection. L'argumentaire devient *« ça peut ne rien vous coûter »*. Et pour celui qui répercute : *« le temps que vos salariés passent aujourd'hui sur les dossiers est déjà dans votre prix d'emplacement, il est juste invisible. On le remplace par 6 €. Vous ne créez pas une dépense, vous en substituez une moins chère. »*
+
+**Condition non négociable — transparent, jamais caché.** L'exposant voit **« 406 € · dont 6 € de frais de dossier »**. Sur un emplacement à 400 €, le montant est dérisoire face à l'essence et à l'hôtel ; le cacher ne rapporterait rien et abîmerait la confiance, qui est précisément notre fossé (cf. [0005](0005-avis-bien-commun-exposants.md)).
+
+**Bénéfice caché de la transparence :** quand l'exposant voit la ligne, il identifie Fellowship comme l'outil que son orga utilise — et il le réclame au festival suivant qui le fait encore ramer sur un Google Form. **La ligne de 6 € alimente gratuitement le mécanisme de traction** décrit plus haut.
+
+**Trois règles de mise en œuvre :**
+- Le pourcentage se calcule **sur le prix de base**, sinon on majore un prix déjà majoré.
+- Le choix se fait **à la création de l'événement**, jamais au dossier — sinon deux exposants du même festival paieraient différemment.
+- **Défaut : répercuté.** La plupart des orgas gardent le défaut ; celui qui préfère absorber le fait en un clic et peut s'en prévaloir auprès de son plateau.
+
 **Contrainte produit qui en découle :** le concurrent (Google Forms) est gratuit. Le logiciel doit donc **rendre le temps gagné visible** — « 147 dossiers traités, 12 h économisées » — sinon l'orga compare à zéro et il a raison.
 
 **Ce que ça avance dans la feuille de route — et ce n'est PAS l'encaissement.**

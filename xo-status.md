@@ -26,7 +26,13 @@ Le tarif n'est pas déclaré, il est transacté → sous-déclaration structurel
 L'encaissement (Stripe Connect) n'est **plus nécessaire** au modèle.
 Avantage imbattable : le formulaire est côté orga, **le dossier est côté exposant** (pré-rempli).
 Ordre de grandeur : ~7 festivals comblent le trou, ~15 couvrent le plancher entier.
+**Qui paie les frais : l'orga choisit** (répercuté sur le tarif d'emplacement ou absorbé) —
+standard du métier, ça supprime l'objection prix. Défaut = répercuté. Calcul sur le prix de
+base, choix à la création de l'événement. **Transparent obligatoire** : « 406 € · dont 6 € de
+frais de dossier ». Bénéfice : l'exposant identifie Fellowship et le réclame au festival suivant.
 Mise sur le marché : **prévente de 2-3 pilotes** « saison 2027, tarif fondateur gelé 2 ans ».
+📌 **Uriel doit encore fournir le contenu réel d'un dossier de candidature** (il le connaît par
+cœur, il le donnera plus tard). Bloquant pour spécifier le formulaire configurable.
 ⚠️ Honnêteté due : **ça ne fait pas 1 500 €/mois en 6 mois.** Le pont de trésorerie reste non résolu.
 ⚠️ Ne pas re-proposer : salariat, prestation de projet aux festivals, hausse du prix Pro exposant.
 
