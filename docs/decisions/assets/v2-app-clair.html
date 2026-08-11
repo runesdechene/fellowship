@@ -1,0 +1,567 @@
+<title>Fellowship V2 — l'app en clair</title>
+
+<style>
+  :root, :root[data-accent="terracotta"] {
+    --accent: #C06846; --accent-ink: #FFF6F0; --accent-wash: rgba(192,104,70,.11);
+  }
+  :root[data-accent="bordeaux"] { --accent:#8A2B41; --accent-ink:#FDF4F2; --accent-wash:rgba(138,43,65,.10); }
+  :root[data-accent="violet"]   { --accent:#5B3FA8; --accent-ink:#F7F3FF; --accent-wash:rgba(91,63,168,.10); }
+  :root[data-accent="bleu"]     { --accent:#2340E8; --accent-ink:#F3F5FF; --accent-wash:rgba(35,64,232,.10); }
+
+  :root {
+    --parchment: #F4EEE1;
+    --rail:      #EFE8D9;
+    --surface:   #FBF7EF;
+    --surface-2: #F3EDE1;
+    --ink:       #594848;
+    --ink-soft:  #8C7B72;
+    --ink-faint: #B0A197;
+    --hairline:  rgba(89,72,72,.13);
+    --hairline-2:rgba(89,72,72,.07);
+    --shade:     rgba(89,72,72,.045);
+    --tooth:     rgba(120,96,72,.026);
+    --sky-1:#F2D9A8; --sky-2:#E8B98C;
+    --hill-far:#B79A78; --hill-mid:#93795E; --hill-near:#6E5843;
+    --mark-1:#4E3E30; --glow:#F6E2B4;
+    --sidebar-w: 232px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink);
+    font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    background-color: var(--parchment);
+    background-image:
+      repeating-linear-gradient(97deg, var(--tooth) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(4deg, var(--tooth) 0 1px, transparent 1px 6px);
+  }
+  p { margin: 0; }
+  svg { flex: none; }
+
+  /* ── Chrome de démo ──────────────────────────────────────────── */
+  .demo-bar {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 60;
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 9px; border-radius: 999px;
+    border: 1px solid var(--hairline); background: var(--surface);
+    box-shadow: 0 8px 26px rgba(50,38,28,.13);
+  }
+  .demo-bar .lbl { font-size: .6875rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-faint); padding-left: 8px; }
+  .acc { width: 24px; height: 24px; border-radius: 999px; cursor: pointer; border: 2px solid transparent; padding: 0; box-shadow: inset 0 0 0 1px var(--hairline); }
+  .acc[aria-pressed="true"] { border-color: var(--ink); }
+  .acc:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .a-terracotta { background:#C06846; } .a-bordeaux { background:#8A2B41; }
+  .a-violet { background:#5B3FA8; } .a-bleu { background:#2340E8; }
+
+  /* ── Coque applicative ───────────────────────────────────────── */
+  .app { display: flex; min-height: 100vh; }
+
+  .side {
+    width: var(--sidebar-w); flex: none;
+    border-right: 1px solid var(--hairline-2);
+    background: var(--rail);
+    padding: 22px 14px 20px;
+    display: flex; flex-direction: column; gap: 26px;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; font-weight: 600; letter-spacing: -.02em; font-size: 1rem; }
+  .brand .mark { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: .75rem; font-weight: 700; }
+  .brand .dot { color: var(--accent); }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav a {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px; border-radius: 11px;
+    color: var(--ink-soft); text-decoration: none;
+    font-size: .9375rem; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .nav a svg { width: 18px; height: 18px; }
+  .nav a:hover { background: var(--shade); color: var(--ink); }
+  .nav a.on { background: var(--surface); color: var(--ink); border-color: var(--hairline-2); font-weight: 600; }
+  .nav a.on svg { color: var(--accent); }
+  .nav .lock { margin-left: auto; font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .side-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-top: 1px solid var(--hairline-2); }
+  .side-foot .av { width: 30px; height: 30px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--hairline-2); display: grid; place-items: center; font-size: .6875rem; font-weight: 700; color: var(--ink-soft); }
+  .side-foot .who { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+  .side-foot .n { font-size: .8125rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .side-foot .p { font-size: .6875rem; color: var(--ink-faint); }
+
+  .main { flex: 1; min-width: 0; padding: 44px 46px 120px; }
+  .screen { display: none; flex-direction: column; gap: 40px; max-width: 1080px; }
+  .screen.on { display: flex; }
+
+  /* ── Typographie ─────────────────────────────────────────────── */
+  .page-title { font-size: 2rem; font-weight: 500; letter-spacing: -.032em; line-height: 1.08; margin: 0; }
+  .page-sub { font-size: .9375rem; color: var(--ink-soft); }
+  .sec-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+  h2.blk { font-size: 1.25rem; font-weight: 500; letter-spacing: -.024em; margin: 0; }
+  h3 { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; margin: 0; }
+
+  .topbar { display: flex; align-items: center; gap: 16px; }
+  .topbar .av {
+    width: 52px; height: 52px; border-radius: 999px; flex: none;
+    background: var(--accent-wash); color: var(--accent);
+    display: grid; place-items: center; font-weight: 700; font-size: 1rem;
+  }
+
+  /* ── Cartes ──────────────────────────────────────────────────── */
+  .card { border: 1px solid var(--hairline-2); border-radius: 18px; background: var(--surface); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .muted { color: var(--ink-soft); font-size: .875rem; }
+  .faint { color: var(--ink-faint); font-size: .8125rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .row { display: flex; align-items: center; gap: 12px; }
+
+  /* Prochain festival */
+  .next { display: grid; grid-template-columns: 168px 1fr; gap: 0; padding: 0; overflow: hidden; }
+  .next .art { overflow: hidden; }
+  .next .art svg { display: block; width: 100%; height: 100%; }
+  .next .in { padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+  .next .ttl { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+    padding: 5px 12px; border-radius: 999px; font-size: .75rem; font-weight: 600;
+    background: var(--accent-wash); color: var(--accent);
+  }
+
+  /* Frise de saison */
+  .frise { display: flex; flex-direction: column; gap: 16px; }
+  .frise-track { display: flex; align-items: flex-end; gap: 5px; height: 78px; }
+  .frise-track i {
+    flex: 1; border-radius: 5px 5px 3px 3px; background: var(--surface-2);
+    border: 1px solid var(--hairline-2); display: block;
+    height: 14px; /* mois vide : un socle, pas rien */
+  }
+  .frise-track i.has { background: var(--accent-wash); border-color: transparent; height: 46px; }
+  .frise-track i.has.d2 { height: 62px; }
+  .frise-track i.has.d3 { height: 78px; }
+  .frise-track i.now { background: var(--accent); border-color: transparent; height: 46px; }
+  .frise-months { display: flex; gap: 5px; }
+  .frise-months span { flex: 1; text-align: center; font-size: .625rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* Listes */
+  .list { display: flex; flex-direction: column; }
+  .li { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-top: 1px solid var(--hairline-2); }
+  .li:first-of-type { border-top: 0; }
+  .txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+  .txt .t { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; }
+  .txt .s { font-size: .8125rem; color: var(--ink-soft); }
+  .thumb { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; border: 1px solid var(--hairline-2); flex: none; }
+  .thumb svg { display: block; width: 100%; height: 100%; }
+
+  .dot { width: 9px; height: 9px; border-radius: 999px; display: inline-block; flex: none; }
+  .dot.ok { background: var(--accent); }
+  .dot.wait { background: transparent; border: 1.5px solid var(--ink-faint); }
+
+  .faces { display: flex; }
+  .face { width: 24px; height: 24px; border-radius: 999px; background: var(--surface-2); border: 1.5px solid var(--surface); margin-left: -7px; display: grid; place-items: center; font-size: .625rem; font-weight: 700; color: var(--ink-soft); }
+  .face:first-child { margin-left: 0; }
+
+  .amount { font-variant-numeric: tabular-nums; font-weight: 600; font-size: .9375rem; }
+  .amount.pos { color: var(--accent); }
+
+  /* Cartes événement */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+  .ecard { border: 1px solid var(--hairline-2); border-radius: 18px; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; cursor: pointer; }
+  .ecard:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .ecard .art { aspect-ratio: 4/3; overflow: hidden; }
+  .ecard .art svg { display: block; width: 100%; height: 100%; }
+  .ecard .b { padding: 16px 17px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .ecard .t { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; }
+  .ecard .w { font-size: .8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .ecard .who { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .8125rem; color: var(--ink-soft); }
+
+  /* Barre de recherche + filtres */
+  .search {
+    display: flex; align-items: center; gap: 11px;
+    padding: 13px 18px; border-radius: 999px;
+    border: 1px solid var(--hairline); background: var(--surface); color: var(--ink-faint);
+    font-size: .9375rem; max-width: 460px;
+  }
+  .search svg { width: 17px; height: 17px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 999px; font-size: .8125rem; font-weight: 500;
+    border: 1px solid var(--hairline); background: transparent; color: var(--ink-soft); cursor: pointer;
+  }
+  .chip svg { width: 14px; height: 14px; }
+  .chip.on { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+
+  /* Calendrier */
+  .month { display: flex; flex-direction: column; gap: 2px; }
+  .month-h { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 14px; }
+  .month-h .m { font-size: 1.125rem; font-weight: 500; letter-spacing: -.022em; }
+  .month-h .c { font-size: .75rem; color: var(--ink-faint); letter-spacing: .1em; text-transform: uppercase; }
+  .drow { display: grid; grid-template-columns: 44px 64px 1fr auto; gap: 18px; align-items: center; padding: 16px 8px; border-top: 1px solid var(--hairline-2); border-radius: 10px; }
+  .drow:hover { background: var(--shade); }
+  .drow .thumb { width: 44px; height: 44px; }
+  .dnum { font-size: 1.375rem; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; line-height: 1; }
+  .dsub { font-size: .6875rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
+  .empty-month { padding: 22px 8px; border-top: 1px solid var(--hairline-2); font-size: .875rem; color: var(--ink-faint); }
+
+  .quota { display: flex; align-items: center; gap: 12px; padding: 15px 20px; border-radius: 14px; background: var(--accent-wash); color: var(--accent); font-size: .875rem; font-weight: 500; }
+  .quota svg { width: 17px; height: 17px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 1000px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .next { grid-template-columns: 1fr; } .next .art { aspect-ratio: 16/6; } }
+  @media (max-width: 760px) {
+    .side { display: none; }
+    .main { padding: 28px 20px 110px; }
+    .drow { grid-template-columns: 44px 1fr auto; gap: 14px; }
+    .drow .daycol { display: none; }
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--sky-1)" /><stop offset="100%" stop-color="var(--sky-2)" />
+    </linearGradient>
+
+    <!-- Fête médiévale : donjon, tentes, oriflammes -->
+    <symbol id="art-castle" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="url(#sky)" />
+      <circle cx="308" cy="86" r="34" fill="var(--glow)" opacity=".78" />
+      <path d="M0 176 L54 148 L108 172 L170 140 L232 170 L292 146 L352 174 L400 152 L400 300 L0 300Z" fill="var(--hill-far)" />
+      <g fill="var(--mark-1)" opacity=".9">
+        <rect x="150" y="86" width="26" height="96" /><rect x="196" y="66" width="32" height="116" /><rect x="248" y="94" width="24" height="88" />
+        <path d="M148 86h30l-15-22zM194 66h36l-18-26zM246 94h28l-14-20z" />
+        <rect x="176" y="122" width="20" height="60" /><rect x="228" y="128" width="20" height="54" />
+      </g>
+      <path d="M0 206 L60 178 L124 204 L192 176 L262 206 L330 180 L400 208 L400 300 L0 300Z" fill="var(--hill-mid)" />
+      <g fill="var(--hill-near)">
+        <path d="M44 262 L74 214 L104 262Z" /><path d="M116 266 L150 208 L184 266Z" /><path d="M292 264 L322 216 L352 264Z" />
+      </g>
+      <g stroke="var(--mark-1)" stroke-width="2.5" fill="none" opacity=".85">
+        <path d="M74 214 V190" /><path d="M150 208 V180" /><path d="M322 216 V194" />
+      </g>
+      <g fill="var(--accent)" opacity=".95">
+        <path d="M75 190 L100 197 L75 204Z" /><path d="M151 180 L178 188 L151 196Z" /><path d="M323 194 L346 200 L323 206Z" />
+      </g>
+      <path d="M0 272 L400 272 L400 300 L0 300Z" fill="var(--mark-1)" opacity=".55" />
+    </symbol>
+
+    <!-- Festival de musique : scène, portiques, foule -->
+    <symbol id="art-stage" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="url(#sky)" />
+      <g fill="var(--glow)" opacity=".42">
+        <path d="M176 96 L120 250 L164 250Z" /><path d="M200 96 L192 250 L226 250Z" /><path d="M224 96 L252 250 L294 250Z" />
+      </g>
+      <path d="M0 190 L70 168 L140 190 L210 166 L280 192 L350 170 L400 190 L400 300 L0 300Z" fill="var(--hill-far)" />
+      <g fill="var(--mark-1)" opacity=".92">
+        <rect x="112" y="96" width="10" height="146" /><rect x="278" y="96" width="10" height="146" /><rect x="112" y="92" width="176" height="12" />
+        <rect x="126" y="150" width="26" height="92" /><rect x="248" y="150" width="26" height="92" />
+        <rect x="164" y="184" width="72" height="58" rx="4" />
+      </g>
+      <g stroke="var(--mark-1)" stroke-width="3" opacity=".9">
+        <path d="M120 104 L280 104" /><path d="M120 118 L280 118" />
+      </g>
+      <path d="M0 246 Q30 232 58 246 Q88 230 116 246 Q146 231 174 246 Q204 230 232 246 Q262 232 290 246 Q320 230 348 246 Q376 233 400 246 L400 300 L0 300Z" fill="var(--hill-near)" />
+      <path d="M0 274 L400 274 L400 300 L0 300Z" fill="var(--mark-1)" opacity=".6" />
+    </symbol>
+
+    <!-- Convention en halle : arches, stands, fanions -->
+    <symbol id="art-hall" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="300" fill="url(#sky)" />
+      <g fill="var(--hill-far)">
+        <path d="M28 250 V128 a44 44 0 0 1 88 0 V250Z" /><path d="M156 250 V116 a44 44 0 0 1 88 0 V250Z" /><path d="M284 250 V128 a44 44 0 0 1 88 0 V250Z" />
+      </g>
+      <g fill="var(--glow)" opacity=".55">
+        <path d="M46 244 V136 a26 26 0 0 1 52 0 V244Z" /><path d="M174 244 V124 a26 26 0 0 1 52 0 V244Z" /><path d="M302 244 V136 a26 26 0 0 1 52 0 V244Z" />
+      </g>
+      <g fill="var(--accent)" opacity=".9">
+        <path d="M0 62 L22 62 L11 82Z" /><path d="M44 66 L66 66 L55 86Z" /><path d="M88 62 L110 62 L99 82Z" /><path d="M132 66 L154 66 L143 86Z" /><path d="M176 62 L198 62 L187 82Z" /><path d="M220 66 L242 66 L231 86Z" /><path d="M264 62 L286 62 L275 82Z" /><path d="M308 66 L330 66 L319 86Z" /><path d="M352 62 L374 62 L363 82Z" />
+      </g>
+      <path d="M0 58 L400 62" stroke="var(--mark-1)" stroke-width="2.5" fill="none" opacity=".7" />
+      <g fill="var(--hill-near)">
+        <rect x="34" y="212" width="76" height="38" rx="5" /><rect x="162" y="204" width="76" height="46" rx="5" /><rect x="290" y="212" width="76" height="38" rx="5" />
+      </g>
+      <path d="M0 250 L400 250 L400 300 L0 300Z" fill="var(--mark-1)" opacity=".55" />
+    </symbol>
+
+    <!-- Panorama du hero -->
+    <symbol id="art-pano" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
+      <rect width="1200" height="400" fill="url(#sky)" />
+      <circle cx="960" cy="112" r="52" fill="var(--glow)" opacity=".8" />
+      <g stroke="var(--mark-1)" stroke-width="2.5" fill="none" opacity=".45">
+        <path d="M700 84 q12 -10 24 0 q12 10 24 0" /><path d="M772 62 q10 -8 20 0 q10 8 20 0" /><path d="M648 112 q9 -7 18 0 q9 7 18 0" />
+      </g>
+      <path d="M0 226 L120 190 L246 224 L372 184 L500 222 L628 186 L760 226 L890 192 L1020 228 L1140 196 L1200 220 L1200 400 L0 400Z" fill="var(--hill-far)" />
+      <g fill="var(--mark-1)" opacity=".88">
+        <rect x="196" y="110" width="30" height="122" /><rect x="246" y="84" width="38" height="148" /><rect x="304" y="118" width="28" height="114" />
+        <path d="M194 110h34l-17-26zM244 84h42l-21-30zM302 118h32l-16-24z" />
+        <rect x="226" y="150" width="20" height="82" /><rect x="284" y="156" width="20" height="76" />
+      </g>
+      <path d="M0 274 L140 240 L282 274 L420 238 L560 276 L700 240 L846 278 L988 244 L1120 278 L1200 256 L1200 400 L0 400Z" fill="var(--hill-mid)" />
+      <g fill="var(--hill-near)">
+        <path d="M84 350 L128 276 L172 350Z" /><path d="M196 356 L246 268 L296 356Z" /><path d="M420 352 L462 282 L504 352Z" />
+        <path d="M700 354 L744 280 L788 354Z" /><path d="M812 358 L862 272 L912 358Z" /><path d="M1024 352 L1066 282 L1108 352Z" />
+      </g>
+      <g stroke="var(--mark-1)" stroke-width="3" fill="none" opacity=".85">
+        <path d="M128 276 V244" /><path d="M246 268 V232" /><path d="M462 282 V252" /><path d="M744 280 V248" /><path d="M862 272 V238" /><path d="M1066 282 V250" />
+      </g>
+      <g fill="var(--accent)">
+        <path d="M129 244 L162 253 L129 262Z" /><path d="M247 232 L284 243 L247 254Z" /><path d="M463 252 L494 260 L463 268Z" />
+        <path d="M745 248 L778 257 L745 266Z" /><path d="M863 238 L900 249 L863 260Z" /><path d="M1067 250 L1098 258 L1067 266Z" />
+      </g>
+      <path d="M0 366 L1200 366 L1200 400 L0 400Z" fill="var(--mark-1)" opacity=".5" />
+    </symbol>
+
+    <!-- Petits repères dessinés -->
+    <symbol id="i-tent" viewBox="0 0 24 24"><path d="M12 4 L21 20 H3 Z M12 4 V20 M7.5 20 L12 12 L16.5 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.4 8.6 L10.6 10.6 L8.6 15.4 L13.4 13.4 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5.2" width="17" height="15.3" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 10.2h17M8 3.4v3.6M16 3.4v3.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.4 C12 3.4 5.6 10.6 5.6 14.6 a6.4 6.4 0 0 0 12.8 0 C18.4 10.6 12 3.4 12 3.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-type" viewBox="0 0 24 24"><path d="M4.6 6.2V4.4h14.8v1.8M12 4.4v15.2M8.8 19.6h6.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-cards" viewBox="0 0 24 24"><rect x="3.4" y="6.4" width="10.6" height="13.4" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.6 4.2h9a3 3 0 0 1 3 3v9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M6.4 4.4h11.2a2 2 0 0 1 2 2v13.2H8.4a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.6 9h7M9.6 13h7M9.6 17h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="M6.6 6.6l10.8 10.8M17.4 6.6L6.6 17.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.6l4.6 4.4L19 7.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.4v13.2M5.4 12h13.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+      <symbol id="n-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.6 8.4 L10.6 10.6 L8.4 15.6 L13.4 13.4 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="3" width="7.5" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="11" width="7.5" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="15" width="7.5" height="6" rx="2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10h18M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-map" viewBox="0 0 24 24"><path d="M9 4 L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4v13M15 6.5v13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.6 20v-1a6 6 0 0112.8 0v1M16.5 5.2a3.6 3.6 0 010 6.6M21.4 20v-1a5.6 5.6 0 00-3.3-5.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-store" viewBox="0 0 24 24"><path d="M4 9.5V20h16V9.5M2.6 9.5 4.6 4h14.8l2 5.5a3 3 0 01-5.6 1.6 3 3 0 01-5.6 0 3 3 0 01-5.6 0 3 3 0 01-2-1.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="n-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 007.5 19.5l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 15H3a2 2 0 110-4h.1A1.6 1.6 0 004.5 8.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010 4.6V4a2 2 0 114 0v.1a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1A1.6 1.6 0 0021 11h.1a2 2 0 110 4H21a1.6 1.6 0 00-1.6 1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 20l-3.8-3.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="demo-bar">
+  <span class="lbl">Accent</span>
+  <button class="acc a-terracotta" type="button" data-acc="terracotta" aria-pressed="true" title="Terracotta (actuel)" aria-label="Terracotta"></button>
+  <button class="acc a-bordeaux" type="button" data-acc="bordeaux" aria-pressed="false" title="Bordeaux" aria-label="Bordeaux"></button>
+  <button class="acc a-violet" type="button" data-acc="violet" aria-pressed="false" title="Violet" aria-label="Violet"></button>
+  <button class="acc a-bleu" type="button" data-acc="bleu" aria-pressed="false" title="Bleu électrique" aria-label="Bleu électrique"></button>
+</div>
+
+<div class="app">
+
+  <aside class="side">
+    <span class="brand"><span class="mark">F</span>Fellowship<span class="dot">.</span></span>
+    <nav class="nav">
+      <a data-scr="explorer"><svg><use href="#n-compass" /></svg>Explorer</a>
+      <a data-scr="cockpit" class="on"><svg><use href="#n-dash" /></svg>Cockpit</a>
+      <a data-scr="calendrier"><svg><use href="#n-cal" /></svg>Calendrier</a>
+      <a><svg><use href="#n-map" /></svg>Carte</a>
+      <a><svg><use href="#n-users" /></svg>Communauté</a>
+      <a><svg><use href="#n-store" /></svg>Ma vitrine</a>
+      <a><svg><use href="#n-cog" /></svg>Réglages</a>
+    </nav>
+    <div class="side-foot">
+      <span class="av">RC</span>
+      <span class="who"><span class="n">Runes de Chêne</span><span class="p">Pro</span></span>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ════════ COCKPIT ════════ -->
+    <section class="screen on" id="scr-cockpit">
+      <div class="topbar">
+        <span class="av">RC</span>
+        <div>
+          <h1 class="page-title">Bonjour Runes de Chêne</h1>
+          <p class="page-sub">Ta prochaine action</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card next">
+          <div class="art"><svg><use href="#art-castle" /></svg></div>
+          <div class="in">
+            <span class="sec-label">Prochain festival</span>
+            <span class="ttl">Trolls &amp; Légendes</span>
+            <span class="muted">24 – 26 avril · Mons, Belgique · 3 jours</span>
+            <span class="badge">Dans 12 jours</span>
+            <div class="row" style="margin-top:6px">
+              <span class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></span>
+              <span class="faint">4 de ton réseau y seront</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card frise">
+          <div class="card-head">
+            <span class="sec-label">Ta saison</span>
+            <span class="faint">9 dates · 3 en attente</span>
+          </div>
+          <div class="frise-track">
+            <i></i><i></i><i class="has"></i><i class="now"></i><i class="has d2"></i><i class="has d3"></i>
+            <i></i><i class="has"></i><i class="has"></i><i></i><i class="has"></i><i class="has d2"></i>
+          </div>
+          <div class="frise-months">
+            <span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span>
+            <span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span>
+          </div>
+          <p class="faint">Ton mois le plus chargé : juin, 3 dates.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-head"><h3>À régler</h3><span class="faint">2</span></div>
+          <div class="list">
+            <div class="li"><span class="dot wait"></span><span class="txt"><span class="t">Provins</span><span class="s">Emplacement · 120 €</span></span><span class="amount">120 €</span></div>
+            <div class="li"><span class="dot wait"></span><span class="txt"><span class="t">Convention Tattoo</span><span class="s">Acompte · 60 €</span></span><span class="amount">60 €</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Compagnons de route</h3><span class="faint">Avril</span></div>
+          <div class="list">
+            <div class="li"><span class="face" style="margin:0">M</span><span class="txt"><span class="t">Marie</span><span class="s">4 dates avec toi</span></span></div>
+            <div class="li"><span class="face" style="margin:0">J</span><span class="txt"><span class="t">Julien</span><span class="s">2 dates avec toi</span></span></div>
+            <div class="li"><span class="face" style="margin:0">L</span><span class="txt"><span class="t">Léa</span><span class="s">1 date avec toi</span></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Mes bilans</h3><span class="faint">Saison</span></div>
+          <div class="list">
+            <div class="li"><span class="txt"><span class="t">Vaison</span><span class="s">Mars · 2 jours</span></span><span class="amount">−140 €</span></div>
+            <div class="li"><span class="txt"><span class="t">Marché de Noël</span><span class="s">Décembre · 4 jours</span></span><span class="amount pos">+610 €</span></div>
+            <div class="li"><span class="txt"><span class="t">Total net</span><span class="s">6 bilans remplis</span></span><span class="amount pos">+1 240 €</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ CALENDRIER ════════ -->
+    <section class="screen" id="scr-calendrier">
+      <div>
+        <h1 class="page-title">Ma saison 2027</h1>
+        <p class="page-sub">9 dates · 3 en attente de réponse</p>
+      </div>
+
+      <div class="quota"><svg><use href="#i-check" /></svg>Plan Pro — dates illimitées</div>
+
+      <div class="month">
+        <div class="month-h"><span class="m">Avril</span><span class="c">1 date</span></div>
+        <div class="drow">
+          <div class="thumb"><svg><use href="#art-castle" /></svg></div>
+          <div class="daycol"><div class="dnum">24</div><div class="dsub">sam</div></div>
+          <div class="txt"><span class="t">Trolls &amp; Légendes</span><span class="s">Mons, Belgique · 3 jours</span></div>
+          <div class="row"><span class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></span><span class="dot ok"></span></div>
+        </div>
+      </div>
+
+      <div class="month">
+        <div class="month-h"><span class="m">Mai</span><span class="c">2 dates</span></div>
+        <div class="drow">
+          <div class="thumb"><svg><use href="#art-hall" /></svg></div>
+          <div class="daycol"><div class="dnum">07</div><div class="dsub">ven</div></div>
+          <div class="txt"><span class="t">Convention Tattoo Nantes</span><span class="s">Nantes · 3 jours</span></div>
+          <div class="row"><span class="dot wait"></span></div>
+        </div>
+        <div class="drow">
+          <div class="thumb"><svg><use href="#art-castle" /></svg></div>
+          <div class="daycol"><div class="dnum">22</div><div class="dsub">sam</div></div>
+          <div class="txt"><span class="t">Fête médiévale de Provins</span><span class="s">Provins · 2 jours</span></div>
+          <div class="row"><span class="faces"><span class="face">A</span><span class="face">M</span></span><span class="dot ok"></span></div>
+        </div>
+      </div>
+
+      <div class="month">
+        <div class="month-h"><span class="m">Juin</span><span class="c">1 date</span></div>
+        <div class="drow">
+          <div class="thumb"><svg><use href="#art-stage" /></svg></div>
+          <div class="daycol"><div class="dnum">18</div><div class="dsub">jeu</div></div>
+          <div class="txt"><span class="t">Hellfest — Village artisans</span><span class="s">Clisson · 4 jours</span></div>
+          <div class="row"><span class="faces"><span class="face">P</span></span><span class="dot wait"></span></div>
+        </div>
+      </div>
+
+      <div class="month">
+        <div class="month-h"><span class="m">Juillet</span><span class="c">Rien de prévu</span></div>
+        <div class="empty-month">Aucune date. Trois festivals de ton réseau cherchent encore des exposants ce mois-ci.</div>
+      </div>
+    </section>
+
+    <!-- ════════ EXPLORER ════════ -->
+    <section class="screen" id="scr-explorer">
+      <div>
+        <h1 class="page-title">Où poser ton stand</h1>
+        <p class="page-sub">412 événements · 340 prennent des exposants</p>
+      </div>
+
+      <div class="search"><svg><use href="#i-search" /></svg>Chercher un festival, une ville…</div>
+
+      <div class="chips">
+        <span class="chip on"><svg><use href="#i-tent" /></svg>Prend des exposants</span>
+        <span class="chip"><svg><use href="#i-cal" /></svg>Printemps 2027</span>
+        <span class="chip">Moins de 300 km</span>
+        <span class="chip">Où vont mes potes</span>
+        <span class="chip">Candidatures ouvertes</span>
+      </div>
+
+      <div class="cards">
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-castle" /></svg></div>
+          <div class="b"><span class="t">Trolls &amp; Légendes</span><span class="w">24 – 26 avril · Mons</span>
+            <div class="who"><span class="faces"><span class="face">M</span><span class="face">J</span><span class="face">L</span></span>4 de ton réseau</div></div>
+        </div>
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-stage" /></svg></div>
+          <div class="b"><span class="t">Hellfest — Village</span><span class="w">18 – 20 juin · Clisson</span>
+            <div class="who"><span class="faces"><span class="face">A</span><span class="face">P</span></span>2 de ton réseau</div></div>
+        </div>
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-hall" /></svg></div>
+          <div class="b"><span class="t">Convention Tattoo Nantes</span><span class="w">7 – 9 mai · Nantes</span>
+            <div class="who">Personne pour l'instant</div></div>
+        </div>
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-castle" /></svg></div>
+          <div class="b"><span class="t">Médiévales de Provins</span><span class="w">22 – 23 mai · Provins</span>
+            <div class="who"><span class="faces"><span class="face">A</span><span class="face">M</span></span>2 de ton réseau</div></div>
+        </div>
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-hall" /></svg></div>
+          <div class="b"><span class="t">Marché de Noël · Colmar</span><span class="w">1 – 24 décembre · Colmar</span>
+            <div class="who">Personne pour l'instant</div></div>
+        </div>
+        <div class="ecard">
+          <div class="art"><svg><use href="#art-stage" /></svg></div>
+          <div class="b"><span class="t">Motocultor</span><span class="w">14 – 17 août · Carhaix</span>
+            <div class="who"><span class="faces"><span class="face">J</span></span>1 de ton réseau</div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+
+    var accs = document.querySelectorAll('.acc');
+    Array.prototype.forEach.call(accs, function (a) {
+      a.addEventListener('click', function () {
+        root.setAttribute('data-accent', a.getAttribute('data-acc'));
+        Array.prototype.forEach.call(accs, function (o) {
+          o.setAttribute('aria-pressed', o === a ? 'true' : 'false');
+        });
+      });
+    });
+
+    var links = document.querySelectorAll('.nav a[data-scr]');
+    var screens = document.querySelectorAll('.screen');
+    Array.prototype.forEach.call(links, function (l) {
+      l.addEventListener('click', function () {
+        var id = 'scr-' + l.getAttribute('data-scr');
+        Array.prototype.forEach.call(screens, function (s) { s.classList.toggle('on', s.id === id); });
+        Array.prototype.forEach.call(document.querySelectorAll('.nav a'), function (o) { o.classList.toggle('on', o === l); });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
