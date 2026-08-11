@@ -45,10 +45,10 @@
     --ok: #4E7355;  --ok-wash: rgba(78,115,85,.13);
     --wait: #B98032; --wait-wash: rgba(185,128,50,.14);
 
-    --halo-1: rgba(226,155,118,.34);
-    --halo-2: rgba(186,152,214,.15);
-    --halo-3: rgba(232,180,120,.16);
-    --halo-4: rgba(214,146,120,.16);
+    --halo-1: rgba(226,155,118,.17);
+    --halo-2: rgba(186,152,214,.075);
+    --halo-3: rgba(232,180,120,.08);
+    --halo-4: rgba(214,146,120,.08);
     --halo-blur: 90px;
     --rail-bg: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
     --nav-on: rgba(255,252,245,.92);
@@ -85,10 +85,10 @@
     --wait: #E0B26A; --wait-wash: rgba(224,178,106,.16);
 
     /* Les halos reprennent leur force : c'est la nuit de festival. */
-    --halo-1: rgba(226,124,78,.36);
-    --halo-2: rgba(150,110,205,.30);
-    --halo-3: rgba(226,155,90,.20);
-    --halo-4: rgba(196,96,80,.24);
+    --halo-1: rgba(226,124,78,.18);
+    --halo-2: rgba(150,110,205,.15);
+    --halo-3: rgba(226,155,90,.10);
+    --halo-4: rgba(196,96,80,.12);
     --halo-blur: 110px;
     --rail-bg: linear-gradient(180deg, rgba(30,25,23,.88), rgba(23,19,18,.94));
     --nav-on: rgba(255,240,225,.075);
@@ -204,7 +204,7 @@
   .side-foot .p { font-size: .6875rem; color: var(--ink-faint); }
 
   .main { flex: 1; min-width: 0; padding: 44px 46px 120px; }
-  .screen { display: none; flex-direction: column; gap: 40px; max-width: 1080px; }
+  .screen { display: none; flex-direction: column; gap: 60px; max-width: 1080px; }
   .screen.on { display: flex; }
 
   /* ── Typographie ─────────────────────────────────────────────── */
@@ -221,28 +221,36 @@
     display: grid; place-items: center; font-weight: 700; font-size: 1rem;
   }
 
-  /* ── Cartes ──────────────────────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════════════
+     PRINCIPE : seules les IMAGES ont des bords.
+     Le contenu ne vit plus dans des boîtes — il respire directement
+     sur le parchemin. La matière ne vient plus des cadres mais des
+     visuels arrondis, de l'espace et de la hiérarchie typographique.
+     ══════════════════════════════════════════════════════════════ */
   .card {
-    border: 1px solid var(--hairline-2); border-radius: 18px;
-    background: var(--paper); box-shadow: var(--lift);
-    padding: 24px; display: flex; flex-direction: column; gap: 14px;
+    border: 0; border-radius: 0; background: none; box-shadow: none;
+    padding: 0; display: flex; flex-direction: column; gap: 16px;
     position: relative;
   }
-  /* (Le grain par carte a été retiré lui aussi : mêmes hachures,
-     même effet grillagé.) */
-  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .card-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding-bottom: 4px;
+  }
   .muted { color: var(--ink-soft); font-size: .875rem; }
   .faint { color: var(--ink-faint); font-size: .8125rem; }
 
-  .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 52px; }
   .row { display: flex; align-items: center; gap: 12px; }
 
-  /* Prochain festival */
-  .next { display: grid; grid-template-columns: 168px 1fr; gap: 0; padding: 0; overflow: hidden; }
-  .next .art { overflow: hidden; }
+  /* Prochain festival : l'image est le seul objet qui a un bord. */
+  .next { display: grid; grid-template-columns: 200px 1fr; gap: 26px; align-items: center; }
+  .next .art {
+    overflow: hidden; border-radius: 18px; aspect-ratio: 4/3.4;
+    box-shadow: var(--lift);
+  }
   .next .art svg { display: block; width: 100%; height: 100%; }
-  .next .in { padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+  .next .in { padding: 0; display: flex; flex-direction: column; gap: 9px; }
   .next .ttl { font-size: 1.375rem; font-weight: 500; letter-spacing: -.028em; line-height: 1.15; }
   .badge {
     display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
@@ -268,12 +276,12 @@
 
   /* Listes */
   .list { display: flex; flex-direction: column; }
-  .li { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-top: 1px solid var(--hairline-2); }
+  .li { display: flex; align-items: center; gap: 13px; padding: 15px 0; border-top: 1px solid var(--hairline-2); }
   .li:first-of-type { border-top: 0; }
   .txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
   .txt .t { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; }
   .txt .s { font-size: .8125rem; color: var(--ink-soft); }
-  .thumb { width: 42px; height: 42px; border-radius: 11px; overflow: hidden; border: 1px solid var(--hairline-2); flex: none; }
+  .thumb { width: 42px; height: 42px; border-radius: 12px; overflow: hidden; border: 0; box-shadow: var(--lift); flex: none; }
   .thumb svg { display: block; width: 100%; height: 100%; }
 
   /* Billes de statut : la couleur revient. Elle disait l'état plus
@@ -305,28 +313,33 @@
   .amount.pos { color: var(--accent); }
 
   /* Cartes événement */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 34px 28px; }
+  /* Carte événement : plus de conteneur. Une image arrondie, et le
+     texte posé dessous à même la page. */
   .ecard {
-    border: 1px solid var(--hairline-2); border-radius: 18px;
-    background: var(--paper); box-shadow: var(--lift);
-    overflow: hidden; display: flex; flex-direction: column; position: relative;
-    transition: box-shadow .24s ease, transform .24s ease; cursor: pointer;
+    border: 0; border-radius: 0; background: none; box-shadow: none;
+    display: flex; flex-direction: column; position: relative; cursor: pointer;
   }
-  .ecard:hover { transform: translateY(-4px); box-shadow: var(--lift-hi); }
-  .ecard .art { aspect-ratio: 4/3; overflow: hidden; }
+  .ecard .art {
+    aspect-ratio: 4/3; overflow: hidden; border-radius: 16px;
+    box-shadow: var(--lift);
+    transition: box-shadow .24s ease, transform .24s ease;
+  }
+  .ecard:hover .art { transform: translateY(-4px); box-shadow: var(--lift-hi); }
   .ecard .art svg { display: block; width: 100%; height: 100%; }
-  .ecard .b { padding: 16px 17px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .ecard .b { padding: 14px 2px 0; display: flex; flex-direction: column; gap: 4px; }
   .ecard .t { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; }
   .ecard .w { font-size: .8125rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
   .ecard .who { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .8125rem; color: var(--ink-soft); }
 
   /* Barre de recherche + filtres */
+  /* Champ de recherche : un simple filet en dessous, pas une boîte. */
   .search {
-    display: flex; align-items: center; gap: 11px;
-    padding: 14px 20px; border-radius: 999px;
-    border: 1px solid var(--hairline-2); background: var(--paper);
-    box-shadow: var(--lift); color: var(--ink-faint);
-    font-size: .9375rem; max-width: 460px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 4px 2px 14px; border-radius: 0;
+    border: 0; border-bottom: 1px solid var(--hairline); background: none;
+    box-shadow: none; color: var(--ink-faint);
+    font-size: 1.0625rem; max-width: 440px;
   }
   .search svg { width: 17px; height: 17px; }
   .chips { display: flex; flex-wrap: wrap; gap: 9px; }
@@ -356,13 +369,12 @@
   .empty-month { padding: 22px 8px; border-top: 1px solid var(--hairline-2); font-size: .875rem; color: var(--ink-faint); }
 
   .quota {
-    display: flex; align-items: center; gap: 12px; padding: 16px 22px; border-radius: 16px;
-    background: var(--accent-wash); color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-    font-size: .875rem; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 10px; padding: 0;
+    background: none; border: 0; color: var(--accent);
+    font-size: .875rem; font-weight: 600;
   }
   .drow { background: transparent; transition: background .18s ease, box-shadow .18s ease; }
-  .drow:hover { background: var(--paper); box-shadow: var(--lift); border-top-color: transparent; }
+  .drow:hover { background: var(--shade); box-shadow: none; }
   .quota svg { width: 17px; height: 17px; }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
