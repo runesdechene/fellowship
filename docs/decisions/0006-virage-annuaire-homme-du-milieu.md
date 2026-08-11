@@ -1,0 +1,178 @@
+# 0006 — Le virage annuaire : Fellowship, l'homme du milieu
+
+**Statut : acté** — 2026-08-11
+**Remplace le cadrage social de** [0001](0001-fondations-vision-packs-da.md) · **complète** [0005](0005-avis-bien-commun-exposants.md)
+
+---
+
+## Contexte
+
+Uriel ouvre la session sur un doute de fond : *« Fellowship est trop social. Je veux un produit qui ait une vraie utilité pour nos problématiques d'exposants. Si ça n'aboutit à rien, on abandonnera le projet. »*
+
+L'état des lieux confirme le doute :
+
+- **4 clients payants externes, MRR ≈ 42 € HT.** Les features construites (fil Communauté, follows, avis, Discussion, Rencontres à venir) ont toutes le même défaut : **leur valeur est nulle tant qu'il n'y a personne.**
+- **Le test du jour 1 échouait.** Un exposant qui s'inscrit seul, sans un seul contact, n'obtenait qu'un calendrier et une vitrine que personne ne visite.
+- On a construit **un réseau social avant d'avoir un réseau**.
+
+Deux intentions fondatrices d'Uriel, jamais servies frontalement jusqu'ici :
+
+1. **Se sentir moins seul** au cours de sa saison.
+2. **Être l'homme du milieu** entre organisateurs et exposants — *« les orgas galèrent souvent à organiser leurs fests, et ont de l'argent pourtant. »*
+
+---
+
+## Ce qu'on a découvert en séance
+
+**1. La machine à fossé défensif est déjà construite, et le fil est coupé.**
+Le Bilan post-événement existe (`event_reports` + `event_ledger_entries` : registre entrées/sorties par catégorie, bénéfice calculé, photos, améliorations) et il est **verrouillé en privé** par la migration `20260602160001_fix_event_reports_private.sql`. Chaque exposant saisit sa rentabilité dans son coin et l'app n'en fait rien.
+
+**2. Les deux seuls retours utilisateurs enthousiastes portent sur les mêmes types de feature.**
+Le **calendrier embarqué** (« les gens en sont très fans ») et les **threads de périple** (« les gens ADORENT »). Point commun : ce sont **les deux seules features qui sortent de l'app et touchent le réel**. Tout ce qui reste à l'intérieur de l'application laisse froid.
+
+**3. Le bouche-à-oreille est la vraie source de découverte — et il s'évapore.**
+Uriel chine sur les stands et sur les agendas régionaux, pas sur les réseaux. L'info (« Vaison c'était mort, va à Provins ») circule par le réseau physique, se perd, et ne touche que ceux qui étaient présents ce soir-là.
+
+**4. Le concurrent est faible, mais pas là où on croyait.**
+[Mediefest](https://mediefest.org/) : liste / calendrier / carte, financé par la publicité et les bannières « en vedette », **397 abonnés newsletter**, **aucun compte utilisateur**. Et — correction d'Uriel en séance — **il est rempli par les orgas et les visiteurs eux-mêmes**, pas par son éditeur.
+
+**5. Les orgas déposent spontanément leurs événements dans un annuaire.**
+Uriel n'a que 2-3 organisateurs dans son téléphone, ce qui condamnait une stratégie orga-first. Mais le point 4 le retourne : **on n'a pas besoin de les connaître, ils viennent d'eux-mêmes** chercher de la visibilité gratuite.
+
+**6. Pour une partie des exposants, Fellowship est déjà « la constitution de mon réseau pro ».**
+L'esprit de camaraderie est très fort dans le milieu. Le social n'est donc pas un placage marketing : il est culturellement juste. **Le problème n'a jamais été le social, c'était sa forme.**
+
+---
+
+## Options envisagées
+
+| Option | Pour | Contre | Verdict |
+|---|---|---|---|
+| **A — D'abord les chiffres** : brancher le Bilan sur l'Explorer (rentabilité médiane par festival) | La machine existe déjà, fossé défensif immédiat | Ne règle ni l'acquisition ni la rétention d'hiver ; inutile sans volume d'utilisateurs | Reporté (chantier 5) |
+| **B — D'abord les orgas** : construire le back-office organisateur | Ouvre le robinet d'inscriptions (1 festival = 80 exposants) | Six mois de chantier pour 2-3 prospects ; rien de neuf pour l'exposant en attendant | Rejeté en l'état |
+| **C — L'annuaire public comme porte d'entrée**, les deux bouts ensuite | Utile au jour 1 sans réseau ; sert l'acquisition exposant **et** orga ; nourrit A et B | Exige du contenu en volume et un chantier SEO non trivial | **Retenu** |
+
+---
+
+## Décision
+
+### Positionnement
+
+> **Fellowship est le système d'exploitation de la saison d'un exposant nomade — édité par Runes de Chêne.**
+
+« Fait par des exposants, pour des exposants » : aucun éditeur SaaS ne peut acheter cet argument. Il règle le problème de confiance qui bloque le partage des chiffres et des avis.
+
+*Limite connue, avancée par la décision sur le périmètre :* une marque d'artisanat d'inspiration médiévale éditant l'outil du circuit métal et tatouage tient au démarrage — grâce à la présence réelle d'Uriel sur ces salons — mais **l'entité dédiée arrivera plus tôt que prévu**. Conséquence immédiate et non différable : **le vocabulaire médiéval doit sortir du produit public.** Le champ lexical de type « Guilde » ([0004](0004-badge-certifie-levier-pro.md)) sonne juste sur une fête médiévale et faux dans une convention de tatouage. La direction artistique chaude/artisan passe partout ; les mots, non. **À réauditer.**
+
+### Périmètre : la niche est professionnelle, pas thématique
+
+**Décision tranchée par Uriel : surtout pas de niche médiéval/geek.** Il expose aussi sur des festivals de métal et des conventions de tatouage, où les exposants sont très intéressés.
+
+L'argument décisif est plus fort que l'argument de focus : **un même exposant circule entre ces mondes.** Médiéval, métal, tatouage, marchés de créateurs — même homme, même camionnette, même saison. Un annuaire qui ne couvre que la moitié de la saison d'un exposant **est inutilisable** : il retourne à son tableur pour le reste, et l'app perd la partie.
+
+> **La frontière n'est pas l'esthétique de l'événement, c'est : accueille-t-il des exposants indépendants qui vivent de la vente directe sur stand ?**
+
+- ✅ Médiéval, fantasy, métal, tatouage, pop culture / geek, marchés de créateurs, marchés de Noël, brocantes créatives…
+- ❌ Salons B2B, congrès, foires commerciales généralistes — il y a des stands, mais pas ce métier.
+
+**Fellowship n'est donc pas un agenda d'événements : c'est un annuaire d'opportunités d'exposition.** Personne n'occupe ce terrain.
+
+Bénéfice : couverture annuelle pleine. Médiéval et métal l'été, tatouage à l'automne et en salle, marchés de Noël en décembre. **L'app est utile douze mois sur douze sans qu'on invente le moindre artifice d'engagement.**
+
+**Nuance conservée — priorité de remplissage ≠ restriction de périmètre.** On ouvre tous les thèmes dès le départ, mais on remplit **d'abord** les circuits qu'Uriel connaît et où son bouche-à-oreille porte. Un annuaire large et creux ne sert personne.
+
+### « Prend des exposants » est un attribut, pas un filtre
+
+On référence **large** (volume, SEO, festivaliers). Chaque fiche porte un statut : `prend des exposants` / `n'en prend pas` / `inconnu`.
+
+- L'app connectée **filtre par défaut** sur « prend des exposants » — l'exposant ne voit jamais de bruit.
+- La page publique montre tout.
+- Un événement « ne prend pas d'exposants » n'est pas un déchet : il évite de chercher un dossier qui n'existe pas, et c'est du contenu indexé en plus.
+
+C'est le champ le plus précieux de la base, précisément parce que c'est **celui que Mediefest n'a pas et ne peut pas avoir**.
+
+### Modèle économique
+
+| Qui | Quoi | Prix |
+|---|---|---|
+| **Exposant — gratuit** | L'annuaire, son calendrier, son **calendrier embarqué**, son dossier de candidature réutilisable, les alertes deadlines, les threads de périple, ses compagnons de saison, **son carnet de réseau pro qui se remplit tout seul** | 0 € |
+| **Exposant — Pro** | Ses **métriques et ses budgets** (le Bilan, déjà codé et déjà gaté Pro) | inchangé |
+| **Organisateur** | Entre gratuitement (dépose son festival, voit son audience), ressort client : boîte de réception des candidatures + outils de gestion | **Forfait de base + facturation aux dossiers validés** |
+
+**Facturation orga : aux dossiers _validés_, jamais aux dossiers _reçus_.**
+L'orga ne paie que pour les exposants qu'il retient — ceux qui vont lui payer un emplacement. Il paie donc sur son revenu, pas sur son volume de candidatures.
+
+- ❌ **Rejeté — commission sur les dossiers reçus** : punit l'orga quand le produit marche, et lui donne une échappatoire gratuite (« envoyez-moi ça par mail »), donc une incitation à nous contourner.
+- ⚠️ **Risque résiduel** : tant que les outils aval n'existent pas, rien n'empêche l'orga de valider ses habitués hors plateforme. **La parade est le lock-in en aval** (gestion des frais, plans d'emplacement, communication aux exposants) → **ces outils doivent arriver _avec_ la facturation, pas après.**
+- 💡 **Piste v2+** : commission sur **l'encaissement des emplacements** (80 × 120 € = 9 600 € qui transitent réellement ; 3-5 % ≈ 350 €/festival). Règle en prime les relances d'impayés et les désistements. Chantier lourd (Stripe Connect, remboursements, légal).
+
+### Quatre principes directeurs
+
+1. **Égoïsme utile** — *chaque geste égoïste de l'utilisateur remplit un actif collectif.* Je candidate pour moi → l'annuaire se remplit. Je fais mon bilan pour moi → les métriques de rentabilité se remplissent. Je partage ma vitrine pour moi → Fellowship se fait connaître. **Aucune feature ne doit demander à l'utilisateur de « contribuer ».**
+2. **Ça doit toucher le réel** — les deux features adorées sortent de l'app et touchent la vraie vie. C'est le critère de tri de toute feature future.
+3. **Deux formes de social, et deux seulement.** Le problème n'a jamais été le social — l'esprit de camaraderie est fort dans le milieu, et une partie des exposants voit déjà Fellowship comme « la constitution de mon réseau pro ». Le problème, c'était **la forme** :
+   - ✅ **La conversation ancrée** — le thread de périple : accroché à un événement précis, daté, éphémère, il marche à trois personnes. Il **crée** la relation.
+   - ✅ **Le carnet qui se sédimente** — le réseau pro : durable, cumulatif, **jamais saisi à la main** (les participations disent déjà qui était là). Il **conserve** la relation. *« 34 exposants étaient à Provins avec toi. » « Tu as croisé Marie sur quatre événements — vous ne vous suivez toujours pas. »*
+   - ❌ **Le contenu à produire pour un public flou** — le fil de posts. Il exige une masse qu'on n'a pas. *Le fil Communauté change donc de contenu : des **mouvements de saison** (« Marie a ajouté Trolls & Légendes »), pas des posts. Il se remplit tout seul, avec les gestes que les gens font de toute façon.*
+4. **Valeur au jour 1, seul** — toute feature doit servir un exposant sans un seul contact sur la plateforme.
+
+### Le fossé défensif : le graphe accumulé
+
+**L'annuaire est copiable. Le Bilan est copiable. Le SEO se rattrape. Le carnet de deux cents collègues croisés sur trois saisons, non.** C'est le fossé côté exposant — la raison pour laquelle LinkedIn n'a jamais été détrôné malgré un produit médiocre. Cela justifie rétroactivement [0005](0005-avis-bien-commun-exposants.md) : les avis à identité protégée reposent sur le graphe d'amis pro ; cette brique n'était pas un détour, c'est la **couche de confiance** du fossé.
+
+Le prérequis de ce fossé, c'est **le compte**. Sans compte utilisateur, un annuaire ne devient jamais un outil : Mediefest ne sait pas qui tu es, donc il ne peut ni te dire si tes copains y vont, ni si c'est rentable, ni te rappeler une deadline, ni te faire candidater, ni te faire un bilan. Il est structurellement condamné au panneau d'affichage. Sa monétisation publicitaire l'enferme : son intérêt, c'est le nombre de visites, pas notre succès.
+
+**L'asymétrie est totale : nous pouvons devenir eux en un chantier ; ils ne peuvent pas devenir nous.**
+
+Leur seul actif réel est **le référencement** — vingt ans d'ancienneté et de pages indexées. **Notre arme contre ça, c'est le calendrier embarqué** : chaque embed est un lien vers Fellowship depuis un site tiers. On ne rattrape pas leur SEO en écrivant du contenu, on le rattrape par nos utilisateurs.
+
+Et la vraie bataille n'est pas la saisie : c'est **le réflexe** « je poste mon fest sur Mediefest ». On le prend avec le seul argument qui compte pour un orga et qui nous est structurellement réservé : *« 23 exposants suivent votre festival. »*
+
+### Le cycle d'usage, fourni par le métier
+
+- **Hiver** — je candidate, les deadlines me rappellent · les marchés de Noël tournent
+- **Deux semaines avant** — le thread de périple s'allume, on s'organise (il absorbe toute la logistique : covoiturage, hébergement, camion — **sans construire de feature dédiée**)
+- **Le week-end** — j'y suis, mes compagnons aussi
+- **Dimanche soir** — mon bilan, et l'info remonte à tout le monde
+
+Aucune mécanique d'engagement à inventer.
+
+### Ordre des chantiers
+
+| # | Chantier | Nature |
+|---|---|---|
+| **0** | **Amorçage de l'annuaire** — automatisation cloud (Haiku) de collecte quotidienne sur les agendas régionaux et sites d'orgas | Infra + contenu |
+| **1** | **L'annuaire public** — la page déconnectée devient un lieu de découverte ; une page indexable par événement | Produit + SEO |
+| **2** | **Dossier exposant + candidature sortante** — postuler en un clic, y compris vers un orga absent de la plateforme | Produit |
+| **3** | **Fil de saison + threads de périple + carnet de réseau** — mouvements au lieu de posts ; valoriser le thread existant ; le carnet pro qui se remplit via les participations | Produit |
+| **4** | **Boîte de réception orga** — offerte à 2-3 pilotes, construite avec eux | Produit |
+| **5** | **Métriques agrégées + facturation orga** — brancher le Bilan sur l'Explorer ; forfait + dossiers validés | Produit + business |
+
+---
+
+## Conséquences
+
+**Technique**
+- **Prérendu / SSG obligatoire** sur les pages événement : l'app est une SPA React que Google indexe mal. Sans ça, tout le travail SEO ne rapporte rien. **C'est le coût caché du chantier 1.**
+- **Réaudit des surfaces de fuite des événements privés/cachés** avant d'ouvrir l'Explorer au public.
+- **Dédoublonnage à industrialiser** (`DeduplicateSuggestions` existe déjà) : le scraping quotidien produira doublons, dates changées et annulations.
+- Le scraping donne **le squelette** (nom, dates, lieu, thème), **jamais la viande** (tarif d'emplacement, deadline, contact orga, prend-des-exposants) — celle-ci vit dans des dossiers envoyés sur demande. Elle viendra des utilisateurs via le principe d'égoïsme utile.
+
+**Produit**
+- La Landing publique devient l'annuaire. Elle **prouve** la valeur au lieu de la raconter.
+- Le fil Communauté change de nature (mouvements, pas posts).
+- Le calendrier embarqué passe de feature annexe à **pilier**.
+- L'onglet Rencontres, annoncé comme prochain chantier, **est déprioritisé** au profit de l'annuaire.
+
+**Business**
+- La cible de revenu se déplace de l'exposant vers l'orga : ~62 abonnés payants à convertir *ou* ~20 festivals à signer, pour le même objectif de +500 €/mois — et chaque festival signé amène ses exposants.
+- Le gratuit massif côté exposant n'est pas une concession commerciale : **l'inventaire d'exposants est ce qui rend la plateforme précieuse pour l'orga.**
+
+---
+
+## Ce qui reste ouvert
+
+- **Le contenu réel d'un dossier de candidature** — ce qu'on fournit, dans quel format, par quel canal. Uriel n'a pas encore raconté sa dernière candidature. **Bloquant pour le chantier 2.**
+- **L'acceptabilité du partage des chiffres** (CA par événement, même agrégé et anonymisé) — tabou réel chez les exposants, à tester avant le chantier 5. La couche de confiance de [0005](0005-avis-bien-commun-exposants.md) est l'atout ici.
+- **Le tarif orga** — forfait de base et prix au dossier validé, à calibrer.
+- **La segmentation des métriques** — un stand de bijoux n'est pas un stand de restauration ; comparer des CA bruts produit du bruit trompeur.
