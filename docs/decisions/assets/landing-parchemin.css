@@ -27,24 +27,20 @@
   --card: 40 40% 97%;
   --hair: rgba(89, 72, 72, .10);
   --glass: rgba(251, 247, 239, .82);
+
+  /* Le bloc : un fond à peine décalé du parchemin, jamais un cadre.
+     Légèrement translucide pour capter les halos qui passent. */
+  --block: rgba(255, 252, 246, .58);
+  --block-2: rgba(255, 252, 246, .38);
 }
 
-/* Trame de papier : deux passes très faibles. Assez pour qu'on la
-   sente, jamais assez pour qu'on la voie. Posée SOUS les halos. */
-.light .landing::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background-image:
-    repeating-linear-gradient(97deg, rgba(120, 96, 72, .026) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(4deg,  rgba(120, 96, 72, .026) 0 1px, transparent 1px 6px);
-}
+/* Pas de trame tissée : elle produisait un effet grillagé. La matière
+   vient des halos, des blocs teintés et des visuels arrondis. */
 
-/* Halos : en clair ils doivent effleurer, pas tacher. */
-.light .landing .glow { opacity: .34; filter: blur(90px); }
-.light .landing .hero-bokeh { opacity: .45; }
+/* Halos : en clair ils effleurent. Deux fois plus discrets que le
+   réglage d'origine — au-delà, ils grisent le parchemin. */
+.light .landing .glow { opacity: .17; filter: blur(100px); }
+.light .landing .hero-bokeh { opacity: .28; }
 
 /* ── 2. Typographie : grande, légère, serrée ─────────────────────── */
 /* Le réflexe est d'agrandir ET de graisser. On fait l'inverse :
@@ -91,15 +87,24 @@
 .landing .hero-cta { gap: 13px; margin-top: 30px; }
 .landing .proof { margin-top: 26px; }
 
-/* ── 4. Cartes : filet d'un pixel, aucune ombre ──────────────────── */
+/* ── 4. Les blocs se séparent par la TEINTE, jamais par le trait ─── */
 .light .landing .feat,
 .light .landing .tier,
 .light .landing .org-card,
 .light .landing .testimonial {
-  background: #FBF7EF;
-  border: 1px solid rgba(89, 72, 72, .10);
+  background: var(--block);
+  border: 0;
+  border-radius: 20px;
   box-shadow: none;
 }
+.light .landing .testimonial { background: var(--block-2); }
+/* Le palier Pro se distingue par une teinte d'accent, pas par un cadre. */
+.light .landing .tier.pro {
+  background: linear-gradient(178deg, rgba(226, 155, 118, .13), rgba(226, 155, 118, .07));
+  border: 0;
+}
+/* Les gélules d'univers du bandeau : même logique, plus de contour. */
+.light .landing .etag { border-color: transparent; }
 .light .landing .btn-primary { box-shadow: none; }
 .light .landing .btn-primary:hover { box-shadow: none; opacity: .9; transform: none; }
 .light .landing .btn-ghost {
@@ -114,8 +119,11 @@
 .light .landing .dv-desktop,
 .light .landing .dv-phone {
   background: #FBF7EF;
-  border-color: rgba(89, 72, 72, .12);
-  box-shadow: 0 24px 60px rgba(90, 70, 50, .12);
+  border-color: transparent;
+  border-radius: 18px;
+  /* Seul objet de la page à porter une vraie ombre : c'est une image
+     de produit, elle doit flotter. */
+  box-shadow: 0 28px 70px -18px rgba(90, 70, 50, .22);
 }
 .light .landing .dv-bar,
 .light .landing .dv-side,
