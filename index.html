@@ -28,8 +28,13 @@
         if (theme === 'day') {
           document.documentElement.classList.add('light');
         } else if (theme === null) {
-          var isV2 = new URLSearchParams(location.search).get('v2') === '1'
-            || localStorage.getItem('flwsh-landing-v2') === '1';
+          // `?v2=0` est un ordre, pas une absence d'ordre : il éteint la V2 AVANT
+          // que React n'ait pu effacer la mémoire. Sans ce garde-fou, éteindre
+          // l'interrupteur peignait quand même en clair, et ThemeProvider
+          // persistait « day » pour toute l'app — la V1 n'était plus intacte.
+          var param = new URLSearchParams(location.search).get('v2');
+          var isV2 = param === '1'
+            || (param !== '0' && localStorage.getItem('flwsh-landing-v2') === '1');
           if (isV2) document.documentElement.classList.add('light');
         }
       } catch (e) {}

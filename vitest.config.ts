@@ -8,6 +8,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    // Fuseau épinglé : plusieurs helpers de dates (todayIso, parseDay,
+    // startOfDay) n'existent que pour éviter les décalages UTC. Sur un runner
+    // en UTC, leurs tests de régression passeraient contre le bug même
+    // qu'ils surveillent. Europe/Paris = le fuseau des utilisateurs.
+    env: { TZ: 'Europe/Paris' },
   },
   resolve: {
     alias: {

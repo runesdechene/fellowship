@@ -5,7 +5,6 @@ import { useAuth } from '@/lib/auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LandingPage } from '@/pages/Landing'
-import { LandingV2Page } from '@/pages/LandingV2'
 import { readLandingV2 } from '@/lib/landing-v2'
 import { LoginPage } from '@/pages/Login'
 import { OnboardingPage } from '@/pages/Onboarding'
@@ -42,6 +41,10 @@ const AdminTestimonials = lazy(() => import('@/components/admin/AdminTestimonial
 const AdminReports = lazy(() => import('@/components/admin/AdminReports').then(m => ({ default: m.AdminReports })))
 // Carte = lazy : MapLibre (~200 kB) ne charge que sur /carte.
 const Carte = lazy(() => import('@/pages/Carte'))
+// Landing V2 = lazy : la fonctionnalité est éteinte par défaut. En statique,
+// son composant, son CSS et ses icônes partaient dans le bundle principal de
+// TOUT LE MONDE — visiteurs de la V1 et utilisateurs connectés compris.
+const LandingV2Page = lazy(() => import('@/pages/LandingV2').then(m => ({ default: m.LandingV2Page })))
 
 function AdminFallback() {
   return (
@@ -100,7 +103,14 @@ function EventWithLayout() {
 function LandingRoute() {
   // Lu une seule fois au montage : l'interrupteur ne change pas en cours de visite.
   const [v2] = useState(readLandingV2)
-  return v2 ? <LandingV2Page /> : <LandingPage />
+  if (!v2) return <LandingPage />
+  // Suspense seulement sur la branche V2 : le chemin V1 ne traverse aucun
+  // code neuf. Repli neutre pleine hauteur, le temps du chunk.
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100dvh' }} />}>
+      <LandingV2Page />
+    </Suspense>
+  )
 }
 
 function App() {

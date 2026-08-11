@@ -3,7 +3,7 @@
    une classe nue comme .ev ou .btn fuirait dans toute l'application. */
 
 .lv2 {
-  --parchment: #F4EEE1; --rail: #EFE8D9;
+  --parchment: #F4EEE1;
   --ink: #594848; --ink-soft: #8C7B72; --ink-faint: #B0A197;
   --hairline: rgba(89,72,72,.13); --hairline-2: rgba(89,72,72,.09);
   --block: rgba(255,252,246,.58); --block-2: rgba(255,252,246,.38);
@@ -28,7 +28,7 @@
 /* Le sombre ne s'active que sur demande explicite (classe .light absente =
    nuit dans cette app). Aucune règle prefers-color-scheme : décision 0007. */
 html:not(.light) .lv2 {
-  --parchment: #171414; --rail: #1B1716;
+  --parchment: #171414;
   --ink: #F0E5D6; --ink-soft: #A3948A; --ink-faint: #786A62;
   --hairline: rgba(240,229,214,.15); --hairline-2: rgba(240,229,214,.10);
   --block: rgba(255,238,222,.042); --block-2: rgba(255,238,222,.028);
@@ -49,6 +49,11 @@ html:not(.light) .lv2 {
 /* width:100% indispensable : dans un parent flex, `margin: 0 auto` annule
    l'étirement et le bloc se réduit à son contenu. */
 .lv2 .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 30px; }
+/* Visible des seuls lecteurs d'écran (annonce du nombre de résultats). */
+.lv2 .visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
 
 .lv2 .halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
 .lv2 .halos i { position: absolute; border-radius: 50%; filter: blur(var(--halo-blur)); display: block; }
@@ -75,6 +80,14 @@ html:not(.light) .lv2 {
 .lv2 .nav-links { display: flex; align-items: center; gap: 26px; }
 .lv2 .link { color: var(--ink-soft); text-decoration: none; font-size: .9375rem; background: none; border: 0; font: inherit; cursor: pointer; padding: 0; }
 .lv2 .link:hover { color: var(--ink); }
+
+/* La bascule jour/nuit : composant PARTAGÉ (src/components/theme-toggle.tsx),
+   jamais modifié — il porte les jetons de l'app (hsl(var(--card))…, qui
+   jureraient sur le parchemin). On le repeint ici, sous .lv2 seulement.
+   Le déplacement du bouton reste piloté par `.light .theme-toggle .knob`. */
+.lv2 .theme-toggle { background: var(--block); border: 1px solid var(--hairline); }
+.lv2 .theme-toggle .knob { background: var(--accent-lv2); color: var(--accent-ink); box-shadow: none; }
+.lv2 .theme-toggle:focus-visible { outline: 2px solid var(--accent-lv2); outline-offset: 3px; }
 
 .lv2 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 13px 26px; border-radius: 999px; font: inherit; font-size: .9375rem; font-weight: 600; letter-spacing: -.005em; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: opacity .18s, border-color .18s; }
 .lv2 .btn svg { width: 17px; height: 17px; }
@@ -119,7 +132,10 @@ html:not(.light) .lv2 {
 .lv2 .search-big:focus-within { outline: 2px solid var(--accent-lv2); outline-offset: 2px; }
 .lv2 .search-big svg { width: 20px; height: 20px; color: var(--ink-soft); }
 .lv2 .search-big input { flex: 1; border: 0; background: none; font: inherit; font-size: 1.0625rem; color: var(--ink); outline: none; min-width: 0; }
-.lv2 .search-big input::placeholder { color: var(--ink-faint); }
+/* --ink-soft, pas --ink-faint (2,16:1) : ce texte de substitution est la SEULE
+   indication à l'intérieur de la grosse pilule de recherche. Une consigne
+   fantôme ne guide personne. */
+.lv2 .search-big input::placeholder { color: var(--ink-soft); }
 .lv2 .counts { display: flex; align-items: center; gap: 10px; font-size: .875rem; color: var(--ink-soft); flex-wrap: wrap; }
 .lv2 .counts b { color: var(--ink); font-weight: 600; }
 
@@ -131,8 +147,13 @@ html:not(.light) .lv2 {
   font-size: .8125rem; font-weight: 700;
 }
 .lv2 .badge-free svg { width: 15px; height: 15px; }
-.lv2 .signature .by { font-size: .875rem; color: var(--ink-faint); }
-.lv2 .signature .by strong { color: var(--ink-soft); font-weight: 600; }
+/* --ink-soft (3,5:1), pas --ink-faint (2,16:1) : c'est la ligne de crédibilité
+   du hero — « on expose, comme vous » EST le positionnement de la page. Elle
+   ne peut pas être le texte le plus effacé de l'écran. */
+.lv2 .signature .by { font-size: .875rem; color: var(--ink-soft); }
+/* La ligne passant à --ink-soft, le nom de l'atelier monte d'un cran pour
+   garder la hiérarchie voulue par la DA. */
+.lv2 .signature .by strong { color: var(--ink); font-weight: 600; }
 
 /* ── Bandeau des univers : les couleurs font le caractère ─────── */
 .lv2 .marquee { overflow: hidden; padding: 24px 0; position: relative; }
@@ -190,10 +211,23 @@ html:not(.light) .lv2 {
 .lv2 .stat.soon { background: var(--wait-wash); color: var(--wait); }
 .lv2 .stat.info { background: var(--block); color: var(--ink-soft); }
 
-/* Squelettes pendant le chargement : la grille ne doit pas sauter. */
+/* Squelettes pendant le chargement : la grille ne doit pas sauter. Même
+   nombre (12) et même hauteur de bloc texte que les vraies cartes — sinon la
+   mise en page bouge deux fois : à l'arrivée des données, puis au remplissage
+   des titres. */
 .lv2 .ev-skeleton { border-radius: 20px; background: var(--block-2); padding: 10px 10px 4px; }
-.lv2 .ev-skeleton .art { background: var(--block); }
+.lv2 .ev-skeleton .art { aspect-ratio: 4/3; border-radius: 13px; background: var(--block); }
+.lv2 .ev-skeleton .b { padding: 14px 8px 12px; display: flex; flex-direction: column; gap: 9px; }
+.lv2 .ev-skeleton .l { display: block; border-radius: 999px; background: var(--block); }
+.lv2 .ev-skeleton .l1 { width: 78%; height: 15px; }
+.lv2 .ev-skeleton .l2 { width: 52%; height: 12px; }
+.lv2 .ev-skeleton .l3 { width: 40%; height: 20px; margin-top: 5px; border-radius: 999px; }
 .lv2 .annuaire-empty { padding: 40px 0; color: var(--ink-soft); font-size: .9375rem; }
+/* Une lecture ratée n'est PAS un annuaire vide : message distinct, ton
+   distinct, et une sortie (recharger) plutôt qu'un « Tout afficher » qui
+   n'afficherait rien de plus. */
+.lv2 .annuaire-error { padding: 40px 0; color: var(--ink); font-size: .9375rem; }
+.lv2 .annuaire-error .link { color: var(--accent-lv2); text-decoration: underline; }
 
 /* ── Le gratuit : c'est l'argument d'acquisition ──────────────── */
 .lv2 .free-block {
@@ -207,7 +241,6 @@ html:not(.light) .lv2 {
 .lv2 .free-left { display: flex; flex-direction: column; gap: 16px; }
 .lv2 .free-price { font-size: 3rem; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
 .lv2 .free-price small { display: block; font-size: .875rem; font-weight: 400; letter-spacing: 0; color: var(--ink-soft); margin-top: 8px; }
-.lv2 .pro-note { font-size: .875rem; color: var(--ink-faint); padding-top: 4px; }
 /* Le payant est nommé franchement, pas caché en petites lignes :
    une page qui plaide l'honnêteté ne peut pas enterrer son prix. */
 .lv2 .pro-line {
@@ -256,7 +289,9 @@ html:not(.light) .lv2 {
   border: 1px solid var(--hairline); background: var(--block-2); font: inherit; font-size: .9375rem;
   color: var(--ink);
 }
-.lv2 .waitlist-input::placeholder { color: var(--ink-faint); }
+/* --ink-soft : même raison que le champ de recherche — dans une pilule vide,
+   le texte de substitution est la seule consigne. */
+.lv2 .waitlist-input::placeholder { color: var(--ink-soft); }
 .lv2 .waitlist-input:focus-visible { outline: 2px solid var(--accent-lv2); outline-offset: 2px; }
 .lv2 .waitlist-error { font-size: .8125rem; color: var(--wait); }
 .lv2 .waitlist-success { font-size: .9375rem; color: var(--ok); font-weight: 600; }

@@ -22,6 +22,12 @@ export interface CardStatus { kind: StatusKind; label: string }
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
   'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
 
+/** Accord singulier/pluriel : UNE seule mécanique pour toute la page. Zéro
+ *  prend le singulier (« 0 événement à venir »), règle française. */
+function plural(n: number, one: string, many: string): string {
+  return n > 1 ? many : one
+}
+
 /** Une date ISO `YYYY-MM-DD` lue en heure locale, sans décalage de fuseau. */
 function parseDay(iso: string): Date {
   const [y, m, d] = iso.split('-').map(Number)
@@ -65,7 +71,7 @@ export function applicationStatus(e: PublicEvent, today: Date): CardStatus {
     const left = daysBetween(today, parseDay(e.registration_deadline))
     if (left < 0) return { kind: 'info', label: 'Candidatures closes' }
     if (left === 0) return { kind: 'soon', label: 'Clôture aujourd’hui' }
-    if (left <= 30) return { kind: 'soon', label: `Clôture dans ${left} jour${left > 1 ? 's' : ''}` }
+    if (left <= 30) return { kind: 'soon', label: `Clôture dans ${left} ${plural(left, 'jour', 'jours')}` }
     return { kind: 'open', label: 'Candidatures ouvertes' }
   }
   if (e.registration_url) return { kind: 'open', label: 'Candidatures ouvertes' }
@@ -148,14 +154,52 @@ export function topUniverses(list: PublicEvent[], limit = 8): string[] {
     .map(([slug]) => slug)
 }
 
+/** Un événement « prend des exposants » s'il porte une URL de candidature ou
+ *  une date limite. LE prédicat, unique : compteurs du hero, bande de dernier
+ *  appel et puce de filtre s'y réfèrent tous, sans le recopier. */
+export function takesExhibitors(e: PublicEvent): boolean {
+  return Boolean(e.registration_url || e.registration_deadline)
+}
+
+export function countWithApplications(list: PublicEvent[]): number {
+  return list.filter(takesExhibitors).length
+}
+
 /** Compteurs du hero. Uniquement des nombres mesurés : la page plaide
- *  l'honnêteté, elle ne peut pas s'ouvrir sur un chiffre gonflé. */
-export function countCounters(list: PublicEvent[], exposants: number | null): Array<{ n: string; label: string }> {
-  const withApplications = list.filter(e => e.registration_url || e.registration_deadline).length
-  const out = [
-    { n: String(list.length), label: list.length > 1 ? 'événements à venir' : 'événement à venir' },
-    { n: String(withApplications), label: withApplications > 1 ? 'prennent des exposants' : 'prend des exposants' },
-  ]
+ *  l'honnêteté, elle ne peut pas s'ouvrir sur un chiffre gonflé — ni sur un
+ *  zéro qui n'est en réalité qu'une lecture ratée. `list` à `null` veut dire
+ *  « on ne sait pas » : les deux premières pastilles disparaissent, exactement
+ *  comme la troisième quand le compte d'exposants est inconnu. */
+export function countCounters(list: PublicEvent[] | null, exposants: number | null): Array<{ n: string; label: string }> {
+  const out: Array<{ n: string; label: string }> = []
+  if (list) {
+    const withApplications = countWithApplications(list)
+    out.push({ n: String(list.length), label: plural(list.length, 'événement à venir', 'événements à venir') })
+    out.push({ n: String(withApplications), label: plural(withApplications, 'prend des exposants', 'prennent des exposants') })
+  }
   if (exposants != null) out.push({ n: String(exposants), label: 'exposants inscrits' })
   return out
+}
+
+/** Le premier point du bloc gratuit. `count` à `null` (lecture ratée) →
+ *  la promesse reste vraie sans avancer de nombre. */
+export function searchScopeLabel(count: number | null): string {
+  if (count == null) return 'Chercher dans l’annuaire'
+  return `Chercher dans ${count} ${plural(count, 'événement', 'événements')}`
+}
+
+/** La phrase chiffrée de la bande de dernier appel, ou `null` quand la lecture
+ *  a échoué : on ne clôt pas la page sur un chiffre qu'on n'a pas mesuré. */
+export function ctaCountsSentence(list: PublicEvent[] | null): string | null {
+  if (!list) return null
+  const w = countWithApplications(list)
+  return `${list.length} ${plural(list.length, 'événement à venir', 'événements à venir')}, `
+    + `${w} qui ${plural(w, 'prend', 'prennent')} des exposants.`
+}
+
+/** Annonce vocale (aria-live) du nombre de résultats après une recherche ou
+ *  un filtre — sans elle, taper dans le champ ne produit aucun retour. */
+export function resultsLabel(n: number): string {
+  if (n === 0) return 'Aucun événement ne correspond'
+  return `${n} ${plural(n, 'événement trouvé', 'événements trouvés')}`
 }

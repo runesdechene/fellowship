@@ -1,6 +1,9 @@
 // src/lib/annuaire.test.ts
 import { describe, it, expect } from 'vitest'
-import { toPublicList, applicationStatus, formatWhen, searchEvents, countCounters, toCard, todayIso, topUniverses } from './annuaire'
+import {
+  toPublicList, applicationStatus, formatWhen, searchEvents, countCounters, toCard, todayIso, topUniverses,
+  countWithApplications, searchScopeLabel, ctaCountsSentence, resultsLabel,
+} from './annuaire'
 import type { PublicEvent } from './annuaire'
 
 const TODAY = new Date('2026-08-11T00:00:00Z')
@@ -46,6 +49,10 @@ describe('applicationStatus', () => {
   it('date limite demain → singulier', () => {
     expect(applicationStatus(ev({ registration_deadline: '2026-08-12' }), TODAY))
       .toEqual({ kind: 'soon', label: 'Clôture dans 1 jour' })
+  })
+  it('date limite aujourd’hui → clôture aujourd’hui', () => {
+    expect(applicationStatus(ev({ registration_deadline: '2026-08-11' }), TODAY))
+      .toEqual({ kind: 'soon', label: 'Clôture aujourd’hui' })
   })
   it('date limite dépassée → candidatures closes', () => {
     expect(applicationStatus(ev({ registration_deadline: '2026-08-01', registration_url: 'https://x.fr' }), TODAY))
@@ -103,6 +110,73 @@ describe('countCounters', () => {
   it('compte des exposants inconnu → la troisième pastille disparaît', () => {
     expect(countCounters([ev()], null)).toHaveLength(2)
   })
+  it('lecture ratée (liste inconnue) → aucun compteur d’événements, jamais un zéro', () => {
+    // Une lecture qui échoue n'est pas « 0 événement » : on se tait.
+    expect(countCounters(null, 84)).toEqual([{ n: '84', label: 'exposants inscrits' }])
+  })
+  it('lecture ratée et compte d’exposants inconnu → plus aucune pastille', () => {
+    expect(countCounters(null, null)).toEqual([])
+  })
+})
+
+describe('countWithApplications', () => {
+  it('compte les événements avec URL de candidature ou date limite', () => {
+    const list = [
+      ev({ id: 'a', registration_url: 'https://x.fr' }),
+      ev({ id: 'b', registration_deadline: '2026-09-01' }),
+      ev({ id: 'c' }),
+    ]
+    expect(countWithApplications(list)).toBe(2)
+  })
+  it('liste vide → zéro', () => {
+    expect(countWithApplications([])).toBe(0)
+  })
+  it('même prédicat que la deuxième pastille de countCounters', () => {
+    const list = [ev({ id: 'a', registration_url: 'https://x.fr' }), ev({ id: 'b' })]
+    expect(countCounters(list, null)[1].n).toBe(String(countWithApplications(list)))
+  })
+})
+
+describe('searchScopeLabel', () => {
+  it('accorde le pluriel', () => {
+    expect(searchScopeLabel(42)).toBe('Chercher dans 42 événements')
+  })
+  it('un seul événement → singulier', () => {
+    expect(searchScopeLabel(1)).toBe('Chercher dans 1 événement')
+  })
+  it('lecture ratée → la phrase perd son nombre, pas sa promesse', () => {
+    expect(searchScopeLabel(null)).toBe('Chercher dans l’annuaire')
+  })
+})
+
+describe('ctaCountsSentence', () => {
+  it('accorde les deux nombres', () => {
+    const list = [ev({ id: 'a', registration_url: 'https://x.fr' }), ev({ id: 'b' })]
+    expect(ctaCountsSentence(list)).toBe('2 événements à venir, 1 qui prend des exposants.')
+  })
+  it('un seul de chaque → tout au singulier', () => {
+    expect(ctaCountsSentence([ev({ registration_url: 'https://x.fr' })]))
+      .toBe('1 événement à venir, 1 qui prend des exposants.')
+  })
+  it('plusieurs qui prennent des exposants → « prennent »', () => {
+    const list = [ev({ id: 'a', registration_url: 'https://x.fr' }), ev({ id: 'b', registration_deadline: '2026-09-01' })]
+    expect(ctaCountsSentence(list)).toBe('2 événements à venir, 2 qui prennent des exposants.')
+  })
+  it('lecture ratée → aucune phrase chiffrée', () => {
+    expect(ctaCountsSentence(null)).toBeNull()
+  })
+})
+
+describe('resultsLabel', () => {
+  it('aucun résultat', () => {
+    expect(resultsLabel(0)).toBe('Aucun événement ne correspond')
+  })
+  it('un seul résultat → singulier', () => {
+    expect(resultsLabel(1)).toBe('1 événement trouvé')
+  })
+  it('plusieurs résultats → pluriel', () => {
+    expect(resultsLabel(7)).toBe('7 événements trouvés')
+  })
 })
 
 describe('topUniverses', () => {
@@ -147,6 +221,11 @@ describe('todayIso', () => {
     // retomber sur la veille en UTC dans tout fuseau positif (UTC+1/+2) —
     // exactement le bug que ce helper existe pour éviter.
     const justAfterMidnight = new Date(2026, 7, 11, 0, 30)
+    // Garde-fou du garde-fou : sur un runner en UTC, toISOString() renverrait
+    // le MÊME jour et ce test passerait contre le bug qu'il surveille. Le
+    // fuseau est épinglé (TZ=Europe/Paris, vitest.config.ts) — cette première
+    // assertion échoue bruyamment si l'épinglage saute.
+    expect(justAfterMidnight.toISOString().slice(0, 10)).toBe('2026-08-10')
     expect(todayIso(justAfterMidnight)).toBe('2026-08-11')
   })
   it('complète les zéros du mois et du jour', () => {

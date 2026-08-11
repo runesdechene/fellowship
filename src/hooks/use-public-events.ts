@@ -14,10 +14,14 @@ export interface PublicEventsState {
   events: PublicEvent[]
   tagLabels: Record<string, string>
   loading: boolean
+  /** La lecture des événements a échoué (erreur PostgREST ou panne réseau).
+   *  supabase-js ne lève pas : sans ce drapeau, une erreur ressemblerait à
+   *  « 0 événement » et la page annoncerait ce zéro comme un fait mesuré. */
+  error: boolean
 }
 
 export function usePublicEvents(): PublicEventsState {
-  const [state, setState] = useState<PublicEventsState>({ events: [], tagLabels: {}, loading: true })
+  const [state, setState] = useState<PublicEventsState>({ events: [], tagLabels: {}, loading: true, error: false })
 
   useEffect(() => {
     let cancelled = false
@@ -37,9 +41,18 @@ export function usePublicEvents(): PublicEventsState {
       if (cancelled) return
       const labels = Object.fromEntries(
         ((tags.data ?? []) as Array<{ slug: string; name: string }>).map(t => [t.slug, t.name]))
-      setState({ events: (evs.data ?? []) as unknown as PublicEvent[], tagLabels: labels, loading: false })
+      // Seule l'erreur sur `events` est fatale à l'annuaire : sans libellés de
+      // tags, `toCard` retombe déjà proprement sur le slug.
+      if (evs.error) {
+        setState({ events: [], tagLabels: labels, loading: false, error: true })
+        return
+      }
+      setState({
+        events: (evs.data ?? []) as unknown as PublicEvent[],
+        tagLabels: labels, loading: false, error: false,
+      })
     }
-    run().catch(() => { if (!cancelled) setState({ events: [], tagLabels: {}, loading: false }) })
+    run().catch(() => { if (!cancelled) setState({ events: [], tagLabels: {}, loading: false, error: true }) })
     return () => { cancelled = true }
   }, [])
 
