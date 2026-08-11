@@ -10,6 +10,9 @@ export interface LandingExposant {
 
 export interface LandingStats {
   count: number | null
+  /** Le vrai compte, sans le VIRTUAL_BOOST — la V2 plaide l'honnêteté et ne
+   *  peut pas afficher un chiffre gonflé. Le boost reste réservé à la V1. */
+  realCount: number | null
   avatars: LandingExposant[]
   loading: boolean
 }
@@ -20,7 +23,7 @@ const AVATAR_LIMIT = 5
 const VIRTUAL_BOOST = 50
 
 export function useLandingExposants(): LandingStats {
-  const [stats, setStats] = useState<LandingStats>({ count: null, avatars: [], loading: true })
+  const [stats, setStats] = useState<LandingStats>({ count: null, realCount: null, avatars: [], loading: true })
 
   useEffect(() => {
     let cancelled = false
@@ -35,11 +38,12 @@ export function useLandingExposants(): LandingStats {
       const rows = (avatarsRes.data ?? []) as Array<{ actor_id: string; brand_name: string | null; avatar_url: string | null }>
       setStats({
         count: countRes.count != null ? countRes.count + VIRTUAL_BOOST : null,
+        realCount: countRes.count,
         avatars: rows.map(r => ({ actor_id: r.actor_id, label: r.brand_name, avatar_url: r.avatar_url })),
         loading: false,
       })
     }
-    run().catch(() => { if (!cancelled) setStats({ count: null, avatars: [], loading: false }) })
+    run().catch(() => { if (!cancelled) setStats({ count: null, realCount: null, avatars: [], loading: false }) })
     return () => { cancelled = true }
   }, [])
 

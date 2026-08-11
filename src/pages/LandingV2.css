@@ -90,6 +90,65 @@ html:not(.light) .lv2 {
 .lv2 .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
 .lv2 .sec-head .l { display: flex; flex-direction: column; gap: 11px; }
 
+/* ── Le sélecteur d'audience : il pilote toute la page ────────── */
+.lv2 .seg { display: inline-flex; padding: 5px; gap: 4px; border-radius: 999px; background: var(--block); align-self: flex-start; flex-wrap: wrap; }
+.lv2 .seg button {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px; border-radius: 999px; border: 0; cursor: pointer;
+  font: inherit; font-size: .9375rem; font-weight: 500;
+  background: transparent; color: var(--ink-soft);
+}
+.lv2 .seg button:hover { color: var(--ink); }
+.lv2 .seg button.on { background: var(--accent-lv2); color: var(--accent-ink); font-weight: 600; }
+.lv2 .seg .mini { font-size: .625rem; letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+
+.lv2 .v { display: none; }
+.lv2[data-aud="festivalier"]  .v.festivalier,
+.lv2[data-aud="exposant"]     .v.exposant,
+.lv2[data-aud="organisateur"] .v.organisateur { display: block; }
+.lv2 .hero-copy.v { display: none; }
+.lv2[data-aud="festivalier"]  .hero-copy.festivalier,
+.lv2[data-aud="exposant"]     .hero-copy.exposant,
+.lv2[data-aud="organisateur"] .hero-copy.organisateur { display: flex; flex-direction: column; gap: 18px; }
+
+.lv2 header.hero { padding: 46px 0 40px; display: flex; flex-direction: column; gap: 26px; }
+.lv2 .search-big { display: flex; align-items: center; gap: 14px; padding: 18px 26px; border-radius: 999px; max-width: 620px; background: var(--block); box-shadow: var(--lift); }
+.lv2 .search-big svg { width: 20px; height: 20px; color: var(--ink-soft); }
+.lv2 .search-big input { flex: 1; border: 0; background: none; font: inherit; font-size: 1.0625rem; color: var(--ink); outline: none; min-width: 0; }
+.lv2 .search-big input::placeholder { color: var(--ink-faint); }
+.lv2 .counts { display: flex; align-items: center; gap: 10px; font-size: .875rem; color: var(--ink-soft); flex-wrap: wrap; }
+.lv2 .counts b { color: var(--ink); font-weight: 600; }
+
+.lv2 .signature { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 4px; }
+.lv2 .badge-free {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px; border-radius: 999px;
+  background: var(--ok-wash); color: var(--ok);
+  font-size: .8125rem; font-weight: 700;
+}
+.lv2 .badge-free svg { width: 15px; height: 15px; }
+.lv2 .signature .by { font-size: .875rem; color: var(--ink-faint); }
+.lv2 .signature .by strong { color: var(--ink-soft); font-weight: 600; }
+
+/* ── Bandeau des univers : les couleurs font le caractère ─────── */
+.lv2 .marquee { overflow: hidden; padding: 24px 0; position: relative; }
+.lv2 .marquee::before, .lv2 .marquee::after { content: ""; position: absolute; top: 0; bottom: 0; width: 110px; z-index: 2; pointer-events: none; }
+.lv2 .marquee::before { left: 0; background: linear-gradient(to right, var(--parchment), transparent); }
+.lv2 .marquee::after { right: 0; background: linear-gradient(to left, var(--parchment), transparent); }
+.lv2 .mtrack { display: flex; gap: 11px; width: max-content; animation: lv2-slide 58s linear infinite; }
+.lv2 .marquee:hover .mtrack { animation-play-state: paused; }
+@keyframes lv2-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* Chaque univers porte SA couleur : fond lavé, texte teinté. */
+.lv2 .etag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 19px; border-radius: 999px; white-space: nowrap;
+  font-size: .9375rem; font-weight: 500; cursor: pointer;
+  background: color-mix(in srgb, var(--c) var(--tag-bg), transparent);
+  color: color-mix(in srgb, var(--c) var(--tag-ink), var(--ink));
+  transition: transform .18s ease;
+}
+.lv2 .etag:hover { transform: translateY(-2px); }
+
 @media (prefers-reduced-motion: reduce) {
   .lv2 *, .lv2 *::before, .lv2 *::after { transition: none !important; animation: none !important; }
 }
