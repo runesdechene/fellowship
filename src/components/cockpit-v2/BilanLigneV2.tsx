@@ -20,13 +20,17 @@ export function BilanLigneV2({ prompt, onSaved, onSnooze }: Props) {
   return (
     <>
       <div className="ck2-bilan">
-        <span className="ck2-dot ck2-wait" aria-hidden="true" />
-        <span className="ck2-bilan-txt">
-          Comment s'est passé <b>{p.events.name}</b> ?
-          {prompt.extraCount > 0 && <span className="app2-faint"> +{prompt.extraCount} en attente</span>}
+        <span className="ck2-bilan-lead">
+          <span className="ck2-dot ck2-wait" aria-hidden="true" />
+          <span className="ck2-bilan-txt">
+            Comment s'est passé <b>{p.events.name}</b> ?
+            {prompt.extraCount > 0 && <span className="app2-faint"> +{prompt.extraCount} en attente</span>}
+          </span>
         </span>
-        <button className="ck2-bilan-go" onClick={() => setOpen(true)}>Remplir mon bilan</button>
-        <button className="ck2-bilan-later" onClick={() => onSnooze(p.event_id)} aria-label="Plus tard">Plus tard</button>
+        <span className="ck2-bilan-actions">
+          <button className="ck2-bilan-go" onClick={() => setOpen(true)}>Remplir mon bilan</button>
+          <button className="ck2-bilan-later" onClick={() => onSnooze(p.event_id)} aria-label="Plus tard">Plus tard</button>
+        </span>
       </div>
       {open && (
         <BilanModal

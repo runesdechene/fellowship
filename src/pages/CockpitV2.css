@@ -70,9 +70,18 @@ a.ck2-li:hover .ck2-t, button.ck2-li:hover .ck2-t { color: var(--accent-app2); }
 /* Ligne bilan (#7) : une ligne calme, une seule action visible + un lien discret
    pour « plus tard ». Ni bandeau coloré, ni trois boutons. */
 .ck2-bilan { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 14px; background: var(--block); }
+.ck2-bilan-lead { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
 .ck2-bilan-txt { flex: 1; font-size: .9375rem; min-width: 0; }
+.ck2-bilan-actions { display: flex; align-items: center; gap: 12px; flex: none; }
 .ck2-bilan-go { flex: none; padding: 8px 16px; border-radius: 999px; background: var(--accent-app2); color: var(--accent-ink2); font-size: .8125rem; font-weight: 600; }
 .ck2-bilan-later { flex: none; padding: 8px 4px; color: var(--ink-faint); font-size: .8125rem; text-decoration: underline; text-underline-offset: 2px; }
+/* En dessous de 768px, la ligne se replie en pile : le texte prend toute la largeur sur
+   sa propre ligne, l'action principale et « Plus tard » restent ensemble sur la ligne
+   suivante (même logique de repli que .ck2-grid-2/.ck2-grid-3 plus haut dans ce fichier). */
+@media (max-width: 768px) {
+  .ck2-bilan { flex-direction: column; align-items: stretch; }
+  .ck2-bilan-actions { align-self: flex-start; }
+}
 
 /* Dossiers refusés (#7) : repliés par défaut dans un <details>. */
 .ck2-refus summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
