@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { getInitialTheme, applyTheme, THEME_STORAGE_KEY } from './theme'
+import { getInitialTheme, resolveInitialTheme, applyThemeClass, persistTheme, THEME_STORAGE_KEY } from './theme'
 
 describe('theme', () => {
   beforeEach(() => {
@@ -41,16 +41,56 @@ describe('theme', () => {
     expect(getInitialTheme()).toBe('night')
   })
 
-  it('applyTheme("day") ajoute la classe light et persiste', () => {
-    applyTheme('day')
+  it('applyThemeClass("day") + persistTheme("day") = l\'ancien applyTheme', () => {
+    applyThemeClass('day')
+    persistTheme('day')
     expect(document.documentElement.classList.contains('light')).toBe(true)
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('day')
   })
-
-  it('applyTheme("night") retire la classe light et persiste', () => {
+  it('applyThemeClass("night") + persistTheme("night") = l\'ancien applyTheme', () => {
     document.documentElement.classList.add('light')
-    applyTheme('night')
+    applyThemeClass('night')
+    persistTheme('night')
     expect(document.documentElement.classList.contains('light')).toBe(false)
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('night')
+  })
+
+  describe('resolveInitialTheme — les trois états', () => {
+    it('aucun choix + V1 → night (défaut historique)', () => {
+      expect(resolveInitialTheme(null, false, false)).toBe('night')
+    })
+    it('aucun choix + V2 → day (le parchemin est le défaut, décision 0007)', () => {
+      expect(resolveInitialTheme(null, false, true)).toBe('day')
+    })
+    it('choix "night" + V2 → night (un choix explicite est roi)', () => {
+      expect(resolveInitialTheme('night', false, true)).toBe('night')
+    })
+    it('choix "day" + V1 → day', () => {
+      expect(resolveInitialTheme('day', false, false)).toBe('day')
+    })
+    it('valeur invalide + V2 → day (on retombe sur le défaut du contexte)', () => {
+      expect(resolveInitialTheme('banana', false, true)).toBe('day')
+    })
+    it('aucun choix + classe .light déjà posée par l\'anti-flash → day, pas de divergence', () => {
+      expect(resolveInitialTheme(null, true, false)).toBe('day')
+    })
+  })
+
+  describe('applyThemeClass / persistTheme — la séparation', () => {
+    it('applyThemeClass("day") pose la classe SANS rien mémoriser', () => {
+      applyThemeClass('day')
+      expect(document.documentElement.classList.contains('light')).toBe(true)
+      expect(localStorage.getItem(THEME_STORAGE_KEY)).toBeNull()
+    })
+    it('applyThemeClass("night") retire la classe SANS rien mémoriser', () => {
+      document.documentElement.classList.add('light')
+      applyThemeClass('night')
+      expect(document.documentElement.classList.contains('light')).toBe(false)
+      expect(localStorage.getItem(THEME_STORAGE_KEY)).toBeNull()
+    })
+    it('persistTheme écrit le choix', () => {
+      persistTheme('night')
+      expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('night')
+    })
   })
 })

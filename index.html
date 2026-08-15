@@ -28,14 +28,19 @@
         if (theme === 'day') {
           document.documentElement.classList.add('light');
         } else if (theme === null) {
-          // `?v2=0` est un ordre, pas une absence d'ordre : il éteint la V2 AVANT
-          // que React n'ait pu effacer la mémoire. Sans ce garde-fou, éteindre
-          // l'interrupteur peignait quand même en clair, et ThemeProvider
-          // persistait « day » pour toute l'app — la V1 n'était plus intacte.
-          var param = new URLSearchParams(location.search).get('v2');
-          var isV2 = param === '1'
-            || (param !== '0' && localStorage.getItem('flwsh-landing-v2') === '1');
-          if (isV2) document.documentElement.classList.add('light');
+          var qs = new URLSearchParams(location.search);
+          // Un `=0` est un ORDRE d'extinction, pas une absence d'ordre : il doit
+          // gagner AVANT que React n'ait pu effacer la mémoire, sinon éteindre
+          // l'interrupteur peignait quand même en clair.
+          function on(name, key) {
+            var p = qs.get(name);
+            if (p === '1') return true;
+            if (p === '0') return false;
+            return localStorage.getItem(key) === '1';
+          }
+          if (on('v2', 'flwsh-landing-v2') || on('app2', 'flwsh-app-v2')) {
+            document.documentElement.classList.add('light');
+          }
         }
       } catch (e) {}
     </script>
