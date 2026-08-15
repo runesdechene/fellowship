@@ -43,8 +43,8 @@
 .ck2-h3 { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; margin: 0; }
 .ck2-list { display: flex; flex-direction: column; }
 .ck2-li { display: flex; align-items: center; gap: 13px; padding: 15px 0; border-top: 1px solid var(--hairline-2); text-decoration: none; color: inherit; }
-.ck2-li:first-of-type { border-top: 0; }
-.ck2-li:hover .ck2-t { color: var(--accent-app2); }
+.ck2-li:first-child { border-top: 0; }
+a.ck2-li:hover .ck2-t, button.ck2-li:hover .ck2-t { color: var(--accent-app2); }
 .ck2-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
 .ck2-t { font-size: .9375rem; font-weight: 600; letter-spacing: -.012em; }
 .ck2-s { font-size: .8125rem; color: var(--ink-soft); }

@@ -43,7 +43,7 @@ export function CompagnonsV2() {
         <div className="ck2-list">
           {visible.map(c => (
             <Link key={c.event.id} to={eventPath(c.event)} className="ck2-li">
-              <span className="ck2-faces">
+              <span className="ck2-faces" aria-hidden="true">
                 {c.sample.slice(0, 3).map((a, i) => (
                   <span key={a.actorId} className="ck2-face"
                     style={{ background: a.avatarUrl ? 'transparent' : avatarColor(a.label), zIndex: 3 - i }}>

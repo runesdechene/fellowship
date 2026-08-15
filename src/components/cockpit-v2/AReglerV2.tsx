@@ -39,15 +39,19 @@ export function AReglerV2({ participations, entriesByEvent }: Props) {
             const ev = p.events
             const chip = participationChip(p.status, p.payment_status, 'entity')
             const due = dueAmount(entriesByEvent.get(ev.id))
-            // Bille : ambre tant que ce n'est pas réglé, vert quand ça l'est.
-            const settled = chip?.variant === 'inscrit' || chip?.variant === 'accepte'
+            // Repris tel quel de AReglerFinaliser.tsx : le label du chip débarrassé du
+            // « € » qui le préfixe parfois. Toutes les lignes de ce bloc sont en attente
+            // par construction (cf. selectAReglerItems) : la bille reste ambre partout,
+            // c'est ce label qui porte la nuance de statut.
+            const label = chip?.label.replace(/^€\s*/, '')
             return (
               <Link key={p.id} to={eventPath(ev)} className="ck2-li">
-                <span className={`ck2-dot ${settled ? 'ck2-ok' : 'ck2-wait'}`} aria-hidden="true" />
+                <span className="ck2-dot ck2-wait" aria-hidden="true" />
                 <span className="ck2-txt">
                   <span className="ck2-t">{ev.name}</span>
                   <span className="ck2-s">
                     {ev.city} · {new Date(ev.start_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                    {label && ` · ${label}`}
                   </span>
                 </span>
                 {due != null && <span className="ck2-amount">{due.toLocaleString('fr-FR')} €</span>}
