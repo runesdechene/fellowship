@@ -1,0 +1,49 @@
+/* src/components/layout/SidebarV2.css — tout est préfixé sd2- : les .css de ce
+   projet sont globaux, une classe nue fuirait dans les autres composants. */
+.sd2 {
+  width: var(--sidebar2-w, 232px); flex: none;
+  position: fixed; inset: 0 auto 0 0; z-index: 30;
+  height: 100dvh;
+  border-right: 1px solid var(--hairline-2);
+  background: var(--rail-bg);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  padding: 22px 14px 20px;
+  display: flex; flex-direction: column; gap: 22px;
+  transition: width .18s ease;
+}
+@media (max-width: 767px) { .sd2 { display: none; } }
+
+.sd2-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 8px; }
+.sd2-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.02em; font-size: 1rem; color: var(--ink); text-decoration: none; }
+/* Hauteur fixée, largeur libre, jamais de border-radius. */
+.sd2-mark { height: 28px; width: auto; display: block; flex: none; }
+.sd2-dot { color: var(--accent-app2); }
+.sd2-fold { background: none; border: 0; color: var(--ink-faint); cursor: pointer; padding: 4px; display: grid; place-items: center; }
+.sd2-fold svg { width: 18px; height: 18px; }
+.sd2-fold:hover { color: var(--ink); }
+
+.sd2-nav { display: flex; flex-direction: column; gap: 2px; }
+.sd2-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 12px; border-radius: 11px;
+  color: var(--ink-soft); text-decoration: none;
+  font-size: .9375rem; cursor: pointer;
+  background: none; border: 1px solid transparent; font: inherit; width: 100%; text-align: left;
+}
+.sd2-link svg { width: 18px; height: 18px; }
+.sd2-link:hover { background: var(--shade); color: var(--ink); }
+/* Actif = un simple fond plus clair. Ni bordure, ni liseré de lumière : sur
+   fond sombre le liseré blanc se voyait comme un trait. */
+.sd2-on { background: var(--nav-on); color: var(--ink); font-weight: 600; box-shadow: none; }
+.sd2-on svg { color: var(--accent-app2); }
+.sd2-collapsed .sd2-lab, .sd2-collapsed .sd2-name, .sd2-collapsed .sd2-who { display: none; }
+.sd2-count, .sd2-badge { margin-left: auto; font-size: .6875rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--accent-wash2); color: var(--accent-app2); }
+.sd2-lock { margin-left: auto; color: var(--accent-app2); display: grid; place-items: center; }
+.sd2-lock svg { width: 14px; height: 14px; }
+
+.sd2-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px 0; border-top: 1px solid var(--hairline-2); }
+.sd2-av { width: 30px; height: 30px; border-radius: 999px; overflow: hidden; background: var(--surf-2); border: 1px solid var(--hairline-2); display: grid; place-items: center; font-size: .6875rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; flex: none; }
+.sd2-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sd2-who { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; text-decoration: none; color: inherit; }
+.sd2-who b { font-size: .8125rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sd2-who span { font-size: .6875rem; color: var(--ink-faint); }

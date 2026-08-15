@@ -1,0 +1,118 @@
+/* src/styles/app2.css
+   DA V2 « Parchemin » — décision 0007. TOUT est scopé sous .app2 : les .css de
+   ce projet sont globaux, et les jetons de src/index.css sont des triplets HSL
+   consommés par ~224 hsl(var(--x)) écrits à la main. Ces jetons-ci sont en hex
+   et ne doivent JAMAIS porter les mêmes noms. */
+
+.app2 {
+  --parchment: #F4EEE1;
+  --rail: #EFE8D9;
+  --surf: #FBF7EF;
+  --surf-2: #F3EDE1;
+  --ink: #594848;
+  --ink-soft: #8C7B72;
+  --ink-faint: #B0A197;
+  --hairline: rgba(89,72,72,.13);
+  --hairline-2: rgba(89,72,72,.09);
+  --shade: rgba(89,72,72,.045);
+  --accent-app2: #C06846;
+  --accent-ink2: #FFF6F0;
+  --accent-wash2: rgba(192,104,70,.11);
+  --ok: #4E7355; --ok-wash: rgba(78,115,85,.13);
+  --wait: #B98032; --wait-wash: rgba(185,128,50,.14);
+
+  /* Un bloc = un fond à peine décalé du parchemin. Ni bordure ni ombre :
+     la séparation se fait par la teinte. Légèrement translucide pour capter
+     les halos qui passent derrière — c'est ce qui l'empêche d'être un
+     rectangle mort. */
+  --block: rgba(255,252,246,.58);
+  --block-2: rgba(255,252,246,.38);
+  --rail-bg: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
+  --nav-on: rgba(255,252,245,.92);
+
+  /* La matière : jamais une ombre dure. Un liseré de lumière, une ombre large
+     et très diffuse. Le liseré passe par ce jeton et JAMAIS en dur : écrit en
+     dur, il se voit comme un trait blanc en thème sombre. */
+  --lift:
+    inset 0 1px 0 rgba(255,255,255,.72),
+    0 1px 2px rgba(84,62,44,.045),
+    0 10px 26px -8px rgba(84,62,44,.10);
+
+  --halo-1: rgba(226,155,118,.17);
+  --halo-2: rgba(186,152,214,.075);
+  --halo-3: rgba(232,180,120,.08);
+  --halo-4: rgba(214,146,120,.08);
+  --halo-blur: 90px;
+  --photo-a: #D8C7A8; --photo-b: #A8927A;
+
+  --sidebar2-w: 232px;
+
+  color: var(--ink);
+  background-color: var(--parchment);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Le sombre ne s'active JAMAIS tout seul : aucune règle prefers-color-scheme.
+   Dans cette app, absence de .light = nuit (défaut historique de la V1). */
+html:not(.light) .app2 {
+  --parchment: #171414;
+  --rail: #1B1716;
+  --surf: #221C19;
+  --surf-2: #2A231F;
+  --ink: #F0E5D6;
+  --ink-soft: #A3948A;
+  --ink-faint: #786A62;
+  --hairline: rgba(240,229,214,.15);
+  --hairline-2: rgba(240,229,214,.10);
+  --shade: rgba(240,229,214,.05);
+  --accent-app2: #E29B76;
+  --accent-ink2: #2A1810;
+  --accent-wash2: rgba(226,155,118,.16);
+  --ok: #8FBF9C; --ok-wash: rgba(143,191,156,.15);
+  --wait: #E0B26A; --wait-wash: rgba(224,178,106,.16);
+  --block: rgba(255,238,222,.042);
+  --block-2: rgba(255,238,222,.028);
+  --rail-bg: linear-gradient(180deg, rgba(30,25,23,.88), rgba(23,19,18,.94));
+  --nav-on: rgba(255,240,225,.075);
+  --lift:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    0 1px 2px rgba(0,0,0,.34),
+    0 12px 30px -10px rgba(0,0,0,.50);
+  --halo-1: rgba(226,124,78,.18);
+  --halo-2: rgba(150,110,205,.15);
+  --halo-3: rgba(226,155,90,.10);
+  --halo-4: rgba(196,96,80,.12);
+  --halo-blur: 110px;
+  --photo-a: #4E4237; --photo-b: #2E2721;
+}
+
+/* Sans cette règle, les SVG portés depuis une maquette prennent fill:black et
+   deviennent des taches noires dans LES DEUX thèmes. La couleur de l'icône
+   vient du `color` du parent. */
+.app2 svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.app2 * { box-sizing: border-box; }
+.app2 p { margin: 0; }
+
+/* Les halos, à ~17 %. En clair, le chaud domine et le froid ne fait que
+   ponctuer : un halo bleu ou vert trop présent grise le parchemin. */
+.app2 .app2-halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.app2 .app2-halos i { position: absolute; border-radius: 50%; filter: blur(var(--halo-blur)); display: block; }
+.app2 .app2-h1 { width: 680px; height: 560px; top: -200px; left: -140px; background: var(--halo-1); }
+.app2 .app2-h2 { width: 520px; height: 460px; top: 2%; right: -160px; background: var(--halo-2); }
+.app2 .app2-h3 { width: 620px; height: 520px; top: 52%; left: 18%; background: var(--halo-3); }
+.app2 .app2-h4 { width: 520px; height: 440px; bottom: -170px; right: 6%; background: var(--halo-4); }
+
+/* Typographie 0007 : graisse 500, interlettrage négatif, jamais de noir pur. */
+.app2 .app2-title { font-size: 2rem; font-weight: 500; letter-spacing: -.032em; line-height: 1.08; margin: 0; }
+.app2 .app2-sub { font-size: .9375rem; color: var(--ink-soft); }
+.app2 .app2-label { font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+.app2 .app2-muted { color: var(--ink-soft); font-size: .875rem; }
+.app2 .app2-faint { color: var(--ink-faint); font-size: .8125rem; }
+
+/* Le theme-toggle est un composant PARTAGÉ qui porte les jetons de l'app
+   (hsl(var(--card))…, qui jureraient sur le parchemin). On ne le modifie pas :
+   on le repeint ici, sous .app2 seulement. Le déplacement du bouton reste
+   piloté par `.light .theme-toggle .knob`. */
+.app2 .theme-toggle { background: var(--block); border: 1px solid var(--hairline); }
+.app2 .theme-toggle .knob { background: var(--accent-app2); color: var(--accent-ink2); box-shadow: none; }
+.app2 .theme-toggle:focus-visible { outline: 2px solid var(--accent-app2); outline-offset: 3px; }

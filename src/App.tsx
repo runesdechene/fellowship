@@ -1,9 +1,11 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useState, type ReactNode } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { AppLayoutV2 } from '@/components/layout/AppLayoutV2'
+import { readV2Switch, APP_V2_PARAM, APP_V2_STORAGE_KEY } from '@/lib/v2-switch'
 import { LandingPage } from '@/pages/Landing'
 import { readLandingV2 } from '@/lib/landing-v2'
 import { LoginPage } from '@/pages/Login'
@@ -62,11 +64,14 @@ function OnboardingGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
-function AuthenticatedApp({ children }: { children: React.ReactNode }) {
+function AuthenticatedApp({ children }: { children: ReactNode }) {
+  // Lu une seule fois au montage : l'interrupteur ne change pas en cours de visite.
+  const [v2] = useState(() => readV2Switch(APP_V2_PARAM, APP_V2_STORAGE_KEY))
+  const Layout = v2 ? AppLayoutV2 : AppLayout
   return (
     <ProtectedRoute>
       <OnboardingGuard>
-        <AppLayout>{children}</AppLayout>
+        <Layout>{children}</Layout>
       </OnboardingGuard>
     </ProtectedRoute>
   )
