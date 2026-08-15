@@ -45,7 +45,12 @@
   --halo-blur: 90px;
   --photo-a: #D8C7A8; --photo-b: #A8927A;
 
-  --sidebar2-w: 232px;
+  /* --sidebar2-w n'est JAMAIS déclarée ici : elle ne vit qu'en JS sur <html>
+     (SidebarV2.tsx), comme --sidebar-w en V1. Une déclaration ici masquerait
+     la valeur dynamique pour tout ce qui vit sous .app2 (custom property
+     déclarée localement > héritée d'un ancêtre) — la sidebar ne se
+     redimensionnerait jamais. Chaque site de consommation lit
+     var(--sidebar2-w, 232px), le fallback couvrant le premier paint. */
 
   color: var(--ink);
   background-color: var(--parchment);

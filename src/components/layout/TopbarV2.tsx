@@ -16,7 +16,7 @@ export function TopbarV2({ onCreateEvent }: Props) {
       </Link>
       <div className="tb2-right">
         <NotifBell />
-        <button className="tb2-cta" onClick={onCreateEvent}>
+        <button className="tb2-cta" onClick={onCreateEvent} aria-label="Ajouter un événement">
           <Plus strokeWidth={2.2} />
           <span>Ajouter un événement</span>
         </button>
