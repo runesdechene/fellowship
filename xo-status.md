@@ -1,7 +1,7 @@
 ---
-updated: 2026-08-12T00:00:00Z
-summary: "La nouvelle page d'accueil existe pour de vrai. Elle est en ligne mais éteinte : elle ne s'affiche que si on ajoute ?v2=1 à l'adresse, et l'ancienne page reste intacte pour tout le monde. Elle montre les vrais festivals de la base avec leurs vraies affiches, ses chiffres sont mesurés et non inventés, et elle est habillée du parchemin clair validé la veille. Neuf tâches, chacune relue par un agent indépendant, plus une relecture générale : rien de grave trouvé, tout ce qui a été trouvé est corrigé."
-next_step: "Uriel doit d'abord ouvrir la page et dire si elle lui plaît, sur ordinateur et sur téléphone. Trois petites choses attendent son avis : une phrase de secours jamais validée, l'adresse de contact du bas de page, et le fait qu'une visite sur la nouvelle page bascule toute l'application en clair. Le vrai sujet n'est pas la page mais son contenu : l'annuaire ne contient que 43 dates à venir alors que la maquette en promettait 412. Ensuite, appeler deux ou trois organisateurs de gros festivals — sans rien vendre — pour comprendre comment ils gèrent leurs dossiers d'exposants. Il manque toujours le contenu réel d'un dossier de candidature."
+updated: 2026-08-15T00:00:00Z
+summary: "Le nouveau tableau de bord a été passé en revue avant sa mise à disposition. Tous les contrôles automatiques sont au vert et l'ancienne version reste inchangée pour tout le monde. Comme l'application ne pouvait pas être ouverte dans un vrai navigateur ici, trois images ont été fabriquées avec les mêmes styles que l'application réelle pour montrer à quoi ressemble la nouvelle page de jour, de nuit et sur téléphone. Un défaut a été repéré sur téléphone : la petite bannière qui invite à remplir un bilan affiche son texte en colonne étroite, un mot par ligne, au lieu de s'adapter à l'écran. Le travail n'a pas encore été envoyé en ligne, il reste sur cette machine en attente d'une décision."
+next_step: "Ouvrir la nouvelle page sur ordinateur et sur téléphone pour donner un avis réel, et regarder en particulier la bannière de bilan qui s'affiche mal sur petit écran. Une fois l'avis donné et ce défaut réglé, il restera à envoyer le travail en ligne."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -9,6 +9,33 @@ next_step: "Uriel doit d'abord ouvrir la page et dire si elle lui plaît, sur or
   de Claude, jamais affichée. Les tâches affichées viennent de la note Obsidian reliée (✎). -->
 
 ## Mémoire de session
+
+--- RECETTE COCKPIT V2 « PARCHEMIN » — Tâche 8 (2026-08-15) ---
+Garde anti-régression complète au vert : lint 0 erreur, 464 tests passés, build OK, aucune
+couleur hsl() mal formée dans le CSS compilé. V1 confirmée intacte par diff contre la base du
+chantier : seuls App.tsx, theme.ts, theme.test.ts, landing-v2.ts, use-theme.tsx et index.html —
+déjà existants avant le chantier — ont été touchés ; tout le reste (composants, pages, styles du
+nouveau Cockpit, sidebar/barre du haut V2) est neuf. Aucune régression détectée.
+Captures jour/nuit/mobile produites via un harnais statique HORS du dépôt (navigateur Edge
+piloté automatiquement, feuille de style compilée du build reliée telle quelle) — PAS un vrai
+navigateur sur l'app réelle avec connexion (non automatisable ici). Jour et nuit lisibles, aucun
+trait blanc parasite en sombre, aucune icône noire, logo entier sans coin arrondi, pas de
+débordement horizontal. **Défaut repéré sur téléphone (390px)** : la ligne « Comment s'est
+passé... / Remplir mon bilan / Plus tard » ne s'empile pas sous les grands écrans — le texte est
+écrasé sur une soixantaine de pixels de large et casse un mot par ligne, illisible. Confirmé par
+la mesure (pas juste un rendu qui a mal tourné). Cas limites relus dans le code (pas exécutables
+ici, pas de navigateur réel) : compte sans aucune date à venir → rien n'est cassé ni vide-avec-
+cadre, mais le bloc « À régler » affiche quand même un état « tout est à jour » et « Compagnons »
+son propre état vide — des états volontaires, pas juste le bandeau + la carte vide + l'invitation
+de la frise comme décrit au départ, mais rien de cassé pour autant ; événement sans affiche →
+aplat teinté confirmé, jamais de cadre vide ; retour arrière par lien → efface bien la mémoire du
+navigateur et repasse à l'ancienne version ; navigation privée sans aucun stockage → ancienne
+version par défaut, en thème sombre, protégé par un filet qui avale les erreurs.
+Rien n'a été envoyé en ligne : c'est volontaire (personne pour juger le rendu réel en ce moment),
+le travail reste local en attente d'un feu vert.
+Reste ouvert : les huit autres écrans de l'application sont encore dans l'ancien thème sombre ;
+la barre du haut n'a pas de recherche globale dans ce lot ; la carte « Prochain festival » a
+perdu le cadenas d'événement privé et le raccourci itinéraire qu'avait l'ancienne version.
 
 --- 🔴 RETOURNEMENT DE FIN DE SESSION : LE PAYEUR, C'EST LE GROS FESTIVAL ---
 Contexte vital : Uriel a **6 mois**, plancher **1 500 €/mois**, Runes de Chêne rapporte **700 €/mois**
