@@ -66,3 +66,17 @@ a.ck2-li:hover .ck2-t, button.ck2-li:hover .ck2-t { color: var(--accent-app2); }
 
 .ck2-allset { display: flex; align-items: center; gap: 8px; color: var(--ok); }
 .ck2-allset svg { width: 16px; height: 16px; }
+
+/* Ligne bilan (#7) : une ligne calme, une seule action visible + un lien discret
+   pour « plus tard ». Ni bandeau coloré, ni trois boutons. */
+.ck2-bilan { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 14px; background: var(--block); }
+.ck2-bilan-txt { flex: 1; font-size: .9375rem; min-width: 0; }
+.ck2-bilan-go { flex: none; padding: 8px 16px; border-radius: 999px; background: var(--accent-app2); color: var(--accent-ink2); font-size: .8125rem; font-weight: 600; }
+.ck2-bilan-later { flex: none; padding: 8px 4px; color: var(--ink-faint); font-size: .8125rem; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Dossiers refusés (#7) : repliés par défaut dans un <details>. */
+.ck2-refus summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ck2-refus summary::-webkit-details-marker { display: none; }
+.ck2-refus[open] summary { margin-bottom: 14px; }
+.ck2-refus-row { flex-direction: column; align-items: stretch; gap: 8px; }
+.ck2-refus-note { width: 100%; resize: vertical; border: 0; border-radius: 10px; background: var(--surf-2); color: var(--ink); font: inherit; font-size: .8125rem; padding: 8px 10px; }
