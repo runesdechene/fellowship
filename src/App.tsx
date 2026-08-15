@@ -24,6 +24,7 @@ import { CommunautePage } from '@/pages/Communaute'
 import { BoutiquePage } from '@/pages/Boutique'
 import { AbonnementPage } from '@/pages/Abonnement'
 import { CockpitPage } from '@/pages/Cockpit'
+import { CockpitV2Page } from '@/pages/CockpitV2'
 import { MentionsLegalesPage } from '@/pages/legal/MentionsLegales'
 import { ConfidentialitePage } from '@/pages/legal/Confidentialite'
 import { CGUPage } from '@/pages/legal/CGU'
@@ -105,6 +106,11 @@ function EventWithLayout() {
   return <EventPage />
 }
 
+function CockpitRoute() {
+  const [v2] = useState(() => readV2Switch(APP_V2_PARAM, APP_V2_STORAGE_KEY))
+  return v2 ? <CockpitV2Page /> : <CockpitPage />
+}
+
 function LandingRoute() {
   // Lu une seule fois au montage : l'interrupteur ne change pas en cours de visite.
   const [v2] = useState(readLandingV2)
@@ -148,7 +154,7 @@ function App() {
           <Route path="/mes-dates" element={<Navigate to="/calendrier" replace />} />
           <Route path="/mes-createurs" element={<AuthenticatedApp><ComingSoon title="Mes créateurs" /></AuthenticatedApp>} />
           <Route path="/communaute" element={<AuthenticatedApp><CommunautePage /></AuthenticatedApp>} />
-          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><CockpitPage /></ProGate></AuthenticatedApp>} />
+          <Route path="/tableau-de-bord" element={<AuthenticatedApp><ProGate title="Cockpit"><CockpitRoute /></ProGate></AuthenticatedApp>} />
           <Route path="/boutique" element={<AuthenticatedApp><BoutiquePage /></AuthenticatedApp>} />
           <Route path="/abonnement" element={<AuthenticatedApp><AbonnementPage /></AuthenticatedApp>} />
           <Route path="/evenement/:id" element={<EventWithLayout />} />
