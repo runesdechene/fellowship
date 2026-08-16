@@ -80,6 +80,7 @@
   margin-top: auto;
   font: var(--type-card-link);
   color: var(--ink-soft);
+  cursor: pointer;
 }
 
 .upcoming__empty {

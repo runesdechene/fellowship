@@ -52,7 +52,7 @@ export function Sidebar() {
           )
 
           return to === null ? (
-            <span key={label} className="sidebar__item">
+            <span key={label} className="sidebar__item sidebar__item--inert">
               {content}
             </span>
           ) : (

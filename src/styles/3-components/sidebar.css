@@ -80,10 +80,9 @@
   margin-top: var(--sidebar-nav-gap);
 }
 
-/* Au repos, l'entrée est collée à gauche et sans fond.
-   Active OU survolée, elle glisse vers la droite et un fond plus foncé
-   apparaît : le survol est un aperçu de l'état actif. Seuls l'icône et le
-   libellé se déplacent — la pastille de fond, elle, ne bouge pas. */
+/* Icônes et libellés restent sur une seule ligne verticale, dans tous les
+   états. Seul le fond bouge : rien au repos, un crème léger au survol, un
+   crème soutenu quand l'entrée est active. */
 .sidebar__item {
   display: flex;
   align-items: center;
@@ -94,6 +93,7 @@
   font: var(--type-nav);
   color: var(--ink-soft);
   background-color: transparent;
+  cursor: pointer;
   transition:
     background-color var(--sidebar-item-motion),
     color var(--sidebar-item-motion);
@@ -102,26 +102,24 @@
 .sidebar__item-icon,
 .sidebar__item-label {
   flex: none;
-  transition: transform var(--sidebar-item-motion);
 }
 
-.sidebar__item:hover,
-.sidebar__item--active {
+.sidebar__item:hover {
+  background-color: var(--surface-nav-hover);
+  color: var(--ink-title);
+}
+
+.sidebar__item--active,
+.sidebar__item--active:hover {
   background-color: var(--surface-nav-active);
   color: var(--ink-title);
 }
 
-.sidebar__item:hover .sidebar__item-icon,
-.sidebar__item:hover .sidebar__item-label,
-.sidebar__item--active .sidebar__item-icon,
-.sidebar__item--active .sidebar__item-label {
-  transform: translateX(var(--sidebar-item-shift));
-}
+/* `--inert` = entrée dont l'écran n'est pas encore intégré (Explorer).
+   Elle se comporte comme les autres : même survol, même curseur. */
 
 @media (prefers-reduced-motion: reduce) {
-  .sidebar__item,
-  .sidebar__item-icon,
-  .sidebar__item-label {
+  .sidebar__item {
     transition: none;
   }
 }

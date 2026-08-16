@@ -22,7 +22,8 @@
   --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
   --surface-card: var(--cream-200); /* cartes posées sur le panneau */
   --surface-raised: var(--cream-50); /* la carte de compte, posée SUR le crème */
-  --surface-nav-active: var(--cream-400); /* l'entrée de menu active et survolée */
+  --surface-nav-active: var(--cream-400); /* l'entrée de menu active */
+  --surface-nav-hover: var(--cream-300); /* survol : un cran plus léger que l'actif */
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-150); /* mois qui portent au moins une date */
@@ -139,8 +140,9 @@
   --sidebar-nav-gap: var(--space-15); /* carte de compte → navigation */
   --sidebar-item-height: 46px;
   --sidebar-item-gap: 1px;
-  --sidebar-item-inset: var(--space-6); /* retrait au repos */
-  --sidebar-item-shift: var(--space-12); /* décalage vers la droite quand actif ou survolé */
+  /* Icônes et libellés sont sur une seule ligne verticale, quel que soit
+     l'état : c'est le fond qui change, jamais la position. */
+  --sidebar-item-inset: var(--space-17);
   --sidebar-icon-gap: var(--space-15);
   --sidebar-item-motion: var(--duration-fast) var(--ease-out);
 
