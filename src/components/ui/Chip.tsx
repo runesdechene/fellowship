@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-/** neutral = compte à rebours · ok = inscrit · pending = dossier en cours */
+/** neutral = information · ok = acquis · pending = en attente */
 export type ChipTone = 'neutral' | 'ok' | 'pending'
 
 interface ChipProps {

@@ -135,6 +135,9 @@
   --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
 
+  --type-settlement-due: var(--weight-bold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+
   --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
     var(--family-sans);
   --type-chip-strong: var(--weight-extrabold) var(--size-9) /
@@ -235,6 +238,14 @@
   --banner-icon-surface: var(--status-pending-surface);
   --banner-icon-ink: var(--status-pending-ink);
   --radius-banner: var(--round-15);
+
+  /* =========================================================================
+     À RÉGLER — les dossiers et paiements en suspens
+     ====================================================================== */
+  --settlement-padding-x: var(--card-padding);
+  --settlement-padding-y: var(--space-20);
+  --settlement-row-gap: var(--space-18);
+  --settlement-due-ink: var(--status-ok-ink);
 
   /* =========================================================================
      MES BILANS — les petites cartes du bas

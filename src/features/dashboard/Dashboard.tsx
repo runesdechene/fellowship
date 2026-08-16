@@ -5,6 +5,7 @@ import { ActionBanner } from './ActionBanner'
 import { NextDateCard } from './NextDateCard'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
+import { SettlementsSection } from './SettlementsSection'
 import { UpcomingCard } from './UpcomingCard'
 import { useDashboard } from './useDashboard'
 
@@ -15,6 +16,7 @@ export function Dashboard() {
     months,
     next,
     upcoming,
+    settlements,
     reports,
     seasonNet,
     seasonRevenue,
@@ -61,6 +63,13 @@ export function Dashboard() {
             <h2 className="dashboard__section-title">A venir</h2>
             <UpcomingCard dates={upcoming} />
           </div>
+        </section>
+      )}
+
+      {settlements.length > 0 && (
+        <section className="dashboard__section">
+          <h2 className="dashboard__section-title">À régler</h2>
+          <SettlementsSection settlements={settlements} />
         </section>
       )}
 

@@ -191,6 +191,7 @@ La base est celle de la V1, inchangée. Aucune migration nouvelle.
 | Ma prochaine date | la participation dont l'événement commence le plus tôt |
 | À venir | les trois suivantes |
 | « 3 amis » + avatars | abonnements **réciproques** (`follows` dans les deux sens) présents sur la même date |
+| À régler | dates **à venir** dont le dossier est parti sans réponse (`en_cours`), ou qui sont inscrites sans être soldées (`payment_status` = `a_payer` ou `acompte_verse`). Le montant est **la** ligne d'emplacement du registre (`source = stepper`, `direction = out`) — jamais une somme, qui mélangerait la dette et les frais. |
 | Mes bilans | **toutes** les dates passées confirmées **de l'année en cours** — il n'existe pas d'écran d'historique, tout vit sur le tableau de bord et la rangée passe à la ligne. Montants calculés depuis `event_ledger_entries` : recette = somme des entrants, net = entrants − sortants. Aucune ligne de registre = bilan à remplir. Les années précédentes attendent un écran d'historique. |
 | Total de saison | net cumulé des dates passées de l'année en cours, sous le titre du bloc |
 

@@ -57,6 +57,16 @@ export function formatDayMonth(date: Date): string {
   return DAY_MONTH_FORMATTER.format(date)
 }
 
+const DAY_MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'short',
+})
+
+/** « 12 sept. » — la forme brève des listes. */
+export function formatDayMonthShort(date: Date): string {
+  return DAY_MONTH_SHORT_FORMATTER.format(date)
+}
+
 /** « 28 août 2026 » — la date affichée sur une carte de bilan. */
 export function formatFullDate(date: Date): string {
   return FULL_DATE_FORMATTER.format(date)
