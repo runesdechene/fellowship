@@ -11,6 +11,14 @@
   color: var(--ink-title);
 }
 
+/* Colonne repliée : on ne change qu'une poignée de variables, tout le reste
+   du CSS de la barre latérale s'y adapte tout seul. */
+.app-shell--collapsed {
+  --shell-sidebar-width: var(--shell-sidebar-width-collapsed);
+  --sidebar-padding-x: var(--space-16);
+  --sidebar-logo-top: var(--space-48); /* dégage le bouton de repli */
+}
+
 .app-shell__main {
   position: relative;
   flex: 1 1 auto;

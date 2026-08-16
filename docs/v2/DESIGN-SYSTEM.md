@@ -147,6 +147,19 @@ au nombre de dates. Aucun nombre n'est écrit dans le code.
 `2-semantic.css` → `--shell-sidebar-width`, puis `--sidebar-padding-x` pour
 réaligner la carte de compte et la navigation.
 
+### Régler le repli de la colonne de gauche
+Le bouton en haut à droite replie la colonne en un rail d'icônes. Tout est
+piloté par la classe `.app-shell--collapsed`, qui ne fait que **redéfinir
+quelques variables** (`app-shell.css`) — aucun composant n'est démonté :
+
+- `--shell-sidebar-width-collapsed` : largeur du rail (88 px)
+- `--sidebar-collapse-motion` : vitesse et courbe de l'animation
+- dans `.app-shell--collapsed` : `--sidebar-padding-x` et `--sidebar-logo-top`
+  se resserrent pour centrer les icônes et dégager le bouton
+
+Le réglage est mémorisé (`localStorage`, clé `flwsh-sidebar-collapsed`) : la
+colonne se rouvre dans l'état où on l'a laissée.
+
 ---
 
 ## 4. Ce que contient la V2, et rien d'autre

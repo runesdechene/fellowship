@@ -106,6 +106,7 @@
   --space-12: 12px;
   --space-14: 14px;
   --space-15: 15px;
+  --space-16: 16px;
   --space-17: 17px;
   --space-18: 18px;
   --space-20: 20px;
@@ -140,6 +141,7 @@
      DIMENSIONS FIXES issues de la maquette
      --------------------------------------------------------------------- */
   --width-sidebar: 263px;
+  --width-sidebar-collapsed: 88px; /* le rail : plus que les icônes */
   --width-content: 918px; /* 452 + 14 + 452 : la colonne de contenu */
   --width-card: 452px;
   --height-card: 196px;

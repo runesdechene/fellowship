@@ -8,6 +8,11 @@
   flex: 0 0 var(--shell-sidebar-width);
   width: var(--shell-sidebar-width);
   padding: 0 var(--sidebar-padding-x);
+  overflow: hidden; /* les libellés se laissent rogner pendant le repli */
+  transition:
+    flex-basis var(--sidebar-collapse-motion),
+    width var(--sidebar-collapse-motion),
+    padding var(--sidebar-collapse-motion);
 }
 
 /* --- Logo, centré en haut ------------------------------------------------- */
@@ -16,6 +21,7 @@
   height: 37px;
   width: auto;
   margin: var(--sidebar-logo-top) auto 0;
+  transition: margin-top var(--sidebar-collapse-motion);
 }
 
 /* --- Bouton de repli, calé en haut à droite ------------------------------- */
@@ -39,6 +45,9 @@
   background: var(--surface-raised);
   border-radius: var(--radius-nav);
   text-align: left;
+  transition:
+    gap var(--sidebar-collapse-motion),
+    padding var(--sidebar-collapse-motion);
 }
 
 .sidebar__account-avatar {
@@ -96,7 +105,9 @@
   cursor: pointer;
   transition:
     background-color var(--sidebar-item-motion),
-    color var(--sidebar-item-motion);
+    color var(--sidebar-item-motion),
+    gap var(--sidebar-collapse-motion),
+    padding var(--sidebar-collapse-motion);
 }
 
 .sidebar__item-icon,
@@ -118,8 +129,45 @@
 /* `--inert` = entrée dont l'écran n'est pas encore intégré (Explorer).
    Elle se comporte comme les autres : même survol, même curseur. */
 
+/* -----------------------------------------------------------------------------
+   ÉTAT REPLIÉ
+   La colonne se réduit à un rail d'icônes. Les libellés s'effacent, les
+   contenus se recentrent ; rien n'est démonté, tout est piloté par la classe
+   .app-shell--collapsed posée sur le conteneur (voir app-shell.css).
+   -------------------------------------------------------------------------- */
+
+.sidebar__item-label,
+.sidebar__account-identity,
+.sidebar__account-chevron {
+  white-space: nowrap;
+  transition:
+    opacity var(--sidebar-collapse-motion),
+    transform var(--sidebar-collapse-motion);
+}
+
+.app-shell--collapsed .sidebar__item-label,
+.app-shell--collapsed .sidebar__account-identity,
+.app-shell--collapsed .sidebar__account-chevron {
+  opacity: 0;
+  transform: translateX(calc(-1 * var(--space-8)));
+  pointer-events: none;
+}
+
+.app-shell--collapsed .sidebar__account,
+.app-shell--collapsed .sidebar__item {
+  justify-content: center;
+  gap: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .sidebar__item {
+  .sidebar,
+  .sidebar__logo,
+  .sidebar__item,
+  .sidebar__item-label,
+  .sidebar__account-identity,
+  .sidebar__account-chevron {
     transition: none;
   }
 }

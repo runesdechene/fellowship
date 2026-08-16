@@ -126,7 +126,11 @@
      GABARIT — la structure de la page
      ====================================================================== */
   --shell-sidebar-width: var(--width-sidebar);
+  --shell-sidebar-width-collapsed: var(--width-sidebar-collapsed);
   --shell-content-width: var(--width-content);
+
+  /* Vitesse du repli de la colonne de gauche */
+  --sidebar-collapse-motion: var(--duration-medium) var(--ease-out);
 
   /* Marges intérieures du grand panneau */
   --page-padding-left: var(--space-70);

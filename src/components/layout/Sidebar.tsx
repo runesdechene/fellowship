@@ -1,4 +1,10 @@
-import { ChevronDown, CircleGauge, PanelRightOpen, Telescope } from 'lucide-react'
+import {
+  ChevronDown,
+  CircleGauge,
+  PanelRightClose,
+  PanelRightOpen,
+  Telescope,
+} from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
@@ -17,13 +23,25 @@ const NAV_ITEMS: ReadonlyArray<{
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },
 ]
 
-export function Sidebar() {
+interface SidebarProps {
+  collapsed: boolean
+  onToggle: () => void
+}
+
+export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { actor } = useAuth()
+  const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
 
   return (
     <aside className="sidebar">
-      <button type="button" className="sidebar__collapse" aria-label="Replier le menu">
-        <PanelRightOpen size={17} strokeWidth={1.75} />
+      <button
+        type="button"
+        className="sidebar__collapse"
+        onClick={onToggle}
+        aria-expanded={!collapsed}
+        aria-label={collapsed ? 'Déplier le menu' : 'Replier le menu'}
+      >
+        <ToggleIcon size={17} strokeWidth={1.75} />
       </button>
 
       {/* La marque seule — /logo.png est le lockup complet, réservé à la connexion */}
