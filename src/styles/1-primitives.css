@@ -23,12 +23,22 @@
 
   /* ---------------------------------------------------------------------
      PALETTE — PIERRE
-     Même teinte que le crème (~40°) mais deux fois moins saturée (14 %).
-     Un aplat soutenu posé au milieu de surfaces très claires tire au chaud ;
-     ces deux valeurs l'évitent. Seule la clarté les sépare.
+     Gris chaud désaturé, pour les états de la navigation.
+
+     Ces teintes ne sont PAS écrites en hexadécimal, et c'est volontaire :
+     en 8 bits, deux hexa de clarté différente ne retombent jamais sur la
+     même teinte exacte (#E4E1DB = 40°, #E9E6E1 = 37,5° — l'œil le voit).
+     Ici la teinte et la saturation sont deux variables PARTAGÉES : seule la
+     clarté distingue les nuances, la dérive est impossible.
+
+     Pour retoucher toute la famille d'un coup, ne changer que ces deux
+     lignes — jamais les nuances une par une.
      --------------------------------------------------------------------- */
-  --stone-100: #e9e6e1; /* survol */
-  --stone-200: #e4e1db; /* actif */
+  --stone-hue: 40;
+  --stone-saturation: 14%;
+
+  --stone-100: hsl(var(--stone-hue) var(--stone-saturation) 90%); /* survol */
+  --stone-200: hsl(var(--stone-hue) var(--stone-saturation) 88%); /* actif */
 
   /* ---------------------------------------------------------------------
      PALETTE — BRUN (l'encre)
