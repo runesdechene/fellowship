@@ -115,6 +115,9 @@
   --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
 
+  --type-report-count: var(--weight-extrabold) var(--size-16) /
+    var(--leading-snug) var(--family-sans);
+
   --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
     var(--family-sans);
   --type-chip-strong: var(--weight-extrabold) var(--size-9) /
@@ -197,16 +200,22 @@
   /* =========================================================================
      MES BILANS — les petites cartes du bas
      ====================================================================== */
-  --report-height: 72px;
-  --report-thumb-width: 50px;
-  --report-gap: var(--space-14);
-  --report-padding-x: var(--space-14);
+  --report-height: var(--height-report);
+  --report-thumb-width: var(--width-report-thumb);
+  --report-gap: var(--space-20); /* entre deux cartes */
+  --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */
+  --report-line-gap: var(--space-6); /* entre les trois lignes de texte */
   --radius-report: var(--round-10);
   --report-net-ink: var(--status-ok-ink);
   --report-todo-ink: var(--status-pending-ink);
-  --report-todo-border: var(--brown-250);
-  /* Largeur du fondu au bord droit : la bande s'efface au lieu d'être coupée */
-  --report-fade-width: 140px;
+  --report-todo-surface: var(--surface-control); /* le plus clair : « à remplir » */
+
+  /* Pile de fin : les affiches des bilans plus anciens, empilées sous un
+     voile, avec le compte par-dessus. */
+  --report-stack-width: var(--width-report-stack);
+  --report-stack-veil: var(--veil-ink);
+  --report-stack-ink: var(--cream-50);
+  --report-stack-offset: var(--space-8); /* décalage d'une affiche à l'autre */
 
   /* =========================================================================
      LISTE « À VENIR »

@@ -54,6 +54,9 @@
   --olive-100: #e8f0d8; /* fond de pastille */
   --olive-500: #84aa3c; /* la couleur de marque */
 
+  /* Voile posé sur une image, pour rendre un texte lisible par-dessus. */
+  --veil-ink: rgb(45 40 38 / 0.62);
+
   /* ---------------------------------------------------------------------
      PALETTE — TERRE (statuts non validés)
      --------------------------------------------------------------------- */
@@ -155,4 +158,7 @@
   --width-avatar-hero: 71px; /* l'avatar de l'accroche */
   --width-avatar-account: 35px; /* l'avatar de la carte de compte */
   --width-avatar-list: 21px; /* les avatars d'amis, en pile */
+  --height-report: 86px; /* une carte de bilan */
+  --width-report-thumb: 60px; /* sa vignette d'affiche */
+  --width-report-stack: 74px; /* la pile de fin, plus étroite qu'une carte */
 }

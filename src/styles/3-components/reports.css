@@ -14,20 +14,6 @@
   overflow-x: auto;
   padding-right: var(--page-padding-right);
   scrollbar-width: none; /* Firefox */
-
-  /* Fondu au bord droit : les cartes s'effacent au lieu d'être tranchées.
-     Le masque porte sur la boîte visible, pas sur le contenu : le fondu
-     reste collé au bord pendant tout le défilement. */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 calc(100% - var(--report-fade-width)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 calc(100% - var(--report-fade-width)),
-    transparent 100%
-  );
 }
 
 .reports::-webkit-scrollbar {
@@ -58,7 +44,7 @@
   flex: 1 1 auto;
   flex-direction: column;
   justify-content: center;
-  gap: var(--space-4);
+  gap: var(--report-line-gap);
   min-width: 0;
   padding: 0 var(--report-padding-x);
 }
@@ -66,7 +52,7 @@
 .report__head {
   display: flex;
   align-items: center;
-  gap: var(--space-20);
+  gap: var(--space-24);
 }
 
 .report__name {
@@ -104,14 +90,10 @@
 }
 
 /* --- Bilan pas encore rempli ---------------------------------------------- */
+/* Fond plein, mais le plus clair de la palette — le même que les boutons de
+   la barre du haut. La carte existe sans peser. */
 .report--todo {
-  background: transparent;
-}
-
-.report--todo .report__body {
-  background: var(--surface-panel);
-  border: 1px dashed var(--report-todo-border);
-  border-left: none;
+  background: var(--report-todo-surface);
 }
 
 .report--todo .report__name {
@@ -121,4 +103,62 @@
 .report__todo {
   font: var(--type-list-meta);
   color: var(--report-todo-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   PILE DE FIN — les bilans plus anciens, en affiches empilées
+   Elle parle le langage des cartes plutôt que celui d'un bouton : c'est une
+   dernière vignette, pas une étiquette.
+   -------------------------------------------------------------------------- */
+
+.report-stack {
+  position: relative;
+  flex: none;
+  width: var(--report-stack-width);
+  height: var(--report-height);
+  border-radius: var(--radius-report);
+  background: var(--surface-card);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Les affiches, décalées les unes derrière les autres et de plus en plus
+   effacées : la profondeur vient de l'écart et de l'opacité, pas d'une ombre. */
+.report-stack__layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  object-fit: cover;
+}
+
+.report-stack__layer:nth-of-type(1) {
+  left: 0;
+  opacity: 1;
+}
+
+.report-stack__layer:nth-of-type(2) {
+  left: var(--report-stack-offset);
+  opacity: 0.6;
+}
+
+.report-stack__layer:nth-of-type(3) {
+  left: calc(var(--report-stack-offset) * 2);
+  opacity: 0.35;
+}
+
+.report-stack__count {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--report-stack-veil);
+  font: var(--type-report-count);
+  color: var(--report-stack-ink);
+}
+
+/* Sans affiche à empiler, la pile reste une pastille sobre. */
+.report-stack--bare .report-stack__count {
+  background: transparent;
+  color: var(--ink-soft);
 }

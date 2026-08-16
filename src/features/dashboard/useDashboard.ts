@@ -49,10 +49,20 @@ export interface DashboardReport {
 }
 
 /**
- * Nombre de bilans chargés. La bande défile horizontalement : on peut en
- * charger plus que ce qui tient à l'écran, les suivants continuent à droite.
+ * Nombre de bilans affichés sur le tableau de bord. Au-delà, une pile
+ * d'affiches en fin de bande renvoie vers l'historique complet.
  */
-const REPORTS_SHOWN = 12
+const REPORTS_SHOWN = 5
+
+/** Nombre d'affiches empilées dans cette pile. */
+const STACK_LAYERS = 3
+
+/** Ce qui déborde des bilans affichés : combien, et à quoi ça ressemble. */
+export interface ReportsOverflow {
+  count: number
+  /** Jusqu'à trois affiches des bilans suivants, pour composer la pile. */
+  images: string[]
+}
 
 export interface DashboardData {
   /** Nombre total de dates programmées à venir. */
@@ -63,6 +73,8 @@ export interface DashboardData {
   upcoming: DashboardDate[]
   /** Les dernières dates passées, remplies ou non. */
   reports: DashboardReport[]
+  /** Ce qui reste au-delà des bilans affichés. null s'il n'y a rien de plus. */
+  reportsOverflow: ReportsOverflow | null
   loading: boolean
   error: string | null
 }
@@ -73,6 +85,7 @@ const EMPTY: DashboardData = {
   next: null,
   upcoming: [],
   reports: [],
+  reportsOverflow: null,
   loading: true,
   error: null,
 }
@@ -139,7 +152,10 @@ async function fetchFriendProfiles(ids: string[]): Promise<Map<string, Friend>> 
  * Une date sans bilan reste dans la liste : c'est justement celle qu'il faut
  * remplir, et la maquette lui réserve une carte à part.
  */
-async function fetchReports(actorId: string, todayIso: string): Promise<DashboardReport[]> {
+async function fetchReports(
+  actorId: string,
+  todayIso: string,
+): Promise<{ reports: DashboardReport[]; overflow: ReportsOverflow | null }> {
   const { data } = await supabase
     .from('participations')
     .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
@@ -147,13 +163,25 @@ async function fetchReports(actorId: string, todayIso: string): Promise<Dashboar
     .in('status', CONFIRMED_STATUSES)
     .lt('events.end_date', todayIso)
 
-  const rows = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
+  const past = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
     .map((row) => row.events)
     .filter((event): event is PastEvent => Boolean(event))
     .sort((a, b) => b.end_date.localeCompare(a.end_date))
-    .slice(0, REPORTS_SHOWN)
 
-  if (rows.length === 0) return []
+  const rows = past.slice(0, REPORTS_SHOWN)
+  const rest = past.slice(REPORTS_SHOWN)
+  const overflow: ReportsOverflow | null =
+    rest.length > 0
+      ? {
+          count: rest.length,
+          images: rest
+            .map((event) => event.image_url)
+            .filter((url): url is string => Boolean(url))
+            .slice(0, STACK_LAYERS),
+        }
+      : null
+
+  if (rows.length === 0) return { reports: [], overflow: null }
 
   const { data: ledgerRows } = await supabase
     .from('event_ledger_entries')
@@ -171,7 +199,7 @@ async function fetchReports(actorId: string, todayIso: string): Promise<Dashboar
     return map
   }, new Map<string, LedgerLine[]>())
 
-  return rows.map((event) => {
+  const reports = rows.map((event) => {
     const lines = linesByEvent.get(event.id) ?? []
     // Aucune ligne de registre = bilan pas encore rempli.
     const filled = lines.length > 0
@@ -184,6 +212,8 @@ async function fetchReports(actorId: string, todayIso: string): Promise<Dashboar
       net: filled ? ledgerProfit(lines) : null,
     }
   })
+
+  return { reports, overflow }
 }
 
 /**
@@ -269,7 +299,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         })
         .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
-      const reports = await fetchReports(currentActorId, todayIso)
+      const { reports, overflow } = await fetchReports(currentActorId, todayIso)
       if (cancelled) return
 
       setDates(built)
@@ -278,6 +308,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         next: built[0] ?? null,
         upcoming: built.slice(1, 4),
         reports,
+        reportsOverflow: overflow,
         loading: false,
         error: null,
       })
@@ -308,6 +339,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       next: null,
       upcoming: [],
       reports: [],
+      reportsOverflow: null,
       loading: false,
       error: null,
     }

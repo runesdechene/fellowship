@@ -1,7 +1,7 @@
 import { Pencil } from 'lucide-react'
 import { formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
-import type { DashboardReport } from './useDashboard'
+import type { DashboardReport, ReportsOverflow } from './useDashboard'
 
 function ReportCard({ report }: { report: DashboardReport }) {
   const filled = report.net !== null
@@ -33,12 +33,36 @@ function ReportCard({ report }: { report: DashboardReport }) {
   )
 }
 
-export function ReportsSection({ reports }: { reports: DashboardReport[] }) {
+/** Les bilans plus anciens, en affiches empilées avec leur compte par-dessus. */
+function ReportStack({ overflow }: { overflow: ReportsOverflow }) {
+  const bare = overflow.images.length === 0
+
+  return (
+    <button
+      type="button"
+      className={bare ? 'report-stack report-stack--bare' : 'report-stack'}
+      aria-label={`Voir les ${overflow.count} autres bilans`}
+    >
+      {overflow.images.map((image) => (
+        <img key={image} className="report-stack__layer" src={image} alt="" />
+      ))}
+      <span className="report-stack__count">+{overflow.count}</span>
+    </button>
+  )
+}
+
+interface ReportsSectionProps {
+  reports: DashboardReport[]
+  overflow: ReportsOverflow | null
+}
+
+export function ReportsSection({ reports, overflow }: ReportsSectionProps) {
   return (
     <div className="reports">
       {reports.map((report) => (
         <ReportCard key={report.eventId} report={report} />
       ))}
+      {overflow && <ReportStack overflow={overflow} />}
     </div>
   )
 }

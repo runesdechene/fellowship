@@ -8,9 +8,8 @@ import { useDashboard } from './useDashboard'
 
 export function Dashboard() {
   const { actor } = useAuth()
-  const { programmedCount, months, next, upcoming, reports, loading, error } = useDashboard(
-    actor?.id,
-  )
+  const { programmedCount, months, next, upcoming, reports, reportsOverflow, loading, error } =
+    useDashboard(actor?.id)
 
   return (
     <div className="dashboard">
@@ -50,7 +49,7 @@ export function Dashboard() {
       {reports.length > 0 && (
         <section className="dashboard__section dashboard__section--bleed">
           <h2 className="dashboard__section-title">Mes bilans</h2>
-          <ReportsSection reports={reports} />
+          <ReportsSection reports={reports} overflow={reportsOverflow} />
         </section>
       )}
     </div>
