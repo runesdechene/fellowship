@@ -149,6 +149,9 @@
      --------------------------------------------------------------------- */
   --duration-quick: 110ms;
   --duration-fast: 160ms;
+  /* Le velours d'un survol vient de la DURÉE, pas de la brièveté : un
+     mouvement court se lit comme un à-coup, même avec une courbe molle. */
+  --duration-smooth: 200ms;
   --duration-medium: 240ms;
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
   /* Courbe plus molle : elle démarre et finit sans à-coup, ce qui rend un
