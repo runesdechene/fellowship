@@ -62,6 +62,8 @@ export interface DashboardData {
   reports: DashboardReport[]
   /** Net cumulé de toutes les dates passées. null si aucun bilan rempli. */
   seasonNet: number | null
+  /** Recette cumulée des mêmes dates — le CA, pour situer le bénéfice. */
+  seasonRevenue: number | null
   /**
    * La date passée la plus récente dont le bilan n'a pas été rempli — celle
    * que la bande d'action met en avant. null s'il n'y en a aucune.
@@ -78,6 +80,7 @@ const EMPTY: DashboardData = {
   upcoming: [],
   reports: [],
   seasonNet: null,
+  seasonRevenue: null,
   pendingReport: null,
   loading: true,
   error: null,
@@ -154,6 +157,7 @@ async function fetchReports(
 ): Promise<{
   reports: DashboardReport[]
   seasonNet: number | null
+  seasonRevenue: number | null
   pendingReport: DashboardReport | null
 }> {
   const yearStart = `${todayIso.slice(0, 4)}-01-01`
@@ -171,7 +175,8 @@ async function fetchReports(
     .filter((event): event is PastEvent => Boolean(event))
     .sort((a, b) => b.end_date.localeCompare(a.end_date))
 
-  if (past.length === 0) return { reports: [], seasonNet: null, pendingReport: null }
+  if (past.length === 0)
+    return { reports: [], seasonNet: null, seasonRevenue: null, pendingReport: null }
 
   const { data: ledgerRows } = await supabase
     .from('event_ledger_entries')
@@ -208,12 +213,13 @@ async function fetchReports(
     direction: line.direction,
   }))
   const seasonNet = allLines.length > 0 ? ledgerProfit(allLines) : null
+  const seasonRevenue = allLines.length > 0 ? ledgerRevenue(allLines) : null
 
   // `past` est trié du plus récent au plus ancien : le premier bilan vide
   // trouvé est donc bien le plus récent.
   const pendingReport = reports.find((report) => report.net === null) ?? null
 
-  return { reports, seasonNet, pendingReport }
+  return { reports, seasonNet, seasonRevenue, pendingReport }
 }
 
 /**
@@ -299,7 +305,10 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         })
         .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
-      const { reports, seasonNet, pendingReport } = await fetchReports(currentActorId, todayIso)
+      const { reports, seasonNet, seasonRevenue, pendingReport } = await fetchReports(
+        currentActorId,
+        todayIso,
+      )
       if (cancelled) return
 
       setDates(built)
@@ -309,6 +318,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         upcoming: built.slice(1, 4),
         reports,
         seasonNet,
+        seasonRevenue,
         pendingReport,
         loading: false,
         error: null,
@@ -341,6 +351,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       upcoming: [],
       reports: [],
       seasonNet: null,
+      seasonRevenue: null,
       pendingReport: null,
       loading: false,
       error: null,

@@ -147,9 +147,13 @@
   /* ---------------------------------------------------------------------
      MOUVEMENT
      --------------------------------------------------------------------- */
+  --duration-quick: 110ms;
   --duration-fast: 160ms;
   --duration-medium: 240ms;
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
+  /* Courbe plus molle : elle démarre et finit sans à-coup, ce qui rend un
+     mouvement court doux plutôt que sec. */
+  --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
 
   /* ---------------------------------------------------------------------
      DIMENSIONS FIXES issues de la maquette

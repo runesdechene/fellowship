@@ -244,6 +244,12 @@
   /* Largeur plancher : les cartes s'étirent pour remplir leur ligne, et
      passent à la suivante dès qu'elles descendraient sous cette valeur. */
   --report-min-width: var(--width-report-min);
+
+  /* Réaction au survol : la carte grossit très légèrement, et rien d'autre.
+     Rien ne bouge à l'intérieur. */
+  --report-hover-motion: var(--duration-quick) var(--ease-soft);
+  --report-hover-scale: 1.05;
+  --report-action-shift: var(--space-4); /* d'où le crayon arrive en surgissant */
   --report-gap: var(--space-20); /* entre deux cartes */
   --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */
   --report-line-gap: var(--space-6); /* entre les trois lignes de texte */

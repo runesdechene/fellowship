@@ -27,6 +27,13 @@
   border-radius: var(--radius-report);
   overflow: hidden;
   text-align: left;
+  cursor: pointer;
+  transition: transform var(--report-hover-motion);
+}
+
+/* La carte entière grossit très légèrement. Rien ne bouge à l'intérieur. */
+.report:hover {
+  transform: scale(var(--report-hover-scale));
 }
 
 .report__thumb {
@@ -61,10 +68,23 @@
   white-space: nowrap;
 }
 
+/* Le crayon ne se montre qu'au survol : au repos, la carte ne porte que ses
+   informations. Il occupe sa place en permanence, sinon le nom se décalerait
+   à chaque passage de souris. */
 .report__action {
   flex: none;
   margin-left: auto;
   color: var(--ink-soft);
+  opacity: 0;
+  transform: translateX(var(--report-action-shift));
+  transition:
+    opacity var(--report-hover-motion),
+    transform var(--report-hover-motion);
+}
+
+.report:hover .report__action {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .report__date {
@@ -97,6 +117,7 @@
   border: 1px dashed var(--report-todo-border);
 }
 
+
 .report--todo .report__name {
   color: var(--ink-soft);
 }
@@ -104,4 +125,15 @@
 .report__todo {
   font: var(--type-report-meta);
   color: var(--report-todo-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .report,
+  .report__action {
+    transition: none;
+  }
+
+  .report:hover {
+    transform: none;
+  }
 }

@@ -62,16 +62,17 @@
   margin-bottom: 0;
 }
 
-/* Total de saison, sous le titre du bloc */
+/* Phrase de synthèse sous le titre du bloc. Les chiffres portent le poids,
+   les mots qui les relient s'effacent. */
 .dashboard__section-total {
   margin-top: var(--space-8);
-  font: var(--type-section-total);
-  color: var(--ink-total);
-}
-
-.dashboard__section-total span {
   font: var(--type-section-total-note);
   color: var(--ink-soft);
+}
+
+.dashboard__section-total b {
+  font: var(--type-section-total);
+  color: var(--ink-total);
 }
 
 /* Deux colonnes titrées côte à côte : prochaine date + à venir */

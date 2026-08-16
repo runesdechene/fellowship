@@ -1,6 +1,6 @@
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
-import { formatSignedEuros } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { ActionBanner } from './ActionBanner'
 import { NextDateCard } from './NextDateCard'
 import { ReportsSection } from './ReportsSection'
@@ -17,6 +17,7 @@ export function Dashboard() {
     upcoming,
     reports,
     seasonNet,
+    seasonRevenue,
     pendingReport,
     loading,
     error,
@@ -67,9 +68,12 @@ export function Dashboard() {
         <section className="dashboard__section">
           <div className="dashboard__section-head">
             <h2 className="dashboard__section-title">Mes bilans</h2>
-            {seasonNet !== null && (
+            {/* `typeof` et non `!== null` : une valeur absente vaut undefined,
+                qui passait la garde et affichait « NaN € ». */}
+            {typeof seasonNet === 'number' && typeof seasonRevenue === 'number' && (
               <p className="dashboard__section-total">
-                {formatSignedEuros(seasonNet)} <span>sur la saison</span>
+                <b>{formatSignedEuros(seasonNet)}</b> de bénéfice sur un CA de{' '}
+                <b>{formatEuros(seasonRevenue)}</b> en {new Date().getFullYear()}
               </p>
             )}
           </div>
