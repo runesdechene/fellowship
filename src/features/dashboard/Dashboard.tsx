@@ -1,5 +1,6 @@
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
+import { formatSignedEuros } from '@/lib/money'
 import { NextDateCard } from './NextDateCard'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
@@ -8,8 +9,16 @@ import { useDashboard } from './useDashboard'
 
 export function Dashboard() {
   const { actor } = useAuth()
-  const { programmedCount, months, next, upcoming, reports, reportsOverflow, loading, error } =
-    useDashboard(actor?.id)
+  const {
+    programmedCount,
+    months,
+    next,
+    upcoming,
+    reports,
+    seasonNet,
+    loading,
+    error,
+  } = useDashboard(actor?.id)
 
   return (
     <div className="dashboard">
@@ -47,9 +56,16 @@ export function Dashboard() {
       )}
 
       {reports.length > 0 && (
-        <section className="dashboard__section dashboard__section--bleed">
-          <h2 className="dashboard__section-title">Mes bilans</h2>
-          <ReportsSection reports={reports} overflow={reportsOverflow} />
+        <section className="dashboard__section dashboard__section--wide">
+          <div className="dashboard__section-head">
+            <h2 className="dashboard__section-title">Mes bilans</h2>
+            {seasonNet !== null && (
+              <p className="dashboard__section-total">
+                {formatSignedEuros(seasonNet)} <span>sur la saison</span>
+              </p>
+            )}
+          </div>
+          <ReportsSection reports={reports} />
         </section>
       )}
     </div>

@@ -48,21 +48,8 @@ export interface DashboardReport {
   net: number | null
 }
 
-/**
- * Nombre de bilans affichés sur le tableau de bord. Au-delà, une pile
- * d'affiches en fin de bande renvoie vers l'historique complet.
- */
-const REPORTS_SHOWN = 5
-
-/** Nombre d'affiches empilées dans cette pile. */
-const STACK_LAYERS = 3
-
-/** Ce qui déborde des bilans affichés : combien, et à quoi ça ressemble. */
-export interface ReportsOverflow {
-  count: number
-  /** Jusqu'à trois affiches des bilans suivants, pour composer la pile. */
-  images: string[]
-}
+/* Il n'existe pas d'écran d'historique : TOUS les bilans vivent sur le
+   tableau de bord. La rangée passe à la ligne, elle ne tronque jamais. */
 
 export interface DashboardData {
   /** Nombre total de dates programmées à venir. */
@@ -73,8 +60,8 @@ export interface DashboardData {
   upcoming: DashboardDate[]
   /** Les dernières dates passées, remplies ou non. */
   reports: DashboardReport[]
-  /** Ce qui reste au-delà des bilans affichés. null s'il n'y a rien de plus. */
-  reportsOverflow: ReportsOverflow | null
+  /** Net cumulé de toutes les dates passées. null si aucun bilan rempli. */
+  seasonNet: number | null
   loading: boolean
   error: string | null
 }
@@ -85,7 +72,7 @@ const EMPTY: DashboardData = {
   next: null,
   upcoming: [],
   reports: [],
-  reportsOverflow: null,
+  seasonNet: null,
   loading: true,
   error: null,
 }
@@ -148,19 +135,25 @@ async function fetchFriendProfiles(ids: string[]): Promise<Map<string, Friend>> 
 }
 
 /**
- * Les dernières dates passées, chacune accompagnée de son bilan s'il existe.
- * Une date sans bilan reste dans la liste : c'est justement celle qu'il faut
- * remplir, et la maquette lui réserve une carte à part.
+ * Les dates passées de l'ANNÉE EN COURS, chacune accompagnée de son bilan
+ * s'il existe. Une date sans bilan reste dans la liste : c'est justement
+ * celle qu'il faut remplir, et elle a sa propre carte.
+ *
+ * Les années précédentes ne sont pas affichées pour l'instant — il n'y a pas
+ * encore d'écran d'historique où les envoyer.
  */
 async function fetchReports(
   actorId: string,
   todayIso: string,
-): Promise<{ reports: DashboardReport[]; overflow: ReportsOverflow | null }> {
+): Promise<{ reports: DashboardReport[]; seasonNet: number | null }> {
+  const yearStart = `${todayIso.slice(0, 4)}-01-01`
+
   const { data } = await supabase
     .from('participations')
     .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
     .eq('actor_id', actorId)
     .in('status', CONFIRMED_STATUSES)
+    .gte('events.end_date', yearStart)
     .lt('events.end_date', todayIso)
 
   const past = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
@@ -168,20 +161,7 @@ async function fetchReports(
     .filter((event): event is PastEvent => Boolean(event))
     .sort((a, b) => b.end_date.localeCompare(a.end_date))
 
-  const rows = past.slice(0, REPORTS_SHOWN)
-  const rest = past.slice(REPORTS_SHOWN)
-  const overflow: ReportsOverflow | null =
-    rest.length > 0
-      ? {
-          count: rest.length,
-          images: rest
-            .map((event) => event.image_url)
-            .filter((url): url is string => Boolean(url))
-            .slice(0, STACK_LAYERS),
-        }
-      : null
-
-  if (rows.length === 0) return { reports: [], overflow: null }
+  if (past.length === 0) return { reports: [], seasonNet: null }
 
   const { data: ledgerRows } = await supabase
     .from('event_ledger_entries')
@@ -189,7 +169,7 @@ async function fetchReports(
     .eq('actor_id', actorId)
     .in(
       'event_id',
-      rows.map((event) => event.id),
+      past.map((event) => event.id),
     )
 
   const linesByEvent = (ledgerRows ?? []).reduce((map, line) => {
@@ -199,7 +179,7 @@ async function fetchReports(
     return map
   }, new Map<string, LedgerLine[]>())
 
-  const reports = rows.map((event) => {
+  const reports = past.map((event) => {
     const lines = linesByEvent.get(event.id) ?? []
     // Aucune ligne de registre = bilan pas encore rempli.
     const filled = lines.length > 0
@@ -213,7 +193,13 @@ async function fetchReports(
     }
   })
 
-  return { reports, overflow }
+  const allLines = (ledgerRows ?? []).map((line) => ({
+    amount: line.amount,
+    direction: line.direction,
+  }))
+  const seasonNet = allLines.length > 0 ? ledgerProfit(allLines) : null
+
+  return { reports, seasonNet }
 }
 
 /**
@@ -299,7 +285,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         })
         .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
-      const { reports, overflow } = await fetchReports(currentActorId, todayIso)
+      const { reports, seasonNet } = await fetchReports(currentActorId, todayIso)
       if (cancelled) return
 
       setDates(built)
@@ -308,7 +294,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         next: built[0] ?? null,
         upcoming: built.slice(1, 4),
         reports,
-        reportsOverflow: overflow,
+        seasonNet,
         loading: false,
         error: null,
       })
@@ -339,7 +325,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       next: null,
       upcoming: [],
       reports: [],
-      reportsOverflow: null,
+      seasonNet: null,
       loading: false,
       error: null,
     }

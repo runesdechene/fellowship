@@ -42,18 +42,40 @@
   margin-top: var(--gap-section);
 }
 
-/* Bloc qui déborde volontairement jusqu'au bord droit du panneau, et au-delà :
-   son contenu file vers la droite au lieu de revenir à la ligne. */
-.dashboard__section--bleed {
-  width: auto;
-  margin-right: calc(-1 * var(--page-padding-right));
-}
-
-/* Grand titre pâle posé AU-DESSUS du bloc, jamais dedans */
+/* Grand titre posé AU-DESSUS du bloc, jamais dedans */
 .dashboard__section-title {
   margin-bottom: var(--gap-section-title);
   font: var(--type-section-title);
   color: var(--ink-section);
+}
+
+/* Bloc qui occupe toute la largeur disponible du panneau, et non la colonne
+   de 918 px : la rangée de bilans a besoin de la place pour tenir sur une
+   ligne sans être coupée. */
+.dashboard__section--wide {
+  width: auto;
+}
+
+/* Variante : le titre est suivi d'un chiffre de synthèse. Les deux forment un
+   bloc, et c'est ce bloc qui porte la distance jusqu'au contenu. */
+.dashboard__section-head {
+  margin-bottom: var(--gap-section-title);
+}
+
+.dashboard__section-head .dashboard__section-title {
+  margin-bottom: 0;
+}
+
+/* Total de saison, sous le titre du bloc */
+.dashboard__section-total {
+  margin-top: var(--space-8);
+  font: var(--type-section-total);
+  color: var(--ink-total);
+}
+
+.dashboard__section-total span {
+  font: var(--type-section-total-note);
+  color: var(--ink-soft);
 }
 
 /* Deux colonnes titrées côte à côte : prochaine date + à venir */

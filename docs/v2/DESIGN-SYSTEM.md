@@ -190,7 +190,8 @@ La base est celle de la V1, inchangée. Aucune migration nouvelle.
 | Ma prochaine date | la participation dont l'événement commence le plus tôt |
 | À venir | les trois suivantes |
 | « 3 amis » + avatars | abonnements **réciproques** (`follows` dans les deux sens) présents sur la même date |
-| Mes bilans | les **5** dernières dates passées confirmées, montants calculés depuis `event_ledger_entries` : recette = somme des entrants, net = entrants − sortants. Aucune ligne de registre = bilan à remplir. S'il en existe de plus anciens, une case de fin renvoie vers l'historique. |
+| Mes bilans | **toutes** les dates passées confirmées **de l'année en cours** — il n'existe pas d'écran d'historique, tout vit sur le tableau de bord et la rangée passe à la ligne. Montants calculés depuis `event_ledger_entries` : recette = somme des entrants, net = entrants − sortants. Aucune ligne de registre = bilan à remplir. Les années précédentes attendent un écran d'historique. |
+| Total de saison | net cumulé des dates passées de l'année en cours, sous le titre du bloc |
 
 Les colonnes `revenue` / `booth_cost` / `charges` de `event_reports` sont un
 reliquat de l'ancien modèle : **elles ne sont plus alimentées, ne pas les lire.**

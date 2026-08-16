@@ -44,6 +44,7 @@
   --brown-200: #ebe3e3; /* quasi effacé — chiffres à zéro */
   --brown-250: #dcd5cb; /* sable pâle — les grands titres de section */
   --brown-400: #a79f9f; /* brun doux — texte secondaire, métadonnées */
+  --brown-600: #6f665e; /* brun moyen — le grand total de saison */
   --brown-700: #564444; /* brun profond — titres et chiffres forts */
   --brown-800: #4a4643; /* gris chaud — les grands titres de bloc */
   --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
@@ -54,14 +55,18 @@
   --olive-100: #e8f0d8; /* fond de pastille */
   --olive-500: #84aa3c; /* la couleur de marque */
 
-  /* Voile posé sur une image, pour rendre un texte lisible par-dessus. */
-  --veil-ink: rgb(45 40 38 / 0.62);
-
   /* ---------------------------------------------------------------------
      PALETTE — TERRE (statuts non validés)
      --------------------------------------------------------------------- */
   --clay-100: #f6e7dc;
   --clay-500: #c0642a;
+
+  /* ---------------------------------------------------------------------
+     PALETTE — BLEU
+     La seule couleur froide : les liens. Elle ne sert QUE à ça, pour qu'un
+     texte bleu signifie toujours « ceci mène ailleurs ».
+     --------------------------------------------------------------------- */
+  --blue-500: #3b5bff;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLE
@@ -160,5 +165,4 @@
   --width-avatar-list: 21px; /* les avatars d'amis, en pile */
   --height-report: 86px; /* une carte de bilan */
   --width-report-thumb: 60px; /* sa vignette d'affiche */
-  --width-report-stack: 74px; /* la pile de fin, plus étroite qu'une carte */
 }

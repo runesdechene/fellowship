@@ -41,6 +41,8 @@
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
   /* Grands titres posés au-dessus des blocs. Version pâle = var(--brown-250). */
   --ink-section: var(--brown-800);
+  --ink-total: var(--brown-600); /* le grand total de saison */
+  --ink-link: var(--blue-500); /* « Tout voir » — la seule couleur froide */
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -79,9 +81,17 @@
   --type-page-subtitle: var(--weight-regular) var(--size-14) /
     var(--leading-normal) var(--family-sans);
 
-  /* Le grand titre pâle posé au-dessus d'un bloc (Ma prochaine date, A venir…) */
+  /* Le grand titre posé au-dessus d'un bloc (Ma prochaine date, A venir…) */
   --type-section-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
     var(--family-sans);
+
+  /* Le lien qui accompagne un titre de bloc, et le total sous celui-ci */
+  --type-section-link: var(--weight-semibold) var(--size-12) /
+    var(--leading-snug) var(--family-sans);
+  --type-section-total: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+  --type-section-total-note: var(--weight-medium) var(--size-16) /
+    var(--leading-snug) var(--family-sans);
 
   --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
     var(--family-sans);
@@ -112,11 +122,12 @@
   --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug)
     var(--family-sans);
 
+  --type-report-name: var(--weight-bold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-report-meta: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
   --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
-
-  --type-report-count: var(--weight-extrabold) var(--size-16) /
-    var(--leading-snug) var(--family-sans);
 
   --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
     var(--family-sans);
@@ -208,14 +219,7 @@
   --radius-report: var(--round-10);
   --report-net-ink: var(--status-ok-ink);
   --report-todo-ink: var(--status-pending-ink);
-  --report-todo-surface: var(--surface-control); /* le plus clair : « à remplir » */
-
-  /* Pile de fin : les affiches des bilans plus anciens, empilées sous un
-     voile, avec le compte par-dessus. */
-  --report-stack-width: var(--width-report-stack);
-  --report-stack-veil: var(--veil-ink);
-  --report-stack-ink: var(--cream-50);
-  --report-stack-offset: var(--space-8); /* décalage d'une affiche à l'autre */
+  --report-todo-border: var(--brown-250); /* le contour pointillé « à remplir » */
 
   /* =========================================================================
      LISTE « À VENIR »
