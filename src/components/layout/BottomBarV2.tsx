@@ -56,8 +56,9 @@ export function BottomBarV2() {
         </button>
       </nav>
       {/* AccountSheet est un composant PARTAGÉ qui porte les jetons de l'app.
-          On ne le modifie pas ; s'il jure sur le parchemin, on le repeint sous
-          .app2 dans app2.css, comme le theme-toggle. */}
+          On ne le modifie pas ; le repeint sous .app2 (comme le theme-toggle
+          et EntitySwitcher) reste À FAIRE — il est derrière un clic, hors
+          scope de ce lot. Ne pas lire ce commentaire comme un travail fait. */}
       <AccountSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
     </>
   )

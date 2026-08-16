@@ -50,6 +50,10 @@ a.ck2-li:hover .ck2-t, button.ck2-li:hover .ck2-t { color: var(--accent-app2); }
 .ck2-s { font-size: .8125rem; color: var(--ink-soft); }
 .ck2-amount { font-size: .875rem; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ck2-pos { color: var(--ok); }
+/* Une perte doit se voir, pas seulement le gain (#7) : même registre de jeton
+   que le reste des états "en attente/à surveiller" du calque, pas une
+   couleur neuve. */
+.ck2-neg { color: var(--wait); }
 
 /* Les billes de statut : la couleur revient, elle dit l'état plus vite qu'une
    forme. Halo doux autour, jamais de bordure. */
@@ -73,8 +77,8 @@ a.ck2-li:hover .ck2-t, button.ck2-li:hover .ck2-t { color: var(--accent-app2); }
 .ck2-bilan-lead { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
 .ck2-bilan-txt { flex: 1; font-size: .9375rem; min-width: 0; }
 .ck2-bilan-actions { display: flex; align-items: center; gap: 12px; flex: none; }
-.ck2-bilan-go { flex: none; padding: 8px 16px; border-radius: 999px; background: var(--accent-app2); color: var(--accent-ink2); font-size: .8125rem; font-weight: 600; }
-.ck2-bilan-later { flex: none; padding: 8px 4px; color: var(--ink-faint); font-size: .8125rem; text-decoration: underline; text-underline-offset: 2px; }
+.ck2-bilan-go { flex: none; padding: 8px 16px; border-radius: 999px; background: var(--accent-app2); color: var(--accent-ink2); font-size: .8125rem; font-weight: 600; cursor: pointer; }
+.ck2-bilan-later { flex: none; padding: 8px 4px; color: var(--ink-faint); font-size: .8125rem; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 /* En dessous de 768px, la ligne se replie en pile : le texte prend toute la largeur sur
    sa propre ligne, l'action principale et « Plus tard » restent ensemble sur la ligne
    suivante (même logique de repli que .ck2-grid-2/.ck2-grid-3 plus haut dans ce fichier). */

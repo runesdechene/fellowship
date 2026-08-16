@@ -5,6 +5,11 @@ import type { ParticipationWithEvent } from '@/types/database'
 
 interface Props {
   participations: ParticipationWithEvent[]
+  /** Horloge unique de la page (CockpitV2.tsx) : requis, pas de valeur par
+   *  défaut — un `new Date()` local ici désynchroniserait le J-N de « À
+   *  venir » du reste de la page à minuit ou dans un onglet longtemps
+   *  ouvert (#5), et se réévaluait ici à chaque rendu (non mémoïsé). */
+  now: Date
 }
 
 const STRIP_CAP = 4
@@ -19,10 +24,9 @@ function chipToStatusVar(variant: string): 'ok' | 'wait' {
 
 /** Reprise de ProchainsFestivals.tsx (V1) : même cap, même sélection, remise en
  *  liste sobre dans un .ck2-block. La trame texturée de la V1 n'est pas reportée (0007). */
-export function AVenirV2({ participations }: Props) {
+export function AVenirV2({ participations, now }: Props) {
   if (participations.length === 0) return null
 
-  const now = new Date()
   const visible = participations.slice(0, STRIP_CAP)
   const extra = participations.length - visible.length
 

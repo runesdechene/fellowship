@@ -88,16 +88,16 @@ export function CockpitV2Page() {
         <BilanLigneV2 prompt={bilanPrompt} onSaved={() => { refetch(); refetchReports() }} onSnooze={onSnooze} />
 
         <div className="ck2-grid-2">
-          <ProchainFestivalV2 participation={nextFestival} />
+          <ProchainFestivalV2 participation={nextFestival} now={now} />
           <SaisonFriseV2 season={season} />
         </div>
 
-        <AVenirV2 participations={upcoming} />
+        <AVenirV2 participations={upcoming} now={now} />
 
         <div className="ck2-grid-3">
           <AReglerV2 participations={aRegler} entriesByEvent={entriesByEvent} />
           <CompagnonsV2 />
-          <MesBilansV2 participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} />
+          <MesBilansV2 participations={participations} entriesByEvent={entriesByEvent} onSaved={() => { refetchReports(); refetchLedger() }} now={now} />
         </div>
 
         <DossiersRefusesV2 participations={refused} onUpdated={refetch} />

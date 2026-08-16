@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { ParticipationWithEvent, LedgerEntry } from '@/types/database'
 import { buildPastBilans, type PastBilan } from '@/lib/cockpit-bilans'
-import { formatDateRange } from '@/lib/calendar-format'
+import { formatDateRangeWithYear } from '@/lib/calendar-format'
 import { BilanModal } from '@/components/reports/BilanModal'
 
 const MAX_ROWS = 5
@@ -10,10 +10,13 @@ interface Props {
   participations: ParticipationWithEvent[]
   entriesByEvent: Map<string, LedgerEntry[]>
   onSaved: () => void
+  /** Horloge unique de la page (CockpitV2.tsx) : requis, pas de valeur par
+   *  défaut — un `new Date()` local ici désynchroniserait ce bloc du reste
+   *  de la page à minuit ou dans un onglet resté longtemps ouvert (#5). */
+  now: Date
 }
 
-export function MesBilansV2({ participations, entriesByEvent, onSaved }: Props) {
-  const now = useMemo(() => new Date(), [])
+export function MesBilansV2({ participations, entriesByEvent, onSaved, now }: Props) {
   const bilans = useMemo(() => buildPastBilans(participations, entriesByEvent, now), [participations, entriesByEvent, now])
   const rows = useMemo(() => bilans.slice(0, MAX_ROWS), [bilans])
   const extra = bilans.length - rows.length
@@ -51,12 +54,17 @@ export function MesBilansV2({ participations, entriesByEvent, onSaved }: Props) 
             >
               <span className="ck2-txt">
                 <span className="ck2-t">{ev.name}</span>
+                {/* La date reste visible même sans bilan rempli (#8) : sinon deux
+                    éditions du même festival, l'une remplie et l'autre pas,
+                    deviennent littéralement la même ligne. L'année est incluse
+                    car ce bloc liste des festivals passés sur plusieurs saisons. */}
                 <span className="ck2-s">
-                  {hasEntries ? formatDateRange(new Date(ev.start_date), new Date(ev.end_date)) : 'Remplir le bilan'}
+                  {formatDateRangeWithYear(new Date(ev.start_date), new Date(ev.end_date))}
+                  {!hasEntries && ' · Remplir le bilan'}
                 </span>
               </span>
               {net != null && (
-                <span className={`ck2-amount ${net > 0 ? 'ck2-pos' : ''}`}>
+                <span className={`ck2-amount ${net > 0 ? 'ck2-pos' : net < 0 ? 'ck2-neg' : ''}`}>
                   {net > 0 ? '+' : ''}{net.toLocaleString('fr-FR')} €
                 </span>
               )}
@@ -67,7 +75,7 @@ export function MesBilansV2({ participations, entriesByEvent, onSaved }: Props) 
           <span className="ck2-txt">
             <span className="ck2-t">Total net</span>
           </span>
-          <span className={`ck2-amount ${totalNet > 0 ? 'ck2-pos' : ''}`}>
+          <span className={`ck2-amount ${totalNet > 0 ? 'ck2-pos' : totalNet < 0 ? 'ck2-neg' : ''}`}>
             {totalNet > 0 ? '+' : ''}{totalNet.toLocaleString('fr-FR')} €
           </span>
         </div>

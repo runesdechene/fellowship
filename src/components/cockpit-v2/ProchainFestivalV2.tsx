@@ -6,6 +6,10 @@ import type { ParticipationWithEvent } from '@/types/database'
 
 interface Props {
   participation: ParticipationWithEvent | null
+  /** Horloge unique de la page (CockpitV2.tsx) : requis, pas de valeur par
+   *  défaut — un `new Date()` local ici désynchroniserait ce bloc du reste
+   *  de la page à minuit ou dans un onglet resté longtemps ouvert (#5). */
+  now: Date
 }
 
 function daysUntil(start: Date, now: Date): number {
@@ -14,9 +18,7 @@ function daysUntil(start: Date, now: Date): number {
   return Math.round(ms / 86_400_000)
 }
 
-export function ProchainFestivalV2({ participation }: Props) {
-  const now = new Date()
-
+export function ProchainFestivalV2({ participation, now }: Props) {
   if (!participation) {
     return (
       <div className="ck2-block ck2-next-empty">
