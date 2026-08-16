@@ -12,8 +12,6 @@ function placeLine(date: DashboardDate): string {
 export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
   return (
     <section className="upcoming">
-      <h2 className="upcoming__title">À venir</h2>
-
       {dates.length === 0 ? (
         <p className="upcoming__empty">Aucune autre date programmée.</p>
       ) : (
@@ -42,6 +40,7 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
           ))}
         </ul>
       )}
+      <span className="upcoming__footer">Voir tout le calendrier &gt;</span>
     </section>
   )
 }

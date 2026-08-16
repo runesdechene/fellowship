@@ -38,6 +38,7 @@
   padding: var(--space-10);
   background: var(--surface-raised);
   border-radius: var(--radius-nav);
+  box-shadow: var(--shadow-raised);
   text-align: left;
 }
 
@@ -73,23 +74,54 @@
   margin-top: var(--sidebar-nav-gap);
 }
 
+/* Au repos, l'entrée est collée à gauche et sans fond.
+   Active OU survolée, elle glisse vers la droite et le fond blanc apparaît :
+   le survol est un aperçu de l'état actif. Seuls l'icône et le libellé
+   se déplacent — la pastille de fond, elle, ne bouge pas. */
 .sidebar__item {
   display: flex;
   align-items: center;
   gap: var(--sidebar-icon-gap);
   height: var(--sidebar-item-height);
-  padding: 0 var(--sidebar-item-padding);
+  padding: 0 var(--sidebar-item-inset);
   border-radius: var(--radius-nav);
   font: var(--type-nav);
   color: var(--ink-soft);
+  background-color: transparent;
+  box-shadow: none;
+  transition:
+    background-color var(--sidebar-item-motion),
+    color var(--sidebar-item-motion),
+    box-shadow var(--sidebar-item-motion);
 }
 
-.sidebar__item-icon {
+.sidebar__item-icon,
+.sidebar__item-label {
   flex: none;
-  color: currentColor;
+  transition: transform var(--sidebar-item-motion);
+}
+
+.sidebar__item:hover,
+.sidebar__item--active {
+  background-color: var(--surface-raised);
+  color: var(--ink-title);
 }
 
 .sidebar__item--active {
-  background: var(--surface-raised);
-  color: var(--ink-title);
+  box-shadow: var(--shadow-raised);
+}
+
+.sidebar__item:hover .sidebar__item-icon,
+.sidebar__item:hover .sidebar__item-label,
+.sidebar__item--active .sidebar__item-icon,
+.sidebar__item--active .sidebar__item-label {
+  transform: translateX(var(--sidebar-item-shift));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar__item,
+  .sidebar__item-icon,
+  .sidebar__item-label {
+    transition: none;
+  }
 }

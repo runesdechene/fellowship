@@ -1,27 +1,24 @@
 /* -----------------------------------------------------------------------------
-   UPCOMING CARD — la liste « À venir »
+   UPCOMING CARD — la liste « A venir »
+   Le titre du bloc vit AU-DESSUS de la carte (voir dashboard.css), pas dedans.
    Utilisé par : src/features/dashboard/UpcomingCard.tsx
    -------------------------------------------------------------------------- */
 
 .upcoming {
+  display: flex;
   flex: none;
+  flex-direction: column;
   width: var(--card-width);
   height: var(--card-height);
-  padding: var(--space-17) var(--card-padding);
+  padding: var(--space-20) var(--card-padding);
   background: var(--surface-card);
   border-radius: var(--radius-card);
-}
-
-.upcoming__title {
-  font: var(--type-card-title);
-  color: var(--ink-soft);
 }
 
 .upcoming__list {
   display: flex;
   flex-direction: column;
   gap: var(--list-row-gap);
-  margin-top: var(--space-6);
 }
 
 .upcoming__row {
@@ -31,12 +28,11 @@
   height: var(--list-row-height);
 }
 
-/* Pastille de statut, dans une boîte fixe pour aligner les textes */
+/* Pastille de statut */
 .upcoming__dot {
   flex: none;
   width: var(--dot-size);
   height: var(--dot-size);
-  margin: 0 var(--space-4);
   border-radius: var(--radius-round);
   background: var(--dot-confirmed);
 }
@@ -76,8 +72,14 @@
   color: var(--ink-soft);
 }
 
+/* Lien de bas de carte, poussé en bas quelle que soit la longueur de la liste */
+.upcoming__footer {
+  margin-top: auto;
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+}
+
 .upcoming__empty {
-  margin-top: var(--space-20);
   font: var(--type-list-meta);
   color: var(--ink-soft);
 }

@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { daysUntil, monthKey, monthsWindow, parseSqlDate, type MonthSlot } from '@/lib/dates'
+import { netResult } from '@/lib/money'
 import type { EntityRow, EventRow, ParticipationStatus, UserRow } from '@/types/database'
+
+/** Les seules colonnes d'événement dont une carte de bilan a besoin. */
+type PastEvent = Pick<EventRow, 'id' | 'name' | 'image_url' | 'start_date' | 'end_date'>
 
 /**
  * Statuts considérés comme « une date programmée » : l'exposant s'est engagé,
@@ -32,6 +36,20 @@ export interface MonthBucket extends MonthSlot {
   count: number
 }
 
+/** Une date passée, avec son bilan s'il a été rempli. */
+export interface DashboardReport {
+  eventId: string
+  name: string
+  imageUrl: string | null
+  date: Date
+  /** null tant que l'exposant n'a pas rempli son bilan. */
+  revenue: number | null
+  net: number | null
+}
+
+/** Nombre de bilans affichés sur le tableau de bord. */
+const REPORTS_SHOWN = 6
+
 export interface DashboardData {
   /** Nombre total de dates programmées à venir. */
   programmedCount: number
@@ -39,6 +57,8 @@ export interface DashboardData {
   next: DashboardDate | null
   /** Les dates suivantes, après la prochaine. */
   upcoming: DashboardDate[]
+  /** Les dernières dates passées, remplies ou non. */
+  reports: DashboardReport[]
   loading: boolean
   error: string | null
 }
@@ -48,6 +68,7 @@ const EMPTY: DashboardData = {
   months: [],
   next: null,
   upcoming: [],
+  reports: [],
   loading: true,
   error: null,
 }
@@ -110,6 +131,58 @@ async function fetchFriendProfiles(ids: string[]): Promise<Map<string, Friend>> 
 }
 
 /**
+ * Les dernières dates passées, chacune accompagnée de son bilan s'il existe.
+ * Une date sans bilan reste dans la liste : c'est justement celle qu'il faut
+ * remplir, et la maquette lui réserve une carte à part.
+ */
+async function fetchReports(actorId: string, todayIso: string): Promise<DashboardReport[]> {
+  const { data } = await supabase
+    .from('participations')
+    .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
+    .eq('actor_id', actorId)
+    .in('status', PROGRAMMED_STATUSES)
+    .lt('events.end_date', todayIso)
+    .order('end_date', { ascending: false, referencedTable: 'events' })
+    .limit(REPORTS_SHOWN)
+
+  const rows = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
+    .map((row) => row.events)
+    .filter((event): event is PastEvent => Boolean(event))
+    .sort((a, b) => b.start_date.localeCompare(a.start_date))
+    .slice(0, REPORTS_SHOWN)
+
+  if (rows.length === 0) return []
+
+  const { data: reportRows } = await supabase
+    .from('event_reports')
+    .select('event_id, revenue, booth_cost, charges')
+    .eq('actor_id', actorId)
+    .in(
+      'event_id',
+      rows.map((event) => event.id),
+    )
+
+  const byEvent = new Map(
+    (reportRows ?? []).map((row) => [
+      row.event_id,
+      { revenue: row.revenue, net: netResult(row) },
+    ]),
+  )
+
+  return rows.map((event) => {
+    const report = byEvent.get(event.id)
+    return {
+      eventId: event.id,
+      name: event.name,
+      imageUrl: event.image_url,
+      date: parseSqlDate(event.start_date),
+      revenue: report?.revenue ?? null,
+      net: report?.net ?? null,
+    }
+  })
+}
+
+/**
  * Toutes les données du tableau de bord, pour l'acteur actif.
  * Une seule requête principale (participations + événements), puis deux
  * requêtes d'appoint pour les amis présents sur les mêmes dates.
@@ -133,7 +206,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
 
       const { data, error } = await supabase
         .from('participations')
-        .select('id, status, event_id, events(*)')
+        .select('id, status, event_id, events!inner(*)')
         .eq('actor_id', currentActorId)
         .in('status', PROGRAMMED_STATUSES)
         .gte('events.end_date', todayIso)
@@ -192,11 +265,15 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         })
         .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
+      const reports = await fetchReports(currentActorId, todayIso)
+      if (cancelled) return
+
       setDates(built)
       setState({
         programmedCount: built.length,
         next: built[0] ?? null,
         upcoming: built.slice(1, 4),
+        reports,
         loading: false,
         error: null,
       })
@@ -221,7 +298,15 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
   }, [dates, actorId])
 
   if (!actorId) {
-    return { programmedCount: 0, months, next: null, upcoming: [], loading: false, error: null }
+    return {
+      programmedCount: 0,
+      months,
+      next: null,
+      upcoming: [],
+      reports: [],
+      loading: false,
+      error: null,
+    }
   }
 
   return { ...state, months }

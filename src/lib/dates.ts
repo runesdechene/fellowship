@@ -37,6 +37,11 @@ export function formatDaysShort(days: number): string {
 
 const MONTH_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'long' })
 const DAY_MONTH_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' })
+const FULL_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
 
 function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1)
@@ -50,6 +55,11 @@ export function formatMonthLabel(date: Date): string {
 /** « 25 septembre » — la date affichée sur la carte de prochaine date. */
 export function formatDayMonth(date: Date): string {
   return DAY_MONTH_FORMATTER.format(date)
+}
+
+/** « 28 août 2026 » — la date affichée sur une carte de bilan. */
+export function formatFullDate(date: Date): string {
+  return FULL_DATE_FORMATTER.format(date)
 }
 
 export interface MonthSlot {

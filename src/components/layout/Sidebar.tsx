@@ -38,11 +38,17 @@ export function Sidebar() {
       </button>
 
       <nav className="sidebar__nav">
-        {NAV_ITEMS.map(({ to, label, Icon }) =>
-          to === null ? (
-            <span key={label} className="sidebar__item">
+        {NAV_ITEMS.map(({ to, label, Icon }) => {
+          const content = (
+            <>
               <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-              {label}
+              <span className="sidebar__item-label">{label}</span>
+            </>
+          )
+
+          return to === null ? (
+            <span key={label} className="sidebar__item">
+              {content}
             </span>
           ) : (
             <NavLink
@@ -53,11 +59,10 @@ export function Sidebar() {
                 isActive ? 'sidebar__item sidebar__item--active' : 'sidebar__item'
               }
             >
-              <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-              {label}
+              {content}
             </NavLink>
-          ),
-        )}
+          )
+        })}
       </nav>
     </aside>
   )

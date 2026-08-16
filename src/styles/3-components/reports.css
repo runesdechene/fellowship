@@ -1,0 +1,101 @@
+/* -----------------------------------------------------------------------------
+   REPORTS — « Mes bilans » : une petite carte par date passée
+   Les cartes s'ajustent à leur contenu, elles n'ont pas de largeur imposée.
+   Utilisé par : src/features/dashboard/ReportsSection.tsx
+   -------------------------------------------------------------------------- */
+
+.reports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--report-gap);
+}
+
+.report {
+  display: flex;
+  align-items: stretch;
+  height: var(--report-height);
+  background: var(--surface-card);
+  border-radius: var(--radius-report);
+  box-shadow: var(--shadow-raised);
+  overflow: hidden;
+  text-align: left;
+}
+
+.report__thumb {
+  flex: none;
+  width: var(--report-thumb-width);
+  height: 100%;
+  object-fit: cover;
+  background: var(--surface-chip-neutral);
+}
+
+.report__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: 0 var(--report-padding-x);
+}
+
+.report__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-20);
+}
+
+.report__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  white-space: nowrap;
+}
+
+.report__action {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-soft);
+}
+
+.report__date {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.report__money {
+  display: flex;
+  gap: var(--space-10);
+  white-space: nowrap;
+}
+
+.report__revenue {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.report__net {
+  font: var(--type-report-net);
+  color: var(--report-net-ink);
+}
+
+/* --- Bilan pas encore rempli ---------------------------------------------- */
+.report--todo {
+  background: transparent;
+  box-shadow: none;
+}
+
+.report--todo .report__body {
+  background: var(--surface-panel);
+  border: 1px dashed var(--report-todo-border);
+  border-left: none;
+}
+
+.report--todo .report__name {
+  color: var(--ink-soft);
+}
+
+.report__todo {
+  font: var(--type-list-meta);
+  color: var(--report-todo-ink);
+}

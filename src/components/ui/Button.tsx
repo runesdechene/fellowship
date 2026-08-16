@@ -1,9 +1,9 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
-type Variant = 'solid' | 'ghost'
+type Variant = 'solid' | 'icon'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** `solid` = fond crème (Ajouter une date) · `ghost` = icône seule (cloche). */
+  /** `solid` = icône + libellé (Ajouter une date) · `icon` = carré, icône seule (cloche). */
   variant?: Variant
   block?: boolean
   icon?: ReactNode
@@ -18,7 +18,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const classes = ['button']
-  if (variant === 'ghost') classes.push('button--ghost')
+  if (variant === 'icon') classes.push('button--icon')
   if (block) classes.push('button--block')
   if (className) classes.push(className)
 

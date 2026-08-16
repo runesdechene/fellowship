@@ -24,7 +24,8 @@
      PALETTE — BRUN (l'encre)
      --------------------------------------------------------------------- */
   --brown-200: #ebe3e3; /* quasi effacé — chiffres à zéro */
-  --brown-400: #a79f9f; /* brun doux — texte secondaire, sur-titres */
+  --brown-250: #dcd5cb; /* sable pâle — les grands titres de section */
+  --brown-400: #a79f9f; /* brun doux — texte secondaire, métadonnées */
   --brown-700: #564444; /* brun profond — titres et chiffres forts */
   --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
 
@@ -95,8 +96,14 @@
   --space-32: 32px;
   --space-40: 40px;
   --space-42: 42px;
+  --space-48: 48px;
   --space-51: 51px;
   --space-70: 70px;
+
+  /* ---------------------------------------------------------------------
+     OMBRES
+     --------------------------------------------------------------------- */
+  --shadow-soft: 0 1px 2px rgba(86, 68, 68, 0.05), 0 4px 12px rgba(86, 68, 68, 0.04);
 
   /* ---------------------------------------------------------------------
      RAYONS
@@ -107,6 +114,13 @@
   --round-15: 15px;
   --round-20: 20px;
   --round-full: 9999px;
+
+  /* ---------------------------------------------------------------------
+     MOUVEMENT
+     --------------------------------------------------------------------- */
+  --duration-fast: 160ms;
+  --duration-medium: 240ms;
+  --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
 
   /* ---------------------------------------------------------------------
      DIMENSIONS FIXES issues de la maquette

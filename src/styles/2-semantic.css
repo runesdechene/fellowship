@@ -31,8 +31,12 @@
      ====================================================================== */
   --ink-title: var(--brown-700); /* titres, nom de l'événement */
   --ink-strong: var(--brown-900); /* texte sur contrôle clair */
-  --ink-soft: var(--brown-400); /* sur-titres, métadonnées, mois */
+  --ink-soft: var(--brown-400); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
+  --ink-section: var(--brown-250); /* les grands titres posés au-dessus des blocs */
+
+  /* Relief : très discret, uniquement sur ce qui est « posé » sur le fond */
+  --shadow-raised: var(--shadow-soft);
 
   /* =========================================================================
      STATUTS — la seule couleur vive de l'interface
@@ -68,7 +72,14 @@
   --type-page-subtitle: var(--weight-regular) var(--size-14) /
     var(--leading-normal) var(--family-sans);
 
+  /* Le grand titre pâle posé au-dessus d'un bloc (Ma prochaine date, A venir…) */
+  --type-section-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
+    var(--family-sans);
+
   --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+
+  --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug)
     var(--family-sans);
   --type-event-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
     var(--family-sans);
@@ -92,6 +103,9 @@
   --type-chart-value: var(--weight-bold) var(--size-30) / var(--leading-tight)
     var(--family-sans);
   --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
+
+  --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
 
   --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
@@ -123,8 +137,10 @@
   --sidebar-nav-gap: var(--space-15); /* carte de compte → navigation */
   --sidebar-item-height: 46px;
   --sidebar-item-gap: 1px;
-  --sidebar-item-padding: var(--space-17);
+  --sidebar-item-inset: var(--space-6); /* retrait au repos */
+  --sidebar-item-shift: var(--space-12); /* décalage vers la droite quand actif ou survolé */
   --sidebar-icon-gap: var(--space-15);
+  --sidebar-item-motion: var(--duration-fast) var(--ease-out);
 
   /* Barre du haut : elle flotte au-dessus du contenu, comme sur la maquette */
   --topbar-top: var(--space-17);
@@ -147,9 +163,24 @@
      ====================================================================== */
   --card-width: var(--width-card);
   --card-height: var(--height-card);
-  --card-gap: var(--space-14);
+  --card-gap: var(--space-17);
   --card-padding: var(--space-23);
   --poster-width: var(--width-poster);
+
+  /* Distance entre un grand titre de section et son bloc */
+  --gap-section-title: var(--space-15);
+
+  /* =========================================================================
+     MES BILANS — les petites cartes du bas
+     ====================================================================== */
+  --report-height: 72px;
+  --report-thumb-width: 50px;
+  --report-gap: var(--space-14);
+  --report-padding-x: var(--space-14);
+  --radius-report: var(--round-10);
+  --report-net-ink: var(--status-ok-ink);
+  --report-todo-ink: var(--status-pending-ink);
+  --report-todo-border: var(--brown-250);
 
   /* =========================================================================
      LISTE « À VENIR »

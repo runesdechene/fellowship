@@ -1,13 +1,16 @@
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { NextDateCard } from './NextDateCard'
+import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
 import { UpcomingCard } from './UpcomingCard'
 import { useDashboard } from './useDashboard'
 
 export function Dashboard() {
   const { actor } = useAuth()
-  const { programmedCount, months, next, upcoming, loading, error } = useDashboard(actor?.id)
+  const { programmedCount, months, next, upcoming, reports, loading, error } = useDashboard(
+    actor?.id,
+  )
 
   return (
     <div className="dashboard">
@@ -22,7 +25,7 @@ export function Dashboard() {
               ? 'Chargement de tes dates…'
               : error
                 ? 'Tes dates n’ont pas pu être chargées.'
-                : `Tu as encore ${programmedCount} ${programmedCount === 1 ? 'date programmée' : 'dates programmées'} !`}
+                : `Tu as ${programmedCount} ${programmedCount === 1 ? 'date prévue' : 'dates prévues'} à ce jour`}
           </p>
         </div>
       </header>
@@ -31,14 +34,25 @@ export function Dashboard() {
         <SeasonChart months={months} />
       </section>
 
-      <section className="dashboard__section dashboard__cards">
-        {next ? (
-          <NextDateCard date={next} />
-        ) : (
-          <p className="dashboard__empty">Aucune date programmée pour le moment.</p>
-        )}
-        {next && <UpcomingCard dates={upcoming} />}
-      </section>
+      {next && (
+        <section className="dashboard__section dashboard__columns">
+          <div className="dashboard__column">
+            <h2 className="dashboard__section-title">Ma prochaine date</h2>
+            <NextDateCard date={next} />
+          </div>
+          <div className="dashboard__column">
+            <h2 className="dashboard__section-title">A venir</h2>
+            <UpcomingCard dates={upcoming} />
+          </div>
+        </section>
+      )}
+
+      {reports.length > 0 && (
+        <section className="dashboard__section">
+          <h2 className="dashboard__section-title">Mes bilans</h2>
+          <ReportsSection reports={reports} />
+        </section>
+      )}
     </div>
   )
 }

@@ -15,8 +15,7 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
       )}
 
       <div className="next-date__body">
-        <p className="next-date__eyebrow">Ma prochaine date</p>
-        <h2 className="next-date__title">{event.name}</h2>
+        <h3 className="next-date__title">{event.name}</h3>
         <p className="next-date__meta">
           Le <b>{formatDayMonth(date.startDate)}</b> - {event.city} ({event.department})
         </p>

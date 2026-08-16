@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button'
 export function Topbar() {
   return (
     <div className="topbar">
-      <Button variant="ghost" aria-label="Notifications">
+      <Button variant="icon" aria-label="Notifications">
         <Bell size={20} strokeWidth={1.75} />
       </Button>
       <Button icon={<CirclePlus size={22} strokeWidth={1.75} />}>Ajouter une date</Button>

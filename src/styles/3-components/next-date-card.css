@@ -21,19 +21,18 @@
   background: var(--surface-chip-neutral);
 }
 
+/* Le contenu est centré verticalement dans la carte : le titre du bloc
+   (« Ma prochaine date ») vit au-dessus de la carte, plus dedans. */
 .next-date__body {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
-  padding: 34px var(--card-padding) 0 30px;
-}
-
-.next-date__eyebrow {
-  font: var(--type-card-title);
-  color: var(--ink-soft);
+  padding: 0 var(--card-padding) 0 30px;
 }
 
 .next-date__title {
-  margin-top: var(--space-8);
   font: var(--type-event-title);
   color: var(--ink-title);
   overflow: hidden;
