@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>L'atelier — le flux complet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Tokens recopiés de src/styles/. La maquette doit tenir seule ; en cas
+         d'écart, c'est l'app qui fait foi. */
+      :root {
+        --cream-50: #fffbf5;
+        --cream-100: #f9f6ef;
+        --cream-150: #f6f2e9;
+        --cream-200: #f3f0e9;
+        --cream-300: #ebe6dd;
+        --stone-200: hsl(40 14% 88%);
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+        --olive-100: #e8f0d8;
+        --olive-500: #84aa3c;
+        --clay-100: #f6e7dc;
+        --clay-500: #c0642a;
+
+        --family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-200);
+        --surface-control: var(--cream-100);
+        --ink-title: var(--brown-700);
+        --ink-strong: var(--brown-900);
+        --ink-soft: var(--brown-400);
+        --ink-section: var(--brown-800);
+        --ink-total: var(--brown-600);
+        --radius-panel: 20px;
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-sm: 8px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-app);
+        color: var(--ink-title);
+        font-family: var(--family);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 64px 32px 96px;
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+      }
+
+      .doc-head {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 70ch;
+      }
+
+      .doc-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .doc-title {
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        color: var(--ink-section);
+        text-wrap: balance;
+      }
+
+      .doc-lede {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.65;
+        color: var(--ink-total);
+      }
+
+      .doc-note {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-total);
+        padding: 18px 22px;
+        background: var(--cream-150);
+        border-radius: var(--radius-nav);
+        max-width: 78ch;
+      }
+
+      .doc-note b {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      /* --- Une étape ------------------------------------------------------ */
+      .step {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .step__head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+      }
+
+      .step__num {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .step__name {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-section);
+      }
+
+      .step__why {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-total);
+        max-width: 76ch;
+      }
+
+      /* --- Le panneau ----------------------------------------------------- */
+      .panel {
+        background: var(--surface-panel);
+        border-radius: var(--radius-panel);
+        padding: 40px 44px 44px;
+      }
+
+      .panel__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 34px;
+      }
+
+      .quit {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .studio {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 48px;
+        align-items: start;
+      }
+
+      .ask {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        color: var(--ink-section);
+        text-wrap: balance;
+      }
+
+      .hint {
+        margin-top: 10px;
+        margin-bottom: 26px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.55;
+        color: var(--ink-soft);
+      }
+
+      .fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+
+      .field__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .field__label i {
+        font-style: normal;
+        color: var(--clay-500);
+      }
+
+      .input {
+        height: 46px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        background: var(--surface-card);
+        border-radius: var(--radius-nav);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-title);
+      }
+
+      .input--empty {
+        color: var(--ink-soft);
+        font-weight: 400;
+      }
+
+      .input--area {
+        height: 96px;
+        align-items: flex-start;
+        padding-top: 14px;
+      }
+
+      .drop {
+        height: 110px;
+        display: grid;
+        place-items: center;
+        border: 1px dashed var(--brown-250);
+        border-radius: var(--radius-nav);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        background: var(--surface-card);
+        border-radius: var(--radius-nav);
+      }
+
+      .toggle__switch {
+        flex: none;
+        width: 38px;
+        height: 22px;
+        border-radius: 999px;
+        background: var(--stone-200);
+        position: relative;
+      }
+
+      .toggle__switch::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: var(--cream-50);
+      }
+
+      .toggle__text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .toggle__title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .toggle__note {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 30px;
+        padding: 0 14px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 600;
+        background: var(--cream-200);
+        color: var(--ink-soft);
+      }
+
+      .chip--on {
+        background: var(--olive-100);
+        color: #4f6a1f;
+        font-weight: 700;
+      }
+
+      .chip--first {
+        background: var(--brown-900);
+        color: var(--cream-50);
+        font-weight: 700;
+      }
+
+      .chip--sm {
+        height: 26px;
+        padding: 0 11px;
+        font-size: 11px;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        height: 46px;
+        padding: 0 22px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-control);
+        color: var(--ink-strong);
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .btn--action {
+        background: var(--brown-900);
+        color: var(--cream-50);
+      }
+
+      .btn--quiet {
+        background: none;
+        color: var(--ink-soft);
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .actions__spacer {
+        flex: 1;
+      }
+
+      /* --- La colonne compagnon ------------------------------------------- */
+      .mate {
+        position: sticky;
+        top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mate__label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        overflow: hidden;
+      }
+
+      .card__poster {
+        height: 172px;
+        display: grid;
+        place-items: center;
+        background: var(--cream-300);
+        color: var(--ink-soft);
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .card__poster--filled {
+        background: linear-gradient(150deg, #3a2f2a, #6b4a35 55%, #a06a3f);
+        color: #f4e6d4;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .card__body {
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card__name {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-title);
+        line-height: 1.2;
+      }
+
+      .card__name--waiting {
+        color: var(--brown-250);
+      }
+
+      .card__meta {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .card__meta b {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .card__meta--waiting {
+        color: var(--brown-250);
+      }
+
+      /* Doublons — l'étape 1 */
+      .dupe {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        background: var(--surface-card);
+        border-radius: var(--radius-nav);
+      }
+
+      .dupe__thumb {
+        flex: none;
+        width: 38px;
+        height: 52px;
+        border-radius: 6px;
+        background: var(--cream-300);
+      }
+
+      .dupe__text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .dupe__name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .dupe__meta {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .mate__box {
+        padding: 16px 18px;
+        background: var(--clay-100);
+        border-radius: var(--radius-nav);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.55;
+        color: #93441a;
+      }
+
+      /* --- Clôture -------------------------------------------------------- */
+      .closing {
+        background: var(--surface-panel);
+        border-radius: var(--radius-panel);
+        padding: 36px 40px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .closing h2 {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-section);
+      }
+
+      .closing p {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.65;
+        color: var(--ink-total);
+        max-width: 76ch;
+      }
+
+      .closing b {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="doc-head">
+        <p class="doc-eyebrow">Fellowship V2 · direction retenue</p>
+        <h1 class="doc-title">L'atelier — le flux complet</h1>
+        <p class="doc-lede">
+          Les quatre étapes de bout en bout. À gauche une question à la fois ; à droite un
+          compagnon qui change de rôle selon le moment. C'est le seul écart avec la
+          maquette de comparaison, et il corrige son défaut.
+        </p>
+        <p class="doc-note">
+          <b>La colonne de droite n'est pas qu'un aperçu.</b> À l'étape 1, la fiche serait
+          vide et donc décourageante — alors elle montre autre chose : les événements
+          déjà présents qui ressemblent au tien. C'est précisément le moment où cette
+          information a de la valeur. À partir de l'étape 2, elle devient la fiche qui se
+          construit.
+        </p>
+      </header>
+
+      <!-- ÉTAPE 1 -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">Étape 1</span>
+          <h2 class="step__name">L'événement</h2>
+        </div>
+        <p class="step__why">
+          Le nom, et rien d'autre. Pendant que tu tapes, on cherche les événements
+          existants qui lui ressemblent — pour t'éviter de créer un doublon sans le savoir.
+        </p>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip chip--sm">Étape 1 sur 4</span>
+          </div>
+
+          <div class="studio">
+            <div>
+              <h3 class="ask">Quel événement veux-tu ajouter ?</h3>
+              <p class="hint">Son nom, tel qu'il est annoncé par l'organisateur.</p>
+
+              <div class="fields">
+                <div class="field">
+                  <span class="field__label">Nom <i>*</i></span>
+                  <span class="input">Fête médiévale de Provins 2026</span>
+                </div>
+
+                <div class="toggle">
+                  <span class="toggle__switch"></span>
+                  <span class="toggle__text">
+                    <span class="toggle__title">Événement privé</span>
+                    <span class="toggle__note">
+                      Visible par toi seul. N'entre pas dans l'annuaire.
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="btn btn--action">Continuer</span>
+                <span class="actions__spacer"></span>
+                <span class="btn btn--quiet">Annuler</span>
+              </div>
+            </div>
+
+            <aside class="mate">
+              <p class="mate__label">2 événements se ressemblent</p>
+
+              <div class="dupe">
+                <span class="dupe__thumb"></span>
+                <span class="dupe__text">
+                  <span class="dupe__name">Fête médiévale de Provins</span>
+                  <span class="dupe__meta">Provins (77) · 13–14 juin 2026</span>
+                </span>
+              </div>
+
+              <div class="dupe">
+                <span class="dupe__thumb"></span>
+                <span class="dupe__text">
+                  <span class="dupe__name">Médiévales de Provins</span>
+                  <span class="dupe__meta">Provins (77) · 20–21 juin 2026</span>
+                </span>
+              </div>
+
+              <div class="mate__box">
+                Si c'est l'un d'eux, ouvre-le plutôt que d'en créer un second — tu y
+                retrouveras les autres exposants.
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÉTAPE 2 -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">Étape 2</span>
+          <h2 class="step__name">Où et quand</h2>
+        </div>
+        <p class="step__why">
+          La fiche apparaît, encore incomplète. Chaque champ rempli s'y inscrit
+          aussitôt : on comprend à quoi il sert parce qu'on voit où il atterrit.
+        </p>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip chip--sm">Étape 2 sur 4</span>
+          </div>
+
+          <div class="studio">
+            <div>
+              <h3 class="ask">Où et quand se passe-t-il ?</h3>
+              <p class="hint">La ville et la date de début suffisent pour l'enregistrer.</p>
+
+              <div class="fields">
+                <div class="field">
+                  <span class="field__label">Adresse ou lieu</span>
+                  <span class="input input--empty">Commence à taper, on complète le reste</span>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Ville <i>*</i></span>
+                    <span class="input">Provins</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Département <i>*</i></span>
+                    <span class="input">77</span>
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Début <i>*</i></span>
+                    <span class="input">13 juin 2026</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Fin</span>
+                    <span class="input">14 juin 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="btn">Retour</span>
+                <span class="btn btn--action">Continuer</span>
+                <span class="actions__spacer"></span>
+                <span class="btn btn--quiet">Enregistrer et finir plus tard</span>
+              </div>
+            </div>
+
+            <aside class="mate">
+              <p class="mate__label">Ce que verront les exposants</p>
+              <div class="card">
+                <div class="card__poster">Affiche — étape 4</div>
+                <div class="card__body">
+                  <span class="card__name">Fête médiévale de Provins 2026</span>
+                  <span class="card__meta">
+                    Du <b>13</b> au <b>14 juin</b> · <b>Provins</b> (77)
+                  </span>
+                  <span class="card__meta card__meta--waiting">Catégories — étape 3</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÉTAPE 3 -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">Étape 3</span>
+          <h2 class="step__name">Catégories</h2>
+        </div>
+        <p class="step__why">
+          Le premier choix fait office de catégorie principale — c'est lui qui classera
+          l'événement dans l'annuaire. La fiche le montre en sombre, les autres en clair :
+          l'ordre se voit au lieu de se deviner.
+        </p>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip chip--sm">Étape 3 sur 4</span>
+          </div>
+
+          <div class="studio">
+            <div>
+              <h3 class="ask">De quoi s'agit-il ?</h3>
+              <p class="hint">
+                Le premier que tu choisis devient la catégorie principale. Tu peux en
+                mettre plusieurs.
+              </p>
+
+              <div class="chips">
+                <span class="chip chip--first">Médiéval</span>
+                <span class="chip chip--on">Artisanat</span>
+                <span class="chip">Fantasy</span>
+                <span class="chip">Geek &amp; pop</span>
+                <span class="chip">Tatouage</span>
+                <span class="chip">Musique</span>
+                <span class="chip">Marché de Noël</span>
+                <span class="chip">Viking</span>
+                <span class="chip">Steampunk</span>
+                <span class="chip">Renaissance</span>
+                <span class="chip">Fête locale</span>
+                <span class="chip">Salon</span>
+              </div>
+
+              <div class="actions">
+                <span class="btn">Retour</span>
+                <span class="btn btn--action">Continuer</span>
+                <span class="actions__spacer"></span>
+                <span class="btn btn--quiet">Enregistrer et finir plus tard</span>
+              </div>
+            </div>
+
+            <aside class="mate">
+              <p class="mate__label">Ce que verront les exposants</p>
+              <div class="card">
+                <div class="card__poster">Affiche — étape 4</div>
+                <div class="card__body">
+                  <span class="card__name">Fête médiévale de Provins 2026</span>
+                  <span class="card__meta">
+                    Du <b>13</b> au <b>14 juin</b> · <b>Provins</b> (77)
+                  </span>
+                  <div class="chips" style="margin-top: 2px">
+                    <span class="chip chip--sm chip--first">Médiéval</span>
+                    <span class="chip chip--sm chip--on">Artisanat</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÉTAPE 4 -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">Étape 4</span>
+          <h2 class="step__name">Détails</h2>
+        </div>
+        <p class="step__why">
+          Tout est facultatif ici, et le bouton le dit : « Créer l'événement » est
+          disponible dès l'arrivée sur l'étape. L'affiche est le seul champ qui change
+          vraiment la fiche — elle est donc placée en premier, pas en dernier comme
+          aujourd'hui.
+        </p>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip chip--sm">Étape 4 sur 4 · facultative</span>
+          </div>
+
+          <div class="studio">
+            <div>
+              <h3 class="ask">Ce qu'on peut ajouter</h3>
+              <p class="hint">
+                Rien n'est obligatoire. Tu peux créer l'événement maintenant et compléter
+                plus tard.
+              </p>
+
+              <div class="fields">
+                <div class="field">
+                  <span class="field__label">Affiche</span>
+                  <span class="drop">Dépose une image, ou clique pour choisir</span>
+                </div>
+                <div class="field">
+                  <span class="field__label">Description</span>
+                  <span class="input input--area input--empty">
+                    Ce qu'un exposant a besoin de savoir avant de candidater…
+                  </span>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Date limite d'inscription</span>
+                    <span class="input input--empty">jj/mm/aaaa</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Lien d'inscription</span>
+                    <span class="input input--empty">https://…</span>
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Site de l'événement</span>
+                    <span class="input input--empty">https://…</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Email de contact</span>
+                    <span class="input input--empty">contact@exemple.fr</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <span class="field__label">Comment candidater</span>
+                  <span class="input input--empty">Ex : envoyer un dossier par mail</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="btn">Retour</span>
+                <span class="btn btn--action">Créer l'événement</span>
+              </div>
+            </div>
+
+            <aside class="mate">
+              <p class="mate__label">Ce que verront les exposants</p>
+              <div class="card">
+                <div class="card__poster card__poster--filled">AFFICHE</div>
+                <div class="card__body">
+                  <span class="card__name">Fête médiévale de Provins 2026</span>
+                  <span class="card__meta">
+                    Du <b>13</b> au <b>14 juin</b> · <b>Provins</b> (77)
+                  </span>
+                  <div class="chips" style="margin-top: 2px">
+                    <span class="chip chip--sm chip--first">Médiéval</span>
+                    <span class="chip chip--sm chip--on">Artisanat</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <h2>Trois décisions que la maquette prend</h2>
+        <p>
+          <b>La colonne de droite change de rôle.</b> Aperçu à partir de l'étape 2, mais
+          détecteur de doublons à l'étape 1 — là où une fiche vide n'aurait rien dit.
+          C'est ce qui règle le défaut que j'avais signalé.
+        </p>
+        <p>
+          <b>L'affiche remonte en tête de l'étape 4.</b> Aujourd'hui elle est en dernier,
+          après six champs de texte. C'est pourtant le seul élément qui transforme la
+          fiche — et celui qu'on a sous la main quand on crée l'événement.
+        </p>
+        <p>
+          <b>« Enregistrer et finir plus tard » est présent dès l'étape 2</b>, dès qu'il y
+          a de quoi enregistrer. Un exposant qui ferme l'onglet ne perd rien.
+        </p>
+        <p>
+          Une question reste ouverte, et elle est produit, pas graphique : quand tu crées
+          un événement, est-ce que <b>ta date s'y ajoute automatiquement</b> ? Créer
+          « Provins 2026 » veut probablement dire que tu comptes y aller. Si oui, l'écran
+          suivant est ton dossier ; si non, on retombe sur le tableau de bord et tu
+          t'inscris ensuite.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
