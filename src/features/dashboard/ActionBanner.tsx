@@ -1,42 +1,20 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PartyPopper, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import type { DashboardReport } from './useDashboard'
 
-const DISMISSED_KEY = 'flwsh-action-dismissed'
-
-function readDismissed(): string[] {
-  try {
-    const raw = localStorage.getItem(DISMISSED_KEY)
-    const parsed: unknown = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []
-  } catch {
-    return []
-  }
-}
-
 /**
  * La seule bande qui réclame quelque chose. Elle disparaît dès que le bilan
- * est rempli — ou que l'exposant l'a écartée.
+ * est rempli.
+ *
+ * « Plus tard » et la croix ne l'écartent QUE pour la visite en cours : elle
+ * revient au rechargement. Un rejet persistant serait un cul-de-sac — le
+ * bilan resterait à faire, sans plus rien pour le rappeler.
  */
 export function ActionBanner({ report }: { report: DashboardReport }) {
-  const [dismissed, setDismissed] = useState<string[]>(readDismissed)
+  const [hidden, setHidden] = useState(false)
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(DISMISSED_KEY, JSON.stringify(dismissed))
-    } catch {
-      /* stockage indisponible : le rejet ne vaut que pour cette session */
-    }
-  }, [dismissed])
-
-  const dismiss = useCallback(() => {
-    setDismissed((previous) =>
-      previous.includes(report.eventId) ? previous : [...previous, report.eventId],
-    )
-  }, [report.eventId])
-
-  if (dismissed.includes(report.eventId)) return null
+  if (hidden) return null
 
   return (
     <div>
@@ -49,15 +27,13 @@ export function ActionBanner({ report }: { report: DashboardReport }) {
 
         <div className="action-banner__body">
           <p className="action-banner__title">Comment s’est passé {report.name} ?</p>
-          <p className="action-banner__note">
-            Note tes revenus, tes coûts et tes impressions.
-          </p>
+          <p className="action-banner__note">Note tes revenus, tes coûts et tes impressions.</p>
         </div>
 
         <div className="action-banner__actions">
           <Button variant="action">Remplir mon bilan</Button>
-          <Button onClick={dismiss}>Plus tard</Button>
-          <Button variant="bare" onClick={dismiss} aria-label="Masquer">
+          <Button onClick={() => setHidden(true)}>Plus tard</Button>
+          <Button variant="bare" onClick={() => setHidden(true)} aria-label="Masquer">
             <X size={20} strokeWidth={1.75} />
           </Button>
         </div>
