@@ -8,6 +8,7 @@ import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
 import { useCommunityBadge } from '@/hooks/use-community-badge'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { V2Toggle } from './V2Toggle'
 import './SidebarV2.css'
 
 const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings, Map }
@@ -72,8 +73,10 @@ export function SidebarV2() {
             )
           }
           const Badge = state === 'lock-pro' ? Lock : Sparkles
+          // Le dim ne s'applique qu'au verrou Pro (V1 : .navlink.locked ne couvre que
+          // ce cas) — « bientôt » reste à pleine intensité, seul son badge le distingue.
           return (
-            <button key={key} className="sd2-link sd2-locked" onClick={() => navigate(to)} title={collapsed ? def.label : undefined}>
+            <button key={key} className={`sd2-link${state === 'lock-pro' ? ' sd2-locked' : ''}`} onClick={() => navigate(to)} title={collapsed ? def.label : undefined}>
               <Icon strokeWidth={2} />
               <span className="sd2-lab">{def.label}</span>
               <span className="sd2-lock"><Badge strokeWidth={2} /></span>
@@ -101,6 +104,7 @@ export function SidebarV2() {
           </Link>
         )}
         <ThemeToggle />
+        <V2Toggle />
       </div>
     </aside>
   )

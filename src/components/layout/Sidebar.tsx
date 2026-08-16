@@ -8,6 +8,7 @@ import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
 import { useCommunityBadge } from '@/hooks/use-community-badge'
 import { EntitySwitcher } from './EntitySwitcher'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { V2Toggle } from './V2Toggle'
 import { SidebarNetworkActivity } from '@/components/community/SidebarNetworkActivity'
 import './Sidebar.css'
 
@@ -124,6 +125,7 @@ export function Sidebar() {
           </Link>
           {!collapsed && <Link to="/reglages" className="nm"><b>{accountName}</b><span>Mon compte</span></Link>}
           <ThemeToggle />
+          <V2Toggle />
         </div>
         {!collapsed && (
           <div className="sidebar-legal">
