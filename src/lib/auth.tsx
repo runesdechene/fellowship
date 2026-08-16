@@ -134,11 +134,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [actors, actorId],
   )
 
-  // Une fois l'acteur résolu, on le grave : la prochaine visite reprendra le
-  // même, quoi qu'il arrive à l'ordre des enseignes.
-  useEffect(() => {
-    if (actor && !actorId) writeStoredActorId(actor.id)
-  }, [actor, actorId])
+  // On NE mémorise PAS l'acteur choisi par défaut : ce n'est pas un choix de
+  // l'utilisateur. Le graver enfermerait quelqu'un sur une enseigne qu'il n'a
+  // jamais sélectionnée, sans moyen d'en sortir tant que le sélecteur n'existe
+  // pas. Seul switchActor écrit dans le stockage.
+  //
+  // Un identifiant mémorisé qui ne correspond à aucune enseigne connue est
+  // ignoré : on retombe sur la première, qui est désormais triée.
 
   const switchActor = useCallback((id: string) => {
     setActorId(id)
