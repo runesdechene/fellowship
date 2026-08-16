@@ -193,6 +193,12 @@
   /* Respiration verticale entre les grands blocs */
   --gap-section: var(--space-42);
 
+  /* Passage d'un écran à l'autre. La sortie est plus courte que l'entrée :
+     on efface vite ce qu'on quitte, on installe posément ce qui arrive. */
+  --page-transition-out: var(--duration-fast) var(--ease-soft);
+  --page-transition-in: var(--duration-medium) var(--ease-soft);
+  --page-transition-rise: var(--space-12);
+
   /* Colonne de gauche */
   --sidebar-padding-x: var(--space-23); /* aligne compte et navigation */
   --sidebar-logo-top: var(--space-32);

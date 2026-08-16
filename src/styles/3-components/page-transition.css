@@ -1,0 +1,43 @@
+/* -----------------------------------------------------------------------------
+   PAGE TRANSITION — le passage d'un écran à l'autre
+   S'appuie sur les transitions de vue du navigateur, déclenchées par React
+   Router (`navigate(..., { viewTransition: true })`). Aucune bibliothèque.
+   Les navigateurs qui ne les gèrent pas changent d'écran sans animation :
+   c'est une amélioration, pas une dépendance.
+
+   Seul le panneau principal est animé — il porte `view-transition-name` dans
+   app-shell.css. La colonne de gauche ne bouge donc pas d'un pixel.
+   -------------------------------------------------------------------------- */
+
+::view-transition-old(main-panel) {
+  animation: page-leave var(--page-transition-out) both;
+}
+
+::view-transition-new(main-panel) {
+  animation: page-enter var(--page-transition-in) both;
+}
+
+/* L'ancien écran s'efface sur place. Le faire glisser dans l'autre sens
+   donnerait un croisement lisible comme un va-et-vient : ici, une page
+   remplace l'autre, elle ne la pousse pas. */
+@keyframes page-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Le nouvel écran monte de quelques pixels en apparaissant. Le mouvement est
+   court : il signale le changement sans le faire attendre. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--page-transition-rise));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(main-panel),
+  ::view-transition-new(main-panel) {
+    animation: none;
+  }
+}

@@ -25,8 +25,15 @@
 
 .app-shell__main {
   position: relative;
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   min-width: 0;
   background: var(--surface-panel);
   border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+
+  /* Nommé pour la transition de page : c'est CE panneau qui change d'un
+     écran à l'autre, pas la colonne de gauche. La nommer l'extrait de
+     l'instantané global, donc la barre latérale ne bouge pas. */
+  view-transition-name: main-panel;
 }

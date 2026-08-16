@@ -13,7 +13,7 @@ export function Topbar() {
       </Button>
       <Button
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
-        onClick={() => navigate('/evenement/nouveau')}
+        onClick={() => navigate('/evenement/nouveau', { viewTransition: true })}
       >
         Ajouter une date
       </Button>

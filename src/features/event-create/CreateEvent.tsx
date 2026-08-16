@@ -98,7 +98,7 @@ export function CreateEvent() {
     }
 
     clear()
-    navigate('/')
+    navigate('/', { viewTransition: true })
   }
 
   const isLast = step === STEPS.length - 1
@@ -106,7 +106,7 @@ export function CreateEvent() {
   return (
     <div className="create">
       <div className="create__top">
-        <button type="button" className="create__quit" onClick={() => navigate('/')}>
+        <button type="button" className="create__quit" onClick={() => navigate('/', { viewTransition: true })}>
           <ArrowLeft size={15} strokeWidth={2} />
           Tableau de bord
         </button>
@@ -138,11 +138,11 @@ export function CreateEvent() {
             )}
             <span className="create__spacer" />
             {step === 0 ? (
-              <Button variant="bare" onClick={() => navigate('/')} aria-label="Annuler">
+              <Button variant="bare" onClick={() => navigate('/', { viewTransition: true })} aria-label="Annuler">
                 Annuler
               </Button>
             ) : (
-              <Button variant="bare" onClick={() => navigate('/')}>
+              <Button variant="bare" onClick={() => navigate('/', { viewTransition: true })}>
                 Enregistrer et finir plus tard
               </Button>
             )}

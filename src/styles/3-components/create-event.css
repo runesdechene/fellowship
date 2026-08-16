@@ -5,7 +5,14 @@
    Utilisé par : src/features/event-create/CreateEvent.tsx
    -------------------------------------------------------------------------- */
 
+/* L'écran occupe toute la hauteur du panneau : la barre du haut reste en
+   haut, et la question se cale au milieu de ce qui reste. Un formulaire
+   court ne doit pas flotter sous le plafond. */
 .create {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
   padding: var(--page-padding-top) var(--page-gutter) var(--space-48);
@@ -36,9 +43,11 @@
 /* --- Les deux colonnes ---------------------------------------------------- */
 .create__body {
   display: grid;
+  flex: 1 1 auto;
   grid-template-columns: 1fr var(--create-mate-width);
   gap: var(--create-columns-gap);
-  align-items: start;
+  align-items: center;
+  align-content: center;
 }
 
 .create__ask {
