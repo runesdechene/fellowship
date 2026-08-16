@@ -132,6 +132,17 @@
   /* Vitesse du repli de la colonne de gauche */
   --sidebar-collapse-motion: var(--duration-medium) var(--ease-out);
 
+  /* Bouton de repli : calé à droite quand la colonne est ouverte, centré dans
+     le rail quand elle est repliée. Le pourcentage suit la largeur pendant
+     toute l'animation, donc il reste centré à chaque image. */
+  --sidebar-collapse-size: 17px;
+  --sidebar-collapse-right: var(--space-15);
+  /* Respiration verticale du bouton. Nulle quand la colonne est ouverte : le
+     bouton est calé dans un coin. Une fois centré dans le rail, il lui faut
+     de l'air — davantage en dessous, pour le détacher du logo. */
+  --sidebar-collapse-padding-top: 0px;
+  --sidebar-collapse-padding-bottom: 0px;
+
   /* Marges intérieures du grand panneau */
   --page-padding-left: var(--space-70);
   --page-padding-right: var(--space-32);

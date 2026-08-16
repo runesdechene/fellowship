@@ -28,10 +28,14 @@
 .sidebar__collapse {
   position: absolute;
   top: var(--space-20);
-  right: var(--space-15);
+  right: var(--sidebar-collapse-right);
   display: grid;
   place-items: center;
+  padding: var(--sidebar-collapse-padding-top) 0 var(--sidebar-collapse-padding-bottom);
   color: var(--ink-soft);
+  transition:
+    right var(--sidebar-collapse-motion),
+    padding var(--sidebar-collapse-motion);
 }
 
 /* --- Carte de compte ------------------------------------------------------ */
@@ -145,25 +149,32 @@
     transform var(--sidebar-collapse-motion);
 }
 
+/* Ce qui disparaît doit cesser d'occuper de la place. S'il ne fait que
+   devenir transparent, il pousse encore les icônes hors du rail. */
 .app-shell--collapsed .sidebar__item-label,
 .app-shell--collapsed .sidebar__account-identity,
 .app-shell--collapsed .sidebar__account-chevron {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
   opacity: 0;
-  transform: translateX(calc(-1 * var(--space-8)));
+  overflow: hidden;
   pointer-events: none;
 }
 
+/* L'écart tombe à zéro : il ne reste qu'un seul enfant visible, qu'on centre.
+   Les retraits, eux, ne bougent pas — c'est ce qui rend l'icône exactement
+   centrée dans sa pastille. */
 .app-shell--collapsed .sidebar__account,
 .app-shell--collapsed .sidebar__item {
-  justify-content: center;
   gap: 0;
-  padding-left: 0;
-  padding-right: 0;
+  justify-content: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar,
   .sidebar__logo,
+  .sidebar__collapse,
   .sidebar__item,
   .sidebar__item-label,
   .sidebar__account-identity,
