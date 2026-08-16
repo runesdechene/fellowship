@@ -1,10 +1,10 @@
 import { Bell, CirclePlus } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
+import { useTransitionNavigate } from '@/lib/navigation'
 
 /** Barre du haut : cloche + « Ajouter une date ». Rien d'autre sur la maquette. */
 export function Topbar() {
-  const navigate = useNavigate()
+  const go = useTransitionNavigate()
 
   return (
     <div className="topbar">
@@ -13,7 +13,7 @@ export function Topbar() {
       </Button>
       <Button
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
-        onClick={() => navigate('/evenement/nouveau', { viewTransition: true })}
+        onClick={() => go('/evenement/nouveau')}
       >
         Ajouter une date
       </Button>

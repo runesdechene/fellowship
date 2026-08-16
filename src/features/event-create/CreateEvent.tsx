@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useTransitionNavigate } from '@/lib/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
@@ -15,7 +15,7 @@ import { blockingReason, STEPS, useEventDraft, type EventDraft } from './useEven
 const POSTER_BUCKET = 'event-images'
 
 export function CreateEvent() {
-  const navigate = useNavigate()
+  const go = useTransitionNavigate()
   const { actor, person } = useAuth()
   const { draft, update, toggleTag, clear } = useEventDraft()
   const tags = useTags()
@@ -98,7 +98,7 @@ export function CreateEvent() {
     }
 
     clear()
-    navigate('/', { viewTransition: true })
+    go('/')
   }
 
   const isLast = step === STEPS.length - 1
@@ -106,7 +106,7 @@ export function CreateEvent() {
   return (
     <div className="create">
       <div className="create__top">
-        <button type="button" className="create__quit" onClick={() => navigate('/', { viewTransition: true })}>
+        <button type="button" className="create__quit" onClick={() => go('/')}>
           <ArrowLeft size={15} strokeWidth={2} />
           Tableau de bord
         </button>
@@ -138,11 +138,11 @@ export function CreateEvent() {
             )}
             <span className="create__spacer" />
             {step === 0 ? (
-              <Button variant="bare" onClick={() => navigate('/', { viewTransition: true })} aria-label="Annuler">
+              <Button variant="bare" onClick={() => go('/')} aria-label="Annuler">
                 Annuler
               </Button>
             ) : (
-              <Button variant="bare" onClick={() => navigate('/', { viewTransition: true })}>
+              <Button variant="bare" onClick={() => go('/')}>
                 Enregistrer et finir plus tard
               </Button>
             )}
