@@ -269,7 +269,8 @@
 
   /* Passage d'une étape à l'autre. Le mouvement suit le sens de la marche :
      on avance, ça vient de la droite ; on revient, ça vient de la gauche. */
-  --step-motion: var(--duration-cinematic) var(--ease-soft);
+  --step-duration: var(--duration-cinematic);
+  --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
   --create-mate-width: 360px;

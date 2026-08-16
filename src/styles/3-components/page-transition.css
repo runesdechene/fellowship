@@ -1,33 +1,35 @@
 /* -----------------------------------------------------------------------------
-   PAGE TRANSITION — le passage d'un écran à l'autre
-   S'appuie sur les transitions de vue du navigateur, déclenchées par React
-   Router (`navigate(..., { viewTransition: true })`). Aucune bibliothèque.
-   Les navigateurs qui ne les gèrent pas changent d'écran sans animation :
-   c'est une amélioration, pas une dépendance.
+   TRANSITIONS — passages d'un écran à l'autre, et d'une étape à l'autre
+   S'appuie sur les transitions de vue du navigateur (voir src/lib/navigation.ts).
+   Elles font coexister l'ancien et le nouveau le temps du passage : c'est ce
+   qui permet d'animer la SORTIE autant que l'entrée.
 
-   Seul le panneau principal est animé — il porte `view-transition-name` dans
-   app-shell.css. La colonne de gauche ne bouge donc pas d'un pixel.
+   Les pseudo-éléments ::view-transition-* vivent sur la racine du document,
+   pas dans le composant — d'où ce fichier commun. Chaque passage pose son
+   `mode` sur la racine, et le CSS choisit l'animation en conséquence.
    -------------------------------------------------------------------------- */
 
-::view-transition-old(main-panel) {
+/* =============================================================================
+   D'UN ÉCRAN À L'AUTRE
+   Seul le panneau principal bouge : il porte `view-transition-name` dans
+   app-shell.css, ce qui l'extrait de l'instantané global. La colonne de
+   gauche ne bouge donc pas d'un pixel.
+   ========================================================================== */
+
+:root[data-transition='page']::view-transition-old(main-panel) {
   animation: page-leave var(--page-transition-out) both;
 }
 
-::view-transition-new(main-panel) {
+:root[data-transition='page']::view-transition-new(main-panel) {
   animation: page-enter var(--page-transition-in) both;
 }
 
-/* L'ancien écran s'efface sur place. Le faire glisser dans l'autre sens
-   donnerait un croisement lisible comme un va-et-vient : ici, une page
-   remplace l'autre, elle ne la pousse pas. */
 @keyframes page-leave {
   to {
     opacity: 0;
   }
 }
 
-/* Le nouvel écran monte de quelques pixels en apparaissant. Le mouvement est
-   court : il signale le changement sans le faire attendre. */
 @keyframes page-enter {
   from {
     opacity: 0;
@@ -35,9 +37,68 @@
   }
 }
 
+/* =============================================================================
+   D'UNE ÉTAPE À L'AUTRE
+   Le mouvement suit le sens de la marche : on avance, l'ancienne part vers la
+   gauche et la nouvelle vient de la droite ; on revient, l'inverse.
+   ========================================================================== */
+
+::view-transition-old(step-content),
+::view-transition-new(step-content) {
+  animation-duration: var(--step-duration);
+  animation-timing-function: var(--step-easing);
+  animation-fill-mode: both;
+}
+
+:root[data-transition='step-next']::view-transition-old(step-content) {
+  animation-name: step-out-left;
+}
+
+:root[data-transition='step-next']::view-transition-new(step-content) {
+  animation-name: step-in-right;
+}
+
+:root[data-transition='step-back']::view-transition-old(step-content) {
+  animation-name: step-out-right;
+}
+
+:root[data-transition='step-back']::view-transition-new(step-content) {
+  animation-name: step-in-left;
+}
+
+@keyframes step-out-left {
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--step-shift)));
+  }
+}
+
+@keyframes step-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--step-shift));
+  }
+}
+
+@keyframes step-out-right {
+  to {
+    opacity: 0;
+    transform: translateX(var(--step-shift));
+  }
+}
+
+@keyframes step-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--step-shift)));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(main-panel),
-  ::view-transition-new(main-panel) {
+  ::view-transition-new(main-panel),
+  ::view-transition-old(step-content),
+  ::view-transition-new(step-content) {
     animation: none;
   }
 }

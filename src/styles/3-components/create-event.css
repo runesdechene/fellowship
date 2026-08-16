@@ -50,43 +50,12 @@
   align-content: center;
 }
 
-/* L'étape entre en glissant dans le sens de la marche. Seule l'arrivée est
-   animée : le contenu sortant est retiré par React, on ne peut pas le
-   retenir sans le garder en double. Le mouvement directionnel suffit à
-   faire sentir le passage. */
+/* L'étape est nommée pour la transition : le navigateur l'extrait alors de
+   l'instantané de la page et peut faire coexister l'ancienne et la nouvelle
+   le temps du passage. L'animation elle-même vit dans page-transition.css,
+   parce que les pseudo-éléments concernés appartiennent à la racine. */
 .create__step {
-  animation: step-enter-next var(--step-motion) both;
-}
-
-.create__step--back {
-  animation-name: step-enter-back;
-}
-
-@keyframes step-enter-next {
-  from {
-    opacity: 0;
-    transform: translateX(var(--step-shift));
-  }
-}
-
-@keyframes step-enter-back {
-  from {
-    opacity: 0;
-    transform: translateX(calc(-1 * var(--step-shift)));
-  }
-}
-
-/* Le compagnon ne bouge qu'en changeant de NATURE — doublons puis fiche.
-   La fiche, elle, se met à jour sur place : c'est l'objet qu'on fabrique,
-   il ne doit pas se recréer à chaque question. */
-.mate {
-  animation: mate-enter var(--step-motion) both;
-}
-
-@keyframes mate-enter {
-  from {
-    opacity: 0;
-  }
+  view-transition-name: step-content;
 }
 
 .create__ask {
@@ -161,12 +130,6 @@
   gap: var(--space-12);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .create__step,
-  .mate {
-    animation: none;
-  }
-}
 
 .mate__label {
   font: var(--type-eyebrow);
