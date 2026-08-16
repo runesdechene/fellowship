@@ -25,20 +25,18 @@
      PALETTE — PIERRE
      Gris chaud désaturé, pour les états de la navigation.
 
-     Ces teintes ne sont PAS écrites en hexadécimal, et c'est volontaire :
-     en 8 bits, deux hexa de clarté différente ne retombent jamais sur la
-     même teinte exacte (#E4E1DB = 40°, #E9E6E1 = 37,5° — l'œil le voit).
-     Ici la teinte et la saturation sont deux variables PARTAGÉES : seule la
-     clarté distingue les nuances, la dérive est impossible.
+     Écrite en HSL et non en hexadécimal, pour que toute nuance ajoutée plus
+     tard parte de la MÊME teinte et de la MÊME saturation. En 8 bits, deux
+     hexa de clarté différente ne retombent jamais sur la même teinte exacte
+     et l'écart se voit.
 
-     Pour retoucher toute la famille d'un coup, ne changer que ces deux
-     lignes — jamais les nuances une par une.
+     Pour réchauffer ou refroidir la navigation : --stone-hue.
+     Pour la rendre plus ou moins grise : --stone-saturation.
      --------------------------------------------------------------------- */
   --stone-hue: 40;
   --stone-saturation: 14%;
 
-  --stone-100: hsl(var(--stone-hue) var(--stone-saturation) 90%); /* survol */
-  --stone-200: hsl(var(--stone-hue) var(--stone-saturation) 88%); /* actif */
+  --stone-200: hsl(var(--stone-hue) var(--stone-saturation) 88%);
 
   /* ---------------------------------------------------------------------
      PALETTE — BRUN (l'encre)
