@@ -48,7 +48,7 @@ export function Dashboard() {
       )}
 
       {reports.length > 0 && (
-        <section className="dashboard__section">
+        <section className="dashboard__section dashboard__section--bleed">
           <h2 className="dashboard__section-title">Mes bilans</h2>
           <ReportsSection reports={reports} />
         </section>

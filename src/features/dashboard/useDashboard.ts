@@ -47,8 +47,11 @@ export interface DashboardReport {
   net: number | null
 }
 
-/** Nombre de bilans affichés sur le tableau de bord. */
-const REPORTS_SHOWN = 6
+/**
+ * Nombre de bilans chargés. La bande défile horizontalement : on peut en
+ * charger plus que ce qui tient à l'écran, les suivants continuent à droite.
+ */
+const REPORTS_SHOWN = 12
 
 export interface DashboardData {
   /** Nombre total de dates programmées à venir. */

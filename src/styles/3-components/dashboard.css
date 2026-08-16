@@ -43,6 +43,13 @@
   margin-top: var(--gap-section);
 }
 
+/* Bloc qui déborde volontairement jusqu'au bord droit du panneau, et au-delà :
+   son contenu file vers la droite au lieu de revenir à la ligne. */
+.dashboard__section--bleed {
+  width: auto;
+  margin-right: calc(-1 * var(--page-padding-right));
+}
+
 /* Grand titre pâle posé AU-DESSUS du bloc, jamais dedans */
 .dashboard__section-title {
   margin-bottom: var(--gap-section-title);

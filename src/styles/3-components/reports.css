@@ -4,14 +4,25 @@
    Utilisé par : src/features/dashboard/ReportsSection.tsx
    -------------------------------------------------------------------------- */
 
+/* Une seule ligne, qui continue vers la droite au-delà du bord du panneau.
+   Le retrait droit est repris en padding pour que la dernière carte ne colle
+   pas au bord quand on a fait défiler jusqu'au bout. */
 .reports {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--report-gap);
+  overflow-x: auto;
+  padding-right: var(--page-padding-right);
+  scrollbar-width: none; /* Firefox */
+}
+
+.reports::-webkit-scrollbar {
+  display: none;
 }
 
 .report {
   display: flex;
+  flex: none;
   align-items: stretch;
   height: var(--report-height);
   background: var(--surface-card);
