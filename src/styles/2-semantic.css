@@ -25,7 +25,8 @@
   --surface-nav-active: var(--cream-400); /* l'entrée de menu active et survolée */
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
-  --surface-bar: var(--cream-200); /* barres du graphe de saison */
+  --surface-bar: var(--cream-150); /* mois qui portent au moins une date */
+  --surface-bar-empty: var(--cream-100); /* mois à zéro — moins marqué */
 
   /* =========================================================================
      ENCRE — les couleurs de texte, de la plus forte à la plus effacée

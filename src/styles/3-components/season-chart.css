@@ -39,8 +39,12 @@
   color: var(--ink-soft);
 }
 
-/* Mois sans date : la barre est réduite à son minimum, le zéro passe
-   au-dessus d'elle et s'éteint. */
+/* Mois sans date : la barre est réduite à son minimum, son fond est moins
+   marqué, et le zéro passe au-dessus d'elle en s'éteignant. */
+.season-chart__column--empty .season-chart__bar {
+  background: var(--surface-bar-empty);
+}
+
 .season-chart__column--empty .season-chart__value {
   position: absolute;
   bottom: 100%;
