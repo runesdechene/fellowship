@@ -98,8 +98,9 @@
   transition: transform var(--menu-motion);
 }
 
+/* Un interrupteur n'est pas un statut : il porte donc le bleu, pas l'olive. */
 .toggle--on .toggle__switch {
-  background: var(--status-ok-ink);
+  background: var(--toggle-on-surface);
 }
 
 .toggle--on .toggle__switch::after {

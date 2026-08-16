@@ -62,10 +62,14 @@
   --clay-500: #c0642a;
 
   /* ---------------------------------------------------------------------
-     PALETTE — BLEU
-     La seule couleur froide : les liens. Elle ne sert QUE à ça, pour qu'un
-     texte bleu signifie toujours « ceci mène ailleurs ».
+     PALETTE — BLEU ÉLECTRIQUE
+     La SECONDE couleur d'accent de Fellowship, et la seule froide.
+
+     Partage du travail avec l'olive, à ne pas mélanger :
+       olive  = un ÉTAT acquis (inscrit, acompte versé, bénéfice)
+       bleu   = ce sur quoi on AGIT (liens, interrupteurs, focus)
      --------------------------------------------------------------------- */
+  --blue-100: #e6e9ff; /* fond très clair, pour poser du bleu sur du crème */
   --blue-500: #3b5bff;
 
   /* ---------------------------------------------------------------------

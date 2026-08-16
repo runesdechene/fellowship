@@ -138,6 +138,21 @@ Si la taille voulue n'existe pas, l'ajouter d'abord en couche 1.
 La hauteur de chaque barre est calculée entre ces deux bornes, proportionnellement
 au nombre de dates. Aucun nombre n'est écrit dans le code.
 
+### Les deux couleurs d'accent, et leur partage du travail
+
+Fellowship a **deux** accents, et ils ne se croisent jamais :
+
+| Couleur | Rôle | Tokens |
+|---|---|---|
+| **Olive** `#84AA3C` | un **état acquis** — inscrit, acompte versé, bénéfice | `--status-ok-*` |
+| **Bleu électrique** `#3B5BFF` | ce sur quoi on **agit** — liens, interrupteurs, focus | `--accent-interactive*` |
+
+Le test avant d'employer l'un ou l'autre : *est-ce que ça décrit quelque chose
+qui EST, ou quelque chose qu'on FAIT ?* Un interrupteur allumé n'est pas un
+statut — il porte donc le bleu.
+
+Pour changer l'un des deux : `--olive-500` ou `--blue-500` en couche 1.
+
 ### Changer la couleur d'un statut
 `2-semantic.css`, bloc « STATUTS » :
 - `--status-ok-ink` / `--status-ok-surface` : « Inscrit » (vert olive)

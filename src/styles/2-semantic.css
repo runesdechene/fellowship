@@ -42,7 +42,11 @@
   /* Grands titres posés au-dessus des blocs. Version pâle = var(--brown-250). */
   --ink-section: var(--brown-800);
   --ink-total: var(--brown-600); /* le grand total de saison */
-  --ink-link: var(--blue-500); /* « Tout voir » — la seule couleur froide */
+  /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
+     acquis, le bleu dit une commande — les deux ne se croisent jamais. */
+  --accent-interactive: var(--blue-500);
+  --accent-interactive-surface: var(--blue-100);
+  --ink-link: var(--accent-interactive);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -275,7 +279,8 @@
   --radius-control: var(--round-12);
   --field-gap: var(--space-6);
   --fields-gap: var(--space-16);
-  --focus-ring: var(--brown-400);
+  --focus-ring: var(--accent-interactive);
+  --toggle-on-surface: var(--accent-interactive);
   --required-ink: var(--status-pending-ink);
   --dropzone-border: var(--brown-250);
 
