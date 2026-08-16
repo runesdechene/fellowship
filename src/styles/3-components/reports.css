@@ -5,19 +5,21 @@
    Utilisé par : src/features/dashboard/ReportsSection.tsx
    -------------------------------------------------------------------------- */
 
-/* Tous les bilans sont ici : il n'existe pas d'écran d'historique. La rangée
-   passe à la ligne au lieu de défiler ou d'être coupée. */
+/* Tous les bilans sont ici : il n'existe pas d'écran d'historique. Ils passent
+   à la ligne au lieu de défiler ou d'être coupés.
+
+   Une GRILLE, pas un flex : en flex, les cartes de la dernière ligne
+   s'étireraient pour combler le vide — une carte seule prendrait toute la
+   largeur. Avec `auto-fill`, les colonnes vides restent en place et une carte
+   isolée garde exactement la largeur des autres. */
 .reports {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--report-min-width), 1fr));
   gap: var(--report-gap);
 }
 
-/* Les cartes s'ajustent à leur contenu et peuvent se resserrer : elles ne
-   dépassent jamais de la ligne. */
 .report {
   display: flex;
-  flex: 0 1 auto;
   align-items: stretch;
   min-width: 0;
   height: var(--report-height);
@@ -54,6 +56,8 @@
 .report__name {
   font: var(--type-report-name);
   color: var(--ink-title);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

@@ -106,7 +106,8 @@ sans toucher aux autres.
 
 ### Interface plus dense / plus aérée
 `2-semantic.css` → `--gap-section` (entre les grands blocs),
-`--page-padding-left` / `--page-padding-top` (marges du panneau),
+`--page-gutter` / `--page-padding-top` (marges du panneau),
+`--page-max-width` (largeur de la colonne centrée),
 `--card-padding` (intérieur des cartes).
 
 ### Changer la police

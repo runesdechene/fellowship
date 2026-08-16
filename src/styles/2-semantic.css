@@ -158,9 +158,10 @@
   --sidebar-collapse-padding-top: 0px;
   --sidebar-collapse-padding-bottom: 0px;
 
-  /* Marges intérieures du grand panneau */
-  --page-padding-left: var(--space-70);
-  --page-padding-right: var(--space-32);
+  /* La colonne de contenu est centrée dans le panneau. La gouttière est la
+     marge minimale de chaque côté quand la fenêtre devient trop étroite. */
+  --page-gutter: var(--space-32);
+  --page-max-width: calc(var(--shell-content-width) + 2 * var(--page-gutter));
   --page-padding-top: var(--space-51);
 
   /* Respiration verticale entre les grands blocs */
@@ -181,7 +182,6 @@
 
   /* Barre du haut : elle flotte au-dessus du contenu, comme sur la maquette */
   --topbar-top: var(--space-17);
-  --topbar-right: var(--space-32);
   --topbar-gap: var(--space-12);
   --topbar-control-height: 42px;
 
@@ -213,6 +213,9 @@
      ====================================================================== */
   --report-height: var(--height-report);
   --report-thumb-width: var(--width-report-thumb);
+  /* Largeur plancher : les cartes s'étirent pour remplir leur ligne, et
+     passent à la suivante dès qu'elles descendraient sous cette valeur. */
+  --report-min-width: var(--width-report-min);
   --report-gap: var(--space-20); /* entre deux cartes */
   --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */
   --report-line-gap: var(--space-6); /* entre les trois lignes de texte */

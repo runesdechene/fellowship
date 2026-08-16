@@ -5,12 +5,19 @@
    Utilisé par : src/components/layout/Topbar.tsx
    -------------------------------------------------------------------------- */
 
+/* Elle partage la colonne centrée du contenu : son bord droit tombe donc
+   exactement sur celui des blocs, et non sur le bord du panneau. */
 .topbar {
   position: absolute;
   top: var(--topbar-top);
-  right: var(--topbar-right);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--topbar-gap);
+  width: 100%;
+  max-width: var(--page-max-width);
+  padding-right: var(--page-gutter);
 }

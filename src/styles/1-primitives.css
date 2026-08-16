@@ -165,4 +165,5 @@
   --width-avatar-list: 21px; /* les avatars d'amis, en pile */
   --height-report: 86px; /* une carte de bilan */
   --width-report-thumb: 60px; /* sa vignette d'affiche */
+  --width-report-min: 240px; /* en dessous, elle passe à la ligne */
 }

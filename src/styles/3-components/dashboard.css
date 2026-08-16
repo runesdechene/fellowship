@@ -3,9 +3,12 @@
    Utilisé par : src/features/dashboard/Dashboard.tsx
    -------------------------------------------------------------------------- */
 
+/* Une colonne de largeur fixe, centrée dans le panneau : tout le contenu de
+   la page partage le même axe, la barre du haut comprise. */
 .dashboard {
-  padding: var(--page-padding-top) var(--page-padding-right) var(--space-40)
-    var(--page-padding-left);
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
 }
 
 /* --- Accroche ------------------------------------------------------------- */
@@ -47,13 +50,6 @@
   margin-bottom: var(--gap-section-title);
   font: var(--type-section-title);
   color: var(--ink-section);
-}
-
-/* Bloc qui occupe toute la largeur disponible du panneau, et non la colonne
-   de 918 px : la rangée de bilans a besoin de la place pour tenir sur une
-   ligne sans être coupée. */
-.dashboard__section--wide {
-  width: auto;
 }
 
 /* Variante : le titre est suivi d'un chiffre de synthèse. Les deux forment un

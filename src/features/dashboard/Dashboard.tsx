@@ -56,7 +56,7 @@ export function Dashboard() {
       )}
 
       {reports.length > 0 && (
-        <section className="dashboard__section dashboard__section--wide">
+        <section className="dashboard__section">
           <div className="dashboard__section-head">
             <h2 className="dashboard__section-title">Mes bilans</h2>
             {seasonNet !== null && (
