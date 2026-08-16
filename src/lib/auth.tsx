@@ -92,10 +92,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle()
     setPerson((personRow as UserRow) ?? null)
 
+    // Le TRI est indispensable : sans lui, Postgres rend les lignes dans un
+    // ordre arbitraire qui peut changer d'un appel à l'autre. Comme l'acteur
+    // par défaut est « le premier de la liste » et que l'identité est
+    // rechargée plusieurs fois par Supabase, l'app basculait silencieusement
+    // d'une enseigne à l'autre — et le tableau de bord se vidait tout seul.
     const { data: memberships } = await supabase
       .from('memberships')
-      .select('entities(*)')
+      .select('created_at, entities(*)')
       .eq('user_actor_id', authUid)
+      .order('created_at', { ascending: true })
     const rows = (memberships ?? []) as unknown as Array<{ entities: EntityRow | null }>
     setEntities(rows.map((r) => r.entities).filter((e): e is EntityRow => Boolean(e)))
   }, [])
@@ -127,6 +133,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => actors.find((a) => a.id === actorId) ?? actors[0] ?? null,
     [actors, actorId],
   )
+
+  // Une fois l'acteur résolu, on le grave : la prochaine visite reprendra le
+  // même, quoi qu'il arrive à l'ordre des enseignes.
+  useEffect(() => {
+    if (actor && !actorId) writeStoredActorId(actor.id)
+  }, [actor, actorId])
 
   const switchActor = useCallback((id: string) => {
     setActorId(id)

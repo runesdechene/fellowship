@@ -303,7 +303,7 @@
       "source_file": "src\\components\\layout\\Topbar.tsx",
       "source_location": "L1",
       "id": "src_components_layout_topbar_tsx",
-      "community": 21,
+      "community": 20,
       "norm_label": "topbar.tsx"
     },
     {
@@ -312,7 +312,7 @@
       "source_file": "src\\components\\layout\\Topbar.tsx",
       "source_location": "L5",
       "id": "topbar_topbar",
-      "community": 21,
+      "community": 20,
       "norm_label": "topbar()"
     },
     {
@@ -348,7 +348,7 @@
       "source_file": "src\\components\\ui\\Button.tsx",
       "source_location": "L1",
       "id": "src_components_ui_button_tsx",
-      "community": 22,
+      "community": 21,
       "norm_label": "button.tsx"
     },
     {
@@ -357,7 +357,7 @@
       "source_file": "src\\components\\ui\\Button.tsx",
       "source_location": "L17",
       "id": "button_button",
-      "community": 22,
+      "community": 21,
       "norm_label": "button()"
     },
     {
@@ -366,7 +366,7 @@
       "source_file": "src\\components\\ui\\Chip.tsx",
       "source_location": "L1",
       "id": "src_components_ui_chip_tsx",
-      "community": 23,
+      "community": 22,
       "norm_label": "chip.tsx"
     },
     {
@@ -375,7 +375,7 @@
       "source_file": "src\\components\\ui\\Chip.tsx",
       "source_location": "L12",
       "id": "chip_chip",
-      "community": 23,
+      "community": 22,
       "norm_label": "chip()"
     },
     {
@@ -384,25 +384,16 @@
       "source_file": "src\\features\\dashboard\\ActionBanner.tsx",
       "source_location": "L1",
       "id": "src_features_dashboard_actionbanner_tsx",
-      "community": 19,
+      "community": 23,
       "norm_label": "actionbanner.tsx"
-    },
-    {
-      "label": "readDismissed()",
-      "file_type": "code",
-      "source_file": "src\\features\\dashboard\\ActionBanner.tsx",
-      "source_location": "L8",
-      "id": "actionbanner_readdismissed",
-      "community": 19,
-      "norm_label": "readdismissed()"
     },
     {
       "label": "ActionBanner()",
       "file_type": "code",
       "source_file": "src\\features\\dashboard\\ActionBanner.tsx",
-      "source_location": "L22",
+      "source_location": "L14",
       "id": "actionbanner_actionbanner",
-      "community": 19,
+      "community": 23,
       "norm_label": "actionbanner()"
     },
     {
@@ -753,7 +744,7 @@
       "source_file": "src\\pages\\Login.tsx",
       "source_location": "L1",
       "id": "src_pages_login_tsx",
-      "community": 20,
+      "community": 19,
       "norm_label": "login.tsx"
     },
     {
@@ -762,7 +753,7 @@
       "source_file": "src\\pages\\Login.tsx",
       "source_location": "L19",
       "id": "login_handleemail",
-      "community": 20,
+      "community": 19,
       "norm_label": "handleemail()"
     },
     {
@@ -771,7 +762,7 @@
       "source_file": "src\\pages\\Login.tsx",
       "source_location": "L32",
       "id": "login_handlecode",
-      "community": 20,
+      "community": 19,
       "norm_label": "handlecode()"
     },
     {
@@ -2298,19 +2289,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\dashboard\\ActionBanner.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_src": "src_features_dashboard_actionbanner_tsx",
-      "_tgt": "actionbanner_readdismissed",
-      "source": "src_features_dashboard_actionbanner_tsx",
-      "target": "actionbanner_readdismissed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src\\features\\dashboard\\ActionBanner.tsx",
-      "source_location": "L22",
+      "source_location": "L14",
       "weight": 1.0,
       "_src": "src_features_dashboard_actionbanner_tsx",
       "_tgt": "actionbanner_actionbanner",
