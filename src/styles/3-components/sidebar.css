@@ -41,8 +41,11 @@
   text-align: left;
 }
 
+/* Le nom puis le type de compte, l'un SOUS l'autre */
 .sidebar__account-identity {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   min-width: 0;
 }
 

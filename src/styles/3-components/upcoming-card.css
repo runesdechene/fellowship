@@ -41,8 +41,11 @@
   background: var(--dot-pending);
 }
 
+/* Le nom et le compte à rebours, puis la ville en dessous */
 .upcoming__identity {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
   min-width: 0;
 }
 
