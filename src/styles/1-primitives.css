@@ -62,15 +62,19 @@
   --clay-500: #c0642a;
 
   /* ---------------------------------------------------------------------
-     PALETTE — BLEU ÉLECTRIQUE
+     PALETTE — BLEU-VIOLET ÉLECTRIQUE
      La SECONDE couleur d'accent de Fellowship, et la seule froide.
 
      Partage du travail avec l'olive, à ne pas mélanger :
-       olive  = un ÉTAT acquis (inscrit, acompte versé, bénéfice)
-       bleu   = ce sur quoi on AGIT (liens, interrupteurs, focus)
+       olive     = un ÉTAT acquis (inscrit, acompte versé, bénéfice)
+       électrique = ce sur quoi on AGIT (liens, interrupteurs, focus)
+
+     Le fond clair n'est pas choisi à l'œil : c'est la même teinte (241°) et
+     la même saturation (68 %) que le trait, montée en clarté. Les deux se
+     lisent donc comme une seule couleur.
      --------------------------------------------------------------------- */
-  --blue-100: #e6e9ff; /* fond très clair, pour poser du bleu sur du crème */
-  --blue-500: #3b5bff;
+  --electric-100: #e6e5fa; /* fond, pour poser de l'électrique sur du crème */
+  --electric-500: #5d5ae0;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLE

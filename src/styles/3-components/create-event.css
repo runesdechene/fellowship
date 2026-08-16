@@ -102,15 +102,15 @@
 }
 
 .tag--on {
-  background: var(--status-ok-surface);
-  color: var(--status-ok-ink);
+  background: var(--tag-on-surface);
+  color: var(--tag-on-ink);
 }
 
-/* La principale se distingue par le CONTRASTE, comme le bouton d'action :
-   c'est elle qui classera l'événement dans l'annuaire. */
+/* La principale — celle qui classera l'événement — est la version pleine de
+   la même couleur : c'est le même geste, poussé d'un cran. */
 .tag--first {
-  background: var(--action-surface);
-  color: var(--action-ink);
+  background: var(--tag-first-surface);
+  color: var(--tag-first-ink);
 }
 
 /* --- Le compagnon --------------------------------------------------------- */

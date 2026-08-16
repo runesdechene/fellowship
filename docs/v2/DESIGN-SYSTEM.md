@@ -145,13 +145,16 @@ Fellowship a **deux** accents, et ils ne se croisent jamais :
 | Couleur | Rôle | Tokens |
 |---|---|---|
 | **Olive** `#84AA3C` | un **état acquis** — inscrit, acompte versé, bénéfice | `--status-ok-*` |
-| **Bleu électrique** `#3B5BFF` | ce sur quoi on **agit** — liens, interrupteurs, focus | `--accent-interactive*` |
+| **Bleu-violet électrique** `#5D5AE0` | ce sur quoi on **agit** — liens, interrupteurs, focus, catégories choisies | `--accent-interactive*` |
 
 Le test avant d'employer l'un ou l'autre : *est-ce que ça décrit quelque chose
 qui EST, ou quelque chose qu'on FAIT ?* Un interrupteur allumé n'est pas un
-statut — il porte donc le bleu.
+statut, une catégorie qu'on coche non plus — les deux portent l'électrique.
 
-Pour changer l'un des deux : `--olive-500` ou `--blue-500` en couche 1.
+Pour changer l'un des deux : `--olive-500` ou `--electric-500` en couche 1.
+Le fond clair `--electric-100` a été calculé à la **même teinte et la même
+saturation** que le trait : si tu changes l'un, recalcule l'autre plutôt que
+de le choisir à l'œil, sinon les deux ne se liront plus comme une couleur.
 
 ### Changer la couleur d'un statut
 `2-semantic.css`, bloc « STATUTS » :

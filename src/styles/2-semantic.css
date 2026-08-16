@@ -44,8 +44,8 @@
   --ink-total: var(--brown-600); /* le grand total de saison */
   /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
      acquis, le bleu dit une commande — les deux ne se croisent jamais. */
-  --accent-interactive: var(--blue-500);
-  --accent-interactive-surface: var(--blue-100);
+  --accent-interactive: var(--electric-500);
+  --accent-interactive-surface: var(--electric-100);
   --ink-link: var(--accent-interactive);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
@@ -259,6 +259,14 @@
   /* =========================================================================
      CRÉATION D'ÉVÉNEMENT — « l'atelier »
      ====================================================================== */
+  /* Catégories : choisir n'est pas un état acquis, c'est une action — donc le
+     bleu. La principale est la version pleine de la même couleur, pas une
+     autre couleur : on voit qu'elles appartiennent au même geste. */
+  --tag-on-surface: var(--accent-interactive-surface);
+  --tag-on-ink: var(--accent-interactive);
+  --tag-first-surface: var(--accent-interactive);
+  --tag-first-ink: var(--cream-50);
+
   --create-mate-width: 360px;
   --create-columns-gap: var(--space-48);
   --create-poster-height: 172px;
