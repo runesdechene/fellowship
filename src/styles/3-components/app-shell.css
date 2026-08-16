@@ -17,10 +17,10 @@
   --shell-sidebar-width: var(--shell-sidebar-width-collapsed);
   /* La marge latérale ne change PAS : les pastilles gardent leur bord gauche
      au même endroit, seule la colonne se resserre autour. */
-  --sidebar-logo-top: var(--space-88); /* dégage le bouton de repli */
+  --sidebar-logo-top: var(--space-80); /* dégage le bouton de repli */
   --sidebar-collapse-right: calc(50% - var(--sidebar-collapse-size) / 2);
   --sidebar-collapse-padding-top: var(--space-10);
-  --sidebar-collapse-padding-bottom: var(--space-32);
+  --sidebar-collapse-padding-bottom: var(--space-26);
 }
 
 .app-shell__main {
