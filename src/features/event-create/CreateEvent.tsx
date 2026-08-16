@@ -37,17 +37,22 @@ export function CreateEvent() {
   const blocker = blockingReason(draft, step)
   const similar = useSimilarEvents(draft.name, step === 0 && !draft.isPrivate)
 
+  // Le sens de la marche : il décide de quel côté l'étape suivante arrive.
+  const [direction, setDirection] = useState<'next' | 'back'>('next')
+
   const goNext = useCallback(() => {
     if (blocker) {
       setShowBlocker(true)
       return
     }
     setShowBlocker(false)
+    setDirection('next')
     setStep((current) => Math.min(current + 1, STEPS.length - 1))
   }, [blocker])
 
   const goBack = useCallback(() => {
     setShowBlocker(false)
+    setDirection('back')
     setStep((current) => Math.max(current - 1, 0))
   }, [])
 
@@ -118,12 +123,18 @@ export function CreateEvent() {
 
       <div className="create__body">
         <div>
-          {step === 0 && <StepIdentity draft={draft} update={update} />}
-          {step === 1 && <StepPlace draft={draft} update={update} />}
-          {step === 2 && <StepTags draft={draft} tags={tags} onToggle={toggleTag} />}
-          {step === 3 && (
-            <StepDetails draft={draft} update={update} poster={poster} onPoster={setPoster} />
-          )}
+          {/* La clé fait rejouer l'animation à chaque changement d'étape. */}
+          <div
+            key={step}
+            className={direction === 'back' ? 'create__step create__step--back' : 'create__step'}
+          >
+            {step === 0 && <StepIdentity draft={draft} update={update} />}
+            {step === 1 && <StepPlace draft={draft} update={update} />}
+            {step === 2 && <StepTags draft={draft} tags={tags} onToggle={toggleTag} />}
+            {step === 3 && (
+              <StepDetails draft={draft} update={update} poster={poster} onPoster={setPoster} />
+            )}
+          </div>
 
           <div className="create__actions">
             {step > 0 && <Button onClick={goBack}>Retour</Button>}
@@ -152,7 +163,9 @@ export function CreateEvent() {
           {error && <p className="create__blocker">{error}</p>}
         </div>
 
-        <aside className="mate">
+        {/* La clé ne change que si le compagnon change de NATURE : la fiche
+            se met à jour sur place, elle ne se recrée pas à chaque question. */}
+        <aside className="mate" key={step === 0 ? 'doublons' : 'fiche'}>
           {step === 0 && similar.length > 0 ? (
             <DuplicateWarning similar={similar} />
           ) : (
