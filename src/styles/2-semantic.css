@@ -22,8 +22,8 @@
   --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
   --surface-card: var(--cream-200); /* cartes posées sur le panneau */
   --surface-raised: var(--cream-50); /* la carte de compte, posée SUR le crème */
-  --surface-nav-active: var(--cream-400); /* l'entrée de menu active */
-  --surface-nav-hover: var(--cream-300); /* survol : un cran plus léger que l'actif */
+  --surface-nav-active: var(--stone-200); /* l'entrée de menu active */
+  --surface-nav-hover: var(--stone-100); /* survol : même teinte, un cran plus clair */
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-150); /* mois qui portent au moins une date */
