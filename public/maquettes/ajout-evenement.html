@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajouter une date — trois directions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =====================================================================
+         Les tokens sont RECOPIÉS depuis src/styles/1-primitives.css et
+         2-semantic.css. C'est une maquette : elle doit tenir seule, ouverte
+         sans l'app. Si un token change dans l'app après validation, c'est
+         l'app qui fait foi, pas ce fichier.
+         ===================================================================== */
+      :root {
+        --cream-50: #fffbf5;
+        --cream-100: #f9f6ef;
+        --cream-150: #f6f2e9;
+        --cream-200: #f3f0e9;
+        --cream-300: #ebe6dd;
+        --stone-200: hsl(40 14% 88%);
+        --brown-200: #ebe3e3;
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+        --olive-100: #e8f0d8;
+        --olive-500: #84aa3c;
+        --clay-100: #f6e7dc;
+        --clay-500: #c0642a;
+        --blue-500: #3b5bff;
+
+        --family: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-200);
+        --surface-control: var(--cream-100);
+        --ink-title: var(--brown-700);
+        --ink-strong: var(--brown-900);
+        --ink-soft: var(--brown-400);
+        --ink-section: var(--brown-800);
+        --ink-total: var(--brown-600);
+
+        --radius-panel: 20px;
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-sm: 8px;
+        --radius-bar: 8px;
+
+        --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-app);
+        color: var(--ink-title);
+        font-family: var(--family);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 64px 32px 96px;
+        display: flex;
+        flex-direction: column;
+        gap: 72px;
+      }
+
+      /* --- En-tête du document ------------------------------------------ */
+      .doc-head {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 68ch;
+      }
+
+      .doc-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .doc-title {
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        color: var(--ink-section);
+        text-wrap: balance;
+      }
+
+      .doc-lede {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-total);
+      }
+
+      .doc-note {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        padding: 16px 20px;
+        background: var(--cream-150);
+        border-radius: var(--radius-nav);
+      }
+
+      /* --- Une direction ------------------------------------------------- */
+      .direction {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .direction__head {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 72ch;
+      }
+
+      .direction__name {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-section);
+      }
+
+      .direction__thesis {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.6;
+        color: var(--ink-total);
+      }
+
+      .verdict {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      .verdict > div {
+        padding: 14px 16px;
+        border-radius: var(--radius-nav);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.55;
+      }
+
+      .verdict__pro {
+        background: var(--olive-100);
+        color: #4f6a1f;
+      }
+
+      .verdict__con {
+        background: var(--clay-100);
+        color: #93441a;
+      }
+
+      /* =====================================================================
+         LE PANNEAU — reproduit l'écran principal de l'app.
+         La colonne de gauche ne change pas, elle n'est pas redessinée ici.
+         ===================================================================== */
+      .panel {
+        background: var(--surface-panel);
+        border-radius: var(--radius-panel);
+        padding: 44px 48px 48px;
+        overflow: hidden;
+      }
+
+      /* Fil d'Ariane de sortie, commun aux trois directions */
+      .panel__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 36px;
+      }
+
+      .quit {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .screen-title {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-section);
+      }
+
+      /* --- Contrôles partagés -------------------------------------------- */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+
+      .field__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .field__label i {
+        font-style: normal;
+        color: var(--clay-500);
+      }
+
+      .input {
+        height: 46px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        background: var(--surface-card);
+        border-radius: var(--radius-nav);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-title);
+      }
+
+      .input--empty {
+        color: var(--ink-soft);
+        font-weight: 400;
+      }
+
+      .input--tall {
+        height: auto;
+        padding: 14px 16px;
+        align-items: flex-start;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 46px;
+        padding: 0 22px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-control);
+        color: var(--ink-strong);
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .btn--action {
+        background: var(--brown-900);
+        color: var(--cream-50);
+      }
+
+      .btn--quiet {
+        background: none;
+        color: var(--ink-soft);
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .actions__spacer {
+        flex: 1;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 13px;
+        border-radius: var(--radius-sm);
+        font-size: 11px;
+        font-weight: 600;
+        background: var(--cream-300);
+        color: var(--ink-soft);
+      }
+
+      .chip--on {
+        background: var(--olive-100);
+        color: #4f6a1f;
+        font-weight: 800;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 16px;
+      }
+
+      /* =====================================================================
+         A — LE DÉPLIANT
+         ===================================================================== */
+      .fold {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .fold__step {
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .fold__num {
+        flex: none;
+        width: 26px;
+        height: 26px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: var(--stone-200);
+        color: var(--ink-soft);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .fold__step--done .fold__num {
+        background: var(--olive-500);
+        color: var(--cream-50);
+      }
+
+      .fold__label {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .fold__step--todo .fold__label {
+        color: var(--ink-soft);
+      }
+
+      .fold__summary {
+        margin-left: auto;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+        text-align: right;
+      }
+
+      .fold__step--open {
+        display: block;
+        background: var(--surface-card);
+        padding: 26px 28px 28px;
+      }
+
+      .fold__open-head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .fold__open-head .fold__num {
+        background: var(--brown-900);
+        color: var(--cream-50);
+      }
+
+      .fold__open-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      /* =====================================================================
+         B — L'ATELIER
+         ===================================================================== */
+      .studio {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 48px;
+        align-items: start;
+      }
+
+      .studio__question {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        color: var(--ink-section);
+        margin-bottom: 8px;
+      }
+
+      .studio__hint {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-soft);
+        margin-bottom: 28px;
+      }
+
+      .studio__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* La fiche en construction */
+      .preview {
+        position: sticky;
+        top: 24px;
+      }
+
+      .preview__label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin-bottom: 12px;
+      }
+
+      .preview__card {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        overflow: hidden;
+      }
+
+      .preview__poster {
+        height: 180px;
+        display: grid;
+        place-items: center;
+        background: var(--cream-300);
+        color: var(--ink-soft);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .preview__body {
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .preview__name {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink-title);
+        letter-spacing: -0.01em;
+      }
+
+      .preview__meta {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .preview__meta b {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .preview__pending {
+        color: var(--brown-250);
+      }
+
+      .preview__tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 2px;
+      }
+
+      /* =====================================================================
+         C — LA FRISE
+         ===================================================================== */
+      .frieze {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        margin-bottom: 44px;
+      }
+
+      .frieze__col {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .frieze__bar {
+        width: 100%;
+        border-radius: var(--radius-bar);
+        background: var(--cream-150);
+        height: 30px;
+      }
+
+      .frieze__col--done .frieze__bar {
+        background: var(--olive-100);
+        height: 52px;
+      }
+
+      .frieze__col--now .frieze__bar {
+        background: var(--brown-900);
+        height: 74px;
+      }
+
+      .frieze__name {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .frieze__col--now .frieze__name {
+        color: var(--ink-title);
+      }
+
+      .ask {
+        max-width: 34ch;
+        font-size: 40px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.08;
+        color: var(--ink-section);
+        text-wrap: balance;
+      }
+
+      .ask + .studio__hint {
+        margin-top: 14px;
+        margin-bottom: 34px;
+        font-size: 15px;
+      }
+
+      .frieze-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        max-width: 640px;
+      }
+
+      /* --- Recommandation finale ----------------------------------------- */
+      .verdict-final {
+        background: var(--surface-panel);
+        border-radius: var(--radius-panel);
+        padding: 36px 40px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .verdict-final h2 {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--ink-section);
+      }
+
+      .verdict-final p {
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.65;
+        color: var(--ink-total);
+        max-width: 74ch;
+      }
+
+      .verdict-final b {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="doc-head">
+        <p class="doc-eyebrow">Fellowship V2 · proposition</p>
+        <h1 class="doc-title">Ajouter une date — trois directions</h1>
+        <p class="doc-lede">
+          Même contenu dans les trois : les quatre étapes de la modale actuelle — l'événement,
+          où et quand, les catégories, les détails. Ce qui change, c'est la manière dont
+          l'écran te fait avancer. Chaque maquette montre la même étape, « Où et quand ? »,
+          pour qu'elles soient comparables.
+        </p>
+        <p class="doc-note">
+          Ce sont les tokens réels de la V2 — mêmes couleurs, même police, mêmes rayons.
+          Ce que tu vois ici est ce qui sortira. La colonne de gauche ne change pas et
+          n'est pas redessinée.
+        </p>
+      </header>
+
+      <!-- ============================ A ============================ -->
+      <section class="direction">
+        <div class="direction__head">
+          <h2 class="direction__name">Le dépliant</h2>
+          <p class="direction__thesis">
+            Les quatre étapes sont là dès le début, empilées. Une seule est ouverte ;
+            les précédentes se replient en une ligne de résumé qu'on peut rouvrir d'un clic.
+            Aucun bouton « retour » : la page entière est la progression.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip">Brouillon enregistré</span>
+          </div>
+          <h3 class="screen-title" style="margin-bottom: 28px">Ajouter un événement</h3>
+
+          <div class="fold">
+            <div class="fold__step fold__step--done">
+              <span class="fold__num">✓</span>
+              <span class="fold__label">L'événement</span>
+              <span class="fold__summary">Fête médiévale de Provins 2026 · public</span>
+            </div>
+
+            <div class="fold__step fold__step--open">
+              <div class="fold__open-head">
+                <span class="fold__num">2</span>
+                <span class="fold__open-title">Où et quand ?</span>
+              </div>
+
+              <div class="field" style="margin-bottom: 16px">
+                <span class="field__label">Adresse ou lieu</span>
+                <span class="input input--empty">Commence à taper, on complète le reste</span>
+              </div>
+
+              <div class="grid-3" style="margin-bottom: 16px">
+                <div class="field">
+                  <span class="field__label">Ville <i>*</i></span>
+                  <span class="input">Provins</span>
+                </div>
+                <div class="field">
+                  <span class="field__label">Département <i>*</i></span>
+                  <span class="input">77</span>
+                </div>
+                <div class="field">
+                  <span class="field__label">Début <i>*</i></span>
+                  <span class="input">13 juin 2026</span>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <span class="field__label">Fin</span>
+                  <span class="input">14 juin 2026</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="btn btn--action">Continuer</span>
+                <span class="btn btn--quiet">Passer cette étape</span>
+              </div>
+            </div>
+
+            <div class="fold__step fold__step--todo">
+              <span class="fold__num">3</span>
+              <span class="fold__label">Catégories</span>
+            </div>
+
+            <div class="fold__step fold__step--todo">
+              <span class="fold__num">4</span>
+              <span class="fold__label">Détails</span>
+              <span class="fold__summary">facultatif</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <div class="verdict__pro">
+            <b>Ce que ça gagne</b> — on voit d'emblée ce qui reste à faire, et combien
+            c'est court. Revenir sur une étape est un clic, pas une navigation. Rien ne
+            disparaît jamais de l'écran.
+          </div>
+          <div class="verdict__con">
+            <b>Ce que ça coûte</b> — l'écran bouge beaucoup quand une étape se replie et
+            que la suivante s'ouvre. Et l'étape 4, longue, fera défiler la page.
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ B ============================ -->
+      <section class="direction">
+        <div class="direction__head">
+          <h2 class="direction__name">L'atelier</h2>
+          <p class="direction__thesis">
+            À gauche la question, à droite la fiche telle qu'elle apparaîtra dans
+            l'annuaire, qui se remplit à mesure que tu tapes. Tu ne remplis pas un
+            formulaire, tu fabriques un objet et tu le vois se former.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip">Étape 2 sur 4</span>
+          </div>
+
+          <div class="studio">
+            <div>
+              <h3 class="studio__question">Où et quand ?</h3>
+              <p class="studio__hint">
+                La ville et la date de début suffisent. Le reste peut attendre.
+              </p>
+
+              <div class="studio__fields">
+                <div class="field">
+                  <span class="field__label">Adresse ou lieu</span>
+                  <span class="input input--empty">Commence à taper, on complète le reste</span>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Ville <i>*</i></span>
+                    <span class="input">Provins</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Département <i>*</i></span>
+                    <span class="input">77</span>
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div class="field">
+                    <span class="field__label">Début <i>*</i></span>
+                    <span class="input">13 juin 2026</span>
+                  </div>
+                  <div class="field">
+                    <span class="field__label">Fin</span>
+                    <span class="input">14 juin 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <span class="btn">Retour</span>
+                <span class="btn btn--action">Continuer</span>
+              </div>
+            </div>
+
+            <aside class="preview">
+              <p class="preview__label">Ce que verront les exposants</p>
+              <div class="preview__card">
+                <div class="preview__poster">Affiche · étape 4</div>
+                <div class="preview__body">
+                  <span class="preview__name">Fête médiévale de Provins 2026</span>
+                  <span class="preview__meta">
+                    Du <b>13</b> au <b>14 juin</b> · <b>Provins</b> (77)
+                  </span>
+                  <span class="preview__meta preview__pending">
+                    Catégories à venir · étape 3
+                  </span>
+                  <div class="preview__tags">
+                    <span class="chip">Public</span>
+                    <span class="chip">Créé par toi</span>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <div class="verdict__pro">
+            <b>Ce que ça gagne</b> — on comprend à quoi sert chaque champ, parce qu'on
+            voit où il atterrit. La fiche vide en début de parcours dit exactement ce
+            qu'il reste à remplir, sans le formuler.
+          </div>
+          <div class="verdict__con">
+            <b>Ce que ça coûte</b> — la moitié droite est presque vide au début, ce qui
+            peut décourager. Et elle réclame de dessiner la fiche de l'annuaire avant
+            que l'écran Explorer n'existe.
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ C ============================ -->
+      <section class="direction">
+        <div class="direction__head">
+          <h2 class="direction__name">La frise</h2>
+          <p class="direction__thesis">
+            Une question par écran, en grand, avec beaucoup d'air. La progression reprend
+            le langage de la frise des mois du tableau de bord : quatre barres qui
+            grandissent au lieu de douze. C'est la plus proche de ce qu'on a déjà construit.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel__top">
+            <span class="quit">← Tableau de bord</span>
+            <span class="chip">Brouillon enregistré</span>
+          </div>
+
+          <div class="frieze">
+            <div class="frieze__col frieze__col--done">
+              <span class="frieze__bar"></span>
+              <span class="frieze__name">L'événement</span>
+            </div>
+            <div class="frieze__col frieze__col--now">
+              <span class="frieze__bar"></span>
+              <span class="frieze__name">Où et quand</span>
+            </div>
+            <div class="frieze__col">
+              <span class="frieze__bar"></span>
+              <span class="frieze__name">Catégories</span>
+            </div>
+            <div class="frieze__col">
+              <span class="frieze__bar"></span>
+              <span class="frieze__name">Détails</span>
+            </div>
+          </div>
+
+          <h3 class="ask">Où et quand se passe cet événement ?</h3>
+          <p class="studio__hint">
+            La ville et la date de début suffisent pour l'enregistrer. Tu pourras compléter
+            plus tard.
+          </p>
+
+          <div class="frieze-fields">
+            <div class="field">
+              <span class="field__label">Adresse ou lieu</span>
+              <span class="input input--empty">Commence à taper, on complète le reste</span>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <span class="field__label">Ville <i>*</i></span>
+                <span class="input">Provins</span>
+              </div>
+              <div class="field">
+                <span class="field__label">Département <i>*</i></span>
+                <span class="input">77</span>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <span class="field__label">Début <i>*</i></span>
+                <span class="input">13 juin 2026</span>
+              </div>
+              <div class="field">
+                <span class="field__label">Fin</span>
+                <span class="input">14 juin 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <span class="btn">Retour</span>
+            <span class="btn btn--action">Continuer</span>
+            <span class="actions__spacer"></span>
+            <span class="btn btn--quiet">Enregistrer et finir plus tard</span>
+          </div>
+        </div>
+
+        <div class="verdict">
+          <div class="verdict__pro">
+            <b>Ce que ça gagne</b> — c'est la plus calme des trois, et la plus cohérente
+            avec le tableau de bord : la frise y est déjà le motif qui dit « voilà où tu
+            en es ». Une seule chose à faire à l'écran, jamais deux.
+          </div>
+          <div class="verdict__con">
+            <b>Ce que ça coûte</b> — on ne voit pas les autres étapes tant qu'on n'y est
+            pas. Et réutiliser la frise pour deux choses différentes — les mois, les
+            étapes — peut brouiller son sens.
+          </div>
+        </div>
+      </section>
+
+      <section class="verdict-final">
+        <h2>Ce que je choisirais</h2>
+        <p>
+          <b>La frise</b>, pour une raison qui n'est pas graphique : c'est la seule des
+          trois qui ne demande rien de neuf. Elle réutilise un motif que tu as déjà validé,
+          elle ne dépend d'aucun écran qui n'existe pas encore, et elle tient sur un
+          téléphone sans être repensée.
+        </p>
+        <p>
+          <b>L'atelier</b> est la plus séduisante, et je la garderais en tête pour plus
+          tard — mais elle suppose de dessiner la fiche de l'annuaire, donc de trancher
+          l'écran Explorer avant celui-ci. C'est prendre les sujets dans le désordre.
+        </p>
+        <p>
+          <b>Le dépliant</b> est le plus malin sur le papier et le plus agité à l'usage :
+          l'écran bouge à chaque étape franchie, et l'étape 4 casse le format.
+        </p>
+        <p>
+          Une chose vaut pour les trois, et elle compte plus que le choix : <b>le brouillon
+          s'enregistre</b>. Un exposant qui ferme l'onglet au milieu ne doit rien perdre.
+          C'est ce qu'une modale ne sait pas faire, et la vraie raison de sortir de la modale.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
