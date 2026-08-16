@@ -129,7 +129,9 @@ Si la taille voulue n'existe pas, l'ajouter d'abord en couche 1.
 `2-semantic.css`, bloc « GRAPHE DE SAISON » :
 - `--chart-bar-min` : hauteur d'une barre à zéro
 - `--chart-bar-max` : hauteur du mois le plus chargé
-- `--chart-column-width` / `--chart-column-gap` : largeur et écart des colonnes
+- `--chart-column-gap` : écart entre les colonnes (leur largeur n'est pas
+  réglable : la frise remplit toute la largeur du contenu et les douze mois
+  se la partagent également, comme les blocs du dessous)
 - `--chart-label-gap` : distance entre la barre et le nom du mois
 
 La hauteur de chaque barre est calculée entre ces deux bornes, proportionnellement

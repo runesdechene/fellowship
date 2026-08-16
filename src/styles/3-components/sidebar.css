@@ -38,7 +38,6 @@
   padding: var(--space-10);
   background: var(--surface-raised);
   border-radius: var(--radius-nav);
-  box-shadow: var(--shadow-raised);
   text-align: left;
 }
 
@@ -75,9 +74,9 @@
 }
 
 /* Au repos, l'entrée est collée à gauche et sans fond.
-   Active OU survolée, elle glisse vers la droite et le fond blanc apparaît :
-   le survol est un aperçu de l'état actif. Seuls l'icône et le libellé
-   se déplacent — la pastille de fond, elle, ne bouge pas. */
+   Active OU survolée, elle glisse vers la droite et un fond plus foncé
+   apparaît : le survol est un aperçu de l'état actif. Seuls l'icône et le
+   libellé se déplacent — la pastille de fond, elle, ne bouge pas. */
 .sidebar__item {
   display: flex;
   align-items: center;
@@ -88,11 +87,9 @@
   font: var(--type-nav);
   color: var(--ink-soft);
   background-color: transparent;
-  box-shadow: none;
   transition:
     background-color var(--sidebar-item-motion),
-    color var(--sidebar-item-motion),
-    box-shadow var(--sidebar-item-motion);
+    color var(--sidebar-item-motion);
 }
 
 .sidebar__item-icon,
@@ -103,12 +100,8 @@
 
 .sidebar__item:hover,
 .sidebar__item--active {
-  background-color: var(--surface-raised);
+  background-color: var(--surface-nav-active);
   color: var(--ink-title);
-}
-
-.sidebar__item--active {
-  box-shadow: var(--shadow-raised);
 }
 
 .sidebar__item:hover .sidebar__item-icon,

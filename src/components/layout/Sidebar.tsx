@@ -26,7 +26,8 @@ export function Sidebar() {
         <PanelRightOpen size={17} strokeWidth={1.75} />
       </button>
 
-      <img className="sidebar__logo" src="/logo.png" alt="Fellowship" />
+      {/* La marque seule — /logo.png est le lockup complet, réservé à la connexion */}
+      <img className="sidebar__logo" src="/icon.png" alt="Fellowship" />
 
       <button type="button" className="sidebar__account">
         <Avatar src={actor?.avatarUrl} name={actor?.label} size={35} />

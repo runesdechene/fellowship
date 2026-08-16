@@ -21,7 +21,8 @@
   --surface-app: var(--cream-200); /* fond général + colonne de gauche */
   --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
   --surface-card: var(--cream-200); /* cartes posées sur le panneau */
-  --surface-raised: var(--cream-50); /* compte, onglet actif : posé SUR le crème */
+  --surface-raised: var(--cream-50); /* la carte de compte, posée SUR le crème */
+  --surface-nav-active: var(--cream-400); /* l'entrée de menu active et survolée */
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-200); /* barres du graphe de saison */
@@ -35,8 +36,8 @@
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
   --ink-section: var(--brown-250); /* les grands titres posés au-dessus des blocs */
 
-  /* Relief : très discret, uniquement sur ce qui est « posé » sur le fond */
-  --shadow-raised: var(--shadow-soft);
+  /* Aucune ombre dans cette interface : les plans se distinguent par le
+     fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
 
   /* =========================================================================
      STATUTS — la seule couleur vive de l'interface
@@ -56,7 +57,7 @@
      ====================================================================== */
   --radius-panel: var(--round-20); /* le grand panneau */
   --radius-card: var(--round-15); /* cartes et boutons de la barre du haut */
-  --radius-nav: var(--round-10); /* compte + entrées de navigation */
+  --radius-nav: var(--round-12); /* compte + entrées de navigation */
   --radius-bar: var(--round-8); /* barres du graphe */
   --radius-chip: var(--round-8); /* pastilles de statut */
   --radius-round: var(--round-full); /* avatars, points */
@@ -152,7 +153,8 @@
      GRAPHE DE SAISON — les réglages du seul élément « dessiné »
      ====================================================================== */
   --chart-months: 12; /* nombre de mois affichés */
-  --chart-column-width: 61px;
+  /* Pas de largeur de colonne : la frise remplit toute la largeur du contenu
+     et les douze mois se la partagent également. Seul l'écart se règle. */
   --chart-column-gap: var(--space-8);
   --chart-bar-min: 15px; /* hauteur d'une barre à zéro */
   --chart-bar-max: 142px; /* hauteur du mois le plus chargé */

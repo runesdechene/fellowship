@@ -27,7 +27,6 @@
   height: var(--report-height);
   background: var(--surface-card);
   border-radius: var(--radius-report);
-  box-shadow: var(--shadow-raised);
   overflow: hidden;
   text-align: left;
 }
@@ -93,7 +92,6 @@
 /* --- Bilan pas encore rempli ---------------------------------------------- */
 .report--todo {
   background: transparent;
-  box-shadow: none;
 }
 
 .report--todo .report__body {

@@ -6,17 +6,21 @@
    Utilisé par : src/features/dashboard/SeasonChart.tsx
    -------------------------------------------------------------------------- */
 
+/* La frise occupe toute la largeur du contenu, comme les blocs du dessous :
+   les douze colonnes se partagent la place à parts égales. */
 .season-chart {
   display: flex;
   align-items: flex-end;
   gap: var(--chart-column-gap);
+  width: 100%;
 }
 
 .season-chart__column {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   align-items: center;
-  width: var(--chart-column-width);
+  min-width: 0;
 }
 
 .season-chart__bar {
