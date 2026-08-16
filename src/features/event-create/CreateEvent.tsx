@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
-import { ArrowLeft, Check, Save } from 'lucide-react'
+import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
 import { useAuth } from '@/lib/auth'
@@ -14,13 +14,13 @@ import { blockingReason, STEPS, useEventDraft, type EventDraft } from './useEven
 /** Le dépôt public des affiches. */
 const POSTER_BUCKET = 'event-images'
 
-/** Le temps que la confirmation reste affichée avant de redevenir une offre. */
-const SAVED_NOTICE_MS = 2400
+/** Le temps que la question « pour de bon ? » reste posée avant de s'effacer. */
+const CONFIRM_MS = 4000
 
 export function CreateEvent() {
   const go = useTransitionNavigate()
   const { actor, person } = useAuth()
-  const { draft, update, toggleTag, clear, save } = useEventDraft()
+  const { draft, update, toggleTag, clear, status } = useEventDraft()
   const tags = useTags()
 
   const [step, setStep] = useState(0)
@@ -28,7 +28,7 @@ export function CreateEvent() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showBlocker, setShowBlocker] = useState(false)
-  const [savedNotice, setSavedNotice] = useState(false)
+  const [confirmingQuit, setConfirmingQuit] = useState(false)
 
   // L'aperçu de l'affiche vient du navigateur, avant tout envoi. L'URL objet
   // doit être révoquée, sinon le fichier reste en mémoire.
@@ -59,26 +59,31 @@ export function CreateEvent() {
     transition('step-back', () => setStep((current) => Math.max(current - 1, 0)))
   }, [transition])
 
-  // La confirmation ne dure pas : passé quelques secondes le bouton redevient
-  // ce qu'il était, sinon il finirait par ne plus rien vouloir dire.
+  // La question posée ne reste pas armée indéfiniment : passé quelques
+  // secondes, un clic distrait ne doit plus pouvoir effacer le travail.
   useEffect(() => {
-    if (!savedNotice) return
-    const timer = setTimeout(() => setSavedNotice(false), SAVED_NOTICE_MS)
+    if (!confirmingQuit) return
+    const timer = setTimeout(() => setConfirmingQuit(false), CONFIRM_MS)
     return () => clearTimeout(timer)
-  }, [savedNotice])
+  }, [confirmingQuit])
 
-  const saveDraft = useCallback(() => {
-    if (save()) {
-      setError(null)
-      setSavedNotice(true)
+  /**
+   * Abandonner efface le brouillon — c'est le seul geste destructeur de
+   * l'écran, et le seul moyen de repartir d'une fiche vierge. Il demande
+   * donc confirmation, sauf s'il n'y a rien à perdre.
+   */
+  const abandon = useCallback(() => {
+    if (status === 'blank') {
+      go('/')
       return
     }
-    setSavedNotice(false)
-    setError(
-      "Le brouillon n'a pas pu être gardé : ce navigateur refuse le stockage. " +
-        "Termine l'événement maintenant, ou il sera perdu en fermant l'onglet.",
-    )
-  }, [save])
+    if (!confirmingQuit) {
+      setConfirmingQuit(true)
+      return
+    }
+    clear()
+    go('/')
+  }, [status, confirmingQuit, clear, go])
 
   async function submit() {
     if (!actor) return
@@ -135,32 +140,40 @@ export function CreateEvent() {
   return (
     <div className="create">
       <div className="create__top">
-        <button type="button" className="create__quit" onClick={() => go('/')}>
+        {/* Le seul geste qui détruit quelque chose : il demande donc deux fois. */}
+        <button
+          type="button"
+          className={confirmingQuit ? 'create__quit create__quit--armed' : 'create__quit'}
+          onClick={abandon}
+        >
           <ArrowLeft size={15} strokeWidth={2} />
-          Tableau de bord
+          {confirmingQuit ? 'Effacer et partir ?' : 'Abandonner'}
         </button>
+
         <div className="create__top-right">
           <span className="create__progress">
             Étape {step + 1} sur {STEPS.length}
             {isLast && ' · facultative'}
           </span>
 
-          {/* Les deux états cohabitent dans la même case : ils se croisent en
-              fondu au lieu de se remplacer, et le bouton garde sa largeur. */}
-          <button
-            type="button"
-            className={savedNotice ? 'create__save create__save--done' : 'create__save'}
-            onClick={saveDraft}
-          >
-            <span className="create__save-swap" aria-hidden="true">
-              <Save size={14} strokeWidth={2} className="create__save-offer" />
-              <Check size={14} strokeWidth={2.4} className="create__save-done" />
+          {/* Un statut, pas une commande : le brouillon part au stockage tout
+              seul, ce badge ne fait que l'annoncer. Rien à cliquer. */}
+          {status !== 'blank' && (
+            <span
+              className={
+                status === 'kept' ? 'create__draft' : 'create__draft create__draft--refused'
+              }
+              role="status"
+              title={
+                status === 'kept'
+                  ? undefined
+                  : "Ce navigateur refuse le stockage : le brouillon sera perdu en fermant l'onglet."
+              }
+            >
+              <Save size={14} strokeWidth={2} />
+              {status === 'kept' ? 'Brouillon sauvegardé !' : 'Brouillon non gardé'}
             </span>
-            <span className="create__save-swap">
-              <span className="create__save-offer">Sauvegarder</span>
-              <span className="create__save-done">Brouillon sauvegardé</span>
-            </span>
-          </button>
+          )}
         </div>
       </div>
 

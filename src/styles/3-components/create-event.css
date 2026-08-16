@@ -33,6 +33,7 @@
   font: var(--type-section-link);
   color: var(--ink-soft);
   cursor: pointer;
+  transition: color var(--menu-motion);
 }
 
 .create__top-right {
@@ -46,59 +47,44 @@
   color: var(--ink-soft);
 }
 
-/* --- Sauvegarder ---------------------------------------------------------- */
-/* Le brouillon part déjà tout seul à chaque frappe : ce bouton n'existe pas
-   pour enregistrer, il existe pour le DIRE. D'où sa discrétion — il rassure,
-   il ne réclame rien. */
-.create__save {
+/* --- Le statut du brouillon ----------------------------------------------- */
+/* Le brouillon part au stockage à chaque frappe : rien à cliquer ici. Ce
+   badge annonce un fait, en électrique — la couleur de ce sur quoi on agit,
+   employée ici pour dire une bonne nouvelle. */
+.create__draft {
   display: inline-flex;
   align-items: center;
   gap: var(--space-8);
   height: 30px;
   padding: 0 var(--space-12);
   border-radius: var(--radius-chip);
-  background: var(--surface-card);
-  color: var(--ink-soft);
+  background: var(--accent-interactive-surface);
+  color: var(--accent-interactive);
   font: var(--type-section-link);
-  cursor: pointer;
-  transition:
-    background-color var(--menu-motion),
-    color var(--menu-motion);
+  white-space: nowrap;
+  animation: draft-appear var(--duration-medium) var(--ease-soft) both;
 }
 
-.create__save:hover {
-  color: var(--ink-section);
+/* Il apparaît à la première saisie : sans ce fondu il surgirait d'un coup à
+   côté du compteur, ce qui se lirait comme une alerte. */
+@keyframes draft-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
-/* Une fois le geste fait, il prend la couleur d'un état acquis. */
-.create__save--done {
-  background: var(--tag-on-surface);
-  color: var(--tag-on-ink);
-  cursor: default;
+/* Le stockage refusé n'est pas une bonne nouvelle : même forme, ton d'alerte. */
+.create__draft--refused {
+  background: var(--status-pending-surface);
+  color: var(--status-pending-ink);
 }
 
-/* Les deux versions occupent la même case de la grille : elles se croisent
-   en fondu, et la plus large fixe la largeur du bouton une fois pour toutes.
-   Rien ne saute quand l'une remplace l'autre. */
-.create__save-swap {
-  display: grid;
-  align-items: center;
-  justify-items: start;
-}
-
-.create__save-swap > * {
-  grid-area: 1 / 1;
-  transition: opacity var(--menu-motion);
-}
-
-.create__save .create__save-done,
-.create__save--done .create__save-offer {
-  opacity: 0;
-}
-
-.create__save .create__save-offer,
-.create__save--done .create__save-done {
-  opacity: 1;
+/* --- Abandonner ----------------------------------------------------------- */
+/* Armé, il annonce ce qu'il va détruire. La couleur fait le travail que le
+   libellé seul ne ferait pas assez vite. */
+.create__quit--armed {
+  color: var(--status-pending-ink);
 }
 
 /* --- Les deux colonnes ---------------------------------------------------- */

@@ -616,7 +616,7 @@
       "label": "submit()",
       "file_type": "code",
       "source_file": "src\\features\\event-create\\CreateEvent.tsx",
-      "source_location": "L58",
+      "source_location": "L83",
       "id": "createevent_submit",
       "community": 31,
       "norm_label": "submit()"
@@ -645,34 +645,43 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L1",
       "id": "src_features_event_create_useeventdraft_ts",
-      "community": 16,
+      "community": 14,
       "norm_label": "useeventdraft.ts"
+    },
+    {
+      "label": "writeDraft()",
+      "file_type": "code",
+      "source_file": "src\\features\\event-create\\useEventDraft.ts",
+      "source_location": "L45",
+      "id": "useeventdraft_writedraft",
+      "community": 14,
+      "norm_label": "writedraft()"
     },
     {
       "label": "readDraft()",
       "file_type": "code",
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
-      "source_location": "L45",
+      "source_location": "L55",
       "id": "useeventdraft_readdraft",
-      "community": 16,
+      "community": 14,
       "norm_label": "readdraft()"
     },
     {
       "label": "blockingReason()",
       "file_type": "code",
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
-      "source_location": "L65",
+      "source_location": "L75",
       "id": "useeventdraft_blockingreason",
-      "community": 16,
+      "community": 14,
       "norm_label": "blockingreason()"
     },
     {
       "label": "useEventDraft()",
       "file_type": "code",
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
-      "source_location": "L85",
+      "source_location": "L95",
       "id": "useeventdraft_useeventdraft",
-      "community": 16,
+      "community": 14,
       "norm_label": "useeventdraft()"
     },
     {
@@ -906,7 +915,7 @@
       "source_file": "src\\lib\\money.ts",
       "source_location": "L1",
       "id": "src_lib_money_ts",
-      "community": 14,
+      "community": 15,
       "norm_label": "money.ts"
     },
     {
@@ -915,7 +924,7 @@
       "source_file": "src\\lib\\money.ts",
       "source_location": "L17",
       "id": "money_ledgerrevenue",
-      "community": 14,
+      "community": 15,
       "norm_label": "ledgerrevenue()"
     },
     {
@@ -924,7 +933,7 @@
       "source_file": "src\\lib\\money.ts",
       "source_location": "L22",
       "id": "money_ledgerprofit",
-      "community": 14,
+      "community": 15,
       "norm_label": "ledgerprofit()"
     },
     {
@@ -933,7 +942,7 @@
       "source_file": "src\\lib\\money.ts",
       "source_location": "L30",
       "id": "money_formateuros",
-      "community": 14,
+      "community": 15,
       "norm_label": "formateuros()"
     },
     {
@@ -942,7 +951,7 @@
       "source_file": "src\\lib\\money.ts",
       "source_location": "L35",
       "id": "money_formatsignedeuros",
-      "community": 14,
+      "community": 15,
       "norm_label": "formatsignedeuros()"
     },
     {
@@ -1341,7 +1350,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "design system refonte plan",
       "id": "plan_design_system_refonte"
     },
@@ -1354,7 +1363,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "css tokens (flat warm design)",
       "id": "ds_css_tokens"
     },
@@ -1367,7 +1376,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "netflix-style eventcard component",
       "id": "ds_eventcard_netflix"
     },
@@ -1380,7 +1389,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "plus jakarta sans + inter typography",
       "id": "ds_typography_jakarta_inter"
     },
@@ -1393,7 +1402,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "terre & feu color palette",
       "id": "ds_palette_terre_feu"
     },
@@ -1432,7 +1441,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "explorer redesign plan",
       "id": "plan_explorer_redesign"
     },
@@ -1445,7 +1454,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "sliderow component (slideshow rows)",
       "id": "explorer_sliderow_component"
     },
@@ -1458,7 +1467,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "herobanner component",
       "id": "explorer_hero_banner"
     },
@@ -1471,7 +1480,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "filter chips (tags + temporal + geo)",
       "id": "explorer_filter_chips"
     },
@@ -1484,7 +1493,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "prospection mode (exposants only)",
       "id": "explorer_prospection_mode"
     },
@@ -1497,7 +1506,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "primary_tags constants",
       "id": "explorer_primary_tags"
     },
@@ -1510,7 +1519,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "notifications redesign plan",
       "id": "plan_notifications_redesign"
     },
@@ -1523,7 +1532,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "sidebaractivity section",
       "id": "notif_sidebar_activity"
     },
@@ -1536,7 +1545,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "notificationslidepanel",
       "id": "notif_slide_panel"
     },
@@ -1549,7 +1558,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "friend detection logic (avatar+glow)",
       "id": "notif_friend_detection"
     },
@@ -1562,7 +1571,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "new notification types (event_created, event_updated, etc.)",
       "id": "notif_new_types"
     },
@@ -1939,7 +1948,7 @@
       "captured_at": "2026-04-04",
       "author": "Uriel (Rune de Ch\u00eane) + Claude",
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "fellowship v1 design spec",
       "id": "spec_v1_design"
     },
@@ -1952,7 +1961,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "vision: netflix de l'evenementiel",
       "id": "spec_v1_vision_netflix"
     },
@@ -1965,7 +1974,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "three user segments (exposant/public/organisateur)",
       "id": "spec_v1_segments"
     },
@@ -1978,7 +1987,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "calendrier communautaire (vue annuelle/mensuelle)",
       "id": "spec_v1_calendrier_communautaire"
     },
@@ -1991,7 +2000,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "relations sociales (follow \u2192 friends auto)",
       "id": "spec_v1_relations_sociales"
     },
@@ -2004,7 +2013,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "notes privees + notes amis (friend-of-friend)",
       "id": "spec_v1_notes_evenements"
     },
@@ -2017,7 +2026,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "bilan post-evenement (prive)",
       "id": "spec_v1_bilan_postevent"
     },
@@ -2069,7 +2078,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 1,
       "norm_label": "rationale: lu.ma rigor + artisan warmth",
       "id": "rationale_ds_lu_ma_inspiration"
     },
@@ -2264,7 +2273,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "pwa icon 192x192 (png, branded fellowship logo)",
       "id": "pwa_192_png"
     },
@@ -2277,7 +2286,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "pwa icon 192x192 (svg, placeholder f on black)",
       "id": "pwa_192_svg"
     },
@@ -2290,7 +2299,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "pwa icon 512x512 (png, branded fellowship logo)",
       "id": "pwa_512_png"
     },
@@ -2303,7 +2312,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "pwa icon 512x512 (svg, placeholder f on black)",
       "id": "pwa_512_svg"
     },
@@ -2342,7 +2351,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "branding mismatch (svg placeholder vs png branded)",
       "id": "branding_mismatch"
     }
@@ -2712,7 +2721,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event-create\\CreateEvent.tsx",
-      "source_location": "L58",
+      "source_location": "L83",
       "weight": 1.0,
       "_src": "src_features_event_create_createevent_tsx",
       "_tgt": "createevent_submit",
@@ -2739,6 +2748,18 @@
       "source_location": "L45",
       "weight": 1.0,
       "_src": "src_features_event_create_useeventdraft_ts",
+      "_tgt": "useeventdraft_writedraft",
+      "source": "src_features_event_create_useeventdraft_ts",
+      "target": "useeventdraft_writedraft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\event-create\\useEventDraft.ts",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_src": "src_features_event_create_useeventdraft_ts",
       "_tgt": "useeventdraft_readdraft",
       "source": "src_features_event_create_useeventdraft_ts",
       "target": "useeventdraft_readdraft",
@@ -2748,7 +2769,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
-      "source_location": "L65",
+      "source_location": "L75",
       "weight": 1.0,
       "_src": "src_features_event_create_useeventdraft_ts",
       "_tgt": "useeventdraft_blockingreason",
@@ -2760,7 +2781,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
-      "source_location": "L85",
+      "source_location": "L95",
       "weight": 1.0,
       "_src": "src_features_event_create_useeventdraft_ts",
       "_tgt": "useeventdraft_useeventdraft",

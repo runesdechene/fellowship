@@ -92,21 +92,36 @@ export function blockingReason(draft: EventDraft, step: number): string | null {
   return null
 }
 
+/**
+ * L'état du brouillon, tel qu'un statut peut l'annoncer.
+ * `blank`   rien de saisi — il n'y a rien à annoncer
+ * `kept`    écrit dans le stockage du navigateur, il survivra à l'onglet
+ * `refused` le navigateur refuse d'écrire — il faut le dire, pas le taire
+ */
+export type DraftStatus = 'blank' | 'kept' | 'refused'
+
+/** Un brouillon vierge : le statut se tait tant qu'on n'a rien tapé. */
+function isBlank(draft: EventDraft): boolean {
+  return Object.values(draft).every((value) => {
+    if (typeof value === 'string') return value.trim() === ''
+    if (Array.isArray(value)) return value.length === 0
+    return value === false // le seul booléen : « événement privé »
+  })
+}
+
 export function useEventDraft() {
   const [draft, setDraft] = useState<EventDraft>(readDraft)
+  const [stored, setStored] = useState(true)
 
   // Le brouillon survit à la fermeture de l'onglet : c'est la raison d'être
-  // de cet écran plutôt qu'une modale.
+  // de cet écran plutôt qu'une modale. On retient si l'écriture a tenu —
+  // un statut qui affirme « sauvegardé » doit l'avoir vérifié.
   useEffect(() => {
-    writeDraft(draft)
+    setStored(writeDraft(draft))
   }, [draft])
 
-  /**
-   * L'enregistrement volontaire. Le brouillon part déjà à chaque frappe ;
-   * ce geste-là écrit pour de bon et dit si ça a tenu, parce qu'un bouton
-   * qui affirme « sauvegardé » doit l'avoir vérifié.
-   */
-  const save = useCallback(() => writeDraft(draft), [draft])
+  const status: DraftStatus = isBlank(draft) ? 'blank' : stored ? 'kept' : 'refused'
+
 
   const update = useCallback(<K extends keyof EventDraft>(key: K, value: EventDraft[K]) => {
     setDraft((previous) => ({ ...previous, [key]: value }))
@@ -130,5 +145,5 @@ export function useEventDraft() {
     }
   }, [])
 
-  return { draft, update, toggleTag, clear, save }
+  return { draft, update, toggleTag, clear, status }
 }

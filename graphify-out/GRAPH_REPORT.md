@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-17)
 
 ## Corpus Check
-- 47 files · ~530,245 words
+- 47 files · ~530,425 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 206 nodes · 179 edges · 58 communities detected
+- 207 nodes · 180 edges · 58 communities detected
 - Extraction: 81% EXTRACTED · 17% INFERRED · 2% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -112,12 +112,12 @@ Cohesion: 0.18
 Nodes (4): capitalize(), daysUntil(), formatMonthLabel(), startOfDay()
 
 ### Community 1 - "Community 1"
-Cohesion: 0.17
-Nodes (12): Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section, NotificationSlidePanel, Notifications Redesign Plan, Bilan Post-Événement (privé), Calendrier Communautaire (vue annuelle/mensuelle), Fellowship V1 Design Spec (+4 more)
-
-### Community 2 - "Community 2"
 Cohesion: 0.2
 Nodes (12): CSS Tokens (Flat warm design), Netflix-style EventCard Component, Terre & Feu Color Palette, Plus Jakarta Sans + Inter Typography, Filter Chips (tags + temporal + geo), HeroBanner Component, PRIMARY_TAGS Constants, Prospection Mode (exposants only) (+4 more)
+
+### Community 2 - "Community 2"
+Cohesion: 0.17
+Nodes (12): Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section, NotificationSlidePanel, Notifications Redesign Plan, Bilan Post-Événement (privé), Calendrier Communautaire (vue annuelle/mensuelle), Fellowship V1 Design Spec (+4 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.18
@@ -168,12 +168,12 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 15 - "Community 15"
-Cohesion: 0.6
-Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 16 - "Community 16"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.6
+Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
 
 ### Community 17 - "Community 17"
 Cohesion: 0.5
@@ -428,9 +428,9 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Design System Refonte Plan` connect `Community 2` to `Community 1`, `Community 6`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
-- **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 2`, `Community 7`?**
+- **Why does `Design System Refonte Plan` connect `Community 1` to `Community 2`, `Community 6`?**
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
+- **Why does `Fellowship V1 Design Spec` connect `Community 2` to `Community 1`, `Community 7`?**
   _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
