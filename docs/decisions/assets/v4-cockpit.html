@@ -1,0 +1,198 @@
+<title>Cockpit Fellowship</title>
+<style>
+:root{
+  --ground:#FAF8F5;
+  --surface:#FFFFFF;
+  --ink:#1A1614;
+  --ink-soft:#6E6862;
+  --ink-faint:#A39C95;
+  --hair:rgba(26,22,20,.075);
+  --accent:#B4522F;
+  --accent-soft:rgba(180,82,47,.09);
+  --ok:#3E6B4C;
+  --wait:#A5762B;
+  --shadow:0 1px 2px rgba(26,22,20,.04), 0 12px 32px -14px rgba(26,22,20,.14);
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI Variable Text','Segoe UI',sans-serif;
+  --rail:268px;
+}
+[data-mode="nuit"]{
+  --ground:#121110;
+  --surface:#1C1A18;
+  --ink:#F2EFEB;
+  --ink-soft:#9C948C;
+  --ink-faint:#6A635C;
+  --hair:rgba(242,239,235,.09);
+  --accent:#E08055;
+  --accent-soft:rgba(224,128,85,.13);
+  --ok:#7FB58F;
+  --wait:#D9A860;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 36px -14px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+
+/* ── Le rail : plat, sur le sol, aucune bordure ─────────────────────── */
+.rail{position:fixed;inset:0 auto 0 0;width:var(--rail);padding:34px 20px 26px;display:flex;flex-direction:column;gap:34px;z-index:10}
+.logo{font-family:var(--serif);font-size:1.4rem;letter-spacing:-.02em;padding:0 12px}
+.logo em{font-style:normal;color:var(--accent)}
+.who{display:flex;align-items:center;gap:11px;padding:0 12px}
+.who .av{width:32px;height:32px;border-radius:999px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:.6875rem;font-weight:700;font-family:var(--sans)}
+.who b{font-size:.875rem;font-weight:600;display:block;line-height:1.2}
+.who span{font-size:.75rem;color:var(--ink-faint)}
+nav{display:flex;flex-direction:column;gap:1px}
+nav a{padding:9px 12px;border-radius:10px;color:var(--ink-soft);font-size:.9375rem;display:flex;align-items:center;justify-content:space-between}
+nav a:hover{color:var(--ink)}
+nav a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+nav .n{font-size:.75rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+nav .pro{font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.rail-foot{margin-top:auto;padding:0 12px;font-size:.75rem;color:var(--ink-faint)}
+
+/* ── Scène ──────────────────────────────────────────────────────────── */
+.stage{margin-left:var(--rail);padding:34px 46px 120px;max-width:1180px}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:44px}
+.hello{font-family:var(--serif);font-size:2.6rem;line-height:1.05;letter-spacing:-.022em;margin:0;text-wrap:balance}
+.hello small{display:block;font-family:var(--sans);font-size:.8125rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px}
+.cta{padding:11px 20px;border-radius:999px;border:0;background:var(--accent);color:#fff;font:inherit;font-size:.875rem;font-weight:600;cursor:pointer;white-space:nowrap}
+[data-mode="nuit"] .cta{color:#1A0F09}
+
+/* ── LE HÉROS : un seul élément dominant ───────────────────────────── */
+.hero{display:grid;grid-template-columns:300px 1fr;gap:38px;align-items:center;background:var(--surface);border-radius:26px;padding:30px;box-shadow:var(--shadow);margin-bottom:54px}
+.hero .poster{aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:linear-gradient(155deg,#C9743F,#8B3E22 55%,#4E2415)}
+.hero .poster .fake{width:100%;height:100%;display:grid;place-items:center;color:#F6E3CE;font-family:var(--serif);font-size:1.1rem;letter-spacing:.02em;text-align:center;padding:20px}
+.hero .body{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:.6875rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)}
+.count{font-family:var(--serif);font-size:5.2rem;line-height:.92;letter-spacing:-.045em;margin:6px 0 2px}
+.count b{font-weight:400}
+.count span{font-family:var(--sans);font-size:1rem;font-weight:600;letter-spacing:0;color:var(--ink-soft);margin-left:10px}
+.hero h2{font-family:var(--serif);font-size:1.85rem;font-weight:400;letter-spacing:-.02em;line-height:1.15;margin:8px 0 0}
+.hero .meta{color:var(--ink-soft);font-size:.9375rem}
+.hero .who-else{display:flex;align-items:center;gap:10px;margin-top:16px}
+.faces{display:inline-flex}
+.faces i{width:28px;height:28px;border-radius:999px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:.6875rem;font-weight:700;font-style:normal}
+.faces i+i{margin-left:-9px}
+.hero .who-else span{font-size:.875rem;color:var(--ink-soft)}
+
+/* ── Le ruban de saison : pleine largeur, calme ─────────────────────── */
+.season{margin-bottom:54px}
+.srow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+.big{font-family:var(--serif);font-size:2.4rem;line-height:1;letter-spacing:-.03em}
+.big span{font-family:var(--sans);font-size:.875rem;font-weight:600;color:var(--ink-soft);margin-left:10px;letter-spacing:0}
+.ribbon{display:flex;gap:6px;align-items:flex-end;height:64px}
+.ribbon i{flex:1;border-radius:4px;background:var(--hair);display:block;height:10px}
+.ribbon i.a{background:var(--accent-soft);height:30px}
+.ribbon i.b{background:var(--accent-soft);height:46px}
+.ribbon i.c{background:var(--accent-soft);height:64px}
+.ribbon i.now{background:var(--accent)}
+.rmonths{display:flex;gap:6px;margin-top:10px}
+.rmonths span{flex:1;text-align:center;font-size:.6875rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em}
+
+/* ── Le reste : trois colonnes qui se taisent ───────────────────────── */
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+.col h3{font-size:.6875rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px}
+.row{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--hair)}
+.row:last-child{border-bottom:0}
+.pip{width:7px;height:7px;border-radius:999px;flex:none}
+.pip.w{background:var(--wait)}.pip.o{background:var(--ok)}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-size:.9375rem;font-weight:600;letter-spacing:-.01em}
+.tx span{font-size:.8125rem;color:var(--ink-faint)}
+.amt{font-family:var(--serif);font-size:1.25rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.amt.p{color:var(--ok)}
+.total{display:flex;align-items:baseline;justify-content:space-between;padding-top:16px;margin-top:4px;border-top:1px solid var(--hair)}
+.total b{font-size:.8125rem;font-weight:600;color:var(--ink-soft)}
+
+.theme{position:fixed;bottom:22px;right:22px;z-index:40;padding:9px 16px;border-radius:999px;border:0;background:var(--surface);color:var(--ink-soft);box-shadow:var(--shadow);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+
+@media(max-width:1000px){
+  .rail{display:none}
+  .stage{margin-left:0;padding:24px 20px 90px}
+  .hero{grid-template-columns:1fr;gap:24px}
+  .hero .poster{aspect-ratio:16/10}
+  .count{font-size:4rem}
+  .cols{grid-template-columns:1fr;gap:26px}
+  .hello{font-size:2rem}
+}
+</style>
+
+<aside class="rail">
+  <div class="logo">Fellowship<em>.</em></div>
+  <div class="who">
+    <span class="av">RC</span>
+    <span><b>Runes de Chêne</b><span>Exposant · Pro</span></span>
+  </div>
+  <nav>
+    <a href="#">Explorer</a>
+    <a href="#">Calendrier<span class="n">9</span></a>
+    <a href="#" class="on">Cockpit</a>
+    <a href="#">Communauté</a>
+    <a href="#">Ma vitrine</a>
+    <a href="#">Boutique<span class="pro">Pro</span></a>
+  </nav>
+  <div class="rail-foot">Uriel Lahoussaye · Réglages</div>
+</aside>
+
+<main class="stage">
+  <div class="head">
+    <h1 class="hello"><small>Ta prochaine action</small>Bonjour Runes de Chêne</h1>
+    <button class="cta">Ajouter un événement</button>
+  </div>
+
+  <section class="hero">
+    <div class="poster"><div class="fake">Le Marché<br>des Lucioles</div></div>
+    <div class="body">
+      <span class="eyebrow">Prochain festival</span>
+      <div class="count"><b>31</b><span>jours</span></div>
+      <h2>Le Marché des Lucioles</h2>
+      <p class="meta">14 → 16 septembre · Annecy, Haute-Savoie · Inscrit</p>
+      <div class="who-else">
+        <span class="faces"><i>M</i><i>J</i><i>A</i><i>L</i></span>
+        <span>4 compagnons y seront aussi</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="season">
+    <div class="srow">
+      <div class="big">9<span>dates cette saison</span></div>
+      <div style="font-size:.875rem;color:var(--ink-soft)">Ton mois le plus chargé : juin, 3 dates</div>
+    </div>
+    <div class="ribbon">
+      <i class="now"></i><i></i><i class="a"></i><i class="b"></i><i></i><i class="c"></i><i class="a"></i><i></i><i></i><i class="a"></i><i></i><i class="b"></i>
+    </div>
+    <div class="rmonths"><span>Août</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span><span>Juil</span></div>
+  </section>
+
+  <section class="cols">
+    <div class="col">
+      <h3>À régler</h3>
+      <a class="row" href="#"><span class="pip w"></span><span class="tx"><b>Foire aux Vents d'Automne</b><span>Nantes · 2 oct. · Accepté</span></span><span class="amt">180 €</span></a>
+      <a class="row" href="#"><span class="pip w"></span><span class="tx"><b>Nuit des Artisans</b><span>Lyon · 17 oct. · Acompte versé</span></span><span class="amt">95 €</span></a>
+      <a class="row" href="#"><span class="pip w"></span><span class="tx"><b>Salon des Curiosités</b><span>Bordeaux · 2 nov. · Dossier envoyé</span></span></a>
+    </div>
+    <div class="col">
+      <h3>Compagnons</h3>
+      <a class="row" href="#"><span class="faces"><i>M</i><i>J</i></span><span class="tx"><b>Vous serez 5 réunis</b><span>Le Marché des Lucioles</span></span></a>
+      <a class="row" href="#"><span class="faces"><i>S</i><i>L</i></span><span class="tx"><b>Vous serez 3 réunis</b><span>Foire aux Vents d'Automne</span></span></a>
+    </div>
+    <div class="col">
+      <h3>Mes bilans</h3>
+      <div class="row"><span class="tx"><b>Fête des Récoltes</b><span>14 → 15 juin 2026</span></span><span class="amt p">+340 €</span></div>
+      <div class="row"><span class="tx"><b>Marché de Printemps</b><span>3 → 5 avril 2026</span></span><span class="amt">−120 €</span></div>
+      <div class="total"><b>Total net de la saison</b><span class="amt p">+220 €</span></div>
+    </div>
+  </section>
+</main>
+
+<button class="theme" id="t">Nuit</button>
+<script>
+  var night = false, r = document.documentElement, b = document.getElementById('t');
+  b.addEventListener('click', function(){
+    night = !night;
+    r.setAttribute('data-mode', night ? 'nuit' : 'jour');
+    b.textContent = night ? 'Jour' : 'Nuit';
+  });
+</script>

@@ -30,6 +30,12 @@ export function AppLayoutV2({ children }: { children: ReactNode }) {
         <i className="app2-h1" /><i className="app2-h2" /><i className="app2-h3" /><i className="app2-h4" />
       </div>
       <SidebarV2 />
+      {/* Coins inversés : deux blocs couleur parchemin, posés à la jonction du
+          rail et du contenu, avec un rayon creusé vers l'intérieur. C'est eux
+          qui dessinent la courbe — pas un border-radius sur le panneau, qui ne
+          se lisait pas faute de contraste. */}
+      <i className="app2-corner app2-corner-tl" aria-hidden="true" />
+      <i className="app2-corner app2-corner-bl" aria-hidden="true" />
       <div className="app2-stage">
         <TopbarV2 onCreateEvent={() => setShowCreate(true)} />
         <main className="app2-main">{children}</main>

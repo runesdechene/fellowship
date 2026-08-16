@@ -1,7 +1,7 @@
 ---
-updated: 2026-08-15T00:00:00Z
-summary: "Le nouveau tableau de bord a été passé en revue avant sa mise à disposition. Tous les contrôles automatiques sont au vert et l'ancienne version reste inchangée pour tout le monde. Comme l'application ne pouvait pas être ouverte dans un vrai navigateur ici, trois images ont été fabriquées avec les mêmes styles que l'application réelle pour montrer à quoi ressemble la nouvelle page de jour, de nuit et sur téléphone. Un défaut a été repéré sur téléphone : la petite bannière qui invite à remplir un bilan affiche son texte en colonne étroite, un mot par ligne, au lieu de s'adapter à l'écran. Le travail n'a pas encore été envoyé en ligne, il reste sur cette machine en attente d'une décision."
-next_step: "Ouvrir la nouvelle page sur ordinateur et sur téléphone pour donner un avis réel, et regarder en particulier la bannière de bilan qui s'affiche mal sur petit écran. Une fois l'avis donné et ce défaut réglé, il restera à envoyer le travail en ligne."
+updated: 2026-08-16T00:00:00Z
+summary: "Le nouveau tableau de bord est entièrement construit, relu et fonctionne : rien n'est cassé, l'ancienne version reste intacte pour tout le monde, et le travail attend sur la machine sans avoir été mis en ligne. Ce qui bloque n'est plus technique mais visuel : l'habillage ne plaît pas. Une longue série d'essais sur les couleurs et les fonds n'a rien donné de convaincant, et la conclusion de la soirée est qu'il faut repartir d'une maquette dessinée à la main plutôt que de continuer à régler des teintes une par une. Uriel va la faire lui-même."
+next_step: "Attendre la maquette qu'Uriel dessine, puis reporter ses valeurs dans l'application — l'habillage se pilote depuis un seul fichier, donc l'intégration est rapide une fois la direction arrêtée."
 ---
 
 <!-- `summary` et `next_step` (ci-dessus) sont lues PAR UN HUMAIN sur le tableau de bord :
@@ -9,6 +9,33 @@ next_step: "Ouvrir la nouvelle page sur ordinateur et sur téléphone pour donne
   de Claude, jamais affichée. Les tâches affichées viennent de la note Obsidian reliée (✎). -->
 
 ## Mémoire de session
+
+--- 🔴 HABILLAGE DU COCKPIT : REJETÉ, ON REPART D'UNE MAQUETTE D'URIEL (2026-08-16) ---
+Le lot technique est fini et relu. Ce qui bloque est visuel, et une longue série de réglages à
+chaud n'a rien donné. Ce qui a été appris, à ne pas refaire :
+• **JAMAIS de serif dans l'app.** Testée sur les chiffres et les titres, rejetée net :
+  « personne ne va payer pour une application en serif ». Le sans reste la règle.
+• **Ne pas régler les teintes une par une en direct.** Six propositions, six rejets. Chaque
+  correction ponctuelle ajoutait une couche (rail, sol, panneau, blocs) et le résultat a fini
+  par être jugé « bordélique, pas reposant » — l'inverse de ce que 0007 demandait.
+• **Ne pas juger sur une maquette dépouillée.** J'avais retiré halos, icônes et logo d'une
+  maquette pour isoler la question des teintes ; Uriel a cru que l'app avait perdu son
+  identité. Toujours dire explicitement qu'un banc d'essai n'est pas censé être beau.
+• **Le vrai grief : « trop de terracotta, trop de marron, je voulais du professionnel ».**
+  C'est le prix d'un arbitrage écrit dans 0007 (« accent terracotta partout, app comme
+  vitrine — marque unifiée > lisibilité fonctionnelle »). À rouvrir avec lui : une piste
+  testée était encre presque-noire + sol neutre chaud + terracotta réservé aux actions.
+• **Cabin n'a toujours pas été embarquée**, alors que 0007 la désigne comme la porteuse de la
+  reconnaissance de marque. Piste jamais essayée.
+• Références utiles : Vowen (coins arrondis vers le contenu — la seule chose validée ce
+  soir-là). Maquettes d'essai : `assets/v3-cockpit-tons.html`, `assets/v4-cockpit.html`.
+**Prochaine étape : Uriel dessine sa maquette. On reporte ses valeurs, on n'invente plus.**
+Non poussé : 13 commits d'avance sur `main`. Mes retouches de style de la soirée sont NON
+COMMITÉES dans 4 fichiers (`styles/app2.css`, `layout/SidebarV2.css`, `layout/AppLayoutV2.css`,
+`layout/TopbarV2.css`) — un `git checkout` dessus revient à l'état relu et validé.
+Fait au passage : bascule admin V1/V2 dans le pied des deux rails (commit 5f48bf5) ; l'entité
+`runesdechene` passée en `plan=pro` en base de prod (le doublon `runes-de-chene`, 0 participation,
+n'a pas été touché et mériterait un nettoyage).
 
 --- RECETTE COCKPIT V2 « PARCHEMIN » — Tâche 8 (2026-08-15) ---
 Garde anti-régression complète au vert : lint 0 erreur, 464 tests passés, build OK, aucune

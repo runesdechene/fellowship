@@ -25,10 +25,49 @@
      la séparation se fait par la teinte. Légèrement translucide pour capter
      les halos qui passent derrière — c'est ce qui l'empêche d'être un
      rectangle mort. */
+  /* Trois marches, jamais de blanc : sol/rail parchemin → panneau soulevé →
+     blocs au-dessus du panneau. Translucides, pour capter les halos qui passent
+     derrière — 0007 : c'est ce qui les empêche d'être des rectangles morts. */
   --block: rgba(255,252,246,.58);
   --block-2: rgba(255,252,246,.38);
-  --rail-bg: linear-gradient(180deg, rgba(247,241,229,.86), rgba(240,232,217,.92));
-  --nav-on: rgba(255,252,245,.92);
+  /* Rail plus clair que le parchemin (#F4EEE1), nettement soulevé de lui,
+     mais jamais neutre ni froid : --surf (#FBF7EF), la surface chaude la
+     plus claire de la palette — PAS de blanc pur (0007 le bannit ; un
+     premier passage l'avait mis en blanc dur, corrigé). Plat, pas de
+     dégradé : le dégradé crème précédent alourdissait le rail contre le sol.
+     Sombre inchangé, garde son voile en dégradé. */
+  /* Le rail EST le sol : même ton que le parchemin. C'est la zone de contenu
+     qui est le panneau posé dessus (--stage), et c'est ELLE qui porte les coins
+     arrondis, côté rail. Rail et panneau à des teintes voisines faisaient
+     disparaître le rail — ils étaient à deux points d'écart. */
+  /* Le rail a SA teinte, un cran SOUS le sol : mis au même ton que le parchemin
+     il se perdait complètement, tout le côté gauche devenait un aplat sans
+     limite. `--rail` (#EFE8D9) existait dans la palette sans jamais servir.
+     Les coins creusés se peignent avec --rail-bg, pas avec --parchment : ils
+     suivent ainsi le rail quelle que soit sa teinte. */
+  --rail-bg: var(--rail);
+  /* Panneau de contenu : soulevé du sol, mais PAS poussé jusqu'au quasi-blanc —
+     sinon il ne reste plus d'espace clair au-dessus pour les blocs, et il faut
+     les écraser vers le bas pour les distinguer (ce qui les tuait). À .38 il
+     tombe vers #F8F4EB : lisible contre le parchemin, et il laisse la marche
+     du dessus libre. Translucide : les halos passent encore. */
+  --stage: rgba(255,253,250,.38);
+  /* Entrée active : sur ce rail clair, l'ancien --nav-on quasi-blanc devenait
+     invisible. Teinte chaude dérivée de --ink (jamais un gris neutre : gris
+     neutre + surface chaude = lecture sale). Premier jugé contre
+     --surf/#FBF7EF à .07 (dans la fourchette .06–.09 demandée) ; remonté à
+     .14 après calibration sur la référence du propriétaire (Vowen), qui
+     montre un rectangle arrondi gris NETTEMENT rempli, pas un voile — .07-.09
+     restait trop proche d'un « presque invisible » pour ça. .14 se voit au
+     premier coup d'œil sans devenir un aplat gris lourd ni rivaliser avec
+     --accent-app2 sur les icônes/badges actifs. */
+  --nav-on: rgba(89,72,72,.14);
+  /* Topbar (fix D) : .tb2 est sticky avec un fond plein, ce qui tranchait net
+     le halo du haut d'une bordure horizontale dure une fois les halos rendus
+     (fix 1). Fond translucide + blur, même principe que --rail-bg, dérivé de
+     --parchment (jamais de blanc en dur : un voile blanc se verrait comme une
+     bande claire en thème sombre). */
+  --topbar-bg: color-mix(in srgb, var(--parchment) 72%, transparent);
 
   /* La matière : jamais une ombre dure. Un liseré de lumière, une ombre large
      et très diffuse. Le liseré passe par ce jeton et JAMAIS en dur : écrit en
@@ -50,11 +89,20 @@
      la valeur dynamique pour tout ce qui vit sous .app2 (custom property
      déclarée localement > héritée d'un ancêtre) — la sidebar ne se
      redimensionnerait jamais. Chaque site de consommation lit
-     var(--sidebar2-w, 232px), le fallback couvrant le premier paint. */
+     var(--sidebar2-w, 262px), le fallback couvrant le premier paint. */
 
   color: var(--ink);
   background-color: var(--parchment);
   -webkit-font-smoothing: antialiased;
+
+  /* .app2 doit posséder son propre contexte d'empilement : sans position/
+     isolation, elle ne crée aucun stacking context, et .app2-halos (fixed,
+     z-index négatif) part se peindre dans le stacking context RACINE, sous
+     le background-color de .app2 elle-même — les halos disparaissent sous
+     le parchemin qu'ils sont censés teinter. `isolation: isolate` fixe ça :
+     tout ce qui vit sous .app2 (halos compris) reste dans SON empilement. */
+  position: relative;
+  isolation: isolate;
 }
 
 /* Le sombre ne s'active JAMAIS tout seul : aucune règle prefers-color-scheme.
@@ -75,10 +123,14 @@ html:not(.light) .app2 {
   --accent-wash2: rgba(226,155,118,.16);
   --ok: #8FBF9C; --ok-wash: rgba(143,191,156,.15);
   --wait: #E0B26A; --wait-wash: rgba(224,178,106,.16);
-  --block: rgba(255,238,222,.042);
-  --block-2: rgba(255,238,222,.028);
-  --rail-bg: linear-gradient(180deg, rgba(30,25,23,.88), rgba(23,19,18,.94));
+  /* Mêmes trois marches qu'en clair : panneau à peine relevé du fond, blocs
+     relevés au-dessus du panneau. */
+  --block: rgba(255,238,222,.075);
+  --block-2: rgba(255,238,222,.05);
+  --rail-bg: var(--rail);
+  --stage: rgba(255,238,222,.03);
   --nav-on: rgba(255,240,225,.075);
+  --topbar-bg: color-mix(in srgb, var(--parchment) 72%, transparent);
   --lift:
     inset 0 1px 0 rgba(255,255,255,.055),
     0 1px 2px rgba(0,0,0,.34),
@@ -100,7 +152,7 @@ html:not(.light) .app2 {
 
 /* Les halos, à ~17 %. En clair, le chaud domine et le froid ne fait que
    ponctuer : un halo bleu ou vert trop présent grise le parchemin. */
-.app2 .app2-halos { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.app2 .app2-halos { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .app2 .app2-halos i { position: absolute; border-radius: 50%; filter: blur(var(--halo-blur)); display: block; }
 .app2 .app2-h1 { width: 680px; height: 560px; top: -200px; left: -140px; background: var(--halo-1); }
 .app2 .app2-h2 { width: 520px; height: 460px; top: 2%; right: -160px; background: var(--halo-2); }
@@ -121,3 +173,23 @@ html:not(.light) .app2 {
 .app2 .theme-toggle { background: var(--block); border: 1px solid var(--hairline); }
 .app2 .theme-toggle .knob { background: var(--accent-app2); color: var(--accent-ink2); box-shadow: none; }
 .app2 .theme-toggle:focus-visible { outline: 2px solid var(--accent-app2); outline-offset: 3px; }
+
+/* EntitySwitcher est lui aussi un composant PARTAGÉ (border: 1px solid --hair,
+   background: --field, hsl(var(--muted-foreground))…, exactement ce que 0007
+   bannit) et il est visible sur CHAQUE écran V2 sans interaction. Même
+   traitement que le theme-toggle : on ne touche ni EntitySwitcher.tsx ni
+   Sidebar.css, on repeint ici sous .app2. */
+.app2 .entity { border: 0; border-radius: 12px; background: var(--block); color: var(--ink); }
+.app2 .entity:hover { background: var(--shade); }
+.app2 .entity .av {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-app2) 70%, #000), color-mix(in srgb, var(--accent-app2) 38%, #000));
+  color: var(--accent-ink2);
+}
+.app2 .entity .nm b { font-family: inherit; color: var(--ink); }
+.app2 .entity .nm span { font-family: inherit; color: var(--ink-faint); }
+.app2 .entity .chev { color: var(--ink-faint); }
+.app2 .entity-dropdown { border: 0; background: var(--surf); box-shadow: var(--lift); }
+.app2 .entity-dropdown button { color: var(--ink); font-family: inherit; }
+.app2 .entity-dropdown button:hover { background: var(--shade); }
+.app2 .entity-dropdown-create { border-top: 1px solid var(--hairline-2); color: var(--accent-app2) !important; }
+.app2 .entity-dropdown-create svg { color: var(--accent-app2); }

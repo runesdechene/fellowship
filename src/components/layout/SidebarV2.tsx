@@ -16,7 +16,9 @@ const ICONS: Record<string, LucideIcon> = { Compass, CalendarClock, Heart, Layou
 export function SidebarV2() {
   const [collapsed, setCollapsed] = useState(false)
   useEffect(() => {
-    document.documentElement.style.setProperty('--sidebar2-w', collapsed ? '76px' : '232px')
+    // 262px = largeur exacte du rail V1 (Sidebar.css) : même largeur des deux
+    // côtés de l'interrupteur, pas de saut de mise en page en basculant.
+    document.documentElement.style.setProperty('--sidebar2-w', collapsed ? '76px' : '262px')
   }, [collapsed])
 
   const { currentActor, currentActorRow, person, isAdmin } = useAuth()

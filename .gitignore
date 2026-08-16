@@ -50,4 +50,3 @@ graphify-out/cache/
 Stripe.txt
 *.secrets.txt
 .mcp.json
-.xo/

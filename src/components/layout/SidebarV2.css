@@ -1,12 +1,14 @@
 /* src/components/layout/SidebarV2.css — tout est préfixé sd2- : les .css de ce
    projet sont globaux, une classe nue fuirait dans les autres composants. */
 .sd2 {
-  width: var(--sidebar2-w, 232px); flex: none;
+  width: var(--sidebar2-w, 262px); flex: none;
   position: fixed; inset: 0 auto 0 0; z-index: 30;
   height: 100dvh;
-  border-right: 1px solid var(--hairline-2);
+  /* Le rail reste à angles droits et sans filet : il EST le sol, et c'est la
+     zone de contenu (.app2-stage) qui porte l'arrondi en passant par-dessus.
+     Deux courbes qui se font face se liraient comme une erreur. Pas de blur
+     non plus : le rail est la couche du fond, il n'y a rien derrière. */
   background: var(--rail-bg);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   padding: 22px 14px 20px;
   display: flex; flex-direction: column; gap: 22px;
   transition: width .18s ease;
@@ -40,6 +42,11 @@
 .sd2-count, .sd2-badge { margin-left: auto; font-size: .6875rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--accent-wash2); color: var(--accent-app2); }
 .sd2-lock { margin-left: auto; color: var(--accent-app2); display: grid; place-items: center; }
 .sd2-lock svg { width: 14px; height: 14px; }
+
+/* Verrou Pro (V1 : .navlink.locked), même valeurs — appliqué seulement pour
+   state === 'lock-pro' côté SidebarV2.tsx, jamais pour « bientôt ». */
+.sd2-locked { opacity: .5; }
+.sd2-locked:hover { opacity: .8; background: var(--shade); }
 
 .sd2-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 8px 0; border-top: 1px solid var(--hairline-2); }
 .sd2-av { width: 30px; height: 30px; border-radius: 999px; overflow: hidden; background: var(--surf-2); border: 1px solid var(--hairline-2); display: grid; place-items: center; font-size: .6875rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; flex: none; }

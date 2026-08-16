@@ -1,0 +1,376 @@
+<title>Cockpit Parchemin</title>
+<style>
+/* ── Palette : reprise telle quelle de src/styles/app2.css ────────────── */
+:root{
+  --parchment:#F4EEE1; --rail:#EFE8D9; --surf:#FBF7EF; --surf-2:#F3EDE1;
+  --ink:#594848; --ink-soft:#8C7B72; --ink-faint:#B0A197;
+  --hairline:rgba(89,72,72,.13); --hairline-2:rgba(89,72,72,.09); --shade:rgba(89,72,72,.045);
+  --accent:#C06846; --accent-ink:#FFF6F0; --accent-wash:rgba(192,104,70,.11);
+  --ok:#4E7355; --ok-wash:rgba(78,115,85,.13);
+  --wait:#B98032; --wait-wash:rgba(185,128,50,.14);
+  --photo-a:#D8C7A8; --photo-b:#A8927A;
+  --lift:inset 0 1px 0 rgba(255,255,255,.72),0 1px 2px rgba(84,62,44,.045),0 10px 26px -8px rgba(84,62,44,.10);
+  --nav-on:rgba(89,72,72,.09);
+  --rail-w:262px; --corner:28px;
+}
+[data-mode="night"]{
+  --parchment:#171414; --rail:#1B1716; --surf:#221C19; --surf-2:#2A231F;
+  --ink:#F0E5D6; --ink-soft:#A3948A; --ink-faint:#786A62;
+  --hairline:rgba(240,229,214,.15); --hairline-2:rgba(240,229,214,.10); --shade:rgba(240,229,214,.05);
+  --accent:#E29B76; --accent-ink:#2A1810; --accent-wash:rgba(226,155,118,.16);
+  --ok:#8FBF9C; --ok-wash:rgba(143,191,156,.15);
+  --wait:#E0B26A; --wait-wash:rgba(224,178,106,.16);
+  --photo-a:#4E4237; --photo-b:#2E2721;
+  --lift:inset 0 1px 0 rgba(255,255,255,.055),0 1px 2px rgba(0,0,0,.34),0 12px 30px -10px rgba(0,0,0,.50);
+  --nav-on:rgba(255,240,225,.075);
+}
+
+/* ── LES DEUX AXES QUI COMPTENT ───────────────────────────────────────────
+   Le nombre de tons n'était pas le sujet : dans les trois versions, l'écart
+   rail/sol ne faisait que 5 points de luminosité — invisible. La référence
+   Vowen en a trois fois plus. D'où ces deux axes. */
+
+/* CONTRASTE DU RAIL — c'est lui qui donne au rail une frontière, ou pas.
+   Les coins creusés se peignent avec --rail-bg, donc ils suivent tout seuls. */
+/* BLOCS — le rail prend la teinte exacte des blocs : il passe AU-DESSUS du
+   sol au lieu d'être en dessous. Rail et blocs = les surfaces soulevees,
+   le sol = le creux entre les deux. */
+[data-rail="blocs"] { --rail-bg:#FAF6ED; }
+[data-mode="night"][data-rail="blocs"] { --rail-bg:#262221; }
+[data-rail="doux"]  { --rail-bg:#EFE8D9; }   /* 5 pts sous le sol */
+[data-rail="moyen"] { --rail-bg:#E9E0CE; }   /* 11 pts */
+[data-rail="franc"] { --rail-bg:#E1D6BE; }   /* 20 pts — l'ordre de Vowen */
+[data-mode="night"][data-rail="doux"]  { --rail-bg:#1B1716; }
+[data-mode="night"][data-rail="moyen"] { --rail-bg:#221D1A; }
+[data-mode="night"][data-rail="franc"] { --rail-bg:#2C2521; }
+
+/* ── PALETTE : MARQUE vs OUTIL ────────────────────────────────────────────
+   MARQUE = 0007 applique a la lettre : sol parchemin, encre brune (#594848),
+   terracotta partout, y compris sur les pastilles, compteurs et avatars.
+   OUTIL  = neutre chaud plutot que brun. L'encre devient un presque-noir, le
+   sol un gris tres legerement chaud, et le terracotta est RESERVE aux actions
+   et a l'entree active — plus aucun lavis terracotta decoratif. Les couleurs
+   de statut (vert / ambre) restent, elles portent de l'information. */
+[data-palette="outil"]{
+  --ink:#262220; --ink-soft:#6B655F; --ink-faint:#9A938C;
+  --hairline:rgba(38,34,32,.12); --hairline-2:rgba(38,34,32,.08); --shade:rgba(38,34,32,.04);
+  --accent:#C0563A; --accent-ink:#FFFFFF;
+  --accent-wash:rgba(38,34,32,.055);   /* neutralise : plus de lavis terracotta */
+  --nav-on:rgba(38,34,32,.07);
+  --surf-2:#EFEDEA; --photo-a:#C9C4BC; --photo-b:#95908A;
+}
+[data-palette="outil"][data-sol="clair"]   { --parchment:#F5F4F1; }
+[data-palette="outil"][data-sol="moyen"]   { --parchment:#EFEEEA; }
+[data-palette="outil"][data-sol="profond"] { --parchment:#E7E5E0; }
+[data-palette="outil"][data-rail="blocs"]  { --rail-bg:#FBFAF8; }
+[data-palette="outil"]{ --block:rgba(255,255,255,.72); --block-2:rgba(255,255,255,.45); }
+
+[data-palette="outil"][data-mode="night"]{
+  --ink:#EDEBE8; --ink-soft:#9C9691; --ink-faint:#6E6863;
+  --hairline:rgba(237,235,232,.14); --hairline-2:rgba(237,235,232,.09); --shade:rgba(237,235,232,.05);
+  --accent:#E08765; --accent-ink:#1A1512;
+  --accent-wash:rgba(237,235,232,.07);
+  --nav-on:rgba(237,235,232,.075);
+  --surf-2:#2A2A2A; --photo-a:#3E3C39; --photo-b:#2A2826;
+  --block:rgba(255,255,255,.055); --block-2:rgba(255,255,255,.035);
+}
+[data-palette="outil"][data-mode="night"][data-sol="clair"]   { --parchment:#151515; }
+[data-palette="outil"][data-mode="night"][data-sol="moyen"]   { --parchment:#111111; }
+[data-palette="outil"][data-mode="night"][data-sol="profond"] { --parchment:#0C0C0C; }
+[data-palette="outil"][data-mode="night"][data-rail="blocs"]  { --rail-bg:#1F1F1F; }
+
+/* PROFONDEUR DU SOL — le fond derriere tout. Plus il descend, plus le rail et
+   les blocs (qui ne bougent pas) se detachent. */
+[data-sol="clair"]   { --parchment:#F4EEE1; }
+[data-sol="moyen"]   { --parchment:#EEE6D5; }
+[data-sol="profond"] { --parchment:#E7DCC7; }
+[data-mode="night"][data-sol="clair"]   { --parchment:#171414; }
+[data-mode="night"][data-sol="moyen"]   { --parchment:#121010; }
+[data-mode="night"][data-sol="profond"] { --parchment:#0D0B0B; }
+
+/* PANNEAU DE CONTENU — la zone de droite est-elle une dalle rapportée, ou
+   simplement le sol qui continue ? */
+[data-panel="non"] { --stage:transparent; }
+[data-panel="oui"] { --stage:rgba(255,253,250,.38); }
+[data-mode="night"][data-panel="oui"] { --stage:rgba(255,238,222,.03); }
+
+/* Les blocs ne bougent pas : une seule marche translucide au-dessus. */
+[data-palette="marque"]{ --block:rgba(255,252,246,.58); --block-2:rgba(255,252,246,.38); }
+[data-palette="marque"][data-mode="night"]{ --block:rgba(255,238,222,.065); --block-2:rgba(255,238,222,.04); }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--parchment);color:var(--ink);font-family:'Inter',system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+p{margin:0}
+svg{flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+
+/* Rail */
+.rail{position:fixed;inset:0 auto 0 0;width:var(--rail-w);z-index:30;background:var(--rail-bg);padding:22px 14px 20px;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px;font-weight:600;letter-spacing:-.02em}
+.dot{color:var(--accent)}
+.switcher{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--block);font-size:.8125rem;font-weight:600}
+.switcher .av{width:26px;height:26px;border-radius:999px;background:var(--accent-wash);color:var(--accent);display:grid;place-items:center;font-size:.625rem;font-weight:700}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;color:var(--ink-soft);text-decoration:none;font-size:.9375rem}
+.nav a svg{width:18px;height:18px}
+.nav a:hover{background:var(--shade);color:var(--ink)}
+.nav a.on{background:var(--nav-on);color:var(--ink);font-weight:600}
+.nav a.on svg{color:var(--accent)}
+.nav .cnt{margin-left:auto;font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--accent-wash);color:var(--accent)}
+.nav a.locked{opacity:.5}
+.nav .lk{margin-left:auto;color:var(--accent);display:grid;place-items:center}
+.nav .lk svg{width:14px;height:14px}
+.foot{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--hairline-2)}
+.foot .av{width:30px;height:30px;border-radius:999px;background:var(--surf-2);display:grid;place-items:center;font-size:.6875rem;font-weight:700;color:var(--ink-soft)}
+.who{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.who b{font-size:.8125rem}.who span{font-size:.6875rem;color:var(--ink-faint)}
+.pill{position:relative;width:58px;height:30px;border-radius:99px;background:var(--block);border:1px solid var(--hairline);flex:none}
+.pill i{position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:9px;font-weight:700;font-style:normal}
+.pill.right i{left:auto;right:2px}
+
+/* Coins creusés */
+.corner{position:fixed;left:var(--rail-w);width:var(--corner);height:var(--corner);z-index:32;pointer-events:none}
+.corner.tl{top:0;background:radial-gradient(circle at 100% 100%,transparent var(--corner),var(--rail-bg) var(--corner))}
+.corner.bl{bottom:0;background:radial-gradient(circle at 100% 0,transparent var(--corner),var(--rail-bg) var(--corner))}
+[data-corners="off"] .corner{display:none}
+
+/* Zone de contenu */
+.stage{margin-left:var(--rail-w);min-height:100vh;position:relative;z-index:1;background:var(--stage);border-radius:var(--corner) 0 0 var(--corner)}
+[data-panel="non"] .stage{border-radius:0}
+.tb{display:flex;align-items:center;gap:16px;height:68px;padding:0 40px;position:sticky;top:0;z-index:20;background:transparent}
+.cta{margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:0;font:inherit;font-size:.875rem;font-weight:600;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.cta svg{width:16px;height:16px}
+.main{padding:24px 40px 120px;display:flex;flex-direction:column;gap:28px;max-width:1080px}
+
+/* Typographie */
+.title{font-size:2rem;font-weight:500;letter-spacing:-.032em;line-height:1.08;margin:0}
+.sub{font-size:.9375rem;color:var(--ink-soft)}
+.lab{font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+.muted{color:var(--ink-soft);font-size:.875rem}
+.faint{color:var(--ink-faint);font-size:.8125rem}
+h3{font-size:.9375rem;font-weight:600;letter-spacing:-.012em;margin:0}
+
+/* Blocs */
+.top{display:flex;align-items:center;gap:16px}
+.top .av{width:52px;height:52px;border-radius:999px;background:var(--accent-wash);color:var(--accent);display:grid;place-items:center;font-weight:700}
+.block{border:0;border-radius:20px;background:var(--block);box-shadow:none;padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px}
+.bhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.g2{display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+
+.bilan{display:flex;align-items:center;gap:13px;border-radius:20px;background:var(--block);padding:16px 22px}
+.bilan .txt{flex:1}
+.go{padding:8px 15px;border-radius:999px;border:0;font:inherit;font-size:.8125rem;font-weight:600;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.later{background:none;border:0;font:inherit;font-size:.8125rem;color:var(--ink-soft);text-decoration:underline;cursor:pointer}
+
+.next{display:grid;grid-template-columns:190px 1fr;gap:24px;align-items:center}
+.poster{overflow:hidden;border-radius:18px;aspect-ratio:4/3.4;box-shadow:var(--lift)}
+.poster .img{width:100%;height:100%;background:linear-gradient(150deg,#C8703F,#8A3F22 60%,#5E2A17);display:grid;place-items:center;color:#F7E4CE;font-weight:700;letter-spacing:.08em;font-size:.75rem}
+.poster .fb{width:100%;height:100%;background:linear-gradient(160deg,var(--photo-a),var(--photo-b))}
+.nname{font-size:1.375rem;font-weight:500;letter-spacing:-.028em;line-height:1.15}
+.badge{align-self:flex-start;padding:6px 14px;border-radius:999px;font-size:.75rem;font-weight:600;background:var(--accent);color:var(--accent-ink)}
+.nin{display:flex;flex-direction:column;gap:9px}
+
+.track{display:flex;align-items:flex-end;gap:5px;height:78px}
+.track i{flex:1;border-radius:5px 5px 3px 3px;background:var(--surf-2);border:1px solid var(--hairline-2);height:14px;display:block}
+.track i.l1,.track i.l2,.track i.l3{background:var(--accent-wash);border-color:transparent}
+.track i.l1{height:46px}.track i.l2{height:62px}.track i.l3{height:78px}
+.track i.now{background:var(--accent);border-color:transparent}
+.months{display:flex;gap:5px}
+.months span{flex:1;text-align:center;font-size:.625rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em}
+
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:13px;padding:15px 0;border-top:1px solid var(--hairline-2);text-decoration:none;color:inherit}
+.li:first-child{border-top:0}
+.t{font-size:.9375rem;font-weight:600;letter-spacing:-.012em}
+.s{font-size:.8125rem;color:var(--ink-soft)}
+.txtcol{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.amt{font-size:.875rem;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos{color:var(--ok)}
+.pip{width:10px;height:10px;border-radius:999px;flex:none}
+.pip.ok{background:var(--ok);box-shadow:0 0 0 4px var(--ok-wash)}
+.pip.wait{background:var(--wait);box-shadow:0 0 0 4px var(--wait-wash)}
+.faces{display:inline-flex;flex:none}
+.faces .f+.f{margin-left:-10px}
+.f{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:var(--accent-wash);color:var(--accent);font-size:.75rem;font-weight:700;position:relative}
+.refus summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.refus summary::-webkit-details-marker{display:none}
+
+[data-density="epure"] .only-full{display:none}
+
+/* Barre de démo */
+.demo{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:14px;align-items:center;padding:9px 14px;border-radius:999px;background:var(--surf);border:1px solid var(--hairline);box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:12px}
+.demo b{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+.demo .grp{display:flex;gap:3px;align-items:center}
+.demo button{border:0;background:none;font:inherit;font-size:11px;font-weight:600;color:var(--ink-soft);padding:4px 9px;border-radius:999px;cursor:pointer}
+.demo button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.demo .sep{width:1px;height:18px;background:var(--hairline)}
+@media(max-width:900px){.demo{flex-wrap:wrap;max-width:92vw;justify-content:center;border-radius:18px}}
+</style>
+
+
+<aside class="rail">
+  <div class="brand"><span>Fellowship<span class="dot">.</span></span></div>
+  <div class="switcher"><span class="av">RV</span><span>Les Rêveurs Vagabonds</span></div>
+  <nav class="nav">
+    <a href="#">Explorer</a>
+    <a href="#">Calendrier<span class="cnt">3</span></a>
+    <a href="#">Suivis</a>
+    <a href="#" class="on">Cockpit</a>
+    <a href="#">Communauté</a>
+    <a href="#" class="locked">Boutique<span class="lk"></span></a>
+  </nav>
+  <div class="foot">
+    <span class="av">UL</span>
+    <span class="who"><b>Uriel Lahou…</b><span>Mon compte</span></span>
+    <span class="pill"><i>☀</i></span>
+    <span class="pill right"><i>V2</i></span>
+  </div>
+</aside>
+
+<i class="corner tl"></i><i class="corner bl"></i>
+
+<div class="stage">
+  <header class="tb">
+    <button class="cta">Ajouter un événement</button>
+  </header>
+
+  <main class="main">
+    <div class="top">
+      <span class="av">RC</span>
+      <div><h1 class="title">Bonjour Runes de Chêne</h1><p class="sub">Ta prochaine action</p></div>
+    </div>
+
+    <div class="bilan only-full">
+      <span class="pip wait"></span>
+      <span class="txt">Comment s'est passé <b>Les Feux de la Saint-Jean</b> ? <span class="faint">+1 en attente</span></span>
+      <button class="go">Remplir mon bilan</button>
+      <button class="later">Plus tard</button>
+    </div>
+
+    <div class="g2">
+      <div class="block next">
+        <div class="poster"><div class="img">AFFICHE RÉELLE</div></div>
+        <div class="nin">
+          <span class="lab">Prochain festival</span>
+          <span class="nname">Le Marché des Lucioles</span>
+          <span class="muted">14 septembre · Annecy, Haute-Savoie</span>
+          <span class="badge">Dans 31 jours</span>
+          <span class="faint">Inscrit</span>
+        </div>
+      </div>
+      <div class="block">
+        <div class="bhead"><span class="lab">Ta saison</span><span class="faint">7 dates sur 12 mois</span></div>
+        <div class="track"><i class="now"></i><i></i><i class="l1"></i><i class="l2"></i><i></i><i class="l3"></i><i class="l1"></i><i></i><i></i><i class="l1"></i><i></i><i class="l2"></i></div>
+        <div class="months"><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span></div>
+        <p class="faint">Ton mois le plus chargé : janvier, 3 dates.</p>
+      </div>
+    </div>
+
+    <div class="block next">
+      <div class="poster"><div class="fb"></div></div>
+      <div class="nin">
+        <span class="lab">Sans affiche — repli teinté</span>
+        <span class="nname">Braderie de la Grand-Place</span>
+        <span class="muted">28 septembre · Lille, Nord</span>
+        <span class="badge">Dans 45 jours</span>
+      </div>
+    </div>
+
+    <div class="block only-full">
+      <div class="bhead"><h3>À venir</h3><span class="faint">6 ›</span></div>
+      <div class="list">
+        <a class="li" href="#"><span class="pip ok"></span><span class="txtcol"><span class="t">Le Marché des Lucioles</span><span class="s">Annecy</span></span><span class="faint">J-31</span></a>
+        <a class="li" href="#"><span class="pip wait"></span><span class="txtcol"><span class="t">Foire aux Vents d'Automne</span><span class="s">Nantes</span></span><span class="faint">J-48</span></a>
+        <a class="li" href="#"><span class="pip wait"></span><span class="txtcol"><span class="t">Nuit des Artisans</span><span class="s">Lyon</span></span><span class="faint">J-63</span></a>
+        <a class="li" href="#"><span class="pip ok"></span><span class="txtcol"><span class="t">Salon des Curiosités</span><span class="s">Bordeaux</span></span><span class="faint">J-79</span></a>
+      </div>
+      <span class="faint">+2 autres ›</span>
+    </div>
+
+    <div class="g3">
+      <div class="block">
+        <div class="bhead"><h3>À régler</h3><span class="faint">3 ›</span></div>
+        <div class="list">
+          <a class="li" href="#"><span class="pip wait"></span><span class="txtcol"><span class="t">Foire aux Vents d'Automne</span><span class="s">Nantes · 2 oct. · Accepté</span></span><span class="amt">180 €</span></a>
+          <a class="li" href="#"><span class="pip wait"></span><span class="txtcol"><span class="t">Nuit des Artisans</span><span class="s">Lyon · 17 oct. · Acompte versé</span></span><span class="amt">95 €</span></a>
+          <a class="li" href="#"><span class="pip wait"></span><span class="txtcol"><span class="t">Salon des Curiosités</span><span class="s">Bordeaux · 2 nov. · Dossier envoyé</span></span></a>
+        </div>
+      </div>
+      <div class="block">
+        <div class="bhead"><h3>Compagnons</h3><span class="faint">tout ›</span></div>
+        <div class="list">
+          <a class="li" href="#"><span class="faces"><span class="f">M</span><span class="f">J</span><span class="f">A</span></span><span class="txtcol"><span class="t">Vous serez 5 réunis</span><span class="s">Le Marché des Lucioles</span></span></a>
+          <a class="li" href="#"><span class="faces"><span class="f">S</span><span class="f">L</span></span><span class="txtcol"><span class="t">Vous serez 3 réunis</span><span class="s">Foire aux Vents d'Automne</span></span></a>
+        </div>
+      </div>
+      <div class="block">
+        <div class="bhead"><h3>Mes bilans</h3><span class="faint">tous ›</span></div>
+        <div class="list">
+          <span class="li"><span class="txtcol"><span class="t">Fête des Récoltes</span><span class="s">14 → 15 juin 2026</span></span><span class="amt pos">+340 €</span></span>
+          <span class="li"><span class="txtcol"><span class="t">Marché de Printemps</span><span class="s">3 → 5 avril 2026</span></span><span class="amt">−120 €</span></span>
+          <span class="li"><span class="txtcol"><span class="t">Total net</span><span class="s">2 bilans remplis</span></span><span class="amt pos">+220 €</span></span>
+        </div>
+      </div>
+    </div>
+
+    <details class="block refus only-full">
+      <summary><span class="lab">Dossiers refusés</span><span class="faint">2</span></summary>
+    </details>
+  </main>
+</div>
+
+<div class="demo">
+  <span class="grp"><b>Palette</b>
+    <button data-k="palette" data-v="marque">Marque</button>
+    <button data-k="palette" data-v="outil">Outil</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Rail</b>
+    <button data-k="rail" data-v="blocs">Blocs</button>
+    <button data-k="rail" data-v="doux">Doux</button>
+    <button data-k="rail" data-v="moyen">Moyen</button>
+    <button data-k="rail" data-v="franc">Franc</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Fond</b>
+    <button data-k="sol" data-v="clair">Clair</button>
+    <button data-k="sol" data-v="moyen">Moyen</button>
+    <button data-k="sol" data-v="profond">Profond</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Panneau</b>
+    <button data-k="panel" data-v="non">Non</button>
+    <button data-k="panel" data-v="oui">Oui</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Densité</b>
+    <button data-k="density" data-v="full">Complet</button>
+    <button data-k="density" data-v="epure">Épuré</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Thème</b>
+    <button data-k="mode" data-v="day">Jour</button>
+    <button data-k="mode" data-v="night">Nuit</button>
+  </span>
+  <span class="sep"></span>
+  <span class="grp"><b>Coins</b>
+    <button data-k="corners" data-v="on">Oui</button>
+    <button data-k="corners" data-v="off">Non</button>
+  </span>
+</div>
+
+<script>
+  var state = { palette:'outil', rail:'blocs', sol:'moyen', panel:'non', density:'full', mode:'day', corners:'on' };
+  function apply(){
+    var r = document.documentElement;
+    for (var k in state) r.setAttribute('data-'+k, state[k]);
+    document.querySelectorAll('.demo button').forEach(function(b){
+      b.setAttribute('aria-pressed', state[b.dataset.k] === b.dataset.v ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('.demo button').forEach(function(b){
+    b.addEventListener('click', function(){ state[b.dataset.k] = b.dataset.v; apply(); });
+  });
+  apply();
+</script>
