@@ -189,6 +189,16 @@
      ====================================================================== */
   --list-row-gap: var(--space-12);
   --list-row-height: 33px;
-  --avatar-size: 21px;
   --avatar-overlap: -3px;
+
+  /* =========================================================================
+     AVATARS
+     Un seul et même composant `.avatar`, dont la taille est pilotée par la
+     variable --avatar-size. Chaque endroit REDÉFINIT cette variable ; il ne
+     faut jamais réécrire width/height depuis un fichier de composant, sinon
+     l'ordre des imports décide du gagnant.
+     ====================================================================== */
+  --avatar-size: var(--width-avatar-list); /* valeur par défaut */
+  --avatar-size-hero: var(--width-avatar-hero);
+  --avatar-size-account: var(--width-avatar-account);
 }

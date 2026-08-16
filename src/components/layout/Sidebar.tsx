@@ -30,7 +30,11 @@ export function Sidebar() {
       <img className="sidebar__logo" src="/icon.png" alt="Fellowship" />
 
       <button type="button" className="sidebar__account">
-        <Avatar src={actor?.avatarUrl} name={actor?.label} size={35} />
+        <Avatar
+          className="sidebar__account-avatar"
+          src={actor?.avatarUrl}
+          name={actor?.label}
+        />
         <span className="sidebar__account-identity">
           <span className="sidebar__account-name">{actor?.label ?? '—'}</span>
           <span className="sidebar__account-role">{actor?.roleLabel ?? ''}</span>

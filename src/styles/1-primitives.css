@@ -127,4 +127,7 @@
   --width-card: 452px;
   --height-card: 196px;
   --width-poster: 131px;
+  --width-avatar-hero: 71px; /* l'avatar de l'accroche */
+  --width-avatar-account: 35px; /* l'avatar de la carte de compte */
+  --width-avatar-list: 21px; /* les avatars d'amis, en pile */
 }

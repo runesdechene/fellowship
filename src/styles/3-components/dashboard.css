@@ -15,10 +15,9 @@
   gap: var(--space-18);
 }
 
+/* On redéfinit la variable, on ne réécrit pas width/height : voir couche 2. */
 .dashboard__avatar {
-  flex: none;
-  width: 71px;
-  height: 71px;
+  --avatar-size: var(--avatar-size-hero);
 }
 
 .dashboard__greeting {

@@ -41,6 +41,10 @@
   text-align: left;
 }
 
+.sidebar__account-avatar {
+  --avatar-size: var(--avatar-size-account);
+}
+
 /* Le nom puis le type de compte, l'un SOUS l'autre */
 .sidebar__account-identity {
   display: flex;

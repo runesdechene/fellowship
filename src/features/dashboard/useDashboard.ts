@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { daysUntil, monthKey, monthsWindow, parseSqlDate, type MonthSlot } from '@/lib/dates'
-import { netResult } from '@/lib/money'
+import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
 import type { EntityRow, EventRow, ParticipationStatus, UserRow } from '@/types/database'
 
 /** Les seules colonnes d'événement dont une carte de bilan a besoin. */
@@ -42,8 +42,9 @@ export interface DashboardReport {
   name: string
   imageUrl: string | null
   date: Date
-  /** null tant que l'exposant n'a pas rempli son bilan. */
+  /** Somme des entrants. null tant qu'aucune ligne de registre n'existe. */
   revenue: number | null
+  /** Entrants − sortants. null tant qu'aucune ligne de registre n'existe. */
   net: number | null
 }
 
@@ -143,44 +144,44 @@ async function fetchReports(actorId: string, todayIso: string): Promise<Dashboar
     .from('participations')
     .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
     .eq('actor_id', actorId)
-    .in('status', PROGRAMMED_STATUSES)
+    .in('status', CONFIRMED_STATUSES)
     .lt('events.end_date', todayIso)
-    .order('end_date', { ascending: false, referencedTable: 'events' })
-    .limit(REPORTS_SHOWN)
 
   const rows = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
     .map((row) => row.events)
     .filter((event): event is PastEvent => Boolean(event))
-    .sort((a, b) => b.start_date.localeCompare(a.start_date))
+    .sort((a, b) => b.end_date.localeCompare(a.end_date))
     .slice(0, REPORTS_SHOWN)
 
   if (rows.length === 0) return []
 
-  const { data: reportRows } = await supabase
-    .from('event_reports')
-    .select('event_id, revenue, booth_cost, charges')
+  const { data: ledgerRows } = await supabase
+    .from('event_ledger_entries')
+    .select('event_id, amount, direction')
     .eq('actor_id', actorId)
     .in(
       'event_id',
       rows.map((event) => event.id),
     )
 
-  const byEvent = new Map(
-    (reportRows ?? []).map((row) => [
-      row.event_id,
-      { revenue: row.revenue, net: netResult(row) },
-    ]),
-  )
+  const linesByEvent = (ledgerRows ?? []).reduce((map, line) => {
+    const list = map.get(line.event_id) ?? []
+    list.push({ amount: line.amount, direction: line.direction })
+    map.set(line.event_id, list)
+    return map
+  }, new Map<string, LedgerLine[]>())
 
   return rows.map((event) => {
-    const report = byEvent.get(event.id)
+    const lines = linesByEvent.get(event.id) ?? []
+    // Aucune ligne de registre = bilan pas encore rempli.
+    const filled = lines.length > 0
     return {
       eventId: event.id,
       name: event.name,
       imageUrl: event.image_url,
       date: parseSqlDate(event.start_date),
-      revenue: report?.revenue ?? null,
-      net: report?.net ?? null,
+      revenue: filled ? ledgerRevenue(lines) : null,
+      net: filled ? ledgerProfit(lines) : null,
     }
   })
 }
