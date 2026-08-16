@@ -1,0 +1,116 @@
+/* -----------------------------------------------------------------------------
+   ACCOUNT SWITCHER — la carte de compte, et le menu des enseignes
+   Utilisé par : src/components/layout/AccountSwitcher.tsx
+   -------------------------------------------------------------------------- */
+
+.account-switcher {
+  position: relative;
+  width: 100%;
+}
+
+/* --- La carte elle-même --------------------------------------------------- */
+.account-switcher__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  width: 100%;
+  padding: var(--space-10);
+  background: var(--surface-raised);
+  border-radius: var(--radius-nav);
+  text-align: left;
+  transition:
+    gap var(--sidebar-collapse-motion),
+    padding var(--sidebar-collapse-motion);
+}
+
+.account-switcher__avatar {
+  --avatar-size: var(--avatar-size-account);
+}
+
+/* Le nom puis le type de compte, l'un SOUS l'autre */
+.account-switcher__identity {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.account-switcher__name {
+  font: var(--type-account-name);
+  color: var(--ink-title);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-switcher__role {
+  margin-top: var(--space-4);
+  font: var(--type-account-role);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.account-switcher__chevron {
+  flex: none;
+  color: var(--ink-soft);
+  transition: transform var(--menu-motion);
+}
+
+/* Le chevron se retourne : il pointe vers ce que le clic va faire. */
+.account-switcher__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* --- Le menu -------------------------------------------------------------- */
+/* Il flotte au-dessus du contenu. Aucune ombre dans cette interface, donc
+   c'est un liseré qui le détache — sans lui, il se fondrait dans la page. */
+.account-switcher__menu {
+  position: absolute;
+  top: calc(100% + var(--space-6));
+  right: 0;
+  left: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  background: var(--surface-panel);
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-nav);
+}
+
+.account-switcher__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  padding: var(--space-8);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  transition: background-color var(--menu-motion);
+}
+
+.account-switcher__option:hover {
+  background-color: var(--surface-nav-hover);
+}
+
+.account-switcher__check {
+  flex: none;
+  color: var(--status-ok-ink);
+}
+
+/* --- Colonne repliée ------------------------------------------------------ */
+/* Le déclencheur se réduit à l'avatar : le repli de la barre latérale masque
+   déjà l'identité et le chevron (voir sidebar.css). */
+.app-shell--collapsed .account-switcher__trigger {
+  gap: 0;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-switcher__trigger,
+  .account-switcher__chevron,
+  .account-switcher__option {
+    transition: none;
+  }
+}

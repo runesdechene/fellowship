@@ -1,13 +1,11 @@
 import {
-  ChevronDown,
   CircleGauge,
   PanelRightClose,
   PanelRightOpen,
   Telescope,
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import { Avatar } from '@/components/ui/Avatar'
-import { useAuth } from '@/lib/auth'
+import { AccountSwitcher } from './AccountSwitcher'
 
 /**
  * Les deux entrées de la maquette, dans l'ordre de la maquette.
@@ -29,7 +27,6 @@ interface SidebarProps {
 }
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
-  const { actor } = useAuth()
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
 
   return (
@@ -47,18 +44,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* La marque seule — /logo.png est le lockup complet, réservé à la connexion */}
       <img className="sidebar__logo" src="/icon.png" alt="Fellowship" />
 
-      <button type="button" className="sidebar__account">
-        <Avatar
-          className="sidebar__account-avatar"
-          src={actor?.avatarUrl}
-          name={actor?.label}
-        />
-        <span className="sidebar__account-identity">
-          <span className="sidebar__account-name">{actor?.label ?? '—'}</span>
-          <span className="sidebar__account-role">{actor?.roleLabel ?? ''}</span>
-        </span>
-        <ChevronDown className="sidebar__account-chevron" size={19} strokeWidth={1.75} />
-      </button>
+      <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 
       <nav className="sidebar__nav">
         {NAV_ITEMS.map(({ to, label, Icon }) => {

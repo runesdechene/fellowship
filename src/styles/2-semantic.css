@@ -74,7 +74,14 @@
   --radius-nav: var(--round-12); /* compte + entrées de navigation */
   --radius-bar: var(--round-8); /* barres du graphe */
   --radius-chip: var(--round-8); /* pastilles de statut */
+  --radius-sm: var(--round-8); /* petits éléments : options de menu */
   --radius-round: var(--round-full); /* avatars, points */
+
+  /* Menus flottants. Sans ombre dans cette interface, c'est un liseré qui
+     détache le menu du contenu qu'il recouvre. */
+  --border-menu: var(--stone-200);
+  --menu-motion: var(--duration-fast) var(--ease-out);
+  --layer-menu: 20;
 
   /* =========================================================================
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)

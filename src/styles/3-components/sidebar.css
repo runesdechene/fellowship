@@ -39,50 +39,10 @@
 }
 
 /* --- Carte de compte ------------------------------------------------------ */
-.sidebar__account {
-  display: flex;
-  align-items: center;
-  gap: var(--space-14);
-  width: 100%;
+/* Son apparence vit dans account-switcher.css ; la barre latérale ne décide
+   que de sa place. */
+.sidebar > .account-switcher {
   margin-top: var(--sidebar-logo-gap);
-  padding: var(--space-10);
-  background: var(--surface-raised);
-  border-radius: var(--radius-nav);
-  text-align: left;
-  transition:
-    gap var(--sidebar-collapse-motion),
-    padding var(--sidebar-collapse-motion);
-}
-
-.sidebar__account-avatar {
-  --avatar-size: var(--avatar-size-account);
-}
-
-/* Le nom puis le type de compte, l'un SOUS l'autre */
-.sidebar__account-identity {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.sidebar__account-name {
-  font: var(--type-account-name);
-  color: var(--ink-title);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebar__account-role {
-  margin-top: var(--space-4);
-  font: var(--type-account-role);
-  color: var(--ink-soft);
-}
-
-.sidebar__account-chevron {
-  flex: none;
-  color: var(--ink-soft);
 }
 
 /* --- Navigation ----------------------------------------------------------- */
@@ -141,8 +101,8 @@
    -------------------------------------------------------------------------- */
 
 .sidebar__item-label,
-.sidebar__account-identity,
-.sidebar__account-chevron {
+.account-switcher__identity,
+.account-switcher__chevron {
   white-space: nowrap;
   transition:
     opacity var(--sidebar-collapse-motion),
@@ -152,8 +112,8 @@
 /* Ce qui disparaît doit cesser d'occuper de la place. S'il ne fait que
    devenir transparent, il pousse encore les icônes hors du rail. */
 .app-shell--collapsed .sidebar__item-label,
-.app-shell--collapsed .sidebar__account-identity,
-.app-shell--collapsed .sidebar__account-chevron {
+.app-shell--collapsed .account-switcher__identity,
+.app-shell--collapsed .account-switcher__chevron {
   flex: 0 0 0;
   width: 0;
   min-width: 0;
@@ -165,7 +125,6 @@
 /* L'écart tombe à zéro : il ne reste qu'un seul enfant visible, qu'on centre.
    Les retraits, eux, ne bougent pas — c'est ce qui rend l'icône exactement
    centrée dans sa pastille. */
-.app-shell--collapsed .sidebar__account,
 .app-shell--collapsed .sidebar__item {
   gap: 0;
   justify-content: center;
@@ -177,8 +136,8 @@
   .sidebar__collapse,
   .sidebar__item,
   .sidebar__item-label,
-  .sidebar__account-identity,
-  .sidebar__account-chevron {
+  .account-switcher__identity,
+  .account-switcher__chevron {
     transition: none;
   }
 }
