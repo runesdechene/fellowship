@@ -162,6 +162,7 @@
      mouvement court se lit comme un à-coup, même avec une courbe molle. */
   --duration-smooth: 200ms;
   --duration-medium: 240ms;
+  --duration-slow: 480ms;
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
   /* Courbe plus molle : elle démarre et finit sans à-coup, ce qui rend un
      mouvement court doux plutôt que sec. */
