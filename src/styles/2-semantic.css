@@ -247,6 +247,38 @@
   --radius-banner: var(--round-15);
 
   /* =========================================================================
+     CRÉATION D'ÉVÉNEMENT — « l'atelier »
+     ====================================================================== */
+  --create-mate-width: 360px;
+  --create-columns-gap: var(--space-48);
+  --create-poster-height: 172px;
+
+  --type-create-ask: var(--weight-bold) var(--size-30) / var(--leading-tight)
+    var(--family-sans);
+  --type-create-card-name: var(--weight-bold) var(--size-18) /
+    var(--leading-snug) var(--family-sans);
+
+  /* =========================================================================
+     FORMULAIRES — champs, bascules, dépôt de fichier
+     ====================================================================== */
+  --control-height: 46px;
+  --control-surface: var(--surface-card);
+  --control-ink: var(--ink-title);
+  --control-placeholder: var(--ink-soft);
+  --control-padding-x: var(--space-16);
+  --radius-control: var(--round-12);
+  --field-gap: var(--space-6);
+  --fields-gap: var(--space-16);
+  --focus-ring: var(--brown-400);
+  --required-ink: var(--status-pending-ink);
+  --dropzone-border: var(--brown-250);
+
+  --type-field-label: var(--weight-semibold) var(--size-11) /
+    var(--leading-snug) var(--family-sans);
+  --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+
+  /* =========================================================================
      À RÉGLER — les dossiers et paiements en suspens
      ====================================================================== */
   --settlement-padding-x: var(--card-padding);

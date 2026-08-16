@@ -1,0 +1,158 @@
+/* -----------------------------------------------------------------------------
+   FORM — les contrôles de saisie, partagés par tous les écrans
+   Utilisé par : src/components/ui/Field.tsx, Input.tsx, Textarea.tsx,
+                 Toggle.tsx, Dropzone.tsx
+   -------------------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--field-gap);
+  min-width: 0;
+}
+
+.field__label {
+  font: var(--type-field-label);
+  color: var(--ink-soft);
+}
+
+/* L'astérisque du champ obligatoire emprunte la couleur d'attente : c'est
+   le même message — il manque quelque chose. */
+.field__required {
+  color: var(--required-ink);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fields-gap);
+}
+
+.fields__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fields-gap);
+}
+
+/* --- Champs de saisie ----------------------------------------------------- */
+.control {
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--control-padding-x);
+  background: var(--control-surface);
+  border-radius: var(--radius-control);
+  font: var(--type-control);
+  color: var(--control-ink);
+}
+
+.control::placeholder {
+  color: var(--control-placeholder);
+  font-weight: var(--weight-regular);
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.control--area {
+  height: auto;
+  min-height: 96px;
+  padding: var(--space-14) var(--control-padding-x);
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+
+/* --- Bascule -------------------------------------------------------------- */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  width: 100%;
+  padding: var(--space-16) var(--space-18);
+  background: var(--control-surface);
+  border-radius: var(--radius-control);
+  text-align: left;
+  cursor: pointer;
+}
+
+.toggle__switch {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  border-radius: var(--radius-round);
+  background: var(--stone-200);
+  transition: background-color var(--menu-motion);
+}
+
+.toggle__switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+  background: var(--cream-50);
+  transition: transform var(--menu-motion);
+}
+
+.toggle--on .toggle__switch {
+  background: var(--status-ok-ink);
+}
+
+.toggle--on .toggle__switch::after {
+  transform: translateX(16px);
+}
+
+.toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.toggle__title {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.toggle__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Dépôt de fichier ----------------------------------------------------- */
+.dropzone {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 110px;
+  padding: var(--space-20);
+  border: 1px dashed var(--dropzone-border);
+  border-radius: var(--radius-control);
+  font: var(--type-list-name);
+  color: var(--ink-soft);
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropzone--filled {
+  padding: 0;
+  border-style: solid;
+  overflow: hidden;
+}
+
+.dropzone__preview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle__switch,
+  .toggle__switch::after {
+    transition: none;
+  }
+}
