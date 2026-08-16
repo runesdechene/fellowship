@@ -35,9 +35,70 @@
   cursor: pointer;
 }
 
+.create__top-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
 .create__progress {
   font: var(--type-section-link);
   color: var(--ink-soft);
+}
+
+/* --- Sauvegarder ---------------------------------------------------------- */
+/* Le brouillon part déjà tout seul à chaque frappe : ce bouton n'existe pas
+   pour enregistrer, il existe pour le DIRE. D'où sa discrétion — il rassure,
+   il ne réclame rien. */
+.create__save {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  height: 30px;
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  color: var(--ink-soft);
+  font: var(--type-section-link);
+  cursor: pointer;
+  transition:
+    background-color var(--menu-motion),
+    color var(--menu-motion);
+}
+
+.create__save:hover {
+  color: var(--ink-section);
+}
+
+/* Une fois le geste fait, il prend la couleur d'un état acquis. */
+.create__save--done {
+  background: var(--tag-on-surface);
+  color: var(--tag-on-ink);
+  cursor: default;
+}
+
+/* Les deux versions occupent la même case de la grille : elles se croisent
+   en fondu, et la plus large fixe la largeur du bouton une fois pour toutes.
+   Rien ne saute quand l'une remplace l'autre. */
+.create__save-swap {
+  display: grid;
+  align-items: center;
+  justify-items: start;
+}
+
+.create__save-swap > * {
+  grid-area: 1 / 1;
+  transition: opacity var(--menu-motion);
+}
+
+.create__save .create__save-done,
+.create__save--done .create__save-offer {
+  opacity: 0;
+}
+
+.create__save .create__save-offer,
+.create__save--done .create__save-done {
+  opacity: 1;
 }
 
 /* --- Les deux colonnes ---------------------------------------------------- */
@@ -76,10 +137,6 @@
   align-items: center;
   gap: var(--space-12);
   margin-top: var(--space-32);
-}
-
-.create__spacer {
-  flex: 1 1 auto;
 }
 
 /* Ce qui manque pour avancer, dit à l'endroit où on essaie d'avancer. */

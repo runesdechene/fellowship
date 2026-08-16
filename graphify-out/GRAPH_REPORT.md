@@ -1,12 +1,12 @@
 # Graph Report - .  (2026-08-17)
 
 ## Corpus Check
-- 47 files · ~530,222 words
+- 47 files · ~530,245 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 205 nodes · 177 edges · 58 communities detected
-- Extraction: 81% EXTRACTED · 18% INFERRED · 2% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
+- 206 nodes · 179 edges · 58 communities detected
+- Extraction: 81% EXTRACTED · 17% INFERRED · 2% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -112,12 +112,12 @@ Cohesion: 0.18
 Nodes (4): capitalize(), daysUntil(), formatMonthLabel(), startOfDay()
 
 ### Community 1 - "Community 1"
-Cohesion: 0.2
-Nodes (12): CSS Tokens (Flat warm design), Netflix-style EventCard Component, Terre & Feu Color Palette, Plus Jakarta Sans + Inter Typography, Filter Chips (tags + temporal + geo), HeroBanner Component, PRIMARY_TAGS Constants, Prospection Mode (exposants only) (+4 more)
-
-### Community 2 - "Community 2"
 Cohesion: 0.17
 Nodes (12): Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section, NotificationSlidePanel, Notifications Redesign Plan, Bilan Post-Événement (privé), Calendrier Communautaire (vue annuelle/mensuelle), Fellowship V1 Design Spec (+4 more)
+
+### Community 2 - "Community 2"
+Cohesion: 0.2
+Nodes (12): CSS Tokens (Flat warm design), Netflix-style EventCard Component, Terre & Feu Color Palette, Plus Jakarta Sans + Inter Typography, Filter Chips (tags + temporal + geo), HeroBanner Component, PRIMARY_TAGS Constants, Prospection Mode (exposants only) (+4 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.18
@@ -196,11 +196,11 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 22 - "Community 22"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 1.0
+Nodes (2): useTransitionNavigate(), useViewTransition()
 
 ### Community 23 - "Community 23"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 24 - "Community 24"
@@ -350,29 +350,27 @@ Nodes (1): Pastel Tag System
 ## Knowledge Gaps
 - **37 isolated node(s):** `Netlify Deployment (PWA, SPA fallback)`, `Supabase Auth via Magic Link OTP`, `Vite + React + TS Template`, `Phase 0 Cleanup (Remove Tauri)`, `Test Infrastructure (Vitest + RTL)` (+32 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 23`** (2 nodes): `Topbar.tsx`, `Topbar()`
+- **Thin community `Community 24`** (2 nodes): `Topbar.tsx`, `Topbar()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (2 nodes): `Button()`, `Button.tsx`
+- **Thin community `Community 25`** (2 nodes): `Button()`, `Button.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (2 nodes): `Chip()`, `Chip.tsx`
+- **Thin community `Community 26`** (2 nodes): `Chip()`, `Chip.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
+- **Thin community `Community 27`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
+- **Thin community `Community 28`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
+- **Thin community `Community 29`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
+- **Thin community `Community 30`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (2 nodes): `submit()`, `CreateEvent.tsx`
+- **Thin community `Community 31`** (2 nodes): `submit()`, `CreateEvent.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (2 nodes): `formatRange()`, `EventPreview.tsx`
+- **Thin community `Community 32`** (2 nodes): `formatRange()`, `EventPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (2 nodes): `useSimilarEvents.ts`, `useSimilarEvents()`
+- **Thin community `Community 33`** (2 nodes): `useSimilarEvents.ts`, `useSimilarEvents()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (2 nodes): `useTags.ts`, `useTags()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (2 nodes): `useTransitionNavigate()`, `navigation.ts`
+- **Thin community `Community 34`** (2 nodes): `useTags.ts`, `useTags()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 35`** (2 nodes): `syncCustomerBilling()`, `billing.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -430,10 +428,10 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Design System Refonte Plan` connect `Community 1` to `Community 2`, `Community 6`?**
+- **Why does `Design System Refonte Plan` connect `Community 2` to `Community 1`, `Community 6`?**
   _High betweenness centrality (0.062) - this node is a cross-community bridge._
-- **Why does `Fellowship V1 Design Spec` connect `Community 2` to `Community 1`, `Community 7`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 2`, `Community 7`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**

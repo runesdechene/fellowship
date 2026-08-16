@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Check, Save } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
 import { useAuth } from '@/lib/auth'
@@ -14,10 +14,13 @@ import { blockingReason, STEPS, useEventDraft, type EventDraft } from './useEven
 /** Le dépôt public des affiches. */
 const POSTER_BUCKET = 'event-images'
 
+/** Le temps que la confirmation reste affichée avant de redevenir une offre. */
+const SAVED_NOTICE_MS = 2400
+
 export function CreateEvent() {
   const go = useTransitionNavigate()
   const { actor, person } = useAuth()
-  const { draft, update, toggleTag, clear } = useEventDraft()
+  const { draft, update, toggleTag, clear, save } = useEventDraft()
   const tags = useTags()
 
   const [step, setStep] = useState(0)
@@ -25,6 +28,7 @@ export function CreateEvent() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showBlocker, setShowBlocker] = useState(false)
+  const [savedNotice, setSavedNotice] = useState(false)
 
   // L'aperçu de l'affiche vient du navigateur, avant tout envoi. L'URL objet
   // doit être révoquée, sinon le fichier reste en mémoire.
@@ -54,6 +58,27 @@ export function CreateEvent() {
     setShowBlocker(false)
     transition('step-back', () => setStep((current) => Math.max(current - 1, 0)))
   }, [transition])
+
+  // La confirmation ne dure pas : passé quelques secondes le bouton redevient
+  // ce qu'il était, sinon il finirait par ne plus rien vouloir dire.
+  useEffect(() => {
+    if (!savedNotice) return
+    const timer = setTimeout(() => setSavedNotice(false), SAVED_NOTICE_MS)
+    return () => clearTimeout(timer)
+  }, [savedNotice])
+
+  const saveDraft = useCallback(() => {
+    if (save()) {
+      setError(null)
+      setSavedNotice(true)
+      return
+    }
+    setSavedNotice(false)
+    setError(
+      "Le brouillon n'a pas pu être gardé : ce navigateur refuse le stockage. " +
+        "Termine l'événement maintenant, ou il sera perdu en fermant l'onglet.",
+    )
+  }, [save])
 
   async function submit() {
     if (!actor) return
@@ -114,10 +139,29 @@ export function CreateEvent() {
           <ArrowLeft size={15} strokeWidth={2} />
           Tableau de bord
         </button>
-        <span className="create__progress">
-          Étape {step + 1} sur {STEPS.length}
-          {isLast && ' · facultative'}
-        </span>
+        <div className="create__top-right">
+          <span className="create__progress">
+            Étape {step + 1} sur {STEPS.length}
+            {isLast && ' · facultative'}
+          </span>
+
+          {/* Les deux états cohabitent dans la même case : ils se croisent en
+              fondu au lieu de se remplacer, et le bouton garde sa largeur. */}
+          <button
+            type="button"
+            className={savedNotice ? 'create__save create__save--done' : 'create__save'}
+            onClick={saveDraft}
+          >
+            <span className="create__save-swap" aria-hidden="true">
+              <Save size={14} strokeWidth={2} className="create__save-offer" />
+              <Check size={14} strokeWidth={2.4} className="create__save-done" />
+            </span>
+            <span className="create__save-swap">
+              <span className="create__save-offer">Sauvegarder</span>
+              <span className="create__save-done">Brouillon sauvegardé</span>
+            </span>
+          </button>
+        </div>
       </div>
 
       <div className="create__body">
@@ -140,16 +184,6 @@ export function CreateEvent() {
             ) : (
               <Button variant="action" onClick={goNext}>
                 Continuer
-              </Button>
-            )}
-            <span className="create__spacer" />
-            {step === 0 ? (
-              <Button variant="bare" onClick={() => go('/')} aria-label="Annuler">
-                Annuler
-              </Button>
-            ) : (
-              <Button variant="bare" onClick={() => go('/')}>
-                Enregistrer et finir plus tard
               </Button>
             )}
           </div>

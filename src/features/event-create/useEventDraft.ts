@@ -42,6 +42,16 @@ export const EMPTY_DRAFT: EventDraft = {
 
 const DRAFT_KEY = 'flwsh-event-draft'
 
+function writeDraft(draft: EventDraft): boolean {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+    return true
+  } catch {
+    /* stockage indisponible : le brouillon ne vaut que pour cette visite */
+    return false
+  }
+}
+
 function readDraft(): EventDraft {
   try {
     const raw = localStorage.getItem(DRAFT_KEY)
@@ -88,12 +98,15 @@ export function useEventDraft() {
   // Le brouillon survit à la fermeture de l'onglet : c'est la raison d'être
   // de cet écran plutôt qu'une modale.
   useEffect(() => {
-    try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
-    } catch {
-      /* stockage indisponible : le brouillon ne vaut que pour cette visite */
-    }
+    writeDraft(draft)
   }, [draft])
+
+  /**
+   * L'enregistrement volontaire. Le brouillon part déjà à chaque frappe ;
+   * ce geste-là écrit pour de bon et dit si ça a tenu, parce qu'un bouton
+   * qui affirme « sauvegardé » doit l'avoir vérifié.
+   */
+  const save = useCallback(() => writeDraft(draft), [draft])
 
   const update = useCallback(<K extends keyof EventDraft>(key: K, value: EventDraft[K]) => {
     setDraft((previous) => ({ ...previous, [key]: value }))
@@ -117,5 +130,5 @@ export function useEventDraft() {
     }
   }, [])
 
-  return { draft, update, toggleTag, clear }
+  return { draft, update, toggleTag, clear, save }
 }
