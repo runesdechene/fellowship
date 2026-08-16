@@ -39,7 +39,8 @@
   --ink-strong: var(--brown-900); /* texte sur contrôle clair */
   --ink-soft: var(--brown-400); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
-  --ink-section: var(--brown-250); /* les grands titres posés au-dessus des blocs */
+  /* Grands titres posés au-dessus des blocs. Version pâle = var(--brown-250). */
+  --ink-section: var(--brown-800);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -191,7 +192,7 @@
   --poster-width: var(--width-poster);
 
   /* Distance entre un grand titre de section et son bloc */
-  --gap-section-title: var(--space-15);
+  --gap-section-title: var(--space-20);
 
   /* =========================================================================
      MES BILANS — les petites cartes du bas
@@ -204,6 +205,8 @@
   --report-net-ink: var(--status-ok-ink);
   --report-todo-ink: var(--status-pending-ink);
   --report-todo-border: var(--brown-250);
+  /* Largeur du fondu au bord droit : la bande s'efface au lieu d'être coupée */
+  --report-fade-width: 140px;
 
   /* =========================================================================
      LISTE « À VENIR »
