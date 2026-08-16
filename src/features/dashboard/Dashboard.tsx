@@ -1,6 +1,7 @@
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { formatSignedEuros } from '@/lib/money'
+import { ActionBanner } from './ActionBanner'
 import { NextDateCard } from './NextDateCard'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
@@ -16,6 +17,7 @@ export function Dashboard() {
     upcoming,
     reports,
     seasonNet,
+    pendingReport,
     loading,
     error,
   } = useDashboard(actor?.id)
@@ -37,6 +39,12 @@ export function Dashboard() {
           </p>
         </div>
       </header>
+
+      {pendingReport && (
+        <section className="dashboard__section">
+          <ActionBanner report={pendingReport} />
+        </section>
+      )}
 
       <section className="dashboard__section">
         <SeasonChart months={months} />

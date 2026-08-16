@@ -24,6 +24,21 @@
   color: var(--ink-title);
 }
 
+/* La seule surface pleine et colorée : l'action que l'interface réclame */
+.button--action {
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+/* Sans fond du tout : la croix qui ferme une bande */
+.button--bare {
+  width: var(--topbar-control-height);
+  padding: 0;
+  justify-content: center;
+  background: none;
+  color: var(--ink-soft);
+}
+
 .button--block {
   width: 100%;
   justify-content: center;

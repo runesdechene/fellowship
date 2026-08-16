@@ -1,0 +1,59 @@
+/* -----------------------------------------------------------------------------
+   ACTION BANNER — « Comment s'est passé … ? »
+   La seule bande qui réclame quelque chose à l'exposant. Elle n'apparaît que
+   s'il existe une date passée dont le bilan n'a pas été rempli.
+   Utilisé par : src/features/dashboard/ActionBanner.tsx
+   -------------------------------------------------------------------------- */
+
+/* Sur-titre en capitales, posé au-dessus de la bande */
+.action-banner__eyebrow {
+  margin-bottom: var(--space-10);
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.action-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--banner-gap);
+  padding: var(--banner-padding-y) var(--banner-padding-x);
+  background: var(--surface-card);
+  border-radius: var(--radius-banner);
+}
+
+/* Tuile d'icône : le seul endroit où la couleur d'alerte est un fond */
+.action-banner__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--banner-icon-size);
+  height: var(--banner-icon-size);
+  border-radius: var(--radius-nav);
+  background: var(--banner-icon-surface);
+  color: var(--banner-icon-ink);
+}
+
+.action-banner__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.action-banner__title {
+  font: var(--type-banner-title);
+  color: var(--ink-title);
+}
+
+.action-banner__note {
+  margin-top: var(--space-4);
+  font: var(--type-banner-note);
+  color: var(--ink-soft);
+}
+
+.action-banner__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-10);
+}

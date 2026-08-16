@@ -55,6 +55,12 @@
   --status-pending-ink: var(--clay-500);
   --status-pending-surface: var(--clay-100);
 
+  /* Bouton d'action principal. Il ne se distingue pas par une couleur mais
+     par le CONTRASTE : une surface sombre au milieu de surfaces claires.
+     Aucune teinte vive n'entre dans l'interface par cette porte. */
+  --action-surface: var(--brown-900);
+  --action-ink: var(--cream-50);
+
   /* Pastille ronde devant chaque date à venir */
   --dot-confirmed: var(--olive-500);
   --dot-pending: var(--clay-500);
@@ -137,6 +143,16 @@
   --type-button: var(--weight-bold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
+  /* Sur-titre en capitales, posé au-dessus d'une bande d'action */
+  --type-eyebrow: var(--weight-extrabold) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
+  --tracking-eyebrow: var(--tracking-wide);
+
+  --type-banner-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+  --type-banner-note: var(--weight-medium) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+
   /* =========================================================================
      GABARIT — la structure de la page
      ====================================================================== */
@@ -183,6 +199,7 @@
   /* Barre du haut : elle flotte au-dessus du contenu, comme sur la maquette */
   --topbar-top: var(--space-17);
   --topbar-gap: var(--space-12);
+  --topbar-right: var(--space-32);
   --topbar-control-height: 42px;
 
   /* =========================================================================
@@ -207,6 +224,17 @@
 
   /* Distance entre un grand titre de section et son bloc */
   --gap-section-title: var(--space-20);
+
+  /* =========================================================================
+     BANDE D'ACTION — « Comment s'est passé … ? »
+     ====================================================================== */
+  --banner-padding-x: var(--space-20);
+  --banner-padding-y: var(--space-15);
+  --banner-gap: var(--space-15);
+  --banner-icon-size: var(--width-banner-icon);
+  --banner-icon-surface: var(--status-pending-surface);
+  --banner-icon-ink: var(--status-pending-ink);
+  --radius-banner: var(--round-15);
 
   /* =========================================================================
      MES BILANS — les petites cartes du bas

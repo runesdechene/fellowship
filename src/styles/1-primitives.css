@@ -100,6 +100,8 @@
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — INTERLIGNES
      --------------------------------------------------------------------- */
+  --tracking-wide: 0.08em; /* les sur-titres en capitales */
+
   --leading-tight: 1.15;
   --leading-snug: 1.3;
   --leading-normal: 1.45;
@@ -166,4 +168,5 @@
   --height-report: 86px; /* une carte de bilan */
   --width-report-thumb: 60px; /* sa vignette d'affiche */
   --width-report-min: 240px; /* en dessous, elle passe à la ligne */
+  --width-banner-icon: 44px; /* la tuile d'icône de la bande d'action */
 }
