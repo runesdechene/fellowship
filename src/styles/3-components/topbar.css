@@ -1,0 +1,16 @@
+/* -----------------------------------------------------------------------------
+   TOPBAR — cloche + bouton « Ajouter une date »
+   Elle flotte au-dessus du contenu, comme sur la maquette : le titre de page
+   commence plus bas et plus à gauche, les deux ne se croisent jamais.
+   Utilisé par : src/components/layout/Topbar.tsx
+   -------------------------------------------------------------------------- */
+
+.topbar {
+  position: absolute;
+  top: var(--topbar-top);
+  right: var(--topbar-right);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--topbar-gap);
+}

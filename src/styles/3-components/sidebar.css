@@ -1,0 +1,95 @@
+/* -----------------------------------------------------------------------------
+   SIDEBAR — logo, carte de compte, navigation
+   Utilisé par : src/components/layout/Sidebar.tsx
+   -------------------------------------------------------------------------- */
+
+.sidebar {
+  position: relative;
+  flex: 0 0 var(--shell-sidebar-width);
+  width: var(--shell-sidebar-width);
+  padding: 0 var(--sidebar-padding-x);
+}
+
+/* --- Logo, centré en haut ------------------------------------------------- */
+.sidebar__logo {
+  display: block;
+  height: 37px;
+  width: auto;
+  margin: var(--sidebar-logo-top) auto 0;
+}
+
+/* --- Bouton de repli, calé en haut à droite ------------------------------- */
+.sidebar__collapse {
+  position: absolute;
+  top: var(--space-20);
+  right: var(--space-15);
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+}
+
+/* --- Carte de compte ------------------------------------------------------ */
+.sidebar__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  width: 100%;
+  margin-top: var(--sidebar-logo-gap);
+  padding: var(--space-10);
+  background: var(--surface-raised);
+  border-radius: var(--radius-nav);
+  text-align: left;
+}
+
+.sidebar__account-identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sidebar__account-name {
+  font: var(--type-account-name);
+  color: var(--ink-title);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__account-role {
+  margin-top: var(--space-4);
+  font: var(--type-account-role);
+  color: var(--ink-soft);
+}
+
+.sidebar__account-chevron {
+  flex: none;
+  color: var(--ink-soft);
+}
+
+/* --- Navigation ----------------------------------------------------------- */
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sidebar-item-gap);
+  margin-top: var(--sidebar-nav-gap);
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sidebar-icon-gap);
+  height: var(--sidebar-item-height);
+  padding: 0 var(--sidebar-item-padding);
+  border-radius: var(--radius-nav);
+  font: var(--type-nav);
+  color: var(--ink-soft);
+}
+
+.sidebar__item-icon {
+  flex: none;
+  color: currentColor;
+}
+
+.sidebar__item--active {
+  background: var(--surface-raised);
+  color: var(--ink-title);
+}

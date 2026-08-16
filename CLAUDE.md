@@ -52,25 +52,50 @@ Honest caveats: AST nodes are deterministic and reliable. Semantic edges (extrac
 
 Package manager is **pnpm**.
 
+## Branche `v2` — refonte complète (branche courante)
+
+La V1 vit sur `main` et reste consultable côte à côte dans le worktree
+`../fellowship-legacy` (`git worktree remove ../fellowship-legacy` pour l'enlever).
+
+**Périmètre volontairement fermé** : la V2 n'intègre QUE l'écran maquetté
+(tableau de bord) plus la connexion. On n'ajoute pas d'écran, pas de
+fonctionnalité, pas de composant « au cas où ». Ce qui n'est pas sur la
+maquette n'existe pas.
+
+**Le design appartient à Uriel.** On n'améliore pas la maquette de sa propre
+initiative : on l'intègre. Toute proposition graphique se discute avant, jamais
+en la codant directement.
+
 ## Tech Stack
 
 - **React 19** + **TypeScript 5.9** + **Vite 7**
-- **Tailwind CSS v4** via `@tailwindcss/vite` plugin (no tailwind.config — uses CSS-first config in `src/index.css`)
-- **Supabase** for auth (magic link OTP) and backend
-- **React Router v7** for routing
-- **PWA** via `vite-plugin-pwa` with workbox
-- **shadcn/ui** pattern: `class-variance-authority` + `clsx` + `tailwind-merge` for component variants
+- **CSS natif en trois couches** — pas de Tailwind, pas de CSS-in-JS, pas de
+  classes utilitaires. Voir `docs/v2/DESIGN-SYSTEM.md`. Règle dure : **aucune
+  valeur en dur dans `src/styles/3-components/`**, et aucun style dans les `.tsx`.
+- **Supabase** pour l'auth (OTP e-mail) et les données. Schéma inchangé.
+- **React Router v7**
+- **lucide-react** pour les icônes (les mêmes que la maquette Figma)
 
 ## Architecture
 
-- `src/lib/supabase.ts` — Supabase client singleton. Env vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-- `src/lib/auth.tsx` — AuthContext provider with `useAuth()` hook. Auth uses Supabase OTP (magic link)
-- `src/components/ProtectedRoute.tsx` — Wraps routes requiring authentication
-- `src/pages/` — Page components (Landing, Login, Dashboard)
-- `src/components/ui/` — Reusable UI primitives (shadcn/ui style)
-- `src/lib/utils.ts` — `cn()` helper for merging Tailwind classes
+```
+src/
+├── styles/            tout le design (3 couches — voir docs/v2/DESIGN-SYSTEM.md)
+├── lib/               supabase.ts, auth.tsx, dates.ts (+ tests)
+├── components/
+│   ├── layout/        AppShell, Sidebar, Topbar
+│   └── ui/            Button, Chip, Avatar
+├── features/
+│   └── dashboard/     Dashboard, SeasonChart, NextDateCard, UpcomingCard, useDashboard
+├── pages/             Login
+└── types/             supabase.ts (généré), database.ts (alias)
+```
 
-Path alias: `@` maps to `./src` (configured in vite.config.ts).
+Alias `@` → `./src`.
+
+Toute la logique de dates est isolée dans `src/lib/dates.ts` et couverte par
+`src/lib/dates.test.ts` — les décalages de fuseau y sont des bugs surveillés,
+ne pas contourner ces helpers.
 
 ## Environment Variables
 

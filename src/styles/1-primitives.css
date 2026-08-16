@@ -1,0 +1,119 @@
+/* =============================================================================
+   COUCHE 1 — PRIMITIVES
+   =============================================================================
+   La matière brute. Une primitive décrit CE QU'ELLE EST, jamais à quoi elle
+   sert : « --cream-200 », pas « --fond-de-carte ».
+
+   Aucun composant ne doit lire ce fichier directement. Il passe toujours par
+   la couche 2. Ça permet de changer toute la palette ici sans rien casser.
+
+   Pour ajouter une teinte : la poser ici, PUIS lui donner un rôle en couche 2.
+   ========================================================================== */
+
+:root {
+  /* ---------------------------------------------------------------------
+     PALETTE — CRÈME
+     Du plus clair au plus foncé. C'est le socle de toute l'interface.
+     --------------------------------------------------------------------- */
+  --cream-50: #fffbf5; /* le plus clair — grandes surfaces */
+  --cream-100: #f9f6ef; /* à peine teinté — contrôles posés sur le clair */
+  --cream-200: #f3f0e9; /* le crème de référence — fond général */
+  --cream-300: #ebe6dd; /* crème appuyé — pastilles neutres */
+
+  /* ---------------------------------------------------------------------
+     PALETTE — BRUN (l'encre)
+     --------------------------------------------------------------------- */
+  --brown-200: #ebe3e3; /* quasi effacé — chiffres à zéro */
+  --brown-400: #a79f9f; /* brun doux — texte secondaire, sur-titres */
+  --brown-700: #564444; /* brun profond — titres et chiffres forts */
+  --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
+
+  /* ---------------------------------------------------------------------
+     PALETTE — OLIVE (l'unique couleur vive : le statut)
+     --------------------------------------------------------------------- */
+  --olive-100: #e8f0d8; /* fond de pastille */
+  --olive-500: #84aa3c; /* la couleur de marque */
+
+  /* ---------------------------------------------------------------------
+     PALETTE — TERRE (statuts non validés)
+     --------------------------------------------------------------------- */
+  --clay-100: #f6e7dc;
+  --clay-500: #c0642a;
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHIE — FAMILLE
+     --------------------------------------------------------------------- */
+  --family-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)
+     --------------------------------------------------------------------- */
+  --size-9: 9px;
+  --size-10: 10px;
+  --size-11: 11px;
+  --size-12: 12px;
+  --size-13: 13px;
+  --size-14: 14px;
+  --size-16: 16px;
+  --size-26: 26px;
+  --size-30: 30px;
+  --size-32: 32px;
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHIE — GRAISSES
+     --------------------------------------------------------------------- */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHIE — INTERLIGNES
+     --------------------------------------------------------------------- */
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.45;
+
+  /* ---------------------------------------------------------------------
+     ESPACEMENT — échelle libre, calquée sur la maquette
+     --------------------------------------------------------------------- */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-15: 15px;
+  --space-17: 17px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-23: 23px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-42: 42px;
+  --space-51: 51px;
+  --space-70: 70px;
+
+  /* ---------------------------------------------------------------------
+     RAYONS
+     --------------------------------------------------------------------- */
+  --round-6: 6px;
+  --round-8: 8px;
+  --round-10: 10px;
+  --round-15: 15px;
+  --round-20: 20px;
+  --round-full: 9999px;
+
+  /* ---------------------------------------------------------------------
+     DIMENSIONS FIXES issues de la maquette
+     --------------------------------------------------------------------- */
+  --width-sidebar: 263px;
+  --width-content: 918px; /* 452 + 14 + 452 : la colonne de contenu */
+  --width-card: 452px;
+  --height-card: 196px;
+  --width-poster: 131px;
+}

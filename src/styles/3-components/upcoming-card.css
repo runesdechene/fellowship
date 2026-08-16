@@ -1,0 +1,83 @@
+/* -----------------------------------------------------------------------------
+   UPCOMING CARD — la liste « À venir »
+   Utilisé par : src/features/dashboard/UpcomingCard.tsx
+   -------------------------------------------------------------------------- */
+
+.upcoming {
+  flex: none;
+  width: var(--card-width);
+  height: var(--card-height);
+  padding: var(--space-17) var(--card-padding);
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+}
+
+.upcoming__title {
+  font: var(--type-card-title);
+  color: var(--ink-soft);
+}
+
+.upcoming__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--list-row-gap);
+  margin-top: var(--space-6);
+}
+
+.upcoming__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  height: var(--list-row-height);
+}
+
+/* Pastille de statut, dans une boîte fixe pour aligner les textes */
+.upcoming__dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  margin: 0 var(--space-4);
+  border-radius: var(--radius-round);
+  background: var(--dot-confirmed);
+}
+
+.upcoming__row--pending .upcoming__dot {
+  background: var(--dot-pending);
+}
+
+.upcoming__identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.upcoming__line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+}
+
+.upcoming__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upcoming__countdown {
+  flex: none;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.upcoming__place {
+  margin-top: var(--space-2);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.upcoming__empty {
+  margin-top: var(--space-20);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}

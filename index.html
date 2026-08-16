@@ -5,45 +5,20 @@
     <link rel="icon" type="image/png" href="/icon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta
       name="description"
       content="Fellowship - Gestionnaire d'événements pour professionnels"
     />
-    <meta name="theme-color" content="#170f0e" />
+    <meta name="theme-color" content="#f3f0e9" />
     <title>Fellowship | flw.sh</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <script>
-      // Anti-flash : applique le thème persisté avant le premier paint. Nuit = défaut (aucune classe).
-      // Cas particulier V2 (décision 0007) : une visite neuve (aucun thème stocké) sur l'annuaire
-      // atterrit en clair — il faut le savoir ICI, en synchrone, sinon le premier paint est sombre
-      // avant que React ne rattrape via setTheme('day'). Un choix de thème déjà stocké reste roi.
-      try {
-        var theme = localStorage.getItem('flwsh-theme');
-        if (theme === 'day') {
-          document.documentElement.classList.add('light');
-        } else if (theme === null) {
-          var qs = new URLSearchParams(location.search);
-          // Un `=0` est un ORDRE d'extinction, pas une absence d'ordre : il doit
-          // gagner AVANT que React n'ait pu effacer la mémoire, sinon éteindre
-          // l'interrupteur peignait quand même en clair.
-          function on(name, key) {
-            var p = qs.get(name);
-            if (p === '1') return true;
-            if (p === '0') return false;
-            return localStorage.getItem(key) === '1';
-          }
-          if (on('v2', 'flwsh-landing-v2') || on('app2', 'flwsh-app-v2')) {
-            document.documentElement.classList.add('light');
-          }
-        }
-      } catch (e) {}
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

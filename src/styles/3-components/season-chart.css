@@ -1,0 +1,52 @@
+/* -----------------------------------------------------------------------------
+   SEASON CHART — une barre par mois sur douze mois glissants
+   La hauteur de chaque barre est passée en ligne par le composant, via la
+   variable --bar-height. Les bornes se règlent en couche 2 :
+   --chart-bar-min (mois vide) et --chart-bar-max (mois le plus chargé).
+   Utilisé par : src/features/dashboard/SeasonChart.tsx
+   -------------------------------------------------------------------------- */
+
+.season-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--chart-column-gap);
+}
+
+.season-chart__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--chart-column-width);
+}
+
+.season-chart__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--bar-height);
+  background: var(--surface-bar);
+  border-radius: var(--radius-bar);
+}
+
+.season-chart__value {
+  font: var(--type-chart-value);
+  color: var(--ink-soft);
+}
+
+/* Mois sans date : la barre est réduite à son minimum, le zéro passe
+   au-dessus d'elle et s'éteint. */
+.season-chart__column--empty .season-chart__value {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: var(--space-2);
+  color: var(--ink-ghost);
+}
+
+.season-chart__month {
+  margin-top: var(--chart-label-gap);
+  font: var(--type-chart-month);
+  color: var(--ink-soft);
+  text-align: center;
+}

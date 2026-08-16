@@ -1,182 +1,194 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { supabase } from './supabase'
-import type { User, Session } from '@supabase/supabase-js'
-import type { UserRow, EntityRow } from '@/types/database'
 import {
-  pickCurrentActor, deriveNeedsOnboarding, readStoredActorId, writeStoredActorId,
-  actorCan, type ActorView, type ActorAction,
-} from './actorModel'
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+import type { Session, User } from '@supabase/supabase-js'
+import { supabase } from './supabase'
+import type { Actor, EntityRow, EntityType, UserRow } from '@/types/database'
 
-interface AuthContextType {
+/** Libellé affiché sous le nom, dans la carte de compte. */
+const ENTITY_ROLE_LABEL: Record<EntityType, string> = {
+  exposant: 'Compte exposant',
+  festival: 'Compte festival',
+  entreprise: 'Compte entreprise',
+}
+
+const STORED_ACTOR_KEY = 'flwsh-actor-id'
+
+function readStoredActorId(): string | null {
+  try {
+    return localStorage.getItem(STORED_ACTOR_KEY)
+  } catch {
+    return null
+  }
+}
+
+function writeStoredActorId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(STORED_ACTOR_KEY, id)
+    else localStorage.removeItem(STORED_ACTOR_KEY)
+  } catch {
+    /* stockage indisponible : on garde l'acteur en mémoire seulement */
+  }
+}
+
+function toActor(row: UserRow | EntityRow, kind: 'person' | 'entity'): Actor {
+  if (kind === 'entity') {
+    const entity = row as EntityRow
+    return {
+      id: entity.actor_id,
+      kind: 'entity',
+      label: entity.brand_name,
+      avatarUrl: entity.avatar_url,
+      roleLabel: ENTITY_ROLE_LABEL[entity.type],
+    }
+  }
+  const person = row as UserRow
+  return {
+    id: person.actor_id,
+    kind: 'person',
+    label: person.display_name ?? person.email,
+    avatarUrl: person.avatar_url,
+    roleLabel: 'Compte personnel',
+  }
+}
+
+interface AuthContextValue {
   user: User | null
   session: Session | null
-  // Nouveau modèle (acteurs)
   person: UserRow | null
   entities: EntityRow[]
-  currentActor: ActorView | null      // acteur actif (personne par défaut)
-  currentActorRow: UserRow | EntityRow | null
-  switchActor: (actorId: string | null) => void
-  can: (action: ActorAction) => boolean
+  /** Acteur actif : la première enseigne par défaut, sinon la personne. */
+  actor: Actor | null
+  actors: Actor[]
+  switchActor: (actorId: string) => void
+  /** Vrai tant que la session initiale n'a pas été résolue. */
   loading: boolean
-  /** true tant que fetchProfile+fetchIdentity n'ont pas tous deux résolu pour la session
-   *  courante. Découplé de `loading` (qui ne couvre que le boot session Supabase) et
-   *  utilisé par AdminRoute pour ne pas éjecter un admin avant que son rôle soit chargé. */
-  identityLoading: boolean
   signIn: (email: string) => Promise<{ error: Error | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
-  refreshProfile: () => Promise<void>
-  needsOnboarding: boolean
-  isAdmin: boolean
-  // Debug admin : force le plan perçu de l'entité active (pur client, n'écrit rien en base).
-  planOverride: PlanOverride
-  setPlanOverride: (v: PlanOverride) => void
 }
 
-type PlanOverride = 'pro' | 'free' | null
-const PLAN_OVERRIDE_KEY = 'debug-plan-override'
-function readPlanOverride(): PlanOverride {
-  try {
-    const v = localStorage.getItem(PLAN_OVERRIDE_KEY)
-    return v === 'pro' || v === 'free' ? v : null
-  } catch { return null }
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [person, setPerson] = useState<UserRow | null>(null)
   const [entities, setEntities] = useState<EntityRow[]>([])
-  const [currentActorId, setCurrentActorId] = useState<string | null>(readStoredActorId())
+  const [actorId, setActorId] = useState<string | null>(readStoredActorId)
   const [loading, setLoading] = useState(true)
-  const [identityLoading, setIdentityLoading] = useState(false)
-  const [planOverride, setPlanOverrideState] = useState<PlanOverride>(() => readPlanOverride())
 
-  const setPlanOverride = (v: PlanOverride) => {
-    setPlanOverrideState(v)
-    try {
-      if (v) localStorage.setItem(PLAN_OVERRIDE_KEY, v)
-      else localStorage.removeItem(PLAN_OVERRIDE_KEY)
-    } catch { /* ignore */ }
-  }
+  const loadIdentity = useCallback(async (authUid: string) => {
+    const { data: personRow } = await supabase
+      .from('users')
+      .select('*')
+      .eq('actor_id', authUid)
+      .maybeSingle()
+    setPerson((personRow as UserRow) ?? null)
 
-  const switchActor = (id: string | null) => {
-    setCurrentActorId(id)
-    writeStoredActorId(id)
-  }
-
-  // Nouveau modèle : la personne + ses entités (via memberships).
-  const fetchIdentity = async (authUid: string) => {
-    const { data: u } = await supabase.from('users').select('*').eq('actor_id', authUid).single()
-    setPerson((u as UserRow) ?? null)
-    const { data: ms } = await supabase
+    const { data: memberships } = await supabase
       .from('memberships')
-      .select('entity_actor_id, entities(*)')
+      .select('entities(*)')
       .eq('user_actor_id', authUid)
-    const rows = (ms ?? []) as unknown as Array<{ entities: EntityRow | null }>
-    setEntities(rows.map(r => r.entities).filter((e): e is EntityRow => !!e))
-  }
-
-  const refreshProfile = async () => {
-    if (user) await fetchIdentity(user.id)
-  }
-
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-
-        if (session?.user) {
-          // identityLoading reste vrai jusqu'à ce que les DEUX fetchs aient résolu
-          // (succès ou échec). Sans ça, AdminRoute ne savait pas si `isAdmin=false`
-          // signifie « pas admin » ou « rôle pas encore lu » → bandaid timer 1.5s.
-          setIdentityLoading(true)
-          fetchIdentity(session.user.id).finally(() => setIdentityLoading(false))
-        } else {
-          setPerson(null)
-          setEntities([])
-          setIdentityLoading(false)
-        }
-
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
+    const rows = (memberships ?? []) as unknown as Array<{ entities: EntityRow | null }>
+    setEntities(rows.map((r) => r.entities).filter((e): e is EntityRow => Boolean(e)))
   }, [])
 
-  const signIn = async (email: string) => {
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession)
+      setUser(nextSession?.user ?? null)
+      if (nextSession?.user) {
+        void loadIdentity(nextSession.user.id)
+      } else {
+        setPerson(null)
+        setEntities([])
+      }
+      setLoading(false)
+    })
+    return () => subscription.unsubscribe()
+  }, [loadIdentity])
+
+  const actors = useMemo<Actor[]>(() => {
+    const list: Actor[] = entities.map((e) => toActor(e, 'entity'))
+    if (person) list.push(toActor(person, 'person'))
+    return list
+  }, [entities, person])
+
+  const actor = useMemo<Actor | null>(
+    () => actors.find((a) => a.id === actorId) ?? actors[0] ?? null,
+    [actors, actorId],
+  )
+
+  const switchActor = useCallback((id: string) => {
+    setActorId(id)
+    writeStoredActorId(id)
+  }, [])
+
+  const signIn = useCallback(async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: true },
+      options: { shouldCreateUser: false },
     })
     return { error: error as Error | null }
-  }
+  }, [])
 
-  const verifyOtp = async (email: string, token: string) => {
+  const verifyOtp = useCallback(async (email: string, token: string) => {
     const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' })
     return { error: error as Error | null }
-  }
+  }, [])
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await supabase.auth.signOut({ scope: 'local' })
     setPerson(null)
     setEntities([])
-    switchActor(null)
-  }
+    setActorId(null)
+    writeStoredActorId(null)
+  }, [])
 
-  const toView = (row: UserRow | EntityRow | null, kind: 'person' | 'entity'): ActorView | null =>
-    row && {
-      id: (row as { actor_id: string }).actor_id,
-      kind,
-      entityType: kind === 'entity' ? (row as EntityRow).type : null,
-      label: kind === 'entity' ? (row as EntityRow).brand_name : (row as UserRow).display_name,
-      hasName: kind === 'person' ? !!(row as UserRow).display_name : true,
-    }
-
-  const personView = toView(person, 'person')
-  const entityViews = entities
-    .map(e => toView(e, 'entity'))
-    .filter((v): v is ActorView => !!v)
-  const currentActor = personView ? pickCurrentActor(personView, entityViews, currentActorId) : null
-  const rawActorRow = currentActor?.kind === 'entity'
-    ? entities.find(e => e.actor_id === currentActor.id) ?? null
-    : person
-  const can = (action: ActorAction) => (currentActor ? actorCan(currentActor, action) : false)
-
-  // Garde anti-flash : on attend que `person` soit chargée avant de router vers l'onboarding.
-  const needsOnboarding = !!user && person !== null && deriveNeedsOnboarding(personView)
-  // Rôle admin : source de vérité = users.role (modèle acteur). Le legacy profiles.role a été
-  // backfillé vers users.role en Plan 4 / Phase 5a avant le retrait de la table profiles.
-  const isAdmin = person?.role === 'admin'
-
-  // Debug admin : surcharge du plan perçu de l'entité active (n'écrit rien en base).
-  const currentActorRow = (isAdmin && planOverride && currentActor?.kind === 'entity' && rawActorRow)
-    ? { ...(rawActorRow as EntityRow), plan: planOverride }
-    : rawActorRow
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user, session,
-        person, entities, currentActor, currentActorRow, switchActor, can,
-        loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
-        planOverride, setPlanOverride,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      session,
+      person,
+      entities,
+      actor,
+      actors,
+      switchActor,
+      loading,
+      signIn,
+      verifyOtp,
+      signOut,
+    }),
+    [
+      user,
+      session,
+      person,
+      entities,
+      actor,
+      actors,
+      switchActor,
+      loading,
+      signIn,
+      verifyOtp,
+      signOut,
+    ],
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
+  if (!context) throw new Error('useAuth doit être utilisé dans un <AuthProvider>')
   return context
 }

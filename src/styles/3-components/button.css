@@ -1,0 +1,36 @@
+/* -----------------------------------------------------------------------------
+   BOUTONS
+   Utilisé par : src/components/ui/Button.tsx
+   -------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12);
+  height: var(--topbar-control-height);
+  padding: 0 var(--space-24);
+  border-radius: var(--radius-card);
+  background: var(--surface-control);
+  color: var(--ink-strong);
+  font: var(--type-button);
+  white-space: nowrap;
+}
+
+/* Bouton sans fond, réduit à son icône (la cloche) */
+.button--ghost {
+  width: var(--topbar-control-height);
+  padding: 0;
+  justify-content: center;
+  background: none;
+  color: var(--ink-title);
+}
+
+.button--block {
+  width: 100%;
+  justify-content: center;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

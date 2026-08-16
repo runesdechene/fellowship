@@ -1,0 +1,32 @@
+/* =============================================================================
+   FELLOWSHIP V2 — POINT D'ENTRÉE DES STYLES
+   =============================================================================
+   L'ORDRE DES IMPORTS EST SIGNIFIANT. Ne pas le changer.
+
+     0-reset        remet le navigateur à zéro. On n'y touche jamais.
+     1-primitives   la matière brute : couleurs, tailles, graisses, espaces.
+                    Aucun sens, aucun usage. « #F3F0E9 », pas « fond de carte ».
+     2-semantic     le sens : à quoi sert chaque valeur brute.
+                    C'EST ICI QU'ON JOUE 90 % DU TEMPS.
+     3-components   un fichier par composant. Chaque règle pioche dans la
+                    couche 2, JAMAIS dans la couche 1, JAMAIS en dur.
+
+   Règle d'or : aucune valeur en dur dans la couche 3.
+   Si une valeur manque, on l'ajoute en couche 1 puis on la nomme en couche 2.
+   ========================================================================== */
+
+@import './0-reset.css';
+@import './1-primitives.css';
+@import './2-semantic.css';
+
+@import './3-components/app-shell.css';
+@import './3-components/sidebar.css';
+@import './3-components/topbar.css';
+@import './3-components/dashboard.css';
+@import './3-components/season-chart.css';
+@import './3-components/next-date-card.css';
+@import './3-components/upcoming-card.css';
+@import './3-components/avatar.css';
+@import './3-components/chip.css';
+@import './3-components/button.css';
+@import './3-components/login.css';

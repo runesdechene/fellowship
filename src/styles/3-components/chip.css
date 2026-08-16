@@ -1,0 +1,36 @@
+/* -----------------------------------------------------------------------------
+   CHIP — pastille de statut (« Dans 11 jours », « Inscrit »)
+   Utilisé par : src/components/ui/Chip.tsx
+   -------------------------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: 25px;
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-chip);
+  font: var(--type-chip);
+  white-space: nowrap;
+}
+
+.chip--neutral {
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+}
+
+.chip--ok {
+  background: var(--status-ok-surface);
+  color: var(--status-ok-ink);
+  font: var(--type-chip-strong);
+}
+
+.chip--pending {
+  background: var(--status-pending-surface);
+  color: var(--status-pending-ink);
+  font: var(--type-chip-strong);
+}
+
+.chip__icon {
+  flex: none;
+}

@@ -1,0 +1,55 @@
+/* -----------------------------------------------------------------------------
+   DASHBOARD — l'accroche puis les blocs, dans une colonne de largeur fixe
+   Utilisé par : src/features/dashboard/Dashboard.tsx
+   -------------------------------------------------------------------------- */
+
+.dashboard {
+  padding: var(--page-padding-top) var(--page-padding-right) var(--space-40)
+    var(--page-padding-left);
+}
+
+/* --- Accroche ------------------------------------------------------------- */
+.dashboard__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-18);
+}
+
+.dashboard__avatar {
+  flex: none;
+  width: 71px;
+  height: 71px;
+}
+
+.dashboard__greeting {
+  font: var(--type-page-title);
+  color: var(--ink-title);
+}
+
+/* Le nom de l'enseigne, en gras dans la même ligne */
+.dashboard__greeting b {
+  font: var(--type-page-title-accent);
+}
+
+.dashboard__subtitle {
+  margin-top: var(--space-6);
+  font: var(--type-page-subtitle);
+  color: var(--ink-soft);
+}
+
+/* --- Blocs ---------------------------------------------------------------- */
+.dashboard__section {
+  width: var(--shell-content-width);
+  margin-top: var(--gap-section);
+}
+
+.dashboard__cards {
+  display: flex;
+  gap: var(--card-gap);
+}
+
+/* --- États ---------------------------------------------------------------- */
+.dashboard__empty {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}

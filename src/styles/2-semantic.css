@@ -1,0 +1,161 @@
+/* =============================================================================
+   COUCHE 2 — SÉMANTIQUE   ←←← C'EST ICI QU'ON MODIFIE LE DESIGN
+   =============================================================================
+   Chaque variable dit À QUOI SERT une primitive. Changer une ligne ici se
+   répercute partout, d'un coup, sans ouvrir un seul composant.
+
+   Exemples :
+     • toutes les cartes plus claires  → --surface-card
+     • titres moins bruns              → --ink-title
+     • coins moins arrondis            → --radius-card
+     • interface plus dense            → --gap-section, --page-padding-*
+
+   Une valeur à droite doit TOUJOURS être un var(--...) de la couche 1.
+   Si on écrit une valeur en dur ici, c'est qu'il manque une primitive.
+   ========================================================================== */
+
+:root {
+  /* =========================================================================
+     SURFACES — les fonds, du plus profond au plus posé
+     ====================================================================== */
+  --surface-app: var(--cream-200); /* fond général + colonne de gauche */
+  --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
+  --surface-card: var(--cream-200); /* cartes posées sur le panneau */
+  --surface-raised: var(--cream-50); /* compte, onglet actif : posé SUR le crème */
+  --surface-control: var(--cream-100); /* boutons de la barre du haut */
+  --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
+  --surface-bar: var(--cream-200); /* barres du graphe de saison */
+
+  /* =========================================================================
+     ENCRE — les couleurs de texte, de la plus forte à la plus effacée
+     ====================================================================== */
+  --ink-title: var(--brown-700); /* titres, nom de l'événement */
+  --ink-strong: var(--brown-900); /* texte sur contrôle clair */
+  --ink-soft: var(--brown-400); /* sur-titres, métadonnées, mois */
+  --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
+
+  /* =========================================================================
+     STATUTS — la seule couleur vive de l'interface
+     ====================================================================== */
+  --status-ok-ink: var(--olive-500);
+  --status-ok-surface: var(--olive-100);
+  --status-pending-ink: var(--clay-500);
+  --status-pending-surface: var(--clay-100);
+
+  /* Pastille ronde devant chaque date à venir */
+  --dot-confirmed: var(--olive-500);
+  --dot-pending: var(--clay-500);
+  --dot-size: var(--space-8);
+
+  /* =========================================================================
+     RAYONS
+     ====================================================================== */
+  --radius-panel: var(--round-20); /* le grand panneau */
+  --radius-card: var(--round-15); /* cartes et boutons de la barre du haut */
+  --radius-nav: var(--round-10); /* compte + entrées de navigation */
+  --radius-bar: var(--round-8); /* barres du graphe */
+  --radius-chip: var(--round-8); /* pastilles de statut */
+  --radius-round: var(--round-full); /* avatars, points */
+
+  /* =========================================================================
+     TYPOGRAPHIE — rôles complets (raccourci CSS `font`)
+     Format : graisse taille/interligne famille
+     ====================================================================== */
+  --type-page-title: var(--weight-regular) var(--size-32) / var(--leading-tight)
+    var(--family-sans);
+  --type-page-title-accent: var(--weight-bold) var(--size-32) /
+    var(--leading-tight) var(--family-sans);
+  --type-page-subtitle: var(--weight-regular) var(--size-14) /
+    var(--leading-normal) var(--family-sans);
+
+  --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+  --type-event-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
+    var(--family-sans);
+  --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+  --type-event-meta-accent: var(--weight-bold) var(--size-14) /
+    var(--leading-snug) var(--family-sans);
+
+  --type-nav: var(--weight-bold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+  --type-account-name: var(--weight-bold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-account-role: var(--weight-regular) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
+
+  --type-list-name: var(--weight-bold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-list-meta: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+
+  --type-chart-value: var(--weight-bold) var(--size-30) / var(--leading-tight)
+    var(--family-sans);
+  --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
+
+  --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
+    var(--family-sans);
+  --type-chip-strong: var(--weight-extrabold) var(--size-9) /
+    var(--leading-snug) var(--family-sans);
+
+  --type-button: var(--weight-bold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+
+  /* =========================================================================
+     GABARIT — la structure de la page
+     ====================================================================== */
+  --shell-sidebar-width: var(--width-sidebar);
+  --shell-content-width: var(--width-content);
+
+  /* Marges intérieures du grand panneau */
+  --page-padding-left: var(--space-70);
+  --page-padding-right: var(--space-32);
+  --page-padding-top: var(--space-51);
+
+  /* Respiration verticale entre les grands blocs */
+  --gap-section: var(--space-42);
+
+  /* Colonne de gauche */
+  --sidebar-padding-x: var(--space-23); /* aligne compte et navigation */
+  --sidebar-logo-top: var(--space-32);
+  --sidebar-logo-gap: 27px; /* logo → carte de compte */
+  --sidebar-nav-gap: var(--space-15); /* carte de compte → navigation */
+  --sidebar-item-height: 46px;
+  --sidebar-item-gap: 1px;
+  --sidebar-item-padding: var(--space-17);
+  --sidebar-icon-gap: var(--space-15);
+
+  /* Barre du haut : elle flotte au-dessus du contenu, comme sur la maquette */
+  --topbar-top: var(--space-17);
+  --topbar-right: var(--space-32);
+  --topbar-gap: var(--space-12);
+  --topbar-control-height: 42px;
+
+  /* =========================================================================
+     GRAPHE DE SAISON — les réglages du seul élément « dessiné »
+     ====================================================================== */
+  --chart-months: 12; /* nombre de mois affichés */
+  --chart-column-width: 61px;
+  --chart-column-gap: var(--space-8);
+  --chart-bar-min: 15px; /* hauteur d'une barre à zéro */
+  --chart-bar-max: 142px; /* hauteur du mois le plus chargé */
+  --chart-label-gap: var(--space-12); /* barre ↔ nom du mois */
+
+  /* =========================================================================
+     CARTES DU BAS
+     ====================================================================== */
+  --card-width: var(--width-card);
+  --card-height: var(--height-card);
+  --card-gap: var(--space-14);
+  --card-padding: var(--space-23);
+  --poster-width: var(--width-poster);
+
+  /* =========================================================================
+     LISTE « À VENIR »
+     ====================================================================== */
+  --list-row-gap: var(--space-12);
+  --list-row-height: 33px;
+  --avatar-size: 21px;
+  --avatar-overlap: -3px;
+}
