@@ -1,0 +1,252 @@
+/* -----------------------------------------------------------------------------
+   FICHE D'UN ÉVÉNEMENT — l'affiche, puis ce qu'il faut savoir pour y aller
+   Utilisé par : src/features/event/EventPage.tsx
+
+   Même colonne, même axe et mêmes distances que le tableau de bord : passer
+   de l'un à l'autre ne doit pas déplacer la page sous les yeux.
+   -------------------------------------------------------------------------- */
+
+.event-page {
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+/* --- Retour --------------------------------------------------------------- */
+/* Un chemin, pas une commande : ni fond, ni contour, juste de l'encre douce
+   qui s'affirme au survol. */
+.event-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-24);
+  background: none;
+  color: var(--ink-soft);
+  font: var(--type-section-link);
+  cursor: pointer;
+  transition: color var(--menu-motion);
+}
+
+.event-page__back:hover {
+  color: var(--ink-title);
+}
+
+/* --- L'accroche ----------------------------------------------------------- */
+.event-page__hero {
+  display: flex;
+  gap: var(--event-hero-gap);
+  width: var(--shell-content-width);
+}
+
+.event-page__poster {
+  flex: none;
+  width: var(--event-poster-width);
+  height: var(--event-poster-height);
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.event-page__identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.event-page__title {
+  font: var(--type-page-title-accent);
+  color: var(--ink-title);
+}
+
+.event-page__meta {
+  margin-top: var(--space-12);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+/* Les dates et le lieu portent le poids ; ce qui les relie s'efface. */
+.event-page__meta b {
+  font: var(--type-event-meta-accent);
+}
+
+.event-page__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-18);
+}
+
+.event-page__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-18);
+}
+
+/* Ici les catégories ne sont plus un choix à faire : elles décrivent. */
+.event-page__tags .tag {
+  cursor: default;
+}
+
+/* --- Les blocs ------------------------------------------------------------ */
+.event-page__section {
+  width: var(--shell-content-width);
+  margin-top: var(--gap-section);
+}
+
+.event-page__section-title {
+  margin-bottom: var(--gap-section-title);
+  font: var(--type-section-title);
+  color: var(--ink-section);
+}
+
+.event-page__section-head {
+  margin-bottom: var(--gap-section-title);
+}
+
+.event-page__section-head .event-page__section-title {
+  margin-bottom: 0;
+}
+
+.event-page__section-total {
+  margin-top: var(--space-8);
+  font: var(--type-section-total-note);
+  color: var(--ink-soft);
+}
+
+.event-page__section-total b {
+  font: var(--type-section-total);
+  color: var(--ink-total);
+}
+
+/* --- Le stand ------------------------------------------------------------- */
+/* Une carte unique, où les informations se rangent en colonnes égales. Elles
+   repassent à la ligne dès qu'une colonne descendrait sous sa largeur
+   plancher : rien ne se serre, la carte s'allonge. */
+.event-page__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--event-fact-min-width), 1fr));
+  gap: var(--event-fact-gap-y) var(--event-fact-gap-x);
+  padding: var(--event-facts-padding);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.event-page__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.event-page__fact-label {
+  font: var(--type-event-fact-label);
+  color: var(--ink-soft);
+}
+
+.event-page__fact-value {
+  font: var(--type-event-fact-value);
+  color: var(--ink-title);
+}
+
+/* Ce que le festival n'a pas donné garde sa place, éteint : la fiche dit
+   aussi ce qui manque. */
+.event-page__fact-value--empty {
+  font: var(--type-event-fact-value);
+  color: var(--ink-ghost);
+}
+
+.event-page__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  margin-top: var(--space-20);
+}
+
+/* Aller ailleurs est une commande : c'est le bleu, jamais l'olive. */
+.event-page__link {
+  color: var(--ink-link);
+  font: var(--type-section-link);
+  text-decoration: none;
+}
+
+.event-page__link:hover {
+  text-decoration: underline;
+}
+
+.event-page__note {
+  margin-top: var(--space-16);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Les amis ------------------------------------------------------------- */
+/* Ici les avatars ne se chevauchent pas : sur le tableau de bord ils comptent,
+   sur la fiche ils se nomment. */
+.event-page__friends {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--event-friend-gap);
+}
+
+.event-page__friend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.event-page__friend-name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+/* --- Le festival ---------------------------------------------------------- */
+.event-page__description {
+  font: var(--type-event-description);
+  color: var(--ink-soft);
+  white-space: pre-line;
+}
+
+/* --- Le bilan ------------------------------------------------------------- */
+.event-page__ledger {
+  padding: 0 var(--event-facts-padding);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  list-style: none;
+}
+
+.event-page__ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  min-height: var(--event-ledger-row-height);
+}
+
+/* Un filet entre deux lignes, jamais autour du bloc : la carte a déjà son
+   fond, le trait ne sert qu'à séparer. */
+.event-page__ledger-row + .event-page__ledger-row {
+  border-top: 1px solid var(--border-menu);
+}
+
+.event-page__ledger-label {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.event-page__ledger-amount--in {
+  font: var(--type-settlement-due);
+  color: var(--status-ok-ink);
+}
+
+.event-page__ledger-amount--out {
+  font: var(--type-settlement-due);
+  color: var(--ink-soft);
+}
+
+/* --- États ---------------------------------------------------------------- */
+.event-page__state {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}

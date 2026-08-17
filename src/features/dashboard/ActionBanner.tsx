@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PartyPopper, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
 
 /**
@@ -13,6 +14,7 @@ import type { DashboardReport } from './useDashboard'
  */
 export function ActionBanner({ report }: { report: DashboardReport }) {
   const [hidden, setHidden] = useState(false)
+  const go = useTransitionNavigate()
 
   if (hidden) return null
 
@@ -31,7 +33,11 @@ export function ActionBanner({ report }: { report: DashboardReport }) {
         </div>
 
         <div className="action-banner__actions">
-          <Button variant="action">Remplir mon bilan</Button>
+          {/* Le bilan vivra sur la fiche de la date : c'est déjà là qu'on
+              l'envoie, même si le formulaire reste à écrire. */}
+          <Button variant="action" onClick={() => go(`/evenement/${report.eventId}`)}>
+            Remplir mon bilan
+          </Button>
           <Button onClick={() => setHidden(true)}>Plus tard</Button>
           <Button variant="bare" onClick={() => setHidden(true)} aria-label="Masquer">
             <X size={20} strokeWidth={1.75} />

@@ -1,26 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { daysUntil, monthKey, monthsWindow, parseSqlDate, type MonthSlot } from '@/lib/dates'
+import {
+  CONFIRMED_STATUSES,
+  PROGRAMMED_STATUSES,
+  fetchFriendsByEvent,
+  type Friend,
+} from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
-import type { EntityRow, EventRow, ParticipationStatus, UserRow } from '@/types/database'
+import type { EventRow, ParticipationStatus } from '@/types/database'
 
 /** Les seules colonnes d'événement dont une carte de bilan a besoin. */
 type PastEvent = Pick<EventRow, 'id' | 'name' | 'image_url' | 'start_date' | 'end_date'>
 
-/**
- * Statuts considérés comme « une date programmée » : l'exposant s'est engagé,
- * ou son dossier est en cours. « interesse » et « refuse » n'en font pas partie.
- */
-const PROGRAMMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme', 'en_cours']
-
-/** Statuts qui valent pastille verte ; le reste passe en pastille terre. */
-const CONFIRMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme']
-
-export interface Friend {
-  id: string
-  name: string
-  avatarUrl: string | null
-}
+export type { Friend }
 
 export interface DashboardDate {
   participationId: string
@@ -44,6 +37,8 @@ export type SettlementState = 'dossier' | 'acompte' | 'a-payer'
 /** Une date à venir dont le dossier ou le paiement n'est pas clos. */
 export interface Settlement {
   participationId: string
+  /** Vers où mène la ligne : la fiche de l'événement. */
+  eventId: string
   name: string
   city: string
   startDate: Date
@@ -153,6 +148,7 @@ async function fetchSettlements(
     const due = dueByEvent.get(date.event.id)
     return {
       participationId: date.participationId,
+      eventId: date.event.id,
       name: date.event.name,
       city: date.event.city,
       startDate: date.startDate,
@@ -165,56 +161,6 @@ async function fetchSettlements(
       due: typeof due === 'number' && due > 0 ? due : null,
     }
   })
-}
-
-/** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
-async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
-  const { data } = await supabase
-    .from('follows')
-    .select('follower_actor, following_actor')
-    .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`)
-
-  const following = new Set<string>()
-  const followers = new Set<string>()
-  for (const row of data ?? []) {
-    if (row.follower_actor === actorId) following.add(row.following_actor)
-    if (row.following_actor === actorId) followers.add(row.follower_actor)
-  }
-  return [...following].filter((id) => followers.has(id))
-}
-
-/** Nom et image des amis, qu'ils soient une personne ou une enseigne. */
-async function fetchFriendProfiles(ids: string[]): Promise<Map<string, Friend>> {
-  const byId = new Map<string, Friend>()
-  if (ids.length === 0) return byId
-
-  const [{ data: entities }, { data: users }] = await Promise.all([
-    supabase.from('entities').select('actor_id, brand_name, avatar_url').in('actor_id', ids),
-    supabase.from('users').select('actor_id, display_name, avatar_url').in('actor_id', ids),
-  ])
-
-  for (const row of (entities ?? []) as Pick<
-    EntityRow,
-    'actor_id' | 'brand_name' | 'avatar_url'
-  >[]) {
-    byId.set(row.actor_id, {
-      id: row.actor_id,
-      name: row.brand_name,
-      avatarUrl: row.avatar_url,
-    })
-  }
-  for (const row of (users ?? []) as Pick<
-    UserRow,
-    'actor_id' | 'display_name' | 'avatar_url'
-  >[]) {
-    if (byId.has(row.actor_id)) continue
-    byId.set(row.actor_id, {
-      id: row.actor_id,
-      name: row.display_name ?? 'Ami',
-      avatarUrl: row.avatar_url,
-    })
-  }
-  return byId
 }
 
 /**
@@ -336,31 +282,10 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         (row): row is ParticipationWithEvent & { events: EventRow } => Boolean(row.events),
       )
 
-      const friendIds = await fetchMutualFriendIds(currentActorId)
-      let friendsByEvent = new Map<string, Friend[]>()
-
-      if (friendIds.length > 0 && rows.length > 0) {
-        const [{ data: friendParticipations }, profiles] = await Promise.all([
-          supabase
-            .from('participations')
-            .select('actor_id, event_id')
-            .in('actor_id', friendIds)
-            .in('status', PROGRAMMED_STATUSES)
-            .in(
-              'event_id',
-              rows.map((row) => row.event_id),
-            ),
-          fetchFriendProfiles(friendIds),
-        ])
-        friendsByEvent = (friendParticipations ?? []).reduce((map, row) => {
-          const friend = profiles.get(row.actor_id)
-          if (!friend) return map
-          const list = map.get(row.event_id) ?? []
-          list.push(friend)
-          map.set(row.event_id, list)
-          return map
-        }, new Map<string, Friend[]>())
-      }
+      const friendsByEvent = await fetchFriendsByEvent(
+        currentActorId,
+        rows.map((row) => row.event_id),
+      )
 
       if (cancelled) return
 

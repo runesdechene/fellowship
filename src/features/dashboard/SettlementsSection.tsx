@@ -1,6 +1,7 @@
 import { Chip, type ChipTone } from '@/components/ui/Chip'
 import { formatDayMonthShort } from '@/lib/dates'
 import { formatEuros } from '@/lib/money'
+import { useTransitionNavigate } from '@/lib/navigation'
 import type { Settlement, SettlementState } from './useDashboard'
 
 /** Ce que chaque état raconte, et avec quelle pastille. */
@@ -11,12 +12,19 @@ const STATE: Record<SettlementState, { label: string; tone: ChipTone }> = {
 }
 
 export function SettlementsSection({ settlements }: { settlements: Settlement[] }) {
+  const go = useTransitionNavigate()
+
   return (
     <div className="settlements">
       {settlements.map((item) => {
         const state = STATE[item.state]
         return (
-          <button key={item.participationId} type="button" className="settlement">
+          <button
+            key={item.participationId}
+            type="button"
+            className="settlement"
+            onClick={() => go(`/evenement/${item.eventId}`)}
+          >
             <span className="settlement__dot" />
             <span className="settlement__identity">
               <span className="settlement__name">{item.name}</span>

@@ -115,6 +115,7 @@
   --leading-tight: 1.15;
   --leading-snug: 1.3;
   --leading-normal: 1.45;
+  --leading-relaxed: 1.6; /* les paragraphes qu'on lit vraiment */
 
   /* ---------------------------------------------------------------------
      ESPACEMENT — échelle libre, calquée sur la maquette

@@ -306,6 +306,32 @@
     var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
+     FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
+     ====================================================================== */
+  /* L'affiche est le seul grand aplat de la page : elle porte l'identité de la
+     date là où le tableau de bord n'en montrait qu'une vignette. */
+  --event-poster-width: 300px;
+  --event-poster-height: 220px;
+  --event-hero-gap: var(--space-32);
+
+  /* Les informations pratiques se rangent en colonnes qui se partagent la
+     largeur, et repassent à la ligne plutôt que de se serrer. */
+  --event-fact-min-width: 200px;
+  --event-fact-gap-x: var(--space-32);
+  --event-fact-gap-y: var(--space-24);
+  --event-facts-padding: var(--card-padding);
+
+  --event-friend-gap: var(--space-24); /* entre deux amis de la rangée */
+  --event-ledger-row-height: 40px;
+
+  --type-event-fact-label: var(--weight-semibold) var(--size-11) /
+    var(--leading-snug) var(--family-sans);
+  --type-event-fact-value: var(--weight-medium) var(--size-14) /
+    var(--leading-snug) var(--family-sans);
+  --type-event-description: var(--weight-regular) var(--size-14) /
+    var(--leading-relaxed) var(--family-sans);
+
+  /* =========================================================================
      FORMULAIRES — champs, bascules, dépôt de fichier
      ====================================================================== */
   --control-height: 46px;

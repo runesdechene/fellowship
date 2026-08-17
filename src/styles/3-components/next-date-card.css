@@ -14,6 +14,8 @@
   border-radius: var(--radius-card);
   overflow: hidden;
   cursor: pointer;
+  /* C'est un bouton : il centrerait son contenu comme un libellé. */
+  text-align: left;
   transition: background-color var(--menu-motion);
 }
 
@@ -49,6 +51,7 @@
 }
 
 .next-date__title {
+  display: block;
   font: var(--type-event-title);
   color: var(--ink-title);
   overflow: hidden;
@@ -57,6 +60,7 @@
 }
 
 .next-date__meta {
+  display: block;
   margin-top: var(--space-18);
   font: var(--type-event-meta);
   color: var(--ink-soft);

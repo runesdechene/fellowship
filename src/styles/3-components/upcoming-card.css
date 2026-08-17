@@ -37,9 +37,17 @@
 
    Latéralement, le fond déborde de quatorze pixels par marge négative et
    s'arrête à neuf du bord de la carte. */
+/* L'élément de liste n'est qu'un support : le bouton qu'il porte doit
+   s'étirer à sa largeur, puis déborder par ses marges négatives. */
+.upcoming__item {
+  display: flex;
+  flex-direction: column;
+}
+
 .upcoming__row {
   display: flex;
   align-items: center;
+  text-align: left;
   gap: var(--space-12);
   height: calc(var(--list-row-height) + var(--list-row-gap));
   padding-inline: var(--space-14);

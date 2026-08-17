@@ -1,13 +1,19 @@
 import { Pencil } from 'lucide-react'
 import { formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
+import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
 
 function ReportCard({ report }: { report: DashboardReport }) {
   const filled = report.net !== null
+  const go = useTransitionNavigate()
 
   return (
-    <button type="button" className={filled ? 'report' : 'report report--todo'}>
+    <button
+      type="button"
+      className={filled ? 'report' : 'report report--todo'}
+      onClick={() => go(`/evenement/${report.eventId}`)}
+    >
       {report.imageUrl ? (
         <img className="report__thumb" src={report.imageUrl} alt="" />
       ) : (

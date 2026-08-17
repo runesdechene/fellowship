@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
+import { EventPage } from '@/features/event/EventPage'
 import { Login } from '@/pages/Login'
 import { useAuth } from '@/lib/auth'
 import type { ReactNode } from 'react'
@@ -38,6 +39,18 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <CreateEvent />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      {/* « /evenement/nouveau » l'emporte sur ce motif : le routeur classe les
+          segments fixes avant les variables, quel que soit l'ordre écrit ici. */}
+      <Route
+        path="/evenement/:id"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <EventPage />
             </AppShell>
           </ProtectedRoute>
         }
