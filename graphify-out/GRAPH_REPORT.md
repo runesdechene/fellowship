@@ -1,7 +1,7 @@
 # Graph Report - .  (2026-08-17)
 
 ## Corpus Check
-- 47 files · ~530,594 words
+- 47 files · ~530,575 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -354,7 +354,7 @@ Nodes (1): Pastel Tag System
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 28`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `submit()`, `CreateEvent.tsx`
+- **Thin community `Community 29`** (2 nodes): `CreateEvent()`, `CreateEvent.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 30`** (2 nodes): `formatRange()`, `EventPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.

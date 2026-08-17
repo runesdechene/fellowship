@@ -167,7 +167,7 @@ export function CreateEvent() {
                 </button>
               </span>
             ) : (
-              <>
+              <span className="create__draft-group">
                 {/* Un statut, pas une commande : le brouillon part au stockage
                     tout seul, ce badge ne fait que l'annoncer. */}
                 <span
@@ -194,7 +194,7 @@ export function CreateEvent() {
                 >
                   <Trash2 size={14} strokeWidth={2} />
                 </button>
-              </>
+              </span>
             ))}
         </div>
       </div>
