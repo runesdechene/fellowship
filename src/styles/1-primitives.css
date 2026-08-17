@@ -164,9 +164,6 @@
   --duration-smooth: 200ms;
   --duration-medium: 240ms;
   --duration-slow: 480ms;
-  /* Presque une seconde : ce n'est plus une réaction, c'est un plan. À
-     réserver à ce qu'on regarde, jamais à ce qu'on attend. */
-  --duration-cinematic: 960ms;
   --ease-out: cubic-bezier(0.2, 0.6, 0.2, 1);
   /* Courbe plus molle : elle démarre et finit sans à-coup, ce qui rend un
      mouvement court doux plutôt que sec. */
