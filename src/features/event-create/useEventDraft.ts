@@ -94,11 +94,18 @@ export function blockingReason(draft: EventDraft, step: number): string | null {
 
 /**
  * L'état du brouillon, tel qu'un statut peut l'annoncer.
- * `blank`   rien de saisi — il n'y a rien à annoncer
+ * `quiet`   rien à annoncer — fiche vierge, ou frappe encore en cours
  * `kept`    écrit dans le stockage du navigateur, il survivra à l'onglet
  * `refused` le navigateur refuse d'écrire — il faut le dire, pas le taire
  */
-export type DraftStatus = 'blank' | 'kept' | 'refused'
+export type DraftStatus = 'quiet' | 'kept' | 'refused'
+
+/**
+ * Le temps de silence après lequel on considère qu'une saisie est posée.
+ * Le statut annonce un champ rempli, pas un caractère tapé : il apparaîtrait
+ * sinon à la première lettre, en plein milieu de la frappe.
+ */
+const SETTLE_MS = 900
 
 /** Un brouillon vierge : le statut se tait tant qu'on n'a rien tapé. */
 function isBlank(draft: EventDraft): boolean {
@@ -110,8 +117,13 @@ function isBlank(draft: EventDraft): boolean {
 }
 
 export function useEventDraft() {
-  const [draft, setDraft] = useState<EventDraft>(readDraft)
+  // Lu une seule fois : ce brouillon de départ dit aussi si le statut doit
+  // s'afficher d'emblée — on revient sur une saisie, personne n'est en train
+  // d'écrire, il n'y a rien à attendre.
+  const [initialDraft] = useState(readDraft)
+  const [draft, setDraft] = useState<EventDraft>(initialDraft)
   const [stored, setStored] = useState(true)
+  const [settled, setSettled] = useState(() => !isBlank(initialDraft))
 
   // Le brouillon survit à la fermeture de l'onglet : c'est la raison d'être
   // de cet écran plutôt qu'une modale. On retient si l'écriture a tenu —
@@ -120,7 +132,19 @@ export function useEventDraft() {
     setStored(writeDraft(draft))
   }, [draft])
 
-  const status: DraftStatus = isBlank(draft) ? 'blank' : stored ? 'kept' : 'refused'
+  // Le statut attend un silence pour se montrer. Une fois posé il reste :
+  // il dirait la même chose à chaque frappe, autant ne pas le faire clignoter.
+  useEffect(() => {
+    if (isBlank(draft)) {
+      setSettled(false)
+      return
+    }
+    if (settled) return
+    const timer = setTimeout(() => setSettled(true), SETTLE_MS)
+    return () => clearTimeout(timer)
+  }, [draft, settled])
+
+  const status: DraftStatus = !settled ? 'quiet' : stored ? 'kept' : 'refused'
 
 
   const update = useCallback(<K extends keyof EventDraft>(key: K, value: EventDraft[K]) => {

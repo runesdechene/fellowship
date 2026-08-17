@@ -277,7 +277,9 @@
   --create-columns-gap: var(--space-48);
   --create-poster-height: 172px;
 
-  --type-create-ask: var(--weight-bold) var(--size-30) / var(--leading-tight)
+  /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
+     les titres des pages qui, elles, en empilent plusieurs. */
+  --type-create-ask: var(--weight-bold) var(--size-38) / var(--leading-tight)
     var(--family-sans);
   --type-create-card-name: var(--weight-bold) var(--size-18) /
     var(--leading-snug) var(--family-sans);

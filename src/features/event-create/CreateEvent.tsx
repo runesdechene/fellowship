@@ -151,7 +151,7 @@ export function CreateEvent() {
           {/* Tout ce qui concerne le brouillon se dit ici : ce qu'il en est, et
               le seul moyen de s'en défaire. Rien de destructeur ne traîne du
               côté de la sortie. */}
-          {status !== 'blank' &&
+          {status !== 'quiet' &&
             (askingDiscard ? (
               <span className="create__draft create__draft--asking">
                 Effacer le brouillon ?
