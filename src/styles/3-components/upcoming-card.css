@@ -10,28 +10,40 @@
   flex-direction: column;
   width: var(--card-width);
   height: var(--card-height);
-  padding: var(--space-20) var(--card-padding);
+  /* En haut, la carte rend aux lignes la moitié d'écart qu'elles ont prise,
+     pour que le premier nom reste à sa place. En bas c'est le lien de pied
+     de carte, pas une ligne : la marge d'origine y est conservée. */
+  padding: calc(var(--space-20) - var(--list-row-gap) / 2) var(--card-padding)
+    var(--space-20);
   background: var(--surface-card);
   border-radius: var(--radius-card);
 }
 
+/* Aucun écart ici : chaque ligne l'a absorbé en rembourrage (voir ci-dessous).
+   Le laisser entre les lignes ferait s'arrêter le fond du survol au ras du
+   texte. */
 .upcoming__list {
   display: flex;
   flex-direction: column;
-  gap: var(--list-row-gap);
 }
 
 /* Chaque ligne mène à sa date : c'est la LIGNE qui s'éclaircit, pas la carte
-   qui les contient. Le fond déborde de dix pixels de chaque côté par marge
-   négative — le texte ne bouge pas d'un cheveu, mais le survol respire au
-   lieu de coller aux lettres. */
+   qui les contient.
+
+   Elle occupe sa hauteur PLUS l'écart qui la séparait de la suivante, si
+   bien que le survol dessine une bande pleine autour du texte au lieu de le
+   serrer. Deux lignes voisines se touchent, mais elles ne s'éclairent jamais
+   ensemble : ce contact ne se voit pas. Le texte, lui, n'a pas bougé.
+
+   Latéralement, le fond déborde de quatorze pixels par marge négative et
+   s'arrête à neuf du bord de la carte. */
 .upcoming__row {
   display: flex;
   align-items: center;
   gap: var(--space-12);
-  height: var(--list-row-height);
-  padding-inline: var(--space-10);
-  margin-inline: calc(-1 * var(--space-10));
+  height: calc(var(--list-row-height) + var(--list-row-gap));
+  padding-inline: var(--space-14);
+  margin-inline: calc(-1 * var(--space-14));
   border-radius: var(--radius-nav);
   cursor: pointer;
   transition: background-color var(--menu-motion);

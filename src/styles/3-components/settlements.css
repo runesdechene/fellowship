@@ -6,19 +6,24 @@
    Utilisé par : src/features/dashboard/SettlementsSection.tsx
    -------------------------------------------------------------------------- */
 
+/* Pas d'écart entre les lignes : chacune l'a repris en rembourrage, pour que
+   le survol les entoure au lieu de les serrer. */
 .settlements {
   display: flex;
   flex-direction: column;
-  gap: var(--settlement-row-gap);
-  padding: var(--settlement-padding-y) var(--settlement-padding-x);
+  /* La carte rend aux lignes la moitié d'écart qu'elles ont prise : les
+     textes restent exactement où ils étaient. */
+  padding: calc(var(--settlement-padding-y) - var(--settlement-row-gap) / 2)
+    var(--settlement-padding-x);
   background: var(--surface-card);
   border-radius: var(--radius-card);
 }
 
 /* Même règle que « À venir » : chaque ligne est une destination, donc c'est
-   elle qui répond. Le débordement est purement horizontal — un rembourrage
-   vertical remonterait la première ligne et mangerait la marge haute de la
-   carte. Ces lignes tiennent deux textes, elles sont déjà assez hautes.
+   elle qui répond, et elle reprend en rembourrage la moitié de l'écart qui
+   la séparait de ses voisines — de part et d'autre, l'espacement d'origine
+   est donc conservé au pixel près.
+
    `align-self: stretch` remplace l'ancien `width: 100%` : avec des marges
    négatives, une largeur figée à 100 % décentrerait la ligne au lieu de
    l'élargir. */
@@ -27,8 +32,8 @@
   align-self: stretch;
   align-items: center;
   gap: var(--space-12);
-  padding-inline: var(--space-10);
-  margin-inline: calc(-1 * var(--space-10));
+  padding: calc(var(--settlement-row-gap) / 2) var(--space-14);
+  margin-inline: calc(-1 * var(--space-14));
   border-radius: var(--radius-nav);
   text-align: left;
   cursor: pointer;

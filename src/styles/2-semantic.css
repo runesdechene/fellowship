@@ -330,7 +330,6 @@
   /* Réaction au survol : la carte grossit très légèrement, et rien d'autre.
      Rien ne bouge à l'intérieur. */
   --report-hover-motion: var(--duration-smooth) var(--ease-soft);
-  --report-hover-scale: 1.05;
   --report-action-shift: var(--space-4); /* d'où le crayon arrive en surgissant */
   --report-gap: var(--space-20); /* entre deux cartes */
   --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */

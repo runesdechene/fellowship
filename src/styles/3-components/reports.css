@@ -28,12 +28,20 @@
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  transition: transform var(--report-hover-motion);
+  transition: background-color var(--report-hover-motion);
 }
 
-/* La carte entière grossit très légèrement. Rien ne bouge à l'intérieur. */
+/* La carte s'éclaircit d'un cran, comme tout ce qui mène quelque part dans
+   le cockpit. Elle grossissait auparavant : un agrandissement attire l'œil
+   sans rien apprendre, et bouscule ses voisines dans la grille. */
 .report:hover {
-  transform: scale(var(--report-hover-scale));
+  background: var(--surface-card-hover);
+}
+
+/* Le bilan pas encore rempli n'a pas de fond à éclaircir : il en gagne un.
+   Le survol le rend tangible, ce qui est exactement son propos. */
+.report--todo:hover {
+  background: var(--surface-card-hover);
 }
 
 .report__thumb {
@@ -131,9 +139,5 @@
   .report,
   .report__action {
     transition: none;
-  }
-
-  .report:hover {
-    transform: none;
   }
 }
