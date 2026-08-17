@@ -15,13 +15,28 @@
   border-radius: var(--radius-card);
 }
 
+/* Même règle que « À venir » : chaque ligne est une destination, donc c'est
+   elle qui répond. Le débordement est purement horizontal — un rembourrage
+   vertical remonterait la première ligne et mangerait la marge haute de la
+   carte. Ces lignes tiennent deux textes, elles sont déjà assez hautes.
+   `align-self: stretch` remplace l'ancien `width: 100%` : avec des marges
+   négatives, une largeur figée à 100 % décentrerait la ligne au lieu de
+   l'élargir. */
 .settlement {
   display: flex;
+  align-self: stretch;
   align-items: center;
   gap: var(--space-12);
-  width: 100%;
+  padding-inline: var(--space-10);
+  margin-inline: calc(-1 * var(--space-10));
+  border-radius: var(--radius-nav);
   text-align: left;
   cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.settlement:hover {
+  background: var(--surface-row-hover);
 }
 
 /* Toutes ces lignes sont en attente par construction : la pastille est la

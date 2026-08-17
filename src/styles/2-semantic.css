@@ -27,6 +27,11 @@
      intermédiaire. Deux noms distincts pour pouvoir les séparer un jour. */
   --surface-nav-active: var(--stone-200);
   --surface-nav-hover: var(--stone-200);
+  /* Survol de ce qui mène quelque part. Une carte s'éclaircit d'un cran ;
+     une LIGNE posée sur une carte en prend deux, sinon la nuance se perd
+     sur une bande de trente pixels de haut. */
+  --surface-card-hover: var(--cream-150);
+  --surface-row-hover: var(--cream-100);
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-150); /* mois qui portent au moins une date */

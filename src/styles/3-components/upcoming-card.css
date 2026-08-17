@@ -21,11 +21,24 @@
   gap: var(--list-row-gap);
 }
 
+/* Chaque ligne mène à sa date : c'est la LIGNE qui s'éclaircit, pas la carte
+   qui les contient. Le fond déborde de dix pixels de chaque côté par marge
+   négative — le texte ne bouge pas d'un cheveu, mais le survol respire au
+   lieu de coller aux lettres. */
 .upcoming__row {
   display: flex;
   align-items: center;
   gap: var(--space-12);
   height: var(--list-row-height);
+  padding-inline: var(--space-10);
+  margin-inline: calc(-1 * var(--space-10));
+  border-radius: var(--radius-nav);
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.upcoming__row:hover {
+  background: var(--surface-row-hover);
 }
 
 /* Pastille de statut */

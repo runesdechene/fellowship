@@ -3,6 +3,8 @@
    Utilisé par : src/features/dashboard/NextDateCard.tsx
    -------------------------------------------------------------------------- */
 
+/* La carte entière mène à l'événement : c'est donc elle qui répond au
+   survol, pas une zone à l'intérieur. */
 .next-date {
   display: flex;
   flex: none;
@@ -11,6 +13,12 @@
   background: var(--surface-card);
   border-radius: var(--radius-card);
   overflow: hidden;
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.next-date:hover {
+  background: var(--surface-card-hover);
 }
 
 .next-date__poster {
