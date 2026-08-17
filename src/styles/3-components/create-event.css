@@ -80,11 +80,53 @@
   color: var(--status-pending-ink);
 }
 
-/* --- Abandonner ----------------------------------------------------------- */
-/* Armé, il annonce ce qu'il va détruire. La couleur fait le travail que le
-   libellé seul ne ferait pas assez vite. */
-.create__quit--armed {
+/* --- Abandonner le brouillon ---------------------------------------------- */
+/* La corbeille se tient à côté du statut, pas près de la sortie : elle agit
+   sur le brouillon, pas sur la navigation. Discrète tant qu'on ne la cherche
+   pas — elle ne se colore qu'au survol. */
+.create__draft-drop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-chip);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--menu-motion),
+    color var(--menu-motion);
+}
+
+.create__draft-drop:hover {
+  background: var(--status-pending-surface);
   color: var(--status-pending-ink);
+}
+
+/* La question prend la place du statut : au même endroit, on parle du même
+   objet. Le ton d'alerte dit qu'on ne parle plus d'une bonne nouvelle. */
+.create__draft--asking {
+  gap: var(--space-10);
+  background: var(--status-pending-surface);
+  color: var(--status-pending-ink);
+}
+
+.create__draft-yes,
+.create__draft-no {
+  font: var(--type-section-link);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Effacer est irréversible : c'est le seul mot en pleine couleur d'alerte. */
+.create__draft-yes {
+  color: var(--status-pending-ink);
+  font-weight: var(--weight-bold);
+}
+
+.create__draft-no {
+  color: var(--ink-soft);
 }
 
 /* --- Les deux colonnes ---------------------------------------------------- */

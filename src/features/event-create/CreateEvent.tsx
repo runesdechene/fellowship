@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Save, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
 import { useAuth } from '@/lib/auth'
@@ -14,8 +14,8 @@ import { blockingReason, STEPS, useEventDraft, type EventDraft } from './useEven
 /** Le dépôt public des affiches. */
 const POSTER_BUCKET = 'event-images'
 
-/** Le temps que la question « pour de bon ? » reste posée avant de s'effacer. */
-const CONFIRM_MS = 4000
+/** Le temps que la question « on efface ? » reste posée avant de se retirer. */
+const CONFIRM_MS = 6000
 
 export function CreateEvent() {
   const go = useTransitionNavigate()
@@ -28,7 +28,7 @@ export function CreateEvent() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showBlocker, setShowBlocker] = useState(false)
-  const [confirmingQuit, setConfirmingQuit] = useState(false)
+  const [askingDiscard, setAskingDiscard] = useState(false)
 
   // L'aperçu de l'affiche vient du navigateur, avant tout envoi. L'URL objet
   // doit être révoquée, sinon le fichier reste en mémoire.
@@ -59,31 +59,27 @@ export function CreateEvent() {
     transition('step-back', () => setStep((current) => Math.max(current - 1, 0)))
   }, [transition])
 
-  // La question posée ne reste pas armée indéfiniment : passé quelques
-  // secondes, un clic distrait ne doit plus pouvoir effacer le travail.
+  // La question ne reste pas posée indéfiniment : sans réponse elle se
+  // retire, plutôt que d'attendre un clic distrait des heures plus tard.
   useEffect(() => {
-    if (!confirmingQuit) return
-    const timer = setTimeout(() => setConfirmingQuit(false), CONFIRM_MS)
+    if (!askingDiscard) return
+    const timer = setTimeout(() => setAskingDiscard(false), CONFIRM_MS)
     return () => clearTimeout(timer)
-  }, [confirmingQuit])
+  }, [askingDiscard])
 
   /**
-   * Abandonner efface le brouillon — c'est le seul geste destructeur de
-   * l'écran, et le seul moyen de repartir d'une fiche vierge. Il demande
-   * donc confirmation, sauf s'il n'y a rien à perdre.
+   * Abandonner le brouillon vide l'atelier sans le quitter : c'est le seul
+   * moyen de repartir d'une fiche vierge, puisque la saisie est conservée
+   * d'une visite à l'autre. Partir, lui, se fait par la barre du haut.
    */
-  const abandon = useCallback(() => {
-    if (status === 'blank') {
-      go('/')
-      return
-    }
-    if (!confirmingQuit) {
-      setConfirmingQuit(true)
-      return
-    }
+  const discardDraft = useCallback(() => {
+    setAskingDiscard(false)
+    setShowBlocker(false)
+    setError(null)
+    setPoster(null)
     clear()
-    go('/')
-  }, [status, confirmingQuit, clear, go])
+    transition('step-back', () => setStep(0))
+  }, [clear, transition])
 
   async function submit() {
     if (!actor) return
@@ -140,14 +136,10 @@ export function CreateEvent() {
   return (
     <div className="create">
       <div className="create__top">
-        {/* Le seul geste qui détruit quelque chose : il demande donc deux fois. */}
-        <button
-          type="button"
-          className={confirmingQuit ? 'create__quit create__quit--armed' : 'create__quit'}
-          onClick={abandon}
-        >
+        {/* La sortie normale : on part, le brouillon reste. */}
+        <button type="button" className="create__quit" onClick={() => go('/')}>
           <ArrowLeft size={15} strokeWidth={2} />
-          {confirmingQuit ? 'Effacer et partir ?' : 'Abandonner'}
+          Tableau de bord
         </button>
 
         <div className="create__top-right">
@@ -156,24 +148,54 @@ export function CreateEvent() {
             {isLast && ' · facultative'}
           </span>
 
-          {/* Un statut, pas une commande : le brouillon part au stockage tout
-              seul, ce badge ne fait que l'annoncer. Rien à cliquer. */}
-          {status !== 'blank' && (
-            <span
-              className={
-                status === 'kept' ? 'create__draft' : 'create__draft create__draft--refused'
-              }
-              role="status"
-              title={
-                status === 'kept'
-                  ? undefined
-                  : "Ce navigateur refuse le stockage : le brouillon sera perdu en fermant l'onglet."
-              }
-            >
-              <Save size={14} strokeWidth={2} />
-              {status === 'kept' ? 'Brouillon sauvegardé !' : 'Brouillon non gardé'}
-            </span>
-          )}
+          {/* Tout ce qui concerne le brouillon se dit ici : ce qu'il en est, et
+              le seul moyen de s'en défaire. Rien de destructeur ne traîne du
+              côté de la sortie. */}
+          {status !== 'blank' &&
+            (askingDiscard ? (
+              <span className="create__draft create__draft--asking">
+                Effacer le brouillon ?
+                <button type="button" className="create__draft-yes" onClick={discardDraft}>
+                  Effacer
+                </button>
+                <button
+                  type="button"
+                  className="create__draft-no"
+                  onClick={() => setAskingDiscard(false)}
+                >
+                  Garder
+                </button>
+              </span>
+            ) : (
+              <>
+                {/* Un statut, pas une commande : le brouillon part au stockage
+                    tout seul, ce badge ne fait que l'annoncer. */}
+                <span
+                  className={
+                    status === 'kept' ? 'create__draft' : 'create__draft create__draft--refused'
+                  }
+                  role="status"
+                  title={
+                    status === 'kept'
+                      ? undefined
+                      : "Ce navigateur refuse le stockage : le brouillon sera perdu en fermant l'onglet."
+                  }
+                >
+                  <Save size={14} strokeWidth={2} />
+                  {status === 'kept' ? 'Brouillon sauvegardé !' : 'Brouillon non gardé'}
+                </span>
+
+                <button
+                  type="button"
+                  className="create__draft-drop"
+                  onClick={() => setAskingDiscard(true)}
+                  aria-label="Abandonner le brouillon"
+                  title="Abandonner le brouillon et repartir d'une fiche vierge"
+                >
+                  <Trash2 size={14} strokeWidth={2} />
+                </button>
+              </>
+            ))}
         </div>
       </div>
 
