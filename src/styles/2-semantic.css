@@ -27,11 +27,19 @@
      intermédiaire. Deux noms distincts pour pouvoir les séparer un jour. */
   --surface-nav-active: var(--stone-200);
   --surface-nav-hover: var(--stone-200);
-  /* Survol de ce qui mène quelque part. Une carte s'éclaircit d'un cran ;
-     une LIGNE posée sur une carte en prend deux, sinon la nuance se perd
-     sur une bande de trente pixels de haut. */
+  /* Survol de ce qui mène quelque part.
+
+     Une CARTE s'éclaire en bloc — fond, vignette et pastilles ensemble — par
+     un filtre de luminosité. C'est ce qui se voit le mieux, au prix d'un
+     texte très légèrement éclairci lui aussi : le filtre ne sait pas faire
+     le tri.
+
+     Une LIGNE n'a pas de fond à éclairer tant qu'on ne la survole pas : le
+     filtre n'aurait rien à mordre. Elle prend donc une surface, et va jusqu'au
+     crème du panneau pour se voir autant que les cartes. */
+  --hover-brightness: 1.2;
   --surface-card-hover: var(--cream-150);
-  --surface-row-hover: var(--cream-100);
+  --surface-row-hover: var(--cream-50);
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-150); /* mois qui portent au moins une date */

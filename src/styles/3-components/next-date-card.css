@@ -14,11 +14,11 @@
   border-radius: var(--radius-card);
   overflow: hidden;
   cursor: pointer;
-  transition: background-color var(--menu-motion);
+  transition: filter var(--menu-motion);
 }
 
 .next-date:hover {
-  background: var(--surface-card-hover);
+  filter: brightness(var(--hover-brightness));
 }
 
 .next-date__poster {
