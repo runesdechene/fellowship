@@ -28,25 +28,25 @@
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  transition: filter var(--report-hover-motion);
+  transition: background-color var(--report-hover-motion);
 }
 
-/* La carte s'éclaire ENTIÈRE — fond, vignette, chiffres — au lieu de grossir.
-   Un agrandissement attire l'œil sans rien apprendre, et bouscule ses
-   voisines dans la grille. */
+/* La carte s'assombrit au lieu de grossir : un agrandissement attire l'œil
+   sans rien apprendre, et bouscule ses voisines dans la grille. */
 .report:hover {
+  background: var(--surface-card-hover);
+}
+
+/* La vignette suit la carte, elle seule — sinon elle resterait une tache
+   inchangée au milieu d'un fond qui bouge. Les chiffres, eux, gagnent du
+   contraste : c'est le moment où on les lit. */
+.report:hover .report__thumb {
   filter: brightness(var(--hover-brightness));
 }
 
-/* Le bilan pas encore rempli est transparent : le filtre n'a presque rien à
-   éclairer. Il gagne donc un fond, ce qui le rend tangible au survol —
-   exactement son propos, une place vide qui demande à être remplie. */
-.report--todo {
-  transition:
-    filter var(--report-hover-motion),
-    background-color var(--report-hover-motion);
-}
-
+/* Le bilan pas encore rempli est transparent par construction : il gagne un
+   fond au survol, ce qui le rend tangible — exactement son propos, une place
+   vide qui demande à être remplie. */
 .report--todo:hover {
   background: var(--surface-card-hover);
 }

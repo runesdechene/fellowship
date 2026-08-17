@@ -14,10 +14,17 @@
   border-radius: var(--radius-card);
   overflow: hidden;
   cursor: pointer;
-  transition: filter var(--menu-motion);
+  transition: background-color var(--menu-motion);
 }
 
 .next-date:hover {
+  background: var(--surface-card-hover);
+}
+
+/* L'affiche suit sa carte : sans ça elle resterait une tache inchangée au
+   milieu d'un fond qui bouge. Le filtre ne touche qu'elle — le texte garde
+   son contraste, et il en gagne même, le fond s'assombrissant sous lui. */
+.next-date:hover .next-date__poster {
   filter: brightness(var(--hover-brightness));
 }
 
@@ -27,6 +34,7 @@
   height: 100%;
   object-fit: cover;
   background: var(--surface-chip-neutral);
+  transition: filter var(--menu-motion);
 }
 
 /* Le contenu est centré verticalement dans la carte : le titre du bloc

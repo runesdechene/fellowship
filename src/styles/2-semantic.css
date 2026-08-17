@@ -29,17 +29,25 @@
   --surface-nav-hover: var(--stone-200);
   /* Survol de ce qui mène quelque part.
 
-     Une CARTE s'éclaire en bloc — fond, vignette et pastilles ensemble — par
-     un filtre de luminosité. C'est ce qui se voit le mieux, au prix d'un
-     texte très légèrement éclairci lui aussi : le filtre ne sait pas faire
-     le tri.
+     On ASSOMBRIT, on n'éclaircit pas. Deux raisons, et la seconde est la
+     vraie : la barre de gauche le fait déjà (--surface-nav-hover), et
+     surtout une carte n'existe QUE parce qu'elle est plus sombre que le
+     panneau. L'éclaircir la rapproche du fond — elle se dissoudrait au
+     moment précis où on la vise. L'assombrir appuie ce qu'elle est.
 
-     Une LIGNE n'a pas de fond à éclairer tant qu'on ne la survole pas : le
-     filtre n'aurait rien à mordre. Elle prend donc une surface, et va jusqu'au
-     crème du panneau pour se voir autant que les cartes. */
-  --hover-brightness: 1.2;
-  --surface-card-hover: var(--cream-150);
-  --surface-row-hover: var(--cream-50);
+     Le fond change par un SAUT DE TEINTE, jamais par un filtre : le crème
+     est à deux doigts du blanc et tout filtre l'y écrase ; passé ce point,
+     ce qui bouge encore n'est plus le fond mais le texte et les images.
+
+     Le filtre garde une seule charge, l'IMAGE — affiche ou vignette — pour
+     qu'elle suive sa carte au lieu d'y rester comme une tache claire.
+
+     Les LIGNES vont un cran plus loin que les cartes : sur trente pixels de
+     haut, une nuance se perd. Elles reprennent la valeur des entrées de
+     navigation, qui sont des lignes elles aussi. */
+  --hover-brightness: 0.96;
+  --surface-card-hover: var(--cream-300);
+  --surface-row-hover: var(--stone-200);
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
   --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
   --surface-bar: var(--cream-150); /* mois qui portent au moins une date */
