@@ -27,8 +27,6 @@
         --brown-700: #564444;
         --brown-800: #4a4643;
         --brown-900: #2d2826;
-        --olive-100: #e8f0d8;
-        --olive-500: #84aa3c;
         --clay-100: #f6e7dc;
         --clay-500: #c0642a;
         --electric-100: #e6e5fa;
@@ -49,8 +47,8 @@
         --ink-section: var(--brown-800);
         --ink-total: var(--brown-600);
 
-        --status-ok-ink: var(--olive-500);
-        --status-ok-surface: var(--olive-100);
+        --status-ok-ink: var(--electric-500);
+        --status-ok-surface: var(--electric-100);
         --status-pending-ink: var(--clay-500);
         --status-pending-surface: var(--clay-100);
 
@@ -793,7 +791,7 @@
         color: transparent;
       }
 
-      /* Un cran franchi : olive, l'état acquis. */
+      /* Un cran franchi : accent, l'état acquis. */
       .stepper__step--done {
         color: var(--ink-title);
       }
@@ -1008,7 +1006,7 @@
       }
 
       /* Une question déjà tranchée : elle reste écrite, mais elle ne réclame
-         plus rien. L'olive dit l'état acquis, comme partout ailleurs. */
+         plus rien. L'accent dit l'état acquis, comme partout ailleurs. */
       .ask--done {
         border-left-color: var(--status-ok-ink);
       }
