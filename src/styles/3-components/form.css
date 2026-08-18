@@ -98,7 +98,7 @@
   transition: transform var(--menu-motion);
 }
 
-/* Un interrupteur n'est pas un statut : il porte donc le bleu, pas l'olive. */
+/* Un interrupteur porte l'accent de l'app, comme tout ce sur quoi on agit. */
 .toggle--on .toggle__switch {
   background: var(--toggle-on-surface);
 }

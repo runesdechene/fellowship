@@ -37,7 +37,7 @@ const PAYMENT_STEPS: Record<PaymentOrientation, { key: PaymentStatus; label: str
 const CAPTURING_STATUSES: string[] = ['acompte_verse', 'paye']
 
 /**
- * Un cran. Trois états : franchi (olive, acquis), courant (surface appuyée,
+ * Un cran. Trois états : franchi (accent, acquis), courant (surface appuyée,
  * c'est là qu'on en est), à venir (éteint). Cliquer un cran déjà courant le
  * décoche — c'est le seul moyen de revenir en arrière sans tout retirer.
  */

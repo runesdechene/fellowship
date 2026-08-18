@@ -59,7 +59,7 @@
 
 /* --- Le statut du brouillon ----------------------------------------------- */
 /* Le brouillon part au stockage à chaque frappe : rien à cliquer ici. Ce
-   badge annonce un ÉTAT ACQUIS — donc l'olive, jamais l'électrique, qui est
+   badge annonce un ÉTAT ACQUIS — même famille que l'action depuis qu'on est
    réservée aux commandes (voir 1-primitives.css : les deux ne se croisent
    jamais). C'est la règle qui a chassé le vert du bouton d'événement privé,
    appliquée ici dans l'autre sens. */

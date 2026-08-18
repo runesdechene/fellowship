@@ -50,12 +50,6 @@
   --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
 
   /* ---------------------------------------------------------------------
-     PALETTE — OLIVE (l'unique couleur vive : le statut)
-     --------------------------------------------------------------------- */
-  --olive-100: #e8f0d8; /* fond de pastille */
-  --olive-500: #84aa3c; /* la couleur de marque */
-
-  /* ---------------------------------------------------------------------
      PALETTE — TERRE (statuts non validés)
      --------------------------------------------------------------------- */
   --clay-100: #f6e7dc;
@@ -63,11 +57,10 @@
 
   /* ---------------------------------------------------------------------
      PALETTE — BLEU-VIOLET ÉLECTRIQUE
-     La SECONDE couleur d'accent de Fellowship, et la seule froide.
-
-     Partage du travail avec l'olive, à ne pas mélanger :
-       olive     = un ÉTAT acquis (inscrit, acompte versé, bénéfice)
-       électrique = ce sur quoi on AGIT (liens, interrupteurs, focus)
+     Avec la terre du logo, l'UNE DES DEUX couleurs de Fellowship. Il n'y en a
+     pas de troisième : un olive traînait ici depuis le premier commit de la
+     V2, jamais decide, jamais valide. Il est parti — l'etat acquis et l'action
+     portent desormais la meme famille.
 
      Le fond clair n'est pas choisi à l'œil : c'est la même teinte (241°) et
      la même saturation (68 %) que le trait, montée en clarté. Les deux se

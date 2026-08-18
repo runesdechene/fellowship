@@ -73,8 +73,7 @@
      --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
      disparait. Un paragraphe se lit comme un titre se lit : a pleine encre. */
   --ink-body: var(--brown-700);
-  /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
-     acquis, le bleu dit une commande — les deux ne se croisent jamais. */
+  /* L'une des deux couleurs de l'app, avec la terre du logo. */
   --accent-interactive: var(--electric-500);
   --accent-interactive-surface: var(--electric-100);
   --ink-link: var(--accent-interactive);
@@ -85,8 +84,8 @@
   /* =========================================================================
      STATUTS — la seule couleur vive de l'interface
      ====================================================================== */
-  --status-ok-ink: var(--olive-500);
-  --status-ok-surface: var(--olive-100);
+  --status-ok-ink: var(--accent-interactive);
+  --status-ok-surface: var(--accent-interactive-surface);
   --status-pending-ink: var(--clay-500);
   --status-pending-surface: var(--clay-100);
 
@@ -101,7 +100,7 @@
   --action-surface-soft: var(--brown-600);
 
   /* Pastille ronde devant chaque date à venir */
-  --dot-confirmed: var(--olive-500);
+  --dot-confirmed: var(--accent-interactive);
   --dot-pending: var(--clay-500);
   --dot-size: var(--space-8);
 
@@ -378,10 +377,9 @@
 
   /* LE SUIVI — les crans de participation et de paiement.
 
-     Un cran franchi porte l'olive : c'est un état acquis. Le cran courant
-     porte la surface d'action, sombre — c'est là qu'on en est, et c'est le
-     seul endroit de la fiche qui appelle un geste. Les deux ne se croisent
-     jamais, comme partout ailleurs dans l'interface. */
+     Un cran franchi porte l'electrique : c'est un etat acquis. Le cran
+     courant porte la surface d'action, sombre — c'est la qu'on en est, et
+     c'est le seul endroit de la fiche qui appelle un geste. */
   --stepper-step-height: var(--height-stepper-step);
   --stepper-step-gap: var(--space-2);
   --stepper-step-inset: var(--space-12);

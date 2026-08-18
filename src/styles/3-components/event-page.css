@@ -206,7 +206,7 @@
   margin-top: var(--space-20);
 }
 
-/* Aller ailleurs est une commande : c'est le bleu, jamais l'olive. */
+/* Aller ailleurs est une commande : c'est l'accent de l'app. */
 .event-page__link {
   color: var(--ink-link);
   font: var(--type-section-link);
@@ -391,7 +391,7 @@
   color: var(--stepper-dot-ink);
 }
 
-/* Un cran franchi : l'olive, l'état acquis. */
+/* Un cran franchi : l'accent, l'état acquis. */
 .cockpit__step--done {
   color: var(--stepper-done-ink);
 }
