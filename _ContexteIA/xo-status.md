@@ -1,7 +1,7 @@
 ---
-updated: 2026-08-17T00:30:00Z
-summary: "La V2 a son tableau de bord complet et son premier écran fonctionnel : on peut choisir son enseigne et créer un événement de bout en bout, avec détection des doublons et brouillon qui survit à la fermeture de l'onglet."
-next_step: "Décider si créer un événement doit y inscrire automatiquement l'exposant, puis attaquer l'écran de l'événement lui-même — c'est là que mènent tous les liens morts."
+updated: 2026-08-18T12:00:00Z
+summary: "Les règles de dev et les pièges de la base sont posés noir sur blanc."
+next_step: "Trancher si créer un événement inscrit l'exposant, puis faire son écran."
 ---
 
 ## Tâches
@@ -17,6 +17,14 @@ next_step: "Décider si créer un événement doit y inscrire automatiquement l'
 - [ ] Deux enseignes s'appellent « Runes de Chêne » en base — vérifier si c'est voulu
 
 ## Mémoire
+
+**18 août 2026 — la discipline est écrite.** `docs/xo-discipline.md` était une
+copie du repo Citadelle (il citait `apps/explore-web`, les lieux, les factions).
+Réécrit pour Fellowship, et `docs/db/` créé avec `gotchas.md` et
+`migrations-workflow.md`. Canal DB tranché : **MCP Supabase en lecture libre,
+écriture par `db push` uniquement** — `apply_migration` applique en prod sans
+écrire le fichier local, donc le repo perd la migration.
+`_ContexteIA/` est enfin commité (il ne l'avait jamais été).
 
 **Où on en est (17 août 2026)**
 
