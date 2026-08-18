@@ -1,12 +1,12 @@
 ---
 updated: 2026-08-18T12:00:00Z
-summary: "Les règles de dev et les pièges de la base sont posés noir sur blanc."
-next_step: "Trancher si créer un événement inscrit l'exposant, puis faire son écran."
+summary: "Créer une date la marque « intéressé » : elle apparaît tout de suite dans à venir."
+next_step: "Construire l'écran d'un événement — tous les liens morts y mènent."
 ---
 
 ## Tâches
 
-- [ ] Trancher : créer un événement inscrit-il automatiquement l'exposant dessus ?
+- [x] Trancher : créer un événement inscrit-il automatiquement l'exposant dessus ? → « intéressé »
 - [ ] Écran d'un événement (les doublons, les bilans et les dates y mènent tous)
 - [ ] Brancher « Remplir mon bilan » sur un écran de saisie
 - [ ] Décider du comportement de la cloche (sans action pour l'instant)
