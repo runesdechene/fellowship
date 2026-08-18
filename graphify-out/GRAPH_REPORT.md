@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-18)
 
 ## Corpus Check
-- 50 files · ~537,869 words
+- 51 files · ~539,266 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 217 nodes · 189 edges · 60 communities detected
+- 220 nodes · 191 edges · 60 communities detected
 - Extraction: 82% EXTRACTED · 16% INFERRED · 2% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -110,16 +110,16 @@
 ## Communities
 
 ### Community 0 - "Community 0"
+Cohesion: 0.1
+Nodes (20): Source Architecture (lib, components, pages), Netlify Deployment (PWA, SPA fallback), Fellowship Project Overview, Supabase Auth via Magic Link OTP, Tech Stack (React 19, TS 5.9, Vite 7, Tailwind v4, Supabase), Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section (+12 more)
+
+### Community 1 - "Community 1"
 Cohesion: 0.12
 Nodes (18): Admin Dashboard Metrics, role column on profiles, AdminRoute Guard (role===admin), Tags Supabase table (dynamic), CSS Tokens (Flat warm design), Netflix-style EventCard Component, Terre & Feu Color Palette, Plus Jakarta Sans + Inter Typography (+10 more)
 
-### Community 1 - "Community 1"
+### Community 2 - "Community 2"
 Cohesion: 0.18
 Nodes (4): capitalize(), daysUntil(), formatMonthLabel(), startOfDay()
-
-### Community 2 - "Community 2"
-Cohesion: 0.17
-Nodes (12): Friend Detection Logic (avatar+glow), New Notification Types (event_created, event_updated, etc.), SidebarActivity Section, NotificationSlidePanel, Notifications Redesign Plan, Bilan Post-Événement (privé), Calendrier Communautaire (vue annuelle/mensuelle), Fellowship V1 Design Spec (+4 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.18
@@ -138,24 +138,24 @@ Cohesion: 0.22
 Nodes (9): EventDashboard (sticky private), EventHero Component, Mon Suivi Inline Block, Payment Tracking (total_cost, payments JSONB), participation_status enum (interesse, en_cours, inscrit), Event Page Redesign Plan (v1, cockpit), Event Page Redesign v2 (Lu.ma 2-cols), Participation System Refonte Plan (+1 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.25
-Nodes (8): Source Architecture (lib, components, pages), Netlify Deployment (PWA, SPA fallback), Fellowship Project Overview, Supabase Auth via Magic Link OTP, Tech Stack (React 19, TS 5.9, Vite 7, Tailwind v4, Supabase), Fellowship V1 Implementation Plan, Phase 0 Cleanup (Remove Tauri), Test Infrastructure (Vitest + RTL)
-
-### Community 8 - "Community 8"
 Cohesion: 0.29
 Nodes (7): MobileMonthView (event pills), useIsMobile Hook (640px breakpoint), MobileYearGrid (3x4 months), Mobile Calendar Redesign Plan, Rationale: Mobile 12 months too long to scroll, Dashboard & Calendar Spec, Dashboard Sections (Prochaines dates, Amis bougent, Derniers ajouts)
+
+### Community 8 - "Community 8"
+Cohesion: 0.33
+Nodes (0): 
 
 ### Community 9 - "Community 9"
 Cohesion: 0.33
 Nodes (0): 
 
 ### Community 10 - "Community 10"
-Cohesion: 0.33
-Nodes (0): 
-
-### Community 11 - "Community 11"
 Cohesion: 0.6
 Nodes (4): hostThemeFor(), iframes(), init(), sendTheme()
+
+### Community 11 - "Community 11"
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 12 - "Community 12"
 Cohesion: 0.4
@@ -174,16 +174,16 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 16 - "Community 16"
-Cohesion: 0.5
-Nodes (0): 
-
-### Community 17 - "Community 17"
 Cohesion: 0.83
 Nodes (3): fetchFriendProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
 
-### Community 18 - "Community 18"
+### Community 17 - "Community 17"
 Cohesion: 0.5
 Nodes (1): json()
+
+### Community 18 - "Community 18"
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 19 - "Community 19"
 Cohesion: 0.67
@@ -198,15 +198,15 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 22 - "Community 22"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 23 - "Community 23"
 Cohesion: 1.0
 Nodes (2): useTransitionNavigate(), useViewTransition()
 
-### Community 24 - "Community 24"
+### Community 23 - "Community 23"
 Cohesion: 0.67
+Nodes (0): 
+
+### Community 24 - "Community 24"
+Cohesion: 1.0
 Nodes (0): 
 
 ### Community 25 - "Community 25"
@@ -360,21 +360,23 @@ Nodes (1): Pastel Tag System
 ## Knowledge Gaps
 - **37 isolated node(s):** `Netlify Deployment (PWA, SPA fallback)`, `Supabase Auth via Magic Link OTP`, `Vite + React + TS Template`, `Phase 0 Cleanup (Remove Tauri)`, `Test Infrastructure (Vitest + RTL)` (+32 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 25`** (2 nodes): `Topbar.tsx`, `Topbar()`
+- **Thin community `Community 24`** (2 nodes): `Topbar.tsx`, `Topbar()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (2 nodes): `Button()`, `Button.tsx`
+- **Thin community `Community 25`** (2 nodes): `Button()`, `Button.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (2 nodes): `Chip()`, `Chip.tsx`
+- **Thin community `Community 26`** (2 nodes): `Chip()`, `Chip.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
+- **Thin community `Community 27`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `ReportCard()`, `ReportsSection.tsx`
+- **Thin community `Community 28`** (2 nodes): `ReportCard()`, `ReportsSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
+- **Thin community `Community 29`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
+- **Thin community `Community 30`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
+- **Thin community `Community 31`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 32`** (2 nodes): `Step()`, `EventCockpit.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 33`** (2 nodes): `useEvent.ts`, `useEvent()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -440,10 +442,10 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Design System Refonte Plan` connect `Community 0` to `Community 2`, `Community 6`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Why does `Fellowship V1 Design Spec` connect `Community 2` to `Community 0`, `Community 7`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
+- **Why does `Design System Refonte Plan` connect `Community 1` to `Community 0`, `Community 6`?**
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `Fellowship V1 Design Spec` connect `Community 0` to `Community 1`?**
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**

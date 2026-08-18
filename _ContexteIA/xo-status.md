@@ -1,13 +1,16 @@
 ---
 updated: 2026-08-18T12:00:00Z
-summary: "Créer une date la marque « intéressé » : elle apparaît tout de suite dans à venir."
-next_step: "Construire l'écran d'un événement — tous les liens morts y mènent."
+summary: "La fiche d'un événement a ses deux colonnes et son suivi qui marche."
+next_step: "Vérifier la fiche à l'écran, puis brancher la discussion du festival."
 ---
 
 ## Tâches
 
 - [x] Trancher : créer un événement inscrit-il automatiquement l'exposant dessus ? → « intéressé »
-- [ ] Écran d'un événement (les doublons, les bilans et les dates y mènent tous)
+- [x] Écran d'un événement — ossature V1 + design V2, cockpit fonctionnel
+- [ ] Brancher la discussion du festival (bloc en attente sur la fiche)
+- [ ] Brancher les notes privées et les avis (blocs en attente sur la fiche)
+- [ ] Trancher : le hero garde-t-il un fond plat ? (décidé A, à revoir si fade)
 - [ ] Brancher « Remplir mon bilan » sur un écran de saisie
 - [ ] Décider du comportement de la cloche (sans action pour l'instant)
 - [ ] Décider quand l'écran Explorer entre dans la V2
