@@ -73,6 +73,17 @@
         /* Le cockpit : colonne fixe à droite, comme en V1. */
         --cockpit-width: 320px;
         --event-columns-gap: 32px;
+
+        /* Une fausse affiche : sans image réelle, un aplat pâle ne dirait rien
+           du rendu flouté. Celle-ci a assez de matière pour juger. */
+        --fake-poster: linear-gradient(
+          158deg,
+          #7d4a2e 0%,
+          #b5713a 26%,
+          #d9a15c 46%,
+          #6f7f45 68%,
+          #3c4a34 100%
+        );
       }
 
       *,
@@ -253,7 +264,7 @@
         width: 220px;
         height: 290px;
         border-radius: var(--radius-card);
-        background: linear-gradient(150deg, var(--brown-250), var(--cream-300));
+        background: var(--fake-poster);
         flex: none;
         display: flex;
         align-items: flex-end;
@@ -923,6 +934,62 @@
         flex-wrap: wrap;
       }
 
+      /* -------------------------------- comparaison : l'affiche en fond ou non */
+
+      .compare {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .compare__label {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .hero-wrap {
+        position: relative;
+        border-radius: var(--radius-card);
+        overflow: hidden;
+        padding: 32px;
+      }
+
+      .hero-wrap--plain {
+        background: var(--surface-panel);
+      }
+
+      /* L'affiche reprise en grand, floutée, comme en V1. Le dégradé la fond
+         vers le fond du panneau — sinon son arête fait une couture. */
+      .hero-wrap--ambient::before {
+        content: '';
+        position: absolute;
+        inset: -60px;
+        background: var(--fake-poster);
+        filter: blur(46px) saturate(1.1);
+        transform: scale(1.15);
+      }
+
+      .hero-wrap--ambient::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 251, 245, 0.42) 0%,
+          rgba(255, 251, 245, 0.72) 55%,
+          var(--surface-panel) 100%
+        );
+      }
+
+      .hero-wrap--ambient > * {
+        position: relative;
+      }
+
       /* --------------------------------------------------------- les questions */
 
       .asks {
@@ -940,10 +1007,26 @@
         padding-left: 16px;
       }
 
+      /* Une question déjà tranchée : elle reste écrite, mais elle ne réclame
+         plus rien. L'olive dit l'état acquis, comme partout ailleurs. */
+      .ask--done {
+        border-left-color: var(--status-ok-ink);
+      }
+
       .ask__q {
         font-size: 14px;
         font-weight: 700;
         color: var(--ink-title);
+      }
+
+      .ask--done .ask__q {
+        color: var(--ink-soft);
+        font-weight: 600;
+      }
+
+      .ask--done .ask__q b {
+        color: var(--ink-title);
+        font-weight: 700;
       }
 
       .ask__why {
@@ -1195,13 +1278,13 @@
                   <span class="cockpit__label">Participation</span>
                   <div class="stepper">
                     <button class="stepper__step stepper__step--done">
-                      <span class="stepper__dot">✓</span> Repéré
+                      <span class="stepper__dot">✓</span> Intéressé
                     </button>
                     <button class="stepper__step stepper__step--done">
-                      <span class="stepper__dot">✓</span> Dossier envoyé
+                      <span class="stepper__dot">✓</span> Dossier en cours
                     </button>
                     <button class="stepper__step stepper__step--now">
-                      <span class="stepper__dot"></span> Accepté
+                      <span class="stepper__dot"></span> Inscrit
                     </button>
                   </div>
                 </div>
@@ -1335,13 +1418,13 @@
                   <span class="cockpit__label">Participation</span>
                   <div class="stepper">
                     <button class="stepper__step stepper__step--done">
-                      <span class="stepper__dot">✓</span> Repéré
+                      <span class="stepper__dot">✓</span> Intéressé
                     </button>
                     <button class="stepper__step stepper__step--done">
-                      <span class="stepper__dot">✓</span> Dossier envoyé
+                      <span class="stepper__dot">✓</span> Dossier en cours
                     </button>
                     <button class="stepper__step stepper__step--done">
-                      <span class="stepper__dot">✓</span> Accepté
+                      <span class="stepper__dot">✓</span> Inscrit
                     </button>
                   </div>
                 </div>
@@ -1375,7 +1458,7 @@
         </div>
         <p class="step__note">
           L'état qui manque aujourd'hui. La date sort de l'atelier marquée
-          « repéré » : le cockpit le montre et offre le pas suivant. La colonne
+          « intéressé » : le cockpit le montre et offre le pas suivant. La colonne
           principale est encore presque vide — c'est normal, et la fiche le dit
           au lieu de faire semblant.
         </p>
@@ -1448,13 +1531,13 @@
                   <span class="cockpit__label">Participation</span>
                   <div class="stepper">
                     <button class="stepper__step stepper__step--now">
-                      <span class="stepper__dot"></span> Repéré
+                      <span class="stepper__dot"></span> Intéressé
                     </button>
                     <button class="stepper__step">
-                      <span class="stepper__dot"></span> Dossier envoyé
+                      <span class="stepper__dot"></span> Dossier en cours
                     </button>
                     <button class="stepper__step">
-                      <span class="stepper__dot"></span> Accepté
+                      <span class="stepper__dot"></span> Inscrit
                     </button>
                   </div>
                 </div>
@@ -1469,6 +1552,96 @@
       </section>
 
       <!-- ================================================================ -->
+      <!-- ================================================================ -->
+      <!-- COMPARAISON — l'affiche en fond, ou pas                          -->
+      <!-- ================================================================ -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">À comparer</span>
+          <h2 class="step__name">Le fond : plat ou l'affiche derrière ?</h2>
+        </div>
+        <p class="step__note">
+          Le même hero, deux traitements. En haut celui de la maquette : plat,
+          crème, fidèle au tableau de bord. En bas celui de la V1 : l'affiche
+          reprise en grand, floutée, fondue vers le fond du panneau. Regarde-les
+          l'un après l'autre plutôt que côte à côte — c'est la présence qu'on
+          juge, pas le détail.
+        </p>
+
+        <div class="panel compare">
+          <div>
+            <span class="compare__label">A · plat — ce que fait la maquette</span>
+            <div class="hero-wrap hero-wrap--plain">
+              <div class="hero">
+                <div class="poster"><span>l'affiche</span></div>
+                <div class="hero__body">
+                  <h3 class="hero__title">Fête médiévale de Provins 2026</h3>
+                  <div class="hero__meta">
+                    <span class="meta-item"><i>▤</i> <b>Du 13 au 14 juin 2026</b></span>
+                    <span class="meta-item"><i>◎</i> Provins (77)</span>
+                    <span class="meta-item"><i>✦</i> 12ᵉ édition</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag tag--first">Médiéval</span>
+                    <span class="tag">Artisanat</span>
+                    <span class="tag">Plein air</span>
+                  </div>
+                  <div class="hero__actions">
+                    <button class="iconbtn" title="Partager">↗</button>
+                    <button class="iconbtn" title="Site web">◍</button>
+                    <button class="iconbtn" title="Signaler">⚑</button>
+                    <span class="org">
+                      <span class="org__av"></span>
+                      Ajouté par <b>Forge Kernan</b>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="compare__label">B · l'affiche en fond — le geste de la V1</span>
+            <div class="hero-wrap hero-wrap--ambient">
+              <div class="hero">
+                <div class="poster"><span>l'affiche</span></div>
+                <div class="hero__body">
+                  <h3 class="hero__title">Fête médiévale de Provins 2026</h3>
+                  <div class="hero__meta">
+                    <span class="meta-item"><i>▤</i> <b>Du 13 au 14 juin 2026</b></span>
+                    <span class="meta-item"><i>◎</i> Provins (77)</span>
+                    <span class="meta-item"><i>✦</i> 12ᵉ édition</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag tag--first">Médiéval</span>
+                    <span class="tag">Artisanat</span>
+                    <span class="tag">Plein air</span>
+                  </div>
+                  <div class="hero__actions">
+                    <button class="iconbtn" title="Partager">↗</button>
+                    <button class="iconbtn" title="Site web">◍</button>
+                    <button class="iconbtn" title="Signaler">⚑</button>
+                    <span class="org">
+                      <span class="org__av"></span>
+                      Ajouté par <b>Forge Kernan</b>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="step__note">
+          Ce que ça coûte, en clair : le B est plus incarné, chaque salon a sa
+          couleur. Mais c'est le seul endroit de la V2 où un fond porterait une
+          image, et la teinte change à chaque affiche — donc le contraste du
+          texte n'est jamais garanti. Le A ne pose aucun de ces problèmes et ne
+          raconte rien.
+        </p>
+      </section>
+
+      <!-- ================================================================ -->
       <section class="step">
         <div class="step__head">
           <span class="step__num">À trancher</span>
@@ -1476,39 +1649,36 @@
         </div>
 
         <div class="asks">
-          <div class="ask">
-            <p class="ask__q">Le fond flouté de l'affiche : on l'abandonne ?</p>
+          <div class="ask ask--done">
+            <p class="ask__q">✓ Le vocabulaire — <b>celui de la V2</b></p>
             <p class="ask__why">
-              La V1 posait l'affiche en grand derrière le hero, floutée, avec un
-              dégradé. C'est ce qui donnait sa présence à la page. La V2 est
-              plate et claire : je l'ai retiré. Si la fiche te paraît fade, c'est
-              la première chose à rediscuter — mais ça se décide, ça ne se
-              rattrape pas au petit bonheur.
+              Intéressé → Dossier en cours → Inscrit. Les libellés de la V1
+              (« Repéré / Dossier envoyé / Accepté ») sont abandonnés. La
+              maquette est à jour, et c'est ce qui part en code.
+            </p>
+          </div>
+          <div class="ask ask--done">
+            <p class="ask__q">✓ Le cockpit reste <b>collé au défilement</b></p>
+            <p class="ask__why">
+              On peut cocher un cran sans remonter la page. À surveiller sur
+              petit écran : sa hauteur devra rester maîtrisée.
+            </p>
+          </div>
+          <div class="ask ask--done">
+            <p class="ask__q">✓ Les blocs vides sont <b>montrés, en pâle</b></p>
+            <p class="ask__why">
+              La page garde la même forme quel que soit le remplissage. Titre
+              pâle et invitation à remplir, au lieu de disparaître.
             </p>
           </div>
           <div class="ask">
-            <p class="ask__q">Le cockpit reste-t-il collé au défilement ?</p>
+            <p class="ask__q">Le fond du hero : plat, ou l'affiche derrière ?</p>
             <p class="ask__why">
-              Je l'ai mis en position collante : on peut cocher un cran sans
-              remonter. La V1 le laissait défiler. C'est confortable, mais ça
-              impose une hauteur maîtrisée.
-            </p>
-          </div>
-          <div class="ask">
-            <p class="ask__q">Les libellés de la V1, on les garde ?</p>
-            <p class="ask__why">
-              Le cockpit V1 dit « Repéré / Dossier envoyé / Accepté », la fiche
-              V2 actuelle dit « Intéressé / Dossier en cours / Inscrit ». Deux
-              vocabulaires pour la même chose. J'ai pris celui de la V1 puisqu'on
-              reprend sa structure — il faut trancher, sinon ça divergera encore.
-            </p>
-          </div>
-          <div class="ask">
-            <p class="ask__q">Les blocs vides : on les montre ou on les cache ?</p>
-            <p class="ask__why">
-              La V1 cachait ce qui était vide. Ici je montre « Mes notes
-              privées » vide, avec un titre pâle, pour que la page ne change pas
-              de forme selon le remplissage. C'est un parti pris.
+              Seule question encore ouverte. La comparaison est juste au-dessus,
+              A puis B. Mon avis, puisque tu me le demanderas : le B est plus
+              beau sur une belle affiche et se dégrade mal sur les autres — et
+              la plupart des dates n'auront pas d'affiche du tout. Le A est
+              tenable partout. Mais c'est ta page.
             </p>
           </div>
         </div>
