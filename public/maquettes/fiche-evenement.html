@@ -1,0 +1,1518 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La fiche d'un événement — structure V1, design V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Tokens recopiés de src/styles/. La maquette doit tenir seule ; en cas
+         d'écart, c'est l'app qui fait foi. */
+      :root {
+        --cream-50: #fffbf5;
+        --cream-100: #f9f6ef;
+        --cream-150: #f6f2e9;
+        --cream-200: #f3f0e9;
+        --cream-300: #ebe6dd;
+        --stone-200: hsl(40 14% 88%);
+        --brown-200: #ebe3e3;
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+        --olive-100: #e8f0d8;
+        --olive-500: #84aa3c;
+        --clay-100: #f6e7dc;
+        --clay-500: #c0642a;
+        --electric-100: #e6e5fa;
+        --electric-500: #5d5ae0;
+
+        --family: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-200);
+        --surface-control: var(--cream-100);
+        --surface-chip-neutral: var(--cream-300);
+
+        --ink-title: var(--brown-700);
+        --ink-strong: var(--brown-900);
+        --ink-soft: var(--brown-400);
+        --ink-ghost: var(--brown-200);
+        --ink-section: var(--brown-800);
+        --ink-total: var(--brown-600);
+
+        --status-ok-ink: var(--olive-500);
+        --status-ok-surface: var(--olive-100);
+        --status-pending-ink: var(--clay-500);
+        --status-pending-surface: var(--clay-100);
+
+        --accent-interactive: var(--electric-500);
+        --accent-interactive-surface: var(--electric-100);
+
+        --action-surface: var(--brown-900);
+        --action-ink: var(--cream-50);
+
+        --radius-panel: 20px;
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-chip: 8px;
+        --radius-round: 9999px;
+
+        --card-padding: 23px;
+        --gap-section: 42px;
+        --gap-section-title: 20px;
+
+        /* Le cockpit : colonne fixe à droite, comme en V1. */
+        --cockpit-width: 320px;
+        --event-columns-gap: 32px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-app);
+        color: var(--ink-title);
+        font-family: var(--family);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 64px 32px 96px;
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+      }
+
+      /* ---------------------------------------------------- en-tête du document */
+
+      .doc-head {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-width: 74ch;
+      }
+
+      .doc-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .doc-title {
+        font-size: 38px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: var(--ink-title);
+      }
+
+      .doc-lede {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink-total);
+      }
+
+      .doc-note {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        border-left: 2px solid var(--brown-250);
+        padding-left: 14px;
+      }
+
+      /* ------------------------------------------------------------- une étape */
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .step__head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .step__num {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .step__name {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: var(--ink-section);
+      }
+
+      .step__note {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+        max-width: 74ch;
+      }
+
+      /* Le grand panneau clair : la zone de contenu de l'app. */
+      .panel {
+        background: var(--surface-panel);
+        border-radius: var(--radius-panel);
+        padding: 40px 40px 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      /* ------------------------------------------------- la barre de la fiche */
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .back {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .topbar__actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      /* ----------------------------------------------------- les deux colonnes */
+
+      .cols {
+        display: flex;
+        gap: var(--event-columns-gap);
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .col-main {
+        flex: 1;
+        min-width: 380px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-section);
+      }
+
+      .col-side {
+        width: var(--cockpit-width);
+        flex: none;
+      }
+
+      /* ------------------------------------------------------------------ hero */
+
+      .hero {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .poster {
+        width: 220px;
+        height: 290px;
+        border-radius: var(--radius-card);
+        background: linear-gradient(150deg, var(--brown-250), var(--cream-300));
+        flex: none;
+        display: flex;
+        align-items: flex-end;
+        padding: 14px;
+      }
+
+      .poster span {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--cream-50);
+        opacity: 0.9;
+      }
+
+      .hero__body {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 260px;
+        flex: 1;
+      }
+
+      .hero__title {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: var(--ink-title);
+      }
+
+      .hero__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .meta-item {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-total);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .meta-item b {
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .meta-item i {
+        font-style: normal;
+        color: var(--ink-soft);
+        font-size: 12px;
+        width: 14px;
+        text-align: center;
+      }
+
+      .tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        font-size: 11px;
+        font-weight: 500;
+        padding: 5px 10px;
+        border-radius: var(--radius-chip);
+        background: var(--accent-interactive-surface);
+        color: var(--accent-interactive);
+      }
+
+      .tag--first {
+        background: var(--accent-interactive);
+        color: var(--cream-50);
+        font-weight: 600;
+      }
+
+      .hero__actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+
+      .iconbtn {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-control);
+        color: var(--ink-soft);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        border: 0;
+        cursor: pointer;
+      }
+
+      .org {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-soft);
+        margin-left: 4px;
+      }
+
+      .org b {
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .org__av {
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-round);
+        background: var(--brown-250);
+      }
+
+      /* -------------------------------------------------------- blocs communs */
+
+      .block {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-section-title);
+      }
+
+      .block__title {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: var(--ink-section);
+      }
+
+      .block__title--pale {
+        color: var(--brown-250);
+      }
+
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: var(--card-padding);
+      }
+
+      .description {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink-total);
+        max-width: 74ch;
+      }
+
+      /* --------------------------------------------------------- compagnons */
+
+      .companions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        cursor: pointer;
+      }
+
+      .avs {
+        display: flex;
+      }
+
+      .av {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-round);
+        background: var(--brown-250);
+        border: 2px solid var(--surface-card);
+        margin-left: -8px;
+      }
+
+      .av:first-child {
+        margin-left: 0;
+      }
+
+      .av--more {
+        background: var(--cream-300);
+        color: var(--ink-soft);
+        font-size: 11px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .companions__txt {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-total);
+      }
+
+      .companions__txt b {
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      /* ---------------------------------------------------- infos pratiques */
+
+      .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px 32px;
+      }
+
+      .fact {
+        min-width: 200px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .fact__icon {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        color: var(--ink-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex: none;
+      }
+
+      .fact__body {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .fact__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .fact__value {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .fact__value--none {
+        color: var(--ink-ghost);
+        font-weight: 500;
+      }
+
+      /* ------------------------------------------------------------ discussion */
+
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+
+      .tab {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: var(--radius-chip);
+        color: var(--ink-soft);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-family: var(--family);
+      }
+
+      .tab--on {
+        background: var(--surface-panel);
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .message {
+        display: flex;
+        gap: 14px;
+      }
+
+      .message + .message {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--stone-200);
+      }
+
+      .message__avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-round);
+        background: var(--brown-250);
+        flex: none;
+      }
+
+      .message__body {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .message__head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .message__name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .message__when {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .message__text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink-total);
+        max-width: 66ch;
+      }
+
+      .composer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--stone-200);
+      }
+
+      .composer__field {
+        flex: 1;
+        height: 42px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      /* ------------------------------------------------------------ les avis */
+
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .rating__score {
+        font-size: 38px;
+        font-weight: 700;
+        color: var(--ink-total);
+        line-height: 1;
+      }
+
+      .rating__bars {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 220px;
+      }
+
+      .bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .bar__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        width: 92px;
+      }
+
+      .bar__track {
+        flex: 1;
+        height: 6px;
+        border-radius: var(--radius-chip);
+        background: var(--surface-panel);
+        overflow: hidden;
+      }
+
+      .bar__fill {
+        height: 100%;
+        background: var(--status-ok-ink);
+      }
+
+      .bar__value {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink-title);
+        width: 26px;
+        text-align: right;
+      }
+
+      /* ------------------------------------------------------------- le bilan */
+
+      .ledger__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
+        gap: 20px;
+      }
+
+      .ledger__row + .ledger__row {
+        border-top: 1px solid var(--stone-200);
+      }
+
+      .ledger__label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-title);
+      }
+
+      .ledger__amount {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .ledger__amount--in {
+        color: var(--status-ok-ink);
+      }
+
+      .ledger__total {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 2px solid var(--brown-250);
+      }
+
+      .ledger__total-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .ledger__total-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--ink-total);
+      }
+
+      /* ====================================================================== */
+      /* LE COCKPIT                                                             */
+      /* ====================================================================== */
+
+      .cockpit {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: var(--card-padding);
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+        position: sticky;
+        top: 32px;
+      }
+
+      .cockpit__block {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .cockpit__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      /* Le stepper : une colonne de crans cochables, comme en V1. */
+      .stepper {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .stepper__step {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: var(--radius-nav);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-family: var(--family);
+        text-align: left;
+        width: 100%;
+      }
+
+      .stepper__step:hover {
+        background: var(--stone-200);
+      }
+
+      .stepper__dot {
+        width: 16px;
+        height: 16px;
+        border-radius: var(--radius-round);
+        background: var(--surface-panel);
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        color: transparent;
+      }
+
+      /* Un cran franchi : olive, l'état acquis. */
+      .stepper__step--done {
+        color: var(--ink-title);
+      }
+
+      .stepper__step--done .stepper__dot {
+        background: var(--status-ok-ink);
+        color: var(--cream-50);
+      }
+
+      /* Le cran courant : c'est là qu'on en est. Contraste, pas couleur. */
+      .stepper__step--now {
+        background: var(--action-surface);
+        color: var(--action-ink);
+        font-weight: 700;
+      }
+
+      .stepper__step--now .stepper__dot {
+        background: var(--action-ink);
+      }
+
+      /* Bascule « je paie ma place / on me paie pour venir » */
+      .orientation {
+        display: flex;
+        gap: 2px;
+        background: var(--surface-panel);
+        border-radius: var(--radius-nav);
+        padding: 3px;
+      }
+
+      .orientation__opt {
+        flex: 1;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 8px 6px;
+        border-radius: 9px;
+        border: 0;
+        background: transparent;
+        color: var(--ink-soft);
+        cursor: pointer;
+        font-family: var(--family);
+      }
+
+      .orientation__opt--on {
+        background: var(--surface-card);
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .amount {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+      }
+
+      .amount__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .amount__value {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .cockpit__sep {
+        height: 1px;
+        background: var(--stone-200);
+      }
+
+      /* -------------------------------------------------------------- boutons */
+
+      .btn {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 11px 18px;
+        border-radius: var(--radius-nav);
+        border: 0;
+        background: var(--surface-control);
+        color: var(--ink-title);
+        font-family: var(--family);
+        cursor: pointer;
+      }
+
+      /* L'action principale se distingue par le CONTRASTE, jamais par une
+         couleur vive. */
+      .btn--action {
+        background: var(--action-surface);
+        color: var(--action-ink);
+      }
+
+      .btn--bare {
+        background: transparent;
+        color: var(--ink-soft);
+        font-weight: 600;
+        font-size: 12px;
+        padding: 11px 0;
+      }
+
+      .btn--wide {
+        width: 100%;
+      }
+
+      .chip {
+        font-size: 9px;
+        font-weight: 800;
+        padding: 5px 9px;
+        border-radius: var(--radius-chip);
+        background: var(--surface-chip-neutral);
+        color: var(--ink-title);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .chip--ok {
+        background: var(--status-ok-surface);
+        color: var(--status-ok-ink);
+      }
+
+      .chip--pending {
+        background: var(--status-pending-surface);
+        color: var(--status-pending-ink);
+      }
+
+      .empty {
+        font-size: 14px;
+        color: var(--ink-soft);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      /* --------------------------------------------------------- les questions */
+
+      .asks {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        max-width: 82ch;
+      }
+
+      .ask {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border-left: 2px solid var(--clay-500);
+        padding-left: 16px;
+      }
+
+      .ask__q {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .ask__why {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+      <header class="doc-head">
+        <p class="doc-eyebrow">Fellowship V2 · structure V1, design V2</p>
+        <h1 class="doc-title">La fiche d'un événement</h1>
+        <p class="doc-lede">
+          L'ossature est celle de la V1, reprise telle quelle : deux colonnes,
+          le contenu à gauche, le cockpit de suivi à droite, et les blocs dans
+          le même ordre. Seule la peinture change — crème, sans ombre, titres
+          posés au-dessus des cartes.
+        </p>
+        <p class="doc-note">
+          Ce que je n'ai pas repris de la V1 : l'affiche floutée en fond et les
+          cartes de verre. C'était sa direction artistique, pas sa structure —
+          et la V2 pose ses plans par la teinte, jamais par le relief. Si tu y
+          tiens, c'est une décision à part.
+        </p>
+      </header>
+
+      <!-- ================================================================ -->
+      <!-- ÉTAT 1 — une date à venir                                        -->
+      <!-- ================================================================ -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">État 1</span>
+          <h2 class="step__name">Une date à venir</h2>
+        </div>
+        <p class="step__note">
+          Le cas courant. Tout l'ordre de la V1 est conservé : hero, compagnons,
+          à propos, infos pratiques, discussion, notes privées, avis. Le cockpit
+          reste collé en haut de sa colonne pendant qu'on descend.
+        </p>
+
+        <div class="panel">
+          <div class="topbar">
+            <span class="back">← Retour</span>
+            <div class="topbar__actions">
+              <button class="btn">Laisser mon avis</button>
+              <button class="btn">Modifier</button>
+            </div>
+          </div>
+
+          <div class="cols">
+            <!-- ─────────────────────────── COLONNE PRINCIPALE ───────────── -->
+            <div class="col-main">
+              <div class="hero">
+                <div class="poster"><span>l'affiche</span></div>
+                <div class="hero__body">
+                  <h3 class="hero__title">Fête médiévale de Provins 2026</h3>
+                  <div class="hero__meta">
+                    <span class="meta-item"><i>▤</i> <b>Du 13 au 14 juin 2026</b></span>
+                    <span class="meta-item"><i>◎</i> Provins (77)</span>
+                    <span class="meta-item"><i>✦</i> 12ᵉ édition</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag tag--first">Médiéval</span>
+                    <span class="tag">Artisanat</span>
+                    <span class="tag">Plein air</span>
+                  </div>
+                  <div class="hero__actions">
+                    <button class="iconbtn" title="Partager">↗</button>
+                    <button class="iconbtn" title="Site web">◍</button>
+                    <button class="iconbtn" title="Signaler">⚑</button>
+                    <span class="org">
+                      <span class="org__av"></span>
+                      Ajouté par <b>Forge Kernan</b>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Tes compagnons sur cette date</h3>
+                <div class="card">
+                  <div class="companions">
+                    <div class="avs">
+                      <span class="av"></span>
+                      <span class="av"></span>
+                      <span class="av"></span>
+                      <span class="av"></span>
+                      <span class="av av--more">+4</span>
+                    </div>
+                    <span class="companions__txt">
+                      <b>8 exposants</b> que tu suis y seront
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">À propos de l'événement</h3>
+                <div class="card">
+                  <p class="description">
+                    Deux jours de fête dans la ville haute. Les exposants sont
+                    installés le long de la rue Saint-Thibault, montage le
+                    vendredi soir à partir de 18 h. Le public est estimé à
+                    30 000 visiteurs sur le week-end, avec une forte
+                    fréquentation le samedi après-midi.
+                  </p>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Infos pratiques</h3>
+                <div class="card">
+                  <div class="facts">
+                    <div class="fact">
+                      <span class="fact__icon">▤</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Dates</span>
+                        <span class="fact__value">13 – 14 juin 2026</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">◷</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Horaires</span>
+                        <span class="fact__value">10 h – 19 h</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">◎</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Lieu</span>
+                        <span class="fact__value">Provins (77)</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">◉</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Affluence attendue</span>
+                        <span class="fact__value">30 000 visiteurs</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">✎</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Candidatures jusqu'au</span>
+                        <span class="fact__value">15 avril 2026</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">⌂</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Emplacement (3 × 3 m)</span>
+                        <span class="fact__value">180 €</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Discussion du festival</h3>
+                <div class="card">
+                  <div class="tabs">
+                    <button class="tab tab--on">Questions</button>
+                    <button class="tab">Avis</button>
+                    <button class="tab">Rencontres</button>
+                  </div>
+                  <div class="message">
+                    <span class="message__avatar"></span>
+                    <div class="message__body">
+                      <div class="message__head">
+                        <span class="message__name">Forge Kernan</span>
+                        <span class="message__when">il y a 3 jours</span>
+                      </div>
+                      <p class="message__text">
+                        Quelqu'un sait si l'électricité est fournie sur les
+                        emplacements de la rue haute ? L'an dernier il fallait
+                        son propre groupe.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="message">
+                    <span class="message__avatar"></span>
+                    <div class="message__body">
+                      <div class="message__head">
+                        <span class="message__name">Atelier du Lierre</span>
+                        <span class="message__when">il y a 2 jours</span>
+                        <span class="chip chip--ok">Meilleure réponse</span>
+                      </div>
+                      <p class="message__text">
+                        Fournie, mais 16 A max et il faut le demander à
+                        l'inscription. Le montage du vendredi soir se fait au
+                        calme, arrivez tôt.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="composer">
+                    <span class="message__avatar"></span>
+                    <span class="composer__field">Poser une question…</span>
+                    <button class="btn btn--action">Envoyer</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title block__title--pale">Mes notes privées</h3>
+                <div class="card">
+                  <p class="empty">
+                    <span>Rien de noté. Ces notes ne sont visibles que par toi.</span>
+                    <button class="btn">Ajouter une note</button>
+                  </p>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Avis des exposants</h3>
+                <div class="card">
+                  <div class="rating">
+                    <span class="rating__score">4,2</span>
+                    <div class="rating__bars">
+                      <div class="bar">
+                        <span class="bar__label">Affluence</span>
+                        <span class="bar__track"><span class="bar__fill" style="width: 88%"></span></span>
+                        <span class="bar__value">4,4</span>
+                      </div>
+                      <div class="bar">
+                        <span class="bar__label">Organisation</span>
+                        <span class="bar__track"><span class="bar__fill" style="width: 84%"></span></span>
+                        <span class="bar__value">4,2</span>
+                      </div>
+                      <div class="bar">
+                        <span class="bar__label">Rentabilité</span>
+                        <span class="bar__track"><span class="bar__fill" style="width: 78%"></span></span>
+                        <span class="bar__value">3,9</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ────────────────────────────── LE COCKPIT ────────────────── -->
+            <aside class="col-side">
+              <div class="cockpit">
+                <div class="cockpit__block">
+                  <span class="cockpit__label">Participation</span>
+                  <div class="stepper">
+                    <button class="stepper__step stepper__step--done">
+                      <span class="stepper__dot">✓</span> Repéré
+                    </button>
+                    <button class="stepper__step stepper__step--done">
+                      <span class="stepper__dot">✓</span> Dossier envoyé
+                    </button>
+                    <button class="stepper__step stepper__step--now">
+                      <span class="stepper__dot"></span> Accepté
+                    </button>
+                  </div>
+                </div>
+
+                <div class="cockpit__sep"></div>
+
+                <div class="cockpit__block">
+                  <span class="cockpit__label">Paiement</span>
+                  <div class="orientation">
+                    <button class="orientation__opt orientation__opt--on">Je paie ma place</button>
+                    <button class="orientation__opt">On me paie</button>
+                  </div>
+                  <div class="stepper">
+                    <button class="stepper__step stepper__step--now">
+                      <span class="stepper__dot"></span> À payer
+                    </button>
+                    <button class="stepper__step">
+                      <span class="stepper__dot"></span> Acompte versé
+                    </button>
+                    <button class="stepper__step">
+                      <span class="stepper__dot"></span> Payé
+                    </button>
+                  </div>
+                  <div class="amount">
+                    <span class="amount__label">Prix de la place</span>
+                    <span class="amount__value">180 €</span>
+                  </div>
+                </div>
+
+                <div class="cockpit__sep"></div>
+
+                <button class="btn btn--bare btn--wide">Je ne fais pas cette date</button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- ÉTAT 2 — une date passée                                         -->
+      <!-- ================================================================ -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">État 2</span>
+          <h2 class="step__name">Une date passée</h2>
+        </div>
+        <p class="step__note">
+          Comme en V1, le bilan n'apparaît qu'ici — festival passé et présence
+          acquise. Le cockpit ne propose plus de faire avancer quoi que ce soit :
+          il constate. C'est là qu'atterrit « Remplir mon bilan » depuis le
+          tableau de bord.
+        </p>
+
+        <div class="panel">
+          <div class="topbar">
+            <span class="back">← Retour</span>
+            <div class="topbar__actions">
+              <button class="btn">Laisser mon avis</button>
+            </div>
+          </div>
+
+          <div class="cols">
+            <div class="col-main">
+              <div class="hero">
+                <div class="poster"><span>l'affiche</span></div>
+                <div class="hero__body">
+                  <h3 class="hero__title">Marché de Noël de Colmar 2025</h3>
+                  <div class="hero__meta">
+                    <span class="meta-item"><i>▤</i> <b>Du 6 au 8 décembre 2025</b></span>
+                    <span class="meta-item"><i>◎</i> Colmar (68)</span>
+                  </div>
+                  <div class="tags">
+                    <span class="tag tag--first">Marché de Noël</span>
+                    <span class="tag">Artisanat</span>
+                  </div>
+                  <div class="hero__actions">
+                    <button class="iconbtn" title="Partager">↗</button>
+                    <button class="iconbtn" title="Site web">◍</button>
+                    <span class="chip">Date passée</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Mon bilan</h3>
+                <div class="card">
+                  <div class="ledger">
+                    <div class="ledger__row">
+                      <span class="ledger__label">Emplacement</span>
+                      <span class="ledger__amount">− 240 €</span>
+                    </div>
+                    <div class="ledger__row">
+                      <span class="ledger__label">Essence</span>
+                      <span class="ledger__amount">− 86 €</span>
+                    </div>
+                    <div class="ledger__row">
+                      <span class="ledger__label">Hébergement</span>
+                      <span class="ledger__amount">− 150 €</span>
+                    </div>
+                    <div class="ledger__row">
+                      <span class="ledger__label">Ventes</span>
+                      <span class="ledger__amount ledger__amount--in">+ 1 340 €</span>
+                    </div>
+                  </div>
+                  <div class="ledger__total">
+                    <span class="ledger__total-label">Ce que la date m'a laissé</span>
+                    <span class="ledger__total-value">864 €</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title">Discussion du festival</h3>
+                <div class="card">
+                  <div class="tabs">
+                    <button class="tab tab--on">Questions</button>
+                    <button class="tab">Avis</button>
+                    <button class="tab">Rencontres</button>
+                  </div>
+                  <p class="empty">
+                    <span>Personne n'a encore rien dit sur cette édition.</span>
+                    <button class="btn">Ouvrir le fil</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <aside class="col-side">
+              <div class="cockpit">
+                <div class="cockpit__block">
+                  <span class="cockpit__label">Participation</span>
+                  <div class="stepper">
+                    <button class="stepper__step stepper__step--done">
+                      <span class="stepper__dot">✓</span> Repéré
+                    </button>
+                    <button class="stepper__step stepper__step--done">
+                      <span class="stepper__dot">✓</span> Dossier envoyé
+                    </button>
+                    <button class="stepper__step stepper__step--done">
+                      <span class="stepper__dot">✓</span> Accepté
+                    </button>
+                  </div>
+                </div>
+
+                <div class="cockpit__sep"></div>
+
+                <div class="cockpit__block">
+                  <span class="cockpit__label">Paiement</span>
+                  <div class="amount">
+                    <span class="amount__label">Place réglée</span>
+                    <span class="amount__value">240 €</span>
+                  </div>
+                </div>
+
+                <div class="cockpit__sep"></div>
+
+                <button class="btn btn--action btn--wide">Compléter mon bilan</button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- ÉTAT 3 — la date qu'on vient d'ajouter                           -->
+      <!-- ================================================================ -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">État 3</span>
+          <h2 class="step__name">Une date qu'on vient d'ajouter</h2>
+        </div>
+        <p class="step__note">
+          L'état qui manque aujourd'hui. La date sort de l'atelier marquée
+          « repéré » : le cockpit le montre et offre le pas suivant. La colonne
+          principale est encore presque vide — c'est normal, et la fiche le dit
+          au lieu de faire semblant.
+        </p>
+
+        <div class="panel">
+          <div class="topbar">
+            <span class="back">← Retour</span>
+            <div class="topbar__actions">
+              <button class="btn">Modifier</button>
+            </div>
+          </div>
+
+          <div class="cols">
+            <div class="col-main">
+              <div class="hero">
+                <div class="poster"><span>pas d'affiche</span></div>
+                <div class="hero__body">
+                  <h3 class="hero__title">Salon des métiers d'art de Dinan</h3>
+                  <div class="hero__meta">
+                    <span class="meta-item"><i>▤</i> <b>Le 4 octobre 2026</b></span>
+                    <span class="meta-item"><i>◎</i> Dinan (22)</span>
+                  </div>
+                  <div class="hero__actions">
+                    <button class="iconbtn" title="Partager">↗</button>
+                    <span class="org">
+                      <span class="org__av"></span>
+                      Ajouté par <b>toi</b>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <h3 class="block__title block__title--pale">Infos pratiques</h3>
+                <div class="card">
+                  <div class="facts">
+                    <div class="fact">
+                      <span class="fact__icon">▤</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Dates</span>
+                        <span class="fact__value">4 octobre 2026</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">✎</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Candidatures jusqu'au</span>
+                        <span class="fact__value fact__value--none">Pas renseigné</span>
+                      </span>
+                    </div>
+                    <div class="fact">
+                      <span class="fact__icon">⌂</span>
+                      <span class="fact__body">
+                        <span class="fact__label">Emplacement</span>
+                        <span class="fact__value fact__value--none">Pas renseigné</span>
+                      </span>
+                    </div>
+                  </div>
+                  <p class="empty" style="margin-top: 20px">
+                    <span>Tu as ajouté cette date : tu peux la compléter.</span>
+                    <button class="btn">Compléter la fiche</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <aside class="col-side">
+              <div class="cockpit">
+                <div class="cockpit__block">
+                  <span class="cockpit__label">Participation</span>
+                  <div class="stepper">
+                    <button class="stepper__step stepper__step--now">
+                      <span class="stepper__dot"></span> Repéré
+                    </button>
+                    <button class="stepper__step">
+                      <span class="stepper__dot"></span> Dossier envoyé
+                    </button>
+                    <button class="stepper__step">
+                      <span class="stepper__dot"></span> Accepté
+                    </button>
+                  </div>
+                </div>
+
+                <div class="cockpit__sep"></div>
+
+                <button class="btn btn--bare btn--wide">Je ne fais pas cette date</button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <section class="step">
+        <div class="step__head">
+          <span class="step__num">À trancher</span>
+          <h2 class="step__name">Ce que je n'ai pas décidé à ta place</h2>
+        </div>
+
+        <div class="asks">
+          <div class="ask">
+            <p class="ask__q">Le fond flouté de l'affiche : on l'abandonne ?</p>
+            <p class="ask__why">
+              La V1 posait l'affiche en grand derrière le hero, floutée, avec un
+              dégradé. C'est ce qui donnait sa présence à la page. La V2 est
+              plate et claire : je l'ai retiré. Si la fiche te paraît fade, c'est
+              la première chose à rediscuter — mais ça se décide, ça ne se
+              rattrape pas au petit bonheur.
+            </p>
+          </div>
+          <div class="ask">
+            <p class="ask__q">Le cockpit reste-t-il collé au défilement ?</p>
+            <p class="ask__why">
+              Je l'ai mis en position collante : on peut cocher un cran sans
+              remonter. La V1 le laissait défiler. C'est confortable, mais ça
+              impose une hauteur maîtrisée.
+            </p>
+          </div>
+          <div class="ask">
+            <p class="ask__q">Les libellés de la V1, on les garde ?</p>
+            <p class="ask__why">
+              Le cockpit V1 dit « Repéré / Dossier envoyé / Accepté », la fiche
+              V2 actuelle dit « Intéressé / Dossier en cours / Inscrit ». Deux
+              vocabulaires pour la même chose. J'ai pris celui de la V1 puisqu'on
+              reprend sa structure — il faut trancher, sinon ça divergera encore.
+            </p>
+          </div>
+          <div class="ask">
+            <p class="ask__q">Les blocs vides : on les montre ou on les cache ?</p>
+            <p class="ask__why">
+              La V1 cachait ce qui était vide. Ici je montre « Mes notes
+              privées » vide, avec un titre pâle, pour que la page ne change pas
+              de forme selon le remplissage. C'est un parti pris.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
