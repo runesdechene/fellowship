@@ -3,10 +3,13 @@ import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { Chip } from '@/components/ui/Chip'
+import { RichText } from '@/components/ui/RichText'
+import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
 import { formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { isRichTextEmpty } from '@/lib/rich-text'
 import { EventCockpit } from './EventCockpit'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
@@ -100,6 +103,7 @@ export function EventPage() {
     paymentStatus,
     paymentOrientation,
     friends,
+    tagStyles,
     ledger,
     revenue,
     net,
@@ -108,9 +112,14 @@ export function EventPage() {
     setStatus,
     setPayment,
     setOrientation,
+    setStandAmount,
     saving,
     writeError,
   } = useEvent(id, actor?.id, person?.actor_id)
+
+  // Le prix de la place est UNE ligne du registre — celle que le suivi pose —
+  // et surtout pas la somme des lignes : additionner donnerait un total faux.
+  const standAmount = ledger.find((line) => line.source === 'stepper')?.amount ?? 0
 
   // Pas le composant Button : ses variantes sont toutes des surfaces, et
   // celui-ci est un chemin de retour, pas une commande.
@@ -178,10 +187,8 @@ export function EventPage() {
 
               {event.tags && event.tags.length > 0 && (
                 <div className="event-page__tags">
-                  {event.tags.map((tag, index) => (
-                    <span key={tag} className={index === 0 ? 'tag tag--first' : 'tag tag--on'}>
-                      {tag}
-                    </span>
+                  {event.tags.map((tag) => (
+                    <Tag key={tag} name={tag} style={tagStyles.get(tag)} />
                   ))}
                 </div>
               )}
@@ -217,13 +224,16 @@ export function EventPage() {
             )}
           </Block>
 
-          <Block title="À propos de l’événement" empty={!event.description}>
-            {event.description ? (
-              <p className="event-page__description">{event.description}</p>
-            ) : (
+          <Block
+            title="À propos de l’événement"
+            empty={isRichTextEmpty(event.description)}
+          >
+            {isRichTextEmpty(event.description) ? (
               <p className="event-page__state">
                 L’organisateur n’a pas encore décrit cet événement.
               </p>
+            ) : (
+              <RichText className="event-page__description" html={event.description ?? ''} />
             )}
           </Block>
 
@@ -318,20 +328,6 @@ export function EventPage() {
               </div>
             </section>
           )}
-
-          {/* Trois blocs que la V1 portait et que la V2 n'a pas encore : ils
-              gardent leur place plutôt que d'apparaître un jour de nulle part. */}
-          <Block title="Discussion du festival" empty>
-            <p className="event-page__state">Le fil de discussion arrive bientôt.</p>
-          </Block>
-
-          <Block title="Mes notes privées" empty>
-            <p className="event-page__state">Les notes privées arrivent bientôt.</p>
-          </Block>
-
-          <Block title="Avis des exposants" empty>
-            <p className="event-page__state">Les avis arrivent bientôt.</p>
-          </Block>
         </div>
 
         <EventCockpit
@@ -342,6 +338,8 @@ export function EventPage() {
           setStatus={setStatus}
           setPayment={setPayment}
           setOrientation={setOrientation}
+          setStandAmount={setStandAmount}
+          standAmount={standAmount}
           saving={saving}
           writeError={writeError}
         />

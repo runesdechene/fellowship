@@ -198,14 +198,17 @@
   gap: var(--space-8);
 }
 
+/* La pastille de base. Ses deux couleurs passent par une VARIABLE avec sa
+   valeur par defaut : la fiche d'un evenement les redefinit depuis les
+   reglages de l'administration sans dependre de l'ordre des imports. */
 .tag {
   display: inline-flex;
   align-items: center;
   height: 32px;
   padding: 0 var(--space-14);
   border-radius: var(--radius-chip);
-  background: var(--surface-card);
-  color: var(--ink-soft);
+  background: var(--tag-bg, var(--surface-card));
+  color: var(--tag-ink, var(--ink-soft));
   font: var(--type-list-name);
   cursor: pointer;
   transition: background-color var(--menu-motion), color var(--menu-motion);

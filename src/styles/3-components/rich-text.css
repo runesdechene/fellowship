@@ -1,0 +1,68 @@
+/* -----------------------------------------------------------------------------
+   TEXTE MIS EN FORME — ce qu'un organisateur a écrit
+   Utilisé par : src/components/ui/RichText.tsx
+
+   Le contenu porte ses propres balises : des paragraphes, des titres, des
+   listes. Sans ces règles, le reset les aplatit toutes et la description
+   redevient le pavé qu'on voulait éviter.
+   -------------------------------------------------------------------------- */
+
+.rich-text,
+.event-page__description {
+  font: var(--type-event-description);
+  color: var(--ink-soft);
+}
+
+.rich-text > * + *,
+.event-page__description > * + * {
+  margin-top: var(--rich-paragraph-gap);
+}
+
+/* Un titre respire davantage AU-DESSUS qu'en dessous : il appartient à ce qui
+   le suit, pas à ce qui le précède. */
+.rich-text :is(h1, h2, h3, h4),
+.event-page__description :is(h1, h2, h3, h4) {
+  margin-top: var(--rich-heading-gap);
+  color: var(--ink-title);
+  font: var(--type-card-title);
+}
+
+.rich-text :is(h1, h2, h3, h4):first-child,
+.event-page__description :is(h1, h2, h3, h4):first-child {
+  margin-top: 0;
+}
+
+.rich-text :is(ul, ol),
+.event-page__description :is(ul, ol) {
+  padding-left: var(--rich-list-inset);
+}
+
+.rich-text ul,
+.event-page__description ul {
+  list-style: disc;
+}
+
+.rich-text ol,
+.event-page__description ol {
+  list-style: decimal;
+}
+
+.rich-text strong,
+.rich-text b,
+.event-page__description strong,
+.event-page__description b {
+  color: var(--ink-title);
+  font-weight: var(--weight-bold);
+}
+
+.rich-text a,
+.event-page__description a {
+  color: var(--ink-link);
+  text-decoration: underline;
+}
+
+.rich-text blockquote,
+.event-page__description blockquote {
+  padding-left: var(--rich-list-inset);
+  border-left: 2px solid var(--border-menu);
+}

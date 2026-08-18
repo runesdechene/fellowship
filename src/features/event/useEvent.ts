@@ -3,6 +3,7 @@ import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
 import { supabase } from '@/lib/supabase'
+import { fetchTags, tagStylesByName, type TagStyle } from '@/lib/tags'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
 /** Une ligne du registre, telle qu'elle s'affiche dans le bilan de la fiche. */
@@ -10,6 +11,9 @@ export interface EventLedgerLine extends LedgerLine {
   id: string
   category: string
   label: string | null
+  /** « stepper » : la ligne posee par le suivi (le prix de la place ou le
+      cachet). Il n'y en a qu'une par bilan, garantie par un index unique. */
+  source: string
 }
 
 export interface EventData {
@@ -29,6 +33,13 @@ export interface EventData {
   confirmed: boolean
 
   friends: Friend[]
+
+  /**
+   * Les couleurs de chaque categorie, telles qu'elles sont reglees dans
+   * l'administration. Vide tant qu'elles ne sont pas chargees : un tag sans
+   * couleur connue retombe sur la pastille neutre.
+   */
+  tagStyles: Map<string, TagStyle>
 
   /** Mon registre sur cette date. Vide tant qu'aucun bilan n'a été rempli. */
   ledger: EventLedgerLine[]
@@ -64,6 +75,12 @@ export interface EventActions {
   setPayment: (next: PaymentStatus) => Promise<void>
   /** Basculer entre « je paie ma place » et « on me paie pour venir ». */
   setOrientation: (next: PaymentOrientation) => Promise<void>
+  /**
+   * Poser le prix de la place (ou le cachet recu). Ce montant n'est pas un
+   * champ de la participation : c'est UNE ligne du registre, celle que le
+   * suivi alimente. Zero l'efface.
+   */
+  setStandAmount: (amount: number) => Promise<void>
   /** Une écriture est en cours : les crans ne doivent pas être re-cliquables. */
   saving: boolean
   /** L'écriture a échoué. L'affichage est déjà revenu en arrière. */
@@ -81,6 +98,7 @@ const EMPTY: EventData = {
   paymentOrientation: 'payeur',
   confirmed: false,
   friends: [],
+  tagStyles: new Map(),
   ledger: [],
   revenue: null,
   net: null,
@@ -116,11 +134,13 @@ export function useEvent(
     async function load(currentEventId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
 
-      const { data: event, error } = await supabase
-        .from('events')
-        .select('*')
-        .eq('id', currentEventId)
-        .maybeSingle()
+      // Les couleurs des categories ne dependent pas de l'evenement : elles
+      // partent en meme temps que lui plutot qu'apres.
+      const [{ data: event, error }, tagRows] = await Promise.all([
+        supabase.from('events').select('*').eq('id', currentEventId).maybeSingle(),
+        fetchTags(),
+      ])
+      const tagStyles = tagStylesByName(tagRows)
 
       if (cancelled) return
       if (error) {
@@ -146,6 +166,7 @@ export function useEvent(
           endDate,
           daysAway: daysUntil(startDate, today),
           past: daysUntil(endDate, today) < 0,
+          tagStyles,
           loading: false,
         })
         return
@@ -160,7 +181,7 @@ export function useEvent(
           .maybeSingle(),
         supabase
           .from('event_ledger_entries')
-          .select('id, amount, direction, category, label')
+          .select('id, amount, direction, category, label, source')
           .eq('actor_id', actorId)
           .eq('event_id', currentEventId),
         fetchFriendsByEvent(actorId, [currentEventId]),
@@ -182,6 +203,7 @@ export function useEvent(
         paymentOrientation: (participation?.payment_orientation as PaymentOrientation) ?? 'payeur',
         confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
         friends: friendsByEvent.get(currentEventId) ?? [],
+        tagStyles,
         ledger,
         revenue: filled ? ledgerRevenue(ledger) : null,
         net: filled ? ledgerProfit(ledger) : null,
@@ -294,7 +316,104 @@ export function useEvent(
     [eventId, actorId, personActorId, saving, currentStatus, currentOrientation],
   )
 
-  const actions: EventActions = { setStatus, setPayment, setOrientation, saving, writeError }
+  const setStandAmount = useCallback(
+    async (amount: number) => {
+      if (!eventId || !actorId || saving || !currentStatus) return
+      setSaving(true)
+      setWriteError(null)
+
+      // Le registre référence un bilan, même si l'exposant n'a pas encore
+      // ouvert de formulaire. On garantit donc sa ligne avant d'écrire.
+      const { data: report } = await supabase
+        .from('event_reports')
+        .upsert({ actor_id: actorId, event_id: eventId }, { onConflict: 'actor_id,event_id' })
+        .select('id')
+        .single()
+
+      if (!report) {
+        setSaving(false)
+        setWriteError("Le montant n'a pas pu être enregistré.")
+        return
+      }
+
+      // Un cachet ENTRE, un emplacement SORT. C'est l'orientation qui décide,
+      // et le montant reste toujours positif en base.
+      const paid = currentOrientation === 'paye'
+      const { data: existing } = await supabase
+        .from('event_ledger_entries')
+        .select('id')
+        .eq('report_id', report.id)
+        .eq('source', 'stepper')
+        .maybeSingle()
+
+      let failed = false
+      if (amount <= 0) {
+        // Zéro n'est pas un montant : c'est l'absence de ligne.
+        if (existing) {
+          const { error } = await supabase
+            .from('event_ledger_entries')
+            .delete()
+            .eq('id', existing.id)
+          failed = Boolean(error)
+        }
+      } else if (existing) {
+        const { error } = await supabase
+          .from('event_ledger_entries')
+          .update({
+            amount,
+            category: paid ? 'cachet' : 'emplacement',
+            direction: paid ? 'in' : 'out',
+          })
+          .eq('id', existing.id)
+        failed = Boolean(error)
+      } else {
+        const { error } = await supabase.from('event_ledger_entries').insert({
+          report_id: report.id,
+          actor_id: actorId,
+          event_id: eventId,
+          label: null,
+          amount,
+          direction: paid ? 'in' : 'out',
+          category: paid ? 'cachet' : 'emplacement',
+          source: 'stepper',
+        })
+        failed = Boolean(error)
+      }
+
+      if (failed) {
+        setSaving(false)
+        setWriteError("Le montant n'a pas pu être enregistré.")
+        return
+      }
+
+      // Le registre a bougé : on le relit plutôt que de le deviner, sinon les
+      // totaux du bilan mentiraient jusqu'au prochain chargement.
+      const { data: rows } = await supabase
+        .from('event_ledger_entries')
+        .select('id, amount, direction, category, label, source')
+        .eq('actor_id', actorId)
+        .eq('event_id', eventId)
+
+      const ledger = (rows ?? []) as EventLedgerLine[]
+      setState((s) => ({
+        ...s,
+        ledger,
+        revenue: ledger.length > 0 ? ledgerRevenue(ledger) : null,
+        net: ledger.length > 0 ? ledgerProfit(ledger) : null,
+      }))
+      setSaving(false)
+    },
+    [eventId, actorId, saving, currentStatus, currentOrientation],
+  )
+
+  const actions: EventActions = {
+    setStatus,
+    setPayment,
+    setOrientation,
+    setStandAmount,
+    saving,
+    writeError,
+  }
 
   if (!eventId) {
     return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.', ...actions }

@@ -207,11 +207,13 @@
   color: var(--ink-title);
 }
 
-/* Ce que le festival n'a pas donné garde sa place, éteint : la fiche dit
-   aussi ce qui manque. */
+/* Ce que le festival n'a pas donné garde sa place — et se LIT. Trop pâle, il
+   disparaissait : or c'est précisément l'information qu'on viendra compléter,
+   elle doit sauter aux yeux autant que celles qui sont là. */
 .event-page__fact-value--empty {
   font: var(--type-event-fact-value);
-  color: var(--ink-ghost);
+  color: var(--ink-missing);
+  font-style: italic;
 }
 
 .event-page__links {
@@ -456,18 +458,21 @@
 }
 
 /* --- Sortir de la date ---------------------------------------------------- */
-/* Se retirer n'est pas une commande qu'on met en avant : pas de fond, de
-   l'encre douce, et le rouge nulle part — l'interface n'en a pas. */
+/* Se retirer reste une sortie discrète — le rouge n'existe nulle part dans
+   cette interface — mais ça reste un CONTRÔLE : sans surface ni poids, il se
+   perdait au bas de la colonne. */
 .cockpit__quit {
-  padding-block: var(--space-8);
-  background: none;
-  color: var(--ink-soft);
-  font: var(--type-section-link);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-nav);
+  background: var(--quit-surface);
+  color: var(--quit-ink);
+  font: var(--type-button);
   cursor: pointer;
-  transition: color var(--stepper-motion);
+  transition: background var(--stepper-motion), color var(--stepper-motion);
 }
 
 .cockpit__quit:hover:not(:disabled) {
+  background: var(--quit-hover-surface);
   color: var(--ink-title);
 }
 
@@ -479,4 +484,94 @@
 .cockpit__error {
   font: var(--type-list-meta);
   color: var(--status-pending-ink);
+}
+
+/* --- La saisie du montant ------------------------------------------------- */
+/* Verser un acompte ou solder appelle un chiffre. La question se pose au
+   moment du clic : posée plus tard, elle ne se pose jamais et le bilan reste
+   vide jusqu'à la fin de saison. */
+.cockpit__amount-capture {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.cockpit__amount-label {
+  font: var(--type-field-label);
+  color: var(--ink-soft);
+}
+
+.cockpit__amount-row {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.cockpit__amount-input {
+  flex: 1;
+  min-width: 0;
+  height: var(--amount-height);
+  padding-inline: var(--control-padding-x);
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--amount-surface);
+  color: var(--control-ink);
+  font: var(--type-control);
+}
+
+.cockpit__amount-input::placeholder {
+  color: var(--control-placeholder);
+}
+
+.cockpit__amount-input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.cockpit__amount-save {
+  height: var(--amount-height);
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-control);
+  background: var(--action-surface-soft);
+  color: var(--action-ink);
+  font: var(--type-button);
+  cursor: pointer;
+}
+
+.cockpit__amount-hint {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* Le montant posé : toujours visible, et cliquable pour le corriger. */
+.cockpit__amount-paid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--radius-nav);
+  background: var(--amount-surface);
+  cursor: pointer;
+  transition: background var(--stepper-motion);
+}
+
+.cockpit__amount-paid:hover:not(:disabled) {
+  background: var(--quit-hover-surface);
+}
+
+.cockpit__amount-paid:disabled {
+  cursor: default;
+}
+
+.cockpit__amount-paid-label {
+  font: var(--type-cockpit-label);
+  color: var(--ink-soft);
+}
+
+.cockpit__amount-paid-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  color: var(--ink-title);
+  font: var(--type-amount-value);
 }

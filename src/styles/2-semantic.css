@@ -60,6 +60,9 @@
   --ink-strong: var(--brown-900); /* texte sur contrôle clair */
   --ink-soft: var(--brown-400); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
+  /* Ce que l'organisateur n'a pas renseigne. Longtemps trop pale : une info
+     manquante doit se LIRE, c'est elle qu'on viendra completer. */
+  --ink-missing: var(--brown-400);
   /* Grands titres posés au-dessus des blocs. */
   --ink-section: var(--brown-800);
   /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
@@ -88,6 +91,10 @@
      Aucune teinte vive n'entre dans l'interface par cette porte. */
   --action-surface: var(--brown-900);
   --action-ink: var(--cream-50);
+  /* La meme idee, en moins tranchant. Le brun profond convient a UN bouton
+     isole ; sur une colonne de crans il cogne. On garde le contraste, on
+     retire l'agressivite. */
+  --action-surface-soft: var(--brown-600);
 
   /* Pastille ronde devant chaque date à venir */
   --dot-confirmed: var(--olive-500);
@@ -359,7 +366,7 @@
   --stepper-dot-ink: var(--cream-50); /* la coche, sur une pastille pleine */
   --stepper-done-ink: var(--ink-title);
   --stepper-done-dot: var(--status-ok-ink);
-  --stepper-now-surface: var(--action-surface);
+  --stepper-now-surface: var(--action-surface-soft);
   --stepper-now-ink: var(--action-ink);
   --stepper-hover-surface: var(--surface-row-hover);
   --stepper-motion: var(--duration-fast) var(--ease-out);
@@ -377,6 +384,24 @@
     var(--leading-snug) var(--family-sans);
   --type-orientation: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);
+
+  /* Se retirer d'une date : un lien discret, mais qui doit se VOIR. Il porte
+     donc une surface, comme les autres controles de la colonne. */
+  --quit-surface: var(--surface-panel);
+  --quit-ink: var(--ink-total);
+  --quit-hover-surface: var(--surface-row-hover);
+
+  /* La saisie du montant, dans le suivi. */
+  --amount-surface: var(--surface-panel);
+  --amount-height: var(--control-height);
+  --type-amount-value: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+
+  /* Un texte mis en forme par un organisateur : les distances entre ses
+     paragraphes, ses titres et ses listes. */
+  --rich-paragraph-gap: var(--space-12);
+  --rich-heading-gap: var(--space-18);
+  --rich-list-inset: var(--space-20);
 
   --type-event-fact-label: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);

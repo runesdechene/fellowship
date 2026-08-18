@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { fetchTags } from '@/lib/tags'
 
 /**
  * Les catégories proposées, dans l'ordre décidé en base (`sort_order`).
  * Elles ne sont pas codées en dur : un ajout côté administration apparaît
  * ici sans toucher au code.
+ *
+ * L'atelier ne montre que des noms : ses pastilles se colorent au choix, pas
+ * à la catégorie. Les couleurs de l'administration servent là où un tag
+ * DÉCRIT — la fiche d'un événement.
  */
 export function useTags(): string[] {
   const [tags, setTags] = useState<string[]>([])
@@ -13,12 +17,9 @@ export function useTags(): string[] {
     let cancelled = false
 
     async function load() {
-      const { data } = await supabase
-        .from('tags')
-        .select('name')
-        .order('sort_order', { ascending: true })
+      const rows = await fetchTags()
       if (cancelled) return
-      setTags((data ?? []).map((row) => row.name))
+      setTags(rows.map((row) => row.name))
     }
 
     void load()
