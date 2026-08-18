@@ -375,23 +375,32 @@
   --companion-overlap: -8px;
   --companion-gap: var(--space-18);
 
-  /* LE SUIVI — les crans de participation et de paiement.
+  /* LE SUIVI — des CASES A COCHER.
 
-     Un cran franchi porte l'electrique : c'est un etat acquis. Le cran
-     courant porte la surface d'action, sombre — c'est la qu'on en est, et
-     c'est le seul endroit de la fiche qui appelle un geste. */
+     Une case a cocher est la seule forme dont personne n'a jamais a se
+     demander ce qu'elle fait : on la coche, on la decoche. Elle dit l'etat ET
+     la commande d'un seul dessin — ce qu'une barre pleine n'arrivait pas a
+     faire, on ne savait pas si elle affichait ou si elle commandait.
+
+     Trois etats : franchi (case pleine, l'accent), prochaine etape (case vide
+     au contour appuye — rien n'est rempli tant que rien n'est fait), a venir
+     (eteint). Aucun aplat sombre : le suivi n'est pas un bouton. */
   --stepper-step-height: var(--height-stepper-step);
   --stepper-step-gap: var(--space-2);
-  --stepper-step-inset: var(--space-12);
-  --stepper-dot-size: var(--width-stepper-dot);
-  --stepper-dot-surface: var(--surface-panel);
-  --stepper-dot-ink: var(--cream-50); /* la coche, sur une pastille pleine */
+  --stepper-step-inset: var(--space-10);
+  --stepper-box-size: var(--width-stepper-box);
+  --stepper-box-radius: var(--round-6);
+  --stepper-box-surface: var(--surface-panel);
+  --stepper-box-border: var(--brown-250);
+  --stepper-box-ink: var(--cream-50); /* la coche, sur une case pleine */
   --stepper-done-ink: var(--ink-title);
-  --stepper-done-dot: var(--status-ok-ink);
-  --stepper-now-surface: var(--action-surface-soft);
-  --stepper-now-ink: var(--action-ink);
+  --stepper-done-surface: var(--status-ok-ink);
+  --stepper-next-ink: var(--ink-title);
+  --stepper-next-border: var(--ink-title);
   --stepper-hover-surface: var(--surface-row-hover);
   --stepper-motion: var(--duration-fast) var(--ease-out);
+  --type-stepper-next: var(--weight-bold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
 
   /* La bascule « je paie ma place / on me paie pour venir ». */
   --orientation-surface: var(--surface-panel);
@@ -401,8 +410,6 @@
   --type-cockpit-label: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);
   --type-stepper-step: var(--weight-semibold) var(--size-13) /
-    var(--leading-snug) var(--family-sans);
-  --type-stepper-step-now: var(--weight-bold) var(--size-13) /
     var(--leading-snug) var(--family-sans);
   --type-orientation: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);

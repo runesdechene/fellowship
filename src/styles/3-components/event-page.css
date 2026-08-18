@@ -347,7 +347,10 @@
   background: var(--border-menu);
 }
 
-/* --- Les crans ------------------------------------------------------------ */
+/* --- Les crans : des cases a cocher ---------------------------------------- */
+/* La barre pleine d'avant ressemblait a un bouton selectionne : on ne savait
+   pas si elle affichait un etat ou si elle commandait quelque chose. Une case
+   a cocher dit les deux d'un seul dessin. */
 .cockpit__steps {
   display: flex;
   flex-direction: column;
@@ -378,43 +381,43 @@
   cursor: default;
 }
 
-/* La pastille : vide tant que le cran n'est pas franchi. */
-.cockpit__dot {
+/* La case elle-meme : vide par defaut, son contour dit qu'elle attend. */
+.cockpit__box {
   display: flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: var(--stepper-dot-size);
-  height: var(--stepper-dot-size);
-  border-radius: var(--radius-round);
-  background: var(--stepper-dot-surface);
-  color: var(--stepper-dot-ink);
+  width: var(--stepper-box-size);
+  height: var(--stepper-box-size);
+  border: 1.5px solid var(--stepper-box-border);
+  border-radius: var(--stepper-box-radius);
+  background: var(--stepper-box-surface);
+  color: transparent;
+  transition: background var(--stepper-motion), border-color var(--stepper-motion);
 }
 
-/* Un cran franchi : l'accent, l'état acquis. */
+/* Franchi : la case se remplit de l'accent et porte sa coche. */
 .cockpit__step--done {
   color: var(--stepper-done-ink);
 }
 
-.cockpit__step--done .cockpit__dot {
-  background: var(--stepper-done-dot);
+.cockpit__step--done .cockpit__box {
+  border-color: var(--stepper-done-surface);
+  background: var(--stepper-done-surface);
+  color: var(--stepper-box-ink);
 }
 
-/* Le cran courant : la surface d'action, sombre. C'est là qu'on en est, et
-   c'est le seul endroit de la fiche qui appelle un geste. */
-.cockpit__step--now {
-  background: var(--stepper-now-surface);
-  color: var(--stepper-now-ink);
-  font: var(--type-stepper-step-now);
+/* La prochaine etape : le contour s'affirme et le libelle passe a pleine
+   encre, mais la case reste VIDE. Rien n'est rempli tant que rien n'est fait
+   — c'est toute la difference avec l'aplat sombre d'avant. */
+.cockpit__step--next {
+  color: var(--stepper-next-ink);
+  font: var(--type-stepper-next);
 }
 
-.cockpit__step--now:hover:not(:disabled) {
-  background: var(--stepper-now-surface);
-}
-
-.cockpit__step--now .cockpit__dot {
-  background: var(--stepper-now-ink);
-  color: var(--stepper-now-surface);
+.cockpit__step--next .cockpit__box {
+  border-color: var(--stepper-next-border);
+  border-width: 2px;
 }
 
 /* --- Le sens de l'argent -------------------------------------------------- */

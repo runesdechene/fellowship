@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Pencil } from 'lucide-react'
 import { formatEuros } from '@/lib/money'
 import type { ParticipationStatus } from '@/types/database'
+import { participationState, paymentState, type StepState } from './steps'
 import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent'
 
 /**
@@ -37,34 +38,35 @@ const PAYMENT_STEPS: Record<PaymentOrientation, { key: PaymentStatus; label: str
 const CAPTURING_STATUSES: string[] = ['acompte_verse', 'paye']
 
 /**
- * Un cran. Trois états : franchi (accent, acquis), courant (surface appuyée,
- * c'est là qu'on en est), à venir (éteint). Cliquer un cran déjà courant le
- * décoche — c'est le seul moyen de revenir en arrière sans tout retirer.
+ * Un cran, dessine comme une case a cocher.
+ *
+ * C'est la seule forme dont personne n'a a se demander ce qu'elle fait : elle
+ * dit l'etat ET la commande d'un seul dessin. La barre pleine d'avant
+ * ressemblait a un bouton selectionne, on ne savait pas si elle affichait ou
+ * si elle commandait.
  */
 function Step({
   label,
-  done,
-  now,
+  state,
   disabled,
   onClick,
 }: {
   label: string
-  done: boolean
-  now: boolean
+  state: StepState
   disabled: boolean
   onClick: () => void
 }) {
-  const state = now ? ' cockpit__step--now' : done ? ' cockpit__step--done' : ''
+  const modifier = state === 'todo' ? '' : ` cockpit__step--${state}`
   return (
     <button
       type="button"
-      className={`cockpit__step${state}`}
+      className={`cockpit__step${modifier}`}
       onClick={onClick}
       disabled={disabled}
-      aria-pressed={done || now}
+      aria-pressed={state === 'done'}
     >
-      <span className="cockpit__dot">
-        {(done || now) && <Check size={10} strokeWidth={3} />}
+      <span className="cockpit__box">
+        {state === 'done' && <Check size={11} strokeWidth={3.25} />}
       </span>
       {label}
     </button>
@@ -129,11 +131,10 @@ export function EventCockpit({
             <Step
               key={step.key}
               label={step.label}
-              done={stepIndex > index}
-              now={stepIndex === index}
+              state={participationState(index, stepIndex)}
               disabled={saving || past}
-              // Recliquer le cran courant revient au précédent — ou retire la
-              // participation quand on décoche le premier.
+              // Decocher la derniere case cochee revient au cran precedent —
+              // ou retire la participation quand on decoche la premiere.
               onClick={() =>
                 void setStatus(
                   stepIndex === index
@@ -192,8 +193,7 @@ export function EventCockpit({
                 <Step
                   key={step.key}
                   label={step.label}
-                  done={paymentIndex > index}
-                  now={paymentIndex === index}
+                  state={paymentState(index, paymentIndex)}
                   disabled={saving || past}
                   onClick={() => {
                     void setPayment(step.key)

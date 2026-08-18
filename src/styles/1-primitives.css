@@ -188,7 +188,7 @@
   --height-event-poster: 290px;
   --width-companion-avatar: 40px; /* les avatars de la bande de compagnons */
   --height-stepper-step: 40px; /* un cran du suivi */
-  --width-stepper-dot: 16px; /* sa pastille */
+  --width-stepper-box: 19px; /* sa case a cocher */
   --width-fact-min: 200px; /* en dessous, une info pratique passe à la ligne */
   --height-ledger-row: 40px; /* une ligne du registre */
   --width-main-min: 380px; /* sous cette largeur, le suivi passe dessous */
