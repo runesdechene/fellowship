@@ -1,19 +1,24 @@
 /* -----------------------------------------------------------------------------
-   TAG — une catégorie qui DÉCRIT
-   Utilisé par : src/components/ui/Tag.tsx
+   TAG — une categorie qui DECRIT
+   Utilise par : src/components/ui/Tag.tsx
 
-   La pastille de base vit dans create-event.css, où elle se CHOISIT. Ici elle
-   se contente de dire ce qu'est l'événement — et elle porte les couleurs
-   réglées tag par tag dans l'administration.
+   A ne pas confondre avec `.tag` (create-event.css), qui est le bouton de
+   l'atelier : 32 px de haut, en gras, fait pour etre clique. Ici le tag se lit
+   au passage. Reutiliser l'autre classe ramenait le gabarit du bouton sur la
+   fiche — gros, gras, et donnant envie de cliquer sur rien.
    -------------------------------------------------------------------------- */
 
-/* Les deux couleurs arrivent par les variables `--tag-bg` et `--tag-ink`,
-   posees sur l'element depuis les donnees — c'est `.tag` lui-meme qui les lit,
-   avec ses valeurs par defaut. Ce sont les seules couleurs de l'interface qui
-   ne viennent pas de la couche semantique : ce ne sont pas des choix de
-   design, ce sont des reglages de l'administration.
-
-   Ici la pastille ne fait plus que decrire : elle ne se clique pas. */
-.tag--painted {
-  cursor: default;
+/* Les deux couleurs arrivent par `--tag-bg` et `--tag-ink`, posees sur
+   l'element depuis les DONNEES : elles sont reglees tag par tag dans
+   l'administration. Ce sont les seules couleurs de l'interface qui ne
+   viennent pas de la couche semantique — et le repli neutre sert aux tags
+   qu'on ne retrouve plus en base. */
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--tag-badge-padding-y) var(--tag-badge-padding-x);
+  border-radius: var(--radius-chip);
+  background: var(--tag-bg, var(--tag-badge-surface));
+  color: var(--tag-ink, var(--tag-badge-ink));
+  font: var(--type-tag-badge);
 }

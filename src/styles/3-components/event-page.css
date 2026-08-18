@@ -113,11 +113,6 @@
   margin-top: var(--space-18);
 }
 
-/* Ici les catégories ne sont plus un choix à faire : elles décrivent. */
-.event-page__tags .tag {
-  cursor: default;
-}
-
 /* --- Les blocs ------------------------------------------------------------ */
 .event-page__block {
   display: flex;

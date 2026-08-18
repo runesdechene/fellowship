@@ -394,6 +394,17 @@
   --type-orientation: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);
 
+  /* LE TAG QUI DECRIT — sur la fiche d'un evenement.
+     Rien a voir avec celui de l'atelier, qui est un bouton : celui-ci se lit
+     au passage, il ne doit ni peser ni crier. Ses couleurs viennent de
+     l'administration, pas d'ici. */
+  --tag-badge-padding-x: var(--space-10);
+  --tag-badge-padding-y: var(--space-4);
+  --tag-badge-surface: var(--surface-chip-neutral);
+  --tag-badge-ink: var(--ink-soft);
+  --type-tag-badge: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+
   /* Se retirer d'une date : un lien discret, mais qui doit se VOIR. Il porte
      donc une surface, comme les autres controles de la colonne. */
   --quit-surface: var(--surface-panel);

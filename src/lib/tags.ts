@@ -13,8 +13,13 @@ export interface TagRow {
   textColor: string
 }
 
-/** Les couleurs d'un tag, prêtes à poser. */
+/**
+ * Un tag resolu : son libelle propre et ses deux couleurs. Le libelle compte
+ * autant que la couleur — un evenement de la V1 porte « marche-de-noel », et
+ * c'est « Marche de Noel » qu'il faut lire.
+ */
 export interface TagStyle {
+  label: string
   bgColor: string
   textColor: string
 }
@@ -43,9 +48,30 @@ export async function fetchTags(): Promise<TagRow[]> {
 }
 
 /**
- * Les couleurs indexées par nom. Les événements stockent le NOM du tag dans
- * `events.tags`, pas son slug — c'est ce que l'atelier de création y écrit.
+ * Les couleurs, indexées par NOM **et** par SLUG.
+ *
+ * Les deux cohabitent dans `events.tags` : la V1 y ecrivait le slug
+ * (« marche-de-noel »), l'atelier de la V2 y ecrit le nom (« Marche de Noel »).
+ * N'indexer que l'un des deux laisse la moitie du catalogue en gris.
+ *
+ * La comparaison ignore la casse pour la meme raison : rien ne garantit que
+ * ce qui a ete ecrit dans un evenement corresponde caractere pour caractere a
+ * ce que porte la table.
  */
 export function tagStylesByName(rows: TagRow[]): Map<string, TagStyle> {
-  return new Map(rows.map((row) => [row.name, { bgColor: row.bgColor, textColor: row.textColor }]))
+  const map = new Map<string, TagStyle>()
+  for (const row of rows) {
+    const style = { label: row.name, bgColor: row.bgColor, textColor: row.textColor }
+    map.set(row.name.toLowerCase(), style)
+    map.set(row.slug.toLowerCase(), style)
+  }
+  return map
+}
+
+/** Retrouve les couleurs d'un tag, qu'il soit stocke par nom ou par slug. */
+export function tagStyleFor(
+  styles: Map<string, TagStyle>,
+  tag: string,
+): TagStyle | undefined {
+  return styles.get(tag.toLowerCase())
 }

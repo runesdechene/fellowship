@@ -21,9 +21,12 @@ export function Tag({ name, style }: { name: string; style?: TagStyle }) {
       } as CSSProperties)
     : undefined
 
+  // Sa propre classe, jamais celle de l'atelier : la-bas un tag se CLIQUE
+  // (32 px de haut, en gras), ici il DECRIT. Reutiliser `.tag` avait ramene
+  // le gabarit du bouton sur la fiche.
   return (
-    <span className={style ? 'tag tag--painted' : 'tag'} style={colors}>
-      {name}
+    <span className="tag-badge" style={colors}>
+      {style?.label ?? name}
     </span>
   )
 }

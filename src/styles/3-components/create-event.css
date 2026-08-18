@@ -198,17 +198,17 @@
   gap: var(--space-8);
 }
 
-/* La pastille de base. Ses deux couleurs passent par une VARIABLE avec sa
-   valeur par defaut : la fiche d'un evenement les redefinit depuis les
-   reglages de l'administration sans dependre de l'ordre des imports. */
+/* La pastille de l'ATELIER : elle se clique pour choisir une categorie. La
+   fiche d'un evenement a la sienne (`.tag-badge`) — un tag qui decrit n'a ni
+   la meme taille ni le meme poids qu'un tag qui se choisit. */
 .tag {
   display: inline-flex;
   align-items: center;
   height: 32px;
   padding: 0 var(--space-14);
   border-radius: var(--radius-chip);
-  background: var(--tag-bg, var(--surface-card));
-  color: var(--tag-ink, var(--ink-soft));
+  background: var(--surface-card);
+  color: var(--ink-soft);
   font: var(--type-list-name);
   cursor: pointer;
   transition: background-color var(--menu-motion), color var(--menu-motion);

@@ -10,6 +10,7 @@ import { formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { isRichTextEmpty } from '@/lib/rich-text'
+import { tagStyleFor } from '@/lib/tags'
 import { EventCockpit } from './EventCockpit'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
@@ -188,7 +189,7 @@ export function EventPage() {
               {event.tags && event.tags.length > 0 && (
                 <div className="event-page__tags">
                   {event.tags.map((tag) => (
-                    <Tag key={tag} name={tag} style={tagStyles.get(tag)} />
+                    <Tag key={tag} name={tag} style={tagStyleFor(tagStyles, tag)} />
                   ))}
                 </div>
               )}
