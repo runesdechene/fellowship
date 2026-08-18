@@ -188,4 +188,16 @@
   --width-report-thumb: 60px; /* sa vignette d'affiche */
   --width-report-min: 240px; /* en dessous, elle passe à la ligne */
   --width-banner-icon: 44px; /* la tuile d'icône de la bande d'action */
+
+  /* La fiche d'un événement : deux colonnes, contenu et suivi. */
+  --width-cockpit: 320px; /* la colonne de suivi, à droite */
+  --width-event-poster: 220px; /* l'affiche, en haut de la fiche */
+  --height-event-poster: 290px;
+  --width-fact-icon: 32px; /* la tuile devant une info pratique */
+  --width-companion-avatar: 40px; /* les avatars de la bande de compagnons */
+  --height-stepper-step: 40px; /* un cran du suivi */
+  --width-stepper-dot: 16px; /* sa pastille */
+  --width-fact-min: 200px; /* en dessous, une info pratique passe à la ligne */
+  --height-ledger-row: 40px; /* une ligne du registre */
+  --width-main-min: 380px; /* sous cette largeur, le suivi passe dessous */
 }

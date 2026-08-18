@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
@@ -24,6 +24,8 @@ export interface EventData {
   /** Ma participation, si j'en ai une. null = je ne suis pas sur cette date. */
   status: ParticipationStatus | null
   paymentStatus: string | null
+  /** « payeur » : je paie ma place. « paye » : on me paie pour venir. */
+  paymentOrientation: PaymentOrientation
   confirmed: boolean
 
   friends: Friend[]
@@ -38,6 +40,36 @@ export interface EventData {
   error: string | null
 }
 
+/**
+ * Les trois états vivants du paiement. « acompte_verse » est un reliquat de la
+ * V1 : on l'affiche s'il est en base, on ne le propose plus.
+ */
+export type PaymentStatus = 'a_payer' | 'acompte_verse' | 'paye'
+
+/**
+ * Le sens de l'argent sur cette date. Un exposant paie son emplacement ; un
+ * artiste programme est paye pour venir. Les memes crans, lus a l'envers.
+ */
+export type PaymentOrientation = 'payeur' | 'paye'
+
+/** Ce que la fiche peut CHANGER, par opposition à ce qu'elle lit. */
+export interface EventActions {
+  /**
+   * Poser mon statut sur cette date. `null` me retire complètement : la ligne
+   * de participation est supprimée, pas passée à un statut « absent » — la
+   * base n'en a pas, et en inventer un fausserait tous les comptages.
+   */
+  setStatus: (next: ParticipationStatus | null) => Promise<void>
+  /** Faire avancer le paiement. Sans participation, il n'y a rien à payer. */
+  setPayment: (next: PaymentStatus) => Promise<void>
+  /** Basculer entre « je paie ma place » et « on me paie pour venir ». */
+  setOrientation: (next: PaymentOrientation) => Promise<void>
+  /** Une écriture est en cours : les crans ne doivent pas être re-cliquables. */
+  saving: boolean
+  /** L'écriture a échoué. L'affichage est déjà revenu en arrière. */
+  writeError: string | null
+}
+
 const EMPTY: EventData = {
   event: null,
   startDate: null,
@@ -46,6 +78,7 @@ const EMPTY: EventData = {
   past: false,
   status: null,
   paymentStatus: null,
+  paymentOrientation: 'payeur',
   confirmed: false,
   friends: [],
   ledger: [],
@@ -63,8 +96,14 @@ const EMPTY: EventData = {
  * permettra plus tard d'ouvrir une fiche depuis une recherche, et pas
  * seulement depuis ses propres dates.
  */
-export function useEvent(eventId: string | undefined, actorId: string | null | undefined): EventData {
+export function useEvent(
+  eventId: string | undefined,
+  actorId: string | null | undefined,
+  personActorId?: string | null,
+): EventData & EventActions {
   const [state, setState] = useState<EventData>(EMPTY)
+  const [saving, setSaving] = useState(false)
+  const [writeError, setWriteError] = useState<string | null>(null)
 
   useEffect(() => {
     // Sans identifiant il n'y a rien à charger : l'état est dérivé plus bas,
@@ -115,7 +154,7 @@ export function useEvent(eventId: string | undefined, actorId: string | null | u
       const [{ data: participation }, { data: ledgerRows }, friendsByEvent] = await Promise.all([
         supabase
           .from('participations')
-          .select('status, payment_status')
+          .select('status, payment_status, payment_orientation')
           .eq('actor_id', actorId)
           .eq('event_id', currentEventId)
           .maybeSingle(),
@@ -140,6 +179,7 @@ export function useEvent(eventId: string | undefined, actorId: string | null | u
         past: daysUntil(endDate, today) < 0,
         status: participation?.status ?? null,
         paymentStatus: participation?.payment_status ?? null,
+        paymentOrientation: (participation?.payment_orientation as PaymentOrientation) ?? 'payeur',
         confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
         friends: friendsByEvent.get(currentEventId) ?? [],
         ledger,
@@ -156,7 +196,109 @@ export function useEvent(eventId: string | undefined, actorId: string | null | u
     }
   }, [eventId, actorId])
 
-  if (!eventId) return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
+  // L'affichage bouge AVANT la base : cocher un cran doit répondre tout de
+  // suite. Si l'écriture échoue, on remet l'état d'avant et on le dit — un
+  // cran qui reste coché sur une écriture ratée est un mensonge.
+  const currentStatus = state.status
+  const currentPayment = state.paymentStatus
 
-  return state
+  const setStatus = useCallback(
+    async (next: ParticipationStatus | null) => {
+      if (!eventId || !actorId || saving) return
+      setSaving(true)
+      setWriteError(null)
+      setState((s) => ({
+        ...s,
+        status: next,
+        confirmed: next ? CONFIRMED_STATUSES.includes(next) : false,
+        // Me retirer efface aussi le paiement : il n'a plus d'objet.
+        paymentStatus: next === null ? null : s.paymentStatus,
+      }))
+
+      const { error } =
+        next === null
+          ? await supabase
+              .from('participations')
+              .delete()
+              .eq('actor_id', actorId)
+              .eq('event_id', eventId)
+          : await supabase.from('participations').upsert(
+              {
+                actor_id: actorId,
+                event_id: eventId,
+                status: next,
+                acted_by_user_id: personActorId ?? null,
+              },
+              { onConflict: 'actor_id,event_id' },
+            )
+
+      setSaving(false)
+      if (error) {
+        setState((s) => ({
+          ...s,
+          status: currentStatus,
+          confirmed: currentStatus ? CONFIRMED_STATUSES.includes(currentStatus) : false,
+          paymentStatus: currentPayment,
+        }))
+        setWriteError("Le changement n'a pas pu être enregistré.")
+      }
+    },
+    [eventId, actorId, personActorId, saving, currentStatus, currentPayment],
+  )
+
+  const setPayment = useCallback(
+    async (next: PaymentStatus) => {
+      // Sans participation il n'y a pas de ligne à mettre à jour : le paiement
+      // n'existe que sur une date qu'on fait.
+      if (!eventId || !actorId || saving || !currentStatus) return
+      setSaving(true)
+      setWriteError(null)
+      setState((s) => ({ ...s, paymentStatus: next }))
+
+      const { error } = await supabase
+        .from('participations')
+        .update({ payment_status: next, acted_by_user_id: personActorId ?? null })
+        .eq('actor_id', actorId)
+        .eq('event_id', eventId)
+
+      setSaving(false)
+      if (error) {
+        setState((s) => ({ ...s, paymentStatus: currentPayment }))
+        setWriteError("Le paiement n'a pas pu être enregistré.")
+      }
+    },
+    [eventId, actorId, personActorId, saving, currentStatus, currentPayment],
+  )
+
+  const currentOrientation = state.paymentOrientation
+
+  const setOrientation = useCallback(
+    async (next: PaymentOrientation) => {
+      if (!eventId || !actorId || saving || !currentStatus) return
+      setSaving(true)
+      setWriteError(null)
+      setState((s) => ({ ...s, paymentOrientation: next }))
+
+      const { error } = await supabase
+        .from('participations')
+        .update({ payment_orientation: next, acted_by_user_id: personActorId ?? null })
+        .eq('actor_id', actorId)
+        .eq('event_id', eventId)
+
+      setSaving(false)
+      if (error) {
+        setState((s) => ({ ...s, paymentOrientation: currentOrientation }))
+        setWriteError("Le changement n'a pas pu être enregistré.")
+      }
+    },
+    [eventId, actorId, personActorId, saving, currentStatus, currentOrientation],
+  )
+
+  const actions: EventActions = { setStatus, setPayment, setOrientation, saving, writeError }
+
+  if (!eventId) {
+    return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.', ...actions }
+  }
+
+  return { ...state, ...actions }
 }

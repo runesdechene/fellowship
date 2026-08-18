@@ -1,9 +1,10 @@
 /* -----------------------------------------------------------------------------
-   FICHE D'UN ÉVÉNEMENT — l'affiche, puis ce qu'il faut savoir pour y aller
-   Utilisé par : src/features/event/EventPage.tsx
+   FICHE D'UN ÉVÉNEMENT — le contenu à gauche, le suivi à droite
+   Utilisé par : src/features/event/EventPage.tsx, EventCockpit.tsx
 
-   Même colonne, même axe et mêmes distances que le tableau de bord : passer
-   de l'un à l'autre ne doit pas déplacer la page sous les yeux.
+   L'ossature est celle de la V1 : deux colonnes, les blocs dans le même ordre.
+   Seule la peinture est celle de la V2 — crème, sans ombre, les grands titres
+   posés AU-DESSUS des cartes.
    -------------------------------------------------------------------------- */
 
 .event-page {
@@ -31,11 +32,29 @@
   color: var(--ink-title);
 }
 
+/* --- Les deux colonnes ---------------------------------------------------- */
+/* Le contenu s'étire, le suivi garde sa largeur. Sous la largeur plancher de
+   la colonne principale, le suivi passe dessous plutôt que de l'écraser. */
+.event-page__cols {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--event-columns-gap);
+  width: var(--shell-content-width);
+  max-width: 100%;
+}
+
+.event-page__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-section);
+  min-width: 0;
+}
+
 /* --- L'accroche ----------------------------------------------------------- */
 .event-page__hero {
   display: flex;
   gap: var(--event-hero-gap);
-  width: var(--shell-content-width);
 }
 
 .event-page__poster {
@@ -50,24 +69,35 @@
 .event-page__identity {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   min-width: 0;
 }
 
 .event-page__title {
-  font: var(--type-page-title-accent);
+  font: var(--type-event-title);
   color: var(--ink-title);
 }
 
+/* Chaque information sur sa ligne, précédée de son icône : on balaie la
+   colonne du regard au lieu de lire une phrase. */
 .event-page__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
   margin-top: var(--space-12);
+}
+
+.event-page__meta-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
   font: var(--type-event-meta);
   color: var(--ink-soft);
 }
 
-/* Les dates et le lieu portent le poids ; ce qui les relie s'efface. */
-.event-page__meta b {
+/* Les dates portent le poids ; ce qui les entoure s'efface. */
+.event-page__meta-line b {
   font: var(--type-event-meta-accent);
+  color: var(--ink-title);
 }
 
 .event-page__chips {
@@ -90,53 +120,80 @@
 }
 
 /* --- Les blocs ------------------------------------------------------------ */
-.event-page__section {
-  width: var(--shell-content-width);
-  margin-top: var(--gap-section);
+.event-page__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section-title);
 }
 
-.event-page__section-title {
-  margin-bottom: var(--gap-section-title);
+.event-page__block-title {
   font: var(--type-section-title);
   color: var(--ink-section);
 }
 
-.event-page__section-head {
-  margin-bottom: var(--gap-section-title);
+/* Un bloc encore vide garde sa place et son titre, en pâle : la page ne
+   change pas de forme selon le remplissage, mais elle ne fait pas croire
+   qu'il s'y trouve quelque chose. */
+.event-page__block-title--empty {
+  font: var(--type-section-title);
+  color: var(--ink-section-pale);
 }
 
-.event-page__section-head .event-page__section-title {
-  margin-bottom: 0;
+.event-page__block-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
-.event-page__section-total {
-  margin-top: var(--space-8);
+.event-page__block-total {
   font: var(--type-section-total-note);
   color: var(--ink-soft);
 }
 
-.event-page__section-total b {
+.event-page__block-total b {
   font: var(--type-section-total);
   color: var(--ink-total);
 }
 
-/* --- Le stand ------------------------------------------------------------- */
-/* Une carte unique, où les informations se rangent en colonnes égales. Elles
-   repassent à la ligne dès qu'une colonne descendrait sous sa largeur
-   plancher : rien ne se serre, la carte s'allonge. */
-.event-page__facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--event-fact-min-width), 1fr));
-  gap: var(--event-fact-gap-y) var(--event-fact-gap-x);
+/* La carte qui porte le contenu d'un bloc. Un seul fond, aucun contour :
+   c'est la teinte qui la détache du panneau. */
+.event-page__card {
   padding: var(--event-facts-padding);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }
 
+/* --- Infos pratiques ------------------------------------------------------ */
+/* Les informations se rangent en colonnes égales et repassent à la ligne dès
+   qu'une colonne descendrait sous sa largeur plancher : rien ne se serre. */
+.event-page__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--event-fact-min-width), 1fr));
+  gap: var(--event-fact-gap-y) var(--event-fact-gap-x);
+}
+
 .event-page__fact {
   display: flex;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.event-page__fact-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--event-fact-icon-size);
+  height: var(--event-fact-icon-size);
+  border-radius: var(--radius-nav);
+  background: var(--event-fact-icon-surface);
+  color: var(--ink-soft);
+}
+
+.event-page__fact-body {
+  display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-4);
   min-width: 0;
 }
 
@@ -181,27 +238,43 @@
   color: var(--ink-soft);
 }
 
-/* --- Les amis ------------------------------------------------------------- */
-/* Ici les avatars ne se chevauchent pas : sur le tableau de bord ils comptent,
-   sur la fiche ils se nomment. */
-.event-page__friends {
+/* --- Les compagnons ------------------------------------------------------- */
+/* Une bande d'avatars qui se chevauchent, puis la phrase qui les compte. Le
+   chevauchement dit « un groupe » là où une liste dirait « des gens ». */
+.event-page__companions {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--event-friend-gap);
-}
-
-.event-page__friend {
-  display: inline-flex;
   align-items: center;
-  gap: var(--space-10);
+  gap: var(--companion-gap);
 }
 
-.event-page__friend-name {
-  font: var(--type-list-name);
+.event-page__avatars {
+  display: flex;
+}
+
+.event-page__avatar {
+  --avatar-size: var(--companion-avatar-size);
+
+  display: inline-flex;
+  margin-left: var(--companion-overlap);
+  border: 2px solid var(--surface-card);
+  border-radius: var(--radius-round);
+}
+
+.event-page__avatar:first-child {
+  margin-left: 0;
+}
+
+.event-page__companions-text {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.event-page__companions-text b {
+  font: var(--type-event-meta-accent);
   color: var(--ink-title);
 }
 
-/* --- Le festival ---------------------------------------------------------- */
+/* --- À propos ------------------------------------------------------------- */
 .event-page__description {
   font: var(--type-event-description);
   color: var(--ink-soft);
@@ -210,9 +283,6 @@
 
 /* --- Le bilan ------------------------------------------------------------- */
 .event-page__ledger {
-  padding: 0 var(--event-facts-padding);
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
   list-style: none;
 }
 
@@ -249,4 +319,164 @@
 .event-page__state {
   font: var(--type-event-meta);
   color: var(--ink-soft);
+}
+
+/* =============================================================================
+   LE COCKPIT — où j'en suis sur cette date
+   =============================================================================
+   Collé en haut pendant qu'on descend : on coche un cran sans remonter.
+   ========================================================================== */
+
+.cockpit {
+  position: sticky;
+  top: var(--cockpit-top);
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--cockpit-gap);
+  width: var(--cockpit-width);
+  padding: var(--cockpit-padding);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.cockpit__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.cockpit__label {
+  font: var(--type-cockpit-label);
+  color: var(--ink-soft);
+}
+
+.cockpit__sep {
+  height: 1px;
+  background: var(--border-menu);
+}
+
+/* --- Les crans ------------------------------------------------------------ */
+.cockpit__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stepper-step-gap);
+}
+
+.cockpit__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  min-height: var(--stepper-step-height);
+  padding-inline: var(--stepper-step-inset);
+  border-radius: var(--radius-nav);
+  background: none;
+  color: var(--ink-soft);
+  font: var(--type-stepper-step);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--stepper-motion), color var(--stepper-motion);
+}
+
+.cockpit__step:hover:not(:disabled) {
+  background: var(--stepper-hover-surface);
+}
+
+.cockpit__step:disabled {
+  cursor: default;
+}
+
+/* La pastille : vide tant que le cran n'est pas franchi. */
+.cockpit__dot {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--stepper-dot-size);
+  height: var(--stepper-dot-size);
+  border-radius: var(--radius-round);
+  background: var(--stepper-dot-surface);
+  color: var(--stepper-dot-ink);
+}
+
+/* Un cran franchi : l'olive, l'état acquis. */
+.cockpit__step--done {
+  color: var(--stepper-done-ink);
+}
+
+.cockpit__step--done .cockpit__dot {
+  background: var(--stepper-done-dot);
+}
+
+/* Le cran courant : la surface d'action, sombre. C'est là qu'on en est, et
+   c'est le seul endroit de la fiche qui appelle un geste. */
+.cockpit__step--now {
+  background: var(--stepper-now-surface);
+  color: var(--stepper-now-ink);
+  font: var(--type-stepper-step-now);
+}
+
+.cockpit__step--now:hover:not(:disabled) {
+  background: var(--stepper-now-surface);
+}
+
+.cockpit__step--now .cockpit__dot {
+  background: var(--stepper-now-ink);
+  color: var(--stepper-now-surface);
+}
+
+/* --- Le sens de l'argent -------------------------------------------------- */
+.cockpit__orientation {
+  display: flex;
+  gap: var(--stepper-step-gap);
+  padding: var(--orientation-padding);
+  border-radius: var(--radius-nav);
+  background: var(--orientation-surface);
+}
+
+.cockpit__orientation-opt {
+  flex: 1;
+  padding-block: var(--space-8);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink-soft);
+  font: var(--type-orientation);
+  cursor: pointer;
+  transition: background var(--stepper-motion), color var(--stepper-motion);
+}
+
+.cockpit__orientation-opt--on {
+  background: var(--orientation-on-surface);
+  color: var(--ink-title);
+}
+
+.cockpit__orientation-opt:disabled {
+  cursor: default;
+}
+
+/* --- Sortir de la date ---------------------------------------------------- */
+/* Se retirer n'est pas une commande qu'on met en avant : pas de fond, de
+   l'encre douce, et le rouge nulle part — l'interface n'en a pas. */
+.cockpit__quit {
+  padding-block: var(--space-8);
+  background: none;
+  color: var(--ink-soft);
+  font: var(--type-section-link);
+  cursor: pointer;
+  transition: color var(--stepper-motion);
+}
+
+.cockpit__quit:hover:not(:disabled) {
+  color: var(--ink-title);
+}
+
+.cockpit__note {
+  font: var(--type-event-meta);
+  color: var(--status-pending-ink);
+}
+
+.cockpit__error {
+  font: var(--type-list-meta);
+  color: var(--status-pending-ink);
 }

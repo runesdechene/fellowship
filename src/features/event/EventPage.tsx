@@ -1,30 +1,15 @@
-import { ArrowLeft, CheckCheck } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Clock, FileText, MapPin, Store, Users } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
-import { Chip, type ChipTone } from '@/components/ui/Chip'
+import { Chip } from '@/components/ui/Chip'
 import { useAuth } from '@/lib/auth'
 import { formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
-import type { ParticipationStatus } from '@/types/database'
+import { EventCockpit } from './EventCockpit'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
-
-/** Ce que chaque statut de dossier raconte, et avec quelle pastille. */
-const STATUS: Record<ParticipationStatus, { label: string; tone: ChipTone }> = {
-  inscrit: { label: 'Inscrit', tone: 'ok' },
-  confirme: { label: 'Confirmé', tone: 'ok' },
-  en_cours: { label: 'Dossier en cours', tone: 'pending' },
-  interesse: { label: 'Intéressé', tone: 'neutral' },
-  refuse: { label: 'Dossier refusé', tone: 'pending' },
-}
-
-/** Le paiement n'a que deux états vivants ; « acompte_verse » est un reliquat. */
-const PAYMENT: Record<string, { label: string; tone: ChipTone }> = {
-  a_payer: { label: 'Emplacement à payer', tone: 'pending' },
-  acompte_verse: { label: 'Acompte versé', tone: 'pending' },
-  paye: { label: 'Emplacement payé', tone: 'ok' },
-}
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
@@ -33,15 +18,52 @@ function formatRange(start: Date, end: Date): string {
 }
 
 /**
+ * Un grand titre posé AU-DESSUS de son bloc, jamais dedans. Il pâlit quand le
+ * bloc est vide : la page garde la même forme quel que soit le remplissage,
+ * mais elle ne prétend pas que tout se vaut.
+ */
+function Block({
+  title,
+  empty,
+  children,
+}: {
+  title: string
+  empty?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <section className="event-page__block">
+      <h2 className={empty ? 'event-page__block-title--empty' : 'event-page__block-title'}>
+        {title}
+      </h2>
+      <div className="event-page__card">{children}</div>
+    </section>
+  )
+}
+
+/**
  * Une information pratique. Ce qui n'a pas été renseigné garde sa place, en
  * éteint : la fiche dit aussi ce que le festival n'a pas encore donné.
  */
-function Fact({ label, value }: { label: string; value: string | null | undefined }) {
+function Fact({
+  Icon,
+  label,
+  value,
+}: {
+  Icon: LucideIcon
+  label: string
+  value: string | null | undefined
+}) {
   return (
     <div className="event-page__fact">
-      <span className="event-page__fact-label">{label}</span>
-      <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
-        {value || 'Non renseigné'}
+      <span className="event-page__fact-icon">
+        <Icon size={15} strokeWidth={1.8} />
+      </span>
+      <span className="event-page__fact-body">
+        <span className="event-page__fact-label">{label}</span>
+        <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
+          {value || 'Non renseigné'}
+        </span>
       </span>
     </div>
   )
@@ -66,7 +88,7 @@ function LedgerRow({ line }: { line: EventLedgerLine }) {
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
-  const { actor } = useAuth()
+  const { actor, person } = useAuth()
   const go = useTransitionNavigate()
   const {
     event,
@@ -76,13 +98,19 @@ export function EventPage() {
     past,
     status,
     paymentStatus,
+    paymentOrientation,
     friends,
     ledger,
     revenue,
     net,
     loading,
     error,
-  } = useEvent(id, actor?.id)
+    setStatus,
+    setPayment,
+    setOrientation,
+    saving,
+    writeError,
+  } = useEvent(id, actor?.id, person?.actor_id)
 
   // Pas le composant Button : ses variantes sont toutes des surfaces, et
   // celui-ci est un chemin de retour, pas une commande.
@@ -111,157 +139,213 @@ export function EventPage() {
     )
   }
 
-  const payment = paymentStatus ? PAYMENT[paymentStatus] : null
-
   return (
     <div className="event-page">
       {back}
 
-      <header className="event-page__hero">
-        {event.image_url ? (
-          <img className="event-page__poster" src={event.image_url} alt="" />
-        ) : (
-          <div className="event-page__poster" />
-        )}
-
-        <div className="event-page__identity">
-          <h1 className="event-page__title">{event.name}</h1>
-          <p className="event-page__meta">
-            <b>{formatRange(startDate, endDate)}</b> · <b>{event.city}</b> ({event.department})
-            {event.edition ? ` · ${event.edition}ᵉ édition` : ''}
-          </p>
-
-          <div className="event-page__chips">
-            {!past && <Chip>{formatCountdown(daysAway)}</Chip>}
-            {past && <Chip>Date passée</Chip>}
-            {status ? (
-              <Chip
-                tone={STATUS[status].tone}
-                icon={
-                  STATUS[status].tone === 'ok' ? (
-                    <CheckCheck size={11} strokeWidth={2.25} />
-                  ) : undefined
-                }
-              >
-                {STATUS[status].label}
-              </Chip>
+      <div className="event-page__cols">
+        <div className="event-page__main">
+          <header className="event-page__hero">
+            {event.image_url ? (
+              <img className="event-page__poster" src={event.image_url} alt="" />
             ) : (
-              <Chip>Tu n’es pas sur cette date</Chip>
+              <div className="event-page__poster" />
             )}
-            {payment && !past && <Chip tone={payment.tone}>{payment.label}</Chip>}
-          </div>
 
-          {event.tags && event.tags.length > 0 && (
-            <div className="event-page__tags">
-              {event.tags.map((tag, index) => (
-                <span key={tag} className={index === 0 ? 'tag tag--first' : 'tag tag--on'}>
-                  {tag}
+            <div className="event-page__identity">
+              <h1 className="event-page__title">{event.name}</h1>
+
+              <div className="event-page__meta">
+                <span className="event-page__meta-line">
+                  <CalendarDays size={14} strokeWidth={1.8} />
+                  <b>{formatRange(startDate, endDate)}</b>
                 </span>
-              ))}
+                <span className="event-page__meta-line">
+                  <MapPin size={14} strokeWidth={1.8} />
+                  {event.city} ({event.department})
+                </span>
+                {event.edition && (
+                  <span className="event-page__meta-line">
+                    <Store size={14} strokeWidth={1.8} />
+                    {event.edition}ᵉ édition
+                  </span>
+                )}
+              </div>
+
+              <div className="event-page__chips">
+                <Chip>{past ? 'Date passée' : formatCountdown(daysAway)}</Chip>
+              </div>
+
+              {event.tags && event.tags.length > 0 && (
+                <div className="event-page__tags">
+                  {event.tags.map((tag, index) => (
+                    <span key={tag} className={index === 0 ? 'tag tag--first' : 'tag tag--on'}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </header>
+          </header>
 
-      <section className="event-page__section">
-        <h2 className="event-page__section-title">Le stand</h2>
-        <div className="event-page__facts">
-          <Fact label="Emplacement" value={event.stand_price} />
-          <Fact label="Taille du stand" value={event.stand_size} />
-          <Fact label="Horaires" value={event.opening_hours} />
-          <Fact
-            label="Date limite d’inscription"
-            value={
-              event.registration_deadline
-                ? formatFullDate(new Date(event.registration_deadline))
-                : null
-            }
-          />
-          <Fact label="Fréquentation attendue" value={event.expected_attendance} />
-          <Fact label="Adresse" value={event.address} />
-        </div>
-
-        {(event.registration_url || event.external_url || event.contact_email) && (
-          <div className="event-page__links">
-            {event.registration_url && (
-              <a
-                className="event-page__link"
-                href={event.registration_url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Dossier d’inscription
-              </a>
-            )}
-            {event.external_url && (
-              <a
-                className="event-page__link"
-                href={event.external_url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Site du festival
-              </a>
-            )}
-            {event.contact_email && (
-              <a className="event-page__link" href={`mailto:${event.contact_email}`}>
-                {event.contact_email}
-              </a>
-            )}
-          </div>
-        )}
-
-        {event.registration_note && (
-          <p className="event-page__note">{event.registration_note}</p>
-        )}
-      </section>
-
-      {friends.length > 0 && (
-        <section className="event-page__section">
-          <h2 className="event-page__section-title">
-            {friends.length === 1 ? 'Un ami y sera' : `${friends.length} amis y seront`}
-          </h2>
-          <div className="event-page__friends">
-            {friends.map((friend) => (
-              <span key={friend.id} className="event-page__friend">
-                <Avatar src={friend.avatarUrl} name={friend.name} />
-                <span className="event-page__friend-name">{friend.name}</span>
-              </span>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {event.description && (
-        <section className="event-page__section">
-          <h2 className="event-page__section-title">Le festival</h2>
-          <p className="event-page__description">{event.description}</p>
-        </section>
-      )}
-
-      {past && (
-        <section className="event-page__section">
-          <div className="event-page__section-head">
-            <h2 className="event-page__section-title">Le bilan</h2>
-            {net !== null && revenue !== null && (
-              <p className="event-page__section-total">
-                <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
-                <b>{formatEuros(revenue)}</b>
+          <Block title="Tes compagnons sur cette date" empty={friends.length === 0}>
+            {friends.length > 0 ? (
+              <div className="event-page__companions">
+                <div className="event-page__avatars">
+                  {friends.slice(0, 5).map((friend) => (
+                    <span key={friend.id} className="event-page__avatar">
+                      <Avatar src={friend.avatarUrl} name={friend.name} />
+                    </span>
+                  ))}
+                </div>
+                <span className="event-page__companions-text">
+                  {friends.length === 1 ? (
+                    <>
+                      <b>{friends[0].name}</b> y sera
+                    </>
+                  ) : (
+                    <>
+                      <b>{friends.length} exposants</b> que tu suis y seront
+                    </>
+                  )}
+                </span>
+              </div>
+            ) : (
+              <p className="event-page__state">
+                Personne de ton réseau n’est encore annoncé sur cette date.
               </p>
             )}
-          </div>
+          </Block>
 
-          {ledger.length > 0 ? (
-            <ul className="event-page__ledger">
-              {ledger.map((line) => (
-                <LedgerRow key={line.id} line={line} />
-              ))}
-            </ul>
-          ) : (
-            <p className="event-page__state">Le bilan de cette date n’a pas encore été rempli.</p>
+          <Block title="À propos de l’événement" empty={!event.description}>
+            {event.description ? (
+              <p className="event-page__description">{event.description}</p>
+            ) : (
+              <p className="event-page__state">
+                L’organisateur n’a pas encore décrit cet événement.
+              </p>
+            )}
+          </Block>
+
+          <Block title="Infos pratiques">
+            <div className="event-page__facts">
+              <Fact Icon={CalendarDays} label="Dates" value={formatRange(startDate, endDate)} />
+              <Fact Icon={Clock} label="Horaires" value={event.opening_hours} />
+              <Fact
+                Icon={MapPin}
+                label="Lieu"
+                value={event.address || `${event.city} (${event.department})`}
+              />
+              <Fact
+                Icon={Users}
+                label="Fréquentation attendue"
+                value={event.expected_attendance}
+              />
+              <Fact
+                Icon={FileText}
+                label="Candidatures jusqu’au"
+                value={
+                  event.registration_deadline
+                    ? formatFullDate(new Date(event.registration_deadline))
+                    : null
+                }
+              />
+              <Fact
+                Icon={Store}
+                label={event.stand_size ? `Emplacement (${event.stand_size})` : 'Emplacement'}
+                value={event.stand_price}
+              />
+            </div>
+
+            {(event.registration_url || event.external_url || event.contact_email) && (
+              <div className="event-page__links">
+                {event.registration_url && (
+                  <a
+                    className="event-page__link"
+                    href={event.registration_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Dossier d’inscription
+                  </a>
+                )}
+                {event.external_url && (
+                  <a
+                    className="event-page__link"
+                    href={event.external_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Site du festival
+                  </a>
+                )}
+                {event.contact_email && (
+                  <a className="event-page__link" href={`mailto:${event.contact_email}`}>
+                    {event.contact_email}
+                  </a>
+                )}
+              </div>
+            )}
+
+            {event.registration_note && (
+              <p className="event-page__note">{event.registration_note}</p>
+            )}
+          </Block>
+
+          {past && (
+            <section className="event-page__block">
+              <div className="event-page__block-head">
+                <h2 className="event-page__block-title">Mon bilan</h2>
+                {net !== null && revenue !== null && (
+                  <p className="event-page__block-total">
+                    <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
+                    <b>{formatEuros(revenue)}</b>
+                  </p>
+                )}
+              </div>
+              <div className="event-page__card">
+                {ledger.length > 0 ? (
+                  <ul className="event-page__ledger">
+                    {ledger.map((line) => (
+                      <LedgerRow key={line.id} line={line} />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="event-page__state">
+                    Le bilan de cette date n’a pas encore été rempli.
+                  </p>
+                )}
+              </div>
+            </section>
           )}
-        </section>
-      )}
+
+          {/* Trois blocs que la V1 portait et que la V2 n'a pas encore : ils
+              gardent leur place plutôt que d'apparaître un jour de nulle part. */}
+          <Block title="Discussion du festival" empty>
+            <p className="event-page__state">Le fil de discussion arrive bientôt.</p>
+          </Block>
+
+          <Block title="Mes notes privées" empty>
+            <p className="event-page__state">Les notes privées arrivent bientôt.</p>
+          </Block>
+
+          <Block title="Avis des exposants" empty>
+            <p className="event-page__state">Les avis arrivent bientôt.</p>
+          </Block>
+        </div>
+
+        <EventCockpit
+          status={status}
+          paymentStatus={paymentStatus}
+          paymentOrientation={paymentOrientation}
+          past={past}
+          setStatus={setStatus}
+          setPayment={setPayment}
+          setOrientation={setOrientation}
+          saving={saving}
+          writeError={writeError}
+        />
+      </div>
     </div>
   )
 }

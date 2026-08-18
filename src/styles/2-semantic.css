@@ -60,8 +60,11 @@
   --ink-strong: var(--brown-900); /* texte sur contrôle clair */
   --ink-soft: var(--brown-400); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
-  /* Grands titres posés au-dessus des blocs. Version pâle = var(--brown-250). */
+  /* Grands titres posés au-dessus des blocs. */
   --ink-section: var(--brown-800);
+  /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
+     réclame plus le regard. */
+  --ink-section-pale: var(--brown-250);
   --ink-total: var(--brown-600); /* le grand total de saison */
   /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
      acquis, le bleu dit une commande — les deux ne se croisent jamais. */
@@ -308,21 +311,72 @@
   /* =========================================================================
      FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
      ====================================================================== */
+  /* Deux colonnes, comme en V1 : le contenu à gauche, le suivi à droite. Le
+     suivi reste collé en haut pendant qu'on descend — on peut cocher un cran
+     sans remonter la page. */
+  --event-columns-gap: var(--space-32);
+  --event-main-min-width: var(--width-main-min);
+  --cockpit-width: var(--width-cockpit);
+  --cockpit-top: var(--space-32);
+  --cockpit-gap: var(--space-26); /* entre deux blocs du suivi */
+  --cockpit-padding: var(--card-padding);
+
   /* L'affiche est le seul grand aplat de la page : elle porte l'identité de la
      date là où le tableau de bord n'en montrait qu'une vignette. */
-  --event-poster-width: 300px;
-  --event-poster-height: 220px;
-  --event-hero-gap: var(--space-32);
+  --event-poster-width: var(--width-event-poster);
+  --event-poster-height: var(--height-event-poster);
+  --event-hero-gap: var(--space-24);
 
   /* Les informations pratiques se rangent en colonnes qui se partagent la
      largeur, et repassent à la ligne plutôt que de se serrer. */
-  --event-fact-min-width: 200px;
+  --event-fact-min-width: var(--width-fact-min);
   --event-fact-gap-x: var(--space-32);
   --event-fact-gap-y: var(--space-24);
   --event-facts-padding: var(--card-padding);
+  --event-fact-icon-size: var(--width-fact-icon);
+  --event-fact-icon-surface: var(--surface-panel);
 
   --event-friend-gap: var(--space-24); /* entre deux amis de la rangée */
-  --event-ledger-row-height: 40px;
+  --event-ledger-row-height: var(--height-ledger-row);
+
+  /* La bande de compagnons : des avatars qui se chevauchent, comme dans la
+     liste « à venir », mais à taille lisible. */
+  --companion-avatar-size: var(--width-companion-avatar);
+  --companion-overlap: -8px;
+  --companion-gap: var(--space-18);
+
+  /* LE SUIVI — les crans de participation et de paiement.
+
+     Un cran franchi porte l'olive : c'est un état acquis. Le cran courant
+     porte la surface d'action, sombre — c'est là qu'on en est, et c'est le
+     seul endroit de la fiche qui appelle un geste. Les deux ne se croisent
+     jamais, comme partout ailleurs dans l'interface. */
+  --stepper-step-height: var(--height-stepper-step);
+  --stepper-step-gap: var(--space-2);
+  --stepper-step-inset: var(--space-12);
+  --stepper-dot-size: var(--width-stepper-dot);
+  --stepper-dot-surface: var(--surface-panel);
+  --stepper-dot-ink: var(--cream-50); /* la coche, sur une pastille pleine */
+  --stepper-done-ink: var(--ink-title);
+  --stepper-done-dot: var(--status-ok-ink);
+  --stepper-now-surface: var(--action-surface);
+  --stepper-now-ink: var(--action-ink);
+  --stepper-hover-surface: var(--surface-row-hover);
+  --stepper-motion: var(--duration-fast) var(--ease-out);
+
+  /* La bascule « je paie ma place / on me paie pour venir ». */
+  --orientation-surface: var(--surface-panel);
+  --orientation-on-surface: var(--surface-card);
+  --orientation-padding: var(--space-4);
+
+  --type-cockpit-label: var(--weight-semibold) var(--size-11) /
+    var(--leading-snug) var(--family-sans);
+  --type-stepper-step: var(--weight-semibold) var(--size-13) /
+    var(--leading-snug) var(--family-sans);
+  --type-stepper-step-now: var(--weight-bold) var(--size-13) /
+    var(--leading-snug) var(--family-sans);
+  --type-orientation: var(--weight-semibold) var(--size-11) /
+    var(--leading-snug) var(--family-sans);
 
   --type-event-fact-label: var(--weight-semibold) var(--size-11) /
     var(--leading-snug) var(--family-sans);
