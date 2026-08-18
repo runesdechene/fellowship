@@ -10,7 +10,7 @@
 .rich-text,
 .event-page__description {
   font: var(--type-event-description);
-  color: var(--ink-soft);
+  color: var(--ink-body);
 }
 
 .rich-text > * + *,

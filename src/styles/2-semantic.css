@@ -69,6 +69,10 @@
      réclame plus le regard. */
   --ink-section-pale: var(--brown-250);
   --ink-total: var(--brown-600); /* le grand total de saison */
+  /* Le corps de texte qu'on LIT — une description, un paragraphe entier.
+     --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
+     disparait. Un cran plus fonce, sans aller jusqu'a l'encre des titres. */
+  --ink-body: var(--brown-600);
   /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
      acquis, le bleu dit une commande — les deux ne se croisent jamais. */
   --accent-interactive: var(--electric-500);
@@ -357,9 +361,9 @@
 
   /* La bande de compagnons : des avatars qui se chevauchent, comme dans la
      liste « à venir », mais à taille lisible. */
-  --companion-avatar-size: var(--width-avatar-account);
+  --companion-avatar-size: var(--width-companion-avatar);
   --companion-overlap: -8px;
-  --companion-gap: var(--space-12);
+  --companion-gap: var(--space-18);
 
   /* LE SUIVI — les crans de participation et de paiement.
 

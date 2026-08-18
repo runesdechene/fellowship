@@ -194,6 +194,7 @@
   --width-event-poster: 220px; /* l'affiche, en haut de la fiche */
   --height-event-poster: 290px;
   --width-fact-icon: 32px; /* la tuile devant une info pratique */
+  --width-companion-avatar: 40px; /* les avatars de la bande de compagnons */
   --height-stepper-step: 40px; /* un cran du suivi */
   --width-stepper-dot: 16px; /* sa pastille */
   --width-fact-min: 200px; /* en dessous, une info pratique passe à la ligne */
