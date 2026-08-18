@@ -100,7 +100,7 @@ export function CreateEvent() {
       imageUrl = supabase.storage.from(POSTER_BUCKET).getPublicUrl(path).data.publicUrl
     }
 
-    const { error: insertError } = await supabase.from('events').insert({
+    const { data: created, error: insertError } = await supabase.from('events').insert({
       name: draft.name.trim(),
       city: draft.city.trim(),
       department: draft.department.trim(),
@@ -119,12 +119,32 @@ export function CreateEvent() {
       is_private: draft.isPrivate,
       created_by_actor: actor.id,
       acted_by_user_id: person?.actor_id ?? null,
+    }).select('id').single()
+
+    if (insertError || !created) {
+      setSaving(false)
+      setError("L'événement n'a pas pu être créé. " + (insertError?.message ?? ''))
+      return
+    }
+
+    // Ajouter une date, c'est déjà la repérer. On la marque « intéressé » —
+    // le cran sans engagement — pour qu'elle apparaisse tout de suite dans
+    // « à venir » au lieu de disparaître. On n'écrit PAS « inscrit » : ça
+    // voudrait dire que la demande est faite auprès de l'organisateur, ce
+    // que l'app ne sait pas.
+    const { error: participationError } = await supabase.from('participations').insert({
+      actor_id: actor.id,
+      event_id: created.id,
+      status: 'interesse',
+      acted_by_user_id: person?.actor_id ?? null,
     })
 
     setSaving(false)
-    if (insertError) {
-      setError("L'événement n'a pas pu être créé. " + insertError.message)
-      return
+
+    // L'événement, lui, existe bel et bien : on ne bloque pas là-dessus.
+    // L'exposant pourra se marquer depuis la fiche.
+    if (participationError) {
+      console.warn('participation à la création:', participationError.message)
     }
 
     clear()
