@@ -1,16 +1,20 @@
 ---
-updated: 2026-08-18T12:00:00Z
-summary: "La fiche d'un événement a ses deux colonnes et son suivi qui marche."
-next_step: "Vérifier la fiche à l'écran, puis brancher la discussion du festival."
+updated: 2026-08-19T00:45:00Z
+summary: "Fiche d'événement debout : suivi, discussion, palette à deux couleurs."
+next_step: "Maquetter avant de coder — Uriel veut dessiner, pas corriger du code livré."
 ---
 
 ## Tâches
 
 - [x] Trancher : créer un événement inscrit-il automatiquement l'exposant dessus ? → « intéressé »
 - [x] Écran d'un événement — ossature V1 + design V2, cockpit fonctionnel
-- [ ] Brancher la discussion du festival (bloc en attente sur la fiche)
-- [ ] Brancher les notes privées et les avis (blocs en attente sur la fiche)
-- [ ] Trancher : le hero garde-t-il un fond plat ? (décidé A, à revoir si fade)
+- [x] Brancher la discussion du festival — questions, réponses, meilleure réponse
+- [ ] **Maquetter la suite avant de coder** (demande d'Uriel du 19 août)
+- [ ] Brancher les avis des exposants (notation 3 axes + fil de réponses)
+- [ ] Écran d'édition d'un événement — débloque l'ajout au clic sur une info manquante
+- [ ] Renouveler le jeton Supabase, régénérer les types, retirer le client sans schéma
+- [ ] Vérifier en vrai : cocher un cran, poser une question (rien testé contre la base)
+- [ ] Confirmer l'orange du logo (`#c0642a` est-il le bon ?)
 - [ ] Brancher « Remplir mon bilan » sur un écran de saisie
 - [ ] Décider du comportement de la cloche (sans action pour l'instant)
 - [ ] Décider quand l'écran Explorer entre dans la V2
@@ -20,6 +24,42 @@ next_step: "Vérifier la fiche à l'écran, puis brancher la discussion du festi
 - [ ] Deux enseignes s'appellent « Runes de Chêne » en base — vérifier si c'est voulu
 
 ## Mémoire
+
+**19 août 2026 — la fiche d'événement est debout, et la méthode change.**
+Livré : deux colonnes (structure V1, design V2), suivi en CASES À COCHER,
+saisie du montant, discussion du festival, infos pratiques sans carte avec
+icônes Lucide, tags aux couleurs de l'administration.
+
+**Décisions de DA prises par Uriel ce jour-là :**
+- **DEUX couleurs d'app, pas trois** : l'orange du logo et le violet
+  électrique. L'olive `#84aa3c` a été RETIRÉ de la palette — il traînait
+  depuis le premier commit V2, jamais décidé. « Acquis » porte désormais
+  l'électrique, partout, tableau de bord compris.
+- Le suivi = des cases à cocher. Une barre pleine ressemble à un bouton
+  sélectionné : on ne sait pas si elle affiche ou si elle commande.
+- Les infos pratiques : pas de carte, libellé en micro-capitales avec son
+  icône, valeur en grand.
+- Un paragraphe se lit à pleine encre (`--ink-body`), pas en encre douce.
+
+**Ce qu'il faut retenir de la séance :** trop d'allers-retours sur du code
+déjà livré. Uriel a demandé de **maquetter d'abord**. On ne code plus un
+écran sans une maquette validée — et une maquette montre de VRAIES icônes,
+pas des caractères Unicode.
+
+**Pièges du jour, à ne pas refaire :**
+- Les maquettes portent une COPIE des tokens : un changement de palette dans
+  l'app ne les suit pas. Les aligner à la main, sinon elles montrent une DA
+  morte.
+- Réutiliser une classe existante (`.tag`) parce que le nom colle : celle de
+  l'atelier est un bouton de 32 px en gras. Un tag qui décrit ≠ un tag qui se
+  choisit.
+- Les événements de la V1 stockent le SLUG d'un tag, la V2 le NOM. Indexer
+  les deux.
+- Des organisateurs écrivent toute leur description avec le bouton « titre »
+  de l'éditeur : les `<h1>` doivent être APLATIS, sinon tout est en gras.
+- Le lint refuse un `setState` synchrone atteint depuis un effet. Sortir la
+  lecture du hook, comme dans `useEvent.ts`.
+- Une requête Supabase est un builder, pas une `Promise` : typer `PromiseLike`.
 
 **18 août 2026 — la discipline est écrite.** `docs/xo-discipline.md` était une
 copie du repo Citadelle (il citait `apps/explore-web`, les lieux, les factions).
