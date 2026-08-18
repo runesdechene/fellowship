@@ -38,8 +38,14 @@ export async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
   return [...following].filter((id) => followers.has(id))
 }
 
-/** Nom et image des amis, qu'ils soient une personne ou une enseigne. */
-export async function fetchFriendProfiles(ids: string[]): Promise<Map<string, Friend>> {
+/**
+ * Nom et image d'acteurs quelconques — personnes ou enseignes.
+ *
+ * Ne sert pas qu'aux amis : la discussion d'un festival s'en sert pour nommer
+ * les auteurs des questions et des reponses. Le type `Friend` porte le meme
+ * mensonge dans son nom, il decrit en realite n'importe quel acteur affiche.
+ */
+export async function fetchActorProfiles(ids: string[]): Promise<Map<string, Friend>> {
   const byId = new Map<string, Friend>()
   if (ids.length === 0) return byId
 
@@ -94,7 +100,7 @@ export async function fetchFriendsByEvent(
       .in('actor_id', friendIds)
       .in('status', PROGRAMMED_STATUSES)
       .in('event_id', eventIds),
-    fetchFriendProfiles(friendIds),
+    fetchActorProfiles(friendIds),
   ])
 
   for (const row of participations ?? []) {

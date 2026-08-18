@@ -1,0 +1,304 @@
+/* -----------------------------------------------------------------------------
+   DISCUSSION DU FESTIVAL — les questions posées autour d'une date
+   Utilisé par : src/features/event/EventDiscussion.tsx
+
+   Un fil se lit de haut en bas. Les réponses sont RENTRÉES sous leur question :
+   c'est le retrait qui dit l'appartenance, pas un cadre supplémentaire — un
+   cadre dans un cadre, sur du crème, ne sépare plus rien.
+   -------------------------------------------------------------------------- */
+
+.discussion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+/* --- Les canaux ----------------------------------------------------------- */
+/* Visibles seulement quand on porte plusieurs casquettes : un seul canal n'a
+   rien à filtrer. */
+.discussion__channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--channel-gap);
+}
+
+.discussion__channel {
+  padding: var(--space-8) var(--space-14);
+  border-radius: var(--radius-chip);
+  background: none;
+  color: var(--ink-soft);
+  font: var(--type-section-link);
+  cursor: pointer;
+  transition: background var(--menu-motion), color var(--menu-motion);
+}
+
+.discussion__channel:hover {
+  background: var(--surface-row-hover);
+}
+
+.discussion__channel--on {
+  background: var(--accent-interactive-surface);
+  color: var(--accent-interactive);
+}
+
+/* --- Poser une question --------------------------------------------------- */
+.discussion__start {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-nav);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  font: var(--type-button);
+  cursor: pointer;
+  transition: background var(--menu-motion);
+}
+
+.discussion__start:hover {
+  background: var(--surface-card-hover);
+}
+
+.discussion__ask {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--thread-padding);
+  border-radius: var(--radius-card);
+  background: var(--thread-surface);
+}
+
+.discussion__field {
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--space-12) var(--control-padding-x);
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--surface-panel);
+  color: var(--control-ink);
+  font: var(--type-control);
+  resize: vertical;
+}
+
+.discussion__field::placeholder {
+  color: var(--control-placeholder);
+}
+
+.discussion__field:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.discussion__field--long {
+  font: var(--type-thread-body);
+}
+
+.discussion__ask-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+
+/* La raison du refus, jamais un bouton gris muet. */
+.discussion__blocker {
+  font: var(--type-thread-meta);
+  color: var(--status-pending-ink);
+}
+
+.discussion__note {
+  font: var(--type-thread-meta);
+  color: var(--ink-soft);
+}
+
+.discussion__note b {
+  color: var(--ink-title);
+}
+
+.discussion__error {
+  font: var(--type-thread-meta);
+  color: var(--status-pending-ink);
+}
+
+/* --- Le fil --------------------------------------------------------------- */
+.discussion__threads {
+  display: flex;
+  flex-direction: column;
+  gap: var(--thread-gap);
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--thread-padding);
+  border-radius: var(--radius-card);
+  background: var(--thread-surface);
+}
+
+.thread__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--thread-head-gap);
+}
+
+.thread__identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.thread__title {
+  font: var(--type-thread-title);
+  color: var(--ink-title);
+}
+
+.thread__meta {
+  margin-top: var(--space-4);
+  font: var(--type-thread-meta);
+  color: var(--ink-soft);
+}
+
+.thread__meta b {
+  color: var(--ink-title);
+}
+
+.thread__solved {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-chip);
+  background: var(--reply-best-surface);
+  color: var(--reply-best-ink);
+  font: var(--type-chip-strong);
+  white-space: nowrap;
+}
+
+.thread__remove {
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color var(--menu-motion);
+}
+
+.thread__remove:hover:not(:disabled) {
+  color: var(--status-pending-ink);
+}
+
+.thread__body {
+  font: var(--type-thread-body);
+  color: var(--ink-body);
+  white-space: pre-line;
+}
+
+/* --- Les réponses --------------------------------------------------------- */
+.thread__replies {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reply-gap);
+  margin-left: var(--reply-inset);
+  list-style: none;
+}
+
+.reply {
+  display: flex;
+  gap: var(--space-12);
+}
+
+.reply__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.reply__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  font: var(--type-thread-meta);
+  color: var(--ink-soft);
+}
+
+.reply__meta b {
+  color: var(--ink-title);
+}
+
+.reply__badge {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-chip);
+  background: var(--reply-best-surface);
+  color: var(--reply-best-ink);
+  font: var(--type-chip-strong);
+}
+
+.reply__text {
+  margin-top: var(--space-4);
+  font: var(--type-thread-body);
+  color: var(--ink-body);
+  white-space: pre-line;
+}
+
+.reply__actions {
+  display: flex;
+  gap: var(--space-16);
+  margin-top: var(--space-6);
+}
+
+.reply__action {
+  background: none;
+  color: var(--ink-link);
+  font: var(--type-card-link);
+  cursor: pointer;
+}
+
+.reply__action:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+/* --- Répondre ------------------------------------------------------------- */
+.thread__open {
+  align-self: flex-start;
+  margin-left: var(--reply-inset);
+  background: none;
+  color: var(--ink-link);
+  font: var(--type-section-link);
+  cursor: pointer;
+}
+
+.thread__open:hover {
+  text-decoration: underline;
+}
+
+.thread__composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  margin-left: var(--reply-inset);
+}
+
+.thread__field {
+  width: 100%;
+  padding: var(--space-12) var(--control-padding-x);
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--surface-panel);
+  color: var(--control-ink);
+  font: var(--type-thread-body);
+  resize: vertical;
+}
+
+.thread__field::placeholder {
+  color: var(--control-placeholder);
+}
+
+.thread__field:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.thread__composer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}

@@ -12,6 +12,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { EventCockpit } from './EventCockpit'
+import { EventDiscussion } from './EventDiscussion'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
 
@@ -302,6 +303,10 @@ export function EventPage() {
             {event.registration_note && (
               <p className="event-page__note">{event.registration_note}</p>
             )}
+          </Block>
+
+          <Block title="Discussion du festival" bare>
+            <EventDiscussion eventId={event.id} />
           </Block>
 
           {past && (

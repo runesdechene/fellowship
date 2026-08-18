@@ -446,6 +446,30 @@
     var(--leading-relaxed) var(--family-sans);
 
   /* =========================================================================
+     DISCUSSION DU FESTIVAL — les questions et leurs réponses
+     ========================================================================
+     Un fil se lit de haut en bas : la question, puis ce qu'on lui a répondu.
+     Les réponses sont RENTRÉES sous leur question — c'est le retrait qui dit
+     l'appartenance, pas un cadre de plus. Un cadre dans un cadre, sur du
+     crème, ne sépare plus rien. */
+  --thread-gap: var(--space-32);
+  --thread-padding: var(--card-padding);
+  --thread-surface: var(--surface-card);
+  --thread-head-gap: var(--space-12);
+  --reply-inset: var(--space-42);
+  --reply-gap: var(--space-18);
+  --reply-best-surface: var(--status-ok-surface);
+  --reply-best-ink: var(--status-ok-ink);
+  --channel-gap: var(--space-8);
+
+  --type-thread-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+  --type-thread-meta: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --type-thread-body: var(--weight-regular) var(--size-14) /
+    var(--leading-relaxed) var(--family-sans);
+
+  /* =========================================================================
      FORMULAIRES — champs, bascules, dépôt de fichier
      ====================================================================== */
   --control-height: 46px;
