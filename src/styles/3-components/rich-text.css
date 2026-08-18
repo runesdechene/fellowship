@@ -18,18 +18,20 @@
   margin-top: var(--rich-paragraph-gap);
 }
 
-/* Un titre respire davantage AU-DESSUS qu'en dessous : il appartient à ce qui
-   le suit, pas à ce qui le précède. */
+/* Les titres sont APLATIS en texte courant, volontairement.
+
+   Ce n'est pas un oubli : dans la vraie base, des organisateurs ecrivent
+   toute leur description avec le bouton « titre » de l'editeur. Un exemple
+   reel — ARBOR PAGAN FEST — tient ses quatre lignes dans un seul <h1>. Les
+   rendre comme de vrais titres met la description entiere en gras.
+
+   La V1 les aplatissait deja, par son reset. Une description est du corps de
+   texte : on garde sa mise en page (paragraphes, retours a la ligne, listes),
+   pas la hierarchie que personne n'a voulu poser. */
 .rich-text :is(h1, h2, h3, h4),
 .event-page__description :is(h1, h2, h3, h4) {
-  margin-top: var(--rich-heading-gap);
-  color: var(--ink-title);
-  font: var(--type-card-title);
-}
-
-.rich-text :is(h1, h2, h3, h4):first-child,
-.event-page__description :is(h1, h2, h3, h4):first-child {
-  margin-top: 0;
+  font: var(--type-event-description);
+  color: inherit;
 }
 
 .rich-text :is(ul, ol),

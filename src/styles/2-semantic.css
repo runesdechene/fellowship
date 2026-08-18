@@ -420,7 +420,6 @@
   /* Un texte mis en forme par un organisateur : les distances entre ses
      paragraphes, ses titres et ses listes. */
   --rich-paragraph-gap: var(--space-12);
-  --rich-heading-gap: var(--space-18);
   --rich-list-inset: var(--space-20);
 
   --type-event-fact-label: var(--weight-semibold) var(--size-11) /

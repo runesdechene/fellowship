@@ -225,7 +225,7 @@ export function EventPage() {
           </header>
 
           <Block
-            title="À propos de l’événement"
+            title="À propos"
             empty={isRichTextEmpty(event.description)}
           >
             {isRichTextEmpty(event.description) ? (
