@@ -20,13 +20,13 @@
      ====================================================================== */
   --surface-app: var(--cream-200); /* fond général + colonne de gauche */
   --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
-  --surface-card: var(--cream-200); /* cartes posées sur le panneau */
+  --surface-card: var(--cream-250); /* cartes posées sur le panneau */
   --surface-raised: var(--cream-50); /* la carte de compte, posée SUR le crème */
   /* Le survol et l'état actif portent EXACTEMENT le même fond : survoler une
      entrée montre à quoi elle ressemblera une fois active, sans nuance
      intermédiaire. Deux noms distincts pour pouvoir les séparer un jour. */
-  --surface-nav-active: var(--stone-200);
-  --surface-nav-hover: var(--stone-200);
+  --surface-nav-active: var(--cream-500);
+  --surface-nav-hover: var(--cream-500);
   /* Survol de ce qui mène quelque part.
 
      On ASSOMBRIT, on n'éclaircit pas. Deux raisons, et la seconde est la
@@ -46,12 +46,12 @@
      haut, une nuance se perd. Elles reprennent la valeur des entrées de
      navigation, qui sont des lignes elles aussi. */
   --hover-brightness: 0.96;
-  --surface-card-hover: var(--cream-300);
-  --surface-row-hover: var(--stone-200);
+  --surface-card-hover: var(--cream-400);
+  --surface-row-hover: var(--cream-400);
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
-  --surface-chip-neutral: var(--cream-300); /* pastille sans couleur */
-  --surface-bar: var(--cream-150); /* mois qui portent au moins une date */
-  --surface-bar-empty: var(--cream-100); /* mois à zéro — moins marqué */
+  --surface-chip-neutral: var(--cream-400); /* pastille sans couleur */
+  --surface-bar: var(--cream-300); /* mois qui portent au moins une date */
+  --surface-bar-empty: var(--cream-250); /* mois à zéro — moins marqué */
 
   /* =========================================================================
      ENCRE — les couleurs de texte, de la plus forte à la plus effacée
@@ -68,13 +68,15 @@
   /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
      réclame plus le regard. */
   --ink-section-pale: var(--brown-250);
+  /* La place tenue par un champ pas encore rempli, dans l atelier. */
+  --ink-waiting: var(--brown-250);
   --ink-total: var(--brown-600); /* le grand total de saison */
   /* Le corps de texte qu'on LIT — une description, un paragraphe entier.
      --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
      disparait. Un paragraphe se lit comme un titre se lit : a pleine encre. */
   --ink-body: var(--brown-700);
   /* L'une des deux couleurs de l'app, avec la terre du logo. */
-  --accent-interactive: var(--electric-500);
+  --accent-interactive: #5dbd88;
   --accent-interactive-surface: var(--electric-100);
   --ink-link: var(--accent-interactive);
 
@@ -117,7 +119,7 @@
 
   /* Menus flottants. Sans ombre dans cette interface, c'est un liseré qui
      détache le menu du contenu qu'il recouvre. */
-  --border-menu: var(--stone-200);
+  --border-menu: var(--cream-400);
   --menu-motion: var(--duration-fast) var(--ease-out);
   --layer-menu: 20;
 
@@ -482,6 +484,11 @@
   --fields-gap: var(--space-16);
   --focus-ring: var(--accent-interactive);
   --toggle-on-surface: var(--accent-interactive);
+  /* La bascule au repos, et sa pastille. Elles vivaient en dur dans form.css,
+     donc hors de portee d un changement de palette : la bascule est restee
+     grise le jour ou la navigation s est rechauffee. */
+  --toggle-off-surface: var(--cream-400);
+  --toggle-knob: var(--cream-50);
   --required-ink: var(--status-pending-ink);
   --dropzone-border: var(--brown-250);
 

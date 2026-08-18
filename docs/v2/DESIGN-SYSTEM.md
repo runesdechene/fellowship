@@ -49,9 +49,9 @@ cette architecture évite.
 On y nomme les choses par **ce qu'elles sont**, jamais par leur usage.
 
 ```css
---cream-200: #f3f0e9;      /* une teinte, point */
+--cream-hue: 39;                              /* la molette de la chaleur */
+--cream-200: hsl(var(--cream-hue) 61% 92.9%); /* une teinte, point */
 --brown-700: #564444;
---olive-500: #84aa3c;
 --size-26: 26px;
 --space-23: 23px;
 --round-15: 15px;
@@ -94,6 +94,12 @@ sans toucher aux autres.
 ---
 
 ## 3. Recettes
+
+### Réchauffer ou refroidir TOUTE l’interface
+`1-primitives.css` → `--cream-hue`. Monter va vers le jaune, descendre vers le
+rose. Les sept nuances de crème partagent cette teinte : elles bougent
+ensemble, sans dériver les unes par rapport aux autres. C’est la seule molette
+de la couche 1 qu’on tourne sans rien casser.
 
 ### Rendre toutes les cartes plus claires
 `2-semantic.css` → `--surface-card: var(--cream-100);`

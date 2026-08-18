@@ -325,7 +325,7 @@
    la fiche dit ce qu'il reste à faire sans avoir à l'écrire ailleurs. */
 .event-card__name--waiting,
 .event-card__meta--waiting {
-  color: var(--brown-250);
+  color: var(--ink-waiting);
 }
 
 .event-card__meta {

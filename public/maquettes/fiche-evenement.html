@@ -14,12 +14,18 @@
       /* Tokens recopiés de src/styles/. La maquette doit tenir seule ; en cas
          d'écart, c'est l'app qui fait foi. */
       :root {
-        --cream-50: #fffbf5;
-        --cream-100: #f9f6ef;
-        --cream-150: #f6f2e9;
-        --cream-200: #f3f0e9;
-        --cream-300: #ebe6dd;
-        --stone-200: hsl(40 14% 88%);
+        /* Rampe crème — COPIE de src/styles/1-primitives.css.
+           Une maquette ne lit pas les tokens de l’app : quand la palette bouge
+           là-bas, ces lignes se recopient À LA MAIN. Sans ça la maquette
+           montre une DA morte, et on dessine sur une couleur qui n’existe plus. */
+        --cream-hue: 39;
+        --cream-50: hsl(var(--cream-hue) 100% 97.1%);
+        --cream-100: hsl(var(--cream-hue) 62% 95.5%);
+        --cream-200: hsl(var(--cream-hue) 61% 92.9%);
+        --cream-250: hsl(var(--cream-hue) 49% 92.4%);
+        --cream-300: hsl(var(--cream-hue) 44% 89.4%);
+        --cream-400: hsl(var(--cream-hue) 33% 88.2%);
+        --cream-500: hsl(var(--cream-hue) 40% 85.7%);
         --brown-200: #ebe3e3;
         --brown-250: #dcd5cb;
         --brown-400: #a79f9f;
@@ -31,14 +37,15 @@
         --clay-500: #c0642a;
         --electric-100: #e6e5fa;
         --electric-500: #5d5ae0;
+        --kaki-500: #7abe83;
 
         --family: 'Plus Jakarta Sans', system-ui, sans-serif;
 
         --surface-app: var(--cream-200);
         --surface-panel: var(--cream-50);
-        --surface-card: var(--cream-200);
+        --surface-card: var(--cream-250);
         --surface-control: var(--cream-100);
-        --surface-chip-neutral: var(--cream-300);
+        --surface-chip-neutral: var(--cream-400);
 
         --ink-title: var(--brown-700);
         --ink-strong: var(--brown-900);
@@ -47,8 +54,8 @@
         --ink-section: var(--brown-800);
         --ink-total: var(--brown-600);
 
-        --status-ok-ink: var(--electric-500);
-        --status-ok-surface: var(--electric-100);
+        --status-ok-ink: red;
+        --status-ok-surface: red;
         --status-pending-ink: var(--clay-500);
         --status-pending-surface: var(--clay-100);
 
@@ -443,7 +450,7 @@
       }
 
       .av--more {
-        background: var(--cream-300);
+        background: var(--cream-400);
         color: var(--ink-soft);
         font-size: 11px;
         font-weight: 700;
@@ -549,7 +556,7 @@
       .message + .message {
         margin-top: 18px;
         padding-top: 18px;
-        border-top: 1px solid var(--stone-200);
+        border-top: 1px solid var(--cream-400);
       }
 
       .message__avatar {
@@ -598,7 +605,7 @@
         gap: 12px;
         margin-top: 18px;
         padding-top: 18px;
-        border-top: 1px solid var(--stone-200);
+        border-top: 1px solid var(--cream-400);
       }
 
       .composer__field {
@@ -683,7 +690,7 @@
       }
 
       .ledger__row + .ledger__row {
-        border-top: 1px solid var(--stone-200);
+        border-top: 1px solid var(--cream-400);
       }
 
       .ledger__label {
@@ -775,7 +782,7 @@
       }
 
       .stepper__step:hover {
-        background: var(--stone-200);
+        background: var(--cream-400);
       }
 
       .stepper__dot {
@@ -864,7 +871,7 @@
 
       .cockpit__sep {
         height: 1px;
-        background: var(--stone-200);
+        background: var(--cream-400);
       }
 
       /* -------------------------------------------------------------- boutons */

@@ -13,30 +13,31 @@
 :root {
   /* ---------------------------------------------------------------------
      PALETTE — CRÈME
-     Du plus clair au plus foncé. C'est le socle de toute l'interface.
+     Du plus clair au plus foncé. C’est le socle de toute l’interface.
+
+     Écrite en HSL autour d’une SEULE molette, --cream-hue, comme la pierre
+     l’était avant elle. Raison : les sept nuances que porte l’app se sont
+     révélées être une seule et même teinte répétée — 37,5° à 41,5°, soit 39°
+     à un cheveu près. Ce qui les sépare n’est pas la teinte mais la
+     SATURATION. Les figer en hexadécimal, c’était condamner chaque
+     réchauffement futur à sept retouches à l’œil qui dérivent.
+
+     Pour réchauffer ou refroidir TOUTE l’interface d’un coup : --cream-hue.
+     Monter = vers le jaune. Descendre = vers le rose.
+
+     La pierre a disparu d’ici : c’était un gris chaud désaturé réservé à la
+     navigation. En montant la saturation, elle a rejoint la famille crème —
+     elle n’avait plus de raison de vivre à part. C’est --cream-500.
      --------------------------------------------------------------------- */
-  --cream-50: #fffbf5; /* le plus clair — grandes surfaces */
-  --cream-100: #f9f6ef; /* à peine teinté — contrôles posés sur le clair */
-  --cream-150: #f6f2e9; /* crème léger — les mois qui ont des dates */
-  --cream-200: #f3f0e9; /* le crème de référence — fond général */
-  --cream-300: #ebe6dd; /* crème appuyé — pastilles neutres */
+  --cream-hue: 39;
 
-  /* ---------------------------------------------------------------------
-     PALETTE — PIERRE
-     Gris chaud désaturé, pour les états de la navigation.
-
-     Écrite en HSL et non en hexadécimal, pour que toute nuance ajoutée plus
-     tard parte de la MÊME teinte et de la MÊME saturation. En 8 bits, deux
-     hexa de clarté différente ne retombent jamais sur la même teinte exacte
-     et l'écart se voit.
-
-     Pour réchauffer ou refroidir la navigation : --stone-hue.
-     Pour la rendre plus ou moins grise : --stone-saturation.
-     --------------------------------------------------------------------- */
-  --stone-hue: 40;
-  --stone-saturation: 14%;
-
-  --stone-200: hsl(var(--stone-hue) var(--stone-saturation) 88%);
+  --cream-50: hsl(var(--cream-hue) 100% 97.1%); /* panneau, carte de compte */
+  --cream-100: hsl(var(--cream-hue) 62% 95.5%); /* contrôles de la barre du haut */
+  --cream-200: hsl(var(--cream-hue) 61% 92.9%); /* le crème de référence — fond général */
+  --cream-250: hsl(var(--cream-hue) 49% 92.4%); /* cartes posées sur le panneau */
+  --cream-300: hsl(var(--cream-hue) 44% 89.4%); /* barres des mois qui ont une date */
+  --cream-400: hsl(var(--cream-hue) 33% 88.2%); /* survols, pastilles neutres */
+  --cream-500: hsl(var(--cream-hue) 40% 85.7%); /* nav active, liseré de menu */
 
   /* ---------------------------------------------------------------------
      PALETTE — BRUN (l'encre)
