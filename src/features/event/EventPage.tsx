@@ -193,37 +193,36 @@ export function EventPage() {
                   ))}
                 </div>
               )}
+
+              {/* Qui du reseau y sera : une ligne sous les tags, pas un bloc a
+                  part. C'est une precision sur la date, au meme titre que le
+                  lieu — pas un sujet qui merite son propre titre. Absente
+                  quand personne n'est annonce : une phrase pour dire « rien »
+                  coute une ligne et n'apprend rien. */}
+              {friends.length > 0 && (
+                <div className="event-page__companions">
+                  <div className="event-page__avatars">
+                    {friends.slice(0, 5).map((friend) => (
+                      <span key={friend.id} className="event-page__avatar">
+                        <Avatar src={friend.avatarUrl} name={friend.name} />
+                      </span>
+                    ))}
+                  </div>
+                  <span className="event-page__companions-text">
+                    {friends.length === 1 ? (
+                      <>
+                        <b>{friends[0].name}</b> y sera
+                      </>
+                    ) : (
+                      <>
+                        <b>{friends.length} exposants</b> que tu suis y seront
+                      </>
+                    )}
+                  </span>
+                </div>
+              )}
             </div>
           </header>
-
-          <Block title="Tes compagnons sur cette date" empty={friends.length === 0}>
-            {friends.length > 0 ? (
-              <div className="event-page__companions">
-                <div className="event-page__avatars">
-                  {friends.slice(0, 5).map((friend) => (
-                    <span key={friend.id} className="event-page__avatar">
-                      <Avatar src={friend.avatarUrl} name={friend.name} />
-                    </span>
-                  ))}
-                </div>
-                <span className="event-page__companions-text">
-                  {friends.length === 1 ? (
-                    <>
-                      <b>{friends[0].name}</b> y sera
-                    </>
-                  ) : (
-                    <>
-                      <b>{friends.length} exposants</b> que tu suis y seront
-                    </>
-                  )}
-                </span>
-              </div>
-            ) : (
-              <p className="event-page__state">
-                Personne de ton réseau n’est encore annoncé sur cette date.
-              </p>
-            )}
-          </Block>
 
           <Block
             title="À propos de l’événement"

@@ -1,12 +1,12 @@
-# Graph Report - .  (2026-08-18)
+# Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 55 files · ~540,858 words
+- 56 files · ~541,236 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 232 nodes · 200 edges · 64 communities detected
-- Extraction: 83% EXTRACTED · 16% INFERRED · 2% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
+- 234 nodes · 201 edges · 65 communities detected
+- Extraction: 83% EXTRACTED · 15% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -74,6 +74,7 @@
 - [[_COMMUNITY_Community 61|Community 61]]
 - [[_COMMUNITY_Community 62|Community 62]]
 - [[_COMMUNITY_Community 63|Community 63]]
+- [[_COMMUNITY_Community 64|Community 64]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Fellowship V1 Design Spec` - 8 edges
@@ -187,11 +188,11 @@ Nodes (3): fetchFriendProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
 
 ### Community 18 - "Community 18"
 Cohesion: 0.5
-Nodes (1): json()
+Nodes (0): 
 
 ### Community 19 - "Community 19"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): json()
 
 ### Community 20 - "Community 20"
 Cohesion: 0.67
@@ -206,16 +207,16 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 23 - "Community 23"
-Cohesion: 1.0
-Nodes (2): useTransitionNavigate(), useViewTransition()
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 24 - "Community 24"
 Cohesion: 1.0
-Nodes (2): cleanRichText(), isRichTextEmpty()
+Nodes (2): useTransitionNavigate(), useViewTransition()
 
 ### Community 25 - "Community 25"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 1.0
+Nodes (2): cleanRichText(), isRichTextEmpty()
 
 ### Community 26 - "Community 26"
 Cohesion: 0.67
@@ -363,9 +364,13 @@ Nodes (0):
 
 ### Community 62 - "Community 62"
 Cohesion: 1.0
-Nodes (1): Vite + React + TS Template
+Nodes (0): 
 
 ### Community 63 - "Community 63"
+Cohesion: 1.0
+Nodes (1): Vite + React + TS Template
+
+### Community 64 - "Community 64"
 Cohesion: 1.0
 Nodes (1): Pastel Tag System
 
@@ -442,17 +447,19 @@ Nodes (1): Pastel Tag System
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 57`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (1 nodes): `setup.ts`
+- **Thin community `Community 58`** (1 nodes): `tags.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (1 nodes): `database.ts`
+- **Thin community `Community 59`** (1 nodes): `setup.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (1 nodes): `supabase.ts`
+- **Thin community `Community 60`** (1 nodes): `database.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (1 nodes): `cors.ts`
+- **Thin community `Community 61`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 62`** (1 nodes): `Vite + React + TS Template`
+- **Thin community `Community 62`** (1 nodes): `cors.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (1 nodes): `Pastel Tag System`
+- **Thin community `Community 63`** (1 nodes): `Vite + React + TS Template`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 64`** (1 nodes): `Pastel Tag System`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
@@ -465,9 +472,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **Why does `Design System Refonte Plan` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+  _High betweenness centrality (0.048) - this node is a cross-community bridge._
 - **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**

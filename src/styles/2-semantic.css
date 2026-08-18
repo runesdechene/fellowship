@@ -357,9 +357,9 @@
 
   /* La bande de compagnons : des avatars qui se chevauchent, comme dans la
      liste « à venir », mais à taille lisible. */
-  --companion-avatar-size: var(--width-companion-avatar);
+  --companion-avatar-size: var(--width-avatar-account);
   --companion-overlap: -8px;
-  --companion-gap: var(--space-18);
+  --companion-gap: var(--space-12);
 
   /* LE SUIVI — les crans de participation et de paiement.
 

@@ -236,11 +236,15 @@
 
 /* --- Les compagnons ------------------------------------------------------- */
 /* Une bande d'avatars qui se chevauchent, puis la phrase qui les compte. Le
-   chevauchement dit « un groupe » là où une liste dirait « des gens ». */
+   chevauchement dit « un groupe » là où une liste dirait « des gens ».
+
+   Cette ligne vit sous les tags, dans l'accroche : c'est une précision sur la
+   date, au même titre que le lieu. Elle n'a pas de bloc à elle. */
 .event-page__companions {
   display: flex;
   align-items: center;
   gap: var(--companion-gap);
+  margin-top: var(--space-18);
 }
 
 .event-page__avatars {
@@ -252,7 +256,7 @@
 
   display: inline-flex;
   margin-left: var(--companion-overlap);
-  border: 2px solid var(--surface-card);
+  border: 2px solid var(--surface-panel);
   border-radius: var(--radius-round);
 }
 
