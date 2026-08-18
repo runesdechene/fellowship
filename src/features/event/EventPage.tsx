@@ -29,10 +29,13 @@ function formatRange(start: Date, end: Date): string {
 function Block({
   title,
   empty,
+  bare,
   children,
 }: {
   title: string
   empty?: boolean
+  /** Sans carte : le contenu se pose a meme le panneau (les infos pratiques). */
+  bare?: boolean
   children: React.ReactNode
 }) {
   return (
@@ -40,7 +43,7 @@ function Block({
       <h2 className={empty ? 'event-page__block-title--empty' : 'event-page__block-title'}>
         {title}
       </h2>
-      <div className="event-page__card">{children}</div>
+      {bare ? children : <div className="event-page__card">{children}</div>}
     </section>
   )
 }
@@ -60,14 +63,12 @@ function Fact({
 }) {
   return (
     <div className="event-page__fact">
-      <span className="event-page__fact-icon">
-        <Icon size={15} strokeWidth={1.8} />
+      <span className="event-page__fact-label">
+        <Icon size={13} strokeWidth={2} />
+        {label}
       </span>
-      <span className="event-page__fact-body">
-        <span className="event-page__fact-label">{label}</span>
-        <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
-          {value || 'Non renseigné'}
-        </span>
+      <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
+        {value || 'Non renseigné'}
       </span>
     </div>
   )
@@ -238,7 +239,7 @@ export function EventPage() {
             )}
           </Block>
 
-          <Block title="Infos pratiques">
+          <Block title="Infos pratiques" bare>
             <div className="event-page__facts">
               <Fact Icon={CalendarDays} label="Dates" value={formatRange(startDate, endDate)} />
               <Fact Icon={Clock} label="Horaires" value={event.opening_hours} />
