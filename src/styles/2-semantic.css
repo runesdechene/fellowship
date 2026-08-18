@@ -324,6 +324,15 @@
   --event-columns-gap: var(--space-32);
   --event-main-min-width: var(--width-main-min);
   --cockpit-width: var(--width-cockpit);
+
+  /* La fiche est le SEUL ecran a deux colonnes. Si elle gardait la largeur du
+     tableau de bord, sa colonne de lecture tomberait a 566 px — le cockpit et
+     son ecart lui prendraient 352 px sur 918. Elle s'elargit donc d'exactement
+     ce que le cockpit occupe : le texte retrouve la largeur de lecture des
+     autres ecrans, et le suivi s'ajoute a cote au lieu de mordre dedans. */
+  --event-page-max-width: calc(
+    var(--page-max-width) + var(--cockpit-width) + var(--event-columns-gap)
+  );
   --cockpit-top: var(--space-32);
   --cockpit-gap: var(--space-26); /* entre deux blocs du suivi */
   --cockpit-padding: var(--card-padding);
