@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fiche — infos pratiques et suivi, options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Tokens recopiés de src/styles/. En cas d'écart, c'est l'app qui fait foi. */
+      :root {
+        --cream-50: #fffbf5;
+        --cream-100: #f9f6ef;
+        --cream-200: #f3f0e9;
+        --cream-300: #ebe6dd;
+        --stone-200: hsl(40 14% 88%);
+        --brown-200: #ebe3e3;
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+        --olive-100: #e8f0d8;
+        --olive-500: #84aa3c;
+        --clay-100: #f6e7dc;
+        --clay-500: #c0642a;
+        --electric-100: #e6e5fa;
+        --electric-500: #5d5ae0;
+
+        --family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-200);
+        --ink-title: var(--brown-700);
+        --ink-soft: var(--brown-400);
+        --ink-body: var(--brown-700);
+        --ink-section: var(--brown-800);
+        --ink-ghost: var(--brown-200);
+        --ink-missing: var(--brown-400);
+        --ink-total: var(--brown-600);
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-chip: 8px;
+        --radius-round: 9999px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-app);
+        color: var(--ink-title);
+        font-family: var(--family);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 64px 32px 96px;
+        display: flex;
+        flex-direction: column;
+        gap: 72px;
+      }
+
+      .doc-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .doc-title {
+        font-size: 38px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .doc-lede {
+        margin-top: 14px;
+        max-width: 74ch;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--ink-total);
+      }
+
+      .family {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .family__title {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      .family__note {
+        max-width: 74ch;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+
+      .option {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .option__label {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .option__label b {
+        color: var(--olive-500);
+      }
+
+      .option__why {
+        max-width: 74ch;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+
+      .panel {
+        background: var(--surface-panel);
+        border-radius: 20px;
+        padding: 32px;
+      }
+
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-card);
+        padding: 23px;
+      }
+
+      .block-title {
+        margin-bottom: 20px;
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      /* =====================================================================
+         INFOS PRATIQUES — A · en lignes
+         ================================================================== */
+      .rows__row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+        min-height: 42px;
+      }
+
+      .rows__row + .rows__row {
+        border-top: 1px solid var(--stone-200);
+      }
+
+      .rows__label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .rows__value {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-title);
+        text-align: right;
+      }
+
+      .rows__value--none {
+        font-weight: 500;
+        font-style: italic;
+        color: var(--ink-missing);
+      }
+
+      /* =====================================================================
+         INFOS PRATIQUES — B · paires serrées, sans tuile
+         ================================================================== */
+      .pairs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 22px 32px;
+      }
+
+      .pairs__label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .pairs__value {
+        margin-top: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink-title);
+      }
+
+      .pairs__value--none {
+        font-weight: 500;
+        font-style: italic;
+        color: var(--ink-missing);
+      }
+
+      /* =====================================================================
+         INFOS PRATIQUES — C · en clair, sans carte
+         ================================================================== */
+      .plain {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 32px;
+      }
+
+      .plain__label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .plain__value {
+        margin-top: 6px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .plain__value--none {
+        font-size: 15px;
+        font-weight: 500;
+        font-style: italic;
+        color: var(--ink-missing);
+      }
+
+      /* =====================================================================
+         LE SUIVI — colonne de droite
+         ================================================================== */
+      .cockpits {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
+
+      .cockpit {
+        width: 320px;
+        padding: 23px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+      }
+
+      .cockpit__label {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .cockpit__sep {
+        height: 1px;
+        background: var(--stone-200);
+      }
+
+      /* --- A · cases à cocher ------------------------------------------- */
+      .checks {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 40px;
+        padding: 0 10px;
+        border: 0;
+        border-radius: var(--radius-nav);
+        background: none;
+        color: var(--ink-soft);
+        font-family: var(--family);
+        font-size: 13px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .check:hover {
+        background: var(--stone-200);
+      }
+
+      .check__box {
+        width: 19px;
+        height: 19px;
+        flex: none;
+        border-radius: 6px;
+        border: 1.5px solid var(--brown-250);
+        background: var(--surface-panel);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: transparent;
+      }
+
+      .check--done {
+        color: var(--ink-title);
+      }
+
+      .check--done .check__box {
+        background: var(--olive-500);
+        border-color: var(--olive-500);
+        color: var(--cream-50);
+      }
+
+      /* La prochaine étape : la case reste vide, mais le contour s'affirme et
+         le libellé passe à pleine encre. Rien n'est rempli tant que rien n'est
+         fait. */
+      .check--next {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .check--next .check__box {
+        border-color: var(--ink-title);
+        border-width: 2px;
+      }
+
+      /* --- B · frise reliée ---------------------------------------------- */
+      .rail {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .rail__step {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 9px 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        cursor: pointer;
+      }
+
+      .rail__dot {
+        position: relative;
+        z-index: 1;
+        width: 15px;
+        height: 15px;
+        flex: none;
+        border-radius: var(--radius-round);
+        border: 2px solid var(--brown-250);
+        background: var(--surface-card);
+      }
+
+      /* Le trait qui relie deux crans. Olive jusqu'à l'étape atteinte. */
+      .rail__step:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 50%;
+        width: 2px;
+        height: 100%;
+        background: var(--brown-250);
+      }
+
+      .rail__step--done {
+        color: var(--ink-title);
+      }
+
+      .rail__step--done .rail__dot {
+        background: var(--olive-500);
+        border-color: var(--olive-500);
+      }
+
+      .rail__step--done:not(:last-child)::before {
+        background: var(--olive-500);
+      }
+
+      .rail__step--now {
+        color: var(--ink-title);
+        font-weight: 700;
+      }
+
+      .rail__step--now .rail__dot {
+        border-color: var(--olive-500);
+        border-width: 4px;
+      }
+
+      /* --- C · l'état, puis le geste suivant ----------------------------- */
+      .now {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .now__state {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .now__badge {
+        width: 22px;
+        height: 22px;
+        border-radius: var(--radius-round);
+        background: var(--olive-500);
+        color: var(--cream-50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
+      .now__value {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .now__next {
+        width: 100%;
+        padding: 12px;
+        border: 0;
+        border-radius: var(--radius-nav);
+        background: var(--olive-500);
+        color: var(--cream-50);
+        font-family: var(--family);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .now__back {
+        background: none;
+        border: 0;
+        padding: 0;
+        font-family: var(--family);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .amount {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+      }
+
+      .amount__label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .amount__value {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .verdict {
+        max-width: 74ch;
+        border-left: 2px solid var(--olive-500);
+        padding-left: 16px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+
+      .verdict b {
+        color: var(--ink-title);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="page">
+      <header>
+        <p class="doc-eyebrow">Fellowship V2 · à comparer</p>
+        <h1 class="doc-title">Les infos pratiques, et le suivi</h1>
+        <p class="doc-lede">
+          Deux endroits de la fiche qui ne vont pas. Trois options chacun, avec
+          ce que chacune coûte. Rien n'est décidé — dis-moi une lettre par
+          famille et je code celle-là.
+        </p>
+      </header>
+
+      <!-- ================================================================= -->
+      <section class="family">
+        <h2 class="family__title">Les infos pratiques</h2>
+        <p class="family__note">
+          Ce qui cloche aujourd'hui : six tuiles d'icônes pâles posées sur un
+          fond pâle, ça fait du bruit sans rien hiérarchiser. Et une info
+          absente occupe autant de place qu'une info présente, alors qu'on ne
+          lit pas les deux de la même façon.
+        </p>
+
+        <div class="option">
+          <span class="option__label">A · en lignes <b>— ma recommandation</b></span>
+          <div class="panel">
+            <h3 class="block-title">Infos pratiques</h3>
+            <div class="card">
+              <div class="rows__row">
+                <span class="rows__label">Dates</span>
+                <span class="rows__value">13 – 14 juin 2026</span>
+              </div>
+              <div class="rows__row">
+                <span class="rows__label">Horaires</span>
+                <span class="rows__value">10 h – 19 h</span>
+              </div>
+              <div class="rows__row">
+                <span class="rows__label">Lieu</span>
+                <span class="rows__value">Place du Châtel, Provins (77)</span>
+              </div>
+              <div class="rows__row">
+                <span class="rows__label">Fréquentation attendue</span>
+                <span class="rows__value rows__value--none">Non renseignée</span>
+              </div>
+              <div class="rows__row">
+                <span class="rows__label">Candidatures jusqu’au</span>
+                <span class="rows__value">15 avril 2026</span>
+              </div>
+              <div class="rows__row">
+                <span class="rows__label">Emplacement (3 × 3 m)</span>
+                <span class="rows__value">180 €</span>
+              </div>
+            </div>
+          </div>
+          <p class="option__why">
+            Deux colonnes invisibles : ce qu'on cherche à gauche, la réponse à
+            droite. L'œil descend une seule fois. Les valeurs sont alignées
+            entre elles, donc une absence se repère sans crier. Aucune icône —
+            elles ne servaient à rien qu'à remplir. Coût : c'est plus haut
+            qu'une grille, et six lignes prennent de la place.
+          </p>
+        </div>
+
+        <div class="option">
+          <span class="option__label">B · paires serrées, sans les tuiles</span>
+          <div class="panel">
+            <h3 class="block-title">Infos pratiques</h3>
+            <div class="card">
+              <div class="pairs">
+                <div>
+                  <span class="pairs__label">▤ Dates</span>
+                  <p class="pairs__value">13 – 14 juin 2026</p>
+                </div>
+                <div>
+                  <span class="pairs__label">◷ Horaires</span>
+                  <p class="pairs__value">10 h – 19 h</p>
+                </div>
+                <div>
+                  <span class="pairs__label">◎ Lieu</span>
+                  <p class="pairs__value">Provins (77)</p>
+                </div>
+                <div>
+                  <span class="pairs__label">◉ Fréquentation</span>
+                  <p class="pairs__value pairs__value--none">Non renseignée</p>
+                </div>
+                <div>
+                  <span class="pairs__label">✎ Candidatures jusqu’au</span>
+                  <p class="pairs__value">15 avril 2026</p>
+                </div>
+                <div>
+                  <span class="pairs__label">⌂ Emplacement</span>
+                  <p class="pairs__value">180 €</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="option__why">
+            Le minimum de changement : on retire les tuiles, l'icône revient en
+            petit dans le libellé, et le libellé passe en capitales pour se
+            distinguer de la valeur. Compact, familier. Coût : ça reste une
+            grille éparse, et sur une ligne de trois colonnes le regard ne sait
+            toujours pas par où commencer.
+          </p>
+        </div>
+
+        <div class="option">
+          <span class="option__label">C · en clair, sans carte</span>
+          <div class="panel">
+            <h3 class="block-title">Infos pratiques</h3>
+            <div class="plain">
+              <div>
+                <span class="plain__label">Dates</span>
+                <p class="plain__value">13 – 14 juin</p>
+              </div>
+              <div>
+                <span class="plain__label">Emplacement</span>
+                <p class="plain__value">180 €</p>
+              </div>
+              <div>
+                <span class="plain__label">Candidatures jusqu’au</span>
+                <p class="plain__value">15 avril</p>
+              </div>
+              <div>
+                <span class="plain__label">Horaires</span>
+                <p class="plain__value">10 h – 19 h</p>
+              </div>
+              <div>
+                <span class="plain__label">Lieu</span>
+                <p class="plain__value">Provins (77)</p>
+              </div>
+              <div>
+                <span class="plain__label">Fréquentation</span>
+                <p class="plain__value plain__value--none">Non renseignée</p>
+              </div>
+            </div>
+          </div>
+          <p class="option__why">
+            Pas de carte du tout : les valeurs en grand, posées sur le panneau,
+            comme une fiche technique. Ça respire et les chiffres sautent aux
+            yeux. Coût : c'est le plus encombrant des trois, et une info absente
+            en grand format fait un trou visible — ce qui peut être voulu, ou
+            insupportable.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <section class="family">
+        <h2 class="family__title">Le suivi</h2>
+        <p class="family__note">
+          Ce qui cloche : la barre marron pleine ressemble à un bouton
+          sélectionné, on ne sait pas si elle affiche un état ou si elle
+          commande quelque chose. Et les deux suivis — participation et
+          paiement — se ressemblent trop pour qu'on distingue lequel on lit.
+        </p>
+
+        <div class="cockpits">
+          <div class="option">
+            <span class="option__label">A · cases à cocher <b>— ma recommandation</b></span>
+            <div class="cockpit">
+              <div>
+                <span class="cockpit__label">Participation</span>
+                <div class="checks">
+                  <button class="check check--done"><span class="check__box">✓</span> Intéressé</button>
+                  <button class="check check--done"><span class="check__box">✓</span> Dossier en cours</button>
+                  <button class="check check--next"><span class="check__box"></span> Inscrit</button>
+                </div>
+              </div>
+              <div class="cockpit__sep"></div>
+              <div>
+                <span class="cockpit__label">Paiement</span>
+                <div class="checks">
+                  <button class="check check--next"><span class="check__box"></span> À payer</button>
+                  <button class="check"><span class="check__box"></span> Acompte versé</button>
+                  <button class="check"><span class="check__box"></span> Payé</button>
+                </div>
+              </div>
+              <div class="amount">
+                <span class="amount__label">Prix de la place</span>
+                <span class="amount__value">180 €</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="option">
+            <span class="option__label">B · frise reliée</span>
+            <div class="cockpit">
+              <div>
+                <span class="cockpit__label">Participation</span>
+                <div class="rail">
+                  <div class="rail__step rail__step--done"><span class="rail__dot"></span> Intéressé</div>
+                  <div class="rail__step rail__step--done"><span class="rail__dot"></span> Dossier en cours</div>
+                  <div class="rail__step rail__step--now"><span class="rail__dot"></span> Inscrit</div>
+                </div>
+              </div>
+              <div class="cockpit__sep"></div>
+              <div>
+                <span class="cockpit__label">Paiement</span>
+                <div class="rail">
+                  <div class="rail__step rail__step--now"><span class="rail__dot"></span> À payer</div>
+                  <div class="rail__step"><span class="rail__dot"></span> Acompte versé</div>
+                  <div class="rail__step"><span class="rail__dot"></span> Payé</div>
+                </div>
+              </div>
+              <div class="amount">
+                <span class="amount__label">Prix de la place</span>
+                <span class="amount__value">180 €</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="option">
+            <span class="option__label">C · l’état, puis le geste suivant</span>
+            <div class="cockpit">
+              <div>
+                <span class="cockpit__label">Participation</span>
+                <div class="now">
+                  <div class="now__state">
+                    <span class="now__badge">✓</span>
+                    <span class="now__value">Inscrit</span>
+                  </div>
+                  <button class="now__back">← Revenir à « dossier en cours »</button>
+                </div>
+              </div>
+              <div class="cockpit__sep"></div>
+              <div>
+                <span class="cockpit__label">Paiement</span>
+                <div class="now">
+                  <div class="now__state">
+                    <span class="now__value">Place à payer</span>
+                  </div>
+                  <button class="now__next">J’ai versé un acompte</button>
+                  <button class="now__next">J’ai tout payé</button>
+                </div>
+              </div>
+              <div class="amount">
+                <span class="amount__label">Prix de la place</span>
+                <span class="amount__value">180 €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="verdict">
+          <b>Pourquoi je pousse le A.</b> Une case à cocher est la seule forme
+          dont personne n'a jamais à se demander ce qu'elle fait : on la coche,
+          on la décoche. Elle dit l'état ET la commande d'un seul dessin, ce que
+          la barre pleine n'arrivait pas à faire. L'olive garde son rôle — ce
+          qui est acquis — et la prochaine étape se distingue par un simple
+          contour appuyé, sans rien remplir : rien n'est fait tant que rien
+          n'est fait.
+          <br /><br />
+          <b>Le B est plus joli</b> et montre mieux la progression, mais il
+          ressemble à un affichage, pas à un contrôle : tu risques de ne pas
+          penser à cliquer dessus.
+          <br /><br />
+          <b>Le C est le plus clair de tous</b> à l'instant T, mais il cache le
+          chemin : on ne voit plus qu'il reste des étapes, et le retour arrière
+          devient un lien qu'on ne lit pas. Il vaut le coup si tu penses que les
+          exposants s'en fichent du chemin et ne veulent que le prochain geste.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

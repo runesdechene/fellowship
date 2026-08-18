@@ -71,8 +71,8 @@
   --ink-total: var(--brown-600); /* le grand total de saison */
   /* Le corps de texte qu'on LIT — une description, un paragraphe entier.
      --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
-     disparait. Un cran plus fonce, sans aller jusqu'a l'encre des titres. */
-  --ink-body: var(--brown-600);
+     disparait. Un paragraphe se lit comme un titre se lit : a pleine encre. */
+  --ink-body: var(--brown-700);
   /* Seconde couleur d'accent : ce sur quoi on agit. L'olive dit un état
      acquis, le bleu dit une commande — les deux ne se croisent jamais. */
   --accent-interactive: var(--electric-500);
