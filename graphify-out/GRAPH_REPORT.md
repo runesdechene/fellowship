@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 63 files · ~567,933 words
+- 63 files · ~567,529 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 267 nodes · 229 edges · 72 communities detected
+- 266 nodes · 228 edges · 72 communities detected
 - Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -226,27 +226,27 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 26 - "Community 26"
-Cohesion: 0.67
-Nodes (0): 
-
-### Community 27 - "Community 27"
 Cohesion: 1.0
 Nodes (2): ecrire(), enregistrerLeMontant()
 
-### Community 28 - "Community 28"
+### Community 27 - "Community 27"
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 29 - "Community 29"
+### Community 28 - "Community 28"
 Cohesion: 1.0
 Nodes (2): useTransitionNavigate(), useViewTransition()
 
-### Community 30 - "Community 30"
+### Community 29 - "Community 29"
 Cohesion: 1.0
 Nodes (2): cleanRichText(), isRichTextEmpty()
 
-### Community 31 - "Community 31"
+### Community 30 - "Community 30"
 Cohesion: 0.67
+Nodes (0): 
+
+### Community 31 - "Community 31"
+Cohesion: 1.0
 Nodes (0): 
 
 ### Community 32 - "Community 32"
@@ -420,6 +420,8 @@ Nodes (1): Pastel Tag System
 ## Knowledge Gaps
 - **37 isolated node(s):** `Netlify Deployment (PWA, SPA fallback)`, `Supabase Auth via Magic Link OTP`, `Vite + React + TS Template`, `Phase 0 Cleanup (Remove Tauri)`, `Test Infrastructure (Vitest + RTL)` (+32 more)
   These have ≤1 connection - possible missing edges or undocumented components.
+- **Thin community `Community 31`** (2 nodes): `PosterWall()`, `PosterWall.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 32`** (2 nodes): `Topbar.tsx`, `Topbar()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 33`** (2 nodes): `Button()`, `Button.tsx`

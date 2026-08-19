@@ -415,7 +415,11 @@
      lit comme une dalle posée sur le crème. On a essayé l'inverse — le
      panneau s'arrondissant par-dessus l'image — et Uriel a tranché pour
      celui-ci. Son propre jeton : c'est le même rayon que le panneau, mais
-     rien ne dit qu'il doive le rester. */
+     rien ne dit qu'il doive le rester.
+
+     Ils sont sur l'IMAGE et non sur son cadre, ce qui les fait voyager avec
+     elle pendant la glissade : deux coins arrondis qui traversent l'écran,
+     plutôt qu'un masque fixe derrière lequel une image défile. */
   --wall-radius: var(--radius-panel);
 
   /* LE VOILE EST BRUN, ET C'EST CE QUI LE REND UTILE.
