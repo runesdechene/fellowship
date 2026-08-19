@@ -93,8 +93,12 @@
         --control-height: 42px;
         --width-sidebar: 263px;
         /* Le mur d’affiche : 38 % de la fenêtre, comme sur ta maquette. */
-        --width-wall: 38vw;
-        --width-reading: 452px;
+        --width-wall: 34vw;
+        /* La colonne suit l ecran. Uriel travaille sur 2478 px de large :
+           une largeur fixe y laisse un timbre-poste au milieu du panneau.
+           Le plancher garde la mise en page sur un portable, le plafond
+           empeche la ligne de depasser une longueur lisible. */
+        --width-reading: clamp(452px, 34vw, 760px);
       }
 
       *,
@@ -723,7 +727,20 @@
         transform: scale(1.18);
       }
 
+      /* COVER — le parti pris d Uriel : l affiche remplit le mur, quitte a
+         etre coupee. C est un effet de style, pas un accident : le bord droit
+         qui sort du cadre dit que l image continue au-dela de l ecran. */
       .wall__poster {
+        object-fit: cover;
+      }
+
+      body[data-affiche='cover'] .wall__blur {
+        display: none;
+      }
+
+      /* ENTIERE — l affiche complete posee sur son propre flou. Rien n est
+         jamais rogne, quel que soit le format. Le prix : des marges. */
+      body[data-affiche='entiere'] .wall__poster {
         object-fit: contain;
       }
 
@@ -736,6 +753,78 @@
          recentre dans le panneau. Une page sans affiche n’est pas une page
          cassée, c’est une page plus calme. */
       body[data-affiche='non'] .wall {
+        display: none;
+      }
+
+      /* =====================================================================
+         LE MODULE DE STATUT D URIEL
+         =====================================================================
+         Sa version : le mot « Statut » a la taille d un titre de section, et
+         la valeur en pilule verte pleine, calee a droite. Les trois controles
+         de paiement vivent dans une barre creme en dessous.
+         ===================================================================== */
+      .statut {
+        margin-bottom: 34px;
+      }
+
+      .statut__row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+
+      .statut__title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      .statut__pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: var(--control-height);
+        flex: 1 1 auto;
+        max-width: 320px;
+        margin-left: auto;
+        padding: 0 14px;
+        border-radius: var(--radius-nav);
+        background: var(--status-ok-surface);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--status-ok-ink);
+      }
+
+      .statut__pill svg:first-child {
+        width: 15px;
+        height: 15px;
+        flex: none;
+        color: var(--olive-400);
+      }
+
+      .statut__pill .chev {
+        margin-left: auto;
+        color: var(--status-ok-ink);
+        opacity: 0.7;
+      }
+
+      .statut__bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
+
+      /* --- l aiguillage entre les deux modules -------------------------- */
+      body[data-statut='tiberius'] .statut {
+        display: none;
+      }
+
+      body[data-statut='uriel'] .track {
         display: none;
       }
 
@@ -798,7 +887,7 @@
          ===================================================================== */
       @media (max-width: 1180px) {
         :root {
-          --width-wall: 32vw;
+          --width-wall: 30vw;
         }
       }
 
@@ -854,7 +943,7 @@
     </style>
   </head>
 
-  <body data-couleur="inversion" data-affiche="oui">
+  <body data-couleur="inversion" data-affiche="cover" data-statut="uriel">
     <div class="shell">
       <!-- ============================================================ -->
       <aside class="sidebar">
@@ -1024,7 +1113,68 @@
             <span><b>Gautier</b> et <b>Pooka</b> y seront aussi</span>
           </p>
 
-          <!-- LE SUIVI -->
+          <!-- LE SUIVI — version URIEL -->
+          <div class="statut">
+            <div class="statut__row">
+              <span class="statut__title">Statut</span>
+              <button class="statut__pill">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                Inscrit
+                <svg
+                  class="chev"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="statut__bar">
+              <div class="seg">
+                <button aria-pressed="true">Je paie ma place</button>
+                <button aria-pressed="false">On me paie pour venir</button>
+              </div>
+              <div class="money">
+                <input
+                  class="money__input"
+                  placeholder="Ex : 150"
+                  aria-label="Montant"
+                />
+                <span class="money__state">
+                  <span class="dot dot--todo"></span>
+                  À payer
+                  <svg
+                    class="chev"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LE SUIVI — version TIBÉRIUS -->
           <div class="track">
             <div class="track__row">
               <span class="track__label">Ma place</span>
@@ -1180,9 +1330,16 @@
 
     <!-- ================================================================ -->
     <div class="lab">
-      <div class="lab__title">Le mur, sans affiche</div>
+      <div class="lab__title">Module de statut</div>
+      <div class="lab__switch" data-axe="statut">
+        <button data-set="uriel" aria-pressed="true">Uriel</button>
+        <button data-set="tiberius" aria-pressed="false">Tibérius</button>
+      </div>
+
+      <div class="lab__title">L’affiche</div>
       <div class="lab__switch" data-axe="affiche">
-        <button data-set="oui" aria-pressed="true">Avec</button>
+        <button data-set="cover" aria-pressed="true">Coupée</button>
+        <button data-set="entiere" aria-pressed="false">Entière</button>
         <button data-set="non" aria-pressed="false">Sans</button>
       </div>
 
