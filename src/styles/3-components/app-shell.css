@@ -25,15 +25,37 @@
 
 .app-shell__main {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
   min-width: 0;
-  background: var(--surface-panel);
-  border-radius: var(--radius-panel) 0 0 var(--radius-panel);
 
   /* Nommé pour la transition de page : c'est CE panneau qui change d'un
      écran à l'autre, pas la colonne de gauche. La nommer l'extrait de
      l'instantané global, donc la barre latérale ne bouge pas. */
   view-transition-name: main-panel;
+}
+
+/* LE FOND DU PANNEAU EST UNE COUCHE COLLÉE À L’ÉCRAN, pas le fond de
+   l’élément. Peint sur l’élément, il défile avec lui : ses coins arrondis
+   partent vers le haut dès qu’on descend, et on se retrouve avec une arête
+   droite alors que la barre de gauche et le mur d’affiche, eux, restent.
+
+   Un bloc `sticky` de 100 vh, sorti du flux par une marge négative de la
+   même hauteur. Il prend automatiquement la largeur du panneau — donc il
+   suit le repli de la barre de gauche et la présence ou non du mur, sans
+   qu’aucune valeur ait à être répétée ici.
+
+   C’est aussi ce qui permet de NE PAS réintroduire de scroll interne : le
+   contenu continue de défiler avec le document, seul son fond est fixe. */
+.app-shell__main::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  z-index: -1;
+  height: 100vh;
+  margin-bottom: -100vh;
+  border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+  background: var(--surface-panel);
 }
