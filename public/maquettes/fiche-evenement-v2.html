@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fiche d’événement — le mur d’affiche</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =====================================================================
+         COUCHE 1 — PRIMITIVES
+         COPIE de src/styles/1-primitives.css.
+         ===================================================================== */
+      :root {
+        --cream-hue: 39;
+        --cream-50: hsl(var(--cream-hue) 100% 97.1%);
+        --cream-100: hsl(var(--cream-hue) 62% 95.5%);
+        --cream-200: hsl(var(--cream-hue) 61% 92.9%);
+        --cream-250: hsl(var(--cream-hue) 49% 92.4%);
+        --cream-300: hsl(var(--cream-hue) 44% 89.4%);
+        --cream-400: hsl(var(--cream-hue) 33% 88.2%);
+        --cream-500: hsl(var(--cream-hue) 40% 85.7%);
+
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+
+        /* OLIVE — 81°, saturation 48 %. Une couleur, trois clartés :
+             500  #84aa3c  la tienne, INTACTE — décoratif seulement
+             400  #729334  3,03:1 sur le vert pâle — plancher d’une icône
+             700  #556d26  5,00:1 — dès que la couleur PORTE du texte */
+        --olive-100: #def5c8;
+        --olive-400: #729334;
+        --olive-500: #84aa3c;
+        --olive-700: #556d26;
+
+        /* BLÉ — 51°, saturation 55 %. Même logique. */
+        --wheat-100: #e9e1b4;
+        --wheat-500: #b29f34;
+        --wheat-700: #6b5f1f;
+
+        --family-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI',
+          sans-serif;
+
+        --tracking-wide: 0.08em;
+        --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
+      }
+
+      /* =====================================================================
+         COUCHE 2 — SÉMANTIQUE
+         ===================================================================== */
+      :root {
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-250);
+        --surface-raised: var(--cream-50);
+        --surface-nav-active: var(--cream-500);
+        --surface-control: var(--cream-100);
+        --surface-row-hover: var(--cream-300);
+        --border-hairline: var(--cream-400);
+
+        --ink-title: var(--brown-700);
+        --ink-section: var(--brown-800);
+        --ink-body: var(--brown-700);
+        /* --ink-soft tombait à 2,25:1 sur une carte, posé 60 fois dans
+           17 composants de l’app. Ici : 4,91:1. */
+        --ink-soft: var(--brown-600);
+        --ink-ghost: var(--brown-400);
+
+        --action-surface: var(--brown-900);
+        --action-ink: var(--cream-50);
+
+        --status-ok-surface: var(--olive-100);
+        --status-ok-ink: var(--olive-700);
+        --status-ok-mark: var(--olive-500);
+
+        --status-todo-surface: var(--wheat-100);
+        --status-todo-ink: var(--wheat-700);
+        --status-todo-mark: var(--wheat-500);
+
+        --radius-panel: 20px;
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-round: 9999px;
+
+        --control-height: 42px;
+        --width-sidebar: 263px;
+        /* Le mur d’affiche : 38 % de la fenêtre, comme sur ta maquette. */
+        --width-wall: 38vw;
+        --width-reading: 452px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-app);
+        font-family: var(--family-sans);
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-title);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+
+      button {
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--olive-700);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      /* =====================================================================
+         CHÂSSIS — trois bandes : le rail, le panneau, le mur
+         ===================================================================== */
+      .shell {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        flex: none;
+        width: var(--width-sidebar);
+        padding: 32px 23px 0;
+      }
+
+      .sidebar__top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 27px;
+      }
+
+      .sidebar__logo {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+      }
+
+      .sidebar__collapse {
+        display: grid;
+        place-items: center;
+        color: var(--ink-soft);
+      }
+
+      .sidebar__collapse svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-raised);
+        text-align: left;
+      }
+
+      .account__avatar {
+        width: 35px;
+        height: 35px;
+        flex: none;
+        border-radius: var(--radius-round);
+        object-fit: cover;
+      }
+
+      .account__name {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .account__role {
+        display: block;
+        font-size: 10px;
+        line-height: 1.3;
+        color: var(--ink-soft);
+      }
+
+      .account__chev {
+        width: 15px;
+        height: 15px;
+        flex: none;
+        margin-left: auto;
+        color: var(--ink-soft);
+      }
+
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .nav__item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 46px;
+        padding: 0 17px;
+        border-radius: var(--radius-nav);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-soft);
+        text-decoration: none;
+      }
+
+      .nav__item svg {
+        width: 22px;
+        height: 22px;
+        flex: none;
+      }
+
+      .nav__item[aria-current='page'] {
+        background: var(--surface-nav-active);
+        color: var(--ink-title);
+      }
+
+      /* --- le panneau --------------------------------------------------- */
+      .panel {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 17px 0 120px;
+        border-radius: var(--radius-panel) 0 0 var(--radius-panel);
+        background: var(--surface-panel);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 32px;
+      }
+
+      /* Le compte à rebours prend la barre du haut : c’est l’information la
+         plus périssable de la page, et la seule qui change tous les jours.
+         Elle n’a rien à faire enterrée au milieu d’une colonne. */
+      .topbar__countdown {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .topbar__spacer {
+        flex: 1 1 auto;
+      }
+
+      .topbar__icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        flex: none;
+        border-radius: var(--radius-round);
+        background: var(--surface-control);
+      }
+
+      .topbar__icon svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      .topbar__cta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 42px;
+        flex: none;
+        padding: 0 20px 0 15px;
+        border-radius: var(--radius-round);
+        background: var(--surface-control);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .topbar__cta svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      /* --- la colonne de lecture, seule ---------------------------------- */
+      .page {
+        width: 100%;
+        max-width: calc(var(--width-reading) + 64px);
+        margin: 0 auto;
+        padding: 84px 32px 0;
+      }
+
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 18px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-soft);
+        text-decoration: none;
+      }
+
+      .back svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .hero__title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 0 0 6px;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      /* La couleur PORTE le mot ici, donc l’encre descend à l’olive foncé
+         (5,00:1). La coche garde l’olive moyen : elle est graphique, son
+         plancher est 3:1. */
+      .badge {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: var(--radius-round);
+        background: var(--status-ok-surface);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--status-ok-ink);
+      }
+
+      .badge svg {
+        width: 14px;
+        height: 14px;
+        color: var(--olive-400);
+      }
+
+      .hero__meta {
+        margin: 0 0 18px;
+        font-size: 16px;
+        color: var(--ink-soft);
+      }
+
+      .hero__meta b {
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+
+      /* Couleurs administratives — seules les ENCRES ont été assombries
+         pour passer 4,5:1. */
+      .tag {
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .tag--violet {
+        background: #f0e7f5;
+        color: #6b4a86;
+      }
+
+      .tag--rose {
+        background: #fae8e4;
+        color: #9c4e3c;
+      }
+
+      .tag--vert {
+        background: #eceee2;
+        color: #52603a;
+      }
+
+      .friends {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 32px;
+        font-size: 13px;
+        color: var(--ink-soft);
+      }
+
+      .friends b {
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .friends__pile {
+        display: flex;
+        flex: none;
+      }
+
+      .friends__pile i {
+        width: 22px;
+        height: 22px;
+        border-radius: var(--radius-round);
+        background: var(--cream-400);
+        box-shadow: 0 0 0 2px var(--surface-panel);
+      }
+
+      .friends__pile i + i {
+        margin-left: -4px;
+      }
+
+      .section + .section {
+        margin-top: 36px;
+      }
+
+      .section__title {
+        margin: 0 0 16px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      /* Le paragraphe sort de son cadre. Un texte qu on LIT n a pas besoin
+         d etre contenu : le cadre disait « ceci est un bloc », alors que la
+         description est simplement la voix de l organisateur. Les cartes
+         restent pour les FAITS — date, lieu, echeance — qui eux se scannent. */
+      .prose p {
+        margin: 0;
+        max-width: 46ch;
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--ink-body);
+      }
+
+      .prose p + p {
+        margin-top: 14px;
+      }
+
+      .facts {
+        display: flex;
+        gap: 10px;
+      }
+
+      .fact {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 12px 13px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-card);
+      }
+
+      .fact svg {
+        width: 20px;
+        height: 20px;
+        flex: none;
+        color: var(--ink-soft);
+      }
+
+      .fact__label {
+        display: block;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        /* Ce libellé tombait à 1,65:1. C’est pourtant lui qu’on cherche
+           quand on scanne une fiche. */
+        color: var(--ink-soft);
+      }
+
+      .fact__value {
+        display: block;
+        margin: 3px 0 1px;
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .fact__sub {
+        display: block;
+        font-size: 10px;
+        color: var(--ink-soft);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .placeholder {
+        height: 108px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
+
+      /* =====================================================================
+         LE SUIVI — remonté sous le titre, plus de colonne étroite
+         =====================================================================
+         Tous les contrôles partagent UNE hauteur et UN rayon. C’est ce qui
+         manquait dans l’ancienne colonne : trois voisins de 30 / 26 / 30 px
+         sur trois familles de fond, l’œil n’y trouvait aucun rythme.
+         ===================================================================== */
+      .track {
+        margin-bottom: 34px;
+        padding: 6px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
+
+      .track__row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .track__row + .track__row {
+        margin-top: 6px;
+      }
+
+      .track__label {
+        flex: none;
+        padding-left: 11px;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      /* La valeur d’état, compacte et non pleine largeur : elle redit ce que
+         le badge du titre dit déjà, elle n’a pas à le crier deux fois. */
+      .pick {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: var(--control-height);
+        margin-left: auto;
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 13px;
+        font-weight: 600;
+        transition: background-color 160ms var(--ease-soft);
+      }
+
+      .pick:hover {
+        background: var(--surface-row-hover);
+      }
+
+      .chev {
+        width: 14px;
+        height: 14px;
+        flex: none;
+        color: var(--ink-soft);
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        flex: none;
+        border-radius: var(--radius-round);
+      }
+
+      /* La pastille ne porte aucun texte : elle garde EXACTEMENT ta teinte.
+         C’est la règle qui sauve la couleur — le mot reste lisible, la teinte
+         reste belle. */
+      .dot--ok {
+        background: var(--status-ok-mark);
+      }
+
+      .dot--todo {
+        background: var(--status-todo-mark);
+      }
+
+      .seg {
+        display: flex;
+        gap: 4px;
+        height: var(--control-height);
+        flex: none;
+      }
+
+      .seg button {
+        padding: 0 14px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 12px;
+        font-weight: 600;
+        /* L’option NON retenue tombait à 2,05:1. Ce n’est pas du texte
+           désactivé : c’est un choix qu’on peut faire. */
+        color: var(--ink-soft);
+        transition: background-color 160ms var(--ease-soft),
+          color 160ms var(--ease-soft);
+      }
+
+      .seg button[aria-pressed='true'] {
+        background: var(--action-surface);
+        color: var(--action-ink);
+      }
+
+      .money {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: var(--control-height);
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .money__input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        background: none;
+        font-weight: 700;
+        outline: none;
+      }
+
+      .money__input::placeholder {
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .money__state {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex: none;
+        margin-left: auto;
+      }
+
+      /* --- LE RISQUE ASSUMÉ ---------------------------------------------
+         Le seul aplat coloré de l’écran va à la seule chose qui réclame un
+         geste. Le jour où c’est payé, il redevient crème : la couleur dit
+         l’ÉTAT, jamais la nature de la chose. */
+      body[data-couleur='inversion'] .money {
+        background: var(--status-todo-surface);
+        color: var(--status-todo-ink);
+      }
+
+      body[data-couleur='inversion'] .money__input,
+      body[data-couleur='inversion'] .money__input::placeholder {
+        color: var(--status-todo-ink);
+      }
+
+      body[data-couleur='inversion'] .money .dot {
+        display: none;
+      }
+
+      body[data-couleur='inversion'] .money .chev {
+        color: var(--status-todo-ink);
+        opacity: 0.75;
+      }
+
+      /* =====================================================================
+         LE MUR D’AFFICHE — ta trouvaille
+         =====================================================================
+         L’affiche n’est plus une vignette dans un couloir : c’est le mur de
+         droite, du haut au bas de l’écran. Dans le monde d’un exposant,
+         l’affiche EST l’artefact — c’est ce qui lui fait dire oui à une date.
+
+         Deux couches, et c’est ce qui rend le mur increvable :
+           • le FOND   — la même image, floutée, agrandie pour couvrir
+           • le DEVANT — l’image entière, jamais rognée (`contain`)
+         Résultat : aucune affiche n’est coupée, quel que soit son format —
+         portrait, carrée, paysage, ou basse définition. Le flou fabrique la
+         marge, et il la fabrique dans les couleurs de l’affiche elle-même.
+         ===================================================================== */
+      .wall {
+        /* COLLÉE À L ÉCRAN, pas au document. Sans ça le mur prend la hauteur
+           de toute la page — l affiche s étire sur 1600 px, le fond flouté
+           ne se voit jamais, et le bas de l affiche tombe sous le pli. */
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+        flex: none;
+        width: var(--width-wall);
+        height: 100vh;
+        overflow: hidden;
+        background: var(--brown-900);
+      }
+
+      .wall__blur,
+      .wall__poster {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .wall__blur {
+        object-fit: cover;
+        filter: blur(38px) saturate(1.15) brightness(0.62);
+        transform: scale(1.18);
+      }
+
+      .wall__poster {
+        object-fit: contain;
+      }
+
+      /* Rien ne se pose sur l’affiche : ni texte, ni voile, ni bouton. C’est
+         le seul endroit de l’app qui n’appartient pas à l’app. */
+
+      /* --- l’état sans affiche ------------------------------------------
+         Beaucoup d’organisateurs n’en mettent pas. Le mur ne se remplit alors
+         pas d’un faux visuel : il DISPARAÎT, et la colonne de lecture se
+         recentre dans le panneau. Une page sans affiche n’est pas une page
+         cassée, c’est une page plus calme. */
+      body[data-affiche='non'] .wall {
+        display: none;
+      }
+
+      /* =====================================================================
+         BARRE DE MAQUETTE — n’existe pas dans l’app
+         ===================================================================== */
+      .lab {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 50;
+        width: 252px;
+        padding: 15px 17px;
+        border-radius: 14px;
+        background: var(--brown-900);
+        color: var(--cream-50);
+        font-size: 11px;
+        line-height: 1.5;
+        box-shadow: 0 18px 40px rgba(45, 40, 38, 0.26);
+      }
+
+      .lab__title {
+        margin-bottom: 9px;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        opacity: 0.55;
+      }
+
+      .lab__switch {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        border-radius: 9px;
+        background: rgba(255, 251, 242, 0.12);
+      }
+
+      .lab__switch + .lab__title {
+        margin-top: 14px;
+      }
+
+      .lab__switch button {
+        flex: 1;
+        padding: 7px 4px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        color: rgba(255, 251, 242, 0.6);
+        transition: background-color 160ms var(--ease-soft);
+      }
+
+      .lab__switch button[aria-pressed='true'] {
+        background: var(--cream-50);
+        color: var(--brown-900);
+      }
+
+      /* =====================================================================
+         PLANCHER DE QUALITÉ
+         ===================================================================== */
+      @media (max-width: 1180px) {
+        :root {
+          --width-wall: 32vw;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .sidebar,
+        .wall {
+          display: none;
+        }
+
+        .panel {
+          padding: 17px 0 80px;
+          border-radius: 0;
+        }
+
+        .page {
+          padding: 40px 20px 0;
+        }
+
+        .track__row {
+          flex-wrap: wrap;
+        }
+
+        .seg,
+        .money {
+          flex: 1 1 100%;
+        }
+
+        .seg button {
+          flex: 1;
+        }
+
+        .facts {
+          flex-wrap: wrap;
+        }
+
+        .fact {
+          flex: 1 1 140px;
+        }
+
+        .lab {
+          position: static;
+          width: auto;
+          margin: 32px auto 0;
+          max-width: 452px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body data-couleur="inversion" data-affiche="oui">
+    <div class="shell">
+      <!-- ============================================================ -->
+      <aside class="sidebar">
+        <div class="sidebar__top">
+          <img
+            class="sidebar__logo"
+            src="assets/logo-fellowship.png"
+            alt="Fellowship"
+          />
+          <button class="sidebar__collapse" aria-label="Replier le menu">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M9 3v18" />
+              <path d="m16 15-3-3 3-3" />
+            </svg>
+          </button>
+        </div>
+
+        <button class="account">
+          <img class="account__avatar" src="assets/avatar-runes.png" alt="" />
+          <span>
+            <span class="account__name">Runes de Chêne</span>
+            <span class="account__role">Compte exposant</span>
+          </span>
+          <svg
+            class="account__chev"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        <nav class="nav">
+          <a class="nav__item" href="#">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"
+              />
+              <path d="m13.56 11.747 4.332-.924" />
+              <path d="m16 21-3.105-6.21" />
+              <path
+                d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"
+              />
+              <path d="m6.158 8.633 1.114 4.456" />
+              <path d="m8 21 3.105-6.21" />
+              <circle cx="12" cy="13" r="2" />
+            </svg>
+            Explorer
+          </a>
+          <a class="nav__item" href="#" aria-current="page">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z" />
+            </svg>
+            Tableau de bord
+          </a>
+        </nav>
+      </aside>
+
+      <!-- ============================================================ -->
+      <main class="panel">
+        <div class="topbar">
+          <p class="topbar__countdown">Dans 32 jours</p>
+          <span class="topbar__spacer"></span>
+          <button class="topbar__icon" aria-label="Notifications">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+              <path
+                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+              />
+            </svg>
+          </button>
+          <button class="topbar__cta">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 12h8" />
+              <path d="M12 8v8" />
+            </svg>
+            Ajouter une date
+          </button>
+        </div>
+
+        <div class="page">
+          <a class="back" href="#">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+            Explorer
+          </a>
+
+          <h1 class="hero__title">
+            Les Aventuriales
+            <span class="badge">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 6 7 17l-5-5" />
+                <path d="m22 10-7.5 7.5L13 16" />
+              </svg>
+              Inscrit
+            </span>
+          </h1>
+
+          <p class="hero__meta">Le <b>25 septembre</b> — Ménétrole (63)</p>
+
+          <div class="tags">
+            <span class="tag tag--violet">Fantastique</span>
+            <span class="tag tag--rose">Musique</span>
+            <span class="tag tag--vert">Marché</span>
+          </div>
+
+          <p class="friends">
+            <span class="friends__pile"><i></i><i></i></span>
+            <span><b>Gautier</b> et <b>Pooka</b> y seront aussi</span>
+          </p>
+
+          <!-- LE SUIVI -->
+          <div class="track">
+            <div class="track__row">
+              <span class="track__label">Ma place</span>
+              <button class="pick">
+                <span class="dot dot--ok"></span>
+                Inscrit
+                <svg
+                  class="chev"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="track__row">
+              <div class="seg">
+                <button aria-pressed="true">Je paie ma place</button>
+                <button aria-pressed="false">On me paie</button>
+              </div>
+              <div class="money">
+                <input
+                  class="money__input"
+                  placeholder="Montant"
+                  value="150 €"
+                  aria-label="Montant"
+                />
+                <span class="money__state">
+                  <span class="dot dot--todo"></span>
+                  À payer
+                  <svg
+                    class="chev"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <section class="section">
+            <h2 class="section__title">À propos</h2>
+            <div class="prose">
+              <p>
+                4 jours hors du temps au cœur d’un village pirate, viking,
+                médiéval et fantastique.
+              </p>
+              <p>
+                Chaque village est séparé afin de donner une immersion totale
+                aux festivaliers.
+              </p>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2 class="section__title">Informations</h2>
+            <div class="facts">
+              <div class="fact">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M8 2v4" />
+                  <path d="M16 2v4" />
+                  <rect width="18" height="18" x="3" y="4" rx="2" />
+                  <path d="M3 10h18" />
+                </svg>
+                <span>
+                  <span class="fact__label">Date</span>
+                  <span class="fact__value">28 juillet</span>
+                  <span class="fact__sub">4 jours</span>
+                </span>
+              </div>
+
+              <div class="fact">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                  />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span>
+                  <span class="fact__label">Lieu</span>
+                  <span class="fact__value">Ménétrole</span>
+                  <span class="fact__sub">Salle polyvalente</span>
+                </span>
+              </div>
+
+              <div class="fact">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                  />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
+                <span>
+                  <span class="fact__label">Candidater</span>
+                  <span class="fact__value">7 juillet</span>
+                  <span class="fact__sub">Par e-mail</span>
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2 class="section__title">Discussions</h2>
+            <div class="placeholder"></div>
+          </section>
+        </div>
+      </main>
+
+      <!-- ============================================================ -->
+      <div class="wall">
+        <img class="wall__blur" src="assets/affiche-aventuriales.png" alt="" />
+        <img
+          class="wall__poster"
+          src="assets/affiche-aventuriales.png"
+          alt="Affiche des Aventuriales 2026"
+        />
+      </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <div class="lab">
+      <div class="lab__title">Le mur, sans affiche</div>
+      <div class="lab__switch" data-axe="affiche">
+        <button data-set="oui" aria-pressed="true">Avec</button>
+        <button data-set="non" aria-pressed="false">Sans</button>
+      </div>
+
+      <div class="lab__title">La couleur du « à faire »</div>
+      <div class="lab__switch" data-axe="couleur">
+        <button data-set="famille" aria-pressed="false">A · pastille</button>
+        <button data-set="inversion" aria-pressed="true">B · aplat blé</button>
+      </div>
+    </div>
+
+    <script>
+      // La barre de maquette n’existe pas dans l’app : elle sert à comparer.
+      document.querySelectorAll('.lab__switch').forEach((groupe) => {
+        const axe = groupe.dataset.axe
+        const boutons = groupe.querySelectorAll('button')
+        boutons.forEach((b) =>
+          b.addEventListener('click', () => {
+            document.body.dataset[axe] = b.dataset.set
+            boutons.forEach((o) =>
+              o.setAttribute('aria-pressed', String(o === b)),
+            )
+          }),
+        )
+      })
+
+      document.querySelectorAll('.seg button').forEach((b) => {
+        b.addEventListener('click', () => {
+          document
+            .querySelectorAll('.seg button')
+            .forEach((o) => o.setAttribute('aria-pressed', String(o === b)))
+        })
+      })
+    </script>
+  </body>
+</html>
