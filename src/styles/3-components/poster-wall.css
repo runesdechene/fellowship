@@ -26,10 +26,10 @@
   /* Caché tant que l'image n'est pas prête — mais il garde sa place, sinon la
      colonne de lecture s'élargirait puis se resserrerait. */
   visibility: hidden;
-  /* CARRÉ. L'affiche a porté les rayons du panneau un temps — une dalle
-     posée sur le crème. Uriel tranche l'inverse : arrondir une affiche, c'est
-     lui mettre un cadre, alors qu'elle doit se lire comme un mur qui va
-     jusqu'au bord. */
+  /* Les rayons sont TOURNÉS VERS LE CONTENU : l'affiche se lit comme une
+     dalle posée sur le crème. Ils portent aussi la coupe de l'image, grâce à
+     l'`overflow: hidden` juste au-dessus. */
+  border-radius: var(--wall-radius) 0 0 var(--wall-radius);
   background: var(--wall-milieu);
 }
 
@@ -107,43 +107,10 @@
   background: var(--wall-veil);
 }
 
-/* =============================================================================
-   LE PANNEAU PASSE PAR-DESSUS L'AFFICHE
-   =============================================================================
-   L'affiche a porté les rayons un temps : c'était elle, la dalle posée sur le
-   crème. Uriel retourne le geste — c'est le CONTENU qui est la feuille du
-   dessus, et l'affiche le mur qui continue derrière lui.
-
-   Trois choses, et il faut les trois :
-   - le mur glisse SOUS le panneau de la valeur d’un rayon, sinon les coins
-     découpés laisseraient voir le fond de l'app et non l'image ;
-   - le panneau passe devant lui ;
-   - son fond s’arrondit des quatre côtés au lieu des deux de gauche.
-
-   Uniquement QUAND IL Y A UN MUR : sans affiche, le bord droit du panneau est
-   le bord de la fenêtre, et l'arrondir y creuserait deux encoches de crème. */
-.poster-wall {
-  margin-left: calc(-1 * var(--radius-panel));
-}
-
-.app-shell--mur .app-shell__main {
-  z-index: 1;
-}
-
-.app-shell--mur .app-shell__main::before {
-  border-radius: var(--radius-panel);
-}
-
 /* Sous cette largeur la fenêtre n'a plus de place pour une colonne ET une
    image : le mur s'efface, la colonne de lecture prend toute la place. */
 @media (max-width: 1100px) {
   .poster-wall {
     display: none;
-  }
-
-  /* La coque porte encore la classe, même le mur caché : le panneau reprend
-     ses deux rayons de gauche. */
-  .app-shell--mur .app-shell__main::before {
-    border-radius: var(--radius-panel) 0 0 var(--radius-panel);
   }
 }

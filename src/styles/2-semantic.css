@@ -411,6 +411,12 @@
      du haut au bas de l'écran.
      ====================================================================== */
   --wall-width: 34vw;
+  /* L'affiche porte les rayons du panneau, TOURNÉS VERS LE CONTENU : elle se
+     lit comme une dalle posée sur le crème. On a essayé l'inverse — le
+     panneau s'arrondissant par-dessus l'image — et Uriel a tranché pour
+     celui-ci. Son propre jeton : c'est le même rayon que le panneau, mais
+     rien ne dit qu'il doive le rester. */
+  --wall-radius: var(--radius-panel);
 
   /* LE VOILE EST BRUN, ET C'EST CE QUI LE REND UTILE.
      Il a longtemps repris les couleurs relevées DANS l'affiche — donc il la
