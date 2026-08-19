@@ -1,6 +1,6 @@
 ---
-updated: 2026-08-19T17:40:00Z
-summary: "Une date passée se remplit à nouveau. Le panneau se pose sur l’affiche."
+updated: 2026-08-19T23:40:00Z
+summary: "La flèche de retour est montée dans le coin, à côté de la date."
 next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à faire »."
 ---
 
@@ -14,6 +14,7 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [x] Refonte de la fiche : mur d'affiche + suivi dans la grille
 - [x] Déverrouiller le suivi sur une date passée — un exposant est payé APRÈS
 - [x] Les coins du panneau restent au bord de l’écran, et se posent sur l’affiche
+- [x] La flèche de retour monte en haut à gauche, à côté du compte à rebours
 - [ ] **Trancher : le blé OU la terre pour « il reste un geste à faire »** (les deux le disent aujourd'hui)
 - [ ] Revoir « Acompte versé » sur le tableau de bord — il s'affiche en acquis alors qu'il reste le solde
 - [ ] Brancher les avis des exposants (notation 3 axes + fil de réponses)
@@ -30,6 +31,29 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [ ] Deux enseignes s'appellent « Runes de Chêne » en base — vérifier si c'est voulu
 
 ## Mémoire
+
+**19 août 2026, tard — la sortie n'était pas au bon étage.**
+
+Uriel ne cliquait jamais la flèche de retour posée au-dessus du titre : la
+main la cherche dans le coin, pas dans le texte. Son instinct disait « près
+de la date » — et c'était la bonne raison sans le savoir : **sortir d'un
+écran est du CHÂSSIS, pas du contenu**, au même titre que la cloche. Posée en
+tête de la colonne, elle faisait s'ouvrir la page sur un petit contrôle gris.
+Elle a rejoint le coin gauche de la barre, juste avant le compte à rebours.
+
+`PageChrome` porte donc un troisième champ, `back` — **un chemin, jamais une
+fonction** : le décor est comparé champ à champ en dépendances d'effet, et
+une fonction reconstruite à chaque rendu relancerait la déclaration en
+boucle. Même raison que les deux contextes séparés.
+
+Deux détails qui se réutiliseront : la marge automatique appartient au COIN,
+pas à l'accroche (pendant un chargement il n'y a pas encore de compte à
+rebours, la flèche doit rester calée quand même) ; et une zone de clic plus
+large que son dessin **désaligne** l'élément du bord — une marge négative du
+même calcul le rattrape.
+
+Le libellé est tombé exprès : `back` ne connaît qu'un chemin, donc aucun mot
+ne peut promettre où l'on retombe quand le calendrier arrivera.
 
 **19 août 2026, soir — un verrou posé pour une jolie phrase.**
 
