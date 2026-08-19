@@ -24,6 +24,13 @@ import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent
  * teinte : ça se lit aussi en noir et blanc, et pour un daltonien. La couleur
  * ne dit que l'ÉTAT : olive pour ce qui est acquis, blé pour ce qui attend un
  * geste. Une place réglée redevient crème.
+ *
+ * RIEN NE SE VERROUILLE APRÈS LA DATE. Le module a longtemps été gelé sur un
+ * événement passé, au nom de « après la date, ça ne se pilote plus, ça se
+ * constate ». C'est faux dans le métier : un exposant est payé APRÈS, il note
+ * son cachet APRÈS, il solde son acompte APRÈS. Geler la fiche à minuit, c'est
+ * fermer la porte juste avant le moment où elle sert — et l'obliger à tenir
+ * ses comptes ailleurs.
  */
 
 /**
@@ -79,7 +86,6 @@ export function EventStatus({
   paymentStatus,
   paymentOrientation,
   standAmount,
-  past,
   setStatus,
   setPayment,
   setOrientation,
@@ -92,7 +98,6 @@ export function EventStatus({
   paymentOrientation: PaymentOrientation
   /** Le prix de la place déjà posé, ou 0 s'il ne l'est pas encore. */
   standAmount: number
-  past: boolean
 } & EventActions) {
   // Le montant se tape, donc il a son brouillon. Il se recale quand la valeur
   // enregistrée change sous lui — après un enregistrement, ou en revenant sur
@@ -152,7 +157,7 @@ export function EventStatus({
           label="Ma participation à cette date"
           value={status}
           options={participation}
-          disabled={saving || past}
+          disabled={saving}
           onChange={(choisi) => void setStatus(choisi)}
         />
       </div>
@@ -170,7 +175,6 @@ export function EventStatus({
               type="button"
               className="event-status__side"
               aria-pressed={paymentOrientation === 'payeur'}
-              disabled={past}
               onClick={() => void setOrientation('payeur')}
             >
               Je paie ma place
@@ -179,7 +183,6 @@ export function EventStatus({
               type="button"
               className="event-status__side"
               aria-pressed={paye}
-              disabled={past}
               onClick={() => void setOrientation('paye')}
             >
               On me paie
@@ -199,7 +202,6 @@ export function EventStatus({
                 placeholder={paye ? 'Cachet' : 'Montant'}
                 aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
                 value={montant}
-                disabled={past}
                 onChange={(evenement) => setMontant(evenement.target.value)}
                 onBlur={() => void enregistrerLeMontant()}
                 onKeyDown={(evenement) => {
@@ -226,7 +228,7 @@ export function EventStatus({
               label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
               value={statutPaiement}
               options={paiement}
-              disabled={saving || past}
+              disabled={saving}
               onChange={(choisi) => void setPayment(choisi)}
             />
           </div>

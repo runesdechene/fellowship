@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
-import { PageChromeProvider } from '@/lib/page-chrome'
+import { PageChromeProvider, usePageChrome } from '@/lib/page-chrome'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
@@ -32,14 +32,46 @@ export function AppShell({ children }: { children: ReactNode }) {
   // enfant, la barre du haut et le mur qui le rendent sont ses frères.
   return (
     <PageChromeProvider>
-      <div className={collapsed ? 'app-shell app-shell--collapsed' : 'app-shell'}>
-        <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
-        <main className="app-shell__main">
-          <Topbar />
-          {children}
-        </main>
-        <PosterWall />
-      </div>
+      <Coque collapsed={collapsed} onToggle={toggleSidebar}>
+        {children}
+      </Coque>
     </PageChromeProvider>
+  )
+}
+
+/**
+ * La coque ne peut pas vivre dans AppShell : elle LIT le décor que le
+ * fournisseur porte, or on ne lit pas un contexte depuis le composant qui le
+ * pose. D'où ce petit intérieur.
+ *
+ * Il existe pour une seule raison : la coque doit SAVOIR qu'il y a un mur.
+ * Le CSS pourrait le déduire avec un sélecteur parent, mais ce sélecteur
+ * fait surveiller au moteur de style tout le sous-arbre de l'app à chaque
+ * mutation, pour une information que React a déjà sous la main.
+ */
+function Coque({
+  collapsed,
+  onToggle,
+  children,
+}: {
+  collapsed: boolean
+  onToggle: () => void
+  children: ReactNode
+}) {
+  const { poster } = usePageChrome()
+
+  const classes = ['app-shell']
+  if (collapsed) classes.push('app-shell--collapsed')
+  if (poster) classes.push('app-shell--mur')
+
+  return (
+    <div className={classes.join(' ')}>
+      <Sidebar collapsed={collapsed} onToggle={onToggle} />
+      <main className="app-shell__main">
+        <Topbar />
+        {children}
+      </main>
+      <PosterWall />
+    </div>
   )
 }

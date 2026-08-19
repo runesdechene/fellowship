@@ -269,7 +269,6 @@ export function EventPage() {
             status={status}
             paymentStatus={paymentStatus}
             paymentOrientation={paymentOrientation}
-            past={past}
             setStatus={setStatus}
             setPayment={setPayment}
             setOrientation={setOrientation}
