@@ -58,7 +58,7 @@
 /* Le compte dit où il se passe quelque chose avant qu'on ait cliqué. */
 .discussion__canal small {
   font: var(--type-canal-compte);
-  color: var(--ink-ghost);
+  color: var(--ink-soft);
 }
 
 .discussion__canal[aria-pressed='true'] small {
@@ -104,7 +104,11 @@
 }
 
 /* --- Écrire ---------------------------------------------------------------- */
+/* Le bouton d envoi prend le rayon des CHAMPS qu il accompagne, pas celui
+   des controles de la page : dans une boite, ce qui se touche s aligne. */
 .discussion__composer {
+  --button-radius: var(--radius-sm);
+
   display: flex;
   flex-direction: column;
   gap: var(--composer-gap);
@@ -136,8 +140,11 @@
   font: var(--type-composer-titre);
 }
 
+/* --ink-ghost donnait 1,21:1 sur le panneau : du blanc casse sur du blanc
+   casse. Il est fait pour une VALEUR NULLE, pas pour un texte qu'on doit
+   lire — un placeholder dit ce qu'on attend de vous, il se lit. 5,40:1. */
 .discussion__champ::placeholder {
-  color: var(--ink-ghost);
+  color: var(--ink-soft);
 }
 
 .discussion__champ:focus-visible {
@@ -223,7 +230,7 @@
 
 .discussion__signature time {
   font: var(--type-signature-time);
-  color: var(--ink-ghost);
+  color: var(--ink-soft);
 }
 
 .discussion__avatar {
@@ -256,7 +263,7 @@
   place-items: center;
   flex: none;
   background: none;
-  color: var(--ink-ghost);
+  color: var(--ink-soft);
   cursor: pointer;
   transition: color var(--menu-motion);
 }
@@ -411,9 +418,14 @@
 
 /* --- Rien encore ------------------------------------------------------------
    Un écran vide est une invitation, pas un constat. */
+/* Un ecran vide est une INVITATION, pas un constat — encore faut-il pouvoir
+   le lire. Il portait --ink-ghost, soit 1,21:1 sur le panneau : la page
+   avait l air abandonnee, litteralement effacee. Meme cause que les
+   placeholders : --ink-ghost est fait pour une VALEUR NULLE, jamais pour une
+   phrase qu on adresse a quelqu un. */
 .discussion__vide {
   max-width: 46ch;
   font: var(--type-vide);
-  color: var(--ink-ghost);
+  color: var(--ink-soft);
   text-wrap: balance;
 }

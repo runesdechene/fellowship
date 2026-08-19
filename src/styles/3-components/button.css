@@ -9,7 +9,7 @@
   gap: var(--space-12);
   height: var(--topbar-control-height);
   padding: 0 var(--space-24);
-  border-radius: var(--radius-card);
+  border-radius: var(--button-radius);
   background: var(--surface-control);
   color: var(--ink-strong);
   font: var(--type-button);
@@ -44,7 +44,20 @@
   justify-content: center;
 }
 
+/* Un bouton empêché PERD SA SURFACE plutôt que de la délaver. L'ancien
+   `opacity: 0.5` mélangeait le brun profond au crème et donnait une boue
+   grise — en emportant le texte avec lui, donc en le rendant illisible.
+   Ici il cesse d'avoir l'air d'un bouton plein, ce qui est la vérité. */
 .button:disabled {
-  opacity: 0.5;
   cursor: default;
+  color: var(--action-ink-off);
+}
+
+.button--action:disabled {
+  background: var(--action-surface-off);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }

@@ -153,6 +153,13 @@
      Aucune teinte vive n'entre dans l'interface par cette porte. */
   --action-surface: var(--brown-900);
   --action-ink: var(--cream-50);
+  /* UN BOUTON EMPÊCHÉ PERD SA SURFACE, il ne la delave pas. Le procede
+     d'avant — `opacity: 0.5` — melangeait le brun profond au creme et
+     donnait une boue grise, en emportant le texte avec lui. Ici il cesse
+     d'avoir l'air d'un bouton plein, ce qui est la verite : on ne peut
+     pas le presser. */
+  --action-surface-off: var(--surface-card);
+  --action-ink-off: var(--brown-400);
   /* La meme idee, en moins tranchant. Le brun profond convient a UN bouton
      isole ; sur une colonne de crans il cogne. On garde le contraste, on
      retire l'agressivite. */
@@ -172,6 +179,11 @@
   --radius-bar: var(--round-8); /* barres du graphe */
   --radius-chip: var(--round-8); /* pastilles de statut */
   --radius-sm: var(--round-8); /* petits éléments : options de menu */
+  /* UN BOUTON EST UN CONTROLE, pas un bloc. Il prenait --radius-card, donc le
+     rayon des CARTES : il se retrouvait plus rond que tout ce qui l entoure,
+     et colle a des champs en 8. Les trois familles se lisent maintenant sans
+     exception — 15 pour les blocs, 12 pour les controles, 8 pour le menu. */
+  --button-radius: var(--radius-nav);
   --radius-round: var(--round-full); /* avatars, points */
 
   /* Menus flottants. Sans ombre dans cette interface, c'est un liseré qui
@@ -658,7 +670,13 @@
   --radius-control: var(--round-12);
   --field-gap: var(--space-6);
   --fields-gap: var(--space-16);
-  --focus-ring: var(--accent-interactive);
+  /* L'ANNEAU DE FOCUS N'EST PAS UN STATUT. Il portait l'accent, donc
+     l'olive, donc la couleur de « c'est acquis » — sur un champ qu'on est
+     justement en train de remplir. Il passe au lavande : la seule teinte
+     FROIDE de la palette, donc la seule qui ne puisse se confondre avec
+     aucun état, et qui reste visible sur tous les fonds de l’app
+     (3,97:1 sur le blé, son pire cas — au-dessus du seuil de 3:1). */
+  --focus-ring: var(--electric-500);
   --toggle-on-surface: var(--accent-interactive);
   /* La bascule au repos, et sa pastille. Elles vivaient en dur dans form.css,
      donc hors de portee d un changement de palette : la bascule est restee

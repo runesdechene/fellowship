@@ -267,9 +267,16 @@ function Question({
               >
                 Répondre
               </Button>
-              <Button variant="bare" onClick={() => setOpen(false)}>
+              {/* Pas `variant="bare"` : il est dessiné pour UNE ICÔNE dans
+                  un carré de 42 px, le mot y débordait. C'est une action en
+                  texte, comme « Répondre » — même classe qu'elle. */}
+              <button
+                type="button"
+                className="discussion__geste"
+                onClick={() => setOpen(false)}
+              >
                 Annuler
-              </Button>
+              </button>
             </div>
           </div>
         ) : (
@@ -374,9 +381,13 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
               {blocker && title.trim() !== '' && (
                 <span className="discussion__blocage">{blocker}</span>
               )}
-              <Button variant="bare" onClick={() => setAsking(false)}>
+              <button
+                type="button"
+                className="discussion__geste"
+                onClick={() => setAsking(false)}
+              >
                 Annuler
-              </Button>
+              </button>
               <Button
                 variant="action"
                 disabled={saving || blocker !== null || !audience}

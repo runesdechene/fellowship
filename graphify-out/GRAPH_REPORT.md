@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 63 files · ~566,848 words
+- 63 files · ~567,438 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 265 nodes · 227 edges · 72 communities detected
+- 267 nodes · 229 edges · 72 communities detected
 - Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -182,20 +182,20 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 15 - "Community 15"
+Cohesion: 0.4
+Nodes (0): 
+
+### Community 16 - "Community 16"
 Cohesion: 0.6
 Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
 
-### Community 16 - "Community 16"
+### Community 17 - "Community 17"
 Cohesion: 0.5
 Nodes (0): 
-
-### Community 17 - "Community 17"
-Cohesion: 0.83
-Nodes (3): fetchActorProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
 
 ### Community 18 - "Community 18"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.83
+Nodes (3): fetchActorProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
 
 ### Community 19 - "Community 19"
 Cohesion: 0.5
@@ -203,11 +203,11 @@ Nodes (0):
 
 ### Community 20 - "Community 20"
 Cohesion: 0.5
-Nodes (1): json()
+Nodes (0): 
 
 ### Community 21 - "Community 21"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): json()
 
 ### Community 22 - "Community 22"
 Cohesion: 0.67
