@@ -1,6 +1,6 @@
 ---
-updated: 2026-08-19T03:10:00Z
-summary: "L'affiche prend tout le bord droit, le suivi remonte dans la page."
+updated: 2026-08-19T17:40:00Z
+summary: "Une date passée se remplit à nouveau. Le panneau se pose sur l’affiche."
 next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à faire »."
 ---
 
@@ -12,6 +12,8 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [x] **Maquetter la suite avant de coder** — méthode adoptée, ça marche
 - [x] Ranger la palette chaude d'Uriel en variables
 - [x] Refonte de la fiche : mur d'affiche + suivi dans la grille
+- [x] Déverrouiller le suivi sur une date passée — un exposant est payé APRÈS
+- [x] Les coins du panneau restent au bord de l’écran, et se posent sur l’affiche
 - [ ] **Trancher : le blé OU la terre pour « il reste un geste à faire »** (les deux le disent aujourd'hui)
 - [ ] Revoir « Acompte versé » sur le tableau de bord — il s'affiche en acquis alors qu'il reste le solde
 - [ ] Brancher les avis des exposants (notation 3 axes + fil de réponses)
@@ -28,6 +30,18 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [ ] Deux enseignes s'appellent « Runes de Chêne » en base — vérifier si c'est voulu
 
 ## Mémoire
+
+**19 août 2026, soir — un verrou posé pour une jolie phrase.**
+
+Le suivi était gelé sur un événement passé, au nom de « après la date, ça ne
+se pilote plus, ça se constate ». Uriel l’a découvert en voulant noter son
+débit. La phrase sonnait juste et elle était fausse : un exposant est payé
+APRÈS, il note son cachet APRÈS, il solde son acompte APRÈS. **Se méfier des
+règles qui tiennent surtout parce qu’elles se formulent bien.**
+
+Il a aussi retourné le geste des rayons : ce n’est plus l’affiche qui est la
+dalle posée sur le crème, c’est le contenu qui est la feuille du dessus.
+
 
 **19 août 2026, nuit — la fiche d'événement change de forme, et la méthode
 « maquette d'abord » fait ses preuves.**
