@@ -23,9 +23,10 @@
   width: var(--wall-width);
   height: 100vh;
   overflow: hidden;
-  /* Les mêmes rayons que le panneau, du même côté : l'affiche est une dalle
-     posée sur le crème, pas un bloc encastré dans la fenêtre. */
-  border-radius: var(--radius-wall) 0 0 var(--radius-wall);
+  /* CARRÉ. L'affiche a porté les rayons du panneau un temps — une dalle
+     posée sur le crème. Uriel tranche l'inverse : arrondir une affiche, c'est
+     lui mettre un cadre, alors qu'elle doit se lire comme un mur qui va
+     jusqu'au bord. */
   background: var(--wall-milieu);
 }
 

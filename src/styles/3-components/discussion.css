@@ -66,6 +66,10 @@
 }
 
 /* --- Poser une question ---------------------------------------------------- */
+.discussion__poser:last-child {
+  margin-bottom: 0;
+}
+
 .discussion__poser {
   display: flex;
   align-items: center;
@@ -92,8 +96,10 @@
 
 .discussion__poser-sous {
   display: block;
-  margin-top: var(--space-2);
+  max-width: 52ch;
+  margin-top: var(--space-4);
   font: var(--type-poser-sous);
+  line-height: var(--leading-normal);
   color: var(--ink-soft);
 }
 

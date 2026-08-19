@@ -220,7 +220,10 @@
 
   --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug)
     var(--family-sans);
-  --type-event-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
+  /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
+     corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
+     « A propos » qui le suivent — rien ne le detachait d eux. */
+  --type-event-title: var(--weight-bold) var(--size-32) / var(--leading-tight)
     var(--family-sans);
   /* La ligne sous le titre d'une fiche. Elle a son propre token : le
      --type-event-meta ordinaire sert dans six composants, et le monter a
@@ -416,7 +419,6 @@
      donc plus rien : il ne reste que pour lier le mur au crème de la page et
      couvrir le fond le temps du chargement. Un souffle suffit. */
   --wall-veil-opacity: 0.1;
-  --radius-wall: var(--round-20);
 
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,
@@ -654,9 +656,12 @@
   --type-composer-titre: var(--weight-bold) var(--size-16) / var(--leading-snug)
     var(--family-sans);
 
-  /* Un écran vide est une invitation, pas un constat : il porte donc un
-     corps de titre, en encre effacée. */
-  --type-vide: var(--weight-bold) var(--size-18) / var(--leading-snug)
+  /* L INVITATION porte l absence quand il y en a une : sa sous-ligne dit
+     « personne n a encore rien demande » au lieu qu un paragraphe le
+     constate en dessous. Ce qui reste ici ne sert donc qu aux cas ou il n y
+     a rien A FAIRE — un filtre qui masque tout, ou un acteur qui ne peut pas
+     poser de question. Ca se dit petit. */
+  --type-vide: var(--weight-medium) var(--size-13) / var(--leading-normal)
     var(--family-sans);
 
   /* =========================================================================

@@ -316,6 +316,9 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
   const [body, setBody] = useState('')
 
   const audience = deriveAudience(threadActor)
+  // Aucune question du tout — a distinguer de « aucune dans les canaux
+  // affiches », qui est un resultat de filtre et non une absence.
+  const rienDuTout = threads.length === 0
   const blocker = askBlocker(title, body)
   const visible = filterByChannels(threads, shown)
   const isAdmin = person?.role === 'admin'
@@ -411,10 +414,17 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
           >
             <span>
               <span className="discussion__poser-mot">Poser une question</span>
+              {/* Quand il n’y a RIEN, l’absence se dit ICI plutôt qu’en
+                  dessous : deux objets disaient la même chose, et le constat
+                  était plus gros que l’invitation — c’était donc le vide
+                  qu’on voyait. Plié dans le bouton, il devient la RAISON
+                  d’écrire au lieu d’une annonce à côté. */}
               <span className="discussion__poser-sous">
-                {audience === 'organisateur'
-                  ? 'Aux autres organisateurs'
-                  : 'Aux autres exposants et à l’organisateur'}
+                {rienDuTout
+                  ? 'Personne n’a encore rien demandé. Si tu hésites sur l’électricité, le montage ou l’accès, quelqu’un d’autre hésite aussi.'
+                  : audience === 'organisateur'
+                    ? 'Aux autres organisateurs'
+                    : 'Aux autres exposants et à l’organisateur'}
               </span>
             </span>
             <ArrowRight className="discussion__poser-fleche" size={18} strokeWidth={2} />
@@ -426,12 +436,16 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
       {loading ? (
         <p className="event-page__state">Chargement de la discussion…</p>
       ) : visible.length === 0 ? (
-        /* Un écran vide est une invitation, pas un constat. */
-        <p className="discussion__vide">
-          {threads.length === 0
-            ? 'Personne n’a encore rien demandé sur cette date. Si tu hésites sur l’électricité, le montage ou l’accès, quelqu’un d’autre hésite aussi.'
-            : 'Aucune question dans les canaux affichés.'}
-        </p>
+        /* Rien à ajouter quand l’invitation porte déjà le message : on ne le
+           répète que si l’acteur ne PEUT pas poser de question, ou si c’est
+           un filtre qui a tout masqué. */
+        ((rienDuTout && !canAsk(threadActor)) || !rienDuTout) && (
+          <p className="discussion__vide">
+            {rienDuTout
+              ? 'Personne n’a encore rien demandé sur cette date.'
+              : 'Aucune question dans les canaux affichés.'}
+          </p>
+        )
       ) : (
         <div className="discussion__fil">
           {visible.map((thread) => (

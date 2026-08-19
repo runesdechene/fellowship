@@ -3,8 +3,18 @@
    Utilisé par : src/components/layout/Sidebar.tsx
    -------------------------------------------------------------------------- */
 
+/* COLLÉE À L’ÉCRAN, comme le mur d’affiche à l’autre bout. Elle suivait le
+   document : sur une fiche longue, la navigation partait vers le haut et on
+   n’avait plus rien pour changer d’écran sans remonter.
+
+   `sticky` et non `fixed` : la colonne garde sa place dans la rangée, donc
+   le panneau n’a pas besoin d’une marge compensatoire qu’il faudrait tenir
+   à jour à chaque changement de largeur. */
 .sidebar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
   flex: 0 0 var(--shell-sidebar-width);
   width: var(--shell-sidebar-width);
   padding: 0 var(--sidebar-padding-x);
