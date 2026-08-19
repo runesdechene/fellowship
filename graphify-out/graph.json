@@ -222,7 +222,7 @@
       "source_file": "src\\App.tsx",
       "source_location": "L1",
       "id": "src_app_tsx",
-      "community": 23,
+      "community": 22,
       "norm_label": "app.tsx"
     },
     {
@@ -231,7 +231,7 @@
       "source_file": "src\\App.tsx",
       "source_location": "L10",
       "id": "app_protectedroute",
-      "community": 23,
+      "community": 22,
       "norm_label": "protectedroute()"
     },
     {
@@ -240,7 +240,7 @@
       "source_file": "src\\App.tsx",
       "source_location": "L17",
       "id": "app_app",
-      "community": 23,
+      "community": 22,
       "norm_label": "app()"
     },
     {
@@ -267,7 +267,7 @@
       "source_file": "src\\components\\layout\\AccountSwitcher.tsx",
       "source_location": "L1",
       "id": "src_components_layout_accountswitcher_tsx",
-      "community": 24,
+      "community": 23,
       "norm_label": "accountswitcher.tsx"
     },
     {
@@ -276,7 +276,7 @@
       "source_file": "src\\components\\layout\\AccountSwitcher.tsx",
       "source_location": "L22",
       "id": "accountswitcher_onpointerdown",
-      "community": 24,
+      "community": 23,
       "norm_label": "onpointerdown()"
     },
     {
@@ -285,7 +285,7 @@
       "source_file": "src\\components\\layout\\AccountSwitcher.tsx",
       "source_location": "L25",
       "id": "accountswitcher_onkeydown",
-      "community": 24,
+      "community": 23,
       "norm_label": "onkeydown()"
     },
     {
@@ -294,7 +294,7 @@
       "source_file": "src\\components\\layout\\AppShell.tsx",
       "source_location": "L1",
       "id": "src_components_layout_appshell_tsx",
-      "community": 17,
+      "community": 24,
       "norm_label": "appshell.tsx"
     },
     {
@@ -303,7 +303,7 @@
       "source_file": "src\\components\\layout\\AppShell.tsx",
       "source_location": "L9",
       "id": "appshell_readcollapsed",
-      "community": 17,
+      "community": 24,
       "norm_label": "readcollapsed()"
     },
     {
@@ -312,17 +312,8 @@
       "source_file": "src\\components\\layout\\AppShell.tsx",
       "source_location": "L17",
       "id": "appshell_appshell",
-      "community": 17,
+      "community": 24,
       "norm_label": "appshell()"
-    },
-    {
-      "label": "Coque()",
-      "file_type": "code",
-      "source_file": "src\\components\\layout\\AppShell.tsx",
-      "source_location": "L52",
-      "id": "appshell_coque",
-      "community": 17,
-      "norm_label": "coque()"
     },
     {
       "label": "PosterWall.tsx",
@@ -654,7 +645,7 @@
       "source_file": "src\\features\\dashboard\\useDashboard.ts",
       "source_location": "L1",
       "id": "src_features_dashboard_usedashboard_ts",
-      "community": 18,
+      "community": 17,
       "norm_label": "usedashboard.ts"
     },
     {
@@ -663,7 +654,7 @@
       "source_file": "src\\features\\dashboard\\useDashboard.ts",
       "source_location": "L123",
       "id": "usedashboard_fetchsettlements",
-      "community": 18,
+      "community": 17,
       "norm_label": "fetchsettlements()"
     },
     {
@@ -672,7 +663,7 @@
       "source_file": "src\\features\\dashboard\\useDashboard.ts",
       "source_location": "L174",
       "id": "usedashboard_fetchreports",
-      "community": 18,
+      "community": 17,
       "norm_label": "fetchreports()"
     },
     {
@@ -681,7 +672,7 @@
       "source_file": "src\\features\\dashboard\\useDashboard.ts",
       "source_location": "L250",
       "id": "usedashboard_usedashboard",
-      "community": 18,
+      "community": 17,
       "norm_label": "usedashboard()"
     },
     {
@@ -1176,7 +1167,7 @@
       "source_file": "src\\lib\\friends.ts",
       "source_location": "L1",
       "id": "src_lib_friends_ts",
-      "community": 19,
+      "community": 18,
       "norm_label": "friends.ts"
     },
     {
@@ -1185,7 +1176,7 @@
       "source_file": "src\\lib\\friends.ts",
       "source_location": "L26",
       "id": "friends_fetchmutualfriendids",
-      "community": 19,
+      "community": 18,
       "norm_label": "fetchmutualfriendids()"
     },
     {
@@ -1194,7 +1185,7 @@
       "source_file": "src\\lib\\friends.ts",
       "source_location": "L48",
       "id": "friends_fetchactorprofiles",
-      "community": 19,
+      "community": 18,
       "norm_label": "fetchactorprofiles()"
     },
     {
@@ -1203,7 +1194,7 @@
       "source_file": "src\\lib\\friends.ts",
       "source_location": "L86",
       "id": "friends_fetchfriendsbyevent",
-      "community": 19,
+      "community": 18,
       "norm_label": "fetchfriendsbyevent()"
     },
     {
@@ -1293,7 +1284,7 @@
       "source_file": "src\\lib\\page-chrome.tsx",
       "source_location": "L1",
       "id": "src_lib_page_chrome_tsx",
-      "community": 20,
+      "community": 19,
       "norm_label": "page-chrome.tsx"
     },
     {
@@ -1302,7 +1293,7 @@
       "source_file": "src\\lib\\page-chrome.tsx",
       "source_location": "L38",
       "id": "page_chrome_pagechromeprovider",
-      "community": 20,
+      "community": 19,
       "norm_label": "pagechromeprovider()"
     },
     {
@@ -1311,7 +1302,7 @@
       "source_file": "src\\lib\\page-chrome.tsx",
       "source_location": "L50",
       "id": "page_chrome_usepagechrome",
-      "community": 20,
+      "community": 19,
       "norm_label": "usepagechrome()"
     },
     {
@@ -1320,7 +1311,7 @@
       "source_file": "src\\lib\\page-chrome.tsx",
       "source_location": "L63",
       "id": "page_chrome_usedeclarepagechrome",
-      "community": 20,
+      "community": 19,
       "norm_label": "usedeclarepagechrome()"
     },
     {
@@ -1374,7 +1365,7 @@
       "source_file": "src\\lib\\tags.ts",
       "source_location": "L1",
       "id": "src_lib_tags_ts",
-      "community": 21,
+      "community": 20,
       "norm_label": "tags.ts"
     },
     {
@@ -1383,7 +1374,7 @@
       "source_file": "src\\lib\\tags.ts",
       "source_location": "L31",
       "id": "tags_fetchtags",
-      "community": 21,
+      "community": 20,
       "norm_label": "fetchtags()"
     },
     {
@@ -1392,7 +1383,7 @@
       "source_file": "src\\lib\\tags.ts",
       "source_location": "L61",
       "id": "tags_tagstylesbyname",
-      "community": 21,
+      "community": 20,
       "norm_label": "tagstylesbyname()"
     },
     {
@@ -1401,7 +1392,7 @@
       "source_file": "src\\lib\\tags.ts",
       "source_location": "L72",
       "id": "tags_tagstylefor",
-      "community": 21,
+      "community": 20,
       "norm_label": "tagstylefor()"
     },
     {
@@ -1599,7 +1590,7 @@
       "source_file": "supabase\\functions\\stripe-checkout-session\\index.ts",
       "source_location": "L1",
       "id": "supabase_functions_stripe_checkout_session_index_ts",
-      "community": 22,
+      "community": 21,
       "norm_label": "index.ts"
     },
     {
@@ -1608,7 +1599,7 @@
       "source_file": "supabase\\functions\\stripe-update-billing\\index.ts",
       "source_location": "L81",
       "id": "index_json",
-      "community": 22,
+      "community": 21,
       "norm_label": "json()"
     },
     {
@@ -1617,7 +1608,7 @@
       "source_file": "supabase\\functions\\stripe-portal-link\\index.ts",
       "source_location": "L1",
       "id": "supabase_functions_stripe_portal_link_index_ts",
-      "community": 22,
+      "community": 21,
       "norm_label": "index.ts"
     },
     {
@@ -1626,7 +1617,7 @@
       "source_file": "supabase\\functions\\stripe-update-billing\\index.ts",
       "source_location": "L1",
       "id": "supabase_functions_stripe_update_billing_index_ts",
-      "community": 22,
+      "community": 21,
       "norm_label": "index.ts"
     },
     {
@@ -3048,18 +3039,6 @@
       "_tgt": "appshell_appshell",
       "source": "src_components_layout_appshell_tsx",
       "target": "appshell_appshell",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src\\components\\layout\\AppShell.tsx",
-      "source_location": "L52",
-      "weight": 1.0,
-      "_src": "src_components_layout_appshell_tsx",
-      "_tgt": "appshell_coque",
-      "source": "src_components_layout_appshell_tsx",
-      "target": "appshell_coque",
       "confidence_score": 1.0
     },
     {

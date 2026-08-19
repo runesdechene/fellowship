@@ -446,14 +446,16 @@
      rectangle brun qui glisse puis se remplit est précisément ce qui fait
      bricolé.
 
-     L'image RETARDE sur son mur, et c'est tout le sujet. Sans ce décalage, un
-     bloc glisse ; avec, un mur arrive et l'image qu'il porte semble plus
-     loin. Le retard découvrirait le bord droit du mur, d'où l'agrandissement
-     qui le couvre — et qui se pose en fin de course, ce qui donne au geste sa
-     dernière image. */
+     UNE GLISSADE, ET RIEN D'AUTRE. L'image a porté un temps un léger retard
+     sur son cadre et un agrandissement qui se posait à l'arrivée — une
+     profondeur. Uriel l'a refusée : le geste doit être lisible comme un seul
+     mouvement, du bord de l'écran jusqu'à sa place. Deux vitesses, c'est deux
+     gestes.
+
+     C'est l'AFFICHE qui glisse, pas son cadre. Le cadre est déjà là, à la
+     couleur du panneau : on voit donc une image arriver SUR la page, et non
+     une fente sombre se remplir. */
   --wall-entry-motion: var(--duration-entrance) var(--ease-arrive);
-  --wall-entry-lag: -5%;
-  --wall-entry-zoom: 1.14;
 
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,

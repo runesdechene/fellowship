@@ -12,10 +12,6 @@
    -------------------------------------------------------------------------- */
 
 .poster-wall {
-  --wall-haut: var(--brown-900);
-  --wall-milieu: var(--brown-800);
-  --wall-bas: var(--brown-900);
-
   position: sticky;
   top: 0;
   align-self: flex-start;
@@ -23,62 +19,56 @@
   width: var(--wall-width);
   height: 100vh;
   overflow: hidden;
-  /* Caché tant que l'image n'est pas prête — mais il garde sa place, sinon la
-     colonne de lecture s'élargirait puis se resserrerait. */
-  visibility: hidden;
   /* Les rayons sont TOURNÉS VERS LE CONTENU : l'affiche se lit comme une
      dalle posée sur le crème. Ils portent aussi la coupe de l'image, grâce à
      l'`overflow: hidden` juste au-dessus. */
   border-radius: var(--wall-radius) 0 0 var(--wall-radius);
-  background: var(--wall-milieu);
+  /* LA COULEUR DU CONTENU, et non un brun d'attente. Le cadre est en place
+     avant l'affiche ; le voir clair fait lire l'image comme quelque chose qui
+     ARRIVE SUR la page, là où un fond sombre donnait une fente qui se
+     remplit. C'est aussi ce qui a rendu inutile l'échantillonnage des
+     couleurs de l'affiche : plus rien ne les lisait. */
+  background: var(--surface-panel);
 }
 
 /* =============================================================================
-   L'ARRIVÉE — le mur entre par la droite
+   LA GLISSADE — l'affiche entre par le bord de l'écran
    =============================================================================
-   Le mur est INVISIBLE tant que son image n'est pas prête, mais il garde sa
-   place : la colonne de lecture ne change donc jamais de largeur. Sans ça, on
-   verrait la colonne brune se poser, puis se téléporter à droite pour glisser
-   à nouveau.
+   L'AFFICHE GLISSE, PAS SON CADRE. Le cadre est posé dès le départ, à la
+   couleur du panneau ; l'image et son voile arrivent dedans. Un seul
+   mouvement, une seule vitesse : l'image a porté un temps un retard sur son
+   cadre et un agrandissement qui se posait à l'arrivée, et deux vitesses se
+   lisent comme deux gestes.
 
-   « Prêt » vaut aussi pour une image en ERREUR (voir PosterWall.tsx) : le mur
-   arrive alors avec son fond seul, plutôt que de ne jamais venir. */
-.poster-wall--entre {
-  visibility: visible;
-  animation: mur-arrive var(--wall-entry-motion) both;
+   Le départ hors champ est écrit sur la règle de base, pas seulement dans le
+   `from` : sans ça, le voile brun se poserait à sa place, puis sauterait à
+   droite pour glisser à nouveau.
+
+   Le déclencheur est l'image PRÊTE, jamais le chargement de la page — et une
+   image en ERREUR compte comme prête (voir PosterWall.tsx), sinon une URL
+   cassée la laisserait hors champ pour toujours. */
+.poster-wall--entre .poster-wall__image,
+.poster-wall--entre .poster-wall__veil {
+  animation: affiche-glisse var(--wall-entry-motion) both;
 }
 
-.poster-wall--entre .poster-wall__image {
-  animation: affiche-suit var(--wall-entry-motion) both;
-}
-
-@keyframes mur-arrive {
+@keyframes affiche-glisse {
   from {
     transform: translateX(100%);
   }
-}
 
-@keyframes affiche-suit {
-  from {
-    transform: translateX(var(--wall-entry-lag)) scale(var(--wall-entry-zoom));
+  to {
+    transform: translateX(0);
   }
 }
 
-/* Le mur PARAÎT au lieu d'arriver. On ne supprime pas le geste — sans lui, le
-   mur resterait caché — on lui retire son déplacement. */
+/* L'affiche PARAÎT au lieu de glisser. On ne supprime pas le geste — sans
+   lui elle resterait hors champ — on lui retire son déplacement. */
 @media (prefers-reduced-motion: reduce) {
-  .poster-wall--entre {
-    animation-name: mur-parait;
-  }
-
-  .poster-wall--entre .poster-wall__image {
+  .poster-wall--entre .poster-wall__image,
+  .poster-wall--entre .poster-wall__veil {
     animation: none;
-  }
-}
-
-@keyframes mur-parait {
-  from {
-    opacity: 0;
+    transform: none;
   }
 }
 
@@ -94,6 +84,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Hors champ tant qu'elle n'est pas prête — voir la glissade plus haut. */
+  transform: translateX(100%);
 }
 
 /* Un souffle de brun, pour tirer l'affiche vers la palette de la page.
@@ -105,6 +97,9 @@
   inset: 0;
   opacity: var(--wall-veil-opacity);
   background: var(--wall-veil);
+  /* Il voyage AVEC l'affiche : voilé le cadre vide, il donnerait la fente
+     sombre qu'on vient justement de retirer. */
+  transform: translateX(100%);
 }
 
 /* Sous cette largeur la fenêtre n'a plus de place pour une colonne ET une

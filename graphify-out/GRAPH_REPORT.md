@@ -1,12 +1,12 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 63 files · ~568,068 words
+- 63 files · ~567,933 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 268 nodes · 230 edges · 72 communities detected
-- Extraction: 85% EXTRACTED · 13% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
+- 267 nodes · 229 edges · 72 communities detected
+- Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -194,12 +194,12 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 18 - "Community 18"
-Cohesion: 0.5
-Nodes (0): 
-
-### Community 19 - "Community 19"
 Cohesion: 0.83
 Nodes (3): fetchActorProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
+
+### Community 19 - "Community 19"
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 20 - "Community 20"
 Cohesion: 0.5
@@ -207,11 +207,11 @@ Nodes (0):
 
 ### Community 21 - "Community 21"
 Cohesion: 0.5
-Nodes (0): 
+Nodes (1): json()
 
 ### Community 22 - "Community 22"
-Cohesion: 0.5
-Nodes (1): json()
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 23 - "Community 23"
 Cohesion: 0.67
@@ -511,9 +511,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **Why does `Design System Refonte Plan` connect `Community 0` to `Community 1`, `Community 3`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**
