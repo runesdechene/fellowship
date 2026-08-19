@@ -408,17 +408,26 @@
      LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
      ========================================================================
      L'affiche n'est plus une vignette dans la page : c'est le mur de droite,
-     du haut au bas de l'écran. Le flou n'est pas un effet — c'est ce qui rend
-     le mur tenable : la plupart des affiches arrivent en petit JPEG, et
-     étirées sur huit cents pixels elles montrent leurs artefacts.
+     du haut au bas de l'écran.
      ====================================================================== */
   --wall-width: 34vw;
-  /* L'agrandissement compense le flou, qui sinon laisse un liseré
-     transparent tout autour du mur. */
-  /* L'affiche est NETTE depuis qu'Uriel l'a demandé. Le voile ne rattrape
-     donc plus rien : il ne reste que pour lier le mur au crème de la page et
-     couvrir le fond le temps du chargement. Un souffle suffit. */
-  --wall-veil-opacity: 0.1;
+
+  /* LE VOILE EST BRUN, ET C'EST CE QUI LE REND UTILE.
+     Il a longtemps repris les couleurs relevées DANS l'affiche — donc il la
+     teintait avec elle-même, et ne pouvait par construction rapprocher aucune
+     affiche de la page. Un brun profond, lui, tire tout le catalogue vers la
+     palette : l'affiche fluo et l'affiche noire finissent au même endroit.
+
+     Il se règle tout seul, ce qui est l'argument décisif. Sur une affiche
+     saturée il calme vraiment ; sur une affiche déjà sombre il ne fait
+     presque rien, parce qu'il n'y a rien à calmer. Un voile CRÈME faisait
+     l'inverse et mal des deux côtés : laiteux sur les claires, et il
+     éclaircissait les sombres en gris de brume.
+
+     0,2 et pas 0,3 : au-delà, les zones foncées d'une affiche colorée perdent
+     leurs teintes et virent au boueux. */
+  --wall-veil: var(--brown-900);
+  --wall-veil-opacity: 0.2;
 
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,

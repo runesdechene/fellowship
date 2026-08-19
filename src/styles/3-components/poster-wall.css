@@ -44,19 +44,15 @@
   object-fit: cover;
 }
 
-/* Un souffle de la couleur de l'affiche, pour lier le mur au crème de la page
-   et couvrir le fond le temps du chargement. Il ne rattrape plus rien depuis
-   que l'image est nette : d'où une opacité très basse. */
+/* Un souffle de brun, pour tirer l'affiche vers la palette de la page.
+   À PLAT, et non plus en dégradé des couleurs relevées dans l'image : ce
+   dégradé teintait l'affiche avec elle-même, donc il ne la rapprochait de
+   rien. Le raisonnement complet est sur --wall-veil, en couche 2. */
 .poster-wall__veil {
   position: absolute;
   inset: 0;
   opacity: var(--wall-veil-opacity);
-  background: linear-gradient(
-    180deg,
-    var(--wall-haut) 0%,
-    var(--wall-milieu) 52%,
-    var(--wall-bas) 100%
-  );
+  background: var(--wall-veil);
 }
 
 /* =============================================================================
