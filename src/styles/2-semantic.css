@@ -118,8 +118,15 @@
   --status-todo-surface-hover: var(--wheat-150);
   --status-todo-icon: var(--wheat-400);
 
-  --status-pending-ink: var(--clay-500);
+  /* CE QUI ATTEND CHEZ QUELQU'UN D'AUTRE. Le troisième registre, et celui
+     qui manquait : le blé disait « à toi de jouer », l'olive « c'est fait »,
+     mais rien ne disait « c'est parti, ça ne dépend plus de toi ».
+     Les trois se lisent comme une progression : tiède, chaud, résolu. */
+  --status-pending-ink: var(--clay-700);
   --status-pending-surface: var(--clay-100);
+  --status-pending-surface-hover: var(--clay-150);
+  --status-pending-mark: var(--clay-500);
+  --status-pending-icon: var(--clay-500);
 
   /* Bouton d'action principal. Il ne se distingue pas par une couleur mais
      par le CONTRASTE : une surface sombre au milieu de surfaces claires.

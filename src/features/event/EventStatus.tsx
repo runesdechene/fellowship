@@ -33,8 +33,10 @@ import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent
  */
 const PARTICIPATION: SelectOption<ParticipationStatus | null>[] = [
   { value: null, label: 'Je n’y vais pas', tone: 'muet', Icon: CircleMinus },
-  { value: 'interesse', label: 'Intéressé', tone: 'muet', Icon: Star },
-  { value: 'en_cours', label: 'Dossier en cours', tone: 'todo', Icon: FileClock },
+  // Blé : la date est notée, rien n'est fait — c'est à TOI de candidater.
+  { value: 'interesse', label: 'Intéressé', tone: 'todo', Icon: Star },
+  // Terre : le dossier est parti, ça ne dépend plus de toi.
+  { value: 'en_cours', label: 'Dossier en cours', tone: 'pending', Icon: FileClock },
   { value: 'inscrit', label: 'Inscrit', tone: 'ok', Icon: CircleCheck },
 ]
 

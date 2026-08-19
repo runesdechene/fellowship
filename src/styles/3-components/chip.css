@@ -25,6 +25,12 @@
   font: var(--type-chip-strong);
 }
 
+.chip--todo {
+  background: var(--status-todo-surface);
+  color: var(--status-todo-ink);
+  font: var(--type-chip-strong);
+}
+
 .chip--pending {
   background: var(--status-pending-surface);
   color: var(--status-pending-ink);

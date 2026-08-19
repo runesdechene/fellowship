@@ -1,7 +1,13 @@
 import type { ReactNode } from 'react'
 
-/** neutral = information · ok = acquis · pending = en attente */
-export type ChipTone = 'neutral' | 'ok' | 'pending'
+/**
+ * Les registres de l’app, dans l’ordre où on les traverse :
+ *   neutral — une information, pas un état
+ *   todo    — à TOI de jouer (blé)
+ *   pending — c’est parti, ça attend chez quelqu’un d’autre (terre du logo)
+ *   ok      — c’est acquis (olive)
+ */
+export type ChipTone = 'neutral' | 'todo' | 'pending' | 'ok'
 
 interface ChipProps {
   tone?: ChipTone

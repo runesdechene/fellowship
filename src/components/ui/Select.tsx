@@ -16,7 +16,14 @@ import type { LucideIcon } from 'lucide-react'
  * est une régression, pas une amélioration.
  */
 
-export type SelectTone = 'muet' | 'todo' | 'ok'
+/**
+ * Les trois registres de l'app, dans l'ordre où on les traverse :
+ *   todo     — à TOI de jouer (blé)
+ *   pending  — c'est parti, ça attend chez quelqu'un d'autre (terre du logo)
+ *   ok       — c'est acquis (olive)
+ * Le ton muet n'est pas un état : c'est l'absence d'état.
+ */
+export type SelectTone = 'muet' | 'todo' | 'pending' | 'ok'
 
 export type SelectOption<T> = {
   value: T

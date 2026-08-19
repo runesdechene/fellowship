@@ -83,6 +83,15 @@
   background: var(--status-todo-surface-hover);
 }
 
+.select__valeur--plein.select__valeur--pending {
+  background: var(--status-pending-surface);
+  color: var(--status-pending-ink);
+}
+
+.select__valeur--plein.select__valeur--pending:hover:not(:disabled) {
+  background: var(--status-pending-surface-hover);
+}
+
 /* Sur un aplat, l'icône et le chevron reprennent l'encre du texte : garder
    leur teinte d'origine ferait deux verts qui se ratent de peu. */
 .select__valeur--plein.select__valeur--ok .select__icone,
@@ -93,6 +102,11 @@
 .select__valeur--plein.select__valeur--todo .select__icone,
 .select__valeur--plein.select__valeur--todo .select__chevron {
   color: var(--status-todo-ink);
+}
+
+.select__valeur--plein.select__valeur--pending .select__icone,
+.select__valeur--plein.select__valeur--pending .select__chevron {
+  color: var(--status-pending-ink);
 }
 
 /* --- L'icône porte la teinte de l'état -----------------------------------
@@ -112,6 +126,11 @@
 .select__valeur--todo .select__icone,
 .select__option--todo .select__icone {
   color: var(--status-todo-icon);
+}
+
+.select__valeur--pending .select__icone,
+.select__option--pending .select__icone {
+  color: var(--status-pending-icon);
 }
 
 /* --- Le menu -------------------------------------------------------------- */
@@ -168,4 +187,9 @@
 .select__option--todo[aria-selected='true'] {
   background: var(--status-todo-surface);
   color: var(--status-todo-ink);
+}
+
+.select__option--pending[aria-selected='true'] {
+  background: var(--status-pending-surface);
+  color: var(--status-pending-ink);
 }

@@ -4,11 +4,22 @@ import { formatEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { Settlement, SettlementState } from './useDashboard'
 
-/** Ce que chaque état raconte, et avec quelle pastille. */
+/**
+ * Ce que chaque état raconte, et avec quelle pastille.
+ *
+ * Les teintes suivent le registre de l’app et non l’avancement : ce qui
+ * compte n’est pas « où j’en suis » mais « qui doit bouger ».
+ *   dossier — le dossier est parti, ça attend chez l’organisateur : TERRE
+ *   acompte — l’acompte est versé, il reste le solde à payer : BLÉ
+ *   à payer — rien n’est versé, tout reste à faire : BLÉ
+ *
+ * « Acompte versé » portait l’olive, donc l’ACQUIS, alors qu’il reste de
+ * l’argent à sortir. C’est tout ce que le bloc « À régler » sert à dire.
+ */
 const STATE: Record<SettlementState, { label: string; tone: ChipTone }> = {
-  dossier: { label: 'Dossier envoyé', tone: 'neutral' },
-  acompte: { label: 'Acompte versé', tone: 'ok' },
-  'a-payer': { label: 'À payer', tone: 'pending' },
+  dossier: { label: 'Dossier envoyé', tone: 'pending' },
+  acompte: { label: 'Acompte versé', tone: 'todo' },
+  'a-payer': { label: 'À payer', tone: 'todo' },
 }
 
 export function SettlementsSection({ settlements }: { settlements: Settlement[] }) {

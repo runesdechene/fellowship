@@ -51,10 +51,21 @@
   --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
 
   /* ---------------------------------------------------------------------
-     PALETTE — TERRE (statuts non validés)
+     PALETTE — TERRE (ce qui attend une réponse chez quelqu'un d'autre)
+
+     C'est la couleur du logo, 23°. Elle a longtemps servi de fourre-tout
+     « pas validé » ; elle a désormais un rôle précis, entre le blé et
+     l'olive : le dossier est parti, la balle est dans le camp de
+     l'organisateur, et il n'y a plus rien à faire qu'attendre.
+
+     Mêmes trois clartés que l'olive et le blé — 500 pour l'icône (3,57:1),
+     700 dès que la couleur PORTE du texte (4,69:1, contre 3,41 pour le 500,
+     qui ne passait pas).
      --------------------------------------------------------------------- */
   --clay-100: #f6e7dc;
+  --clay-150: #f1d9c8; /* le même, au survol d'un aplat plein */
   --clay-500: #c0642a;
+  --clay-700: #9f5223;
 
   /* ---------------------------------------------------------------------
      PALETTE — OLIVE (ce qui est acquis)
