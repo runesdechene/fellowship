@@ -7,10 +7,12 @@
    posés AU-DESSUS des cartes.
    -------------------------------------------------------------------------- */
 
+/* Elle respire plus haut que les autres écrans : son titre est le seul à
+   devoir tenir tête au mur d'affiche posé juste à côté. */
 .event-page {
   max-width: var(--event-page-max-width);
   margin-inline: auto;
-  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+  padding: var(--event-page-padding-top) var(--page-gutter) var(--space-40);
 }
 
 /* --- Retour --------------------------------------------------------------- */
@@ -132,33 +134,56 @@
 /* La carte qui porte le contenu d'un bloc. Un seul fond, aucun contour :
    c'est la teinte qui la détache du panneau. */
 .event-page__card {
-  padding: var(--event-facts-padding);
+  padding: var(--event-card-padding);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }
 
-/* --- Infos pratiques ------------------------------------------------------ */
-/* Les informations se rangent en colonnes égales et repassent à la ligne dès
-   qu'une colonne descendrait sous sa largeur plancher : rien ne se serre. */
+/* --- Infos pratiques ------------------------------------------------------
+   Chaque fait est une CARTE : l'icône à gauche, puis le libellé en
+   micro-capitales, la valeur en gras, et ce qui la précise en dessous.
+
+   Trois par ligne sur la largeur de lecture, et ça repasse à la ligne plutôt
+   que de se serrer. C'est la carte qui porte le fait — d'où une valeur en
+   14 px et non en 18 : à 18 une plage de dates débordait de son tiers. */
+/* Une GRILLE et non un flex : `grid-auto-rows: 1fr` donne la meme hauteur a
+   toutes les cartes, y compris d une ligne a l autre. En flex, une valeur qui
+   passe sur deux lignes gonflait sa rangee et cassait le rythme. */
 .event-page__facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--event-fact-min-width), 1fr));
-  gap: var(--event-fact-gap-y) var(--event-fact-gap-x);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--event-fact-min-width), 1fr)
+  );
+  grid-auto-rows: 1fr;
+  gap: var(--event-fact-gap);
 }
 
 .event-page__fact {
+  display: flex;
+  align-items: center;
+  gap: var(--event-fact-icon-gap);
+  min-width: 0;
+  padding: var(--event-fact-padding-y) var(--event-fact-padding-x);
+  border-radius: var(--radius-fact);
+  background: var(--surface-card);
+}
+
+.event-page__fact-icon {
+  flex: none;
+  color: var(--ink-soft);
+}
+
+.event-page__fact-body {
   display: flex;
   flex-direction: column;
   gap: var(--event-fact-label-gap);
   min-width: 0;
 }
 
-/* L'icône vit DANS le libellé, à sa taille. Une tuile de fond posait un carré
-   pâle de plus sans rien apprendre — six d'affilée faisaient du bruit. */
+/* Le libellé dit CE QUE C'EST : c'est lui qu'on cherche en balayant la fiche.
+   Il a longtemps été plus pâle que sa valeur — l'inverse du besoin. */
 .event-page__fact-label {
-  display: flex;
-  align-items: center;
-  gap: var(--event-fact-icon-gap);
   font: var(--type-event-fact-label);
   letter-spacing: var(--tracking-fact-label);
   text-transform: uppercase;
@@ -169,6 +194,13 @@
 .event-page__fact-value {
   font: var(--type-event-fact-value);
   color: var(--ink-title);
+}
+
+/* Ce qui précise la valeur sans être elle : la durée sous les dates, la salle
+   sous la ville, le mode de candidature sous l'échéance. */
+.event-page__fact-sub {
+  font: var(--type-event-fact-sub);
+  color: var(--ink-soft);
 }
 
 /* Ce que le festival n'a pas donné garde sa place, mais pas le même poids :
@@ -203,16 +235,26 @@
   color: var(--ink-soft);
 }
 
-/* --- Les compagnons ------------------------------------------------------- */
-/* Une bande d'avatars qui se chevauchent, puis la phrase qui les compte. Le
+/* --- Les compagnons -------------------------------------------------------
+   Une bande d'avatars qui se chevauchent, puis la phrase qui les compte. Le
    chevauchement dit « un groupe » là où une liste dirait « des gens ».
 
-   Elle a son propre bloc : essayée en simple ligne sous les tags, elle s'y
-   perdait — qui du réseau sera là mérite qu'on s'y arrête. */
+   Elle vit DANS l'accroche, sous les tags, sans titre ni carte : savoir qui
+   d'autre y sera fait partie de l'identité de la date, au même titre que son
+   lieu. Elle avait son propre bloc — un titre de section et un cadre pour une
+   seule ligne de texte, c'était de la structure pour rien. */
 .event-page__companions {
   display: flex;
   align-items: center;
   gap: var(--companion-gap);
+  margin-top: var(--space-20);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.event-page__companions b {
+  font: var(--type-event-meta-accent);
+  color: var(--ink-title);
 }
 
 .event-page__avatars {
@@ -224,22 +266,12 @@
 
   display: inline-flex;
   margin-left: var(--companion-overlap);
-  border: 2px solid var(--surface-card);
+  border: 2px solid var(--surface-panel);
   border-radius: var(--radius-round);
 }
 
 .event-page__avatar:first-child {
   margin-left: 0;
-}
-
-.event-page__companions-text {
-  font: var(--type-event-meta);
-  color: var(--ink-soft);
-}
-
-.event-page__companions-text b {
-  font: var(--type-event-meta-accent);
-  color: var(--ink-title);
 }
 
 /* --- À propos -------------------------------------------------------------

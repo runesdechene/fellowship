@@ -97,6 +97,7 @@
      couche 1, c’est exactement ce qui a fait traîner l’olive six mois.
      --------------------------------------------------------------------- */
   --wheat-100: #e9e1b4;
+  --wheat-400: #96862c;
   --wheat-500: #b29f34;
   --wheat-700: #6b5f1f;
 
@@ -166,6 +167,7 @@
   --space-51: 51px;
   --space-64: 64px;
   --space-80: 80px;
+  --space-150: 150px; /* la respiration au-dessus du titre d’une fiche */
   --space-70: 70px;
 
   /* ---------------------------------------------------------------------
@@ -220,7 +222,7 @@
   --width-companion-avatar: 40px; /* les avatars de la bande de compagnons */
   --height-stepper-step: 40px; /* un cran du suivi */
   --width-stepper-box: 19px; /* sa case a cocher */
-  --width-fact-min: 200px; /* en dessous, une info pratique passe à la ligne */
+  --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */
   --height-ledger-row: 40px; /* une ligne du registre */
   --width-main-min: 380px; /* sous cette largeur, le suivi passe dessous */
 }

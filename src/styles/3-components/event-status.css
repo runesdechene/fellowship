@@ -59,23 +59,24 @@
   background: var(--surface-row-hover);
 }
 
-/* La pastille de 8 px ne porte aucun texte : elle garde donc la teinte
-   PLEINE, la belle. C'est la règle qui réconcilie couleur et lisibilité —
-   le mot est lisible tout seul, la couleur n'a plus rien à porter. */
-.event-status__dot {
+/* CHAQUE ÉTAT A SON DESSIN, pas seulement sa teinte. Une pastille ronde dit
+   qu'il se passe quelque chose ; une étoile, un sablier ou une coche disent
+   QUOI — et ils le disent aussi en noir et blanc, ou pour un daltonien.
+
+   Une icône PORTE du sens : son plancher de contraste est 3:1, pas celui
+   d'une pastille décorative. D'où --status-*-icon, un cran plus sombre que
+   la marque : la teinte ne bouge pas, seule la clarté descend. */
+.event-status__icon {
   flex: none;
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border-radius: var(--radius-round);
-  background: var(--brown-250);
+  color: var(--ink-soft);
 }
 
-.event-status__pick--ok .event-status__dot {
-  background: var(--status-ok-mark);
+.event-status__pick--ok .event-status__icon {
+  color: var(--status-ok-icon);
 }
 
-.event-status__pick--todo .event-status__dot {
-  background: var(--status-todo-mark);
+.event-status__pick--todo .event-status__icon {
+  color: var(--status-todo-icon);
 }
 
 .event-status__chev {

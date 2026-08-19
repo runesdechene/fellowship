@@ -104,6 +104,10 @@
   --status-ok-ink: var(--olive-700);
   --status-ok-surface: var(--olive-100);
   --status-ok-mark: var(--olive-500);
+  /* L’ICÔNE, elle, porte du sens : son plancher est 3:1, pas celui d’une
+     pastille décorative. D’où une clarté intermédiaire — la teinte ne bouge
+     pas, seule la clarté descend. */
+  --status-ok-icon: var(--olive-400);
 
   /* CE QUI ATTEND UN GESTE. Le registre qui manquait : sans lui « à payer »
      se lisait comme « payé », et le bloc « À régler » du tableau de bord
@@ -111,6 +115,7 @@
   --status-todo-ink: var(--wheat-700);
   --status-todo-surface: var(--wheat-100);
   --status-todo-mark: var(--wheat-500);
+  --status-todo-icon: var(--wheat-400);
 
   --status-pending-ink: var(--clay-500);
   --status-pending-surface: var(--clay-100);
@@ -253,6 +258,9 @@
   --page-gutter: var(--space-32);
   --page-max-width: calc(var(--shell-content-width) + 2 * var(--page-gutter));
   --page-padding-top: var(--space-51);
+  /* La fiche d’un événement respire plus haut que les autres écrans : son
+     titre est le seul à devoir tenir tête au mur d’affiche posé à côté. */
+  --event-page-padding-top: var(--space-150);
 
   /* Respiration verticale entre les grands blocs */
   --gap-section: var(--space-42);
@@ -409,10 +417,16 @@
 
   /* Les informations pratiques se rangent en colonnes qui se partagent la
      largeur, et repassent à la ligne plutôt que de se serrer. */
+  /* Le rembourrage d une carte de bloc (« À propos », le bilan). Il
+     s appelait --event-facts-padding, du nom d une zone qui ne l utilise
+     plus depuis que les faits sont eux-memes des cartes. */
+  --event-card-padding: var(--card-padding);
+
   --event-fact-min-width: var(--width-fact-min);
-  --event-fact-gap-x: var(--space-32);
-  --event-fact-gap-y: var(--space-32);
-  --event-facts-padding: var(--card-padding);
+  --event-fact-gap: var(--space-10);
+  --event-fact-padding-x: var(--space-14);
+  --event-fact-padding-y: var(--space-12);
+  --radius-fact: var(--radius-nav);
 
   /* Le libelle en micro-capitales, la valeur en grand dessous. L'icone vit
      DANS le libelle, a sa taille : une tuile pale de plus posait un carre
@@ -420,7 +434,13 @@
   --type-event-fact-label: var(--weight-bold) var(--size-10) /
     var(--leading-snug) var(--family-sans);
   --tracking-fact-label: var(--tracking-wide);
-  --type-event-fact-value: var(--weight-bold) var(--size-18) /
+  /* La valeur tient dans un tiers de la colonne : à 18 px une plage de dates
+     débordait. C’est la CARTE qui porte le fait, plus la taille du texte. */
+  --type-event-fact-value: var(--weight-bold) var(--size-14) /
+    var(--leading-snug) var(--family-sans);
+  /* Ce qui précise la valeur sans être elle : la durée sous les dates, la
+     salle sous la ville, le mode de candidature sous l’échéance. */
+  --type-event-fact-sub: var(--weight-medium) var(--size-10) /
     var(--leading-snug) var(--family-sans);
   --type-event-fact-missing: var(--weight-medium) var(--size-14) /
     var(--leading-snug) var(--family-sans);

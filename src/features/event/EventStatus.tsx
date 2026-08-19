@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import {
+  ChevronDown,
+  CircleCheck,
+  CircleMinus,
+  CircleX,
+  Coins,
+  FileClock,
+  Hourglass,
+  Star,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import type { ParticipationStatus } from '@/types/database'
 import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent'
 
@@ -18,7 +28,12 @@ import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent
 
 type Ton = 'muet' | 'todo' | 'ok'
 
-type Choix<T> = { key: T; label: string; ton: Ton }
+/**
+ * Chaque état a SON dessin, pas seulement sa teinte. Une pastille ronde dit
+ * qu'il se passe quelque chose ; une étoile, un sablier ou une coche disent
+ * QUOI — et ils le disent aussi en noir et blanc, ou pour un daltonien.
+ */
+type Choix<T> = { key: T; label: string; ton: Ton; Icon: LucideIcon }
 
 /**
  * Les crans de participation, dans l'ordre du chemin. Le premier retire la
@@ -26,10 +41,10 @@ type Choix<T> = { key: T; label: string; ton: Ton }
  * retire », là où le suivi d'avant demandait un lien séparé.
  */
 const PARTICIPATION: Choix<ParticipationStatus | null>[] = [
-  { key: null, label: 'Je n’y vais pas', ton: 'muet' },
-  { key: 'interesse', label: 'Intéressé', ton: 'muet' },
-  { key: 'en_cours', label: 'Dossier en cours', ton: 'todo' },
-  { key: 'inscrit', label: 'Inscrit', ton: 'ok' },
+  { key: null, label: 'Je n’y vais pas', ton: 'muet', Icon: CircleMinus },
+  { key: 'interesse', label: 'Intéressé', ton: 'muet', Icon: Star },
+  { key: 'en_cours', label: 'Dossier en cours', ton: 'todo', Icon: FileClock },
+  { key: 'inscrit', label: 'Inscrit', ton: 'ok', Icon: CircleCheck },
 ]
 
 /**
@@ -41,19 +56,20 @@ const REFUSE: Choix<ParticipationStatus | null> = {
   key: 'refuse',
   label: 'Dossier refusé',
   ton: 'muet',
+  Icon: CircleX,
 }
 
 /** Les mêmes états en base, lus selon qu'on paie sa place ou qu'on est payé. */
 const PAIEMENT: Record<PaymentOrientation, Choix<PaymentStatus>[]> = {
   payeur: [
-    { key: 'a_payer', label: 'À payer', ton: 'todo' },
-    { key: 'acompte_verse', label: 'Acompte versé', ton: 'todo' },
-    { key: 'paye', label: 'Payé', ton: 'ok' },
+    { key: 'a_payer', label: 'À payer', ton: 'todo', Icon: Hourglass },
+    { key: 'acompte_verse', label: 'Acompte versé', ton: 'todo', Icon: Coins },
+    { key: 'paye', label: 'Payé', ton: 'ok', Icon: CircleCheck },
   ],
   paye: [
-    { key: 'a_payer', label: 'À recevoir', ton: 'todo' },
-    { key: 'acompte_verse', label: 'Acompte reçu', ton: 'todo' },
-    { key: 'paye', label: 'Reçu', ton: 'ok' },
+    { key: 'a_payer', label: 'À recevoir', ton: 'todo', Icon: Hourglass },
+    { key: 'acompte_verse', label: 'Acompte reçu', ton: 'todo', Icon: Coins },
+    { key: 'paye', label: 'Reçu', ton: 'ok', Icon: CircleCheck },
   ],
 }
 
@@ -83,7 +99,7 @@ function Pick<T extends string | null>({
 
   return (
     <span className={`event-status__pick event-status__pick--${courant.ton}`}>
-      <span className="event-status__dot" />
+      <courant.Icon className="event-status__icon" size={16} strokeWidth={2} />
       {courant.label}
       <ChevronDown className="event-status__chev" size={14} strokeWidth={2} />
       <select

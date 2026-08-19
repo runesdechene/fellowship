@@ -5,7 +5,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
-import { formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
+import { daysUntil, formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
@@ -20,6 +20,17 @@ import type { EventLedgerLine } from './useEvent'
 function formatRange(start: Date, end: Date): string {
   if (start.getTime() === end.getTime()) return `Le ${formatDayMonth(start)}`
   return `Du ${formatDayMonth(start)} au ${formatDayMonth(end)}`
+}
+
+/**
+ * Combien de jours dure la date. Posé SOUS ses bornes : un exposant compte en
+ * jours de stand, pas en dates de calendrier — c'est ce nombre qui lui dit
+ * s'il doit prévoir une nuit d'hôtel.
+ */
+function formatDuration(start: Date, end: Date): string | null {
+  const jours = daysUntil(end, start) + 1
+  if (jours <= 1) return null
+  return `${jours} jours`
 }
 
 /**
@@ -50,26 +61,33 @@ function Block({
 }
 
 /**
- * Une information pratique. Ce qui n'a pas été renseigné garde sa place, en
- * éteint : la fiche dit aussi ce que le festival n'a pas encore donné.
+ * Une information pratique, en CARTE : l'icône à gauche, puis le libellé en
+ * micro-capitales, la valeur en gras, et ce qui la précise en dessous.
+ *
+ * Ce qui n'a pas été renseigné garde sa place, en éteint : la fiche dit aussi
+ * ce que le festival n'a pas encore donné.
  */
 function Fact({
   Icon,
   label,
   value,
+  sub,
 }: {
   Icon: LucideIcon
   label: string
   value: string | null | undefined
+  /** Ce qui précise la valeur sans être elle : la durée, la salle, le mode. */
+  sub?: string | null
 }) {
   return (
     <div className="event-page__fact">
-      <span className="event-page__fact-label">
-        <Icon size={13} strokeWidth={2} />
-        {label}
-      </span>
-      <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
-        {value || 'Non renseigné'}
+      <Icon className="event-page__fact-icon" size={20} strokeWidth={1.8} />
+      <span className="event-page__fact-body">
+        <span className="event-page__fact-label">{label}</span>
+        <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
+          {value || 'Non renseigné'}
+        </span>
+        {value && sub && <span className="event-page__fact-sub">{sub}</span>}
       </span>
     </div>
   )
@@ -192,6 +210,30 @@ export function EventPage() {
                   ))}
                 </div>
               )}
+
+              {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
+                  de l'identité de la date, au même titre que son lieu — ça ne
+                  méritait ni un titre de section ni une carte. */}
+              {friends.length > 0 && (
+                <p className="event-page__companions">
+                  <span className="event-page__avatars">
+                    {friends.slice(0, 5).map((friend) => (
+                      <span key={friend.id} className="event-page__avatar">
+                        <Avatar src={friend.avatarUrl} name={friend.name} />
+                      </span>
+                    ))}
+                  </span>
+                  {friends.length === 1 ? (
+                    <span>
+                      <b>{friends[0].name}</b> y sera aussi
+                    </span>
+                  ) : (
+                    <span>
+                      <b>{friends.length} exposants</b> que tu suis y seront
+                    </span>
+                  )}
+                </p>
+              )}
             </div>
           </header>
 
@@ -209,35 +251,6 @@ export function EventPage() {
             writeError={writeError}
           />
 
-          <Block title="Tes compagnons sur cette date" empty={friends.length === 0}>
-            {friends.length > 0 ? (
-              <div className="event-page__companions">
-                <div className="event-page__avatars">
-                  {friends.slice(0, 5).map((friend) => (
-                    <span key={friend.id} className="event-page__avatar">
-                      <Avatar src={friend.avatarUrl} name={friend.name} />
-                    </span>
-                  ))}
-                </div>
-                <span className="event-page__companions-text">
-                  {friends.length === 1 ? (
-                    <>
-                      <b>{friends[0].name}</b> y sera
-                    </>
-                  ) : (
-                    <>
-                      <b>{friends.length} exposants</b> que tu suis y seront
-                    </>
-                  )}
-                </span>
-              </div>
-            ) : (
-              <p className="event-page__state">
-                Personne de ton réseau n’est encore annoncé sur cette date.
-              </p>
-            )}
-          </Block>
-
           {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
               Le cadre disait « ceci est un bloc » alors que la description est
               simplement la voix de l'organisateur. Les cartes restent pour les
@@ -254,31 +267,39 @@ export function EventPage() {
 
           <Block title="Infos pratiques" bare>
             <div className="event-page__facts">
-              <Fact Icon={CalendarDays} label="Dates" value={formatRange(startDate, endDate)} />
+              <Fact
+                Icon={CalendarDays}
+                label="Dates"
+                value={formatRange(startDate, endDate)}
+                sub={formatDuration(startDate, endDate)}
+              />
               <Fact Icon={Clock} label="Horaires" value={event.opening_hours} />
               <Fact
                 Icon={MapPin}
                 label="Lieu"
-                value={event.address || `${event.city} (${event.department})`}
+                value={`${event.city} (${event.department})`}
+                sub={event.address}
               />
               <Fact
                 Icon={Users}
-                label="Fréquentation attendue"
+                label="Fréquentation"
                 value={event.expected_attendance}
               />
               <Fact
                 Icon={FileText}
-                label="Candidatures jusqu’au"
+                label="Candidater jusqu’au"
                 value={
                   event.registration_deadline
                     ? formatFullDate(new Date(event.registration_deadline))
                     : null
                 }
+                sub={event.registration_url ? 'En ligne' : event.contact_email ? 'Par e-mail' : null}
               />
               <Fact
                 Icon={Store}
-                label={event.stand_size ? `Emplacement (${event.stand_size})` : 'Emplacement'}
+                label="Emplacement"
                 value={event.stand_price}
+                sub={event.stand_size}
               />
             </div>
 
