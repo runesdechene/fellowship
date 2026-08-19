@@ -233,7 +233,7 @@
   --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */
 
   /* Les contrôles de choix : le suivi, les sélecteurs et leurs menus. */
-  --height-control: 42px;
+  --height-control: 46px;
   --height-option: 38px; /* une ligne dans un menu déroulant */
   --width-menu-max: 260px; /* au-delà, un menu se replierait sur lui-même */
   /* La valeur du paiement est FIGÉE : « Acompte versé » est plus long que

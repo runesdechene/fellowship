@@ -52,15 +52,23 @@ const REFUSE: SelectOption<ParticipationStatus | null> = {
   Icon: CircleX,
 }
 
-/** Les mêmes états en base, lus selon qu'on paie sa place ou qu'on est payé. */
+/**
+ * Les mêmes états en base, lus selon qu'on paie sa place ou qu'on est payé.
+ *
+ * L'argent porte une JAUGE, pas la sémantique « qui doit bouger » de la
+ * participation — et c'est voulu : un intérêt n'a aucune urgence, une dette
+ * en a une. Terre, blé, olive : rien n'a bougé, ça a commencé, c'est réglé.
+ * La terre est celle du logo, la même que « Dossier en cours » : dans les
+ * deux cas elle dit « ça n'a pas avancé ».
+ */
 const PAIEMENT: Record<PaymentOrientation, SelectOption<PaymentStatus>[]> = {
   payeur: [
-    { value: 'a_payer', label: 'À payer', tone: 'todo', Icon: Hourglass },
+    { value: 'a_payer', label: 'À payer', tone: 'pending', Icon: Hourglass },
     { value: 'acompte_verse', label: 'Acompte versé', tone: 'todo', Icon: Coins },
     { value: 'paye', label: 'Payé', tone: 'ok', Icon: CircleCheck },
   ],
   paye: [
-    { value: 'a_payer', label: 'À recevoir', tone: 'todo', Icon: Hourglass },
+    { value: 'a_payer', label: 'À recevoir', tone: 'pending', Icon: Hourglass },
     { value: 'acompte_verse', label: 'Acompte reçu', tone: 'todo', Icon: Coins },
     { value: 'paye', label: 'Reçu', tone: 'ok', Icon: CircleCheck },
   ],

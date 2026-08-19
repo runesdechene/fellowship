@@ -418,8 +418,6 @@
      le retenu prend la surface claire, l autre n en a aucune, et il se lit
      comme un libelle eteint plutot que comme l option qu on peut choisir.
      La piste les tient ensemble et dit « ces deux-la vont par paire ». */
-  --status-track-surface: var(--cream-300);
-  --status-track-padding: var(--space-4);
   --status-participation-width: var(--width-status-participation);
   --status-amount-width: var(--width-status-amount);
   --type-status-unit: var(--weight-semibold) var(--size-12) /

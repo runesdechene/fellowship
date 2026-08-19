@@ -19,7 +19,7 @@ import type { Settlement, SettlementState } from './useDashboard'
 const STATE: Record<SettlementState, { label: string; tone: ChipTone }> = {
   dossier: { label: 'Dossier envoyé', tone: 'pending' },
   acompte: { label: 'Acompte versé', tone: 'todo' },
-  'a-payer': { label: 'À payer', tone: 'todo' },
+  'a-payer': { label: 'À payer', tone: 'pending' },
 }
 
 export function SettlementsSection({ settlements }: { settlements: Settlement[] }) {

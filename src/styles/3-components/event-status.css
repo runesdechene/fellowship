@@ -71,9 +71,9 @@
    L'option NON retenue n'est pas du texte désactivé : c'est un choix qu'on
    peut faire, elle reste donc lisible. */
 .event-status__side {
-  height: calc(var(--status-row-height) - 2 * var(--status-track-padding));
-  padding: 0 var(--space-12);
-  border-radius: var(--radius-sm);
+  height: var(--status-row-height);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-status-row);
   background: none;
   font: var(--type-status-side);
   color: var(--ink-soft);
@@ -83,8 +83,15 @@
     color var(--menu-motion);
 }
 
-.event-status__side:hover:not(:disabled) {
+/* Le survol ne touche QUE le sens non retenu. Sur celui qui est deja choisi
+   il promettait un changement qui n arrive pas : cliquer dessus ne fait
+   rien. Un survol doit annoncer un geste, pas decorer un etat. */
+.event-status__side:hover:not(:disabled):not([aria-pressed='true']) {
   background: var(--surface-row-hover);
+}
+
+.event-status__side[aria-pressed='true'] {
+  cursor: default;
 }
 
 /* Le sens retenu prend l’aplat clair, celui qui dit « posé au-dessus », ET
