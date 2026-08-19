@@ -414,6 +414,12 @@
      ====================================================================== */
   --status-row-height: var(--height-control);
   --status-pick-width: var(--width-status-pick);
+  /* La PISTE de la bascule. Sans elle, les deux sens flottent dans la barre :
+     le retenu prend la surface claire, l autre n en a aucune, et il se lit
+     comme un libelle eteint plutot que comme l option qu on peut choisir.
+     La piste les tient ensemble et dit « ces deux-la vont par paire ». */
+  --status-track-surface: var(--cream-300);
+  --status-track-padding: var(--space-4);
   --status-participation-width: var(--width-status-participation);
   --status-amount-width: var(--width-status-amount);
   --type-status-unit: var(--weight-semibold) var(--size-12) /
@@ -427,6 +433,10 @@
   --type-status-value: var(--weight-semibold) var(--size-13) /
     var(--leading-snug) var(--family-sans);
   --type-status-side: var(--weight-semibold) var(--size-12) /
+    var(--leading-snug) var(--family-sans);
+  /* Le sens RETENU passe en gras. La surface seule ne suffit pas a le
+     distinguer : c est la meme que celle du champ du montant d a cote. */
+  --type-status-side-on: var(--weight-bold) var(--size-12) /
     var(--leading-snug) var(--family-sans);
 
   /* =========================================================================

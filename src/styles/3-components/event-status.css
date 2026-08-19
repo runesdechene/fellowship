@@ -51,21 +51,36 @@
   background: var(--surface-card);
 }
 
-/* --- Le sens du paiement -------------------------------------------------- */
+/* --- Le sens du paiement -------------------------------------------------
+   Les deux sens vivent dans une PISTE, un cran plus sombre que la barre.
+   Sans elle ils flottaient : le retenu prenait la surface claire, l autre
+   n en avait aucune, et il se lisait comme un libelle eteint plutot que
+   comme l option qu on peut choisir. Dans une barre ou trois objets sur
+   quatre portent deja la surface claire, c est celui qui n en a pas qui
+   passe pour un trou. */
 .event-status__sides {
   display: flex;
   flex: none;
-  gap: var(--space-4);
+  gap: var(--space-2);
+  padding: var(--status-track-padding);
+  border-radius: var(--radius-status-row);
+  background: var(--status-track-surface);
 }
 
+/* LE CLAIR DEVANT. Le sens retenu prend la surface la plus claire de l'app,
+   celle qui dit « posé au-dessus » ; l'autre perd la sienne et se fond dans
+   la barre. Le noir profond qui tenait ce rôle est la voix de l'ACTION
+   PRINCIPALE — le prêter à un RÉGLAGE le faisait crier plus fort que le
+   statut posé juste au-dessus.
+
+   L'option NON retenue n'est pas du texte désactivé : c'est un choix qu'on
+   peut faire, elle reste donc lisible. */
 .event-status__side {
-  height: var(--status-row-height);
-  padding: 0 var(--space-14);
-  border-radius: var(--radius-status-row);
-  background: var(--surface-panel);
+  height: calc(var(--status-row-height) - 2 * var(--status-track-padding));
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-sm);
+  background: none;
   font: var(--type-status-side);
-  /* L'option NON retenue n'est pas du texte désactivé : c'est un choix qu'on
-     peut faire. Elle reste donc lisible. */
   color: var(--ink-soft);
   cursor: pointer;
   transition:
@@ -77,9 +92,13 @@
   background: var(--surface-row-hover);
 }
 
+/* Le GRAS en plus de la surface : celle-ci est la même que celle du champ du
+   montant juste à côté, et sans la graisse les deux objets se ressembleraient
+   alors que l'un se clique et l'autre se remplit. */
 .event-status__side[aria-pressed='true'] {
-  background: var(--action-surface);
-  color: var(--action-ink);
+  background: var(--surface-panel);
+  font: var(--type-status-side-on);
+  color: var(--ink-title);
 }
 
 .event-status__side:disabled {

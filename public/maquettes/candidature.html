@@ -311,27 +311,34 @@
         background: var(--surface-card);
       }
 
+      /* RETENU : « C — le clair devant », choisi par Uriel, avec une PISTE.
+         Sans la piste, le sens non retenu n avait aucune surface dans une
+         barre ou trois objets sur quatre en portaient une : il se lisait
+         comme un libelle eteint, pas comme l option qu on peut choisir. */
       .seg {
         display: flex;
-        gap: 4px;
+        gap: 2px;
         flex: none;
+        padding: 4px;
+        border-radius: var(--radius-nav);
+        background: var(--cream-300);
       }
 
       .seg span {
         display: flex;
         align-items: center;
-        height: var(--control-height);
-        padding: 0 14px;
-        border-radius: var(--radius-nav);
-        background: var(--surface-panel);
+        height: calc(var(--control-height) - 8px);
+        padding: 0 12px;
+        border-radius: 8px;
         font-size: 12px;
         font-weight: 600;
         color: var(--ink-soft);
       }
 
       .seg span.on {
-        background: var(--action-surface);
-        color: var(--action-ink);
+        background: var(--surface-panel);
+        font-weight: 700;
+        color: var(--ink-title);
       }
 
       .money {
@@ -1123,12 +1130,14 @@
           </div>
 
           <p class="note">
-            <b>Mon vote : B.</b> Il suit la doctrine déjà écrite dans l’app —
-            « on assombrit, on n’éclaircit pas » — et le retenu se lit sans
-            peser. <b>C</b> est plus élégant mais le segment retenu prend alors
-            exactement la surface du champ du montant à côté : deux objets qui
-            se ressemblent alors que l’un se clique et l’autre se remplit.
-            <b>A</b> garde un aplat sombre, donc garde une part du problème.
+            <b>Uriel a choisi C.</b> Ma réserve — le segment retenu prend la
+            surface du champ du montant — s’est révélée fondée mais mal visée :
+            le vrai défaut, une fois posé dans la vraie barre, c’est que le sens
+            NON retenu se retrouvait sans aucune surface là où trois objets sur
+            quatre en portaient une. Il se lisait comme un libellé éteint.
+            <b>Réglé par une PISTE</b> qui tient les deux sens ensemble, un cran
+            plus sombre que la barre : ils redeviennent une paire, et le retenu
+            vient toujours au-dessus. C’est ce qui est dans l’app.
           </p>
         </div>
       </section>
