@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarDays, Clock, FileText, MapPin, Store, Users } from 'lucide-react'
+import { CalendarDays, Clock, FileText, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
@@ -7,7 +7,6 @@ import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
 import { daysUntil, formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
-import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
@@ -120,7 +119,6 @@ function LedgerRow({ line }: { line: EventLedgerLine }) {
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const { actor, person } = useAuth()
-  const go = useTransitionNavigate()
   const {
     event,
     startDate,
@@ -146,30 +144,23 @@ export function EventPage() {
   } = useEvent(id, actor?.id, person?.actor_id)
 
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
-  // remplit le mur de droite, le compte à rebours prend la barre du haut.
-  // Déclaré AVANT tout retour anticipé — c'est un hook.
+  // remplit le mur de droite, la flèche de retour et le compte à rebours
+  // prennent le coin gauche de la barre du haut.
+  // Déclaré AVANT tout retour anticipé — c'est un hook, et la flèche doit
+  // exister même quand la fiche charge ou n'existe pas.
   useDeclarePageChrome({
     poster: event?.image_url ?? null,
     lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
+    back: '/',
   })
 
   // Le prix de la place est UNE ligne du registre — celle que le suivi pose —
   // et surtout pas la somme des lignes : additionner donnerait un total faux.
   const standAmount = ledger.find((line) => line.source === 'stepper')?.amount ?? 0
 
-  // Pas le composant Button : ses variantes sont toutes des surfaces, et
-  // celui-ci est un chemin de retour, pas une commande.
-  const back = (
-    <button type="button" className="event-page__back" onClick={() => go('/')}>
-      <ArrowLeft size={15} strokeWidth={2} />
-      Retour
-    </button>
-  )
-
   if (loading) {
     return (
       <div className="event-page">
-        {back}
         <p className="event-page__state">Chargement de la fiche…</p>
       </div>
     )
@@ -178,7 +169,6 @@ export function EventPage() {
   if (error || !event || !startDate || !endDate) {
     return (
       <div className="event-page">
-        {back}
         <p className="event-page__state">{error ?? 'Cet événement est introuvable.'}</p>
       </div>
     )
@@ -214,8 +204,6 @@ export function EventPage() {
 
   return (
     <div className="event-page">
-      {back}
-
       <div className="event-page__main">
           <header className="event-page__hero">
             <div className="event-page__identity">

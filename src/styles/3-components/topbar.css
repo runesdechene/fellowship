@@ -27,10 +27,47 @@
   pointer-events: auto;
 }
 
-/* L'accroche que la page déclare, calée à gauche. Sur la fiche d'un
-   événement, c'est son compte à rebours. */
-.topbar__lead {
+/* LE COIN GAUCHE — les deux repères que la page déclare : par où l'on sort,
+   puis où l'on est. C'est LUI qui porte la marge automatique, pas l'accroche :
+   pendant le chargement d'une fiche il n'y a pas encore de compte à rebours,
+   et la flèche doit rester calée à gauche quand même. */
+.topbar__coin {
   margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--topbar-coin-gap);
+}
+
+/* La flèche de retour. Nue : un chemin de sortie n'est pas une commande, il
+   ne prend donc pas de surface. Sa zone de clic, elle, reste celle d'un
+   bouton — la marge négative rattrape ce que cette zone ajoute à gauche, pour
+   que la flèche s'aligne sur le bord du panneau comme le reste du châssis. */
+.topbar__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--topbar-back-size);
+  height: var(--topbar-back-size);
+  margin-left: calc(-1 * var(--topbar-back-inset));
+  border-radius: var(--button-radius);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color var(--menu-motion);
+}
+
+.topbar__back:hover {
+  color: var(--ink-title);
+}
+
+.topbar__back:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* L'accroche que la page déclare. Sur la fiche d'un événement, c'est son
+   compte à rebours. */
+.topbar__lead {
   font: var(--type-topbar-lead);
   color: var(--ink-soft);
 }

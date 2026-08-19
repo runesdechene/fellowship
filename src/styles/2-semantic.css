@@ -341,6 +341,20 @@
   --topbar-gap: var(--space-12);
   --topbar-right: var(--space-32);
   --topbar-control-height: 42px;
+  /* Le coin gauche : la flèche de retour, puis l'accroche. Elles se serrent
+     l'une contre l'autre — c'est UN repère en deux mots, pas deux contrôles
+     voisins, donc leur écart est plus court que celui de la barre. */
+  --topbar-coin-gap: var(--space-10);
+  /* La flèche se pose nue, mais sa zone de clic reste celle d'un bouton.
+     L'écart est ce que cette zone déborde du dessin de chaque côté : la
+     flèche s'aligne ainsi sur le bord du panneau, pas sa boîte invisible.
+     `--topbar-back-glyph` doit suivre le `size` passé à l'icône dans
+     Topbar.tsx — c'est la seule valeur des deux qui vive en JSX. */
+  --topbar-back-size: var(--space-32);
+  --topbar-back-glyph: 20px;
+  --topbar-back-inset: calc(
+    (var(--topbar-back-size) - var(--topbar-back-glyph)) / 2
+  );
 
   /* =========================================================================
      GRAPHE DE SAISON — les réglages du seul élément « dessiné »

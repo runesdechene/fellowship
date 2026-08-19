@@ -22,23 +22,12 @@
 }
 
 /* --- Retour --------------------------------------------------------------- */
-/* Un chemin, pas une commande : ni fond, ni contour, juste de l'encre douce
-   qui s'affirme au survol. */
-.event-page__back {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  margin-bottom: var(--space-24);
-  background: none;
-  color: var(--ink-soft);
-  font: var(--type-section-link);
-  cursor: pointer;
-  transition: color var(--menu-motion);
-}
-
-.event-page__back:hover {
-  color: var(--ink-title);
-}
+/* Il n'est plus ici. Le retour ouvrait la colonne de contenu : la page
+   s'ouvrait donc sur un petit contrôle gris, et le nom du festival n'arrivait
+   qu'en deuxième. Or sortir d'un écran est du CHASSIS, pas du contenu — au
+   même titre que la cloche. Il est monté dans le coin gauche de la barre du
+   haut, à côté du compte à rebours (voir topbar.css), là où la main le
+   cherche sur tous les autres logiciels. La page commence par son titre. */
 
 /* --- La colonne, seule ---------------------------------------------------- */
 /* La fiche a longtemps eu deux colonnes : le contenu à gauche, le suivi dans

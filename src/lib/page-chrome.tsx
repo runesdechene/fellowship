@@ -9,10 +9,10 @@ import {
 /**
  * LE DÉCOR QU'UNE PAGE DEMANDE À LA COQUILLE.
  *
- * Deux morceaux de la fiche d'un événement vivent HORS du panneau : le mur
- * d'affiche, collé au bord droit de l'écran, et le compte à rebours, posé à
- * gauche de la barre du haut. Ni l'un ni l'autre ne peut être rendu par la
- * page — mais elle est la seule à savoir quoi y mettre.
+ * Trois morceaux de la fiche d'un événement vivent HORS du panneau : le mur
+ * d'affiche, collé au bord droit de l'écran, et — dans la barre du haut — la
+ * flèche de retour puis le compte à rebours. Aucun des trois ne peut être
+ * rendu par la page, mais elle est la seule à savoir quoi y mettre.
  *
  * Elle le DÉCLARE, la coquille le rend. Une page qui ne déclare rien laisse
  * la coquille nue : c'est le cas de tous les autres écrans.
@@ -22,9 +22,18 @@ export type PageChrome = {
   poster: string | null
   /** Le mot posé à gauche de la barre du haut (« Dans 32 jours »). */
   lead: string | null
+  /**
+   * Où mène la flèche de retour, tout en haut à gauche. `null` = pas de
+   * flèche — c'est le cas d'un écran qui n'a pas de parent.
+   *
+   * Un CHEMIN, pas une fonction : le décor est comparé champ à champ en
+   * dépendances d'effet, et une fonction reconstruite à chaque rendu
+   * relancerait la déclaration en boucle.
+   */
+  back: string | null
 }
 
-const NU: PageChrome = { poster: null, lead: null }
+const NU: PageChrome = { poster: null, lead: null, back: null }
 
 /**
  * DEUX contextes, pas un. Le lecteur change à chaque déclaration ; l'écrivain
@@ -56,17 +65,17 @@ export function usePageChrome(): PageChrome {
  *
  * Il se retire tout seul quand elle se démonte : sans ça, l'affiche d'un
  * événement resterait collée au bord de l'écran une fois revenu au tableau
- * de bord. Les deux champs sont passés à plat en dépendances pour qu'un
- * objet reconstruit à chaque rendu ne relance pas l'effet.
+ * de bord. Les champs sont passés à plat en dépendances pour qu'un objet
+ * reconstruit à chaque rendu ne relance pas l'effet.
  */
 // eslint-disable-next-line react-refresh/only-export-components
-export function useDeclarePageChrome({ poster, lead }: PageChrome): void {
+export function useDeclarePageChrome({ poster, lead, back }: PageChrome): void {
   // Le poseur vient du contexte d’écriture, qui ne change JAMAIS : l’effet ne
   // se relance donc que si le décor lui-même a changé.
   const declarer = useContext(EcritureContext)
 
   useEffect(() => {
-    declarer({ poster, lead })
+    declarer({ poster, lead, back })
     return () => declarer(NU)
-  }, [declarer, poster, lead])
+  }, [declarer, poster, lead, back])
 }
