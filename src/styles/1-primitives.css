@@ -163,6 +163,10 @@
      TYPOGRAPHIE — INTERLIGNES
      --------------------------------------------------------------------- */
   --tracking-wide: 0.08em; /* les sur-titres en capitales */
+  /* Un titre porté à 26 px respire trop entre ses lettres au réglage par
+     défaut : la fonte est dessinée pour du corps de texte. On la resserre
+     — et seulement là, jamais sur du petit. */
+  --tracking-tight: -0.015em;
 
   --leading-tight: 1.15;
   --leading-snug: 1.3;
@@ -246,7 +250,9 @@
   --width-cockpit: 320px; /* la colonne de suivi, à droite */
   --width-event-poster: 220px; /* l'affiche, en haut de la fiche */
   --height-event-poster: 290px;
-  --width-companion-avatar: 32px; /* les avatars de la bande de compagnons */
+  --width-companion-avatar: 32px;
+  --width-avatar-discussion: 30px; /* qui parle, dans un fil */
+  --width-avatar-pile: 26px; /* les visages empilés de ceux qui ont répondu */ /* les avatars de la bande de compagnons */
   --height-stepper-step: 40px; /* un cran du suivi */
   --width-stepper-box: 19px; /* sa case a cocher */
   --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */

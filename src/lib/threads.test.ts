@@ -13,7 +13,7 @@ import {
 
 describe('le canal d’une question', () => {
   it('se déduit du type de l’acteur, il ne se choisit pas', () => {
-    expect(deriveAudience({ id: 'a', kind: 'person' })).toBe('festivalier')
+    expect(deriveAudience({ id: 'a', kind: 'person' })).toBeNull()
     expect(deriveAudience({ id: 'a', kind: 'entity', entityType: 'exposant' })).toBe('exposant')
     expect(deriveAudience({ id: 'a', kind: 'entity', entityType: 'festival' })).toBe(
       'organisateur',
@@ -31,19 +31,29 @@ describe('le canal d’une question', () => {
   it('refuse un visiteur non connecté', () => {
     expect(canAsk(null)).toBe(false)
   })
+
+  // Fellowship ne fournit plus rien aux festivaliers (19 août 2026). Un compte
+  // PERSONNEL n’a donc plus de canal et ne peut plus poser de question. Ce
+  // test épingle la décision : sans lui, rien n’empêche de la défaire par
+  // mégarde en rebranchant 'festivalier' dans deriveAudience.
+  it('refuse un compte personnel — le canal festivalier est retiré', () => {
+    const perso = { id: 'a', kind: 'person' as const }
+    expect(deriveAudience(perso)).toBeNull()
+    expect(canAsk(perso)).toBe(false)
+    expect(visibleChannels([])).not.toContain('festivalier')
+  })
 })
 
 describe('les canaux proposés au filtrage', () => {
   it('suit les casquettes possédées, dans un ordre stable', () => {
-    expect(visibleChannels({ hasPerson: true, entityTypes: ['exposant', 'festival'] })).toEqual([
-      'festivalier',
+    expect(visibleChannels(['exposant', 'festival'])).toEqual([
       'exposant',
       'organisateur',
     ])
   })
 
   it('n’en propose aucun sans casquette', () => {
-    expect(visibleChannels({ hasPerson: false, entityTypes: [] })).toEqual([])
+    expect(visibleChannels([])).toEqual([])
   })
 })
 

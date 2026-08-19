@@ -41,7 +41,11 @@ export function channelLabel(audience: ThreadAudience): string {
  */
 export function deriveAudience(actor: ThreadActor | null): ThreadAudience | null {
   if (!actor) return null
-  if (actor.kind === 'person') return 'festivalier'
+  // Un compte PERSONNEL n'a plus de canal : Fellowship ne sert plus les
+  // festivaliers (décision du 19 août 2026). Le type 'festivalier' reste
+  // dans l'union parce que la BASE le porte encore sur d'anciennes lignes —
+  // le retirer ferait mentir le type sur ce qu'on lit vraiment.
+  if (actor.kind === 'person') return null
   if (actor.entityType === 'exposant') return 'exposant'
   if (actor.entityType === 'festival') return 'organisateur'
   return null
@@ -50,15 +54,17 @@ export function deriveAudience(actor: ThreadActor | null): ThreadAudience | null
 /**
  * Les canaux qu'on propose de filtrer, selon les casquettes possédées.
  * L'ordre est stable — il ne doit pas danser d'une session à l'autre.
+ *
+ * « festivalier » n'y figure plus : Fellowship ne leur fournit plus rien.
+ * Les anciennes questions posées dans ce canal restent en base mais ne
+ * s'affichent nulle part, puisque `filterByChannels` ne garde que les
+ * canaux visibles. On ne les efface pas — les effacer serait irréversible
+ * pour un changement de cap qui, lui, ne l'est pas.
  */
-export function visibleChannels(opts: {
-  hasPerson: boolean
-  entityTypes: string[]
-}): ThreadAudience[] {
+export function visibleChannels(entityTypes: string[]): ThreadAudience[] {
   const channels: ThreadAudience[] = []
-  if (opts.hasPerson) channels.push('festivalier')
-  if (opts.entityTypes.includes('exposant')) channels.push('exposant')
-  if (opts.entityTypes.includes('festival')) channels.push('organisateur')
+  if (entityTypes.includes('exposant')) channels.push('exposant')
+  if (entityTypes.includes('festival')) channels.push('organisateur')
   return channels
 }
 

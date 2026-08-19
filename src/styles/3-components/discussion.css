@@ -1,114 +1,159 @@
 /* -----------------------------------------------------------------------------
-   DISCUSSION DU FESTIVAL — les questions posées autour d'une date
+   LA DISCUSSION DU FESTIVAL — les questions et leurs réponses
    Utilisé par : src/features/event/EventDiscussion.tsx
 
-   Un fil se lit de haut en bas. Les réponses sont RENTRÉES sous leur question :
-   c'est le retrait qui dit l'appartenance, pas un cadre supplémentaire — un
-   cadre dans un cadre, sur du crème, ne sépare plus rien.
+   Refondue le 19 août 2026. Elle était « moche au possible » : une liste de
+   texte gris sur du crème, où la question tenait en 16 px coincée entre son
+   auteur et son corps.
+
+   L'AUDACE EST DANS L'ÉCHELLE — c'est le seul geste fort disponible sur une
+   page sans ombre et sans image. La question monte à 26 px et tout le reste
+   redescend : la section cesse d'être une liste pour devenir un sommaire.
+
+   AUCUNE CARTE. Les questions se séparent par un FILET, les réponses par un
+   RETRAIT. C'était déjà la doctrine : « c'est le retrait qui dit
+   l'appartenance, pas un cadre de plus ».
    -------------------------------------------------------------------------- */
 
 .discussion {
   display: flex;
   flex-direction: column;
-  gap: var(--space-20);
 }
 
-/* --- Les canaux ----------------------------------------------------------- */
-/* Visibles seulement quand on porte plusieurs casquettes : un seul canal n'a
-   rien à filtrer. */
-.discussion__channels {
+/* --- Les canaux ------------------------------------------------------------
+   Même grammaire que la bascule du paiement : le retenu prend l'aplat clair,
+   l'autre reste nu. Une seule façon de dire « choisis-en un » dans toute
+   l'app. Ils portaient l'olive, donc la couleur de « c'est acquis » — un
+   filtre n'est pas un état. */
+.discussion__canaux {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--channel-gap);
+  gap: var(--canal-gap);
+  margin-bottom: var(--space-24);
 }
 
-.discussion__channel {
-  padding: var(--space-8) var(--space-14);
-  border-radius: var(--radius-chip);
+.discussion__canal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  height: var(--canal-height);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-sm);
   background: none;
+  font: var(--type-canal);
   color: var(--ink-soft);
-  font: var(--type-section-link);
   cursor: pointer;
-  transition: background var(--menu-motion), color var(--menu-motion);
+  transition: background-color var(--menu-motion);
 }
 
-.discussion__channel:hover {
+.discussion__canal:hover:not([aria-pressed='true']) {
   background: var(--surface-row-hover);
 }
 
-.discussion__channel--on {
-  background: var(--accent-interactive-surface);
-  color: var(--accent-interactive);
-}
-
-/* --- Poser une question --------------------------------------------------- */
-.discussion__start {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: var(--space-8);
-  padding: var(--space-12) var(--space-16);
-  border-radius: var(--radius-nav);
+.discussion__canal[aria-pressed='true'] {
   background: var(--surface-card);
+  font: var(--type-canal-on);
   color: var(--ink-title);
-  font: var(--type-button);
-  cursor: pointer;
-  transition: background var(--menu-motion);
 }
 
-.discussion__start:hover {
-  background: var(--surface-card-hover);
+/* Le compte dit où il se passe quelque chose avant qu'on ait cliqué. */
+.discussion__canal small {
+  font: var(--type-canal-compte);
+  color: var(--ink-ghost);
 }
 
-.discussion__ask {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  padding: var(--thread-padding);
-  border-radius: var(--radius-card);
-  background: var(--thread-surface);
+.discussion__canal[aria-pressed='true'] small {
+  color: var(--ink-soft);
 }
 
-.discussion__field {
-  width: 100%;
-  min-height: var(--control-height);
-  padding: var(--space-12) var(--control-padding-x);
-  border: none;
-  border-radius: var(--radius-control);
-  background: var(--surface-panel);
-  color: var(--control-ink);
-  font: var(--type-control);
-  resize: vertical;
-}
-
-.discussion__field::placeholder {
-  color: var(--control-placeholder);
-}
-
-.discussion__field:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: -2px;
-}
-
-.discussion__field--long {
-  font: var(--type-thread-body);
-}
-
-.discussion__ask-actions {
+/* --- Poser une question ---------------------------------------------------- */
+.discussion__poser {
   display: flex;
   align-items: center;
   gap: var(--space-12);
-  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: var(--space-40);
+  padding: var(--poser-padding-y) var(--poser-padding-x);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
 }
 
-/* La raison du refus, jamais un bouton gris muet. */
-.discussion__blocker {
-  font: var(--type-thread-meta);
-  color: var(--status-pending-ink);
+.discussion__poser:hover {
+  background: var(--surface-row-hover);
+}
+
+.discussion__poser-mot {
+  display: block;
+  font: var(--type-poser);
+  color: var(--ink-title);
+}
+
+.discussion__poser-sous {
+  display: block;
+  margin-top: var(--space-2);
+  font: var(--type-poser-sous);
+  color: var(--ink-soft);
+}
+
+.discussion__poser-fleche {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-soft);
+}
+
+/* --- Écrire ---------------------------------------------------------------- */
+.discussion__composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--composer-gap);
+  margin-top: var(--space-20);
+  padding: var(--composer-padding);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.discussion__composer--question {
+  margin-top: 0;
+  margin-bottom: var(--space-40);
+}
+
+.discussion__champ {
+  width: 100%;
+  padding: var(--space-12) var(--space-15);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-panel);
+  font: var(--type-question-body);
+  color: var(--ink-title);
+  resize: none;
+}
+
+/* Le titre d'une question se tape gros : ce qu'on écrit ressemble déjà à ce
+   qu'on lira. */
+.discussion__champ--titre {
+  font: var(--type-composer-titre);
+}
+
+.discussion__champ::placeholder {
+  color: var(--ink-ghost);
+}
+
+.discussion__champ:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.discussion__composer-pied {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
 }
 
 .discussion__note {
-  font: var(--type-thread-meta);
+  font: var(--type-signature-time);
+  line-height: var(--leading-normal);
   color: var(--ink-soft);
 }
 
@@ -116,189 +161,259 @@
   color: var(--ink-title);
 }
 
-.discussion__error {
-  font: var(--type-thread-meta);
+/* La raison du blocage, jamais un bouton gris sans explication. */
+.discussion__blocage {
+  font: var(--type-signature-time);
   color: var(--status-pending-ink);
 }
 
-/* --- Le fil --------------------------------------------------------------- */
-.discussion__threads {
+.discussion__composer-pied .button {
+  margin-left: auto;
+}
+
+.discussion__composer-pied .button + .button {
+  margin-left: 0;
+}
+
+.discussion__erreur {
+  margin-bottom: var(--space-20);
+  font: var(--type-signature);
+  color: var(--status-pending-ink);
+}
+
+/* --- Le fil ---------------------------------------------------------------- */
+.discussion__fil {
   display: flex;
   flex-direction: column;
-  gap: var(--thread-gap);
 }
 
-.thread {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
-  padding: var(--thread-padding);
-  border-radius: var(--radius-card);
-  background: var(--thread-surface);
+.question + .question {
+  margin-top: var(--discussion-gap);
+  padding-top: var(--discussion-gap);
+  box-shadow: inset 0 1px 0 var(--border-menu);
 }
 
-.thread__head {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--thread-head-gap);
-}
-
-.thread__identity {
-  flex: 1;
-  min-width: 0;
-}
-
-.thread__title {
-  font: var(--type-thread-title);
+/* LA QUESTION EST LE CONTENU. Elle porte le corps d'un titre de page et une
+   mesure courte : au-delà, elle cesse de se lire comme une question et
+   redevient un paragraphe. */
+.question__titre {
+  max-width: var(--question-measure);
+  font: var(--type-question);
+  letter-spacing: var(--tracking-question);
   color: var(--ink-title);
+  text-wrap: balance;
 }
 
-.thread__meta {
-  margin-top: var(--space-4);
-  font: var(--type-thread-meta);
+.question__corps {
+  margin-top: var(--space-14);
+  max-width: var(--width-card);
+  font: var(--type-question-body);
   color: var(--ink-soft);
 }
 
-.thread__meta b {
-  color: var(--ink-title);
-}
-
-.thread__solved {
-  display: inline-flex;
+/* --- Qui parle, et quand --------------------------------------------------- */
+.discussion__signature {
+  display: flex;
   align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-chip);
-  background: var(--reply-best-surface);
-  color: var(--reply-best-ink);
-  font: var(--type-chip-strong);
-  white-space: nowrap;
+  gap: var(--signature-gap);
+  margin-top: var(--space-18);
+  font: var(--type-signature);
+  color: var(--ink-soft);
 }
 
-.thread__remove {
+.discussion__signature time {
+  font: var(--type-signature-time);
+  color: var(--ink-ghost);
+}
+
+.discussion__avatar {
+  --avatar-size: var(--avatar-size-discussion);
+
+  display: inline-flex;
+  flex: none;
+}
+
+/* Les visages de ceux qui ont répondu, AVANT d'ouvrir. L'app fait déjà ça
+   pour les compagnons d'une date : c'est sa grammaire, pas une trouvaille. */
+.question__pile {
+  display: flex;
+  margin-left: auto;
+}
+
+.question__pile .discussion__avatar {
+  --avatar-size: var(--avatar-size-pile);
+
+  border-radius: var(--radius-round);
+  box-shadow: 0 0 0 2px var(--surface-panel);
+}
+
+.question__pile .discussion__avatar + .discussion__avatar {
+  margin-left: var(--pile-overlap);
+}
+
+.question__retirer {
+  display: grid;
+  place-items: center;
+  flex: none;
   background: none;
-  color: var(--ink-soft);
+  color: var(--ink-ghost);
   cursor: pointer;
   transition: color var(--menu-motion);
 }
 
-.thread__remove:hover:not(:disabled) {
+.question__pile + .question__retirer {
+  margin-left: var(--space-12);
+}
+
+.question__retirer:not(.question__pile + .question__retirer) {
+  margin-left: auto;
+}
+
+.question__retirer:hover:not(:disabled) {
   color: var(--status-pending-ink);
 }
 
-.thread__body {
-  font: var(--type-thread-body);
-  color: var(--ink-body);
-  white-space: pre-line;
+/* =============================================================================
+   LA RÉPONSE ÉLUE — le seul aplat de toute la section
+   =============================================================================
+   Elle était une pastille posée dans la marge. C'est pourtant la SEULE chose
+   qu'on vient chercher : elle prend toute la largeur, un vrai rembourrage, et
+   son texte remonte plus haut que le corps de la question.
+
+   Elle sort aussi de la CHRONOLOGIE — voir EventDiscussion.tsx. Une fois
+   qu'une réponse fait autorité, l'ordre d'arrivée ne porte plus rien.
+   ========================================================================== */
+.reponse-elue {
+  margin-top: var(--space-24);
+  padding: var(--reponse-elue-padding-y) var(--reponse-elue-padding-x);
+  border-radius: var(--radius-reponse-elue);
+  background: var(--status-ok-surface);
 }
 
-/* --- Les réponses --------------------------------------------------------- */
-.thread__replies {
-  display: flex;
-  flex-direction: column;
-  gap: var(--reply-gap);
-  margin-left: var(--reply-inset);
-  list-style: none;
-}
-
-.reply {
-  display: flex;
-  gap: var(--space-12);
-}
-
-.reply__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.reply__meta {
+.reponse-elue__sceau {
   display: flex;
   align-items: center;
   gap: var(--space-8);
-  flex-wrap: wrap;
-  font: var(--type-thread-meta);
-  color: var(--ink-soft);
+  font: var(--type-sceau);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--status-ok-ink);
 }
 
-.reply__meta b {
-  color: var(--ink-title);
+.reponse-elue__sceau svg {
+  flex: none;
+  color: var(--status-ok-icon);
 }
 
-.reply__badge {
-  padding: var(--space-2) var(--space-8);
-  border-radius: var(--radius-chip);
-  background: var(--reply-best-surface);
-  color: var(--reply-best-ink);
-  font: var(--type-chip-strong);
+.reponse-elue__texte {
+  margin-top: var(--space-12);
+  max-width: var(--width-card);
+  font: var(--type-reponse-elue);
+  color: var(--status-ok-ink);
 }
 
-.reply__text {
-  margin-top: var(--space-4);
-  font: var(--type-thread-body);
-  color: var(--ink-body);
-  white-space: pre-line;
+.reponse-elue .discussion__signature,
+.reponse-elue .discussion__signature time {
+  color: var(--status-ok-ink);
 }
 
-.reply__actions {
-  display: flex;
-  gap: var(--space-16);
-  margin-top: var(--space-6);
+.reponse-elue .discussion__geste {
+  color: var(--status-ok-ink);
 }
 
-.reply__action {
-  background: none;
-  color: var(--ink-link);
-  font: var(--type-card-link);
-  cursor: pointer;
+/* --- Une question sans réponse ---------------------------------------------
+   Ce n'est pas un vide, c'est un ÉTAT : la terre dit « ça attend chez
+   quelqu'un d'autre », la même teinte que « Dossier en cours » sur la fiche. */
+.question__attente {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-20);
+  padding: var(--space-8) var(--space-14);
+  border-radius: var(--radius-sm);
+  background: var(--status-pending-surface);
+  font: var(--type-canal-on);
+  color: var(--status-pending-ink);
 }
 
-.reply__action:hover:not(:disabled) {
-  text-decoration: underline;
+.question__attente svg {
+  flex: none;
+  color: var(--status-pending-icon);
 }
 
-/* --- Répondre ------------------------------------------------------------- */
-.thread__open {
+/* --- Les autres réponses ---------------------------------------------------
+   Neuf questions ouvertes font un mur : elles se replient sous un compte.
+   Le RETRAIT dit l'appartenance, un filet à gauche la souligne — c'est le
+   seul trait vertical de la page, et il porte un sens. */
+.question__deplier {
   align-self: flex-start;
-  margin-left: var(--reply-inset);
+  margin-top: var(--space-18);
   background: none;
-  color: var(--ink-link);
-  font: var(--type-section-link);
+  font: var(--type-canal-on);
+  color: var(--ink-soft);
   cursor: pointer;
 }
 
-.thread__open:hover {
+.question__deplier:hover {
   text-decoration: underline;
 }
 
-.thread__composer {
+.question__autres {
   display: flex;
   flex-direction: column;
-  gap: var(--space-10);
-  margin-left: var(--reply-inset);
 }
 
-.thread__field {
-  width: 100%;
-  padding: var(--space-12) var(--control-padding-x);
-  border: none;
-  border-radius: var(--radius-control);
-  background: var(--surface-panel);
-  color: var(--control-ink);
-  font: var(--type-thread-body);
-  resize: vertical;
+.reponse {
+  margin-top: var(--space-24);
+  padding-left: var(--reponse-inset);
+  box-shadow: inset 2px 0 0 var(--border-menu);
 }
 
-.thread__field::placeholder {
-  color: var(--control-placeholder);
+.reponse .discussion__signature {
+  margin-top: 0;
 }
 
-.thread__field:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: -2px;
+.reponse__texte {
+  margin-top: var(--space-8);
+  max-width: var(--width-card);
+  font: var(--type-reponse);
+  color: var(--ink-body);
 }
 
-.thread__composer-actions {
+/* --- Les gestes -------------------------------------------------------------
+   Répondre, élire, supprimer sont des ACTIONS et non des destinations : elles
+   ne prennent pas le lavande, qui est réservé à ce qui mène ailleurs. */
+.discussion__gestes {
   display: flex;
-  align-items: center;
-  gap: var(--space-12);
+  gap: var(--space-20);
+  margin-top: var(--space-16);
+}
+
+.discussion__gestes:empty {
+  display: none;
+}
+
+.discussion__geste {
+  background: none;
+  font: var(--type-canal-on);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.discussion__geste:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.discussion__geste--seul {
+  align-self: flex-start;
+  margin-top: var(--space-20);
+}
+
+/* --- Rien encore ------------------------------------------------------------
+   Un écran vide est une invitation, pas un constat. */
+.discussion__vide {
+  max-width: 46ch;
+  font: var(--type-vide);
+  color: var(--ink-ghost);
+  text-wrap: balance;
 }
