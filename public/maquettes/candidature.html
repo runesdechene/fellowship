@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Candidater — le prochain geste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =====================================================================
+         COPIE des tokens de l'app (src/styles/1-primitives + 2-semantic).
+         Une maquette ne les lit pas : quand la palette bouge là-bas, ces
+         lignes se recopient À LA MAIN.
+         ===================================================================== */
+      :root {
+        --cream-hue: 39;
+        --cream-50: hsl(var(--cream-hue) 100% 97.1%);
+        --cream-100: hsl(var(--cream-hue) 62% 95.5%);
+        --cream-200: hsl(var(--cream-hue) 61% 92.9%);
+        --cream-250: hsl(var(--cream-hue) 49% 92.4%);
+        --cream-300: hsl(var(--cream-hue) 44% 89.4%);
+        --cream-400: hsl(var(--cream-hue) 33% 88.2%);
+        --cream-500: hsl(var(--cream-hue) 40% 85.7%);
+
+        --brown-250: #dcd5cb;
+        --brown-400: #a79f9f;
+        --brown-600: #6f665e;
+        --brown-700: #564444;
+        --brown-800: #4a4643;
+        --brown-900: #2d2826;
+
+        /* Les trois registres : à toi / chez l'autre / acquis */
+        --wheat-100: #e9e1b4;
+        --wheat-150: #e3d9a0;
+        --wheat-400: #96862c;
+        --wheat-700: #6b5f1f;
+
+        --clay-100: #f6e7dc;
+        --clay-150: #f1d9c8;
+        --clay-500: #c0642a;
+        --clay-700: #9f5223;
+
+        --olive-100: #def5c8;
+        --olive-400: #729334;
+        --olive-500: #84aa3c;
+        --olive-700: #556d26;
+
+        --family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        --tracking-wide: 0.08em;
+        --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
+
+        --surface-app: var(--cream-200);
+        --surface-panel: var(--cream-50);
+        --surface-card: var(--cream-250);
+        --surface-row-hover: var(--cream-300);
+        --border-menu: var(--cream-400);
+
+        --ink-title: var(--brown-700);
+        --ink-section: var(--brown-800);
+        --ink-soft: var(--brown-600);
+        --ink-ghost: var(--brown-400);
+
+        --action-surface: var(--brown-900);
+        --action-ink: var(--cream-50);
+
+        --control-height: 42px;
+        --radius-card: 15px;
+        --radius-nav: 12px;
+        --radius-round: 9999px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 40px 48px 90px;
+        background: var(--surface-app);
+        font-family: var(--family);
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-title);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button {
+        font: inherit;
+        color: inherit;
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 26px;
+        font-weight: 700;
+      }
+
+      .lede {
+        max-width: 780px;
+        margin: 0 0 10px;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--ink-soft);
+      }
+
+      .lede b {
+        color: var(--ink-title);
+      }
+
+      .rule {
+        max-width: 780px;
+        margin: 20px 0 40px;
+        padding: 16px 20px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 13px;
+        line-height: 1.65;
+        color: var(--ink-soft);
+      }
+
+      .rule b {
+        color: var(--ink-title);
+      }
+
+      /* --- les trois moments -------------------------------------------- */
+      .moments {
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+        max-width: 780px;
+      }
+
+      .moment__tag {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 3px 10px;
+        border-radius: var(--radius-round);
+        background: var(--cream-400);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        color: var(--brown-600);
+      }
+
+      .stage {
+        padding: 26px 30px;
+        border-radius: 18px;
+        background: var(--surface-panel);
+      }
+
+      /* Le bloc de suivi, tel qu'il est dans l'app aujourd'hui. */
+      .status {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .status__head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .status__title {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      .pick {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 226px;
+        height: var(--control-height);
+        margin-left: auto;
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-card);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .pick svg:first-child {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+
+      .pick__chev {
+        width: 14px;
+        height: 14px;
+        flex: none;
+        margin-left: auto;
+        color: var(--ink-soft);
+      }
+
+      .pick--todo {
+        background: var(--wheat-100);
+        color: var(--wheat-700);
+      }
+
+      .pick--todo svg {
+        color: var(--wheat-700);
+      }
+
+      .pick--pending {
+        background: var(--clay-100);
+        color: var(--clay-700);
+      }
+
+      .pick--pending svg {
+        color: var(--clay-700);
+      }
+
+      .pick--ok {
+        background: var(--olive-100);
+        color: var(--olive-700);
+      }
+
+      .pick--ok svg {
+        color: var(--olive-700);
+      }
+
+      /* =====================================================================
+         LA BARRE DU PROCHAIN GESTE
+         =====================================================================
+         Le MÊME créneau que le paiement. Il n'était pas occupé avant
+         l'inscription : la barre de paiement n'apparaît que quand la place
+         est acquise. Elle dit donc, à chaque moment, la seule chose qu'il
+         reste à faire.
+         ===================================================================== */
+      .next {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 6px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
+
+      .next__word {
+        min-width: 0;
+        padding-left: 12px;
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--ink-soft);
+      }
+
+      .next__word b {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .next__cta {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex: none;
+        height: var(--control-height);
+        margin-left: auto;
+        padding: 0 18px;
+        border-radius: var(--radius-nav);
+        font-size: 13px;
+        font-weight: 700;
+        transition: background-color 160ms var(--ease-soft);
+      }
+
+      .next__cta svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* À TOI DE JOUER — le seul aplat blé de l'écran. */
+      .next__cta--todo {
+        background: var(--wheat-100);
+        color: var(--wheat-700);
+      }
+
+      .next__cta--todo:hover {
+        background: var(--wheat-150);
+      }
+
+      /* DÉJÀ FAIT — le bouton reste, il ne crie plus. On y revient trois
+         semaines plus tard pour retrouver l'adresse et relancer. */
+      .next__cta--calme {
+        background: var(--surface-panel);
+        color: var(--ink-title);
+      }
+
+      .next__cta--calme:hover {
+        background: var(--surface-row-hover);
+      }
+
+      /* La barre de paiement, telle qu'elle est aujourd'hui. */
+      .pay {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
+
+      .seg {
+        display: flex;
+        gap: 4px;
+        flex: none;
+      }
+
+      .seg span {
+        display: flex;
+        align-items: center;
+        height: var(--control-height);
+        padding: 0 14px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .seg span.on {
+        background: var(--action-surface);
+        color: var(--action-ink);
+      }
+
+      .money {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+      }
+
+      .money__field {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        width: 144px;
+        height: var(--control-height);
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .money__field small {
+        margin-left: auto;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .money__state {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 172px;
+        height: var(--control-height);
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .money__state svg:first-child {
+        width: 16px;
+        height: 16px;
+        color: var(--wheat-400);
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--ink-soft);
+      }
+
+      .note b {
+        color: var(--ink-title);
+      }
+
+      /* =====================================================================
+         LA MODALE — reprise de la V1, qui avait déjà trouvé l'essentiel :
+         elle n'affiche pas, elle ENREGISTRE LE GESTE.
+         ===================================================================== */
+      .apply {
+        width: 100%;
+        max-width: 460px;
+        border-radius: 18px;
+        background: var(--surface-panel);
+        overflow: hidden;
+      }
+
+      .apply__head {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 24px 24px 0;
+      }
+
+      .apply__title {
+        margin: 0 0 6px;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink-section);
+      }
+
+      .apply__sub {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--ink-soft);
+      }
+
+      .apply__x {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        flex: none;
+        margin-left: auto;
+        border-radius: var(--radius-round);
+        color: var(--ink-soft);
+      }
+
+      .apply__x:hover {
+        background: var(--surface-card);
+      }
+
+      .apply__x svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .apply__list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 20px 24px 24px;
+      }
+
+      .apply__item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-card);
+        text-align: left;
+      }
+
+      .apply__item svg {
+        width: 18px;
+        height: 18px;
+        flex: none;
+        color: var(--ink-soft);
+      }
+
+      .apply__body {
+        min-width: 0;
+      }
+
+      .apply__label {
+        display: block;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: var(--tracking-wide);
+        text-transform: uppercase;
+        color: var(--ink-soft);
+      }
+
+      .apply__value {
+        display: block;
+        margin-top: 3px;
+        font-size: 13px;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .apply__value--note {
+        font-weight: 500;
+        line-height: 1.5;
+        color: var(--ink-soft);
+      }
+
+      .apply__do {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: none;
+        height: 32px;
+        margin-left: auto;
+        padding: 0 12px;
+        border-radius: var(--radius-nav);
+        background: var(--surface-panel);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .apply__do:hover {
+        background: var(--surface-row-hover);
+      }
+
+      .apply__do svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      /* Le pied : c'est LUI qui justifie la modale. Sans ce bouton, trois
+         liens dans une boîte ne valaient pas le prix d'une modale. */
+      .apply__foot {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 24px;
+        background: var(--surface-card);
+        box-shadow: inset 0 1px 0 var(--border-menu);
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+
+      .apply__mark {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+        height: 38px;
+        margin-left: auto;
+        padding: 0 16px;
+        border-radius: var(--radius-nav);
+        background: var(--action-surface);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--action-ink);
+      }
+
+      .apply__mark svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* Le fond assombri, pour montrer la modale en situation. */
+      .scrim {
+        display: grid;
+        place-items: center;
+        padding: 40px 20px;
+        border-radius: 18px;
+        background: rgb(45 40 38 / 42%);
+      }
+
+      footer {
+        max-width: 780px;
+        margin-top: 52px;
+        padding-top: 22px;
+        border-top: 1px solid var(--cream-400);
+        font-size: 13px;
+        line-height: 1.7;
+        color: var(--ink-soft);
+      }
+
+      footer b {
+        color: var(--ink-title);
+      }
+
+      footer ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      footer li {
+        margin-bottom: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Candidater — le prochain geste</h1>
+    <p class="lede">
+      Aujourd’hui, candidater se cache dans trois liens posés à plat sous les
+      infos pratiques : <b>Dossier d’inscription</b>, <b>Site du festival</b>,
+      l’e-mail. Tous au même niveau, alors qu’un seul est le geste et que les
+      deux autres sont du contexte.
+    </p>
+
+    <div class="rule">
+      <b>Le créneau existe déjà et il est vide.</b> La barre de paiement
+      n’apparaît que quand la place est acquise — avant, il n’y a rien sous le
+      statut. Elle devient donc <b>la barre du prochain geste</b> : candidater
+      tant que ce n’est pas fait, payer une fois que c’est acquis. Un seul
+      endroit, qui dit toujours ce qu’il reste à faire.
+    </div>
+
+    <div class="moments">
+      <!-- ============================================================ -->
+      <section>
+        <span class="moment__tag">Moment 1 — la date est notée</span>
+        <div class="stage">
+          <div class="status">
+            <div class="status__head">
+              <span class="status__title">Statut</span>
+              <span class="pick pick--todo">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2.12 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.12 2.12 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.12 2.12 0 0 0-1.973 0L6.396 20.99a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.775a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16z"
+                  />
+                </svg>
+                Intéressé
+                <svg
+                  class="pick__chev"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="next">
+              <span class="next__word">
+                <b>Il reste à candidater</b>
+                Les dossiers sont acceptés jusqu’au 7 juillet
+              </span>
+              <button class="next__cta next__cta--todo">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                  <path d="m21.854 2.147-10.94 10.939" />
+                </svg>
+                Candidater
+              </button>
+            </div>
+          </div>
+          <p class="note">
+            Le <b>blé</b> tombe pile : c’est le registre « à toi de jouer », et
+            c’est exactement ce que la barre dit à ce moment-là.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section>
+        <span class="moment__tag">Moment 2 — le dossier est parti</span>
+        <div class="stage">
+          <div class="status">
+            <div class="status__head">
+              <span class="status__title">Statut</span>
+              <span class="pick pick--pending">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M16 22h2a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <circle cx="8" cy="16" r="6" />
+                  <path d="M9.5 17.5 8 16.25V14" />
+                </svg>
+                Dossier en cours
+                <svg
+                  class="pick__chev"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="next">
+              <span class="next__word">
+                <b>La balle est chez l’organisateur</b>
+                Envoyé il y a 12 jours
+              </span>
+              <button class="next__cta next__cta--calme">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
+                Revoir comment candidater
+              </button>
+            </div>
+          </div>
+          <p class="note">
+            Le bouton <b>ne disparaît pas</b> une fois le dossier envoyé — il se
+            calme. Trois semaines plus tard, on y revient pour retrouver
+            l’adresse et relancer.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section>
+        <span class="moment__tag">Moment 3 — la place est acquise</span>
+        <div class="stage">
+          <div class="status">
+            <div class="status__head">
+              <span class="status__title">Statut</span>
+              <span class="pick pick--ok">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                Inscrit
+                <svg
+                  class="pick__chev"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </span>
+            </div>
+
+            <div class="pay">
+              <span class="seg">
+                <span class="on">Je paie ma place</span>
+                <span>On me paie</span>
+              </span>
+              <span class="money">
+                <span class="money__field">400 <small>€</small></span>
+                <span class="money__state">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 22h14" />
+                    <path d="M5 2h14" />
+                    <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
+                    <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
+                  </svg>
+                  À payer
+                  <svg
+                    class="pick__chev"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </span>
+            </div>
+          </div>
+          <p class="note">
+            Le même créneau, occupé par le paiement. <b>Rien ne change ici</b> —
+            c’est ce qui existe déjà dans l’app.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section>
+        <span class="moment__tag">La modale</span>
+        <div class="scrim">
+          <div class="apply">
+            <div class="apply__head">
+              <div>
+                <h2 class="apply__title">Comment candidater</h2>
+                <p class="apply__sub">
+                  La candidature se fait directement auprès de l’organisateur.
+                  Voici ce qu’il a donné.
+                </p>
+              </div>
+              <button class="apply__x" aria-label="Fermer">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="apply__list">
+              <div class="apply__item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+                <span class="apply__body">
+                  <span class="apply__label">Par e-mail</span>
+                  <span class="apply__value">info@arbor-pagan-festival.ch</span>
+                </span>
+                <button class="apply__do">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                  </svg>
+                  Copier
+                </button>
+              </div>
+
+              <div class="apply__item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M15 3h6v6" />
+                  <path d="M10 14 21 3" />
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                </svg>
+                <span class="apply__body">
+                  <span class="apply__label">Le dossier</span>
+                  <span class="apply__value">Ouvrir le formulaire</span>
+                </span>
+                <span class="apply__do">Ouvrir</span>
+              </div>
+
+              <div class="apply__item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M8 2v4" />
+                  <path d="M16 2v4" />
+                  <rect width="18" height="18" x="3" y="4" rx="2" />
+                  <path d="M3 10h18" />
+                </svg>
+                <span class="apply__body">
+                  <span class="apply__label">Jusqu’au</span>
+                  <span class="apply__value">7 juillet 2026</span>
+                </span>
+              </div>
+
+              <div class="apply__item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11l5-5V5a2 2 0 0 0-2-2z" />
+                  <path d="M21 14h-4a2 2 0 0 0-2 2v4" />
+                </svg>
+                <span class="apply__body">
+                  <span class="apply__label">Ce que l’organisateur précise</span>
+                  <span class="apply__value apply__value--note">
+                    Merci de joindre trois photos de votre stand et la liste des
+                    produits vendus.
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <div class="apply__foot">
+              <span>Tu as envoyé ton dossier&nbsp;?</span>
+              <button class="apply__mark">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                Passer en « Dossier en cours »
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="note" style="max-width: 780px">
+          <b>C’est ce pied qui justifie la modale.</b> Sans lui, trois liens
+          dans une boîte ne valent pas le prix d’une modale — le focus à
+          piéger, Échap, le clic dehors, le scroll bloqué, le focus à rendre.
+          Ici elle n’affiche pas : elle <b>enregistre le geste</b>, et le statut
+          bascule tout seul.
+        </p>
+      </section>
+    </div>
+
+    <footer>
+      <b>Ce qui reste à trancher :</b>
+      <ul>
+        <li>
+          <b>Le libellé du bouton.</b> « Candidater » promet que le clic
+          candidate, alors qu’il ouvre un mode d’emploi. La V1 avait les deux
+          formulations selon l’endroit. Je garde « Candidater » parce que c’est
+          l’intention de l’exposant, et la première phrase de la modale dit
+          tout de suite que ça se passe chez l’organisateur — mais ça se
+          discute.
+        </li>
+        <li>
+          <b>Et si l’organisateur n’a rien donné ?</b> La V1 masquait le bouton,
+          donc le créneau redevenait vide sans rien expliquer. Je propose
+          d’assumer : « L’organisateur n’a pas dit comment candidater » avec le
+          lien du site, qui est souvent le seul recours.
+        </li>
+        <li>
+          <b>« Envoyé il y a 12 jours »</b> demande de savoir QUAND le statut a
+          basculé. À vérifier en base avant de le promettre — sinon la ligne
+          dira juste « La balle est chez l’organisateur ».
+        </li>
+      </ul>
+    </footer>
+  </body>
+</html>
