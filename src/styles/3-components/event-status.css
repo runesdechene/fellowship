@@ -52,19 +52,14 @@
 }
 
 /* --- Le sens du paiement -------------------------------------------------
-   Les deux sens vivent dans une PISTE, un cran plus sombre que la barre.
-   Sans elle ils flottaient : le retenu prenait la surface claire, l autre
-   n en avait aucune, et il se lisait comme un libelle eteint plutot que
-   comme l option qu on peut choisir. Dans une barre ou trois objets sur
-   quatre portent deja la surface claire, c est celui qui n en a pas qui
-   passe pour un trou. */
+   AUCUN FOND, ni sur la paire ni sous le sens retenu. Les deux sens se
+   posent a meme la barre ; c est la GRAISSE et l ENCRE qui disent lequel est
+   choisi. Une piste les tenait ensemble un temps — elle ajoutait un
+   contenant de plus dans une barre qui en compte deja assez. */
 .event-status__sides {
   display: flex;
   flex: none;
   gap: var(--space-2);
-  padding: var(--status-track-padding);
-  border-radius: var(--radius-status-row);
-  background: var(--status-track-surface);
 }
 
 /* LE CLAIR DEVANT. Le sens retenu prend la surface la plus claire de l'app,
@@ -92,11 +87,11 @@
   background: var(--surface-row-hover);
 }
 
-/* Le GRAS en plus de la surface : celle-ci est la même que celle du champ du
-   montant juste à côté, et sans la graisse les deux objets se ressembleraient
-   alors que l'un se clique et l'autre se remplit. */
+/* Le sens retenu ne prend PAS de surface : il passe au gras et a l’encre
+   pleine. C’est le seul endroit de l’app ou une selection se dit sans aplat
+   — parce que la barre porte deja trois objets a surface claire, et qu’un
+   quatrieme n’aurait plus rien distingue. */
 .event-status__side[aria-pressed='true'] {
-  background: var(--surface-panel);
   font: var(--type-status-side-on);
   color: var(--ink-title);
 }

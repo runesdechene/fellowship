@@ -151,12 +151,18 @@ export function EventStatus({
 
       {montrerLePaiement && (
         <div className="event-status__bar">
+          {/* PAS de `disabled={saving}` ici, contrairement aux menus.
+              L’ecriture est optimiste : l’affichage montre deja le nouveau sens.
+              Desactiver le bouton pendant l’aller-retour lui faisait perdre
+              son fond de survol puis le reprendre — deux sauts en 200 ms, un
+              clignotement a chaque clic. Le hook garde deja la reentrance
+              (`if (saving) return`), la protection n’est donc pas perdue. */}
           <div className="event-status__sides">
             <button
               type="button"
               className="event-status__side"
               aria-pressed={paymentOrientation === 'payeur'}
-              disabled={saving || past}
+              disabled={past}
               onClick={() => void setOrientation('payeur')}
             >
               Je paie ma place
@@ -165,7 +171,7 @@ export function EventStatus({
               type="button"
               className="event-status__side"
               aria-pressed={paye}
-              disabled={saving || past}
+              disabled={past}
               onClick={() => void setOrientation('paye')}
             >
               On me paie
