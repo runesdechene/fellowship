@@ -424,10 +424,14 @@
      l'inverse et mal des deux côtés : laiteux sur les claires, et il
      éclaircissait les sombres en gris de brume.
 
-     0,2 et pas 0,3 : au-delà, les zones foncées d'une affiche colorée perdent
-     leurs teintes et virent au boueux. */
+     0,35. J'avais posé 0,2 en prévenant qu'au-delà les zones foncées d'une
+     affiche colorée viraient au boueux ; Uriel a demandé plus franc, et il a
+     raison sur le fond : à 0,2 le mur hésitait entre deux mondes. Assumé : le
+     mur est un FOND, l'affiche s'y devine, et c'est la feuille crème qui
+     tient le regard. Ce que le voile mange en fidélité à l'image, il le rend
+     en lisibilité de la page. */
   --wall-veil: var(--brown-900);
-  --wall-veil-opacity: 0.2;
+  --wall-veil-opacity: 0.35;
 
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,
