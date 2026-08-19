@@ -35,8 +35,8 @@
    barre en dessous, c'est l'inverse, et le Select garde sa valeur par
    défaut. On redéfinit la VARIABLE, on ne réécrit pas la règle. */
 .event-status__participation {
-  flex: 1 1 auto;
-  max-width: var(--width-card);
+  flex: none;
+  width: var(--status-participation-width);
   margin-left: auto;
 
   --select-surface: var(--surface-card);
@@ -86,34 +86,62 @@
   cursor: default;
 }
 
-/* --- Le montant et son état ---------------------------------------------- */
-/* Le montant s'étire, l'état garde une largeur FIGÉE. Sans ça « Acompte
-   versé » et « Payé » n'ont pas la même longueur, et le champ du montant se
-   déformait à chaque changement d'état — la barre bougeait sous les doigts. */
+/* --- Le montant et son état ----------------------------------------------
+   Ils sont une seule chose, donc ils se tiennent groupés à droite de la
+   barre. Les deux ont une largeur FIGÉE : « Acompte versé » est plus long que
+   « Payé », et sans ça le champ se déformait à chaque changement d'état — la
+   barre bougeait sous les doigts. */
+.event-status__money {
+  display: flex;
+  align-items: center;
+  gap: var(--status-gap);
+  margin-left: auto;
+}
+
+/* C'est l'enveloppe qui porte le champ, pas l'`input` : il faut de la place
+   pour l'unité à droite. */
 .event-status__amount {
-  flex: 1 1 auto;
-  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex: none;
+  width: var(--status-amount-width);
   height: var(--status-row-height);
   padding: 0 var(--status-inset);
-  border: 0;
   border-radius: var(--radius-status-row);
   background: var(--surface-panel);
-  font: var(--type-status-value);
-  color: var(--ink-title);
   transition: background-color var(--menu-motion);
 }
 
-.event-status__amount::placeholder {
-  color: var(--ink-soft);
-}
-
-.event-status__amount:hover:not(:disabled) {
+.event-status__amount:hover:has(input:not(:disabled)) {
   background: var(--surface-row-hover);
 }
 
-.event-status__amount:focus-visible {
+/* L'anneau se pose sur l'enveloppe, pas sur le champ : sinon il couperait
+   l'unité en deux. */
+.event-status__amount:has(input:focus-visible) {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+.event-status__amount-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: none;
+  font: var(--type-status-value);
+  color: var(--ink-title);
+  outline: none;
+}
+
+.event-status__amount-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.event-status__unit {
+  flex: none;
+  font: var(--type-status-unit);
+  color: var(--ink-soft);
 }
 
 .event-status__reglement {
@@ -141,9 +169,14 @@
   }
 
   .event-status__sides,
+  .event-status__money {
+    flex: 1 1 100%;
+    margin-left: 0;
+  }
+
   .event-status__amount,
   .event-status__reglement {
-    flex: 1 1 100%;
+    flex: 1 1 0;
     width: auto;
   }
 

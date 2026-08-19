@@ -170,36 +170,46 @@ export function EventStatus({
             </button>
           </div>
 
-          <input
-            className="event-status__amount"
-            type="text"
-            inputMode="decimal"
-            placeholder={paye ? 'Cachet' : 'Montant'}
-            aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
-            value={montant}
-            disabled={past}
-            onChange={(evenement) => setMontant(evenement.target.value)}
-            onBlur={() => void enregistrerLeMontant()}
-            onKeyDown={(evenement) => {
-              if (evenement.key === 'Enter') evenement.currentTarget.blur()
-              if (evenement.key === 'Escape') {
-                setMontant(ecrire(standAmount))
-                evenement.currentTarget.blur()
-              }
-            }}
-          />
+          {/* Le montant et l'état de son règlement sont une seule chose : ils
+              se tiennent à droite de la barre, groupés. Les deux ont une
+              largeur FIGÉE — « Acompte versé » est plus long que « Payé », et
+              sans ça le champ se déformait à chaque changement d'état. */}
+          <div className="event-status__money">
+            <span className="event-status__amount">
+              <input
+                className="event-status__amount-input"
+                type="text"
+                inputMode="decimal"
+                placeholder={paye ? 'Cachet' : 'Montant'}
+                aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
+                value={montant}
+                disabled={past}
+                onChange={(evenement) => setMontant(evenement.target.value)}
+                onBlur={() => void enregistrerLeMontant()}
+                onKeyDown={(evenement) => {
+                  if (evenement.key === 'Enter') evenement.currentTarget.blur()
+                  if (evenement.key === 'Escape') {
+                    setMontant(ecrire(standAmount))
+                    evenement.currentTarget.blur()
+                  }
+                }}
+              />
+              {/* Décoratif : l'unité est déjà dans le libellé du champ, que
+                  lisent les lecteurs d'écran. La répéter les ferait bégayer. */}
+              <span className="event-status__unit" aria-hidden="true">
+                €
+              </span>
+            </span>
 
-          {/* Sa largeur est FIGÉE : « Acompte versé » est plus long que
-              « Payé », et sans ça le champ du montant d'à côté se déformait à
-              chaque changement d'état. */}
-          <Select
-            className="event-status__reglement"
-            label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
-            value={statutPaiement}
-            options={paiement}
-            disabled={saving || past}
-            onChange={(choisi) => void setPayment(choisi)}
-          />
+            <Select
+              className="event-status__reglement"
+              label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
+              value={statutPaiement}
+              options={paiement}
+              disabled={saving || past}
+              onChange={(choisi) => void setPayment(choisi)}
+            />
+          </div>
         </div>
       )}
 

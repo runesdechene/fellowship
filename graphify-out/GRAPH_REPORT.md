@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 62 files · ~565,766 words
+- 63 files · ~566,267 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 263 nodes · 226 edges · 71 communities detected
+- 264 nodes · 226 edges · 72 communities detected
 - Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -81,6 +81,7 @@
 - [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
+- [[_COMMUNITY_Community 71|Community 71]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Fellowship V1 Design Spec` - 8 edges
@@ -189,12 +190,12 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 17 - "Community 17"
-Cohesion: 0.67
-Nodes (2): ecrire(), enregistrerLeMontant()
-
-### Community 18 - "Community 18"
 Cohesion: 0.83
 Nodes (3): fetchActorProfiles(), fetchFriendsByEvent(), fetchMutualFriendIds()
+
+### Community 18 - "Community 18"
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 19 - "Community 19"
 Cohesion: 0.5
@@ -202,11 +203,11 @@ Nodes (0):
 
 ### Community 20 - "Community 20"
 Cohesion: 0.5
-Nodes (0): 
+Nodes (1): json()
 
 ### Community 21 - "Community 21"
-Cohesion: 0.5
-Nodes (1): json()
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 22 - "Community 22"
 Cohesion: 0.67
@@ -229,8 +230,8 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 27 - "Community 27"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 1.0
+Nodes (2): ecrire(), enregistrerLeMontant()
 
 ### Community 28 - "Community 28"
 Cohesion: 0.67
@@ -322,15 +323,15 @@ Nodes (0):
 
 ### Community 50 - "Community 50"
 Cohesion: 1.0
-Nodes (2): Flat Surfaces (no shadows, lin background), Rationale: Inverted Surfaces (warm white / lin cards)
+Nodes (0): 
 
 ### Community 51 - "Community 51"
 Cohesion: 1.0
-Nodes (2): Boilerplate Leftover (scaffold artifact to clean up), Vite Default Logo (lightning bolt)
+Nodes (2): Flat Surfaces (no shadows, lin background), Rationale: Inverted Surfaces (warm white / lin cards)
 
 ### Community 52 - "Community 52"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (2): Boilerplate Leftover (scaffold artifact to clean up), Vite Default Logo (lightning bolt)
 
 ### Community 53 - "Community 53"
 Cohesion: 1.0
@@ -398,9 +399,13 @@ Nodes (0):
 
 ### Community 69 - "Community 69"
 Cohesion: 1.0
-Nodes (1): Vite + React + TS Template
+Nodes (0): 
 
 ### Community 70 - "Community 70"
+Cohesion: 1.0
+Nodes (1): Vite + React + TS Template
+
+### Community 71 - "Community 71"
 Cohesion: 1.0
 Nodes (1): Pastel Tag System
 
@@ -423,75 +428,77 @@ Nodes (1): Pastel Tag System
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 35`** (2 nodes): `RichText()`, `RichText.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (2 nodes): `Tag.tsx`, `Tag()`
+- **Thin community `Community 36`** (2 nodes): `Select()`, `Select.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
+- **Thin community `Community 37`** (2 nodes): `Tag.tsx`, `Tag()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (2 nodes): `ReportCard()`, `ReportsSection.tsx`
+- **Thin community `Community 38`** (2 nodes): `ActionBanner()`, `ActionBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
+- **Thin community `Community 39`** (2 nodes): `ReportCard()`, `ReportsSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
+- **Thin community `Community 40`** (2 nodes): `SeasonChart()`, `SeasonChart.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
+- **Thin community `Community 41`** (2 nodes): `SettlementsSection()`, `SettlementsSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (2 nodes): `useEvent.ts`, `useEvent()`
+- **Thin community `Community 42`** (2 nodes): `UpcomingCard.tsx`, `placeLine()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (2 nodes): `CreateEvent()`, `CreateEvent.tsx`
+- **Thin community `Community 43`** (2 nodes): `useEvent.ts`, `useEvent()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (2 nodes): `formatRange()`, `EventPreview.tsx`
+- **Thin community `Community 44`** (2 nodes): `CreateEvent()`, `CreateEvent.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (2 nodes): `useSimilarEvents.ts`, `useSimilarEvents()`
+- **Thin community `Community 45`** (2 nodes): `formatRange()`, `EventPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (2 nodes): `useTags.ts`, `useTags()`
+- **Thin community `Community 46`** (2 nodes): `useSimilarEvents.ts`, `useSimilarEvents()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (2 nodes): `syncCustomerBilling()`, `billing.ts`
+- **Thin community `Community 47`** (2 nodes): `useTags.ts`, `useTags()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (2 nodes): `getStripe()`, `stripe.ts`
+- **Thin community `Community 48`** (2 nodes): `syncCustomerBilling()`, `billing.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (2 nodes): `getSupabaseAdmin()`, `supabase-admin.ts`
+- **Thin community `Community 49`** (2 nodes): `getStripe()`, `stripe.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
+- **Thin community `Community 50`** (2 nodes): `getSupabaseAdmin()`, `supabase-admin.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
+- **Thin community `Community 51`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 52`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 53`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (1 nodes): `vitest.config.ts`
+- **Thin community `Community 54`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (1 nodes): `main.tsx`
+- **Thin community `Community 55`** (1 nodes): `vitest.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (1 nodes): `vite-env.d.ts`
+- **Thin community `Community 56`** (1 nodes): `main.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (1 nodes): `Sidebar.tsx`
+- **Thin community `Community 57`** (1 nodes): `vite-env.d.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (1 nodes): `Dashboard.tsx`
+- **Thin community `Community 58`** (1 nodes): `Sidebar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (1 nodes): `NextDateCard.tsx`
+- **Thin community `Community 59`** (1 nodes): `Dashboard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (1 nodes): `dates.test.ts`
+- **Thin community `Community 60`** (1 nodes): `NextDateCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (1 nodes): `money.test.ts`
+- **Thin community `Community 61`** (1 nodes): `dates.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 62`** (1 nodes): `supabase.ts`
+- **Thin community `Community 62`** (1 nodes): `money.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (1 nodes): `tags.test.ts`
+- **Thin community `Community 63`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (1 nodes): `threads.test.ts`
+- **Thin community `Community 64`** (1 nodes): `tags.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (1 nodes): `setup.ts`
+- **Thin community `Community 65`** (1 nodes): `threads.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (1 nodes): `database.ts`
+- **Thin community `Community 66`** (1 nodes): `setup.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (1 nodes): `supabase.ts`
+- **Thin community `Community 67`** (1 nodes): `database.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (1 nodes): `cors.ts`
+- **Thin community `Community 68`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (1 nodes): `Vite + React + TS Template`
+- **Thin community `Community 69`** (1 nodes): `cors.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (1 nodes): `Pastel Tag System`
+- **Thin community `Community 70`** (1 nodes): `Vite + React + TS Template`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 71`** (1 nodes): `Pastel Tag System`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
@@ -504,7 +511,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **What is the exact relationship between `Vite Default Logo (lightning bolt)` and `Boilerplate Leftover (scaffold artifact to clean up)`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
 - **Why does `Design System Refonte Plan` connect `Community 0` to `Community 1`, `Community 3`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 0`?**
   _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**

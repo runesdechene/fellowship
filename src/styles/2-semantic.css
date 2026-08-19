@@ -407,6 +407,10 @@
      ====================================================================== */
   --status-row-height: var(--height-control);
   --status-pick-width: var(--width-status-pick);
+  --status-participation-width: var(--width-status-participation);
+  --status-amount-width: var(--width-status-amount);
+  --type-status-unit: var(--weight-semibold) var(--size-12) /
+    var(--leading-snug) var(--family-sans);
   --status-gap: var(--space-6);
   --status-padding: var(--space-6);
   --status-inset: var(--space-12);
@@ -462,7 +466,9 @@
      salle sous la ville, le mode de candidature sous l’échéance. */
   --type-event-fact-sub: var(--weight-medium) var(--size-10) /
     var(--leading-snug) var(--family-sans);
-  --event-fact-icon-gap: var(--space-6);
+  /* L’icone respire loin de son libelle : collee, elle se lisait comme le
+     premier caractere du mot. */
+  --event-fact-icon-gap: var(--space-14);
   --event-fact-label-gap: var(--space-6);
 
   --event-friend-gap: var(--space-24); /* entre deux amis de la rangée */
