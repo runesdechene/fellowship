@@ -234,10 +234,6 @@
 
   /* Les contrôles de choix : le suivi, les sélecteurs et leurs menus. */
   --height-control: 46px;
-  /* Un controle A L INTERIEUR de la barre de suivi. 34 + 2 x 6 de
-     rembourrage = 46, soit exactement la hauteur du statut au-dessus : la
-     barre s egalise sans perdre le cadre creme qui la tient. */
-  --height-control-inner: 34px;
   --height-option: 38px; /* une ligne dans un menu déroulant */
   --width-menu-max: 260px; /* au-delà, un menu se replierait sur lui-même */
   /* La valeur du paiement est FIGÉE : « Acompte versé » est plus long que

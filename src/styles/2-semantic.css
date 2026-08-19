@@ -436,10 +436,13 @@
   /* Le rembourrage RESTE : c est lui qui donne au fond creme une surface a
      lui, et donc aux controles clairs poses dessus de quoi se detacher. Sans
      lui, le sens retenu (couleur du panneau) devenait invisible et le NON
-     retenu ressortait — le signal a l envers. C est la hauteur INTERIEURE
-     qui s ajuste pour egaliser avec le statut. */
+     retenu ressortait — le signal a l envers.
+
+     Les controles INTERIEURS font la meme taille que la pastille de statut
+     au-dessus : c est cette taille-la qu on compare d une ligne a l autre,
+     pas celle du cadre. La barre grandit donc autour d eux. */
   --status-padding: var(--space-6);
-  --status-inner-height: var(--height-control-inner);
+  --status-inner-height: var(--height-control);
   --status-inset: var(--space-12);
   --radius-status: var(--radius-card);
   --radius-status-row: var(--radius-nav);

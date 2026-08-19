@@ -79,8 +79,8 @@
    peut faire, elle reste donc lisible. */
 .event-status__side {
   height: var(--status-inner-height);
-  padding: 0 var(--space-12);
-  border-radius: var(--radius-sm);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-status-row);
   background: none;
   font: var(--type-status-side);
   color: var(--ink-soft);
@@ -137,8 +137,8 @@
   flex: none;
   width: var(--status-amount-width);
   height: var(--status-inner-height);
-  padding: 0 var(--space-12);
-  border-radius: var(--radius-sm);
+  padding: 0 var(--status-inset);
+  border-radius: var(--radius-status-row);
   background: var(--surface-panel);
   transition: background-color var(--menu-motion);
 }
@@ -185,7 +185,6 @@
   width: var(--status-pick-width);
 
   --select-height: var(--status-inner-height);
-  --radius-select: var(--radius-sm);
 }
 
 /* Son menu s'ouvre par la droite : collé à gauche, il déborderait de la
