@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 63 files · ~566,755 words
+- 63 files · ~566,848 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 264 nodes · 226 edges · 72 communities detected
+- 265 nodes · 227 edges · 72 communities detected
 - Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -155,11 +155,11 @@ Nodes (8): handleCheckoutCompleted(), handleInvoicePaymentFailed(), handleInvoic
 
 ### Community 8 - "Community 8"
 Cohesion: 0.29
-Nodes (7): MobileMonthView (event pills), useIsMobile Hook (640px breakpoint), MobileYearGrid (3x4 months), Mobile Calendar Redesign Plan, Rationale: Mobile 12 months too long to scroll, Dashboard & Calendar Spec, Dashboard Sections (Prochaines dates, Amis bougent, Derniers ajouts)
+Nodes (0): 
 
 ### Community 9 - "Community 9"
-Cohesion: 0.33
-Nodes (0): 
+Cohesion: 0.29
+Nodes (7): MobileMonthView (event pills), useIsMobile Hook (640px breakpoint), MobileYearGrid (3x4 months), Mobile Calendar Redesign Plan, Rationale: Mobile 12 months too long to scroll, Dashboard & Calendar Spec, Dashboard Sections (Prochaines dates, Amis bougent, Derniers ajouts)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.33

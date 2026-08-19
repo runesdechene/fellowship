@@ -84,12 +84,14 @@
 .event-page__meta {
   margin-top: var(--space-6);
   font: var(--type-event-hero-meta);
-  color: var(--ink-soft);
+  color: var(--ink-hero-meta);
 }
 
+/* Les dates ne changent pas d ENCRE, seulement de graisse : sur la maquette
+   d Uriel toute la ligne est de la meme teinte, et c est le gras seul qui
+   detache le moment du reste de la phrase. */
 .event-page__meta b {
   font: var(--type-event-hero-meta-accent);
-  color: var(--ink-title);
 }
 
 /* Les dates portent le poids ; ce qui les entoure s'efface. */

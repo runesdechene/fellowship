@@ -66,6 +66,18 @@
      écran calibré, pas sur celui d’un exposant en plein soleil. */
   --ink-soft: var(--brown-600); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
+  /* LA LIGNE SOUS LE TITRE D UNE FICHE, et elle seule.
+     Releve au pixel sur la maquette d Uriel : #a79f9f, soit --brown-400 —
+     la meme teinte pour toute la ligne, la date n etant que mise en GRAS et
+     non en fonce.
+
+     EXCEPTION ASSUMEE : 2,49:1 sur le panneau, sous le seuil de 4,5. C est
+     la seule encre de l app a passer dessous depuis qu --ink-soft est remonte
+     a --brown-600. Elle tient parce que l information y est REDITE juste en
+     dessous, en cartes, a pleine encre : la date et le lieu ont leur propre
+     fait dans « Infos pratiques ». Cette ligne-ci est un rappel, pas la
+     source. Ne pas etendre ce token ailleurs. */
+  --ink-hero-meta: var(--brown-400);
   /* Ce que l'organisateur n'a pas renseigne. Longtemps trop pale : une info
      manquante doit se LIRE, c'est elle qu'on viendra completer. */
   /* Grands titres posés au-dessus des blocs. */
