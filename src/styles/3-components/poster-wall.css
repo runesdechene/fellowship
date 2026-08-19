@@ -23,11 +23,63 @@
   width: var(--wall-width);
   height: 100vh;
   overflow: hidden;
+  /* Caché tant que l'image n'est pas prête — mais il garde sa place, sinon la
+     colonne de lecture s'élargirait puis se resserrerait. */
+  visibility: hidden;
   /* CARRÉ. L'affiche a porté les rayons du panneau un temps — une dalle
      posée sur le crème. Uriel tranche l'inverse : arrondir une affiche, c'est
      lui mettre un cadre, alors qu'elle doit se lire comme un mur qui va
      jusqu'au bord. */
   background: var(--wall-milieu);
+}
+
+/* =============================================================================
+   L'ARRIVÉE — le mur entre par la droite
+   =============================================================================
+   Le mur est INVISIBLE tant que son image n'est pas prête, mais il garde sa
+   place : la colonne de lecture ne change donc jamais de largeur. Sans ça, on
+   verrait la colonne brune se poser, puis se téléporter à droite pour glisser
+   à nouveau.
+
+   « Prêt » vaut aussi pour une image en ERREUR (voir PosterWall.tsx) : le mur
+   arrive alors avec son fond seul, plutôt que de ne jamais venir. */
+.poster-wall--entre {
+  visibility: visible;
+  animation: mur-arrive var(--wall-entry-motion) both;
+}
+
+.poster-wall--entre .poster-wall__image {
+  animation: affiche-suit var(--wall-entry-motion) both;
+}
+
+@keyframes mur-arrive {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes affiche-suit {
+  from {
+    transform: translateX(var(--wall-entry-lag)) scale(var(--wall-entry-zoom));
+  }
+}
+
+/* Le mur PARAÎT au lieu d'arriver. On ne supprime pas le geste — sans lui, le
+   mur resterait caché — on lui retire son déplacement. */
+@media (prefers-reduced-motion: reduce) {
+  .poster-wall--entre {
+    animation-name: mur-parait;
+  }
+
+  .poster-wall--entre .poster-wall__image {
+    animation: none;
+  }
+}
+
+@keyframes mur-parait {
+  from {
+    opacity: 0;
+  }
 }
 
 /* L'affiche remplit le mur, quitte à être coupée. C'est un parti pris : le

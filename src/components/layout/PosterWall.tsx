@@ -93,12 +93,24 @@ function releverLesTeintes(image: HTMLImageElement, pour: string): Teintes | nul
 export function PosterWall() {
   const { poster } = usePageChrome()
   const [teintes, setTeintes] = useState<Teintes | null>(null)
+  // L'affiche dont l'image est arrivee. C'est ELLE qui declenche l'entree du
+  // mur, et non le chargement de la page : l'affiche vient apres la requete,
+  // et un rectangle brun qui glisse puis se remplit fait bricolé.
+  const [arrivee, setArrivee] = useState<string | null>(null)
 
   const lire = useCallback((image: HTMLImageElement | null) => {
     if (!image?.src) return
+    // `complete` couvre l'image DEJA EN CACHE : la balise est alors montee
+    // chargee et `onLoad` peut ne jamais se declencher.
+    if (!image.complete || !image.naturalWidth) return
+    setArrivee(image.src)
     const relevees = releverLesTeintes(image, image.src)
     if (relevees) setTeintes(relevees)
   }, [])
+
+  // Une image en ERREUR compte comme arrivee : le mur entre avec son fond
+  // seul. Sans ca, une URL cassee le laisserait cache pour toujours.
+  const echouer = useCallback((source: string) => setArrivee(source), [])
 
   if (!poster) return null
 
@@ -119,7 +131,11 @@ export function PosterWall() {
     : undefined
 
   return (
-    <aside className="poster-wall" style={couleurs} aria-hidden="true">
+    <aside
+      className={arrivee === poster ? 'poster-wall poster-wall--entre' : 'poster-wall'}
+      style={couleurs}
+      aria-hidden="true"
+    >
       <img
         className="poster-wall__image"
         src={poster}
@@ -129,6 +145,7 @@ export function PosterWall() {
         crossOrigin="anonymous"
         ref={lire}
         onLoad={(evenement) => lire(evenement.currentTarget)}
+        onError={(evenement) => echouer(evenement.currentTarget.src)}
       />
       <div className="poster-wall__veil" />
     </aside>

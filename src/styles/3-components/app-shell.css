@@ -6,6 +6,14 @@
 .app-shell {
   display: flex;
   min-height: 100vh;
+  /* Le mur d'affiche entre par la droite : hors de l'écran, il déborde du
+     document et ouvre une barre de défilement horizontale le temps du geste.
+
+     `clip` et surtout PAS `hidden` : `hidden` ferait de la coque un conteneur
+     de défilement, et tout ce qui est collé à l'écran — la barre de gauche,
+     le mur, le fond du panneau — se mettrait à se référer à elle au lieu de
+     la fenêtre. `clip` coupe sans rien de tout ça. */
+  overflow-x: clip;
   background: var(--surface-app);
   font-family: var(--family-sans);
   color: var(--ink-title);

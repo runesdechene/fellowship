@@ -227,6 +227,15 @@
      mouvement court doux plutôt que sec. */
   --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
 
+  /* L'ENTRÉE D'UN GRAND ÉLÉMENT n'est pas un survol allongé. Un mouvement de
+     survol se remarque à peine ; une arrivée pleine hauteur doit se voir, donc
+     durer, sans jamais faire attendre. */
+  --duration-entrance: 760ms;
+  /* Presque toute la course est faite au premier tiers du temps, le reste se
+     pose. C'est ce qui distingue une chose QUI ARRIVE d'une chose qu'on
+     traîne : la vitesse initiale dit l'élan, la fin longue dit le poids. */
+  --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+
   /* ---------------------------------------------------------------------
      DIMENSIONS FIXES issues de la maquette
      --------------------------------------------------------------------- */
