@@ -455,8 +455,8 @@
 
   --event-fact-min-width: var(--width-fact-min);
   --event-fact-gap: var(--space-10);
-  --event-fact-padding-x: var(--space-14);
-  --event-fact-padding-y: var(--space-12);
+  --event-fact-padding-x: var(--space-20);
+  --event-fact-padding-y: var(--space-15);
   --radius-fact: var(--radius-nav);
 
   /* Le libelle en micro-capitales, la valeur en grand dessous. L'icone vit
@@ -473,9 +473,10 @@
      salle sous la ville, le mode de candidature sous l’échéance. */
   --type-event-fact-sub: var(--weight-medium) var(--size-10) /
     var(--leading-snug) var(--family-sans);
-  /* L’icone respire loin de son libelle : collee, elle se lisait comme le
-     premier caractere du mot. */
-  --event-fact-icon-gap: var(--space-14);
+  /* L’icone respire loin de son libelle ET du bord de sa carte. Collee, elle
+     se lisait comme le premier caractere du mot ; serree contre le bord, la
+     carte avait l’air trop petite pour ce qu’elle porte. */
+  --event-fact-icon-gap: var(--space-18);
   --event-fact-label-gap: var(--space-6);
 
   --event-friend-gap: var(--space-24); /* entre deux amis de la rangée */
