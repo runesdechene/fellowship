@@ -52,7 +52,7 @@
 .event-status__bar {
   display: flex;
   align-items: center;
-  gap: var(--status-gap);
+  gap: var(--status-bar-gap);
   padding: var(--status-padding);
   border-radius: var(--radius-status);
   background: var(--surface-card);
@@ -146,9 +146,16 @@
   transition: background-color var(--menu-motion);
 }
 
-.event-status__amount:hover:has(input:not(:disabled)) {
-  background: var(--surface-row-hover);
-}
+/* PAS DE SURVOL SUR LE CHAMP. Deux raisons, et la seconde est la vraie :
+   c est un champ de saisie et non un bouton — le curseur texte dit deja ce
+   qu on peut y faire ; et surtout, la doctrine « on assombrit, on n eclaircit
+   pas » vaut quand l objet est plus SOMBRE que son fond, parce que c est de
+   la qu il tire son existence. Ici c est l inverse : les controles sont plus
+   CLAIRS que la barre qui les porte. Les assombrir les fait reculer vers
+   elle au lieu de les avancer.
+
+   Ils sont deja au creme le plus clair de la palette : il n y a rien
+   au-dessus, sauf le blanc pur, qui n entre pas dans cette interface. */
 
 /* L'anneau se pose sur l'enveloppe, pas sur le champ : sinon il couperait
    l'unité en deux. */

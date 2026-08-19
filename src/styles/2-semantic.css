@@ -429,6 +429,11 @@
   --type-status-unit: var(--weight-semibold) var(--size-12) /
     var(--leading-snug) var(--family-sans);
   --status-gap: var(--space-6);
+  /* L ecart entre les DEUX moities de la barre : le sens du paiement d un
+     cote, l argent de l autre. Il ne peut pas dependre du `margin-left: auto`
+     seul — quand la barre est pleine a ras bord, il n a plus rien a
+     distribuer et les deux moities se touchent a 6 px. */
+  --status-bar-gap: var(--space-20);
   /* L air entre l en-tete et la barre. Il etait cale sur l ecart HORIZONTAL
      des controles : deux lignes collees a 6 px, alors que ce sont deux
      rangees distinctes qui doivent se voir comme telles. */
@@ -468,7 +473,7 @@
      panneau sur un grand écran. Le plancher tient la mise en page sur un
      portable, le plafond empêche la ligne de dépasser une longueur lisible.
      ====================================================================== */
-  --event-reading-width: clamp(462px, 30vw, 671px);
+  --event-reading-width: clamp(508px, 33vw, 738px);
   --event-page-max-width: calc(
     var(--event-reading-width) + 2 * var(--page-gutter)
   );
