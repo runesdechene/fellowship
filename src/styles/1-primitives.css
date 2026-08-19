@@ -103,6 +103,25 @@
      sur aucune des maquettes validées. Laisser une couleur morte dans la
      couche 1, c’est exactement ce qui a fait traîner l’olive six mois.
      --------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------
+     PALETTE — BLEU LAVANDE ÉLECTRIQUE (ce qui MÈNE ailleurs)
+
+     Il avait quitté la palette : il ne tenait plus qu'une ligne et
+     n'apparaissait sur aucune maquette. Il revient avec un rôle qu'il
+     n'avait jamais eu — LES LIENS, et rien d'autre.
+
+     C'est ce rôle qui le justifie. Un lien n'est ni un statut ni un
+     bouton : c'est une DESTINATION. Le bleu en est la convention
+     universelle, et surtout il ne peut se confondre avec aucune des trois
+     teintes d’état — olive, blé, terre — puisqu’il vit dans un autre
+     registre. Il redonne aussi au crème le contrepoint froid qui lui
+     manquait entièrement.
+
+     5,04:1 sur le panneau, 4,55:1 sur une carte : il passe le seuil tel
+     quel, sans avoir besoin d'une clarté dédiée.
+     --------------------------------------------------------------------- */
+  --electric-500: #5d5ae0;
+
   --wheat-100: #e9e1b4;
   --wheat-150: #e3d9a0; /* le même, au survol d’un aplat plein */
   --wheat-400: #96862c;
@@ -227,7 +246,7 @@
   --width-cockpit: 320px; /* la colonne de suivi, à droite */
   --width-event-poster: 220px; /* l'affiche, en haut de la fiche */
   --height-event-poster: 290px;
-  --width-companion-avatar: 40px; /* les avatars de la bande de compagnons */
+  --width-companion-avatar: 32px; /* les avatars de la bande de compagnons */
   --height-stepper-step: 40px; /* un cran du suivi */
   --width-stepper-box: 19px; /* sa case a cocher */
   --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */
@@ -246,6 +265,10 @@
   /* Un prix de place tient en quatre chiffres. Plus large, le champ
      promettait une saisie qui n’existe pas. */
   --width-status-amount: 144px;
+  /* En dessous, un montant a quatre chiffres ne rentre plus. C est le
+     PLANCHER du champ, pas sa taille : il part de 144 et se resserre quand
+     la colonne se resserre, plutot que de pousser la rangee hors du cadre. */
+  --width-status-amount-min: 96px;
   --height-ledger-row: 40px; /* une ligne du registre */
   --width-main-min: 380px; /* sous cette largeur, le suivi passe dessous */
 }

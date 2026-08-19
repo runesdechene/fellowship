@@ -100,13 +100,15 @@
      qu’elle PORTE du texte sur son propre fond, et qu’il y faut 4,5:1. */
   --accent-interactive: var(--olive-700);
   --accent-interactive-surface: var(--olive-100);
-  /* UN LIEN N EST PAS UN STATUT. Il portait l accent, donc l olive, donc la
-     couleur de « c est acquis » : un lien « Dossier d inscription » en
-     vert-acquis ment sur ce qu il est. Il passe a l encre douce — ce sont le
-     soulignement, la position et le curseur qui disent qu on peut cliquer,
-     comme partout ailleurs dans l app ou l action porte du contraste et non
-     une teinte. */
-  --ink-link: var(--ink-soft);
+  /* UN LIEN N EST PAS UN STATUT — mais ce n est pas non plus un bouton.
+     C est une DESTINATION, et le bleu en est la convention universelle.
+
+     Il a porte l olive un temps, donc la couleur de « c est acquis » : un
+     lien « Dossier d inscription » en vert-acquis mentait sur ce qu il est.
+     Puis l encre douce, ce qui reglait le mensonge mais ne disait plus rien.
+     Le lavande dit la bonne chose, et il ne peut se confondre avec aucune
+     des trois teintes d etat puisqu il vit dans un autre registre. */
+  --ink-link: var(--electric-500);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -447,6 +449,7 @@
      La piste les tient ensemble et dit « ces deux-la vont par paire ». */
   --status-participation-width: var(--width-status-participation);
   --status-amount-width: var(--width-status-amount);
+  --status-amount-min: var(--width-status-amount-min);
   --type-status-unit: var(--weight-semibold) var(--size-12) /
     var(--leading-snug) var(--family-sans);
   --status-gap: var(--space-6);
@@ -497,7 +500,7 @@
   /* C est le terme du MILIEU qui gouverne sur un grand ecran : le plancher
      ne sert qu au portable, le plafond qu au tres grand. Elargir « pour de
      vrai » passe donc par le vw, pas par le plafond. */
-  --event-reading-width: clamp(468px, 28vw, 648px);
+  --event-reading-width: clamp(430px, 25.5vw, 600px);
   --event-page-max-width: calc(
     var(--event-reading-width) + 2 * var(--page-gutter)
   );

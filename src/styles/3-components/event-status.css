@@ -124,21 +124,30 @@
    barre. Les deux ont une largeur FIGÉE : « Acompte versé » est plus long que
    « Payé », et sans ça le champ se déformait à chaque changement d'état — la
    barre bougeait sous les doigts. */
+/* `min-width: 0` N EST PAS DECORATIF. Un element flex a `min-width: auto`
+   par defaut, ce qui le fige a la taille de son contenu : le groupe refusait
+   de se resserrer, et la pilule de droite sortait du cadre creme de la barre
+   des que la colonne descendait sous 576 px. */
 .event-status__money {
   display: flex;
   align-items: center;
   gap: var(--status-gap);
+  min-width: 0;
   margin-left: auto;
 }
 
 /* C'est l'enveloppe qui porte le champ, pas l'`input` : il faut de la place
    pour l'unité à droite. */
+/* Le SEUL controle de la rangee qui accepte de se resserrer. Les deux sens
+   et l etat du reglement portent des mots dont la longueur est fixe ; un
+   montant, non. Sans ca, sous une certaine largeur de colonne, la pilule de
+   droite sortait du cadre creme de la barre — vingt-trois pixels dehors. */
 .event-status__amount {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  flex: none;
-  width: var(--status-amount-width);
+  flex: 0 1 var(--status-amount-width);
+  min-width: var(--status-amount-min);
   height: var(--status-inner-height);
   padding: 0 var(--status-inset);
   border-radius: var(--radius-status-row);
