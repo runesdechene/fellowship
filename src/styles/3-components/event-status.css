@@ -42,15 +42,19 @@
   --select-surface: var(--surface-card);
 }
 
-/* Sans rembourrage, la barre fait exactement la hauteur de ses controles —
-   donc celle du statut au-dessus. Son rayon s aligne sur le leur pour que
-   les coins ne se ratent pas de trois pixels. */
+/* La barre GARDE son fond et son rembourrage : c est le cadre creme qui
+   donne aux controles clairs de quoi se detacher. Sans lui, le sens retenu
+   prenait la couleur du panneau et devenait invisible, pendant que le NON
+   retenu, transparent, laissait voir le creme — le signal a l envers.
+
+   L egalisation avec le statut se fait donc par la hauteur INTERIEURE :
+   34 + 2 x 6 = 46. */
 .event-status__bar {
   display: flex;
   align-items: center;
   gap: var(--status-gap);
   padding: var(--status-padding);
-  border-radius: var(--radius-status-row);
+  border-radius: var(--radius-status);
   background: var(--surface-card);
 }
 
@@ -74,9 +78,9 @@
    L'option NON retenue n'est pas du texte désactivé : c'est un choix qu'on
    peut faire, elle reste donc lisible. */
 .event-status__side {
-  height: var(--status-row-height);
-  padding: 0 var(--space-14);
-  border-radius: var(--radius-status-row);
+  height: var(--status-inner-height);
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-sm);
   background: none;
   font: var(--type-status-side);
   color: var(--ink-soft);
@@ -132,9 +136,9 @@
   gap: var(--space-4);
   flex: none;
   width: var(--status-amount-width);
-  height: var(--status-row-height);
-  padding: 0 var(--status-inset);
-  border-radius: var(--radius-status-row);
+  height: var(--status-inner-height);
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-sm);
   background: var(--surface-panel);
   transition: background-color var(--menu-motion);
 }
@@ -150,6 +154,9 @@
   outline-offset: 2px;
 }
 
+/* Cale a DROITE, donc colle a son unite : etale sur toute la largeur, le
+   nombre se retrouvait a un bout et l euro a l autre, et « 400 » et « € »
+   se lisaient comme deux objets au lieu d un prix. */
 .event-status__amount-input {
   flex: 1 1 auto;
   min-width: 0;
@@ -157,6 +164,7 @@
   background: none;
   font: var(--type-status-value);
   color: var(--ink-title);
+  text-align: right;
   outline: none;
 }
 
@@ -170,9 +178,14 @@
   color: var(--ink-soft);
 }
 
+/* Le menu du reglement suit la meme hauteur interieure que ses voisins : on
+   redefinit la VARIABLE du composant, on ne reecrit pas sa regle. */
 .event-status__reglement {
   flex: none;
   width: var(--status-pick-width);
+
+  --select-height: var(--status-inner-height);
+  --radius-select: var(--radius-sm);
 }
 
 /* Son menu s'ouvre par la droite : collé à gauche, il déborderait de la

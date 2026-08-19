@@ -433,9 +433,13 @@
      des controles : deux lignes collees a 6 px, alors que ce sont deux
      rangees distinctes qui doivent se voir comme telles. */
   --status-stack-gap: var(--space-14);
-  /* La barre n a plus de rembourrage : c est lui qui la portait a 58 px
-     quand le statut au-dessus en fait 46. Elle EST ses controles. */
-  --status-padding: 0px;
+  /* Le rembourrage RESTE : c est lui qui donne au fond creme une surface a
+     lui, et donc aux controles clairs poses dessus de quoi se detacher. Sans
+     lui, le sens retenu (couleur du panneau) devenait invisible et le NON
+     retenu ressortait — le signal a l envers. C est la hauteur INTERIEURE
+     qui s ajuste pour egaliser avec le statut. */
+  --status-padding: var(--space-6);
+  --status-inner-height: var(--height-control-inner);
   --status-inset: var(--space-12);
   --radius-status: var(--radius-card);
   --radius-status-row: var(--radius-nav);
