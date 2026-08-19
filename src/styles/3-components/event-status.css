@@ -87,11 +87,13 @@
   background: var(--surface-row-hover);
 }
 
-/* Le sens retenu ne prend PAS de surface : il passe au gras et a l’encre
-   pleine. C’est le seul endroit de l’app ou une selection se dit sans aplat
-   — parce que la barre porte deja trois objets a surface claire, et qu’un
-   quatrieme n’aurait plus rien distingue. */
+/* Le sens retenu prend l’aplat clair, celui qui dit « posé au-dessus », ET
+   le gras. Essaye un temps sans aplat — la selection ne se lisait plus : le
+   gras seul, a 12 px, ne suffit pas a dire « c’est celui-la qui compte ».
+   L’aplat sur le retenu et rien sur l’autre, c’est la forme la plus lue
+   d’une bascule ; il n’y avait pas de raison de la reinventer. */
 .event-status__side[aria-pressed='true'] {
+  background: var(--surface-panel);
   font: var(--type-status-side-on);
   color: var(--ink-title);
 }

@@ -209,7 +209,11 @@ export function EventStatus({
               </span>
             </span>
 
+            {/* En aplat plein lui aussi. Les deux aplats ne se disputent pas
+                le regard : ils racontent ensemble « je suis inscrit MAIS il
+                reste a payer » — ce qu une seule couleur ne pouvait pas dire. */}
             <Select
+              filled
               className="event-status__reglement"
               label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
               value={statutPaiement}
