@@ -584,6 +584,101 @@
       footer li {
         margin-bottom: 6px;
       }
+
+      /* =====================================================================
+         LA BASCULE DU PAIEMENT — trois sorties
+         =====================================================================
+         Le noir profond est la voix de l'ACTION PRINCIPALE : « Ajouter une
+         date », « Remplir mon bilan ». Ici il est prêté à un RÉGLAGE, qui
+         crie donc plus fort que le statut posé juste au-dessus.
+
+         Aucune de ces sorties n'utilise une couleur : le sens de l'argent
+         n'est pas un état, et la couleur est réservée aux états.
+         ===================================================================== */
+      .duo {
+        display: flex;
+        gap: 4px;
+        flex: none;
+      }
+
+      .duo span {
+        display: flex;
+        align-items: center;
+        height: var(--control-height);
+        padding: 0 14px;
+        border-radius: var(--radius-nav);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      /* A — le même geste, en moins tranchant. Le token existe déjà et ne
+         sert nulle part : --action-surface-soft. */
+      .duo--a span {
+        background: var(--surface-panel);
+      }
+
+      .duo--a span.on {
+        background: var(--brown-600);
+        color: var(--cream-50);
+      }
+
+      /* B — le retenu s'APPUIE dans le crème, comme un survol qui serait
+         resté. Suit la doctrine de l'app : on assombrit, on n'éclaircit pas. */
+      .duo--b span {
+        background: var(--surface-panel);
+      }
+
+      .duo--b span.on {
+        background: var(--cream-400);
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      /* C — le retenu vient DEVANT : il prend la surface la plus claire de
+         l'app, celle qui dit « posé au-dessus ». Le non-retenu perd la
+         sienne et se fond dans la barre. */
+      .duo--c span.on {
+        background: var(--surface-panel);
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .essai {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 14px 0;
+      }
+
+      .essai + .essai {
+        box-shadow: inset 0 1px 0 var(--cream-400);
+      }
+
+      .essai__nom {
+        flex: none;
+        width: 150px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .essai__nom small {
+        display: block;
+        margin-top: 3px;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .essai__bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1 1 auto;
+        padding: 6px;
+        border-radius: var(--radius-card);
+        background: var(--surface-card);
+      }
     </style>
   </head>
 
@@ -657,7 +752,7 @@
                   <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
                   <path d="m21.854 2.147-10.94 10.939" />
                 </svg>
-                Candidater
+                Voir comment candidater
               </button>
             </div>
           </div>
@@ -962,18 +1057,92 @@
           bascule tout seul.
         </p>
       </section>
+
+      <!-- ============================================================ -->
+      <section>
+        <span class="moment__tag">Le noir qui gêne — trois sorties</span>
+        <div class="stage">
+          <p class="note" style="margin: 0 0 6px">
+            Le noir profond est la voix de l’ACTION PRINCIPALE — « Ajouter une
+            date », « Remplir mon bilan ». Ici il est prêté à un <b>réglage</b>,
+            qui crie donc plus fort que le statut posé juste au-dessus.
+            <b>Aucune de ces sorties n’utilise de couleur</b> : le sens de
+            l’argent n’est pas un état, et la couleur est réservée aux états.
+          </p>
+
+          <div class="essai">
+            <span class="essai__nom">Aujourd’hui<small>noir profond · 14:1</small></span>
+            <span class="essai__bar">
+              <span class="seg">
+                <span class="on">Je paie ma place</span>
+                <span>On me paie</span>
+              </span>
+              <span class="money">
+                <span class="money__field">400 <small>€</small></span>
+              </span>
+            </span>
+          </div>
+
+          <div class="essai">
+            <span class="essai__nom">A · brun moyen<small>le même geste, adouci · 5,4:1</small></span>
+            <span class="essai__bar">
+              <span class="duo duo--a">
+                <span class="on">Je paie ma place</span>
+                <span>On me paie</span>
+              </span>
+              <span class="money">
+                <span class="money__field">400 <small>€</small></span>
+              </span>
+            </span>
+          </div>
+
+          <div class="essai">
+            <span class="essai__nom">B · crème appuyé<small>plus d’aplat sombre · 7,2:1</small></span>
+            <span class="essai__bar">
+              <span class="duo duo--b">
+                <span class="on">Je paie ma place</span>
+                <span>On me paie</span>
+              </span>
+              <span class="money">
+                <span class="money__field">400 <small>€</small></span>
+              </span>
+            </span>
+          </div>
+
+          <div class="essai">
+            <span class="essai__nom">C · le clair devant<small>le retenu vient au-dessus · 8,8:1</small></span>
+            <span class="essai__bar">
+              <span class="duo duo--c">
+                <span class="on">Je paie ma place</span>
+                <span>On me paie</span>
+              </span>
+              <span class="money">
+                <span class="money__field">400 <small>€</small></span>
+              </span>
+            </span>
+          </div>
+
+          <p class="note">
+            <b>Mon vote : B.</b> Il suit la doctrine déjà écrite dans l’app —
+            « on assombrit, on n’éclaircit pas » — et le retenu se lit sans
+            peser. <b>C</b> est plus élégant mais le segment retenu prend alors
+            exactement la surface du champ du montant à côté : deux objets qui
+            se ressemblent alors que l’un se clique et l’autre se remplit.
+            <b>A</b> garde un aplat sombre, donc garde une part du problème.
+          </p>
+        </div>
+      </section>
     </div>
 
     <footer>
       <b>Ce qui reste à trancher :</b>
       <ul>
         <li>
-          <b>Le libellé du bouton.</b> « Candidater » promet que le clic
-          candidate, alors qu’il ouvre un mode d’emploi. La V1 avait les deux
-          formulations selon l’endroit. Je garde « Candidater » parce que c’est
-          l’intention de l’exposant, et la première phrase de la modale dit
-          tout de suite que ça se passe chez l’organisateur — mais ça se
-          discute.
+          <b>Le libellé est tranché</b> : « Voir comment candidater ». On ne
+          candidate pas encore À TRAVERS Fellowship — l’app donne le mode
+          d’emploi, elle n’envoie rien. Un bouton doit dire ce que le clic
+          fait, pas ce qu’on aimerait qu’il fasse. Le jour où une candidature
+          part d’ici en un clic, le bouton pourra redevenir « Candidater ».
         </li>
         <li>
           <b>Et si l’organisateur n’a rien donné ?</b> La V1 masquait le bouton,
