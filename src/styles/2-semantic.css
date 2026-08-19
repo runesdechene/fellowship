@@ -58,7 +58,13 @@
      ====================================================================== */
   --ink-title: var(--brown-700); /* titres, nom de l'événement */
   --ink-strong: var(--brown-900); /* texte sur contrôle clair */
-  --ink-soft: var(--brown-400); /* métadonnées, mois, dates */
+  /* Longtemps --brown-400 : 2,25:1 sur une carte, 2,49:1 sur le panneau —
+     sous le seuil de 4,5:1, et posé 60 fois dans 17 composants. C’était
+     TOUTE la couche d’information secondaire de l’app qui passait sous la
+     ligne de flottaison. Ici : 4,91:1. La hiérarchie se fait désormais par
+     la taille et la graisse, pas par la pâleur — la pâleur marche sur un
+     écran calibré, pas sur celui d’un exposant en plein soleil. */
+  --ink-soft: var(--brown-600); /* métadonnées, mois, dates */
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
   /* Ce que l'organisateur n'a pas renseigne. Longtemps trop pale : une info
      manquante doit se LIRE, c'est elle qu'on viendra completer. */
@@ -75,9 +81,14 @@
      --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
      disparait. Un paragraphe se lit comme un titre se lit : a pleine encre. */
   --ink-body: var(--brown-700);
-  /* L'une des deux couleurs de l'app, avec la terre du logo. */
-  --accent-interactive: #5dbd88;
-  --accent-interactive-surface: var(--electric-100);
+  /* L’accent de l’app. Il portait un vert EN DUR posé sur un fond LAVANDE
+     resté de la veille : les pastilles « Inscrit » sortaient en vert sur du
+     violet. Les deux moitiés se rejoignent enfin.
+
+     Sa clarté n’est pas choisie à l’œil : l’encre est l’olive 700 parce
+     qu’elle PORTE du texte sur son propre fond, et qu’il y faut 4,5:1. */
+  --accent-interactive: var(--olive-700);
+  --accent-interactive-surface: var(--olive-100);
   --ink-link: var(--accent-interactive);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
@@ -86,8 +97,21 @@
   /* =========================================================================
      STATUTS — la seule couleur vive de l'interface
      ====================================================================== */
-  --status-ok-ink: var(--accent-interactive);
-  --status-ok-surface: var(--accent-interactive-surface);
+  /* CE QUI EST ACQUIS. L’encre est lisible ; la MARQUE garde la teinte
+     pleine d’Uriel — une pastille de 8 px posée à côté d’un mot déjà
+     lisible ne porte aucun sens à elle seule, donc elle a le droit d’être
+     belle plutôt que contrastée. */
+  --status-ok-ink: var(--olive-700);
+  --status-ok-surface: var(--olive-100);
+  --status-ok-mark: var(--olive-500);
+
+  /* CE QUI ATTEND UN GESTE. Le registre qui manquait : sans lui « à payer »
+     se lisait comme « payé », et le bloc « À régler » du tableau de bord
+     n’attrapait plus l’œil — alors que c’est sa seule fonction. */
+  --status-todo-ink: var(--wheat-700);
+  --status-todo-surface: var(--wheat-100);
+  --status-todo-mark: var(--wheat-500);
+
   --status-pending-ink: var(--clay-500);
   --status-pending-surface: var(--clay-100);
 
@@ -102,7 +126,7 @@
   --action-surface-soft: var(--brown-600);
 
   /* Pastille ronde devant chaque date à venir */
-  --dot-confirmed: var(--accent-interactive);
+  --dot-confirmed: var(--status-ok-mark);
   --dot-pending: var(--clay-500);
   --dot-size: var(--space-8);
 
@@ -321,32 +345,67 @@
     var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
-     FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
+     LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
+     ========================================================================
+     L'affiche n'est plus une vignette dans la page : c'est le mur de droite,
+     du haut au bas de l'écran. Le flou n'est pas un effet — c'est ce qui rend
+     le mur tenable : la plupart des affiches arrivent en petit JPEG, et
+     étirées sur huit cents pixels elles montrent leurs artefacts.
      ====================================================================== */
-  /* Deux colonnes, comme en V1 : le contenu à gauche, le suivi à droite. Le
-     suivi reste collé en haut pendant qu'on descend — on peut cocher un cran
-     sans remonter la page. */
-  --event-columns-gap: var(--space-32);
-  --event-main-min-width: var(--width-main-min);
-  --cockpit-width: var(--width-cockpit);
+  --wall-width: 34vw;
+  --wall-blur: 16px;
+  /* L'agrandissement compense le flou, qui sinon laisse un liseré
+     transparent tout autour du mur. */
+  --wall-scale: 1.09;
+  /* Le voile compensait un flou CSS qui délavait l'image. L'aperçu basse
+     définition, lui, garde ses couleurs : le voile n'a plus qu'à unifier.
+     À 0,42 il écrasait une affiche déjà sombre en dalle noire. */
+  --wall-veil-opacity: 0.24;
+  --wall-vignette: var(--brown-shade-soft);
+  --radius-wall: var(--round-20);
 
-  /* La fiche est le SEUL ecran a deux colonnes. Si elle gardait la largeur du
-     tableau de bord, sa colonne de lecture tomberait a 566 px — le cockpit et
-     son ecart lui prendraient 352 px sur 918. Elle s'elargit donc d'exactement
-     ce que le cockpit occupe : le texte retrouve la largeur de lecture des
-     autres ecrans, et le suivi s'ajoute a cote au lieu de mordre dedans. */
+  /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
+     c'est le compte à rebours : l'information la plus périssable de la page,
+     et la seule qui change tous les jours. */
+  --type-topbar-lead: var(--weight-bold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
+
+  /* =========================================================================
+     LE SUIVI — remonté dans la grille principale
+     ========================================================================
+     Une seule hauteur, un seul rayon, une seule grammaire. Dans la colonne
+     étroite d'avant, trois contrôles voisins faisaient 30, 26 et 30 px sur
+     trois familles de fond : c'est ça qui rendait la zone laide, pas la
+     disposition.
+     ====================================================================== */
+  --status-row-height: 42px;
+  --status-gap: var(--space-6);
+  --status-padding: var(--space-6);
+  --status-inset: var(--space-12);
+  --radius-status: var(--radius-card);
+  --radius-status-row: var(--radius-nav);
+  --type-status-title: var(--type-section-title);
+  --type-status-value: var(--weight-semibold) var(--size-13) /
+    var(--leading-snug) var(--family-sans);
+  --type-status-side: var(--weight-semibold) var(--size-12) /
+    var(--leading-snug) var(--family-sans);
+
+  /* =========================================================================
+     FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
+     ========================================================================
+     UNE colonne, désormais. La fiche a longtemps eu le contenu à gauche et le
+     suivi dans un couloir de 200 px à droite ; le couloir est parti avec le
+     mur d'affiche, et le suivi est remonté dans la grille.
+
+     Sa largeur suit l'écran plutôt que d'être fixe : le mur mange 34 % de la
+     fenêtre, et une valeur figée laisserait un timbre-poste au milieu du
+     panneau sur un grand écran. Le plancher tient la mise en page sur un
+     portable, le plafond empêche la ligne de dépasser une longueur lisible.
+     ====================================================================== */
+  --event-reading-width: clamp(420px, 27vw, 610px);
   --event-page-max-width: calc(
-    var(--page-max-width) + var(--cockpit-width) + var(--event-columns-gap)
+    var(--event-reading-width) + 2 * var(--page-gutter)
   );
-  --cockpit-top: var(--space-32);
-  --cockpit-gap: var(--space-26); /* entre deux blocs du suivi */
-  --cockpit-padding: var(--card-padding);
-
-  /* L'affiche est le seul grand aplat de la page : elle porte l'identité de la
-     date là où le tableau de bord n'en montrait qu'une vignette. */
-  --event-poster-width: var(--width-event-poster);
-  --event-poster-height: var(--height-event-poster);
-  --event-hero-gap: var(--space-24);
 
   /* Les informations pratiques se rangent en colonnes qui se partagent la
      largeur, et repassent à la ligne plutôt que de se serrer. */
@@ -377,45 +436,6 @@
   --companion-overlap: -8px;
   --companion-gap: var(--space-18);
 
-  /* LE SUIVI — des CASES A COCHER.
-
-     Une case a cocher est la seule forme dont personne n'a jamais a se
-     demander ce qu'elle fait : on la coche, on la decoche. Elle dit l'etat ET
-     la commande d'un seul dessin — ce qu'une barre pleine n'arrivait pas a
-     faire, on ne savait pas si elle affichait ou si elle commandait.
-
-     Trois etats : franchi (case pleine, l'accent), prochaine etape (case vide
-     au contour appuye — rien n'est rempli tant que rien n'est fait), a venir
-     (eteint). Aucun aplat sombre : le suivi n'est pas un bouton. */
-  --stepper-step-height: var(--height-stepper-step);
-  --stepper-step-gap: var(--space-2);
-  --stepper-step-inset: var(--space-10);
-  --stepper-box-size: var(--width-stepper-box);
-  --stepper-box-radius: var(--round-6);
-  --stepper-box-surface: var(--surface-panel);
-  --stepper-box-border: var(--brown-250);
-  --stepper-box-ink: var(--cream-50); /* la coche, sur une case pleine */
-  --stepper-done-ink: var(--ink-title);
-  --stepper-done-surface: var(--status-ok-ink);
-  --stepper-next-ink: var(--ink-title);
-  --stepper-next-border: var(--ink-title);
-  --stepper-hover-surface: var(--surface-row-hover);
-  --stepper-motion: var(--duration-fast) var(--ease-out);
-  --type-stepper-next: var(--weight-bold) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
-
-  /* La bascule « je paie ma place / on me paie pour venir ». */
-  --orientation-surface: var(--surface-panel);
-  --orientation-on-surface: var(--surface-card);
-  --orientation-padding: var(--space-4);
-
-  --type-cockpit-label: var(--weight-semibold) var(--size-11) /
-    var(--leading-snug) var(--family-sans);
-  --type-stepper-step: var(--weight-semibold) var(--size-13) /
-    var(--leading-snug) var(--family-sans);
-  --type-orientation: var(--weight-semibold) var(--size-11) /
-    var(--leading-snug) var(--family-sans);
-
   /* LE TAG QUI DECRIT — sur la fiche d'un evenement.
      Rien a voir avec celui de l'atelier, qui est un bouton : celui-ci se lit
      au passage, il ne doit ni peser ni crier. Ses couleurs viennent de
@@ -425,18 +445,6 @@
   --tag-badge-surface: var(--surface-chip-neutral);
   --tag-badge-ink: var(--ink-soft);
   --type-tag-badge: var(--weight-medium) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
-
-  /* Se retirer d'une date : un lien discret, mais qui doit se VOIR. Il porte
-     donc une surface, comme les autres controles de la colonne. */
-  --quit-surface: var(--surface-panel);
-  --quit-ink: var(--ink-total);
-  --quit-hover-surface: var(--surface-row-hover);
-
-  /* La saisie du montant, dans le suivi. */
-  --amount-surface: var(--surface-panel);
-  --amount-height: var(--control-height);
-  --type-amount-value: var(--weight-bold) var(--size-16) / var(--leading-snug)
     var(--family-sans);
 
   /* Un texte mis en forme par un organisateur : les distances entre ses

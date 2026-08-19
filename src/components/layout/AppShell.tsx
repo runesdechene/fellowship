@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { PageChromeProvider } from '@/lib/page-chrome'
+import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './Topbar'
 
@@ -26,13 +28,18 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
 
+  // Le fournisseur enveloppe TOUT : la page qui déclare son décor est un
+  // enfant, la barre du haut et le mur qui le rendent sont ses frères.
   return (
-    <div className={collapsed ? 'app-shell app-shell--collapsed' : 'app-shell'}>
-      <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
-      <main className="app-shell__main">
-        <Topbar />
-        {children}
-      </main>
-    </div>
+    <PageChromeProvider>
+      <div className={collapsed ? 'app-shell app-shell--collapsed' : 'app-shell'}>
+        <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
+        <main className="app-shell__main">
+          <Topbar />
+          {children}
+        </main>
+        <PosterWall />
+      </div>
+    </PageChromeProvider>
   )
 }

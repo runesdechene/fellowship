@@ -49,6 +49,11 @@
   --brown-700: #564444; /* brun profond — titres et chiffres forts */
   --brown-800: #4a4643; /* gris chaud — les grands titres de bloc */
   --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
+  /* Une ombre transparente, pour poser une vignette SUR une image. C’est la
+     seule couleur semi-opaque de la palette : partout ailleurs les plans se
+     distinguent par un aplat, jamais par de la transparence. */
+  --brown-shade: rgb(23 18 15 / 42%);
+  --brown-shade-soft: rgb(23 18 15 / 26%);
 
   /* ---------------------------------------------------------------------
      PALETTE — TERRE (statuts non validés)
@@ -57,18 +62,43 @@
   --clay-500: #c0642a;
 
   /* ---------------------------------------------------------------------
-     PALETTE — BLEU-VIOLET ÉLECTRIQUE
-     Avec la terre du logo, l'UNE DES DEUX couleurs de Fellowship. Il n'y en a
-     pas de troisième : un olive traînait ici depuis le premier commit de la
-     V2, jamais decide, jamais valide. Il est parti — l'etat acquis et l'action
-     portent desormais la meme famille.
+     PALETTE — OLIVE (ce qui est acquis)
 
-     Le fond clair n'est pas choisi à l'œil : c'est la même teinte (241°) et
-     la même saturation (68 %) que le trait, montée en clarté. Les deux se
-     lisent donc comme une seule couleur.
+     La teinte choisie par Uriel à l’œil sur ses maquettes : 81°, saturation
+     48 %. C’est, au hexadécimal près, l’olive retiré la veille — il est
+     revenu par le regard, pas par distraction. Cette fois il a un rôle
+     écrit : « c’est fait, tu peux passer à autre chose ».
+
+     TROIS CLARTÉS, TROIS EMPLOIS. C’est la règle qui permet de garder une
+     couleur belle ET lisible :
+       500  la teinte d’Uriel, INTACTE — uniquement décorative (une pastille
+            de 8 px à côté d’un mot déjà lisible ne porte aucun sens seule)
+       400  3,03:1 sur le fond pâle — le plancher d’une icône
+       700  5,00:1 — obligatoire dès que la couleur PORTE du texte
+     Le fond 100 est la même teinte montée en clarté, comme pour la terre.
      --------------------------------------------------------------------- */
-  --electric-100: #e6e5fa; /* fond, pour poser de l'électrique sur du crème */
-  --electric-500: #5d5ae0;
+  --olive-100: #def5c8;
+  --olive-400: #729334;
+  --olive-500: #84aa3c;
+  --olive-700: #556d26;
+
+  /* ---------------------------------------------------------------------
+     PALETTE — BLÉ (ce qui attend un geste)
+
+     51°, saturation 55 %, relevée sur la même maquette. Elle répond à
+     l’olive : même logique de clartés, même façon d’être posée. Elle ne
+     dit PAS « attention » — elle dit « il y a quelque chose à faire ici ».
+     Une ligne qui la porte redevient crème une fois le geste accompli :
+     la couleur décrit un ÉTAT, jamais la nature de la chose.
+
+     Le violet électrique a quitté la palette avec ce commit. Il ne tenait
+     plus qu’une seule ligne (--accent-interactive-surface) et n’apparaît
+     sur aucune des maquettes validées. Laisser une couleur morte dans la
+     couche 1, c’est exactement ce qui a fait traîner l’olive six mois.
+     --------------------------------------------------------------------- */
+  --wheat-100: #e9e1b4;
+  --wheat-500: #b29f34;
+  --wheat-700: #6b5f1f;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLE

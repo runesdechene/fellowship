@@ -2,17 +2,17 @@ import { ArrowLeft, CalendarDays, Clock, FileText, MapPin, Store, Users } from '
 import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
-import { Chip } from '@/components/ui/Chip'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
 import { formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
-import { EventCockpit } from './EventCockpit'
 import { EventDiscussion } from './EventDiscussion'
+import { EventStatus } from './EventStatus'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
 
@@ -120,6 +120,14 @@ export function EventPage() {
     writeError,
   } = useEvent(id, actor?.id, person?.actor_id)
 
+  // La fiche est le seul écran à demander un décor à la coquille : l'affiche
+  // remplit le mur de droite, le compte à rebours prend la barre du haut.
+  // Déclaré AVANT tout retour anticipé — c'est un hook.
+  useDeclarePageChrome({
+    poster: event?.image_url ?? null,
+    lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
+  })
+
   // Le prix de la place est UNE ligne du registre — celle que le suivi pose —
   // et surtout pas la somme des lignes : additionner donnerait un total faux.
   const standAmount = ledger.find((line) => line.source === 'stepper')?.amount ?? 0
@@ -155,15 +163,8 @@ export function EventPage() {
     <div className="event-page">
       {back}
 
-      <div className="event-page__cols">
-        <div className="event-page__main">
+      <div className="event-page__main">
           <header className="event-page__hero">
-            {event.image_url ? (
-              <img className="event-page__poster" src={event.image_url} alt="" />
-            ) : (
-              <div className="event-page__poster" />
-            )}
-
             <div className="event-page__identity">
               <h1 className="event-page__title">{event.name}</h1>
 
@@ -184,10 +185,6 @@ export function EventPage() {
                 )}
               </div>
 
-              <div className="event-page__chips">
-                <Chip>{past ? 'Date passée' : formatCountdown(daysAway)}</Chip>
-              </div>
-
               {event.tags && event.tags.length > 0 && (
                 <div className="event-page__tags">
                   {event.tags.map((tag) => (
@@ -197,6 +194,20 @@ export function EventPage() {
               )}
             </div>
           </header>
+
+          <EventStatus
+            status={status}
+            paymentStatus={paymentStatus}
+            paymentOrientation={paymentOrientation}
+            past={past}
+            setStatus={setStatus}
+            setPayment={setPayment}
+            setOrientation={setOrientation}
+            setStandAmount={setStandAmount}
+            standAmount={standAmount}
+            saving={saving}
+            writeError={writeError}
+          />
 
           <Block title="Tes compagnons sur cette date" empty={friends.length === 0}>
             {friends.length > 0 ? (
@@ -227,10 +238,11 @@ export function EventPage() {
             )}
           </Block>
 
-          <Block
-            title="À propos"
-            empty={isRichTextEmpty(event.description)}
-          >
+          {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
+              Le cadre disait « ceci est un bloc » alors que la description est
+              simplement la voix de l'organisateur. Les cartes restent pour les
+              FAITS — dates, lieu, échéance — qui eux se scannent. */}
+          <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
             {isRichTextEmpty(event.description) ? (
               <p className="event-page__state">
                 L’organisateur n’a pas encore décrit cet événement.
@@ -335,21 +347,6 @@ export function EventPage() {
               </div>
             </section>
           )}
-        </div>
-
-        <EventCockpit
-          status={status}
-          paymentStatus={paymentStatus}
-          paymentOrientation={paymentOrientation}
-          past={past}
-          setStatus={setStatus}
-          setPayment={setPayment}
-          setOrientation={setOrientation}
-          setStandAmount={setStandAmount}
-          standAmount={standAmount}
-          saving={saving}
-          writeError={writeError}
-        />
       </div>
     </div>
   )

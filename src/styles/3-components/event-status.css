@@ -1,0 +1,219 @@
+/* -----------------------------------------------------------------------------
+   LE SUIVI — sous le titre de la fiche, dans la grille principale
+   Utilisé par : src/features/event/EventStatus.tsx
+
+   Il vivait dans une colonne de 200 px à droite, où trois contrôles voisins
+   faisaient 30, 26 et 30 px de haut sur trois familles de fond : l'œil n'y
+   trouvait aucun rythme. Ici tout partage UNE hauteur, UN rayon, UNE
+   grammaire — le libellé à gauche, la valeur à droite, un chevron pour
+   changer.
+   -------------------------------------------------------------------------- */
+
+.event-status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--status-gap);
+}
+
+/* Le mot « Statut » porte la taille d'un titre de bloc, comme « À propos » :
+   c'est une rubrique de la page, pas une étiquette de champ. */
+.event-status__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.event-status__title {
+  font: var(--type-status-title);
+  color: var(--ink-section);
+}
+
+.event-status__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--status-gap);
+  padding: var(--status-padding);
+  border-radius: var(--radius-status);
+  background: var(--surface-card);
+}
+
+/* --- Une valeur qu'on change --------------------------------------------- */
+/* La pastille dessine, le `<select>` natif la recouvre en transparent : on
+   garde le clavier, le tactile et le menu du système sans réécrire un menu. */
+.event-status__pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+  height: var(--status-row-height);
+  padding: 0 var(--status-inset);
+  border-radius: var(--radius-status-row);
+  background: var(--surface-panel);
+  font: var(--type-status-value);
+  color: var(--ink-title);
+  transition: background-color var(--menu-motion);
+}
+
+.event-status__pick:hover {
+  background: var(--surface-row-hover);
+}
+
+/* La pastille de 8 px ne porte aucun texte : elle garde donc la teinte
+   PLEINE, la belle. C'est la règle qui réconcilie couleur et lisibilité —
+   le mot est lisible tout seul, la couleur n'a plus rien à porter. */
+.event-status__dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-round);
+  background: var(--brown-250);
+}
+
+.event-status__pick--ok .event-status__dot {
+  background: var(--status-ok-mark);
+}
+
+.event-status__pick--todo .event-status__dot {
+  background: var(--status-todo-mark);
+}
+
+.event-status__chev {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-soft);
+}
+
+.event-status__select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  opacity: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.event-status__select:disabled {
+  cursor: default;
+}
+
+.event-status__pick:has(.event-status__select:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Dans l'en-tête, la valeur se cale à droite du titre sans prendre toute la
+   largeur : elle redit ce que la pastille du titre dit déjà, elle n'a pas à
+   le crier deux fois. */
+.event-status__head .event-status__pick {
+  flex: 1 1 auto;
+  max-width: var(--width-card);
+  margin-left: auto;
+  background: var(--surface-card);
+}
+
+.event-status__head .event-status__pick:hover {
+  background: var(--surface-row-hover);
+}
+
+/* --- Le sens du paiement -------------------------------------------------- */
+.event-status__sides {
+  display: flex;
+  flex: none;
+  gap: var(--space-4);
+}
+
+.event-status__side {
+  height: var(--status-row-height);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-status-row);
+  background: var(--surface-panel);
+  font: var(--type-status-side);
+  /* L'option NON retenue n'est pas du texte désactivé : c'est un choix qu'on
+     peut faire. Elle reste donc lisible. */
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--menu-motion),
+    color var(--menu-motion);
+}
+
+.event-status__side:hover:not(:disabled) {
+  background: var(--surface-row-hover);
+}
+
+.event-status__side[aria-pressed='true'] {
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.event-status__side:disabled {
+  cursor: default;
+}
+
+/* --- Le montant et son état ---------------------------------------------- */
+/* Le montant et l'état de son règlement sont une seule chose : ils vivent
+   dans un seul objet, pas dans deux contrôles voisins. */
+.event-status__money {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: var(--space-4);
+  min-width: 0;
+  padding-left: var(--space-4);
+}
+
+.event-status__amount {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--status-row-height);
+  padding: 0 var(--status-inset);
+  border: 0;
+  border-radius: var(--radius-status-row);
+  background: var(--surface-panel);
+  font: var(--type-status-value);
+  color: var(--ink-title);
+  transition: background-color var(--menu-motion);
+}
+
+.event-status__amount::placeholder {
+  color: var(--ink-soft);
+}
+
+.event-status__amount:hover:not(:disabled) {
+  background: var(--surface-row-hover);
+}
+
+.event-status__amount:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.event-status__money .event-status__pick {
+  flex: none;
+}
+
+.event-status__error {
+  font: var(--type-list-meta);
+  color: var(--status-pending-ink);
+}
+
+/* Sous cette largeur, le sens du paiement et le montant ne tiennent plus sur
+   une ligne : ils s'empilent plutôt que de se serrer. */
+@media (max-width: 760px) {
+  .event-status__bar {
+    flex-wrap: wrap;
+  }
+
+  .event-status__sides,
+  .event-status__money {
+    flex: 1 1 100%;
+  }
+
+  .event-status__side {
+    flex: 1;
+  }
+}

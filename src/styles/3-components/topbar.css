@@ -11,8 +11,26 @@
   position: absolute;
   top: var(--topbar-top);
   right: var(--topbar-right);
+  /* Elle s'étend jusqu'au bord gauche pour porter l'accroche de la page.
+     Du coup elle recouvre le haut du contenu — donc elle n'intercepte plus
+     rien : seuls ses enfants reçoivent le clic. */
+  left: var(--topbar-right);
+  pointer-events: none;
   z-index: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--topbar-gap);
+}
+
+.topbar > * {
+  pointer-events: auto;
+}
+
+/* L'accroche que la page déclare, calée à gauche. Sur la fiche d'un
+   événement, c'est son compte à rebours. */
+.topbar__lead {
+  margin-right: auto;
+  font: var(--type-topbar-lead);
+  color: var(--ink-soft);
 }

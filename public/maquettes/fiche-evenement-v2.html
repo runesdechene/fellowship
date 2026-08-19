@@ -98,7 +98,7 @@
            une largeur fixe y laisse un timbre-poste au milieu du panneau.
            Le plancher garde la mise en page sur un portable, le plafond
            empeche la ligne de depasser une longueur lisible. */
-        --width-reading: clamp(452px, 34vw, 760px);
+        --width-reading: clamp(420px, 27vw, 610px);
       }
 
       *,
@@ -148,11 +148,21 @@
         padding: 32px 23px 0;
       }
 
+      /* Le logo se pose au CENTRE du rail, pas contre son bord gauche. Le
+         bouton de repli est epingle a droite pour ne pas decaler le centre. */
       .sidebar__top {
+        position: relative;
         display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
+        align-items: center;
+        justify-content: center;
         margin-bottom: 27px;
+      }
+
+      .sidebar__collapse {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
       }
 
       .sidebar__logo {
@@ -699,7 +709,14 @@
          portrait, carrée, paysage, ou basse définition. Le flou fabrique la
          marge, et il la fabrique dans les couleurs de l’affiche elle-même.
          ===================================================================== */
+      /* Les couleurs sont extraites de l affiche elle-meme au chargement
+         (voir le script en bas) : le voile marche donc avec n importe quelle
+         affiche, pas seulement celle-ci. Ces valeurs ne sont qu un repli le
+         temps que l image charge. */
       .wall {
+        --affiche-haut: #2d2826;
+        --affiche-milieu: #6f5a3a;
+        --affiche-bas: #2d2826;
         /* COLLÉE À L ÉCRAN, pas au document. Sans ça le mur prend la hauteur
            de toute la page — l affiche s étire sur 1600 px, le fond flouté
            ne se voit jamais, et le bas de l affiche tombe sous le pli. */
@@ -710,6 +727,9 @@
         width: var(--width-wall);
         height: 100vh;
         overflow: hidden;
+        /* Les memes rayons que le panneau, du meme cote : l affiche est une
+           dalle posee sur le creme, pas un bloc encastre. */
+        border-radius: var(--radius-panel) 0 0 var(--radius-panel);
         background: var(--brown-900);
       }
 
@@ -732,6 +752,62 @@
          qui sort du cadre dit que l image continue au-dela de l ecran. */
       .wall__poster {
         object-fit: cover;
+        transition: filter 240ms var(--ease-soft);
+      }
+
+      /* LE FLOU NATIF.
+         Le mur fait plus de 800 px de large sur un grand ecran. La plupart des
+         affiches arrivent en JPEG de 400 px pris sur Facebook : etirees la
+         dessus, elles montrent leurs pixels et leurs artefacts. Le flou les
+         efface et transforme le mur en AMBIANCE — ce que la page perd en
+         lisibilite de l affiche, elle l a deja en texte a gauche.
+         Le leger agrandissement evite le liseré transparent que le flou
+         creerait sur les bords. */
+      body[data-flou='oui'] .wall__poster {
+        filter: blur(var(--flou, 16px)) saturate(1.2);
+        /* L’agrandissement suit le flou : sans ça, un flou fort laisse un
+           liseré transparent sur les bords du mur. */
+        transform: scale(calc(1 + var(--flou, 16px) / 180));
+      }
+
+      /* LE VOILE — teinte dans les couleurs de l affiche, relevees au
+         chargement. Il rattrape ce que le flou delave et donne au mur la
+         dominante de l evenement : sombre pour un festival nocturne, clair
+         pour un marche de printemps. */
+      .wall__veil {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background:
+          linear-gradient(
+            180deg,
+            var(--affiche-haut) 0%,
+            var(--affiche-milieu) 52%,
+            var(--affiche-bas) 100%
+          );
+        transition: opacity 240ms var(--ease-soft);
+      }
+
+      body[data-flou='oui'] .wall__veil {
+        opacity: calc(0.1 + var(--flou, 16px) / 50);
+      }
+
+      /* Une vignette tres douce pour que les bords se posent au lieu de
+         couper net. */
+      .wall__vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          120% 90% at 50% 45%,
+          transparent 40%,
+          rgba(20, 16, 14, 0.42) 100%
+        );
+        opacity: 0;
+        transition: opacity 240ms var(--ease-soft);
+      }
+
+      body[data-flou='oui'] .wall__vignette {
+        opacity: 1;
       }
 
       body[data-affiche='cover'] .wall__blur {
@@ -863,8 +939,15 @@
         background: rgba(255, 251, 242, 0.12);
       }
 
-      .lab__switch + .lab__title {
+      .lab__switch + .lab__title,
+      .lab__molette + .lab__title {
         margin-top: 14px;
+      }
+
+      .lab__molette {
+        width: 100%;
+        margin-top: 8px;
+        accent-color: var(--olive-500);
       }
 
       .lab__switch button {
@@ -943,7 +1026,7 @@
     </style>
   </head>
 
-  <body data-couleur="inversion" data-affiche="cover" data-statut="uriel">
+  <body data-couleur="inversion" data-affiche="cover" data-statut="uriel" data-flou="oui">
     <div class="shell">
       <!-- ============================================================ -->
       <aside class="sidebar">
@@ -1325,6 +1408,8 @@
           src="assets/affiche-aventuriales.png"
           alt="Affiche des Aventuriales 2026"
         />
+        <div class="wall__veil"></div>
+        <div class="wall__vignette"></div>
       </div>
     </div>
 
@@ -1342,6 +1427,21 @@
         <button data-set="entiere" aria-pressed="false">Entière</button>
         <button data-set="non" aria-pressed="false">Sans</button>
       </div>
+
+      <div class="lab__title">Le flou du mur — <b id="flou-valeur">16</b> px</div>
+      <div class="lab__switch" data-axe="flou">
+        <button data-set="oui" aria-pressed="true">Flouté</button>
+        <button data-set="non" aria-pressed="false">Net</button>
+      </div>
+      <input
+        id="flou-molette"
+        class="lab__molette"
+        type="range"
+        min="0"
+        max="40"
+        value="16"
+        aria-label="Intensité du flou du mur"
+      />
 
       <div class="lab__title">La couleur du « à faire »</div>
       <div class="lab__switch" data-axe="couleur">
@@ -1363,6 +1463,79 @@
             )
           }),
         )
+      })
+
+      /* =================================================================
+         LES COULEURS DU MUR VIENNENT DE L’AFFICHE ELLE-MÊME.
+         On dessine l’affiche dans un canevas minuscule (16 × 24) et on fait
+         la moyenne de trois bandes horizontales. Aucune valeur n’est écrite
+         en dur : une affiche nocturne donne un mur sombre, une affiche de
+         marché de printemps donne un mur clair. C’est ce qui rend le voile
+         utilisable sur les 43 dates réelles et pas seulement sur celle-ci.
+         ================================================================= */
+      function teinterLeMur(affiche) {
+        const mur = affiche.closest('.wall')
+        if (!mur || !affiche.naturalWidth) return
+        const toile = document.createElement('canvas')
+        toile.width = 16
+        toile.height = 24
+        const ctx = toile.getContext('2d', { willReadFrequently: true })
+        ctx.drawImage(affiche, 0, 0, 16, 24)
+        let px
+        try {
+          px = ctx.getImageData(0, 0, 16, 24).data
+        } catch (err) {
+          return /* affiche servie par un autre domaine : on garde le repli */
+        }
+        const bande = (y0, y1) => {
+          let r = 0,
+            v = 0,
+            b = 0,
+            n = 0
+          for (let y = y0; y < y1; y++) {
+            for (let x = 0; x < 16; x++) {
+              const i = (y * 16 + x) * 4
+              r += px[i]
+              v += px[i + 1]
+              b += px[i + 2]
+              n++
+            }
+          }
+          return (
+            'rgb(' +
+            Math.round(r / n) +
+            ' ' +
+            Math.round(v / n) +
+            ' ' +
+            Math.round(b / n) +
+            ')'
+          )
+        }
+        mur.style.setProperty('--affiche-haut', bande(0, 8))
+        mur.style.setProperty('--affiche-milieu', bande(8, 16))
+        mur.style.setProperty('--affiche-bas', bande(16, 24))
+      }
+
+      document.querySelectorAll('.wall__poster').forEach((affiche) => {
+        if (affiche.complete) teinterLeMur(affiche)
+        else affiche.addEventListener('load', () => teinterLeMur(affiche))
+      })
+
+      /* La molette pilote le flou ET l’opacité du voile : plus l’affiche
+         part en bouillie, plus sa propre couleur reprend la main. */
+      const molette = document.getElementById('flou-molette')
+      const valeur = document.getElementById('flou-valeur')
+      molette.addEventListener('input', () => {
+        document.body.style.setProperty('--flou', molette.value + 'px')
+        valeur.textContent = molette.value
+        if (document.body.dataset.flou !== 'oui') {
+          document.body.dataset.flou = 'oui'
+          document
+            .querySelectorAll('[data-axe="flou"] button')
+            .forEach((o) =>
+              o.setAttribute('aria-pressed', String(o.dataset.set === 'oui')),
+            )
+        }
       })
 
       document.querySelectorAll('.seg button').forEach((b) => {

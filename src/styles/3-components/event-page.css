@@ -32,37 +32,24 @@
   color: var(--ink-title);
 }
 
-/* --- Les deux colonnes ---------------------------------------------------- */
-/* Le contenu s'étire, le suivi garde sa largeur. Sous la largeur plancher de
-   la colonne principale, le suivi passe dessous plutôt que de l'écraser. */
-.event-page__cols {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--event-columns-gap);
-  width: 100%;
-}
-
+/* --- La colonne, seule ---------------------------------------------------- */
+/* La fiche a longtemps eu deux colonnes : le contenu à gauche, le suivi dans
+   un couloir de 200 px à droite. Le couloir a disparu — l'affiche a pris tout
+   le bord de l'écran (voir poster-wall.css) et le suivi est remonté dans la
+   grille. Il reste UNE colonne, donc UN rythme de lecture. */
 .event-page__main {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: var(--gap-section);
   min-width: 0;
 }
 
 /* --- L'accroche ----------------------------------------------------------- */
+/* Elle portait l'affiche en vignette à côté du titre. L'affiche est devenue
+   le mur de droite : il ne reste que l'identité, sur toute la largeur. */
 .event-page__hero {
   display: flex;
-  gap: var(--event-hero-gap);
-}
-
-.event-page__poster {
-  flex: none;
-  width: var(--event-poster-width);
-  height: var(--event-poster-height);
-  object-fit: cover;
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
+  flex-direction: column;
 }
 
 .event-page__identity {
@@ -97,13 +84,6 @@
 .event-page__meta-line b {
   font: var(--type-event-meta-accent);
   color: var(--ink-title);
-}
-
-.event-page__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-8);
-  margin-top: var(--space-18);
 }
 
 .event-page__tags {
@@ -262,7 +242,9 @@
   color: var(--ink-title);
 }
 
-/* --- À propos ------------------------------------------------------------- */
+/* --- À propos -------------------------------------------------------------
+   Le paragraphe est posé à même le panneau, sans carte : ce qui se LIT n'a
+   pas besoin d'être contenu. Les cartes restent pour ce qui se SCANNE. */
 /* Un paragraphe qu'on LIT vraiment, pas une métadonnée qu'on survole : il
    prend l'encre du corps de texte. L'encre douce convient à une date ou à un
    lieu de trois mots, elle disparaît sur cinq lignes. */
@@ -310,260 +292,4 @@
 .event-page__state {
   font: var(--type-event-meta);
   color: var(--ink-soft);
-}
-
-/* =============================================================================
-   LE COCKPIT — où j'en suis sur cette date
-   =============================================================================
-   Collé en haut pendant qu'on descend : on coche un cran sans remonter.
-   ========================================================================== */
-
-.cockpit {
-  position: sticky;
-  top: var(--cockpit-top);
-  display: flex;
-  flex: none;
-  flex-direction: column;
-  gap: var(--cockpit-gap);
-  width: var(--cockpit-width);
-  padding: var(--cockpit-padding);
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
-}
-
-.cockpit__block {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
-}
-
-.cockpit__label {
-  font: var(--type-cockpit-label);
-  color: var(--ink-soft);
-}
-
-.cockpit__sep {
-  height: 1px;
-  background: var(--border-menu);
-}
-
-/* --- Les crans : des cases a cocher ---------------------------------------- */
-/* La barre pleine d'avant ressemblait a un bouton selectionne : on ne savait
-   pas si elle affichait un etat ou si elle commandait quelque chose. Une case
-   a cocher dit les deux d'un seul dessin. */
-.cockpit__steps {
-  display: flex;
-  flex-direction: column;
-  gap: var(--stepper-step-gap);
-}
-
-.cockpit__step {
-  display: flex;
-  align-items: center;
-  gap: var(--space-12);
-  width: 100%;
-  min-height: var(--stepper-step-height);
-  padding-inline: var(--stepper-step-inset);
-  border-radius: var(--radius-nav);
-  background: none;
-  color: var(--ink-soft);
-  font: var(--type-stepper-step);
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--stepper-motion), color var(--stepper-motion);
-}
-
-.cockpit__step:hover:not(:disabled) {
-  background: var(--stepper-hover-surface);
-}
-
-.cockpit__step:disabled {
-  cursor: default;
-}
-
-/* La case elle-meme : vide par defaut, son contour dit qu'elle attend. */
-.cockpit__box {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: var(--stepper-box-size);
-  height: var(--stepper-box-size);
-  border: 1.5px solid var(--stepper-box-border);
-  border-radius: var(--stepper-box-radius);
-  background: var(--stepper-box-surface);
-  color: transparent;
-  transition: background var(--stepper-motion), border-color var(--stepper-motion);
-}
-
-/* Franchi : la case se remplit de l'accent et porte sa coche. */
-.cockpit__step--done {
-  color: var(--stepper-done-ink);
-}
-
-.cockpit__step--done .cockpit__box {
-  border-color: var(--stepper-done-surface);
-  background: var(--stepper-done-surface);
-  color: var(--stepper-box-ink);
-}
-
-/* La prochaine etape : le contour s'affirme et le libelle passe a pleine
-   encre, mais la case reste VIDE. Rien n'est rempli tant que rien n'est fait
-   — c'est toute la difference avec l'aplat sombre d'avant. */
-.cockpit__step--next {
-  color: var(--stepper-next-ink);
-  font: var(--type-stepper-next);
-}
-
-.cockpit__step--next .cockpit__box {
-  border-color: var(--stepper-next-border);
-  border-width: 2px;
-}
-
-/* --- Le sens de l'argent -------------------------------------------------- */
-.cockpit__orientation {
-  display: flex;
-  gap: var(--stepper-step-gap);
-  padding: var(--orientation-padding);
-  border-radius: var(--radius-nav);
-  background: var(--orientation-surface);
-}
-
-.cockpit__orientation-opt {
-  flex: 1;
-  padding-block: var(--space-8);
-  border-radius: var(--radius-sm);
-  background: none;
-  color: var(--ink-soft);
-  font: var(--type-orientation);
-  cursor: pointer;
-  transition: background var(--stepper-motion), color var(--stepper-motion);
-}
-
-.cockpit__orientation-opt--on {
-  background: var(--orientation-on-surface);
-  color: var(--ink-title);
-}
-
-.cockpit__orientation-opt:disabled {
-  cursor: default;
-}
-
-/* --- Sortir de la date ---------------------------------------------------- */
-/* Se retirer reste une sortie discrète — le rouge n'existe nulle part dans
-   cette interface — mais ça reste un CONTRÔLE : sans surface ni poids, il se
-   perdait au bas de la colonne. */
-.cockpit__quit {
-  padding: var(--space-10) var(--space-12);
-  border-radius: var(--radius-nav);
-  background: var(--quit-surface);
-  color: var(--quit-ink);
-  font: var(--type-button);
-  cursor: pointer;
-  transition: background var(--stepper-motion), color var(--stepper-motion);
-}
-
-.cockpit__quit:hover:not(:disabled) {
-  background: var(--quit-hover-surface);
-  color: var(--ink-title);
-}
-
-.cockpit__note {
-  font: var(--type-event-meta);
-  color: var(--status-pending-ink);
-}
-
-.cockpit__error {
-  font: var(--type-list-meta);
-  color: var(--status-pending-ink);
-}
-
-/* --- La saisie du montant ------------------------------------------------- */
-/* Verser un acompte ou solder appelle un chiffre. La question se pose au
-   moment du clic : posée plus tard, elle ne se pose jamais et le bilan reste
-   vide jusqu'à la fin de saison. */
-.cockpit__amount-capture {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
-}
-
-.cockpit__amount-label {
-  font: var(--type-field-label);
-  color: var(--ink-soft);
-}
-
-.cockpit__amount-row {
-  display: flex;
-  gap: var(--space-8);
-}
-
-.cockpit__amount-input {
-  flex: 1;
-  min-width: 0;
-  height: var(--amount-height);
-  padding-inline: var(--control-padding-x);
-  border: none;
-  border-radius: var(--radius-control);
-  background: var(--amount-surface);
-  color: var(--control-ink);
-  font: var(--type-control);
-}
-
-.cockpit__amount-input::placeholder {
-  color: var(--control-placeholder);
-}
-
-.cockpit__amount-input:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: -2px;
-}
-
-.cockpit__amount-save {
-  height: var(--amount-height);
-  padding-inline: var(--space-16);
-  border-radius: var(--radius-control);
-  background: var(--action-surface-soft);
-  color: var(--action-ink);
-  font: var(--type-button);
-  cursor: pointer;
-}
-
-.cockpit__amount-hint {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
-}
-
-/* Le montant posé : toujours visible, et cliquable pour le corriger. */
-.cockpit__amount-paid {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-12);
-  padding: var(--space-12) var(--space-14);
-  border-radius: var(--radius-nav);
-  background: var(--amount-surface);
-  cursor: pointer;
-  transition: background var(--stepper-motion);
-}
-
-.cockpit__amount-paid:hover:not(:disabled) {
-  background: var(--quit-hover-surface);
-}
-
-.cockpit__amount-paid:disabled {
-  cursor: default;
-}
-
-.cockpit__amount-paid-label {
-  font: var(--type-cockpit-label);
-  color: var(--ink-soft);
-}
-
-.cockpit__amount-paid-value {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  color: var(--ink-title);
-  font: var(--type-amount-value);
 }
