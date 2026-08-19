@@ -14,7 +14,7 @@
 .event-status {
   display: flex;
   flex-direction: column;
-  gap: var(--status-gap);
+  gap: var(--status-stack-gap);
 }
 
 /* Le mot « Statut » porte la taille d'un titre de bloc, comme « À propos » :
@@ -42,12 +42,15 @@
   --select-surface: var(--surface-card);
 }
 
+/* Sans rembourrage, la barre fait exactement la hauteur de ses controles —
+   donc celle du statut au-dessus. Son rayon s aligne sur le leur pour que
+   les coins ne se ratent pas de trois pixels. */
 .event-status__bar {
   display: flex;
   align-items: center;
   gap: var(--status-gap);
   padding: var(--status-padding);
-  border-radius: var(--radius-status);
+  border-radius: var(--radius-status-row);
   background: var(--surface-card);
 }
 

@@ -88,7 +88,13 @@
      qu’elle PORTE du texte sur son propre fond, et qu’il y faut 4,5:1. */
   --accent-interactive: var(--olive-700);
   --accent-interactive-surface: var(--olive-100);
-  --ink-link: var(--accent-interactive);
+  /* UN LIEN N EST PAS UN STATUT. Il portait l accent, donc l olive, donc la
+     couleur de « c est acquis » : un lien « Dossier d inscription » en
+     vert-acquis ment sur ce qu il est. Il passe a l encre douce — ce sont le
+     soulignement, la position et le curseur qui disent qu on peut cliquer,
+     comme partout ailleurs dans l app ou l action porte du contraste et non
+     une teinte. */
+  --ink-link: var(--ink-soft);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -423,7 +429,13 @@
   --type-status-unit: var(--weight-semibold) var(--size-12) /
     var(--leading-snug) var(--family-sans);
   --status-gap: var(--space-6);
-  --status-padding: var(--space-6);
+  /* L air entre l en-tete et la barre. Il etait cale sur l ecart HORIZONTAL
+     des controles : deux lignes collees a 6 px, alors que ce sont deux
+     rangees distinctes qui doivent se voir comme telles. */
+  --status-stack-gap: var(--space-14);
+  /* La barre n a plus de rembourrage : c est lui qui la portait a 58 px
+     quand le statut au-dessus en fait 46. Elle EST ses controles. */
+  --status-padding: 0px;
   --status-inset: var(--space-12);
   --radius-status: var(--radius-card);
   --radius-status-row: var(--radius-nav);

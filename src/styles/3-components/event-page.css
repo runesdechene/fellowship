@@ -203,11 +203,14 @@
   color: var(--ink-soft);
 }
 
+/* Colles aux infos pratiques : ce sont les MEMES informations, poursuivies —
+   ou candidater, ou aller voir. Vingt pixels les detachaient en un bloc a
+   part, alors qu ils appartiennent a celui du dessus. */
 .event-page__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-24);
-  margin-top: var(--space-20);
+  margin-top: var(--space-10);
 }
 
 /* Aller ailleurs est une commande : c'est l'accent de l'app. */
