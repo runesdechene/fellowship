@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  ChevronDown,
   CircleCheck,
   CircleMinus,
   CircleX,
@@ -9,42 +8,34 @@ import {
   Hourglass,
   Star,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { Select, type SelectOption } from '@/components/ui/Select'
 import type { ParticipationStatus } from '@/types/database'
 import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent'
 
 /**
- * LE SUIVI — remonté dans la grille principale, sous le titre.
+ * LE SUIVI — dans la grille principale, sous le titre.
  *
- * Il vivait dans une colonne de deux cents pixels à droite, où trois
- * contrôles voisins faisaient trente, vingt-six et trente pixels de haut sur
- * trois familles de fond : l'œil n'y trouvait aucun rythme. Ici tout partage
- * une hauteur, un rayon, une grammaire — libellé à gauche, valeur à droite,
- * chevron pour changer.
+ * Il vivait dans une colonne de deux cents pixels à droite, où trois contrôles
+ * voisins faisaient trente, vingt-six et trente pixels de haut sur trois
+ * familles de fond : l'œil n'y trouvait aucun rythme. Ici tout partage une
+ * hauteur, un rayon, une grammaire.
  *
- * La couleur n'y sert qu'à dire l'ÉTAT : l'olive pour ce qui est acquis, le
- * blé pour ce qui attend un geste. Une place réglée redevient crème.
+ * Chaque état a SON dessin — étoile, sablier, coche — et pas seulement sa
+ * teinte : ça se lit aussi en noir et blanc, et pour un daltonien. La couleur
+ * ne dit que l'ÉTAT : olive pour ce qui est acquis, blé pour ce qui attend un
+ * geste. Une place réglée redevient crème.
  */
-
-type Ton = 'muet' | 'todo' | 'ok'
-
-/**
- * Chaque état a SON dessin, pas seulement sa teinte. Une pastille ronde dit
- * qu'il se passe quelque chose ; une étoile, un sablier ou une coche disent
- * QUOI — et ils le disent aussi en noir et blanc, ou pour un daltonien.
- */
-type Choix<T> = { key: T; label: string; ton: Ton; Icon: LucideIcon }
 
 /**
  * Les crans de participation, dans l'ordre du chemin. Le premier retire la
  * participation : un seul contrôle porte donc « je m'inscris » ET « je me
  * retire », là où le suivi d'avant demandait un lien séparé.
  */
-const PARTICIPATION: Choix<ParticipationStatus | null>[] = [
-  { key: null, label: 'Je n’y vais pas', ton: 'muet', Icon: CircleMinus },
-  { key: 'interesse', label: 'Intéressé', ton: 'muet', Icon: Star },
-  { key: 'en_cours', label: 'Dossier en cours', ton: 'todo', Icon: FileClock },
-  { key: 'inscrit', label: 'Inscrit', ton: 'ok', Icon: CircleCheck },
+const PARTICIPATION: SelectOption<ParticipationStatus | null>[] = [
+  { value: null, label: 'Je n’y vais pas', tone: 'muet', Icon: CircleMinus },
+  { value: 'interesse', label: 'Intéressé', tone: 'muet', Icon: Star },
+  { value: 'en_cours', label: 'Dossier en cours', tone: 'todo', Icon: FileClock },
+  { value: 'inscrit', label: 'Inscrit', tone: 'ok', Icon: CircleCheck },
 ]
 
 /**
@@ -52,76 +43,25 @@ const PARTICIPATION: Choix<ParticipationStatus | null>[] = [
  * garantit que la contrainte en base l'accepte. Mais si la base le porte
  * déjà, le menu doit pouvoir l'afficher plutôt que de se vider.
  */
-const REFUSE: Choix<ParticipationStatus | null> = {
-  key: 'refuse',
+const REFUSE: SelectOption<ParticipationStatus | null> = {
+  value: 'refuse',
   label: 'Dossier refusé',
-  ton: 'muet',
+  tone: 'muet',
   Icon: CircleX,
 }
 
 /** Les mêmes états en base, lus selon qu'on paie sa place ou qu'on est payé. */
-const PAIEMENT: Record<PaymentOrientation, Choix<PaymentStatus>[]> = {
+const PAIEMENT: Record<PaymentOrientation, SelectOption<PaymentStatus>[]> = {
   payeur: [
-    { key: 'a_payer', label: 'À payer', ton: 'todo', Icon: Hourglass },
-    { key: 'acompte_verse', label: 'Acompte versé', ton: 'todo', Icon: Coins },
-    { key: 'paye', label: 'Payé', ton: 'ok', Icon: CircleCheck },
+    { value: 'a_payer', label: 'À payer', tone: 'todo', Icon: Hourglass },
+    { value: 'acompte_verse', label: 'Acompte versé', tone: 'todo', Icon: Coins },
+    { value: 'paye', label: 'Payé', tone: 'ok', Icon: CircleCheck },
   ],
   paye: [
-    { key: 'a_payer', label: 'À recevoir', ton: 'todo', Icon: Hourglass },
-    { key: 'acompte_verse', label: 'Acompte reçu', ton: 'todo', Icon: Coins },
-    { key: 'paye', label: 'Reçu', ton: 'ok', Icon: CircleCheck },
+    { value: 'a_payer', label: 'À recevoir', tone: 'todo', Icon: Hourglass },
+    { value: 'acompte_verse', label: 'Acompte reçu', tone: 'todo', Icon: Coins },
+    { value: 'paye', label: 'Reçu', tone: 'ok', Icon: CircleCheck },
   ],
-}
-
-/** `null` ne survit pas à un attribut HTML : on lui donne un jeton stable. */
-const AUCUN = '—'
-
-/**
- * Une valeur qu'on change. Le `<select>` natif recouvre toute la pastille,
- * transparent : on garde le clavier, le tactile et le menu du système sans
- * réécrire un menu à la main.
- */
-function Pick<T extends string | null>({
-  label,
-  value,
-  options,
-  disabled,
-  onChange,
-}: {
-  label: string
-  value: T
-  options: Choix<T>[]
-  disabled: boolean
-  onChange: (value: T) => void
-}) {
-  const jeton = (key: T) => (key === null ? AUCUN : String(key))
-  const courant = options.find((option) => option.key === value) ?? options[0]
-
-  return (
-    <span className={`event-status__pick event-status__pick--${courant.ton}`}>
-      <courant.Icon className="event-status__icon" size={16} strokeWidth={2} />
-      {courant.label}
-      <ChevronDown className="event-status__chev" size={14} strokeWidth={2} />
-      <select
-        className="event-status__select"
-        aria-label={label}
-        value={jeton(value)}
-        disabled={disabled}
-        onChange={(event) => {
-          const choisi = options.find(
-            (option) => jeton(option.key) === event.target.value,
-          )
-          if (choisi) onChange(choisi.key)
-        }}
-      >
-        {options.map((option) => (
-          <option key={jeton(option.key)} value={jeton(option.key)}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </span>
-  )
 }
 
 export function EventStatus({
@@ -160,8 +100,7 @@ export function EventStatus({
   }
 
   // Un dossier refusé n'est pas dans la liste ; il faut pourtant l'afficher.
-  const participation =
-    status === 'refuse' ? [...PARTICIPATION, REFUSE] : PARTICIPATION
+  const participation = status === 'refuse' ? [...PARTICIPATION, REFUSE] : PARTICIPATION
 
   const paiement = PAIEMENT[paymentOrientation]
   const statutPaiement = (paymentStatus ?? 'a_payer') as PaymentStatus
@@ -194,7 +133,12 @@ export function EventStatus({
     <section className="event-status">
       <div className="event-status__head">
         <h2 className="event-status__title">Statut</h2>
-        <Pick
+        {/* Le SEUL aplat coloré de l'écran : c'est le contrôle qui résume la
+            page. Le règlement, lui, garde son icône teintée sur du crème —
+            deux aplats côte à côte se disputeraient le regard. */}
+        <Select
+          filled
+          className="event-status__participation"
           label="Ma participation à cette date"
           value={status}
           options={participation}
@@ -226,33 +170,36 @@ export function EventStatus({
             </button>
           </div>
 
-          <div className="event-status__money">
-            <input
-              className="event-status__amount"
-              type="text"
-              inputMode="decimal"
-              placeholder={paye ? 'Cachet' : 'Montant'}
-              aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
-              value={montant}
-              disabled={past}
-              onChange={(event) => setMontant(event.target.value)}
-              onBlur={() => void enregistrerLeMontant()}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') event.currentTarget.blur()
-                if (event.key === 'Escape') {
-                  setMontant(ecrire(standAmount))
-                  event.currentTarget.blur()
-                }
-              }}
-            />
-            <Pick
-              label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
-              value={statutPaiement}
-              options={paiement}
-              disabled={saving || past}
-              onChange={(choisi) => void setPayment(choisi)}
-            />
-          </div>
+          <input
+            className="event-status__amount"
+            type="text"
+            inputMode="decimal"
+            placeholder={paye ? 'Cachet' : 'Montant'}
+            aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
+            value={montant}
+            disabled={past}
+            onChange={(evenement) => setMontant(evenement.target.value)}
+            onBlur={() => void enregistrerLeMontant()}
+            onKeyDown={(evenement) => {
+              if (evenement.key === 'Enter') evenement.currentTarget.blur()
+              if (evenement.key === 'Escape') {
+                setMontant(ecrire(standAmount))
+                evenement.currentTarget.blur()
+              }
+            }}
+          />
+
+          {/* Sa largeur est FIGÉE : « Acompte versé » est plus long que
+              « Payé », et sans ça le champ du montant d'à côté se déformait à
+              chaque changement d'état. */}
+          <Select
+            className="event-status__reglement"
+            label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
+            value={statutPaiement}
+            options={paiement}
+            disabled={saving || past}
+            onChange={(choisi) => void setPayment(choisi)}
+          />
         </div>
       )}
 

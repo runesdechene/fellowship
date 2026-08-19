@@ -32,11 +32,9 @@
 /* L'affiche remplit le mur, quitte à être coupée. C'est un parti pris : le
    bord qui sort du cadre dit que l'image continue au-delà de l'écran.
 
-   AUCUN FILTRE ICI. Ce qu'on affiche est une version de quarante pixels de
-   large fabriquée au chargement (voir PosterWall.tsx) : c'est son
-   ré-agrandissement qui fait le flou. Un flou CSS coûterait le prix de la
-   couche AFFICHÉE — 737 x 1291 px repeints à chaque image — et ça a suffi
-   à figer le moteur de rendu pendant les essais. */
+   NETTE, et aucun filtre. Elle a été floue un temps ; si on y revient, ne
+   pas le faire avec `filter: blur()` — son coût suit la taille AFFICHÉE, et
+   flouter 737 x 1291 se repaie à chaque image, assez pour figer le rendu. */
 .poster-wall__image {
   position: absolute;
   inset: 0;
@@ -45,17 +43,9 @@
   object-fit: cover;
 }
 
-/* Le seul cas où l'on garde l'affiche pleine : un stockage qui refuse les
-   en-têtes CORS, donc un canevas qu'on ne peut pas lire. On paie alors le
-   flou en CSS — cher, mais ça ne devrait pas arriver en production.
-   L'agrandissement compense le liseré transparent que le flou crée sinon. */
-.poster-wall__image--brute {
-  filter: blur(var(--wall-blur)) saturate(1.2);
-  transform: scale(var(--wall-scale));
-}
-
-/* Le voile rattrape ce que le flou délave et donne au mur la dominante de
-   l'événement. Il est tiré de l'affiche, donc il ne jure jamais avec elle. */
+/* Un souffle de la couleur de l'affiche, pour lier le mur au crème de la page
+   et couvrir le fond le temps du chargement. Il ne rattrape plus rien depuis
+   que l'image est nette : d'où une opacité très basse. */
 .poster-wall__veil {
   position: absolute;
   inset: 0;
@@ -68,18 +58,7 @@
   );
 }
 
-/* Une vignette très douce, pour que les bords se posent au lieu de couper. */
-.poster-wall__vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    120% 90% at 50% 45%,
-    transparent 40%,
-    var(--wall-vignette) 100%
-  );
-}
-
-/* Sous cette largeur la fenêtre n'a plus de place pour deux colonnes ET une
+/* Sous cette largeur la fenêtre n'a plus de place pour une colonne ET une
    image : le mur s'efface, la colonne de lecture prend toute la place. */
 @media (max-width: 1100px) {
   .poster-wall {

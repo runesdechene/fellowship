@@ -177,7 +177,7 @@
       "source_file": "public\\embed.js",
       "source_location": "L1",
       "id": "public_embed_js",
-      "community": 11,
+      "community": 12,
       "norm_label": "embed.js"
     },
     {
@@ -186,7 +186,7 @@
       "source_file": "public\\embed.js",
       "source_location": "L6",
       "id": "embed_iframes",
-      "community": 11,
+      "community": 12,
       "norm_label": "iframes()"
     },
     {
@@ -195,7 +195,7 @@
       "source_file": "public\\embed.js",
       "source_location": "L14",
       "id": "embed_hostthemefor",
-      "community": 11,
+      "community": 12,
       "norm_label": "hostthemefor()"
     },
     {
@@ -204,7 +204,7 @@
       "source_file": "public\\embed.js",
       "source_location": "L31",
       "id": "embed_sendtheme",
-      "community": 11,
+      "community": 12,
       "norm_label": "sendtheme()"
     },
     {
@@ -213,7 +213,7 @@
       "source_file": "public\\embed.js",
       "source_location": "L56",
       "id": "embed_init",
-      "community": 11,
+      "community": 12,
       "norm_label": "init()"
     },
     {
@@ -438,7 +438,7 @@
       "source_file": "src\\components\\ui\\Field.tsx",
       "source_location": "L1",
       "id": "src_components_ui_field_tsx",
-      "community": 12,
+      "community": 13,
       "norm_label": "field.tsx"
     },
     {
@@ -447,7 +447,7 @@
       "source_file": "src\\components\\ui\\Field.tsx",
       "source_location": "L9",
       "id": "field_field",
-      "community": 12,
+      "community": 13,
       "norm_label": "field()"
     },
     {
@@ -456,7 +456,7 @@
       "source_file": "src\\components\\ui\\Field.tsx",
       "source_location": "L21",
       "id": "field_input",
-      "community": 12,
+      "community": 13,
       "norm_label": "input()"
     },
     {
@@ -465,7 +465,7 @@
       "source_file": "src\\components\\ui\\Field.tsx",
       "source_location": "L25",
       "id": "field_textarea",
-      "community": 12,
+      "community": 13,
       "norm_label": "textarea()"
     },
     {
@@ -474,7 +474,7 @@
       "source_file": "src\\components\\ui\\Field.tsx",
       "source_location": "L36",
       "id": "field_toggle",
-      "community": 12,
+      "community": 13,
       "norm_label": "toggle()"
     },
     {
@@ -690,7 +690,7 @@
       "source_file": "src\\features\\event\\EventPage.tsx",
       "source_location": "L1",
       "id": "src_features_event_eventpage_tsx",
-      "community": 13,
+      "community": 9,
       "norm_label": "eventpage.tsx"
     },
     {
@@ -699,34 +699,43 @@
       "source_file": "src\\features\\event\\EventPage.tsx",
       "source_location": "L20",
       "id": "eventpage_formatrange",
-      "community": 13,
+      "community": 9,
       "norm_label": "formatrange()"
+    },
+    {
+      "label": "formatDuration()",
+      "file_type": "code",
+      "source_file": "src\\features\\event\\EventPage.tsx",
+      "source_location": "L30",
+      "id": "eventpage_formatduration",
+      "community": 9,
+      "norm_label": "formatduration()"
     },
     {
       "label": "Block()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventPage.tsx",
-      "source_location": "L30",
+      "source_location": "L41",
       "id": "eventpage_block",
-      "community": 13,
+      "community": 9,
       "norm_label": "block()"
     },
     {
       "label": "Fact()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventPage.tsx",
-      "source_location": "L56",
+      "source_location": "L70",
       "id": "eventpage_fact",
-      "community": 13,
+      "community": 9,
       "norm_label": "fact()"
     },
     {
       "label": "LedgerRow()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventPage.tsx",
-      "source_location": "L79",
+      "source_location": "L97",
       "id": "eventpage_ledgerrow",
-      "community": 13,
+      "community": 9,
       "norm_label": "ledgerrow()"
     },
     {
@@ -742,7 +751,7 @@
       "label": "jeton()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L81",
+      "source_location": "L97",
       "id": "eventstatus_jeton",
       "community": 17,
       "norm_label": "jeton()"
@@ -751,7 +760,7 @@
       "label": "ecrire()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L138",
+      "source_location": "L154",
       "id": "eventstatus_ecrire",
       "community": 17,
       "norm_label": "ecrire()"
@@ -760,7 +769,7 @@
       "label": "enregistrerLeMontant()",
       "file_type": "code",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L163",
+      "source_location": "L179",
       "id": "eventstatus_enregistrerlemontant",
       "community": 17,
       "norm_label": "enregistrerlemontant()"
@@ -852,7 +861,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L1",
       "id": "src_features_event_create_useeventdraft_ts",
-      "community": 9,
+      "community": 10,
       "norm_label": "useeventdraft.ts"
     },
     {
@@ -861,7 +870,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L45",
       "id": "useeventdraft_writedraft",
-      "community": 9,
+      "community": 10,
       "norm_label": "writedraft()"
     },
     {
@@ -870,7 +879,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L55",
       "id": "useeventdraft_readdraft",
-      "community": 9,
+      "community": 10,
       "norm_label": "readdraft()"
     },
     {
@@ -879,7 +888,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L75",
       "id": "useeventdraft_blockingreason",
-      "community": 9,
+      "community": 10,
       "norm_label": "blockingreason()"
     },
     {
@@ -888,7 +897,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L111",
       "id": "useeventdraft_isblank",
-      "community": 9,
+      "community": 10,
       "norm_label": "isblank()"
     },
     {
@@ -897,7 +906,7 @@
       "source_file": "src\\features\\event-create\\useEventDraft.ts",
       "source_location": "L119",
       "id": "useeventdraft_useeventdraft",
-      "community": 9,
+      "community": 10,
       "norm_label": "useeventdraft()"
     },
     {
@@ -942,7 +951,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L1",
       "id": "src_lib_auth_tsx",
-      "community": 10,
+      "community": 11,
       "norm_label": "auth.tsx"
     },
     {
@@ -951,7 +960,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L23",
       "id": "auth_readstoredactorid",
-      "community": 10,
+      "community": 11,
       "norm_label": "readstoredactorid()"
     },
     {
@@ -960,7 +969,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L31",
       "id": "auth_writestoredactorid",
-      "community": 10,
+      "community": 11,
       "norm_label": "writestoredactorid()"
     },
     {
@@ -969,7 +978,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L40",
       "id": "auth_toactor",
-      "community": 10,
+      "community": 11,
       "norm_label": "toactor()"
     },
     {
@@ -978,7 +987,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L79",
       "id": "auth_authprovider",
-      "community": 10,
+      "community": 11,
       "norm_label": "authprovider()"
     },
     {
@@ -987,7 +996,7 @@
       "source_file": "src\\lib\\auth.tsx",
       "source_location": "L204",
       "id": "auth_useauth",
-      "community": 10,
+      "community": 11,
       "norm_label": "useauth()"
     },
     {
@@ -3291,6 +3300,18 @@
       "source_location": "L30",
       "weight": 1.0,
       "_src": "src_features_event_eventpage_tsx",
+      "_tgt": "eventpage_formatduration",
+      "source": "src_features_event_eventpage_tsx",
+      "target": "eventpage_formatduration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\features\\event\\EventPage.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "src_features_event_eventpage_tsx",
       "_tgt": "eventpage_block",
       "source": "src_features_event_eventpage_tsx",
       "target": "eventpage_block",
@@ -3300,7 +3321,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventPage.tsx",
-      "source_location": "L56",
+      "source_location": "L70",
       "weight": 1.0,
       "_src": "src_features_event_eventpage_tsx",
       "_tgt": "eventpage_fact",
@@ -3312,7 +3333,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventPage.tsx",
-      "source_location": "L79",
+      "source_location": "L97",
       "weight": 1.0,
       "_src": "src_features_event_eventpage_tsx",
       "_tgt": "eventpage_ledgerrow",
@@ -3324,7 +3345,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L81",
+      "source_location": "L97",
       "weight": 1.0,
       "_src": "src_features_event_eventstatus_tsx",
       "_tgt": "eventstatus_jeton",
@@ -3336,7 +3357,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L138",
+      "source_location": "L154",
       "weight": 1.0,
       "_src": "src_features_event_eventstatus_tsx",
       "_tgt": "eventstatus_ecrire",
@@ -3348,7 +3369,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L163",
+      "source_location": "L179",
       "weight": 1.0,
       "_src": "src_features_event_eventstatus_tsx",
       "_tgt": "eventstatus_enregistrerlemontant",
@@ -3360,7 +3381,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "src\\features\\event\\EventStatus.tsx",
-      "source_location": "L171",
+      "source_location": "L187",
       "weight": 1.0,
       "_src": "eventstatus_enregistrerlemontant",
       "_tgt": "eventstatus_ecrire",

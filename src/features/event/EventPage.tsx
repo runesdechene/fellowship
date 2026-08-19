@@ -64,30 +64,27 @@ function Block({
  * Une information pratique, en CARTE : l'icône à gauche, puis le libellé en
  * micro-capitales, la valeur en gras, et ce qui la précise en dessous.
  *
- * Ce qui n'a pas été renseigné garde sa place, en éteint : la fiche dit aussi
- * ce que le festival n'a pas encore donné.
+ * CE QUI N'EST PAS RENSEIGNÉ N'APPARAÎT PAS. La fiche a longtemps gardé la
+ * place des absents, en éteint — ça se tenait tant que c'était une liste,
+ * mais en cartes, quatre « Non renseigné » sur six font une grille de vide
+ * qui pèse plus lourd que l'information. Le tri se fait à l'appel.
  */
-function Fact({
-  Icon,
-  label,
-  value,
-  sub,
-}: {
+type FactData = {
   Icon: LucideIcon
   label: string
   value: string | null | undefined
   /** Ce qui précise la valeur sans être elle : la durée, la salle, le mode. */
   sub?: string | null
-}) {
+}
+
+function Fact({ Icon, label, value, sub }: FactData) {
   return (
     <div className="event-page__fact">
       <Icon className="event-page__fact-icon" size={20} strokeWidth={1.8} />
       <span className="event-page__fact-body">
         <span className="event-page__fact-label">{label}</span>
-        <span className={value ? 'event-page__fact-value' : 'event-page__fact-value--empty'}>
-          {value || 'Non renseigné'}
-        </span>
-        {value && sub && <span className="event-page__fact-sub">{sub}</span>}
+        <span className="event-page__fact-value">{value}</span>
+        {sub && <span className="event-page__fact-sub">{sub}</span>}
       </span>
     </div>
   )
@@ -177,6 +174,34 @@ export function EventPage() {
     )
   }
 
+  // Les faits se construisent d'abord, se filtrent ensuite : seul ce que
+  // l'organisateur a renseigné prend une carte.
+  const facts: FactData[] = [
+    {
+      Icon: CalendarDays,
+      label: 'Dates',
+      value: formatRange(startDate, endDate),
+      sub: formatDuration(startDate, endDate),
+    },
+    { Icon: Clock, label: 'Horaires', value: event.opening_hours },
+    {
+      Icon: MapPin,
+      label: 'Lieu',
+      value: `${event.city} (${event.department})`,
+      sub: event.address,
+    },
+    { Icon: Users, label: 'Fréquentation', value: event.expected_attendance },
+    {
+      Icon: FileText,
+      label: 'Candidater jusqu’au',
+      value: event.registration_deadline
+        ? formatFullDate(new Date(event.registration_deadline))
+        : null,
+      sub: event.registration_url ? 'En ligne' : event.contact_email ? 'Par e-mail' : null,
+    },
+    { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
+  ].filter((fait) => Boolean(fait.value))
+
   return (
     <div className="event-page">
       {back}
@@ -265,43 +290,18 @@ export function EventPage() {
             )}
           </Block>
 
-          <Block title="Infos pratiques" bare>
-            <div className="event-page__facts">
-              <Fact
-                Icon={CalendarDays}
-                label="Dates"
-                value={formatRange(startDate, endDate)}
-                sub={formatDuration(startDate, endDate)}
-              />
-              <Fact Icon={Clock} label="Horaires" value={event.opening_hours} />
-              <Fact
-                Icon={MapPin}
-                label="Lieu"
-                value={`${event.city} (${event.department})`}
-                sub={event.address}
-              />
-              <Fact
-                Icon={Users}
-                label="Fréquentation"
-                value={event.expected_attendance}
-              />
-              <Fact
-                Icon={FileText}
-                label="Candidater jusqu’au"
-                value={
-                  event.registration_deadline
-                    ? formatFullDate(new Date(event.registration_deadline))
-                    : null
-                }
-                sub={event.registration_url ? 'En ligne' : event.contact_email ? 'Par e-mail' : null}
-              />
-              <Fact
-                Icon={Store}
-                label="Emplacement"
-                value={event.stand_price}
-                sub={event.stand_size}
-              />
-            </div>
+          <Block title="Infos pratiques" bare empty={facts.length === 0}>
+            {facts.length > 0 ? (
+              <div className="event-page__facts">
+                {facts.map((fait) => (
+                  <Fact key={fait.label} {...fait} />
+                ))}
+              </div>
+            ) : (
+              <p className="event-page__state">
+                L’organisateur n’a encore donné aucune information pratique.
+              </p>
+            )}
 
             {(event.registration_url || event.external_url || event.contact_email) && (
               <div className="event-page__links">

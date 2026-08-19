@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-08-19)
 
 ## Corpus Check
-- 62 files · ~565,540 words
+- 62 files · ~565,766 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 262 nodes · 225 edges · 71 communities detected
+- 263 nodes · 226 edges · 71 communities detected
 - Extraction: 85% EXTRACTED · 14% INFERRED · 1% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -165,12 +165,12 @@ Cohesion: 0.33
 Nodes (0): 
 
 ### Community 11 - "Community 11"
-Cohesion: 0.6
-Nodes (4): hostThemeFor(), iframes(), init(), sendTheme()
+Cohesion: 0.33
+Nodes (0): 
 
 ### Community 12 - "Community 12"
-Cohesion: 0.4
-Nodes (0): 
+Cohesion: 0.6
+Nodes (4): hostThemeFor(), iframes(), init(), sendTheme()
 
 ### Community 13 - "Community 13"
 Cohesion: 0.4
@@ -506,7 +506,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Design System Refonte Plan` connect `Community 0` to `Community 1`, `Community 3`?**
   _High betweenness centrality (0.038) - this node is a cross-community bridge._
 - **Why does `Fellowship V1 Design Spec` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Design System Refonte Plan` (e.g. with `Fellowship V1 Design Spec` and `Explorer Redesign Plan`) actually correct?**
   _`Design System Refonte Plan` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 6 inferred relationships involving `Icon (color/bronze gradient PNG) — Fellowship 'w'-shape brand mark with 4 dots` (e.g. with `Icon (SVG) — vector version of Fellowship 'w' brand mark, solid black fill` and `Icon (black PNG) — monochrome variant of Fellowship 'w' brand mark`) actually correct?**

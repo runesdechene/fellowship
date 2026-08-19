@@ -68,7 +68,6 @@
   --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
   /* Ce que l'organisateur n'a pas renseigne. Longtemps trop pale : une info
      manquante doit se LIRE, c'est elle qu'on viendra completer. */
-  --ink-missing: var(--brown-400);
   /* Grands titres posés au-dessus des blocs. */
   --ink-section: var(--brown-800);
   /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
@@ -104,6 +103,7 @@
   --status-ok-ink: var(--olive-700);
   --status-ok-surface: var(--olive-100);
   --status-ok-mark: var(--olive-500);
+  --status-ok-surface-hover: var(--olive-150);
   /* L’ICÔNE, elle, porte du sens : son plancher est 3:1, pas celui d’une
      pastille décorative. D’où une clarté intermédiaire — la teinte ne bouge
      pas, seule la clarté descend. */
@@ -115,6 +115,7 @@
   --status-todo-ink: var(--wheat-700);
   --status-todo-surface: var(--wheat-100);
   --status-todo-mark: var(--wheat-500);
+  --status-todo-surface-hover: var(--wheat-150);
   --status-todo-icon: var(--wheat-400);
 
   --status-pending-ink: var(--clay-500);
@@ -361,15 +362,12 @@
      étirées sur huit cents pixels elles montrent leurs artefacts.
      ====================================================================== */
   --wall-width: 34vw;
-  --wall-blur: 16px;
   /* L'agrandissement compense le flou, qui sinon laisse un liseré
      transparent tout autour du mur. */
-  --wall-scale: 1.09;
-  /* Le voile compensait un flou CSS qui délavait l'image. L'aperçu basse
-     définition, lui, garde ses couleurs : le voile n'a plus qu'à unifier.
-     À 0,42 il écrasait une affiche déjà sombre en dalle noire. */
-  --wall-veil-opacity: 0.24;
-  --wall-vignette: var(--brown-shade-soft);
+  /* L'affiche est NETTE depuis qu'Uriel l'a demandé. Le voile ne rattrape
+     donc plus rien : il ne reste que pour lier le mur au crème de la page et
+     couvrir le fond le temps du chargement. Un souffle suffit. */
+  --wall-veil-opacity: 0.1;
   --radius-wall: var(--round-20);
 
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
@@ -379,6 +377,27 @@
     var(--family-sans);
 
   /* =========================================================================
+     SELECT — le sélecteur maison
+     ========================================================================
+     Celui du navigateur ne sait afficher que du texte : ni icône ni couleur
+     dans son menu. Or c'est le dessin qui porte l'état ici, et le cacher au
+     moment du choix — le seul où il sert — n'avait pas de sens.
+     ====================================================================== */
+  --select-height: var(--height-control);
+  --select-option-height: var(--height-option);
+  --select-menu-max-width: var(--width-menu-max);
+  --select-menu-gap: var(--space-4);
+  --select-inset: var(--space-12);
+  --select-gap: var(--space-8);
+  --radius-select: var(--radius-nav);
+  --select-surface: var(--surface-panel);
+  --select-surface-hover: var(--surface-row-hover);
+  --type-select-value: var(--weight-semibold) var(--size-13) /
+    var(--leading-snug) var(--family-sans);
+  --type-select-option: var(--weight-semibold) var(--size-13) /
+    var(--leading-snug) var(--family-sans);
+
+  /* =========================================================================
      LE SUIVI — remonté dans la grille principale
      ========================================================================
      Une seule hauteur, un seul rayon, une seule grammaire. Dans la colonne
@@ -386,7 +405,8 @@
      trois familles de fond : c'est ça qui rendait la zone laide, pas la
      disposition.
      ====================================================================== */
-  --status-row-height: 42px;
+  --status-row-height: var(--height-control);
+  --status-pick-width: var(--width-status-pick);
   --status-gap: var(--space-6);
   --status-padding: var(--space-6);
   --status-inset: var(--space-12);
@@ -410,7 +430,7 @@
      panneau sur un grand écran. Le plancher tient la mise en page sur un
      portable, le plafond empêche la ligne de dépasser une longueur lisible.
      ====================================================================== */
-  --event-reading-width: clamp(420px, 27vw, 610px);
+  --event-reading-width: clamp(462px, 30vw, 671px);
   --event-page-max-width: calc(
     var(--event-reading-width) + 2 * var(--page-gutter)
   );
@@ -441,8 +461,6 @@
   /* Ce qui précise la valeur sans être elle : la durée sous les dates, la
      salle sous la ville, le mode de candidature sous l’échéance. */
   --type-event-fact-sub: var(--weight-medium) var(--size-10) /
-    var(--leading-snug) var(--family-sans);
-  --type-event-fact-missing: var(--weight-medium) var(--size-14) /
     var(--leading-snug) var(--family-sans);
   --event-fact-icon-gap: var(--space-6);
   --event-fact-label-gap: var(--space-6);

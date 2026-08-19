@@ -203,14 +203,6 @@
   color: var(--ink-soft);
 }
 
-/* Ce que le festival n'a pas donné garde sa place, mais pas le même poids :
-   en grand format une absence ferait un trou. Elle se lit, elle ne crie pas. */
-.event-page__fact-value--empty {
-  font: var(--type-event-fact-missing);
-  color: var(--ink-missing);
-  font-style: italic;
-}
-
 .event-page__links {
   display: flex;
   flex-wrap: wrap;

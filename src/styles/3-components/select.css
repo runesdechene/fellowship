@@ -1,0 +1,171 @@
+/* -----------------------------------------------------------------------------
+   SELECT — un sélecteur maison, parce que celui du navigateur ne sait pas
+   afficher d'icône ni de couleur dans son menu.
+   Utilisé par : src/components/ui/Select.tsx
+
+   La valeur fermée et les options du menu partagent EXACTEMENT la même
+   grammaire : icône, mot, et la teinte de l'état. On reconnaît dans la liste
+   ce qu'on a vu sur le bouton — c'est tout l'intérêt de l'avoir réécrit.
+   -------------------------------------------------------------------------- */
+
+.select {
+  position: relative;
+  min-width: 0;
+}
+
+/* --- La valeur, fermée ---------------------------------------------------- */
+.select__valeur {
+  display: flex;
+  align-items: center;
+  gap: var(--select-gap);
+  width: 100%;
+  height: var(--select-height);
+  padding: 0 var(--select-inset);
+  border-radius: var(--radius-select);
+  background: var(--select-surface);
+  font: var(--type-select-value);
+  color: var(--ink-title);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.select__valeur:hover:not(:disabled) {
+  background: var(--select-surface-hover);
+}
+
+.select__valeur:disabled {
+  cursor: default;
+}
+
+.select__mot {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Le chevron se cale à droite quoi qu'il arrive, et bascule à l'ouverture :
+   c'est le seul mouvement du composant. */
+.select__chevron {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-soft);
+  transition: transform var(--menu-motion);
+}
+
+.select[data-ouvert='oui'] .select__chevron {
+  transform: rotate(180deg);
+}
+
+/* --- La valeur EN APLAT ---------------------------------------------------
+   La variante `filled` : le contrôle entier prend la teinte de son état, pas
+   seulement son icône. Réservée à celui qui résume l'écran — deux aplats
+   côte à côte se disputeraient le regard.
+
+   L'encre descend à la valeur 700 : ici la couleur PORTE le mot, donc il lui
+   faut 4,5:1 et non le plancher d'un décor. */
+.select__valeur--plein.select__valeur--ok {
+  background: var(--status-ok-surface);
+  color: var(--status-ok-ink);
+}
+
+.select__valeur--plein.select__valeur--ok:hover:not(:disabled) {
+  background: var(--status-ok-surface-hover);
+}
+
+.select__valeur--plein.select__valeur--todo {
+  background: var(--status-todo-surface);
+  color: var(--status-todo-ink);
+}
+
+.select__valeur--plein.select__valeur--todo:hover:not(:disabled) {
+  background: var(--status-todo-surface-hover);
+}
+
+/* Sur un aplat, l'icône et le chevron reprennent l'encre du texte : garder
+   leur teinte d'origine ferait deux verts qui se ratent de peu. */
+.select__valeur--plein.select__valeur--ok .select__icone,
+.select__valeur--plein.select__valeur--ok .select__chevron {
+  color: var(--status-ok-ink);
+}
+
+.select__valeur--plein.select__valeur--todo .select__icone,
+.select__valeur--plein.select__valeur--todo .select__chevron {
+  color: var(--status-todo-ink);
+}
+
+/* --- L'icône porte la teinte de l'état -----------------------------------
+   Une icône PORTE du sens : son plancher de contraste est 3:1, pas celui
+   d'une pastille décorative. D'où --status-*-icon, un cran plus sombre que
+   la marque — la teinte ne bouge pas, seule la clarté descend. */
+.select__icone {
+  flex: none;
+  color: var(--ink-soft);
+}
+
+.select__valeur--ok .select__icone,
+.select__option--ok .select__icone {
+  color: var(--status-ok-icon);
+}
+
+.select__valeur--todo .select__icone,
+.select__option--todo .select__icone {
+  color: var(--status-todo-icon);
+}
+
+/* --- Le menu -------------------------------------------------------------- */
+/* Sans ombre dans cette interface : c'est un liseré qui détache le menu du
+   contenu qu'il recouvre, comme pour tous les flottants de l'app. */
+.select__menu {
+  position: absolute;
+  top: calc(100% + var(--select-menu-gap));
+  left: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 100%;
+  width: max-content;
+  max-width: var(--select-menu-max-width);
+  padding: var(--space-4);
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-select);
+  background: var(--surface-panel);
+}
+
+.select__option {
+  display: flex;
+  align-items: center;
+  gap: var(--select-gap);
+  width: 100%;
+  height: var(--select-option-height);
+  padding: 0 var(--space-10);
+  border-radius: var(--radius-sm);
+  font: var(--type-select-option);
+  color: var(--ink-title);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Un seul surlignage, piloté par le clavier ET par la souris : sans ça, le
+   pointeur et les flèches désignent deux options différentes en même temps. */
+.select__option[data-survol='oui'] {
+  background: var(--surface-row-hover);
+}
+
+/* L'option DÉJÀ retenue porte la teinte de son état en fond, à peine posée :
+   on la retrouve du regard sans avoir à lire toute la liste. */
+.select__option[aria-selected='true'] {
+  background: var(--surface-card);
+}
+
+.select__option--ok[aria-selected='true'] {
+  background: var(--status-ok-surface);
+  color: var(--status-ok-ink);
+}
+
+.select__option--todo[aria-selected='true'] {
+  background: var(--status-todo-surface);
+  color: var(--status-todo-ink);
+}

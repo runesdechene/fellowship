@@ -4,9 +4,11 @@
 
    Il vivait dans une colonne de 200 px à droite, où trois contrôles voisins
    faisaient 30, 26 et 30 px de haut sur trois familles de fond : l'œil n'y
-   trouvait aucun rythme. Ici tout partage UNE hauteur, UN rayon, UNE
-   grammaire — le libellé à gauche, la valeur à droite, un chevron pour
-   changer.
+   trouvait aucun rythme. Ici tout partage UNE hauteur et UN rayon.
+
+   Les valeurs qu'on change sont des `Select` maison (voir select.css) : le
+   sélecteur du navigateur ne sait afficher ni icône ni couleur dans son menu,
+   et c'est justement le dessin qui porte l'état.
    -------------------------------------------------------------------------- */
 
 .event-status {
@@ -28,6 +30,18 @@
   color: var(--ink-section);
 }
 
+/* La participation se cale à droite du titre. Elle est posée à même le
+   panneau, donc elle prend la teinte d'une carte pour se détacher — dans la
+   barre en dessous, c'est l'inverse, et le Select garde sa valeur par
+   défaut. On redéfinit la VARIABLE, on ne réécrit pas la règle. */
+.event-status__participation {
+  flex: 1 1 auto;
+  max-width: var(--width-card);
+  margin-left: auto;
+
+  --select-surface: var(--surface-card);
+}
+
 .event-status__bar {
   display: flex;
   align-items: center;
@@ -35,89 +49,6 @@
   padding: var(--status-padding);
   border-radius: var(--radius-status);
   background: var(--surface-card);
-}
-
-/* --- Une valeur qu'on change --------------------------------------------- */
-/* La pastille dessine, le `<select>` natif la recouvre en transparent : on
-   garde le clavier, le tactile et le menu du système sans réécrire un menu. */
-.event-status__pick {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  min-width: 0;
-  height: var(--status-row-height);
-  padding: 0 var(--status-inset);
-  border-radius: var(--radius-status-row);
-  background: var(--surface-panel);
-  font: var(--type-status-value);
-  color: var(--ink-title);
-  transition: background-color var(--menu-motion);
-}
-
-.event-status__pick:hover {
-  background: var(--surface-row-hover);
-}
-
-/* CHAQUE ÉTAT A SON DESSIN, pas seulement sa teinte. Une pastille ronde dit
-   qu'il se passe quelque chose ; une étoile, un sablier ou une coche disent
-   QUOI — et ils le disent aussi en noir et blanc, ou pour un daltonien.
-
-   Une icône PORTE du sens : son plancher de contraste est 3:1, pas celui
-   d'une pastille décorative. D'où --status-*-icon, un cran plus sombre que
-   la marque : la teinte ne bouge pas, seule la clarté descend. */
-.event-status__icon {
-  flex: none;
-  color: var(--ink-soft);
-}
-
-.event-status__pick--ok .event-status__icon {
-  color: var(--status-ok-icon);
-}
-
-.event-status__pick--todo .event-status__icon {
-  color: var(--status-todo-icon);
-}
-
-.event-status__chev {
-  flex: none;
-  margin-left: auto;
-  color: var(--ink-soft);
-}
-
-.event-status__select {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: inherit;
-  opacity: 0;
-  font: inherit;
-  cursor: pointer;
-}
-
-.event-status__select:disabled {
-  cursor: default;
-}
-
-.event-status__pick:has(.event-status__select:focus-visible) {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-/* Dans l'en-tête, la valeur se cale à droite du titre sans prendre toute la
-   largeur : elle redit ce que la pastille du titre dit déjà, elle n'a pas à
-   le crier deux fois. */
-.event-status__head .event-status__pick {
-  flex: 1 1 auto;
-  max-width: var(--width-card);
-  margin-left: auto;
-  background: var(--surface-card);
-}
-
-.event-status__head .event-status__pick:hover {
-  background: var(--surface-row-hover);
 }
 
 /* --- Le sens du paiement -------------------------------------------------- */
@@ -156,17 +87,9 @@
 }
 
 /* --- Le montant et son état ---------------------------------------------- */
-/* Le montant et l'état de son règlement sont une seule chose : ils vivent
-   dans un seul objet, pas dans deux contrôles voisins. */
-.event-status__money {
-  display: flex;
-  align-items: center;
-  flex: 1 1 auto;
-  gap: var(--space-4);
-  min-width: 0;
-  padding-left: var(--space-4);
-}
-
+/* Le montant s'étire, l'état garde une largeur FIGÉE. Sans ça « Acompte
+   versé » et « Payé » n'ont pas la même longueur, et le champ du montant se
+   déformait à chaque changement d'état — la barre bougeait sous les doigts. */
 .event-status__amount {
   flex: 1 1 auto;
   min-width: 0;
@@ -193,8 +116,16 @@
   outline-offset: 2px;
 }
 
-.event-status__money .event-status__pick {
+.event-status__reglement {
   flex: none;
+  width: var(--status-pick-width);
+}
+
+/* Son menu s'ouvre par la droite : collé à gauche, il déborderait de la
+   colonne de lecture. */
+.event-status__reglement .select__menu {
+  left: auto;
+  right: 0;
 }
 
 .event-status__error {
@@ -202,16 +133,18 @@
   color: var(--status-pending-ink);
 }
 
-/* Sous cette largeur, le sens du paiement et le montant ne tiennent plus sur
-   une ligne : ils s'empilent plutôt que de se serrer. */
+/* Sous cette largeur, le sens du paiement, le montant et son état ne tiennent
+   plus sur une ligne : ils s'empilent plutôt que de se serrer. */
 @media (max-width: 760px) {
   .event-status__bar {
     flex-wrap: wrap;
   }
 
   .event-status__sides,
-  .event-status__money {
+  .event-status__amount,
+  .event-status__reglement {
     flex: 1 1 100%;
+    width: auto;
   }
 
   .event-status__side {
