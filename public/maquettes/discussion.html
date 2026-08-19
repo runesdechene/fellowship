@@ -18,6 +18,7 @@
       :root {
         --cream-hue: 39;
         --cream-50: hsl(var(--cream-hue) 100% 97.1%);
+        --cream-100: hsl(var(--cream-hue) 62% 95.5%);
         --cream-200: hsl(var(--cream-hue) 61% 92.9%);
         --cream-250: hsl(var(--cream-hue) 49% 92.4%);
         --cream-300: hsl(var(--cream-hue) 44% 89.4%);
@@ -31,9 +32,14 @@
         --brown-900: #2d2826;
 
         --olive-100: #def5c8;
+        --olive-150: #d1f1b2;
         --olive-400: #729334;
         --olive-500: #84aa3c;
         --olive-700: #556d26;
+
+        --clay-100: #f6e7dc;
+        --clay-500: #c0642a;
+        --clay-700: #9f5223;
 
         --electric-500: #5d5ae0;
 
@@ -55,7 +61,6 @@
         --radius-nav: 12px;
         --radius-sm: 8px;
         --radius-round: 9999px;
-        --control-height: 40px;
       }
 
       * {
@@ -64,7 +69,7 @@
 
       body {
         margin: 0;
-        padding: 40px 48px 80px;
+        padding: 40px 48px 90px;
         background: var(--surface-app);
         font-family: var(--family);
         color: var(--ink-title);
@@ -104,56 +109,52 @@
 
       .stage {
         max-width: 720px;
-        padding: 32px 36px 36px;
+        padding: 36px 40px 40px;
         border-radius: 18px;
         background: var(--surface-panel);
       }
 
       .note {
-        margin: 18px 0 34px;
+        margin: 22px 0 34px;
       }
 
       /* =====================================================================
-         LA DISCUSSION
-         =====================================================================
-         AUCUNE CARTE. Uriel a retiré tous les contenants de la fiche l'un
-         après l'autre — la description, la piste de la bascule, le bloc des
-         compagnons. La discussion suit : les questions se séparent par un
-         FILET, les réponses par un RETRAIT. C'est déjà écrit dans les tokens
-         de l'app : « c'est le retrait qui dit l'appartenance, pas un cadre de
-         plus ».
+         L'EN-TÊTE
          ===================================================================== */
-      .discussion__head {
+      .tete {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         gap: 16px;
-        margin-bottom: 26px;
+        margin-bottom: 8px;
       }
 
-      .discussion__title {
-        font-size: 20px;
+      .tete__titre {
+        font-size: 22px;
         font-weight: 700;
         color: var(--ink-section);
       }
 
-      /* Les canaux reprennent EXACTEMENT la grammaire de la bascule du
-         paiement : le retenu prend l'aplat clair, l'autre reste nu. Une seule
-         façon de dire « choisis-en un » dans toute l'app.
+      .tete__compte {
+        font-size: 13px;
+        color: var(--ink-faint);
+      }
 
-         Ils portaient l'olive — la couleur de « c'est acquis ». Un filtre
-         n'est pas un état : il ne devait rien porter du tout. */
+      /* Les canaux reprennent la grammaire de la bascule du paiement : le
+         retenu prend l'aplat clair, l'autre reste nu. Une seule façon de dire
+         « choisis-en un » dans toute l'app. Ils portaient l'olive — la couleur
+         de « c'est acquis » — alors qu'un filtre n'est pas un état. */
       .canaux {
         display: flex;
         gap: 6px;
-        margin-left: auto;
+        margin: 20px 0 34px;
       }
 
       .canal {
         display: flex;
         align-items: center;
-        gap: 7px;
-        height: 34px;
-        padding: 0 13px;
+        gap: 8px;
+        height: 36px;
+        padding: 0 14px;
         border-radius: var(--radius-sm);
         font-size: 12px;
         font-weight: 600;
@@ -171,166 +172,218 @@
         color: var(--ink-title);
       }
 
-      /* Le compte est une VRAIE information : il dit où il se passe quelque
-         chose avant qu'on ait cliqué. */
       .canal small {
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
         color: var(--ink-faint);
       }
 
-      .canal[aria-pressed='true'] small {
-        color: var(--ink-soft);
-      }
+      /* =====================================================================
+         LA QUESTION — L'AUDACE EST ICI, ET ELLE EST DANS L'ÉCHELLE
+         =====================================================================
+         Dans une question-réponse, la QUESTION est le contenu. Elle etait a
+         17 px, noyee entre son auteur et son corps : une liste de texte gris
+         sur du creme, rien a regarder.
 
-      /* --- Une question ------------------------------------------------- */
-      .fil {
-        display: flex;
-        flex-direction: column;
-      }
-
+         Elle passe a 27 px, interligne serre, pleine encre. Tout le reste
+         redescend. Ce seul ecart transforme la section d'une liste en un
+         sommaire : on balaie les questions, on s'arrete sur la sienne.
+         ===================================================================== */
       .question + .question {
-        margin-top: 30px;
-        padding-top: 30px;
+        margin-top: 44px;
+        padding-top: 44px;
         box-shadow: inset 0 1px 0 var(--cream-400);
       }
 
-      /* Dans le fil, l auteur passe SOUS sa question : on scanne une
-         question-reponse par les questions, pas par les gens. Dans les
-         reponses c est l inverse — la, savoir qui parle est ce qui compte. */
-      .qui {
+      .question__titre {
+        margin: 0;
+        max-width: 22ch;
+        font-size: 27px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        color: var(--ink-title);
+        text-wrap: balance;
+      }
+
+      .question__corps {
+        margin: 14px 0 0;
+        max-width: 54ch;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--ink-soft);
+      }
+
+      /* La ligne de qui-et-quand, sous la question. Elle porte aussi la PILE
+         DE VISAGES de ceux qui ont repondu : on sait qui parle avant meme
+         d'ouvrir. L'app fait deja ca pour les compagnons d'une date. */
+      .signe {
         display: flex;
         align-items: center;
         gap: 10px;
+        margin-top: 18px;
         font-size: 12px;
-        font-weight: 700;
-        color: var(--ink-title);
-      }
-
-      .question > .qui {
-        margin-top: 8px;
         font-weight: 600;
         color: var(--ink-soft);
       }
 
-      .qui time {
+      .signe time {
         font-size: 11px;
         font-weight: 500;
         color: var(--ink-faint);
       }
 
-      /* Une discussion sans visage se lit comme une base de donnees. La
-         donnee porte les avatars depuis le debut — on ne les montrait pas.
-         Ici, le repli quand il n y a pas d image : l initiale. */
       .avatar {
         display: inline-grid;
         place-items: center;
-        width: 26px;
-        height: 26px;
+        width: 30px;
+        height: 30px;
         flex: none;
         border-radius: var(--radius-round);
         background: var(--cream-300);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 800;
         color: var(--ink-soft);
-        object-fit: cover;
       }
 
-      .question__titre {
-        margin: 0;
-        font-size: 17px;
-        font-weight: 700;
-        line-height: 1.35;
-        color: var(--ink-title);
-      }
-
-      .question__corps {
-        margin: 12px 0 0;
-        max-width: 56ch;
-        font-size: 14px;
-        line-height: 1.6;
-        color: var(--ink-body);
-      }
-
-      /* --- Les réponses -------------------------------------------------- */
-      /* Le retrait dit l'appartenance. Pas de cadre, pas de filet vertical :
-         un trait de plus dans une page qui n'en a aucun ferait un décor. */
-      .reponses {
+      .pile {
         display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin: 20px 0 0 36px;
+        margin-left: auto;
       }
 
-      .reponse__texte {
-        margin: 5px 0 0;
-        max-width: 54ch;
-        font-size: 14px;
-        line-height: 1.6;
-        color: var(--ink-body);
+      .pile .avatar {
+        width: 26px;
+        height: 26px;
+        box-shadow: 0 0 0 2px var(--surface-panel);
+      }
+
+      .pile .avatar + .avatar {
+        margin-left: -8px;
       }
 
       /* =====================================================================
-         LA SIGNATURE — la réponse élue est le SEUL aplat de la discussion
+         LA SIGNATURE — LA RÉPONSE EST UN BLOC, PAS UNE PASTILLE
          =====================================================================
-         Dans une question-réponse, on vient chercher LA réponse ; le reste
-         est du contexte. Elle remonte donc en tête, hors chronologie, et
-         porte l'olive — qui est ici légitime : « c'est réglé » est un ÉTAT,
-         pas une décoration.
+         Elle etait une petite pilule posee dans la marge. C'est pourtant la
+         SEULE chose qu'on vient chercher : elle prend donc toute la largeur,
+         un vrai rembourrage, et son texte remonte a 16 px — plus gros que le
+         corps de la question elle-meme.
 
-         C'est le seul objet rempli de toute la section. Tout le reste est nu.
+         Elle sort aussi de la CHRONOLOGIE : elle remonte en tete, avant les
+         autres reponses. Une fois qu'une reponse fait autorite, l'ordre
+         d'arrivee ne porte plus rien.
+
+         C'est le seul aplat de toute la section. Tout le reste est nu.
          ===================================================================== */
-      .reponse--elue {
-        margin-left: -14px;
-        padding: 14px 16px;
-        border-radius: var(--radius-nav);
+      .laReponse {
+        margin-top: 24px;
+        padding: 22px 24px 24px;
+        border-radius: 14px;
         background: var(--olive-100);
       }
 
-      .reponse--elue .qui {
-        color: var(--olive-700);
-      }
-
-      .reponse--elue .qui time {
-        color: var(--olive-700);
-        opacity: 0.7;
-      }
-
-      .reponse--elue .reponse__texte {
-        color: var(--olive-700);
-      }
-
-      .elue__sceau {
-        display: inline-flex;
+      .laReponse__sceau {
+        display: flex;
         align-items: center;
-        gap: 5px;
-        margin-left: auto;
-        font-size: 9px;
+        gap: 7px;
+        font-size: 10px;
         font-weight: 800;
         letter-spacing: var(--tracking-wide);
         text-transform: uppercase;
         color: var(--olive-700);
       }
 
-      .elue__sceau svg {
-        width: 13px;
-        height: 13px;
+      .laReponse__sceau svg {
+        width: 15px;
+        height: 15px;
         color: var(--olive-400);
       }
 
-      /* --- Les gestes ---------------------------------------------------- */
-      /* Répondre, élire, supprimer sont des ACTIONS, pas des destinations :
-         elles ne prennent pas le lavande, qui est reservé aux liens. Encre
-         douce, soulignement au survol. */
+      .laReponse__texte {
+        margin: 12px 0 0;
+        max-width: 52ch;
+        font-size: 16px;
+        line-height: 1.6;
+        font-weight: 500;
+        color: var(--olive-700);
+      }
+
+      .laReponse .signe {
+        margin-top: 16px;
+        color: var(--olive-700);
+      }
+
+      .laReponse .signe time {
+        color: var(--olive-700);
+        opacity: 0.65;
+      }
+
+      .laReponse .avatar {
+        background: var(--olive-150);
+        color: var(--olive-700);
+      }
+
+      /* --- Le reste du fil, replie ---------------------------------------- */
+      /* Sept questions ouvertes font un mur. Ce qui compte tient dans la
+         question et sa reponse ; le reste s'ouvre a la demande. */
+      .autres {
+        margin-top: 18px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .autres:hover {
+        text-decoration: underline;
+      }
+
+      .reponse {
+        margin-top: 22px;
+        padding-left: 22px;
+        box-shadow: inset 2px 0 0 var(--cream-400);
+      }
+
+      .reponse__texte {
+        margin: 8px 0 0;
+        max-width: 52ch;
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--ink-body);
+      }
+
+      /* --- Sans reponse ---------------------------------------------------
+         Une question sans reponse n'est pas un vide : c'est une occasion.
+         Elle porte donc la TERRE — « ca attend chez quelqu'un d'autre » — la
+         meme teinte que « Dossier en cours » sur la fiche. */
+      .sansReponse {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 22px;
+        padding: 9px 14px;
+        border-radius: var(--radius-sm);
+        background: var(--clay-100);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--clay-700);
+      }
+
+      .sansReponse svg {
+        width: 14px;
+        height: 14px;
+        color: var(--clay-500);
+      }
+
+      /* --- Les gestes ------------------------------------------------------ */
       .gestes {
         display: flex;
-        gap: 18px;
-        margin-top: 14px;
+        gap: 20px;
+        margin-top: 20px;
       }
 
       .geste {
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         color: var(--ink-soft);
       }
 
@@ -338,31 +391,17 @@
         text-decoration: underline;
       }
 
-      .repondre {
-        margin: 18px 0 0 36px;
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--ink-soft);
-      }
-
-      .repondre:hover {
-        text-decoration: underline;
-      }
-
-      /* --- Poser une question --------------------------------------------- */
+      /* =====================================================================
+         POSER UNE QUESTION
+         ===================================================================== */
       .poser {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         width: 100%;
-        height: var(--control-height);
-        margin-bottom: 30px;
-        padding: 0 14px;
-        border-radius: var(--radius-nav);
+        padding: 16px 18px;
+        border-radius: 14px;
         background: var(--surface-card);
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--ink-soft);
         text-align: left;
         transition: background-color 160ms var(--ease-soft);
       }
@@ -371,43 +410,64 @@
         background: var(--surface-row-hover);
       }
 
-      .poser svg {
-        width: 16px;
-        height: 16px;
+      .poser__mot {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink-title);
+      }
+
+      .poser__sous {
+        display: block;
+        margin-top: 3px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-soft);
+      }
+
+      .poser__fleche {
+        width: 18px;
+        height: 18px;
         flex: none;
+        margin-left: auto;
+        color: var(--ink-soft);
       }
 
       .composer {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        margin-bottom: 30px;
         padding: 14px;
-        border-radius: var(--radius-nav);
+        border-radius: 14px;
         background: var(--surface-card);
       }
 
       .composer input,
       .composer textarea {
         width: 100%;
-        padding: 11px 13px;
+        padding: 13px 15px;
         border: 0;
         border-radius: var(--radius-sm);
         background: var(--surface-panel);
         font: inherit;
-        font-size: 14px;
         color: var(--ink-title);
         resize: none;
       }
 
-      .composer input::placeholder,
-      .composer textarea::placeholder {
-        color: var(--ink-soft);
+      .composer input {
+        font-size: 17px;
+        font-weight: 700;
       }
 
       .composer textarea {
-        min-height: 76px;
-        line-height: 1.55;
+        min-height: 80px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .composer input::placeholder,
+      .composer textarea::placeholder {
+        font-weight: 500;
+        color: var(--ink-faint);
       }
 
       .composer__pied {
@@ -432,9 +492,9 @@
         align-items: center;
         gap: 7px;
         flex: none;
-        height: 36px;
+        height: 38px;
         margin-left: auto;
-        padding: 0 16px;
+        padding: 0 18px;
         border-radius: var(--radius-sm);
         background: var(--brown-900);
         font-size: 12px;
@@ -449,18 +509,21 @@
         color: var(--ink-soft);
       }
 
-      /* --- Rien encore ---------------------------------------------------- */
-      /* Un écran vide est une invitation, pas un constat. */
+      /* --- Rien encore ------------------------------------------------------
+         Un ecran vide est une invitation, pas un constat. */
       .vide {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.6;
-        color: var(--ink-soft);
+        margin: 36px 0 0;
+        max-width: 46ch;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.35;
+        color: var(--ink-faint);
+        text-wrap: balance;
       }
 
       footer {
         max-width: 720px;
-        margin-top: 44px;
+        margin-top: 46px;
         padding-top: 20px;
         border-top: 1px solid var(--cream-400);
         font-size: 13px;
@@ -478,7 +541,7 @@
       }
 
       footer li {
-        margin-bottom: 7px;
+        margin-bottom: 8px;
       }
     </style>
   </head>
@@ -486,28 +549,35 @@
   <body>
     <h1>La discussion du festival</h1>
     <p class="lede">
-      Aujourd’hui : les canaux portent l’<b>olive</b>, c’est-à-dire la couleur
-      de « c’est acquis » — or un filtre n’est pas un état. Le fil n’a aucun
-      visage alors que l’app a des avatars partout. Et la
-      <b>réponse élue</b> — la seule chose qu’on vient chercher dans une
-      question-réponse — est traitée comme une étiquette posée à côté d’une date.
+      Deuxième passe. La première était trop sage : j’avais répondu à « trop de
+      cartes » par « plus rien du tout », ce qui donnait une liste de texte gris
+      sur du crème. <b>L’audace est ici dans l’échelle</b> — la question devient
+      le titre, la réponse devient un bloc, et on voit les visages avant
+      d’ouvrir.
     </p>
 
     <div class="stage">
-      <div class="discussion__head">
-        <span class="discussion__title">Discussion du festival</span>
-        <div class="canaux">
-          <button class="canal" aria-pressed="true">
-            Exposants <small>2</small>
-          </button>
-          <button class="canal" aria-pressed="false">
-            Festivaliers <small>7</small>
-          </button>
-        </div>
+      <div class="tete">
+        <span class="tete__titre">Discussion du festival</span>
+        <span class="tete__compte">9 questions</span>
+      </div>
+
+      <div class="canaux">
+        <button class="canal" aria-pressed="true">Exposants <small>2</small></button>
+        <button class="canal" aria-pressed="false">
+          Festivaliers <small>7</small>
+        </button>
       </div>
 
       <button class="poser">
+        <span>
+          <span class="poser__mot">Poser une question</span>
+          <span class="poser__sous">
+            Aux autres exposants et à l’organisateur
+          </span>
+        </span>
         <svg
+          class="poser__fleche"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -515,66 +585,54 @@
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" />
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
         </svg>
-        Poser une question aux autres exposants
       </button>
 
-      <div class="fil">
+      <div style="margin-top: 40px">
         <!-- ============================================================ -->
         <article class="question">
           <h3 class="question__titre">On peut dormir sur place ?</h3>
-          <p class="qui">
-            <span class="avatar">G</span>
-            Gautier <time>il y a 3 jours</time>
-          </p>
           <p class="question__corps">
             On monte de Toulouse et l’hôtel le plus proche est à vingt minutes.
             Si le camion peut rester sur le site, ça change tout.
           </p>
+          <p class="signe">
+            <span class="avatar">G</span>
+            Gautier <time>il y a 3 jours</time>
+            <span class="pile">
+              <span class="avatar">A</span>
+              <span class="avatar">P</span>
+            </span>
+          </p>
 
-          <div class="reponses">
-            <!-- LA SIGNATURE : elle remonte en tete, hors chronologie -->
-            <div class="reponse reponse--elue">
-              <p class="qui">
-                <span class="avatar">A</span>
-                Les Aventuriales <time>il y a 2 jours</time>
-                <span class="elue__sceau">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.4"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                  La réponse
-                </span>
-              </p>
-              <p class="reponse__texte">
-                Oui. Le pré derrière la salle est ouvert aux exposants dès le
-                vendredi 18 h, camions compris. Prévoyez des piquets longs, le
-                sol est très dur en fin d’été.
-              </p>
-            </div>
-
-            <div class="reponse">
-              <p class="qui">
-                <span class="avatar">P</span>
-                Pooka <time>il y a 2 jours</time>
-              </p>
-              <p class="reponse__texte">
-                On y était l’an dernier, c’est calme et il y a un point d’eau.
-              </p>
-              <div class="gestes">
-                <button class="geste">Élire cette réponse</button>
-              </div>
-            </div>
+          <div class="laReponse">
+            <p class="laReponse__sceau">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              La réponse
+            </p>
+            <p class="laReponse__texte">
+              Oui. Le pré derrière la salle est ouvert aux exposants dès le
+              vendredi 18 h, camions compris. Prévoyez des piquets longs, le sol
+              est très dur en fin d’été.
+            </p>
+            <p class="signe">
+              <span class="avatar">A</span>
+              Les Aventuriales <time>il y a 2 jours</time>
+            </p>
           </div>
 
-          <button class="repondre">Répondre</button>
+          <button class="autres">1 autre réponse</button>
         </article>
 
         <!-- ============================================================ -->
@@ -582,48 +640,118 @@
           <h3 class="question__titre">
             Y a-t-il de l’électricité sur les emplacements ?
           </h3>
-          <p class="qui">
-            <span class="avatar">R</span>
-            Runes de Chêne <time>hier</time>
-          </p>
           <p class="question__corps">
             J’ai deux vitrines à éclairer et je préfère savoir si je dois
             emmener le groupe.
           </p>
-
-          <p class="vide" style="margin: 18px 0 0 36px">
-            Personne n’a encore répondu.
+          <p class="signe">
+            <span class="avatar">R</span>
+            Runes de Chêne <time>hier</time>
           </p>
 
-          <button class="repondre">Répondre</button>
+          <span class="sansReponse">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 22h14" />
+              <path d="M5 2h14" />
+              <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
+              <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
+            </svg>
+            En attente de réponse
+          </span>
+
+          <div class="gestes">
+            <button class="geste">Répondre</button>
+          </div>
         </article>
       </div>
     </div>
 
     <p class="note">
-      Et le composer ouvert, plus l’état où personne n’a rien demandé :
+      Le fil déplié, le composer ouvert, et l’écran quand personne n’a rien
+      demandé :
     </p>
 
     <div class="stage">
-      <div class="discussion__head">
-        <span class="discussion__title">Discussion du festival</span>
-        <div class="canaux">
-          <button class="canal" aria-pressed="true">
-            Exposants <small>0</small>
-          </button>
-          <button class="canal" aria-pressed="false">
-            Festivaliers <small>7</small>
-          </button>
+      <article class="question">
+        <h3 class="question__titre">On peut dormir sur place ?</h3>
+        <p class="signe">
+          <span class="avatar">G</span>
+          Gautier <time>il y a 3 jours</time>
+        </p>
+
+        <div class="laReponse">
+          <p class="laReponse__sceau">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            La réponse
+          </p>
+          <p class="laReponse__texte">
+            Oui. Le pré derrière la salle est ouvert aux exposants dès le
+            vendredi 18 h, camions compris.
+          </p>
+          <p class="signe">
+            <span class="avatar">A</span>
+            Les Aventuriales <time>il y a 2 jours</time>
+          </p>
         </div>
+
+        <div class="reponse">
+          <p class="signe" style="margin-top: 0">
+            <span class="avatar">P</span>
+            Pooka <time>il y a 2 jours</time>
+          </p>
+          <p class="reponse__texte">
+            On y était l’an dernier, c’est calme et il y a un point d’eau juste
+            à côté du pré.
+          </p>
+          <div class="gestes">
+            <button class="geste">Élire cette réponse</button>
+          </div>
+        </div>
+
+        <div class="gestes">
+          <button class="geste">Répondre</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="stage" style="margin-top: 34px">
+      <div class="tete">
+        <span class="tete__titre">Discussion du festival</span>
+        <span class="tete__compte">aucune question</span>
+      </div>
+
+      <div class="canaux">
+        <button class="canal" aria-pressed="true">Exposants <small>0</small></button>
+        <button class="canal" aria-pressed="false">
+          Festivaliers <small>7</small>
+        </button>
       </div>
 
       <div class="composer">
-        <input placeholder="Ta question, en une phrase" value="" />
-        <textarea placeholder="Des précisions, si besoin"></textarea>
+        <input placeholder="On peut dormir sur place ?" />
+        <textarea
+          placeholder="Ajoute ce qui aidera à te répondre — d’où tu viens, ce que tu montes, ce qui te bloque."
+        ></textarea>
         <div class="composer__pied">
           <span class="composer__note">
-            Elle sera posée dans le canal <b>Exposants</b> — seuls les exposants
-            et l’organisateur la verront.
+            Posée dans le canal <b>Exposants</b> : seuls les exposants et
+            l’organisateur la verront.
           </span>
           <button class="composer__annuler">Annuler</button>
           <button class="composer__envoyer">Poser la question</button>
@@ -631,57 +759,50 @@
       </div>
 
       <p class="vide">
-        Personne n’a encore rien demandé sur cette date. Si tu as un doute sur
-        l’électricité, le montage ou l’accès, il y a de bonnes chances que
-        quelqu’un d’autre l’ait aussi.
+        Personne n’a encore rien demandé sur cette date. Si tu hésites sur
+        l’électricité, le montage ou l’accès, quelqu’un d’autre hésite aussi.
       </p>
     </div>
 
     <footer>
-      <b>Ce que je change, et pourquoi :</b>
+      <b>Où est passée l’audace, cette fois :</b>
       <ul>
         <li>
-          <b>Plus aucune carte.</b> Tu as retiré tous les contenants de la fiche
-          l’un après l’autre — la description, la piste de la bascule, le bloc
-          des compagnons. La discussion suit : les questions se séparent par un
-          <b>filet</b>, les réponses par un <b>retrait</b>. C’était déjà écrit
-          dans les tokens de l’app : « c’est le retrait qui dit l’appartenance,
-          pas un cadre de plus ».
+          <b>L’échelle.</b> La question passe de 17 à <b>27 px</b>, interligne
+          serré, pleine encre — et tout le reste redescend. Ce seul écart
+          transforme la section d’une liste en un sommaire : on balaie les
+          questions, on s’arrête sur la sienne. C’est le geste le plus fort
+          disponible sur une page sans ombre et sans image.
         </li>
         <li>
-          <b>Les canaux perdent l’olive</b> et reprennent la grammaire de la
-          bascule du paiement : le retenu prend l’aplat clair, l’autre reste nu.
-          Une seule façon de dire « choisis-en un » dans toute l’app. Ils
-          portent leur <b>compte</b>, qui dit où il se passe quelque chose avant
-          qu’on ait cliqué.
+          <b>La réponse est un BLOC, plus une pastille.</b> Elle prend toute la
+          largeur, un vrai rembourrage, et son texte remonte à 16 px — plus gros
+          que le corps de la question. C’est la seule chose qu’on vient
+          chercher : elle a le droit d’être ce qu’on voit en premier.
         </li>
         <li>
-          <b>La réponse élue remonte en tête et devient le SEUL aplat</b> de la
-          section. Dans une question-réponse, on vient chercher LA réponse ; la
-          chronologie ne porte plus rien une fois qu’une réponse fait autorité.
-          L’olive y est légitime — « c’est réglé » est un état, pas un décor.
-          <br /><b>C’est le risque que j’assume</b> : sortir une réponse de
-          l’ordre chronologique peut désorienter. Je le prends parce que c’est
-          une Q&amp;R, pas un forum.
+          <b>Les visages avant d’ouvrir.</b> Une pile d’avatars sur la ligne de
+          signature dit qui a répondu avant même de déplier. L’app fait déjà ça
+          pour les compagnons d’une date — c’est sa grammaire, pas une trouvaille.
         </li>
         <li>
-          <b>Des visages.</b> La donnée porte les avatars depuis le début et on
-          ne les montrait pas — une discussion sans visage se lit comme une base
-          de données.
+          <b>Une question sans réponse porte la TERRE</b> — « ça attend chez
+          quelqu’un d’autre », la même teinte que « Dossier en cours » sur la
+          fiche. Ce n’est pas un vide, c’est un état.
         </li>
         <li>
-          <b>Répondre, élire, supprimer restent en encre douce</b>, pas en
-          lavande : ce sont des actions, pas des destinations. Le lavande est
-          réservé à ce qui mène ailleurs.
+          <b>Le fil se replie.</b> Neuf questions ouvertes font un mur. La
+          question et sa réponse suffisent ; le reste s’ouvre à la demande.
         </li>
       </ul>
 
       <p style="margin-top: 16px">
-        <b>Ce que je n’ai pas fait, et pourquoi :</b> marquer la réponse de
-        l’organisateur. La donnée ne dit pas qui il est sur une réponse — il n’y
-        a que l’auteur et son avatar. Le promettre en maquette aurait été une
-        promesse en l’air. Si tu veux ce signal, c’est une colonne à ajouter, et
-        ça se décide avant.
+        <b>Si tu veux aller plus loin, il reste un cran :</b> donner aux
+        questions une <b>seconde fonte</b>, à caractère, réservée à elles. Toute
+        l’app est en Plus Jakarta Sans — un display sur les seules questions
+        ferait de cette section quelque chose qu’on reconnaît au premier coup
+        d’œil. C’est une décision de DA qui dépasse la discussion, donc je ne
+        l’ai pas prise tout seul.
       </p>
     </footer>
   </body>
