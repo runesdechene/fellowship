@@ -63,10 +63,13 @@
    posent a meme la barre ; c est la GRAISSE et l ENCRE qui disent lequel est
    choisi. Une piste les tenait ensemble un temps — elle ajoutait un
    contenant de plus dans une barre qui en compte deja assez. */
+/* Le meme ecart qu entre les autres controles de la barre. A deux pixels,
+   le survol de l un venait toucher le voisin : deux aplats qui se frolent se
+   lisent comme un seul objet coupe en deux. */
 .event-status__sides {
   display: flex;
   flex: none;
-  gap: var(--space-2);
+  gap: var(--status-gap);
 }
 
 /* LE CLAIR DEVANT. Le sens retenu prend la surface la plus claire de l'app,
