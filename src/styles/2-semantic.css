@@ -196,6 +196,15 @@
     var(--family-sans);
   --type-event-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
     var(--family-sans);
+  /* La ligne sous le titre d'une fiche. Elle a son propre token : le
+     --type-event-meta ordinaire sert dans six composants, et le monter a
+     16 px les aurait tous emportes. Ici c'est la premiere phrase de la
+     page, elle porte plus haut que des metadonnees de carte. */
+  --type-event-hero-meta: var(--weight-regular) var(--size-16) /
+    var(--leading-normal) var(--family-sans);
+  --type-event-hero-meta-accent: var(--weight-bold) var(--size-16) /
+    var(--leading-normal) var(--family-sans);
+
   --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
   --type-event-meta-accent: var(--weight-bold) var(--size-14) /
@@ -473,7 +482,10 @@
      panneau sur un grand écran. Le plancher tient la mise en page sur un
      portable, le plafond empêche la ligne de dépasser une longueur lisible.
      ====================================================================== */
-  --event-reading-width: clamp(508px, 33vw, 738px);
+  /* C est le terme du MILIEU qui gouverne sur un grand ecran : le plancher
+     ne sert qu au portable, le plafond qu au tres grand. Elargir « pour de
+     vrai » passe donc par le vw, pas par le plafond. */
+  --event-reading-width: clamp(468px, 28vw, 648px);
   --event-page-max-width: calc(
     var(--event-reading-width) + 2 * var(--page-gutter)
   );

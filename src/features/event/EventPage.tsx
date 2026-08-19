@@ -16,6 +16,16 @@ import { EventStatus } from './EventStatus'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
 
+/**
+ * « Le » + « 13 juin », ou « Du » + « 13 au 14 juin ». Le mot d'attaque d'un
+ * cote, les dates de l'autre : dans l'accroche, seules les dates portent le
+ * gras — « Le » et « Du » ne sont pas des informations, c'est de la grammaire.
+ */
+function splitRange(start: Date, end: Date): [string, string] {
+  if (start.getTime() === end.getTime()) return ['Le', formatDayMonth(start)]
+  return ['Du', `${formatDayMonth(start)} au ${formatDayMonth(end)}`]
+}
+
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
   if (start.getTime() === end.getTime()) return `Le ${formatDayMonth(start)}`
@@ -211,22 +221,15 @@ export function EventPage() {
             <div className="event-page__identity">
               <h1 className="event-page__title">{event.name}</h1>
 
-              <div className="event-page__meta">
-                <span className="event-page__meta-line">
-                  <CalendarDays size={14} strokeWidth={1.8} />
-                  <b>{formatRange(startDate, endDate)}</b>
-                </span>
-                <span className="event-page__meta-line">
-                  <MapPin size={14} strokeWidth={1.8} />
-                  {event.city} ({event.department})
-                </span>
-                {event.edition && (
-                  <span className="event-page__meta-line">
-                    <Store size={14} strokeWidth={1.8} />
-                    {event.edition}ᵉ édition
-                  </span>
-                )}
-              </div>
+              {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
+                  ne se scannent pas. Ceux qui se scannent sont plus bas, en
+                  cartes. */}
+              <p className="event-page__meta">
+                {splitRange(startDate, endDate)[0]}{' '}
+                <b>{splitRange(startDate, endDate)[1]}</b> — {event.city} (
+                {event.department})
+                {event.edition ? ` · ${event.edition}ᵉ édition` : ''}
+              </p>
 
               {event.tags && event.tags.length > 0 && (
                 <div className="event-page__tags">

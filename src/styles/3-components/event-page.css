@@ -9,7 +9,13 @@
 
 /* Elle respire plus haut que les autres écrans : son titre est le seul à
    devoir tenir tête au mur d'affiche posé juste à côté. */
+/* `width: 100%` N EST PAS DECORATIF. Le panneau est un conteneur flex, et
+   une marge AUTO sur l axe transversal annule le `stretch` : sans largeur
+   explicite, la colonne se dimensionne sur son CONTENU et la max-width ne
+   sert plus a rien. Elle a longtemps fait exactement la largeur intrinseque
+   de la barre de statut — le token de lecture etait inerte. */
 .event-page {
+  width: 100%;
   max-width: var(--event-page-max-width);
   margin-inline: auto;
   padding: var(--event-page-padding-top) var(--page-gutter) var(--space-40);
@@ -67,19 +73,23 @@
 
 /* Chaque information sur sa ligne, précédée de son icône : on balaie la
    colonne du regard au lieu de lire une phrase. */
+/* UNE SEULE PHRASE, sans pictogramme. La fiche portait trois lignes a
+   icone, heritees de la V1 : une date, un lieu, une edition, chacune
+   precedee de son dessin. C'est la grammaire d'une LISTE de faits — or ces
+   trois-la ne se scannent pas, ils se lisent d'un trait. Les faits qui se
+   scannent ont leur propre bloc plus bas, en cartes.
+
+   Seules les DATES portent le gras : « Le » et « Du » ne sont pas des
+   informations, c'est de la grammaire. */
 .event-page__meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  margin-top: var(--space-12);
+  margin-top: var(--space-6);
+  font: var(--type-event-hero-meta);
+  color: var(--ink-soft);
 }
 
-.event-page__meta-line {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font: var(--type-event-meta);
-  color: var(--ink-soft);
+.event-page__meta b {
+  font: var(--type-event-hero-meta-accent);
+  color: var(--ink-title);
 }
 
 /* Les dates portent le poids ; ce qui les entoure s'efface. */

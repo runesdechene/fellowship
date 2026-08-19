@@ -5,7 +5,13 @@
 
 /* Une colonne de largeur fixe, centrée dans le panneau : tout le contenu de
    la page partage le même axe, la barre du haut comprise. */
+/* `width: 100%` : sans lui, la marge auto annule le `stretch` du panneau
+   flex et la colonne se dimensionne sur son contenu. Ca ne se voyait pas ici
+   — les deux cartes du bas font pile la largeur voulue — mais le jour ou un
+   ecran serait plus etroit que --page-max-width, il se centrerait sur sa
+   propre largeur au lieu de la largeur voulue. */
 .dashboard {
+  width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
   padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
