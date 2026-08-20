@@ -14,6 +14,7 @@
   color: var(--ink-strong);
   font: var(--type-button);
   white-space: nowrap;
+  transition: background var(--menu-motion);
 }
 
 /* Réduit à son icône, dans un carré (la cloche) */
@@ -42,6 +43,33 @@
 .button--block {
   width: 100%;
   justify-content: center;
+}
+
+/* --- Le survol ------------------------------------------------------------ */
+/* Il n'existait NULLE PART : les trois contrôles de la barre du haut étaient
+   inertes sous la souris, on ne savait qu'ils étaient cliquables qu'au
+   curseur. Il vit sur `.button` et pas sur la barre, parce que c'est le même
+   composant partout — un bouton qui ne réagirait qu'à un endroit de l'app
+   serait un mensonge de plus qu'un réglage de moins.
+
+   Les trois règles gardent `:not(:disabled)` MÊME quand elles n'en ont pas
+   besoin : sans lui elles pèsent moins lourd que la première et se feraient
+   écraser par elle, chacune repeignant alors sa surface en crème. */
+.button:hover:not(:disabled) {
+  background: var(--surface-control-hover);
+}
+
+/* Elle part d'une surface sombre, pas claire : elle ne peut pas hériter du
+   crème sans se retourner complètement. */
+.button--action:hover:not(:disabled) {
+  background: var(--action-surface-hover);
+}
+
+/* Sans fond au repos, sans fond au survol : c'est son encre qui s'affirme —
+   lui donner une surface ici la ferait apparaître de nulle part. */
+.button--bare:hover:not(:disabled) {
+  background: none;
+  color: var(--ink-title);
 }
 
 /* Un bouton empêché PERD SA SURFACE plutôt que de la délaver. L'ancien

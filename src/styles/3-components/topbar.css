@@ -35,35 +35,12 @@
   margin-right: auto;
   display: flex;
   align-items: center;
-  gap: var(--topbar-coin-gap);
+  gap: var(--topbar-gap);
 }
 
-/* La flèche de retour. Nue : un chemin de sortie n'est pas une commande, il
-   ne prend donc pas de surface. Sa zone de clic, elle, reste celle d'un
-   bouton — la marge négative rattrape ce que cette zone ajoute à gauche, pour
-   que la flèche s'aligne sur le bord du panneau comme le reste du châssis. */
-.topbar__back {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--topbar-back-size);
-  height: var(--topbar-back-size);
-  margin-left: calc(-1 * var(--topbar-back-inset));
-  border-radius: var(--button-radius);
-  background: none;
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: color var(--menu-motion);
-}
-
-.topbar__back:hover {
-  color: var(--ink-title);
-}
-
-.topbar__back:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
+/* La flèche de retour n'a plus de règle à elle : c'est `Button variant="icon"`,
+   la variante de la cloche. Elle en hérite la surface, la taille, le coin et
+   le survol — voir button.css. */
 
 /* L'accroche que la page déclare. Sur la fiche d'un événement, c'est son
    compte à rebours. */

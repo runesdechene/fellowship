@@ -21,18 +21,21 @@ export function Topbar() {
     <div className="topbar">
       {(back || lead) && (
         <div className="topbar__coin">
-          {/* Pas le composant Button : ses variantes sont toutes des
-              surfaces, et ceci est un chemin de retour, pas une commande. */}
+          {/* La MEME variante que la cloche, pas une imitation à côté. Le
+              retour a d'abord été dessiné nu — « un chemin, pas une
+              commande » — mais posé dans le châssis il est devenu le voisin
+              direct de la cloche, et deux voisins identiques qui ne se
+              ressemblent pas se remarquent. Uriel a tranché : les trois
+              contrôles de la barre portent la même surface. */}
           {back && (
-            <button
-              type="button"
-              className="topbar__back"
+            <Button
+              variant="icon"
               onClick={() => go(back)}
               aria-label="Retour"
               title="Retour"
             >
-              <ArrowLeft size={20} strokeWidth={2} />
-            </button>
+              <ArrowLeft size={20} strokeWidth={1.75} />
+            </Button>
           )}
           {lead && <p className="topbar__lead">{lead}</p>}
         </div>

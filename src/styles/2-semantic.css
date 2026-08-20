@@ -49,6 +49,12 @@
   --surface-card-hover: var(--cream-400);
   --surface-row-hover: var(--cream-400);
   --surface-control: var(--cream-100); /* boutons de la barre du haut */
+  /* Le survol d'un bouton. TROIS points de clarté en dessous — c'est le même
+     écart que --surface-card → --surface-card-hover, et c'est ce qui rend
+     l'effet « léger » : la subtilité est une affaire de CLARTÉ, pas de
+     teinte. Pour l'appuyer, descendre d'un cran (--cream-300), pas changer
+     de couleur. */
+  --surface-control-hover: var(--cream-250);
   --surface-chip-neutral: var(--cream-400); /* pastille sans couleur */
   --surface-bar: var(--cream-300); /* mois qui portent au moins une date */
   --surface-bar-empty: var(--cream-250); /* mois à zéro — moins marqué */
@@ -152,6 +158,10 @@
      par le CONTRASTE : une surface sombre au milieu de surfaces claires.
      Aucune teinte vive n'entre dans l'interface par cette porte. */
   --action-surface: var(--brown-900);
+  /* Il s'ÉCLAIRE au survol au lieu de s'assombrir : à ce niveau de noir, un
+     cran plus bas ne se verrait pas. Le geste est le même que sur les
+     surfaces claires — un pas vers le gris — mais il part de l'autre bout. */
+  --action-surface-hover: var(--brown-800);
   --action-ink: var(--cream-50);
   /* UN BOUTON EMPÊCHÉ PERD SA SURFACE, il ne la delave pas. Le procede
      d'avant — `opacity: 0.5` — melangeait le brun profond au creme et
@@ -341,20 +351,9 @@
   --topbar-gap: var(--space-12);
   --topbar-right: var(--space-32);
   --topbar-control-height: 42px;
-  /* Le coin gauche : la flèche de retour, puis l'accroche. Elles se serrent
-     l'une contre l'autre — c'est UN repère en deux mots, pas deux contrôles
-     voisins, donc leur écart est plus court que celui de la barre. */
-  --topbar-coin-gap: var(--space-10);
-  /* La flèche se pose nue, mais sa zone de clic reste celle d'un bouton.
-     L'écart est ce que cette zone déborde du dessin de chaque côté : la
-     flèche s'aligne ainsi sur le bord du panneau, pas sa boîte invisible.
-     `--topbar-back-glyph` doit suivre le `size` passé à l'icône dans
-     Topbar.tsx — c'est la seule valeur des deux qui vive en JSX. */
-  --topbar-back-size: var(--space-32);
-  --topbar-back-glyph: 20px;
-  --topbar-back-inset: calc(
-    (var(--topbar-back-size) - var(--topbar-back-glyph)) / 2
-  );
+  /* Pas de réglage pour le coin gauche : depuis que la flèche de retour est
+     la variante icône du bouton — comme la cloche — elle a la taille des
+     autres contrôles, et son écart à l'accroche est celui de la barre. */
 
   /* =========================================================================
      GRAPHE DE SAISON — les réglages du seul élément « dessiné »
