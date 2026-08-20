@@ -37,34 +37,19 @@
   }
 }
 
-/* -----------------------------------------------------------------------------
-   LE MUR D'AFFICHE S'EN VA PAR OÙ IL EST VENU
+/* LE RESTE DE L'ÉCRAN S'EFFACE À LA MÊME VITESSE QUE LE PANNEAU.
 
-   Il entrait par la droite et disparaissait sans un mot : le seul élément de
-   l'app qui traverse l'écran pour arriver était aussi le seul à s'éteindre
-   d'un coup. Un geste qui n'a qu'une moitié se remarque.
+   Tout ce qui ne porte pas de nom — la colonne de gauche, le mur d'affiche —
+   est photographié ensemble sous le nom `root`, et le navigateur fond cette
+   photo par défaut en un quart de seconde. C'est invisible sur la colonne de
+   gauche, identique des deux côtés. Ça ne l'est pas sur le mur d'affiche :
+   pendant qu'il s'en va vers la droite pour de vrai, son fantôme immobile
+   reste posé à sa place de départ, et le geste traîne.
 
-   L'ENTRÉE ET LA SORTIE NE SE JOUENT PAS AU MÊME ENDROIT, et c'est voulu.
-   L'entrée est dans poster-wall.css, déclenchée par l'AFFICHE PRÊTE — jamais
-   par le chargement de la page, sinon un cadre glisse puis se remplit. La
-   sortie ne peut pas y être : au moment où l'on quitte la fiche, le composant
-   n'existe déjà plus. Seule la photographie du navigateur le garde en vie le
-   temps de le faire partir. D'où ces deux moitiés dans deux fichiers.
-
-   Deuxième différence : à l'entrée c'est l'AFFICHE qui glisse et non son
-   cadre — le cadre est déjà posé, à la couleur du panneau, pour qu'on voie
-   une image arriver SUR la page et non une fente se remplir. À la sortie il
-   n'y a rien à révéler derrière : le mur part ENTIER, cadre compris. Le
-   retenir laisserait une dalle crème le temps du geste.
-   -------------------------------------------------------------------------- */
-:root[data-transition='page']::view-transition-old(poster-wall) {
-  animation: mur-sort var(--wall-exit-motion) both;
-}
-
-@keyframes mur-sort {
-  to {
-    transform: translateX(100%);
-  }
+   On aligne donc cette photo sur la sortie du panneau : ce qu'on quitte
+   s'efface vite, et le mur part seul. */
+:root[data-transition='page']::view-transition-old(root) {
+  animation: page-leave var(--page-transition-out) both;
 }
 
 /* =============================================================================
@@ -128,8 +113,7 @@
   ::view-transition-old(main-panel),
   ::view-transition-new(main-panel),
   ::view-transition-old(step-content),
-  ::view-transition-new(step-content),
-  ::view-transition-old(poster-wall) {
+  ::view-transition-new(step-content) {
     animation: none;
   }
 }
