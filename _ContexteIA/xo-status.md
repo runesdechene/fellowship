@@ -1,7 +1,7 @@
 ---
-updated: 2026-08-19T23:40:00Z
-summary: "Les boutons réagissent enfin au survol. Le mur d'affiche repart par la droite."
-next_step: "Regarder le mur s'en aller : je n'ai pas pu le voir jouer."
+updated: 2026-08-20T13:30:00Z
+summary: "Le mur d'affiche part vraiment vers la droite, il ne s'éteint plus."
+next_step: "Regarder le mur s'en aller : je ne peux pas voir les pixels bouger."
 ---
 
 ## Tâches
@@ -17,7 +17,7 @@ next_step: "Regarder le mur s'en aller : je n'ai pas pu le voir jouer."
 - [x] La flèche de retour monte en haut à gauche, à côté du compte à rebours
 - [x] Les boutons réagissent au survol — il n'existait nulle part dans l'app
 - [x] Le mur d'affiche repart vers la droite quand on quitte la fiche
-- [ ] **Regarder de visu la sortie du mur** — l'onglet piloté ne peut pas la jouer
+- [ ] **Regarder de visu la sortie du mur** — l'onglet piloté gèle les animations
 - [ ] **Trancher : le blé OU la terre pour « il reste un geste à faire »** (les deux le disent aujourd'hui)
 - [ ] Revoir « Acompte versé » sur le tableau de bord — il s'affiche en acquis alors qu'il reste le solde
 - [ ] Brancher les avis des exposants (notation 3 axes + fil de réponses)
@@ -59,17 +59,38 @@ et se fait repeindre en crème.
 une transition CSS. J'ai cru le survol cassé sur le bouton sombre ; c'est la
 capture d'écran qui a tranché. Sur un effet animé, la capture fait foi.
 
-**Le mur d'affiche repart maintenant vers la droite.** Rien à construire :
-l'app photographie l'avant/après à chaque écran, il suffisait de NOMMER le
-mur pour l'extraire de l'instantané global. À l'entrée seule l'affiche glisse
-(le cadre est déjà posé) ; à la sortie **le mur part entier**, il n'y a rien à
-révéler derrière. L'entrée freine en arrivant, la sortie accélère en partant.
+**Le mur d'affiche repart vers la droite** — au deuxième essai. Le premier
+confiait le geste à la photographie du navigateur : nommer le mur suffisait à
+faire glisser l'ancienne image. Uriel : « elle disparaît sans partir. »
 
-⚠️ **Non vérifié de visu, et c'est une limite à connaître pour la suite** :
-`document.visibilityState` vaut « hidden » dans l'onglet piloté, et **Chrome
-saute toutes les transitions de vue sur un document caché**. Même le fondu du
-panneau, en place depuis longtemps, ne s'y joue pas. Toute animation de
-navigation devra être regardée par Uriel, jamais par moi.
+**Sa cause, mesurée** : en quittant la fiche, dans le rappel de
+`startViewTransition`, la route est déjà passée à « / » mais `.poster-wall`
+est ENCORE dans le DOM. Le mur figurait donc sur les **deux** photos, le
+navigateur les appariait, et l'ancienne glissait sous la nouvelle restée
+immobile. Son hypothèse était juste à l'envers : démonté trop **tard**, pas
+trop tôt.
+
+**`useLayoutEffect` ne suffit pas** (testé) : le nettoyage part tout de suite,
+mais l'état qu'il repose n'est rendu qu'APRÈS la sortie du `flushSync`. À
+retenir comme règle : **ne jamais compter sur l'instant où une page retire son
+décor.** Ce qui doit lui survivre doit se tenir tout seul.
+
+Le mur **tient donc son affiche lui-même** et ne la lâche qu'une fois sorti.
+Plus de dépendance ni à React, ni aux transitions de vue. Effet de bord
+heureux : l'entrée et la sortie vivent enfin au même endroit.
+
+Trois détails qui mordent : l'état dérivé s'ajuste PENDANT le rendu ;
+`animationend` remonte depuis les enfants, donc **filtrer sur le nom** sinon
+la fin de l'entrée démonte le mur à peine arrivé ; et en mouvement réduit la
+sortie garde 1 ms d'animation au lieu de `none`, parce que c'est sa FIN qui
+dit au mur de lâcher.
+
+⚠️ **Ce que je ne peux PAS voir, et c'est structurel** : l'onglet piloté est
+en arrière-plan (`visibilityState: "hidden"`). Chrome y saute **toutes les
+transitions de vue** et **gèle l'horloge des animations** (`currentTime` à 0
+après 1,1 s). C'est la même cause qui fait mentir `getComputedStyle` sur un
+survol. Je peux vérifier la logique — classes, montage, événements — jamais
+les pixels en mouvement. Ceux-là, c'est Uriel qui les regarde.
 
 **19 août 2026, tard — la sortie n'était pas au bon étage.**
 

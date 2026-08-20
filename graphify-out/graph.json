@@ -1291,7 +1291,7 @@
       "label": "useDeclarePageChrome()",
       "file_type": "code",
       "source_file": "src\\lib\\page-chrome.tsx",
-      "source_location": "L72",
+      "source_location": "L84",
       "id": "page_chrome_usedeclarepagechrome",
       "community": 19,
       "norm_label": "usedeclarepagechrome()"
@@ -3963,7 +3963,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src\\lib\\page-chrome.tsx",
-      "source_location": "L72",
+      "source_location": "L84",
       "weight": 1.0,
       "_src": "src_lib_page_chrome_tsx",
       "_tgt": "page_chrome_usedeclarepagechrome",
