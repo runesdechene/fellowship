@@ -28,6 +28,15 @@
      remplit. C'est aussi ce qui a rendu inutile l'échantillonnage des
      couleurs de l'affiche : plus rien ne les lisait. */
   background: var(--surface-panel);
+  /* Nommé pour la transition de page, comme le panneau principal : ça
+     l'EXTRAIT de l'instantané global, donc il cesse de se fondre avec le
+     décor et peut repartir par où il est venu. L'animation elle-même est
+     dans page-transition.css — les pseudo-éléments ::view-transition-* vivent
+     sur la racine du document, pas ici.
+
+     Ce nom doit rester UNIQUE dans la page : un seul mur à la fois, ce que
+     garantit PosterWall.tsx (il ne rend rien sans affiche). */
+  view-transition-name: poster-wall;
 }
 
 /* =============================================================================
