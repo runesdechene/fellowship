@@ -37,21 +37,6 @@
   }
 }
 
-/* LE RESTE DE L'ÉCRAN S'EFFACE À LA MÊME VITESSE QUE LE PANNEAU.
-
-   Tout ce qui ne porte pas de nom — la colonne de gauche, le mur d'affiche —
-   est photographié ensemble sous le nom `root`, et le navigateur fond cette
-   photo par défaut en un quart de seconde. C'est invisible sur la colonne de
-   gauche, identique des deux côtés. Ça ne l'est pas sur le mur d'affiche :
-   pendant qu'il s'en va vers la droite pour de vrai, son fantôme immobile
-   reste posé à sa place de départ, et le geste traîne.
-
-   On aligne donc cette photo sur la sortie du panneau : ce qu'on quitte
-   s'efface vite, et le mur part seul. */
-:root[data-transition='page']::view-transition-old(root) {
-  animation: page-leave var(--page-transition-out) both;
-}
-
 /* =============================================================================
    D'UNE ÉTAPE À L'AUTRE
    Le mouvement suit le sens de la marche : on avance, l'ancienne part vers la

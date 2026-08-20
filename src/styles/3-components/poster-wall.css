@@ -61,32 +61,6 @@
   }
 }
 
-/* =============================================================================
-   LA SORTIE — le mur repart par où il est venu
-   =============================================================================
-   ICI, ET PAS DANS LES TRANSITIONS DE PAGE. Le geste a d'abord été confié à
-   la photographie du navigateur : il suffisait de nommer le mur pour que
-   l'ancienne image glisse toute seule. Mesuré, ça ne marche pas — quand une
-   page se démonte dans un `flushSync`, l'état reposé par son nettoyage n'est
-   rendu qu'APRÈS. Le mur était donc sur les deux photos, et l'ancienne
-   glissait sous la nouvelle restée immobile : « elle disparaît sans partir ».
-   Il tient donc son affiche lui-même (voir PosterWall.tsx) et s'anime ici,
-   à côté de son entrée. Un seul geste, un seul endroit.
-
-   LE MUR PART ENTIER, CADRE COMPRIS — à l'inverse de l'entrée, où seule
-   l'affiche glisse dans un cadre déjà posé. À l'entrée le cadre évite la
-   fente sombre qui se remplit ; à la sortie il n'y a rien à révéler derrière,
-   et le retenir laisserait une dalle crème le temps du geste. */
-.poster-wall--sort {
-  animation: mur-sort var(--wall-exit-motion) both;
-}
-
-@keyframes mur-sort {
-  to {
-    transform: translateX(100%);
-  }
-}
-
 /* L'affiche PARAÎT au lieu de glisser. On ne supprime pas le geste — sans
    lui elle resterait hors champ — on lui retire son déplacement. */
 @media (prefers-reduced-motion: reduce) {
@@ -94,13 +68,6 @@
   .poster-wall--entre .poster-wall__veil {
     animation: none;
     transform: none;
-  }
-
-  /* La sortie, elle, garde son animation — RÉDUITE À RIEN, mais pas
-     supprimée : c'est sa fin qui dit au mur qu'il peut lâcher son affiche.
-     Un `animation: none` ici et il resterait à l'écran pour toujours. */
-  .poster-wall--sort {
-    animation-duration: 1ms;
   }
 }
 

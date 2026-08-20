@@ -474,16 +474,6 @@
      une fente sombre se remplir. */
   --wall-entry-motion: var(--duration-entrance) var(--ease-arrive);
 
-  /* LA SORTIE EST PLUS COURTE QUE L'ENTREE — la même règle que le passage
-     d'un écran à l'autre : on efface vite ce qu'on quitte, on installe
-     posément ce qui arrive. Deux tiers du temps de l'entrée.
-
-     Et l'allure s'inverse. L'entrée FREINE en arrivant (--ease-arrive) parce
-     qu'elle se pose ; la sortie ACCÉLÈRE en partant (--ease-soft démarre à
-     plat) parce qu'elle s'échappe. Reprendre l'allure d'entrée à l'envers
-     donnerait un mur qui hésite avant de s'en aller. */
-  --wall-exit-motion: var(--duration-slow) var(--ease-soft);
-
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,
      et la seule qui change tous les jours. */

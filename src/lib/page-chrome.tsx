@@ -1,7 +1,7 @@
 import {
   createContext,
   useContext,
-  useLayoutEffect,
+  useEffect,
   useState,
   type ReactNode,
 } from 'react'
@@ -67,18 +67,6 @@ export function usePageChrome(): PageChrome {
  * événement resterait collée au bord de l'écran une fois revenu au tableau
  * de bord. Les champs sont passés à plat en dépendances pour qu'un objet
  * reconstruit à chaque rendu ne relance pas l'effet.
- *
- * `useLayoutEffect` ET PAS `useEffect` : le décor est posé avant le premier
- * affichage, jamais après. Ce qu'il déclare doit donc rester bon marché — un
- * chemin, un mot, une URL. Rien qui calcule.
- *
- * NE COMPTEZ PAS SUR L'INSTANT OÙ IL SE RETIRE. Mesuré : quand une page se
- * démonte à l'intérieur d'un `flushSync`, le nettoyage part bien tout de
- * suite, mais l'état qu'il repose n'est rendu qu'APRÈS la sortie du
- * `flushSync` — un effet de mise en page n'y change rien. Tout ce qui doit
- * survivre à la page qui l'a déclaré doit donc se tenir tout seul : c'est ce
- * que fait le mur d'affiche, qui garde la sienne le temps de sortir par la
- * droite (voir PosterWall.tsx).
  */
 // eslint-disable-next-line react-refresh/only-export-components
 export function useDeclarePageChrome({ poster, lead, back }: PageChrome): void {
@@ -86,7 +74,7 @@ export function useDeclarePageChrome({ poster, lead, back }: PageChrome): void {
   // se relance donc que si le décor lui-même a changé.
   const declarer = useContext(EcritureContext)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     declarer({ poster, lead, back })
     return () => declarer(NU)
   }, [declarer, poster, lead, back])
