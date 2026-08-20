@@ -1,7 +1,7 @@
 ---
 updated: 2026-08-19T23:40:00Z
-summary: "La flèche de retour est montée dans le coin, à côté de la date."
-next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à faire »."
+summary: "Les boutons réagissent enfin au survol. Le mur d'affiche repart par la droite."
+next_step: "Regarder le mur s'en aller : je n'ai pas pu le voir jouer."
 ---
 
 ## Tâches
@@ -15,6 +15,9 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [x] Déverrouiller le suivi sur une date passée — un exposant est payé APRÈS
 - [x] Les coins du panneau restent au bord de l’écran, et se posent sur l’affiche
 - [x] La flèche de retour monte en haut à gauche, à côté du compte à rebours
+- [x] Les boutons réagissent au survol — il n'existait nulle part dans l'app
+- [x] Le mur d'affiche repart vers la droite quand on quitte la fiche
+- [ ] **Regarder de visu la sortie du mur** — l'onglet piloté ne peut pas la jouer
 - [ ] **Trancher : le blé OU la terre pour « il reste un geste à faire »** (les deux le disent aujourd'hui)
 - [ ] Revoir « Acompte versé » sur le tableau de bord — il s'affiche en acquis alors qu'il reste le solde
 - [ ] Brancher les avis des exposants (notation 3 axes + fil de réponses)
@@ -31,6 +34,42 @@ next_step: "Choisir : le blé ou la terre pour dire « il reste un geste à fair
 - [ ] Deux enseignes s'appellent « Runes de Chêne » en base — vérifier si c'est voulu
 
 ## Mémoire
+
+**20 août 2026 — le survol manquait partout, et le mur n'avait qu'une moitié
+de geste.**
+
+Uriel a demandé un fond au bouton de retour, « comme la cloche », et un léger
+survol sur les trois. En allant le poser j'ai découvert que **le survol
+n'existait NULLE PART dans l'app** : aucun bouton ne réagissait. La règle vit
+donc sur `.button`, pas sur la barre du haut — un bouton qui ne réagirait
+qu'à un endroit serait un mensonge de plus qu'un réglage de moins.
+
+Du coup la flèche ne ressemble plus à la cloche : elle EST `Button
+variant="icon"`. **Deux voisins identiques qui ne se ressemblent pas se
+remarquent** — ma règle « un chemin n'est pas une commande, donc pas de
+surface » valait tant qu'il vivait dans le contenu, plus une fois monté dans
+le châssis.
+
+**Piège de cascade à retenir** : `.button:hover:not(:disabled)` pèse trois
+classes. Une variante qui veut son propre survol doit reprendre le
+`:not(:disabled)` **même sans en avoir besoin**, sinon elle pèse moins lourd
+et se fait repeindre en crème.
+
+**Piège d'observation** : `getComputedStyle` rend la valeur d'AVANT pendant
+une transition CSS. J'ai cru le survol cassé sur le bouton sombre ; c'est la
+capture d'écran qui a tranché. Sur un effet animé, la capture fait foi.
+
+**Le mur d'affiche repart maintenant vers la droite.** Rien à construire :
+l'app photographie l'avant/après à chaque écran, il suffisait de NOMMER le
+mur pour l'extraire de l'instantané global. À l'entrée seule l'affiche glisse
+(le cadre est déjà posé) ; à la sortie **le mur part entier**, il n'y a rien à
+révéler derrière. L'entrée freine en arrivant, la sortie accélère en partant.
+
+⚠️ **Non vérifié de visu, et c'est une limite à connaître pour la suite** :
+`document.visibilityState` vaut « hidden » dans l'onglet piloté, et **Chrome
+saute toutes les transitions de vue sur un document caché**. Même le fondu du
+panneau, en place depuis longtemps, ne s'y joue pas. Toute animation de
+navigation devra être regardée par Uriel, jamais par moi.
 
 **19 août 2026, tard — la sortie n'était pas au bon étage.**
 
