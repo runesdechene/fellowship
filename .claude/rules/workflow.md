@@ -83,3 +83,14 @@ When dispatching an implementer subagent for tasks that touch test infra, build 
 **Why:** A subagent dispatched on Task 3 (NetworkListItem TDD) hit the React 19 + RTL 16 + jsdom 29 infra issue, spiraled for 73 tool uses + 13 debug test files + a `vitest.config.ts` bandaid (`server.deps.inline` + `dedupe`) before being capped by the rate limit. The work it produced was discarded. The right move was to escalate after the second config tweak failed.
 
 **How to apply:** Whenever the task is "write a test for X" or "configure Y", include a hard upper bound on infra changes in the dispatch prompt. Frame it explicitly: "If the test framework fights you for more than 2 attempts, escalate — don't tweak configs to make it pass." The user prefers root-cause fixes over bandaids (cf. `feedback_no_bandaid.md`), and bandaids dressed as "make the test pass" are still bandaids.
+
+## Graphify — l'index du code
+
+1. **`graphify update .` puis `graphify hook install`** dans un dépôt neuf, sinon l'index pourrit en
+   silence et on repaie en lectures de fichiers ce qu'il économisait.
+2. **Après tout `git pull` non vide, relancer `graphify update .`** — le hook `post-commit` ne se
+   déclenche que sur un commit *local*. Constaté le 25/09/2026 sur IVY : 60 commits tirés d'un autre
+   poste, index resté daté d'un mois plus tôt, aucun signal.
+3. **Vérifier sa fraîcheur sur la date de `graphify-out/graph.json`** — **pas** celle du dossier
+   `graphify-out/`, qui ne bouge pas quand le fichier est réécrit en place. C'est ce piège qui a fait
+   conclure à tort, le 25/09/2026, que tous les index étaient morts.
