@@ -12,3 +12,4 @@ Spec : `docs/superpowers/specs/2026-10-07-calendrier-v2-design.md`. Maquette : c
 
 - `MonthNav.tsx` — la navigation des douze mois : une fenêtre qu'on tire à la souris, la frise suit en
   direct puis se cale sur un mois.
+- `useEasedScroll.ts` — l'amorti du glisser : la frise rattrape le pointeur en douceur.

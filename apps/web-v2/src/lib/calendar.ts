@@ -96,3 +96,12 @@ export function scrollFromPointer(
   const start = Math.min(Math.max(pointer - grab, 0), 1 - size)
   return start * scrollWidth
 }
+
+/**
+ * Un pas de l'amorti du glisser : la frise fait `factor` du chemin vers sa cible à chaque image,
+ * et se pose dessus quand il reste moins d'un demi-pixel.
+ */
+export function easeToward(current: number, target: number, factor: number): number {
+  const next = current + (target - current) * factor
+  return Math.abs(target - next) < 0.5 ? target : next
+}

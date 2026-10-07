@@ -11,6 +11,7 @@ import {
   calendarHeadline,
   countLabel,
   groupCompanions,
+  easeToward,
   navWindow,
   scrollFromPointer,
 } from './calendar'
@@ -107,5 +108,16 @@ describe('scrollFromPointer', () => {
   it('la fenêtre reste dans la navigation', () => {
     expect(scrollFromPointer(0.05, 0.125, 4000, 1000)).toBe(0)
     expect(scrollFromPointer(0.99, 0.125, 4000, 1000)).toBe(3000)
+  })
+})
+
+describe('easeToward', () => {
+  it('fait une part du chemin à chaque image', () => {
+    expect(easeToward(0, 100, 0.2)).toBe(20)
+    expect(easeToward(80, 100, 0.2)).toBe(84)
+  })
+
+  it('arrivé à moins d’un demi-pixel, se pose sur la cible', () => {
+    expect(easeToward(99.8, 100, 0.2)).toBe(100)
   })
 })

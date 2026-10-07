@@ -7,12 +7,13 @@
  *            de scroll interne » (décision du 07/10/2026). Les filtres sont retenus sur l'appareil.
  */
 import { Star, Users } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { calendarHeadline, navWindow, scrollFromPointer } from '@/lib/calendar'
 import { MonthColumn } from './MonthColumn'
 import { MonthNav } from './MonthNav'
+import { useEasedScroll } from './useEasedScroll'
 import { useCalendar } from './useCalendar'
 
 const FRIENDS_KEY = 'flw-calendrier-amis'
@@ -68,20 +69,23 @@ export function CalendarPage() {
   const [showFriends, toggleFriends] = useStoredToggle(FRIENDS_KEY, true)
   const [showInterested, toggleInterested] = useStoredToggle(INTERESTED_KEY, false)
   const [params, setParams] = useSearchParams()
-  const frieze = useRef<HTMLDivElement>(null)
   const [view, setView] = useState({ start: 0, size: 1 })
   const [dragging, setDragging] = useState(false)
+  const { frieze, glideTo, stop, destination } = useEasedScroll()
   const wanted = params.get('mois')
   const last = months[months.length - 1]
 
-  const scrollToMonth = useCallback((key: string, smooth: boolean) => {
-    const column = document.getElementById(`mois-${key}`)
-    if (!column || !frieze.current) return
-    frieze.current.scrollTo({
-      left: column.offsetLeft - frieze.current.offsetLeft,
-      behavior: smooth ? 'smooth' : 'auto',
-    })
-  }, [])
+  const scrollToMonth = useCallback(
+    (key: string, smooth: boolean) => {
+      const column = document.getElementById(`mois-${key}`)
+      if (!column || !frieze.current) return
+      frieze.current.scrollTo({
+        left: column.offsetLeft - frieze.current.offsetLeft,
+        behavior: smooth ? 'smooth' : 'auto',
+      })
+    },
+    [frieze],
+  )
 
   // À l'arrivée, la frise se cale sur le mois demandé par l'adresse.
   useEffect(() => {
@@ -92,7 +96,7 @@ export function CalendarPage() {
   const measure = useCallback(() => {
     const el = frieze.current
     if (el) setView(navWindow(el.scrollLeft, el.scrollWidth, el.clientWidth))
-  }, [])
+  }, [frieze])
 
   // Une fois les mois posés, et à chaque changement de taille de la fenêtre du navigateur.
   useEffect(() => {
@@ -109,13 +113,14 @@ export function CalendarPage() {
     scrollToMonth(key, true)
   }
 
-  /** Après un glisser : la frise se cale, en glissant, sur le mois le plus proche. */
+  /** Après un glisser : la frise se cale, en glissant, sur le mois le plus proche de là où l'on a lâché. */
   function settle() {
+    stop()
     const el = frieze.current
     const first = el?.firstElementChild
     if (!el || !(first instanceof HTMLElement)) return
     const step = first.offsetWidth + parseFloat(getComputedStyle(el).columnGap || '0')
-    const month = months[Math.round(el.scrollLeft / step)]
+    const month = months[Math.round(destination() / step)]
     if (month) pick(month.key)
   }
 
@@ -144,7 +149,7 @@ export function CalendarPage() {
           view={view}
           onDrag={(pointer, grab) => {
             const el = frieze.current
-            if (el) el.scrollLeft = scrollFromPointer(pointer, grab, el.scrollWidth, el.clientWidth)
+            if (el) glideTo(scrollFromPointer(pointer, grab, el.scrollWidth, el.clientWidth))
           }}
           onPick={pick}
           onDragging={setDragging}
