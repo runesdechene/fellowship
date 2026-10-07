@@ -14,6 +14,16 @@ export function parseSqlDate(value: string): Date {
   return new Date(`${value}T00:00:00`)
 }
 
+/**
+ * La date du jour au format SQL « AAAA-MM-JJ », en heure LOCALE. Jamais `toISOString()`, qui
+ * donne le jour UTC : entre minuit et 2 h à Paris, il rend encore la veille.
+ */
+export function todayIso(now: Date = new Date()): string {
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${now.getFullYear()}-${month}-${day}`
+}
+
 /** Ramène une date à minuit, pour comparer des jours et non des instants. */
 export function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())

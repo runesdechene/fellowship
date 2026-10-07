@@ -11,6 +11,7 @@ import {
   monthKey,
   monthsWindow,
   parseSqlDate,
+  todayIso,
 } from './dates'
 
 describe('parseSqlDate', () => {
@@ -73,5 +74,15 @@ describe('monthsWindow', () => {
 describe('monthKey', () => {
   it('complète le mois sur deux chiffres', () => {
     expect(monthKey(new Date(2026, 0, 5))).toBe('2026-01')
+  })
+})
+
+describe('todayIso', () => {
+  it('donne le jour LOCAL, même quand UTC est encore la veille', () => {
+    // 7 octobre à 0 h 30 à Paris = 6 octobre à 22 h 30 UTC.
+    expect(todayIso(new Date('2026-10-06T22:30:00Z'))).toBe('2026-10-07')
+  })
+  it('complète le mois et le jour sur deux chiffres', () => {
+    expect(todayIso(new Date(2026, 0, 5))).toBe('2026-01-05')
   })
 })

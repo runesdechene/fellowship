@@ -7,7 +7,14 @@
  */
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { daysUntil, monthKey, monthsWindow, parseSqlDate, type MonthSlot } from '@/lib/dates'
+import {
+  daysUntil,
+  monthKey,
+  monthsWindow,
+  parseSqlDate,
+  todayIso,
+  type MonthSlot,
+} from '@/lib/dates'
 import {
   CONFIRMED_STATUSES,
   PROGRAMMED_STATUSES,
@@ -177,14 +184,14 @@ async function fetchSettlements(actorId: string, dates: DashboardDate[]): Promis
  */
 async function fetchReports(
   actorId: string,
-  todayIso: string,
+  todaySql: string,
 ): Promise<{
   reports: DashboardReport[]
   seasonNet: number | null
   seasonRevenue: number | null
   pendingReport: DashboardReport | null
 }> {
-  const yearStart = `${todayIso.slice(0, 4)}-01-01`
+  const yearStart = `${todaySql.slice(0, 4)}-01-01`
 
   const { data } = await supabase
     .from('participations')
@@ -192,7 +199,7 @@ async function fetchReports(
     .eq('actor_id', actorId)
     .in('status', CONFIRMED_STATUSES)
     .gte('events.end_date', yearStart)
-    .lt('events.end_date', todayIso)
+    .lt('events.end_date', todaySql)
 
   const past = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
     .map((row) => row.events)
@@ -263,7 +270,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
 
     let cancelled = false
     const today = new Date()
-    const todayIso = today.toISOString().slice(0, 10)
+    const todaySql = todayIso(today)
 
     async function load(currentActorId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
@@ -273,7 +280,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         .select('id, status, payment_status, event_id, events!inner(*)')
         .eq('actor_id', currentActorId)
         .in('status', PROGRAMMED_STATUSES)
-        .gte('events.end_date', todayIso)
+        .gte('events.end_date', todaySql)
 
       if (cancelled) return
       if (error) {
@@ -311,7 +318,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
       const [{ reports, seasonNet, seasonRevenue, pendingReport }, settlements] = await Promise.all(
-        [fetchReports(currentActorId, todayIso), fetchSettlements(currentActorId, built)],
+        [fetchReports(currentActorId, todaySql), fetchSettlements(currentActorId, built)],
       )
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (cancelled) return
