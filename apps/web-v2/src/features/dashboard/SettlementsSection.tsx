@@ -1,8 +1,6 @@
 /**
  * QUOI     — le bloc « À régler » : les dates à venir dont le dossier ou le paiement n'est pas clos.
  * POURQUOI — les teintes disent qui doit bouger, pas où on en est.
- * ATTENTION — le commentaire de STATE et le code divergent sur « À payer » (blé annoncé, terre
- *            posée) : c'est le point ouvert « le blé ou la terre » de docs/v2/README.md.
  */
 import { Chip, type ChipTone } from '@/components/ui/Chip'
 import { formatDayMonthShort } from '@/lib/dates'
@@ -17,7 +15,7 @@ import type { Settlement, SettlementState } from './useDashboard'
  * compte n’est pas « où j’en suis » mais « qui doit bouger ».
  *   dossier — le dossier est parti, ça attend chez l’organisateur : TERRE
  *   acompte — l’acompte est versé, il reste le solde à payer : BLÉ
- *   à payer — rien n’est versé, tout reste à faire : BLÉ
+ *   à payer — rien n’est versé : TERRE (arbitrage d’Uriel, 07/10/2026)
  *
  * « Acompte versé » portait l’olive, donc l’ACQUIS, alors qu’il reste de
  * l’argent à sortir. C’est tout ce que le bloc « À régler » sert à dire.
