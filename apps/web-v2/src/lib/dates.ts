@@ -141,3 +141,17 @@ export function monthsWindow(count: number, from: Date = new Date()): MonthSlot[
     return { date, key: monthKey(date), label: formatMonthLabel(date) }
   })
 }
+
+const MINUTE = 60_000
+const HOUR = 60 * MINUTE
+
+/** « à l'instant », « 12 min », « 2 h », « hier », « 4 j ». */
+export function timeAgo(date: Date, now: Date): string {
+  const elapsed = now.getTime() - date.getTime()
+  if (elapsed < MINUTE) return 'à l’instant'
+  if (elapsed < HOUR) return `${Math.floor(elapsed / MINUTE)} min`
+  const days = daysUntil(now, date)
+  if (days === 0) return `${Math.floor(elapsed / HOUR)} h`
+  if (days === 1) return 'hier'
+  return `${days} j`
+}

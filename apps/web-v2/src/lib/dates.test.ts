@@ -10,6 +10,7 @@ import {
   formatMonthAbbr,
   formatMonthShort,
   stampYear,
+  timeAgo,
   formatCountdown,
   formatDayMonth,
   formatDaysShort,
@@ -149,5 +150,23 @@ describe('durationLabel', () => {
     expect(durationLabel(d('2026-10-30'), d('2026-10-30'))).toBe('1 jour')
     expect(durationLabel(d('2026-10-25'), d('2026-10-27'))).toBe('3 jours')
     expect(durationLabel(d('2026-10-31'), d('2026-11-01'))).toBe('2 jours')
+  })
+})
+
+const now = new Date('2026-10-07T18:00:00')
+
+describe('timeAgo', () => {
+  it('moins d’une minute : à l’instant', () => {
+    expect(timeAgo(new Date('2026-10-07T17:59:40'), now)).toBe('à l’instant')
+  })
+
+  it('en minutes, puis en heures', () => {
+    expect(timeAgo(new Date('2026-10-07T17:48:00'), now)).toBe('12 min')
+    expect(timeAgo(new Date('2026-10-07T16:00:00'), now)).toBe('2 h')
+  })
+
+  it('la veille : hier ; au-delà : en jours', () => {
+    expect(timeAgo(new Date('2026-10-06T09:00:00'), now)).toBe('hier')
+    expect(timeAgo(new Date('2026-10-03T09:00:00'), now)).toBe('4 j')
   })
 })

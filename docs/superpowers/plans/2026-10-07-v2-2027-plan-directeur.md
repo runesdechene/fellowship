@@ -36,12 +36,22 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Spec** : `2026-10-07-design-system-2027-design.md` (validée). **Base** : rien.
 - **Fini quand** : les écrans existants ressemblent aux cadres « 2027 » correspondants.
 
-### Lot 2 — Tableau de bord  ☐
+### Lot 2 — Tableau de bord  ☑ ordinateur (07/10/2026) · ☐ objectif de CA, montant versé et échéance (avec le lot 3), mobile
 - **Livre** : frise de saison, « Ma prochaine date » (pastille Inscrit pleine, objectif), « À venir »,
   **« Mes dossiers »** (dossier + paiement : à payer / acompte / payé, solde, échéance), « Mes bilans »
   (bloc, en Pro), **activité du réseau** en bas de la barre latérale (+ arrivées d'exposants).
 - **Cadre** : `2027 — Tableau de bord`. **Base** : objectif de CA par participation (migration).
 - **Dépend de** : lot 1.
+- **Tranché en route** : livrés « Bonjour », la frise en gélules, « Mes dossiers » (remplace « À
+  régler »), le bloc « Mes bilans », le fil « Activité du réseau » (arrivées, dates prises, abonnements,
+  festivals ajoutés ; sans avis, dont l'identité est protégée ; sans « Tout voir » tant que la
+  Communauté n'existe pas). La base ne garde ni le montant versé d'un acompte ni l'échéance du solde
+  (`payments` et `total_cost` sont vides partout) : « Mes dossiers » dit « Reste le solde sur 450 € »
+  sans barre de progression ; les colonnes et leur saisie arrivent avec « Mon dossier » sur la fiche
+  (lot 3), comme l'objectif de CA — une colonne sans écran pour la remplir serait morte. « Tout
+  voir » des bilans déplie sur place en attendant l'écran « Mes bilans » (lot 7). La bande « Ta
+  prochaine action » (bilan à remplir) est gardée bien qu'absente de la maquette : à trancher par
+  Uriel.
 
 ### Lot 3 — Fiche événement  ☐
 - **Livre** : statut en contrôle segmenté (« Dossier envoyé »), **Mon dossier** (paiement détaillé),

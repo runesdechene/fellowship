@@ -803,4 +803,17 @@
   --type-escale-name: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-stamp-more: var(--weight-semibold) var(--size-22) / 1 var(--family-sans);
   --vitrine-pale-ink: var(--ink-350); /* compteurs, pied de page */
+
+  /* =========================================================================
+     ACTIVITÉ DU RÉSEAU — le fil en bas de la barre latérale (features/activity)
+     ====================================================================== */
+  --activity-live: var(--live-500);
+  --activity-live-halo: color-mix(in srgb, var(--live-500) 25%, transparent);
+  --activity-halo-width: 3px;
+  --activity-avatar-size: 22px;
+  --activity-avatar-surface: var(--sand-350);
+  --type-activity-title: var(--weight-medium) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-activity-time: var(--weight-regular) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
 }
