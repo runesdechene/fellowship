@@ -4,6 +4,7 @@
 - `decisions/` — une page par choix structurant : le contexte, la décision, les options
   écartées et pourquoi. On ne rediscute pas une décision sans lire sa page.
 - `sondes/` — relevés en prod, en lecture seule, faits avant une spec (un relevé d'un jour).
+- `audit-2026-10-07.md` — l’audit de propreté du 07/10, à valider puis corriger.
 - `purge-back.md` — tout ce que le back devra perdre ou corriger une fois la V2 lancée.
 
 Conception : `docs/superpowers/specs/2026-10-07-methode-monorepo-v2-design.md`.
