@@ -87,3 +87,7 @@ When dispatching an implementer subagent for tasks that touch test infra, build 
 3. **Vérifier sa fraîcheur sur la date de `graphify-out/graph.json`** — **pas** celle du dossier
    `graphify-out/`, qui ne bouge pas quand le fichier est réécrit en place. C'est ce piège qui a fait
    conclure à tort, le 25/09/2026, que tous les index étaient morts.
+4. **Un `git checkout` salit `graphify-out/`** — le hook `post-checkout` réécrit le graphe. Le
+   07/10/2026, le fast-forward de `main` a échoué sur ce fichier, et le `git push` enchaîné par `;`
+   est parti quand même, avec l'ancien `main` local. Avant un merge : `git checkout -- graphify-out`.
+   Et toujours enchaîner un push par `&&`, jamais par `;`.

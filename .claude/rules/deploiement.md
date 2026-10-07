@@ -19,19 +19,31 @@ Depuis le 07/10/2026 : **déploiement manuel uniquement**. L'auto-deploy GitHub 
 | Site                | Id                                     | Sert                                   | Dossier         |
 | ------------------- | -------------------------------------- | -------------------------------------- | --------------- |
 | `fellowship-app`    | `8c479753-ecff-4c88-8069-2b25e7514925` | `flw.sh` (V1)                          | `apps/web`      |
-| `fellowship-web-v2` | (noté à la création)                   | `flw.sh/v2/*` via redirection de la V1 | `apps/web-v2`   |
+| `fellowship-web-v2` | `fba73713-7b5e-4750-a8e2-b8e62e6ae4f7` | `flw.sh/v2/*` via redirection de la V1 | `apps/web-v2`   |
 
-**Déployer depuis le dossier de l'app, jamais d'ailleurs** : la CLI ne lit `netlify.toml`
-(redirections, en-têtes) que dans le dossier courant. Chez RdC, une V1 déployée depuis un autre
-dossier est partie sans ses redirections (05/10/2026). Avec `--site`, passer le **nom** du site.
+**Déployer depuis le dossier de l'app** : la CLI y lit `netlify.toml` (redirections, en-têtes).
+Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirections (05/10/2026).
+
+**Les trois pièges de la CLI, payés le 07/10/2026 :**
+- **`--site` prend l'id, pas le nom** : `--site fellowship-web-v2` répondait « Not Found » (chez
+  RdC c'était l'inverse — ne pas s'y fier).
+- **`--dir` en chemin absolu** : la CLI a résolu `--dir dist` depuis la racine du dépôt et publié
+  le vieux `dist/` de la racine (un build de la V2 sans `/v2/`). Après un déploiement, comparer
+  le hash du JS servi à celui du build local.
+- **`--no-build`** : le build est fait en local, le `.env` racine fournit les variables.
+
+**La V1 passe d'abord en brouillon** (sans `--prod`) : vérifier sur l'URL unique les en-têtes
+(CSP, `frame-ancestors *` sur `/*/embed`, cache d'une heure sur `/embed.js`) et `/v2/`, puis
+seulement `--prod`.
 
 ```bash
-cd apps/web    && pnpm build && netlify deploy --prod --dir dist --site fellowship-app
-cd apps/web-v2 && pnpm build && netlify deploy --prod --dir dist --site fellowship-web-v2
+R="$(git rev-parse --show-toplevel)"
+# V1 — depuis apps/web : brouillon, vérifications, puis prod
+pnpm build && netlify deploy --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
+netlify deploy --prod --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
+# V2 — depuis apps/web-v2
+pnpm build && netlify deploy --prod --no-build --dir "$R/apps/web-v2/dist" --site fba73713-7b5e-4750-a8e2-b8e62e6ae4f7
 ```
-
-Le build se fait en local : le `.env` racine fournit les variables (`envDir`), rien n'est à
-configurer côté Netlify.
 
 **Vérifier après chaque déploiement** : `curl -s https://flw.sh/v2/ | grep -o 'src="/v2/assets/[^"]*"'`
 (la V2 répond sous `/v2/`) et `curl -s https://flw.sh/sw.js | grep -c v2` (la denylist est là).
