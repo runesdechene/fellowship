@@ -24,7 +24,7 @@
 .chip--ok {
   border-color: transparent;
   background: var(--brand-gradient);
-  color: var(--action-ink);
+  color: var(--brand-ink);
   font: var(--type-chip-strong);
 }
 

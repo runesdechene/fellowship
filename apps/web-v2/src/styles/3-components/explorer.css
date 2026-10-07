@@ -499,3 +499,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* La nuit : même voile que les étiquettes de la fiche (tag.css). */
+@media (prefers-color-scheme: dark) {
+  .category-chip:not(.category-chip--all) {
+    border-color: color-mix(in srgb, var(--tag-ink, var(--ink-soft)) 35%, transparent);
+    background: color-mix(in srgb, var(--tag-ink, var(--ink-soft)) 18%, transparent);
+    color: color-mix(in oklab, var(--tag-ink, var(--ink-soft)) 60%, var(--ink-title));
+  }
+
+  .category-chip:not(.category-chip--all)[aria-pressed='true'] {
+    outline-color: color-mix(in oklab, var(--tag-ink, var(--ink-soft)) 60%, var(--ink-title));
+  }
+}

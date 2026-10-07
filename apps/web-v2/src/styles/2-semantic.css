@@ -117,6 +117,7 @@
   /* LE DÉGRADÉ DU LOGO — « c'est acquis » (inscrit, payé, bénéfice). Pas pour un
      bouton, un lien ou un titre de l'application. */
   --brand-gradient: linear-gradient(90deg, var(--terre-700), var(--terre-400));
+  --brand-ink: var(--sand-0); /* le texte posé sur le dégradé, dans les deux thèmes */
   /* Le filet qui détache une carte blanche du panneau : les plans se lisent au
      trait fin, plus à l'aplat beige (langage « 2027 »). */
   --line-card: var(--sand-300);
@@ -834,4 +835,81 @@
   --vitrine-mobile-banner: 160px;
   --vitrine-mobile-logo: 96px;
   --type-tab-bar: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+}
+
+/* =========================================================================
+   LA NUIT — le thème sombre suit le réglage de l'appareil (validé le 08/10/2026)
+   =========================================================================
+   Seul le SENS change : les composants lisent les mêmes jetons. La barre latérale est plus claire
+   que le panneau, pour que les cartes ressortent ; la terre du logo ne bouge pas, c'est elle qui
+   se voit la nuit. L'interrupteur clair / sombre / automatique viendra avec les Réglages. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --surface-app: var(--night-50);
+    --surface-panel: var(--night-0);
+    --surface-card: var(--night-100);
+    --surface-raised: var(--night-100);
+    --surface-control: var(--night-100);
+    --surface-nav-active: var(--night-350);
+    --surface-nav-hover: var(--night-350);
+    --surface-card-hover: var(--night-150);
+    --surface-row-hover: var(--night-150);
+    --surface-control-hover: var(--night-200);
+    --surface-chip-neutral: var(--night-200);
+    --surface-bar: var(--night-200);
+    --surface-bar-empty: var(--night-300);
+
+    --ink-title: var(--cream-50);
+    --ink-strong: var(--cream-50);
+    --ink-section: var(--cream-50);
+    --ink-total: var(--cream-50);
+    --ink-link: var(--cream-50);
+    --ink-soft: var(--cream-500);
+    --ink-hero-meta: var(--cream-500);
+    --ink-body: var(--cream-500);
+    --ink-section-pale: var(--cream-750);
+    --ink-waiting: var(--cream-750);
+
+    --accent-interactive: var(--cream-50);
+    --accent-interactive-surface: var(--night-200);
+    --line-card: var(--night-300);
+    --line-dashed: var(--night-400);
+    --border-menu: var(--night-300);
+
+    /* La terre 700 est trop sombre pour se lire sur la nuit : l'encre de l'acquis passe en 400. */
+    --status-ok-ink: var(--terre-400);
+    --status-ok-surface: var(--terre-900);
+    --status-ok-surface-hover: var(--terre-900);
+    --status-ok-icon: var(--terre-400);
+    --status-todo-ink: var(--cream-50);
+    --status-todo-surface: var(--night-100);
+    --status-todo-surface-hover: var(--night-150);
+    --status-todo-icon: var(--cream-650);
+    --status-pending-ink: var(--cream-50);
+    --status-pending-surface: var(--night-100);
+    --status-pending-surface-hover: var(--night-150);
+    --status-pending-icon: var(--cream-650);
+    --dot-pending: var(--cream-650);
+
+    /* Le bouton principal s'inverse : crème, texte foncé. */
+    --action-surface: var(--cream-50);
+    --action-surface-hover: var(--cream-200);
+    --action-ink: var(--night-0);
+    --action-ink-off: var(--cream-750);
+
+    --banner-icon-surface: var(--night-200);
+    --banner-icon-ink: var(--cream-50);
+    --focus-ring: var(--cream-50);
+    --toggle-off-surface: var(--night-400);
+    --toggle-knob: var(--cream-50);
+    --required-ink: var(--cream-500);
+    --dropzone-border: var(--night-400);
+    --calendar-month-ink: var(--cream-750);
+    --vitrine-pale-ink: var(--cream-750);
+    --activity-avatar-surface: var(--night-350);
+    --tab-bar-active: var(--terre-400);
+    --tag-first-ink: var(--night-0);
+  }
 }

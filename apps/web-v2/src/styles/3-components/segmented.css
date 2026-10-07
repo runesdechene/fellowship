@@ -42,7 +42,7 @@
 .segmented__option--brand {
   background: var(--brand-gradient);
   font: var(--type-segmented-on);
-  color: var(--action-ink);
+  color: var(--brand-ink);
 }
 
 .segmented__option:disabled {

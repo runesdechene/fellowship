@@ -41,6 +41,21 @@
      exceptions assumées : l'onglet actif sur mobile, l'action principale de
      la landing. Jamais un bouton, un lien ou un titre de l'application.
      --------------------------------------------------------------------- */
+  /* La nuit (thème sombre, validé le 08/10/2026) : des bruns très foncés, jamais du noir pur. */
+  --night-0: #121110; /* le panneau de contenu, le plus profond */
+  --night-50: #1c1a18; /* la barre latérale, plus claire que le panneau */
+  --night-100: #1f1c1a; /* cartes, contrôles */
+  --night-150: #24211e; /* survol d'une ligne */
+  --night-200: #2a2623; /* surfaces discrètes : pastilles, barres, gouttières */
+  --night-300: #2e2a27; /* les filets */
+  --night-350: #34302c; /* l'entrée active de la barre latérale */
+  --night-400: #3a3531; /* pointillés, interrupteur éteint */
+  --cream-50: #f3efe9; /* titres, texte, bouton principal la nuit */
+  --cream-200: #d9d3cb; /* survol du bouton principal la nuit */
+  --cream-500: #a39d95; /* texte secondaire la nuit */
+  --cream-650: #857f78; /* signes de statut la nuit */
+  --cream-750: #6f6962; /* libellés discrets la nuit */
+  --terre-900: #33241b; /* fond d'une mention acquise, la nuit */
   --shade-900: #14120f; /* le voile au pied des affiches */
   --live-500: #3fa35c; /* le point « en direct », seul vert de l'interface */
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */

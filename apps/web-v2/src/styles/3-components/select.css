@@ -63,7 +63,7 @@
    faut 4,5:1 et non le plancher d'un décor. */
 .select__valeur--plein.select__valeur--ok {
   background: var(--brand-gradient);
-  color: var(--action-ink);
+  color: var(--brand-ink);
 }
 
 .select__valeur--plein.select__valeur--ok:hover:not(:disabled) {

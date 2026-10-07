@@ -174,6 +174,25 @@ colonne se rouvre dans l'état où on l'a laissée.
 
 ---
 
+## 3 bis. La nuit — le thème sombre
+
+Validé le 08/10/2026 (maquettes `2027 sombre — …`). Il suit le réglage de l'appareil
+(`prefers-color-scheme`) ; l'interrupteur clair / sombre / automatique viendra avec les Réglages.
+
+- **Seule la couche du sens change** : un bloc `@media (prefers-color-scheme: dark)` à la fin de
+  `2-semantic.css` redéfinit les jetons. Les composants ne savent pas qu'il fait nuit.
+- La matière de la nuit vit dans `1-primitives.css` : `--night-*` (fonds bruns très foncés, jamais du
+  noir pur) et `--cream-*` (encres).
+- **La barre latérale est plus claire que le panneau** (choix d'Uriel) : les cartes ressortent.
+- **Le bouton principal s'inverse** : crème, texte foncé (`--action-surface`, `--action-ink`).
+- **Le texte posé sur le dégradé** lit `--brand-ink`, blanc dans les deux thèmes — jamais
+  `--action-ink`, qui devient foncé la nuit.
+- L'encre de l'acquis passe en terre 400 la nuit : la 700 ne se lit pas sur fond foncé.
+- **Les catégories** : leurs couleurs viennent de la base, réglées pour le jour. La nuit, `tag.css`
+  et `explorer.css` éclaircissent le texte vers le crème et marquent un peu le voile.
+- Un composant ne lit **jamais** une primitive (`--sand-*`, `--ink-950`…) : il ne suivrait pas la
+  nuit.
+
 ## 4. Ce que contient la V2, et rien d'autre
 
 Écrans intégrés :

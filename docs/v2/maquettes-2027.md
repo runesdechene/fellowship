@@ -30,7 +30,7 @@
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` | dessiné |
 | Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
-| Thème sombre — tableau de bord, fiche, calendrier | `2027 sombre — …` (rangée sous le mobile) | proposé le 08/10/2026, **à valider** |
+| Thème sombre — tableau de bord, fiche, calendrier | `2027 sombre — …` (rangée sous le mobile) | validé le 08/10/2026 |
 | Mobile — les autres écrans | — | à dessiner au moment de leur spec |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -102,7 +102,7 @@
 - [x] « À payer » : réglé le 07/10/2026 — le paiement se lit par la forme (cercle vide, à moitié plein + barre, dégradé quand c'est payé).
 - [ ] Bannière de vitrine : générer une vraie photo d'atelier dans Figma (crédits IA d'Uriel) — en attente de son accord.
 
-## Thème sombre (proposé le 08/10/2026, à valider)
+## Thème sombre (validé par Uriel le 08/10/2026)
 
 - Fonds chauds très foncés : barre latérale `#1c1a18`, panneau `#121110` (plus profond que la
   barre : les cartes ressortent — choix d'Uriel le 08/10/2026, la barre plus sombre est écartée),
