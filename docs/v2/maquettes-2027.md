@@ -39,6 +39,7 @@
 - [ ] Le **dégradé terre du logo** (`#964623` → `#cf9251`) ne dit qu'une chose : **acquis** (Inscrit, bénéfice). Pastille pleine pour une date seule, coche en dégradé dans les listes.
 - [ ] Statuts par la **forme** : Intéressé = cercle en pointillés, Dossier envoyé = cercle à moitié plein, Inscrit = dégradé. Remplace les tons blé / terre / olive actuels du CSS.
 - [ ] **Plus de vert**, sauf le point « en direct » de l'activité du réseau.
+- [ ] **Les tags portent toujours leur couleur** (fond teinté ~16 %, liseré ~35 %, texte et icône assombris), partout : défilé de la landing, puces de l'Explorer, en-tête de la fiche, modification d'un événement, création. Les couleurs viennent de la table des tags.
 - [ ] Bouton principal noir ; liens en encre avec une flèche ; pas d'ombre (liseré seul sur les flottants).
 - [ ] Le Pro se signale par une petite pastille noire « Pro », jamais par un cadenas.
 
