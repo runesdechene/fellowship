@@ -15,7 +15,7 @@ Repris de l'ancien `xo-status.md` (dernière mise à jour : 20/08/2026).
 
 - Sortie du mur d'affiche — ANNULÉE à l'œil, à refaire un jour avec une maquette
 - **Trancher : le blé OU la terre pour « il reste un geste à faire »** (les deux le disent aujourd'hui)
-- Revoir « Acompte versé » sur le tableau de bord — il s'affiche en acquis alors qu'il reste le solde
+- ~~Revoir « Acompte versé »~~ — réglé dans le code : il porte le blé (`SettlementsSection.tsx`). Mais « À payer » porte la terre alors que le commentaire annonce le blé : à trancher avec le point suivant.
 - Brancher les avis des exposants (notation 3 axes + fil de réponses)
 - Écran d'édition d'un événement — débloque l'ajout au clic sur une info manquante
 - Renouveler le jeton Supabase, régénérer les types, retirer le client sans schéma
