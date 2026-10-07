@@ -34,7 +34,7 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
               Inscrit
             </Chip>
           ) : (
-            <Chip tone="pending">Dossier en cours</Chip>
+            <Chip tone="pending">Dossier envoyé</Chip>
           )}
         </span>
       </span>

@@ -1,5 +1,21 @@
 # Fellowship V2 — Le design, et comment le changer
 
+> **Langage « 2027 »** depuis le 07/10/2026 : les maquettes de la rangée « 2027 » du Figma font
+> foi. Ce qu'elles demandent au code : `docs/v2/maquettes-2027.md`.
+
+## 0. Le langage « 2027 » en dix règles
+
+1. **Fond blanc à peine chaud** (`--sand-50`) ; la barre latérale garde le beige d'Uriel et son panneau à arrondi inversé.
+2. **Les plans se lisent au filet** (`--line-card`), plus à l'aplat beige : une carte est blanche et bordée. Aucune ombre.
+3. **Deux polices** : Inter pour tout ; **Instrument Serif** pour les grands moments seulement — nom d'un festival, d'une enseigne, d'un mois, chiffre phare (`--type-display-*`, `--type-event-title`).
+4. **Deux encres** (`--ink-950`, `--ink-600`) et un tertiaire (`--ink-350`). La hiérarchie vient de la taille et de la graisse.
+5. **La couleur vient des affiches et des tags.** Un tag porte toujours sa couleur (réglée dans l'administration).
+6. **La terre du logo dit « acquis »** et rien d'autre (`--brand-gradient`) : inscrit, payé, bénéfice. Exceptions assumées : l'onglet actif sur mobile, l'action principale de la landing.
+7. **Les statuts se lisent par la forme** : intéressé = cercle vide, dossier envoyé = cercle à moitié plein, inscrit = dégradé. Le gris pour ce qui n'est pas acquis.
+8. **Plus de vert**, sauf le point « en direct » de l'activité du réseau.
+9. **Le bouton principal est noir** ; un lien est à l'encre, avec une flèche.
+10. **Le Pro se signale par une petite pastille noire « Pro »**, jamais par un cadenas.
+
 Ce document s'adresse à toi, pas à un développeur. Il dit **où aller** pour
 modifier quoi que ce soit de l'apparence, sans jamais toucher au code React.
 
@@ -34,9 +50,9 @@ Une règle, une seule : **une couche ne lit que la couche juste au-dessus.**
 
 - La couche 3 (composants) utilise les variables de la couche 2.
 - La couche 2 utilise les variables de la couche 1.
-- La couche 1 est la seule à contenir des vraies valeurs (`#F3F0E9`, `14px`).
+- La couche 1 est la seule à contenir des vraies valeurs (`#f2f0ec`, `14px`).
 
-Si tu écris `#F3F0E9` directement dans `sidebar.css`, ça marche — mais tu
+Si tu écris `#f2f0ec` directement dans `sidebar.css`, ça marche — mais tu
 viens de créer une valeur que personne ne retrouvera. C'est exactement ce que
 cette architecture évite.
 
@@ -49,9 +65,8 @@ cette architecture évite.
 On y nomme les choses par **ce qu'elles sont**, jamais par leur usage.
 
 ```css
---cream-hue: 39;                              /* la molette de la chaleur */
---cream-200: hsl(var(--cream-hue) 61% 92.9%); /* une teinte, point */
---brown-700: #564444;
+--sand-200: #f2f0ec; /* une teinte, point */
+--ink-950: #1f1d1b;
 --size-26: 26px;
 --space-23: 23px;
 --round-15: 15px;
@@ -65,8 +80,8 @@ qui n'existe pas encore.
 On y dit **à quoi sert** chaque valeur brute.
 
 ```css
---surface-card: var(--cream-200);   /* le fond des cartes */
---ink-title: var(--brown-700);      /* la couleur des titres */
+--surface-card: var(--sand-0);      /* le fond des cartes */
+--ink-title: var(--ink-950);      /* la couleur des titres */
 --radius-card: var(--round-15);     /* l'arrondi des cartes */
 ```
 
@@ -95,17 +110,15 @@ sans toucher aux autres.
 
 ## 3. Recettes
 
-### Réchauffer ou refroidir TOUTE l’interface
-`1-primitives.css` → `--cream-hue`. Monter va vers le jaune, descendre vers le
-rose. Les sept nuances de crème partagent cette teinte : elles bougent
-ensemble, sans dériver les unes par rapport aux autres. C’est la seule molette
-de la couche 1 qu’on tourne sans rien casser.
+### Changer un neutre, une encre, la terre
+`1-primitives.css` → la palette SABLE (`--sand-*`), l'ENCRE (`--ink-*`), la TERRE (`--terre-700` et
+`--terre-400`, le départ et l'arrivée du dégradé du logo). Toute l'app suit.
 
-### Rendre toutes les cartes plus claires
-`2-semantic.css` → `--surface-card: var(--cream-100);`
+### Rendre toutes les cartes un peu teintées
+`2-semantic.css` → `--surface-card: var(--sand-100);` (et garder `--line-card`, sinon elles se fondent).
 
 ### Adoucir les titres
-`2-semantic.css` → `--ink-title: var(--brown-400);`
+`2-semantic.css` → `--ink-title: var(--ink-600);`
 
 ### Coins moins arrondis partout
 `2-semantic.css` → `--radius-card`, `--radius-nav`, `--radius-panel`.
@@ -117,19 +130,12 @@ de la couche 1 qu’on tourne sans rien casser.
 `--card-padding` (intérieur des cartes).
 
 ### Changer la police
-`1-primitives.css` → `--family-sans`.
-**Puis** déclarer la nouvelle police dans `index.html` (le `<link>` Google Fonts).
+`1-primitives.css` → `--family-sans` (l'interface) ou `--family-display` (les grands titres en serif).
+**Puis** déclarer la police dans `apps/web-v2/index.html` (le `<link>` Google Fonts).
 
 ### Changer une taille de texte précise
-Chaque texte a un **rôle** en couche 2 : `--type-page-title`,
-`--type-card-title`, `--type-event-title`, `--type-list-name`…
-Le format est `graisse taille/interligne famille` :
-
-```css
---type-event-title: var(--weight-bold) var(--size-26) / var(--leading-tight) var(--family-sans);
-```
-
-Pour un titre d'événement plus gros : remplacer `--size-26` par `--size-30`.
+Chaque texte a un **rôle** en couche 2 : `--type-page-title`, `--type-event-title`,
+`--type-display-m`, `--type-list-name`… Format : `graisse taille/interligne famille`.
 Si la taille voulue n'existe pas, l'ajouter d'abord en couche 1.
 
 ### Régler le graphe de saison
@@ -144,29 +150,10 @@ Si la taille voulue n'existe pas, l'ajouter d'abord en couche 1.
 La hauteur de chaque barre est calculée entre ces deux bornes, proportionnellement
 au nombre de dates. Aucun nombre n'est écrit dans le code.
 
-### Les deux couleurs d'accent, et leur partage du travail
-
-Fellowship a **deux** accents, et ils ne se croisent jamais :
-
-| Couleur | Rôle | Tokens |
-|---|---|---|
-| **Olive** `#84AA3C` | un **état acquis** — inscrit, acompte versé, bénéfice | `--status-ok-*` |
-| **Bleu-violet électrique** `#5D5AE0` | ce sur quoi on **agit** — liens, interrupteurs, focus, catégories choisies | `--accent-interactive*` |
-
-Le test avant d'employer l'un ou l'autre : *est-ce que ça décrit quelque chose
-qui EST, ou quelque chose qu'on FAIT ?* Un interrupteur allumé n'est pas un
-statut, une catégorie qu'on coche non plus — les deux portent l'électrique.
-
-Pour changer l'un des deux : `--olive-500` ou `--electric-500` en couche 1.
-Le fond clair `--electric-100` a été calculé à la **même teinte et la même
-saturation** que le trait : si tu changes l'un, recalcule l'autre plutôt que
-de le choisir à l'œil, sinon les deux ne se liront plus comme une couleur.
-
-### Changer la couleur d'un statut
-`2-semantic.css`, bloc « STATUTS » :
-- `--status-ok-ink` / `--status-ok-surface` : « Inscrit » (vert olive)
-- `--status-pending-ink` / `--status-pending-surface` : dossier en cours (terre)
-- `--dot-confirmed` / `--dot-pending` : les pastilles de la liste « À venir »
+### La couleur de ce qui est acquis
+`2-semantic.css` → `--brand-gradient` (le dégradé), `--status-ok-*` (l'encre et le fond quand la
+mention n'est pas en dégradé). Les autres statuts (`--status-todo-*`, `--status-pending-*`) sont
+volontairement neutres : la forme de l'icône dit l'état.
 
 ### Élargir la colonne de gauche
 `2-semantic.css` → `--shell-sidebar-width`, puis `--sidebar-padding-x` pour
@@ -228,9 +215,5 @@ reliquat de l'ancien modèle : **elles ne sont plus alimentées, ne pas les lire
 
 ## 6. L'ancien code
 
-L'ancienne application reste consultable **côte à côte**, dans
-`DEVs/fellowship-legacy` — c'est un *worktree* git figé sur la branche `main`.
-On peut y lire et y copier n'importe quel fichier ; il ne bouge pas quand on
-travaille sur `v2`.
-
-Pour le supprimer un jour : `git worktree remove ../fellowship-legacy`.
+La V1 vit à côté, dans `apps/web` du même dépôt (monorepo depuis le 07/10/2026). On la relit pour
+comprendre un comportement, jamais pour en copier le code.

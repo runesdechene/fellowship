@@ -27,7 +27,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 
 ## Les lots
 
-### Lot 1 — Design system « 2027 »  ☐
+### Lot 1 — Design system « 2027 »  ☑ (07/10/2026, plan `2026-10-07-lot-1-design-system.md`)
 - **Livre** : polices Inter + Instrument Serif, nouvelle matière et nouveau sens (couches 1-2), composants
   dont la forme change (bouton noir, pastilles de statut, tags colorés, contrôle segmenté, cartes
   bordées), barre latérale d'Uriel en Inter ; `docs/v2/DESIGN-SYSTEM.md` réécrit.

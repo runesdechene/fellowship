@@ -195,7 +195,7 @@ export function Question({
       ) : (
         thread.replies.length === 0 && (
           /* Ce n'est pas un vide, c'est un ÉTAT : la terre dit « ça attend
-             chez quelqu'un d'autre », comme « Dossier en cours » sur la fiche. */
+             chez quelqu'un d'autre », comme « Dossier envoyé » sur la fiche. */
           <span className="question__attente">
             <Hourglass size={14} strokeWidth={2} />
             En attente de réponse

@@ -187,7 +187,7 @@
      déformait à chaque changement d’état. */
   --width-status-pick: 172px;
   /* La participation resume l’ecran, elle n’a pas besoin de le traverser :
-     « Dossier en cours » y tient, et c’est le plus long des choix. */
+     « Dossier envoyé » y tient, et c’est le plus long des choix. */
   --width-status-participation: 226px;
   /* Un prix de place tient en quatre chiffres. Plus large, le champ
      promettait une saisie qui n’existe pas. */

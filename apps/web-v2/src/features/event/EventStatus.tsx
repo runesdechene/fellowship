@@ -42,7 +42,7 @@ const PARTICIPATION: SelectOption<ParticipationStatus | null>[] = [
   // Blé : la date est notée, rien n'est fait — c'est à TOI de candidater.
   { value: 'interesse', label: 'Intéressé', tone: 'todo', Icon: Star },
   // Terre : le dossier est parti, ça ne dépend plus de toi.
-  { value: 'en_cours', label: 'Dossier en cours', tone: 'pending', Icon: FileClock },
+  { value: 'en_cours', label: 'Dossier envoyé', tone: 'pending', Icon: FileClock },
   { value: 'inscrit', label: 'Inscrit', tone: 'ok', Icon: CircleCheck },
 ]
 
@@ -64,7 +64,7 @@ const REFUSE: SelectOption<ParticipationStatus | null> = {
  * L'argent porte une JAUGE, pas la sémantique « qui doit bouger » de la
  * participation — et c'est voulu : un intérêt n'a aucune urgence, une dette
  * en a une. Terre, blé, olive : rien n'a bougé, ça a commencé, c'est réglé.
- * La terre est celle du logo, la même que « Dossier en cours » : dans les
+ * La terre est celle du logo, la même que « Dossier envoyé » : dans les
  * deux cas elle dit « ça n'a pas avancé ».
  */
 const PAIEMENT: Record<PaymentOrientation, SelectOption<PaymentStatus>[]> = {

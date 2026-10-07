@@ -337,7 +337,7 @@
 
 /* --- Une question sans réponse ---------------------------------------------
    Ce n'est pas un vide, c'est un ÉTAT : la terre dit « ça attend chez
-   quelqu'un d'autre », la même teinte que « Dossier en cours » sur la fiche. */
+   quelqu'un d'autre », la même teinte que « Dossier envoyé » sur la fiche. */
 .question__attente {
   display: inline-flex;
   align-items: center;

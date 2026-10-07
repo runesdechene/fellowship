@@ -27,4 +27,7 @@ chaque écran comparé à son cadre Figma.
 
 ## Carnet
 
-(une ligne par tâche terminée : commit, vérification)
+- 1-6 : 3d94487 — polices, couches 1-2, cartes bordées, pastilles, serif ; lint + 56 tests + build OK ; déployé et vu sur flw.sh/v2 (tableau de bord, fiche) avec les vraies données.
+- « Dossier envoyé » partout (décision du 07/10).
+- 8 : DESIGN-SYSTEM.md réécrit (dix règles du langage 2027).
+- Vérification locale impossible : le port 5174 est pris par l’app Runes de Chêne et la session admin ne vit que sur flw.sh — la vérification visuelle se fait donc après déploiement de la V2 (admins seulement).
