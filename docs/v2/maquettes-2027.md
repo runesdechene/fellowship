@@ -65,7 +65,7 @@
 - [ ] Alertes Pro : clôture des candidatures (7 jours avant), nouvelle édition d'un festival déjà fait, recherches sauvegardées.
 - [ ] Intégration du calendrier sur son site : gratuite avec la mention Fellowship, Pro sans la marque et personnalisable.
 - [ ] Gratuit : tableau de bord, amis, activité, communauté, avis et questions, vitrine.
-- [ ] Prix repris de la V1 : 11,99 € HT/mois ou 119,88 € HT/an, essai 14 jours — **à confirmer par Uriel**.
+- [x] Prix repris de la V1 : 11,99 € HT/mois ou 119,88 € HT/an, essai 14 jours — confirmés par Uriel (08/10/2026).
 - [ ] La FAQ promet « on te prévient trois jours avant la fin de l'essai » — **à vérifier côté Stripe**, sinon retirer la phrase.
 - [ ] À terme : calcul du coût de la route selon le véhicule (Pro).
 
@@ -92,9 +92,9 @@
 - [ ] Landing : l'annuaire est cherchable **sans compte** (accueil public, indexable) ; la connexion reste la porte.
 - [ ] Les chiffres du mur d'affiches (« 1 200 festivals · 3 400 exposants ») sont **inventés** : à lire en base, en direct.
 - [ ] La page d'accueil actuelle (« Parchemin », derrière `/?v2=1`) est remplacée par la landing « 2027 ».
-- [ ] **Photos de marché à fournir** (Uriel) : derrière l'accroche (très atténuée) et derrière le bandeau Organisateurs. Les images actuelles sont des affiches floutées, provisoires.
+- [ ] **Photos de marché à fournir** (Uriel, plus tard) : derrière l'accroche (très atténuée) et derrière le bandeau Organisateurs. Les images actuelles sont des affiches floutées, provisoires.
 - [ ] Landing : le **défilé des types de festivals** de la V1 revient sous la recherche (18 types, défilement continu, fondu sur les bords, pause au survol, figé si `prefers-reduced-motion`) — liste de la V1 : `apps/web/src/pages/LandingV2.tsx` (`MARQUEE_TAGS`), à lire de préférence dans la table des tags.
-- [ ] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
+- [ ] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel, relu et validé le 08/10/2026), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
 
 ## Points ouverts
 

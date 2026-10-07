@@ -30,18 +30,22 @@ Résolu (2026-06-26) : frontend liste blanche déployé (commits → main, CI ve
 « Using access token from env var ») **avant** le jeton de `supabase login`. Ce jeton était
 périmé : `gen types` répondait « Unauthorized » alors qu'Uriel venait de se connecter.
 
+**Tranché le 07/10/2026 : la ligne `SUPABASE_ACCESS_TOKEN` a été retirée du `.env`.** La CLI
+prend désormais le jeton de `supabase login` ; ne pas en remettre un dans le `.env`.
+
 **How to apply :**
 - Une commande Supabase qui répond « Unauthorized » → `--debug`, et regarder d'où vient le jeton.
-- Le vrai remède : un jeton neuf dans le `.env` (supabase.com → Account → Access Tokens). Tant
-  qu'il n'y est pas, lancer la commande **hors du dépôt** pour que le `.env` ne soit pas lu.
+  S'il vient de « env var », un `SUPABASE_ACCESS_TOKEN` est revenu (`.env` ou session) : le retirer.
+- Sinon, la connexion a expiré : Uriel relance `supabase login` (interactif, à lui de le faire).
 
 ### Régénérer les types de la V2
 
+Depuis le dépôt (vérifié le 07/10/2026) :
 ```bash
-cd "$SCRATCHPAD" && "<dépôt>/node_modules/supabase/bin/supabase.exe" gen types typescript \
-  --project-id trbxpsknbtisqwefqoub --schema public > "<dépôt>/apps/web-v2/src/types/supabase.ts"
+node_modules/supabase/bin/supabase.exe gen types typescript --linked --schema public \
+  > apps/web-v2/src/types/supabase.ts
 ```
-(Depuis le dépôt, une fois le jeton du `.env` renouvelé : `--linked` au lieu de `--project-id`.)
+Passer par un fichier temporaire puis copier évite d'écraser les types si la commande échoue.
 
 ## supabase-cli-setup
 
