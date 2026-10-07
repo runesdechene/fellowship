@@ -30,6 +30,7 @@
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` | dessiné |
 | Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
+| Thème sombre — tableau de bord, fiche, calendrier | `2027 sombre — …` (rangée sous le mobile) | proposé le 08/10/2026, **à valider** |
 | Mobile — les autres écrans | — | à dessiner au moment de leur spec |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -100,3 +101,14 @@
 
 - [x] « À payer » : réglé le 07/10/2026 — le paiement se lit par la forme (cercle vide, à moitié plein + barre, dégradé quand c'est payé).
 - [ ] Bannière de vitrine : générer une vraie photo d'atelier dans Figma (crédits IA d'Uriel) — en attente de son accord.
+
+## Thème sombre (proposé le 08/10/2026, à valider)
+
+- Fonds chauds très foncés : barre latérale `#0f0e0d`, panneau `#171513`, cartes `#1f1c1a`,
+  gouttières et pastilles `#2a2623`, filets `#2e2a27`.
+- Encres crème : titres `#f3efe9`, texte doux `#a39d95`, pâle `#6f6962`.
+- Le bouton principal s'inverse : crème, texte foncé. Le mois en cours de la frise aussi.
+- La terre et le dégradé du logo ne bougent pas : ce sont eux qui ressortent la nuit.
+- Les catégories gardent leur fond translucide ; leur texte prend la couleur claire de la catégorie.
+- Les affiches ne changent pas.
+- Bascule : le système d'abord ; l'interrupteur clair / sombre / automatique arrive avec les Réglages.
