@@ -7,8 +7,9 @@
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const ROOT = new URL('../src', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1')
+const ROOT = fileURLToPath(new URL('../src', import.meta.url))
 const EXEMPTED = new Set(['types/supabase.ts'])
 const CODE = /\.(ts|tsx|css)$/
 
