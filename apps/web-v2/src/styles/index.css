@@ -24,6 +24,7 @@
 @import './3-components/app-shell.css';
 @import './3-components/page-transition.css';
 @import './3-components/sidebar.css';
+@import './3-components/tab-bar.css';
 @import './3-components/network-activity.css';
 @import './3-components/account-switcher.css';
 @import './3-components/topbar.css';

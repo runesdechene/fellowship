@@ -193,6 +193,10 @@ export function EventPage() {
     <div className="event-page">
       <div className="event-page__main">
         <header className="event-page__hero">
+          {/* Sur téléphone, le mur d'affiche disparaît : l'affiche ouvre la fiche. */}
+          {event.image_url && (
+            <img className="event-page__mobile-poster" src={event.image_url} alt="" />
+          )}
           <div className="event-page__identity">
             <h1 className="event-page__title">{event.name}</h1>
 

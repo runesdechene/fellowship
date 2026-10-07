@@ -306,3 +306,23 @@
     scroll-behavior: auto;
   }
 }
+
+@media (width <= 760px) {
+  .calendar {
+    padding: var(--mobile-padding-top) 0 var(--space-40) var(--mobile-gutter);
+  }
+
+  .calendar__head {
+    flex-direction: column;
+    padding-right: var(--mobile-gutter);
+  }
+
+  .month-nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .month-column {
+    width: var(--calendar-mobile-column);
+  }
+}

@@ -111,3 +111,9 @@
     display: none;
   }
 }
+
+@media (width <= 760px) {
+  .poster-wall {
+    display: none;
+  }
+}

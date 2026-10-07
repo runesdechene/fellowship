@@ -25,6 +25,14 @@ export function Topbar() {
 
   return (
     <div className="topbar">
+      {/* Sur téléphone, la barre latérale disparaît : la marque monte en haut à gauche. */}
+      {!back && (
+        <img
+          className="topbar__brand"
+          src={`${import.meta.env.BASE_URL}icon.png`}
+          alt="Fellowship"
+        />
+      )}
       {(back || lead) && (
         <div className="topbar__coin">
           {/* La MEME variante que la cloche, pas une imitation à côté. Le
@@ -48,8 +56,9 @@ export function Topbar() {
         variant="action"
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
         onClick={() => go('/evenement/nouveau')}
+        aria-label="Ajouter une date"
       >
-        Ajouter une date
+        <span className="topbar__add-label">Ajouter une date</span>
       </Button>
     </div>
   )

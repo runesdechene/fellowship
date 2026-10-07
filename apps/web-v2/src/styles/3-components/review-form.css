@@ -258,3 +258,24 @@
     transition: none;
   }
 }
+
+@media (width <= 760px) {
+  .review-form {
+    flex-direction: column;
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .review-form__main,
+  .review-form__preview {
+    width: 100%;
+  }
+
+  .review-form__preview {
+    position: static;
+    margin-top: 0;
+  }
+
+  .review-form__choices {
+    grid-template-columns: 1fr;
+  }
+}

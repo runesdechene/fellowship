@@ -81,3 +81,9 @@
   gap: var(--space-8);
   margin-top: var(--space-18);
 }
+
+@media (width <= 760px) {
+  .next-date {
+    width: 100%;
+  }
+}

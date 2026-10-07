@@ -819,4 +819,19 @@
   --type-search-input: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
   --type-results-title: var(--weight-semibold) var(--size-26) / var(--leading-tight)
     var(--family-sans);
+
+  /* =========================================================================
+     TÉLÉPHONE — la barre d'onglets et les marges d'écran étroit
+     ====================================================================== */
+  --tab-bar-height: 68px;
+  --tab-bar-avatar: 24px;
+  --tab-bar-active: var(--terre-700);
+  --mobile-gutter: var(--space-20);
+  --mobile-padding-top: var(--space-80);
+  --calendar-mobile-column: 240px;
+  --explore-mobile-card: 180px;
+  --mobile-poster-height: 420px;
+  --vitrine-mobile-banner: 160px;
+  --vitrine-mobile-logo: 96px;
+  --type-tab-bar: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
 }

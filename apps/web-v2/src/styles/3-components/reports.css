@@ -171,3 +171,20 @@
     transition: none;
   }
 }
+
+@media (width <= 760px) {
+  .reports {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reports__season {
+    width: auto;
+    padding-right: 0;
+    border-right: none;
+  }
+
+  .reports__latest {
+    grid-template-columns: 1fr;
+  }
+}

@@ -336,3 +336,35 @@
     transition: none;
   }
 }
+
+@media (width <= 760px) {
+  .vitrine {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .vitrine-head__banner {
+    height: var(--vitrine-mobile-banner);
+  }
+
+  .vitrine-head__bar,
+  .vitrine-head__identity,
+  .vitrine-section,
+  .vitrine__footer {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .vitrine-head__logo {
+    width: var(--vitrine-mobile-logo);
+    height: var(--vitrine-mobile-logo);
+    margin-top: calc(var(--vitrine-mobile-logo) / -2);
+  }
+
+  .vitrine-head__name {
+    font: var(--type-display-m);
+  }
+
+  .escales {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

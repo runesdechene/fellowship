@@ -124,3 +124,9 @@
   font: var(--type-list-meta);
   color: var(--ink-soft);
 }
+
+@media (width <= 760px) {
+  .upcoming {
+    width: 100%;
+  }
+}

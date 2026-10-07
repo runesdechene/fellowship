@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
+import { TabBar } from './TabBar'
 import { Topbar } from './Topbar'
 
 const COLLAPSED_KEY = 'flwsh-sidebar-collapsed'
@@ -45,6 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
         </main>
         <PosterWall />
+        <TabBar />
       </div>
     </PageChromeProvider>
   )

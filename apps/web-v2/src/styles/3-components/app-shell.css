@@ -68,3 +68,14 @@
   border-radius: var(--radius-panel) 0 0 var(--radius-panel);
   background: var(--surface-panel);
 }
+
+/* Téléphone : la barre latérale s'efface, la barre d'onglets prend le bas de l'écran. */
+@media (width <= 760px) {
+  .app-shell .sidebar {
+    display: none;
+  }
+
+  .app-shell__main {
+    padding-bottom: var(--tab-bar-height);
+  }
+}

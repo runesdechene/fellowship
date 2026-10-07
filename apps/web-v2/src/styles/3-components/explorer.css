@@ -461,3 +461,41 @@
     transition: none;
   }
 }
+
+/* Téléphone : une seule zone de recherche par mot ; Où et Quand restent dans l'adresse. */
+@media (width <= 760px) {
+  .explorer {
+    padding: var(--mobile-padding-top) 0 var(--space-40) var(--mobile-gutter);
+  }
+
+  .explorer__head,
+  .search-bar,
+  .category-chips,
+  .explorer__state,
+  .results,
+  .rail__head {
+    margin-right: var(--mobile-gutter);
+  }
+
+  .search-bar__field:not(.search-bar__field--words) {
+    display: none;
+  }
+
+  .category-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .category-chip {
+    flex: none;
+  }
+
+  .explore-card {
+    width: var(--explore-mobile-card);
+  }
+
+  .results__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -318,3 +318,31 @@
   font: var(--type-event-meta);
   color: var(--ink-soft);
 }
+
+.event-page__mobile-poster {
+  display: none;
+}
+
+/* Téléphone : l'affiche ouvre la fiche, pleine largeur. */
+@media (width <= 760px) {
+  .event-page {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .event-page__mobile-poster {
+    display: block;
+    width: 100%;
+    max-height: var(--mobile-poster-height);
+    margin-bottom: var(--space-24);
+    border-radius: var(--radius-card);
+    object-fit: cover;
+  }
+
+  .event-page__title {
+    font: var(--type-display-l);
+  }
+
+  .event-page__facts {
+    grid-template-columns: 1fr;
+  }
+}

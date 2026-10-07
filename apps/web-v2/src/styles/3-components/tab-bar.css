@@ -1,0 +1,92 @@
+/**
+ * QUOI     — les styles de la barre d'onglets du téléphone et de la feuille « Moi »
+ *            (components/layout/TabBar.tsx).
+ * POURQUOI — sous 760 px, la navigation passe en bas, au pouce ; l'onglet actif porte le dégradé
+ *            du logo. Invisible sur ordinateur.
+ */
+
+.tab-bar,
+.tab-sheet {
+  display: none;
+}
+
+@media (width <= 760px) {
+  .tab-bar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: var(--space-8) var(--space-8) calc(var(--space-8) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-card);
+    background: var(--surface-card);
+  }
+
+  .tab-bar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    font: var(--type-tab-bar);
+    color: var(--ink-section-pale);
+    cursor: pointer;
+  }
+
+  .tab-bar__item--inert {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  /* L'onglet actif : son icône et son nom prennent la terre du logo. */
+  .tab-bar__item--active {
+    color: var(--tab-bar-active);
+    font-weight: var(--weight-semibold);
+  }
+
+  .tab-bar__avatar {
+    --avatar-size: var(--tab-bar-avatar);
+  }
+
+  .tab-sheet {
+    position: fixed;
+    inset: auto var(--space-12) calc(var(--tab-bar-height) + var(--space-12));
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-8);
+    border: 1px solid var(--line-card);
+    border-radius: var(--radius-card);
+    background: var(--surface-card);
+  }
+
+  .tab-sheet__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    padding: var(--space-10);
+    border-radius: var(--radius-sm);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .tab-sheet__item:hover {
+    background: var(--surface-control-hover);
+  }
+
+  .tab-sheet__avatar {
+    --avatar-size: var(--avatar-size-account);
+  }
+
+  .tab-sheet__identity {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    font: var(--type-list-meta);
+    color: var(--ink-soft);
+  }
+
+  .tab-sheet__identity b {
+    font: var(--type-list-name);
+    color: var(--ink-title);
+  }
+}

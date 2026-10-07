@@ -64,3 +64,17 @@
 .season-chart__column--empty .season-chart__month {
   color: var(--ink-section-pale);
 }
+
+@media (width <= 760px) {
+  .season-chart {
+    gap: var(--space-4);
+  }
+
+  .season-chart__value {
+    font: var(--type-list-name);
+  }
+
+  .season-chart__month {
+    font: var(--type-tab-bar);
+  }
+}

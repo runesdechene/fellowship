@@ -120,3 +120,38 @@
     transition: none;
   }
 }
+
+/* Téléphone : plus de colonnes — la vignette, puis le nom, le dossier et le paiement l'un sous
+   l'autre. */
+@media (width <= 760px) {
+  .dossiers__head {
+    display: none;
+  }
+
+  .dossiers__row {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'date date chevron'
+      'state state chevron'
+      'payment payment chevron';
+    row-gap: var(--space-4);
+    height: auto;
+    padding: var(--space-12);
+  }
+
+  .dossiers__date {
+    grid-area: date;
+  }
+
+  .dossiers__row > .dossiers__state {
+    grid-area: state;
+  }
+
+  .dossiers__payment {
+    grid-area: payment;
+  }
+
+  .dossiers__chevron {
+    grid-area: chevron;
+  }
+}

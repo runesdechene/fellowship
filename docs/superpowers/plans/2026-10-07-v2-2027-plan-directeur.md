@@ -150,6 +150,15 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - Décidé par Uriel quand les lots 1-11 suffisent à remplacer la V1. Redirections, service worker,
   annonce aux utilisateurs. Le mobile des écrans restants est fait au fil des lots, avec chaque écran.
 
+## Mobile — premier passage (07/10/2026, NON VÉRIFIÉ À L'ÉCRAN)
+
+Sous 760 px : la barre latérale disparaît, une barre d'onglets en bas (Explorer, Calendrier,
+Communauté inerte, Tableau, « Moi » qui ouvre la liste des comptes), la marque en haut à gauche, la
+cloche et un « + » rond à droite ; chaque écran passe en une colonne (affiche pleine largeur en tête
+de fiche, recherche réduite au mot dans l'Explorer). Rien n'a pu être regardé sur un écran étroit :
+la fenêtre du navigateur piloté est maximisée et le site refuse d'être affiché dans un cadre. À
+relire sur un téléphone avant de cocher quoi que ce soit.
+
 ## Après la V2
 
 Les organisateurs : comptes, réception des candidatures, « Postuler en 1 clic » (idée de l'ancienne

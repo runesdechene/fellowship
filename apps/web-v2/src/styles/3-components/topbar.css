@@ -48,3 +48,32 @@
   font: var(--type-topbar-lead);
   color: var(--ink-soft);
 }
+
+.topbar__brand {
+  display: none;
+}
+
+/* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
+@media (width <= 760px) {
+  .topbar {
+    right: var(--mobile-gutter);
+    left: var(--mobile-gutter);
+  }
+
+  .topbar__brand {
+    display: block;
+    width: var(--space-32);
+    margin-right: auto;
+  }
+
+  .topbar__add-label {
+    display: none;
+  }
+
+  .topbar .button--action {
+    width: var(--topbar-control-height);
+    padding: 0;
+    justify-content: center;
+    border-radius: var(--radius-round);
+  }
+}
