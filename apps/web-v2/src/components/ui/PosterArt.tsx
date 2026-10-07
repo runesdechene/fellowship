@@ -1,11 +1,14 @@
 /**
  * QUOI     — l'affiche d'une date : l'image (ou la grande date en serif quand il n'y en a pas), le
  *            compte à rebours en haut, les amis présents en bas.
- * POURQUOI — la même affiche vit dans le calendrier et dans la vitrine ; sa hauteur vient du parent
- *            (`--poster-art-height`).
+ * POURQUOI — la même affiche vit dans le calendrier, la vitrine et l'Explorer ; sa hauteur vient du
+ *            parent (`--poster-art-height`).
+ * ATTENTION — `badge` remplace le compte à rebours (« Nouveau » dans l'Explorer) ; `action` se pose
+ *            en haut à droite (l'étoile « Repérer »).
  */
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatCountdown } from '@/lib/dates'
+import type { ReactNode } from 'react'
 import type { Friend } from '@/lib/friends'
 
 const MONTH_LONG = new Intl.DateTimeFormat('fr-FR', { month: 'long' })
@@ -16,9 +19,20 @@ interface PosterArtProps {
   startDate: Date
   daysAway: number
   friends: Friend[]
+  /** Le texte du coin haut gauche ; par défaut, le compte à rebours. */
+  badge?: string | null
+  action?: ReactNode
 }
 
-export function PosterArt({ imageUrl, startDate, daysAway, friends }: PosterArtProps) {
+export function PosterArt({
+  imageUrl,
+  startDate,
+  daysAway,
+  friends,
+  badge,
+  action,
+}: PosterArtProps) {
+  const corner = badge === undefined ? formatCountdown(daysAway) : badge
   const faces = friends.slice(0, MAX_FACES)
   const more = friends.length - faces.length
 
@@ -32,7 +46,8 @@ export function PosterArt({ imageUrl, startDate, daysAway, friends }: PosterArtP
           <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
         </div>
       )}
-      <span className="poster-art__countdown">{formatCountdown(daysAway)}</span>
+      {corner && <span className="poster-art__countdown">{corner}</span>}
+      {action && <span className="poster-art__action">{action}</span>}
       {faces.length > 0 && (
         <span className="poster-art__friends">
           <AvatarStack>

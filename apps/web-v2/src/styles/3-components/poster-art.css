@@ -57,6 +57,13 @@
   color: var(--ink-title);
 }
 
+.poster-art__action {
+  position: absolute;
+  top: var(--space-10);
+  right: var(--space-10);
+  z-index: 1;
+}
+
 .poster-art__friends {
   position: absolute;
   bottom: var(--space-12);

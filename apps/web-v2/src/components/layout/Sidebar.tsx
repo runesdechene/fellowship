@@ -26,7 +26,7 @@ const NAV_ITEMS: ReadonlyArray<{
   label: string
   Icon: typeof Telescope
 }> = [
-  { to: null, label: 'Explorer', Icon: Telescope },
+  { to: '/explorer', label: 'Explorer', Icon: Telescope },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
   { to: null, label: 'Communauté', Icon: Users },
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },

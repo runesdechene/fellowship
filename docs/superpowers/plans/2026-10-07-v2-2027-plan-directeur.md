@@ -85,13 +85,21 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   d’icônes de catégorie (elles arrivent avec l’Explorer, lot 5). Le mobile attend le châssis mobile
   (barre d’onglets en bas), qui n’existe pas encore dans la V2.
 
-### Lot 5 — Explorer  ☐
+### Lot 5 — Explorer  ☑ ordinateur (07/10/2026) · ☐ icônes de catégorie, distance en km, mobile
 - **Livre** : accueil éditorial (Où vont tes amis, Ajoutés récemment, Près de chez toi), recherche par
   mot (festivals + artisans), Où / Quand, catégories colorées, résultats ; étoile « Repérer »
   (horizon 6 mois en gratuit) ; cartes sans affiche (date en serif + icône de catégorie en filigrane).
 - **Cadres** : `2027 — Explorer`, `2027 — Explorer · résultats`.
 - **Base** : recherche plein texte ; code postal → position pour « Près de chez toi ».
 - **Dépend de** : lot 1.
+- **Tranché en route** : la recherche est un `ilike` sur le nom, la ville et le département
+  (festivals) et sur le nom, la ville et le métier (exposants), pas encore un plein texte. « Près
+  de chez toi » compare le département de l'enseigne : l'acteur n'a pas de coordonnées, et les
+  géocoder demanderait un service extérieur (à décider avec Uriel) — d'où l'absence de « à 24 km ».
+  Les rangées glissent à l'horizontale avec leurs flèches (exception assumée, comme la frise du
+  calendrier) ; pas de « Tout voir » tant qu'il n'y a pas d'écran où l'envoyer. L'étoile pose la
+  date en « Intéressé » (ou la retire) ; une date déjà engagée garde son étoile pleine. Les cartes
+  sans affiche n'ont pas l'icône de catégorie en filigrane : la V2 n'a pas encore ces icônes.
 
 ### Lot 6 — Vitrine d'un artisan  ☑ ordinateur, consultation (07/10/2026) · ☐ édition, QR, intégration, signaler, mobile
 - **Livre** : page publique (bannière, logo, Certifié = Pro, réseau, prochaines escales, tampons),

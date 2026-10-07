@@ -9,6 +9,8 @@ import {
   formatDateRange,
   formatMonthAbbr,
   formatMonthShort,
+  isRecent,
+  monthsAhead,
   stampYear,
   timeAgo,
   formatCountdown,
@@ -168,5 +170,20 @@ describe('timeAgo', () => {
   it('la veille : hier ; au-delà : en jours', () => {
     expect(timeAgo(new Date('2026-10-06T09:00:00'), now)).toBe('hier')
     expect(timeAgo(new Date('2026-10-03T09:00:00'), now)).toBe('4 j')
+  })
+})
+
+describe('monthsAhead', () => {
+  it('le premier jour du mois, N mois plus tard', () => {
+    expect(monthsAhead(new Date(2026, 9, 7), 1)).toEqual(new Date(2026, 10, 1))
+    expect(monthsAhead(new Date(2026, 9, 7), 12)).toEqual(new Date(2027, 9, 1))
+  })
+})
+
+describe('isRecent', () => {
+  const today = new Date('2026-10-07T12:00:00')
+  it('vrai dans les quatorze derniers jours', () => {
+    expect(isRecent('2026-10-01T09:00:00Z', today)).toBe(true)
+    expect(isRecent('2026-09-01T09:00:00Z', today)).toBe(false)
   })
 })

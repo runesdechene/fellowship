@@ -801,4 +801,22 @@
   --review-padding-top: var(--space-80);
   --review-form-width: 520px;
   --review-preview-width: 308px;
+
+  /* =========================================================================
+     EXPLORER — recherche, catégories, rangées et résultats (features/explorer)
+     ====================================================================== */
+  --search-bar-width: 908px;
+  --search-bar-height: 64px;
+  --search-submit-size: 44px;
+  --category-chip-height: 32px;
+  --rail-arrow-size: 28px;
+  --explore-card-width: 235px;
+  --explore-poster-height: 314px;
+  --exhibitor-card-min: 240px;
+  --exhibitor-logo-size: 66px;
+  --type-search-label: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-search-input: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-results-title: var(--weight-semibold) var(--size-26) / var(--leading-tight)
+    var(--family-sans);
 }

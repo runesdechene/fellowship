@@ -1,0 +1,463 @@
+/**
+ * QUOI     — les styles de l'Explorer (features/explorer) : l'en-tête, la barre de recherche, les
+ *            catégories, les rangées de cartes, les résultats et les cartes d'exposants.
+ * POURQUOI — une page d'affiches, comme le calendrier : la couleur vient des affiches et des
+ *            catégories, l'interface reste blanche et bordée.
+ * ATTENTION — les rangées glissent à l'horizontale (exception assumée, comme la frise du
+ *            calendrier) ; la page, elle, ne défile qu'à la verticale.
+ */
+
+.explorer {
+  padding: var(--calendar-padding-top) 0 var(--space-48) var(--page-gutter);
+}
+
+.explorer__head,
+.search-bar,
+.category-chips,
+.explorer__state,
+.results {
+  margin-right: var(--page-gutter);
+}
+
+.explorer__title {
+  font: var(--type-page-title);
+  color: var(--ink-title);
+}
+
+.explorer__subtitle {
+  margin-top: var(--space-8);
+  font: var(--type-page-subtitle);
+  color: var(--ink-soft);
+}
+
+.explorer__state {
+  margin-top: var(--space-32);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* --- La barre de recherche ---------------------------------------------- */
+.search-bar {
+  display: flex;
+  align-items: center;
+  max-width: var(--search-bar-width);
+  height: var(--search-bar-height);
+  margin-top: var(--space-32);
+  padding: 0 var(--space-6) 0 var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+}
+
+.search-bar__field {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 0;
+  padding: 0 var(--space-16);
+  cursor: text;
+}
+
+.search-bar__field + .search-bar__field {
+  border-left: 1px solid var(--line-card);
+}
+
+.search-bar__field--words {
+  flex: 1.4;
+  padding-left: 0;
+}
+
+.search-bar__icon {
+  flex: none;
+  color: var(--ink-title);
+}
+
+.search-bar__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.search-bar__label {
+  font: var(--type-search-label);
+  color: var(--ink-title);
+}
+
+.search-bar__input {
+  width: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font: var(--type-search-input);
+  color: var(--ink-title);
+}
+
+.search-bar__input::placeholder {
+  color: var(--ink-section-pale);
+}
+
+.search-bar__clear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--space-20);
+  height: var(--space-20);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.search-bar__submit {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--search-submit-size);
+  height: var(--search-submit-size);
+  border-radius: var(--radius-round);
+  background: var(--action-surface);
+  color: var(--action-ink);
+  cursor: pointer;
+}
+
+/* --- Les catégories -------------------------------------------------------- */
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-20);
+}
+
+.category-chip {
+  height: var(--category-chip-height);
+  padding: 0 var(--space-14);
+  border: 1px solid color-mix(in srgb, var(--tag-ink, var(--ink-soft)) 22%, transparent);
+  border-radius: var(--radius-round);
+  background: var(--tag-bg, var(--surface-chip-neutral));
+  font: var(--type-chip);
+  color: var(--tag-ink, var(--ink-title));
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.category-chip:hover {
+  opacity: 0.85;
+}
+
+.category-chip[aria-pressed='true'] {
+  border-color: var(--tag-ink, var(--ink-title));
+  outline: 1px solid var(--tag-ink, var(--ink-title));
+  outline-offset: -2px;
+}
+
+.category-chip--all[aria-pressed='true'] {
+  border-color: var(--action-surface);
+  outline: none;
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+/* --- Une rangée ------------------------------------------------------------ */
+.rail {
+  margin-top: var(--space-48);
+}
+
+.rail__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-right: var(--page-gutter);
+}
+
+.rail__title {
+  font: var(--type-section-title);
+  color: var(--ink-title);
+}
+
+.rail__subtitle {
+  margin-top: var(--space-4);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.rail__arrows {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.rail__arrow {
+  display: grid;
+  place-items: center;
+  width: var(--rail-arrow-size);
+  height: var(--rail-arrow-size);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.rail__track {
+  display: flex;
+  gap: var(--space-20);
+  margin-top: var(--space-16);
+  padding: 0 var(--page-gutter) var(--space-8) 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.rail__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- La carte -------------------------------------------------------------- */
+.explore-card {
+  --poster-art-height: var(--explore-poster-height);
+
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-10);
+  width: var(--explore-card-width);
+  scroll-snap-align: start;
+}
+
+.explore-card__link {
+  display: block;
+  transition: translate var(--duration-smooth) var(--ease-soft);
+}
+
+.explore-card__link:hover {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.explore-card__star {
+  position: absolute;
+  top: var(--space-10);
+  right: var(--space-10);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--rail-arrow-size);
+  height: var(--rail-arrow-size);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.explore-card__star--on svg {
+  fill: currentcolor;
+}
+
+.explore-card__star:disabled {
+  cursor: default;
+}
+
+.explore-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.explore-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.explore-card__name {
+  overflow: hidden;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.explore-card__chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-tag-badge);
+  color: var(--ink-title);
+}
+
+.explore-card__meta,
+.explore-card__goers {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.explore-card__goers b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+/* --- Les résultats --------------------------------------------------------- */
+.results {
+  margin-top: var(--space-40);
+}
+
+.results__title {
+  font: var(--type-results-title);
+  color: var(--ink-title);
+}
+
+.results__tabs {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-16);
+}
+
+.results__tab {
+  height: var(--category-chip-height);
+  padding: 0 var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.results__tab span {
+  margin-left: var(--space-4);
+  color: var(--ink-section-pale);
+}
+
+.results__tab[aria-pressed='true'] {
+  border-color: var(--action-surface);
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.results__section {
+  margin-top: var(--space-40);
+}
+
+.results__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-16);
+}
+
+.results__section-title {
+  font: var(--type-section-title);
+  color: var(--ink-title);
+}
+
+.results__section-title span {
+  margin-left: var(--space-6);
+  font: var(--type-page-subtitle);
+  color: var(--ink-section-pale);
+}
+
+.results__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-dossier-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.results__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--explore-card-width), 1fr));
+  gap: var(--space-32) var(--space-20);
+}
+
+.results__grid .explore-card {
+  width: auto;
+}
+
+.results__exhibitors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--exhibitor-card-min), 1fr));
+  gap: var(--space-20);
+}
+
+.exhibitor-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-16) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.exhibitor-card__identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.exhibitor-card__logo {
+  display: grid;
+  place-items: center;
+  width: var(--exhibitor-logo-size);
+  height: var(--exhibitor-logo-size);
+  margin-bottom: var(--space-8);
+  overflow: hidden;
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  font: var(--type-display-m);
+  color: var(--ink-title);
+}
+
+.exhibitor-card__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.exhibitor-card__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.exhibitor-card__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.exhibitor-card__follow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  height: var(--category-chip-height);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.exhibitor-card__follow[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--surface-chip-neutral);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-chip,
+  .explore-card__link {
+    transition: none;
+  }
+}

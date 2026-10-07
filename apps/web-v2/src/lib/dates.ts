@@ -155,3 +155,15 @@ export function timeAgo(date: Date, now: Date): string {
   if (days === 1) return 'hier'
   return `${days} j`
 }
+
+/** Le premier jour du mois, `months` mois après celui d'aujourd'hui : la fin d'une fenêtre. */
+export function monthsAhead(today: Date, months: number): Date {
+  return new Date(today.getFullYear(), today.getMonth() + months, 1)
+}
+
+const RECENT_DAYS = 14
+
+/** Ajouté il y a moins de quatorze jours : le badge « Nouveau ». */
+export function isRecent(createdAt: string, today: Date = new Date()): boolean {
+  return today.getTime() - new Date(createdAt).getTime() < RECENT_DAYS * 24 * HOUR
+}
