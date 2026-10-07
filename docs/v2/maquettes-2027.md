@@ -26,7 +26,8 @@
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
-| Landing publique | `2027 — Landing` | validé (photos de marché à fournir) |
+| Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
+| Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Mobile (tous les écrans) | — | à dessiner |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -75,6 +76,7 @@
 - [ ] **Cartes sans affiche** : grande date en serif + icône de la catégorie en filigrane (les icônes des tags existent en V1).
 - [ ] **Bilans** : vraie page « Mes bilans » (année, totaux, bénéfice par mois, tableau) ; le bilan devient une page ; « Ce qui a marché » saisissable (colonne `wins` déjà en base) ; tout s'enregistre seul ; bénéfice par jour.
 - [ ] **Tableau de bord — « Mes dossiers »** (gratuit, fonction plébiscitée) : une ligne par date à venir avec le statut du dossier et du paiement (montant versé, solde, échéance) ; remplace le bloc « À régler » actuel (`SettlementsSection`).
+- [ ] **Écrire un avis** (page, plus une fenêtre) : trois notes en étoiles (affluence, organisation, rentabilité), commentaire facultatif, « Qui voit ton nom ? » (mes amis exposants par défaut / personne), aperçu de l'avis tel que les autres le voient ; réservé à qui était inscrit à l'édition (garde de la V1, `ReviewForm.tsx`) ; les organisateurs ne voient jamais le nom.
 - [ ] **Création d'une date** : les doublons montrent le nombre d'exposants inscrits et s'ouvrent.
 - [ ] **Vitrine** : formulaire e-mail factice et incitation V1 retirés ; emplacement « Obtenir le badge Certifié » pour le propriétaire non Pro.
 
