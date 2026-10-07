@@ -620,9 +620,9 @@
   /* La question porte le corps d’un titre de page, et une mesure courte :
      au-delà de vingt-deux caractères par ligne elle cesse de se lire comme
      une question et redevient un paragraphe. */
-  --question-measure: 22ch;
-  --type-question: var(--weight-semibold) var(--size-22) / var(--leading-tight) var(--family-sans);
-  --tracking-question: var(--tracking-tight);
+  --question-measure: none;
+  --type-question: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
+  --tracking-question: normal;
   --type-question-body: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
     var(--family-sans);
 

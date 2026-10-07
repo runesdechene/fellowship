@@ -199,17 +199,23 @@
 .discussion__fil {
   display: flex;
   flex-direction: column;
+  padding: 0 var(--dossier-card-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--dossier-card-radius);
+  background: var(--surface-card);
+}
+
+/* Langage 2027 : le fil est une carte, chaque question une ligne de la carte. */
+.question {
+  padding: var(--space-16) 0;
 }
 
 .question + .question {
-  margin-top: var(--discussion-gap);
-  padding-top: var(--discussion-gap);
-  box-shadow: inset 0 1px 0 var(--border-menu);
+  border-top: 1px solid var(--line-card);
 }
 
-/* LA QUESTION EST LE CONTENU. Elle porte le corps d'un titre de page et une
-   mesure courte : au-delà, elle cesse de se lire comme une question et
-   redevient un paragraphe. */
+/* La question se lit comme un message (langage 2027) : texte courant, pleine
+   largeur de la carte. Elle portait le corps d'un titre de page avant le 07/10/2026. */
 .question__titre {
   max-width: var(--question-measure);
   font: var(--type-question);

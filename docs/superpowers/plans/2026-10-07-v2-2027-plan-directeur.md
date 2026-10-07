@@ -53,7 +53,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   prochaine action » (bilan à remplir) est gardée bien qu'absente de la maquette : à trancher par
   Uriel.
 
-### Lot 3 — Fiche événement  ☐
+### Lot 3 — Fiche événement  ☑ ordinateur (07/10/2026) · ☐ rappel de clôture (Pro), mobile
 - **Livre** : statut en contrôle segmenté (« Dossier envoyé »), **Mon dossier** (paiement détaillé),
   **Pour candidater** (date limite, comment, dossier, contact, ce que j'ai envoyé), **avis** (note globale
   gratuite, détail Pro, extraits à l'identité protégée), **discussions** au nouveau style, fixer un
@@ -61,6 +61,17 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Cadres** : `2027 — Fiche événement`, `2027 — Écrire un avis`.
 - **Base** : « ce que j'ai envoyé » par exposant ; vérifier les colonnes candidature existantes.
 - **Dépend de** : lots 1-2.
+- **Tranché en route** : le privé d'un exposant sur une date (objectif de CA, acompte, échéance
+  du solde, ce qu'il a envoyé) vit dans une table neuve `participation_dossiers` (migration
+  `20261007200000`, appliquée) — pas sur `participations`, dont la lecture est publique pour une
+  date « inscrit ». Recliquer l'étape choisie du statut retire la date (« Je n'y vais pas » n'est
+  plus un bouton). « Je paie ma place / On me paie un cachet » reste, en petit, sous le paiement :
+  absent de la maquette, mais sans lui un cachet ne se saisit plus. Le détail des avis porte le
+  badge Pro mais reste visible à tous jusqu'au lot 7. Le retour reste dans la barre du haut (règle
+  « sortir d'un écran est du châssis ») alors que la maquette le pose au-dessus du titre :
+  contradiction à trancher par Uriel. Les discussions passent en carte 2027, mais la signature
+  reste sous la question (la maquette la pose au-dessus). Le titre d'« Écrire un avis » est
+  « Alors, c'était comment ? » : « Alors, ces Aventuriales ? » ne se généralise pas à tous les noms.
 
 ### Lot 4 — Calendrier  ☑ ordinateur (07/10/2026) · ☐ mobile
 - **Livre** : frise horizontale de mois, cartes-affiches, filtres Mes amis / Intéressé, compagnons
