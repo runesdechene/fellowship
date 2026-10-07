@@ -9,3 +9,5 @@ L'écran Calendrier (`/calendrier`) : la frise horizontale des douze prochains m
 
 La logique pure (rangement par mois, plages de dates, phrase d'en-tête) vit dans `lib/calendar.ts`.
 Spec : `docs/superpowers/specs/2026-10-07-calendrier-v2-design.md`. Maquette : cadre `2027 — Calendrier`.
+- `MonthNav.tsx` — la navigation des douze mois : une fenêtre qu'on tire à la souris, la frise suit en
+  direct puis se cale sur un mois.

@@ -68,3 +68,31 @@ export function groupCompanions<F extends { id: string }>(
   }
   return grouped
 }
+
+/**
+ * La fenêtre de la navigation des mois : où commence la part visible de la frise et quelle
+ * largeur elle occupe, en fractions de la frise entière (0 à 1).
+ */
+export function navWindow(
+  scrollLeft: number,
+  scrollWidth: number,
+  clientWidth: number,
+): { start: number; size: number } {
+  if (scrollWidth <= clientWidth) return { start: 0, size: 1 }
+  return { start: scrollLeft / scrollWidth, size: clientWidth / scrollWidth }
+}
+
+/**
+ * Le défilement de la frise quand on tire la fenêtre : `pointer` est la position du pointeur et
+ * `grab` l'endroit où la fenêtre a été saisie, en fractions de la navigation.
+ */
+export function scrollFromPointer(
+  pointer: number,
+  grab: number,
+  scrollWidth: number,
+  clientWidth: number,
+): number {
+  const size = clientWidth / scrollWidth
+  const start = Math.min(Math.max(pointer - grab, 0), 1 - size)
+  return start * scrollWidth
+}

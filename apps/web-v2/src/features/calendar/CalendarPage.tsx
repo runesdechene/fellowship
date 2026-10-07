@@ -7,12 +7,12 @@
  *            de scroll interne » (décision du 07/10/2026). Les filtres sont retenus sur l'appareil.
  */
 import { Star, Users } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { calendarHeadline } from '@/lib/calendar'
-import { formatMonthAbbr } from '@/lib/dates'
+import { calendarHeadline, navWindow, scrollFromPointer } from '@/lib/calendar'
 import { MonthColumn } from './MonthColumn'
+import { MonthNav } from './MonthNav'
 import { useCalendar } from './useCalendar'
 
 const FRIENDS_KEY = 'flw-calendrier-amis'
@@ -69,7 +69,8 @@ export function CalendarPage() {
   const [showInterested, toggleInterested] = useStoredToggle(INTERESTED_KEY, false)
   const [params, setParams] = useSearchParams()
   const frieze = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(0)
+  const [view, setView] = useState({ start: 0, size: 1 })
+  const [dragging, setDragging] = useState(false)
   const wanted = params.get('mois')
   const last = months[months.length - 1]
 
@@ -87,23 +88,36 @@ export function CalendarPage() {
     if (!loading && wanted) scrollToMonth(wanted, false)
   }, [loading, wanted, scrollToMonth])
 
-  function onScroll() {
+  /** La fenêtre de la navigation suit la frise, au pixel près. */
+  const measure = useCallback(() => {
     const el = frieze.current
-    const first = el?.firstElementChild
-    if (!el || !(first instanceof HTMLElement)) return
-    const step = first.offsetWidth + parseFloat(getComputedStyle(el).columnGap || '0')
-    setVisible(Math.round(el.scrollLeft / step))
-  }
+    if (el) setView(navWindow(el.scrollLeft, el.scrollWidth, el.clientWidth))
+  }, [])
+
+  // Une fois les mois posés, et à chaque changement de taille de la fenêtre du navigateur.
+  useEffect(() => {
+    if (loading) return
+    measure()
+    window.addEventListener('resize', measure)
+    return () => {
+      window.removeEventListener('resize', measure)
+    }
+  }, [loading, measure])
 
   function pick(key: string) {
     setParams({ mois: key }, { replace: true })
     scrollToMonth(key, true)
   }
 
-  const max = Math.max(
-    1,
-    ...months.map((m) => m.dates.filter((d) => d.status !== 'interesse').length),
-  )
+  /** Après un glisser : la frise se cale, en glissant, sur le mois le plus proche. */
+  function settle() {
+    const el = frieze.current
+    const first = el?.firstElementChild
+    if (!el || !(first instanceof HTMLElement)) return
+    const step = first.offsetWidth + parseFloat(getComputedStyle(el).columnGap || '0')
+    const month = months[Math.round(el.scrollLeft / step)]
+    if (month) pick(month.key)
+  }
 
   return (
     <div className="calendar">
@@ -125,34 +139,24 @@ export function CalendarPage() {
           </div>
         </div>
 
-        <nav className="month-nav" aria-label="Aller à un mois">
-          {months.map((month, index) => {
-            const n = month.dates.filter((d) => d.status !== 'interesse').length
-            const inView = index >= visible && index < visible + 4
-            return (
-              <button
-                key={month.key}
-                type="button"
-                className={
-                  inView ? 'month-nav__month month-nav__month--in-view' : 'month-nav__month'
-                }
-                onClick={() => {
-                  pick(month.key)
-                }}
-                aria-label={`${month.label} : ${n} ${n === 1 ? 'date' : 'dates'}`}
-              >
-                <span
-                  className={n > 0 ? 'month-nav__bar' : 'month-nav__bar month-nav__bar--empty'}
-                  style={{ '--bar-ratio': String(n / max) } as CSSProperties}
-                />
-                <span className="month-nav__label">{formatMonthAbbr(month.date)}</span>
-              </button>
-            )
-          })}
-        </nav>
+        <MonthNav
+          months={months}
+          view={view}
+          onDrag={(pointer, grab) => {
+            const el = frieze.current
+            if (el) el.scrollLeft = scrollFromPointer(pointer, grab, el.scrollWidth, el.clientWidth)
+          }}
+          onPick={pick}
+          onDragging={setDragging}
+          onSettle={settle}
+        />
       </header>
 
-      <div className="calendar__frieze" ref={frieze} onScroll={onScroll}>
+      <div
+        className={dragging ? 'calendar__frieze calendar__frieze--dragging' : 'calendar__frieze'}
+        ref={frieze}
+        onScroll={measure}
+      >
         {months.map((month, index) => (
           <MonthColumn
             key={month.key}

@@ -1,12 +1,19 @@
 /**
  * QUOI     — tests de lib/calendar.ts : rangement des dates par mois, comptes,
- *            phrase d'en-tête, regroupement des compagnons.
+ *            phrase d'en-tête, regroupement des compagnons, fenêtre de la navigation des mois.
  * POURQUOI — la logique du calendrier se teste ici, sans navigateur ; le fuseau est épinglé sur
  *            Europe/Paris par la configuration des tests.
  */
 import { describe, expect, it } from 'vitest'
 import { monthsWindow } from './dates'
-import { bucketByStartMonth, calendarHeadline, countLabel, groupCompanions } from './calendar'
+import {
+  bucketByStartMonth,
+  calendarHeadline,
+  countLabel,
+  groupCompanions,
+  navWindow,
+  scrollFromPointer,
+} from './calendar'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -78,5 +85,27 @@ describe('groupCompanions', () => {
       { eventId: 'e1', friend: { id: 'g', name: 'Gautier', avatarUrl: null } },
     ]
     expect(groupCompanions(rows, new Set()).get('e1')).toHaveLength(1)
+  })
+})
+
+describe('navWindow', () => {
+  it('la fenêtre a la part visible de la frise, à sa place', () => {
+    expect(navWindow(0, 4000, 1000)).toEqual({ start: 0, size: 0.25 })
+    expect(navWindow(1500, 4000, 1000)).toEqual({ start: 0.375, size: 0.25 })
+  })
+
+  it('une frise qui tient entière : la fenêtre couvre tout', () => {
+    expect(navWindow(0, 800, 1000)).toEqual({ start: 0, size: 1 })
+  })
+})
+
+describe('scrollFromPointer', () => {
+  it('la frise suit la fenêtre saisie', () => {
+    expect(scrollFromPointer(0.5, 0.125, 4000, 1000)).toBe(1500)
+  })
+
+  it('la fenêtre reste dans la navigation', () => {
+    expect(scrollFromPointer(0.05, 0.125, 4000, 1000)).toBe(0)
+    expect(scrollFromPointer(0.99, 0.125, 4000, 1000)).toBe(3000)
   })
 })

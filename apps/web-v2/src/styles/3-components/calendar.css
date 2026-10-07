@@ -85,9 +85,30 @@
 
 /* --- Navigation des douze mois -------------------------------------------- */
 .month-nav {
+  position: relative;
   display: flex;
   align-items: flex-end;
   height: var(--calendar-nav-height);
+  cursor: grab;
+  user-select: none;
+  /* Le glisser horizontal est à nous ; le défilement vertical de la page reste au navigateur. */
+  touch-action: pan-y;
+}
+
+.calendar:has(.calendar__frieze--dragging) .month-nav {
+  cursor: grabbing;
+}
+
+/* La fenêtre : la part de l'année visible dans la frise. Elle suit le défilement au pixel près,
+   d'où l'absence de transition — c'est la frise qui porte le mouvement. */
+.month-nav__window {
+  position: absolute;
+  inset-block: 0;
+  left: calc(var(--window-start, 0) * 100%);
+  width: calc(var(--window-size, 1) * 100%);
+  border-radius: var(--radius-sm);
+  background: var(--surface-chip-neutral);
+  pointer-events: none;
 }
 
 .month-nav__month {
@@ -99,13 +120,8 @@
   width: var(--space-40);
   height: 100%;
   padding-bottom: var(--space-4);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-out);
-}
-
-.month-nav__month--in-view {
-  background: var(--surface-chip-neutral);
+  position: relative;
+  cursor: inherit;
 }
 
 /* La hauteur suit le nombre de dates du mois, entre un trait et la colonne pleine. */
@@ -140,6 +156,11 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+}
+
+/* Pendant un glisser, l'aimantation lâcherait la frise à chaque mois : elle revient au relâcher. */
+.calendar__frieze--dragging {
+  scroll-snap-type: none;
 }
 
 .calendar__frieze::-webkit-scrollbar {
@@ -297,8 +318,7 @@
 @media (prefers-reduced-motion: reduce) {
   .poster-card,
   .calendar-toggle__switch,
-  .calendar-toggle__switch::after,
-  .month-nav__month {
+  .calendar-toggle__switch::after {
     transition: none;
   }
 
