@@ -12,7 +12,13 @@ export default defineConfig({
     // startOfDay) n'existent que pour éviter les décalages UTC. Sur un runner
     // en UTC, leurs tests de régression passeraient contre le bug même
     // qu'ils surveillent. Europe/Paris = le fuseau des utilisateurs.
-    env: { TZ: 'Europe/Paris' },
+    // Les tests ne dépendent jamais des vraies clés : supabase.ts lève sans elles, et le
+    // .env vit à la racine du monorepo, hors de portée de la CI.
+    env: {
+      TZ: 'Europe/Paris',
+      VITE_SUPABASE_URL: 'https://test.invalid',
+      VITE_SUPABASE_ANON_KEY: 'test-placeholder',
+    },
   },
   resolve: {
     alias: {
