@@ -23,7 +23,7 @@
 | Offre Pro | `2027 — Offre Pro` | dessiné |
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` | dessiné |
-| Page d'un organisateur | — | à dessiner |
+| Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Mobile (tous les écrans) | — | à dessiner |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -45,7 +45,7 @@
 - [ ] **Recherches sauvegardées** (alerte Pro).
 - [ ] **Lien entre les éditions d'un même festival**, pour l'alerte « nouvelle édition » — rien ne relie aujourd'hui l'édition 2026 à 2027.
 - [ ] **Suppression de compte réelle** : en V1, « Supprimer mon compte » déconnecte seulement (problème RGPD).
-- [ ] À vérifier : les **organisateurs** existent-ils comme type de compte (`entity_type`) ? Sinon, la section « Organisateurs » des résultats et la page organisateur demandent un modèle.
+- [x] Les **organisateurs** ne peuvent pas encore créer de compte (Uriel, 07/10/2026) : pas de page organisateur, et la section « Organisateurs » des résultats est masquée dans la maquette.
 - [ ] À vérifier : les **événements récurrents** (« tous les dimanches ») n'existent sans doute pas — la carte de la maquette disparaît dans ce cas.
 
 ## Le Pro (décidé le 07/10/2026)
@@ -66,7 +66,7 @@
 - [ ] **Navigation** : Explorer · Calendrier · Communauté · Tableau de bord ; « Activité du réseau » en bas de la barre (gratuite).
 - [ ] **Activité du réseau / Communauté** : ajouter les arrivées (« X vient de rejoindre Fellowship ») ; les avis respectent l'**identité protégée** (« Un exposant a noté… » sauf pour les amis professionnels).
 - [ ] **Fiche** : contrôle segmenté du statut (Inscrit en dégradé) ; « Fixer un objectif » ; rappel de clôture (Pro) ; état vide des discussions.
-- [ ] **Explorer** : recherche par mot (festivals, artisans, organisateurs), barre Où / Quand, catégories en puces, rangées éditoriales ; « Près de chez toi » lit le code postal du profil.
+- [ ] **Explorer** : recherche par mot (festivals et artisans ; pas d'organisateurs pour l'instant), barre Où / Quand, catégories en puces, rangées éditoriales ; « Près de chez toi » lit le code postal du profil.
 - [ ] **Cartes sans affiche** : grande date en serif + icône de la catégorie en filigrane (les icônes des tags existent en V1).
 - [ ] **Bilans** : vraie page « Mes bilans » (année, totaux, bénéfice par mois, tableau) ; le bilan devient une page ; « Ce qui a marché » saisissable (colonne `wins` déjà en base) ; tout s'enregistre seul ; bénéfice par jour.
 - [ ] **Création d'une date** : les doublons montrent le nombre d'exposants inscrits et s'ouvrent.
