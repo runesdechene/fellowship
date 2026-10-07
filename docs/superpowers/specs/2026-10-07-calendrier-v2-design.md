@@ -46,7 +46,7 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
   abrégé, dans la couleur de la première catégorie.
 - **Mois vide** : carte en pointillés « Mois libre · Trouver une date en <mois> → ».
 - **Compagnons** (bas de colonne) : les dates du mois où vont des amis **sans** l'artisan —
-  avatar, « Gautier y va », « Hellfest Winter · 14 nov. ».
+  avatar, « Gautier va à » (le nom en gras), puis « Hellfest Winter · 14 nov. » en gras 13.
 - Une date à cheval sur deux mois va dans le mois où elle **commence**.
 - Survol : la carte se soulève légèrement (transition des jetons, `prefers-reduced-motion`
   respecté). Clic : la fiche événement.
@@ -104,3 +104,6 @@ Rien de neuf en base : tout existe et se lit sous les policies en place.
 1. **« Dossier en cours » (code) ou « Dossier envoyé » (maquette de la fiche)** : les deux
    libellés coexistent aujourd'hui. Le calendrier prendra celui qu'Uriel choisit, partout.
 2. **Les dates « Intéressé » dans le calendrier** (voir Les données) : oui par défaut.
+3. **« va à » devant un nom de festival** : le code ne connaît pas l'article (« au Marché de Noël »,
+   « à la Fête… », « aux Médiévales »). « va à » partout fera parfois faux ; « y va » ne se trompe
+   jamais. À trancher.
