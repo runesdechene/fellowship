@@ -7,8 +7,12 @@
  *            et seulement à l'horizontale.
  */
 
+/* Pas de marge à gauche sur la page : la frise part du bord de la barre latérale, pour que les
+   mois y filent en glissant (demande d'Uriel, 08/10/2026). La marge est portée par chaque bloc. */
 .calendar {
-  padding: var(--calendar-padding-top) 0 var(--space-48) var(--page-gutter);
+  --calendar-gutter: var(--page-gutter);
+
+  padding: var(--calendar-padding-top) 0 var(--space-48);
 }
 
 /* --- En-tête --------------------------------------------------------------- */
@@ -17,7 +21,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-32);
-  padding-right: var(--page-gutter);
+  padding: 0 var(--calendar-gutter);
 }
 
 .calendar__title {
@@ -152,8 +156,11 @@
   align-items: flex-start;
   gap: var(--calendar-column-gap);
   margin-top: var(--space-40);
-  padding: 0 var(--page-gutter) var(--space-24) 0;
+  /* La marge est À L'INTÉRIEUR de la frise : au repos, le premier mois s'aligne sous le titre ;
+     en glissant, les mois passent jusqu'au bord. `scroll-padding` cale l'aimantation sur la marge. */
+  padding: 0 var(--calendar-gutter) var(--space-24);
   overflow-x: auto;
+  scroll-padding-inline: var(--calendar-gutter);
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
 }
@@ -329,12 +336,13 @@
 
 @media (width <= 760px) {
   .calendar {
-    padding: var(--mobile-padding-top) 0 var(--space-40) var(--mobile-gutter);
+    --calendar-gutter: var(--mobile-gutter);
+
+    padding: var(--mobile-padding-top) 0 var(--space-40);
   }
 
   .calendar__head {
     flex-direction: column;
-    padding-right: var(--mobile-gutter);
   }
 
   .month-nav {

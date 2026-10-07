@@ -7,7 +7,7 @@
  *            de scroll interne » (décision du 07/10/2026). Les filtres sont retenus sur l'appareil.
  */
 import { Star, Users } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { calendarHeadline, navWindow, scrollFromPointer } from '@/lib/calendar'
@@ -79,17 +79,24 @@ export function CalendarPage() {
     (key: string, smooth: boolean) => {
       const column = document.getElementById(`mois-${key}`)
       if (!column || !frieze.current) return
+      // La marge intérieure de la frise : le mois s'aligne sur elle, sous le titre.
+      const gutter = parseFloat(getComputedStyle(frieze.current).paddingLeft) || 0
       frieze.current.scrollTo({
-        left: column.offsetLeft - frieze.current.offsetLeft,
+        left: column.offsetLeft - frieze.current.offsetLeft - gutter,
         behavior: smooth ? 'smooth' : 'auto',
       })
     },
     [frieze],
   )
 
-  // À l'arrivée, la frise se cale sur le mois demandé par l'adresse.
+  // À l'arrivée, et à l'arrivée SEULEMENT, la frise se cale d'un coup sur le mois de l'adresse.
+  // Ensuite, c'est le clic qui écrit l'adresse : se recaler à chaque changement écrasait son
+  // glissement animé par un saut (bug signalé par Uriel le 08/10/2026).
+  const arrived = useRef(false)
   useEffect(() => {
-    if (!loading && wanted) scrollToMonth(wanted, false)
+    if (loading || arrived.current) return
+    arrived.current = true
+    if (wanted) scrollToMonth(wanted, false)
   }, [loading, wanted, scrollToMonth])
 
   /** La fenêtre de la navigation suit la frise, au pixel près. */
