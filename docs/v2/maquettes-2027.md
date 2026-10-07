@@ -82,6 +82,8 @@
 - [ ] Landing : l'annuaire est cherchable **sans compte** (accueil public, indexable) ; la connexion reste la porte.
 - [ ] Les chiffres du mur d'affiches (« 1 200 festivals · 3 400 exposants ») sont **inventés** : à lire en base, en direct.
 - [ ] La page d'accueil actuelle (« Parchemin », derrière `/?v2=1`) est remplacée par la landing « 2027 ».
+- [ ] **Photos de marché à fournir** (Uriel) : derrière l'accroche (très atténuée) et derrière le bandeau Organisateurs. Les images actuelles sont des affiches floutées, provisoires.
+- [ ] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
 
 ## Points ouverts
 
