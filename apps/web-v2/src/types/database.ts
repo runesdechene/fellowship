@@ -1,3 +1,8 @@
+/**
+ * QUOI     — les alias de types de la base (lignes, énumérations) et les types d'identité (Actor).
+ * POURQUOI — les écrans importent des noms lisibles d'ici, jamais les chemins profonds de
+ *            types/supabase.ts.
+ */
 import type { Database } from './supabase'
 
 export type UserRow = Database['public']['Tables']['users']['Row']
