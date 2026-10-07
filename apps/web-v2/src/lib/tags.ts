@@ -40,12 +40,10 @@ export async function fetchTags(): Promise<TagRow[]> {
     .select('name, slug, bg_color, text_color')
     .order('sort_order', { ascending: true })
 
-  if (error) {
-    console.warn('tags:', error.message)
-    return []
-  }
+  // Sans catégories, l'atelier reste utilisable : on n'en propose simplement aucune.
+  if (error) return []
 
-  return (data ?? []).map((row) => ({
+  return data.map((row) => ({
     name: row.name,
     slug: row.slug,
     bgColor: row.bg_color,

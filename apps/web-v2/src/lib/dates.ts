@@ -6,8 +6,9 @@
 
 /** Convertit une date SQL « AAAA-MM-JJ » en Date locale à minuit. */
 export function parseSqlDate(value: string): Date {
-  const [year, month, day] = value.split('-').map(Number)
-  return new Date(year, month - 1, day)
+  // Une date-heure SANS fuseau est lue en heure locale (norme ECMAScript) — contrairement à
+  // « AAAA-MM-JJ » seule, lue en UTC, qui décale d'un jour.
+  return new Date(`${value}T00:00:00`)
 }
 
 /** Ramène une date à minuit, pour comparer des jours et non des instants. */

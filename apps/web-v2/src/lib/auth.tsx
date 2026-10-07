@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select('*')
       .eq('actor_id', authUid)
       .maybeSingle()
-    setPerson((personRow as UserRow) ?? null)
+    setPerson(personRow)
 
     // Le TRI est indispensable : sans lui, Postgres rend les lignes dans un
     // ordre arbitraire qui peut changer d'un appel à l'autre. Comme l'acteur

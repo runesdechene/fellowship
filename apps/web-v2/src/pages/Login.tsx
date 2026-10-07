@@ -53,7 +53,7 @@ export function Login() {
           <>
             <h1 className="login__title">Connexion</h1>
             <p className="login__hint">On t’envoie un code à six chiffres.</p>
-            <form className="login__form" onSubmit={handleEmail}>
+            <form className="login__form" onSubmit={(event) => void handleEmail(event)}>
               <input
                 className="login__input"
                 type="email"
@@ -72,7 +72,7 @@ export function Login() {
           <>
             <h1 className="login__title">Ton code</h1>
             <p className="login__hint">Envoyé à {email}</p>
-            <form className="login__form" onSubmit={handleCode}>
+            <form className="login__form" onSubmit={(event) => void handleCode(event)}>
               <input
                 className="login__input"
                 inputMode="numeric"

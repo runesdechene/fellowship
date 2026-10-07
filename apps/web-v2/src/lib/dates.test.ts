@@ -63,10 +63,10 @@ describe('monthsWindow', () => {
   it('démarre au mois courant et enchaîne les suivants', () => {
     const slots = monthsWindow(12, new Date(2026, 7, 16))
     expect(slots).toHaveLength(12)
-    expect(slots[0].label).toBe('Août')
-    expect(slots[0].key).toBe('2026-08')
-    expect(slots[1].label).toBe('Septembre')
-    expect(slots[11].key).toBe('2027-07')
+    expect(slots[0]?.label).toBe('Août')
+    expect(slots[0]?.key).toBe('2026-08')
+    expect(slots[1]?.label).toBe('Septembre')
+    expect(slots[11]?.key).toBe('2027-07')
   })
 })
 

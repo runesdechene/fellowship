@@ -282,7 +282,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         return
       }
 
-      const rows = ((data ?? []) as unknown as ParticipationWithEvent[]).filter(
+      const rows = (data as unknown as ParticipationWithEvent[]).filter(
         (row): row is ParticipationWithEvent & { events: EventRow } => Boolean(row.events),
       )
 
@@ -291,6 +291,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
         rows.map((row) => row.event_id),
       )
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (cancelled) return
 
       const built = rows
@@ -312,6 +313,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       const [{ reports, seasonNet, seasonRevenue, pendingReport }, settlements] = await Promise.all(
         [fetchReports(currentActorId, todayIso), fetchSettlements(currentActorId, built)],
       )
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (cancelled) return
 
       setDates(built)

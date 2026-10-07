@@ -98,7 +98,7 @@ async function fetchThreads(eventId: string): Promise<Thread[]> {
 
   if (error) throw new Error(error.message)
 
-  const threadRows = (rows ?? []) as ThreadRow[]
+  const threadRows = rows as ThreadRow[]
   if (threadRows.length === 0) return []
 
   const { data: replyRowsRaw } = await db
@@ -190,6 +190,7 @@ export function useEventThreads(
         if (cancelled) return
         setError('La discussion n’a pas pu être chargée.')
       }
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (!cancelled) setLoading(false)
     }
 

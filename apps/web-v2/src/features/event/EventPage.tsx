@@ -244,7 +244,7 @@ export function EventPage() {
                 </span>
                 {friends.length === 1 ? (
                   <span>
-                    <b>{friends[0].name}</b> y sera aussi
+                    <b>{friends[0]?.name}</b> y sera aussi
                   </span>
                 ) : (
                   <span>

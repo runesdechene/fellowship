@@ -54,7 +54,9 @@ export function useTransitionNavigate() {
 
   return useCallback(
     (to: To) => {
-      transition('page', () => navigate(to))
+      transition('page', () => {
+        void navigate(to)
+      })
     },
     [navigate, transition],
   )

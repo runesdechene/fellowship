@@ -18,9 +18,6 @@ export function SeasonChart({ months }: { months: MonthBucket[] }) {
     <div className="season-chart">
       {months.map((month) => {
         const ratio = month.count / max
-        const style = {
-          '--bar-height': `calc(var(--chart-bar-min) + (var(--chart-bar-max) - var(--chart-bar-min)) * ${ratio})`,
-        } as CSSProperties
 
         return (
           <div
@@ -31,7 +28,14 @@ export function SeasonChart({ months }: { months: MonthBucket[] }) {
                 : 'season-chart__column'
             }
           >
-            <div className="season-chart__bar" style={style}>
+            <div
+              className="season-chart__bar"
+              style={
+                {
+                  '--bar-height': `calc(var(--chart-bar-min) + (var(--chart-bar-max) - var(--chart-bar-min)) * ${ratio})`,
+                } as CSSProperties
+              }
+            >
               <span className="season-chart__value">{month.count}</span>
             </div>
             <span className="season-chart__month">{month.label}</span>

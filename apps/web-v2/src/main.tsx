@@ -9,7 +9,10 @@ import { App } from './App'
 import { AuthProvider } from './lib/auth'
 import './styles/index.css'
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')
+if (!root) throw new Error('index.html doit contenir #root')
+
+createRoot(root).render(
   <StrictMode>
     <BrowserRouter basename="/v2">
       <AuthProvider>

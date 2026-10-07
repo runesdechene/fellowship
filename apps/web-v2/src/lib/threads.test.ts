@@ -94,7 +94,7 @@ describe('les tris', () => {
 
   it('montre les questions les plus récentes d’abord', () => {
     const threads = [{ createdAt: '2026-08-01T10:00:00Z' }, { createdAt: '2026-08-05T10:00:00Z' }]
-    expect(sortThreads(threads)[0].createdAt).toBe('2026-08-05T10:00:00Z')
+    expect(sortThreads(threads)[0]?.createdAt).toBe('2026-08-05T10:00:00Z')
   })
 })
 

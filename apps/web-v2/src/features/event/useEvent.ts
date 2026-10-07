@@ -195,6 +195,7 @@ export function useEvent(
         fetchFriendsByEvent(actorId, [currentEventId]),
       ])
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (cancelled) return
 
       const ledger = (ledgerRows ?? []) as EventLedgerLine[]
@@ -208,7 +209,7 @@ export function useEvent(
         past: daysUntil(endDate, today) < 0,
         status: participation?.status ?? null,
         paymentStatus: participation?.payment_status ?? null,
-        paymentOrientation: (participation?.payment_orientation as PaymentOrientation) ?? 'payeur',
+        paymentOrientation: (participation?.payment_orientation ?? 'payeur') as PaymentOrientation,
         confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
         friends: friendsByEvent.get(currentEventId) ?? [],
         tagStyles,

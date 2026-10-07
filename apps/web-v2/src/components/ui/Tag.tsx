@@ -19,18 +19,18 @@ import type { TagStyle } from '@/lib/tags'
  * événement — la pastille retombe sur le neutre plutôt que de disparaître.
  */
 export function Tag({ name, style }: { name: string; style?: TagStyle }) {
-  const colors = style
-    ? ({
-        '--tag-bg': style.bgColor,
-        '--tag-ink': style.textColor,
-      } as CSSProperties)
-    : undefined
-
   // Sa propre classe, jamais celle de l'atelier : la-bas un tag se CLIQUE
   // (32 px de haut, en gras), ici il DECRIT. Reutiliser `.tag` avait ramene
   // le gabarit du bouton sur la fiche.
   return (
-    <span className="tag-badge" style={colors}>
+    <span
+      className="tag-badge"
+      style={
+        style
+          ? ({ '--tag-bg': style.bgColor, '--tag-ink': style.textColor } as CSSProperties)
+          : undefined
+      }
+    >
       {style?.label ?? name}
     </span>
   )
