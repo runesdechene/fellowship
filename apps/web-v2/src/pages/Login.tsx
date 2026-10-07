@@ -41,7 +41,7 @@ export function Login() {
   return (
     <div className="login">
       <div className="login__card">
-        <img className="login__logo" src="/logo.png" alt="Fellowship" />
+        <img className="login__logo" src={`${import.meta.env.BASE_URL}logo.png`} alt="Fellowship" />
 
         {step === 'email' ? (
           <>

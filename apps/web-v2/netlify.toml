@@ -1,0 +1,10 @@
+# Site fellowship-web-v2 — joint par la V1 via la redirection /v2/* (apps/web/netlify.toml).
+# Il sert dist/ à sa racine ; tout chemin inconnu revient à index.html (le routeur décide).
+[build]
+  command = "pnpm build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

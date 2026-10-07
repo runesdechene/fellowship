@@ -5,6 +5,16 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# V2 en construction (apps/web-v2) : même origine que la V1, donc même session.
+# Le site V2 publie dist/ à sa racine avec base /v2/ — la redirection retire /v2.
+# ATTENTION — pas de règle « /v2 → /v2/ » : chez RdC elle bouclait (30/09/2026).
+# /v2/* couvre /v2 et /v2/. Elle doit rester AVANT le SPA fallback (première règle qui gagne).
+[[redirects]]
+  from = "/v2/*"
+  to = "https://fellowship-web-v2.netlify.app/:splat"
+  status = 200
+  force = true
+
 # SPA fallback - toutes les routes vers index.html
 [[redirects]]
   from = "/*"

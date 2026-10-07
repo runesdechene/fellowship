@@ -9,6 +9,8 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Le .env vit à la racine du monorepo, partagé avec la V2.
+  envDir: path.resolve(__dirname, '../..'),
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
@@ -51,7 +53,9 @@ export default defineConfig({
         // fraîches depuis le réseau, jamais le shell précaché du SW.
         //  - /:slug/embed : sinon le shell racine porte `frame-ancestors 'none'` → iframe bloquée.
         //  - /e/:slug & /evenement/:id : liens partagés/embed → éviter de servir une version périmée.
-        navigateFallbackDenylist: [/\/embed(?:$|\?)/, /\/e\//, /\/evenement\//],
+        //  - /v2 : la V2, servie par son propre site sous la même origine. Sans cette
+        //    exclusion, ce service worker répondrait par le shell de la V1.
+        navigateFallbackDenylist: [/\/embed(?:$|\?)/, /\/e\//, /\/evenement\//, /^\/v2(\/|$)/],
       },
     }),
   ],
