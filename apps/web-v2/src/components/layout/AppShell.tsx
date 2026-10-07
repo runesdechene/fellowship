@@ -1,3 +1,9 @@
+/**
+ * QUOI     — la coquille de tout écran connecté : barre latérale, barre du haut, contenu, mur d'affiche.
+ * POURQUOI — elle porte le PageChromeProvider : la page (enfant) déclare son décor, la barre du
+ *            haut et le mur (frères) le rendent. Elle garde aussi le repli de la barre latérale,
+ *            mémorisé sur l'appareil.
+ */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { PosterWall } from './PosterWall'

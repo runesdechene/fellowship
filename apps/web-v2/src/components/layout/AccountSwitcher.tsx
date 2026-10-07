@@ -1,3 +1,10 @@
+/**
+ * QUOI     — la carte de compte en haut de la barre latérale, et le menu pour changer d'enseigne.
+ * POURQUOI — un exposant peut agir sous plusieurs enseignes (modèle acteur) : le choix vit dans
+ *            useAuth().switchActor, ce composant ne fait que l'afficher.
+ * ATTENTION — barre repliée : le clic rouvre la colonne au lieu d'ouvrir un menu que le rail
+ *            rognerait.
+ */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'

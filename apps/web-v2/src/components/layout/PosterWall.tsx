@@ -1,3 +1,10 @@
+/**
+ * QUOI     — le mur d'affiche : l'affiche de la date, sur tout le bord droit de l'écran.
+ * POURQUOI — pour un exposant, l'affiche EST l'artefact qui fait dire oui ; le détail de ses
+ *            choix (netteté, entrée après chargement) est dans le commentaire du composant.
+ * ATTENTION — la glissade attend que l'image soit arrivée, cache compris, et une image en erreur
+ *            compte comme arrivée.
+ */
 import { useCallback, useState } from 'react'
 import { usePageChrome } from '@/lib/page-chrome'
 

@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la barre latérale : repli, marque, carte de compte, et les entrées de la maquette.
+ * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; une
+ *            entrée sans écran intégré reste visible mais inerte.
+ */
 import {
   CircleGauge,
   PanelRightClose,

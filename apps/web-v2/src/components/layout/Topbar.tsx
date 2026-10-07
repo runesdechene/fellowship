@@ -1,3 +1,9 @@
+/**
+ * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite la
+ *            cloche et « Ajouter une date ».
+ * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
+ *            coin sur tous les écrans.
+ */
 import { ArrowLeft, Bell, CirclePlus } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useTransitionNavigate } from '@/lib/navigation'
