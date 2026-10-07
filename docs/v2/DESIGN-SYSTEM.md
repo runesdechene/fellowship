@@ -176,11 +176,16 @@ colonne se rouvre dans l'état où on l'a laissée.
 
 ## 3 bis. La nuit — le thème sombre
 
-Validé le 08/10/2026 (maquettes `2027 sombre — …`). Il suit le réglage de l'appareil
-(`prefers-color-scheme`) ; l'interrupteur clair / sombre / automatique viendra avec les Réglages.
+Validé le 08/10/2026 (maquettes `2027 sombre — …`). L'interrupteur Clair / Sombre vit en bas de
+la barre latérale, sous le fil d'activité, et dans la feuille « Moi » du téléphone
+(`components/ui/ThemeSwitch.tsx`). Le choix est retenu sur l'appareil ; sans choix, la V2 suit le
+réglage de l'appareil (`lib/theme.ts`).
 
-- **Seule la couche du sens change** : un bloc `@media (prefers-color-scheme: dark)` à la fin de
-  `2-semantic.css` redéfinit les jetons. Les composants ne savent pas qu'il fait nuit.
+- **Seule la couche du sens change** : un bloc `:root[data-theme='dark']` à la fin de
+  `2-semantic.css` redéfinit les jetons. `lib/theme.ts` pose l'attribut sur `<html>` avant le
+  premier rendu (`main.tsx`). Les composants ne savent pas qu'il fait nuit.
+- Une règle de composant propre à la nuit s'écrit `:root[data-theme='dark'] .composant`, jamais
+  `@media (prefers-color-scheme: dark)` : le média ignorerait l'interrupteur.
 - La matière de la nuit vit dans `1-primitives.css` : `--night-*` (fonds bruns très foncés, jamais du
   noir pur) et `--cream-*` (encres).
 - **La barre latérale est plus claire que le panneau** (choix d'Uriel) : les cartes ressortent.
