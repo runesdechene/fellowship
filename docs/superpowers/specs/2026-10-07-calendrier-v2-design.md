@@ -20,8 +20,8 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
   imbriqué ». La page garde un seul défilement vertical.
 - **Une entrée « Calendrier » dans la barre latérale**, entre Explorer et Tableau de bord.
 - **Deux filtres : « Mes amis » (allumé par défaut) et « Intéressé » (éteint par défaut)**. « Amis
-  pro » et « Visiteurs » de la V1 : **à revoir** — ils étaient réservés au Pro, et la V2 garde le Pro
-  (correction d’Uriel, 07/10/2026). Le découpage gratuit / Pro du calendrier reste à trancher.
+  pro » et « Visiteurs » de la V1 ne reviennent pas : tout ce qui touche aux amis reste gratuit
+  (décidé le 07/10/2026). Le Pro du calendrier : poser des dates au-delà de 6 mois.
 - **Les dates « Intéressé » : sur option, et plus discrètes** (carte atténuée, affiche désaturée).
 - **« Dossier envoyé »** est le libellé du statut `en_cours`, partout (la fiche disait « Dossier en
   cours » : elle change aussi).
