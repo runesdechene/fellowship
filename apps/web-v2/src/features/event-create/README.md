@@ -4,6 +4,7 @@ L'écran `/evenement/nouveau` : quatre étapes (l'événement, où et quand, cat
 l'aperçu de la fiche à côté, et la recherche de doublons pendant la saisie.
 
 - `CreateEvent.tsx` — le parcours, l'envoi de l'affiche, la création et l'inscription.
+- `Steps.tsx` — les quatre étapes du formulaire et l'avertissement de doublon.
 - `EventPreview.tsx` — l'aperçu de la fiche.
 - `useEventDraft.ts` — le brouillon gardé dans le navigateur, les étapes, ce qui bloque.
 - `useSimilarEvents.ts` — les événements au nom proche.
