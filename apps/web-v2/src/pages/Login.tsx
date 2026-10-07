@@ -1,3 +1,9 @@
+/**
+ * QUOI     — l'écran de connexion : l'e-mail, puis le code reçu.
+ * POURQUOI — hors maquette, réduit au strict nécessaire pour entrer ; la session ouverte ici est
+ *            aussi celle de la V1 (même origine).
+ * ATTENTION — aucune création de compte : la V2 n'intègre pas d'inscription.
+ */
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
