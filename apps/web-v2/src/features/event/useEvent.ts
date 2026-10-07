@@ -1,3 +1,11 @@
+/**
+ * QUOI     — charge un événement et la participation de l'acteur actif, et expose les écritures
+ *            du suivi (participation, paiement, lignes du registre de bilan).
+ * POURQUOI — un seul hook pour la fiche : lecture et écriture au même endroit, pour que l'état
+ *            affiché reste celui de la base.
+ * ATTENTION — les montants vivent dans event_ledger_entries. « acompte_verse » est un reliquat de
+ *            la V1 : affiché s'il existe, jamais proposé.
+ */
 import { useCallback, useEffect, useState } from 'react'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'

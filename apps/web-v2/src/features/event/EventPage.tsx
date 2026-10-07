@@ -1,3 +1,10 @@
+/**
+ * QUOI     — la fiche d'un événement (/evenement/:id) : titre, accroche, suivi, infos, discussion.
+ * POURQUOI — l'écran où l'exposant décide et suit une date. Il déclare son décor au châssis
+ *            (l'affiche pour le mur, le retour vers le tableau de bord, le compte à rebours) et
+ *            délègue les données à useEvent.
+ * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
+ */
 import { CalendarDays, Clock, FileText, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'

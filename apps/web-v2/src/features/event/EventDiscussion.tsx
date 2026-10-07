@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la discussion du festival : questions, réponses, meilleure réponse, par canal.
+ * POURQUOI — les exposants posent leurs questions sur la date elle-même, pas dans un salon
+ *            général ; les canaux visibles dépendent des casquettes de l'utilisateur.
+ */
 import { useMemo, useState } from 'react'
 import { ArrowRight, CheckCheck, Hourglass, Trash2 } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'

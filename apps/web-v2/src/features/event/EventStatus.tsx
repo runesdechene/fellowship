@@ -1,3 +1,10 @@
+/**
+ * QUOI     — le suivi d'une date sur sa fiche : participation, paiement, bilan.
+ * POURQUOI — un seul contrôle par question, chaque état avec son propre dessin (lisible sans la
+ *            couleur), la couleur ne disant que l'état.
+ * ATTENTION — rien ne se verrouille après la date : un exposant est payé, note son cachet et
+ *            solde son acompte APRÈS (piège du 19/08/2026).
+ */
 import { useState } from 'react'
 import {
   CircleCheck,

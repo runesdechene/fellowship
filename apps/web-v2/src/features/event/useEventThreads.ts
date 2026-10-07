@@ -1,3 +1,11 @@
+/**
+ * QUOI     — charge et écrit les fils de discussion d'un événement (questions, réponses).
+ * POURQUOI — la logique de fil (tri, meilleure réponse, canaux) vit dans lib/threads.ts ; ce hook
+ *            ne fait que parler à la base.
+ * ATTENTION — dette : les types générés ne connaissent pas encore event_threads ni
+ *            event_thread_replies, d'où un client sans schéma pour ces deux tables. À retirer
+ *            après régénération des types (voir docs/v2/README.md).
+ */
 import { useCallback, useEffect, useState } from 'react'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { fetchActorProfiles } from '@/lib/friends'
