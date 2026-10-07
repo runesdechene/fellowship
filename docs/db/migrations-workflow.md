@@ -71,7 +71,7 @@ Le binaire est présent en direct, et c'est souvent le plus fiable :
 node_modules/supabase/bin/supabase.exe db push --linked
 ```
 
-Identifiants dans `.env` : `SUPABASE_DB_PASSWORD`, `SUPABASE_ACCESS_TOKEN`.
+Identifiants : `SUPABASE_DB_PASSWORD` dans `.env` ; le jeton vient de `supabase login` (`.claude/rules/supabase.md`).
 Le projet est déjà lié (`supabase/.temp/project-ref`). Je pousse moi-même — on ne
 demande pas à Uriel d'appliquer à la main, sauf panne totale du CLI.
 

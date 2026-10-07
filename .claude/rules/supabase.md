@@ -24,7 +24,7 @@ Résolu (2026-06-26) : frontend liste blanche déployé (commits → main, CI ve
 
 **Piège détection de déploiement Netlify** : le hash du bundle principal `assets/index-*.js` ne change PAS quand seules des routes lazy/code-splittées changent (Landing/Embed/vitrine/admin sont des chunks séparés). Poller ce hash = aveugle. Détecter via un **chunk lazy nouveau/modifié** : `curl -o /dev/null -w "%{http_code}" https://flw.sh/assets/<NomChunk-HASH>.js` (200 = déployé). Un fichier NEUF de la session (ex. `AdminTestimonials-*.js`) est le signal le plus fiable. Netlify ne poste pas de statut GitHub ici (`gh ... /status` = vide) ; le CI `ci.yml` (Lint/Build/Test) ne déploie pas, Netlify build de son côté.
 
-## Le jeton du `.env` passe devant la connexion — et il était périmé le 07/10/2026
+## Pas de jeton Supabase dans le `.env` — la CLI prend celui de la connexion
 
 **Le piège** (07/10/2026) : la CLI lit `SUPABASE_ACCESS_TOKEN` dans le `.env` du dépôt (`--debug` :
 « Using access token from env var ») **avant** le jeton de `supabase login`. Ce jeton était
@@ -68,9 +68,8 @@ Le projet est déjà lié (via `supabase/config.toml` ou `.supabase`), pas besoi
 
 **`npx --no-install supabase ...` marche aussi** (vérifié 2026-06-02, v2.88.1) — alternative au chemin binaire direct.
 
-**Push non-interactif d'une migration en prod** (vérifié 2026-06-02) : le `.env` du repo contient `SUPABASE_ACCESS_TOKEN` + `SUPABASE_DB_PASSWORD`. Les exporter évite le prompt mot de passe ; `echo y |` répond au Y/n :
+**Push non-interactif d'une migration en prod** (vérifié 2026-06-02) : le `.env` du repo contient `SUPABASE_DB_PASSWORD` (le jeton vient de la connexion, voir plus haut). L'exporter évite le prompt mot de passe ; `echo y |` répond au Y/n :
 ```bash
-export SUPABASE_ACCESS_TOKEN="$(grep '^SUPABASE_ACCESS_TOKEN=' .env | sed 's/^SUPABASE_ACCESS_TOKEN=//; s/\r$//; s/^"//; s/"$//')"
 export SUPABASE_DB_PASSWORD="$(grep '^SUPABASE_DB_PASSWORD=' .env | sed 's/^SUPABASE_DB_PASSWORD=//; s/\r$//; s/^"//; s/"$//')"
 npx --no-install supabase migration list --linked   # contrôle : colonne remote vide = en attente
 echo "y" | npx --no-install supabase db push --linked
