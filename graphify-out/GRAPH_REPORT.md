@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-10-07)
 
 ## Corpus Check
-- 345 files · ~700,389 words
+- 345 files · ~700,648 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1095 nodes · 852 edges · 349 communities detected
+- 1096 nodes · 853 edges · 349 communities detected
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -524,7 +524,7 @@ Nodes (0):
 
 ### Community 31 - "Community 31"
 Cohesion: 0.33
-Nodes (0): 
+Nodes (2): calendarHeadline(), countLabel()
 
 ### Community 32 - "Community 32"
 Cohesion: 0.33
@@ -543,20 +543,20 @@ Cohesion: 0.33
 Nodes (0): 
 
 ### Community 36 - "Community 36"
-Cohesion: 0.47
-Nodes (3): handleCodeChange(), handlePaste(), handleVerify()
-
-### Community 37 - "Community 37"
-Cohesion: 0.4
-Nodes (2): handleSubmit(), update()
-
-### Community 38 - "Community 38"
 Cohesion: 0.33
 Nodes (0): 
 
-### Community 39 - "Community 39"
+### Community 37 - "Community 37"
+Cohesion: 0.47
+Nodes (3): handleCodeChange(), handlePaste(), handleVerify()
+
+### Community 38 - "Community 38"
 Cohesion: 0.4
-Nodes (2): calendarHeadline(), countLabel()
+Nodes (2): handleSubmit(), update()
+
+### Community 39 - "Community 39"
+Cohesion: 0.33
+Nodes (0): 
 
 ### Community 40 - "Community 40"
 Cohesion: 0.33

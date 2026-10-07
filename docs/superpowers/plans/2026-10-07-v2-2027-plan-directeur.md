@@ -72,10 +72,16 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Base** : recherche plein texte ; code postal → position pour « Près de chez toi ».
 - **Dépend de** : lot 1.
 
-### Lot 6 — Vitrine d'un artisan  ☐
+### Lot 6 — Vitrine d'un artisan  ☑ ordinateur, consultation (07/10/2026) · ☐ édition, QR, intégration, signaler, mobile
 - **Livre** : page publique (bannière, logo, Certifié = Pro, réseau, prochaines escales, tampons),
   états du propriétaire (modifier, intégrer à mon site), Suivre / Partager / QR / Signaler.
 - **Cadre** : `2027 — Vitrine d’un artisan`. **Dépend de** : lot 1.
+- **Tranché en route** : la vitrine vit à `/:slug` comme dans la V1. Livré : bannière, logo, nom,
+  Certifié (Pro ou vérifié), Ambassadeur, métier, ville, présentation, site, abonnés et compagnons
+  exposants, prochaines escales avec les amis du visiteur, tampons, Suivre / Partager. Le
+  propriétaire voit « Modifier ma vitrine », qui ouvre l'éditeur de la V1 en attendant celui de la
+  V2. Reste : l'éditeur, le QR, « Intégrer à mon site », « Signaler » et le menu « … » — absents de
+  l'écran plutôt que des boutons morts.
 
 ### Lot 7 — Le Pro et les bilans  ☐
 - **Livre** : états verrouillés (aperçu flouté, pastille Pro, bulles), page **Mes bilans**, **bilan d'une

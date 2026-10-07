@@ -1,0 +1,82 @@
+/**
+ * QUOI     — les styles de l'affiche d'une date (components/ui/PosterArt.tsx).
+ * POURQUOI — la même affiche sert au calendrier et à la vitrine ; chacun lui donne sa hauteur par
+ *            `--poster-art-height`.
+ */
+
+.poster-art {
+  position: relative;
+  height: var(--poster-art-height);
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-chip-neutral);
+}
+
+.poster-art__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Le voile du pied pose les avatars sur l'affiche sans les y noyer. */
+.poster-art:has(.poster-art__image)::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--poster-shade-height);
+  background: var(--poster-shade);
+  pointer-events: none;
+}
+
+.poster-art__fallback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 var(--space-24);
+  color: var(--ink-title);
+}
+
+.poster-art__day {
+  font: var(--type-display-date);
+}
+
+.poster-art__month {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.poster-art__countdown {
+  position: absolute;
+  top: var(--space-12);
+  left: var(--space-12);
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}
+
+.poster-art__friends {
+  position: absolute;
+  bottom: var(--space-12);
+  left: var(--space-12);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.poster-art__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  border: 2px solid var(--surface-card);
+}
+
+.poster-art__more {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}

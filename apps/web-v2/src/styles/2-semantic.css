@@ -770,8 +770,42 @@
   --calendar-column-gap: var(--space-32);
   --calendar-poster-height: var(--height-calendar-poster);
   --calendar-nav-height: var(--height-month-nav);
+  --poster-shade: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--shade-900) 50%, transparent),
+    transparent
+  );
+  --poster-shade-height: var(--space-96);
   --type-calendar-month: var(--weight-regular) var(--size-60) / 1 var(--family-display);
   --calendar-padding-top: var(--space-80);
   --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */
   --calendar-muted-opacity: 0.5; /* une date « Intéressé », affichée sur option */
+
+  /* =========================================================================
+     VITRINE — la page publique d'un artisan (features/vitrine)
+     ====================================================================== */
+  --vitrine-padding-top: var(--space-80);
+  --vitrine-inset: var(--space-51); /* du bord de la bannière au texte */
+  --vitrine-banner-height: var(--height-vitrine-banner);
+  --vitrine-banner-radius: var(--round-20);
+  --vitrine-logo-size: var(--width-vitrine-logo);
+  --vitrine-logo-ring: 5px;
+  --vitrine-bio-width: var(--width-vitrine-bio);
+  --vitrine-section-gap: var(--space-70);
+  --vitrine-escale-width: var(--width-escale);
+  --vitrine-poster-height: var(--height-escale-poster);
+  --vitrine-stamp-size: var(--width-stamp);
+  --type-vitrine-name: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
+  --type-vitrine-initials: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --type-vitrine-meta: var(--weight-regular) var(--size-15) / var(--leading-snug) var(--family-sans);
+  --type-vitrine-craft: var(--weight-medium) var(--size-15) / var(--leading-snug) var(--family-sans);
+  --type-vitrine-bio: var(--weight-regular) var(--size-15) / 1.45 var(--family-sans);
+  --type-vitrine-link: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-vitrine-section: var(--weight-semibold) var(--size-22) / var(--leading-tight)
+    var(--family-sans);
+  --type-vitrine-count: var(--weight-regular) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-escale-name: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
+  --type-stamp-more: var(--weight-semibold) var(--size-22) / 1 var(--family-sans);
+  --vitrine-pale-ink: var(--ink-350); /* compteurs, pied de page */
 }

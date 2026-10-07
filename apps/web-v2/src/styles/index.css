@@ -28,6 +28,8 @@
 @import './3-components/topbar.css';
 @import './3-components/dashboard.css';
 @import './3-components/calendar.css';
+@import './3-components/poster-art.css';
+@import './3-components/vitrine.css';
 @import './3-components/action-banner.css';
 @import './3-components/season-chart.css';
 @import './3-components/next-date-card.css';

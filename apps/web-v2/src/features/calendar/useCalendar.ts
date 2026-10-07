@@ -33,7 +33,6 @@ export interface CalendarDate {
   status: ParticipationStatus
   daysAway: number
   friends: Friend[]
-  /** La première catégorie, pour le repli d'une carte sans affiche. */
 }
 
 export interface CalendarCompanion {

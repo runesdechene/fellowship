@@ -1,6 +1,6 @@
 /**
  * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, calendrier, création,
- *            fiche.
+ *            fiche, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            renvoie les autres sur la V1.
  */
@@ -10,6 +10,7 @@ import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EventPage } from '@/features/event/EventPage'
+import { VitrinePage } from '@/features/vitrine/VitrinePage'
 import { Login } from '@/pages/Login'
 import { useAuth } from '@/lib/auth'
 import { useV2Access } from '@/lib/useV2Access'
@@ -78,6 +79,17 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <CalendarPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      {/* Une vitrine à la racine, comme dans la V1 : les adresses fixes au-dessus l'emportent. */}
+      <Route
+        path="/:slug"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <VitrinePage />
             </AppShell>
           </ProtectedRoute>
         }

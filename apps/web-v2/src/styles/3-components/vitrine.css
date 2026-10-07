@@ -1,0 +1,338 @@
+/**
+ * QUOI     — les styles de la vitrine d'un artisan (features/vitrine) : la bannière, le logo à
+ *            cheval, l'identité, les prochaines escales, les tampons, le pied de page.
+ * POURQUOI — la carte de visite publique de l'artisan, dans le langage « 2027 » : de grands
+ *            blancs, le nom en serif, la couleur qui vient des affiches.
+ */
+
+.vitrine {
+  padding: var(--vitrine-padding-top) var(--page-gutter) var(--space-48);
+}
+
+.vitrine__message {
+  font: var(--type-vitrine-meta);
+  color: var(--ink-soft);
+}
+
+.vitrine--empty {
+  padding-left: calc(var(--page-gutter) + var(--vitrine-inset));
+}
+
+/* --- En-tête --------------------------------------------------------------- */
+.vitrine-head__banner {
+  height: var(--vitrine-banner-height);
+  overflow: hidden;
+  border-radius: var(--vitrine-banner-radius);
+  background: var(--surface-chip-neutral);
+}
+
+.vitrine-head__banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% var(--banner-y, 50%);
+}
+
+.vitrine-head__bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 0 0 var(--vitrine-inset);
+}
+
+/* Le logo mord sur la bannière de la moitié de sa hauteur, moins un souffle. */
+.vitrine-head__logo {
+  display: grid;
+  place-items: center;
+  width: var(--vitrine-logo-size);
+  height: var(--vitrine-logo-size);
+  margin-top: calc(var(--vitrine-logo-size) / -2 - var(--space-4));
+  overflow: hidden;
+  border: var(--vitrine-logo-ring) solid var(--surface-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+}
+
+.vitrine-head__logo-image {
+  --avatar-size: 100%;
+}
+
+.vitrine-head__initials {
+  font: var(--type-vitrine-initials);
+  color: var(--ink-title);
+}
+
+.vitrine-head__actions {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-24);
+}
+
+.vitrine-head__identity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: var(--space-24);
+  padding-left: var(--vitrine-inset);
+}
+
+.vitrine-head__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-14);
+}
+
+.vitrine-head__name {
+  font: var(--type-vitrine-name);
+  color: var(--ink-title);
+}
+
+.vitrine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: 25px;
+  padding: 0 var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-title);
+}
+
+.vitrine-badge--soft {
+  border-color: transparent;
+  background: var(--surface-chip-neutral);
+}
+
+.vitrine-head__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-10);
+  font: var(--type-vitrine-meta);
+  color: var(--ink-soft);
+}
+
+.vitrine-head__craft {
+  font: var(--type-vitrine-craft);
+  color: var(--ink-title);
+}
+
+.vitrine-head__dot {
+  margin: 0 var(--space-6);
+  color: var(--vitrine-pale-ink);
+}
+
+.vitrine-head__meta .vitrine-head__dot {
+  margin: 0;
+}
+
+.vitrine-head__place {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.vitrine-head__bio {
+  max-width: var(--vitrine-bio-width);
+  margin-top: var(--space-10);
+  font: var(--type-vitrine-bio);
+  color: var(--ink-soft);
+  white-space: pre-line; /* l'artisan écrit sa présentation en paragraphes */
+}
+
+.vitrine-head__site {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-14);
+  font: var(--type-vitrine-link);
+  color: var(--ink-title);
+}
+
+.vitrine-head__site:hover {
+  text-decoration: underline;
+}
+
+.vitrine-head__network {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  margin-top: var(--space-14);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.vitrine-head__network b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.vitrine-head__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  border: 2px solid var(--surface-card);
+}
+
+/* --- Sections -------------------------------------------------------------- */
+.vitrine-section {
+  margin-top: var(--vitrine-section-gap);
+  padding-left: var(--vitrine-inset);
+}
+
+.vitrine-section__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-10);
+  margin-bottom: var(--space-20);
+  font: var(--type-vitrine-section);
+  color: var(--ink-title);
+}
+
+.vitrine-section__count {
+  font: var(--type-vitrine-count);
+  color: var(--vitrine-pale-ink);
+}
+
+/* --- Prochaines escales ---------------------------------------------------- */
+.escales {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--vitrine-escale-width));
+  gap: var(--space-32) var(--space-20);
+}
+
+.escale-card {
+  --poster-art-height: var(--vitrine-poster-height);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  transition: translate var(--duration-smooth) var(--ease-soft);
+}
+
+.escale-card:hover {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.escale-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.escale-card__name {
+  font: var(--type-escale-name);
+  color: var(--ink-title);
+}
+
+.escale-card__meta {
+  font: var(--type-event-meta);
+  font-size: var(--size-13);
+  color: var(--ink-soft);
+}
+
+.escale-card__meet {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.escale-card__meet b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+/* --- Tampons --------------------------------------------------------------- */
+.stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-20);
+}
+
+.stamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-20);
+  width: var(--vitrine-stamp-size);
+}
+
+.stamp__circle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--vitrine-stamp-size);
+  height: var(--vitrine-stamp-size);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  transition: scale var(--duration-smooth) var(--ease-soft);
+}
+
+.stamp:hover .stamp__circle {
+  scale: 1.04;
+}
+
+.stamp__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+}
+
+.stamp__placeholder {
+  color: var(--vitrine-pale-ink);
+}
+
+.stamp__year {
+  position: absolute;
+  bottom: calc(-1 * var(--space-10));
+  left: 50%;
+  translate: -50% 0;
+  padding: var(--space-2) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}
+
+.stamp__name {
+  max-width: 100%;
+  overflow: hidden;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stamp__more {
+  display: grid;
+  place-items: center;
+  width: var(--vitrine-stamp-size);
+  height: var(--vitrine-stamp-size);
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-round);
+  font: var(--type-stamp-more);
+  color: var(--ink-title);
+}
+
+/* --- Pied de page ---------------------------------------------------------- */
+.vitrine__footer {
+  margin: var(--vitrine-section-gap) 0 0 var(--vitrine-inset);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--line-card);
+  font: var(--type-event-meta);
+  font-size: var(--size-13);
+  color: var(--vitrine-pale-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .escale-card,
+  .stamp__circle {
+    transition: none;
+  }
+}

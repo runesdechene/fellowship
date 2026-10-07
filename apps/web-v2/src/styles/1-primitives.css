@@ -41,6 +41,7 @@
      exceptions assumées : l'onglet actif sur mobile, l'action principale de
      la landing. Jamais un bouton, un lien ou un titre de l'application.
      --------------------------------------------------------------------- */
+  --shade-900: #14120f; /* le voile au pied des affiches */
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
   --terre-400: #cf9251; /* arrivée du dégradé */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
@@ -69,6 +70,7 @@
   --size-32: 32px;
   --size-36: 36px;
   --size-48: 48px;
+  --size-56: 56px;
   --size-60: 60px;
   --size-64: 64px;
   --size-150: 150px; /* la grande date d'une carte sans affiche */
@@ -119,6 +121,8 @@
   --space-48: 48px;
   --space-51: 51px;
   --space-80: 80px;
+  --space-96: 96px;
+  --space-112: 112px;
   --space-150: 150px; /* la respiration au-dessus du titre d’une fiche */
   --space-70: 70px;
 
@@ -203,5 +207,11 @@
   /* Le calendrier « 2027 ». */
   --width-calendar-column: 280px; /* une colonne de mois : ~4 visibles, la 5e coupée */
   --height-calendar-poster: 380px; /* l'affiche d'une carte, en portrait */
-  --height-month-nav: 72px; /* la navigation des douze mois */
+  --height-month-nav: 72px;
+  --height-vitrine-banner: 280px;
+  --width-vitrine-logo: 136px;
+  --width-vitrine-bio: 640px;
+  --width-escale: 252px;
+  --height-escale-poster: 336px;
+  --width-stamp: 112px; /* la navigation des douze mois */
 }

@@ -205,6 +205,8 @@
 
 /* --- La carte-affiche ------------------------------------------------------ */
 .poster-card {
+  --poster-art-height: var(--calendar-poster-height);
+
   display: flex;
   flex-direction: column;
   gap: var(--space-12);
@@ -217,72 +219,6 @@
 
 .poster-card--muted {
   opacity: var(--calendar-muted-opacity);
-}
-
-.poster-card__art {
-  position: relative;
-  height: var(--calendar-poster-height);
-  overflow: hidden;
-  border-radius: var(--radius-card);
-  background: var(--surface-chip-neutral);
-}
-
-.poster-card__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.poster-card__fallback {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  padding: 0 var(--space-24);
-  color: var(--ink-title);
-}
-
-.poster-card__day {
-  font: var(--type-display-date);
-}
-
-.poster-card__month {
-  font: var(--type-event-meta);
-  color: var(--ink-soft);
-}
-
-.poster-card__countdown {
-  position: absolute;
-  top: var(--space-12);
-  left: var(--space-12);
-  padding: var(--space-4) var(--space-10);
-  border-radius: var(--radius-round);
-  background: var(--surface-card);
-  font: var(--type-chip-strong);
-  color: var(--ink-title);
-}
-
-.poster-card__friends {
-  position: absolute;
-  bottom: var(--space-12);
-  left: var(--space-12);
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-}
-
-.poster-card__face {
-  --avatar-size: var(--avatar-size-pile);
-
-  border: 2px solid var(--surface-card);
-}
-
-.poster-card__more {
-  padding: var(--space-2) var(--space-8);
-  border-radius: var(--radius-round);
-  background: var(--surface-card);
-  font: var(--type-chip-strong);
-  color: var(--ink-title);
 }
 
 .poster-card__info {
