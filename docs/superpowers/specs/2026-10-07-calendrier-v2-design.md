@@ -42,7 +42,8 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
 - **Carte-affiche** : l'affiche en portrait, un dégradé sombre en haut et en bas ; posés dessus, le
   compte à rebours (haut droite) et les avatars des amis présents (bas gauche, 3 max puis « +N »).
   Dessous : le nom avec, sur la même ligne à droite, la pastille de statut (double coche sur
-  « Inscrit ») ; « 25–27 oct. · Ménétrole (63) » ; les catégories (coins arrondis, pas en gélule).
+  « Inscrit ») ; « 25–27 oct. · Ménétrole (63) ». **Pas de catégories** sur le calendrier (07/10/2026) :
+  l'artisan connaît ses dates, elles détournaient l'œil du statut ; la fiche et Explorer les montrent.
 - **Sans affiche** : bloc beige au format portrait, le jour en très grands chiffres et le mois
   abrégé, dans la couleur de la première catégorie.
 - **Mois vide** : carte en pointillés « Mois libre · Trouver une date en <mois> → ».
@@ -72,7 +73,8 @@ Rien de neuf en base : tout existe et se lit sous les policies en place.
   événements où l'artisan est déjà, regroupées par événement (plusieurs amis → une ligne).
   Nouvelle fonction dans `lib/friends.ts`, à côté de `fetchFriendsByEvent`, qui réutilise
   `fetchMutualFriendIds` et `fetchActorProfiles`.
-- **Catégories** : couleurs et libellés de la table des tags (`lib/tags.ts`), jamais en dur.
+- **Catégories** : seulement la couleur de la première, pour la grande date des cartes sans affiche
+  (`lib/tags.ts`, jamais en dur).
 - **Statuts** : mêmes libellés et mêmes tons que la fiche (`EventStatus.tsx`) — blé « Intéressé »,
   terre « Dossier en cours », olive « Inscrit ». La pastille vient d'un seul endroit, partagé.
 
