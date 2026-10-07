@@ -9,9 +9,9 @@
 
 | Écran | Cadre Figma | État |
 |---|---|---|
-| Tableau de bord | `2027 — Tableau de bord` | validé |
+| Tableau de bord | `2027 — Tableau de bord` | validé (avec « Mes dossiers ») |
 | Calendrier | `2027 — Calendrier` | validé — spec `docs/superpowers/specs/2026-10-07-calendrier-v2-design.md` |
-| Fiche événement | `2027 — Fiche événement` | validé |
+| Fiche événement | `2027 — Fiche événement` | validé (enrichie le 07/10 : dossier, candidature, avis, discussions) |
 | Explorer, accueil | `2027 — Explorer` | validé |
 | Explorer, résultats | `2027 — Explorer · résultats` | validé |
 | Vitrine d'un artisan | `2027 — Vitrine d’un artisan` (+ états du propriétaire) | validé |
@@ -24,9 +24,9 @@
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` | dessiné |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
-| Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | dessiné |
+| Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
-| Landing publique | `2027 — Landing` | dessiné |
+| Landing publique | `2027 — Landing` | validé (photos de marché à fournir) |
 | Mobile (tous les écrans) | — | à dessiner |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
