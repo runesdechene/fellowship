@@ -41,16 +41,16 @@
      exceptions assumées : l'onglet actif sur mobile, l'action principale de
      la landing. Jamais un bouton, un lien ou un titre de l'application.
      --------------------------------------------------------------------- */
-  /* La nuit (thème sombre, validé le 08/10/2026 ; éclaircie d'un cran à la demande d'Uriel) : des
+  /* La nuit (thème sombre, validé le 08/10/2026 ; éclaircie de deux crans à la demande d'Uriel) : des
      bruns foncés, jamais du noir pur. */
-  --night-0: #1a1816; /* le panneau de contenu, le plus profond */
-  --night-50: #242120; /* la barre latérale, plus claire que le panneau */
-  --night-100: #262320; /* cartes, contrôles */
-  --night-150: #2b2825; /* survol d'une ligne */
-  --night-200: #312d29; /* surfaces discrètes : pastilles, barres, gouttières */
-  --night-300: #36322e; /* les filets */
-  --night-350: #3c3733; /* l'entrée active de la barre latérale */
-  --night-400: #433d38; /* pointillés, interrupteur éteint */
+  --night-0: #201e1b; /* le panneau de contenu, le plus profond */
+  --night-50: #2a2724; /* la barre latérale, plus claire que le panneau */
+  --night-100: #2c2926; /* cartes, contrôles */
+  --night-150: #312e2a; /* survol d'une ligne */
+  --night-200: #37332f; /* surfaces discrètes : pastilles, barres, gouttières */
+  --night-300: #3c3834; /* les filets */
+  --night-350: #423d38; /* l'entrée active de la barre latérale */
+  --night-400: #49433e; /* pointillés, interrupteur éteint */
   --cream-50: #f3efe9; /* titres, texte, bouton principal la nuit */
   --cream-200: #d9d3cb; /* survol du bouton principal la nuit */
   --cream-500: #a39d95; /* texte secondaire la nuit */
