@@ -7,7 +7,11 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { App } from './App'
 import { AuthProvider } from './lib/auth'
+import { applyTheme, currentTheme } from './lib/theme'
 import './styles/index.css'
+
+// Avant le premier rendu : la page ne doit jamais s'afficher un instant dans l'autre thème.
+applyTheme(currentTheme())
 
 const root = document.getElementById('root')
 if (!root) throw new Error('index.html doit contenir #root')

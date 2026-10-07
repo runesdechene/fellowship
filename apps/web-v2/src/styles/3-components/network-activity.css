@@ -6,10 +6,7 @@
  */
 
 .network-activity {
-  position: absolute;
-  right: var(--sidebar-padding-x);
-  bottom: var(--space-24);
-  left: var(--sidebar-padding-x);
+  margin-bottom: var(--space-16);
 }
 
 .network-activity__title {

@@ -25,10 +25,8 @@
 /* La nuit : en base, le fond est un voile à 10 % et le texte une couleur moyenne, réglés pour le
    jour. Le texte s'éclaircit vers le crème et le voile se marque un peu (maquette sombre validée le
    08/10/2026). */
-@media (prefers-color-scheme: dark) {
-  .tag-badge {
-    border-color: color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 35%, transparent);
-    background: color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 18%, transparent);
-    color: color-mix(in oklab, var(--tag-ink, var(--tag-badge-ink)) 60%, var(--ink-title));
-  }
+:root[data-theme='dark'] .tag-badge {
+  border-color: color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 35%, transparent);
+  background: color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 18%, transparent);
+  color: color-mix(in oklab, var(--tag-ink, var(--tag-badge-ink)) 60%, var(--ink-title));
 }

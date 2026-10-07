@@ -10,6 +10,7 @@ import { CalendarDays, Check, CircleGauge, Telescope, Users } from 'lucide-react
 import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
 
 const TABS: ReadonlyArray<{ to: string | null; label: string; Icon: typeof Telescope }> = [
@@ -64,6 +65,9 @@ export function TabBar() {
               {item.id === actor?.id && <Check size={16} strokeWidth={2} />}
             </button>
           ))}
+          <div className="tab-sheet__theme">
+            <ThemeSwitch />
+          </div>
         </div>
       )}
       <nav className="tab-bar" aria-label="Navigation">

@@ -1,6 +1,6 @@
 /**
  * QUOI     — la barre latérale : repli, marque, carte de compte, les entrées de la maquette, et le
- *            fil « Activité du réseau » en bas.
+ *            fil « Activité du réseau » et l'interrupteur Clair / Sombre en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; une
  *            entrée sans écran intégré reste visible mais inerte.
  */
@@ -13,6 +13,7 @@ import {
   Users,
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { AccountSwitcher } from './AccountSwitcher'
 
@@ -85,7 +86,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         })}
       </nav>
 
-      {!collapsed && <NetworkActivity />}
+      <div className="sidebar__foot">
+        {!collapsed && <NetworkActivity />}
+        <ThemeSwitch compact={collapsed} />
+      </div>
     </aside>
   )
 }

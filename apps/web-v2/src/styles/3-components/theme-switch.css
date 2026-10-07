@@ -1,0 +1,60 @@
+/**
+ * QUOI     — les styles de l'interrupteur Clair / Sombre (components/ui/ThemeSwitch.tsx) et du pied
+ *            de la barre latérale qui le porte, sous le fil d'activité.
+ * POURQUOI — un petit contrôle segmenté, discret : on le cherche rarement, il doit se trouver
+ *            sans gêner.
+ */
+
+.sidebar__foot {
+  position: absolute;
+  right: var(--sidebar-padding-x);
+  bottom: var(--space-24);
+  left: var(--sidebar-padding-x);
+}
+
+.theme-switch {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+}
+
+.theme-switch__option {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  height: var(--theme-switch-height);
+  border: 1px solid transparent;
+  border-radius: var(--radius-round);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.theme-switch__option:hover:not([aria-pressed='true']) {
+  color: var(--ink-title);
+}
+
+.theme-switch__option[aria-pressed='true'] {
+  border-color: var(--line-card);
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.tab-sheet__theme {
+  margin-top: var(--space-8);
+  padding: var(--space-8) var(--space-10) var(--space-4);
+  border-top: 1px solid var(--line-card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch__option {
+    transition: none;
+  }
+}
