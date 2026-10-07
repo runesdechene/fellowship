@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
-import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
+import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
 import { supabase } from '@/lib/supabase'
 import { fetchTags, tagStylesByName, type TagStyle } from '@/lib/tags'
 import type { EventRow, ParticipationStatus } from '@/types/database'
@@ -303,6 +303,25 @@ export function useEvent(
 
   const currentOrientation = state.paymentOrientation
 
+  // Le registre a bougé : on le relit plutôt que de le deviner, sinon les totaux du bilan
+  // mentiraient jusqu'au prochain chargement.
+  const reloadLedger = useCallback(async () => {
+    if (!eventId || !actorId) return
+    const { data: rows } = await supabase
+      .from('event_ledger_entries')
+      .select('id, amount, direction, category, label, source')
+      .eq('actor_id', actorId)
+      .eq('event_id', eventId)
+
+    const ledger = (rows ?? []) as EventLedgerLine[]
+    setState((s) => ({
+      ...s,
+      ledger,
+      revenue: ledger.length > 0 ? ledgerRevenue(ledger) : null,
+      net: ledger.length > 0 ? ledgerProfit(ledger) : null,
+    }))
+  }, [eventId, actorId])
+
   const setOrientation = useCallback(
     async (next: PaymentOrientation) => {
       if (!eventId || !actorId || saving || !currentStatus) return
@@ -316,13 +335,28 @@ export function useEvent(
         .eq('actor_id', actorId)
         .eq('event_id', eventId)
 
-      setSaving(false)
       if (error) {
+        setSaving(false)
         setState((s) => ({ ...s, paymentOrientation: currentOrientation }))
         setWriteError("Le changement n'a pas pu être enregistré.")
+        return
       }
+
+      // Le montant déjà saisi change de sens avec l'orientation : 200 € d'emplacement qui
+      // deviennent un cachet passent de la sortie à l'entrée. Sans ça, le bilan restait faux
+      // du double du montant jusqu'à une nouvelle saisie (audit du 07/10/2026).
+      const { error: lineError } = await supabase
+        .from('event_ledger_entries')
+        .update(standLine(next))
+        .eq('actor_id', actorId)
+        .eq('event_id', eventId)
+        .eq('source', 'stepper')
+
+      if (lineError) setWriteError("Le montant n'a pas pu suivre le changement.")
+      await reloadLedger()
+      setSaving(false)
     },
-    [eventId, actorId, personActorId, saving, currentStatus, currentOrientation],
+    [eventId, actorId, personActorId, saving, currentStatus, currentOrientation, reloadLedger],
   )
 
   const setStandAmount = useCallback(
@@ -345,9 +379,7 @@ export function useEvent(
         return
       }
 
-      // Un cachet ENTRE, un emplacement SORT. C'est l'orientation qui décide,
-      // et le montant reste toujours positif en base.
-      const paid = currentOrientation === 'paye'
+      const line = standLine(currentOrientation)
       const { data: existing } = await supabase
         .from('event_ledger_entries')
         .select('id')
@@ -368,11 +400,7 @@ export function useEvent(
       } else if (existing) {
         const { error } = await supabase
           .from('event_ledger_entries')
-          .update({
-            amount,
-            category: paid ? 'cachet' : 'emplacement',
-            direction: paid ? 'in' : 'out',
-          })
+          .update({ amount, ...line })
           .eq('id', existing.id)
         failed = Boolean(error)
       } else {
@@ -382,8 +410,7 @@ export function useEvent(
           event_id: eventId,
           label: null,
           amount,
-          direction: paid ? 'in' : 'out',
-          category: paid ? 'cachet' : 'emplacement',
+          ...line,
           source: 'stepper',
         })
         failed = Boolean(error)
@@ -395,24 +422,10 @@ export function useEvent(
         return
       }
 
-      // Le registre a bougé : on le relit plutôt que de le deviner, sinon les
-      // totaux du bilan mentiraient jusqu'au prochain chargement.
-      const { data: rows } = await supabase
-        .from('event_ledger_entries')
-        .select('id, amount, direction, category, label, source')
-        .eq('actor_id', actorId)
-        .eq('event_id', eventId)
-
-      const ledger = (rows ?? []) as EventLedgerLine[]
-      setState((s) => ({
-        ...s,
-        ledger,
-        revenue: ledger.length > 0 ? ledgerRevenue(ledger) : null,
-        net: ledger.length > 0 ? ledgerProfit(ledger) : null,
-      }))
+      await reloadLedger()
       setSaving(false)
     },
-    [eventId, actorId, saving, currentStatus, currentOrientation],
+    [eventId, actorId, saving, currentStatus, currentOrientation, reloadLedger],
   )
 
   const actions: EventActions = {

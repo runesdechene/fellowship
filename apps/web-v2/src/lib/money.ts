@@ -15,6 +15,19 @@ export interface LedgerLine {
   direction: string
 }
 
+/**
+ * La ligne de registre du montant saisi sur la fiche. Un emplacement SORT, un cachet ENTRE :
+ * c'est l'orientation (qui paie qui) qui décide, et le montant reste toujours positif en base.
+ */
+export function standLine(orientation: 'payeur' | 'paye'): {
+  direction: 'in' | 'out'
+  category: 'cachet' | 'emplacement'
+} {
+  return orientation === 'paye'
+    ? { direction: 'in', category: 'cachet' }
+    : { direction: 'out', category: 'emplacement' }
+}
+
 /** Ce qui est rentré — le « CA / Reçu » affiché en premier sur une carte. */
 export function ledgerRevenue(lines: LedgerLine[]): number {
   return lines.reduce((sum, line) => (line.direction === 'in' ? sum + line.amount : sum), 0)
