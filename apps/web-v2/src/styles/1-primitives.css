@@ -129,6 +129,7 @@
   /* ---------------------------------------------------------------------
      RAYONS
      --------------------------------------------------------------------- */
+  --round-6: 6px;
   --round-8: 8px;
   --round-10: 10px;
   --round-12: 12px;
@@ -174,8 +175,6 @@
   --width-avatar-hero: 71px; /* l'avatar de l'accroche */
   --width-avatar-account: 35px; /* l'avatar de la carte de compte */
   --width-avatar-list: 21px; /* les avatars d'amis, en pile */
-  --height-report: 86px; /* une carte de bilan */
-  --width-report-thumb: 60px; /* sa vignette d'affiche */
   --width-report-min: 240px; /* en dessous, elle passe à la ligne */
   --width-banner-icon: 44px; /* la tuile d'icône de la bande d'action */
 

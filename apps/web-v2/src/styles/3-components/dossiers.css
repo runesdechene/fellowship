@@ -1,0 +1,122 @@
+/**
+ * QUOI     — les styles de « Mes dossiers » : un tableau à trois colonnes, Date · Dossier ·
+ *            Paiement (features/dashboard/DossiersSection.tsx).
+ * POURQUOI — une carte qui contient des lignes, pas une grille de cartes : les colonnes
+ *            s'alignent d'une ligne à l'autre et se balayent d'un regard.
+ */
+
+.dossiers {
+  padding: var(--dossiers-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.dossiers__head,
+.dossiers__row {
+  display: grid;
+  grid-template-columns: var(--dossiers-date-column) var(--dossiers-state-column) 1fr auto;
+  align-items: center;
+  padding: 0 var(--space-12);
+}
+
+.dossiers__head {
+  height: var(--space-40);
+  border-bottom: 1px solid var(--line-card);
+  font: var(--type-dossiers-head);
+  color: var(--ink-section-pale);
+}
+
+.dossiers__list > li + li {
+  border-top: 1px solid var(--line-card);
+}
+
+.dossiers__row {
+  width: 100%;
+  height: var(--dossiers-row-height);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.dossiers__row:hover {
+  background: var(--surface-control-hover);
+}
+
+.dossiers__date {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.dossiers__thumb {
+  flex: none;
+  width: var(--dossiers-thumb-width);
+  height: var(--dossiers-thumb-height);
+  border-radius: var(--radius-xs);
+  background: var(--surface-chip-neutral);
+  object-fit: cover;
+}
+
+.dossiers__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.dossiers__name {
+  overflow: hidden;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dossiers__range,
+.dossiers__detail {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.dossiers__state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-dossiers-state);
+  color: var(--ink-title);
+}
+
+.dossiers__payment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dossiers__icon {
+  flex: none;
+  color: var(--status-pending-icon);
+}
+
+.dossiers__dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-round);
+}
+
+.dossiers__dot--acquired {
+  background: var(--dot-confirmed);
+}
+
+.dossiers__chevron {
+  color: var(--ink-section-pale);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossiers__row {
+    transition: none;
+  }
+}

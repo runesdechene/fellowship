@@ -84,13 +84,14 @@ export function formatDayMonthShort(date: Date): string {
 const DAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric' })
 const MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'short' })
 
-/** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. ». */
-export function formatDateRange(start: Date, end: Date): string {
-  if (start.toDateString() === end.toDateString()) return formatDayMonthShort(start)
+/** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. » — ou « 25–27 septembre » en toutes lettres. */
+export function formatDateRange(start: Date, end: Date, month: 'short' | 'long' = 'short'): string {
+  const dayMonth = month === 'long' ? formatDayMonth : formatDayMonthShort
+  if (start.toDateString() === end.toDateString()) return dayMonth(start)
   if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-    return `${DAY_FORMATTER.format(start)}–${formatDayMonthShort(end)}`
+    return `${DAY_FORMATTER.format(start)}–${dayMonth(end)}`
   }
-  return `${formatDayMonthShort(start)}–${formatDayMonthShort(end)}`
+  return `${dayMonth(start)}–${dayMonth(end)}`
 }
 
 /** « Sept. », « Janv. », « Mai » : le mois en abrégé, initiale en capitale. */

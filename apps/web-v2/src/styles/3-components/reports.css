@@ -1,150 +1,149 @@
 /**
- * QUOI     — les styles de « Mes bilans » : une petite carte par date passée
+ * QUOI     — les styles de « Mes bilans » : une carte avec le bénéfice de l'année à gauche et les
+ *            trois dernières dates à droite, puis la liste dépliée
  *            (features/dashboard/ReportsSection.tsx).
- * POURQUOI — les cartes s'ajustent à leur contenu ; la bande tient sur une ligne et déborde
- *            jusqu'au bord droit du panneau.
+ * POURQUOI — le chiffre de l'année se lit en premier, en serif et dans la terre du logo : c'est
+ *            de l'acquis.
  */
 
-/* Tous les bilans sont ici : il n'existe pas d'écran d'historique. Ils passent
-   à la ligne au lieu de défiler ou d'être coupés.
-
-   Une GRILLE, pas un flex : en flex, les cartes de la dernière ligne
-   s'étireraient pour combler le vide — une carte seule prendrait toute la
-   largeur. Avec `auto-fill`, les colonnes vides restent en place et une carte
-   isolée garde exactement la largeur des autres. */
 .reports {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  padding: var(--space-14) var(--space-14) var(--space-14) var(--card-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.reports__season {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: var(--report-season-width);
+  padding-right: var(--space-24);
+  border-right: 1px solid var(--line-card);
+}
+
+.reports__label {
+  font: var(--type-dossiers-head);
+  color: var(--ink-section-pale);
+}
+
+/* Le seul chiffre en dégradé de la page : le bénéfice, c'est l'acquis. */
+.reports__net {
+  width: fit-content;
+  background: var(--brand-gradient);
+  background-clip: text;
+  font: var(--type-display-l);
+  color: transparent;
+}
+
+.reports__revenue {
+  font: var(--type-report-meta);
+  color: var(--ink-soft);
+}
+
+.reports__revenue b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.reports__latest {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.reports__all {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--report-min-width), 1fr));
-  gap: var(--report-gap);
+  margin-top: var(--space-12);
+  padding: var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.reports__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-section-link);
+  color: var(--ink-title);
+  cursor: pointer;
 }
 
 .report {
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  gap: var(--space-12);
   min-width: 0;
-  height: var(--report-height);
-  background: var(--surface-card);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-report);
-  overflow: hidden;
+  padding: var(--space-10);
+  border-radius: var(--radius-sm);
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--report-hover-motion);
+  transition: background var(--duration-fast) var(--ease-out);
 }
 
-/* La carte s'assombrit au lieu de grossir : un agrandissement attire l'œil
-   sans rien apprendre, et bouscule ses voisines dans la grille. */
 .report:hover {
-  background: var(--surface-card-hover);
-}
-
-/* La vignette suit la carte, elle seule — sinon elle resterait une tache
-   inchangée au milieu d'un fond qui bouge. Les chiffres, eux, gagnent du
-   contraste : c'est le moment où on les lit. */
-.report:hover .report__thumb {
-  filter: brightness(var(--hover-brightness));
-}
-
-/* Le bilan pas encore rempli est transparent par construction : il gagne un
-   fond au survol, ce qui le rend tangible — exactement son propos, une place
-   vide qui demande à être remplie. */
-.report--todo:hover {
-  background: var(--surface-card-hover);
+  background: var(--surface-control-hover);
 }
 
 .report__thumb {
   flex: none;
   width: var(--report-thumb-width);
-  height: 100%;
-  object-fit: cover;
+  height: var(--report-thumb-height);
+  border-radius: var(--radius-sm);
   background: var(--surface-chip-neutral);
+  object-fit: cover;
 }
 
 .report__body {
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
-  justify-content: center;
-  gap: var(--report-line-gap);
+  gap: var(--space-4);
   min-width: 0;
-  padding: 0 var(--report-padding-x);
-}
-
-.report__head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-20);
 }
 
 .report__name {
-  font: var(--type-report-name);
-  color: var(--ink-title);
   overflow: hidden;
+  font: var(--type-list-name);
+  color: var(--ink-title);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Le crayon ne se montre qu'au survol : au repos, la carte ne porte que ses
-   informations. Il occupe sa place en permanence, sinon le nom se décalerait
-   à chaque passage de souris. */
-.report__action {
-  flex: none;
-  margin-left: auto;
-  color: var(--ink-soft);
-  opacity: 0;
-  transform: translateX(var(--report-action-shift));
-  transition:
-    opacity var(--report-hover-motion),
-    transform var(--report-hover-motion);
-}
-
-.report:hover .report__action {
-  opacity: 1;
-  transform: translateX(0);
-}
-
 .report__date {
-  font: var(--type-report-meta);
-  color: var(--ink-soft);
-  white-space: nowrap;
-}
-
-.report__money {
-  display: flex;
-  gap: var(--space-10);
-  white-space: nowrap;
-}
-
-.report__revenue {
-  font: var(--type-report-meta);
+  font: var(--type-list-meta);
   color: var(--ink-soft);
 }
 
 .report__net {
-  font: var(--type-report-net);
-  color: var(--report-net-ink);
-}
-
-/* --- Bilan pas encore rempli ---------------------------------------------- */
-/* Contour pointillé, aucun fond : la carte existe mais reste une place vide
-   tant que l'exposant ne l'a pas remplie. */
-.report--todo {
-  background: transparent;
-  border: 1px dashed var(--report-todo-border);
-}
-
-.report--todo .report__name {
-  color: var(--ink-soft);
+  margin-top: var(--space-4);
+  font: var(--type-report-name);
+  color: var(--ink-title);
 }
 
 .report__todo {
-  font: var(--type-report-meta);
-  color: var(--report-todo-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-4);
+  font: var(--type-chip);
+  color: var(--ink-title);
+}
+
+.report__todo-dot {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-round);
+  background: var(--ink-title);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .report,
-  .report__action {
+  .report {
     transition: none;
   }
 }

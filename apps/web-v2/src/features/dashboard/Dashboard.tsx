@@ -1,17 +1,16 @@
 /**
  * QUOI     — l'écran du tableau de bord : accueil, bande d'action, frise de saison, prochaine date,
- *            dates à venir, ce qui reste à régler, bilans.
+ *            dates à venir, mes dossiers, mes bilans.
  * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
  *            il assemble ce que useDashboard prépare.
  */
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
-import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { ActionBanner } from './ActionBanner'
+import { DossiersSection } from './DossiersSection'
 import { NextDateCard } from './NextDateCard'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
-import { SettlementsSection } from './SettlementsSection'
 import { UpcomingCard } from './UpcomingCard'
 import { useDashboard } from './useDashboard'
 
@@ -22,7 +21,7 @@ export function Dashboard() {
     months,
     next,
     upcoming,
-    settlements,
+    dossiers,
     reports,
     seasonNet,
     seasonRevenue,
@@ -37,14 +36,21 @@ export function Dashboard() {
         <Avatar className="dashboard__avatar" src={actor?.avatarUrl} name={actor?.label} />
         <div>
           <h1 className="dashboard__greeting">
-            Bienvenue <b>{actor?.label ?? ''}</b> 🫡
+            Bonjour, <b>{actor?.label ?? ''}</b>
           </h1>
           <p className="dashboard__subtitle">
-            {loading
-              ? 'Chargement de tes dates…'
-              : error
-                ? 'Tes dates n’ont pas pu être chargées.'
-                : `Tu as ${programmedCount} ${programmedCount === 1 ? 'date prévue' : 'dates prévues'} à ce jour`}
+            {loading ? (
+              'Chargement de tes dates…'
+            ) : error ? (
+              'Tes dates n’ont pas pu être chargées.'
+            ) : (
+              <>
+                <b>
+                  {programmedCount} {programmedCount === 1 ? 'date' : 'dates'}
+                </b>{' '}
+                {programmedCount === 1 ? 'prévue' : 'prévues'} à ce jour
+              </>
+            )}
           </p>
         </div>
       </header>
@@ -66,34 +72,24 @@ export function Dashboard() {
             <NextDateCard date={next} />
           </div>
           <div className="dashboard__column">
-            <h2 className="dashboard__section-title">A venir</h2>
+            <h2 className="dashboard__section-title">À venir</h2>
             <UpcomingCard dates={upcoming} />
           </div>
         </section>
       )}
 
-      {settlements.length > 0 && (
+      {dossiers.length > 0 && (
         <section className="dashboard__section">
-          <h2 className="dashboard__section-title">À régler</h2>
-          <SettlementsSection settlements={settlements} />
+          <h2 className="dashboard__section-title">Mes dossiers</h2>
+          <p className="dashboard__section-note">
+            Ce qui reste à envoyer, à payer ou à recevoir sur tes prochaines dates
+          </p>
+          <DossiersSection dossiers={dossiers} />
         </section>
       )}
 
       {reports.length > 0 && (
-        <section className="dashboard__section">
-          <div className="dashboard__section-head">
-            <h2 className="dashboard__section-title">Mes bilans</h2>
-            {/* `typeof` et non `!== null` : une valeur absente vaut undefined,
-                qui passait la garde et affichait « NaN € ». */}
-            {typeof seasonNet === 'number' && typeof seasonRevenue === 'number' && (
-              <p className="dashboard__section-total">
-                <b>{formatSignedEuros(seasonNet)}</b> de bénéfice sur un CA de{' '}
-                <b>{formatEuros(seasonRevenue)}</b> en {new Date().getFullYear()}
-              </p>
-            )}
-          </div>
-          <ReportsSection reports={reports} />
-        </section>
+        <ReportsSection reports={reports} seasonNet={seasonNet} seasonRevenue={seasonRevenue} />
       )}
     </div>
   )

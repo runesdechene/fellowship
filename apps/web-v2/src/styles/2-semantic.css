@@ -70,7 +70,6 @@
      la taille et la graisse, pas par la pâleur — la pâleur marche sur un
      écran calibré, pas sur celui d’un exposant en plein soleil. */
   --ink-soft: var(--ink-600); /* métadonnées, mois, dates */
-  --ink-ghost: var(--sand-500); /* valeurs nulles, éteint */
   /* LA LIGNE SOUS LE TITRE D UNE FICHE, et elle seule.
      Releve au pixel sur la maquette d Uriel : #a79f9f, soit --brown-400 —
      la meme teinte pour toute la ligne, la date n etant que mise en GRAS et
@@ -192,8 +191,10 @@
   --radius-panel: var(--round-20); /* le grand panneau */
   --radius-card: var(--round-16); /* cartes et boutons de la barre du haut */
   --radius-nav: var(--round-12); /* compte + entrées de navigation */
-  --radius-bar: var(--round-8); /* barres du graphe */
+  --radius-bar: var(--round-12); /* gélules de la frise de saison */
   --radius-chip: var(--round-full); /* pastilles de statut */
+  --radius-xs: var(--round-6); /* vignettes d'affiche dans une liste */
+  --radius-poster-inset: var(--round-10); /* une affiche posée en retrait dans sa carte */
   --radius-sm: var(--round-8); /* petits éléments : options de menu */
   /* UN BOUTON EST UN CONTROLE, pas un bloc. Il prenait --radius-card, donc le
      rayon des CARTES : il se retrouvait plus rond que tout ce qui l entoure,
@@ -213,6 +214,7 @@
      Format : graisse taille/interligne famille
      ====================================================================== */
   --type-page-title: var(--weight-semibold) var(--size-32) / var(--leading-tight) var(--family-sans);
+  --type-greeting: var(--weight-regular) var(--size-32) / var(--leading-tight) var(--family-sans);
   --type-page-title-accent: var(--weight-semibold) var(--size-32) / var(--leading-tight)
     var(--family-sans);
   --type-page-subtitle: var(--weight-regular) var(--size-14) / var(--leading-normal)
@@ -232,7 +234,7 @@
 
   --type-card-title: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
 
-  --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-card-link: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
@@ -260,11 +262,10 @@
 
   --type-chart-value: var(--weight-semibold) var(--size-22) / var(--leading-tight)
     var(--family-sans);
-  --type-chart-month: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-chart-month: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
 
   --type-report-name: var(--weight-semibold) var(--size-13) / var(--leading-snug) var(--family-sans);
-  --type-report-meta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
-  --type-report-net: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-report-meta: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
 
   --type-settlement-due: var(--weight-semibold) var(--size-13) / var(--leading-snug)
     var(--family-sans);
@@ -348,9 +349,10 @@
      ====================================================================== */
   /* Pas de largeur de colonne : la frise remplit toute la largeur du contenu
      et les douze mois se la partagent également. Seul l'écart se règle. */
-  --chart-column-gap: var(--space-8);
-  --chart-bar-min: 15px; /* hauteur d'une barre à zéro */
-  --chart-bar-max: 142px; /* hauteur du mois le plus chargé */
+  --chart-column-gap: var(--space-14);
+  --chart-bar-min: 80px; /* hauteur d'un mois à une date */
+  --chart-bar-max: 128px; /* hauteur du mois le plus chargé */
+  --chart-bar-empty: 3px; /* le trait d'un mois vide */
   --chart-label-gap: var(--space-12); /* barre ↔ nom du mois */
 
   /* =========================================================================
@@ -718,33 +720,25 @@
   --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
-     À RÉGLER — les dossiers et paiements en suspens
+     MES DOSSIERS — une ligne par date à venir (features/dashboard)
      ====================================================================== */
-  --settlement-padding-x: var(--card-padding);
-  --settlement-padding-y: var(--space-20);
-  --settlement-row-gap: var(--space-18);
-  --settlement-due-ink: var(--ink-950);
+  --dossiers-padding: var(--space-10);
+  --dossiers-date-column: 300px;
+  --dossiers-state-column: 170px;
+  --dossiers-row-height: 74px;
+  --dossiers-thumb-width: 36px;
+  --dossiers-thumb-height: 50px;
+  --type-dossiers-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-dossiers-state: var(--weight-medium) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
 
   /* =========================================================================
-     MES BILANS — les petites cartes du bas
+     MES BILANS — le bénéfice de l'année et les dernières dates (features/dashboard)
      ====================================================================== */
-  --report-height: var(--height-report);
-  --report-thumb-width: var(--width-report-thumb);
-  /* Largeur plancher : les cartes s'étirent pour remplir leur ligne, et
-     passent à la suivante dès qu'elles descendraient sous cette valeur. */
+  --report-season-width: 226px;
+  --report-thumb-width: 56px;
+  --report-thumb-height: 78px;
   --report-min-width: var(--width-report-min);
-
-  /* Réaction au survol : la carte grossit très légèrement, et rien d'autre.
-     Rien ne bouge à l'intérieur. */
-  --report-hover-motion: var(--duration-smooth) var(--ease-soft);
-  --report-action-shift: var(--space-4); /* d'où le crayon arrive en surgissant */
-  --report-gap: var(--space-20); /* entre deux cartes */
-  --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */
-  --report-line-gap: var(--space-6); /* entre les trois lignes de texte */
-  --radius-report: var(--round-10);
-  --report-net-ink: var(--ink-950);
-  --report-todo-ink: var(--ink-950);
-  --report-todo-border: var(--sand-400); /* le contour pointillé « à remplir » */
 
   /* =========================================================================
      LISTE « À VENIR »
@@ -776,6 +770,7 @@
     transparent
   );
   --poster-shade-height: var(--space-96);
+  --type-calendar-nav: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
   --type-calendar-month: var(--weight-regular) var(--size-60) / 1 var(--family-display);
   --calendar-padding-top: var(--space-80);
   --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */

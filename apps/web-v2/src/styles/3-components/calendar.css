@@ -122,7 +122,7 @@
 }
 
 .month-nav__label {
-  font: var(--type-chart-month);
+  font: var(--type-calendar-nav);
   color: var(--ink-soft);
 }
 

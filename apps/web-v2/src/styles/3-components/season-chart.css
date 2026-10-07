@@ -1,12 +1,10 @@
 /**
  * QUOI     — les styles de la frise de saison : une barre par mois sur douze mois glissants
  *            (features/dashboard/SeasonChart.tsx).
- * POURQUOI — la hauteur de chaque barre vient du composant via --bar-height ; ses bornes se
+ * POURQUOI — la hauteur de chaque gélule vient du composant via --bar-ratio ; ses bornes se
  *            règlent en couche 2 (--chart-bar-min, --chart-bar-max).
  */
 
-/* La frise occupe toute la largeur du contenu, comme les blocs du dessous :
-   les douze colonnes se partagent la place à parts égales. */
 .season-chart {
   display: flex;
   align-items: flex-end;
@@ -23,37 +21,46 @@
 }
 
 .season-chart__bar {
-  position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
-  height: var(--bar-height);
-  background: var(--surface-bar);
+  height: calc(
+    var(--chart-bar-min) + (var(--chart-bar-max) - var(--chart-bar-min)) * var(--bar-ratio, 0)
+  );
+  padding-top: var(--space-14);
   border-radius: var(--radius-bar);
+  background: var(--surface-bar);
 }
 
 .season-chart__value {
   font: var(--type-chart-value);
-  color: var(--ink-soft);
+  color: var(--ink-title);
 }
 
-/* Mois sans date : la barre est réduite à son minimum, son fond est moins
-   marqué, et le zéro passe au-dessus d'elle en s'éteignant. */
+/* Le mois en cours : la seule gélule pleine. */
+.season-chart__column--current .season-chart__bar {
+  background: var(--action-surface);
+}
+
+.season-chart__column--current .season-chart__value {
+  color: var(--action-ink);
+}
+
+/* Un mois sans date n'a pas de gélule : un trait, et son nom s'efface. */
 .season-chart__column--empty .season-chart__bar {
+  height: var(--chart-bar-empty);
+  padding: 0;
   background: var(--surface-bar-empty);
-}
-
-.season-chart__column--empty .season-chart__value {
-  position: absolute;
-  bottom: 100%;
-  margin-bottom: var(--space-2);
-  color: var(--ink-ghost);
 }
 
 .season-chart__month {
   margin-top: var(--chart-label-gap);
   font: var(--type-chart-month);
-  color: var(--ink-soft);
+  color: var(--ink-title);
   text-align: center;
+}
+
+.season-chart__column--empty .season-chart__month {
+  color: var(--ink-section-pale);
 }

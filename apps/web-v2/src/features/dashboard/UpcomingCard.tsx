@@ -2,17 +2,11 @@
  * QUOI     — la liste des dates suivantes, avec la ville et les amis présents.
  * POURQUOI — « X utilisateurs de Fellowship y vont » : on ne voit que son réseau.
  */
+import { ArrowRight, Contrast } from 'lucide-react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatDaysShort } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardDate } from './useDashboard'
-
-/** « Lyon, 3 amis » — la ville, puis les amis présents s'il y en a. */
-function placeLine(date: DashboardDate): string {
-  const friends = date.friends.length
-  if (friends === 0) return date.event.city
-  return `${date.event.city}, ${friends} ${friends === 1 ? 'ami' : 'amis'}`
-}
 
 export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
   const go = useTransitionNavigate()
@@ -29,18 +23,20 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
             <li key={date.participationId} className="upcoming__item">
               <button
                 type="button"
-                className={
-                  date.confirmed ? 'upcoming__row' : 'upcoming__row upcoming__row--pending'
-                }
+                className="upcoming__row"
                 onClick={() => go(`/evenement/${date.event.id}`)}
               >
-                <span className="upcoming__dot" />
+                {date.confirmed ? (
+                  <span className="upcoming__dot" />
+                ) : (
+                  <Contrast className="upcoming__pending" size={12} strokeWidth={2.4} />
+                )}
                 <span className="upcoming__identity">
                   <span className="upcoming__line">
                     <span className="upcoming__name">{date.event.name}</span>
                     <span className="upcoming__countdown">{formatDaysShort(date.daysAway)}</span>
                   </span>
-                  <span className="upcoming__place">{placeLine(date)}</span>
+                  <span className="upcoming__place">{date.event.city}</span>
                 </span>
                 {date.friends.length > 0 && (
                   <AvatarStack>
@@ -61,7 +57,8 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
           go('/calendrier')
         }}
       >
-        Voir tout le calendrier &gt;
+        Voir tout le calendrier
+        <ArrowRight size={14} strokeWidth={2} />
       </button>
     </section>
   )

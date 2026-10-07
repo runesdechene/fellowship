@@ -21,6 +21,7 @@ import {
   fetchFriendsByEvent,
   type Friend,
 } from '@/lib/friends'
+import { dossierView, type DossierView } from '@/lib/dossiers'
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
@@ -30,6 +31,7 @@ export interface DashboardDate {
   participationId: string
   status: ParticipationStatus
   paymentStatus: string | null
+  paymentOrientation: string
   confirmed: boolean
   event: EventRow
   startDate: Date
@@ -37,29 +39,17 @@ export interface DashboardDate {
   friends: Friend[]
 }
 
-/**
- * Où en est une date qui n'est pas encore réglée.
- * `dossier`  le dossier est parti, le festival n'a pas répondu
- * `acompte`  inscrit, un acompte a été versé, il reste le solde
- * `a-payer`  inscrit, rien n'a encore été versé
- */
-export type SettlementState = 'dossier' | 'acompte' | 'a-payer'
-
-/** Une date à venir dont le dossier ou le paiement n'est pas clos. */
-export interface Settlement {
+/** Une ligne de « Mes dossiers » : une date à venir, son dossier et son paiement. */
+export interface Dossier {
   participationId: string
   /** Vers où mène la ligne : la fiche de l'événement. */
   eventId: string
   name: string
-  city: string
+  imageUrl: string | null
   startDate: Date
-  state: SettlementState
-  /** Le prix de l'emplacement, s'il est renseigné. Jamais une somme de frais. */
-  due: number | null
+  endDate: Date
+  view: DossierView
 }
-
-/** Paiements qui laissent quelque chose à régler. */
-const DUE_PAYMENTS = ['a_payer', 'acompte_verse']
 
 export interface MonthBucket extends MonthSlot {
   count: number
@@ -87,8 +77,8 @@ interface DashboardData {
   next: DashboardDate | null
   /** Les dates suivantes, après la prochaine. */
   upcoming: DashboardDate[]
-  /** Les dates à venir dont le dossier ou le paiement n'est pas clos. */
-  settlements: Settlement[]
+  /** Toutes les dates à venir, avec leur dossier et leur paiement. */
+  dossiers: Dossier[]
   /** Les dernières dates passées, remplies ou non. */
   reports: DashboardReport[]
   /** Net cumulé de toutes les dates passées. null si aucun bilan rempli. */
@@ -109,7 +99,7 @@ const EMPTY: DashboardData = {
   months: [],
   next: null,
   upcoming: [],
-  settlements: [],
+  dossiers: [],
   reports: [],
   seasonNet: null,
   seasonRevenue: null,
@@ -119,48 +109,41 @@ const EMPTY: DashboardData = {
 }
 
 /**
- * « À régler » : une date à venir dont le dossier est parti sans réponse, ou
- * dont le paiement n'est pas soldé. Le montant vient de LA ligne d'emplacement
- * du registre — jamais d'une somme, qui mélangerait la dette et les frais.
+ * « Mes dossiers » : chaque date à venir avec son dossier et son paiement. Le montant vient de LA
+ * ligne d'emplacement (ou de cachet) du registre — jamais d'une somme, qui mélangerait la dette
+ * et les frais.
  */
-async function fetchSettlements(actorId: string, dates: DashboardDate[]): Promise<Settlement[]> {
-  const pending = dates.filter(
-    (date) =>
-      date.status === 'en_cours' ||
-      (date.confirmed && DUE_PAYMENTS.includes(date.paymentStatus ?? '')),
-  )
-  if (pending.length === 0) return []
+async function fetchDossiers(actorId: string, dates: DashboardDate[]): Promise<Dossier[]> {
+  if (dates.length === 0) return []
 
-  const dueRows = must(
+  const standRows = must(
     await supabase
       .from('event_ledger_entries')
       .select('event_id, amount')
       .eq('actor_id', actorId)
       .eq('source', 'stepper')
-      .eq('direction', 'out')
       .in(
         'event_id',
-        pending.map((date) => date.event.id),
+        dates.map((date) => date.event.id),
       ),
   )
+  const amountByEvent = new Map(standRows.map((row) => [row.event_id, row.amount]))
 
-  const dueByEvent = new Map(dueRows.map((row) => [row.event_id, row.amount]))
-
-  return pending.map((date) => {
-    const due = dueByEvent.get(date.event.id)
+  return dates.map((date) => {
+    const amount = amountByEvent.get(date.event.id)
     return {
       participationId: date.participationId,
       eventId: date.event.id,
       name: date.event.name,
-      city: date.event.city,
+      imageUrl: date.event.image_url,
       startDate: date.startDate,
-      state:
-        date.status === 'en_cours'
-          ? 'dossier'
-          : date.paymentStatus === 'acompte_verse'
-            ? 'acompte'
-            : 'a-payer',
-      due: typeof due === 'number' && due > 0 ? due : null,
+      endDate: parseSqlDate(date.event.end_date),
+      view: dossierView({
+        status: date.status,
+        paymentStatus: date.paymentStatus,
+        orientation: date.paymentOrientation,
+        amount: typeof amount === 'number' && amount > 0 ? amount : null,
+      }),
     }
   })
 }
@@ -260,7 +243,7 @@ async function loadDashboard(
   const rows = must(
     await supabase
       .from('participations')
-      .select('id, status, payment_status, event_id, events!inner(*)')
+      .select('id, status, payment_status, payment_orientation, event_id, events!inner(*)')
       .eq('actor_id', actorId)
       .in('status', PROGRAMMED_STATUSES)
       .gte('events.end_date', todaySql),
@@ -278,6 +261,7 @@ async function loadDashboard(
         participationId: row.id,
         status: row.status,
         paymentStatus: row.payment_status,
+        paymentOrientation: row.payment_orientation,
         confirmed: CONFIRMED_STATUSES.includes(row.status),
         event: row.events,
         startDate,
@@ -287,9 +271,9 @@ async function loadDashboard(
     })
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
-  const [{ reports, seasonNet, seasonRevenue, pendingReport }, settlements] = await Promise.all([
+  const [{ reports, seasonNet, seasonRevenue, pendingReport }, dossiers] = await Promise.all([
     fetchReports(actorId, todaySql),
-    fetchSettlements(actorId, dates),
+    fetchDossiers(actorId, dates),
   ])
 
   return {
@@ -298,7 +282,7 @@ async function loadDashboard(
       programmedCount: dates.length,
       next: dates[0] ?? null,
       upcoming: dates.slice(1, 4),
-      settlements,
+      dossiers,
       reports,
       seasonNet,
       seasonRevenue,
@@ -367,7 +351,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       months,
       next: null,
       upcoming: [],
-      settlements: [],
+      dossiers: [],
       reports: [],
       seasonNet: null,
       seasonRevenue: null,

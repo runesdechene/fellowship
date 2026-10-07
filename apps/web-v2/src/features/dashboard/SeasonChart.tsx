@@ -1,44 +1,37 @@
 /**
- * QUOI     — la frise de saison : une barre par mois, proportionnelle au nombre de dates.
+ * QUOI     — la frise de saison : une gélule par mois, de plus en plus haute avec le nombre de
+ *            dates ; le mois en cours en noir, un mois vide réduit à un trait.
  * POURQUOI — voir d'un coup d'œil les mois chargés ; les bornes de hauteur se règlent dans
  *            styles/2-semantic.css, pas ici.
  */
 import type { CSSProperties } from 'react'
+import { formatMonthShort } from '@/lib/dates'
 import type { MonthBucket } from './useDashboard'
 
-/**
- * Une barre par mois. La hauteur est proportionnelle au nombre de dates,
- * entre --chart-bar-min (zéro) et --chart-bar-max (le mois le plus chargé).
- * Les deux bornes se règlent dans src/styles/2-semantic.css.
- */
+/** De 0 (un mois à une date) à 1 (le mois le plus chargé). */
+function barRatio(count: number, max: number): number {
+  return max > 1 ? (count - 1) / (max - 1) : 0
+}
+
 export function SeasonChart({ months }: { months: MonthBucket[] }) {
   const max = Math.max(1, ...months.map((month) => month.count))
 
   return (
     <div className="season-chart">
-      {months.map((month) => {
-        const ratio = month.count / max
+      {months.map((month, index) => {
+        const classes = ['season-chart__column']
+        if (month.count === 0) classes.push('season-chart__column--empty')
+        if (index === 0) classes.push('season-chart__column--current')
 
         return (
-          <div
-            key={month.key}
-            className={
-              month.count === 0
-                ? 'season-chart__column season-chart__column--empty'
-                : 'season-chart__column'
-            }
-          >
+          <div key={month.key} className={classes.join(' ')}>
             <div
               className="season-chart__bar"
-              style={
-                {
-                  '--bar-height': `calc(var(--chart-bar-min) + (var(--chart-bar-max) - var(--chart-bar-min)) * ${ratio})`,
-                } as CSSProperties
-              }
+              style={{ '--bar-ratio': String(barRatio(month.count, max)) } as CSSProperties}
             >
-              <span className="season-chart__value">{month.count}</span>
+              {month.count > 0 && <span className="season-chart__value">{month.count}</span>}
             </div>
-            <span className="season-chart__month">{month.label}</span>
+            <span className="season-chart__month">{formatMonthShort(month.date)}</span>
           </div>
         )
       })}

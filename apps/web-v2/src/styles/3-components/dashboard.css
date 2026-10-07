@@ -31,7 +31,7 @@
 }
 
 .dashboard__greeting {
-  font: var(--type-page-title);
+  font: var(--type-greeting);
   color: var(--ink-title);
 }
 
@@ -44,6 +44,11 @@
   margin-top: var(--space-6);
   font: var(--type-page-subtitle);
   color: var(--ink-soft);
+}
+
+.dashboard__subtitle b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
 }
 
 /* --- Blocs ---------------------------------------------------------------- */
@@ -62,6 +67,9 @@
 /* Variante : le titre est suivi d'un chiffre de synthèse. Les deux forment un
    bloc, et c'est ce bloc qui porte la distance jusqu'au contenu. */
 .dashboard__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   margin-bottom: var(--gap-section-title);
 }
 
@@ -69,17 +77,11 @@
   margin-bottom: 0;
 }
 
-/* Phrase de synthèse sous le titre du bloc. Les chiffres portent le poids,
-   les mots qui les relient s'effacent. */
-.dashboard__section-total {
-  margin-top: var(--space-8);
-  font: var(--type-section-total-note);
+/* Une phrase qui dit à quoi sert le bloc, entre son titre et son contenu. */
+.dashboard__section-note {
+  margin: calc(var(--space-8) - var(--gap-section-title)) 0 var(--gap-section-title);
+  font: var(--type-page-subtitle);
   color: var(--ink-soft);
-}
-
-.dashboard__section-total b {
-  font: var(--type-section-total);
-  color: var(--ink-total);
 }
 
 /* Deux colonnes titrées côte à côte : prochaine date + à venir */
