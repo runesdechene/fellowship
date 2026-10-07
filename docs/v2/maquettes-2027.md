@@ -29,7 +29,8 @@
 | Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` | dessiné |
-| Mobile (tous les écrans) | — | à dessiner |
+| Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
+| Mobile — les autres écrans | — | à dessiner au moment de leur spec |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
 
@@ -72,6 +73,7 @@
 
 - [ ] **Statut `en_cours`** : libellé « Dossier envoyé » partout (`EventStatus.tsx` dit « Dossier en cours »).
 - [ ] **Navigation** : Explorer · Calendrier · Communauté · Tableau de bord ; « Activité du réseau » en bas de la barre (gratuite).
+- [ ] **Mobile** : barre d'onglets en bas (les mêmes quatre entrées) ; en haut le compte, la cloche et le « + » ; la fiche ouvre sur l'affiche pleine largeur (retour et partage posés dessus) ; le calendrier glisse mois par mois avec les initiales des mois fixées en haut ; l'Explorer ramasse Rechercher / Où / Quand en un seul champ + un bouton de filtres, les catégories et les rangées glissent.
 - [ ] **Activité du réseau / Communauté** : ajouter les arrivées (« X vient de rejoindre Fellowship ») ; les avis respectent l'**identité protégée** (« Un exposant a noté… » sauf pour les amis professionnels).
 - [ ] **Fiche** : contrôle segmenté du statut (Inscrit en dégradé) ; « Fixer un objectif » ; rappel de clôture (Pro). Ordre : Statut · **Mon dossier** (paiement : à payer / acompte versé / payé, montant versé, solde et échéance, à qui) · À propos · Informations · **Pour candidater** (date limite, comment, dossier en ligne, contact, ce que j'ai envoyé — à stocker par exposant) · **Avis** (note globale ; détail affluence / organisation / rentabilité en Pro ; extraits à l'identité protégée) · **Discussions** (questions, réponses, « Résolu », champ pour poser une question). L'affiche reste fixe au défilement.
 - [ ] **Explorer** : recherche par mot (festivals et artisans ; pas d'organisateurs pour l'instant), barre Où / Quand, catégories en puces, rangées éditoriales ; « Près de chez toi » lit le code postal du profil.
