@@ -211,7 +211,9 @@
   color: var(--ink-soft);
   font: var(--type-list-name);
   cursor: pointer;
-  transition: background-color var(--menu-motion), color var(--menu-motion);
+  transition:
+    background-color var(--menu-motion),
+    color var(--menu-motion);
 }
 
 .tag--on {
@@ -234,7 +236,6 @@
   flex-direction: column;
   gap: var(--space-12);
 }
-
 
 .mate__label {
   font: var(--type-eyebrow);

@@ -172,9 +172,7 @@ export function Select<T>({
         onClick={() => (ouvert ? setOuvert(false) : ouvrir())}
         onKeyDown={auClavier}
       >
-        {courant?.Icon && (
-          <courant.Icon className="select__icone" size={16} strokeWidth={2} />
-        )}
+        {courant?.Icon && <courant.Icon className="select__icone" size={16} strokeWidth={2} />}
         <span className="select__mot">{courant?.label}</span>
         <ChevronDown className="select__chevron" size={14} strokeWidth={2} />
       </button>
@@ -199,9 +197,7 @@ export function Select<T>({
                 onMouseEnter={() => setSurvol(position)}
                 tabIndex={-1}
               >
-                {option.Icon && (
-                  <option.Icon className="select__icone" size={16} strokeWidth={2} />
-                )}
+                {option.Icon && <option.Icon className="select__icone" size={16} strokeWidth={2} />}
                 <span className="select__mot">{option.label}</span>
               </button>
             </li>

@@ -148,11 +148,7 @@ function Question({
       <h3 className="question__titre">{thread.title}</h3>
       {thread.body && <p className="question__corps">{thread.body}</p>}
 
-      <Signature
-        name={thread.name}
-        avatarUrl={thread.avatarUrl}
-        createdAt={thread.createdAt}
-      >
+      <Signature name={thread.name} avatarUrl={thread.avatarUrl} createdAt={thread.createdAt}>
         {/* Les visages de ceux qui ont répondu, avant même d'ouvrir. */}
         {thread.replies.length > 0 && (
           <span className="question__pile">
@@ -183,11 +179,7 @@ function Question({
             La réponse
           </p>
           <p className="reponse-elue__texte">{elue.body}</p>
-          <Signature
-            name={elue.name}
-            avatarUrl={elue.avatarUrl}
-            createdAt={elue.createdAt}
-          />
+          <Signature name={elue.name} avatarUrl={elue.avatarUrl} createdAt={elue.createdAt} />
           <div className="discussion__gestes">
             {/* Élire, c'est aussi pouvoir se dédire. */}
             {canElect && (
@@ -240,11 +232,7 @@ function Question({
             ))}
           </div>
         ) : (
-          <button
-            type="button"
-            className="question__deplier"
-            onClick={() => setDeplie(true)}
-          >
+          <button type="button" className="question__deplier" onClick={() => setDeplie(true)}>
             {autres.length === 1 ? '1 autre réponse' : `${autres.length} autres réponses`}
           </button>
         ))}
@@ -275,11 +263,7 @@ function Question({
               {/* Pas `variant="bare"` : il est dessiné pour UNE ICÔNE dans
                   un carré de 42 px, le mot y débordait. C'est une action en
                   texte, comme « Répondre » — même classe qu'elle. */}
-              <button
-                type="button"
-                className="discussion__geste"
-                onClick={() => setOpen(false)}
-              >
+              <button type="button" className="discussion__geste" onClick={() => setOpen(false)}>
                 Annuler
               </button>
             </div>
@@ -331,16 +315,13 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
   function toggle(channel: ThreadAudience) {
     const current = shown
     setActive(
-      current.includes(channel)
-        ? current.filter((c) => c !== channel)
-        : [...current, channel],
+      current.includes(channel) ? current.filter((c) => c !== channel) : [...current, channel],
     )
   }
 
   /** Combien de questions vivent dans un canal — dit où il se passe quelque
       chose avant qu'on ait cliqué. */
-  const compte = (channel: ThreadAudience) =>
-    threads.filter((t) => t.audience === channel).length
+  const compte = (channel: ThreadAudience) => threads.filter((t) => t.audience === channel).length
 
   return (
     <div className="discussion">
@@ -381,19 +362,15 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
             <div className="discussion__composer-pied">
               {audience && (
                 <span className="discussion__note">
-                  Posée dans le canal <b>{channelLabel(audience)}</b> — c’est celui de la
-                  casquette avec laquelle tu es connecté.
+                  Posée dans le canal <b>{channelLabel(audience)}</b> — c’est celui de la casquette
+                  avec laquelle tu es connecté.
                 </span>
               )}
               {/* La raison du blocage, jamais un bouton gris sans explication. */}
               {blocker && title.trim() !== '' && (
                 <span className="discussion__blocage">{blocker}</span>
               )}
-              <button
-                type="button"
-                className="discussion__geste"
-                onClick={() => setAsking(false)}
-              >
+              <button type="button" className="discussion__geste" onClick={() => setAsking(false)}>
                 Annuler
               </button>
               <Button
@@ -412,11 +389,7 @@ export function EventDiscussion({ eventId }: { eventId: string }) {
             </div>
           </div>
         ) : (
-          <button
-            type="button"
-            className="discussion__poser"
-            onClick={() => setAsking(true)}
-          >
+          <button type="button" className="discussion__poser" onClick={() => setAsking(true)}>
             <span>
               <span className="discussion__poser-mot">Poser une question</span>
               {/* Quand il n’y a RIEN, l’absence se dit ICI plutôt qu’en

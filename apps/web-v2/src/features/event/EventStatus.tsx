@@ -6,15 +6,7 @@
  *            solde son acompte APRÈS (piège du 19/08/2026).
  */
 import { useState } from 'react'
-import {
-  CircleCheck,
-  CircleMinus,
-  CircleX,
-  Coins,
-  FileClock,
-  Hourglass,
-  Star,
-} from 'lucide-react'
+import { CircleCheck, CircleMinus, CircleX, Coins, FileClock, Hourglass, Star } from 'lucide-react'
 import { Select, type SelectOption } from '@/components/ui/Select'
 import type { ParticipationStatus } from '@/types/database'
 import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent'

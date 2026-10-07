@@ -152,7 +152,6 @@ export function useEventDraft() {
 
   const status: DraftStatus = !settled ? 'quiet' : stored ? 'kept' : 'refused'
 
-
   const update = useCallback(<K extends keyof EventDraft>(key: K, value: EventDraft[K]) => {
     setDraft((previous) => ({ ...previous, [key]: value }))
   }, [])

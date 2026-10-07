@@ -19,9 +19,7 @@ describe('le canal d’une question', () => {
   it('se déduit du type de l’acteur, il ne se choisit pas', () => {
     expect(deriveAudience({ id: 'a', kind: 'person' })).toBeNull()
     expect(deriveAudience({ id: 'a', kind: 'entity', entityType: 'exposant' })).toBe('exposant')
-    expect(deriveAudience({ id: 'a', kind: 'entity', entityType: 'festival' })).toBe(
-      'organisateur',
-    )
+    expect(deriveAudience({ id: 'a', kind: 'entity', entityType: 'festival' })).toBe('organisateur')
   })
 
   // Une entité sans canal serait rejetée par la base : mieux vaut ne pas lui
@@ -50,10 +48,7 @@ describe('le canal d’une question', () => {
 
 describe('les canaux proposés au filtrage', () => {
   it('suit les casquettes possédées, dans un ordre stable', () => {
-    expect(visibleChannels(['exposant', 'festival'])).toEqual([
-      'exposant',
-      'organisateur',
-    ])
+    expect(visibleChannels(['exposant', 'festival'])).toEqual(['exposant', 'organisateur'])
   })
 
   it('n’en propose aucun sans casquette', () => {
@@ -98,20 +93,14 @@ describe('les tris', () => {
   })
 
   it('montre les questions les plus récentes d’abord', () => {
-    const threads = [
-      { createdAt: '2026-08-01T10:00:00Z' },
-      { createdAt: '2026-08-05T10:00:00Z' },
-    ]
+    const threads = [{ createdAt: '2026-08-01T10:00:00Z' }, { createdAt: '2026-08-05T10:00:00Z' }]
     expect(sortThreads(threads)[0].createdAt).toBe('2026-08-05T10:00:00Z')
   })
 })
 
 describe('le filtrage par canal', () => {
   it('ne garde que les canaux actifs', () => {
-    const rows = [
-      { audience: 'exposant' as const },
-      { audience: 'festivalier' as const },
-    ]
+    const rows = [{ audience: 'exposant' as const }, { audience: 'festivalier' as const }]
     expect(filterByChannels(rows, ['exposant'])).toHaveLength(1)
   })
 })

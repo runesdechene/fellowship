@@ -75,9 +75,6 @@ export function tagStylesByName(rows: TagRow[]): Map<string, TagStyle> {
 }
 
 /** Retrouve les couleurs d'un tag, qu'il soit stocke par nom ou par slug. */
-export function tagStyleFor(
-  styles: Map<string, TagStyle>,
-  tag: string,
-): TagStyle | undefined {
+export function tagStyleFor(styles: Map<string, TagStyle>, tag: string): TagStyle | undefined {
   return styles.get(tag.toLowerCase())
 }

@@ -40,9 +40,7 @@ export function EventPreview({ draft, posterUrl }: EventPreviewProps) {
 
       <div className="event-card__body">
         <span
-          className={
-            draft.name ? 'event-card__name' : 'event-card__name event-card__name--waiting'
-          }
+          className={draft.name ? 'event-card__name' : 'event-card__name event-card__name--waiting'}
         >
           {draft.name || 'Sans nom pour l’instant'}
         </span>
@@ -69,9 +67,7 @@ export function EventPreview({ draft, posterUrl }: EventPreviewProps) {
           </div>
         ) : (
           !draft.isPrivate && (
-            <span className="event-card__meta event-card__meta--waiting">
-              Catégories — étape 3
-            </span>
+            <span className="event-card__meta event-card__meta--waiting">Catégories — étape 3</span>
           )
         )}
       </div>

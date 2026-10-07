@@ -64,10 +64,7 @@ export async function fetchActorProfiles(ids: string[]): Promise<Map<string, Fri
       avatarUrl: row.avatar_url,
     })
   }
-  for (const row of (users ?? []) as Pick<
-    UserRow,
-    'actor_id' | 'display_name' | 'avatar_url'
-  >[]) {
+  for (const row of (users ?? []) as Pick<UserRow, 'actor_id' | 'display_name' | 'avatar_url'>[]) {
     if (byId.has(row.actor_id)) continue
     byId.set(row.actor_id, {
       id: row.actor_id,

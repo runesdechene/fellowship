@@ -56,5 +56,9 @@ export function cleanRichText(html: string): string {
  */
 export function isRichTextEmpty(html: string | null | undefined): boolean {
   if (!html) return true
-  return cleanRichText(html).replace(/<[^>]*>/g, '').trim() === ''
+  return (
+    cleanRichText(html)
+      .replace(/<[^>]*>/g, '')
+      .trim() === ''
+  )
 }

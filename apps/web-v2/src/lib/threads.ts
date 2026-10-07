@@ -123,9 +123,7 @@ export function sortReplies<T extends { id: string; createdAt: string }>(
 
 /** La plus récente d'abord. Non mutant. */
 export function sortThreads<T extends { createdAt: string }>(rows: T[]): T[] {
-  return [...rows].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  )
+  return [...rows].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 
 export function filterByChannels<T extends { audience: ThreadAudience }>(

@@ -13,8 +13,7 @@
   /* En haut, la carte rend aux lignes la moitié d'écart qu'elles ont prise,
      pour que le premier nom reste à sa place. En bas c'est le lien de pied
      de carte, pas une ligne : la marge d'origine y est conservée. */
-  padding: calc(var(--space-20) - var(--list-row-gap) / 2) var(--card-padding)
-    var(--space-20);
+  padding: calc(var(--space-20) - var(--list-row-gap) / 2) var(--card-padding) var(--space-20);
   background: var(--surface-card);
   border-radius: var(--radius-card);
 }

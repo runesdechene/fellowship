@@ -34,12 +34,7 @@ export function Topbar() {
               ressemblent pas se remarquent. Uriel a tranché : les trois
               contrôles de la barre portent la même surface. */}
           {back && (
-            <Button
-              variant="icon"
-              onClick={() => go(back)}
-              aria-label="Retour"
-              title="Retour"
-            >
+            <Button variant="icon" onClick={() => go(back)} aria-label="Retour" title="Retour">
               <ArrowLeft size={20} strokeWidth={1.75} />
             </Button>
           )}

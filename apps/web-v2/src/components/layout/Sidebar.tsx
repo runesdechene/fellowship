@@ -3,12 +3,7 @@
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; une
  *            entrée sans écran intégré reste visible mais inerte.
  */
-import {
-  CircleGauge,
-  PanelRightClose,
-  PanelRightOpen,
-  Telescope,
-} from 'lucide-react'
+import { CircleGauge, PanelRightClose, PanelRightOpen, Telescope } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { AccountSwitcher } from './AccountSwitcher'
 

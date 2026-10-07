@@ -6,24 +6,36 @@ import { decideAccess, settleCheck, toAccessState } from './access'
 
 describe('toAccessState', () => {
   it('attend tant que la session se lit', () => {
-    expect(toAccessState({ authLoading: true, hasUser: false, check: 'pending' })).toEqual({ status: 'loading' })
+    expect(toAccessState({ authLoading: true, hasUser: false, check: 'pending' })).toEqual({
+      status: 'loading',
+    })
   })
   it('sans compte, ne demande rien à la base', () => {
     expect(toAccessState({ authLoading: false, hasUser: false, check: 'pending' })).toEqual({
-      status: 'ready', hasSession: false, hasAccess: false,
+      status: 'ready',
+      hasSession: false,
+      hasAccess: false,
     })
   })
   it('attend la réponse de la base pour un compte connecté', () => {
-    expect(toAccessState({ authLoading: false, hasUser: true, check: 'pending' })).toEqual({ status: 'loading' })
+    expect(toAccessState({ authLoading: false, hasUser: true, check: 'pending' })).toEqual({
+      status: 'loading',
+    })
   })
   it('traduit la réponse de la base', () => {
     expect(toAccessState({ authLoading: false, hasUser: true, check: 'allowed' })).toEqual({
-      status: 'ready', hasSession: true, hasAccess: true,
+      status: 'ready',
+      hasSession: true,
+      hasAccess: true,
     })
     expect(toAccessState({ authLoading: false, hasUser: true, check: 'refused' })).toEqual({
-      status: 'ready', hasSession: true, hasAccess: false,
+      status: 'ready',
+      hasSession: true,
+      hasAccess: false,
     })
-    expect(toAccessState({ authLoading: false, hasUser: true, check: 'error' })).toEqual({ status: 'error' })
+    expect(toAccessState({ authLoading: false, hasUser: true, check: 'error' })).toEqual({
+      status: 'error',
+    })
   })
 })
 

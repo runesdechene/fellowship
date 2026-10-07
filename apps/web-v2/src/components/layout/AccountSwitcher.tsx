@@ -70,11 +70,7 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
         aria-expanded={open}
         aria-haspopup={hasChoice ? 'menu' : undefined}
       >
-        <Avatar
-          className="account-switcher__avatar"
-          src={actor?.avatarUrl}
-          name={actor?.label}
-        />
+        <Avatar className="account-switcher__avatar" src={actor?.avatarUrl} name={actor?.label} />
         <span className="account-switcher__identity">
           <span className="account-switcher__name">{actor?.label ?? '—'}</span>
           <span className="account-switcher__role">{actor?.roleLabel ?? ''}</span>

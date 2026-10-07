@@ -131,8 +131,7 @@
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLE
      --------------------------------------------------------------------- */
-  --family-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI',
-    sans-serif;
+  --family-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)

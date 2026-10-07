@@ -113,9 +113,7 @@ function LedgerRow({ line }: { line: EventLedgerLine }) {
     <li className="event-page__ledger-row">
       <span className="event-page__ledger-label">{line.label || line.category}</span>
       <span
-        className={
-          incoming ? 'event-page__ledger-amount--in' : 'event-page__ledger-amount--out'
-        }
+        className={incoming ? 'event-page__ledger-amount--in' : 'event-page__ledger-amount--out'}
       >
         {incoming ? formatEuros(line.amount) : `− ${formatEuros(line.amount)}`}
       </span>
@@ -212,159 +210,153 @@ export function EventPage() {
   return (
     <div className="event-page">
       <div className="event-page__main">
-          <header className="event-page__hero">
-            <div className="event-page__identity">
-              <h1 className="event-page__title">{event.name}</h1>
+        <header className="event-page__hero">
+          <div className="event-page__identity">
+            <h1 className="event-page__title">{event.name}</h1>
 
-              {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
+            {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
                   ne se scannent pas. Ceux qui se scannent sont plus bas, en
                   cartes. */}
-              <p className="event-page__meta">
-                {splitRange(startDate, endDate)[0]}{' '}
-                <b>{splitRange(startDate, endDate)[1]}</b> — {event.city} (
-                {event.department})
-                {event.edition ? ` · ${event.edition}ᵉ édition` : ''}
-              </p>
+            <p className="event-page__meta">
+              {splitRange(startDate, endDate)[0]} <b>{splitRange(startDate, endDate)[1]}</b> —{' '}
+              {event.city} ({event.department}){event.edition ? ` · ${event.edition}ᵉ édition` : ''}
+            </p>
 
-              {event.tags && event.tags.length > 0 && (
-                <div className="event-page__tags">
-                  {event.tags.map((tag) => (
-                    <Tag key={tag} name={tag} style={tagStyleFor(tagStyles, tag)} />
-                  ))}
-                </div>
-              )}
+            {event.tags && event.tags.length > 0 && (
+              <div className="event-page__tags">
+                {event.tags.map((tag) => (
+                  <Tag key={tag} name={tag} style={tagStyleFor(tagStyles, tag)} />
+                ))}
+              </div>
+            )}
 
-              {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
+            {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
                   de l'identité de la date, au même titre que son lieu — ça ne
                   méritait ni un titre de section ni une carte. */}
-              {friends.length > 0 && (
-                <p className="event-page__companions">
-                  <span className="event-page__avatars">
-                    {friends.slice(0, 5).map((friend) => (
-                      <span key={friend.id} className="event-page__avatar">
-                        <Avatar src={friend.avatarUrl} name={friend.name} />
-                      </span>
-                    ))}
+            {friends.length > 0 && (
+              <p className="event-page__companions">
+                <span className="event-page__avatars">
+                  {friends.slice(0, 5).map((friend) => (
+                    <span key={friend.id} className="event-page__avatar">
+                      <Avatar src={friend.avatarUrl} name={friend.name} />
+                    </span>
+                  ))}
+                </span>
+                {friends.length === 1 ? (
+                  <span>
+                    <b>{friends[0].name}</b> y sera aussi
                   </span>
-                  {friends.length === 1 ? (
-                    <span>
-                      <b>{friends[0].name}</b> y sera aussi
-                    </span>
-                  ) : (
-                    <span>
-                      <b>{friends.length} exposants</b> que tu suis y seront
-                    </span>
-                  )}
-                </p>
-              )}
-            </div>
-          </header>
+                ) : (
+                  <span>
+                    <b>{friends.length} exposants</b> que tu suis y seront
+                  </span>
+                )}
+              </p>
+            )}
+          </div>
+        </header>
 
-          <EventStatus
-            status={status}
-            paymentStatus={paymentStatus}
-            paymentOrientation={paymentOrientation}
-            setStatus={setStatus}
-            setPayment={setPayment}
-            setOrientation={setOrientation}
-            setStandAmount={setStandAmount}
-            standAmount={standAmount}
-            saving={saving}
-            writeError={writeError}
-          />
+        <EventStatus
+          status={status}
+          paymentStatus={paymentStatus}
+          paymentOrientation={paymentOrientation}
+          setStatus={setStatus}
+          setPayment={setPayment}
+          setOrientation={setOrientation}
+          setStandAmount={setStandAmount}
+          standAmount={standAmount}
+          saving={saving}
+          writeError={writeError}
+        />
 
-          {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
+        {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
               Le cadre disait « ceci est un bloc » alors que la description est
               simplement la voix de l'organisateur. Les cartes restent pour les
               FAITS — dates, lieu, échéance — qui eux se scannent. */}
-          <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
-            {isRichTextEmpty(event.description) ? (
-              <p className="event-page__state">
-                L’organisateur n’a pas encore décrit cet événement.
-              </p>
-            ) : (
-              <RichText className="event-page__description" html={event.description ?? ''} />
-            )}
-          </Block>
-
-          <Block title="Infos pratiques" bare empty={facts.length === 0}>
-            {facts.length > 0 ? (
-              <div className="event-page__facts">
-                {facts.map((fait) => (
-                  <Fact key={fait.label} {...fait} />
-                ))}
-              </div>
-            ) : (
-              <p className="event-page__state">
-                L’organisateur n’a encore donné aucune information pratique.
-              </p>
-            )}
-
-            {(event.registration_url || event.external_url || event.contact_email) && (
-              <div className="event-page__links">
-                {event.registration_url && (
-                  <a
-                    className="event-page__link"
-                    href={event.registration_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Dossier d’inscription
-                  </a>
-                )}
-                {event.external_url && (
-                  <a
-                    className="event-page__link"
-                    href={event.external_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Site du festival
-                  </a>
-                )}
-                {event.contact_email && (
-                  <a className="event-page__link" href={`mailto:${event.contact_email}`}>
-                    {event.contact_email}
-                  </a>
-                )}
-              </div>
-            )}
-
-            {event.registration_note && (
-              <p className="event-page__note">{event.registration_note}</p>
-            )}
-          </Block>
-
-          <Block title="Discussion du festival" bare>
-            <EventDiscussion eventId={event.id} />
-          </Block>
-
-          {past && (
-            <section className="event-page__block">
-              <div className="event-page__block-head">
-                <h2 className="event-page__block-title">Mon bilan</h2>
-                {net !== null && revenue !== null && (
-                  <p className="event-page__block-total">
-                    <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
-                    <b>{formatEuros(revenue)}</b>
-                  </p>
-                )}
-              </div>
-              <div className="event-page__card">
-                {ledger.length > 0 ? (
-                  <ul className="event-page__ledger">
-                    {ledger.map((line) => (
-                      <LedgerRow key={line.id} line={line} />
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="event-page__state">
-                    Le bilan de cette date n’a pas encore été rempli.
-                  </p>
-                )}
-              </div>
-            </section>
+        <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
+          {isRichTextEmpty(event.description) ? (
+            <p className="event-page__state">L’organisateur n’a pas encore décrit cet événement.</p>
+          ) : (
+            <RichText className="event-page__description" html={event.description ?? ''} />
           )}
+        </Block>
+
+        <Block title="Infos pratiques" bare empty={facts.length === 0}>
+          {facts.length > 0 ? (
+            <div className="event-page__facts">
+              {facts.map((fait) => (
+                <Fact key={fait.label} {...fait} />
+              ))}
+            </div>
+          ) : (
+            <p className="event-page__state">
+              L’organisateur n’a encore donné aucune information pratique.
+            </p>
+          )}
+
+          {(event.registration_url || event.external_url || event.contact_email) && (
+            <div className="event-page__links">
+              {event.registration_url && (
+                <a
+                  className="event-page__link"
+                  href={event.registration_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Dossier d’inscription
+                </a>
+              )}
+              {event.external_url && (
+                <a
+                  className="event-page__link"
+                  href={event.external_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Site du festival
+                </a>
+              )}
+              {event.contact_email && (
+                <a className="event-page__link" href={`mailto:${event.contact_email}`}>
+                  {event.contact_email}
+                </a>
+              )}
+            </div>
+          )}
+
+          {event.registration_note && <p className="event-page__note">{event.registration_note}</p>}
+        </Block>
+
+        <Block title="Discussion du festival" bare>
+          <EventDiscussion eventId={event.id} />
+        </Block>
+
+        {past && (
+          <section className="event-page__block">
+            <div className="event-page__block-head">
+              <h2 className="event-page__block-title">Mon bilan</h2>
+              {net !== null && revenue !== null && (
+                <p className="event-page__block-total">
+                  <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
+                  <b>{formatEuros(revenue)}</b>
+                </p>
+              )}
+            </div>
+            <div className="event-page__card">
+              {ledger.length > 0 ? (
+                <ul className="event-page__ledger">
+                  {ledger.map((line) => (
+                    <LedgerRow key={line.id} line={line} />
+                  ))}
+                </ul>
+              ) : (
+                <p className="event-page__state">
+                  Le bilan de cette date n’a pas encore été rempli.
+                </p>
+              )}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   )

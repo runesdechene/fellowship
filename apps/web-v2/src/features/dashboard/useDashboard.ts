@@ -127,10 +127,7 @@ type ParticipationWithEvent = {
  * dont le paiement n'est pas soldé. Le montant vient de LA ligne d'emplacement
  * du registre — jamais d'une somme, qui mélangerait la dette et les frais.
  */
-async function fetchSettlements(
-  actorId: string,
-  dates: DashboardDate[],
-): Promise<Settlement[]> {
+async function fetchSettlements(actorId: string, dates: DashboardDate[]): Promise<Settlement[]> {
   const pending = dates.filter(
     (date) =>
       date.status === 'en_cours' ||

@@ -75,11 +75,7 @@ export interface ThreadsData {
   error: string | null
   /** Une écriture est en cours : on ne rejoue pas le même geste deux fois. */
   saving: boolean
-  ask: (input: {
-    audience: ThreadAudience
-    title: string
-    body: string
-  }) => Promise<void>
+  ask: (input: { audience: ThreadAudience; title: string; body: string }) => Promise<void>
   reply: (threadId: string, body: string) => Promise<void>
   markBest: (threadId: string, replyId: string | null) => Promise<void>
   remove: (threadId: string) => Promise<void>
@@ -119,10 +115,7 @@ async function fetchThreads(eventId: string): Promise<Thread[]> {
   // confondues : une requête par message ferait des dizaines d'appels sur un
   // fil un peu vivant.
   const actorIds = [
-    ...new Set([
-      ...threadRows.map((row) => row.actor_id),
-      ...replyRows.map((row) => row.actor_id),
-    ]),
+    ...new Set([...threadRows.map((row) => row.actor_id), ...replyRows.map((row) => row.actor_id)]),
   ]
   const profiles = await fetchActorProfiles(actorIds)
 
@@ -223,10 +216,7 @@ export function useEventThreads(
    * peut attendre, pas une vraie promesse — elle n'a ni `catch` ni `finally`.
    */
   const write = useCallback(
-    async (
-      run: () => PromiseLike<{ error: { message: string } | null }>,
-      failure: string,
-    ) => {
+    async (run: () => PromiseLike<{ error: { message: string } | null }>, failure: string) => {
       if (saving) return
       setSaving(true)
       setError(null)
@@ -281,8 +271,7 @@ export function useEventThreads(
   const markBest = useCallback(
     async (threadId: string, replyId: string | null) => {
       await write(
-        () =>
-          db.from('event_threads').update({ best_reply_id: replyId }).eq('id', threadId),
+        () => db.from('event_threads').update({ best_reply_id: replyId }).eq('id', threadId),
         'La meilleure réponse n’a pas pu être changée.',
       )
     },

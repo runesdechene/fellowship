@@ -206,93 +206,69 @@
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)
      Format : graisse taille/interligne famille
      ====================================================================== */
-  --type-page-title: var(--weight-regular) var(--size-32) / var(--leading-tight)
+  --type-page-title: var(--weight-regular) var(--size-32) / var(--leading-tight) var(--family-sans);
+  --type-page-title-accent: var(--weight-bold) var(--size-32) / var(--leading-tight)
     var(--family-sans);
-  --type-page-title-accent: var(--weight-bold) var(--size-32) /
-    var(--leading-tight) var(--family-sans);
-  --type-page-subtitle: var(--weight-regular) var(--size-14) /
-    var(--leading-normal) var(--family-sans);
+  --type-page-subtitle: var(--weight-regular) var(--size-14) / var(--leading-normal)
+    var(--family-sans);
 
   /* Le grand titre posé au-dessus d'un bloc (Ma prochaine date, A venir…) */
-  --type-section-title: var(--weight-bold) var(--size-26) / var(--leading-tight)
-    var(--family-sans);
+  --type-section-title: var(--weight-bold) var(--size-26) / var(--leading-tight) var(--family-sans);
 
   /* Le lien qui accompagne un titre de bloc, et le total sous celui-ci */
-  --type-section-link: var(--weight-semibold) var(--size-12) /
-    var(--leading-snug) var(--family-sans);
-  --type-section-total: var(--weight-bold) var(--size-16) / var(--leading-snug)
+  --type-section-link: var(--weight-semibold) var(--size-12) / var(--leading-snug)
     var(--family-sans);
-  --type-section-total-note: var(--weight-medium) var(--size-16) /
-    var(--leading-snug) var(--family-sans);
-
-  --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
+  --type-section-total: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-section-total-note: var(--weight-medium) var(--size-16) / var(--leading-snug)
     var(--family-sans);
 
-  --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
+  --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+
+  --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
-  --type-event-title: var(--weight-bold) var(--size-32) / var(--leading-tight)
-    var(--family-sans);
+  --type-event-title: var(--weight-bold) var(--size-32) / var(--leading-tight) var(--family-sans);
   /* La ligne sous le titre d'une fiche. Elle a son propre token : le
      --type-event-meta ordinaire sert dans six composants, et le monter a
      16 px les aurait tous emportes. Ici c'est la premiere phrase de la
      page, elle porte plus haut que des metadonnees de carte. */
-  --type-event-hero-meta: var(--weight-regular) var(--size-16) /
-    var(--leading-normal) var(--family-sans);
-  --type-event-hero-meta-accent: var(--weight-bold) var(--size-16) /
-    var(--leading-normal) var(--family-sans);
-
-  --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
+  --type-event-hero-meta: var(--weight-regular) var(--size-16) / var(--leading-normal)
     var(--family-sans);
-  --type-event-meta-accent: var(--weight-bold) var(--size-14) /
-    var(--leading-snug) var(--family-sans);
-
-  --type-nav: var(--weight-bold) var(--size-14) / var(--leading-snug)
-    var(--family-sans);
-  --type-account-name: var(--weight-bold) var(--size-12) / var(--leading-snug)
-    var(--family-sans);
-  --type-account-role: var(--weight-regular) var(--size-10) / var(--leading-snug)
+  --type-event-hero-meta-accent: var(--weight-bold) var(--size-16) / var(--leading-normal)
     var(--family-sans);
 
-  --type-list-name: var(--weight-bold) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
-  --type-list-meta: var(--weight-medium) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
-
-  --type-chart-value: var(--weight-bold) var(--size-30) / var(--leading-tight)
-    var(--family-sans);
-  --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug)
+  --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-event-meta-accent: var(--weight-bold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
-  --type-report-name: var(--weight-bold) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
-  --type-report-meta: var(--weight-medium) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
-  --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
+  --type-nav: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-account-name: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-account-role: var(--weight-regular) var(--size-10) / var(--leading-snug) var(--family-sans);
 
-  --type-settlement-due: var(--weight-bold) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
+  --type-list-name: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-list-meta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
 
-  --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug)
-    var(--family-sans);
-  --type-chip-strong: var(--weight-extrabold) var(--size-9) /
-    var(--leading-snug) var(--family-sans);
+  --type-chart-value: var(--weight-bold) var(--size-30) / var(--leading-tight) var(--family-sans);
+  --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug) var(--family-sans);
 
-  --type-button: var(--weight-bold) var(--size-14) / var(--leading-snug)
-    var(--family-sans);
+  --type-report-name: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-report-meta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug) var(--family-sans);
+
+  --type-settlement-due: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
+
+  --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug) var(--family-sans);
+  --type-chip-strong: var(--weight-extrabold) var(--size-9) / var(--leading-snug) var(--family-sans);
+
+  --type-button: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
 
   /* Sur-titre en capitales, posé au-dessus d'une bande d'action */
-  --type-eyebrow: var(--weight-extrabold) var(--size-10) / var(--leading-snug)
-    var(--family-sans);
+  --type-eyebrow: var(--weight-extrabold) var(--size-10) / var(--leading-snug) var(--family-sans);
   --tracking-eyebrow: var(--tracking-wide);
 
-  --type-banner-title: var(--weight-bold) var(--size-16) / var(--leading-snug)
-    var(--family-sans);
-  --type-banner-note: var(--weight-medium) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
+  --type-banner-title: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-banner-note: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      GABARIT — la structure de la page
@@ -412,10 +388,9 @@
 
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */
-  --type-create-ask: var(--weight-bold) var(--size-38) / var(--leading-tight)
+  --type-create-ask: var(--weight-bold) var(--size-38) / var(--leading-tight) var(--family-sans);
+  --type-create-card-name: var(--weight-bold) var(--size-18) / var(--leading-snug)
     var(--family-sans);
-  --type-create-card-name: var(--weight-bold) var(--size-18) /
-    var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
@@ -477,8 +452,7 @@
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,
      et la seule qui change tous les jours. */
-  --type-topbar-lead: var(--weight-bold) var(--size-16) / var(--leading-snug)
-    var(--family-sans);
+  --type-topbar-lead: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      SELECT — le sélecteur maison
@@ -496,10 +470,10 @@
   --radius-select: var(--radius-nav);
   --select-surface: var(--surface-panel);
   --select-surface-hover: var(--surface-row-hover);
-  --type-select-value: var(--weight-semibold) var(--size-13) /
-    var(--leading-snug) var(--family-sans);
-  --type-select-option: var(--weight-semibold) var(--size-13) /
-    var(--leading-snug) var(--family-sans);
+  --type-select-value: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-select-option: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
 
   /* =========================================================================
      LE SUIVI — remonté dans la grille principale
@@ -518,8 +492,7 @@
   --status-participation-width: var(--width-status-participation);
   --status-amount-width: var(--width-status-amount);
   --status-amount-min: var(--width-status-amount-min);
-  --type-status-unit: var(--weight-semibold) var(--size-12) /
-    var(--leading-snug) var(--family-sans);
+  --type-status-unit: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
   --status-gap: var(--space-6);
   /* L ecart entre les DEUX moities de la barre : le sens du paiement d un
      cote, l argent de l autre. Il ne peut pas dependre du `margin-left: auto`
@@ -544,14 +517,12 @@
   --radius-status: var(--radius-card);
   --radius-status-row: var(--radius-nav);
   --type-status-title: var(--type-section-title);
-  --type-status-value: var(--weight-semibold) var(--size-13) /
-    var(--leading-snug) var(--family-sans);
-  --type-status-side: var(--weight-semibold) var(--size-12) /
-    var(--leading-snug) var(--family-sans);
+  --type-status-value: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-status-side: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
   /* Le sens RETENU passe en gras. La surface seule ne suffit pas a le
      distinguer : c est la meme que celle du champ du montant d a cote. */
-  --type-status-side-on: var(--weight-bold) var(--size-12) /
-    var(--leading-snug) var(--family-sans);
+  --type-status-side-on: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
@@ -569,9 +540,7 @@
      ne sert qu au portable, le plafond qu au tres grand. Elargir « pour de
      vrai » passe donc par le vw, pas par le plafond. */
   --event-reading-width: clamp(430px, 25.5vw, 600px);
-  --event-page-max-width: calc(
-    var(--event-reading-width) + 2 * var(--page-gutter)
-  );
+  --event-page-max-width: calc(var(--event-reading-width) + 2 * var(--page-gutter));
 
   /* Les informations pratiques se rangent en colonnes qui se partagent la
      largeur, et repassent à la ligne plutôt que de se serrer. */
@@ -589,17 +558,17 @@
   /* Le libelle en micro-capitales, la valeur en grand dessous. L'icone vit
      DANS le libelle, a sa taille : une tuile pale de plus posait un carre
      sans rien dire. */
-  --type-event-fact-label: var(--weight-bold) var(--size-10) /
-    var(--leading-snug) var(--family-sans);
+  --type-event-fact-label: var(--weight-bold) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
   --tracking-fact-label: var(--tracking-wide);
   /* La valeur tient dans un tiers de la colonne : à 18 px une plage de dates
      débordait. C’est la CARTE qui porte le fait, plus la taille du texte. */
-  --type-event-fact-value: var(--weight-bold) var(--size-14) /
-    var(--leading-snug) var(--family-sans);
+  --type-event-fact-value: var(--weight-bold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
   /* Ce qui précise la valeur sans être elle : la durée sous les dates, la
      salle sous la ville, le mode de candidature sous l’échéance. */
-  --type-event-fact-sub: var(--weight-medium) var(--size-10) /
-    var(--leading-snug) var(--family-sans);
+  --type-event-fact-sub: var(--weight-medium) var(--size-10) / var(--leading-snug)
+    var(--family-sans);
   /* L’icone respire loin de son libelle ET du bord de sa carte. Collee, elle
      se lisait comme le premier caractere du mot ; serree contre le bord, la
      carte avait l’air trop petite pour ce qu’elle porte. */
@@ -623,16 +592,15 @@
   --tag-badge-padding-y: var(--space-4);
   --tag-badge-surface: var(--surface-chip-neutral);
   --tag-badge-ink: var(--ink-soft);
-  --type-tag-badge: var(--weight-medium) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
+  --type-tag-badge: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
 
   /* Un texte mis en forme par un organisateur : les distances entre ses
      paragraphes, ses titres et ses listes. */
   --rich-paragraph-gap: var(--space-12);
   --rich-list-inset: var(--space-20);
 
-  --type-event-description: var(--weight-regular) var(--size-14) /
-    var(--leading-relaxed) var(--family-sans);
+  --type-event-description: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
+    var(--family-sans);
 
   /* =========================================================================
      DISCUSSION DU FESTIVAL — les questions et leurs réponses
@@ -660,63 +628,52 @@
      couleur de « c'est acquis » — un filtre n'est pas un état. */
   --canal-height: var(--height-option);
   --canal-gap: var(--space-6);
-  --type-canal: var(--weight-semibold) var(--size-12) / var(--leading-snug)
-    var(--family-sans);
-  --type-canal-on: var(--weight-bold) var(--size-12) / var(--leading-snug)
-    var(--family-sans);
-  --type-canal-compte: var(--weight-bold) var(--size-11) / var(--leading-snug)
-    var(--family-sans);
+  --type-canal: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-canal-on: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-canal-compte: var(--weight-bold) var(--size-11) / var(--leading-snug) var(--family-sans);
 
   /* La question porte le corps d’un titre de page, et une mesure courte :
      au-delà de vingt-deux caractères par ligne elle cesse de se lire comme
      une question et redevient un paragraphe. */
   --question-measure: 22ch;
-  --type-question: var(--weight-bold) var(--size-26) / var(--leading-tight)
-    var(--family-sans);
+  --type-question: var(--weight-bold) var(--size-26) / var(--leading-tight) var(--family-sans);
   --tracking-question: var(--tracking-tight);
-  --type-question-body: var(--weight-regular) var(--size-14) /
-    var(--leading-relaxed) var(--family-sans);
+  --type-question-body: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
+    var(--family-sans);
 
   --signature-gap: var(--space-10);
   --avatar-size-discussion: var(--width-avatar-discussion);
   --avatar-size-pile: var(--width-avatar-pile);
   --pile-overlap: -8px;
-  --type-signature: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+  --type-signature: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-signature-time: var(--weight-medium) var(--size-11) / var(--leading-snug)
     var(--family-sans);
-  --type-signature-time: var(--weight-medium) var(--size-11) /
-    var(--leading-snug) var(--family-sans);
 
   --reponse-elue-padding-y: var(--space-23);
   --reponse-elue-padding-x: var(--space-24);
   --radius-reponse-elue: var(--round-15);
-  --type-reponse-elue: var(--weight-medium) var(--size-16) /
-    var(--leading-relaxed) var(--family-sans);
-  --type-sceau: var(--weight-extrabold) var(--size-10) / var(--leading-snug)
+  --type-reponse-elue: var(--weight-medium) var(--size-16) / var(--leading-relaxed)
     var(--family-sans);
+  --type-sceau: var(--weight-extrabold) var(--size-10) / var(--leading-snug) var(--family-sans);
 
   --reponse-inset: var(--space-23);
-  --type-reponse: var(--weight-regular) var(--size-14) /
-    var(--leading-relaxed) var(--family-sans);
+  --type-reponse: var(--weight-regular) var(--size-14) / var(--leading-relaxed) var(--family-sans);
 
   --poser-padding-y: var(--space-16);
   --poser-padding-x: var(--space-18);
-  --type-poser: var(--weight-bold) var(--size-14) / var(--leading-snug)
-    var(--family-sans);
-  --type-poser-sous: var(--weight-medium) var(--size-12) / var(--leading-snug)
-    var(--family-sans);
+  --type-poser: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-poser-sous: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
 
   --composer-padding: var(--space-14);
   --composer-gap: var(--space-8);
-  --type-composer-titre: var(--weight-bold) var(--size-16) / var(--leading-snug)
-    var(--family-sans);
+  --type-composer-titre: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
 
   /* L INVITATION porte l absence quand il y en a une : sa sous-ligne dit
      « personne n a encore rien demande » au lieu qu un paragraphe le
      constate en dessous. Ce qui reste ici ne sert donc qu aux cas ou il n y
      a rien A FAIRE — un filtre qui masque tout, ou un acteur qui ne peut pas
      poser de question. Ca se dit petit. */
-  --type-vide: var(--weight-medium) var(--size-13) / var(--leading-normal)
-    var(--family-sans);
+  --type-vide: var(--weight-medium) var(--size-13) / var(--leading-normal) var(--family-sans);
 
   /* =========================================================================
      FORMULAIRES — champs, bascules, dépôt de fichier
@@ -745,10 +702,8 @@
   --required-ink: var(--status-pending-ink);
   --dropzone-border: var(--brown-250);
 
-  --type-field-label: var(--weight-semibold) var(--size-11) /
-    var(--leading-snug) var(--family-sans);
-  --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug)
-    var(--family-sans);
+  --type-field-label: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      À RÉGLER — les dossiers et paiements en suspens

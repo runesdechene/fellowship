@@ -132,7 +132,6 @@
   border: 1px dashed var(--report-todo-border);
 }
 
-
 .report--todo .report__name {
   color: var(--ink-soft);
 }

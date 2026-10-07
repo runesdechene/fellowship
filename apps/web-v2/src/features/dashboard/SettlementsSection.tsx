@@ -50,7 +50,9 @@ export function SettlementsSection({ settlements }: { settlements: Settlement[] 
               </span>
             </span>
             <span className="settlement__state">
-              {item.due !== null && <span className="settlement__due">{formatEuros(item.due)}</span>}
+              {item.due !== null && (
+                <span className="settlement__due">{formatEuros(item.due)}</span>
+              )}
               <Chip tone={state.tone}>{state.label}</Chip>
             </span>
           </button>

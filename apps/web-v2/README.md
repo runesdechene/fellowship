@@ -13,12 +13,12 @@ construction : un autre compte retourne sur la V1.
 
 ## Commandes (depuis la racine du dépôt)
 
-| Commande                        | Effet                                          |
-| ------------------------------- | ---------------------------------------------- |
-| `pnpm dev:v2`                   | serveur local sur http://localhost:5174/v2/    |
-| `pnpm --filter web-v2 test`     | tests                                          |
-| `pnpm --filter web-v2 lint`     | ESLint                                         |
-| `pnpm build:v2`                 | build de production dans `apps/web-v2/dist`    |
+| Commande                    | Effet                                       |
+| --------------------------- | ------------------------------------------- |
+| `pnpm dev:v2`               | serveur local sur http://localhost:5174/v2/ |
+| `pnpm --filter web-v2 test` | tests                                       |
+| `pnpm --filter web-v2 lint` | ESLint                                      |
+| `pnpm build:v2`             | build de production dans `apps/web-v2/dist` |
 
 ## Tester en local avec une session
 
@@ -31,15 +31,15 @@ La V2 lit la session de la V1 (même origine). En local :
 
 ## Où sont les choses
 
-| Dossier                | Contenu                                                        |
-| ---------------------- | -------------------------------------------------------------- |
-| `src/styles/`          | tout le design, en trois couches (aucun style dans les `.tsx`) |
+| Dossier                  | Contenu                                                             |
+| ------------------------ | ------------------------------------------------------------------- |
+| `src/styles/`            | tout le design, en trois couches (aucun style dans les `.tsx`)      |
 | `src/components/layout/` | le châssis : AppShell, Sidebar, Topbar, AccountSwitcher, PosterWall |
-| `src/components/ui/`   | les briques : Button, Chip, Avatar, Field, Select, Tag…        |
-| `src/features/<écran>/` | un dossier par écran, avec son hook (`useDashboard`, `useEvent`…) |
-| `src/pages/`           | les pages hors coquille (Login)                                |
-| `src/lib/`             | la logique sans React (dates, montants, accès…) et ses tests   |
-| `src/types/`           | les types de la base (`supabase.ts` généré, `database.ts`)     |
+| `src/components/ui/`     | les briques : Button, Chip, Avatar, Field, Select, Tag…             |
+| `src/features/<écran>/`  | un dossier par écran, avec son hook (`useDashboard`, `useEvent`…)   |
+| `src/pages/`             | les pages hors coquille (Login)                                     |
+| `src/lib/`               | la logique sans React (dates, montants, accès…) et ses tests        |
+| `src/types/`             | les types de la base (`supabase.ts` généré, `database.ts`)          |
 
 ## Déploiement
 

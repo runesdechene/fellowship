@@ -6,13 +6,7 @@
  * ATTENTION — deux contextes (lecture, écriture), et `back` est un chemin, jamais une fonction :
  *            sinon la déclaration boucle.
  */
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 /**
  * LE DÉCOR QU'UNE PAGE DEMANDE À LA COQUILLE.

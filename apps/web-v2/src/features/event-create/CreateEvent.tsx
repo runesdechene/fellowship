@@ -97,9 +97,7 @@ export function CreateEvent() {
     let imageUrl: string | null = null
     if (poster) {
       const path = `${crypto.randomUUID()}-${poster.name.replace(/[^\w.-]/g, '_')}`
-      const { error: uploadError } = await supabase.storage
-        .from(POSTER_BUCKET)
-        .upload(path, poster)
+      const { error: uploadError } = await supabase.storage.from(POSTER_BUCKET).upload(path, poster)
       if (uploadError) {
         setSaving(false)
         setError("L'affiche n'a pas pu être envoyée. Réessaie, ou crée l'événement sans elle.")
@@ -108,26 +106,30 @@ export function CreateEvent() {
       imageUrl = supabase.storage.from(POSTER_BUCKET).getPublicUrl(path).data.publicUrl
     }
 
-    const { data: created, error: insertError } = await supabase.from('events').insert({
-      name: draft.name.trim(),
-      city: draft.city.trim(),
-      department: draft.department.trim(),
-      start_date: draft.startDate,
-      // La base exige une date de fin : un événement d'un jour finit le jour même.
-      end_date: draft.endDate || draft.startDate,
-      address: draft.address.trim() || null,
-      description: draft.description.trim() || null,
-      registration_deadline: draft.registrationDeadline || null,
-      registration_url: draft.registrationUrl.trim() || null,
-      external_url: draft.externalUrl.trim() || null,
-      contact_email: draft.contactEmail.trim() || null,
-      registration_note: draft.registrationNote.trim() || null,
-      image_url: imageUrl,
-      tags: draft.tags,
-      is_private: draft.isPrivate,
-      created_by_actor: actor.id,
-      acted_by_user_id: person?.actor_id ?? null,
-    }).select('id').single()
+    const { data: created, error: insertError } = await supabase
+      .from('events')
+      .insert({
+        name: draft.name.trim(),
+        city: draft.city.trim(),
+        department: draft.department.trim(),
+        start_date: draft.startDate,
+        // La base exige une date de fin : un événement d'un jour finit le jour même.
+        end_date: draft.endDate || draft.startDate,
+        address: draft.address.trim() || null,
+        description: draft.description.trim() || null,
+        registration_deadline: draft.registrationDeadline || null,
+        registration_url: draft.registrationUrl.trim() || null,
+        external_url: draft.externalUrl.trim() || null,
+        contact_email: draft.contactEmail.trim() || null,
+        registration_note: draft.registrationNote.trim() || null,
+        image_url: imageUrl,
+        tags: draft.tags,
+        is_private: draft.isPrivate,
+        created_by_actor: actor.id,
+        acted_by_user_id: person?.actor_id ?? null,
+      })
+      .select('id')
+      .single()
 
     if (insertError || !created) {
       setSaving(false)
@@ -274,15 +276,13 @@ export function CreateEvent() {
    Le compagnon de la première étape : ce qui existe déjà et lui ressemble.
    Une fiche vide n'aurait rien dit ; ceci arrive au moment où ça compte.
    ------------------------------------------------------------------------ */
-function DuplicateWarning({
-  similar,
-}: {
-  similar: ReturnType<typeof useSimilarEvents>
-}) {
+function DuplicateWarning({ similar }: { similar: ReturnType<typeof useSimilarEvents> }) {
   return (
     <>
       <p className="mate__label">
-        {similar.length === 1 ? 'Un événement ressemble' : `${similar.length} événements ressemblent`}
+        {similar.length === 1
+          ? 'Un événement ressemble'
+          : `${similar.length} événements ressemblent`}
       </p>
       {similar.map((event) => (
         <button key={event.id} type="button" className="dupe">
@@ -295,8 +295,8 @@ function DuplicateWarning({
         </button>
       ))}
       <p className="mate__note">
-        Si c'est l'un d'eux, ouvre-le plutôt que d'en créer un second — tu y retrouveras
-        les autres exposants.
+        Si c'est l'un d'eux, ouvre-le plutôt que d'en créer un second — tu y retrouveras les autres
+        exposants.
       </p>
     </>
   )
@@ -406,8 +406,7 @@ function StepTags({
       <div className="tag-picker">
         {tags.map((tag) => {
           const index = draft.tags.indexOf(tag)
-          const className =
-            index === 0 ? 'tag tag--first' : index > 0 ? 'tag tag--on' : 'tag'
+          const className = index === 0 ? 'tag tag--first' : index > 0 ? 'tag tag--on' : 'tag'
           return (
             <button
               key={tag}
