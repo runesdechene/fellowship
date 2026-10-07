@@ -741,6 +741,54 @@ export type Database = {
         }
         Relationships: []
       }
+      participation_dossiers: {
+        Row: {
+          actor_id: string
+          application_note: string | null
+          application_sent_on: string | null
+          balance_due_on: string | null
+          deposit_amount: number | null
+          event_id: string
+          revenue_goal: number | null
+          updated_at: string
+        }
+        Insert: {
+          actor_id: string
+          application_note?: string | null
+          application_sent_on?: string | null
+          balance_due_on?: string | null
+          deposit_amount?: number | null
+          event_id: string
+          revenue_goal?: number | null
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string
+          application_note?: string | null
+          application_sent_on?: string | null
+          balance_due_on?: string | null
+          deposit_amount?: number | null
+          event_id?: string
+          revenue_goal?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participation_dossiers_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participation_dossiers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       participations: {
         Row: {
           acted_by_user_id: string | null
