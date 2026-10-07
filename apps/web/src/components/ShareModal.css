@@ -1,0 +1,16 @@
+.share-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, .55); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.share-modal { width: 100%; max-width: 460px; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 13px; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); }
+.share-head { display: flex; align-items: center; justify-content: space-between; }
+.share-head h2 { font-family: var(--font-heading); font-size: 19px; font-weight: 800; color: hsl(var(--foreground)); }
+.share-head button { background: none; border: none; color: hsl(var(--muted-foreground)); cursor: pointer; padding: 2px; }
+.share-sub { font-size: 13px; color: hsl(var(--muted-foreground)); }
+.share-text { width: 100%; resize: vertical; border-radius: 12px; border: 1px solid hsl(var(--border)); background: hsl(var(--secondary)); color: hsl(var(--foreground)); padding: 12px 14px; font-size: 14px; line-height: 1.45; font-family: inherit; }
+.share-text:focus { outline: none; border-color: color-mix(in srgb, var(--copper) 45%, hsl(var(--border))); }
+.share-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; font-size: 14px; border-radius: 12px; padding: 12px 18px; border: none; cursor: pointer; }
+.share-btn svg { width: 16px; height: 16px; }
+.share-btn-p { background: var(--gradient-primary); color: hsl(var(--primary-foreground)); }
+.share-btn-g { background: hsl(var(--secondary)); border: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); }
+.share-link { display: flex; align-items: center; gap: 8px; background: hsl(var(--secondary)); border: 1px solid hsl(var(--border)); border-radius: 10px; padding: 8px 8px 8px 12px; }
+.share-link-url { flex: 1; min-width: 0; font-size: 12.5px; color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.share-link-copy { background: none; border: none; color: var(--amber); cursor: pointer; flex-shrink: 0; padding: 4px; display: inline-flex; }
+.share-link-copy svg { width: 16px; height: 16px; }

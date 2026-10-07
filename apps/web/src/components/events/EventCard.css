@@ -1,0 +1,301 @@
+/* ── EventCard ────────────────────────────────────────────────────── */
+
+/* ── Shared ── */
+
+.event-card-link {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  filter: brightness(1) grayscale(0.3);
+}
+
+.event-card-link:hover {
+  filter: brightness(1.1);
+}
+
+/* ── Horizontal variant ── */
+
+.event-card-link.horizontal {
+  height: 120px;
+}
+
+.event-card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-card-bg-empty {
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--card));
+}
+
+.event-card-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.event-card-h-content {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.event-card-h-date {
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.event-card-h-day {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.event-card-h-month {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.event-card-h-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.event-card-h-name {
+  font-size: 16px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-card-h-meta {
+  font-size: 11px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-card-h-meta svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── With image ── */
+.event-card-h-day.has-image { color: white; }
+.event-card-h-month.has-image { color: rgba(255,255,255,0.5); }
+.event-card-h-name.has-image { color: white; }
+.event-card-h-meta.has-image { color: rgba(255,255,255,0.45); }
+
+/* ── Without image ── */
+.event-card-h-day.no-image { color: hsl(var(--primary)); }
+.event-card-h-month.no-image { color: hsl(var(--primary) / 0.5); }
+.event-card-h-name.no-image { color: hsl(var(--foreground)); }
+.event-card-h-meta.no-image { color: hsl(var(--muted-foreground)); }
+
+/* ── Portrait variant (Netflix-style) ── */
+
+.event-card-link.portrait {
+  flex-direction: column;
+  aspect-ratio: 2 / 3;
+}
+
+.event-card-portrait-empty {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, hsl(var(--card)), hsl(var(--secondary)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-card-portrait-empty svg {
+  width: 48px;
+  height: 48px;
+  color: hsl(var(--muted-foreground) / 0.1);
+}
+
+/* ── Tag badge (top-left) ── */
+
+.event-card-tag {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 9999px;
+  padding: 2px 10px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.event-card-tag.has-image {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.event-card-tag.no-image {
+  background: rgba(61,48,40,0.08);
+  color: rgba(61,48,40,0.5);
+}
+
+/* ── Date badge (top-right) ── */
+
+.event-card-date-badge {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  border-radius: 12px;
+  padding: 6px 10px;
+  text-align: center;
+}
+
+.event-card-date-badge.has-image {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.event-card-date-badge.no-image {
+  background: rgba(61,48,40,0.06);
+}
+
+.event-card-date-day {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.event-card-date-day.has-image { color: white; }
+.event-card-date-day.no-image { color: hsl(var(--foreground) / 0.5); }
+
+.event-card-date-month {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.event-card-date-month.has-image { color: rgba(255,255,255,0.6); }
+.event-card-date-month.no-image { color: hsl(var(--foreground) / 0.3); }
+
+/* ── Deadline badge ── */
+
+.event-card-deadline {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  border-radius: 12px;
+  padding: 6px 10px;
+  text-align: center;
+}
+
+.event-card-deadline-label {
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+}
+
+.event-card-deadline-days {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+}
+
+/* ── Bottom info (portrait) ── */
+
+.event-card-bottom {
+  margin-top: auto;
+  position: relative;
+  padding: 16px;
+}
+
+.event-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.event-card-name.has-image { color: white; }
+.event-card-name.no-image { color: hsl(var(--foreground)); }
+
+.event-card-location {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.event-card-location svg {
+  width: 12px;
+  height: 12px;
+}
+
+.event-card-location.has-image { color: rgba(255,255,255,0.5); }
+.event-card-location.no-image { color: hsl(var(--muted-foreground)); }
+
+/* ── Stats row ── */
+
+.event-card-stats {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.event-card-stats.has-image { color: rgba(255,255,255,0.4); }
+.event-card-stats.no-image { color: hsl(var(--muted-foreground)); }
+
+.event-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-card-stat svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Prospection rating ── */
+
+.event-card-rating {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.event-card-rating.has-image { color: rgba(255,255,255,0.5); }
+.event-card-rating.no-image { color: hsl(var(--muted-foreground)); }
+
+.event-card-rating svg {
+  width: 12px;
+  height: 12px;
+  fill: #f59e0b;
+  color: #f59e0b;
+}
+
+.event-card-rating-score {
+  font-weight: 700;
+}

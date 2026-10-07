@@ -1,0 +1,12 @@
+.dq-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; background: color-mix(in srgb, hsl(var(--background)) 70%, transparent); backdrop-filter: blur(4px); }
+.dq-card { position: relative; width: min(420px, 100%); text-align: center; background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 18px; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+.dq-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: hsl(var(--muted-foreground)); cursor: pointer; padding: 4px; border-radius: 8px; }
+.dq-close:hover { color: hsl(var(--foreground)); }
+.dq-lock { width: 48px; height: 48px; border-radius: 14px; background: color-mix(in srgb, hsl(var(--primary)) 16%, transparent); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; color: hsl(var(--primary)); }
+.dq-lock svg { width: 22px; height: 22px; }
+.dq-card h2 { font-size: 19px; font-weight: 800; color: hsl(var(--foreground)); margin-bottom: 8px; }
+.dq-card p { font-size: 14px; color: hsl(var(--muted-foreground)); line-height: 1.5; margin-bottom: 18px; }
+.dq-btn { display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; border-radius: 11px; padding: 12px 22px; text-decoration: none; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); transition: opacity .12s; }
+.dq-btn:hover { opacity: .9; }
+.dq-later { display: block; margin: 8px auto 0; padding: 8px 12px; background: none; border: none; color: hsl(var(--muted-foreground)); font-size: 13px; cursor: pointer; }
+.dq-later:hover { color: hsl(var(--foreground)); }

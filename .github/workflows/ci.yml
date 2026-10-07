@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # La version de pnpm vient de `packageManager` dans le package.json racine.
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - uses: actions/setup-node@v4
@@ -26,15 +26,21 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm -r lint
 
-      - name: Build (typecheck + Vite)
-        run: pnpm build
+      # Le build n'exécute pas le throw de supabase.ts, mais vite-plugin-pwa (V1)
+      # a besoin d'une vraie chaîne quand il substitue import.meta.env.
+      - name: Build V1
+        run: pnpm --filter web build
         env:
-          # Build does not execute the supabase module-level throw, but
-          # vite-plugin-pwa needs a real string when substituting import.meta.env
+          VITE_SUPABASE_URL: https://ci.local.invalid
+          VITE_SUPABASE_ANON_KEY: ci-placeholder
+
+      - name: Build V2
+        run: pnpm --filter web-v2 build
+        env:
           VITE_SUPABASE_URL: https://ci.local.invalid
           VITE_SUPABASE_ANON_KEY: ci-placeholder
 
       - name: Test
-        run: pnpm test
+        run: pnpm -r test
