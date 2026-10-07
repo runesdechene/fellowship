@@ -1,3 +1,10 @@
+/**
+ * QUOI     — charge et prépare toutes les données du tableau de bord pour l'acteur actif.
+ * POURQUOI — un seul hook pour l'écran : participations, amis présents, registre des bilans
+ *            (event_ledger_entries), découpés en blocs prêts à afficher (DashboardData).
+ * ATTENTION — les montants viennent de event_ledger_entries, jamais des colonnes mortes de
+ *            event_reports ; les dates passent par lib/dates.ts, les sommes par lib/money.ts.
+ */
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { daysUntil, monthKey, monthsWindow, parseSqlDate, type MonthSlot } from '@/lib/dates'

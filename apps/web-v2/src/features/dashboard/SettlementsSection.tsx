@@ -1,3 +1,9 @@
+/**
+ * QUOI     — le bloc « À régler » : les dates à venir dont le dossier ou le paiement n'est pas clos.
+ * POURQUOI — les teintes disent qui doit bouger, pas où on en est.
+ * ATTENTION — le commentaire de STATE et le code divergent sur « À payer » (blé annoncé, terre
+ *            posée) : c'est le point ouvert « le blé ou la terre » de docs/v2/README.md.
+ */
 import { Chip, type ChipTone } from '@/components/ui/Chip'
 import { formatDayMonthShort } from '@/lib/dates'
 import { formatEuros } from '@/lib/money'

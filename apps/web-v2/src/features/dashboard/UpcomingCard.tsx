@@ -1,3 +1,7 @@
+/**
+ * QUOI     — la liste des dates suivantes, avec la ville et les amis présents.
+ * POURQUOI — « X utilisateurs de Fellowship y vont » : on ne voit que son réseau.
+ */
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatDaysShort } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'

@@ -1,3 +1,9 @@
+/**
+ * QUOI     — l'écran du tableau de bord : accueil, bande d'action, frise de saison, prochaine date,
+ *            dates à venir, ce qui reste à régler, bilans.
+ * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
+ *            il assemble ce que useDashboard prépare.
+ */
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { formatEuros, formatSignedEuros } from '@/lib/money'

@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la bande qui réclame le bilan de la dernière date passée.
+ * POURQUOI — la seule chose que le tableau de bord exige ; elle disparaît dès que le bilan est
+ *            rempli, et un « Plus tard » ne vaut que pour la visite en cours.
+ */
 import { useState } from 'react'
 import { PartyPopper, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'

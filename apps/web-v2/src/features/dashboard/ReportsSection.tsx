@@ -1,3 +1,8 @@
+/**
+ * QUOI     — le bloc « Mes bilans » : les dernières dates passées, remplies ou à remplir.
+ * POURQUOI — un bilan vide se signale par son appel à remplir ; un bilan rempli montre recette
+ *            et bénéfice. Un clic ouvre la fiche de la date.
+ */
 import { Pencil } from 'lucide-react'
 import { formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'

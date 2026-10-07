@@ -1,3 +1,7 @@
+/**
+ * QUOI     — la carte de la prochaine date : affiche, compte à rebours, statut.
+ * POURQUOI — la date la plus proche mérite sa propre carte ; un clic ouvre sa fiche.
+ */
 import { CheckCheck } from 'lucide-react'
 import { Chip } from '@/components/ui/Chip'
 import { formatCountdown, formatDayMonth } from '@/lib/dates'

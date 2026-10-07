@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la frise de saison : une barre par mois, proportionnelle au nombre de dates.
+ * POURQUOI — voir d'un coup d'œil les mois chargés ; les bornes de hauteur se règlent dans
+ *            styles/2-semantic.css, pas ici.
+ */
 import type { CSSProperties } from 'react'
 import type { MonthBucket } from './useDashboard'
 
