@@ -1,3 +1,9 @@
+/**
+ * QUOI     — les catégories (tags) telles que réglées dans l'administration : lecture, libellé
+ *            propre et couleurs par nom.
+ * POURQUOI — les couleurs et libellés sont des données posées par Uriel dans le back-office ;
+ *            un ancien slug de la V1 (« marche-de-noel ») doit se lire « Marché de Noël ».
+ */
 import { supabase } from '@/lib/supabase'
 
 /**

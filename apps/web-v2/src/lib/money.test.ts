@@ -1,3 +1,7 @@
+/**
+ * QUOI     — tests de lib/money.ts : les montants et le registre de bilan.
+ * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
+ */
 import { describe, expect, it } from 'vitest'
 import { formatEuros, formatSignedEuros, ledgerProfit, ledgerRevenue } from './money'
 

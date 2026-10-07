@@ -1,3 +1,10 @@
+/**
+ * QUOI     — la session et l'identité : l'utilisateur, ses casquettes (personne + enseignes via
+ *            memberships), l'acteur actif, et la connexion par code e-mail. Exposé par useAuth().
+ * POURQUOI — modèle acteur : on agit sous une personne ou une enseigne, et l'acteur choisi est
+ *            gardé sur l'appareil. La session est celle de la V1 (même origine, même clé).
+ * ATTENTION — le profil personnel s'écrit sur `users`, jamais sur l'ancienne table `profiles`.
+ */
 import {
   createContext,
   useCallback,

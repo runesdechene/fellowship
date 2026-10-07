@@ -1,3 +1,7 @@
+/**
+ * QUOI     — tests de lib/threads.ts : la logique des fils de discussion.
+ * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
+ */
 import { describe, expect, it } from 'vitest'
 import {
   askBlocker,

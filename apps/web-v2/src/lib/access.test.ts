@@ -1,3 +1,7 @@
+/**
+ * QUOI     — tests de lib/access.ts : la garde d'accès à la V2 (toAccessState, decideAccess).
+ * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
+ */
 import { decideAccess, toAccessState } from './access'
 
 describe('toAccessState', () => {

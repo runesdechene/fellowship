@@ -1,3 +1,7 @@
+/**
+ * QUOI     — tests de lib/dates.ts : les helpers de dates, fuseau Europe/Paris épinglé.
+ * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
+ */
 import { describe, expect, it } from 'vitest'
 import {
   daysUntil,

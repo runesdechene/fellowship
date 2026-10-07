@@ -1,3 +1,7 @@
+/**
+ * QUOI     — tests de lib/tags.ts : la résolution des catégories (libellés, couleurs).
+ * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
+ */
 import { describe, expect, it } from 'vitest'
 import { tagStyleFor, tagStylesByName, type TagRow } from './tags'
 

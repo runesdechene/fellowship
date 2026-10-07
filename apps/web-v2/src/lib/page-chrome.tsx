@@ -1,3 +1,11 @@
+/**
+ * QUOI     — le décor qu'une page demande à la coquille : l'affiche du mur, le repère et le retour
+ *            de la barre du haut.
+ * POURQUOI — la page sait quoi afficher mais ne peut pas le rendre (c'est hors de son panneau) :
+ *            elle le déclare, la coquille le rend.
+ * ATTENTION — deux contextes (lecture, écriture), et `back` est un chemin, jamais une fonction :
+ *            sinon la déclaration boucle.
+ */
 import {
   createContext,
   useContext,

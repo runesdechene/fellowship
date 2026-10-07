@@ -1,3 +1,10 @@
+/**
+ * QUOI     — la navigation animée : changer d'écran ou d'étape via l'API View Transitions.
+ * POURQUOI — c'est la seule façon d'animer aussi la SORTIE d'un écran ; sans elle, l'ancien
+ *            contenu disparaît d'un coup.
+ * ATTENTION — flushSync est indispensable, et une transition ne se vérifie pas dans un onglet en
+ *            arrière-plan (.claude/rules/v2.md).
+ */
 import { useCallback } from 'react'
 import { flushSync } from 'react-dom'
 import { useNavigate, type To } from 'react-router-dom'

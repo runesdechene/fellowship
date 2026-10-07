@@ -1,3 +1,9 @@
+/**
+ * QUOI     — nettoie le HTML d'une description d'événement (DOMPurify, liste blanche de balises),
+ *            et dit si une description est vide.
+ * POURQUOI — le contenu vient d'un utilisateur : sans ce passage, une description piégée
+ *            s'exécuterait chez tous ceux qui ouvrent la fiche.
+ */
 import DOMPurify from 'dompurify'
 
 /**
