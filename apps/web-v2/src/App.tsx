@@ -5,13 +5,23 @@ import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EventPage } from '@/features/event/EventPage'
 import { Login } from '@/pages/Login'
 import { useAuth } from '@/lib/auth'
-import type { ReactNode } from 'react'
+import { useV2Access } from '@/lib/useV2Access'
+import { useEffect, type ReactNode } from 'react'
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth()
-  if (loading) return null
-  if (!user) return <Navigate to="/connexion" replace />
+  const decision = useV2Access()
+  if (decision === 'wait') return null
+  if (decision === 'login') return <Navigate to="/connexion" replace />
+  if (decision === 'leave') return <LeaveToV1 />
   return <>{children}</>
+}
+
+// Hors du routeur de la V2 (basename /v2) : la V1 vit à la racine du domaine.
+function LeaveToV1() {
+  useEffect(() => {
+    window.location.replace('/')
+  }, [])
+  return null
 }
 
 export function App() {
