@@ -1,15 +1,50 @@
 ---
 paths:
-  - "netlify.toml"
-  - "vite.config.*"
-  - "package.json"
-  - "public/**"
+  - "**/netlify.toml"
+  - "**/vite.config.*"
+  - "**/package.json"
+  - "apps/*/public/**"
 ---
 
 # Déploiement et diffusion
 
 > Netlify, service worker, embeds. Ce qui casse en ligne sans casser en local.
 > Regroupé le 25/09/2026 depuis la mémoire locale, pour que ce savoir voyage avec le dépôt.
+
+## Les deux sites et le cycle de déploiement
+
+Depuis le 07/10/2026 : **déploiement manuel uniquement**. L'auto-deploy GitHub est coupé
+(`stop_builds: true`) — un push sur `main` ne déploie rien.
+
+| Site                | Id                                     | Sert                                   | Dossier         |
+| ------------------- | -------------------------------------- | -------------------------------------- | --------------- |
+| `fellowship-app`    | `8c479753-ecff-4c88-8069-2b25e7514925` | `flw.sh` (V1)                          | `apps/web`      |
+| `fellowship-web-v2` | (noté à la création)                   | `flw.sh/v2/*` via redirection de la V1 | `apps/web-v2`   |
+
+**Déployer depuis le dossier de l'app, jamais d'ailleurs** : la CLI ne lit `netlify.toml`
+(redirections, en-têtes) que dans le dossier courant. Chez RdC, une V1 déployée depuis un autre
+dossier est partie sans ses redirections (05/10/2026). Avec `--site`, passer le **nom** du site.
+
+```bash
+cd apps/web    && pnpm build && netlify deploy --prod --dir dist --site fellowship-app
+cd apps/web-v2 && pnpm build && netlify deploy --prod --dir dist --site fellowship-web-v2
+```
+
+Le build se fait en local : le `.env` racine fournit les variables (`envDir`), rien n'est à
+configurer côté Netlify.
+
+**Vérifier après chaque déploiement** : `curl -s https://flw.sh/v2/ | grep -o 'src="/v2/assets/[^"]*"'`
+(la V2 répond sous `/v2/`) et `curl -s https://flw.sh/sw.js | grep -c v2` (la denylist est là).
+
+## Le service worker de la V1 doit ignorer `/v2`
+
+**Le piège** : la PWA de la V1 a une portée `/`. Sans exclusion, sa navigation de repli sert le
+shell de la V1 à la place de `/v2/` — chez tous ceux qui ont déjà la V1 installée, et rien ne se
+voit dans un navigateur neuf.
+
+**How to apply :** garder `/^\/v2(\/|$)/` dans `navigateFallbackDenylist`
+(`apps/web/vite.config.ts`). Vérifier dans `apps/web/dist/sw.js` après un changement de config
+PWA, puis en prod sur un navigateur qui avait déjà la V1 (recharger deux fois).
 
 ## reference_netlify_header_order
 

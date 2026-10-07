@@ -18,7 +18,7 @@ paths:
 
 **What works:** `await act(async () => { render(...) })` works but contaminates every test with async. `flushSync(() => root.render(...))` directly (bypassing RTL) works for plain components but still hits the multi-React problem with router-based components.
 
-**The project's pattern (from `src/lib/explorer.test.ts` and now `src/lib/profile-network.test.ts`):** Extract presentational logic into a **pure function** in `src/lib/*.ts` (returns the data the JSX consumes — names, URLs, gradients, fallback initials, …). Test the pure function with vitest. The React component becomes a thin shell that takes the pure function's output and renders it — verified manually in the browser.
+**The project's pattern (from `apps/web/src/lib/explorer.test.ts` and now `apps/web/src/lib/profile-network.test.ts`):** Extract presentational logic into a **pure function** in `apps/web/src/lib/*.ts` (returns the data the JSX consumes — names, URLs, gradients, fallback initials, …). Test the pure function with vitest. The React component becomes a thin shell that takes the pure function's output and renders it — verified manually in the browser.
 
 **Why this is right (not a bandaid):**
 - Tests verify the actual logic that has bugs (e.g. the avatar_url-being-ignored bug was a logic bug, not a render bug)

@@ -126,19 +126,19 @@ git fetch origin && git reset --hard origin/main
 
 ## Calling new Supabase RPCs (Fellowship)
 
-When adding a new Postgres RPC via migration, `src/types/supabase.ts` doesn't know about it yet. TypeScript will error: `Argument of type '"my_new_rpc"' is not assignable to parameter of type '"are_friends" | ...'`.
+When adding a new Postgres RPC via migration, `apps/web/src/types/supabase.ts` doesn't know about it yet. TypeScript will error: `Argument of type '"my_new_rpc"' is not assignable to parameter of type '"are_friends" | ...'`.
 
-**Project precedent** (`src/hooks/use-events.ts:133`):
+**Project precedent** (`apps/web/src/hooks/use-events.ts:133`):
 ```ts
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { data } = await (supabase.rpc as any)('search_similar_events', { ... })
 ```
 
-This pattern is used for `get_friends_with_dates` (added 2026-05-09) and `search_similar_events`. It's not ideal but it's the convention until someone runs `supabase gen types typescript --linked > src/types/supabase.ts` to refresh the generated types.
+This pattern is used for `get_friends_with_dates` (added 2026-05-09) and `search_similar_events`. It's not ideal but it's the convention until someone runs `supabase gen types typescript --linked > apps/web/src/types/supabase.ts` to refresh the generated types.
 
 **Alternative if you want full type safety:** regenerate the types via Supabase CLI. Direct binary on Windows (cf. `reference_supabase_cli.md`):
 ```
-"C:/Users/uriel/desktop/DEVS/fellowship/node_modules/supabase/bin/supabase.exe" gen types typescript --linked > src/types/supabase.ts
+"C:/Users/uriel/desktop/DEVS/fellowship/node_modules/supabase/bin/supabase.exe" gen types typescript --linked > apps/web/src/types/supabase.ts
 ```
 
 ## reference_pg_column_grant_revoke
@@ -152,7 +152,7 @@ grant  select (col_a, col_b, …safe…) on public.<table> to <role>;
 ```
 La liste grantée doit couvrir EXACTEMENT ce que l'app lit côté `<role>` (sinon les requêtes existantes cassent en `42501 permission denied for table`). Et tout `select('*')` du rôle restreint échoue désormais → narrower les requêtes vers une liste blanche AVANT le revoke.
 
-Cas Fellowship : `entities` exposait stripe_customer_id / subscription_status / siren / legal_name… à `anon` (la vitrine faisait `select('*')`). Fix : `revoke select on entities from anon` + `grant select (<PUBLIC_ENTITY_COLUMNS>) to anon` (migration `20260626100145`), et `use-vitrine.ts` / `Embed.tsx` passés sur la const `PUBLIC_ENTITY_COLUMNS` (src/lib/vitrine.ts). `authenticated` garde le grant table (le proprio lit ses infos billing). **Résidu connu** : un user authentifié peut encore lire le billing d'une autre entité via un select brut (IDOR authentifié) ; vrai fix = sortir les colonnes billing dans une table séparée RLS own-row-only. Vérifier toute restriction colonne par `set role <role>; select <col>` (erreur = OK). Lié : [[reference_storage_rls_security_definer]].
+Cas Fellowship : `entities` exposait stripe_customer_id / subscription_status / siren / legal_name… à `anon` (la vitrine faisait `select('*')`). Fix : `revoke select on entities from anon` + `grant select (<PUBLIC_ENTITY_COLUMNS>) to anon` (migration `20260626100145`), et `use-vitrine.ts` / `Embed.tsx` passés sur la const `PUBLIC_ENTITY_COLUMNS` (apps/web/src/lib/vitrine.ts). `authenticated` garde le grant table (le proprio lit ses infos billing). **Résidu connu** : un user authentifié peut encore lire le billing d'une autre entité via un select brut (IDOR authentifié) ; vrai fix = sortir les colonnes billing dans une table séparée RLS own-row-only. Vérifier toute restriction colonne par `set role <role>; select <col>` (erreur = OK). Lié : [[reference_storage_rls_security_definer]].
 
 ## reference_storage_rls_security_definer
 

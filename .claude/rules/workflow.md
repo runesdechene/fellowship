@@ -3,17 +3,23 @@
 > Se charge toujours. La méthode générale vit dans le vault : `_Socle/Méthode.md`.
 > Regroupé le 25/09/2026 depuis la mémoire locale, pour que ce savoir voyage avec le dépôt.
 
-## travailler-sur-main-directement
+## Le régime de livraison
 
-Au lieu de bosser sur une feature branch pendant 5 jours puis merger, on travaillera désormais **directement sur `main`**. Décidé après le ship 0.7.168 où la divergence prod ↔ repo (12 migrations en prod sans équivalent sur la branche, V2 déployée manuellement, etc.) a coûté ~2h de réconciliation `migration repair` + cleanup `gh pr merge` qui a embarqué le local sur l'ancien main. Uriel a re-confirmé fortement : « plus jamais cette galère, on bosse sur prod et main, voire une branche séparée pour un petit truc ».
+Depuis le 07/10/2026, Fellowship suit le régime de Runes de Chêne :
 
-**Why:** Sur Fellowship `main` = prod (Netlify auto-déploie). Bosser sur une branche n'apporte pas d'isolation utile — la DB est partagée de toute façon, et les divergences avec la prod s'accumulent rapidement. Une feature branche longue te force à faire la danse `migration repair --status applied/reverted` au moment du merge, c'est risqué.
+- **Une seule branche, `main`.** La V2 ne vit plus sur une branche longue : elle vit dans
+  `apps/web-v2`, la V1 dans `apps/web`. Une branche reste possible pour une expérimentation qu'on
+  n'est pas sûr de garder.
+- **Commit à chaque étape qui marche ; push en fin de session** (ou quand Uriel change de poste).
+  Le hook `Stop` rappelle les commits non poussés.
+- **Déploiement manuel, par lot**, depuis le dossier de l'app (`deploiement.md`). Pousser sur
+  `main` ne déploie plus rien : l'auto-deploy Netlify est coupé (`stop_builds: true`).
+- **Les migrations** sont écrites dans l'ordre et appliquées tout de suite par
+  `pnpm exec supabase db push --linked` : la base est partagée par les deux apps et c'est la prod.
 
-**How to apply:**
-- Plus de feature branches pour les changements normaux. Commit directement sur `main`.
-- Branches OK uniquement pour : refactos massifs >2j, expérimentations qu'on n'est pas sûr de garder, ou quand on veut un PR review avant prod (rare).
-- Les migrations sont écrites dans le bon ordre et appliquées immédiatement via `supabase db push --linked`.
-- Pousser sur `main` = déployer en prod : continuer à faire build+lint avant push.
+**Why:** la branche `v2` avait accumulé 142 commits sans mode de déploiement, et l'auto-deploy
+redéployait la prod sur un simple commit de doc (constaté le 07/10/2026). Avant ça, la divergence
+prod ↔ branche du ship 0.7.168 avait coûté ~2 h de `migration repair`.
 
 [[reference-supabase-db-diverge-recovery]]
 
@@ -43,28 +49,15 @@ et fait remonter les bugs immédiatement, donc le build est du temps perdu.
 de logique TypeScript, son prochain message le signale et je corrige.
 
 **How to apply:**
-- Pour des changements de texte / couleur / micro-CSS : commit + push direct,
-  pas de build, pas de lint. Vite est exécuté côté Netlify de toute façon
-  au déploiement, et l'utilisateur travaille en local en dev mode (HMR).
+- Pour des changements de texte / couleur / micro-CSS : commit direct,
+  pas de build, pas de lint. Le build se refait de toute façon au
+  déploiement manuel, et Uriel regarde en local en dev mode (HMR).
 - Build/lint reste utile :
   - Avant un commit qui touche logique TS / nouveaux fichiers / migration / refactor
   - Quand le diff est gros (10+ fichiers) ou implique des types croisés
   - Quand l'utilisateur explicitement demande une vérif
 
 Pas de policy stricte : juge à la situation. Doute = skip.
-
-## V1 testing feedback — UX issues
-
-## Feedback from first test session (2026-04-04)
-
-1. **Page profil charge sans fin** — bug, probablement un hook qui ne résout jamais le loading state
-2. **Dashboard inaccessible depuis le menu** — le logo dans la sidebar devrait ramener au dashboard (accueil exposant)
-3. **Création d'événement pas intuitive** — pas de bouton "Créer" en haut. Le flow devrait être : chercher d'abord, si rien trouvé → proposition de créer dans la recherche (modal ou page séparée). Pas de bouton visible "Créer un événement" en haut à droite.
-4. **Tags primaires fixés** — doivent être définis par nous (admin), pas libres. Pour tester : Geek, Fête médiévale, Festival de musique. Les secondaires sont ajoutables par la communauté, partagés.
-5. **Formulaire de création trop "form"** — manque de modernité, fait trop classique/HTML brut. Doit être plus moderne, plus Fellowship.
-
-**Why:** L'UX doit être intuitive et moderne pour convaincre les exposants. Un formulaire laid ou un flow confus = abandon.
-**How to apply:** Toujours tester les flows du point de vue d'un exposant qui découvre l'app. La recherche est l'action primaire, pas la création.
 
 ## Save credentials to .env immediately
 

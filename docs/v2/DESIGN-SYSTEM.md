@@ -7,11 +7,11 @@ modifier quoi que ce soit de l'apparence, sans jamais toucher au code React.
 
 ## 1. Le principe
 
-Tout le style vit dans `src/styles/`. Rien d'autre. Aucun fichier `.tsx` ne
+Tout le style vit dans `apps/web-v2/src/styles/`. Rien d'autre. Aucun fichier `.tsx` ne
 contient de couleur, de taille ou d'espacement.
 
 ```
-src/styles/
+apps/web-v2/src/styles/
 ├── index.css              l'ordre des imports. Ne pas y toucher.
 ├── 0-reset.css            neutralise le navigateur. Ne pas y toucher.
 ├── 1-primitives.css       LA MATIÈRE : les couleurs, tailles, espaces bruts.

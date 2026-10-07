@@ -14,7 +14,7 @@ paths:
 
 Les **maquettes HTML** dans `docs/decisions/assets/*.html` définissent leurs PROPRES tokens dans un `:root` local (`--bg`, `--surface`, `--surface2`, `--cop`, `--cop-d`, `--green`, `--line`, `--text`…). **Ces noms N'EXISTENT PAS dans l'app.** Porter le CSS d'une maquette en gardant ces noms → fonds/bordures transparents → « page à plat, pas de cadre » (bug réel sur le Cockpit v0.7.205, corrigé v0.7.206).
 
-**Vrais tokens de l'app** (définis dans `src/index.css`, thèmes nuit défaut + `.light`), à utiliser via `hsl(var(--x))` sauf indication :
+**Vrais tokens de l'app** (définis dans `apps/web/src/index.css`, thèmes nuit défaut + `.light`), à utiliser via `hsl(var(--x))` sauf indication :
 - Surfaces : `hsl(var(--card))` (carte), `hsl(var(--secondary))` ou `hsl(var(--muted))` (surface secondaire/survol), `hsl(var(--background))` (page).
 - Texte : `hsl(var(--foreground))`, `hsl(var(--muted-foreground))` (texte atténué).
 - Bordure : `hsl(var(--border))`.
@@ -24,11 +24,11 @@ Les **maquettes HTML** dans `docs/decisions/assets/*.html` définissent leurs PR
 
 **Pattern badge de statut** (cf. `MesDates.css`) : poser `--chip: var(--status-xxx)` sur la variante, puis `background: color-mix(in srgb, var(--chip) 18%, transparent); color: var(--chip); border: 1px solid color-mix(in srgb, var(--chip) 35%, transparent)`. Les variantes matchent les retours de `participationChip` (cf. [[reference_tags_slug_coupling]] pour une logique de couplage similaire).
 
-**Règle :** avant de porter une maquette, ouvrir `src/index.css` + une page CSS existante (`MesDates.css`, `Calendar.css`) et mapper sur ces tokens. Cohérent avec [[feedback_css_token_audit]] et [[reference_da_daynight_gotchas]].
+**Règle :** avant de porter une maquette, ouvrir `apps/web/src/index.css` + une page CSS existante (`MesDates.css`, `Calendar.css`) et mapper sur ces tokens. Cohérent avec [[feedback_css_token_audit]] et [[reference_da_daynight_gotchas]].
 
 ## reference_theming_knobs
 
-**Tout le thème de l'app connectée se pilote depuis `src/index.css`**, défini 2 fois :
+**Tout le thème de l'app connectée se pilote depuis `apps/web/src/index.css`**, défini 2 fois :
 bloc `:root` = **nuit**, bloc `.light` = **jour**. Changer une valeur dans les deux
 blocs → tout le site suit (refonte DA terminée v0.7.325, tout standardisé sur ces tokens).
 
@@ -66,7 +66,7 @@ Pièges jour/nuit appris en intégrant landing + onboarding (2026-05-25). **À v
 
 5. **Outils dispo** — le variant Tailwind `light:` existe (custom variant ajouté au socle) pour les overrides jour ponctuels côté composant ; côté `.css` on écrit `.light <scope> …`.
 
-6. **Dette connue non encore corrigée** : la même ombre copper dense est sur le bouton primaire global (`src/components/ui/button.tsx`) et les CTA landing (`Landing.css .btn-primary`) → à adoucir en jour en une passe. Voir [[project_da_socle]].
+6. **Dette connue non encore corrigée** : la même ombre copper dense est sur le bouton primaire global (`apps/web/src/components/ui/button.tsx`) et les CTA landing (`Landing.css .btn-primary`) → à adoucir en jour en une passe. Voir [[project_da_socle]].
 
 ## reference_css_global_class_collisions
 
@@ -129,7 +129,7 @@ Règle générale : un overlay décoratif (grain, voile) doit couvrir le **même
 Le système de tags Fellowship a une **coupling cachée** entre la DB (table `tags`) et le frontend :
 
 - DB stocke `slug, name, bg_color, text_color` (saisis manuellement dans `/admin/tags`)
-- Frontend `src/components/ui/TagBadge.tsx` a 2 maps hardcodées par slug :
+- Frontend `apps/web/src/components/ui/TagBadge.tsx` a 2 maps hardcodées par slug :
   - `TAG_EMOJIS` → emoji affiché (chips Explorer, badges)
   - `TAG_LANDING_COLORS` → couleur hex chaude (chips Explorer, accent)
 
@@ -211,7 +211,7 @@ Lors du socle DA, j'ai changé les design tokens de triplets-HSL (`24 12% 8%`) v
 
 **Why :** un audit basé uniquement sur les classes utilitaires Tailwind (et `dark:`) rate la couche de CSS manuel. Le format des tokens est un contrat dont dépend tout `hsl(var())`.
 
-**How to apply :** avant tout changement de format de tokens dans `index.css`, faire `grep -rn "hsl(var(" src/` (et inclure les `.tsx` pour les styles inline). Si des callsites consomment `hsl(var(--x))`, **garder le format triplet-HSL** et ne changer que les valeurs. Vérifier la sortie : `pnpm exec vite build` puis greper `hsl(#` / `hsl(hsl(` dans `dist/assets/*.css` (doit être vide). Lié à [[project_da_socle]] et au fait que la revue de code finale ([[feedback_never_regress_commits]]) attrape ce genre de régression.
+**How to apply :** avant tout changement de format de tokens dans `index.css`, faire `grep -rn "hsl(var(" apps/web/src/` (et inclure les `.tsx` pour les styles inline). Si des callsites consomment `hsl(var(--x))`, **garder le format triplet-HSL** et ne changer que les valeurs. Vérifier la sortie : `pnpm exec vite build` puis greper `hsl(#` / `hsl(hsl(` dans `dist/assets/*.css` (doit être vide). Lié à [[project_da_socle]] et au fait que la revue de code finale ([[feedback_never_regress_commits]]) attrape ce genre de régression.
 
 ## feedback-light-button-shadow
 
@@ -219,15 +219,15 @@ Lors du socle DA, j'ai changé les design tokens de triplets-HSL (`24 12% 8%`) v
 
 **Pourquoi :** sur fond clair, une ombre forte/saturée jure ; en nuit elle donne du relief, en jour elle doit juste poser le bouton.
 
-**Comment l'appliquer :** valeur de référence (du bouton global `src/components/ui/button.tsx`) :
+**Comment l'appliquer :** valeur de référence (du bouton global `apps/web/src/components/ui/button.tsx`) :
 - repos : `box-shadow: 0 6px 16px hsl(24 70% 50% / 0.20)`
 - hover : `box-shadow: 0 8px 22px hsl(24 70% 50% / 0.28)`
 
-Le bouton global (`button.tsx`, variant `light:shadow-[…]`) le fait déjà. **Mais les composants qui redéfinissent leur propre bouton coloré** (ex. `.v-btn-p`/`.v-save` dans `src/pages/Vitrine.css`) gardent l'ombre nuit forte par défaut → il faut **ajouter un override `.light .<classe> { box-shadow: … }`**. Vérifier ça sur chaque page qui a des boutons colorés custom (pas via `button.tsx`). Cf. [[da-socle-done-on-branch]] (dette d'ombre jour) et [[feedback_css_token_audit]].
+Le bouton global (`button.tsx`, variant `light:shadow-[…]`) le fait déjà. **Mais les composants qui redéfinissent leur propre bouton coloré** (ex. `.v-btn-p`/`.v-save` dans `apps/web/src/pages/Vitrine.css`) gardent l'ombre nuit forte par défaut → il faut **ajouter un override `.light .<classe> { box-shadow: … }`**. Vérifier ça sur chaque page qui a des boutons colorés custom (pas via `button.tsx`). Cf. [[da-socle-done-on-branch]] (dette d'ombre jour) et [[feedback_css_token_audit]].
 
 ## feedback_logo_no_border_radius
 
-**Ne jamais mettre de `border-radius` sur le logo Fellowship** (`public/icon.png`, `pwa-192x192.png`). Le poser nu, sans arrondi ni cadre.
+**Ne jamais mettre de `border-radius` sur le logo Fellowship** (`apps/web/public/icon.png`, `pwa-192x192.png`). Le poser nu, sans arrondi ni cadre.
 
 **Why:** Le logo a déjà sa forme ; l'arrondir le rogne et le rend « immonde » (mot d'Uriel). Il a dû le redemander **trois fois** dans une même session — c'est le retour qu'il a répété le plus souvent.
 
