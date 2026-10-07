@@ -55,6 +55,8 @@
 
 - [ ] Certifié = plan Pro.
 - [ ] Bilans et objectifs : Pro (aperçu flouté + invitation pour le gratuit).
+- [ ] Notes détaillées des festivals (affluence, organisation, rentabilité — les axes de la V1) : Pro ; en gratuit, la note globale et la lecture des avis.
+- [ ] Suivi des dossiers et des paiements : **gratuit** (fonction plébiscitée).
 - [ ] Tout le monde voit tous les événements ; en gratuit, **repérer ou s'inscrire jusqu'à 6 mois** (étoile, calendrier, alerte au-delà).
 - [ ] Alertes Pro : clôture des candidatures (7 jours avant), nouvelle édition d'un festival déjà fait, recherches sauvegardées.
 - [ ] Intégration du calendrier sur son site : gratuite avec la mention Fellowship, Pro sans la marque et personnalisable.
