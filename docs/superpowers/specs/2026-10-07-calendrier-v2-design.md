@@ -39,9 +39,10 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
 - En-tête de colonne : le nom du mois en très grand (foncé pour le mois en cours, clair pour les
   autres), le compte (« 2 dates », « 1 date », « Aucune date »), et la pastille « Ce mois-ci » sur
   le mois en cours.
-- **Carte-affiche** : l'affiche en portrait ; posés dessus, le statut (haut gauche), le compte à
-  rebours (haut droite), les avatars des amis présents (bas gauche, 3 max puis « +N »). Dessous :
-  le nom, « 25–27 oct. · Ménétrole (63) », les catégories.
+- **Carte-affiche** : l'affiche en portrait, un dégradé sombre en haut et en bas ; posés dessus, le
+  compte à rebours (haut droite) et les avatars des amis présents (bas gauche, 3 max puis « +N »).
+  Dessous : le nom avec, sur la même ligne à droite, la pastille de statut (double coche sur
+  « Inscrit ») ; « 25–27 oct. · Ménétrole (63) » ; les catégories (coins arrondis, pas en gélule).
 - **Sans affiche** : bloc beige au format portrait, le jour en très grands chiffres et le mois
   abrégé, dans la couleur de la première catégorie.
 - **Mois vide** : carte en pointillés « Mois libre · Trouver une date en <mois> → ».
