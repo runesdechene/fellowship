@@ -5,48 +5,31 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { CalendarDays, Clock, FileText, MapPin, Store, Users } from 'lucide-react'
+import { CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
-import { daysUntil, formatCountdown, formatDayMonth, formatFullDate } from '@/lib/dates'
+import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
+import { nameLine } from '@/lib/name-line'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
+import { Applying } from './Applying'
 import { EventDiscussion } from './EventDiscussion'
 import { EventStatus } from './EventStatus'
+import { MyDossier } from './MyDossier'
+import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import type { EventLedgerLine } from './useEvent'
-
-/**
- * « Le » + « 13 juin », ou « Du » + « 13 au 14 juin ». Le mot d'attaque d'un
- * cote, les dates de l'autre : dans l'accroche, seules les dates portent le
- * gras — « Le » et « Du » ne sont pas des informations, c'est de la grammaire.
- */
-function splitRange(start: Date, end: Date): [string, string] {
-  if (start.getTime() === end.getTime()) return ['Le', formatDayMonth(start)]
-  return ['Du', `${formatDayMonth(start)} au ${formatDayMonth(end)}`]
-}
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
   if (start.getTime() === end.getTime()) return `Le ${formatDayMonth(start)}`
   return `Du ${formatDayMonth(start)} au ${formatDayMonth(end)}`
-}
-
-/**
- * Combien de jours dure la date. Posé SOUS ses bornes : un exposant compte en
- * jours de stand, pas en dates de calendrier — c'est ce nombre qui lui dit
- * s'il doit prévoir une nuit d'hôtel.
- */
-function formatDuration(start: Date, end: Date): string | null {
-  const jours = daysUntil(end, start) + 1
-  if (jours <= 1) return null
-  return `${jours} jours`
 }
 
 /**
@@ -147,6 +130,7 @@ export function EventPage() {
     saving,
     writeError,
   } = useEvent(id, actor?.id, person?.actor_id)
+  const dossier = useDossier(id, actor?.id)
 
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
   // remplit le mur de droite, la flèche de retour et le compte à rebours
@@ -179,6 +163,11 @@ export function EventPage() {
     )
   }
 
+  const companions = nameLine(
+    friends.map((friend) => friend.name),
+    { one: 'y va aussi', many: 'y vont aussi' },
+  )
+
   // Les faits se construisent d'abord, se filtrent ensuite : seul ce que
   // l'organisateur a renseigné prend une carte.
   const facts: FactData[] = [
@@ -186,7 +175,7 @@ export function EventPage() {
       Icon: CalendarDays,
       label: 'Dates',
       value: formatRange(startDate, endDate),
-      sub: formatDuration(startDate, endDate),
+      sub: durationLabel(startDate, endDate),
     },
     { Icon: Clock, label: 'Horaires', value: event.opening_hours },
     {
@@ -196,14 +185,6 @@ export function EventPage() {
       sub: event.address,
     },
     { Icon: Users, label: 'Fréquentation', value: event.expected_attendance },
-    {
-      Icon: FileText,
-      label: 'Candidater jusqu’au',
-      value: event.registration_deadline
-        ? formatFullDate(new Date(event.registration_deadline))
-        : null,
-      sub: event.registration_url ? 'En ligne' : event.contact_email ? 'Par e-mail' : null,
-    },
     { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
   ].filter((fait) => Boolean(fait.value))
 
@@ -218,8 +199,9 @@ export function EventPage() {
                   ne se scannent pas. Ceux qui se scannent sont plus bas, en
                   cartes. */}
             <p className="event-page__meta">
-              {splitRange(startDate, endDate)[0]} <b>{splitRange(startDate, endDate)[1]}</b> —{' '}
-              {event.city} ({event.department}){event.edition ? ` · ${event.edition}ᵉ édition` : ''}
+              {formatDateRange(startDate, endDate, 'long')} {endDate.getFullYear()} · {event.city} (
+              {event.department}) · {past ? 'date passée' : formatCountdown(daysAway).toLowerCase()}
+              {event.edition ? ` · ${event.edition}ᵉ édition` : ''}
             </p>
 
             {event.tags && event.tags.length > 0 && (
@@ -242,13 +224,10 @@ export function EventPage() {
                     </span>
                   ))}
                 </span>
-                {friends.length === 1 ? (
+                {companions && (
                   <span>
-                    <b>{friends[0]?.name}</b> y sera aussi
-                  </span>
-                ) : (
-                  <span>
-                    <b>{friends.length} exposants</b> que tu suis y seront
+                    <b>{companions.first}</b>
+                    {companions.rest}
                   </span>
                 )}
               </p>
@@ -258,16 +237,27 @@ export function EventPage() {
 
         <EventStatus
           status={status}
-          paymentStatus={paymentStatus}
-          paymentOrientation={paymentOrientation}
           setStatus={setStatus}
-          setPayment={setPayment}
-          setOrientation={setOrientation}
-          setStandAmount={setStandAmount}
-          standAmount={standAmount}
           saving={saving}
           writeError={writeError}
+          revenueGoal={dossier.fields.revenueGoal}
+          saveGoal={(goal) => void dossier.save({ revenueGoal: goal })}
         />
+
+        {(status === 'inscrit' || status === 'confirme') && (
+          <MyDossier
+            paymentStatus={paymentStatus}
+            orientation={paymentOrientation}
+            standAmount={standAmount}
+            saving={saving}
+            setPayment={setPayment}
+            setOrientation={setOrientation}
+            setStandAmount={setStandAmount}
+            fields={dossier.fields}
+            save={dossier.save}
+            error={dossier.error}
+          />
+        )}
 
         {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
               Le cadre disait « ceci est un bloc » alors que la description est
@@ -281,7 +271,7 @@ export function EventPage() {
           )}
         </Block>
 
-        <Block title="Infos pratiques" bare empty={facts.length === 0}>
+        <Block title="Informations" bare empty={facts.length === 0}>
           {facts.length > 0 ? (
             <div className="event-page__facts">
               {facts.map((fait) => (
@@ -294,38 +284,21 @@ export function EventPage() {
             </p>
           )}
 
-          {(event.registration_url || event.external_url || event.contact_email) && (
+          {event.external_url && (
             <div className="event-page__links">
-              {event.registration_url && (
-                <a
-                  className="event-page__link"
-                  href={event.registration_url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Dossier d’inscription
-                </a>
-              )}
-              {event.external_url && (
-                <a
-                  className="event-page__link"
-                  href={event.external_url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Site du festival
-                </a>
-              )}
-              {event.contact_email && (
-                <a className="event-page__link" href={`mailto:${event.contact_email}`}>
-                  {event.contact_email}
-                </a>
-              )}
+              <a
+                className="event-page__link"
+                href={event.external_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Site du festival
+              </a>
             </div>
           )}
-
-          {event.registration_note && <p className="event-page__note">{event.registration_note}</p>}
         </Block>
+
+        <Applying event={event} status={status} fields={dossier.fields} save={dossier.save} />
 
         <Block title="Discussion du festival" bare>
           <EventDiscussion eventId={event.id} />

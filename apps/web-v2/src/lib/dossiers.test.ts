@@ -5,7 +5,7 @@
  *            fois ou oublier un solde.
  */
 import { describe, expect, it } from 'vitest'
-import { dossierView } from './dossiers'
+import { balanceOf, dossierView } from './dossiers'
 import { formatEuros } from './money'
 
 const base = {
@@ -75,5 +75,28 @@ describe('dossierView — le cachet d’un exposant payé', () => {
       detail: `${formatEuros(450)} reçus`,
       tone: 'done',
     })
+  })
+})
+
+describe('balanceOf', () => {
+  it('rien de versé tant que c’est à payer', () => {
+    expect(balanceOf(450, 150, 'a_payer')).toEqual({ paid: 0, rest: 450, ratio: 0 })
+  })
+
+  it('l’acompte compte comme versé', () => {
+    expect(balanceOf(450, 150, 'acompte_verse')).toEqual({ paid: 150, rest: 300, ratio: 1 / 3 })
+  })
+
+  it('payé : tout est versé, quel que soit l’acompte noté', () => {
+    expect(balanceOf(450, 150, 'paye')).toEqual({ paid: 450, rest: 0, ratio: 1 })
+  })
+
+  it('un acompte sans montant noté vaut zéro, et ne dépasse jamais le total', () => {
+    expect(balanceOf(450, null, 'acompte_verse')?.paid).toBe(0)
+    expect(balanceOf(450, 600, 'acompte_verse')).toEqual({ paid: 450, rest: 0, ratio: 1 })
+  })
+
+  it('sans total, pas de jauge', () => {
+    expect(balanceOf(0, 150, 'acompte_verse')).toBeNull()
   })
 })

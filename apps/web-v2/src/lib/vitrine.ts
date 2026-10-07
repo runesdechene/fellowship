@@ -1,6 +1,6 @@
 /**
  * QUOI     — la logique pure de la vitrine d'un artisan : couper sa route entre à venir et passé,
- *            nommer les tampons, dire qui « t'y retrouve », accorder le réseau,
+ *            nommer les tampons, accorder le réseau,
  *            les initiales du logo et l'hôte du site.
  * POURQUOI — la vitrine ne fait qu'afficher ; ses libellés se testent seuls (vitrine.test.ts).
  * ATTENTION — une date en cours est encore « à venir » : on la quitte le lendemain de sa fin.
@@ -13,15 +13,6 @@ export function stampName(name: string): string {
     .replace(/^l['’]/i, '')
     .replace(/\s*[-–·]?\s*(19|20)\d{2}\b.*$/, '')
     .trim()
-}
-
-/** « Gautier » + « et Uriel t’y retrouvent » : le premier nom se met en gras à l'affichage. */
-export function meetLine(names: string[]): { first: string; rest: string } | null {
-  const [first, second] = names
-  if (first === undefined) return null
-  if (second === undefined) return { first, rest: ' t’y retrouve' }
-  if (names.length === 2) return { first, rest: ` et ${second} t’y retrouvent` }
-  return { first, rest: ` et ${names.length - 1} autres t’y retrouvent` }
 }
 
 interface Count {

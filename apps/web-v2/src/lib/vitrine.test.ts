@@ -4,7 +4,7 @@
  *            tampon mal coupé s'y voit tout de suite.
  */
 import { describe, expect, it } from 'vitest'
-import { initials, meetLine, networkCounts, splitRoad, stampName, websiteLink } from './vitrine'
+import { initials, networkCounts, splitRoad, stampName, websiteLink } from './vitrine'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -23,30 +23,6 @@ describe('stampName', () => {
 
   it('garde un nom sans article tel quel', () => {
     expect(stampName('Plane’R Fest')).toBe('Plane’R Fest')
-  })
-})
-
-describe('meetLine', () => {
-  it('un ami : le verbe au singulier', () => {
-    expect(meetLine(['Gautier'])).toEqual({ first: 'Gautier', rest: ' t’y retrouve' })
-  })
-
-  it('deux amis : le second nommé', () => {
-    expect(meetLine(['Gautier', 'Uriel'])).toEqual({
-      first: 'Gautier',
-      rest: ' et Uriel t’y retrouvent',
-    })
-  })
-
-  it('au-delà : on compte les autres', () => {
-    expect(meetLine(['Gautier', 'Uriel', 'Iva'])).toEqual({
-      first: 'Gautier',
-      rest: ' et 2 autres t’y retrouvent',
-    })
-  })
-
-  it('personne : rien', () => {
-    expect(meetLine([])).toBeNull()
   })
 })
 

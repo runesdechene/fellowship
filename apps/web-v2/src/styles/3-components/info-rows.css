@@ -1,0 +1,88 @@
+/**
+ * QUOI     — les styles des lignes d'information (components/ui/InfoRows.tsx) et du champ qui se
+ *            remplit sur place (components/ui/DraftInput.tsx).
+ * POURQUOI — on balaie les libellés pâles, on s'arrête sur la valeur ; un champ vide se lit comme
+ *            une invitation, pas comme un formulaire.
+ */
+
+.info-rows > .info-row + .info-row {
+  border-top: 1px solid var(--line-card);
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-12) 0;
+}
+
+.info-row__icon {
+  flex: none;
+  color: var(--ink-soft);
+}
+
+.info-row__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.info-row__label {
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.info-row__value {
+  font: var(--type-dossier-value);
+  color: var(--ink-title);
+}
+
+.info-row__sub {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.info-row__link:hover {
+  text-decoration: underline;
+}
+
+/* --- Le champ sur place ----------------------------------------------------- */
+.draft-input {
+  width: calc(100% + 2 * var(--space-6));
+  margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-6));
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  font: var(--type-dossier-value);
+  color: var(--ink-title);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.draft-input::placeholder {
+  color: var(--ink-section-pale);
+}
+
+.draft-input:hover {
+  background: var(--surface-control-hover);
+}
+
+.draft-input:focus-visible {
+  border-color: var(--line-card);
+  outline: none;
+  background: var(--surface-card);
+}
+
+.draft-input[type='date'] {
+  width: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draft-input {
+    transition: none;
+  }
+}

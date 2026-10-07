@@ -52,3 +52,15 @@ export function formatSignedEuros(amount: number): string {
   const sign = rounded >= 0 ? '+' : '−'
   return `${sign}${Math.abs(rounded).toLocaleString('fr-FR')} €`
 }
+
+/**
+ * Lit un montant tapé à la main : « 450 », « 1 250,50 », « 300 € ». Vide → null (on efface) ;
+ * autre chose qu'un montant positif → « invalide » (on ne touche à rien).
+ */
+export function parseAmount(raw: string): number | null | 'invalide' {
+  // `\s` couvre aussi l'espace fine insécable que toLocaleString met entre les milliers.
+  const cleaned = raw.replace(/[\s€]/g, '').replace(',', '.')
+  if (cleaned === '') return null
+  const amount = Number(cleaned)
+  return Number.isFinite(amount) && amount >= 0 ? amount : 'invalide'
+}

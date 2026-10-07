@@ -1,0 +1,56 @@
+/**
+ * QUOI     — les styles du contrôle segmenté (components/ui/Segmented.tsx).
+ * POURQUOI — une gouttière sable, l'option choisie posée dessus en blanc ; « Inscrit » choisi prend
+ *            le dégradé du logo.
+ */
+
+.segmented {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--segmented-padding);
+  border-radius: var(--segmented-radius);
+  background: var(--surface-chip-neutral);
+}
+
+.segmented__option {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  height: var(--segmented-option-height);
+  border: 1px solid transparent;
+  border-radius: var(--segmented-option-radius);
+  font: var(--type-segmented);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.segmented__option:hover:not(:disabled, [aria-pressed='true']) {
+  color: var(--ink-title);
+}
+
+.segmented__option--on {
+  border-color: var(--line-card);
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.segmented__option--brand {
+  background: var(--brand-gradient);
+  font: var(--type-segmented-on);
+  color: var(--action-ink);
+}
+
+.segmented__option:disabled {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented__option {
+    transition: none;
+  }
+}

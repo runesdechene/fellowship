@@ -3,7 +3,14 @@
  * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
  */
 import { describe, expect, it } from 'vitest'
-import { formatEuros, formatSignedEuros, ledgerProfit, ledgerRevenue, standLine } from './money'
+import {
+  formatEuros,
+  formatSignedEuros,
+  ledgerProfit,
+  ledgerRevenue,
+  parseAmount,
+  standLine,
+} from './money'
 
 const lines = [
   { amount: 5400, direction: 'in' }, // ventes
@@ -56,5 +63,23 @@ describe('standLine', () => {
   })
   it('un exposant payé pour venir : un cachet qui ENTRE', () => {
     expect(standLine('paye')).toEqual({ direction: 'in', category: 'cachet' })
+  })
+})
+
+describe('parseAmount', () => {
+  it('lit un montant tapé à la française', () => {
+    expect(parseAmount('450')).toBe(450)
+    expect(parseAmount('1 250,50')).toBe(1250.5)
+    expect(parseAmount(' 300 € ')).toBe(300)
+  })
+
+  it('vide : pas de montant', () => {
+    expect(parseAmount('')).toBeNull()
+    expect(parseAmount('   ')).toBeNull()
+  })
+
+  it('ce qui n’est pas un montant positif est refusé', () => {
+    expect(parseAmount('beaucoup')).toBe('invalide')
+    expect(parseAmount('-20')).toBe('invalide')
   })
 })

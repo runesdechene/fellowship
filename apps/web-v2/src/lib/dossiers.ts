@@ -59,3 +59,22 @@ export function dossierView(input: DossierInput): DossierView {
     },
   }
 }
+
+/**
+ * Où en est l'argent d'une date : ce qui est versé, ce qui reste, et la part versée (0 à 1) pour
+ * la jauge. `null` sans total : on ne dessine pas une jauge sur un montant inconnu.
+ */
+export function balanceOf(
+  total: number,
+  deposit: number | null,
+  paymentStatus: string | null,
+): { paid: number; rest: number; ratio: number } | null {
+  if (total <= 0) return null
+  const paid =
+    paymentStatus === 'paye'
+      ? total
+      : paymentStatus === 'acompte_verse'
+        ? Math.min(deposit ?? 0, total)
+        : 0
+  return { paid, rest: total - paid, ratio: paid / total }
+}

@@ -1,238 +1,101 @@
 /**
- * QUOI     — le suivi d'une date sur sa fiche : participation, paiement, bilan.
- * POURQUOI — un seul contrôle par question, chaque état avec son propre dessin (lisible sans la
- *            couleur), la couleur ne disant que l'état.
- * ATTENTION — rien ne se verrouille après la date : un exposant est payé, note son cachet et
- *            solde son acompte APRÈS (piège du 19/08/2026).
+ * QUOI     — le statut d'une date sur sa fiche, en contrôle segmenté (Intéressé · Dossier envoyé ·
+ *            Inscrit), et l'objectif de chiffre d'affaires qu'on s'y fixe.
+ * POURQUOI — toutes les étapes visibles d'un coup, celle qui vaut en relief ; « Inscrit » porte le
+ *            dégradé du logo, c'est l'acquis (maquette 2027).
+ * ATTENTION — recliquer l'étape choisie retire la date : la ligne de participation est supprimée.
+ *            « Refusé » ne se choisit pas mais s'affiche s'il est en base. Rien ne se verrouille
+ *            après la date (piège du 19/08/2026).
  */
+import { ArrowRight, Check, Clock, Star, Target } from 'lucide-react'
 import { useState } from 'react'
-import { CircleCheck, CircleMinus, CircleX, Coins, FileClock, Hourglass, Star } from 'lucide-react'
-import { Select, type SelectOption } from '@/components/ui/Select'
+import { DraftInput } from '@/components/ui/DraftInput'
+import { Segmented, type SegmentedOption } from '@/components/ui/Segmented'
+import { formatEuros, parseAmount } from '@/lib/money'
 import type { ParticipationStatus } from '@/types/database'
-import type { EventActions, PaymentOrientation, PaymentStatus } from './useEvent'
 
-/**
- * LE SUIVI — dans la grille principale, sous le titre.
- *
- * Il vivait dans une colonne de deux cents pixels à droite, où trois contrôles
- * voisins faisaient trente, vingt-six et trente pixels de haut sur trois
- * familles de fond : l'œil n'y trouvait aucun rythme. Ici tout partage une
- * hauteur, un rayon, une grammaire.
- *
- * Chaque état a SON dessin — étoile, sablier, coche — et pas seulement sa
- * teinte : ça se lit aussi en noir et blanc, et pour un daltonien. La couleur
- * ne dit que l'ÉTAT : olive pour ce qui est acquis, blé pour ce qui attend un
- * geste. Une place réglée redevient crème.
- *
- * RIEN NE SE VERROUILLE APRÈS LA DATE. Le module a longtemps été gelé sur un
- * événement passé, au nom de « après la date, ça ne se pilote plus, ça se
- * constate ». C'est faux dans le métier : un exposant est payé APRÈS, il note
- * son cachet APRÈS, il solde son acompte APRÈS. Geler la fiche à minuit, c'est
- * fermer la porte juste avant le moment où elle sert — et l'obliger à tenir
- * ses comptes ailleurs.
- */
+type ChosenStatus = 'interesse' | 'en_cours' | 'inscrit'
 
-/**
- * Les crans de participation, dans l'ordre du chemin. Le premier retire la
- * participation : un seul contrôle porte donc « je m'inscris » ET « je me
- * retire », là où le suivi d'avant demandait un lien séparé.
- */
-const PARTICIPATION: SelectOption<ParticipationStatus | null>[] = [
-  { value: null, label: 'Je n’y vais pas', tone: 'muet', Icon: CircleMinus },
-  // Blé : la date est notée, rien n'est fait — c'est à TOI de candidater.
-  { value: 'interesse', label: 'Intéressé', tone: 'todo', Icon: Star },
-  // Terre : le dossier est parti, ça ne dépend plus de toi.
-  { value: 'en_cours', label: 'Dossier envoyé', tone: 'pending', Icon: FileClock },
-  { value: 'inscrit', label: 'Inscrit', tone: 'ok', Icon: CircleCheck },
+const STEPS: SegmentedOption<ChosenStatus>[] = [
+  { value: 'interesse', label: 'Intéressé', Icon: Star },
+  { value: 'en_cours', label: 'Dossier envoyé', Icon: Clock },
+  { value: 'inscrit', label: 'Inscrit', Icon: Check, brand: true },
 ]
 
-/**
- * « refuse » ne se CHOISIT pas — la V1 ne l'a jamais proposé et rien ne
- * garantit que la contrainte en base l'accepte. Mais si la base le porte
- * déjà, le menu doit pouvoir l'afficher plutôt que de se vider.
- */
-const REFUSE: SelectOption<ParticipationStatus | null> = {
-  value: 'refuse',
-  label: 'Dossier refusé',
-  tone: 'muet',
-  Icon: CircleX,
+function chosen(status: ParticipationStatus | null): ChosenStatus | null {
+  if (status === 'confirme') return 'inscrit'
+  if (status === 'refuse') return null
+  return status
 }
 
-/**
- * Les mêmes états en base, lus selon qu'on paie sa place ou qu'on est payé.
- *
- * L'argent porte une JAUGE, pas la sémantique « qui doit bouger » de la
- * participation — et c'est voulu : un intérêt n'a aucune urgence, une dette
- * en a une. Terre, blé, olive : rien n'a bougé, ça a commencé, c'est réglé.
- * La terre est celle du logo, la même que « Dossier envoyé » : dans les
- * deux cas elle dit « ça n'a pas avancé ».
- */
-const PAIEMENT: Record<PaymentOrientation, SelectOption<PaymentStatus>[]> = {
-  payeur: [
-    { value: 'a_payer', label: 'À payer', tone: 'pending', Icon: Hourglass },
-    { value: 'acompte_verse', label: 'Acompte versé', tone: 'todo', Icon: Coins },
-    { value: 'paye', label: 'Payé', tone: 'ok', Icon: CircleCheck },
-  ],
-  paye: [
-    { value: 'a_payer', label: 'À recevoir', tone: 'pending', Icon: Hourglass },
-    { value: 'acompte_verse', label: 'Acompte reçu', tone: 'todo', Icon: Coins },
-    { value: 'paye', label: 'Reçu', tone: 'ok', Icon: CircleCheck },
-  ],
+interface EventStatusProps {
+  status: ParticipationStatus | null
+  setStatus: (next: ParticipationStatus | null) => Promise<void>
+  saving: boolean
+  writeError: string | null
+  revenueGoal: number | null
+  saveGoal: (goal: number | null) => void
 }
 
 export function EventStatus({
   status,
-  paymentStatus,
-  paymentOrientation,
-  standAmount,
   setStatus,
-  setPayment,
-  setOrientation,
-  setStandAmount,
   saving,
   writeError,
-}: {
-  status: ParticipationStatus | null
-  paymentStatus: string | null
-  paymentOrientation: PaymentOrientation
-  /** Le prix de la place déjà posé, ou 0 s'il ne l'est pas encore. */
-  standAmount: number
-} & EventActions) {
-  // Le montant se tape, donc il a son brouillon. Il se recale quand la valeur
-  // enregistrée change sous lui — après un enregistrement, ou en revenant sur
-  // la fiche.
-  //
-  // Ajusté PENDANT le rendu et non dans un effet : c'est le patron documenté
-  // de React pour un état dérivé d'une prop, et il évite le rendu de trop où
-  // le champ afficherait encore l'ancien montant.
-  const ecrire = (valeur: number) => (valeur > 0 ? String(valeur) : '')
-  const [montant, setMontant] = useState(() => ecrire(standAmount))
-  const [montantConnu, setMontantConnu] = useState(standAmount)
-  if (montantConnu !== standAmount) {
-    setMontantConnu(standAmount)
-    setMontant(ecrire(standAmount))
-  }
-
-  // Un dossier refusé n'est pas dans la liste ; il faut pourtant l'afficher.
-  const participation = status === 'refuse' ? [...PARTICIPATION, REFUSE] : PARTICIPATION
-
-  const paiement = PAIEMENT[paymentOrientation]
-  const statutPaiement = (paymentStatus ?? 'a_payer') as PaymentStatus
-
-  // Le paiement n'a de sens qu'une fois la place acquise : avant, il n'y a
-  // rien à régler.
-  const montrerLePaiement = status === 'inscrit' || status === 'confirme'
-  const paye = paymentOrientation === 'paye'
-
-  /**
-   * Une saisie vide vaut zéro, donc efface la ligne. Un texte qui n'est pas
-   * un nombre ne doit RIEN effacer : on remet le brouillon à la valeur
-   * enregistrée et on n'écrit pas.
-   */
-  async function enregistrerLeMontant() {
-    const brut = montant.trim()
-    if (brut === '') {
-      if (standAmount !== 0) await setStandAmount(0)
-      return
-    }
-    const lu = Number.parseFloat(brut.replace(',', '.'))
-    if (Number.isNaN(lu)) {
-      setMontant(ecrire(standAmount))
-      return
-    }
-    if (lu !== standAmount) await setStandAmount(lu)
-  }
+  revenueGoal,
+  saveGoal,
+}: EventStatusProps) {
+  const [editingGoal, setEditingGoal] = useState(false)
+  const engaged = status !== null && status !== 'refuse'
 
   return (
-    <section className="event-status">
-      <div className="event-status__head">
-        <h2 className="event-status__title">Statut</h2>
-        {/* Le SEUL aplat coloré de l'écran : c'est le contrôle qui résume la
-            page. Le règlement, lui, garde son icône teintée sur du crème —
-            deux aplats côte à côte se disputeraient le regard. */}
-        <Select
-          filled
-          className="event-status__participation"
-          label="Ma participation à cette date"
-          value={status}
-          options={participation}
-          disabled={saving}
-          onChange={(choisi) => void setStatus(choisi)}
-        />
-      </div>
+    <section className="event-page__block">
+      <h2 className="event-page__block-title">Statut</h2>
+      <Segmented
+        label="Ma participation à cette date"
+        options={STEPS}
+        value={chosen(status)}
+        disabled={saving}
+        onChange={(next) => void setStatus(next)}
+        onClear={() => void setStatus(null)}
+      />
 
-      {montrerLePaiement && (
-        <div className="event-status__bar">
-          {/* PAS de `disabled={saving}` ici, contrairement aux menus.
-              L’ecriture est optimiste : l’affichage montre deja le nouveau sens.
-              Desactiver le bouton pendant l’aller-retour lui faisait perdre
-              son fond de survol puis le reprendre — deux sauts en 200 ms, un
-              clignotement a chaque clic. Le hook garde deja la reentrance
-              (`if (saving) return`), la protection n’est donc pas perdue. */}
-          <div className="event-status__sides">
-            <button
-              type="button"
-              className="event-status__side"
-              aria-pressed={paymentOrientation === 'payeur'}
-              onClick={() => void setOrientation('payeur')}
-            >
-              Je paie ma place
-            </button>
-            <button
-              type="button"
-              className="event-status__side"
-              aria-pressed={paye}
-              onClick={() => void setOrientation('paye')}
-            >
-              On me paie
-            </button>
-          </div>
-
-          {/* Le montant et l'état de son règlement sont une seule chose : ils
-              se tiennent à droite de la barre, groupés. Les deux ont une
-              largeur FIGÉE — « Acompte versé » est plus long que « Payé », et
-              sans ça le champ se déformait à chaque changement d'état. */}
-          <div className="event-status__money">
-            <span className="event-status__amount">
-              <input
-                className="event-status__amount-input"
-                type="text"
-                inputMode="decimal"
-                placeholder={paye ? 'Cachet' : 'Montant'}
-                aria-label={paye ? 'Montant du cachet en euros' : 'Prix de la place en euros'}
-                value={montant}
-                onChange={(evenement) => setMontant(evenement.target.value)}
-                onBlur={() => void enregistrerLeMontant()}
-                onKeyDown={(evenement) => {
-                  if (evenement.key === 'Enter') evenement.currentTarget.blur()
-                  if (evenement.key === 'Escape') {
-                    setMontant(ecrire(standAmount))
-                    evenement.currentTarget.blur()
-                  }
-                }}
-              />
-              {/* Décoratif : l'unité est déjà dans le libellé du champ, que
-                  lisent les lecteurs d'écran. La répéter les ferait bégayer. */}
-              <span className="event-status__unit" aria-hidden="true">
-                €
-              </span>
-            </span>
-
-            {/* En aplat plein lui aussi. Les deux aplats ne se disputent pas
-                le regard : ils racontent ensemble « je suis inscrit MAIS il
-                reste a payer » — ce qu une seule couleur ne pouvait pas dire. */}
-            <Select
-              filled
-              className="event-status__reglement"
-              label={paye ? 'Où en est le cachet' : 'Où en est le règlement'}
-              value={statutPaiement}
-              options={paiement}
-              disabled={saving}
-              onChange={(choisi) => void setPayment(choisi)}
-            />
-          </div>
-        </div>
+      {status === 'refuse' && (
+        <p className="event-status__note">Ton dossier a été refusé pour cette date.</p>
       )}
+
+      {engaged &&
+        (revenueGoal !== null || editingGoal ? (
+          <label className="event-status__goal">
+            <Target size={13} strokeWidth={2} />
+            Objectif
+            <DraftInput
+              className="event-status__goal-input"
+              label="Objectif de chiffre d’affaires en euros"
+              inputMode="decimal"
+              placeholder="0 €"
+              autoFocus={editingGoal && revenueGoal === null}
+              value={revenueGoal === null ? '' : formatEuros(revenueGoal)}
+              onSave={(draft) => {
+                const amount = parseAmount(draft)
+                if (amount !== 'invalide') saveGoal(amount)
+                setEditingGoal(false)
+              }}
+            />
+          </label>
+        ) : (
+          <button
+            type="button"
+            className="event-status__goal"
+            onClick={() => {
+              setEditingGoal(true)
+            }}
+          >
+            <Target size={13} strokeWidth={2} />
+            Fixer un objectif de chiffre d’affaires
+            <ArrowRight size={13} strokeWidth={2} />
+          </button>
+        ))}
 
       {/* L'écriture a échoué et l'affichage est déjà revenu en arrière : sans
           ce mot, la valeur qui saute passerait pour un bug. */}

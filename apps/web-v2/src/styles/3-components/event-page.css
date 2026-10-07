@@ -97,15 +97,22 @@
 }
 
 .event-page__block-title {
-  font: var(--type-section-title);
+  font: var(--type-event-block-title);
   color: var(--ink-section);
 }
 
 /* Un bloc encore vide garde sa place et son titre, en pâle : la page ne
    change pas de forme selon le remplissage, mais elle ne fait pas croire
    qu'il s'y trouve quelque chose. */
+/* La précision posée à côté du titre : « visible par toi seul », « tout au même endroit ». */
+.event-page__block-hint {
+  margin-left: var(--space-8);
+  font: var(--type-event-block-hint);
+  color: var(--ink-section-pale);
+}
+
 .event-page__block-title--empty {
-  font: var(--type-section-title);
+  font: var(--type-event-block-title);
   color: var(--ink-section-pale);
 }
 
@@ -178,9 +185,7 @@
    Il a longtemps été plus pâle que sa valeur — l'inverse du besoin. */
 .event-page__fact-label {
   font: var(--type-event-fact-label);
-  letter-spacing: var(--tracking-fact-label);
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-section-pale);
 }
 
 /* La valeur porte le regard : c'est elle qu'on est venu chercher. */
