@@ -371,65 +371,15 @@ export function useEvent(
       setSaving(true)
       setWriteError(null)
 
-      // Le registre référence un bilan, même si l'exposant n'a pas encore
-      // ouvert de formulaire. On garantit donc sa ligne avant d'écrire.
-      const { data: report } = await supabase
-        .from('event_reports')
-        .upsert({ actor_id: actorId, event_id: eventId }, { onConflict: 'actor_id,event_id' })
-        .select('id')
-        .single()
+      // Une seule transaction en base : le bilan, la ligne « stepper » et son sens (lu sur
+      // l'orientation enregistrée). Zéro efface la ligne.
+      const { error } = await supabase.rpc('set_stand_amount', {
+        p_actor_id: actorId,
+        p_event_id: eventId,
+        p_amount: amount,
+      })
 
-      if (!report) {
-        setSaving(false)
-        setWriteError("Le montant n'a pas pu être enregistré.")
-        return
-      }
-
-      const line = standLine(currentOrientation)
-      const { data: existing, error: readError } = await supabase
-        .from('event_ledger_entries')
-        .select('id')
-        .eq('report_id', report.id)
-        .eq('source', 'stepper')
-        .maybeSingle()
-
-      // Sans savoir si la ligne existe, on n'écrit rien : on créerait un doublon.
-      if (readError) {
-        setSaving(false)
-        setWriteError("Le montant n'a pas pu être enregistré.")
-        return
-      }
-
-      let failed = false
-      if (amount <= 0) {
-        // Zéro n'est pas un montant : c'est l'absence de ligne.
-        if (existing) {
-          const { error } = await supabase
-            .from('event_ledger_entries')
-            .delete()
-            .eq('id', existing.id)
-          failed = Boolean(error)
-        }
-      } else if (existing) {
-        const { error } = await supabase
-          .from('event_ledger_entries')
-          .update({ amount, ...line })
-          .eq('id', existing.id)
-        failed = Boolean(error)
-      } else {
-        const { error } = await supabase.from('event_ledger_entries').insert({
-          report_id: report.id,
-          actor_id: actorId,
-          event_id: eventId,
-          label: null,
-          amount,
-          ...line,
-          source: 'stepper',
-        })
-        failed = Boolean(error)
-      }
-
-      if (failed) {
+      if (error) {
         setSaving(false)
         setWriteError("Le montant n'a pas pu être enregistré.")
         return
@@ -438,7 +388,7 @@ export function useEvent(
       await reloadLedger()
       setSaving(false)
     },
-    [eventId, actorId, saving, currentStatus, currentOrientation, reloadLedger],
+    [eventId, actorId, saving, currentStatus, reloadLedger],
   )
 
   const actions: EventActions = {

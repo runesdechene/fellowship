@@ -58,6 +58,9 @@ Deux pièges, tous deux déjà payés :
    `source = 'stepper'` et `direction = 'out'`. Un index unique garantit une seule
    ligne `stepper` par bilan (`uniq_ledger_stepper_per_report`). Additionner les
    lignes donne un total faux.
+3. **Cette ligne s'écrit par `set_stand_amount(actor, event, montant)`** (07/10/2026) : une
+   transaction qui garantit le bilan et lit l'orientation de la participation. Zéro efface la
+   ligne. Ne pas la réécrire à la main en plusieurs requêtes.
 
 ### Table `event_reports`
 - ✅ `wins`, `improvements` (`TEXT[]`), `UNIQUE(user_id, event_id)`

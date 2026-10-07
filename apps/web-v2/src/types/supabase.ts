@@ -1380,6 +1380,10 @@ export type Database = {
           start_date: string
         }[]
       }
+      set_stand_amount: {
+        Args: { p_actor_id: string; p_amount: number; p_event_id: string }
+        Returns: undefined
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
