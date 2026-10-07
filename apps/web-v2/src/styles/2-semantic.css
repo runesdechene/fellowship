@@ -139,7 +139,6 @@
      n’attrapait plus l’œil — alors que c’est sa seule fonction. */
   --status-todo-ink: var(--wheat-700);
   --status-todo-surface: var(--wheat-100);
-  --status-todo-mark: var(--wheat-500);
   --status-todo-surface-hover: var(--wheat-150);
   --status-todo-icon: var(--wheat-400);
 
@@ -150,7 +149,6 @@
   --status-pending-ink: var(--clay-700);
   --status-pending-surface: var(--clay-100);
   --status-pending-surface-hover: var(--clay-150);
-  --status-pending-mark: var(--clay-500);
   --status-pending-icon: var(--clay-500);
 
   /* Bouton d'action principal. Il ne se distingue pas par une couleur mais
@@ -169,10 +167,6 @@
      pas le presser. */
   --action-surface-off: var(--surface-card);
   --action-ink-off: var(--brown-400);
-  /* La meme idee, en moins tranchant. Le brun profond convient a UN bouton
-     isole ; sur une colonne de crans il cogne. On garde le contraste, on
-     retire l'agressivite. */
-  --action-surface-soft: var(--brown-600);
 
   /* Pastille ronde devant chaque date à venir */
   --dot-confirmed: var(--status-ok-mark);
@@ -333,7 +327,6 @@
   /* =========================================================================
      GRAPHE DE SAISON — les réglages du seul élément « dessiné »
      ====================================================================== */
-  --chart-months: 12; /* nombre de mois affichés */
   /* Pas de largeur de colonne : la frise remplit toute la largeur du contenu
      et les douze mois se la partagent également. Seul l'écart se règle. */
   --chart-column-gap: var(--space-8);
@@ -482,7 +475,6 @@
      trois familles de fond : c'est ça qui rendait la zone laide, pas la
      disposition.
      ====================================================================== */
-  --status-row-height: var(--height-control);
   --status-pick-width: var(--width-status-pick);
   /* La PISTE de la bascule. Sans elle, les deux sens flottent dans la barre :
      le retenu prend la surface claire, l autre n en a aucune, et il se lit
@@ -574,7 +566,6 @@
   --event-fact-icon-gap: var(--space-18);
   --event-fact-label-gap: var(--space-6);
 
-  --event-friend-gap: var(--space-24); /* entre deux amis de la rangée */
   --event-ledger-row-height: var(--height-ledger-row);
 
   /* La bande de compagnons : des avatars qui se chevauchent, comme dans la

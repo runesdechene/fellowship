@@ -191,7 +191,6 @@
   --space-42: 42px;
   --space-48: 48px;
   --space-51: 51px;
-  --space-64: 64px;
   --space-80: 80px;
   --space-150: 150px; /* la respiration au-dessus du titre d’une fiche */
   --space-70: 70px;
@@ -199,7 +198,6 @@
   /* ---------------------------------------------------------------------
      RAYONS
      --------------------------------------------------------------------- */
-  --round-6: 6px;
   --round-8: 8px;
   --round-10: 10px;
   --round-12: 12px;
@@ -210,7 +208,6 @@
   /* ---------------------------------------------------------------------
      MOUVEMENT
      --------------------------------------------------------------------- */
-  --duration-quick: 110ms;
   --duration-fast: 160ms;
   /* Le velours d'un survol vient de la DURÉE, pas de la brièveté : un
      mouvement court se lit comme un à-coup, même avec une courbe molle. */
@@ -250,15 +247,10 @@
   --width-report-min: 240px; /* en dessous, elle passe à la ligne */
   --width-banner-icon: 44px; /* la tuile d'icône de la bande d'action */
 
-  /* La fiche d'un événement : deux colonnes, contenu et suivi. */
-  --width-cockpit: 320px; /* la colonne de suivi, à droite */
-  --width-event-poster: 220px; /* l'affiche, en haut de la fiche */
-  --height-event-poster: 290px;
+  /* La fiche d'un événement. */
   --width-companion-avatar: 32px;
   --width-avatar-discussion: 30px; /* qui parle, dans un fil */
-  --width-avatar-pile: 26px; /* les visages empilés de ceux qui ont répondu */ /* les avatars de la bande de compagnons */
-  --height-stepper-step: 40px; /* un cran du suivi */
-  --width-stepper-box: 19px; /* sa case a cocher */
+  --width-avatar-pile: 26px; /* les visages empilés de ceux qui ont répondu */
   --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */
 
   /* Les contrôles de choix : le suivi, les sélecteurs et leurs menus. */
@@ -280,5 +272,4 @@
      la colonne se resserre, plutot que de pousser la rangee hors du cadre. */
   --width-status-amount-min: 96px;
   --height-ledger-row: 40px; /* une ligne du registre */
-  --width-main-min: 380px; /* sous cette largeur, le suivi passe dessous */
 }

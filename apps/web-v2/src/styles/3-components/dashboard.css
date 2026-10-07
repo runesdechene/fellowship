@@ -92,9 +92,3 @@
   display: flex;
   flex-direction: column;
 }
-
-/* --- États ---------------------------------------------------------------- */
-.dashboard__empty {
-  font: var(--type-event-meta);
-  color: var(--ink-soft);
-}

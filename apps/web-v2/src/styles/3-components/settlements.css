@@ -87,8 +87,3 @@
   color: var(--settlement-due-ink);
   white-space: nowrap;
 }
-
-.settlements__empty {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
-}

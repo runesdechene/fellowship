@@ -82,12 +82,6 @@
   font: var(--type-event-hero-meta-accent);
 }
 
-/* Les dates portent le poids ; ce qui les entoure s'efface. */
-.event-page__meta-line b {
-  font: var(--type-event-meta-accent);
-  color: var(--ink-title);
-}
-
 .event-page__tags {
   display: flex;
   flex-wrap: wrap;

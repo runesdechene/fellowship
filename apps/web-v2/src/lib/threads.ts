@@ -71,18 +71,6 @@ export function canAsk(actor: ThreadActor | null): boolean {
   return deriveAudience(actor) !== null
 }
 
-/**
- * Répondre est ouvert à tout acteur connecté, y compris hors de son canal :
- * c'est justement l'intérêt: un organisateur répond aux exposants.
- */
-export function canReply(actor: ThreadActor | null): boolean {
-  return Boolean(actor)
-}
-
-export function canEdit(actor: ThreadActor | null, content: { actorId: string }): boolean {
-  return Boolean(actor) && actor?.id === content.actorId
-}
-
 export function canDelete(
   actor: ThreadActor | null,
   content: { actorId: string },
@@ -95,11 +83,6 @@ export function canDelete(
 /** Seul l'auteur de la question élit la meilleure réponse. */
 export function canMarkBest(actor: ThreadActor | null, thread: { actorId: string }): boolean {
   return Boolean(actor) && actor?.id === thread.actorId
-}
-
-/** Une question à laquelle on a répondu pour de bon. */
-export function isSolved(thread: { bestReplyId: string | null }): boolean {
-  return thread.bestReplyId !== null
 }
 
 /**

@@ -146,12 +146,6 @@
   overflow: hidden;
 }
 
-.dropzone__preview {
-  width: 100%;
-  max-height: 220px;
-  object-fit: cover;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .toggle__switch,
   .toggle__switch::after {
