@@ -105,9 +105,9 @@
 ## Thème sombre (validé par Uriel le 08/10/2026)
 
 - Fonds chauds foncés (éclaircis de deux crans le 08/10/2026, le premier jet était trop sombre
-  pour Uriel) : barre latérale `#2a2724`, panneau `#201e1b` (plus profond que la
+  pour Uriel) : barre latérale `#2a2927`, panneau `#201f1d` — rendus moins chauds, accordés entre eux (plus profond que la
   barre : les cartes ressortent — choix d'Uriel le 08/10/2026, la barre plus sombre est écartée),
-  cartes `#2c2926`, gouttières et pastilles `#37332f`, filets `#3c3834`.
+  cartes `#2c2b29`, gouttières et pastilles `#373532`, filets `#3c3a37`.
 - Encres crème : titres `#f3efe9`, texte doux `#a39d95`, pâle `#6f6962`.
 - Le bouton principal s'inverse : crème, texte foncé. Le mois en cours de la frise aussi.
 - La terre et le dégradé du logo ne bougent pas : ce sont eux qui ressortent la nuit.
