@@ -2,47 +2,11 @@
  * QUOI     — charge et écrit les fils de discussion d'un événement (questions, réponses).
  * POURQUOI — la logique de fil (tri, meilleure réponse, canaux) vit dans lib/threads.ts ; ce hook
  *            ne fait que parler à la base.
- * ATTENTION — dette : les types générés ne connaissent pas encore event_threads ni
- *            event_thread_replies, d'où un client sans schéma pour ces deux tables. À retirer
- *            après régénération des types (voir docs/v2/README.md).
  */
 import { useCallback, useEffect, useState } from 'react'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { fetchActorProfiles } from '@/lib/friends'
 import { supabase } from '@/lib/supabase'
 import { sortReplies, sortThreads, type ThreadAudience } from '@/lib/threads'
-
-/**
- * `src/types/supabase.ts` ne connaît pas encore `event_threads` ni
- * `event_thread_replies` : il a été généré avant ces migrations. On passe donc
- * par un client sans schéma pour CES DEUX TABLES seulement, et chaque ligne
- * lue est remise dans un type explicite juste en dessous — le typage se perd
- * sur l'appel, pas sur les données.
- *
- * DETTE À SOLDER : régénérer les types (`supabase gen types typescript
- * --linked`) dès que le jeton d'accès sera renouvelé, puis retirer ce client.
- */
-const db = supabase as unknown as SupabaseClient
-
-/** Une ligne de `event_threads`, telle que la base la rend. */
-interface ThreadRow {
-  id: string
-  actor_id: string
-  audience: string
-  title: string
-  body: string | null
-  best_reply_id: string | null
-  created_at: string
-}
-
-/** Une ligne de `event_thread_replies`. */
-interface ReplyRow {
-  id: string
-  thread_id: string
-  actor_id: string
-  body: string
-  created_at: string
-}
 
 /** Ce qu'un auteur montre de lui à côté de son message. */
 interface Author {
@@ -91,17 +55,17 @@ const NO_ONE = 'Quelqu’un'
  * déclencher de rendu en cascade.
  */
 async function fetchThreads(eventId: string): Promise<Thread[]> {
-  const { data: rows, error } = await db
+  const { data: rows, error } = await supabase
     .from('event_threads')
     .select('id, actor_id, audience, title, body, best_reply_id, created_at')
     .eq('event_id', eventId)
 
   if (error) throw new Error(error.message)
 
-  const threadRows = rows as ThreadRow[]
+  const threadRows = rows
   if (threadRows.length === 0) return []
 
-  const { data: replyRowsRaw, error: replyError } = await db
+  const { data: replyRowsRaw, error: replyError } = await supabase
     .from('event_thread_replies')
     .select('id, thread_id, actor_id, body, created_at')
     .in(
@@ -110,7 +74,7 @@ async function fetchThreads(eventId: string): Promise<Thread[]> {
     )
 
   if (replyError) throw new Error(replyError.message)
-  const replyRows = replyRowsRaw as ReplyRow[]
+  const replyRows = replyRowsRaw
 
   // Un seul aller-retour pour tous les auteurs, questions et réponses
   // confondues : une requête par message ferait des dizaines d'appels sur un
@@ -239,7 +203,7 @@ export function useEventThreads(
       if (!eventId || !actorId) return
       await write(
         () =>
-          db.from('event_threads').insert({
+          supabase.from('event_threads').insert({
             event_id: eventId,
             actor_id: actorId,
             acted_by_user_id: personActorId ?? null,
@@ -258,7 +222,7 @@ export function useEventThreads(
       if (!actorId || !body.trim()) return
       await write(
         () =>
-          db.from('event_thread_replies').insert({
+          supabase.from('event_thread_replies').insert({
             thread_id: threadId,
             actor_id: actorId,
             acted_by_user_id: personActorId ?? null,
@@ -273,7 +237,7 @@ export function useEventThreads(
   const markBest = useCallback(
     async (threadId: string, replyId: string | null) => {
       await write(
-        () => db.from('event_threads').update({ best_reply_id: replyId }).eq('id', threadId),
+        () => supabase.from('event_threads').update({ best_reply_id: replyId }).eq('id', threadId),
         'La meilleure réponse n’a pas pu être changée.',
       )
     },
@@ -283,7 +247,7 @@ export function useEventThreads(
   const remove = useCallback(
     async (threadId: string) => {
       await write(
-        () => db.from('event_threads').delete().eq('id', threadId),
+        () => supabase.from('event_threads').delete().eq('id', threadId),
         'La question n’a pas pu être supprimée.',
       )
     },
@@ -293,7 +257,7 @@ export function useEventThreads(
   const removeReply = useCallback(
     async (replyId: string) => {
       await write(
-        () => db.from('event_thread_replies').delete().eq('id', replyId),
+        () => supabase.from('event_thread_replies').delete().eq('id', replyId),
         'La réponse n’a pas pu être supprimée.',
       )
     },

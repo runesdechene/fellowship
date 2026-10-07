@@ -113,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .eq('user_actor_id', authUid)
       .order('created_at', { ascending: true })
     if (membershipsError) return
-    const rows = memberships as unknown as Array<{ entities: EntityRow | null }>
+    const rows = memberships
     setEntities(rows.map((r) => r.entities).filter((e): e is EntityRow => Boolean(e)))
   }, [])
 

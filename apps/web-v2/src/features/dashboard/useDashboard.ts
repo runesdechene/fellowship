@@ -24,9 +24,6 @@ import {
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
-/** Les seules colonnes d'événement dont une carte de bilan a besoin. */
-type PastEvent = Pick<EventRow, 'id' | 'name' | 'image_url' | 'start_date' | 'end_date'>
-
 export type { Friend }
 
 export interface DashboardDate {
@@ -121,14 +118,6 @@ const EMPTY: DashboardData = {
   error: null,
 }
 
-type ParticipationWithEvent = {
-  id: string
-  status: ParticipationStatus
-  payment_status: string | null
-  event_id: string
-  events: EventRow | null
-}
-
 /**
  * « À régler » : une date à venir dont le dossier est parti sans réponse, ou
  * dont le paiement n'est pas soldé. Le montant vient de LA ligne d'emplacement
@@ -205,9 +194,8 @@ async function fetchReports(
       .lt('events.end_date', todaySql),
   )
 
-  const past = (pastRows as unknown as Array<{ events: PastEvent | null }>)
+  const past = pastRows
     .map((row) => row.events)
-    .filter((event): event is PastEvent => Boolean(event))
     .sort((a, b) => b.end_date.localeCompare(a.end_date))
 
   if (past.length === 0)
@@ -292,9 +280,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
 
       if (cancelled) return
 
-      const rows = (data as unknown as ParticipationWithEvent[]).filter(
-        (row): row is ParticipationWithEvent & { events: EventRow } => Boolean(row.events),
-      )
+      const rows = data
 
       const friendsByEvent = await fetchFriendsByEvent(
         currentActorId,
