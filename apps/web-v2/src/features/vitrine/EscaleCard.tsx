@@ -5,8 +5,8 @@
  */
 import { Link } from 'react-router-dom'
 import { PosterArt } from '@/components/ui/PosterArt'
-import { formatDateRange } from '@/lib/calendar'
-import { durationLabel, meetLine } from '@/lib/vitrine'
+import { durationLabel, formatDateRange } from '@/lib/dates'
+import { meetLine } from '@/lib/vitrine'
 import type { VitrineDate } from './useVitrine'
 
 export function EscaleCard({ date }: { date: VitrineDate }) {

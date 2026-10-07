@@ -7,7 +7,8 @@
  */
 import { ArrowRight } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
-import { countLabel, formatDateRange } from '@/lib/calendar'
+import { countLabel } from '@/lib/calendar'
+import { formatDateRange } from '@/lib/dates'
 import { PosterCard } from './PosterCard'
 import type { CalendarMonth } from './useCalendar'
 

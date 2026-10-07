@@ -5,7 +5,8 @@
  */
 import { CalendarDays } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { stampName, stampYear } from '@/lib/vitrine'
+import { stampYear } from '@/lib/dates'
+import { stampName } from '@/lib/vitrine'
 import type { VitrineDate } from './useVitrine'
 
 const MAX_STAMPS = 8

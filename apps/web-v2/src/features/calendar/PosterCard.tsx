@@ -7,7 +7,7 @@ import { Check, CircleDashed, Contrast } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Chip, type ChipTone } from '@/components/ui/Chip'
 import { PosterArt } from '@/components/ui/PosterArt'
-import { formatDateRange } from '@/lib/calendar'
+import { formatDateRange } from '@/lib/dates'
 import type { ParticipationStatus } from '@/types/database'
 import type { CalendarDate } from './useCalendar'
 

@@ -4,16 +4,7 @@
  *            tampon mal coupé s'y voit tout de suite.
  */
 import { describe, expect, it } from 'vitest'
-import {
-  durationLabel,
-  initials,
-  meetLine,
-  networkCounts,
-  splitRoad,
-  stampName,
-  stampYear,
-  websiteLink,
-} from './vitrine'
+import { initials, meetLine, networkCounts, splitRoad, stampName, websiteLink } from './vitrine'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -32,21 +23,6 @@ describe('stampName', () => {
 
   it('garde un nom sans article tel quel', () => {
     expect(stampName('Plane’R Fest')).toBe('Plane’R Fest')
-  })
-})
-
-describe('stampYear', () => {
-  it('écrit l’année sur deux chiffres, apostrophe typographique', () => {
-    expect(stampYear(d('2024-06-01'))).toBe('’24')
-    expect(stampYear(d('2019-12-31'))).toBe('’19')
-  })
-})
-
-describe('durationLabel', () => {
-  it('compte les jours, bornes comprises', () => {
-    expect(durationLabel(d('2026-10-30'), d('2026-10-30'))).toBe('1 jour')
-    expect(durationLabel(d('2026-10-25'), d('2026-10-27'))).toBe('3 jours')
-    expect(durationLabel(d('2026-10-31'), d('2026-11-01'))).toBe('2 jours')
   })
 })
 

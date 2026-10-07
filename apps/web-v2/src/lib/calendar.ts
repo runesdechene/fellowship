@@ -1,31 +1,13 @@
 /**
- * QUOI     — la logique pure du calendrier : ranger les dates par mois, écrire une plage de dates,
- *            compter, composer la phrase d'en-tête, regrouper les compagnons.
+ * QUOI     — la logique pure du calendrier : ranger les dates par mois, compter, composer la phrase d'en-tête, regrouper les compagnons.
  * POURQUOI — l'écran ne fait qu'afficher ; tout ce qui se calcule vit ici et se teste seul
  *            (calendar.test.ts).
  * ATTENTION — une date à cheval sur deux mois va dans le mois où elle COMMENCE ; une date déjà
  *            commencée avant la fenêtre est rangée dans le premier mois.
  */
-import { formatDayMonthShort, monthKey, type MonthSlot } from './dates'
+import { monthKey, type MonthSlot } from './dates'
 
-const DAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric' })
-const MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'short' })
 const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' })
-
-/** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. ». */
-export function formatDateRange(start: Date, end: Date): string {
-  if (start.toDateString() === end.toDateString()) return formatDayMonthShort(start)
-  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-    return `${DAY_FORMATTER.format(start)}–${formatDayMonthShort(end)}`
-  }
-  return `${formatDayMonthShort(start)}–${formatDayMonthShort(end)}`
-}
-
-/** « Oct », « Janv », « Août » : l’abréviation de la navigation des mois. */
-export function monthNavLabel(month: Date): string {
-  const short = MONTH_SHORT_FORMATTER.format(month).replace('.', '')
-  return short.charAt(0).toUpperCase() + short.slice(1)
-}
 
 /** « Aucune date », « 1 date », « 4 dates ». */
 export function countLabel(count: number): string {

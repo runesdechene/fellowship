@@ -81,6 +81,39 @@ export function formatDayMonthShort(date: Date): string {
   return DAY_MONTH_SHORT_FORMATTER.format(date)
 }
 
+const DAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric' })
+const MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'short' })
+
+/** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. ». */
+export function formatDateRange(start: Date, end: Date): string {
+  if (start.toDateString() === end.toDateString()) return formatDayMonthShort(start)
+  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+    return `${DAY_FORMATTER.format(start)}–${formatDayMonthShort(end)}`
+  }
+  return `${formatDayMonthShort(start)}–${formatDayMonthShort(end)}`
+}
+
+/** « Sept. », « Janv. », « Mai » : le mois en abrégé, initiale en capitale. */
+export function formatMonthShort(month: Date): string {
+  return capitalize(MONTH_SHORT_FORMATTER.format(month))
+}
+
+/** « Oct », « Janv », « Août » : l’abréviation de la navigation des mois. */
+export function formatMonthAbbr(month: Date): string {
+  return formatMonthShort(month).replace('.', '')
+}
+
+/** « ’24 » : l'année d'un tampon. */
+export function stampYear(date: Date): string {
+  return `’${String(date.getFullYear()).slice(2)}`
+}
+
+/** « 1 jour », « 3 jours » — les deux bornes comptent. */
+export function durationLabel(start: Date, end: Date): string {
+  const days = daysUntil(end, start) + 1
+  return days <= 1 ? '1 jour' : `${days} jours`
+}
+
 /** « 28 août 2026 » — la date affichée sur une carte de bilan. */
 export function formatFullDate(date: Date): string {
   return FULL_DATE_FORMATTER.format(date)

@@ -5,6 +5,11 @@
 import { describe, expect, it } from 'vitest'
 import {
   daysUntil,
+  durationLabel,
+  formatDateRange,
+  formatMonthAbbr,
+  formatMonthShort,
+  stampYear,
   formatCountdown,
   formatDayMonth,
   formatDaysShort,
@@ -13,6 +18,8 @@ import {
   parseSqlDate,
   todayIso,
 } from './dates'
+
+const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
 describe('parseSqlDate', () => {
   it('lit une date SQL en local, sans décalage de fuseau', () => {
@@ -84,5 +91,59 @@ describe('todayIso', () => {
   })
   it('complète le mois et le jour sur deux chiffres', () => {
     expect(todayIso(new Date(2026, 0, 5))).toBe('2026-01-05')
+  })
+})
+
+describe('formatDateRange', () => {
+  it('un seul jour', () => {
+    expect(formatDateRange(d('2026-10-30'), d('2026-10-30'))).toBe('30 oct.')
+  })
+  it('plusieurs jours du même mois', () => {
+    expect(formatDateRange(d('2026-10-25'), d('2026-10-27'))).toBe('25–27 oct.')
+  })
+  it('à cheval sur deux mois', () => {
+    expect(formatDateRange(d('2026-10-30'), d('2026-11-02'))).toBe('30 oct.–2 nov.')
+  })
+})
+
+describe('formatMonthAbbr', () => {
+  it('écrit l’abréviation française, sans point, avec une capitale', () => {
+    const labels = Array.from({ length: 12 }, (_, m) => formatMonthAbbr(new Date(2026, m, 1)))
+    expect(labels).toEqual([
+      'Janv',
+      'Févr',
+      'Mars',
+      'Avr',
+      'Mai',
+      'Juin',
+      'Juil',
+      'Août',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Déc',
+    ])
+  })
+})
+
+describe('formatMonthShort', () => {
+  it('garde le point de l’abréviation', () => {
+    expect(formatMonthShort(new Date(2026, 8, 1))).toBe('Sept.')
+    expect(formatMonthShort(new Date(2026, 4, 1))).toBe('Mai')
+  })
+})
+
+describe('stampYear', () => {
+  it('écrit l’année sur deux chiffres, apostrophe typographique', () => {
+    expect(stampYear(d('2024-06-01'))).toBe('’24')
+    expect(stampYear(d('2019-12-31'))).toBe('’19')
+  })
+})
+
+describe('durationLabel', () => {
+  it('compte les jours, bornes comprises', () => {
+    expect(durationLabel(d('2026-10-30'), d('2026-10-30'))).toBe('1 jour')
+    expect(durationLabel(d('2026-10-25'), d('2026-10-27'))).toBe('3 jours')
+    expect(durationLabel(d('2026-10-31'), d('2026-11-01'))).toBe('2 jours')
   })
 })

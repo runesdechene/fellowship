@@ -1,33 +1,14 @@
 /**
- * QUOI     — tests de lib/calendar.ts : rangement des dates par mois, format des plages, comptes,
+ * QUOI     — tests de lib/calendar.ts : rangement des dates par mois, comptes,
  *            phrase d'en-tête, regroupement des compagnons.
  * POURQUOI — la logique du calendrier se teste ici, sans navigateur ; le fuseau est épinglé sur
  *            Europe/Paris par la configuration des tests.
  */
 import { describe, expect, it } from 'vitest'
 import { monthsWindow } from './dates'
-import {
-  monthNavLabel,
-  bucketByStartMonth,
-  calendarHeadline,
-  countLabel,
-  formatDateRange,
-  groupCompanions,
-} from './calendar'
+import { bucketByStartMonth, calendarHeadline, countLabel, groupCompanions } from './calendar'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
-
-describe('formatDateRange', () => {
-  it('un seul jour', () => {
-    expect(formatDateRange(d('2026-10-30'), d('2026-10-30'))).toBe('30 oct.')
-  })
-  it('plusieurs jours du même mois', () => {
-    expect(formatDateRange(d('2026-10-25'), d('2026-10-27'))).toBe('25–27 oct.')
-  })
-  it('à cheval sur deux mois', () => {
-    expect(formatDateRange(d('2026-10-30'), d('2026-11-02'))).toBe('30 oct.–2 nov.')
-  })
-})
 
 describe('countLabel', () => {
   it('dit les dates au singulier, au pluriel, ou leur absence', () => {
@@ -97,25 +78,5 @@ describe('groupCompanions', () => {
       { eventId: 'e1', friend: { id: 'g', name: 'Gautier', avatarUrl: null } },
     ]
     expect(groupCompanions(rows, new Set()).get('e1')).toHaveLength(1)
-  })
-})
-
-describe('monthNavLabel', () => {
-  it('écrit l’abréviation française, sans point, avec une capitale', () => {
-    const labels = Array.from({ length: 12 }, (_, m) => monthNavLabel(new Date(2026, m, 1)))
-    expect(labels).toEqual([
-      'Janv',
-      'Févr',
-      'Mars',
-      'Avr',
-      'Mai',
-      'Juin',
-      'Juil',
-      'Août',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Déc',
-    ])
   })
 })

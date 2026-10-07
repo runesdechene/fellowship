@@ -1,12 +1,10 @@
 /**
  * QUOI     — la logique pure de la vitrine d'un artisan : couper sa route entre à venir et passé,
- *            nommer les tampons, compter les jours, dire qui « t'y retrouve », accorder le réseau,
+ *            nommer les tampons, dire qui « t'y retrouve », accorder le réseau,
  *            les initiales du logo et l'hôte du site.
  * POURQUOI — la vitrine ne fait qu'afficher ; ses libellés se testent seuls (vitrine.test.ts).
  * ATTENTION — une date en cours est encore « à venir » : on la quitte le lendemain de sa fin.
  */
-
-const DAY_MS = 24 * 60 * 60 * 1000
 
 /** « Les Aventuriales » → « Aventuriales » ; « Art to Play 2026 » → « Art to Play ». */
 export function stampName(name: string): string {
@@ -15,17 +13,6 @@ export function stampName(name: string): string {
     .replace(/^l['’]/i, '')
     .replace(/\s*[-–·]?\s*(19|20)\d{2}\b.*$/, '')
     .trim()
-}
-
-/** « ’24 » : l'année d'un tampon. */
-export function stampYear(date: Date): string {
-  return `’${String(date.getFullYear()).slice(2)}`
-}
-
-/** « 1 jour », « 3 jours » — les deux bornes comptent. */
-export function durationLabel(start: Date, end: Date): string {
-  const days = Math.round((end.getTime() - start.getTime()) / DAY_MS) + 1
-  return days <= 1 ? '1 jour' : `${days} jours`
 }
 
 /** « Gautier » + « et Uriel t’y retrouvent » : le premier nom se met en gras à l'affichage. */
