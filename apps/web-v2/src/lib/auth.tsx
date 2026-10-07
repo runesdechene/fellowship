@@ -15,6 +15,7 @@ import {
   type ReactNode,
 } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
+import { shouldLoadIdentity } from './session'
 import { supabase } from './supabase'
 import type { Actor, EntityRow, EntityType, UserRow } from '@/types/database'
 
@@ -120,16 +121,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
       setSession(nextSession)
-      setUser(nextSession?.user ?? null)
-      if (nextSession?.user) {
-        void loadIdentity(nextSession.user.id)
-      } else {
+      const nextUser = nextSession?.user ?? null
+      if (!nextUser) {
+        setUser(null)
         setPerson(null)
         setEntities([])
+        setLoading(false)
+        return
       }
-      setLoading(false)
+      // Un simple rafraîchissement de jeton ne touche ni l'utilisateur ni l'identité (session.ts).
+      if (!shouldLoadIdentity(event)) return
+      setUser(nextUser)
+      // Le chargement ne se termine qu'une fois l'identité connue : sinon les écrans démarraient
+      // sans acteur, et le tableau de bord s'affichait vide un instant.
+      void loadIdentity(nextUser.id).finally(() => setLoading(false))
     })
     return () => subscription.unsubscribe()
   }, [loadIdentity])
