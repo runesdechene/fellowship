@@ -96,12 +96,8 @@
 /* Le survol ne touche QUE le sens non retenu. Sur celui qui est deja choisi
    il promettait un changement qui n arrive pas : cliquer dessus ne fait
    rien. Un survol doit annoncer un geste, pas decorer un etat. */
-.event-status__side:hover:not(:disabled):not([aria-pressed='true']) {
+.event-status__side:hover:not(:disabled, [aria-pressed='true']) {
   background: var(--surface-row-hover);
-}
-
-.event-status__side[aria-pressed='true'] {
-  cursor: default;
 }
 
 /* Le sens retenu prend l’aplat clair, celui qui dit « posé au-dessus », ET
@@ -110,6 +106,7 @@
    L’aplat sur le retenu et rien sur l’autre, c’est la forme la plus lue
    d’une bascule ; il n’y avait pas de raison de la reinventer. */
 .event-status__side[aria-pressed='true'] {
+  cursor: default;
   background: var(--surface-panel);
   font: var(--type-status-side-on);
   color: var(--ink-title);
@@ -220,7 +217,7 @@
 
 /* Sous cette largeur, le sens du paiement, le montant et son état ne tiennent
    plus sur une ligne : ils s'empilent plutôt que de se serrer. */
-@media (max-width: 760px) {
+@media (width <= 760px) {
   .event-status__bar {
     flex-wrap: wrap;
   }

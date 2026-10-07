@@ -1,0 +1,68 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "rules": {
+    "color-no-hex": true,
+    "color-named": "never",
+    "function-disallowed-list": [
+      "rgb",
+      "rgba",
+      "hsl",
+      "hsla",
+      "hwb",
+      "lab",
+      "lch",
+      "oklch",
+      "oklab"
+    ],
+    "declaration-property-value-allowed-list": {
+      "font-family": [
+        "/^var[(]--/",
+        "inherit"
+      ],
+      "font-size": [
+        "/^var[(]--/",
+        "inherit"
+      ],
+      "font-weight": [
+        "/^var[(]--/",
+        "inherit"
+      ],
+      "line-height": [
+        "/^var[(]--/",
+        "inherit",
+        "1"
+      ],
+      "letter-spacing": [
+        "/^var[(]--/",
+        "inherit"
+      ],
+      "font": [
+        "/^var[(]--/",
+        "inherit"
+      ]
+    },
+    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+    "comment-empty-line-before": null,
+    "custom-property-empty-line-before": null,
+    "no-descending-specificity": null,
+    "import-notation": "string",
+    "at-rule-empty-line-before": null
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/styles/0-reset.css",
+        "src/styles/1-primitives.css",
+        "src/styles/2-semantic.css"
+      ],
+      "rules": {
+        "color-no-hex": null,
+        "color-named": null,
+        "function-disallowed-list": null,
+        "declaration-property-value-allowed-list": null
+      }
+    }
+  ]
+}
