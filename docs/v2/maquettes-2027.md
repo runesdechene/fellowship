@@ -104,8 +104,9 @@
 
 ## Thème sombre (proposé le 08/10/2026, à valider)
 
-- Fonds chauds très foncés : barre latérale `#0f0e0d`, panneau `#171513`, cartes `#1f1c1a`,
-  gouttières et pastilles `#2a2623`, filets `#2e2a27`.
+- Fonds chauds très foncés : barre latérale `#1c1a18`, panneau `#121110` (plus profond que la
+  barre : les cartes ressortent — choix d'Uriel le 08/10/2026, la barre plus sombre est écartée),
+  cartes `#1f1c1a`, gouttières et pastilles `#2a2623`, filets `#2e2a27`.
 - Encres crème : titres `#f3efe9`, texte doux `#a39d95`, pâle `#6f6962`.
 - Le bouton principal s'inverse : crème, texte foncé. Le mois en cours de la frise aussi.
 - La terre et le dégradé du logo ne bougent pas : ce sont eux qui ressortent la nuit.
