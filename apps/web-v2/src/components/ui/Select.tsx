@@ -1,3 +1,9 @@
+/**
+ * QUOI     — le sélecteur maison : un menu qui montre l'icône et la couleur de chaque état.
+ * POURQUOI — le <select> du navigateur n'affiche que du texte, or ici le dessin porte l'état
+ *            (une étoile pour « intéressé », un sablier pour « à payer »).
+ * ATTENTION — ce qu'on réécrit, on le réécrit entier : clavier, clic dehors, rôles ARIA.
+ */
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'

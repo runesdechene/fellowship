@@ -1,3 +1,9 @@
+/**
+ * QUOI     — le bouton de l'app, en quatre variantes : solid, icon, action, bare.
+ * POURQUOI — un seul bouton pour toute l'app : le survol et le focus vivent sur `.button`, donc
+ *            tout bouton réagit pareil (le survol n'existait nulle part avant le 20/08/2026).
+ * ATTENTION — `action` est réservé à l'action que l'interface réclame ; pas une couleur d'humeur.
+ */
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
 type Variant = 'solid' | 'icon' | 'action' | 'bare'

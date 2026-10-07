@@ -1,3 +1,8 @@
+/**
+ * QUOI     — les briques de formulaire : Field (libellé + champ), Input, Textarea, Toggle.
+ * POURQUOI — un formulaire de la V2 s'assemble avec elles, pour que libellés, focus et états
+ *            soient les mêmes partout (styles : 3-components/form.css).
+ */
 import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 
 interface FieldProps {

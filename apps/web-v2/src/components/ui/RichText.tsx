@@ -1,3 +1,10 @@
+/**
+ * QUOI     — affiche un texte mis en forme par un organisateur (paragraphes, gras, listes, titres).
+ * POURQUOI — le rendre en texte brut écrasait sa mise en page en un seul pavé.
+ * ATTENTION — le HTML est nettoyé par cleanRichText (lib/rich-text.ts) juste avant l'injection :
+ *            c'est la seule raison pour laquelle on a le droit de l'injecter. Ne jamais poser de
+ *            HTML utilisateur sans ce passage.
+ */
 import { cleanRichText } from '@/lib/rich-text'
 
 /**

@@ -1,3 +1,8 @@
+/**
+ * QUOI     — l'avatar rond (image ou initiale), et la pile d'avatars qui se chevauchent.
+ * POURQUOI — la taille vient du CSS (--avatar-size redéfini par le contexte), jamais d'une prop :
+ *            un avatar ne connaît pas l'endroit où il est posé.
+ */
 import type { ReactNode } from 'react'
 
 interface AvatarProps {

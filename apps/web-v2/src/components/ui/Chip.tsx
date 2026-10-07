@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la pastille d'état (un mot, une icône, un ton).
+ * POURQUOI — la couleur dit qui doit bouger : blé = à toi de jouer, terre = chez l'autre,
+ *            olive = acquis (décision du 19/08/2026). Le ton est un état, pas une décoration.
+ */
 import type { ReactNode } from 'react'
 
 /**

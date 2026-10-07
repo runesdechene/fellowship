@@ -1,3 +1,8 @@
+/**
+ * QUOI     — la pastille d'une catégorie sur la fiche d'un événement.
+ * POURQUOI — ses deux couleurs sont des DONNÉES réglées tag par tag dans l'administration : c'est
+ *            la seule raison pour laquelle ce composant pose un `style`.
+ */
 import type { CSSProperties } from 'react'
 import type { TagStyle } from '@/lib/tags'
 
