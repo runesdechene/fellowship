@@ -1,10 +1,9 @@
-/* -----------------------------------------------------------------------------
-   SEASON CHART — une barre par mois sur douze mois glissants
-   La hauteur de chaque barre est passée en ligne par le composant, via la
-   variable --bar-height. Les bornes se règlent en couche 2 :
-   --chart-bar-min (mois vide) et --chart-bar-max (mois le plus chargé).
-   Utilisé par : src/features/dashboard/SeasonChart.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la frise de saison : une barre par mois sur douze mois glissants
+ *            (features/dashboard/SeasonChart.tsx).
+ * POURQUOI — la hauteur de chaque barre vient du composant via --bar-height ; ses bornes se
+ *            règlent en couche 2 (--chart-bar-min, --chart-bar-max).
+ */
 
 /* La frise occupe toute la largeur du contenu, comme les blocs du dessous :
    les douze colonnes se partagent la place à parts égales. */

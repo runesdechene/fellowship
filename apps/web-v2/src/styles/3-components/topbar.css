@@ -1,9 +1,9 @@
-/* -----------------------------------------------------------------------------
-   TOPBAR — cloche + bouton « Ajouter une date »
-   Elle flotte au-dessus du contenu, comme sur la maquette : le titre de page
-   commence plus bas et plus à gauche, les deux ne se croisent jamais.
-   Utilisé par : src/components/layout/Topbar.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la barre du haut : retour et repère à gauche, cloche et « Ajouter
+ *            une date » à droite (components/layout/Topbar.tsx).
+ * POURQUOI — elle flotte au-dessus du contenu, comme sur la maquette : le titre de page
+ *            commence plus bas, les deux ne se croisent jamais.
+ */
 
 /* C'est du châssis, pas du contenu : elle reste calée au bord du panneau et
    ne suit pas la colonne centrée. */

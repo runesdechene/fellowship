@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   SIDEBAR — logo, carte de compte, navigation
-   Utilisé par : src/components/layout/Sidebar.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la barre latérale : logo, carte de compte, navigation
+ *            (components/layout/Sidebar.tsx).
+ * POURQUOI — la barre se replie en rail ; le logo se pose nu, sans rayon.
+ */
 
 /* COLLÉE À L’ÉCRAN, comme le mur d’affiche à l’autre bout. Elle suivait le
    document : sur une fiche longue, la navigation partait vers le haut et on

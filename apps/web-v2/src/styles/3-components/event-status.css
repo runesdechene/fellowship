@@ -1,15 +1,12 @@
-/* -----------------------------------------------------------------------------
-   LE SUIVI — sous le titre de la fiche, dans la grille principale
-   Utilisé par : src/features/event/EventStatus.tsx
-
-   Il vivait dans une colonne de 200 px à droite, où trois contrôles voisins
-   faisaient 30, 26 et 30 px de haut sur trois familles de fond : l'œil n'y
-   trouvait aucun rythme. Ici tout partage UNE hauteur et UN rayon.
-
-   Les valeurs qu'on change sont des `Select` maison (voir select.css) : le
-   sélecteur du navigateur ne sait afficher ni icône ni couleur dans son menu,
-   et c'est justement le dessin qui porte l'état.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles du suivi, sous le titre de la fiche (features/event/EventStatus.tsx).
+ * POURQUOI — tout partage UNE hauteur et UN rayon : dans l'ancienne colonne de 200 px, trois
+ *            contrôles voisins n'avaient aucun rythme.
+ *
+ * Les valeurs qu'on change sont des `Select` maison (voir select.css) : le
+ * sélecteur du navigateur ne sait afficher ni icône ni couleur dans son menu,
+ * et c'est justement le dessin qui porte l'état.
+ */
 
 .event-status {
   display: flex;

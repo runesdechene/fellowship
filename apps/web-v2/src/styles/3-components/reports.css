@@ -1,9 +1,9 @@
-/* -----------------------------------------------------------------------------
-   REPORTS — « Mes bilans » : une petite carte par date passée
-   Les cartes s'ajustent à leur contenu, elles n'ont pas de largeur imposée.
-   La bande tient sur une ligne et déborde jusqu'au bord droit du panneau.
-   Utilisé par : src/features/dashboard/ReportsSection.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de « Mes bilans » : une petite carte par date passée
+ *            (features/dashboard/ReportsSection.tsx).
+ * POURQUOI — les cartes s'ajustent à leur contenu ; la bande tient sur une ligne et déborde
+ *            jusqu'au bord droit du panneau.
+ */
 
 /* Tous les bilans sont ici : il n'existe pas d'écran d'historique. Ils passent
    à la ligne au lieu de défiler ou d'être coupés.

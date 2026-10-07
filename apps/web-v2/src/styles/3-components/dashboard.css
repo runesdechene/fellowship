@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   DASHBOARD — l'accroche puis les blocs, dans une colonne de largeur fixe
-   Utilisé par : src/features/dashboard/Dashboard.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles du tableau de bord : l'accroche puis les blocs, dans une colonne de
+ *            largeur fixe (features/dashboard/Dashboard.tsx).
+ * POURQUOI — les titres de bloc vivent AU-DESSUS des cartes, pas dedans.
+ */
 
 /* Une colonne de largeur fixe, centrée dans le panneau : tout le contenu de
    la page partage le même axe, la barre du haut comprise. */

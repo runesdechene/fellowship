@@ -1,13 +1,11 @@
-/* -----------------------------------------------------------------------------
-   TRANSITIONS — passages d'un écran à l'autre, et d'une étape à l'autre
-   S'appuie sur les transitions de vue du navigateur (voir src/lib/navigation.ts).
-   Elles font coexister l'ancien et le nouveau le temps du passage : c'est ce
-   qui permet d'animer la SORTIE autant que l'entrée.
-
-   Les pseudo-éléments ::view-transition-* vivent sur la racine du document,
-   pas dans le composant — d'où ce fichier commun. Chaque passage pose son
-   `mode` sur la racine, et le CSS choisit l'animation en conséquence.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les animations de passage d'un écran à l'autre et d'une étape à l'autre
+ *            (lib/navigation.ts).
+ * POURQUOI — les transitions de vue font coexister l'ancien et le nouveau : c'est ce qui anime
+ *            la SORTIE autant que l'entrée.
+ * ATTENTION — les pseudo-éléments ::view-transition-* vivent sur la racine du document, d'où ce
+ *            fichier commun ; chaque passage pose son `mode` sur la racine.
+ */
 
 /* =============================================================================
    D'UN ÉCRAN À L'AUTRE

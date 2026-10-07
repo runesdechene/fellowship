@@ -1,19 +1,17 @@
-/* -----------------------------------------------------------------------------
-   LA DISCUSSION DU FESTIVAL — les questions et leurs réponses
-   Utilisé par : src/features/event/EventDiscussion.tsx
-
-   Refondue le 19 août 2026. Elle était « moche au possible » : une liste de
-   texte gris sur du crème, où la question tenait en 16 px coincée entre son
-   auteur et son corps.
-
-   L'AUDACE EST DANS L'ÉCHELLE — c'est le seul geste fort disponible sur une
-   page sans ombre et sans image. La question monte à 26 px et tout le reste
-   redescend : la section cesse d'être une liste pour devenir un sommaire.
-
-   AUCUNE CARTE. Les questions se séparent par un FILET, les réponses par un
-   RETRAIT. C'était déjà la doctrine : « c'est le retrait qui dit
-   l'appartenance, pas un cadre de plus ».
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la discussion du festival : questions et réponses
+ *            (features/event/EventDiscussion.tsx).
+ * POURQUOI — l'audace est dans l'échelle — sur une page sans ombre et sans image, la question
+ *            monte et tout le reste redescend.
+ *
+ * Refondue le 19 août 2026. Elle était « moche au possible » : une liste de
+ * texte gris sur du crème, où la question tenait en 16 px coincée entre son
+ * auteur et son corps.
+ *
+ * AUCUNE CARTE. Les questions se séparent par un FILET, les réponses par un
+ * RETRAIT. C'était déjà la doctrine : « c'est le retrait qui dit
+ * l'appartenance, pas un cadre de plus ».
+ */
 
 .discussion {
   display: flex;

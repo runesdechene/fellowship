@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   AVATAR — image ronde, et pile d'avatars qui se chevauchent
-   Utilisé par : src/components/ui/Avatar.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de l'avatar rond et de la pile d'avatars (components/ui/Avatar.tsx).
+ * POURQUOI — la taille vient de --avatar-size, redéfinie par le contexte : l'avatar ne connaît
+ *            pas l'endroit où il est posé.
+ */
 
 .avatar {
   flex: none;

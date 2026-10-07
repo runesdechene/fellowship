@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\"",
+    "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\" && prettier --check . && node scripts/check-headers.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint:css": "stylelint \"src/**/*.css\"",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint:headers": "node scripts/check-headers.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.86.0",

@@ -1,8 +1,9 @@
-/* -----------------------------------------------------------------------------
-   Amis — un ami est un acteur suivi DANS LES DEUX SENS. La définition est ici,
-   et nulle part ailleurs : le tableau de bord et la fiche d'un événement
-   doivent compter les mêmes personnes.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — qui sont les amis présents sur une date, et quels statuts comptent comme «
+ *            programmé » ou « confirmé ».
+ * POURQUOI — un ami est un acteur suivi DANS LES DEUX SENS ; la définition vit ici seulement,
+ *            pour que le tableau de bord et la fiche comptent les mêmes personnes.
+ */
 
 import { supabase } from '@/lib/supabase'
 import type { EntityRow, ParticipationStatus, UserRow } from '@/types/database'

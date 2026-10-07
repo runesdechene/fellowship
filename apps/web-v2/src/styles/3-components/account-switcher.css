@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   ACCOUNT SWITCHER — la carte de compte, et le menu des enseignes
-   Utilisé par : src/components/layout/AccountSwitcher.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la carte de compte et du menu des enseignes
+ *            (components/layout/AccountSwitcher.tsx).
+ * POURQUOI — la carte vit en haut de la barre latérale ; repliée, seul l'avatar reste.
+ */
 
 .account-switcher {
   position: relative;

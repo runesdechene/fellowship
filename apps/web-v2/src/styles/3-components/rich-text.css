@@ -1,11 +1,9 @@
-/* -----------------------------------------------------------------------------
-   TEXTE MIS EN FORME — ce qu'un organisateur a écrit
-   Utilisé par : src/components/ui/RichText.tsx
-
-   Le contenu porte ses propres balises : des paragraphes, des titres, des
-   listes. Sans ces règles, le reset les aplatit toutes et la description
-   redevient le pavé qu'on voulait éviter.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles d'un texte mis en forme par un organisateur
+ *            (components/ui/RichText.tsx).
+ * POURQUOI — le contenu porte ses propres balises (paragraphes, titres, listes) : sans ces
+ *            règles, le reset les aplatit et la description redevient un pavé.
+ */
 
 .rich-text,
 .event-page__description {

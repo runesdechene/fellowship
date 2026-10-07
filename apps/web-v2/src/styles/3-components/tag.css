@@ -1,12 +1,10 @@
-/* -----------------------------------------------------------------------------
-   TAG — une categorie qui DECRIT
-   Utilise par : src/components/ui/Tag.tsx
-
-   A ne pas confondre avec `.tag` (create-event.css), qui est le bouton de
-   l'atelier : 32 px de haut, en gras, fait pour etre clique. Ici le tag se lit
-   au passage. Reutiliser l'autre classe ramenait le gabarit du bouton sur la
-   fiche — gros, gras, et donnant envie de cliquer sur rien.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la pastille d'une catégorie sur la fiche (components/ui/Tag.tsx).
+ * POURQUOI — un tag qui DÉCRIT se lit au passage ; ses couleurs viennent de la base.
+ * ATTENTION — ne pas confondre avec `.tag` (create-event.css), le bouton de l'atelier :
+ *            réutiliser l'autre classe ramenait sur la fiche un gabarit gros, gras, qui donne
+ *            envie de cliquer sur rien.
+ */
 
 /* Les deux couleurs arrivent par `--tag-bg` et `--tag-ink`, posees sur
    l'element depuis les DONNEES : elles sont reglees tag par tag dans

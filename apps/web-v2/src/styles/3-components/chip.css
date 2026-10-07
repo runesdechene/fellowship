@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   CHIP — pastille de statut (« Dans 11 jours », « Inscrit »)
-   Utilisé par : src/components/ui/Chip.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la pastille d'état (components/ui/Chip.tsx).
+ * POURQUOI — la teinte dit qui doit bouger : blé = à toi de jouer, terre = chez l'autre, olive
+ *            = acquis.
+ */
 
 .chip {
   display: inline-flex;

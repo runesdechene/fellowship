@@ -1,8 +1,11 @@
-/* -----------------------------------------------------------------------------
-   Dates — toute la logique calendaire de la V2 vit ici, et nulle part ailleurs.
-   Les dates de la base sont des DATE Postgres (« 2026-09-25 »), sans fuseau :
-   on les manipule en local pour éviter le décalage d'un jour.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — toute la logique calendaire de la V2 : lire, comparer, compter et formater les
+ *            dates.
+ * POURQUOI — les dates de la base sont des DATE Postgres (« 2026-09-25 ») sans fuseau : on les
+ *            manipule en local pour éviter le décalage d'un jour.
+ * ATTENTION — aucune date ne se recalcule ailleurs. Les tests (dates.test.ts) surveillent le
+ *            fuseau, épinglé sur Europe/Paris.
+ */
 
 /** Convertit une date SQL « AAAA-MM-JJ » en Date locale à minuit. */
 export function parseSqlDate(value: string): Date {

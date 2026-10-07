@@ -1,7 +1,7 @@
-/* -----------------------------------------------------------------------------
-   LOGIN — écran de connexion (hors maquette : réduit au strict nécessaire)
-   Utilisé par : src/pages/Login.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de l'écran de connexion (pages/Login.tsx).
+ * POURQUOI — hors maquette : réduit au strict nécessaire.
+ */
 
 .login {
   display: grid;

@@ -1,8 +1,9 @@
-/* -----------------------------------------------------------------------------
-   FORM — les contrôles de saisie, partagés par tous les écrans
-   Utilisé par : src/components/ui/Field.tsx, Input.tsx, Textarea.tsx,
-                 Toggle.tsx, Dropzone.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles des contrôles de saisie partagés par tous les écrans
+ *            (components/ui/Field.tsx : Field, Input, Textarea, Toggle).
+ * POURQUOI — un formulaire de la V2 a partout les mêmes libellés, le même focus et les mêmes
+ *            états.
+ */
 
 .field {
   display: flex;

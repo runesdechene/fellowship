@@ -45,15 +45,18 @@ export default defineConfig([
         {
           // Style inline passé par une variable : on ne peut pas vérifier ce qu'il contient.
           selector: "JSXAttribute[name.name='style'] > JSXExpressionContainer > Identifier",
-          message: 'Pas de style inline par variable : écrire l’objet sur place, variables CSS seulement.',
+          message:
+            'Pas de style inline par variable : écrire l’objet sur place, variables CSS seulement.',
         },
         {
-          selector: "JSXAttribute[name.name='style'] Property[key.type='Literal'][key.value!=/^--/]",
+          selector:
+            "JSXAttribute[name.name='style'] Property[key.type='Literal'][key.value!=/^--/]",
           message: "Pas de style inline : seules les variables CSS ('--nom') sont permises.",
         },
         {
           selector: "JSXAttribute[name.name='style'] Property[key.type='Identifier']",
-          message: "Pas de style inline : passer par styles/3-components. Seules les variables CSS ('--nom') sont permises.",
+          message:
+            "Pas de style inline : passer par styles/3-components. Seules les variables CSS ('--nom') sont permises.",
         },
       ],
     },

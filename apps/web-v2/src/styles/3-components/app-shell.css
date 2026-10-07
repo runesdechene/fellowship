@@ -1,7 +1,8 @@
-/* -----------------------------------------------------------------------------
-   APP SHELL — la structure d'ensemble : colonne de gauche + grand panneau
-   Utilisé par : src/components/layout/AppShell.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la structure d'ensemble : colonne de gauche et grand panneau
+ *            (components/layout/AppShell.tsx).
+ * POURQUOI — un seul scroll, celui de la page ; la colonne de gauche reste fixe.
+ */
 
 .app-shell {
   display: flex;

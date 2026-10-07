@@ -1,11 +1,10 @@
-/* -----------------------------------------------------------------------------
-   FICHE D'UN ÉVÉNEMENT — le contenu à gauche, le suivi à droite
-   Utilisé par : src/features/event/EventPage.tsx, EventCockpit.tsx
-
-   L'ossature est celle de la V1 : deux colonnes, les blocs dans le même ordre.
-   Seule la peinture est celle de la V2 — crème, sans ombre, les grands titres
-   posés AU-DESSUS des cartes.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la fiche d'un événement : le contenu à gauche, le suivi à droite
+ *            (features/event/EventPage.tsx).
+ * POURQUOI — l'ossature est celle de la V1 (deux colonnes, les blocs dans le même ordre) ;
+ *            seule la peinture est celle de la V2 — crème, sans ombre, les grands titres posés
+ *            AU-DESSUS des cartes.
+ */
 
 /* Elle respire plus haut que les autres écrans : son titre est le seul à
    devoir tenir tête au mur d'affiche posé juste à côté. */

@@ -1,9 +1,9 @@
-/* -----------------------------------------------------------------------------
-   ACTION BANNER — « Comment s'est passé … ? »
-   La seule bande qui réclame quelque chose à l'exposant. Elle n'apparaît que
-   s'il existe une date passée dont le bilan n'a pas été rempli.
-   Utilisé par : src/features/dashboard/ActionBanner.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la bande « Comment s'est passé … ? »
+ *            (features/dashboard/ActionBanner.tsx).
+ * POURQUOI — la seule bande qui réclame quelque chose à l'exposant ; elle n'existe que s'il
+ *            reste un bilan à remplir.
+ */
 
 /* Sur-titre en capitales, posé au-dessus de la bande */
 .action-banner__eyebrow {

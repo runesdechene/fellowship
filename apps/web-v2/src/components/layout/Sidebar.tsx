@@ -41,7 +41,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <ToggleIcon size={17} strokeWidth={1.75} />
       </button>
 
-      {/* La marque seule — /logo.png est le lockup complet, réservé à la connexion */}
+      {/* La marque seule — logo.png est le lockup complet, réservé à la connexion */}
       <img className="sidebar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />

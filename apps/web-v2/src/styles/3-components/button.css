@@ -1,7 +1,10 @@
-/* -----------------------------------------------------------------------------
-   BOUTONS
-   Utilisé par : src/components/ui/Button.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles du bouton et de ses variantes (components/ui/Button.tsx).
+ * POURQUOI — un seul bouton pour toute l'app : survol et focus vivent ici, donc tout bouton
+ *            réagit pareil.
+ * ATTENTION — une variante qui définit son survol reprend `:not(:disabled)`, sinon elle pèse
+ *            moins lourd que la règle de base.
+ */
 
 .button {
   display: inline-flex;

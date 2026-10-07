@@ -1,12 +1,8 @@
-/* -----------------------------------------------------------------------------
-   SELECT — un sélecteur maison, parce que celui du navigateur ne sait pas
-   afficher d'icône ni de couleur dans son menu.
-   Utilisé par : src/components/ui/Select.tsx
-
-   La valeur fermée et les options du menu partagent EXACTEMENT la même
-   grammaire : icône, mot, et la teinte de l'état. On reconnaît dans la liste
-   ce qu'on a vu sur le bouton — c'est tout l'intérêt de l'avoir réécrit.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles du sélecteur maison (components/ui/Select.tsx).
+ * POURQUOI — celui du navigateur n'affiche ni icône ni couleur dans son menu ; ici la valeur
+ *            fermée et les options partagent la même grammaire : icône, mot, teinte de l'état.
+ */
 
 .select {
   position: relative;

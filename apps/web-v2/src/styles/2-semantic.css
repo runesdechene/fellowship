@@ -1,18 +1,17 @@
-/* =============================================================================
-   COUCHE 2 — SÉMANTIQUE   ←←← C'EST ICI QU'ON MODIFIE LE DESIGN
-   =============================================================================
-   Chaque variable dit À QUOI SERT une primitive. Changer une ligne ici se
-   répercute partout, d'un coup, sans ouvrir un seul composant.
-
-   Exemples :
-     • toutes les cartes plus claires  → --surface-card
-     • titres moins bruns              → --ink-title
-     • coins moins arrondis            → --radius-card
-     • interface plus dense            → --gap-section, --page-padding-*
-
-   Une valeur à droite doit TOUJOURS être un var(--...) de la couche 1.
-   Si on écrit une valeur en dur ici, c'est qu'il manque une primitive.
-   ========================================================================== */
+/**
+ * QUOI     — couche 2 — le sens : à quoi sert chaque primitive. C'est ICI qu'on modifie le
+ *            design.
+ * POURQUOI — changer une ligne ici se répercute partout, d'un coup, sans ouvrir un seul
+ *            composant.
+ * ATTENTION — une valeur à droite est TOUJOURS un var(--…) de la couche 1 ; une valeur en dur
+ *            ici signale une primitive manquante.
+ *
+ * Exemples :
+ *   • toutes les cartes plus claires  → --surface-card
+ *   • titres moins bruns              → --ink-title
+ *   • coins moins arrondis            → --radius-card
+ *   • interface plus dense            → --gap-section, --page-padding-*
+ */
 
 :root {
   /* =========================================================================

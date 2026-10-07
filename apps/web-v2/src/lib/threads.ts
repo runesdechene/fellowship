@@ -1,10 +1,8 @@
 /**
- * La discussion d'un festival : des questions, des réponses, et une réponse
- * élue par celui qui a posé la question.
- *
- * Tout ce fichier est de la logique pure — aucun React, aucun réseau. C'est ce
- * qui permet de la tester pour de vrai, et de la relire sans dérouler un
- * composant.
+ * QUOI     — la logique de la discussion d'un festival : questions, réponses, réponse élue,
+ *            canaux, tri.
+ * POURQUOI — logique pure — aucun React, aucun réseau : elle se teste pour de vrai et se relit
+ *            sans dérouler un composant.
  */
 
 /**

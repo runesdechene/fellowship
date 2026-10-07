@@ -1,10 +1,9 @@
-/* =============================================================================
-   COUCHE 0 — RESET
-   =============================================================================
-   Neutralise les styles par défaut du navigateur. Rien de spécifique à
-   Fellowship ne doit vivre ici : ce fichier serait identique dans n'importe
-   quel projet. Ne pas y ajouter de couleur, de police ni d'espacement.
-   ========================================================================== */
+/**
+ * QUOI     — couche 0 — neutralise les styles par défaut du navigateur.
+ * POURQUOI — rien de spécifique à Fellowship : ce fichier serait identique dans n'importe quel
+ *            projet.
+ * ATTENTION — ne pas y ajouter de couleur, de police ni d'espacement.
+ */
 
 *,
 *::before,

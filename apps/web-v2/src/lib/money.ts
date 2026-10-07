@@ -1,12 +1,14 @@
-/* -----------------------------------------------------------------------------
-   Argent — les montants d'un bilan viennent du REGISTRE (event_ledger_entries),
-   pas des colonnes revenue / booth_cost / charges de event_reports, qui sont
-   un reliquat de l'ancien modèle et ne sont plus alimentées.
-
-   Chaque ligne du registre porte un montant et un sens :
-     'in'  = ce qui rentre (ventes, cachet, remboursement)
-     'out' = ce qui sort  (emplacement, essence, péage, hébergement, repas)
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — tous les montants : recette et bénéfice d'une date à partir de son registre, et
+ *            leur affichage en euros.
+ * POURQUOI — les montants d'un bilan viennent du REGISTRE (event_ledger_entries), pas des
+ *            colonnes revenue / booth_cost / charges de event_reports, reliquat de l'ancien
+ *            modèle qui n'est plus alimenté.
+ *
+ * Chaque ligne du registre porte un montant et un sens :
+ *   'in'  = ce qui rentre (ventes, cachet, remboursement)
+ *   'out' = ce qui sort  (emplacement, essence, péage, hébergement, repas)
+ */
 
 export interface LedgerLine {
   amount: number

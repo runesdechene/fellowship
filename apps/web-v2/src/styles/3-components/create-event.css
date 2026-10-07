@@ -1,9 +1,9 @@
-/* -----------------------------------------------------------------------------
-   CREATE EVENT — « l'atelier » : une question à gauche, un compagnon à droite
-   Le compagnon change de rôle : détecteur de doublons à la première étape,
-   fiche en construction ensuite.
-   Utilisé par : src/features/event-create/CreateEvent.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de « l'atelier » de création : une question à gauche, un compagnon à
+ *            droite (features/event-create/).
+ * POURQUOI — le compagnon change de rôle : détecteur de doublons à la première étape, fiche en
+ *            construction ensuite.
+ */
 
 /* La barre et la question forment UN bloc, centré ensemble dans la hauteur
    du panneau. Plaquer la barre en haut la laissait flotter à des centaines

@@ -1,8 +1,7 @@
-/* -----------------------------------------------------------------------------
-   UPCOMING CARD — la liste « A venir »
-   Le titre du bloc vit AU-DESSUS de la carte (voir dashboard.css), pas dedans.
-   Utilisé par : src/features/dashboard/UpcomingCard.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la liste « À venir » (features/dashboard/UpcomingCard.tsx).
+ * POURQUOI — le titre du bloc vit AU-DESSUS de la carte (dashboard.css), pas dedans.
+ */
 
 .upcoming {
   display: flex;

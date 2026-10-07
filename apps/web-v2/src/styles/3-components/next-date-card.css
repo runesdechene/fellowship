@@ -1,7 +1,9 @@
-/* -----------------------------------------------------------------------------
-   NEXT DATE CARD — affiche à gauche, informations à droite
-   Utilisé par : src/features/dashboard/NextDateCard.tsx
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles de la carte de la prochaine date : affiche à gauche, informations à
+ *            droite (features/dashboard/NextDateCard.tsx).
+ * POURQUOI — la date la plus proche a sa propre carte ; l'affiche la fait reconnaître d'un
+ *            coup d'œil.
+ */
 
 /* La carte entière mène à l'événement : c'est donc elle qui répond au
    survol, pas une zone à l'intérieur. */

@@ -1,14 +1,10 @@
-/* =============================================================================
-   COUCHE 1 — PRIMITIVES
-   =============================================================================
-   La matière brute. Une primitive décrit CE QU'ELLE EST, jamais à quoi elle
-   sert : « --cream-200 », pas « --fond-de-carte ».
-
-   Aucun composant ne doit lire ce fichier directement. Il passe toujours par
-   la couche 2. Ça permet de changer toute la palette ici sans rien casser.
-
-   Pour ajouter une teinte : la poser ici, PUIS lui donner un rôle en couche 2.
-   ========================================================================== */
+/**
+ * QUOI     — couche 1 — la matière brute : couleurs, tailles, espaces, durées, en valeurs.
+ * POURQUOI — une primitive dit CE QU'ELLE EST, jamais à quoi elle sert (« --cream-200 », pas «
+ *            --fond-de-carte ») : on change toute la palette ici sans rien casser.
+ * ATTENTION — aucun composant ne lit ce fichier directement. Une teinte nouvelle se pose ici,
+ *            PUIS prend un rôle en couche 2.
+ */
 
 :root {
   /* ---------------------------------------------------------------------

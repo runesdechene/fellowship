@@ -1,15 +1,11 @@
-/* -----------------------------------------------------------------------------
-   LE MUR D'AFFICHE — le bord droit de l'écran, sur la fiche d'un événement
-   Utilisé par : src/components/layout/PosterWall.tsx
-
-   Il est COLLÉ À L'ÉCRAN et non au document : sans ça, l'affiche s'étirerait
-   sur toute la hauteur de la page et son bas tomberait sous le pli.
-
-   Les trois couleurs --wall-haut / --wall-milieu / --wall-bas sont relevées
-   dans l'affiche elle-même au chargement (voir PosterWall.tsx). Les valeurs
-   écrites ici ne sont qu'un repli : le temps du chargement, et pour les
-   affiches servies sans en-tête CORS, qu'un canevas ne peut pas lire.
-   -------------------------------------------------------------------------- */
+/**
+ * QUOI     — les styles du mur d'affiche, le bord droit de l'écran sur la fiche d'un événement
+ *            (components/layout/PosterWall.tsx).
+ * POURQUOI — il est COLLÉ À L'ÉCRAN et non au document : sans ça, l'affiche s'étirerait sur
+ *            toute la page et son bas tomberait sous le pli.
+ * ATTENTION — l'affiche est nette et le voile est un brun à plat : plus aucune couleur n'est
+ *            relevée dans l'image (voir PosterWall.tsx).
+ */
 
 .poster-wall {
   position: sticky;
