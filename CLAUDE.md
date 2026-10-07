@@ -45,7 +45,7 @@ Un nom de colonne ou une signature de RPC ne se devine jamais : graph, `docs/db/
 - **pnpm** uniquement. **TS strict** : pas de `any`, `@ts-ignore`, `as unknown as`.
 - **Conventional Commits**, en français.
 - **Migrations** horodatées (`supabase/migrations/<horodatage>_<nom>.sql`), canal unique
-  `pnpm exec supabase db push --linked`, jamais `apply_migration` du MCP (hook). Je les applique
+  `node_modules/supabase/bin/supabase.exe db push --linked` (`pnpm exec supabase` ne marche pas ici : `.claude/rules/supabase.md`), jamais `apply_migration` du MCP (hook). Je les applique
   moi-même, puis je vérifie en prod. En tête : le POURQUOI. Tout `CREATE OR REPLACE` part de la
   définition **live** copiée entière. La base est la **production**. Détail : `docs/db/`.
 - **Architecture existante d'abord** : helpers (`lib/`), RPC et composants en place avant d'en

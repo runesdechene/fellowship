@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"INTERDIT: apply_migration MCP enregistre la migration sous un nom different du fichier -> orphelins dans schema_migrations -> casse db push (incident RdC juin 2026). Canal unique: ecrire supabase/migrations/<horodatage>_<nom>.sql, baser tout CREATE OR REPLACE sur la def LIVE (pg_get_functiondef), puis pnpm exec supabase db push --dry-run --linked puis pnpm exec supabase db push --linked. Voir docs/db/migrations-workflow.md.\"}}'"
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"INTERDIT: apply_migration MCP enregistre la migration sous un nom different du fichier -> orphelins dans schema_migrations -> casse db push (incident RdC juin 2026). Canal unique: ecrire supabase/migrations/<horodatage>_<nom>.sql, baser tout CREATE OR REPLACE sur la def LIVE (pg_get_functiondef), puis node_modules/supabase/bin/supabase.exe db push --dry-run --linked puis db push --linked (voir .claude/rules/supabase.md). Voir docs/db/migrations-workflow.md.\"}}'"
           }
         ]
       }

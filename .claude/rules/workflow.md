@@ -15,7 +15,7 @@ Depuis le 07/10/2026, Fellowship suit le régime de Runes de Chêne :
 - **Déploiement manuel, par lot**, depuis le dossier de l'app (`deploiement.md`). Pousser sur
   `main` ne déploie plus rien : l'auto-deploy Netlify est coupé (`stop_builds: true`).
 - **Les migrations** sont écrites dans l'ordre et appliquées tout de suite par
-  `pnpm exec supabase db push --linked` : la base est partagée par les deux apps et c'est la prod.
+  `node_modules/supabase/bin/supabase.exe db push --linked` : la base est partagée par les deux apps et c'est la prod.
 
 **Why:** la branche `v2` avait accumulé 142 commits sans mode de déploiement, et l'auto-deploy
 redéployait la prod sur un simple commit de doc (constaté le 07/10/2026). Avant ça, la divergence

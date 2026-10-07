@@ -24,6 +24,25 @@ Résolu (2026-06-26) : frontend liste blanche déployé (commits → main, CI ve
 
 **Piège détection de déploiement Netlify** : le hash du bundle principal `assets/index-*.js` ne change PAS quand seules des routes lazy/code-splittées changent (Landing/Embed/vitrine/admin sont des chunks séparés). Poller ce hash = aveugle. Détecter via un **chunk lazy nouveau/modifié** : `curl -o /dev/null -w "%{http_code}" https://flw.sh/assets/<NomChunk-HASH>.js` (200 = déployé). Un fichier NEUF de la session (ex. `AdminTestimonials-*.js`) est le signal le plus fiable. Netlify ne poste pas de statut GitHub ici (`gh ... /status` = vide) ; le CI `ci.yml` (Lint/Build/Test) ne déploie pas, Netlify build de son côté.
 
+## Le jeton du `.env` passe devant la connexion — et il était périmé le 07/10/2026
+
+**Le piège** (07/10/2026) : la CLI lit `SUPABASE_ACCESS_TOKEN` dans le `.env` du dépôt (`--debug` :
+« Using access token from env var ») **avant** le jeton de `supabase login`. Ce jeton était
+périmé : `gen types` répondait « Unauthorized » alors qu'Uriel venait de se connecter.
+
+**How to apply :**
+- Une commande Supabase qui répond « Unauthorized » → `--debug`, et regarder d'où vient le jeton.
+- Le vrai remède : un jeton neuf dans le `.env` (supabase.com → Account → Access Tokens). Tant
+  qu'il n'y est pas, lancer la commande **hors du dépôt** pour que le `.env` ne soit pas lu.
+
+### Régénérer les types de la V2
+
+```bash
+cd "$SCRATCHPAD" && "<dépôt>/node_modules/supabase/bin/supabase.exe" gen types typescript \
+  --project-id trbxpsknbtisqwefqoub --schema public > "<dépôt>/apps/web-v2/src/types/supabase.ts"
+```
+(Depuis le dépôt, une fois le jeton du `.env` renouvelé : `--linked` au lieu de `--project-id`.)
+
 ## supabase-cli-setup
 
 Supabase CLI est installé en devDependency (`supabase` dans package.json).
