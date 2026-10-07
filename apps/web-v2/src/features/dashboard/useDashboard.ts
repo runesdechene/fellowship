@@ -248,10 +248,68 @@ async function fetchReports(
 }
 
 /**
- * Toutes les données du tableau de bord, pour l'acteur actif.
- * Une seule requête principale (participations + événements), puis deux
- * requêtes d'appoint pour les amis présents sur les mêmes dates.
+ * Charge tout le tableau de bord d'un acteur : une requête principale (participations et
+ * événements), puis les amis présents, les bilans et ce qui reste à régler. Lève l'erreur de la
+ * première requête qui échoue (must).
  */
+async function loadDashboard(
+  actorId: string,
+  today: Date,
+): Promise<{ dates: DashboardDate[]; state: Omit<DashboardData, 'months'> }> {
+  const todaySql = todayIso(today)
+  const rows = must(
+    await supabase
+      .from('participations')
+      .select('id, status, payment_status, event_id, events!inner(*)')
+      .eq('actor_id', actorId)
+      .in('status', PROGRAMMED_STATUSES)
+      .gte('events.end_date', todaySql),
+  )
+
+  const friendsByEvent = await fetchFriendsByEvent(
+    actorId,
+    rows.map((row) => row.event_id),
+  )
+
+  const dates = rows
+    .map<DashboardDate>((row) => {
+      const startDate = parseSqlDate(row.events.start_date)
+      return {
+        participationId: row.id,
+        status: row.status,
+        paymentStatus: row.payment_status,
+        confirmed: CONFIRMED_STATUSES.includes(row.status),
+        event: row.events,
+        startDate,
+        daysAway: daysUntil(startDate, today),
+        friends: friendsByEvent.get(row.event_id) ?? [],
+      }
+    })
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+
+  const [{ reports, seasonNet, seasonRevenue, pendingReport }, settlements] = await Promise.all([
+    fetchReports(actorId, todaySql),
+    fetchSettlements(actorId, dates),
+  ])
+
+  return {
+    dates,
+    state: {
+      programmedCount: dates.length,
+      next: dates[0] ?? null,
+      upcoming: dates.slice(1, 4),
+      settlements,
+      reports,
+      seasonNet,
+      seasonRevenue,
+      pendingReport,
+      loading: false,
+      error: null,
+    },
+  }
+}
+
+/** Toutes les données du tableau de bord, pour l'acteur actif. */
 export function useDashboard(actorId: string | null | undefined): DashboardData {
   const [state, setState] = useState<Omit<DashboardData, 'months'>>(EMPTY)
   const [dates, setDates] = useState<DashboardDate[]>([])
@@ -263,81 +321,29 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
     if (!actorId) return
 
     let cancelled = false
-    const today = new Date()
-    const todaySql = todayIso(today)
 
-    async function load(currentActorId: string) {
+    // Le résultat s'applique UNE fois, à la fin, si l'acteur n'a pas changé entre-temps. Une
+    // seule interception : quelle que soit la requête qui échoue, l'écran dit « erreur » plutôt
+    // que d'afficher un tableau de bord vide présenté pour vrai.
+    async function run(currentActorId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
-
-      const data = must(
-        await supabase
-          .from('participations')
-          .select('id, status, payment_status, event_id, events!inner(*)')
-          .eq('actor_id', currentActorId)
-          .in('status', PROGRAMMED_STATUSES)
-          .gte('events.end_date', todaySql),
-      )
-
-      if (cancelled) return
-
-      const rows = data
-
-      const friendsByEvent = await fetchFriendsByEvent(
-        currentActorId,
-        rows.map((row) => row.event_id),
-      )
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
-      if (cancelled) return
-
-      const built = rows
-        .map<DashboardDate>((row) => {
-          const startDate = parseSqlDate(row.events.start_date)
-          return {
-            participationId: row.id,
-            status: row.status,
-            paymentStatus: row.payment_status,
-            confirmed: CONFIRMED_STATUSES.includes(row.status),
-            event: row.events,
-            startDate,
-            daysAway: daysUntil(startDate, today),
-            friends: friendsByEvent.get(row.event_id) ?? [],
-          }
+      try {
+        const result = await loadDashboard(currentActorId, new Date())
+        if (cancelled) return
+        setDates(result.dates)
+        setState(result.state)
+      } catch (reason) {
+        if (cancelled) return
+        setDates([])
+        setState({
+          ...EMPTY,
+          loading: false,
+          error: reason instanceof Error ? reason.message : String(reason),
         })
-        .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-
-      const [{ reports, seasonNet, seasonRevenue, pendingReport }, settlements] = await Promise.all(
-        [fetchReports(currentActorId, todaySql), fetchSettlements(currentActorId, built)],
-      )
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
-      if (cancelled) return
-
-      setDates(built)
-      setState({
-        programmedCount: built.length,
-        next: built[0] ?? null,
-        upcoming: built.slice(1, 4),
-        settlements,
-        reports,
-        seasonNet,
-        seasonRevenue,
-        pendingReport,
-        loading: false,
-        error: null,
-      })
+      }
     }
 
-    // Une seule interception pour tout le chargement : quelle que soit la requête qui échoue,
-    // l'écran dit « erreur » plutôt que d'afficher un tableau de bord vide présenté pour vrai.
-    load(actorId).catch((reason: unknown) => {
-      if (cancelled) return
-      setDates([])
-      setState({
-        ...EMPTY,
-        loading: false,
-        error: reason instanceof Error ? reason.message : String(reason),
-      })
-    })
+    void run(actorId)
     return () => {
       cancelled = true
     }

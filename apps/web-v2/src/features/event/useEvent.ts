@@ -115,6 +115,70 @@ const EMPTY: EventData = {
 }
 
 /**
+ * Charge la fiche d'un événement pour un acteur (ou sans acteur : l'événement seul). Lève
+ * l'erreur de la première requête qui échoue (must).
+ */
+async function loadEvent(eventId: string, actorId: string | null | undefined): Promise<EventData> {
+  // Les couleurs des catégories ne dépendent pas de l'événement : elles partent en même temps
+  // que lui plutôt qu'après.
+  const [eventResponse, tagRows] = await Promise.all([
+    supabase.from('events').select('*').eq('id', eventId).maybeSingle(),
+    fetchTags(),
+  ])
+  const event = must(eventResponse)
+  if (!event) return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
+
+  const tagStyles = tagStylesByName(tagRows)
+  const startDate = parseSqlDate(event.start_date)
+  const endDate = parseSqlDate(event.end_date)
+  const today = new Date()
+  const base = {
+    ...EMPTY,
+    event,
+    startDate,
+    endDate,
+    daysAway: daysUntil(startDate, today),
+    past: daysUntil(endDate, today) < 0,
+    tagStyles,
+    loading: false,
+  }
+
+  // Sans acteur actif, la fiche se réduit à l'événement : pas de participation à chercher, pas
+  // d'amis à compter, pas de registre.
+  if (!actorId) return base
+
+  const [participationResponse, ledgerResponse, friendsByEvent] = await Promise.all([
+    supabase
+      .from('participations')
+      .select('status, payment_status, payment_orientation')
+      .eq('actor_id', actorId)
+      .eq('event_id', eventId)
+      .maybeSingle(),
+    supabase
+      .from('event_ledger_entries')
+      .select('id, amount, direction, category, label, source')
+      .eq('actor_id', actorId)
+      .eq('event_id', eventId),
+    fetchFriendsByEvent(actorId, [eventId]),
+  ])
+  const participation = must(participationResponse)
+  const ledger = must(ledgerResponse) as EventLedgerLine[]
+  const filled = ledger.length > 0
+
+  return {
+    ...base,
+    status: participation?.status ?? null,
+    paymentStatus: participation?.payment_status ?? null,
+    paymentOrientation: (participation?.payment_orientation ?? 'payeur') as PaymentOrientation,
+    confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
+    friends: friendsByEvent.get(eventId) ?? [],
+    ledger,
+    revenue: filled ? ledgerRevenue(ledger) : null,
+    net: filled ? ledgerProfit(ledger) : null,
+  }
+}
+
+/**
  * Tout ce qu'une fiche d'événement affiche, pour l'acteur actif : l'événement
  * lui-même, ma position dessus, les amis qui y seront, et mon registre.
  *
@@ -139,96 +203,26 @@ export function useEvent(
 
     let cancelled = false
 
-    async function load(currentEventId: string) {
+    // Le résultat s'applique UNE fois, à la fin, si la fiche n'a pas changé entre-temps. Une
+    // requête qui échoue s'affiche comme une erreur, jamais comme une fiche sans participation
+    // ni bilan.
+    async function run(currentEventId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
-
-      // Les couleurs des categories ne dependent pas de l'evenement : elles
-      // partent en meme temps que lui plutot qu'apres.
-      const [eventResponse, tagRows] = await Promise.all([
-        supabase.from('events').select('*').eq('id', currentEventId).maybeSingle(),
-        fetchTags(),
-      ])
-      const event = must(eventResponse)
-      const tagStyles = tagStylesByName(tagRows)
-
-      if (cancelled) return
-      if (!event) {
-        setState({ ...EMPTY, loading: false, error: 'Cet événement est introuvable.' })
-        return
-      }
-
-      const startDate = parseSqlDate(event.start_date)
-      const endDate = parseSqlDate(event.end_date)
-      const today = new Date()
-
-      // Sans acteur actif, la fiche se réduit à l'événement : pas de
-      // participation à chercher, pas d'amis à compter, pas de registre.
-      if (!actorId) {
+      try {
+        const next = await loadEvent(currentEventId, actorId)
+        if (cancelled) return
+        setState(next)
+      } catch (reason) {
+        if (cancelled) return
         setState({
           ...EMPTY,
-          event,
-          startDate,
-          endDate,
-          daysAway: daysUntil(startDate, today),
-          past: daysUntil(endDate, today) < 0,
-          tagStyles,
           loading: false,
+          error: reason instanceof Error ? reason.message : String(reason),
         })
-        return
       }
-
-      const [participationResponse, ledgerResponse, friendsByEvent] = await Promise.all([
-        supabase
-          .from('participations')
-          .select('status, payment_status, payment_orientation')
-          .eq('actor_id', actorId)
-          .eq('event_id', currentEventId)
-          .maybeSingle(),
-        supabase
-          .from('event_ledger_entries')
-          .select('id, amount, direction, category, label, source')
-          .eq('actor_id', actorId)
-          .eq('event_id', currentEventId),
-        fetchFriendsByEvent(actorId, [currentEventId]),
-      ])
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
-      if (cancelled) return
-
-      const participation = must(participationResponse)
-      const ledger = must(ledgerResponse) as EventLedgerLine[]
-      const filled = ledger.length > 0
-
-      setState({
-        event,
-        startDate,
-        endDate,
-        daysAway: daysUntil(startDate, today),
-        past: daysUntil(endDate, today) < 0,
-        status: participation?.status ?? null,
-        paymentStatus: participation?.payment_status ?? null,
-        paymentOrientation: (participation?.payment_orientation ?? 'payeur') as PaymentOrientation,
-        confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
-        friends: friendsByEvent.get(currentEventId) ?? [],
-        tagStyles,
-        ledger,
-        revenue: filled ? ledgerRevenue(ledger) : null,
-        net: filled ? ledgerProfit(ledger) : null,
-        loading: false,
-        error: null,
-      })
     }
 
-    // Une seule interception pour tout le chargement : une requête qui échoue s'affiche comme
-    // une erreur, jamais comme une fiche sans participation ni bilan.
-    load(eventId).catch((reason: unknown) => {
-      if (cancelled) return
-      setState({
-        ...EMPTY,
-        loading: false,
-        error: reason instanceof Error ? reason.message : String(reason),
-      })
-    })
+    void run(eventId)
     return () => {
       cancelled = true
     }

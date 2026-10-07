@@ -143,20 +143,21 @@ export function useEventThreads(
 
     async function run() {
       if (!eventId) {
-        if (!cancelled) setLoading(false)
+        setLoading(false)
         return
       }
+      // Le résultat s'applique une fois, à la fin, si la fiche n'a pas changé entre-temps.
       try {
         const rows = await fetchThreads(eventId)
         if (cancelled) return
         setThreads(rows)
         setError(null)
+        setLoading(false)
       } catch {
         if (cancelled) return
         setError('La discussion n’a pas pu être chargée.')
+        setLoading(false)
       }
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
-      if (!cancelled) setLoading(false)
     }
 
     void run()

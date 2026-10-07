@@ -57,7 +57,7 @@ export function PageChromeProvider({ children }: { children: ReactNode }) {
 }
 
 /** Ce que la coquille doit afficher en ce moment. */
-// eslint-disable-next-line react-refresh/only-export-components
+// eslint-disable-next-line react-refresh/only-export-components -- le fournisseur et ses hooks vivent ensemble
 export function usePageChrome(): PageChrome {
   return useContext(LectureContext)
 }
@@ -70,7 +70,7 @@ export function usePageChrome(): PageChrome {
  * de bord. Les champs sont passés à plat en dépendances pour qu'un objet
  * reconstruit à chaque rendu ne relance pas l'effet.
  */
-// eslint-disable-next-line react-refresh/only-export-components
+// eslint-disable-next-line react-refresh/only-export-components -- le fournisseur et ses hooks vivent ensemble
 export function useDeclarePageChrome({ poster, lead, back }: PageChrome): void {
   // Le poseur vient du contexte d’écriture, qui ne change JAMAIS : l’effet ne
   // se relance donc que si le décor lui-même a changé.
