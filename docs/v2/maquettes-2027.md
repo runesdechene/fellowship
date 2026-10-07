@@ -28,6 +28,7 @@
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
 | Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
+| Modifier un événement | `2027 — Modifier un événement` | dessiné |
 | Mobile (tous les écrans) | — | à dessiner |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -77,6 +78,7 @@
 - [ ] **Bilans** : vraie page « Mes bilans » (année, totaux, bénéfice par mois, tableau) ; le bilan devient une page ; « Ce qui a marché » saisissable (colonne `wins` déjà en base) ; tout s'enregistre seul ; bénéfice par jour.
 - [ ] **Tableau de bord — « Mes dossiers »** (gratuit, fonction plébiscitée) : une ligne par date à venir avec le statut du dossier et du paiement (montant versé, solde, échéance) ; remplace le bloc « À régler » actuel (`SettlementsSection`).
 - [ ] **Écrire un avis** (page, plus une fenêtre) : trois notes en étoiles (affluence, organisation, rentabilité), commentaire facultatif, « Qui voit ton nom ? » (mes amis exposants par défaut / personne), aperçu de l'avis tel que les autres le voient ; réservé à qui était inscrit à l'édition (garde de la V1, `ReviewForm.tsx`) ; les organisateurs ne voient jamais le nom.
+- [ ] **Modifier un événement** (page) : les champs de la création en sections ; depuis la fiche, une info manquante ouvre la page sur ce champ, mis en avant (« Il manquait cette info ») ; « dernière modification par X, il y a… » (historique à stocker) ; les changements sont visibles de tous à l'enregistrement. **À vérifier** : qui a le droit de modifier un événement (policy actuelle sur `events`).
 - [ ] **Création d'une date** : les doublons montrent le nombre d'exposants inscrits et s'ouvrent.
 - [ ] **Vitrine** : formulaire e-mail factice et incitation V1 retirés ; emplacement « Obtenir le badge Certifié » pour le propriétaire non Pro.
 
