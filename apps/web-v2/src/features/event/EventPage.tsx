@@ -20,6 +20,7 @@ import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
 import { EventDiscussion } from './EventDiscussion'
+import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
 import { useDossier } from './useDossier'
@@ -300,7 +301,13 @@ export function EventPage() {
 
         <Applying event={event} status={status} fields={dossier.fields} save={dossier.save} />
 
-        <Block title="Discussion du festival" bare>
+        <EventReviews
+          eventId={event.id}
+          viewerId={actor?.id}
+          canReview={past && status === 'inscrit'}
+        />
+
+        <Block title="Discussions" bare>
           <EventDiscussion eventId={event.id} />
         </Block>
 

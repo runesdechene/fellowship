@@ -1,0 +1,117 @@
+/**
+ * QUOI     — les styles du bloc « Avis des exposants » de la fiche
+ *            (features/event/EventReviews.tsx).
+ * POURQUOI — la note globale en serif à gauche, le détail en barres à droite, puis l'extrait sur
+ *            un aplat sable : la couleur ne dit rien ici, c'est la forme qui parle.
+ */
+
+.reviews__scores {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  padding: var(--space-18) var(--dossier-card-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--dossier-card-radius);
+  background: var(--surface-card);
+}
+
+.reviews__overall {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-right: var(--space-24);
+  border-right: 1px solid var(--line-card);
+}
+
+.reviews__score {
+  font: var(--type-review-score);
+  color: var(--ink-title);
+}
+
+.reviews__caption {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.reviews__pro {
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-xs);
+  background: var(--action-surface);
+  font: var(--type-review-pro);
+  color: var(--action-ink);
+}
+
+.reviews__detail {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.reviews__bar-row {
+  display: grid;
+  grid-template-columns: var(--review-label-width) 1fr auto;
+  align-items: center;
+  gap: var(--space-12);
+  font: var(--type-review-row);
+  color: var(--ink-soft);
+}
+
+.reviews__bar-row b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.reviews__bar {
+  position: relative;
+  height: var(--review-bar-height);
+  overflow: hidden;
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+}
+
+.reviews__bar::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--bar, 0) * 100%);
+  border-radius: var(--radius-round);
+  background: var(--ink-title);
+}
+
+.reviews__quote {
+  margin-top: var(--space-14);
+  padding: var(--space-14) var(--space-18);
+  border-radius: var(--dossier-card-radius);
+  background: var(--surface-chip-neutral);
+  font: var(--type-review-quote);
+  color: var(--ink-title);
+}
+
+.reviews__quote figcaption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.reviews__actions {
+  display: flex;
+  gap: var(--space-20);
+  margin-top: var(--space-14);
+}
+
+.reviews__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-dossier-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}

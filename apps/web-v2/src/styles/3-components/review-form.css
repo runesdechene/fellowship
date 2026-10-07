@@ -1,0 +1,260 @@
+/**
+ * QUOI     — les styles de l'écran « Écrire un avis » (features/review/WriteReviewPage.tsx) et
+ *            des étoiles d'une note (components/ui/Stars.tsx).
+ * POURQUOI — le formulaire à gauche, l'aperçu fidèle à droite : l'exposant voit ce que les autres
+ *            liront avant de publier.
+ */
+
+.stars {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.stars__star {
+  color: var(--ink-section-pale);
+}
+
+.stars__star--on {
+  color: var(--ink-title);
+  fill: currentcolor;
+}
+
+.review-form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-48);
+  padding: var(--review-padding-top) var(--page-gutter) var(--space-48);
+}
+
+.review-form__main {
+  width: var(--review-form-width);
+}
+
+.review-form__eyebrow {
+  margin-bottom: var(--space-10);
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.review-form__title {
+  font: var(--type-display-l);
+  color: var(--ink-title);
+}
+
+.review-form__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  margin-top: var(--space-12);
+  font: var(--type-vitrine-meta);
+  color: var(--ink-soft);
+}
+
+.review-form__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-2) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-title);
+}
+
+.review-form__card {
+  margin-top: var(--space-32);
+  padding: 0 var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--dossier-card-radius);
+  background: var(--surface-card);
+}
+
+.review-form__criterion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-20);
+  padding: var(--space-18) 0;
+  font: var(--type-dossier-value);
+  color: var(--ink-title);
+}
+
+.review-form__criterion + .review-form__criterion {
+  border-top: 1px solid var(--line-card);
+}
+
+.review-form__criterion b {
+  display: block;
+  font-weight: var(--weight-semibold);
+}
+
+.review-form__hint {
+  display: block;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.review-form__stars {
+  display: inline-flex;
+  gap: var(--space-4);
+}
+
+.review-form__star {
+  color: var(--ink-section-pale);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+}
+
+.review-form__star:hover {
+  scale: 1.1;
+}
+
+.review-form__star--on {
+  color: var(--ink-title);
+}
+
+.review-form__star--on svg {
+  fill: currentcolor;
+}
+
+.review-form__label {
+  display: block;
+  margin: var(--space-32) 0 var(--space-10);
+  font: var(--type-event-block-title);
+  color: var(--ink-title);
+}
+
+.review-form__label span {
+  margin-left: var(--space-6);
+  font: var(--type-event-block-hint);
+  color: var(--ink-section-pale);
+}
+
+.review-form__comment {
+  width: 100%;
+  padding: var(--space-12) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-dossier-value);
+  color: var(--ink-title);
+  resize: vertical;
+}
+
+.review-form__comment:focus-visible {
+  border-color: var(--ink-title);
+  outline: none;
+}
+
+.review-form__choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+}
+
+.review-form__choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-14) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.review-form__choice b {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-dossier-value);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.review-form__choice[aria-checked='true'] {
+  border-color: var(--ink-title);
+}
+
+.review-form__note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.review-form__note b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.review-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-40);
+}
+
+.review-form__cancel {
+  font: var(--type-dossier-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.review-form__preview {
+  position: sticky;
+  top: var(--review-padding-top);
+  width: var(--review-preview-width);
+  margin-top: var(--space-80);
+}
+
+.review-form__preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  margin-top: 0;
+  padding: var(--space-16);
+  font: var(--type-dossier-value);
+  color: var(--ink-title);
+}
+
+.review-form__preview-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.review-form__preview-head img {
+  width: var(--dossiers-thumb-width);
+  height: var(--dossiers-thumb-height);
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+}
+
+.review-form__preview-score {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.review-form__preview-score > span:first-child {
+  font: var(--type-display-m);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-form__star,
+  .review-form__choice {
+    transition: none;
+  }
+}

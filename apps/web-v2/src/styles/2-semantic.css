@@ -788,4 +788,17 @@
     var(--family-sans);
   --type-activity-time: var(--weight-regular) var(--size-11) / var(--leading-snug)
     var(--family-sans);
+
+  /* =========================================================================
+     AVIS — le bloc de la fiche et l'écran « Écrire un avis » (features/event, features/review)
+     ====================================================================== */
+  --type-review-score: var(--weight-regular) var(--size-52) / 1 var(--family-display);
+  --type-review-pro: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-review-row: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-review-quote: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
+  --review-label-width: 96px;
+  --review-bar-height: 5px;
+  --review-padding-top: var(--space-80);
+  --review-form-width: 520px;
+  --review-preview-width: 308px;
 }
