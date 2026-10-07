@@ -25,7 +25,7 @@ export function todayIso(now: Date = new Date()): string {
 }
 
 /** Ramène une date à minuit, pour comparer des jours et non des instants. */
-export function startOfDay(date: Date): Date {
+function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
 
@@ -62,7 +62,7 @@ function capitalize(value: string): string {
 }
 
 /** « Septembre » — le nom du mois, initiale en capitale. */
-export function formatMonthLabel(date: Date): string {
+function formatMonthLabel(date: Date): string {
   return capitalize(MONTH_FORMATTER.format(date))
 }
 

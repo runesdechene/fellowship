@@ -19,7 +19,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
  * Elle le DÉCLARE, la coquille le rend. Une page qui ne déclare rien laisse
  * la coquille nue : c'est le cas de tous les autres écrans.
  */
-export type PageChrome = {
+type PageChrome = {
   /** L'affiche qui remplit le mur de droite. `null` = pas de mur du tout. */
   poster: string | null
   /** Le mot posé à gauche de la barre du haut (« Dans 32 jours »). */

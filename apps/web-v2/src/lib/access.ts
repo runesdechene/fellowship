@@ -8,7 +8,7 @@
  */
 export type AccessCheck = 'pending' | 'allowed' | 'refused' | 'error'
 
-export type AccessState =
+type AccessState =
   | { status: 'loading' }
   | { status: 'ready'; hasSession: boolean; hasAccess: boolean }
   | { status: 'error' }

@@ -29,7 +29,7 @@ import type { LucideIcon } from 'lucide-react'
  *   ok       — c'est acquis (olive)
  * Le ton muet n'est pas un état : c'est l'absence d'état.
  */
-export type SelectTone = 'muet' | 'todo' | 'pending' | 'ok'
+type SelectTone = 'muet' | 'todo' | 'pending' | 'ok'
 
 export type SelectOption<T> = {
   value: T

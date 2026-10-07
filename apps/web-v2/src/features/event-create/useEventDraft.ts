@@ -29,7 +29,7 @@ export interface EventDraft {
   registrationNote: string
 }
 
-export const EMPTY_DRAFT: EventDraft = {
+const EMPTY_DRAFT: EventDraft = {
   name: '',
   isPrivate: false,
   address: '',
@@ -104,7 +104,7 @@ export function blockingReason(draft: EventDraft, step: number): string | null {
  * `kept`    écrit dans le stockage du navigateur, il survivra à l'onglet
  * `refused` le navigateur refuse d'écrire — il faut le dire, pas le taire
  */
-export type DraftStatus = 'quiet' | 'kept' | 'refused'
+type DraftStatus = 'quiet' | 'kept' | 'refused'
 
 /**
  * Le temps de silence après lequel on considère qu'une saisie est posée.

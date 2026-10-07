@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-export interface SimilarEvent {
+interface SimilarEvent {
   id: string
   name: string
   city: string

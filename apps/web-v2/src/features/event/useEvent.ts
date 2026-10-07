@@ -24,7 +24,7 @@ export interface EventLedgerLine extends LedgerLine {
   source: string
 }
 
-export interface EventData {
+interface EventData {
   event: EventRow | null
   startDate: Date | null
   endDate: Date | null

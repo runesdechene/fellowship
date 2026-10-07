@@ -115,9 +115,9 @@ export function filterByChannels<T extends { audience: ThreadAudience }>(
 }
 
 /** Les bornes que la base impose. Les redire ici évite un aller-retour perdu. */
-export const TITLE_MIN = 3
-export const TITLE_MAX = 140
-export const BODY_MAX = 2000
+const TITLE_MIN = 3
+const TITLE_MAX = 140
+const BODY_MAX = 2000
 
 /**
  * Ce qui empêche de poster, ou `null` si tout va bien. On rend la RAISON, pas

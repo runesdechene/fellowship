@@ -69,7 +69,7 @@ export interface Thread extends Author {
   replies: ThreadReply[]
 }
 
-export interface ThreadsData {
+interface ThreadsData {
   threads: Thread[]
   loading: boolean
   error: string | null

@@ -83,7 +83,7 @@ export interface DashboardReport {
 /* Il n'existe pas d'écran d'historique : TOUS les bilans vivent sur le
    tableau de bord. La rangée passe à la ligne, elle ne tronque jamais. */
 
-export interface DashboardData {
+interface DashboardData {
   /** Nombre total de dates programmées à venir. */
   programmedCount: number
   months: MonthBucket[]
