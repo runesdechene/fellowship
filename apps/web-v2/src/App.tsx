@@ -1,3 +1,8 @@
+/**
+ * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, création, fiche.
+ * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
+ *            renvoie les autres sur la V1.
+ */
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { Dashboard } from '@/features/dashboard/Dashboard'

@@ -1,3 +1,7 @@
+/**
+ * QUOI     — le point d'entrée : monte l'app dans #root, avec le routeur et la session.
+ * POURQUOI — le routeur a pour base /v2 : la V2 vit sous flw.sh/v2/, la V1 à la racine.
+ */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'

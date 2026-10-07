@@ -1,3 +1,7 @@
+/**
+ * QUOI     — les types de l'environnement Vite : variables VITE_*, version injectée au build.
+ * POURQUOI — sans eux, import.meta.env et __APP_VERSION__ ne seraient pas typés.
+ */
 /// <reference types="vite/client" />
 
 declare const __APP_VERSION__: string
