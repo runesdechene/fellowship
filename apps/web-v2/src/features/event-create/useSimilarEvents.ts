@@ -44,6 +44,8 @@ export function useSimilarEvents(name: string, enabled: boolean): SimilarEvent[]
 
     let cancelled = false
     const timer = setTimeout(async () => {
+      // Une aide à la saisie, pas une donnée : si la recherche échoue, on ne propose rien et la
+      // création continue. C'est le seul endroit de la V2 où une erreur est volontairement tue.
       const { data } = await supabase.rpc('search_similar_events', {
         search_name: query,
       })

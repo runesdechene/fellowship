@@ -15,3 +15,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+
+/**
+ * Rend les données d'une réponse de la base, ou lève son erreur. Une requête qui échoue ne doit
+ * jamais passer pour une réponse vide : « aucun bilan » sur une coupure réseau est un mensonge.
+ * Chaque chargement attrape l'erreur une fois, et l'écran affiche son message.
+ */
+type Response<T> = { data: T; error: null } | { data: null; error: { message: string } }
+
+export function must<T>(response: Response<T>): T {
+  if (response.error) throw new Error(response.error.message)
+  return response.data
+}

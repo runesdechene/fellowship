@@ -6,7 +6,7 @@
  *            event_reports ; les dates passent par lib/dates.ts, les sommes par lib/money.ts.
  */
 import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { must, supabase } from '@/lib/supabase'
 import {
   daysUntil,
   monthKey,
@@ -142,18 +142,20 @@ async function fetchSettlements(actorId: string, dates: DashboardDate[]): Promis
   )
   if (pending.length === 0) return []
 
-  const { data } = await supabase
-    .from('event_ledger_entries')
-    .select('event_id, amount')
-    .eq('actor_id', actorId)
-    .eq('source', 'stepper')
-    .eq('direction', 'out')
-    .in(
-      'event_id',
-      pending.map((date) => date.event.id),
-    )
+  const dueRows = must(
+    await supabase
+      .from('event_ledger_entries')
+      .select('event_id, amount')
+      .eq('actor_id', actorId)
+      .eq('source', 'stepper')
+      .eq('direction', 'out')
+      .in(
+        'event_id',
+        pending.map((date) => date.event.id),
+      ),
+  )
 
-  const dueByEvent = new Map((data ?? []).map((row) => [row.event_id, row.amount]))
+  const dueByEvent = new Map(dueRows.map((row) => [row.event_id, row.amount]))
 
   return pending.map((date) => {
     const due = dueByEvent.get(date.event.id)
@@ -193,15 +195,17 @@ async function fetchReports(
 }> {
   const yearStart = `${todaySql.slice(0, 4)}-01-01`
 
-  const { data } = await supabase
-    .from('participations')
-    .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
-    .eq('actor_id', actorId)
-    .in('status', CONFIRMED_STATUSES)
-    .gte('events.end_date', yearStart)
-    .lt('events.end_date', todaySql)
+  const pastRows = must(
+    await supabase
+      .from('participations')
+      .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
+      .eq('actor_id', actorId)
+      .in('status', CONFIRMED_STATUSES)
+      .gte('events.end_date', yearStart)
+      .lt('events.end_date', todaySql),
+  )
 
-  const past = ((data ?? []) as unknown as Array<{ events: PastEvent | null }>)
+  const past = (pastRows as unknown as Array<{ events: PastEvent | null }>)
     .map((row) => row.events)
     .filter((event): event is PastEvent => Boolean(event))
     .sort((a, b) => b.end_date.localeCompare(a.end_date))
@@ -209,16 +213,18 @@ async function fetchReports(
   if (past.length === 0)
     return { reports: [], seasonNet: null, seasonRevenue: null, pendingReport: null }
 
-  const { data: ledgerRows } = await supabase
-    .from('event_ledger_entries')
-    .select('event_id, amount, direction')
-    .eq('actor_id', actorId)
-    .in(
-      'event_id',
-      past.map((event) => event.id),
-    )
+  const ledgerRows = must(
+    await supabase
+      .from('event_ledger_entries')
+      .select('event_id, amount, direction')
+      .eq('actor_id', actorId)
+      .in(
+        'event_id',
+        past.map((event) => event.id),
+      ),
+  )
 
-  const linesByEvent = (ledgerRows ?? []).reduce((map, line) => {
+  const linesByEvent = ledgerRows.reduce((map, line) => {
     const list = map.get(line.event_id) ?? []
     list.push({ amount: line.amount, direction: line.direction })
     map.set(line.event_id, list)
@@ -239,7 +245,7 @@ async function fetchReports(
     }
   })
 
-  const allLines = (ledgerRows ?? []).map((line) => ({
+  const allLines = ledgerRows.map((line) => ({
     amount: line.amount,
     direction: line.direction,
   }))
@@ -275,19 +281,16 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
     async function load(currentActorId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
 
-      const { data, error } = await supabase
-        .from('participations')
-        .select('id, status, payment_status, event_id, events!inner(*)')
-        .eq('actor_id', currentActorId)
-        .in('status', PROGRAMMED_STATUSES)
-        .gte('events.end_date', todaySql)
+      const data = must(
+        await supabase
+          .from('participations')
+          .select('id, status, payment_status, event_id, events!inner(*)')
+          .eq('actor_id', currentActorId)
+          .in('status', PROGRAMMED_STATUSES)
+          .gte('events.end_date', todaySql),
+      )
 
       if (cancelled) return
-      if (error) {
-        setDates([])
-        setState({ ...EMPTY, loading: false, error: error.message })
-        return
-      }
 
       const rows = (data as unknown as ParticipationWithEvent[]).filter(
         (row): row is ParticipationWithEvent & { events: EventRow } => Boolean(row.events),
@@ -338,7 +341,17 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       })
     }
 
-    void load(actorId)
+    // Une seule interception pour tout le chargement : quelle que soit la requête qui échoue,
+    // l'écran dit « erreur » plutôt que d'afficher un tableau de bord vide présenté pour vrai.
+    load(actorId).catch((reason: unknown) => {
+      if (cancelled) return
+      setDates([])
+      setState({
+        ...EMPTY,
+        loading: false,
+        error: reason instanceof Error ? reason.message : String(reason),
+      })
+    })
     return () => {
       cancelled = true
     }

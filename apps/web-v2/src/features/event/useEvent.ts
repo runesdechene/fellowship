@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
-import { supabase } from '@/lib/supabase'
+import { must, supabase } from '@/lib/supabase'
 import { fetchTags, tagStylesByName, type TagStyle } from '@/lib/tags'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
@@ -144,17 +144,14 @@ export function useEvent(
 
       // Les couleurs des categories ne dependent pas de l'evenement : elles
       // partent en meme temps que lui plutot qu'apres.
-      const [{ data: event, error }, tagRows] = await Promise.all([
+      const [eventResponse, tagRows] = await Promise.all([
         supabase.from('events').select('*').eq('id', currentEventId).maybeSingle(),
         fetchTags(),
       ])
+      const event = must(eventResponse)
       const tagStyles = tagStylesByName(tagRows)
 
       if (cancelled) return
-      if (error) {
-        setState({ ...EMPTY, loading: false, error: error.message })
-        return
-      }
       if (!event) {
         setState({ ...EMPTY, loading: false, error: 'Cet événement est introuvable.' })
         return
@@ -180,7 +177,7 @@ export function useEvent(
         return
       }
 
-      const [{ data: participation }, { data: ledgerRows }, friendsByEvent] = await Promise.all([
+      const [participationResponse, ledgerResponse, friendsByEvent] = await Promise.all([
         supabase
           .from('participations')
           .select('status, payment_status, payment_orientation')
@@ -198,7 +195,8 @@ export function useEvent(
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- TypeScript ne voit pas que le nettoyage de l'effet passe `cancelled` à vrai pendant l'await
       if (cancelled) return
 
-      const ledger = (ledgerRows ?? []) as EventLedgerLine[]
+      const participation = must(participationResponse)
+      const ledger = must(ledgerResponse) as EventLedgerLine[]
       const filled = ledger.length > 0
 
       setState({
@@ -221,7 +219,16 @@ export function useEvent(
       })
     }
 
-    void load(eventId)
+    // Une seule interception pour tout le chargement : une requête qui échoue s'affiche comme
+    // une erreur, jamais comme une fiche sans participation ni bilan.
+    load(eventId).catch((reason: unknown) => {
+      if (cancelled) return
+      setState({
+        ...EMPTY,
+        loading: false,
+        error: reason instanceof Error ? reason.message : String(reason),
+      })
+    })
     return () => {
       cancelled = true
     }
@@ -307,13 +314,18 @@ export function useEvent(
   // mentiraient jusqu'au prochain chargement.
   const reloadLedger = useCallback(async () => {
     if (!eventId || !actorId) return
-    const { data: rows } = await supabase
+    const { data: rows, error } = await supabase
       .from('event_ledger_entries')
       .select('id, amount, direction, category, label, source')
       .eq('actor_id', actorId)
       .eq('event_id', eventId)
 
-    const ledger = (rows ?? []) as EventLedgerLine[]
+    // L'écriture a réussi mais la relecture non : on le dit plutôt que d'afficher un bilan vide.
+    if (error) {
+      setWriteError("Le bilan n'a pas pu être relu : recharge la page.")
+      return
+    }
+    const ledger = rows as EventLedgerLine[]
     setState((s) => ({
       ...s,
       ledger,
@@ -380,12 +392,19 @@ export function useEvent(
       }
 
       const line = standLine(currentOrientation)
-      const { data: existing } = await supabase
+      const { data: existing, error: readError } = await supabase
         .from('event_ledger_entries')
         .select('id')
         .eq('report_id', report.id)
         .eq('source', 'stepper')
         .maybeSingle()
+
+      // Sans savoir si la ligne existe, on n'écrit rien : on créerait un doublon.
+      if (readError) {
+        setSaving(false)
+        setWriteError("Le montant n'a pas pu être enregistré.")
+        return
+      }
 
       let failed = false
       if (amount <= 0) {

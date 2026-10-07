@@ -91,25 +91,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [actorId, setActorId] = useState<string | null>(readStoredActorId)
   const [loading, setLoading] = useState(true)
 
+  // Une lecture ratée GARDE l'identité déjà connue : elle est relue à chaque rafraîchissement de
+  // jeton, et un raté réseau à ce moment-là viderait les enseignes — l'app changerait d'acteur
+  // toute seule et le tableau de bord se viderait.
   const loadIdentity = useCallback(async (authUid: string) => {
-    const { data: personRow } = await supabase
+    const { data: personRow, error: personError } = await supabase
       .from('users')
       .select('*')
       .eq('actor_id', authUid)
       .maybeSingle()
-    setPerson(personRow)
+    if (!personError) setPerson(personRow)
 
     // Le TRI est indispensable : sans lui, Postgres rend les lignes dans un
     // ordre arbitraire qui peut changer d'un appel à l'autre. Comme l'acteur
     // par défaut est « le premier de la liste » et que l'identité est
     // rechargée plusieurs fois par Supabase, l'app basculait silencieusement
     // d'une enseigne à l'autre — et le tableau de bord se vidait tout seul.
-    const { data: memberships } = await supabase
+    const { data: memberships, error: membershipsError } = await supabase
       .from('memberships')
       .select('created_at, entities(*)')
       .eq('user_actor_id', authUid)
       .order('created_at', { ascending: true })
-    const rows = (memberships ?? []) as unknown as Array<{ entities: EntityRow | null }>
+    if (membershipsError) return
+    const rows = memberships as unknown as Array<{ entities: EntityRow | null }>
     setEntities(rows.map((r) => r.entities).filter((e): e is EntityRow => Boolean(e)))
   }, [])
 

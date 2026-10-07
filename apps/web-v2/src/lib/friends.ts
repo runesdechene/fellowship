@@ -5,8 +5,8 @@
  *            pour que le tableau de bord et la fiche comptent les mêmes personnes.
  */
 
-import { supabase } from '@/lib/supabase'
-import type { EntityRow, ParticipationStatus, UserRow } from '@/types/database'
+import { must, supabase } from '@/lib/supabase'
+import type { ParticipationStatus } from '@/types/database'
 
 export interface Friend {
   id: string
@@ -25,14 +25,16 @@ export const CONFIRMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme']
 
 /** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
 export async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
-  const { data } = await supabase
-    .from('follows')
-    .select('follower_actor, following_actor')
-    .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`)
+  const follows = must(
+    await supabase
+      .from('follows')
+      .select('follower_actor, following_actor')
+      .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`),
+  )
 
   const following = new Set<string>()
   const followers = new Set<string>()
-  for (const row of data ?? []) {
+  for (const row of follows) {
     if (row.follower_actor === actorId) following.add(row.following_actor)
     if (row.following_actor === actorId) followers.add(row.follower_actor)
   }
@@ -50,22 +52,19 @@ export async function fetchActorProfiles(ids: string[]): Promise<Map<string, Fri
   const byId = new Map<string, Friend>()
   if (ids.length === 0) return byId
 
-  const [{ data: entities }, { data: users }] = await Promise.all([
+  const [entitiesResponse, usersResponse] = await Promise.all([
     supabase.from('entities').select('actor_id, brand_name, avatar_url').in('actor_id', ids),
     supabase.from('users').select('actor_id, display_name, avatar_url').in('actor_id', ids),
   ])
 
-  for (const row of (entities ?? []) as Pick<
-    EntityRow,
-    'actor_id' | 'brand_name' | 'avatar_url'
-  >[]) {
+  for (const row of must(entitiesResponse)) {
     byId.set(row.actor_id, {
       id: row.actor_id,
       name: row.brand_name,
       avatarUrl: row.avatar_url,
     })
   }
-  for (const row of (users ?? []) as Pick<UserRow, 'actor_id' | 'display_name' | 'avatar_url'>[]) {
+  for (const row of must(usersResponse)) {
     if (byId.has(row.actor_id)) continue
     byId.set(row.actor_id, {
       id: row.actor_id,
@@ -91,7 +90,7 @@ export async function fetchFriendsByEvent(
   const friendIds = await fetchMutualFriendIds(actorId)
   if (friendIds.length === 0) return byEvent
 
-  const [{ data: participations }, profiles] = await Promise.all([
+  const [participationsResponse, profiles] = await Promise.all([
     supabase
       .from('participations')
       .select('actor_id, event_id')
@@ -101,7 +100,7 @@ export async function fetchFriendsByEvent(
     fetchActorProfiles(friendIds),
   ])
 
-  for (const row of participations ?? []) {
+  for (const row of must(participationsResponse)) {
     const friend = profiles.get(row.actor_id)
     if (!friend) continue
     const list = byEvent.get(row.event_id) ?? []

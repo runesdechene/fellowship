@@ -101,7 +101,7 @@ async function fetchThreads(eventId: string): Promise<Thread[]> {
   const threadRows = rows as ThreadRow[]
   if (threadRows.length === 0) return []
 
-  const { data: replyRowsRaw } = await db
+  const { data: replyRowsRaw, error: replyError } = await db
     .from('event_thread_replies')
     .select('id, thread_id, actor_id, body, created_at')
     .in(
@@ -109,7 +109,8 @@ async function fetchThreads(eventId: string): Promise<Thread[]> {
       threadRows.map((row) => row.id),
     )
 
-  const replyRows = (replyRowsRaw ?? []) as ReplyRow[]
+  if (replyError) throw new Error(replyError.message)
+  const replyRows = replyRowsRaw as ReplyRow[]
 
   // Un seul aller-retour pour tous les auteurs, questions et réponses
   // confondues : une requête par message ferait des dizaines d'appels sur un
