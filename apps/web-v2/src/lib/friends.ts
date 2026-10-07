@@ -5,6 +5,7 @@
  *            pour que le tableau de bord et la fiche comptent les mêmes personnes.
  */
 
+import { groupCompanions } from '@/lib/calendar'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
 
@@ -108,4 +109,56 @@ export async function fetchFriendsByEvent(
     byEvent.set(row.event_id, list)
   }
   return byEvent
+}
+
+/** Un festival où vont des amis sans moi : ce que montre « Compagnons » au bas d'un mois. */
+export interface CompanionEvent {
+  eventId: string
+  name: string
+  startDate: string
+  endDate: string
+  friends: Friend[]
+}
+
+/**
+ * Les dates programmées par mes amis dans la fenêtre [from, to[, hors festivals où je vais déjà.
+ * Même définition de l'ami que partout (suivi réciproque) et mêmes statuts que « programmé ».
+ */
+export async function fetchCompanions(
+  actorId: string,
+  fromSql: string,
+  toSql: string,
+  myEventIds: Set<string>,
+): Promise<CompanionEvent[]> {
+  const friendIds = await fetchMutualFriendIds(actorId)
+  if (friendIds.length === 0) return []
+
+  const [participationsResponse, profiles] = await Promise.all([
+    supabase
+      .from('participations')
+      .select('actor_id, event_id, events!inner(name, start_date, end_date)')
+      .in('actor_id', friendIds)
+      .in('status', PROGRAMMED_STATUSES)
+      .gte('events.end_date', fromSql)
+      .lt('events.start_date', toSql),
+    fetchActorProfiles(friendIds),
+  ])
+  const rows = must(participationsResponse)
+
+  const grouped = groupCompanions(
+    rows.flatMap((row) => {
+      const friend = profiles.get(row.actor_id)
+      return friend ? [{ eventId: row.event_id, friend }] : []
+    }),
+    myEventIds,
+  )
+  const events = new Map(rows.map((row) => [row.event_id, row.events]))
+
+  return [...grouped].flatMap(([eventId, friends]) => {
+    const event = events.get(eventId)
+    if (!event) return []
+    return [
+      { eventId, name: event.name, startDate: event.start_date, endDate: event.end_date, friends },
+    ]
+  })
 }

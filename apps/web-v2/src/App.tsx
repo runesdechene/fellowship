@@ -1,10 +1,12 @@
 /**
- * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, création, fiche.
+ * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, calendrier, création,
+ *            fiche.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            renvoie les autres sur la V1.
  */
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EventPage } from '@/features/event/EventPage'
@@ -66,6 +68,16 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <EventPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/calendrier"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <CalendarPage />
             </AppShell>
           </ProtectedRoute>
         }

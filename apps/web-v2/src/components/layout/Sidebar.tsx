@@ -3,7 +3,14 @@
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; une
  *            entrée sans écran intégré reste visible mais inerte.
  */
-import { CircleGauge, PanelRightClose, PanelRightOpen, Telescope } from 'lucide-react'
+import {
+  CalendarDays,
+  CircleGauge,
+  PanelRightClose,
+  PanelRightOpen,
+  Telescope,
+  Users,
+} from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { AccountSwitcher } from './AccountSwitcher'
 
@@ -18,6 +25,8 @@ const NAV_ITEMS: ReadonlyArray<{
   Icon: typeof Telescope
 }> = [
   { to: null, label: 'Explorer', Icon: Telescope },
+  { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
+  { to: null, label: 'Communauté', Icon: Users },
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },
 ]
 

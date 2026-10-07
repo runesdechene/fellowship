@@ -1,0 +1,363 @@
+/**
+ * QUOI     — les styles du calendrier (features/calendar) : l'en-tête, les filtres, la navigation
+ *            des douze mois, la frise, les cartes-affiches et les compagnons.
+ * POURQUOI — l'écran du langage « 2027 » le plus visuel : la couleur vient des affiches, la frise
+ *            glisse de gauche à droite, chaque mois s'y arrête net.
+ * ATTENTION — la frise est la SEULE zone à défilement interne admise (décision du 07/10/2026),
+ *            et seulement à l'horizontale.
+ */
+
+.calendar {
+  padding: var(--page-padding-top) 0 var(--space-48) var(--page-gutter);
+}
+
+/* --- En-tête --------------------------------------------------------------- */
+.calendar__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-32);
+  padding-right: var(--page-gutter);
+}
+
+.calendar__title {
+  font: var(--type-page-title);
+  color: var(--ink-title);
+}
+
+.calendar__headline {
+  margin-top: var(--space-8);
+  font: var(--type-page-subtitle);
+  color: var(--ink-soft);
+}
+
+.calendar__filters {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-20);
+}
+
+.calendar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-6) var(--space-4) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.calendar-toggle[aria-pressed='true'] {
+  color: var(--ink-title);
+}
+
+.calendar-toggle__switch {
+  position: relative;
+  width: var(--space-26);
+  height: var(--space-16);
+  border-radius: var(--radius-round);
+  background: var(--toggle-off-surface);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.calendar-toggle__switch::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-round);
+  background: var(--toggle-knob);
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.calendar-toggle[aria-pressed='true'] .calendar-toggle__switch {
+  background: var(--toggle-on-surface);
+}
+
+.calendar-toggle[aria-pressed='true'] .calendar-toggle__switch::after {
+  translate: var(--space-10) 0;
+}
+
+/* --- Navigation des douze mois -------------------------------------------- */
+.month-nav {
+  display: flex;
+  align-items: flex-end;
+  height: var(--calendar-nav-height);
+}
+
+.month-nav__month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-6);
+  width: var(--space-40);
+  height: 100%;
+  padding-bottom: var(--space-4);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.month-nav__month--in-view {
+  background: var(--surface-chip-neutral);
+}
+
+/* La hauteur suit le nombre de dates du mois, entre un trait et la colonne pleine. */
+.month-nav__bar {
+  width: var(--space-6);
+  height: calc(var(--space-6) + var(--bar-ratio, 0) * var(--space-32));
+  border-radius: var(--radius-round);
+  background: var(--ink-title);
+}
+
+.month-nav__bar--empty {
+  height: var(--space-2);
+  background: var(--sand-400);
+}
+
+.month-nav__label {
+  font: var(--type-chart-month);
+  color: var(--ink-soft);
+}
+
+.month-nav__month--in-view .month-nav__label {
+  color: var(--ink-title);
+}
+
+/* --- La frise -------------------------------------------------------------- */
+.calendar__frieze {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--calendar-column-gap);
+  margin-top: var(--space-40);
+  padding: 0 var(--page-gutter) var(--space-24) 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.calendar__frieze::-webkit-scrollbar {
+  display: none;
+}
+
+.month-column {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-24);
+  width: var(--calendar-column-width);
+  scroll-snap-align: start;
+}
+
+.month-column__name {
+  font: var(--type-display-l);
+  color: var(--calendar-month-ink);
+}
+
+.month-column__name--current {
+  color: var(--ink-title);
+}
+
+.month-column__count {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.month-column__now {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  font: var(--type-chip);
+  color: var(--ink-title);
+}
+
+.month-column__free {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-20);
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-card);
+}
+
+.month-column__free-title {
+  font: var(--type-list-name);
+  color: var(--ink-soft);
+}
+
+.month-column__free-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-event-meta);
+  color: var(--ink-title);
+}
+
+/* --- La carte-affiche ------------------------------------------------------ */
+.poster-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  transition: translate var(--duration-smooth) var(--ease-soft);
+}
+
+.poster-card:hover {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.poster-card--muted {
+  opacity: var(--calendar-muted-opacity);
+}
+
+.poster-card__art {
+  position: relative;
+  height: var(--calendar-poster-height);
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--surface-chip-neutral);
+}
+
+.poster-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poster-card__fallback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 var(--space-24);
+  color: var(--tag-ink, var(--ink-title));
+}
+
+.poster-card__day {
+  font: var(--type-display-date);
+}
+
+.poster-card__month {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.poster-card__countdown {
+  position: absolute;
+  top: var(--space-12);
+  left: var(--space-12);
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}
+
+.poster-card__friends {
+  position: absolute;
+  bottom: var(--space-12);
+  left: var(--space-12);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.poster-card__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  border: 2px solid var(--surface-card);
+}
+
+.poster-card__more {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}
+
+.poster-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.poster-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.poster-card__name {
+  font: var(--type-list-name);
+  font-size: var(--size-15);
+  color: var(--ink-title);
+}
+
+.poster-card__meta {
+  font: var(--type-event-meta);
+  font-size: var(--size-13);
+  color: var(--ink-soft);
+}
+
+/* --- Les compagnons -------------------------------------------------------- */
+.companions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.companions__title {
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.companions__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.companions__face {
+  --avatar-size: var(--avatar-size-discussion);
+}
+
+.companions__text {
+  display: flex;
+  flex-direction: column;
+  font: var(--type-list-meta);
+  font-size: var(--size-13);
+  color: var(--ink-soft);
+}
+
+.companions__text b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.companions__event {
+  font-weight: var(--weight-medium);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster-card,
+  .calendar-toggle__switch,
+  .calendar-toggle__switch::after,
+  .month-nav__month {
+    transition: none;
+  }
+
+  .calendar__frieze {
+    scroll-behavior: auto;
+  }
+}

@@ -125,6 +125,7 @@
   /* Les grands moments en serif : nom d'un festival, d'une enseigne, d'un mois. */
   --type-display-xl: var(--weight-regular) var(--size-64) / 1 var(--family-display);
   --type-display-l: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --type-display-date: var(--weight-regular) var(--size-150) / 0.9 var(--family-display);
   --type-display-m: var(--weight-regular) var(--size-36) / 1.05 var(--family-display);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
@@ -762,4 +763,13 @@
   --avatar-size: var(--width-avatar-list); /* valeur par défaut */
   --avatar-size-hero: var(--width-avatar-hero);
   --avatar-size-account: var(--width-avatar-account);
+  /* =========================================================================
+     CALENDRIER — la frise des douze mois (features/calendar)
+     ====================================================================== */
+  --calendar-column-width: var(--width-calendar-column);
+  --calendar-column-gap: var(--space-32);
+  --calendar-poster-height: var(--height-calendar-poster);
+  --calendar-nav-height: var(--height-month-nav);
+  --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */
+  --calendar-muted-opacity: 0.5; /* une date « Intéressé », affichée sur option */
 }

@@ -54,7 +54,15 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
           ))}
         </ul>
       )}
-      <span className="upcoming__footer">Voir tout le calendrier &gt;</span>
+      <button
+        type="button"
+        className="upcoming__footer"
+        onClick={() => {
+          go('/calendrier')
+        }}
+      >
+        Voir tout le calendrier &gt;
+      </button>
     </section>
   )
 }
