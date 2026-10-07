@@ -17,15 +17,15 @@
   /* =========================================================================
      SURFACES — les fonds, du plus profond au plus posé
      ====================================================================== */
-  --surface-app: var(--cream-200); /* fond général + colonne de gauche */
-  --surface-panel: var(--cream-50); /* le grand panneau blanc de droite */
-  --surface-card: var(--cream-250); /* cartes posées sur le panneau */
-  --surface-raised: var(--cream-50); /* la carte de compte, posée SUR le crème */
+  --surface-app: var(--sand-250); /* fond général + colonne de gauche */
+  --surface-panel: var(--sand-50); /* le grand panneau blanc de droite */
+  --surface-card: var(--sand-0); /* cartes posées sur le panneau */
+  --surface-raised: var(--sand-0); /* la carte de compte, posée SUR le crème */
   /* Le survol et l'état actif portent EXACTEMENT le même fond : survoler une
      entrée montre à quoi elle ressemblera une fois active, sans nuance
      intermédiaire. Deux noms distincts pour pouvoir les séparer un jour. */
-  --surface-nav-active: var(--cream-500);
-  --surface-nav-hover: var(--cream-500);
+  --surface-nav-active: var(--sand-350);
+  --surface-nav-hover: var(--sand-350);
   /* Survol de ce qui mène quelque part.
 
      On ASSOMBRIT, on n'éclaircit pas. Deux raisons, et la seconde est la
@@ -45,32 +45,32 @@
      haut, une nuance se perd. Elles reprennent la valeur des entrées de
      navigation, qui sont des lignes elles aussi. */
   --hover-brightness: 0.96;
-  --surface-card-hover: var(--cream-400);
-  --surface-row-hover: var(--cream-400);
-  --surface-control: var(--cream-100); /* boutons de la barre du haut */
+  --surface-card-hover: var(--sand-100);
+  --surface-row-hover: var(--sand-100);
+  --surface-control: var(--sand-0); /* boutons de la barre du haut */
   /* Le survol d'un bouton. TROIS points de clarté en dessous — c'est le même
      écart que --surface-card → --surface-card-hover, et c'est ce qui rend
      l'effet « léger » : la subtilité est une affaire de CLARTÉ, pas de
      teinte. Pour l'appuyer, descendre d'un cran (--cream-300), pas changer
      de couleur. */
-  --surface-control-hover: var(--cream-250);
-  --surface-chip-neutral: var(--cream-400); /* pastille sans couleur */
-  --surface-bar: var(--cream-300); /* mois qui portent au moins une date */
-  --surface-bar-empty: var(--cream-250); /* mois à zéro — moins marqué */
+  --surface-control-hover: var(--sand-200);
+  --surface-chip-neutral: var(--sand-200); /* pastille sans couleur */
+  --surface-bar: var(--sand-200); /* mois qui portent au moins une date */
+  --surface-bar-empty: var(--sand-300); /* mois à zéro — moins marqué */
 
   /* =========================================================================
      ENCRE — les couleurs de texte, de la plus forte à la plus effacée
      ====================================================================== */
-  --ink-title: var(--brown-700); /* titres, nom de l'événement */
-  --ink-strong: var(--brown-900); /* texte sur contrôle clair */
+  --ink-title: var(--ink-950); /* titres, nom de l'événement */
+  --ink-strong: var(--ink-950); /* texte sur contrôle clair */
   /* Longtemps --brown-400 : 2,25:1 sur une carte, 2,49:1 sur le panneau —
      sous le seuil de 4,5:1, et posé 60 fois dans 17 composants. C’était
      TOUTE la couche d’information secondaire de l’app qui passait sous la
      ligne de flottaison. Ici : 4,91:1. La hiérarchie se fait désormais par
      la taille et la graisse, pas par la pâleur — la pâleur marche sur un
      écran calibré, pas sur celui d’un exposant en plein soleil. */
-  --ink-soft: var(--brown-600); /* métadonnées, mois, dates */
-  --ink-ghost: var(--brown-200); /* valeurs nulles, éteint */
+  --ink-soft: var(--ink-600); /* métadonnées, mois, dates */
+  --ink-ghost: var(--sand-500); /* valeurs nulles, éteint */
   /* LA LIGNE SOUS LE TITRE D UNE FICHE, et elle seule.
      Releve au pixel sur la maquette d Uriel : #a79f9f, soit --brown-400 —
      la meme teinte pour toute la ligne, la date n etant que mise en GRAS et
@@ -82,29 +82,29 @@
      dessous, en cartes, a pleine encre : la date et le lieu ont leur propre
      fait dans « Infos pratiques ». Cette ligne-ci est un rappel, pas la
      source. Ne pas etendre ce token ailleurs. */
-  --ink-hero-meta: var(--brown-400);
+  --ink-hero-meta: var(--ink-600);
   /* Ce que l'organisateur n'a pas renseigne. Longtemps trop pale : une info
      manquante doit se LIRE, c'est elle qu'on viendra completer. */
   /* Grands titres posés au-dessus des blocs. */
-  --ink-section: var(--brown-800);
+  --ink-section: var(--ink-950);
   /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
      réclame plus le regard. */
-  --ink-section-pale: var(--brown-250);
+  --ink-section-pale: var(--ink-350);
   /* La place tenue par un champ pas encore rempli, dans l atelier. */
-  --ink-waiting: var(--brown-250);
-  --ink-total: var(--brown-600); /* le grand total de saison */
+  --ink-waiting: var(--ink-350);
+  --ink-total: var(--ink-950); /* le grand total de saison */
   /* Le corps de texte qu'on LIT — une description, un paragraphe entier.
      --ink-soft convient a trois mots de metadonnee ; sur cinq lignes il
      disparait. Un paragraphe se lit comme un titre se lit : a pleine encre. */
-  --ink-body: var(--brown-700);
+  --ink-body: var(--ink-600);
   /* L’accent de l’app. Il portait un vert EN DUR posé sur un fond LAVANDE
      resté de la veille : les pastilles « Inscrit » sortaient en vert sur du
      violet. Les deux moitiés se rejoignent enfin.
 
      Sa clarté n’est pas choisie à l’œil : l’encre est l’olive 700 parce
      qu’elle PORTE du texte sur son propre fond, et qu’il y faut 4,5:1. */
-  --accent-interactive: var(--olive-700);
-  --accent-interactive-surface: var(--olive-100);
+  --accent-interactive: var(--ink-950);
+  --accent-interactive-surface: var(--sand-200);
   /* UN LIEN N EST PAS UN STATUT — mais ce n est pas non plus un bouton.
      C est une DESTINATION, et le bleu en est la convention universelle.
 
@@ -113,7 +113,19 @@
      Puis l encre douce, ce qui reglait le mensonge mais ne disait plus rien.
      Le lavande dit la bonne chose, et il ne peut se confondre avec aucune
      des trois teintes d etat puisqu il vit dans un autre registre. */
-  --ink-link: var(--electric-500);
+  --ink-link: var(--ink-950);
+
+  /* LE DÉGRADÉ DU LOGO — « c'est acquis » (inscrit, payé, bénéfice). Pas pour un
+     bouton, un lien ou un titre de l'application. */
+  --brand-gradient: linear-gradient(90deg, var(--terre-700), var(--terre-400));
+  /* Le filet qui détache une carte blanche du panneau : les plans se lisent au
+     trait fin, plus à l'aplat beige (langage « 2027 »). */
+  --line-card: var(--sand-300);
+  --line-dashed: var(--sand-400);
+  /* Les grands moments en serif : nom d'un festival, d'une enseigne, d'un mois. */
+  --type-display-xl: var(--weight-regular) var(--size-64) / 1 var(--family-display);
+  --type-display-l: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --type-display-m: var(--weight-regular) var(--size-36) / 1.05 var(--family-display);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -125,62 +137,62 @@
      pleine d’Uriel — une pastille de 8 px posée à côté d’un mot déjà
      lisible ne porte aucun sens à elle seule, donc elle a le droit d’être
      belle plutôt que contrastée. */
-  --status-ok-ink: var(--olive-700);
-  --status-ok-surface: var(--olive-100);
-  --status-ok-mark: var(--olive-500);
-  --status-ok-surface-hover: var(--olive-150);
+  --status-ok-ink: var(--terre-700);
+  --status-ok-surface: var(--terre-50);
+  --status-ok-mark: var(--terre-400);
+  --status-ok-surface-hover: var(--terre-50);
   /* L’ICÔNE, elle, porte du sens : son plancher est 3:1, pas celui d’une
      pastille décorative. D’où une clarté intermédiaire — la teinte ne bouge
      pas, seule la clarté descend. */
-  --status-ok-icon: var(--olive-400);
+  --status-ok-icon: var(--terre-700);
 
   /* CE QUI ATTEND UN GESTE. Le registre qui manquait : sans lui « à payer »
      se lisait comme « payé », et le bloc « À régler » du tableau de bord
      n’attrapait plus l’œil — alors que c’est sa seule fonction. */
-  --status-todo-ink: var(--wheat-700);
-  --status-todo-surface: var(--wheat-100);
-  --status-todo-surface-hover: var(--wheat-150);
-  --status-todo-icon: var(--wheat-400);
+  --status-todo-ink: var(--ink-950);
+  --status-todo-surface: var(--sand-0);
+  --status-todo-surface-hover: var(--sand-100);
+  --status-todo-icon: var(--ink-450);
 
   /* CE QUI ATTEND CHEZ QUELQU'UN D'AUTRE. Le troisième registre, et celui
      qui manquait : le blé disait « à toi de jouer », l'olive « c'est fait »,
      mais rien ne disait « c'est parti, ça ne dépend plus de toi ».
      Les trois se lisent comme une progression : tiède, chaud, résolu. */
-  --status-pending-ink: var(--clay-700);
-  --status-pending-surface: var(--clay-100);
-  --status-pending-surface-hover: var(--clay-150);
-  --status-pending-icon: var(--clay-500);
+  --status-pending-ink: var(--ink-950);
+  --status-pending-surface: var(--sand-0);
+  --status-pending-surface-hover: var(--sand-100);
+  --status-pending-icon: var(--ink-450);
 
   /* Bouton d'action principal. Il ne se distingue pas par une couleur mais
      par le CONTRASTE : une surface sombre au milieu de surfaces claires.
      Aucune teinte vive n'entre dans l'interface par cette porte. */
-  --action-surface: var(--brown-900);
+  --action-surface: var(--ink-950);
   /* Il s'ÉCLAIRE au survol au lieu de s'assombrir : à ce niveau de noir, un
      cran plus bas ne se verrait pas. Le geste est le même que sur les
      surfaces claires — un pas vers le gris — mais il part de l'autre bout. */
-  --action-surface-hover: var(--brown-800);
-  --action-ink: var(--cream-50);
+  --action-surface-hover: var(--ink-800);
+  --action-ink: var(--sand-0);
   /* UN BOUTON EMPÊCHÉ PERD SA SURFACE, il ne la delave pas. Le procede
      d'avant — `opacity: 0.5` — melangeait le brun profond au creme et
      donnait une boue grise, en emportant le texte avec lui. Ici il cesse
      d'avoir l'air d'un bouton plein, ce qui est la verite : on ne peut
      pas le presser. */
   --action-surface-off: var(--surface-card);
-  --action-ink-off: var(--brown-400);
+  --action-ink-off: var(--ink-350);
 
   /* Pastille ronde devant chaque date à venir */
   --dot-confirmed: var(--status-ok-mark);
-  --dot-pending: var(--clay-500);
+  --dot-pending: var(--ink-450);
   --dot-size: var(--space-8);
 
   /* =========================================================================
      RAYONS
      ====================================================================== */
   --radius-panel: var(--round-20); /* le grand panneau */
-  --radius-card: var(--round-15); /* cartes et boutons de la barre du haut */
+  --radius-card: var(--round-16); /* cartes et boutons de la barre du haut */
   --radius-nav: var(--round-12); /* compte + entrées de navigation */
   --radius-bar: var(--round-8); /* barres du graphe */
-  --radius-chip: var(--round-8); /* pastilles de statut */
+  --radius-chip: var(--round-full); /* pastilles de statut */
   --radius-sm: var(--round-8); /* petits éléments : options de menu */
   /* UN BOUTON EST UN CONTROLE, pas un bloc. Il prenait --radius-card, donc le
      rayon des CARTES : il se retrouvait plus rond que tout ce qui l entoure,
@@ -191,7 +203,7 @@
 
   /* Menus flottants. Sans ombre dans cette interface, c'est un liseré qui
      détache le menu du contenu qu'il recouvre. */
-  --border-menu: var(--cream-400);
+  --border-menu: var(--sand-300);
   --menu-motion: var(--duration-fast) var(--ease-out);
   --layer-menu: 20;
 
@@ -199,68 +211,74 @@
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)
      Format : graisse taille/interligne famille
      ====================================================================== */
-  --type-page-title: var(--weight-regular) var(--size-32) / var(--leading-tight) var(--family-sans);
-  --type-page-title-accent: var(--weight-bold) var(--size-32) / var(--leading-tight)
+  --type-page-title: var(--weight-semibold) var(--size-32) / var(--leading-tight) var(--family-sans);
+  --type-page-title-accent: var(--weight-semibold) var(--size-32) / var(--leading-tight)
     var(--family-sans);
   --type-page-subtitle: var(--weight-regular) var(--size-14) / var(--leading-normal)
     var(--family-sans);
 
   /* Le grand titre posé au-dessus d'un bloc (Ma prochaine date, A venir…) */
-  --type-section-title: var(--weight-bold) var(--size-26) / var(--leading-tight) var(--family-sans);
+  --type-section-title: var(--weight-semibold) var(--size-20) / var(--leading-tight)
+    var(--family-sans);
 
   /* Le lien qui accompagne un titre de bloc, et le total sous celui-ci */
   --type-section-link: var(--weight-semibold) var(--size-12) / var(--leading-snug)
     var(--family-sans);
-  --type-section-total: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-section-total: var(--weight-semibold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
   --type-section-total-note: var(--weight-medium) var(--size-16) / var(--leading-snug)
     var(--family-sans);
 
-  --type-card-title: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-card-title: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
 
   --type-card-link: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
-  --type-event-title: var(--weight-bold) var(--size-32) / var(--leading-tight) var(--family-sans);
+  --type-event-title: var(--weight-regular) var(--size-64) / 1 var(--family-display);
   /* La ligne sous le titre d'une fiche. Elle a son propre token : le
      --type-event-meta ordinaire sert dans six composants, et le monter a
      16 px les aurait tous emportes. Ici c'est la premiere phrase de la
      page, elle porte plus haut que des metadonnees de carte. */
   --type-event-hero-meta: var(--weight-regular) var(--size-16) / var(--leading-normal)
     var(--family-sans);
-  --type-event-hero-meta-accent: var(--weight-bold) var(--size-16) / var(--leading-normal)
+  --type-event-hero-meta-accent: var(--weight-semibold) var(--size-16) / var(--leading-normal)
     var(--family-sans);
 
   --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-event-meta-accent: var(--weight-bold) var(--size-14) / var(--leading-snug)
+  --type-event-meta-accent: var(--weight-semibold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
-  --type-nav: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-account-name: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-nav: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-account-name: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
   --type-account-role: var(--weight-regular) var(--size-10) / var(--leading-snug) var(--family-sans);
 
-  --type-list-name: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
-  --type-list-meta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-list-name: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-list-meta: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
 
-  --type-chart-value: var(--weight-bold) var(--size-30) / var(--leading-tight) var(--family-sans);
-  --type-chart-month: var(--weight-bold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-chart-value: var(--weight-semibold) var(--size-22) / var(--leading-tight)
+    var(--family-sans);
+  --type-chart-month: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
 
-  --type-report-name: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-report-name: var(--weight-semibold) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-report-meta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
-  --type-report-net: var(--weight-bold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-report-net: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
 
-  --type-settlement-due: var(--weight-bold) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-settlement-due: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
 
-  --type-chip: var(--weight-semibold) var(--size-9) / var(--leading-snug) var(--family-sans);
-  --type-chip-strong: var(--weight-extrabold) var(--size-9) / var(--leading-snug) var(--family-sans);
+  --type-chip: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-chip-strong: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
 
-  --type-button: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-button: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
 
   /* Sur-titre en capitales, posé au-dessus d'une bande d'action */
-  --type-eyebrow: var(--weight-extrabold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-eyebrow: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
   --tracking-eyebrow: var(--tracking-wide);
 
-  --type-banner-title: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-banner-title: var(--weight-semibold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
   --type-banner-note: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
@@ -353,8 +371,8 @@
   --banner-padding-y: var(--space-15);
   --banner-gap: var(--space-15);
   --banner-icon-size: var(--width-banner-icon);
-  --banner-icon-surface: var(--status-pending-surface);
-  --banner-icon-ink: var(--status-pending-ink);
+  --banner-icon-surface: var(--sand-200);
+  --banner-icon-ink: var(--ink-950);
   --radius-banner: var(--round-15);
 
   /* =========================================================================
@@ -366,7 +384,7 @@
   --tag-on-surface: var(--accent-interactive-surface);
   --tag-on-ink: var(--accent-interactive);
   --tag-first-surface: var(--accent-interactive);
-  --tag-first-ink: var(--cream-50);
+  --tag-first-ink: var(--sand-0);
 
   /* Passage d'une étape à l'autre. Le mouvement suit le sens de la marche :
      on avance, ça vient de la droite ; on revient, ça vient de la gauche. */
@@ -380,8 +398,8 @@
 
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */
-  --type-create-ask: var(--weight-bold) var(--size-38) / var(--leading-tight) var(--family-sans);
-  --type-create-card-name: var(--weight-bold) var(--size-18) / var(--leading-snug)
+  --type-create-ask: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  --type-create-card-name: var(--weight-semibold) var(--size-18) / var(--leading-snug)
     var(--family-sans);
 
   /* =========================================================================
@@ -422,7 +440,7 @@
      groupes cesse d'être lisible et que l'affiche arrête d'être une image
      pour devenir une texture. Ce n'est pas une graduation, c'est un
      basculement — le franchir se décide, ne s'ajuste pas. */
-  --wall-veil: var(--brown-900);
+  --wall-veil: var(--ink-950);
   --wall-veil-opacity: 0.45;
 
   /* L'ARRIVÉE DU MUR. Il entre par la droite quand son image est prête — pas
@@ -444,7 +462,7 @@
   /* Le mot posé à gauche de la barre du haut. Sur la fiche d'un événement,
      c'est le compte à rebours : l'information la plus périssable de la page,
      et la seule qui change tous les jours. */
-  --type-topbar-lead: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-topbar-lead: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
      SELECT — le sélecteur maison
@@ -513,7 +531,8 @@
   --type-status-side: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
   /* Le sens RETENU passe en gras. La surface seule ne suffit pas a le
      distinguer : c est la meme que celle du champ du montant d a cote. */
-  --type-status-side-on: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-status-side-on: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
 
   /* =========================================================================
      FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
@@ -549,12 +568,12 @@
   /* Le libelle en micro-capitales, la valeur en grand dessous. L'icone vit
      DANS le libelle, a sa taille : une tuile pale de plus posait un carre
      sans rien dire. */
-  --type-event-fact-label: var(--weight-bold) var(--size-10) / var(--leading-snug)
+  --type-event-fact-label: var(--weight-semibold) var(--size-10) / var(--leading-snug)
     var(--family-sans);
   --tracking-fact-label: var(--tracking-wide);
   /* La valeur tient dans un tiers de la colonne : à 18 px une plage de dates
      débordait. C’est la CARTE qui porte le fait, plus la taille du texte. */
-  --type-event-fact-value: var(--weight-bold) var(--size-14) / var(--leading-snug)
+  --type-event-fact-value: var(--weight-semibold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
   /* Ce qui précise la valeur sans être elle : la durée sous les dates, la
      salle sous la ville, le mode de candidature sous l’échéance. */
@@ -619,14 +638,15 @@
   --canal-height: var(--height-option);
   --canal-gap: var(--space-6);
   --type-canal: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
-  --type-canal-on: var(--weight-bold) var(--size-12) / var(--leading-snug) var(--family-sans);
-  --type-canal-compte: var(--weight-bold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-canal-on: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-canal-compte: var(--weight-semibold) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
 
   /* La question porte le corps d’un titre de page, et une mesure courte :
      au-delà de vingt-deux caractères par ligne elle cesse de se lire comme
      une question et redevient un paragraphe. */
   --question-measure: 22ch;
-  --type-question: var(--weight-bold) var(--size-26) / var(--leading-tight) var(--family-sans);
+  --type-question: var(--weight-semibold) var(--size-22) / var(--leading-tight) var(--family-sans);
   --tracking-question: var(--tracking-tight);
   --type-question-body: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
     var(--family-sans);
@@ -644,19 +664,20 @@
   --radius-reponse-elue: var(--round-15);
   --type-reponse-elue: var(--weight-medium) var(--size-16) / var(--leading-relaxed)
     var(--family-sans);
-  --type-sceau: var(--weight-extrabold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-sceau: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
 
   --reponse-inset: var(--space-23);
   --type-reponse: var(--weight-regular) var(--size-14) / var(--leading-relaxed) var(--family-sans);
 
   --poser-padding-y: var(--space-16);
   --poser-padding-x: var(--space-18);
-  --type-poser: var(--weight-bold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-poser: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
   --type-poser-sous: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
 
   --composer-padding: var(--space-14);
   --composer-gap: var(--space-8);
-  --type-composer-titre: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-composer-titre: var(--weight-semibold) var(--size-16) / var(--leading-snug)
+    var(--family-sans);
 
   /* L INVITATION porte l absence quand il y en a une : sa sous-ligne dit
      « personne n a encore rien demande » au lieu qu un paragraphe le
@@ -682,15 +703,15 @@
      FROIDE de la palette, donc la seule qui ne puisse se confondre avec
      aucun état, et qui reste visible sur tous les fonds de l’app
      (3,97:1 sur le blé, son pire cas — au-dessus du seuil de 3:1). */
-  --focus-ring: var(--electric-500);
+  --focus-ring: var(--ink-950);
   --toggle-on-surface: var(--accent-interactive);
   /* La bascule au repos, et sa pastille. Elles vivaient en dur dans form.css,
      donc hors de portee d un changement de palette : la bascule est restee
      grise le jour ou la navigation s est rechauffee. */
-  --toggle-off-surface: var(--cream-400);
-  --toggle-knob: var(--cream-50);
-  --required-ink: var(--status-pending-ink);
-  --dropzone-border: var(--brown-250);
+  --toggle-off-surface: var(--sand-400);
+  --toggle-knob: var(--sand-0);
+  --required-ink: var(--ink-600);
+  --dropzone-border: var(--sand-400);
 
   --type-field-label: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
   --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
@@ -701,7 +722,7 @@
   --settlement-padding-x: var(--card-padding);
   --settlement-padding-y: var(--space-20);
   --settlement-row-gap: var(--space-18);
-  --settlement-due-ink: var(--status-ok-ink);
+  --settlement-due-ink: var(--ink-950);
 
   /* =========================================================================
      MES BILANS — les petites cartes du bas
@@ -720,9 +741,9 @@
   --report-padding-x: var(--space-20); /* de la vignette au texte, et à droite */
   --report-line-gap: var(--space-6); /* entre les trois lignes de texte */
   --radius-report: var(--round-10);
-  --report-net-ink: var(--status-ok-ink);
-  --report-todo-ink: var(--status-pending-ink);
-  --report-todo-border: var(--brown-250); /* le contour pointillé « à remplir » */
+  --report-net-ink: var(--ink-950);
+  --report-todo-ink: var(--ink-950);
+  --report-todo-border: var(--sand-400); /* le contour pointillé « à remplir » */
 
   /* =========================================================================
      LISTE « À VENIR »

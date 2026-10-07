@@ -24,6 +24,7 @@
   min-width: 0;
   height: var(--report-height);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-report);
   overflow: hidden;
   text-align: left;

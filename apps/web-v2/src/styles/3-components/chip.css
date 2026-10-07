@@ -8,8 +8,9 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-6);
-  height: 25px;
-  padding: 0 var(--space-12);
+  height: 26px;
+  padding: 0 var(--space-10);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-chip);
   font: var(--type-chip);
   white-space: nowrap;
@@ -21,8 +22,9 @@
 }
 
 .chip--ok {
-  background: var(--status-ok-surface);
-  color: var(--status-ok-ink);
+  border-color: transparent;
+  background: var(--brand-gradient);
+  color: var(--action-ink);
   font: var(--type-chip-strong);
 }
 
@@ -40,4 +42,14 @@
 
 .chip__icon {
   flex: none;
+}
+
+/* Ce qui n'est pas encore acquis se dit par la FORME de l'icône, en gris : la
+   couleur est réservée à ce qui l'est. */
+.chip--todo .chip__icon {
+  color: var(--status-todo-icon);
+}
+
+.chip--pending .chip__icon {
+  color: var(--status-pending-icon);
 }

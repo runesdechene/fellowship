@@ -131,6 +131,7 @@
   padding: var(--event-card-padding);
   border-radius: var(--radius-card);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
 }
 
 /* --- Infos pratiques ------------------------------------------------------
@@ -158,6 +159,7 @@
   padding: var(--event-fact-padding-y) var(--event-fact-padding-x);
   border-radius: var(--radius-fact);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
 }
 
 .event-page__fact-icon {

@@ -52,7 +52,7 @@
   gap: var(--status-bar-gap);
   padding: var(--status-padding);
   border-radius: var(--radius-status);
-  background: var(--surface-card);
+  background: var(--surface-chip-neutral);
 }
 
 /* --- Le sens du paiement -------------------------------------------------

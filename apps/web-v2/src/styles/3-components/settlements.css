@@ -15,6 +15,7 @@
   padding: calc(var(--settlement-padding-y) - var(--settlement-row-gap) / 2)
     var(--settlement-padding-x);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
 }
 

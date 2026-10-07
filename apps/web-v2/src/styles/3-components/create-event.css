@@ -206,8 +206,9 @@
   align-items: center;
   height: 32px;
   padding: 0 var(--space-14);
-  border-radius: var(--radius-chip);
+  border-radius: var(--radius-sm);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   color: var(--ink-soft);
   font: var(--type-list-name);
   cursor: pointer;
@@ -261,6 +262,7 @@
   width: 100%;
   padding: var(--space-12) var(--space-14);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-nav);
   text-align: left;
   cursor: pointer;
@@ -289,6 +291,7 @@
 /* --- La fiche en construction --------------------------------------------- */
 .event-card {
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   overflow: hidden;
 }

@@ -8,131 +8,54 @@
 
 :root {
   /* ---------------------------------------------------------------------
-     PALETTE — CRÈME
-     Du plus clair au plus foncé. C’est le socle de toute l’interface.
-
-     Écrite en HSL autour d’une SEULE molette, --cream-hue, comme la pierre
-     l’était avant elle. Raison : les sept nuances que porte l’app se sont
-     révélées être une seule et même teinte répétée — 37,5° à 41,5°, soit 39°
-     à un cheveu près. Ce qui les sépare n’est pas la teinte mais la
-     SATURATION. Les figer en hexadécimal, c’était condamner chaque
-     réchauffement futur à sept retouches à l’œil qui dérivent.
-
-     Pour réchauffer ou refroidir TOUTE l’interface d’un coup : --cream-hue.
-     Monter = vers le jaune. Descendre = vers le rose.
-
-     La pierre a disparu d’ici : c’était un gris chaud désaturé réservé à la
-     navigation. En montant la saturation, elle a rejoint la famille crème —
-     elle n’avait plus de raison de vivre à part. C’est --cream-500.
+     PALETTE — SABLE (les neutres chauds du langage « 2027 », 07/10/2026)
+     Du blanc au sable. Le fond n'est plus crème : c'est un blanc à peine
+     chaud, et les plans se distinguent par un filet, pas par un aplat beige.
+     Deux valeurs viennent de la barre latérale d'Uriel et restent les siennes :
+     --sand-250 (son fond) et --sand-350 (son entrée active).
      --------------------------------------------------------------------- */
-  --cream-hue: 39;
-
-  --cream-50: hsl(var(--cream-hue) 100% 97.1%); /* panneau, carte de compte */
-  --cream-100: hsl(var(--cream-hue) 62% 95.5%); /* contrôles de la barre du haut */
-  --cream-200: hsl(var(--cream-hue) 61% 92.9%); /* le crème de référence — fond général */
-  --cream-250: hsl(var(--cream-hue) 49% 92.4%); /* cartes posées sur le panneau */
-  --cream-300: hsl(var(--cream-hue) 44% 89.4%); /* barres des mois qui ont une date */
-  --cream-400: hsl(var(--cream-hue) 33% 88.2%); /* survols, pastilles neutres */
-  --cream-500: hsl(var(--cream-hue) 40% 85.7%); /* nav active, liseré de menu */
+  --sand-0: #fff; /* cartes, contrôles */
+  --sand-50: #fcfbf9; /* le panneau de contenu */
+  --sand-100: #f7f6f3; /* survol d'une ligne */
+  --sand-200: #f2f0ec; /* surfaces discrètes : pastilles, barres, puces */
+  --sand-250: #f3f0e9; /* le fond de la barre latérale d'Uriel */
+  --sand-300: #ebe9e5; /* les filets */
+  --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
+  --sand-400: #dedad4; /* pointillés, « à remplir » */
+  --sand-500: #d3cec8; /* valeurs éteintes */
 
   /* ---------------------------------------------------------------------
-     PALETTE — BRUN (l'encre)
+     PALETTE — ENCRE
+     Deux encres et un tertiaire. La hiérarchie se fait par la taille et la
+     graisse ; le gris n'est jamais une donnée importante.
      --------------------------------------------------------------------- */
-  --brown-200: #ebe3e3; /* quasi effacé — chiffres à zéro */
-  --brown-250: #dcd5cb; /* sable pâle — les grands titres de section */
-  --brown-400: #a79f9f; /* brun doux — texte secondaire, métadonnées */
-  --brown-600: #6f665e; /* brun moyen — le grand total de saison */
-  --brown-700: #564444; /* brun profond — titres et chiffres forts */
-  --brown-800: #4a4643; /* gris chaud — les grands titres de bloc */
-  --brown-900: #2d2826; /* presque noir — texte sur contrôle clair */
+  --ink-950: #1f1d1b; /* titres, texte, chiffres, bouton principal */
+  --ink-800: #3a3633; /* survol du bouton principal */
+  --ink-600: #6f6b66; /* texte secondaire, métadonnées */
+  --ink-450: #8a857f; /* les signes de statut (cercle vide, à moitié) */
+  --ink-350: #a6a19b; /* tertiaire : libellés discrets */
 
   /* ---------------------------------------------------------------------
-     PALETTE — TERRE (ce qui attend une réponse chez quelqu'un d'autre)
-
-     C'est la couleur du logo, 23°. Elle a longtemps servi de fourre-tout
-     « pas validé » ; elle a désormais un rôle précis, entre le blé et
-     l'olive : le dossier est parti, la balle est dans le camp de
-     l'organisateur, et il n'y a plus rien à faire qu'attendre.
-
-     Mêmes trois clartés que l'olive et le blé — 500 pour l'icône (3,57:1),
-     700 dès que la couleur PORTE du texte (4,69:1, contre 3,41 pour le 500,
-     qui ne passait pas).
+     PALETTE — TERRE (le dégradé du logo)
+     Elle ne dit qu'une chose : C'EST ACQUIS (inscrit, payé, bénéfice). Deux
+     exceptions assumées : l'onglet actif sur mobile, l'action principale de
+     la landing. Jamais un bouton, un lien ou un titre de l'application.
      --------------------------------------------------------------------- */
-  --clay-100: #f6e7dc;
-  --clay-150: #f1d9c8; /* le même, au survol d'un aplat plein */
-  --clay-500: #c0642a;
-  --clay-700: #9f5223;
+  --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
+  --terre-400: #cf9251; /* arrivée du dégradé */
+  --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
 
   /* ---------------------------------------------------------------------
-     PALETTE — OLIVE (ce qui est acquis)
-
-     La teinte choisie par Uriel à l’œil sur ses maquettes : 81°, saturation
-     48 %. C’est, au hexadécimal près, l’olive retiré la veille — il est
-     revenu par le regard, pas par distraction. Cette fois il a un rôle
-     écrit : « c’est fait, tu peux passer à autre chose ».
-
-     TROIS CLARTÉS, TROIS EMPLOIS. C’est la règle qui permet de garder une
-     couleur belle ET lisible :
-       500  la teinte d’Uriel, INTACTE — uniquement décorative (une pastille
-            de 8 px à côté d’un mot déjà lisible ne porte aucun sens seule)
-       400  3,03:1 sur le fond pâle — le plancher d’une icône
-       700  5,00:1 — obligatoire dès que la couleur PORTE du texte
-     Le fond 100 est la même teinte montée en clarté, comme pour la terre.
+     TYPOGRAPHIE — FAMILLES
+     Inter pour toute l'interface ; Instrument Serif pour les grands moments
+     seulement (nom d'un festival, d'une enseigne, d'un mois, chiffre phare).
      --------------------------------------------------------------------- */
-  --olive-100: #def5c8;
-  --olive-150: #d1f1b2; /* le même, au survol d’un aplat plein */
-  --olive-400: #729334;
-  --olive-500: #84aa3c;
-  --olive-700: #556d26;
-
-  /* ---------------------------------------------------------------------
-     PALETTE — BLÉ (ce qui attend un geste)
-
-     51°, saturation 55 %, relevée sur la même maquette. Elle répond à
-     l’olive : même logique de clartés, même façon d’être posée. Elle ne
-     dit PAS « attention » — elle dit « il y a quelque chose à faire ici ».
-     Une ligne qui la porte redevient crème une fois le geste accompli :
-     la couleur décrit un ÉTAT, jamais la nature de la chose.
-
-     Le violet électrique a quitté la palette avec ce commit. Il ne tenait
-     plus qu’une seule ligne (--accent-interactive-surface) et n’apparaît
-     sur aucune des maquettes validées. Laisser une couleur morte dans la
-     couche 1, c’est exactement ce qui a fait traîner l’olive six mois.
-     --------------------------------------------------------------------- */
-  /* ---------------------------------------------------------------------
-     PALETTE — BLEU LAVANDE ÉLECTRIQUE (ce qui MÈNE ailleurs)
-
-     Il avait quitté la palette : il ne tenait plus qu'une ligne et
-     n'apparaissait sur aucune maquette. Il revient avec un rôle qu'il
-     n'avait jamais eu — LES LIENS, et rien d'autre.
-
-     C'est ce rôle qui le justifie. Un lien n'est ni un statut ni un
-     bouton : c'est une DESTINATION. Le bleu en est la convention
-     universelle, et surtout il ne peut se confondre avec aucune des trois
-     teintes d’état — olive, blé, terre — puisqu’il vit dans un autre
-     registre. Il redonne aussi au crème le contrepoint froid qui lui
-     manquait entièrement.
-
-     5,04:1 sur le panneau, 4,55:1 sur une carte : il passe le seuil tel
-     quel, sans avoir besoin d'une clarté dédiée.
-     --------------------------------------------------------------------- */
-  --electric-500: #5d5ae0;
-
-  --wheat-100: #e9e1b4;
-  --wheat-150: #e3d9a0; /* le même, au survol d’un aplat plein */
-  --wheat-400: #96862c;
-  --wheat-500: #b29f34;
-  --wheat-700: #6b5f1f;
-
-  /* ---------------------------------------------------------------------
-     TYPOGRAPHIE — FAMILLE
-     --------------------------------------------------------------------- */
-  --family-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --family-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --family-display: 'Instrument Serif', georgia, 'Times New Roman', serif;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)
      --------------------------------------------------------------------- */
-  --size-9: 9px;
   --size-10: 10px;
   --size-11: 11px;
   --size-12: 12px;
@@ -140,10 +63,12 @@
   --size-14: 14px;
   --size-16: 16px;
   --size-18: 18px;
-  --size-26: 26px;
-  --size-30: 30px;
+  --size-20: 20px;
+  --size-22: 22px;
   --size-32: 32px;
-  --size-38: 38px; /* la question de l'atelier, seule à ce corps */
+  --size-36: 36px;
+  --size-48: 48px;
+  --size-64: 64px;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — GRAISSES
@@ -152,7 +77,6 @@
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
-  --weight-extrabold: 800;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — INTERLIGNES
@@ -202,6 +126,7 @@
   --round-10: 10px;
   --round-12: 12px;
   --round-15: 15px;
+  --round-16: 16px;
   --round-20: 20px;
   --round-full: 9999px;
 

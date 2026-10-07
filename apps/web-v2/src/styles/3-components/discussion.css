@@ -49,6 +49,7 @@
 
 .discussion__canal[aria-pressed='true'] {
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   font: var(--type-canal-on);
   color: var(--ink-title);
 }
@@ -77,6 +78,7 @@
   padding: var(--poser-padding-y) var(--poser-padding-x);
   border-radius: var(--radius-card);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   text-align: left;
   cursor: pointer;
   transition: background-color var(--menu-motion);
@@ -120,6 +122,7 @@
   padding: var(--composer-padding);
   border-radius: var(--radius-card);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
 }
 
 .discussion__composer--question {

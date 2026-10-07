@@ -15,7 +15,8 @@
   display: inline-flex;
   align-items: center;
   padding: var(--tag-badge-padding-y) var(--tag-badge-padding-x);
-  border-radius: var(--radius-chip);
+  border: 1px solid color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 22%, transparent);
+  border-radius: var(--radius-sm);
   background: var(--tag-bg, var(--tag-badge-surface));
   color: var(--tag-ink, var(--tag-badge-ink));
   font: var(--type-tag-badge);

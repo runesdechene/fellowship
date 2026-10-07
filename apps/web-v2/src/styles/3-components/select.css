@@ -62,15 +62,16 @@
    L'encre descend à la valeur 700 : ici la couleur PORTE le mot, donc il lui
    faut 4,5:1 et non le plancher d'un décor. */
 .select__valeur--plein.select__valeur--ok {
-  background: var(--status-ok-surface);
-  color: var(--status-ok-ink);
+  background: var(--brand-gradient);
+  color: var(--action-ink);
 }
 
 .select__valeur--plein.select__valeur--ok:hover:not(:disabled) {
-  background: var(--status-ok-surface-hover);
+  background: var(--brand-gradient);
 }
 
 .select__valeur--plein.select__valeur--todo {
+  border: 1px solid var(--line-card);
   background: var(--status-todo-surface);
   color: var(--status-todo-ink);
 }
@@ -80,6 +81,7 @@
 }
 
 .select__valeur--plein.select__valeur--pending {
+  border: 1px solid var(--line-card);
   background: var(--status-pending-surface);
   color: var(--status-pending-ink);
 }
@@ -92,17 +94,17 @@
    leur teinte d'origine ferait deux verts qui se ratent de peu. */
 .select__valeur--plein.select__valeur--ok .select__icone,
 .select__valeur--plein.select__valeur--ok .select__chevron {
-  color: var(--status-ok-ink);
+  color: var(--action-ink);
 }
 
 .select__valeur--plein.select__valeur--todo .select__icone,
 .select__valeur--plein.select__valeur--todo .select__chevron {
-  color: var(--status-todo-ink);
+  color: var(--status-todo-icon);
 }
 
 .select__valeur--plein.select__valeur--pending .select__icone,
 .select__valeur--plein.select__valeur--pending .select__chevron {
-  color: var(--status-pending-ink);
+  color: var(--status-pending-icon);
 }
 
 /* --- L'icône porte la teinte de l'état -----------------------------------
@@ -172,7 +174,7 @@
 /* L'option DÉJÀ retenue porte la teinte de son état en fond, à peine posée :
    on la retrouve du regard sans avoir à lire toute la liste. */
 .select__option[aria-selected='true'] {
-  background: var(--surface-card);
+  background: var(--surface-chip-neutral);
 }
 
 .select__option--ok[aria-selected='true'] {
@@ -181,11 +183,11 @@
 }
 
 .select__option--todo[aria-selected='true'] {
-  background: var(--status-todo-surface);
+  background: var(--surface-chip-neutral);
   color: var(--status-todo-ink);
 }
 
 .select__option--pending[aria-selected='true'] {
-  background: var(--status-pending-surface);
+  background: var(--surface-chip-neutral);
   color: var(--status-pending-ink);
 }

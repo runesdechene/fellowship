@@ -20,6 +20,7 @@
   gap: var(--banner-gap);
   padding: var(--banner-padding-y) var(--banner-padding-x);
   background: var(--surface-card);
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-banner);
 }
 
