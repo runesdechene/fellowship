@@ -7,6 +7,7 @@
  * ATTENTION — le montant est celui de l'emplacement (ou du cachet) saisi sur la fiche. Sans lui, on
  *            n'invente rien : « Montant à renseigner » tant qu'il reste quelque chose à régler.
  */
+import { formatDayMonthShort, parseSqlDate } from './dates'
 import { formatEuros } from './money'
 
 export type PaymentTone = 'todo' | 'partial' | 'done'
@@ -17,6 +18,9 @@ export interface DossierInput {
   /** `payeur` : l'exposant paie son emplacement. `paye` : il touche un cachet. */
   orientation: string
   amount: number | null
+  /** Du dossier privé (participation_dossiers), s'il a été tenu. */
+  depositAmount?: number | null
+  balanceDueOn?: string | null
 }
 
 export interface DossierView {
@@ -36,13 +40,19 @@ function toneOf(paymentStatus: string | null): PaymentTone {
 }
 
 function detailOf(input: DossierInput, tone: PaymentTone, receives: boolean): string | null {
-  const { amount } = input
+  const { amount, depositAmount, balanceDueOn } = input
   if (amount === null) return tone === 'done' ? null : 'Montant à renseigner'
   const euros = formatEuros(amount)
+  const due = balanceDueOn ? formatDayMonthShort(parseSqlDate(balanceDueOn)) : null
   if (tone === 'done') return receives ? `${euros} reçus` : `${euros} réglés`
-  if (tone === 'partial') return `Reste le solde sur ${euros}`
+  if (tone === 'partial') {
+    if (depositAmount)
+      return `${formatEuros(depositAmount)} sur ${euros}${due ? ` · solde avant le ${due}` : ''}`
+    return `Reste le solde sur ${euros}${due ? ` · avant le ${due}` : ''}`
+  }
   if (receives) return `Cachet de ${euros}`
-  return input.status === 'en_cours' ? `${euros} si le dossier est accepté` : `${euros} à régler`
+  if (input.status === 'en_cours') return `${euros} si le dossier est accepté`
+  return `${euros} à régler${due ? ` avant le ${due}` : ''}`
 }
 
 export function dossierView(input: DossierInput): DossierView {

@@ -64,3 +64,9 @@ export function parseAmount(raw: string): number | null | 'invalide' {
   const amount = Number(cleaned)
   return Number.isFinite(amount) && amount >= 0 ? amount : 'invalide'
 }
+
+/** Où en est un objectif : le pourcentage atteint (il peut dépasser 100) et la jauge, bornée à 1. */
+export function goalShare(revenue: number, goal: number): { percent: number; ratio: number } {
+  const share = revenue / goal
+  return { percent: Math.round(share * 100), ratio: Math.min(1, share) }
+}

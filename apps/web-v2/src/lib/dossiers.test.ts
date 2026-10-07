@@ -100,3 +100,29 @@ describe('balanceOf', () => {
     expect(balanceOf(0, 150, 'acompte_verse')).toBeNull()
   })
 })
+
+describe('dossierView — avec le dossier privé (acompte, échéance)', () => {
+  it('l’acompte noté dit ce qui est versé, et l’échéance du solde', () => {
+    expect(
+      dossierView({
+        ...base,
+        paymentStatus: 'acompte_verse',
+        depositAmount: 150,
+        balanceDueOn: '2026-10-15',
+      }).payment.detail,
+    ).toBe(`${formatEuros(150)} sur ${formatEuros(450)} · solde avant le 15 oct.`)
+  })
+
+  it('à payer, avec une échéance', () => {
+    expect(dossierView({ ...base, balanceDueOn: '2026-10-15' }).payment.detail).toBe(
+      `${formatEuros(450)} à régler avant le 15 oct.`,
+    )
+  })
+
+  it('sans acompte noté, l’échéance s’ajoute au solde', () => {
+    expect(
+      dossierView({ ...base, paymentStatus: 'acompte_verse', balanceDueOn: '2026-10-15' }).payment
+        .detail,
+    ).toBe(`Reste le solde sur ${formatEuros(450)} · avant le 15 oct.`)
+  })
+})

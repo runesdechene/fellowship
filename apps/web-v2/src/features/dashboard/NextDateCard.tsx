@@ -2,9 +2,10 @@
  * QUOI     — la carte de la prochaine date : affiche, compte à rebours, statut.
  * POURQUOI — la date la plus proche mérite sa propre carte ; un clic ouvre sa fiche.
  */
-import { Check, Contrast } from 'lucide-react'
+import { Check, Contrast, Target } from 'lucide-react'
 import { Chip } from '@/components/ui/Chip'
 import { formatCountdown, formatDateRange, parseSqlDate } from '@/lib/dates'
+import { formatEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardDate } from './useDashboard'
 
@@ -37,6 +38,11 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
           ) : (
             <Chip tone="pending" icon={<Contrast size={12} strokeWidth={2.4} />}>
               Dossier envoyé
+            </Chip>
+          )}
+          {date.revenueGoal !== null && (
+            <Chip icon={<Target size={12} strokeWidth={2} />}>
+              Objectif {formatEuros(date.revenueGoal)}
             </Chip>
           )}
         </span>

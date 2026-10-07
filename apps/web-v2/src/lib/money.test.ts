@@ -8,6 +8,7 @@ import {
   formatSignedEuros,
   ledgerProfit,
   ledgerRevenue,
+  goalShare,
   parseAmount,
   standLine,
 } from './money'
@@ -81,5 +82,12 @@ describe('parseAmount', () => {
   it('ce qui n’est pas un montant positif est refusé', () => {
     expect(parseAmount('beaucoup')).toBe('invalide')
     expect(parseAmount('-20')).toBe('invalide')
+  })
+})
+
+describe('goalShare', () => {
+  it('la part de l’objectif atteinte, en pourcentage arrondi et en jauge bornée', () => {
+    expect(goalShare(74444, 90000)).toEqual({ percent: 83, ratio: 74444 / 90000 })
+    expect(goalShare(120000, 90000)).toEqual({ percent: 133, ratio: 1 })
   })
 })

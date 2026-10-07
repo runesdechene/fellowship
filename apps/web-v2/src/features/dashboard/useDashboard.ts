@@ -37,6 +37,8 @@ export interface DashboardDate {
   startDate: Date
   daysAway: number
   friends: Friend[]
+  /** L'objectif de chiffre d'affaires fixé sur la fiche, s'il y en a un. */
+  revenueGoal: number | null
 }
 
 /** Une ligne de « Mes dossiers » : une date à venir, son dossier et son paiement. */
@@ -85,6 +87,8 @@ interface DashboardData {
   seasonNet: number | null
   /** Recette cumulée des mêmes dates — le CA, pour situer le bénéfice. */
   seasonRevenue: number | null
+  /** La somme des objectifs fixés sur les dates de l'année. null s'il n'y en a aucun. */
+  seasonGoal: number | null
   /**
    * La date passée la plus récente dont le bilan n'a pas été rempli — celle
    * que la bande d'action met en avant. null s'il n'y en a aucune.
@@ -103,6 +107,7 @@ const EMPTY: DashboardData = {
   reports: [],
   seasonNet: null,
   seasonRevenue: null,
+  seasonGoal: null,
   pendingReport: null,
   loading: true,
   error: null,
@@ -113,7 +118,18 @@ const EMPTY: DashboardData = {
  * ligne d'emplacement (ou de cachet) du registre — jamais d'une somme, qui mélangerait la dette
  * et les frais.
  */
-async function fetchDossiers(actorId: string, dates: DashboardDate[]): Promise<Dossier[]> {
+/** Le dossier privé d'une date (participation_dossiers) : ce que la fiche y a noté. */
+interface PrivateDossier {
+  revenue_goal: number | null
+  deposit_amount: number | null
+  balance_due_on: string | null
+}
+
+async function fetchDossiers(
+  actorId: string,
+  dates: DashboardDate[],
+  privateByEvent: Map<string, PrivateDossier>,
+): Promise<Dossier[]> {
   if (dates.length === 0) return []
 
   const standRows = must(
@@ -143,6 +159,8 @@ async function fetchDossiers(actorId: string, dates: DashboardDate[]): Promise<D
         paymentStatus: date.paymentStatus,
         orientation: date.paymentOrientation,
         amount: typeof amount === 'number' && amount > 0 ? amount : null,
+        depositAmount: privateByEvent.get(date.event.id)?.deposit_amount ?? null,
+        balanceDueOn: privateByEvent.get(date.event.id)?.balance_due_on ?? null,
       }),
     }
   })
@@ -249,10 +267,17 @@ async function loadDashboard(
       .gte('events.end_date', todaySql),
   )
 
-  const friendsByEvent = await fetchFriendsByEvent(
-    actorId,
-    rows.map((row) => row.event_id),
-  )
+  const [friendsByEvent, privateRows] = await Promise.all([
+    fetchFriendsByEvent(
+      actorId,
+      rows.map((row) => row.event_id),
+    ),
+    supabase
+      .from('participation_dossiers')
+      .select('event_id, revenue_goal, deposit_amount, balance_due_on')
+      .eq('actor_id', actorId),
+  ])
+  const privateByEvent = new Map(must(privateRows).map((row) => [row.event_id, row]))
 
   const dates = rows
     .map<DashboardDate>((row) => {
@@ -267,14 +292,26 @@ async function loadDashboard(
         startDate,
         daysAway: daysUntil(startDate, today),
         friends: friendsByEvent.get(row.event_id) ?? [],
+        revenueGoal: privateByEvent.get(row.event_id)?.revenue_goal ?? null,
       }
     })
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
   const [{ reports, seasonNet, seasonRevenue, pendingReport }, dossiers] = await Promise.all([
     fetchReports(actorId, todaySql),
-    fetchDossiers(actorId, dates),
+    fetchDossiers(actorId, dates, privateByEvent),
   ])
+
+  // L'objectif de l'année : la somme des objectifs fixés sur ses dates, passées comme à venir.
+  const year = today.getFullYear()
+  const yearEvents = [
+    ...reports.map((report) => report.eventId),
+    ...dates.filter((date) => date.startDate.getFullYear() === year).map((date) => date.event.id),
+  ]
+  const seasonGoal = yearEvents.reduce(
+    (sum, eventId) => sum + (privateByEvent.get(eventId)?.revenue_goal ?? 0),
+    0,
+  )
 
   return {
     dates,
@@ -286,6 +323,7 @@ async function loadDashboard(
       reports,
       seasonNet,
       seasonRevenue,
+      seasonGoal: seasonGoal > 0 ? seasonGoal : null,
       pendingReport,
       loading: false,
       error: null,
@@ -355,6 +393,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
       reports: [],
       seasonNet: null,
       seasonRevenue: null,
+      seasonGoal: null,
       pendingReport: null,
       loading: false,
       error: null,

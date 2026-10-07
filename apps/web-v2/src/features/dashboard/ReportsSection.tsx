@@ -8,9 +8,9 @@
  *            pas : aucun bilan ne doit devenir inaccessible.
  */
 import { ArrowRight } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { formatFullDate } from '@/lib/dates'
-import { formatEuros, formatSignedEuros } from '@/lib/money'
+import { formatEuros, formatSignedEuros, goalShare } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
 
@@ -51,9 +51,15 @@ interface ReportsSectionProps {
   reports: DashboardReport[]
   seasonNet: number | null
   seasonRevenue: number | null
+  seasonGoal: number | null
 }
 
-export function ReportsSection({ reports, seasonNet, seasonRevenue }: ReportsSectionProps) {
+export function ReportsSection({
+  reports,
+  seasonNet,
+  seasonRevenue,
+  seasonGoal,
+}: ReportsSectionProps) {
   const [open, setOpen] = useState(false)
   const rest = reports.slice(SHOWN)
 
@@ -86,6 +92,22 @@ export function ReportsSection({ reports, seasonNet, seasonRevenue }: ReportsSec
             <span className="reports__revenue">
               sur <b>{formatEuros(seasonRevenue)}</b> de chiffre d’affaires
             </span>
+            {seasonGoal !== null && (
+              <>
+                <span
+                  className="reports__gauge"
+                  style={
+                    {
+                      '--gauge': String(goalShare(seasonRevenue, seasonGoal).ratio),
+                    } as CSSProperties
+                  }
+                />
+                <span className="reports__goal">
+                  {goalShare(seasonRevenue, seasonGoal).percent} % de l’objectif ·{' '}
+                  {formatEuros(seasonGoal)}
+                </span>
+              </>
+            )}
           </div>
         )}
         <div className="reports__latest">

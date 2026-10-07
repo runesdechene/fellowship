@@ -25,6 +25,7 @@ export function Dashboard() {
     reports,
     seasonNet,
     seasonRevenue,
+    seasonGoal,
     pendingReport,
     loading,
     error,
@@ -89,7 +90,12 @@ export function Dashboard() {
       )}
 
       {reports.length > 0 && (
-        <ReportsSection reports={reports} seasonNet={seasonNet} seasonRevenue={seasonRevenue} />
+        <ReportsSection
+          reports={reports}
+          seasonNet={seasonNet}
+          seasonRevenue={seasonRevenue}
+          seasonGoal={seasonGoal}
+        />
       )}
     </div>
   )
