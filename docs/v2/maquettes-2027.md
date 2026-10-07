@@ -72,6 +72,7 @@
 - [ ] **Explorer** : recherche par mot (festivals et artisans ; pas d'organisateurs pour l'instant), barre Où / Quand, catégories en puces, rangées éditoriales ; « Près de chez toi » lit le code postal du profil.
 - [ ] **Cartes sans affiche** : grande date en serif + icône de la catégorie en filigrane (les icônes des tags existent en V1).
 - [ ] **Bilans** : vraie page « Mes bilans » (année, totaux, bénéfice par mois, tableau) ; le bilan devient une page ; « Ce qui a marché » saisissable (colonne `wins` déjà en base) ; tout s'enregistre seul ; bénéfice par jour.
+- [ ] **Tableau de bord — « Mes dossiers »** (gratuit, fonction plébiscitée) : une ligne par date à venir avec le statut du dossier et du paiement (montant versé, solde, échéance) ; remplace le bloc « À régler » actuel (`SettlementsSection`).
 - [ ] **Création d'une date** : les doublons montrent le nombre d'exposants inscrits et s'ouvrent.
 - [ ] **Vitrine** : formulaire e-mail factice et incitation V1 retirés ; emplacement « Obtenir le badge Certifié » pour le propriétaire non Pro.
 
@@ -87,5 +88,5 @@
 
 ## Points ouverts
 
-- [ ] « À payer porte la terre » (décidé le 07/10 au matin) contredit la terre = « acquis » : trouver un autre signe pour « À payer » quand le bloc « À régler » sera redessiné.
+- [x] « À payer » : réglé le 07/10/2026 — le paiement se lit par la forme (cercle vide, à moitié plein + barre, dégradé quand c'est payé).
 - [ ] Bannière de vitrine : générer une vraie photo d'atelier dans Figma (crédits IA d'Uriel) — en attente de son accord.
