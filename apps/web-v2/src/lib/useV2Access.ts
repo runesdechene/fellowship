@@ -18,6 +18,8 @@ import {
   type AccessDecision,
 } from './access'
 
+const ACCESS_TIMEOUT_MS = 8000
+
 export function useV2Access(): AccessDecision {
   const { user, loading } = useAuth()
   const userId = user?.id ?? null
@@ -26,14 +28,19 @@ export function useV2Access(): AccessDecision {
   useEffect(() => {
     if (!userId) return
     let cancelled = false
-    void supabase.rpc('is_admin').then(({ data, error }) => {
-      if (cancelled) return
-      const result = error ? 'error' : data ? 'allowed' : 'refused'
-      setAnswer((previous) => ({
-        userId,
-        check: settleCheck(previous?.userId === userId ? previous.check : undefined, result),
-      }))
-    })
+    // Sans réponse en 8 s (réseau bloqué, portail captif), la vérification échoue au lieu de
+    // laisser l'écran blanc : l'abandon devient une erreur comme une autre.
+    void supabase
+      .rpc('is_admin')
+      .abortSignal(AbortSignal.timeout(ACCESS_TIMEOUT_MS))
+      .then(({ data, error }) => {
+        if (cancelled) return
+        const result = error ? 'error' : data ? 'allowed' : 'refused'
+        setAnswer((previous) => ({
+          userId,
+          check: settleCheck(previous?.userId === userId ? previous.check : undefined, result),
+        }))
+      })
     return () => {
       cancelled = true
     }

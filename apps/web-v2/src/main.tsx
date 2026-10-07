@@ -14,7 +14,7 @@ if (!root) throw new Error('index.html doit contenir #root')
 
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter basename="/v2">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <App />
       </AuthProvider>

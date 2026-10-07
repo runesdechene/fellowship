@@ -4,6 +4,13 @@
   command = "pnpm build"
   publish = "dist"
 
+# Un fichier de build introuvable (onglet resté sur une ancienne version) répond 404, et non
+# index.html : sinon le navigateur reçoit du HTML à la place d'un script, mis en cache pour un an.
+[[redirects]]
+  from = "/assets/*"
+  to = "/404.html"
+  status = 404
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
