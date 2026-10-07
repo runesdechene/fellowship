@@ -1,3 +1,11 @@
+/**
+ * QUOI     — le parcours de création d'un événement (/evenement/nouveau), en quatre étapes, avec
+ *            l'aperçu de la fiche à côté.
+ * POURQUOI — créer une date sans quitter l'app : l'affiche part dans le stockage, l'événement est
+ *            créé, et le créateur y est inscrit en « intéressé » (décision d'août 2026).
+ * ATTENTION — l'affiche n'est pas dans le brouillon : un fichier ne survit pas au rechargement,
+ *            seul le texte est gardé (useEventDraft).
+ */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { ArrowLeft, Save, Trash2 } from 'lucide-react'

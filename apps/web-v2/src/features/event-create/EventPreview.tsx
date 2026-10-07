@@ -1,3 +1,7 @@
+/**
+ * QUOI     — l'aperçu de la fiche telle que les exposants la verront, pendant la création.
+ * POURQUOI — ce qui manque garde sa place, en éteint : l'aperçu dit ce qu'il reste à remplir.
+ */
 import { formatDayMonth } from '@/lib/dates'
 import { parseSqlDate } from '@/lib/dates'
 import type { EventDraft } from './useEventDraft'

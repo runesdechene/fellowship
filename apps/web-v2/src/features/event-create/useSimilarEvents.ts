@@ -1,3 +1,7 @@
+/**
+ * QUOI     — cherche les événements au nom proche pendant la saisie (RPC search_similar_events).
+ * POURQUOI — éviter les doublons : chercher d'abord, créer seulement si rien n'existe.
+ */
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 

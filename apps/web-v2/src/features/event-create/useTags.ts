@@ -1,3 +1,8 @@
+/**
+ * QUOI     — les catégories proposées à la création, dans l'ordre décidé en base.
+ * POURQUOI — elles viennent de la base, pas du code : un ajout côté administration apparaît
+ *            sans toucher à l'app.
+ */
 import { useEffect, useState } from 'react'
 import { fetchTags } from '@/lib/tags'
 

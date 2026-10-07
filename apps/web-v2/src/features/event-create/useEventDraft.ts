@@ -1,3 +1,9 @@
+/**
+ * QUOI     — le brouillon d'un événement en cours de création, ses étapes et ce qui bloque chacune.
+ * POURQUOI — le brouillon est gardé dans le navigateur : quitter la page ne perd pas la saisie.
+ * ATTENTION — l'affiche n'en fait pas partie (un fichier ne se range pas dans le stockage du
+ *            navigateur, on ne fait pas croire qu'il est conservé).
+ */
 import { useCallback, useEffect, useState } from 'react'
 
 /**
