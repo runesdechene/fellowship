@@ -770,6 +770,8 @@
   --calendar-column-gap: var(--space-32);
   --calendar-poster-height: var(--height-calendar-poster);
   --calendar-nav-height: var(--height-month-nav);
+  --type-calendar-month: var(--weight-regular) var(--size-60) / 1 var(--family-display);
+  --calendar-padding-top: var(--space-80);
   --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */
   --calendar-muted-opacity: 0.5; /* une date « Intéressé », affichée sur option */
 }

@@ -5,7 +5,6 @@
  * ATTENTION — le statut se lit par la FORME de l'icône ; seul « Inscrit » porte la terre du logo.
  */
 import { Check, CircleDashed, Contrast } from 'lucide-react'
-import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Chip, type ChipTone } from '@/components/ui/Chip'
@@ -41,10 +40,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
         {date.imageUrl ? (
           <img className="poster-card__image" src={date.imageUrl} alt="" />
         ) : (
-          <div
-            className="poster-card__fallback"
-            style={date.tag ? ({ '--tag-ink': date.tag.textColor } as CSSProperties) : undefined}
-          >
+          <div className="poster-card__fallback">
             <span className="poster-card__day">{date.startDate.getDate()}</span>
             <span className="poster-card__month">{MONTH_SHORT.format(date.startDate)}</span>
           </div>

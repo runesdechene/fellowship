@@ -9,6 +9,7 @@
 import { formatDayMonthShort, monthKey, type MonthSlot } from './dates'
 
 const DAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric' })
+const MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'short' })
 const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' })
 
 /** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. ». */
@@ -18,6 +19,12 @@ export function formatDateRange(start: Date, end: Date): string {
     return `${DAY_FORMATTER.format(start)}–${formatDayMonthShort(end)}`
   }
   return `${formatDayMonthShort(start)}–${formatDayMonthShort(end)}`
+}
+
+/** « Oct », « Janv », « Août » : l’abréviation de la navigation des mois. */
+export function monthNavLabel(month: Date): string {
+  const short = MONTH_SHORT_FORMATTER.format(month).replace('.', '')
+  return short.charAt(0).toUpperCase() + short.slice(1)
 }
 
 /** « Aucune date », « 1 date », « 4 dates ». */

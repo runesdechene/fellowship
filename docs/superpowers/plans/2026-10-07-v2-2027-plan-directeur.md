@@ -52,12 +52,17 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Base** : « ce que j'ai envoyé » par exposant ; vérifier les colonnes candidature existantes.
 - **Dépend de** : lots 1-2.
 
-### Lot 4 — Calendrier  ☐
+### Lot 4 — Calendrier  ☑ ordinateur (07/10/2026) · ☐ mobile
 - **Livre** : frise horizontale de mois, cartes-affiches, filtres Mes amis / Intéressé, compagnons
   « y va », navigation des 12 mois, horizon 6 mois en gratuit (mois Pro au-delà).
 - **Cadres** : `2027 — Calendrier`, `2027 mobile — Calendrier`.
 - **Spec** : `2026-10-07-calendrier-v2-design.md` — **à aligner** sur la maquette finale avant le plan.
 - **Dépend de** : lot 1.
+- **Tranché en route** : l’horizon 6 mois du gratuit attend le lot 7 — l’authentification de la V2 ne
+  connaît pas encore l’offre du compte ; en attendant, tout le monde voit 12 mois. La carte sans
+  affiche montre la date en serif, sans l’icône de catégorie en filigrane : la V2 n’a pas encore
+  d’icônes de catégorie (elles arrivent avec l’Explorer, lot 5). Le mobile attend le châssis mobile
+  (barre d’onglets en bas), qui n’existe pas encore dans la V2.
 
 ### Lot 5 — Explorer  ☐
 - **Livre** : accueil éditorial (Où vont tes amis, Ajoutés récemment, Près de chez toi), recherche par

@@ -8,7 +8,7 @@
  */
 
 .calendar {
-  padding: var(--page-padding-top) 0 var(--space-48) var(--page-gutter);
+  padding: var(--calendar-padding-top) 0 var(--space-48) var(--page-gutter);
 }
 
 /* --- En-tête --------------------------------------------------------------- */
@@ -156,7 +156,7 @@
 }
 
 .month-column__name {
-  font: var(--type-display-l);
+  font: var(--type-calendar-month);
   color: var(--calendar-month-ink);
 }
 
@@ -239,7 +239,7 @@
   justify-content: center;
   height: 100%;
   padding: 0 var(--space-24);
-  color: var(--tag-ink, var(--ink-title));
+  color: var(--ink-title);
 }
 
 .poster-card__day {
@@ -308,6 +308,15 @@
   font: var(--type-event-meta);
   font-size: var(--size-13);
   color: var(--ink-soft);
+}
+
+/* Sur une carte-affiche, « Inscrit » reste sobre : le dégradé y criait (Uriel, 07/10/2026) ;
+   la coche suffit. Le dégradé plein vit sur la fiche. */
+.poster-card__row .chip--ok {
+  border-color: var(--line-card);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  font: var(--type-chip);
 }
 
 /* --- Les compagnons -------------------------------------------------------- */

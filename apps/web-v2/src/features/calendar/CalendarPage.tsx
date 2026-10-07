@@ -10,7 +10,7 @@ import { Star, Users } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { calendarHeadline } from '@/lib/calendar'
+import { calendarHeadline, monthNavLabel } from '@/lib/calendar'
 import { MonthColumn } from './MonthColumn'
 import { useCalendar } from './useCalendar'
 
@@ -144,7 +144,7 @@ export function CalendarPage() {
                   className={n > 0 ? 'month-nav__bar' : 'month-nav__bar month-nav__bar--empty'}
                   style={{ '--bar-ratio': String(n / max) } as CSSProperties}
                 />
-                <span className="month-nav__label">{month.label.slice(0, 4)}</span>
+                <span className="month-nav__label">{monthNavLabel(month.date)}</span>
               </button>
             )
           })}

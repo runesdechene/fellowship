@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest'
 import { monthsWindow } from './dates'
 import {
+  monthNavLabel,
   bucketByStartMonth,
   calendarHeadline,
   countLabel,
@@ -96,5 +97,25 @@ describe('groupCompanions', () => {
       { eventId: 'e1', friend: { id: 'g', name: 'Gautier', avatarUrl: null } },
     ]
     expect(groupCompanions(rows, new Set()).get('e1')).toHaveLength(1)
+  })
+})
+
+describe('monthNavLabel', () => {
+  it('écrit l’abréviation française, sans point, avec une capitale', () => {
+    const labels = Array.from({ length: 12 }, (_, m) => monthNavLabel(new Date(2026, m, 1)))
+    expect(labels).toEqual([
+      'Janv',
+      'Févr',
+      'Mars',
+      'Avr',
+      'Mai',
+      'Juin',
+      'Juil',
+      'Août',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Déc',
+    ])
   })
 })

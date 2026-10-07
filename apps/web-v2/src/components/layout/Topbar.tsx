@@ -45,6 +45,7 @@ export function Topbar() {
         <Bell size={20} strokeWidth={1.75} />
       </Button>
       <Button
+        variant="action"
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
         onClick={() => go('/evenement/nouveau')}
       >

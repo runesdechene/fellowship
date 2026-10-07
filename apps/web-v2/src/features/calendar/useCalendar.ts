@@ -16,7 +16,6 @@ import {
   type Friend,
 } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
-import { fetchTags, tagStyleFor, tagStylesByName, type TagStyle } from '@/lib/tags'
 import type { ParticipationStatus } from '@/types/database'
 
 /** Les statuts que le calendrier charge : tout, sauf le refus. */
@@ -35,7 +34,6 @@ export interface CalendarDate {
   daysAway: number
   friends: Friend[]
   /** La première catégorie, pour le repli d'une carte sans affiche. */
-  tag: TagStyle | null
 }
 
 export interface CalendarCompanion {
@@ -73,18 +71,15 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
   const fromSql = todayIso(today)
   const toSql = todayIso(windowEnd)
 
-  const [rowsResponse, tagRows] = await Promise.all([
-    supabase
+  const rows = must(
+    await supabase
       .from('participations')
       .select('status, event_id, events!inner(*)')
       .eq('actor_id', actorId)
       .in('status', CALENDAR_STATUSES)
       .gte('events.end_date', fromSql)
       .lt('events.start_date', toSql),
-    fetchTags(),
-  ])
-  const rows = must(rowsResponse)
-  const styles = tagStylesByName(tagRows)
+  )
   const myEventIds = new Set(rows.map((row) => row.event_id))
 
   const [friendsByEvent, companions] = await Promise.all([
@@ -94,7 +89,6 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
 
   const dates = rows.map<CalendarDate>((row) => {
     const startDate = parseSqlDate(row.events.start_date)
-    const firstTag = row.events.tags?.[0]
     return {
       eventId: row.event_id,
       name: row.events.name,
@@ -105,7 +99,6 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
       status: row.status,
       daysAway: daysUntil(startDate, today),
       friends: friendsByEvent.get(row.event_id) ?? [],
-      tag: firstTag ? (tagStyleFor(styles, firstTag) ?? null) : null,
     }
   })
 
