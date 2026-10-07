@@ -1,31 +1,44 @@
 /**
  * QUOI     — demande à la base si le compte connecté peut ouvrir la V2.
  * POURQUOI — la coquille mince autour de access.ts : elle lit la session (useAuth), appelle
- *            is_admin() une fois par compte, et rend la décision.
- * ATTENTION — la réponse est rattachée à l'id du compte : changer de compte relance la
- *            vérification au lieu de réutiliser celle du précédent.
+ *            is_admin() quand le compte change, et rend la décision.
+ * ATTENTION — la vérification suit l'id du compte, pas l'objet `user` : supabase en recrée un à
+ *            chaque rafraîchissement de jeton ou retour sur l'onglet. Et une re-vérification en
+ *            échec ne fait pas sortir un admin déjà admis (settleCheck) — sinon un réseau
+ *            instable le renverrait sur la V1 au milieu d'une saisie.
  */
 import { useEffect, useState } from 'react'
 import { useAuth } from './auth'
 import { supabase } from './supabase'
-import { decideAccess, toAccessState, type AccessCheck, type AccessDecision } from './access'
+import {
+  decideAccess,
+  settleCheck,
+  toAccessState,
+  type AccessCheck,
+  type AccessDecision,
+} from './access'
 
 export function useV2Access(): AccessDecision {
   const { user, loading } = useAuth()
+  const userId = user?.id ?? null
   const [answer, setAnswer] = useState<{ userId: string; check: AccessCheck } | null>(null)
 
   useEffect(() => {
-    if (!user) return
+    if (!userId) return
     let cancelled = false
     void supabase.rpc('is_admin').then(({ data, error }) => {
       if (cancelled) return
-      setAnswer({ userId: user.id, check: error ? 'error' : data ? 'allowed' : 'refused' })
+      const result = error ? 'error' : data ? 'allowed' : 'refused'
+      setAnswer((previous) => ({
+        userId,
+        check: settleCheck(previous?.userId === userId ? previous.check : undefined, result),
+      }))
     })
     return () => {
       cancelled = true
     }
-  }, [user])
+  }, [userId])
 
-  const check = user && answer?.userId === user.id ? answer.check : 'pending'
-  return decideAccess(toAccessState({ authLoading: loading, hasUser: Boolean(user), check }))
+  const check = userId && answer?.userId === userId ? answer.check : 'pending'
+  return decideAccess(toAccessState({ authLoading: loading, hasUser: Boolean(userId), check }))
 }

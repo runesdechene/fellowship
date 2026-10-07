@@ -34,6 +34,17 @@ export function toAccessState(input: {
   }
 }
 
+// Combine une nouvelle réponse de la base avec la précédente, pour le même compte. Un échec de
+// re-vérification (jeton qui se rafraîchit, onglet qui revient sur un réseau instable) ne doit
+// pas éjecter un admin déjà admis au milieu d'une saisie ; un accès RETIRÉ, lui, s'applique.
+export function settleCheck(
+  previous: AccessCheck | undefined,
+  result: Exclude<AccessCheck, 'pending'>,
+): AccessCheck {
+  if (previous === 'allowed' && result === 'error') return 'allowed'
+  return result
+}
+
 export function decideAccess(state: AccessState): AccessDecision {
   switch (state.status) {
     case 'loading':
