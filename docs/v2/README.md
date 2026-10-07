@@ -6,6 +6,7 @@
 - `sondes/` — relevés en prod, en lecture seule, faits avant une spec (un relevé d'un jour).
 - `audit-2026-10-07.md` — l’audit de propreté du 07/10, à valider puis corriger.
 - `purge-back.md` — tout ce que le back devra perdre ou corriger une fois la V2 lancée.
+- **Point de reprise** : `docs/superpowers/plans/2026-10-07-v2-2027-plan-directeur.md` — le plan global de la V2 « 2027 », lot par lot.
 - `maquettes-2027.md` — les maquettes « 2027 » du Figma (qui font foi) et tout ce qu'elles demandent
   au code et à la base.
 
