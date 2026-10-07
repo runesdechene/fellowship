@@ -19,8 +19,13 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
 - **La frise glisse de gauche à droite** : seule exception admise au « jamais de scroll interne
   imbriqué ». La page garde un seul défilement vertical.
 - **Une entrée « Calendrier » dans la barre latérale**, entre Explorer et Tableau de bord.
-- **Un seul filtre : « Mes amis », affichés ou masqués** (demandé par Uriel). « Amis pro » et
-  « Visiteurs » de la V1 ne reviennent pas : ils tenaient au Pro, absent de la V2.
+- **Deux filtres : « Mes amis » (allumé par défaut) et « Intéressé » (éteint par défaut)**. « Amis
+  pro » et « Visiteurs » de la V1 ne reviennent pas : ils tenaient au Pro, absent de la V2.
+- **Les dates « Intéressé » : sur option, et plus discrètes** (carte atténuée, affiche désaturée).
+- **« Dossier envoyé »** est le libellé du statut `en_cours`, partout (la fiche disait « Dossier en
+  cours » : elle change aussi).
+- **Les compagnons disent « y va »** : ça tient avec tous les noms de festivals, sans article à
+  deviner.
 
 ## L'écran
 
@@ -29,9 +34,15 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
 **En-tête**
 - « Calendrier » en titre ; dessous : « N dates d'ici <mois année> · la prochaine dans X jours »
   (rien après le point s'il n'y a pas de prochaine date).
-- **Le filtre « Mes amis »** sous la phrase : une pastille à interrupteur, allumée par défaut.
-  Éteint, plus d'avatars sur les affiches ni de bloc « Tes compagnons ». Le choix est retenu sur
-  l'appareil (`localStorage`, lu et écrit sous `try/catch` : la page marche sans).
+- **Les filtres** sous la phrase, deux pastilles à interrupteur côte à côte :
+  - « Mes amis », allumé par défaut. Éteint : plus d'avatars sur les affiches ni de bloc
+    « Tes compagnons ».
+  - « Intéressé », éteint par défaut. Allumé : les dates notées apparaissent, en carte atténuée
+    (opacité réduite, affiche désaturée).
+  - Les deux choix sont retenus sur l'appareil (`localStorage`, lu et écrit sous `try/catch` : la
+    page marche sans).
+- **Les comptes** (phrase, colonnes, barres) ne comptent que les dates engagées, jamais les
+  « Intéressé » — comme le tableau de bord.
 - **Les 12 barres de mois** (la frise de saison du tableau de bord, en plus fin). Cliquer une
   barre fait défiler la frise jusqu'à ce mois. Une plage surligne les mois visibles.
 
@@ -48,13 +59,13 @@ dossier, et qui de ses amis sera là. C'est l'écran le plus important après le
   abrégé, dans la couleur de la première catégorie.
 - **Mois vide** : carte en pointillés « Mois libre · Trouver une date en <mois> → ».
 - **Compagnons** (bas de colonne) : les dates du mois où vont des amis **sans** l'artisan —
-  avatar, « Gautier va à » (le nom en gras), puis « Hellfest Winter · 14 nov. » en gras 13.
+  avatar, « **Gautier** y va », puis « **Hellfest Winter · 14 nov.** » (gras 13).
 - Une date à cheval sur deux mois va dans le mois où elle **commence**.
 - Survol : la carte se soulève légèrement (transition des jetons, `prefers-reduced-motion`
   respecté). Clic : la fiche événement.
 
-**Mobile** : le filtre « Mes amis » à droite du titre ; une colonne occupe l'écran, la suivante dépasse à droite ; arrêt net sur chaque
-mois (`scroll-snap`). Les barres de mois (initiales) restent fixées en haut au défilement.
+**Mobile** : les filtres à droite du titre ; une colonne occupe l'écran, la suivante dépasse à
+droite ; arrêt net sur chaque mois (`scroll-snap`). Les barres de mois (initiales) restent fixées en haut au défilement.
 
 **Tableau de bord** : le lien « Voir tout le calendrier » mène à `/calendrier` ; cliquer une barre
 de la frise de saison ouvre `/calendrier?mois=…`.
@@ -66,8 +77,8 @@ Rien de neuf en base : tout existe et se lit sous les policies en place.
 - **Mes dates** : `participations` de l'acteur actif dont l'événement **finit** à partir
   d'aujourd'hui et **commence** avant la fin du 12ᵉ mois, statuts `interesse`, `en_cours`,
   `inscrit`, `confirme` (pas `refuse`), avec `events!inner(*)`, triées par `start_date`.
-  ⚠ Le tableau de bord ne compte que les dates *programmées* (sans `interesse`) : le calendrier
-  montre aussi les dates notées, parce que c'est là qu'on planifie.
+  Les `interesse` sont chargées mais n'apparaissent qu'avec le filtre « Intéressé », et ne
+  comptent jamais.
 - **Amis présents** : `fetchFriendsByEvent` (lib/friends.ts), tel quel.
 - **Compagnons** : les participations *programmées* des amis mutuels sur la même fenêtre, hors
   événements où l'artisan est déjà, regroupées par événement (plusieurs amis → une ligne).
@@ -76,7 +87,8 @@ Rien de neuf en base : tout existe et se lit sous les policies en place.
 - **Catégories** : seulement la couleur de la première, pour la grande date des cartes sans affiche
   (`lib/tags.ts`, jamais en dur).
 - **Statuts** : mêmes libellés et mêmes tons que la fiche (`EventStatus.tsx`) — blé « Intéressé »,
-  terre « Dossier en cours », olive « Inscrit ». La pastille vient d'un seul endroit, partagé.
+  terre « Dossier envoyé », olive « Inscrit ». La pastille vient d'un seul endroit, partagé ; le
+  libellé de `EventStatus.tsx` passe de « Dossier en cours » à « Dossier envoyé ».
 
 ## Découpage
 
@@ -102,11 +114,6 @@ Rien de neuf en base : tout existe et se lit sous les policies en place.
   l'entrée Explorer de la barre latérale).
 - La liste complète des amis au clic sur la pile d'avatars (la fiche événement la montre).
 
-## Points à confirmer par Uriel
+## Points tranchés le 07/10/2026
 
-1. **« Dossier en cours » (code) ou « Dossier envoyé » (maquette de la fiche)** : les deux
-   libellés coexistent aujourd'hui. Le calendrier prendra celui qu'Uriel choisit, partout.
-2. **Les dates « Intéressé » dans le calendrier** (voir Les données) : oui par défaut.
-3. **« va à » devant un nom de festival** : le code ne connaît pas l'article (« au Marché de Noël »,
-   « à la Fête… », « aux Médiévales »). « va à » partout fera parfois faux ; « y va » ne se trompe
-   jamais. À trancher.
+« Dossier envoyé » ; « Intéressé » sur option et plus discret ; « y va ». (Voir plus haut.)
