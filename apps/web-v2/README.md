@@ -13,12 +13,13 @@ construction : un autre compte retourne sur la V1.
 
 ## Commandes (depuis la racine du dépôt)
 
-| Commande                    | Effet                                       |
-| --------------------------- | ------------------------------------------- |
-| `pnpm dev:v2`               | serveur local sur http://localhost:5174/v2/ |
-| `pnpm --filter web-v2 test` | tests                                       |
-| `pnpm --filter web-v2 lint` | ESLint                                      |
-| `pnpm build:v2`             | build de production dans `apps/web-v2/dist` |
+| Commande                      | Effet                                       |
+| ----------------------------- | ------------------------------------------- |
+| `pnpm dev:v2`                 | serveur local sur http://localhost:5174/v2/ |
+| `pnpm --filter web-v2 test`   | tests                                       |
+| `pnpm --filter web-v2 lint`   | ESLint, stylelint, prettier, en-têtes       |
+| `pnpm --filter web-v2 format` | remet la mise en forme d'aplomb (prettier)  |
+| `pnpm build:v2`               | build de production dans `apps/web-v2/dist` |
 
 ## Tester en local avec une session
 
