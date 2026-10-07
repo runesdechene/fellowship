@@ -24,6 +24,9 @@
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` | dessiné |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
+| Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | dessiné |
+| Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
+| Landing publique | `2027 — Landing` | dessiné |
 | Mobile (tous les écrans) | — | à dessiner |
 
 ## Le langage visuel — à réécrire dans `docs/v2/DESIGN-SYSTEM.md`
@@ -71,6 +74,14 @@
 - [ ] **Bilans** : vraie page « Mes bilans » (année, totaux, bénéfice par mois, tableau) ; le bilan devient une page ; « Ce qui a marché » saisissable (colonne `wins` déjà en base) ; tout s'enregistre seul ; bénéfice par jour.
 - [ ] **Création d'une date** : les doublons montrent le nombre d'exposants inscrits et s'ouvrent.
 - [ ] **Vitrine** : formulaire e-mail factice et incitation V1 retirés ; emplacement « Obtenir le badge Certifié » pour le propriétaire non Pro.
+
+## Arrivée et landing (07/10/2026)
+
+- [ ] **On ne vend plus aux festivaliers** : plus d'écran « Tu viens pour quoi ? » ; l'arrivée part sur le parcours exposant (prénom, marque, métier, ville, lien) ; CGU sur la première étape. Les comptes festivaliers existants continuent de fonctionner.
+- [ ] La connexion actuelle de la V2 n'a pas d'inscription : l'arrivée de la V1 (`apps/web/src/pages/Onboarding.tsx`) est le cahier des charges.
+- [ ] Landing : l'annuaire est cherchable **sans compte** (accueil public, indexable) ; la connexion reste la porte.
+- [ ] Les chiffres du mur d'affiches (« 1 200 festivals · 3 400 exposants ») sont **inventés** : à lire en base, en direct.
+- [ ] La page d'accueil actuelle (« Parchemin », derrière `/?v2=1`) est remplacée par la landing « 2027 ».
 
 ## Points ouverts
 
