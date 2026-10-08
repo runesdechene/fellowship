@@ -4,11 +4,14 @@
  * POURQUOI — les exposants choisissent leurs dates sur l'avis des autres ; la note se lit d'un
  *            coup, l'extrait donne le ton (maquette 2027).
  * ATTENTION — l'auteur d'un avis ne se nomme que si la base l'autorise (reviewSignature). Le
- *            détail porte le badge Pro ; il reste visible à tous tant que l'offre n'est pas lue
- *            par la V2 (lot 7).
+ *            détail porte le badge Pro : en gratuit, il passe sous un voile ; la note globale et
+ *            la lecture des avis restent ouvertes (Dev.md, 07/10/2026).
  */
 import { ArrowRight, Pencil, ShieldCheck } from 'lucide-react'
 import { ProBadge } from '@/components/ui/ProBadge'
+import { ProVeil } from '@/components/ui/ProVeil'
+import { useTransitionNavigate } from '@/lib/navigation'
+import { usePlan } from '@/lib/usePlan'
 import { useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Stars } from '@/components/ui/Stars'
@@ -35,8 +38,35 @@ interface EventReviewsProps {
   canReview: boolean
 }
 
+/** Le détail des notes : affluence, organisation, rentabilité. */
+function ScoreBars({
+  scores,
+}: {
+  scores: { affluence: number; organisation: number; rentabilite: number }
+}) {
+  return (
+    <>
+      {(
+        [
+          ['Affluence', scores.affluence],
+          ['Organisation', scores.organisation],
+          ['Rentabilité', scores.rentabilite],
+        ] as const
+      ).map(([label, value]) => (
+        <div key={label} className="reviews__bar-row">
+          <span>{label}</span>
+          <span className="reviews__bar" style={{ '--bar': String(value / 5) } as CSSProperties} />
+          <b>{formatScore(value)}</b>
+        </div>
+      ))}
+    </>
+  )
+}
+
 export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps) {
   const { scores, reviews, error } = useEventReviews(eventId, viewerId)
+  const { pro } = usePlan()
+  const go = useTransitionNavigate()
   const [open, setOpen] = useState(false)
   const withComment = reviews.filter((review) => review.comment)
   const [first, ...others] = withComment
@@ -64,22 +94,20 @@ export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps
             <span className="reviews__caption">
               Le détail <ProBadge />
             </span>
-            {(
-              [
-                ['Affluence', scores.affluence],
-                ['Organisation', scores.organisation],
-                ['Rentabilité', scores.rentabilite],
-              ] as const
-            ).map(([label, value]) => (
-              <div key={label} className="reviews__bar-row">
-                <span>{label}</span>
-                <span
-                  className="reviews__bar"
-                  style={{ '--bar': String(value / 5) } as CSSProperties}
-                />
-                <b>{formatScore(value)}</b>
-              </div>
-            ))}
+            {pro ? (
+              <ScoreBars scores={scores} />
+            ) : (
+              <ProVeil
+                invitation={
+                  <button type="button" className="reports__invite" onClick={() => go('/pro')}>
+                    Voir le détail avec le Pro
+                    <ArrowRight size={14} strokeWidth={2} />
+                  </button>
+                }
+              >
+                <ScoreBars scores={scores} />
+              </ProVeil>
+            )}
           </div>
         </div>
       ) : (

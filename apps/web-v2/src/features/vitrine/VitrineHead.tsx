@@ -10,6 +10,7 @@ import { BadgeCheck, Check, ExternalLink, MapPin, Pencil, Plus, Share } from 'lu
 import { useState, type CSSProperties } from 'react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { useTransitionNavigate } from '@/lib/navigation'
 import { initials, networkCounts, websiteLink } from '@/lib/vitrine'
 import type { Vitrine } from './useVitrine'
 
@@ -25,6 +26,7 @@ function publicUrl(slug: string): string {
 }
 
 export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadProps) {
+  const go = useTransitionNavigate()
   const [copied, setCopied] = useState(false)
   const [followers, companions] = networkCounts(vitrine.followerCount, vitrine.companionCount)
   const site = vitrine.website ? websiteLink(vitrine.website) : null
@@ -119,6 +121,17 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadPro
               <BadgeCheck size={14} strokeWidth={2} />
               Certifié
             </span>
+          )}
+          {/* Le propriétaire voit la place du badge ; les visiteurs, rien (Points de contact du Pro). */}
+          {isOwner && !vitrine.certified && (
+            <button
+              type="button"
+              className="vitrine-badge vitrine-badge--empty"
+              onClick={() => go('/pro')}
+            >
+              <BadgeCheck size={14} strokeWidth={2} />
+              Obtenir le badge Certifié
+            </button>
           )}
           {vitrine.ambassador && (
             <span className="vitrine-badge vitrine-badge--soft">Ambassadeur</span>

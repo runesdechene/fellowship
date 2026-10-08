@@ -16,11 +16,12 @@ import {
   type Friend,
 } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
+import { isCertified } from '@/lib/plan'
 import { splitRoad } from '@/lib/vitrine'
 
 /** Les colonnes publiques d'une enseigne — jamais la facturation. */
 const PUBLIC_COLUMNS =
-  'actor_id, brand_name, craft_type, bio, website, banner_url, banner_position, avatar_url, public_slug, city, department, plan, verified, is_ambassador'
+  'actor_id, brand_name, craft_type, bio, website, banner_url, banner_position, avatar_url, public_slug, city, department, plan, verified, comped_pro_until, is_ambassador'
 
 const MAX_FOLLOWER_FACES = 3
 
@@ -144,7 +145,8 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
     place: entity.city
       ? `${entity.city}${entity.department ? ` (${entity.department})` : ''}`
       : null,
-    certified: entity.plan === 'pro' || entity.verified,
+    // Même règle que partout (lib/plan.ts) : le Pro offert par le parrainage compte aussi.
+    certified: isCertified(entity, new Date()),
     ambassador: entity.is_ambassador,
     followerCount: followerRows.length,
     followerFaces: [...faces.values()],
