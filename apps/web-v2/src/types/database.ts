@@ -21,3 +21,15 @@ export interface Actor {
   /** Libellé du type de compte, affiché sous le nom dans la colonne de gauche. */
   roleLabel: string
 }
+
+/** Les catégories d'une ligne de registre : la contrainte CHECK de 20260613120000_event_ledger.sql. */
+export type LedgerCategory =
+  | 'emplacement'
+  | 'cachet'
+  | 'essence'
+  | 'peage'
+  | 'hebergement'
+  | 'repas'
+  | 'remboursement'
+  | 'ventes'
+  | 'autre'
