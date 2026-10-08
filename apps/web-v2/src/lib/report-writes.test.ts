@@ -3,7 +3,7 @@
  * POURQUOI — l'effacement d'un bilan ne doit jamais toucher au prix de Mon dossier.
  */
 import { describe, expect, it } from 'vitest'
-import { addTag, clearReportPlan, directionOf } from './report-writes'
+import { addTag, clearReportPlan, directionOf, removeTag } from './report-writes'
 import { reportPhotoPath } from './report-media'
 
 describe('directionOf', () => {
@@ -36,6 +36,17 @@ describe('addTag', () => {
   it('ignore le vide et les doublons, sans regarder la casse', () => {
     expect(addTag(['Stand en angle'], '   ')).toEqual(['Stand en angle'])
     expect(addTag(['Stand en angle'], 'stand EN angle')).toEqual(['Stand en angle'])
+  })
+})
+
+describe('removeTag', () => {
+  it('retire l’étiquette sans toucher aux autres', () => {
+    expect(removeTag(['Stand en angle', 'Public familial'], 'Stand en angle')).toEqual([
+      'Public familial',
+    ])
+  })
+  it('une étiquette déjà retirée ne change rien', () => {
+    expect(removeTag(['Public familial'], 'Stand en angle')).toEqual(['Public familial'])
   })
 })
 

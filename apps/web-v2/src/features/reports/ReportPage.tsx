@@ -26,7 +26,7 @@ export function ReportPage() {
   const { eventId } = useParams<{ eventId: string }>()
   const { actor } = useAuth()
   const go = useTransitionNavigate()
-  const { status, detail, saving, writeError, actions } = useReport(eventId, actor?.id)
+  const { status, detail, saving, failures, writeError, actions } = useReport(eventId, actor?.id)
   useDeclarePageChrome({ poster: null, lead: null, back: '/bilans' })
 
   if (status === 'missing') return <Navigate to="/bilans" replace />
@@ -70,7 +70,7 @@ export function ReportPage() {
             Recettes et dépenses{' '}
             <span className="report-block__hint">chaque ligne s’enregistre aussitôt</span>
           </h2>
-          <Ledger entries={detail.entries} actions={actions} />
+          <Ledger key={failures} entries={detail.entries} actions={actions} />
         </section>
         {writeError && (
           <p className="report-page__error" role="status">
@@ -80,18 +80,24 @@ export function ReportPage() {
         <TagList
           title="Ce qui a marché"
           tags={detail.wins}
-          onChange={(tags) => {
-            actions.setTags('wins', tags)
+          onAdd={(raw) => {
+            actions.addTag('wins', raw)
+          }}
+          onRemove={(tag) => {
+            actions.removeTag('wins', tag)
           }}
         />
         <TagList
           title="À améliorer la prochaine fois"
           tags={detail.improvements}
-          onChange={(tags) => {
-            actions.setTags('improvements', tags)
+          onAdd={(raw) => {
+            actions.addTag('improvements', raw)
+          }}
+          onRemove={(tag) => {
+            actions.removeTag('improvements', tag)
           }}
         />
-        <ReportNote note={detail.note} onSave={actions.setNote} />
+        <ReportNote key={failures} note={detail.note} onSave={actions.setNote} />
         <ReportPhotos
           photos={detail.photos}
           onAdd={actions.addPhoto}

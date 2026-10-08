@@ -2,10 +2,14 @@
  * QUOI     — le bilan d'une date pour l'acteur actif : son chargement et ses écritures.
  * POURQUOI — chaque changement s'enregistre aussitôt ; après chaque écriture, le bilan est relu
  *            en entier, pour que l'écran montre toujours ce que la base contient.
- * ATTENTION — patron de chargement de .claude/rules/v2.md. Une écriture qui échoue laisse le
- *            bilan tel que la base le garde, et le dit (writeError).
+ * ATTENTION — patron de chargement de .claude/rules/v2.md. Les écritures passent une par une
+ *            (lib/write-queue.ts) : un clic pendant un enregistrement attend son tour au lieu de se
+ *            perdre. Une écriture qui échoue laisse le bilan tel que la base le garde, le dit
+ *            (writeError), et `failures` change pour que les champs reprennent la valeur gardée.
  */
 import { useEffect, useState } from 'react'
+import { createWriteQueue } from '@/lib/write-queue'
+import { addTag, removeTag } from '@/lib/report-writes'
 import type { LedgerCategory } from '@/types/database'
 import { loadReport, type ReportDetail, type ReportEntry } from './loadReport'
 import * as write from './reportActions'
@@ -16,7 +20,8 @@ export interface ReportActions {
   addLine: (category: LedgerCategory, amount: number) => void
   setAmount: (entry: ReportEntry, amount: number) => void
   removeLine: (entry: ReportEntry) => void
-  setTags: (field: 'wins' | 'improvements', tags: string[]) => void
+  addTag: (field: 'wins' | 'improvements', raw: string) => void
+  removeTag: (field: 'wins' | 'improvements', tag: string) => void
   setNote: (note: string) => void
   addPhoto: (file: File) => void
   removePhoto: (path: string) => void
@@ -35,7 +40,9 @@ const LOADING: ReportState = { status: 'loading', detail: null, owner: null }
 export function useReport(eventId: string | undefined, actorId: string | null | undefined) {
   const [state, setState] = useState<ReportState>(LOADING)
   const [version, setVersion] = useState(0)
-  const [saving, setSaving] = useState(false)
+  const [enqueue] = useState(createWriteQueue)
+  const [pending, setPending] = useState(0)
+  const [failures, setFailures] = useState(0)
   const [writeError, setWriteError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -65,22 +72,24 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     }
   }, [eventId, actorId, version])
 
-  /** Lance une écriture, puis relit le bilan, qu'elle ait réussi ou non. */
+  /** Met une écriture dans la file, puis relit le bilan, qu'elle ait réussi ou non. */
   function perform(
     failure: string,
     action: (target: Parameters<typeof write.addLine>[0]) => Promise<void>,
   ) {
     const detail = state.detail
-    if (!eventId || !actorId || !detail || saving) return
+    if (!eventId || !actorId || !detail) return
     if (state.owner !== `${actorId}/${eventId}`) return
-    setSaving(true)
+    const target = { actorId, eventId, detail }
+    setPending((n) => n + 1)
     setWriteError(null)
-    action({ actorId, eventId, detail })
+    enqueue(() => action(target))
       .catch(() => {
         setWriteError(failure)
+        setFailures((n) => n + 1)
       })
       .finally(() => {
-        setSaving(false)
+        setPending((n) => n - 1)
         setVersion((v) => v + 1)
       })
   }
@@ -95,15 +104,18 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     removeLine: (entry) => {
       perform('La ligne n’a pas pu être retirée.', (t) => write.removeLine(t, entry))
     },
-    setTags: (field, tags) => {
-      perform('Ce changement n’a pas pu être enregistré.', (t) =>
-        write.updateReport(t, field === 'wins' ? { wins: tags } : { improvements: tags }),
+    addTag: (field, raw) => {
+      perform('L’étiquette n’a pas pu être ajoutée.', (t) =>
+        write.changeTags(t, field, (tags) => addTag(tags, raw)),
+      )
+    },
+    removeTag: (field, tag) => {
+      perform('L’étiquette n’a pas pu être retirée.', (t) =>
+        write.changeTags(t, field, (tags) => removeTag(tags, tag)),
       )
     },
     setNote: (note) => {
-      perform('La note n’a pas pu être enregistrée.', (t) =>
-        write.updateReport(t, { note: note.trim() === '' ? null : note }),
-      )
+      perform('La note n’a pas pu être enregistrée.', (t) => write.setNote(t, note))
     },
     addPhoto: (file) => {
       perform('La photo n’a pas pu être ajoutée.', (t) => write.addPhoto(t, file))
@@ -116,5 +128,5 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     },
   }
 
-  return { ...state, saving, writeError, actions }
+  return { ...state, saving: pending > 0, failures, writeError, actions }
 }

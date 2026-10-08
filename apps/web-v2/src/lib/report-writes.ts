@@ -47,3 +47,8 @@ export function addTag(tags: string[], raw: string): string[] {
   const exists = tags.some((t) => t.toLocaleLowerCase('fr') === tag.toLocaleLowerCase('fr'))
   return exists ? tags : [...tags, tag]
 }
+
+/** Retire une étiquette ; déjà absente, rien ne change. */
+export function removeTag(tags: string[], tag: string): string[] {
+  return tags.filter((t) => t !== tag)
+}

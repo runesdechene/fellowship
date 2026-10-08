@@ -88,14 +88,46 @@ export async function removeLine(target: Target, entry: ReportEntry) {
   )
 }
 
-type ReportFields = { wins: string[] } | { improvements: string[] } | { note: string | null }
+/** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */
+async function readFresh(target: Target, reportId: string) {
+  const response = await supabase
+    .from('event_reports')
+    .select('wins, improvements, media_paths')
+    .eq('id', reportId)
+    .eq('actor_id', target.actorId)
+    .maybeSingle()
+  const row = must(response)
+  return {
+    wins: row?.wins ?? [],
+    improvements: row?.improvements ?? [],
+    mediaPaths: row?.media_paths ?? [],
+  }
+}
 
-export async function updateReport(target: Target, fields: ReportFields) {
+/** Modifie une liste d'étiquettes à partir de ce que la base garde, pas d'une copie périmée. */
+export async function changeTags(
+  target: Target,
+  field: 'wins' | 'improvements',
+  change: (tags: string[]) => string[],
+) {
+  const reportId = await ensureReport(target)
+  const fresh = await readFresh(target, reportId)
+  const tags = change(fresh[field])
+  must(
+    await supabase
+      .from('event_reports')
+      .update(field === 'wins' ? { wins: tags } : { improvements: tags })
+      .eq('id', reportId)
+      .eq('actor_id', target.actorId),
+  )
+}
+
+export async function setNote(target: Target, note: string) {
   const reportId = await ensureReport(target)
   must(
     await supabase
       .from('event_reports')
-      .update(fields)
+      .update({ note: note.trim() === '' ? null : note })
       .eq('id', reportId)
       .eq('actor_id', target.actorId),
   )
@@ -104,10 +136,13 @@ export async function updateReport(target: Target, fields: ReportFields) {
 export async function addPhoto(target: Target, file: File) {
   const reportId = await ensureReport(target)
   const path = await uploadReportPhoto(file, target.actorId, target.eventId)
-  const paths = [...target.detail.photos.map((photo) => photo.path), path]
+  const fresh = await readFresh(target, reportId).catch(async (reason: unknown) => {
+    await removeReportPhotos([path])
+    throw reason
+  })
   const saved = await supabase
     .from('event_reports')
-    .update({ media_paths: paths })
+    .update({ media_paths: [...fresh.mediaPaths, path] })
     .eq('id', reportId)
     .eq('actor_id', target.actorId)
   // La photo est partie mais le bilan ne la connaît pas : on la retire, pour ne rien laisser traîner.
@@ -118,13 +153,14 @@ export async function addPhoto(target: Target, file: File) {
 }
 
 export async function removePhoto(target: Target, path: string) {
-  if (!target.detail.reportId) return
-  const paths = target.detail.photos.map((photo) => photo.path).filter((p) => p !== path)
+  const reportId = target.detail.reportId
+  if (!reportId) return
+  const fresh = await readFresh(target, reportId)
   must(
     await supabase
       .from('event_reports')
-      .update({ media_paths: paths })
-      .eq('id', target.detail.reportId)
+      .update({ media_paths: fresh.mediaPaths.filter((p) => p !== path) })
+      .eq('id', reportId)
       .eq('actor_id', target.actorId),
   )
   await removeReportPhotos([path])
@@ -133,6 +169,7 @@ export async function removePhoto(target: Target, path: string) {
 export async function clearReport(target: Target) {
   const { reportId } = target.detail
   if (!reportId) return
+  const fresh = await readFresh(target, reportId)
   const plan = clearReportPlan(reportId)
   must(
     await supabase
@@ -148,5 +185,5 @@ export async function clearReport(target: Target) {
       .eq('id', reportId)
       .eq('actor_id', target.actorId),
   )
-  await removeReportPhotos(target.detail.photos.map((photo) => photo.path))
+  await removeReportPhotos(fresh.mediaPaths)
 }

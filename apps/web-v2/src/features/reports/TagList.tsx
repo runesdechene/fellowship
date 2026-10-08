@@ -2,26 +2,26 @@
  * QUOI     — une liste d'étiquettes d'un bilan (« Ce qui a marché », « À améliorer la prochaine
  *            fois ») : une croix pour retirer, « Ajouter » pour en écrire une.
  * POURQUOI — des mots courts se relisent d'un coup d'œil l'année suivante, mieux qu'un paragraphe.
- * ATTENTION — l'ajout passe par addTag (lib/report-writes.ts) : le vide et les doublons ne
- *            changent rien, et rien n'est envoyé.
+ * ATTENTION — la liste n'envoie que le geste (ajouter tel mot, retirer telle étiquette) : la
+ *            nouvelle liste se calcule sur ce que la base garde (reportActions.changeTags), pour
+ *            que deux gestes rapprochés ne s'écrasent pas.
  */
 import { Plus, X } from 'lucide-react'
 import { useState } from 'react'
-import { addTag } from '@/lib/report-writes'
 
 interface TagListProps {
   title: string
   tags: string[]
-  onChange: (tags: string[]) => void
+  onAdd: (raw: string) => void
+  onRemove: (tag: string) => void
 }
 
-export function TagList({ title, tags, onChange }: TagListProps) {
+export function TagList({ title, tags, onAdd, onRemove }: TagListProps) {
   const [writing, setWriting] = useState(false)
   const [draft, setDraft] = useState('')
 
   function commit() {
-    const next = addTag(tags, draft)
-    if (next !== tags) onChange(next)
+    if (draft.trim() !== '') onAdd(draft)
     setDraft('')
     setWriting(false)
   }
@@ -38,7 +38,7 @@ export function TagList({ title, tags, onChange }: TagListProps) {
               className="tag-list__remove"
               aria-label={`Retirer « ${tag} »`}
               onClick={() => {
-                onChange(tags.filter((t) => t !== tag))
+                onRemove(tag)
               }}
             >
               <X size={12} strokeWidth={2} />
