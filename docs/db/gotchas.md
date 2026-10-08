@@ -63,7 +63,7 @@ Deux pièges, tous deux déjà payés :
    ligne. Ne pas la réécrire à la main en plusieurs requêtes.
 
 ### Table `event_reports`
-- ✅ `wins`, `improvements` (`TEXT[]`), `UNIQUE(user_id, event_id)`
+- ✅ `wins`, `improvements` (`TEXT[]`), `note`, `media_paths` (bucket privé `bilan-media`), `UNIQUE(actor_id, event_id)` (`uniq_event_report_actor`)
 - ❌ `booth_cost`, `charges`, `revenue` — **colonnes mortes**, voir ci-dessus
 
 ---
