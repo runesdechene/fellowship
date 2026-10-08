@@ -96,6 +96,7 @@
 - [ ] **Photos de marché à fournir** (Uriel, plus tard) : derrière l'accroche (très atténuée) et derrière le bandeau Organisateurs. Les images actuelles sont des affiches floutées, provisoires.
 - [ ] Landing : le **défilé des types de festivals** de la V1 revient sous la recherche (18 types, défilement continu, fondu sur les bords, pause au survol, figé si `prefers-reduced-motion`) — liste de la V1 : `apps/web/src/pages/LandingV2.tsx` (`MARQUEE_TAGS`), à lire de préférence dans la table des tags.
 - [ ] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel, relu et validé le 08/10/2026), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
+- [ ] **Landing mise à jour le 08/10/2026 (la communauté)** : accroche « Ta saison de festivals, avec ceux qui la font. » ; nouvelle section « Tu n'y vas jamais seul » après « Ce que ça t'apporte » (discussion d'un festival, « Entre exposants / Avec les festivaliers », notification de question, mise en sourdine) ; bande « Festivaliers — Dis à ton public où te retrouver » après Organisateurs ; prix du Pro « 9,99 € HT / mois · 99,90 € HT / an ». Les festivaliers restent un public, pas des clients : l'arrivée ne change pas.
 
 ## Points ouverts
 
