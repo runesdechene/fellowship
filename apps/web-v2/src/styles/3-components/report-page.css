@@ -1,0 +1,659 @@
+/**
+ * QUOI     — les styles de l'écran du bilan d'une date (features/reports/ReportPage.tsx et ses
+ *            blocs : Ledger, TagList, ReportNote, ReportPhotos, ReportSummary, ClearReport).
+ * POURQUOI — maquettes `2027 — Bilan d’une date` et `2027 mobile — Bilan d’une date` : une colonne
+ *            de travail, le résumé à droite ; sur téléphone, le résumé passe sous le titre.
+ */
+
+.report-page {
+  display: grid;
+  grid-template:
+    'header .' auto
+    'main summary' auto
+    'main extras' 1fr
+    / minmax(0, var(--report-main-width)) var(--report-side-width);
+  gap: var(--space-24) var(--report-columns-gap);
+  justify-content: center;
+  width: 100%;
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+.report-page__header {
+  grid-area: header;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.report-page__summary {
+  grid-area: summary;
+}
+
+.report-page__main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: var(--report-blocks-gap);
+  min-width: 0;
+}
+
+.report-page__extras {
+  grid-area: extras;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-16);
+}
+
+.report-page__eyebrow {
+  font: var(--type-report-eyebrow);
+  color: var(--reports-pale-ink);
+}
+
+.report-page__title {
+  font: var(--type-report-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.report-page__meta {
+  font: var(--type-report-page-meta);
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+}
+
+.report-page__error {
+  font: var(--type-report-text);
+  color: var(--ink-title);
+}
+
+/* --- Un bloc ------------------------------------------------------------- */
+.report-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.report-block__title {
+  font: var(--type-report-block);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.report-block__hint {
+  margin-left: var(--space-6);
+  font: var(--type-reports-note);
+  color: var(--reports-pale-ink);
+}
+
+/* --- Recettes et dépenses ------------------------------------------------ */
+.ledger {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) var(--space-8) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.ledger__group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ledger__group-head {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-14) var(--space-12) var(--space-6);
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.ledger__line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--reports-row-radius);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .ledger__line {
+    opacity: 0;
+  }
+}
+
+.ledger__line:hover {
+  background: var(--surface-row-hover);
+}
+
+.ledger__icon {
+  display: flex;
+  flex: none;
+  padding: var(--space-6);
+  border-radius: var(--round-full);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+}
+
+.ledger__mask {
+  width: var(--space-15);
+  height: var(--space-15);
+  background: currentcolor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.ledger__label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+  font: var(--type-report-line);
+  color: var(--ink-title);
+}
+
+.ledger__badge {
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--round-6);
+  background: var(--surface-chip-neutral);
+  font: var(--type-report-badge);
+  color: var(--ink-soft);
+}
+
+.ledger__amount {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font: var(--type-reports-net);
+  color: var(--ink-title);
+}
+
+.ledger__input {
+  width: var(--report-amount-input-width);
+  margin: 0;
+  font: var(--type-reports-net);
+  text-align: right;
+}
+
+.ledger__remove {
+  display: flex;
+  color: var(--reports-pale-ink);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.ledger__line:hover .ledger__remove,
+.ledger__remove:focus-visible {
+  opacity: 1;
+}
+
+.ledger__invalid {
+  padding: var(--space-8) var(--space-12) 0;
+  font: var(--type-report-small);
+  color: var(--ink-title);
+}
+
+.ledger__add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+  padding: var(--space-12) var(--space-8) var(--space-4);
+  border-top: 1px solid var(--line-card);
+}
+
+.ledger__category {
+  width: var(--report-add-category-width);
+}
+
+.ledger__field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: var(--report-add-amount-width);
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-10);
+  background: var(--surface-card);
+}
+
+.ledger__field-label {
+  font: var(--type-reports-note);
+  color: var(--reports-pale-ink);
+}
+
+.ledger__field-input {
+  width: 100%;
+  min-width: 0;
+  font: var(--type-select-value);
+  color: var(--ink-title);
+}
+
+.ledger__field-input:focus {
+  outline: none;
+}
+
+.ledger__submit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-16) var(--space-8) var(--space-14);
+  border-radius: var(--round-10);
+  background: var(--action-surface);
+  font: var(--type-select-value);
+  color: var(--action-ink);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.ledger__submit:hover:not(:disabled) {
+  background: var(--action-surface-hover);
+}
+
+.ledger__submit:disabled {
+  color: var(--action-ink-off);
+  cursor: default;
+}
+
+/* --- Étiquettes ---------------------------------------------------------- */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.tag-list__tag,
+.tag-list__add,
+.tag-list__input {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-8) var(--space-6) var(--space-12);
+  border-radius: var(--round-full);
+  font: var(--type-report-line);
+}
+
+.tag-list__tag {
+  background: var(--surface-chip-neutral);
+  color: var(--ink-title);
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .tag-list__tag {
+    opacity: 0;
+  }
+}
+
+.tag-list__remove {
+  display: flex;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tag-list__add {
+  padding-inline: var(--space-10) var(--space-12);
+  border: 1px dashed var(--dropzone-border);
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tag-list__input {
+  border: 1px solid var(--line-card);
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.tag-list__input:focus {
+  outline: none;
+}
+
+/* --- Note libre ---------------------------------------------------------- */
+.report-note {
+  min-height: var(--space-96);
+  padding: var(--space-14) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-12);
+  background: var(--surface-card);
+  font: var(--type-report-note);
+  color: var(--ink-title);
+  resize: vertical;
+}
+
+.report-note:focus {
+  outline: none;
+  border-color: var(--dropzone-border);
+}
+
+/* --- Photos -------------------------------------------------------------- */
+.report-photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--report-photo-width));
+  gap: var(--space-10);
+}
+
+.report-photos__item,
+.report-photos__add {
+  position: relative;
+  height: var(--report-photo-height);
+  border-radius: var(--report-photo-radius);
+}
+
+.report-photos__item {
+  overflow: hidden;
+  background: var(--surface-chip-neutral);
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .report-photos__item {
+    opacity: 0;
+  }
+}
+
+.report-photos__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.report-photos__remove {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  padding: var(--space-4);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.report-photos__item:hover .report-photos__remove,
+.report-photos__remove:focus-visible {
+  opacity: 1;
+}
+
+.report-photos__add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  border: 1px dashed var(--dropzone-border);
+  font: var(--type-reports-label);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.report-photos__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* --- Le résumé ----------------------------------------------------------- */
+.report-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-23) var(--space-23) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.report-summary__event {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+}
+
+.report-summary__thumb {
+  width: var(--report-summary-thumb-width);
+  height: var(--report-summary-thumb-height);
+  border-radius: var(--round-8);
+  background: var(--surface-chip-neutral);
+  object-fit: cover;
+}
+
+.report-summary__event-text,
+.report-summary__net-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.report-summary__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.report-summary__dates {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.report-summary__label {
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.report-summary__net {
+  width: fit-content;
+  background: var(--brand-gradient);
+  background-clip: text;
+  font: var(--type-report-summary-net);
+  letter-spacing: var(--tracking-tight);
+  color: transparent;
+}
+
+.report-summary__goal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--round-12);
+  background: var(--surface-chip-neutral);
+}
+
+.report-summary__goal-head {
+  display: flex;
+  justify-content: space-between;
+  font: var(--type-select-value);
+  color: var(--ink-title);
+}
+
+.report-summary__goal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-card-link);
+}
+
+.report-summary__gauge {
+  position: relative;
+  overflow: hidden;
+  height: var(--report-gauge-height);
+  border-radius: var(--round-full);
+  background: var(--report-gauge-track);
+}
+
+.report-summary__gauge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--brand-gradient);
+  transform: scaleX(var(--gauge));
+  transform-origin: left;
+  transition: transform var(--duration-slow) var(--ease-soft);
+}
+
+.report-summary__goal-note {
+  font: var(--type-report-small);
+  color: var(--ink-soft);
+}
+
+.report-summary__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.report-summary__row {
+  display: flex;
+  justify-content: space-between;
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+}
+
+.report-summary__row dd {
+  font: var(--type-select-value);
+  color: var(--ink-title);
+}
+
+.report-summary__saved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+  font: var(--type-report-small);
+  color: var(--reports-pale-ink);
+}
+
+/* --- Avis, suppression --------------------------------------------------- */
+.report-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  width: 100%;
+  padding: var(--space-20) var(--space-23);
+  border-radius: var(--radius-card);
+  background: var(--surface-chip-neutral);
+}
+
+.report-review__title {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.report-review__text {
+  font: var(--type-report-text);
+  color: var(--ink-soft);
+}
+
+.report-review__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  padding-top: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.clear-report {
+  padding-left: var(--space-4);
+  font: var(--type-reports-note);
+  color: var(--reports-pale-ink);
+  cursor: pointer;
+}
+
+.clear-report--asking {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  color: var(--ink-soft);
+  cursor: default;
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .clear-report--asking {
+    opacity: 0;
+  }
+}
+
+.clear-report__choices {
+  display: flex;
+  gap: var(--space-14);
+}
+
+.clear-report__confirm,
+.clear-report__cancel {
+  font: var(--type-card-link);
+  cursor: pointer;
+}
+
+.clear-report__confirm {
+  color: var(--ink-title);
+}
+
+.clear-report__cancel {
+  color: var(--ink-soft);
+}
+
+/* --- Téléphone ----------------------------------------------------------- */
+@media (width <= 760px) {
+  .report-page {
+    grid-template:
+      'header'
+      'summary'
+      'main'
+      'extras'
+      / minmax(0, 1fr);
+    gap: var(--space-24);
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .report-page__title {
+    font: var(--type-report-title-mobile);
+  }
+
+  .report-summary__event {
+    display: none;
+  }
+
+  .report-photos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ledger__category {
+    width: 100%;
+  }
+
+  .ledger__field {
+    flex: 1;
+    width: auto;
+  }
+
+  .ledger__remove {
+    opacity: 1;
+  }
+
+  .report-photos__remove {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger__line,
+  .tag-list__tag,
+  .report-photos__item,
+  .report-summary__gauge::after,
+  .clear-report--asking {
+    transition: none;
+  }
+}

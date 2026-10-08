@@ -743,6 +743,38 @@
   --reports-year-height: 32px; /* le choix d’année, plus petit que le statut d’une fiche */
 
   /* =========================================================================
+     LE BILAN D'UNE DATE (features/reports/ReportPage.tsx)
+     ====================================================================== */
+  --report-main-width: 680px;
+  --report-side-width: 360px;
+  --report-columns-gap: var(--space-48);
+  --report-blocks-gap: var(--space-42);
+  --report-photo-width: 160px;
+  --report-photo-height: 120px;
+  --report-photo-radius: var(--round-12);
+  --report-summary-thumb-width: 48px;
+  --report-summary-thumb-height: 68px;
+  --report-gauge-track: var(--sand-350);
+  --report-gauge-height: var(--space-6);
+  --report-add-category-width: 260px;
+  --report-add-amount-width: 160px;
+  --report-amount-input-width: 96px;
+  --type-report-title-mobile: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  --type-report-title: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
+  --type-report-page-meta: var(--weight-regular) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-report-eyebrow: var(--weight-medium) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-report-block: var(--weight-semibold) var(--size-17) / var(--leading-snug)
+    var(--family-sans);
+  --type-report-line: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-report-summary-net: var(--weight-regular) var(--size-48) / 1.1 var(--family-display);
+  --type-report-small: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-report-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
+  --type-report-note: var(--weight-regular) var(--size-14) / 1.6 var(--family-sans);
+  --type-report-badge: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+
+  /* =========================================================================
      LISTE « À VENIR »
      ====================================================================== */
   --list-row-gap: var(--space-12);
@@ -936,6 +968,7 @@
   --toggle-knob: var(--cream-50);
   --required-ink: var(--cream-500);
   --dropzone-border: var(--night-400);
+  --report-gauge-track: var(--night-400);
   --calendar-month-ink: var(--cream-750);
   --vitrine-pale-ink: var(--cream-750);
   --activity-avatar-surface: var(--night-350);

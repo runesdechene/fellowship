@@ -11,6 +11,7 @@ import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EventPage } from '@/features/event/EventPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
+import { ReportPage } from '@/features/reports/ReportPage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
 import { WriteReviewPage } from '@/features/review/WriteReviewPage'
 import { VitrinePage } from '@/features/vitrine/VitrinePage'
@@ -112,6 +113,16 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <ReportsPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bilans/:eventId"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <ReportPage />
             </AppShell>
           </ProtectedRoute>
         }

@@ -40,7 +40,7 @@ export function ActionBanner({ report }: { report: DashboardReport }) {
         <div className="action-banner__actions">
           {/* Le bilan vivra sur la fiche de la date : c'est déjà là qu'on
               l'envoie, même si le formulaire reste à écrire. */}
-          <Button variant="action" onClick={() => go(`/evenement/${report.eventId}`)}>
+          <Button variant="action" onClick={() => go(`/bilans/${report.eventId}`)}>
             Remplir mon bilan
           </Button>
           <Button onClick={() => setHidden(true)}>Plus tard</Button>
