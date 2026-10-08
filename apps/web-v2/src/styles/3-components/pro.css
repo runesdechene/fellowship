@@ -66,7 +66,7 @@
 
 .pro-veil__content {
   filter: blur(var(--pro-veil-blur));
-  opacity: 0.7;
+  opacity: var(--pro-veil-opacity);
   user-select: none;
 }
 

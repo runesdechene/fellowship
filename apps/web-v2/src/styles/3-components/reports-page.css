@@ -398,6 +398,18 @@
 }
 
 /* --- En gratuit : l'invitation posée sur la page floutée ----------------- */
+/* Le flou se paie sur la taille affichée (.claude/rules/interface.md) : on le borne, et
+   l'invitation reste en haut, visible sans défiler, quelle que soit la longueur de la liste. */
+.reports-page .pro-veil__content {
+  overflow: hidden;
+  max-height: var(--reports-veil-height);
+}
+
+.reports-page .pro-veil__invitation {
+  align-items: flex-start;
+  padding-top: var(--space-40);
+}
+
 .reports-invitation {
   display: flex;
   flex-direction: column;

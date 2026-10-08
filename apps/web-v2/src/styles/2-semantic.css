@@ -780,6 +780,8 @@
   --pro-badge-padding-x: var(--space-6);
   --pro-bubble-width: 300px;
   --pro-veil-blur: 6px;
+  --pro-veil-opacity: 0.7;
+  --reports-veil-height: 720px; /* Mes bilans flouté : un bloc borné, jamais toute la page */
   --pro-invitation-width: 563px;
   --type-pro-badge: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
   --type-pro-title: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
