@@ -5,11 +5,14 @@
  *            dégradé du logo, c'est l'acquis (maquette 2027).
  * ATTENTION — recliquer l'étape choisie retire la date : la ligne de participation est supprimée.
  *            « Refusé » ne se choisit pas mais s'affiche s'il est en base. Rien ne se verrouille
- *            après la date (piège du 19/08/2026).
+ *            après la date (piège du 19/08/2026). En gratuit, une date au-delà des 6 mois ne se
+ *            pose pas (`locked`) : le choix ouvre l'invitation Pro ; une date déjà posée, elle,
+ *            reste toujours modifiable (lib/plan.ts).
  */
 import { ArrowRight, Check, Clock, Star, Target } from 'lucide-react'
 import { useState } from 'react'
 import { DraftInput } from '@/components/ui/DraftInput'
+import { ProBubble } from '@/components/ui/ProBubble'
 import { Segmented, type SegmentedOption } from '@/components/ui/Segmented'
 import { formatEuros, parseAmount } from '@/lib/money'
 import type { ParticipationStatus } from '@/types/database'
@@ -35,6 +38,9 @@ interface EventStatusProps {
   writeError: string | null
   revenueGoal: number | null
   saveGoal: (goal: number | null) => void
+  /** En gratuit, au-delà des 6 mois : on ne pose pas la date, on invite au Pro. */
+  locked: boolean
+  monthsAway: number
 }
 
 export function EventStatus({
@@ -44,8 +50,11 @@ export function EventStatus({
   writeError,
   revenueGoal,
   saveGoal,
+  locked,
+  monthsAway,
 }: EventStatusProps) {
   const [editingGoal, setEditingGoal] = useState(false)
+  const [inviting, setInviting] = useState(false)
   const engaged = status !== null && status !== 'refuse'
 
   return (
@@ -56,9 +65,22 @@ export function EventStatus({
         options={STEPS}
         value={chosen(status)}
         disabled={saving}
-        onChange={(next) => void setStatus(next)}
+        onChange={(next) => {
+          if (locked) setInviting(true)
+          else void setStatus(next)
+        }}
         onClear={() => void setStatus(null)}
       />
+      {inviting && (
+        <ProBubble
+          className="event-status__bubble"
+          title={`Ce festival est dans ${monthsAway} mois`}
+          text="En gratuit, tu planifies tes 6 prochains mois. Le Pro t’ouvre toute ton année."
+          onClose={() => {
+            setInviting(false)
+          }}
+        />
+      )}
 
       {status === 'refuse' && (
         <p className="event-status__note">Ton dossier a été refusé pour cette date.</p>

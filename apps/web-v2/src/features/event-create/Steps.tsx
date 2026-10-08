@@ -5,6 +5,9 @@
  */
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
 import { parseSqlDate, formatDayMonth } from '@/lib/dates'
+import { useTransitionNavigate } from '@/lib/navigation'
+import { canActOn, monthsBeyond } from '@/lib/plan'
+import { usePlan } from '@/lib/usePlan'
 import type { useSimilarEvents } from './useSimilarEvents'
 import type { EventDraft } from './useEventDraft'
 
@@ -117,8 +120,31 @@ export function StepPlace({ draft, update }: { draft: EventDraft; update: Update
             />
           </Field>
         </div>
+        <BeyondHorizon startDate={draft.startDate} />
       </div>
     </>
+  )
+}
+
+/**
+ * En gratuit, une date au-delà des 6 mois entre dans l'annuaire mais pas dans le calendrier de
+ * l'exposant (lib/plan.ts) : on le dit avant l'enregistrement, pas après.
+ */
+function BeyondHorizon({ startDate }: { startDate: string }) {
+  const { pro } = usePlan()
+  const go = useTransitionNavigate()
+  if (!startDate) return null
+  const start = parseSqlDate(startDate)
+  const today = new Date()
+  if (canActOn(start, pro, today)) return null
+  return (
+    <p className="create__hint create__hint--pro">
+      Cette date est dans {monthsBeyond(start, today)} mois : elle entrera dans l’annuaire, pas dans
+      ton calendrier. Le Pro t’ouvre toute ton année.{' '}
+      <button type="button" className="create__pro-link" onClick={() => go('/pro')}>
+        Découvrir le Pro
+      </button>
+    </p>
   )
 }
 

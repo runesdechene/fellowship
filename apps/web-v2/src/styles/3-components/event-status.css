@@ -123,3 +123,8 @@
     transition: none;
   }
 }
+
+/* L'invitation Pro, sous le contrôle, quand une date au-delà des 6 mois est refusée en gratuit. */
+.event-status__bubble {
+  margin-top: var(--space-12);
+}

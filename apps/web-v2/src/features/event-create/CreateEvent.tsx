@@ -11,6 +11,9 @@ import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { ArrowLeft, Save, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { parseSqlDate } from '@/lib/dates'
+import { canActOn } from '@/lib/plan'
+import { usePlan } from '@/lib/usePlan'
 import { supabase } from '@/lib/supabase'
 import { EventPreview } from './EventPreview'
 import { useSimilarEvents } from './useSimilarEvents'
@@ -27,6 +30,7 @@ const CONFIRM_MS = 6000
 export function CreateEvent() {
   const go = useTransitionNavigate()
   const { actor, person } = useAuth()
+  const { pro } = usePlan()
   const { draft, update, toggleTag, clear, status } = useEventDraft()
   const tags = useTags()
 
@@ -141,12 +145,16 @@ export function CreateEvent() {
     // « à venir » au lieu de disparaître. On n'écrit PAS « inscrit » : ça
     // voudrait dire que la demande est faite auprès de l'organisateur, ce
     // que l'app ne sait pas.
-    await supabase.from('participations').insert({
-      actor_id: actor.id,
-      event_id: created.id,
-      status: 'interesse',
-      acted_by_user_id: person?.actor_id ?? null,
-    })
+    // En gratuit, au-delà des 6 mois, la date entre dans l'annuaire seulement (lib/plan.ts) :
+    // l'étape des dates l'a dit avant l'enregistrement.
+    if (canActOn(parseSqlDate(draft.startDate), pro, new Date())) {
+      await supabase.from('participations').insert({
+        actor_id: actor.id,
+        event_id: created.id,
+        status: 'interesse',
+        acted_by_user_id: person?.actor_id ?? null,
+      })
+    }
 
     setSaving(false)
 

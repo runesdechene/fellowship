@@ -251,6 +251,15 @@
   cursor: pointer;
 }
 
+.explore-card__bubble {
+  position: absolute;
+  top: calc(var(--space-10) * 2 + var(--rail-arrow-size));
+  right: var(--space-8);
+  left: var(--space-8);
+  z-index: 2;
+  width: auto;
+}
+
 .explore-card__star--on svg {
   fill: currentcolor;
 }

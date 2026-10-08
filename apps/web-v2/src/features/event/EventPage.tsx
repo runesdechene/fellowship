@@ -25,6 +25,8 @@ import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
 import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
+import { canChangeStatus, monthsBeyond } from '@/lib/plan'
+import { usePlan } from '@/lib/usePlan'
 import type { EventLedgerLine } from './useEvent'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
@@ -108,6 +110,8 @@ function LedgerRow({ line }: { line: EventLedgerLine }) {
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const { actor, person } = useAuth()
+  const { pro } = usePlan()
+  const today = new Date()
   const {
     event,
     startDate,
@@ -247,6 +251,8 @@ export function EventPage() {
           writeError={writeError}
           revenueGoal={dossier.fields.revenueGoal}
           saveGoal={(goal) => void dossier.save({ revenueGoal: goal })}
+          locked={!canChangeStatus(startDate, status !== null, pro, today)}
+          monthsAway={monthsBeyond(startDate, today)}
         />
 
         {(status === 'inscrit' || status === 'confirme') && (

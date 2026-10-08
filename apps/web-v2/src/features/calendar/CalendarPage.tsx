@@ -13,6 +13,9 @@ import { useAuth } from '@/lib/auth'
 import { calendarHeadline, navWindow, scrollFromPointer } from '@/lib/calendar'
 import { MonthColumn } from './MonthColumn'
 import { MonthNav } from './MonthNav'
+import { ProMonth } from './ProMonth'
+import { proHorizon } from '@/lib/plan'
+import { usePlan } from '@/lib/usePlan'
 import { useEasedScroll } from './useEasedScroll'
 import { useCalendar } from './useCalendar'
 
@@ -65,7 +68,14 @@ function Toggle({
 
 export function CalendarPage() {
   const { actor } = useAuth()
-  const { months, count, daysToNext, loading, error } = useCalendar(actor?.id)
+  const calendar = useCalendar(actor?.id)
+  const { count, daysToNext, loading, error } = calendar
+  const { pro } = usePlan()
+  // En gratuit, la frise s'arrête au sixième mois et le septième invite au Pro (lib/plan.ts).
+  const today = new Date()
+  const horizon = proHorizon(today)
+  const months = pro ? calendar.months : calendar.months.filter((m) => m.date < horizon)
+  const proMonth = pro ? null : (calendar.months.find((m) => m.date >= horizon) ?? null)
   const [showFriends, toggleFriends] = useStoredToggle(FRIENDS_KEY, true)
   const [showInterested, toggleInterested] = useStoredToggle(INTERESTED_KEY, false)
   const [params, setParams] = useSearchParams()
@@ -178,6 +188,7 @@ export function CalendarPage() {
             showInterested={showInterested}
           />
         ))}
+        {proMonth && <ProMonth slot={proMonth} today={today} />}
       </div>
     </div>
   )

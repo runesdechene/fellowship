@@ -355,3 +355,16 @@
     transition: none;
   }
 }
+
+/* En gratuit, une date au-delà des 6 mois : la note qui le dit, avant l'enregistrement. */
+.create__hint--pro {
+  margin-top: var(--space-12);
+  color: var(--ink-title);
+}
+
+.create__pro-link {
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  text-decoration: underline;
+  cursor: pointer;
+}
