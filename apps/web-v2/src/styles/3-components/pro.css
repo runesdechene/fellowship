@@ -1,0 +1,115 @@
+/**
+ * QUOI     — les styles du Pro : la pastille, la bulle d'invitation, le voile flouté, et la page
+ *            d'attente /pro (components/ui/ProBadge, ProBubble, ProVeil ; features/pro).
+ * POURQUOI — maquettes « Points de contact du Pro » et « Mes bilans · compte gratuit » : une
+ *            invitation blanche bordée, jamais une fenêtre qui recouvre l'écran.
+ */
+
+.pro-badge {
+  display: inline-block;
+  width: fit-content;
+  padding: var(--space-2) var(--pro-badge-padding-x);
+  border-radius: var(--radius-xs);
+  background: var(--action-surface);
+  font: var(--type-pro-badge);
+  color: var(--action-ink);
+}
+
+/* --- La bulle ------------------------------------------------------------ */
+.pro-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-10);
+  width: var(--pro-bubble-width);
+  padding: var(--space-18) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition:
+    opacity var(--duration-medium) var(--ease-soft),
+    translate var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .pro-bubble {
+    opacity: 0;
+    translate: 0 var(--space-6);
+  }
+}
+
+.pro-bubble__title {
+  font: var(--type-pro-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.pro-bubble__text {
+  font: var(--type-pro-text);
+  color: var(--ink-soft);
+}
+
+.pro-bubble__link,
+.pro-page__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+/* --- Le voile ------------------------------------------------------------ */
+.pro-veil {
+  position: relative;
+}
+
+.pro-veil__content {
+  filter: blur(var(--pro-veil-blur));
+  opacity: 0.7;
+  user-select: none;
+}
+
+.pro-veil__invitation {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+}
+
+/* --- La page d'attente --------------------------------------------------- */
+.pro-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-14);
+  width: 100%;
+  max-width: var(--pro-invitation-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+.pro-page__title {
+  font: var(--type-pro-invitation-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.pro-page__text {
+  font: var(--type-pro-invitation-text);
+  color: var(--ink-soft);
+}
+
+@media (width <= 760px) {
+  .pro-page {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pro-bubble {
+    transition: none;
+  }
+}

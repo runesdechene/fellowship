@@ -8,6 +8,7 @@
  *            par la V2 (lot 7).
  */
 import { ArrowRight, Pencil, ShieldCheck } from 'lucide-react'
+import { ProBadge } from '@/components/ui/ProBadge'
 import { useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { Stars } from '@/components/ui/Stars'
@@ -61,7 +62,7 @@ export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps
           </div>
           <div className="reviews__detail">
             <span className="reviews__caption">
-              Le détail <span className="reviews__pro">Pro</span>
+              Le détail <ProBadge />
             </span>
             {(
               [

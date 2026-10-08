@@ -37,14 +37,6 @@
   color: var(--ink-section-pale);
 }
 
-.reviews__pro {
-  padding: 0 var(--space-6);
-  border-radius: var(--radius-xs);
-  background: var(--action-surface);
-  font: var(--type-review-pro);
-  color: var(--action-ink);
-}
-
 .reviews__detail {
   display: flex;
   flex: 1;

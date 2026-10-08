@@ -775,6 +775,20 @@
   --type-report-badge: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
 
   /* =========================================================================
+     LE PRO — pastille, bulle, voile, page d'attente (components/ui/Pro*, features/pro)
+     ====================================================================== */
+  --pro-badge-padding-x: var(--space-6);
+  --pro-bubble-width: 300px;
+  --pro-veil-blur: 6px;
+  --pro-invitation-width: 563px;
+  --type-pro-badge: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
+  --type-pro-title: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-pro-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
+  --type-pro-invitation-title: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
+  --type-pro-invitation-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
+  --pro-check-ink: var(--status-ok-ink);
+
+  /* =========================================================================
      LISTE « À VENIR »
      ====================================================================== */
   --list-row-gap: var(--space-12);
@@ -856,7 +870,6 @@
      AVIS — le bloc de la fiche et l'écran « Écrire un avis » (features/event, features/review)
      ====================================================================== */
   --type-review-score: var(--weight-regular) var(--size-52) / 1 var(--family-display);
-  --type-review-pro: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
   --type-review-row: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-review-quote: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
   --review-label-width: 96px;
