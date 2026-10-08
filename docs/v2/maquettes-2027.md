@@ -15,8 +15,8 @@
 | Explorer, accueil | `2027 — Explorer` | validé |
 | Explorer, résultats | `2027 — Explorer · résultats` | validé |
 | Vitrine d'un artisan | `2027 — Vitrine d’un artisan` (+ états du propriétaire) | validé |
-| Mes bilans | `2027 — Mes bilans` | validé |
-| Bilan d'une date | `2027 — Bilan d’une date` | validé |
+| Mes bilans | `2027 — Mes bilans`, `2027 mobile — Mes bilans` | validé, intégré (lot 7a, 08/10/2026) |
+| Bilan d'une date | `2027 — Bilan d’une date`, `2027 mobile — Bilan d’une date` | validé, intégré (lot 7a, 08/10/2026) |
 | Ajouter une date | `2027 — Ajouter une date · étape 1` | dessiné (étapes 2-4 au même gabarit) |
 | États Pro | `2027 — Mes bilans · compte gratuit`, `2027 — Points de contact du Pro` | dessiné |
 | Notifications | `2027 — Notifications` | dessiné |
