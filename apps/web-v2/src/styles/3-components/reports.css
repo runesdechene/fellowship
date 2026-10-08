@@ -178,3 +178,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* En gratuit : la pastille posée sur le bloc flouté, vers Mes bilans. */
+.reports__invite {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}

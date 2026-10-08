@@ -18,3 +18,5 @@
 - `ReportPhotos.tsx` — les photos souvenir, privées.
 - `ReportSummary.tsx` — bénéfice, objectif, chiffres.
 - `ClearReport.tsx` — « Supprimer ce bilan », en deux temps.
+- `ReportsInvitation.tsx` — en gratuit, l'invitation Pro posée sur Mes bilans flouté.
+- `sampleReports.ts` — l'exemple flouté quand l'enseigne n'a encore aucun bilan.

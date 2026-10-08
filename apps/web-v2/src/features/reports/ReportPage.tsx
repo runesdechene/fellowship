@@ -14,6 +14,7 @@ import { useAuth } from '@/lib/auth'
 import { durationLabel, formatDateRange } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
+import { usePlan } from '@/lib/usePlan'
 import { ClearReport } from './ClearReport'
 import { Ledger } from './Ledger'
 import { ReportNote } from './ReportNote'
@@ -26,10 +27,15 @@ export function ReportPage() {
   const { eventId } = useParams<{ eventId: string }>()
   const { actor } = useAuth()
   const go = useTransitionNavigate()
-  const { status, detail, saving, failures, writeError, actions } = useReport(eventId, actor?.id)
+  const { pro } = usePlan()
+  // En gratuit, le bilan d'une date ne se lit pas : rien n'est chargé, on renvoie à Mes bilans.
+  const { status, detail, saving, failures, writeError, actions } = useReport(
+    pro ? eventId : undefined,
+    actor?.id,
+  )
   useDeclarePageChrome({ poster: null, lead: null, back: '/bilans' })
 
-  if (status === 'missing') return <Navigate to="/bilans" replace />
+  if (!pro || status === 'missing') return <Navigate to="/bilans" replace />
   if (status === 'error') {
     return (
       <div className="report-page">

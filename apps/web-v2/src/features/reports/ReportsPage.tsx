@@ -3,14 +3,20 @@
  *            mois et la liste des dates.
  * POURQUOI — comparer ses saisons et retrouver chaque bilan. L'année vit dans l'adresse : le
  *            retour arrière du navigateur ramène à l'année d'avant.
- * ATTENTION — l'écran n'affiche que ce que useReports charge et lib/reports.ts calcule.
+ * ATTENTION — l'écran n'affiche que ce que useReports charge et lib/reports.ts calcule. En
+ *            gratuit, tout passe sous un voile avec l'invitation Pro : les vraies données s'il y
+ *            en a (saisies pendant une période Pro), sinon un exemple (sampleReports).
  */
 import { Lock } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
+import { ProVeil } from '@/components/ui/ProVeil'
 import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { yearSummary } from '@/lib/reports'
+import { usePlan } from '@/lib/usePlan'
+import { ReportsInvitation } from './ReportsInvitation'
+import { sampleReports } from './sampleReports'
 import { MonthlyChart } from './MonthlyChart'
 import { ReportsTable } from './ReportsTable'
 import { YearCard } from './YearCard'
@@ -27,6 +33,7 @@ export function ReportsPage() {
   const [params, setParams] = useSearchParams()
   const year = yearFrom(params.get('annee'))
   const { status, years, dates, previousYearRevenue } = useReports(actor?.id, year)
+  const { pro } = usePlan()
   useDeclarePageChrome({ poster: null, lead: null, back: '/' })
 
   // L'année affichée reste proposée même sans date, pour qu'on voie où l'on est.
@@ -59,10 +66,22 @@ export function ReportsPage() {
       {status === 'error' && (
         <p className="reports-page__note">Tes bilans n’ont pas pu être chargés.</p>
       )}
-      {status === 'ready' && dates.length === 0 && (
+      {status === 'ready' && !pro && (
+        <ProVeil invitation={<ReportsInvitation />}>
+          <ReportsContent
+            summary={yearSummary(
+              dates.length > 0 ? dates : sampleReports(year),
+              previousYearRevenue,
+            )}
+            dates={dates.length > 0 ? dates : sampleReports(year)}
+            year={year}
+          />
+        </ProVeil>
+      )}
+      {status === 'ready' && pro && dates.length === 0 && (
         <p className="reports-page__note">Aucune date en {year}.</p>
       )}
-      {status === 'ready' && dates.length > 0 && (
+      {status === 'ready' && pro && dates.length > 0 && (
         <ReportsContent
           summary={yearSummary(dates, previousYearRevenue)}
           dates={dates}

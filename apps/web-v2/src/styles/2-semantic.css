@@ -787,6 +787,7 @@
   --type-pro-invitation-title: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-pro-invitation-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
   --pro-check-ink: var(--status-ok-ink);
+  --radius-invitation: var(--round-20);
   --type-pro-month-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 

@@ -396,3 +396,78 @@
     transition: none;
   }
 }
+
+/* --- En gratuit : l'invitation posée sur la page floutée ----------------- */
+.reports-invitation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-18);
+  width: min(100%, var(--pro-invitation-width));
+  padding: var(--space-32) var(--space-40);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-invitation);
+  background: var(--surface-card);
+}
+
+.reports-invitation__title {
+  font: var(--type-pro-invitation-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.reports-invitation__text {
+  font: var(--type-pro-invitation-text);
+  color: var(--ink-soft);
+}
+
+.reports-invitation__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding-top: var(--space-4);
+  font: var(--type-report-line);
+  color: var(--ink-title);
+}
+
+.reports-invitation__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.reports-invitation__list svg {
+  flex: none;
+  color: var(--pro-check-ink);
+}
+
+.reports-invitation__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding-top: var(--space-10);
+}
+
+.reports-invitation__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-18) var(--space-12) var(--space-20);
+  border-radius: var(--radius-control);
+  background: var(--action-surface);
+  font: var(--type-button);
+  color: var(--action-ink);
+  cursor: pointer;
+}
+
+.reports-invitation__later {
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+@media (width <= 760px) {
+  .reports-invitation {
+    padding: var(--space-24) var(--space-20);
+  }
+}

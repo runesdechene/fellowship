@@ -346,3 +346,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* « Ouvrir le bilan » sous le bilan d'une date passée : le bilan a son écran (/bilans/:id). */
+.event-page__link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  margin-top: var(--space-12);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}

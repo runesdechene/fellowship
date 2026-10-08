@@ -6,6 +6,7 @@
  */
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
+import { usePlan } from '@/lib/usePlan'
 import { ActionBanner } from './ActionBanner'
 import { DossiersSection } from './DossiersSection'
 import { NextDateCard } from './NextDateCard'
@@ -16,6 +17,8 @@ import { useDashboard } from './useDashboard'
 
 export function Dashboard() {
   const { actor } = useAuth()
+  // En gratuit, les bilans se devinent sous un voile et la bande qui les réclame se tait.
+  const { pro } = usePlan()
   const {
     programmedCount,
     months,
@@ -56,7 +59,7 @@ export function Dashboard() {
         </div>
       </header>
 
-      {pendingReport && (
+      {pendingReport && pro && (
         <section className="dashboard__section">
           <ActionBanner report={pendingReport} />
         </section>
@@ -95,6 +98,7 @@ export function Dashboard() {
           seasonNet={seasonNet}
           seasonRevenue={seasonRevenue}
           seasonGoal={seasonGoal}
+          locked={!pro}
         />
       )}
     </div>

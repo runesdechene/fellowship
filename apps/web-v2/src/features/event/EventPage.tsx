@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
+import { ArrowRight, CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
@@ -14,6 +14,7 @@ import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
 import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
+import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { nameLine } from '@/lib/name-line'
 import { isRichTextEmpty } from '@/lib/rich-text'
@@ -27,6 +28,8 @@ import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
+import { ProBadge } from '@/components/ui/ProBadge'
+import { ProVeil } from '@/components/ui/ProVeil'
 import type { EventLedgerLine } from './useEvent'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
@@ -107,10 +110,28 @@ function LedgerRow({ line }: { line: EventLedgerLine }) {
   )
 }
 
+/** Les lignes du bilan d'une date, sur sa fiche. */
+function MyReportCard({ ledger }: { ledger: EventLedgerLine[] }) {
+  return (
+    <div className="event-page__card">
+      {ledger.length > 0 ? (
+        <ul className="event-page__ledger">
+          {ledger.map((line) => (
+            <LedgerRow key={line.id} line={line} />
+          ))}
+        </ul>
+      ) : (
+        <p className="event-page__state">Le bilan de cette date n’a pas encore été rempli.</p>
+      )}
+    </div>
+  )
+}
+
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const { actor, person } = useAuth()
   const { pro } = usePlan()
+  const go = useTransitionNavigate()
   const today = new Date()
   const {
     event,
@@ -325,26 +346,38 @@ export function EventPage() {
           <section className="event-page__block">
             <div className="event-page__block-head">
               <h2 className="event-page__block-title">Mon bilan</h2>
-              {net !== null && revenue !== null && (
+              {pro && net !== null && revenue !== null && (
                 <p className="event-page__block-total">
                   <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
                   <b>{formatEuros(revenue)}</b>
                 </p>
               )}
             </div>
-            <div className="event-page__card">
-              {ledger.length > 0 ? (
-                <ul className="event-page__ledger">
-                  {ledger.map((line) => (
-                    <LedgerRow key={line.id} line={line} />
-                  ))}
-                </ul>
-              ) : (
-                <p className="event-page__state">
-                  Le bilan de cette date n’a pas encore été rempli.
-                </p>
-              )}
-            </div>
+            {pro ? (
+              <>
+                <MyReportCard ledger={ledger} />
+                <button
+                  type="button"
+                  className="event-page__link-button"
+                  onClick={() => go(`/bilans/${event.id}`)}
+                >
+                  Ouvrir le bilan
+                  <ArrowRight size={13} strokeWidth={2} />
+                </button>
+              </>
+            ) : (
+              <ProVeil
+                invitation={
+                  <button type="button" className="reports__invite" onClick={() => go('/bilans')}>
+                    <ProBadge />
+                    Tes bilans avec le Pro
+                    <ArrowRight size={14} strokeWidth={2} />
+                  </button>
+                }
+              >
+                <MyReportCard ledger={ledger} />
+              </ProVeil>
+            )}
           </section>
         )}
       </div>
