@@ -118,7 +118,9 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   intégration du calendrier sans la marque.
 - **Cadres** : `2027 — Mes bilans`, `2027 — Bilan d’une date`, `2027 — Mes bilans · compte gratuit`,
   `2027 — Points de contact du Pro`, `2027 — Offre Pro`.
-- **À confirmer par Uriel** : prix, essai de 14 jours, prévenance avant la fin de l'essai.
+- **Prix tranché le 08/10/2026** : 9,99 € HT / mois, 99,90 € HT / an, essai de 14 jours. Les nouveaux
+  prix Stripe et la bascule des abonnés actuels passent **après** la V2 (ordre d'Uriel). Reste à
+  confirmer : la prévenance avant la fin de l'essai.
 
 ### Lot 8 — Notifications et alertes  ☐
 - **Livre** : panneau de la cloche, préférences (appli / e-mail), alertes Pro : clôture des
@@ -126,11 +128,17 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Cadres** : `2027 — Notifications`, section Notifications de `2027 — Réglages`.
 - **Base** : notifications, préférences, recherches sauvegardées, **lien entre éditions** ; envois
   planifiés (e-mails). **Le plus lourd côté back.**
+- **Ajouté le 08/10/2026 (retour client)** : une notification quand quelqu'un écrit dans la discussion
+  d'un festival où tu vas, et la **mise en sourdine** d'une discussion. Le lien entre éditions sert
+  aussi à afficher **ton bilan de l'an passé** sur la fiche de la nouvelle édition.
 
 ### Lot 9 — Communauté et réglages  ☐
 - **Livre** : Communauté (fil groupé par jour, « Ça se rassemble », suggestions, identité protégée) ;
   Réglages (profil, compte, notifications, enseignes et abonnement, **vraie suppression de compte**).
 - **Cadres** : `2027 — Communauté`, `2027 — Réglages`.
+- **Ajouté le 08/10/2026** : la communauté est au cœur de Fellowship ; les festivaliers reviennent
+  comme **public de l'exposant** (discussion « Entre exposants / Avec les festivaliers »), pas comme
+  clients — l'arrivée reste celle de l'exposant.
 
 ### Lot 10 — Connexion, arrivée, création et modification d'une date  ☐
 - **Livre** : connexion au nouveau style ; **arrivée d'un exposant** (prénom, marque, métier, ville,
@@ -141,7 +149,8 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Base** : historique des modifications ; vérifier qui peut modifier un événement.
 
 ### Lot 11 — Landing publique  ☐
-- **Livre** : la landing « 2027 » (accroche copilote, recherche sans compte, défilé des types en
+- **Livre** : la landing « 2027 » (accroche « Ta saison de festivals, avec ceux qui la font. »,
+  section « Tu n'y vas jamais seul », bande Festivaliers — mise à jour validée le 08/10/2026 ; recherche sans compte, défilé des types en
   couleurs, festivals, histoire, six fonctions, Pro, organisateurs, « Propulsé par Runes de Chêne ») ;
   remplace la page « Parchemin ».
 - **Cadre** : `2027 — Landing`. **À fournir par Uriel** : photos de marché, relecture de l'histoire.
