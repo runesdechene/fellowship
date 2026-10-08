@@ -80,16 +80,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.reports__all {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--report-min-width), 1fr));
-  margin-top: var(--space-12);
-  padding: var(--space-10);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
-}
-
 .reports__more {
   display: inline-flex;
   align-items: center;

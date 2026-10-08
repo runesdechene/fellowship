@@ -22,7 +22,8 @@ import {
   type Friend,
 } from '@/lib/friends'
 import { dossierView, type DossierView } from '@/lib/dossiers'
-import { ledgerProfit, ledgerRevenue, type LedgerLine } from '@/lib/money'
+import { ledgerProfit, ledgerRevenue } from '@/lib/money'
+import { isFilled, type ReportLine } from '@/lib/reports'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
 export type { Friend }
@@ -68,9 +69,6 @@ export interface DashboardReport {
   /** Entrants − sortants. null tant qu'aucune ligne de registre n'existe. */
   net: number | null
 }
-
-/* Il n'existe pas d'écran d'historique : TOUS les bilans vivent sur le
-   tableau de bord. La rangée passe à la ligne, elle ne tronque jamais. */
 
 interface DashboardData {
   /** Nombre total de dates programmées à venir. */
@@ -170,9 +168,7 @@ async function fetchDossiers(
  * Les dates passées de l'ANNÉE EN COURS, chacune accompagnée de son bilan
  * s'il existe. Une date sans bilan reste dans la liste : c'est justement
  * celle qu'il faut remplir, et elle a sa propre carte.
- *
- * Les années précédentes ne sont pas affichées pour l'instant — il n'y a pas
- * encore d'écran d'historique où les envoyer.
+ * Les années précédentes vivent dans Mes bilans (/bilans).
  */
 async function fetchReports(
   actorId: string,
@@ -205,7 +201,7 @@ async function fetchReports(
   const ledgerRows = must(
     await supabase
       .from('event_ledger_entries')
-      .select('event_id, amount, direction')
+      .select('event_id, amount, direction, source')
       .eq('actor_id', actorId)
       .in(
         'event_id',
@@ -215,15 +211,15 @@ async function fetchReports(
 
   const linesByEvent = ledgerRows.reduce((map, line) => {
     const list = map.get(line.event_id) ?? []
-    list.push({ amount: line.amount, direction: line.direction })
+    list.push({ amount: line.amount, direction: line.direction, source: line.source })
     map.set(line.event_id, list)
     return map
-  }, new Map<string, LedgerLine[]>())
+  }, new Map<string, ReportLine[]>())
 
   const reports = past.map((event) => {
     const lines = linesByEvent.get(event.id) ?? []
-    // Aucune ligne de registre = bilan pas encore rempli.
-    const filled = lines.length > 0
+    // La ligne de Mon dossier seule ne fait pas un bilan (lib/reports.ts).
+    const filled = isFilled(lines)
     return {
       eventId: event.id,
       name: event.name,
@@ -234,12 +230,14 @@ async function fetchReports(
     }
   })
 
-  const allLines = ledgerRows.map((line) => ({
-    amount: line.amount,
-    direction: line.direction,
-  }))
-  const seasonNet = allLines.length > 0 ? ledgerProfit(allLines) : null
-  const seasonRevenue = allLines.length > 0 ? ledgerRevenue(allLines) : null
+  // La saison ne compte que les bilans remplis : la place d'une date pas encore faite n'est pas
+  // une perte de l'année.
+  const filledLines = past.flatMap((event) => {
+    const lines = linesByEvent.get(event.id) ?? []
+    return isFilled(lines) ? lines : []
+  })
+  const seasonNet = filledLines.length > 0 ? ledgerProfit(filledLines) : null
+  const seasonRevenue = filledLines.length > 0 ? ledgerRevenue(filledLines) : null
 
   // `past` est trié du plus récent au plus ancien : le premier bilan vide
   // trouvé est donc bien le plus récent.

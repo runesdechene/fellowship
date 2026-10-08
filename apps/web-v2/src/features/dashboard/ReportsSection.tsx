@@ -1,14 +1,12 @@
 /**
  * QUOI     — le bloc « Mes bilans » : à gauche le bénéfice de l'année sur son chiffre d'affaires,
- *            à droite les trois dernières dates passées, remplies ou à remplir ; « Tout voir »
- *            déplie les autres.
+ *            à droite les trois dernières dates passées, remplies ou à remplir.
  * POURQUOI — un bilan vide se signale par son appel à remplir ; un bilan rempli montre recette
- *            et bénéfice. Un clic ouvre la fiche de la date.
- * ATTENTION — « Tout voir » déplie sur place tant que l'écran « Mes bilans » (lot 7) n'existe
- *            pas : aucun bilan ne doit devenir inaccessible.
+ *            et bénéfice. « Tout voir » mène à Mes bilans (/bilans) ; un bilan mène à son écran
+ *            (/bilans/:eventId).
  */
 import { ArrowRight } from 'lucide-react'
-import { useState, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 import { formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros, goalShare } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -21,7 +19,7 @@ function ReportItem({ report }: { report: DashboardReport }) {
   const filled = report.net !== null
 
   return (
-    <button type="button" className="report" onClick={() => go(`/evenement/${report.eventId}`)}>
+    <button type="button" className="report" onClick={() => go(`/bilans/${report.eventId}`)}>
       {report.imageUrl ? (
         <img className="report__thumb" src={report.imageUrl} alt="" />
       ) : (
@@ -60,23 +58,15 @@ export function ReportsSection({
   seasonRevenue,
   seasonGoal,
 }: ReportsSectionProps) {
-  const [open, setOpen] = useState(false)
-  const rest = reports.slice(SHOWN)
+  const go = useTransitionNavigate()
 
   return (
     <section className="dashboard__section">
       <div className="dashboard__section-head">
         <h2 className="dashboard__section-title">Mes bilans</h2>
-        {rest.length > 0 && (
-          <button
-            type="button"
-            className="reports__more"
-            aria-expanded={open}
-            onClick={() => {
-              setOpen((value) => !value)
-            }}
-          >
-            {open ? 'Replier' : 'Tout voir'}
+        {reports.length > 0 && (
+          <button type="button" className="reports__more" onClick={() => go('/bilans')}>
+            Tout voir
             <ArrowRight size={14} strokeWidth={2} />
           </button>
         )}
@@ -116,14 +106,6 @@ export function ReportsSection({
           ))}
         </div>
       </div>
-
-      {open && (
-        <div className="reports__all">
-          {rest.map((report) => (
-            <ReportItem key={report.eventId} report={report} />
-          ))}
-        </div>
-      )}
     </section>
   )
 }
