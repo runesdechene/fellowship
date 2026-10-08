@@ -112,7 +112,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   V2. Reste : l'éditeur, le QR, « Intégrer à mon site », « Signaler » et le menu « … » — absents de
   l'écran plutôt que des boutons morts.
 
-### Lot 7 — Le Pro et les bilans  ☐ · 7a bilans ☑ (08/10/2026, plan `2026-10-08-lot-7a-bilans-v2.md`) · ☐ 7b statut Pro · ☐ 7c offre et paiement
+### Lot 7 — Le Pro et les bilans  ☐ · 7a bilans ☑ (08/10/2026, plan `2026-10-08-lot-7a-bilans-v2.md`) · 7b statut Pro ☑ (08/10/2026, plan `2026-10-08-lot-7b-statut-pro-v2.md`) · ☐ 7c offre et paiement
 - **Livre** : états verrouillés (aperçu flouté, pastille Pro, bulles), page **Mes bilans**, **bilan d'une
   date** (page, enregistrement automatique, ce qui a marché), offre Pro, branchement Stripe existant,
   intégration du calendrier sans la marque.
