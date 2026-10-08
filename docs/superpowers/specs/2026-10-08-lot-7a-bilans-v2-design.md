@@ -69,16 +69,25 @@ disparaît, code mort supprimé dans le même commit) ; un bilan du tableau de b
 - **« Et pour les autres exposants ? »** : mène à l'écriture d'un avis (`/evenement/:id/avis`,
   déjà en place).
 - **Supprimer ce bilan** : en deux temps, sur place (« Supprimer ce bilan » puis « Confirmer la
-  suppression ») — jamais une boîte de dialogue du navigateur. Supprime la ligne
-  `event_reports` ; les lignes de montant suivent par la cascade ; les photos sont retirées du
-  bucket.
+  suppression ») — jamais une boîte de dialogue du navigateur. Efface ce que le bilan a ajouté :
+  les lignes de montant **saisies dans le bilan** (`source = 'manual'`), les étiquettes, la note
+  et les photos (retirées du bucket). **La ligne `event_reports` et le montant de Mon dossier
+  (`source = 'stepper'`) restent** : supprimer la ligne ferait partir, par la cascade, le prix de
+  la place saisi sur la fiche.
 
-### Quand un bilan existe
+### Quand un bilan est « rempli »
 
-La ligne `event_reports` (unique par acteur et événement) est créée à la **première saisie** :
-une ligne de montant, une étiquette, une note ou une photo. Ouvrir un bilan ne crée rien. Les
-montants viennent **uniquement** de `event_ledger_entries` ; les colonnes `revenue`,
-`booth_cost`, `charges` d'`event_reports` sont mortes (`docs/db/gotchas.md`).
+La ligne `event_reports` (unique par acteur et événement) existe souvent **avant** la date :
+`set_stand_amount` la crée dès que le prix de la place est saisi dans Mon dossier. Son existence
+ne dit donc rien. **Un bilan est rempli quand il a au moins une ligne de montant saisie dans le
+bilan** (`source = 'manual'`). Sinon la date affiche « Remplir le bilan », même si elle a une
+note ou des étiquettes. La règle vit dans `lib/reports.ts` et le tableau de bord la reprend :
+il comptait jusqu'ici la seule ligne de Mon dossier comme un bilan rempli, et n'appelait donc
+jamais à remplir une date dont la place était saisie.
+
+Ouvrir un bilan ne crée rien ; la première écriture crée la ligne `event_reports` si elle
+manque. Les montants viennent **uniquement** de `event_ledger_entries` ; les colonnes
+`revenue`, `booth_cost`, `charges` d'`event_reports` sont mortes (`docs/db/gotchas.md`).
 
 ## Comment c'est construit
 
