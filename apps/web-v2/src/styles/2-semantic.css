@@ -713,6 +713,36 @@
   --report-thumb-height: 78px;
 
   /* =========================================================================
+     MES BILANS, L'ÉCRAN — l'année, les mois, les dates (features/reports)
+     ====================================================================== */
+  --type-reports-year-net: var(--weight-regular) var(--size-52) / 1.1 var(--family-display);
+  --type-reports-year-value: var(--weight-regular) var(--size-30) / 1.2 var(--family-display);
+  --type-reports-label: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-reports-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-reports-section: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-reports-amount: var(--weight-regular) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+  --type-reports-net: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-reports-bar-value: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --reports-pale-ink: var(--ink-350); /* libellés, mois vides, tirets */
+  --reports-figure-padding: var(--space-26);
+  --reports-card-padding-y: var(--space-26);
+  --reports-chart-height: 130px;
+  --reports-bar-radius: var(--round-8);
+  --reports-bar-floor: 3px; /* un mois sans bénéfice : un trait au ras de l'axe */
+  --reports-row-radius: var(--round-10);
+  --reports-thumb-width: 40px;
+  --reports-thumb-height: 56px;
+  --reports-thumb-radius: var(--round-6);
+  --reports-amount-column: 150px;
+  --reports-costs-column: 130px;
+  --reports-end-column: 180px;
+  --reports-date-column: 420px;
+  --reports-year-height: 32px; /* le choix d’année, plus petit que le statut d’une fiche */
+
+  /* =========================================================================
      LISTE « À VENIR »
      ====================================================================== */
   --list-row-gap: var(--space-12);

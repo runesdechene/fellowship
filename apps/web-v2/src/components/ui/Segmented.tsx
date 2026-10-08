@@ -11,7 +11,8 @@ import type { LucideIcon } from 'lucide-react'
 export interface SegmentedOption<T extends string> {
   value: T
   label: string
-  Icon: LucideIcon
+  /** Absente pour un choix qui se lit seul (une année). */
+  Icon?: LucideIcon
   /** Cette option, une fois choisie, porte le dégradé du logo. */
   brand?: boolean
 }
@@ -52,7 +53,7 @@ export function Segmented<T extends string>({
               else onChange(option)
             }}
           >
-            <Icon size={14} strokeWidth={2} />
+            {Icon && <Icon size={14} strokeWidth={2} />}
             {text}
           </button>
         )

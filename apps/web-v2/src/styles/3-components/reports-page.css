@@ -1,0 +1,398 @@
+/**
+ * QUOI     — les styles de l'écran « Mes bilans » (features/reports/ReportsPage.tsx et ses blocs :
+ *            YearCard, MonthlyChart, ReportsTable).
+ * POURQUOI — maquettes `2027 — Mes bilans` et `2027 mobile — Mes bilans` : une carte de l'année,
+ *            douze barres, une liste de dates. Le bénéfice de l'année et le meilleur mois portent
+ *            la terre du logo : c'est de l'acquis.
+ */
+
+.reports-page {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+/* --- En-tête ------------------------------------------------------------- */
+.reports-page__header {
+  --segmented-option-height: var(--reports-year-height);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-24);
+  margin-bottom: var(--space-32);
+}
+
+.reports-page__title {
+  font: var(--type-page-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.reports-page__private {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+}
+
+.reports-page__note {
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+}
+
+.reports-page__section {
+  margin-top: var(--space-40);
+}
+
+.reports-page__section-title {
+  margin-bottom: var(--space-18);
+  font: var(--type-reports-section);
+  color: var(--ink-section);
+}
+
+/* --- La carte de l'année ------------------------------------------------- */
+.year-card {
+  display: flex;
+  align-items: flex-start;
+  padding-block: var(--reports-card-padding-y);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.year-card__main,
+.year-card__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-inline: var(--reports-figure-padding);
+}
+
+.year-card__figure {
+  border-left: 1px solid var(--line-card);
+}
+
+.year-card__label {
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.year-card__net {
+  width: fit-content;
+  background: var(--brand-gradient);
+  background-clip: text;
+  font: var(--type-reports-year-net);
+  letter-spacing: var(--tracking-tight);
+  color: transparent;
+}
+
+.year-card__value {
+  font: var(--type-reports-year-value);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.year-card__note {
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+}
+
+/* --- Le bénéfice par mois ------------------------------------------------ */
+.monthly-chart {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--chart-column-gap);
+  padding-top: var(--space-18);
+}
+
+.monthly-chart__month {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--chart-label-gap);
+}
+
+.monthly-chart__track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  width: 100%;
+  height: var(--reports-chart-height);
+}
+
+.monthly-chart__value {
+  font: var(--type-reports-bar-value);
+  color: var(--ink-soft);
+}
+
+.monthly-chart__bar {
+  width: 100%;
+  height: max(var(--reports-bar-floor), calc(var(--bar) * 100%));
+  border-radius: var(--reports-bar-radius);
+  background: var(--surface-bar);
+  transition: height var(--duration-slow) var(--ease-soft);
+}
+
+.monthly-chart__bar--empty {
+  border-radius: var(--round-full);
+  background: var(--surface-bar-empty);
+}
+
+.monthly-chart__bar--best {
+  background: var(--brand-gradient);
+}
+
+.monthly-chart__track:has(.monthly-chart__bar--best) .monthly-chart__value {
+  color: var(--ink-title);
+}
+
+.monthly-chart__label {
+  font: var(--type-chart-month);
+  color: var(--reports-pale-ink);
+}
+
+.monthly-chart__label--on {
+  color: var(--ink-title);
+}
+
+.monthly-chart__label-short {
+  display: none;
+}
+
+/* --- La liste des dates -------------------------------------------------- */
+.reports-table {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.reports-table__head,
+.reports-table__row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-12);
+  text-align: left;
+}
+
+.reports-table__head {
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.reports-table__row {
+  border-top: 1px solid var(--line-card);
+  border-radius: var(--reports-row-radius);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-medium) var(--ease-soft);
+}
+
+.reports-table__row:hover {
+  background: var(--surface-row-hover);
+}
+
+.reports-table__date {
+  display: flex;
+  flex: 1 1 var(--reports-date-column);
+  align-items: center;
+  gap: var(--space-14);
+  min-width: 0;
+}
+
+.reports-table__thumb {
+  flex: none;
+  width: var(--reports-thumb-width);
+  height: var(--reports-thumb-height);
+  border-radius: var(--reports-thumb-radius);
+  background: var(--surface-bar);
+  object-fit: cover;
+}
+
+.reports-table__name-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.reports-table__name {
+  overflow: hidden;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reports-table__meta {
+  overflow: hidden;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reports-table__amount,
+.reports-table__net {
+  flex: none;
+  width: var(--reports-amount-column);
+  font: var(--type-reports-amount);
+  color: var(--ink-title);
+  text-align: right;
+}
+
+.reports-table__amount--soft {
+  width: var(--reports-costs-column);
+  color: var(--ink-soft);
+}
+
+.reports-table__amount--none {
+  color: var(--reports-pale-ink);
+}
+
+.reports-table__net {
+  font: var(--type-reports-net);
+}
+
+.reports-table__net--best {
+  width: var(--reports-amount-column);
+  background: var(--brand-gradient);
+  background-clip: text;
+  color: transparent;
+}
+
+.reports-table__end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-6);
+  width: var(--reports-end-column);
+  color: var(--ink-soft);
+}
+
+.reports-table__todo {
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}
+
+.reports-table__todo-dot {
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--round-full);
+  background: var(--ink-title);
+}
+
+.reports-table__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  padding: var(--space-14) var(--space-12) var(--space-12);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+@starting-style {
+  .reports-table__row {
+    opacity: 0;
+  }
+}
+
+/* --- Téléphone ----------------------------------------------------------- */
+@media (width <= 760px) {
+  .reports-page {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .reports-page__header {
+    flex-direction: column;
+  }
+
+  .reports-page__private-more {
+    display: none;
+  }
+
+  .year-card {
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-18);
+  }
+
+  .year-card__main {
+    padding-inline: 0;
+    padding-bottom: var(--space-12);
+    border-bottom: 1px solid var(--line-card);
+  }
+
+  .year-card__figure {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    padding-inline: 0;
+    border-left: 0;
+  }
+
+  .year-card__figure .year-card__label {
+    font: var(--type-reports-amount);
+    color: var(--ink-soft);
+  }
+
+  .year-card__value {
+    font: var(--type-reports-net);
+  }
+
+  .year-card__figure .year-card__note {
+    display: none;
+  }
+
+  .monthly-chart {
+    gap: var(--space-8);
+  }
+
+  .monthly-chart__value,
+  .monthly-chart__label-long {
+    display: none;
+  }
+
+  .monthly-chart__label-short {
+    display: inline;
+  }
+
+  .reports-table__head,
+  .reports-table__amount--wide {
+    display: none;
+  }
+
+  .reports-table__row:first-of-type {
+    border-top: 0;
+  }
+
+  .reports-table__net {
+    width: auto;
+    padding-left: var(--space-8);
+  }
+
+  .reports-table__end {
+    width: auto;
+    padding-left: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reports-table__row,
+  .monthly-chart__bar {
+    transition: none;
+  }
+}
