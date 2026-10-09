@@ -156,7 +156,13 @@ export function useEventDraft() {
   const status: DraftStatus = !settled ? 'quiet' : stored ? 'kept' : 'refused'
 
   const update = useCallback(<K extends keyof EventDraft>(key: K, value: EventDraft[K]) => {
-    setDraft((previous) => ({ ...previous, [key]: value }))
+    // Renommer défait le choix de l'édition précédente : il visait le festival du nom d'avant, et
+    // partirait sinon vers un autre festival sans que rien ne le montre (relecture du lot 8b).
+    setDraft((previous) => ({
+      ...previous,
+      [key]: value,
+      ...(key === 'name' && value !== previous.name ? { previousEditionId: '' } : {}),
+    }))
   }, [])
 
   const toggleTag = useCallback((tag: string) => {

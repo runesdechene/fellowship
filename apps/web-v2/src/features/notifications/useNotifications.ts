@@ -90,15 +90,21 @@ export function useNotifications() {
   }, [key, refresh])
 
   /** « Repérer » une nouvelle édition, pour l'acteur à qui la notification a été écrite. */
-  const markInterested = useCallback(async (ownerId: string, eventId: string) => {
-    const { error } = await supabase
-      .from('participations')
-      .upsert(
-        { actor_id: ownerId, event_id: eventId, status: 'interesse' },
+  const markInterested = useCallback(
+    async (ownerId: string, eventId: string) => {
+      const { error } = await supabase.from('participations').upsert(
+        {
+          actor_id: ownerId,
+          event_id: eventId,
+          status: 'interesse',
+          acted_by_user_id: person?.actor_id ?? null,
+        },
         { onConflict: 'actor_id,event_id', ignoreDuplicates: true },
       )
-    return !error
-  }, [])
+      return !error
+    },
+    [person],
+  )
 
   return {
     views,
