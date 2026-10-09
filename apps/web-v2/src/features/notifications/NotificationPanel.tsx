@@ -7,11 +7,13 @@
  */
 import {
   CalendarPlus,
+  Clock,
   Repeat2,
   MessageCircle,
   MessageCircleReply,
   RefreshCw,
   Star,
+  Telescope,
   User,
   type LucideIcon,
 } from 'lucide-react'
@@ -28,6 +30,8 @@ const ICONS: Record<NotificationIcon, LucideIcon> = {
   follow: User,
   update: RefreshCw,
   edition: CalendarPlus,
+  deadline: Clock,
+  explore: Telescope,
 }
 
 interface NotificationPanelProps {
@@ -122,8 +126,9 @@ export function NotificationPanel({
                     </span>
                   )}
                   <button type="button" className="notif__open" onClick={open}>
-                    <b>{view.lead}</b>
-                    {view.rest}
+                    {view.text.map((part, index) =>
+                      typeof part === 'string' ? part : <b key={index}>{part.strong}</b>,
+                    )}
                   </button>
                   <span className="notif__meta">
                     <span className="notif__time">{timeAgo(view.at, now)}</span>
