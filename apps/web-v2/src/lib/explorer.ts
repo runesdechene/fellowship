@@ -12,6 +12,21 @@ export const QUAND_OPTIONS = [
   { value: '1', label: 'Ce mois-ci', months: 1 },
 ] as const
 
+/** En gratuit, on fouille ses 6 prochains mois (Dev.md, révisé le 08/10/2026) : le choix le plus
+ *  large devient « Les 6 prochains mois ». */
+const FREE_WIDEST = { value: '6', label: 'Les 6 prochains mois', months: 6 } as const
+export const FREE_MONTHS = 6
+
+export function quandChoices(pro: boolean) {
+  return pro ? [...QUAND_OPTIONS] : [FREE_WIDEST, ...QUAND_OPTIONS.slice(1)]
+}
+
+/** La fenêtre réellement cherchée : celle de l'adresse, bornée à 6 mois en gratuit. */
+export function windowMonths(value: string | null, pro: boolean): number {
+  const asked = value === FREE_WIDEST.value ? FREE_WIDEST.months : quandMonths(value)
+  return pro ? asked : Math.min(asked, FREE_MONTHS)
+}
+
 /** Le nombre de mois de la fenêtre, lu dans l'adresse ; douze par défaut. */
 export function quandMonths(value: string | null): number {
   return QUAND_OPTIONS.find((option) => option.value === value)?.months ?? 12

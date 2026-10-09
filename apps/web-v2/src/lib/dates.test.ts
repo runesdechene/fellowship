@@ -20,6 +20,7 @@ import {
   monthsWindow,
   parseSqlDate,
   todayIso,
+  monthName,
 } from './dates'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
@@ -185,5 +186,11 @@ describe('isRecent', () => {
   it('vrai dans les quatorze derniers jours', () => {
     expect(isRecent('2026-10-01T09:00:00Z', today)).toBe(true)
     expect(isRecent('2026-09-01T09:00:00Z', today)).toBe(false)
+  })
+})
+
+describe('monthName', () => {
+  it('le mois en toutes lettres, en minuscules, pour une phrase', () => {
+    expect(monthName(new Date(2027, 2, 1))).toBe('mars')
   })
 })

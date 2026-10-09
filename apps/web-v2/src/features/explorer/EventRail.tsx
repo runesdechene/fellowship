@@ -9,6 +9,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef } from 'react'
 import { ExploreCard } from './ExploreCard'
+import { ProEndCard } from './ProEndCard'
 import type { ExploreEvent } from './useExplorer'
 
 interface EventRailProps {
@@ -16,9 +17,11 @@ interface EventRailProps {
   subtitle: string | null
   events: ExploreEvent[]
   onMark: (event: ExploreEvent) => void
+  /** En gratuit : les festivals au-delà des 6 mois, annoncés au bout de la rangée. */
+  hiddenCount: number
 }
 
-export function EventRail({ title, subtitle, events, onMark }: EventRailProps) {
+export function EventRail({ title, subtitle, events, onMark, hiddenCount }: EventRailProps) {
   const track = useRef<HTMLDivElement>(null)
 
   function slide(direction: 1 | -1) {
@@ -63,6 +66,7 @@ export function EventRail({ title, subtitle, events, onMark }: EventRailProps) {
         {events.map((event) => (
           <ExploreCard key={event.id} event={event} onMark={onMark} />
         ))}
+        <ProEndCard count={hiddenCount} />
       </div>
     </section>
   )

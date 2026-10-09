@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { resultsTitle } from '@/lib/explorer'
 import { initials } from '@/lib/vitrine'
 import { ExploreCard } from './ExploreCard'
+import { ProEndCard } from './ProEndCard'
 import type { Exhibitor, ExploreEvent } from './useExplorer'
 
 const FIRST_EVENTS = 5
@@ -25,6 +26,8 @@ interface SearchResultsProps {
   onTab: (tab: Tab) => void
   onMark: (event: ExploreEvent) => void
   onFollow: (exhibitor: Exhibitor) => void
+  /** En gratuit : les festivals au-delà des 6 mois, annoncés au bout des résultats. */
+  hiddenCount: number
 }
 
 function ExhibitorCard({
@@ -76,6 +79,7 @@ export function SearchResults({
   onTab,
   onMark,
   onFollow,
+  hiddenCount,
 }: SearchResultsProps) {
   const [allEvents, setAllEvents] = useState(false)
   const total = events.length + exhibitors.length
@@ -131,6 +135,7 @@ export function SearchResults({
             {visibleEvents.map((event) => (
               <ExploreCard key={event.id} event={event} onMark={onMark} />
             ))}
+            <ProEndCard count={hiddenCount} />
           </div>
         </section>
       )}

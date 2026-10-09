@@ -14,6 +14,7 @@ import { fetchTags, type TagRow } from '@/lib/tags'
 import { CategoryChips } from './CategoryChips'
 import { EventRail } from './EventRail'
 import { SearchBar } from './SearchBar'
+import { usePlan } from '@/lib/usePlan'
 import { SearchResults } from './SearchResults'
 import { useExplorer } from './useExplorer'
 
@@ -48,7 +49,8 @@ export function ExplorerPage() {
   const tagRow = tags.find((tag) => tag.slug === categorie) ?? null
   const tag = tagRow ? { name: tagRow.name, slug: tagRow.slug } : null
 
-  const data = useExplorer({ q, ou, quand, tag }, actor?.id)
+  const { pro } = usePlan()
+  const data = useExplorer({ q, ou, quand, tag }, actor?.id, pro)
 
   /** Réécrit l'adresse : une valeur vide s'efface plutôt que de traîner en « ?q= ». */
   function update(patch: Record<string, string | null>) {
@@ -77,6 +79,7 @@ export function ExplorerPage() {
       )}
 
       <SearchBar
+        pro={pro}
         key={`${q}|${ou}|${quand ?? ''}`}
         q={q}
         ou={ou}
@@ -109,6 +112,7 @@ export function ExplorerPage() {
             label={q || ou}
             events={data.results}
             exhibitors={data.exhibitors}
+            hiddenCount={data.hiddenCount}
             tab={tab}
             onTab={(next) => {
               update({ voir: next === 'tout' ? null : next })
@@ -123,18 +127,21 @@ export function ExplorerPage() {
               subtitle={friendsLine ? `${friendsLine.first}${friendsLine.rest}` : null}
               events={data.friends}
               onMark={(event) => void data.toggleMark(event)}
+              hiddenCount={data.hiddenCount}
             />
             <EventRail
               title="Ajoutés récemment"
               subtitle="Les dernières dates entrées par la communauté"
               events={data.recent}
               onMark={(event) => void data.toggleMark(event)}
+              hiddenCount={data.hiddenCount}
             />
             <EventRail
               title="Près de chez toi"
               subtitle={data.nearLabel ? `Dans ton département (${data.nearLabel})` : null}
               events={data.near}
               onMark={(event) => void data.toggleMark(event)}
+              hiddenCount={data.hiddenCount}
             />
           </>
         ))}

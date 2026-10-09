@@ -8,7 +8,8 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { isRecent, monthsAhead, parseSqlDate, todayIso } from '@/lib/dates'
-import { quandMonths, searchPattern } from '@/lib/explorer'
+import { searchPattern, windowMonths } from '@/lib/explorer'
+import { proHorizon } from '@/lib/plan'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
@@ -55,6 +56,8 @@ export interface ExplorerData {
   near: ExploreEvent[]
   nearLabel: string | null
   results: ExploreEvent[]
+  /** En gratuit : les festivals au-delà des 6 mois que la recherche ne montre pas. */
+  hiddenCount: number
   exhibitors: Exhibitor[]
   loading: boolean
   error: string | null
@@ -67,6 +70,7 @@ const EMPTY: ExplorerData = {
   near: [],
   nearLabel: null,
   results: [],
+  hiddenCount: 0,
   exhibitors: [],
   loading: true,
   error: null,
@@ -110,9 +114,10 @@ async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<
   }))
 }
 
-/** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. */
-function eventsInWindow(query: ExplorerQuery, today: Date) {
-  const end = todayIso(monthsAhead(today, quandMonths(query.quand)))
+/** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. En
+ *  gratuit, la fenêtre s'arrête aux 6 prochains mois (windowMonths). */
+function eventsInWindow(query: ExplorerQuery, today: Date, pro: boolean) {
+  const end = todayIso(monthsAhead(today, windowMonths(query.quand, pro)))
   let request = supabase
     .from('events')
     .select(EVENT_COLUMNS)
@@ -123,19 +128,38 @@ function eventsInWindow(query: ExplorerQuery, today: Date) {
   return request
 }
 
-async function loadHome(query: ExplorerQuery, viewerId: string, today: Date) {
-  const end = todayIso(monthsAhead(today, quandMonths(query.quand)))
+/** En gratuit : combien de festivals de la même recherche attendent au-delà des 6 mois. */
+async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
+  const words = searchPattern(query.q)
+  const place = searchPattern(query.ou)
+  let request = supabase
+    .from('events')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_private', false)
+    .gte('start_date', todayIso(proHorizon(today)))
+    .lt('start_date', todayIso(monthsAhead(today, 12)))
+  if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
+  if (words)
+    request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
+  if (place) request = request.or(`city.ilike.${place},department.ilike.${place}`)
+  const { count, error } = await request
+  if (error) throw new Error(error.message)
+  return count ?? 0
+}
+
+async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro: boolean) {
+  const end = todayIso(monthsAhead(today, windowMonths(query.quand, pro)))
   const [companions, entity, recentRows] = await Promise.all([
     fetchCompanions(viewerId, todayIso(today), end, new Set()),
     supabase.from('entities').select('department').eq('actor_id', viewerId).maybeSingle(),
-    eventsInWindow(query, today).order('created_at', { ascending: false }).limit(ROW_LIMIT),
+    eventsInWindow(query, today, pro).order('created_at', { ascending: false }).limit(ROW_LIMIT),
   ])
   const department = must(entity)?.department ?? null
 
   const [friendRows, nearRows] = await Promise.all([
     companions.length === 0
       ? Promise.resolve({ data: [], error: null })
-      : eventsInWindow(query, today)
+      : eventsInWindow(query, today, pro)
           .in(
             'id',
             companions.map((companion) => companion.eventId),
@@ -143,7 +167,7 @@ async function loadHome(query: ExplorerQuery, viewerId: string, today: Date) {
           .order('start_date', { ascending: true })
           .limit(ROW_LIMIT),
     department
-      ? eventsInWindow(query, today)
+      ? eventsInWindow(query, today, pro)
           .eq('department', department)
           .order('start_date', { ascending: true })
           .limit(ROW_LIMIT)
@@ -161,11 +185,11 @@ async function loadHome(query: ExplorerQuery, viewerId: string, today: Date) {
   return { friends, friendNames, recent, near, nearLabel: department }
 }
 
-async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date) {
+async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, pro: boolean) {
   const words = searchPattern(query.q)
   const place = searchPattern(query.ou)
 
-  let events = eventsInWindow(query, today)
+  let events = eventsInWindow(query, today, pro)
   if (words) events = events.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
   if (place) events = events.or(`city.ilike.${place},department.ilike.${place}`)
 
@@ -207,7 +231,11 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date) {
   return { results: await enrich(must(eventRows), viewerId, today), exhibitors }
 }
 
-export function useExplorer(query: ExplorerQuery, viewerId: string | null | undefined) {
+export function useExplorer(
+  query: ExplorerQuery,
+  viewerId: string | null | undefined,
+  pro: boolean,
+) {
   const [state, setState] = useState<ExplorerData>(EMPTY)
   const searching = query.q.trim() !== '' || query.ou.trim() !== ''
   const { q, ou, quand } = query
@@ -226,9 +254,13 @@ export function useExplorer(query: ExplorerQuery, viewerId: string | null | unde
       let next: ExplorerData
       try {
         const today = new Date()
-        next = searching
-          ? { ...EMPTY, ...(await loadSearch(current, viewer, today)), loading: false }
-          : { ...EMPTY, ...(await loadHome(current, viewer, today)), loading: false }
+        const [found, hiddenCount] = await Promise.all([
+          searching
+            ? loadSearch(current, viewer, today, pro)
+            : loadHome(current, viewer, today, pro),
+          pro ? Promise.resolve(0) : countBeyond(current, today),
+        ])
+        next = { ...EMPTY, ...found, hiddenCount, loading: false }
       } catch {
         next = { ...EMPTY, loading: false, error: 'L’Explorer n’a pas pu être chargé.' }
       }
@@ -240,7 +272,7 @@ export function useExplorer(query: ExplorerQuery, viewerId: string | null | unde
     return () => {
       cancelled = true
     }
-  }, [viewerId, searching, q, ou, quand, tagName, tagSlug])
+  }, [viewerId, pro, searching, q, ou, quand, tagName, tagSlug])
 
   /** Repérer une date (« Intéressé ») ou la retirer. Une date déjà engagée ne se touche pas ici. */
   const toggleMark = useCallback(

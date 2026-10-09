@@ -61,6 +61,11 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
+/** « mars » — le nom du mois dans une phrase (« 42 festivals t'attendent après mars »). */
+export function monthName(date: Date): string {
+  return MONTH_FORMATTER.format(date)
+}
+
 /** « Septembre » — le nom du mois, initiale en capitale. */
 function formatMonthLabel(date: Date): string {
   return capitalize(MONTH_FORMATTER.format(date))

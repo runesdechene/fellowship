@@ -5,7 +5,14 @@
  *            de l'écran.
  */
 import { describe, expect, it } from 'vitest'
-import { QUAND_OPTIONS, quandMonths, resultsTitle, searchPattern } from './explorer'
+import {
+  QUAND_OPTIONS,
+  quandChoices,
+  quandMonths,
+  resultsTitle,
+  searchPattern,
+  windowMonths,
+} from './explorer'
 
 describe('resultsTitle', () => {
   it('accorde le nombre et cite la recherche', () => {
@@ -40,5 +47,27 @@ describe('quandMonths', () => {
       'Les 3 prochains mois',
       'Ce mois-ci',
     ])
+  })
+})
+
+describe('quandChoices', () => {
+  it('le Pro choisit jusqu’à 12 mois', () => {
+    expect(quandChoices(true).map((option) => option.months)).toEqual([12, 3, 1])
+  })
+  it('le gratuit fouille ses 6 prochains mois au plus', () => {
+    expect(quandChoices(false).map((option) => option.months)).toEqual([6, 3, 1])
+  })
+})
+
+describe('windowMonths', () => {
+  it('en gratuit, une adresse qui demande 12 mois est ramenée à 6', () => {
+    expect(windowMonths('12', false)).toBe(6)
+    expect(windowMonths(null, false)).toBe(6)
+  })
+  it('en gratuit, 3 mois restent 3 mois', () => {
+    expect(windowMonths('3', false)).toBe(3)
+  })
+  it('en Pro, 12 mois par défaut', () => {
+    expect(windowMonths(null, true)).toBe(12)
   })
 })

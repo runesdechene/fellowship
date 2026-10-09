@@ -7,19 +7,24 @@
  */
 import { Search, X } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { QUAND_OPTIONS } from '@/lib/explorer'
+import { quandChoices } from '@/lib/explorer'
 
 interface SearchBarProps {
   q: string
   ou: string
   quand: string | null
   onSearch: (next: { q: string; ou: string; quand: string }) => void
+  /** En gratuit, le choix le plus large est « Les 6 prochains mois » (lib/explorer.ts). */
+  pro: boolean
 }
 
-export function SearchBar({ q, ou, quand, onSearch }: SearchBarProps) {
+export function SearchBar({ q, ou, quand, onSearch, pro }: SearchBarProps) {
+  const choices = quandChoices(pro)
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
-  const [when, setWhen] = useState(quand ?? '12')
+  const [when, setWhen] = useState(
+    choices.some((option) => option.value === quand) ? (quand ?? '') : (choices[0]?.value ?? ''),
+  )
 
   function submit(event: FormEvent) {
     event.preventDefault()
@@ -78,7 +83,7 @@ export function SearchBar({ q, ou, quand, onSearch }: SearchBarProps) {
               setWhen(change.target.value)
             }}
           >
-            {QUAND_OPTIONS.map((option) => (
+            {choices.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>

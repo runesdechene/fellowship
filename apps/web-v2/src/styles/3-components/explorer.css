@@ -500,8 +500,13 @@
     flex: none;
   }
 
-  .explore-card {
+  .explore-card,
+  .pro-end-card {
     width: var(--explore-mobile-card);
+  }
+
+  .pro-end-card {
+    height: auto;
   }
 
   .results__grid {
@@ -518,4 +523,19 @@
 
 :root[data-theme='dark'] .category-chip:not(.category-chip--all)[aria-pressed='true'] {
   outline-color: color-mix(in oklab, var(--tag-ink, var(--ink-soft)) 60%, var(--ink-title));
+}
+
+/* En gratuit, la carte qui clôt une rangée : les festivals au-delà des 6 mois. */
+.pro-end-card {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-10);
+  width: var(--explore-card-width);
+  height: var(--explore-poster-height);
+  padding: var(--space-20);
+  border-radius: var(--radius-card);
+  background: var(--surface-chip-neutral);
 }
