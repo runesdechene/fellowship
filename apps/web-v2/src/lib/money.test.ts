@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   formatEuros,
+  formatPrice,
   formatSignedEuros,
   ledgerProfit,
   ledgerRevenue,
@@ -89,5 +90,13 @@ describe('goalShare', () => {
   it('la part de l’objectif atteinte, en pourcentage arrondi et en jauge bornée', () => {
     expect(goalShare(74444, 90000)).toEqual({ percent: 83, ratio: 74444 / 90000 })
     expect(goalShare(120000, 90000)).toEqual({ percent: 133, ratio: 1 })
+  })
+})
+
+describe('formatPrice', () => {
+  it('écrit les centimes à la française', () => {
+    expect(formatPrice(999)).toBe('9,99 €')
+    expect(formatPrice(11988)).toBe('119,88 €')
+    expect(formatPrice(1200)).toBe('12,00 €')
   })
 })

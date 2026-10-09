@@ -70,3 +70,12 @@ export function goalShare(revenue: number, goal: number): { percent: number; rat
   const share = revenue / goal
   return { percent: Math.round(share * 100), ratio: Math.min(1, share) }
 }
+
+/** « 9,99 € » — un prix en centimes, toujours avec ses deux décimales. */
+export function formatPrice(cents: number): string {
+  const euros = (cents / 100).toLocaleString('fr-FR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+  return `${euros} €`
+}
