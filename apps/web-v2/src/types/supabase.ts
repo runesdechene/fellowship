@@ -843,6 +843,7 @@ export type Database = {
           payment_status: string | null
           payments: Json | null
           refusal_note: string | null
+          remind_deadline: boolean
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
           visibility: Database["public"]["Enums"]["participation_visibility"]
@@ -857,6 +858,7 @@ export type Database = {
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
+          remind_deadline?: boolean
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
@@ -871,6 +873,7 @@ export type Database = {
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
+          remind_deadline?: boolean
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
@@ -1471,6 +1474,8 @@ export type Database = {
           start_date: string
         }[]
       }
+      send_deadline_reminders: { Args: never; Returns: number }
+      send_weekly_new_events: { Args: never; Returns: number }
       set_stand_amount: {
         Args: { p_actor_id: string; p_amount: number; p_event_id: string }
         Returns: undefined
@@ -1498,6 +1503,8 @@ export type Database = {
         | "best_reply"
         | "thread_question"
         | "new_edition"
+        | "friend_added_event"
+        | "weekly_new_events"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -1655,6 +1662,8 @@ export const Constants = {
         "best_reply",
         "thread_question",
         "new_edition",
+        "friend_added_event",
+        "weekly_new_events",
       ],
       participation_status: [
         "interesse",
