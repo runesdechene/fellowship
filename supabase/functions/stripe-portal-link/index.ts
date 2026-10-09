@@ -9,7 +9,8 @@ import { getStripe } from '../_shared/stripe.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 
-interface Body { entityId: string }
+/** returnTo 'v2' : revenir sur /v2/pro. Absent : la V1, inchangée. */
+interface Body { entityId: string; returnTo?: 'v2' }
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
@@ -48,7 +49,7 @@ Deno.serve(async (req) => {
 
     const session = await getStripe().billingPortal.sessions.create({
       customer: entity.stripe_customer_id,
-      return_url: `${appUrl}/abonnement`,
+      return_url: body.returnTo === 'v2' ? `${appUrl}/v2/pro` : `${appUrl}/abonnement`,
     })
 
     return json({ url: session.url })

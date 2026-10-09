@@ -21,6 +21,8 @@ interface Body {
   legalName?: string
   siren?: string | null
   noSiren?: boolean
+  /** 'v2' : ramener l'exposant sur /v2/pro. Absent : le parcours de la V1, inchangé. */
+  returnTo?: 'v2'
 }
 
 Deno.serve(async (req) => {
@@ -149,8 +151,11 @@ Deno.serve(async (req) => {
       // Programme Founder Friends (v0.7.174) : autorise la saisie d'un code promo
       // au Checkout (ex: RUNE-2026 = 100% off pendant 2 mois). CB requise quand même.
       allow_promotion_codes: true,
-      success_url: `${appUrl}/abonnement?status=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/boutique?status=cancel`,
+      success_url:
+        body.returnTo === 'v2'
+          ? `${appUrl}/v2/pro?statut=succes&session_id={CHECKOUT_SESSION_ID}`
+          : `${appUrl}/abonnement?status=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: body.returnTo === 'v2' ? `${appUrl}/v2/pro` : `${appUrl}/boutique?status=cancel`,
       metadata: { entity_actor_id: entity.actor_id },
     })
 
