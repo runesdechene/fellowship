@@ -128,6 +128,7 @@ export function CreateEvent() {
         image_url: imageUrl,
         tags: draft.tags,
         is_private: draft.isPrivate,
+        previous_edition_id: draft.previousEditionId || null,
         created_by_actor: actor.id,
         acted_by_user_id: person?.actor_id ?? null,
       })
@@ -263,7 +264,13 @@ export function CreateEvent() {
 
         <aside className="mate">
           {step === 0 && similar.length > 0 ? (
-            <DuplicateWarning similar={similar} />
+            <DuplicateWarning
+              similar={similar}
+              previousEditionId={draft.previousEditionId}
+              onPickEdition={(id) => {
+                update('previousEditionId', id)
+              }}
+            />
           ) : (
             <>
               <p className="mate__label">Ce que verront les exposants</p>

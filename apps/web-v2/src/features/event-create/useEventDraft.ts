@@ -27,6 +27,8 @@ export interface EventDraft {
   externalUrl: string
   contactEmail: string
   registrationNote: string
+  /** L'édition précédente du même festival, choisie parmi les doublons (vide : aucune). */
+  previousEditionId: string
 }
 
 const EMPTY_DRAFT: EventDraft = {
@@ -44,6 +46,7 @@ const EMPTY_DRAFT: EventDraft = {
   externalUrl: '',
   contactEmail: '',
   registrationNote: '',
+  previousEditionId: '',
 }
 
 const DRAFT_KEY = 'flwsh-event-draft'
