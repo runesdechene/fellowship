@@ -21,7 +21,6 @@ export interface NotificationView {
   id: string
   read: boolean
   at: Date
-  avatarUrl: string | null
   icon: NotificationIcon
   /** Le début, en gras : un nom ou un festival. */
   lead: string
@@ -95,7 +94,6 @@ export function notificationView(row: NotificationRow): NotificationView | null 
     id: row.id,
     read: row.read,
     at: new Date(row.created_at),
-    avatarUrl: text(row.data, 'actor_avatar_url'),
     ...said,
   }
 }

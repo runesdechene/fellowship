@@ -26,7 +26,6 @@ describe('notificationView', () => {
     )
     expect(view?.href).toBe('/evenement/e1#discussions')
     expect(view?.icon).toBe('question')
-    expect(view?.avatarUrl).toBe('a.png')
   })
 
   it('une réponse à ta question', () => {

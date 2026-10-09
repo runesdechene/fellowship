@@ -1,0 +1,154 @@
+/**
+ * QUOI     — les styles de la cloche et de son panneau (features/notifications).
+ * POURQUOI — maquette « Notifications » : un panneau blanc bordé sous la cloche ; le non-lu se
+ *            lit par un fond et un point. Pas d'ombre : un liseré, comme les autres menus flottants.
+ */
+
+.notif-bell {
+  position: relative;
+}
+
+.notif-bell__dot {
+  position: absolute;
+  top: var(--space-8);
+  right: var(--space-8);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border: 2px solid var(--surface-control);
+  border-radius: var(--round-full);
+  background: var(--status-ok-ink);
+}
+
+.notif-panel {
+  position: absolute;
+  top: calc(100% + var(--space-8));
+  right: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  width: var(--notif-panel-width);
+  max-height: var(--notif-panel-max-height);
+  overflow-y: auto;
+  padding: var(--space-6) 0;
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition:
+    opacity var(--duration-medium) var(--ease-soft),
+    translate var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .notif-panel {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-6));
+  }
+}
+
+.notif-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-14) var(--space-20) var(--space-10);
+}
+
+.notif-panel__title {
+  font: var(--type-pro-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.notif-panel__all {
+  font: var(--type-reports-label);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.notif-panel__day {
+  padding: var(--space-12) var(--space-20) var(--space-4);
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.notif-panel__empty {
+  padding: var(--space-12) var(--space-20) var(--space-16);
+  font: var(--type-reports-note);
+  color: var(--ink-soft);
+}
+
+.notif {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-14);
+  width: 100%;
+  padding: var(--space-12) var(--space-20);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.notif:hover {
+  background: var(--surface-row-hover);
+}
+
+.notif--unread {
+  background: var(--surface-row-hover);
+}
+
+.notif__icon {
+  display: flex;
+  flex: none;
+  padding: var(--space-8);
+  border-radius: var(--round-full);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+}
+
+.notif__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.notif__text {
+  font: var(--type-pro-text);
+  color: var(--ink-soft);
+}
+
+.notif__text b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.notif__time {
+  font: var(--type-report-small);
+  color: var(--reports-pale-ink);
+}
+
+.notif__dot {
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  margin-top: var(--space-6);
+  border-radius: var(--round-full);
+  background: var(--ink-title);
+}
+
+@media (width <= 760px) {
+  .notif-panel {
+    position: fixed;
+    top: var(--mobile-padding-top);
+    right: var(--mobile-gutter);
+    left: var(--mobile-gutter);
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif-panel,
+  .notif {
+    transition: none;
+  }
+}

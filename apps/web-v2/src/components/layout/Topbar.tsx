@@ -4,8 +4,9 @@
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
  */
-import { ArrowLeft, Bell, CirclePlus } from 'lucide-react'
+import { ArrowLeft, CirclePlus } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { usePageChrome } from '@/lib/page-chrome'
 
@@ -49,9 +50,7 @@ export function Topbar() {
           {lead && <p className="topbar__lead">{lead}</p>}
         </div>
       )}
-      <Button variant="icon" aria-label="Notifications">
-        <Bell size={20} strokeWidth={1.75} />
-      </Button>
+      <NotificationBell />
       <Button
         variant="action"
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
