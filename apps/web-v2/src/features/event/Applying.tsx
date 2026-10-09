@@ -20,6 +20,7 @@ interface ApplyingProps {
   event: EventRow
   status: ParticipationStatus | null
   setStatus: (next: ParticipationStatus | null) => Promise<void>
+  statusSaving: boolean
   actorId: string | null | undefined
   fields: DossierFields
   save: (patch: Partial<DossierFields>) => Promise<void>
@@ -32,7 +33,8 @@ function deadlineNote(deadline: Date, status: ParticipationStatus | null): strin
   return status === 'inscrit' || status === 'confirme' ? 'clôturé — tu y es inscrit' : 'clôturé'
 }
 
-export function Applying({ event, status, setStatus, actorId, fields, save }: ApplyingProps) {
+export function Applying(props: ApplyingProps) {
+  const { event, status, setStatus, statusSaving, actorId, fields, save } = props
   const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
   const site = event.registration_url ? websiteLink(event.registration_url) : null
   const following = status !== null
@@ -100,6 +102,7 @@ export function Applying({ event, status, setStatus, actorId, fields, save }: Ap
           deadline={deadline}
           status={status}
           setStatus={setStatus}
+          statusSaving={statusSaving}
         />
       )}
     </section>

@@ -4,9 +4,11 @@
  * POURQUOI — lot 8c : l'interrupteur « Me rappeler la clôture des candidatures » de la fiche. La
  *            base allume le rappel quand on repère un festival (participations.remind_deadline) ;
  *            la tâche du matin le lit.
- * ATTENTION — relu à chaque changement de statut : repérer depuis le contrôle segmenté allume le
- *            rappel en base, l'écran doit le montrer. Sur un festival pas encore suivi, allumer
- *            le rappel le repère (le déclencheur fait le reste). Une bascule à la fois (`saving`).
+ * ATTENTION — relu à chaque changement de statut, une fois son écriture finie (`statusSaving`) :
+ *            la base allume ou éteint le rappel avec le statut, et une lecture partie avant
+ *            l'écriture rendrait l'ancien état (relecture du 09/10/2026). Sur un festival pas
+ *            encore suivi, allumer le rappel le repère (le déclencheur fait le reste). Une bascule
+ *            à la fois (`saving`).
  */
 import { useCallback, useEffect, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
@@ -17,13 +19,14 @@ export function useDeadlineReminder(
   actorId: string | null | undefined,
   status: ParticipationStatus | null,
   setStatus: (next: ParticipationStatus | null) => Promise<void>,
+  statusSaving: boolean,
 ) {
   const [on, setOn] = useState(false)
   const [saving, setSaving] = useState(false)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    if (!actorId) return
+    if (!actorId || statusSaving) return
     let cancelled = false
     async function run(actor: string) {
       try {
@@ -45,10 +48,10 @@ export function useDeadlineReminder(
     return () => {
       cancelled = true
     }
-  }, [eventId, actorId, status])
+  }, [eventId, actorId, status, statusSaving])
 
   const toggle = useCallback(async () => {
-    if (!actorId || saving) return
+    if (!actorId || saving || statusSaving) return
     const next = !on
     setOn(next)
     setSaving(true)
@@ -69,7 +72,7 @@ export function useDeadlineReminder(
       setFailed(true)
     }
     setSaving(false)
-  }, [actorId, eventId, on, saving, status, setStatus])
+  }, [actorId, eventId, on, saving, status, setStatus, statusSaving])
 
   return { on, saving, failed, toggle }
 }

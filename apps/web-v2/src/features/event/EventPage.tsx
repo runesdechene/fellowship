@@ -317,6 +317,7 @@ export function EventPage() {
           event={event}
           status={status}
           setStatus={setStatus}
+          statusSaving={saving}
           actorId={actor?.id}
           fields={dossier.fields}
           save={dossier.save}

@@ -21,13 +21,20 @@ interface DeadlineReminderProps {
   deadline: Date
   status: ParticipationStatus | null
   setStatus: (next: ParticipationStatus | null) => Promise<void>
+  statusSaving: boolean
 }
 
 const TITLE = 'Me rappeler la clôture des candidatures'
 
 export function DeadlineReminder(props: DeadlineReminderProps) {
   const { pro } = usePlan()
-  const reminder = useDeadlineReminder(props.eventId, props.actorId, props.status, props.setStatus)
+  const reminder = useDeadlineReminder(
+    props.eventId,
+    props.actorId,
+    props.status,
+    props.setStatus,
+    props.statusSaving,
+  )
   const [inviting, setInviting] = useState(false)
   const on = pro && reminder.on
 
@@ -43,7 +50,7 @@ export function DeadlineReminder(props: DeadlineReminderProps) {
         aria-checked={on}
         aria-label={TITLE}
         className={classes.join(' ')}
-        disabled={reminder.saving}
+        disabled={reminder.saving || props.statusSaving}
         onClick={() => {
           if (pro) void reminder.toggle()
           else setInviting(true)
