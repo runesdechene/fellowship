@@ -36,6 +36,11 @@ export function useNotifications() {
       .from('notifications')
       .select('*')
       .in('actor_id', actorIds)
+      // Seulement les types affichés : la V2 écrit des types que la V1 ne montre pas
+      // (thread_question, 09/10/2026), qui rempliraient sinon la limite de 50 et chasseraient
+      // les notifications de la V1.
+      // Filtre texte : les types générés de la V1 ne connaissent pas encore tous ces types.
+      .filter('type', 'in', `(${[...NOTIFICATION_TYPES].join(',')})`)
       .order('created_at', { ascending: false })
       .limit(50)
 

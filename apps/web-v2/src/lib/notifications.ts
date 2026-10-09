@@ -7,6 +7,18 @@
  *            pas affiché, comme dans la V1.
  */
 
+/** Les types que la cloche sait dire. La lecture ne demande QU'EUX : une limite de 50 lignes
+ *  remplie de types illisibles viderait la cloche (piège vu en relecture, 09/10/2026). */
+export const KNOWN_TYPES = [
+  'thread_question',
+  'thread_reply',
+  'best_reply',
+  'review_reply',
+  'friend_going',
+  'event_updated',
+  'new_follower',
+] as const
+
 export interface NotificationRow {
   id: string
   type: string

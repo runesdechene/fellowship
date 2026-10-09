@@ -3,7 +3,7 @@
  * POURQUOI — la cloche n'affiche que ce qu'elle sait dire ; un type inconnu ne casse rien.
  */
 import { describe, expect, it } from 'vitest'
-import { groupByDay, notificationView, type NotificationRow } from './notifications'
+import { KNOWN_TYPES, groupByDay, notificationView, type NotificationRow } from './notifications'
 
 const row = (type: string, data: Record<string, unknown>, created_at = '2026-10-09T10:00:00Z') =>
   ({ id: 'n1', type, data, read: false, created_at }) satisfies NotificationRow
@@ -83,5 +83,14 @@ describe('groupByDay', () => {
     expect(groupByDay([at(new Date(2026, 9, 9, 0, 10))], now).map((group) => group.label)).toEqual([
       'Aujourd’hui',
     ])
+  })
+})
+
+describe('KNOWN_TYPES', () => {
+  it('liste exactement les types que la cloche sait dire — la requête ne lit qu’eux', () => {
+    const full = { ...event, actor_name: 'X', thread_title: 'Q' }
+    for (const type of KNOWN_TYPES) expect(notificationView(row(type, full))).not.toBeNull()
+    expect(KNOWN_TYPES).toContain('thread_question')
+    expect(KNOWN_TYPES).not.toContain('friend_note')
   })
 })

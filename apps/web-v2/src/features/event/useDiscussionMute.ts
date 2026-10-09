@@ -2,13 +2,16 @@
  * QUOI     — la sourdine de la discussion d'un festival, pour l'acteur actif : la lire, la basculer.
  * POURQUOI — retour client du 08/10/2026 : couper les notifications des nouvelles questions d'un
  *            festival. Une ligne discussion_mutes = en sourdine (le déclencheur la lit).
- * ATTENTION — l'écriture est optimiste ; un échec remet l'état d'avant et le dit.
+ * ATTENTION — une bascule à la fois (`saving`) : deux écritures croisées laisseraient la base et
+ *            l'écran en désaccord. Mettre en sourdine ne craint pas une ligne déjà là (upsert).
+ *            Une lecture ou une écriture qui échoue le dit.
  */
 import { useCallback, useEffect, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
 
 export function useDiscussionMute(eventId: string, actorId: string | null | undefined) {
   const [muted, setMuted] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
@@ -23,9 +26,11 @@ export function useDiscussionMute(eventId: string, actorId: string | null | unde
           .eq('event_id', eventId)
           .maybeSingle()
         const row = must(response)
-        if (!cancelled) setMuted(row !== null)
+        if (cancelled) return
+        setMuted(row !== null)
+        setFailed(false)
       } catch {
-        if (!cancelled) setMuted(false)
+        if (!cancelled) setFailed(true)
       }
     }
     void run(actorId)
@@ -35,20 +40,24 @@ export function useDiscussionMute(eventId: string, actorId: string | null | unde
   }, [eventId, actorId])
 
   const toggle = useCallback(() => {
-    if (!actorId) return
+    if (!actorId || saving) return
     const next = !muted
     setMuted(next)
+    setSaving(true)
     setFailed(false)
     const write = next
-      ? supabase.from('discussion_mutes').insert({ actor_id: actorId, event_id: eventId })
+      ? supabase
+          .from('discussion_mutes')
+          .upsert({ actor_id: actorId, event_id: eventId }, { ignoreDuplicates: true })
       : supabase.from('discussion_mutes').delete().eq('actor_id', actorId).eq('event_id', eventId)
     void write.then(({ error }) => {
       if (error) {
         setMuted(!next)
         setFailed(true)
       }
+      setSaving(false)
     })
-  }, [actorId, eventId, muted])
+  }, [actorId, eventId, muted, saving])
 
-  return { muted, failed, toggle }
+  return { muted, saving, failed, toggle }
 }

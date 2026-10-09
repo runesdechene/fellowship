@@ -25,7 +25,7 @@ export function DiscussionBlock({
     (entity) => entity.actor_id === actor?.id && entity.type === 'exposant',
   )
   const engaged = exhibitor && status !== null && PROGRAMMED_STATUSES.includes(status)
-  const { muted, failed, toggle } = useDiscussionMute(eventId, engaged ? actor?.id : null)
+  const { muted, saving, failed, toggle } = useDiscussionMute(eventId, engaged ? actor?.id : null)
 
   return (
     <section className="event-page__block" id="discussions">
@@ -36,6 +36,7 @@ export function DiscussionBlock({
             type="button"
             className={muted ? 'discussion-mute discussion-mute--on' : 'discussion-mute'}
             aria-pressed={muted}
+            disabled={saving}
             onClick={toggle}
           >
             {muted ? <BellOff size={13} strokeWidth={2} /> : <Bell size={13} strokeWidth={2} />}
@@ -52,7 +53,7 @@ export function DiscussionBlock({
       )}
       {failed && (
         <p className="discussion-mute__note" role="status">
-          La sourdine n’a pas pu être enregistrée.
+          La sourdine n’a pas pu être lue ou enregistrée. Réessaie dans un instant.
         </p>
       )}
     </section>

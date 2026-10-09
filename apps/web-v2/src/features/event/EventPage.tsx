@@ -7,7 +7,8 @@
  */
 import { ArrowRight, CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
@@ -131,6 +132,7 @@ export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const { actor, person } = useAuth()
   const { pro } = usePlan()
+  const { hash } = useLocation()
   const go = useTransitionNavigate()
   const today = new Date()
   const {
@@ -168,6 +170,14 @@ export function EventPage() {
     lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
     back: '/',
   })
+
+  // Une notification mène à « #discussions » : le bloc n'existe qu'une fois la fiche chargée, et le
+  // routeur ne descend pas seul vers une ancre.
+  const loadedId = event?.id
+  useEffect(() => {
+    if (!loadedId || !hash) return
+    document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [loadedId, hash])
 
   // Le prix de la place est UNE ligne du registre — celle que le suivi pose —
   // et surtout pas la somme des lignes : additionner donnerait un total faux.

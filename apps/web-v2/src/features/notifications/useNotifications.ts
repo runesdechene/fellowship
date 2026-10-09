@@ -7,7 +7,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { notificationView, type NotificationView } from '@/lib/notifications'
+import { KNOWN_TYPES, notificationView, type NotificationView } from '@/lib/notifications'
 import { must, supabase } from '@/lib/supabase'
 
 const LIMIT = 50
@@ -34,6 +34,7 @@ export function useNotifications() {
             .from('notifications')
             .select('id, type, data, read, created_at')
             .in('actor_id', ids)
+            .in('type', [...KNOWN_TYPES])
             .order('created_at', { ascending: false })
             .limit(LIMIT),
         )
