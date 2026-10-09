@@ -19,7 +19,8 @@
 | Bilan d'une date | `2027 — Bilan d’une date`, `2027 mobile — Bilan d’une date` | validé, intégré (lot 7a, 08/10/2026) |
 | Ajouter une date | `2027 — Ajouter une date · étape 1` | dessiné (étapes 2-4 au même gabarit) |
 | États Pro | `2027 — Mes bilans · compte gratuit`, `2027 — Points de contact du Pro` (+ notes détaillées, 08/10/2026) | validé, intégré (lot 7b, 08/10/2026) — rappel de clôture au lot 8 |
-| Notifications | `2027 — Notifications` | dessiné |
+| Notifications | `2027 — Notifications` | validé, intégré (lots 8a-8c, 09/10/2026) |
+| Notifications · nouveaux événements | `2027 — Notifications · nouveaux événements` (`2182:2`) | validé, intégré (lot 8c, 09/10/2026) |
 | Offre Pro | `2027 — Offre Pro`, `2027 mobile — Offre Pro` | validé, intégré (lot 7c, 09/10/2026) |
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` | dessiné |
@@ -49,7 +50,7 @@
 
 - [ ] **Objectif de chiffre d'affaires** par participation (colonne). L'objectif de saison = la somme des objectifs (recommandé, à confirmer).
 - [ ] **Préférences de notifications** (par type, appli / e-mail).
-- [ ] **Notifications** elles-mêmes (la cloche de la V2 n'ouvre rien aujourd'hui).
+- [x] **Notifications** elles-mêmes (lots 8a-8c, 09/10/2026).
 - [ ] **Recherches sauvegardées** (alerte Pro).
 - [ ] **Lien entre les éditions d'un même festival**, pour l'alerte « nouvelle édition » — rien ne relie aujourd'hui l'édition 2026 à 2027.
 - [ ] **Suppression de compte réelle** : en V1, « Supprimer mon compte » déconnecte seulement (problème RGPD).
