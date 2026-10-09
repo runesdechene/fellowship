@@ -20,7 +20,7 @@
 | Ajouter une date | `2027 — Ajouter une date · étape 1` | dessiné (étapes 2-4 au même gabarit) |
 | États Pro | `2027 — Mes bilans · compte gratuit`, `2027 — Points de contact du Pro` (+ notes détaillées, 08/10/2026) | validé, intégré (lot 7b, 08/10/2026) — rappel de clôture au lot 8 |
 | Notifications | `2027 — Notifications` | dessiné |
-| Offre Pro | `2027 — Offre Pro` | dessiné |
+| Offre Pro | `2027 — Offre Pro`, `2027 mobile — Offre Pro` | validé, intégré (lot 7c, 09/10/2026) |
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` | dessiné |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
