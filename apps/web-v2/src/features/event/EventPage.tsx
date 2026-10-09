@@ -20,7 +20,7 @@ import { nameLine } from '@/lib/name-line'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
-import { EventDiscussion } from './EventDiscussion'
+import { DiscussionBlock } from './DiscussionBlock'
 import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
@@ -338,9 +338,7 @@ export function EventPage() {
           canReview={past && status === 'inscrit'}
         />
 
-        <Block title="Discussions" bare>
-          <EventDiscussion eventId={event.id} />
-        </Block>
+        <DiscussionBlock eventId={event.id} status={status} />
 
         {past && (
           <section className="event-page__block">

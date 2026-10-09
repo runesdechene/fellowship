@@ -442,3 +442,44 @@
   color: var(--ink-soft);
   text-wrap: balance;
 }
+
+/* --- La sourdine (features/event/DiscussionBlock.tsx) --------------------- */
+.discussion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.discussion-mute {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  font: var(--type-reports-label);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.discussion-mute--on {
+  border-color: transparent;
+  background: var(--surface-chip-neutral);
+  color: var(--ink-title);
+}
+
+.discussion-mute__note {
+  margin-top: var(--space-10);
+  font: var(--type-report-small);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discussion-mute {
+    transition: none;
+  }
+}
