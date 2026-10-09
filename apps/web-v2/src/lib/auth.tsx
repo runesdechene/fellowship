@@ -80,6 +80,8 @@ interface AuthContextValue {
   signIn: (email: string) => Promise<{ error: Error | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
+  /** Relit les enseignes : après un paiement, le statut Pro arrive par le webhook (lib/stripe.ts). */
+  reloadIdentity: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -186,6 +188,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     writeStoredActorId(null)
   }, [])
 
+  const reloadIdentity = useCallback(
+    () => (user ? loadIdentity(user.id) : Promise.resolve()),
+    [user, loadIdentity],
+  )
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -199,6 +206,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       verifyOtp,
       signOut,
+      reloadIdentity,
     }),
     [
       user,
@@ -212,6 +220,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       verifyOtp,
       signOut,
+      reloadIdentity,
     ],
   )
 
