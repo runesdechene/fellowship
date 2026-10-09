@@ -122,7 +122,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   prix Stripe et la bascule des abonnés actuels passent **après** la V2 (ordre d'Uriel). Reste à
   confirmer : la prévenance avant la fin de l'essai.
 
-### Lot 8 — Notifications et alertes  ☐
+### Lot 8 — Notifications et alertes  ☐ · 8a cloche et discussions ☑ (09/10/2026, plan `2026-10-09-lot-8a-cloche-discussions-v2.md`) · ☐ 8b éditions · ☐ 8c alertes planifiées et e-mails · préférences avec les Réglages
 - **Livre** : panneau de la cloche, préférences (appli / e-mail), alertes Pro : clôture des
   candidatures, nouvelle édition d'un festival déjà fait, recherches sauvegardées.
 - **Cadres** : `2027 — Notifications`, section Notifications de `2027 — Réglages`.
