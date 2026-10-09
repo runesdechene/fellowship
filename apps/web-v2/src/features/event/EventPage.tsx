@@ -22,6 +22,8 @@ import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
 import { DiscussionBlock } from './DiscussionBlock'
+import { LastEditionReport } from './LastEditionReport'
+import { useLastEditionReport } from './useLastEditionReport'
 import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
@@ -158,6 +160,7 @@ export function EventPage() {
     saving,
     writeError,
   } = useEvent(id, actor?.id, person?.actor_id)
+  const lastEdition = useLastEditionReport(event?.previous_edition_id, actor?.id)
   const dossier = useDossier(id, actor?.id)
 
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
@@ -285,6 +288,8 @@ export function EventPage() {
           locked={!canChangeStatus(startDate, status !== null, pro, today)}
           monthsAway={monthsBeyond(startDate, today)}
         />
+
+        {lastEdition && <LastEditionReport report={lastEdition} />}
 
         {(status === 'inscrit' || status === 'confirme') && (
           <MyDossier

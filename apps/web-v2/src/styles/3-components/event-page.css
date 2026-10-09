@@ -358,3 +358,93 @@
   color: var(--ink-title);
   cursor: pointer;
 }
+
+/* --- Ton bilan de l'an passé (features/event/LastEditionReport.tsx, lot 8b) -- */
+.last-edition {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  padding: var(--space-20) var(--space-23);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.last-edition__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.last-edition__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.last-edition__title {
+  font: var(--type-pro-month-title);
+  color: var(--ink-title);
+}
+
+.last-edition__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.last-edition__open {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.last-edition__figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-12) var(--space-26);
+}
+
+.last-edition__net {
+  width: fit-content;
+  background: var(--brand-gradient);
+  background-clip: text;
+  font: var(--type-report-summary-net);
+  letter-spacing: var(--tracking-tight);
+  color: transparent;
+}
+
+.last-edition__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.last-edition__figure b {
+  font: var(--type-reports-net);
+  color: var(--ink-title);
+}
+
+.last-edition__tags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.last-edition__label {
+  font: var(--type-reports-label);
+  color: var(--reports-pale-ink);
+}
+
+.last-edition__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
