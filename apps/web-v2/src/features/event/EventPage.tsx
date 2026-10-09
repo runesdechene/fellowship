@@ -27,13 +27,13 @@ import { useLastEditionReport } from './useLastEditionReport'
 import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
+import { MyReportCard } from './MyReportCard'
 import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProVeil } from '@/components/ui/ProVeil'
-import type { EventLedgerLine } from './useEvent'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
@@ -94,38 +94,6 @@ function Fact({ Icon, label, value, sub }: FactData) {
         <span className="event-page__fact-value">{value}</span>
         {sub && <span className="event-page__fact-sub">{sub}</span>}
       </span>
-    </div>
-  )
-}
-
-/** Une ligne du registre : son intitulé, puis son montant signé par le sens. */
-function LedgerRow({ line }: { line: EventLedgerLine }) {
-  const incoming = line.direction === 'in'
-  return (
-    <li className="event-page__ledger-row">
-      <span className="event-page__ledger-label">{line.label || line.category}</span>
-      <span
-        className={incoming ? 'event-page__ledger-amount--in' : 'event-page__ledger-amount--out'}
-      >
-        {incoming ? formatEuros(line.amount) : `− ${formatEuros(line.amount)}`}
-      </span>
-    </li>
-  )
-}
-
-/** Les lignes du bilan d'une date, sur sa fiche. */
-function MyReportCard({ ledger }: { ledger: EventLedgerLine[] }) {
-  return (
-    <div className="event-page__card">
-      {ledger.length > 0 ? (
-        <ul className="event-page__ledger">
-          {ledger.map((line) => (
-            <LedgerRow key={line.id} line={line} />
-          ))}
-        </ul>
-      ) : (
-        <p className="event-page__state">Le bilan de cette date n’a pas encore été rempli.</p>
-      )}
     </div>
   )
 }
@@ -345,7 +313,14 @@ export function EventPage() {
           )}
         </Block>
 
-        <Applying event={event} status={status} fields={dossier.fields} save={dossier.save} />
+        <Applying
+          event={event}
+          status={status}
+          setStatus={setStatus}
+          actorId={actor?.id}
+          fields={dossier.fields}
+          save={dossier.save}
+        />
 
         <EventReviews
           eventId={event.id}

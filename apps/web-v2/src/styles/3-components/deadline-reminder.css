@@ -1,0 +1,99 @@
+/**
+ * QUOI     — la carte « Me rappeler la clôture des candidatures » et son interrupteur
+ *            (features/event/DeadlineReminder.tsx).
+ * POURQUOI — maquette « Points de contact du Pro » (lot 8c) : une carte blanche bordée, la cloche,
+ *            le titre et la pastille Pro, la date du rappel, l'interrupteur à droite.
+ * ATTENTION — en gratuit, l'interrupteur s'éteint à demi (opacité de la maquette) ; la carte reste
+ *            cliquable : elle ouvre la bulle du Pro.
+ */
+.deadline-reminder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  width: 100%;
+  margin-top: var(--space-12);
+  padding: var(--space-14) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--reminder-radius);
+  background: var(--surface-card);
+  text-align: left;
+  cursor: pointer;
+}
+
+.deadline-reminder:disabled {
+  cursor: progress;
+}
+
+.deadline-reminder__bell {
+  flex: none;
+  color: var(--ink-soft);
+}
+
+.deadline-reminder__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.deadline-reminder__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+}
+
+.deadline-reminder__sub {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.deadline-reminder__switch {
+  position: relative;
+  flex: none;
+  width: var(--reminder-switch-width);
+  height: var(--reminder-switch-height);
+  border-radius: var(--radius-round);
+  background: var(--toggle-off-surface);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.deadline-reminder__switch::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  width: var(--reminder-switch-knob);
+  height: var(--reminder-switch-knob);
+  border-radius: var(--radius-round);
+  background: var(--toggle-knob);
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.deadline-reminder--on .deadline-reminder__switch {
+  background: var(--toggle-on-surface);
+}
+
+.deadline-reminder--on .deadline-reminder__switch::after {
+  translate: var(--reminder-switch-travel) 0;
+}
+
+.deadline-reminder--locked .deadline-reminder__switch {
+  opacity: var(--reminder-locked-opacity);
+}
+
+.deadline-reminder__error {
+  margin-top: var(--space-8);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deadline-reminder__switch,
+  .deadline-reminder__switch::after {
+    transition: none;
+  }
+}

@@ -4,7 +4,8 @@
  * POURQUOI — les infos d'inscription étaient éparpillées ; les exposants les ont réclamées au même
  *            endroit, avec la trace de leur propre envoi (maquette 2027, fiche événement).
  * ATTENTION — ce qui n'est pas renseigné n'apparaît pas. « Ce que j'ai envoyé » est privé
- *            (participation_dossiers) et n'existe que si l'exposant suit cette date.
+ *            (participation_dossiers) et n'existe que si l'exposant suit cette date. Le rappel de
+ *            clôture (Pro) ne s'affiche que si la date limite est à venir.
  */
 import { Check, Clock, FileText, Link as LinkIcon, Mail } from 'lucide-react'
 import { DraftInput } from '@/components/ui/DraftInput'
@@ -12,11 +13,14 @@ import { InfoRow, InfoRows } from '@/components/ui/InfoRows'
 import { daysUntil, formatCountdown, formatFullDate, parseSqlDate } from '@/lib/dates'
 import { websiteLink } from '@/lib/vitrine'
 import type { EventRow, ParticipationStatus } from '@/types/database'
+import { DeadlineReminder } from './DeadlineReminder'
 import type { DossierFields } from './useDossier'
 
 interface ApplyingProps {
   event: EventRow
   status: ParticipationStatus | null
+  setStatus: (next: ParticipationStatus | null) => Promise<void>
+  actorId: string | null | undefined
   fields: DossierFields
   save: (patch: Partial<DossierFields>) => Promise<void>
 }
@@ -28,7 +32,7 @@ function deadlineNote(deadline: Date, status: ParticipationStatus | null): strin
   return status === 'inscrit' || status === 'confirme' ? 'clôturé — tu y es inscrit' : 'clôturé'
 }
 
-export function Applying({ event, status, fields, save }: ApplyingProps) {
+export function Applying({ event, status, setStatus, actorId, fields, save }: ApplyingProps) {
   const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
   const site = event.registration_url ? websiteLink(event.registration_url) : null
   const following = status !== null
@@ -89,6 +93,15 @@ export function Applying({ event, status, fields, save }: ApplyingProps) {
           )}
         </InfoRows>
       </div>
+      {deadline && daysUntil(deadline) >= 0 && (
+        <DeadlineReminder
+          eventId={event.id}
+          actorId={actorId}
+          deadline={deadline}
+          status={status}
+          setStatus={setStatus}
+        />
+      )}
     </section>
   )
 }

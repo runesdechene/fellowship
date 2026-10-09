@@ -798,6 +798,16 @@
   --type-pro-invitation-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
   --pro-check-ink: var(--status-ok-ink);
   --radius-invitation: var(--round-20);
+
+  /* --- Le rappel de clôture des candidatures (features/event/DeadlineReminder.tsx, lot 8c) --- */
+  --reminder-radius: var(--round-12);
+  --reminder-switch-width: 30px;
+  --reminder-switch-height: 18px;
+  --reminder-switch-knob: 14px;
+  --reminder-switch-travel: 12px;
+  --reminder-locked-opacity: 0.6;
+  --type-reminder-title: var(--weight-medium) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
   --type-pro-month-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 
