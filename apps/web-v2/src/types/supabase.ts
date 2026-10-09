@@ -92,6 +92,39 @@ export type Database = {
           },
         ]
       }
+      discussion_mutes: {
+        Row: {
+          actor_id: string
+          created_at: string
+          event_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          event_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_mutes_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_mutes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       entities: {
         Row: {
           actor_id: string
@@ -1453,6 +1486,7 @@ export type Database = {
         | "review_reply"
         | "thread_reply"
         | "best_reply"
+        | "thread_question"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -1608,6 +1642,7 @@ export const Constants = {
         "review_reply",
         "thread_reply",
         "best_reply",
+        "thread_question",
       ],
       participation_status: [
         "interesse",
