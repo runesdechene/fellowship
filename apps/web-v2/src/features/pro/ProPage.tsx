@@ -10,6 +10,7 @@ import { ProBadge } from '@/components/ui/ProBadge'
 import { useAuth } from '@/lib/auth'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { annualSaving, formulaFrom, type Formula } from '@/lib/pricing'
+import { billingAction } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { FreeCard, ProCard } from './PlanCard'
 import { ProFaq, ProSoon } from './ProFaq'
@@ -52,10 +53,15 @@ export function ProPage() {
   useDeclarePageChrome({ poster: null, lead: null, back: '/' })
   const [params, setParams] = useSearchParams()
   const formula = formulaFrom(params.get('formule'))
-  const { actor } = useAuth()
+  const { actor, entities } = useAuth()
   const { pro } = usePlan()
   const back = useCheckoutReturn()
-  const entityId = actor?.kind === 'entity' ? actor.id : null
+  const entity =
+    actor?.kind === 'entity' ? (entities.find((row) => row.actor_id === actor.id) ?? null) : null
+  const compedUntil =
+    entity?.comped_pro_until && new Date(entity.comped_pro_until) > new Date()
+      ? entity.comped_pro_until
+      : null
 
   return (
     <div className="pro-page">
@@ -74,13 +80,26 @@ export function ProPage() {
         <FormulaSwitch
           value={formula}
           onChange={(next) => {
-            setParams(next === 'annuel' ? {} : { formule: next })
+            // L'autre paramètre (le retour de Stripe) reste : on ne coupe pas sa relecture.
+            setParams((current) => {
+              const params = new URLSearchParams(current)
+              if (next === 'annuel') params.delete('formule')
+              else params.set('formule', next)
+              return params
+            })
           }}
         />
       </header>
       <div className="pro-page__plans">
         <FreeCard current={!pro} />
-        <ProCard formula={formula} pro={pro} entityId={entityId} />
+        <ProCard
+          formula={formula}
+          pro={pro}
+          entityId={entity?.actor_id ?? null}
+          action={billingAction(entity)}
+          compedUntil={compedUntil}
+          settling={back === 'waiting' || back === 'late'}
+        />
       </div>
       <ProSoon />
       <ProFaq />

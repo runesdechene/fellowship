@@ -6,6 +6,7 @@
  */
 import { ArrowRight, Check } from 'lucide-react'
 import { useState } from 'react'
+import { formatFullDate } from '@/lib/dates'
 import { billingInterval, proPriceLines, type Formula } from '@/lib/pricing'
 import { openPortal, startCheckout } from '@/lib/stripe'
 
@@ -71,22 +72,34 @@ export function FreeCard({ current }: { current: boolean }) {
 
 interface ProCardProps {
   formula: Formula
-  /** L'enseigne active est déjà Pro. */
+  /** L'enseigne active est déjà Pro (payée, ou offerte par le parrainage). */
   pro: boolean
   /** null : compte personnel, le Pro vit sur une enseigne. */
   entityId: string | null
+  /** S'abonner, gérer son abonnement Stripe, ou rien (lib/plan.ts, billingAction). */
+  action: 'checkout' | 'portal' | 'none'
+  /** Un Pro offert, sans abonnement : jusqu'à quand il court. */
+  compedUntil: string | null
+  /** Juste après un paiement, le temps que Stripe prévienne la base : on ne propose rien. */
+  settling: boolean
 }
 
-export function ProCard({ formula, pro, entityId }: ProCardProps) {
+function ctaLabel(action: ProCardProps['action'], pro: boolean): string {
+  if (action === 'portal') return 'Gérer mon abonnement'
+  return pro ? 'M’abonner' : 'Essayer 14 jours gratuitement'
+}
+
+export function ProCard({ formula, pro, entityId, action, compedUntil, settling }: ProCardProps) {
   const [opening, setOpening] = useState(false)
   const [failed, setFailed] = useState(false)
   const { big, unit, note } = proPriceLines(formula)
 
   function open() {
-    if (!entityId || opening) return
+    if (!entityId || opening || settling || action === 'none') return
     setOpening(true)
     setFailed(false)
-    const go = pro ? openPortal(entityId) : startCheckout(entityId, billingInterval(formula))
+    const go =
+      action === 'portal' ? openPortal(entityId) : startCheckout(entityId, billingInterval(formula))
     // En cas de succès, le navigateur part vers Stripe : on ne réactive le bouton qu'en cas d'échec.
     go.catch(() => {
       setOpening(false)
@@ -108,14 +121,20 @@ export function ProCard({ formula, pro, entityId }: ProCardProps) {
       <button
         type="button"
         className="plan-card__cta"
-        disabled={!entityId || opening}
+        disabled={action === 'none' || opening || settling}
+        aria-describedby={action === 'none' ? 'plan-card-hint' : undefined}
         onClick={open}
       >
-        {opening ? 'Ouverture…' : pro ? 'Gérer mon abonnement' : 'Essayer 14 jours gratuitement'}
+        {opening ? 'Ouverture…' : ctaLabel(action, pro)}
         {!opening && <ArrowRight size={15} strokeWidth={2} />}
       </button>
-      {!entityId && (
+      {compedUntil && action === 'checkout' && (
         <p className="plan-card__hint">
+          Ton Pro offert court jusqu’au {formatFullDate(new Date(compedUntil))}.
+        </p>
+      )}
+      {action === 'none' && (
+        <p className="plan-card__hint" id="plan-card-hint">
           Le Pro vit sur une enseigne : passe sur ton compte exposant.
         </p>
       )}

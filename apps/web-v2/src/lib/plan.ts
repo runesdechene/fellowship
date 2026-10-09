@@ -54,3 +54,20 @@ export function devOverride(search: string, isDev: boolean): 'free' | null {
   if (!isDev) return null
   return new URLSearchParams(search).get('plan') === 'free' ? 'free' : null
 }
+
+/** Les états Stripe d'un abonnement en cours — ceux qui se gèrent dans l'espace Stripe. */
+const SUBSCRIBED = ['active', 'trialing', 'past_due']
+
+/**
+ * Le geste de facturation de la page de l'offre : s'abonner, gérer son abonnement, ou rien
+ * (compte personnel). Un Pro offert par le parrainage n'a pas d'abonnement Stripe : il s'abonne,
+ * il n'a rien à « gérer ».
+ */
+export function billingAction(
+  entity: { subscription_status: string | null } | null,
+): 'checkout' | 'portal' | 'none' {
+  if (!entity) return 'none'
+  return entity.subscription_status && SUBSCRIBED.includes(entity.subscription_status)
+    ? 'portal'
+    : 'checkout'
+}

@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   canActOn,
+  billingAction,
   canChangeStatus,
   devOverride,
   isCertified,
@@ -88,5 +89,20 @@ describe('devOverride', () => {
   })
   it('sans paramètre, rien', () => {
     expect(devOverride('', true)).toBeNull()
+  })
+})
+
+describe('billingAction', () => {
+  it('un compte personnel ne paie rien', () => {
+    expect(billingAction(null)).toBe('none')
+  })
+  it('un abonnement Stripe en cours se gère dans l’espace Stripe', () => {
+    expect(billingAction({ subscription_status: 'active' })).toBe('portal')
+    expect(billingAction({ subscription_status: 'trialing' })).toBe('portal')
+    expect(billingAction({ subscription_status: 'past_due' })).toBe('portal')
+  })
+  it('un Pro offert, sans abonnement, peut s’abonner : rien à gérer chez Stripe', () => {
+    expect(billingAction({ subscription_status: null })).toBe('checkout')
+    expect(billingAction({ subscription_status: 'canceled' })).toBe('checkout')
   })
 })

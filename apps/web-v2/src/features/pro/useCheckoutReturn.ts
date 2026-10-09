@@ -31,13 +31,23 @@ export function useCheckoutReturn(): ReturnState {
     if (state !== 'waiting') return
     const step = nextPoll(attempt, pro)
     if (step !== 'wait') {
-      setParams({ statut: step === 'stop-pro' ? 'bienvenue' : 'en-cours' }, { replace: true })
+      setParams(
+        (current) => {
+          const params = new URLSearchParams(current)
+          params.delete('session_id')
+          params.set('statut', step === 'stop-pro' ? 'bienvenue' : 'en-cours')
+          return params
+        },
+        { replace: true },
+      )
       return
     }
     const timer = window.setTimeout(() => {
-      void reloadIdentity().finally(() => {
-        setAttempt((n) => n + 1)
-      })
+      void reloadIdentity()
+        .catch(() => undefined)
+        .finally(() => {
+          setAttempt((n) => n + 1)
+        })
     }, POLL_EVERY_MS)
     return () => {
       window.clearTimeout(timer)
