@@ -6,6 +6,8 @@
  * ATTENTION — « Régler mes notifications » attend les Réglages (lot 9) : pas de lien vers rien.
  */
 import {
+  CalendarPlus,
+  Repeat2,
   MessageCircle,
   MessageCircleReply,
   RefreshCw,
@@ -13,6 +15,7 @@ import {
   User,
   type LucideIcon,
 } from 'lucide-react'
+import { useState } from 'react'
 import { timeAgo } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { groupByDay, type NotificationIcon, type NotificationView } from '@/lib/notifications'
@@ -24,6 +27,7 @@ const ICONS: Record<NotificationIcon, LucideIcon> = {
   friend: User,
   follow: User,
   update: RefreshCw,
+  edition: CalendarPlus,
 }
 
 interface NotificationPanelProps {
@@ -32,6 +36,38 @@ interface NotificationPanelProps {
   onRead: (id: string) => void
   onReadAll: () => void
   onClose: () => void
+  /** « Repérer » : rend vrai si la date est posée. */
+  onMark: (ownerId: string, eventId: string) => Promise<boolean>
+}
+
+/** Le bouton « Repérer » d'une nouvelle édition : il agit sans ouvrir la fiche. */
+function MarkButton({
+  ownerId,
+  eventId,
+  onMark,
+}: {
+  ownerId: string
+  eventId: string
+  onMark: NotificationPanelProps['onMark']
+}) {
+  const [state, setState] = useState<'idle' | 'saving' | 'done' | 'failed'>('idle')
+  return (
+    <button
+      type="button"
+      className="notif__action"
+      disabled={state === 'saving' || state === 'done'}
+      onClick={(click) => {
+        click.stopPropagation()
+        setState('saving')
+        void onMark(ownerId, eventId).then((ok) => {
+          setState(ok ? 'done' : 'failed')
+        })
+      }}
+    >
+      <Star size={12} strokeWidth={2} />
+      {state === 'done' ? 'Repérée' : state === 'failed' ? 'Réessayer' : 'Repérer'}
+    </button>
+  )
 }
 
 export function NotificationPanel({
@@ -40,6 +76,7 @@ export function NotificationPanel({
   onRead,
   onReadAll,
   onClose,
+  onMark,
 }: NotificationPanelProps) {
   const go = useTransitionNavigate()
   const now = new Date()
@@ -66,29 +103,41 @@ export function NotificationPanel({
           <h3 className="notif-panel__day">{group.label}</h3>
           {group.items.map((view) => {
             const Icon = ICONS[view.icon]
+            const open = () => {
+              if (!view.read) onRead(view.id)
+              onClose()
+              go(view.href)
+            }
             return (
-              <button
-                key={view.id}
-                type="button"
-                className={view.read ? 'notif' : 'notif notif--unread'}
-                onClick={() => {
-                  if (!view.read) onRead(view.id)
-                  onClose()
-                  go(view.href)
-                }}
-              >
+              // Une ligne, pas un bouton : elle peut contenir le bouton « Repérer ».
+              <div key={view.id} className={view.read ? 'notif' : 'notif notif--unread'}>
                 <span className="notif__icon">
                   <Icon size={16} strokeWidth={1.8} />
                 </span>
                 <span className="notif__body">
-                  <span className="notif__text">
+                  {view.eyebrow && (
+                    <span className="notif__eyebrow">
+                      <Repeat2 size={12} strokeWidth={2} />
+                      {view.eyebrow}
+                    </span>
+                  )}
+                  <button type="button" className="notif__open" onClick={open}>
                     <b>{view.lead}</b>
                     {view.rest}
+                  </button>
+                  <span className="notif__meta">
+                    <span className="notif__time">{timeAgo(view.at, now)}</span>
+                    {view.action && (
+                      <MarkButton
+                        ownerId={view.ownerId}
+                        eventId={view.action.eventId}
+                        onMark={onMark}
+                      />
+                    )}
                   </span>
-                  <span className="notif__time">{timeAgo(view.at, now)}</span>
                 </span>
                 {!view.read && <span className="notif__dot" aria-label="Non lue" />}
-              </button>
+              </div>
             )
           })}
         </section>

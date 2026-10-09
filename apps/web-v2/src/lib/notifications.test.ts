@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { KNOWN_TYPES, groupByDay, notificationView, type NotificationRow } from './notifications'
 
 const row = (type: string, data: Record<string, unknown>, created_at = '2026-10-09T10:00:00Z') =>
-  ({ id: 'n1', type, data, read: false, created_at }) satisfies NotificationRow
+  ({ id: 'n1', actor_id: 'a1', type, data, read: false, created_at }) satisfies NotificationRow
 
 const event = { event_id: 'e1', event_name: 'Arbor Pagan Fest' }
 
@@ -86,9 +86,39 @@ describe('groupByDay', () => {
   })
 })
 
+describe('new_edition', () => {
+  const edition = {
+    event_id: 'e2',
+    event_name: 'Les Aventuriales',
+    start_date: '2027-09-24',
+    end_date: '2027-09-26',
+    previous_event_id: 'e1',
+    previous_year: 2026,
+  }
+  it('annonce le retour du festival et rappelle l’année passée', () => {
+    const view = notificationView(row('new_edition', edition))
+    expect(view?.eyebrow).toBe('Nouvelle édition')
+    expect(view?.lead).toBe('Les Aventuriales')
+    expect(view?.rest).toBe(' revient du 24 au 26 septembre 2027. Tu y étais en 2026.')
+    expect(view?.href).toBe('/evenement/e2')
+    expect(view?.action).toEqual({ kind: 'mark', eventId: 'e2' })
+    expect(view?.ownerId).toBe('a1')
+  })
+  it('sans dates, elle n’est pas affichée', () => {
+    expect(notificationView(row('new_edition', { ...edition, start_date: undefined }))).toBeNull()
+  })
+})
+
 describe('KNOWN_TYPES', () => {
   it('liste exactement les types que la cloche sait dire — la requête ne lit qu’eux', () => {
-    const full = { ...event, actor_name: 'X', thread_title: 'Q' }
+    const full = {
+      ...event,
+      actor_name: 'X',
+      thread_title: 'Q',
+      start_date: '2027-09-24',
+      end_date: '2027-09-26',
+      previous_year: 2026,
+    }
     for (const type of KNOWN_TYPES) expect(notificationView(row(type, full))).not.toBeNull()
     expect(KNOWN_TYPES).toContain('thread_question')
     expect(KNOWN_TYPES).not.toContain('friend_note')

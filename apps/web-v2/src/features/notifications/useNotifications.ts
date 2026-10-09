@@ -32,7 +32,7 @@ export function useNotifications() {
         const rows = must(
           await supabase
             .from('notifications')
-            .select('id, type, data, read, created_at')
+            .select('id, actor_id, type, data, read, created_at')
             .in('actor_id', ids)
             .in('type', [...KNOWN_TYPES])
             .order('created_at', { ascending: false })
@@ -89,8 +89,20 @@ export function useNotifications() {
       })
   }, [key, refresh])
 
+  /** « Repérer » une nouvelle édition, pour l'acteur à qui la notification a été écrite. */
+  const markInterested = useCallback(async (ownerId: string, eventId: string) => {
+    const { error } = await supabase
+      .from('participations')
+      .upsert(
+        { actor_id: ownerId, event_id: eventId, status: 'interesse' },
+        { onConflict: 'actor_id,event_id', ignoreDuplicates: true },
+      )
+    return !error
+  }, [])
+
   return {
     views,
+    markInterested,
     failed,
     unread: views.some((view) => !view.read),
     refresh,

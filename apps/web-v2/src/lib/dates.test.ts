@@ -21,6 +21,7 @@ import {
   parseSqlDate,
   todayIso,
   monthName,
+  formatDateSpan,
 } from './dates'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
@@ -192,5 +193,21 @@ describe('isRecent', () => {
 describe('monthName', () => {
   it('le mois en toutes lettres, en minuscules, pour une phrase', () => {
     expect(monthName(new Date(2027, 2, 1))).toBe('mars')
+  })
+})
+
+describe('formatDateSpan', () => {
+  it('« du 24 au 26 septembre » dans une phrase', () => {
+    expect(formatDateSpan(new Date(2027, 8, 24), new Date(2027, 8, 26))).toBe(
+      'du 24 au 26 septembre',
+    )
+  })
+  it('à cheval sur deux mois', () => {
+    expect(formatDateSpan(new Date(2027, 9, 30), new Date(2027, 10, 2))).toBe(
+      'du 30 octobre au 2 novembre',
+    )
+  })
+  it('un seul jour', () => {
+    expect(formatDateSpan(new Date(2027, 6, 4), new Date(2027, 6, 4))).toBe('le 4 juillet')
   })
 })

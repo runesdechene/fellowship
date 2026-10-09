@@ -10,7 +10,8 @@ import { NotificationPanel } from './NotificationPanel'
 import { useNotifications } from './useNotifications'
 
 export function NotificationBell() {
-  const { views, failed, unread, refresh, markRead, markAllRead } = useNotifications()
+  const { views, failed, unread, refresh, markRead, markAllRead, markInterested } =
+    useNotifications()
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
 
@@ -50,6 +51,7 @@ export function NotificationBell() {
           failed={failed}
           onRead={markRead}
           onReadAll={markAllRead}
+          onMark={markInterested}
           onClose={() => {
             setOpen(false)
           }}

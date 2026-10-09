@@ -99,6 +99,15 @@ export function formatDateRange(start: Date, end: Date, month: 'short' | 'long' 
   return `${dayMonth(start)}–${dayMonth(end)}`
 }
 
+/** « du 24 au 26 septembre », « du 30 octobre au 2 novembre », « le 4 juillet » : une plage dans
+ *  une phrase (« Les Aventuriales reviennent du 24 au 26 septembre »). */
+export function formatDateSpan(start: Date, end: Date): string {
+  if (start.toDateString() === end.toDateString()) return `le ${formatDayMonth(start)}`
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()
+  const from = sameMonth ? DAY_FORMATTER.format(start) : formatDayMonth(start)
+  return `du ${from} au ${formatDayMonth(end)}`
+}
+
 /** « Sept. », « Janv. », « Mai » : le mois en abrégé, initiale en capitale. */
 export function formatMonthShort(month: Date): string {
   return capitalize(MONTH_SHORT_FORMATTER.format(month))
