@@ -505,6 +505,7 @@ export type Database = {
           longitude: number | null
           name: string
           opening_hours: string | null
+          previous_edition_id: string | null
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
@@ -535,6 +536,7 @@ export type Database = {
           longitude?: number | null
           name: string
           opening_hours?: string | null
+          previous_edition_id?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
@@ -565,6 +567,7 @@ export type Database = {
           longitude?: number | null
           name?: string
           opening_hours?: string | null
+          previous_edition_id?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
@@ -587,6 +590,13 @@ export type Database = {
             columns: ["created_by_actor"]
             isOneToOne: false
             referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_previous_edition_id_fkey"
+            columns: ["previous_edition_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
         ]
@@ -1487,6 +1497,7 @@ export type Database = {
         | "thread_reply"
         | "best_reply"
         | "thread_question"
+        | "new_edition"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -1643,6 +1654,7 @@ export const Constants = {
         "thread_reply",
         "best_reply",
         "thread_question",
+        "new_edition",
       ],
       participation_status: [
         "interesse",
