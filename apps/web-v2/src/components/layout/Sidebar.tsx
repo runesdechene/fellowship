@@ -9,6 +9,7 @@ import {
   CircleGauge,
   PanelRightClose,
   PanelRightOpen,
+  Settings,
   Telescope,
   Users,
 } from 'lucide-react'
@@ -18,7 +19,7 @@ import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { AccountSwitcher } from './AccountSwitcher'
 
 /**
- * Les deux entrées de la maquette, dans l'ordre de la maquette.
+ * Les entrées de la maquette, dans son ordre, puis Réglages (demandé par Uriel le 10/10/2026).
  * `to: null` = l'entrée existe visuellement mais aucun écran n'est encore
  * intégré (Explorer). Le jour où il l'est, on renseigne son chemin ici.
  */
@@ -31,6 +32,7 @@ const NAV_ITEMS: ReadonlyArray<{
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
   { to: null, label: 'Communauté', Icon: Users },
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },
+  { to: '/reglages', label: 'Réglages', Icon: Settings },
 ]
 
 interface SidebarProps {
