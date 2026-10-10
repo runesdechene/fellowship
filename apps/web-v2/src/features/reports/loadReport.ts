@@ -1,6 +1,7 @@
 /**
  * QUOI     — charge le bilan d'une date pour l'acteur actif : la date, la ligne event_reports si
- *            elle existe, les lignes de registre, l'objectif de chiffre d'affaires, les photos.
+ *            elle existe, les lignes de registre, les photos. L'objectif de chiffre d'affaires,
+ *            lui, vient du dossier (useDossier) : le bilan le fixe.
  * POURQUOI — l'écran du bilan lit tout d'un coup ; useReport le recharge après chaque écriture.
  * ATTENTION — rend null quand la date n'est pas un bilan possible (pas inscrit, ou date pas
  *            encore passée) : l'écran renvoie alors vers Mes bilans. Une erreur de la base, elle,
@@ -32,7 +33,6 @@ export interface ReportDetail {
   improvements: string[]
   note: string
   photos: { path: string; url: string }[]
-  revenueGoal: number | null
 }
 
 function toCategory(value: string): LedgerCategory {
@@ -51,7 +51,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
   if (!row || row.events.end_date >= todayIso()) return null
   const event = row.events
 
-  const [reportResponse, ledgerResponse, dossierResponse] = await Promise.all([
+  const [reportResponse, ledgerResponse] = await Promise.all([
     supabase
       .from('event_reports')
       .select('id, wins, improvements, note, media_paths')
@@ -64,16 +64,9 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       .eq('actor_id', actorId)
       .eq('event_id', eventId)
       .order('created_at'),
-    supabase
-      .from('participation_dossiers')
-      .select('revenue_goal')
-      .eq('actor_id', actorId)
-      .eq('event_id', eventId)
-      .maybeSingle(),
   ])
   const report = must(reportResponse)
   const ledger = must(ledgerResponse)
-  const dossier = must(dossierResponse)
 
   const paths = report?.media_paths ?? []
   const urls = await signedReportUrls(paths)
@@ -105,6 +98,5 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       const url = urls.get(path)
       return url ? [{ path, url }] : []
     }),
-    revenueGoal: dossier?.revenue_goal ?? null,
   }
 }

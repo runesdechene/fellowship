@@ -2,20 +2,26 @@
  * QUOI     — le résumé d'un bilan : bénéfice, objectif de chiffre d'affaires comparé au réalisé,
  *            chiffre d'affaires, frais, bénéfice par jour, « Enregistré automatiquement ».
  * POURQUOI — ce qu'on vient regarder en premier : sur téléphone, il passe en tête de l'écran.
- * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) ;
- *            sans objectif, le bloc n'apparaît pas.
+ * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
+ *            se fixe ici (ReportGoal), après le festival.
  */
-import { Check, Target } from 'lucide-react'
-import type { CSSProperties } from 'react'
+import { Check } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
-import { formatEuros, formatSignedEuros, goalShare } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { reportFigures } from '@/lib/reports'
+import { ReportGoal } from './ReportGoal'
 import type { ReportDetail } from './useReport'
 
-export function ReportSummary({ detail, saving }: { detail: ReportDetail; saving: boolean }) {
-  const { date, revenueGoal } = detail
+interface ReportSummaryProps {
+  detail: ReportDetail
+  saving: boolean
+  goal: number | null
+  onSaveGoal: (goal: number | null) => void
+}
+
+export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummaryProps) {
+  const { date } = detail
   const { revenue, costs, net, days } = reportFigures(date)
-  const share = revenueGoal ? goalShare(revenue, revenueGoal) : null
 
   return (
     <div className="report-summary">
@@ -38,25 +44,7 @@ export function ReportSummary({ detail, saving }: { detail: ReportDetail; saving
         <span className="report-summary__net">{formatSignedEuros(net)}</span>
       </div>
 
-      {revenueGoal !== null && share && (
-        <div className="report-summary__goal">
-          <span className="report-summary__goal-head">
-            <span className="report-summary__goal-title">
-              <Target size={13} strokeWidth={2} />
-              Objectif {formatEuros(revenueGoal)}
-            </span>
-            <span>{share.percent >= 100 ? `+${share.percent - 100} %` : `${share.percent} %`}</span>
-          </span>
-          <span
-            className="report-summary__gauge"
-            style={{ '--gauge': String(share.ratio) } as CSSProperties}
-          />
-          <span className="report-summary__goal-note">
-            Réalisé {formatEuros(revenue)}
-            {share.percent >= 100 ? ' — objectif dépassé' : ` sur ${formatEuros(revenueGoal)}`}
-          </span>
-        </div>
-      )}
+      <ReportGoal goal={goal} revenue={revenue} onSave={onSaveGoal} />
 
       <dl className="report-summary__rows">
         <div className="report-summary__row">

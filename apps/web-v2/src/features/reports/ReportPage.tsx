@@ -19,6 +19,7 @@ import { ClearReport } from './ClearReport'
 import { Ledger } from './Ledger'
 import { ReportNote } from './ReportNote'
 import { ReportPhotos } from './ReportPhotos'
+import { useDossier } from '@/features/event/useDossier'
 import { ReportSummary } from './ReportSummary'
 import { TagList } from './TagList'
 import { useReport } from './useReport'
@@ -33,6 +34,8 @@ export function ReportPage() {
     pro ? eventId : undefined,
     actor?.id,
   )
+  // L'objectif se fixe ici, après le festival (Uriel, 11/10/2026) : le dossier de la date le porte.
+  const dossier = useDossier(pro ? eventId : undefined, actor?.id)
   useDeclarePageChrome({ poster: null, lead: null, back: '/bilans' })
 
   if (!pro || status === 'missing') return <Navigate to="/bilans" replace />
@@ -67,7 +70,12 @@ export function ReportPage() {
       </header>
 
       <div className="report-page__summary">
-        <ReportSummary detail={detail} saving={saving} />
+        <ReportSummary
+          detail={detail}
+          saving={saving}
+          goal={dossier.fields.revenueGoal}
+          onSaveGoal={(goal) => void dossier.save({ revenueGoal: goal })}
+        />
       </div>
 
       <div className="report-page__main">

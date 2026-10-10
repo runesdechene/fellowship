@@ -233,8 +233,6 @@ export function EventPage() {
           setStatus={setStatus}
           saving={saving}
           writeError={writeError}
-          revenueGoal={dossier.fields.revenueGoal}
-          saveGoal={(goal) => void dossier.save({ revenueGoal: goal })}
           locked={!canChangeStatus(startDate, status !== null, pro, today)}
           monthsAway={monthsBeyond(startDate, today)}
         />

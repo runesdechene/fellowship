@@ -27,7 +27,7 @@ export function ReportsInvitation() {
         Sache ce que chaque festival t’a vraiment apporté
       </h2>
       <p className="reports-invitation__text">
-        Avec le Pro, tu fixes un objectif avant chaque date et tu le compares à ce que tu as fait.
+        Avec le Pro, tu fixes un objectif pour chaque date et tu le compares à ce que tu as fait.
         Tes bilans restent visibles par toi seul.
       </p>
       <ul className="reports-invitation__list">

@@ -38,8 +38,6 @@ export interface DashboardDate {
   startDate: Date
   daysAway: number
   friends: Friend[]
-  /** L'objectif de chiffre d'affaires fixé sur la fiche, s'il y en a un. */
-  revenueGoal: number | null
 }
 
 /** Une ligne de « Mes dossiers » : une date à venir, son dossier et son paiement. */
@@ -290,7 +288,6 @@ async function loadDashboard(
         startDate,
         daysAway: daysUntil(startDate, today),
         friends: friendsByEvent.get(row.event_id) ?? [],
-        revenueGoal: privateByEvent.get(row.event_id)?.revenue_goal ?? null,
       }
     })
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())

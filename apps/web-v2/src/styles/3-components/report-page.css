@@ -458,6 +458,34 @@
   color: transparent;
 }
 
+/* Fixer ou modifier l'objectif, ici, après le festival (Uriel, 11/10/2026 ; ReportGoal.tsx). */
+.report-summary__goal-set {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-dossier-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.report-summary__goal--editing {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.report-summary__goal-input {
+  width: var(--dossier-goal-width);
+}
+
+.report-summary__goal-edit {
+  cursor: pointer;
+}
+
+.report-summary__goal-edit:hover {
+  text-decoration: underline;
+}
+
 .report-summary__goal {
   display: flex;
   flex-direction: column;

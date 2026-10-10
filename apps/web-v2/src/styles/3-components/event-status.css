@@ -16,21 +16,6 @@
   color: var(--status-pending-ink);
 }
 
-/* --- L'objectif de chiffre d'affaires -------------------------------------- */
-.event-status__goal {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  margin-top: var(--space-14);
-  font: var(--type-dossier-link);
-  color: var(--ink-title);
-  cursor: pointer;
-}
-
-.event-status__goal-input {
-  width: var(--dossier-goal-width);
-}
-
 /* --- Je paie ma place / On me paie un cachet -------------------------------- */
 .event-status__sides {
   display: flex;
