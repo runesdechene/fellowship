@@ -41,7 +41,7 @@
 .community__tab {
   padding: var(--space-8) var(--space-14);
   border: 1px solid var(--line-card);
-  border-radius: var(--radius-round);
+  border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-community-tab);
   color: var(--ink-title);
@@ -112,7 +112,7 @@
 .community__more-button {
   padding: var(--space-8) var(--space-20);
   border: 1px solid var(--line-card);
-  border-radius: var(--radius-round);
+  border-radius: var(--button-radius);
   background: var(--surface-card);
   font: var(--type-community-tab);
   color: var(--ink-title);
@@ -209,7 +209,7 @@
   gap: var(--space-6);
   padding: var(--space-6) var(--space-14) var(--space-6) var(--space-12);
   border: 1px solid var(--line-card);
-  border-radius: var(--radius-sm);
+  border-radius: var(--button-radius);
   background: var(--surface-card);
   font: var(--type-community-tab);
   color: var(--ink-title);
@@ -228,7 +228,7 @@
   align-items: center;
   gap: var(--space-12);
   padding: var(--space-6) var(--space-14) var(--space-6) var(--space-6);
-  border-radius: var(--community-inset-radius);
+  border-radius: var(--radius-nav);
   background: var(--community-inset);
 }
 
@@ -236,7 +236,7 @@
   flex: none;
   width: var(--feed-poster-width);
   height: var(--feed-poster-height);
-  border-radius: var(--community-poster-radius);
+  border-radius: var(--radius-xs);
   object-fit: cover;
 }
 
@@ -265,7 +265,7 @@
   flex-direction: column;
   gap: var(--space-6);
   padding: var(--space-12) var(--space-14);
-  border-radius: var(--community-inset-radius);
+  border-radius: var(--radius-nav);
   background: var(--community-inset);
 }
 
@@ -289,7 +289,7 @@
   gap: var(--space-24);
   padding: var(--space-12) var(--space-24) var(--space-12) var(--space-12);
   border: 1px solid var(--line-card);
-  border-radius: var(--gathering-radius);
+  border-radius: var(--radius-card);
   background: var(--surface-card);
 }
 
@@ -297,7 +297,7 @@
   display: block;
   width: var(--gathering-poster-width);
   height: var(--gathering-poster-height);
-  border-radius: var(--community-inset-radius);
+  border-radius: var(--radius-nav);
   object-fit: cover;
 }
 
@@ -352,7 +352,7 @@
   gap: var(--space-6);
   margin-top: var(--space-6);
   padding: var(--space-6) var(--space-14) var(--space-6) var(--space-12);
-  border-radius: var(--radius-sm);
+  border-radius: var(--button-radius);
   background: var(--action-surface);
   font: var(--type-community-tab);
   color: var(--action-ink);
@@ -392,7 +392,7 @@
   align-items: center;
   gap: var(--space-12);
   padding: var(--space-8) var(--space-10);
-  border-radius: var(--side-row-radius);
+  border-radius: var(--radius-nav);
   transition:
     background var(--duration-fast) var(--ease-out),
     opacity var(--duration-fast) var(--ease-out);
@@ -411,7 +411,7 @@ a.side-card__row:hover {
   flex: none;
   width: var(--side-poster-width);
   height: var(--side-poster-height);
-  border-radius: var(--community-poster-radius);
+  border-radius: var(--radius-xs);
   object-fit: cover;
 }
 

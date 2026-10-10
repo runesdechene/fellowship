@@ -729,8 +729,6 @@
 
   /* « Qui y va » (WhoGoesDialog, maquette 2218:2) : une carte de 420 sur un voile d'encre. */
   --who-goes-width: 420px;
-  --who-goes-radius: var(--round-20);
-  --who-goes-row-radius: var(--round-12);
   --who-goes-close: 34px;
   --who-goes-veil: color-mix(in srgb, var(--ink-950) 38%, transparent);
   --type-who-goes-title: var(--weight-semibold) var(--size-17) / var(--leading-snug)
@@ -750,10 +748,6 @@
   --community-page-width: calc(1088px + 2 * var(--page-gutter));
   --community-side-width: 360px;
   --community-gap: var(--space-48);
-  --community-inset-radius: var(--round-12);
-  --community-poster-radius: var(--round-6);
-  --gathering-radius: var(--round-20);
-  --side-row-radius: var(--round-10);
   --community-inset: var(--sand-200);
   --community-faint-ink: var(--ink-waiting);
   --community-avatar: var(--size-36);

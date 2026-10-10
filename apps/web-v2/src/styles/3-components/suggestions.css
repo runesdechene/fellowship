@@ -96,7 +96,7 @@
   place-items: center;
   width: var(--suggestion-dismiss-size);
   height: var(--suggestion-dismiss-size);
-  border-radius: var(--radius-round);
+  border-radius: var(--button-radius);
   color: var(--suggestion-dismiss-ink);
   cursor: pointer;
   transition:
