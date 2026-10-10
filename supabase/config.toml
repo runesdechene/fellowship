@@ -415,3 +415,7 @@ verify_jwt = true
 [functions.stripe-webhook]
 # Auth = vérification de signature Stripe (pas JWT Supabase).
 verify_jwt = false
+
+[functions.send-push]
+# Auth = le secret d'en-tête X-Push-Secret envoyé par le déclencheur (pas de JWT Supabase).
+verify_jwt = false
