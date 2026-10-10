@@ -7,7 +7,7 @@
 
 .community {
   width: 100%;
-  max-width: var(--page-max-width);
+  max-width: var(--community-page-width);
   margin-inline: auto;
   padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
 }

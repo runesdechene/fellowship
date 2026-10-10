@@ -715,6 +715,9 @@
   --report-thumb-height: 78px;
   /* La Communauté (lot 9a, maquette 2212:2) : le fil à gauche, deux cartes à droite ; les petites
      surfaces (festival, avis, bouclier) en blé discret, les boutons en filet. */
+  /* Plus large que les autres pages : le fil (680) et sa colonne (360) côte à côte, comme la
+     maquette — à 918, le fil s'écrasait. */
+  --community-page-width: calc(1088px + 2 * var(--page-gutter));
   --community-side-width: 360px;
   --community-gap: var(--space-48);
   --community-inset-radius: var(--round-12);
