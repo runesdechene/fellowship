@@ -42,9 +42,9 @@ accordée à `authenticated`. Elle rend au plus **80 lignes**, les **30 derniers
 récente à la plus ancienne :
 
 `(id text, kind text, occurred_at timestamptz, who_id uuid, who_name text, who_avatar text,
-target_id uuid, target_name text, event_id uuid, event_name text, event_city text,
-event_department text, event_start date, event_end date, event_image text, stars int,
-comment text, detail text)`
+who_slug text, target_id uuid, target_name text, target_slug text, event_id uuid, event_name text,
+event_city text, event_department text, event_start date, event_end date, event_image text,
+stars int, comment text, detail text, companions jsonb)` — les `*_slug` ouvrent la vitrine.
 
 | `kind` | Source | Qui | Champs |
 |---|---|---|---|
