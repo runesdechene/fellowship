@@ -1106,6 +1106,7 @@
   --status-pending-icon: var(--cream-650);
   --status-validated-ink: var(--sauge-300);
   --status-validated-surface: var(--sauge-900);
+  --status-validated-mark: var(--sauge-300);
   --status-sent-ink: var(--bleu-300);
   --status-sent-surface: var(--bleu-900);
 
