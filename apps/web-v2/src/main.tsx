@@ -13,6 +13,13 @@ import './styles/index.css'
 // Avant le premier rendu : la page ne doit jamais s'afficher un instant dans l'autre thème.
 applyTheme(currentTheme())
 
+// Le service worker du téléphone (public/sw.js) : les notifications, rien d'autre.
+if ('serviceWorker' in navigator) {
+  void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
+    scope: import.meta.env.BASE_URL,
+  })
+}
+
 const root = document.getElementById('root')
 if (!root) throw new Error('index.html doit contenir #root')
 
