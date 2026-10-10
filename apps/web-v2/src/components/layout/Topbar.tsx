@@ -5,9 +5,10 @@
  *            coin sur tous les écrans.
  */
 import { ArrowLeft, CirclePlus } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
-import { useTransitionNavigate } from '@/lib/navigation'
+import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { usePageChrome } from '@/lib/page-chrome'
 
 /**
@@ -19,10 +20,30 @@ import { usePageChrome } from '@/lib/page-chrome'
  * La sortie est ICI, dans le coin, et pas en tête du contenu : c'est du
  * châssis, pas du texte. La main la cherche au même endroit sur tous les
  * écrans, et la page peut s'ouvrir sur son titre.
+ *
+ * Le retour est celui du navigateur (.claude/rules/v2.md) : on revient à la page d'où l'on vient
+ * — la Communauté, l'Explorer, le calendrier. Le chemin déclaré par la page ne sert que si la
+ * fiche est la première page de l'onglet (lien reçu, nouvel onglet) : il n'y a alors pas
+ * d'« avant » dans l'application. Uriel, 11/10/2026 : la fiche ramenait toujours au tableau de
+ * bord.
  */
 export function Topbar() {
   const go = useTransitionNavigate()
   const { lead, back } = usePageChrome()
+  const navigate = useNavigate()
+  const transition = useViewTransition()
+  // « default » : la première entrée de l'onglet — aucune page de l'application avant elle.
+  const firstPage = useLocation().key === 'default'
+
+  function leave(fallback: string) {
+    if (firstPage) {
+      go(fallback)
+      return
+    }
+    transition('page', () => {
+      void navigate(-1)
+    })
+  }
 
   return (
     <div className="topbar">
@@ -43,7 +64,7 @@ export function Topbar() {
               ressemblent pas se remarquent. Uriel a tranché : les trois
               contrôles de la barre portent la même surface. */}
           {back && (
-            <Button variant="icon" onClick={() => go(back)} aria-label="Retour" title="Retour">
+            <Button variant="icon" onClick={() => leave(back)} aria-label="Retour" title="Retour">
               <ArrowLeft size={20} strokeWidth={1.75} />
             </Button>
           )}
