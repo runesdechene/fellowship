@@ -23,7 +23,7 @@
 | Notifications · nouveaux événements | `2027 — Notifications · nouveaux événements` (`2182:2`) | validé, intégré (lot 8c, 09/10/2026) |
 | Offre Pro | `2027 — Offre Pro`, `2027 mobile — Offre Pro` | validé, intégré (lot 7c, 09/10/2026) |
 | Communauté | `2027 — Communauté` | dessiné |
-| Réglages | `2027 — Réglages` | dessiné |
+| Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; autres sections à venir |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
