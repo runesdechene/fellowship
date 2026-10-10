@@ -1426,6 +1426,7 @@ export type Database = {
           event_image: string
           event_name: string
           event_start: string
+          faces: Json
         }[]
       }
       department_code: { Args: { raw: string }; Returns: string }
