@@ -9,7 +9,6 @@ import { ArrowRight, CalendarDays, Clock, MapPin, Store, Users } from 'lucide-re
 import type { LucideIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
-import { Avatar } from '@/components/ui/Avatar'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
@@ -17,10 +16,10 @@ import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from 
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
-import { namesLine } from '@/lib/name-line'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
+import { Companions } from './Companions'
 import { DiscussionBlock } from './DiscussionBlock'
 import { LastEditionReport } from './LastEditionReport'
 import { useLastEditionReport } from './useLastEditionReport'
@@ -170,12 +169,6 @@ export function EventPage() {
     )
   }
 
-  // Tout le monde est nommé jusqu'à trois : on doit savoir QUI y va (Uriel, 11/10/2026).
-  const companions = namesLine(
-    friends.map((friend) => friend.name),
-    { one: 'y va aussi', many: 'y vont aussi' },
-  )
-
   // Les faits se construisent d'abord, se filtrent ensuite : seul ce que
   // l'organisateur a renseigné prend une carte.
   const facts: FactData[] = [
@@ -227,22 +220,11 @@ export function EventPage() {
             {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
                   de l'identité de la date, au même titre que son lieu — ça ne
                   méritait ni un titre de section ni une carte. */}
-            {friends.length > 0 && (
-              <p className="event-page__companions">
-                <span className="event-page__avatars">
-                  {friends.slice(0, 5).map((friend) => (
-                    <span key={friend.id} className="event-page__avatar">
-                      <Avatar src={friend.avatarUrl} name={friend.name} />
-                    </span>
-                  ))}
-                </span>
-                <span>
-                  {companions.map((part, index) =>
-                    typeof part === 'string' ? part : <b key={index}>{part.strong}</b>,
-                  )}
-                </span>
-              </p>
-            )}
+            <Companions
+              eventId={event.id}
+              subtitle={`${event.name} · ${formatDateRange(startDate, endDate)}`}
+              friends={friends}
+            />
           </div>
         </header>
 

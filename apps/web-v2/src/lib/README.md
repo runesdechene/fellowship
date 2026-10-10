@@ -18,6 +18,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `push-lines.ts` — les sept lignes du téléphone et le message envoyé (recopié dans send-push).
 - `category-icons.ts` — l'icône de chaque catégorie (planche Figma 2215:2).
 - `useTagStyles.ts` — les couleurs des catégories, lues une fois et partagées.
+- `who-goes.ts` — la liste « Qui y va » : statut de chaque ami (Inscrit en vert, Dossier envoyé), ordre.
 - `community.ts` — le fil de la communauté : lire, trier par onglet, dire les lignes et les raisons de suivre.
 - `suggestions.ts` — les suggestions « Pour toi » : lire la réponse, dire la raison (recopié dans send-push).
 - `push-device.ts` — ce que permet ce téléphone, le « Plus tard » de l'invitation, la clé VAPID.

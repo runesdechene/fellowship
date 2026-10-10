@@ -243,6 +243,14 @@
   margin-top: var(--space-32);
   font: var(--type-event-meta);
   color: var(--ink-soft);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Un clic ouvre « Qui y va » (Companions.tsx) : le survol le dit. */
+.event-page__companions:hover .event-page__companions-text {
+  text-decoration: underline;
+  text-underline-offset: var(--space-4);
 }
 
 .event-page__companions b {

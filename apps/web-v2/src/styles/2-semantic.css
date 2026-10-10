@@ -718,6 +718,15 @@
   --report-season-width: 226px;
   --report-thumb-width: 56px;
   --report-thumb-height: 78px;
+  /* « Qui y va » (WhoGoesDialog, maquette 2218:2) : une carte de 420 sur un voile d'encre. */
+  --who-goes-width: 420px;
+  --who-goes-radius: var(--round-20);
+  --who-goes-row-radius: var(--round-12);
+  --who-goes-close: 34px;
+  --who-goes-veil: color-mix(in srgb, var(--ink-950) 38%, transparent);
+  --type-who-goes-title: var(--weight-semibold) var(--size-17) / var(--leading-snug)
+    var(--family-sans);
+
   /* L'affiche absente (Poster.tsx, planche 2215:2) : la couleur de la catégorie quand on la
      connaît, la teinte des affiches vides sinon ; l'icône à moitié de la vignette, étouffée. */
   --poster-empty-surface: var(--sand-300);

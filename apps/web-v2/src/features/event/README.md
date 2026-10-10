@@ -12,3 +12,6 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `DiscussionThread.tsx` — le rendu d’un fil : la question, ses réponses, qui parle et quand.
 - `useEvent.ts` — l'événement, la participation, et leurs écritures.
 - `useEventThreads.ts` — les fils de discussion.
+- `Companions.tsx` — la ligne des amis (« A, B, C et 5 autres y vont aussi ») et sa popup.
+- `WhoGoesDialog.tsx` — la popup « Qui y va » : tous les amis programmés, leur métier, leur statut.
+- `useWhoGoes.ts` — la liste de la popup, chargée à l'ouverture.
