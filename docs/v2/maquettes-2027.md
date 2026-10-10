@@ -21,6 +21,7 @@
 | États Pro | `2027 — Mes bilans · compte gratuit`, `2027 — Points de contact du Pro` (+ notes détaillées, 08/10/2026) | validé, intégré (lot 7b, 08/10/2026) — rappel de clôture au lot 8 |
 | Notifications | `2027 — Notifications` | validé, intégré (lots 8a-8c, 09/10/2026) |
 | Notifications · nouveaux événements | `2027 — Notifications · nouveaux événements` (`2182:2`) | validé, intégré (lot 8c, 09/10/2026) |
+| Pour toi (suggestions) | `2027 — Tableau de bord · Pour toi (Pro)` (`2206:2`), `… (compte gratuit)` (`2206:340`), `2027 — Réglages · ligne Suggestions pour toi` (`2206:691`) | validé, intégré (lot 8d, 10/10/2026) — « Pas pour moi » en icône d'interdiction |
 | Offre Pro | `2027 — Offre Pro`, `2027 mobile — Offre Pro` | validé, intégré (lot 7c, 09/10/2026) |
 | Communauté | `2027 — Communauté` | dessiné |
 | Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; autres sections à venir |
@@ -51,7 +52,7 @@
 - [ ] **Objectif de chiffre d'affaires** par participation (colonne). L'objectif de saison = la somme des objectifs (recommandé, à confirmer).
 - [ ] **Préférences de notifications** (par type, appli / e-mail).
 - [x] **Notifications** elles-mêmes (lots 8a-8c, 09/10/2026).
-- [ ] **Recherches sauvegardées** (alerte Pro).
+- [x] **Suggestions « Pour toi »** (alerte Pro, lot 8d, 10/10/2026) — remplacent les recherches sauvegardées.
 - [ ] **Lien entre les éditions d'un même festival**, pour l'alerte « nouvelle édition » — rien ne relie aujourd'hui l'édition 2026 à 2027.
 - [ ] **Suppression de compte réelle** : en V1, « Supprimer mon compte » déconnecte seulement (problème RGPD).
 - [x] Les **organisateurs** ne peuvent pas encore créer de compte (Uriel, 07/10/2026) : pas de page organisateur, et la section « Organisateurs » des résultats est masquée dans la maquette.

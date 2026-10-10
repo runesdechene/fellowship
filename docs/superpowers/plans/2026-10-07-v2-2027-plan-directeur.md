@@ -122,7 +122,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   prix Stripe et la bascule des abonnés actuels passent **après** la V2 (ordre d'Uriel). Reste à
   confirmer : la prévenance avant la fin de l'essai.
 
-### Lot 8 — Notifications et alertes  ☐ · 8a cloche et discussions ☑ (09/10/2026, plan `2026-10-09-lot-8a-cloche-discussions-v2.md`) · 8b éditions ☑ (09/10/2026, plan `2026-10-09-lot-8b-editions-v2.md`) · 8c alertes planifiées ☑ (09/10/2026, plan `2026-10-09-lot-8c-alertes-planifiees-v2.md`) · 8e notifications sur le téléphone ☑ (10/10/2026, V2 2.27.0, plan `2026-10-10-lot-8e-push-telephone-v2.md` — page Réglages née avec, entrée dans la barre latérale) → ☐ 8d recherches sauvegardées (maquette d'abord) · e-mails (Resend) et préférences plus tard
+### Lot 8 — Notifications et alertes  ☐ · 8a cloche et discussions ☑ (09/10/2026, plan `2026-10-09-lot-8a-cloche-discussions-v2.md`) · 8b éditions ☑ (09/10/2026, plan `2026-10-09-lot-8b-editions-v2.md`) · 8c alertes planifiées ☑ (09/10/2026, plan `2026-10-09-lot-8c-alertes-planifiees-v2.md`) · 8e notifications sur le téléphone ☑ (10/10/2026, V2 2.27.0, plan `2026-10-10-lot-8e-push-telephone-v2.md` — page Réglages née avec, entrée dans la barre latérale) → 8d suggestions « Pour toi » ☑ (10/10/2026, V2 2.28.0, plan `2026-10-10-lot-8d-suggestions-pour-toi-v2.md` — remplacent les recherches sauvegardées) · e-mails (Resend) et préférences plus tard
 - **Livre** : panneau de la cloche, préférences (appli / e-mail), alertes Pro : clôture des
   candidatures, nouvelle édition d'un festival déjà fait, recherches sauvegardées.
 - **Cadres** : `2027 — Notifications`, section Notifications de `2027 — Réglages`.
