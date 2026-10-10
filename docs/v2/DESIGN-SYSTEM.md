@@ -10,9 +10,9 @@
 3. **Deux polices** : Inter pour tout ; **Instrument Serif** pour les grands moments seulement — nom d'un festival, d'une enseigne, d'un mois, chiffre phare (`--type-display-*`, `--type-event-title`).
 4. **Deux encres** (`--ink-950`, `--ink-600`) et un tertiaire (`--ink-350`). La hiérarchie vient de la taille et de la graisse.
 5. **La couleur vient des affiches et des tags.** Un tag porte toujours sa couleur (réglée dans l'administration).
-6. **La terre du logo dit « acquis »** et rien d'autre (`--brand-gradient`) : inscrit, payé, bénéfice. Exceptions assumées : l'onglet actif sur mobile, l'action principale de la landing.
-7. **Les statuts se lisent par la forme** : intéressé = cercle vide, dossier envoyé = cercle à moitié plein, inscrit = dégradé. Le gris pour ce qui n'est pas acquis.
-8. **Plus de vert**, sauf le point « en direct » de l'activité du réseau.
+6. **La terre du logo dit « pérenne »** (`--brand-gradient`, dégradé orangé, doré) : ce qui dure — bénéfice des bilans, acquis, Pro. Exceptions assumées : l'onglet actif sur mobile, l'action principale de la landing. *(Révisé le 11/10/2026 : « inscrit » et « payé » passent au vert de validation.)*
+7. **Les statuts se lisent par la forme et la couleur** : intéressé = cercle vide, dossier envoyé = cercle à moitié plein (un bleu doux, à valider), **inscrit = vert de validation**. Le gris pour ce qui n'est pas encore décidé.
+8. **Le vert dit « validé »** (inscrit, payé), accordé à la terre du logo. Pas de vert de décor : seul le point « en direct » et les statuts validés en portent. *(Uriel, 11/10/2026 : « plus de vert » visait le décor, pas les statuts.)*
 9. **Le bouton principal est noir** ; un lien est à l'encre, avec une flèche.
 10. **Le Pro se signale par une petite pastille noire « Pro »**, jamais par un cadenas.
 
