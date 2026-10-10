@@ -10,5 +10,5 @@ que c'est, pourquoi il est douteux, ce qu'il faudra faire.
 
 | Objet | Pourquoi il est douteux | À faire |
 |---|---|---|
-| Policy `participations_select` | Trop large : une participation `inscrit` marquée `amis` est lisible par tout compte connecté (`visibility <> 'prive'`), pas seulement par les amis — vu au lot 9a, 11/10/2026 | À resserrer (`public`, ou `amis` ET `are_friends`) — **sécurité, à trancher avec Uriel**, la V1 en dépend |
+| ~~Policy `participations_select`~~ | Réglé le 11/10/2026 (migration `20261011170000`, accord d'Uriel) : « amis » ne se lit plus que par un ami, de la personne ou d'une de ses enseignes | — |
 | RPC `get_network_follow_activity` | La V2 ne la lit plus (lot 9a : `community_feed`) ; la V1 oui (`use-community.ts`) | À retirer avec la V1 |
