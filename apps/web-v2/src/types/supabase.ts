@@ -1228,6 +1228,7 @@ export type Database = {
           email: string
           handle: string | null
           postal_code: string | null
+          push_muted: string[]
           role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1242,6 +1243,7 @@ export type Database = {
           email: string
           handle?: string | null
           postal_code?: string | null
+          push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1256,6 +1258,7 @@ export type Database = {
           email?: string
           handle?: string | null
           postal_code?: string | null
+          push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1462,6 +1465,10 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
+      register_push_subscription: {
+        Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
+        Returns: undefined
+      }
       search_similar_events: {
         Args: { search_name: string; search_year?: number; threshold?: number }
         Returns: {
