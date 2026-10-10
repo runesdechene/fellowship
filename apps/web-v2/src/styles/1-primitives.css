@@ -62,6 +62,12 @@
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
   --terre-400: #cf9251; /* arrivée du dégradé */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
+  /* La sauge : le vert de validation, accordé à la terre du logo (Uriel, 11/10/2026). */
+  --sauge-900: #223428; /* fond d'une mention validée, la nuit */
+  --sauge-700: #3f6e47; /* encre d'une mention validée, le jour */
+  --sauge-500: #5e9468; /* point d'un statut validé */
+  --sauge-300: #9cc7a5; /* encre d'une mention validée, la nuit */
+  --sauge-50: #e8f0e6; /* fond d'une mention validée, le jour */
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLES

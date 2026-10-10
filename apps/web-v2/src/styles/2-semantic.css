@@ -182,7 +182,12 @@
   --action-ink-off: var(--ink-350);
 
   /* Pastille ronde devant chaque date à venir */
-  --dot-confirmed: var(--status-ok-mark);
+  /* VALIDÉ ≠ PÉRENNE (Uriel, 11/10/2026) : la terre dit ce qui dure (bénéfice, Pro), la sauge dit
+     ce qui est validé (inscrit, payé). */
+  --status-validated-ink: var(--sauge-700);
+  --status-validated-surface: var(--sauge-50);
+  --status-validated-mark: var(--sauge-500);
+  --dot-confirmed: var(--status-validated-mark);
   --dot-pending: var(--ink-450);
   --dot-size: var(--space-8);
 
@@ -1082,6 +1087,8 @@
   --status-pending-surface-hover: var(--night-150);
   --status-pending-icon: var(--cream-650);
   --dot-pending: var(--cream-650);
+  --status-validated-ink: var(--sauge-300);
+  --status-validated-surface: var(--sauge-900);
 
   /* Le bouton principal s'inverse : crème, texte foncé. */
   --action-surface: var(--cream-50);

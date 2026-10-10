@@ -3,8 +3,8 @@
  *            posée dessus.
  * POURQUOI — le statut et le paiement d'une date se lisent d'un coup : toutes les options sont
  *            visibles, celle qui vaut est en relief (maquette 2027, fiche événement).
- * ATTENTION — `brand` peint l'option choisie du dégradé du logo : réservé à ce qui est acquis
- *            (« Inscrit »). Recliquer l'option choisie la retire si `onClear` est fourni.
+ * ATTENTION — `validated` peint l'option choisie du vert de validation : réservé à ce qui est
+ *            validé (« Inscrit », Uriel, 11/10/2026). Recliquer l'option choisie la retire si `onClear` est fourni.
  */
 import type { LucideIcon } from 'lucide-react'
 
@@ -14,7 +14,7 @@ export interface SegmentedOption<T extends string> {
   /** Absente pour un choix qui se lit seul (une année). */
   Icon?: LucideIcon
   /** Cette option, une fois choisie, porte le dégradé du logo. */
-  brand?: boolean
+  validated?: boolean
 }
 
 interface SegmentedProps<T extends string> {
@@ -37,10 +37,11 @@ export function Segmented<T extends string>({
 }: SegmentedProps<T>) {
   return (
     <div className="segmented" role="group" aria-label={label}>
-      {options.map(({ value: option, label: text, Icon, brand }) => {
+      {options.map(({ value: option, label: text, Icon, validated }) => {
         const selected = option === value
         const classes = ['segmented__option']
-        if (selected) classes.push(brand ? 'segmented__option--brand' : 'segmented__option--on')
+        if (selected)
+          classes.push(validated ? 'segmented__option--validated' : 'segmented__option--on')
         return (
           <button
             key={option}

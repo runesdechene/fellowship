@@ -23,8 +23,8 @@
 
 .chip--ok {
   border-color: transparent;
-  background: var(--brand-gradient);
-  color: var(--brand-ink);
+  background: var(--status-validated-surface);
+  color: var(--status-validated-ink);
   font: var(--type-chip-strong);
 }
 

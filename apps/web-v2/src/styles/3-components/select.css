@@ -62,12 +62,12 @@
    L'encre descend à la valeur 700 : ici la couleur PORTE le mot, donc il lui
    faut 4,5:1 et non le plancher d'un décor. */
 .select__valeur--plein.select__valeur--ok {
-  background: var(--brand-gradient);
-  color: var(--brand-ink);
+  background: var(--status-validated-surface);
+  color: var(--status-validated-ink);
 }
 
 .select__valeur--plein.select__valeur--ok:hover:not(:disabled) {
-  background: var(--brand-gradient);
+  background: var(--status-validated-surface);
 }
 
 .select__valeur--plein.select__valeur--todo {
@@ -118,7 +118,7 @@
 
 .select__valeur--ok .select__icone,
 .select__option--ok .select__icone {
-  color: var(--status-ok-icon);
+  color: var(--status-validated-ink);
 }
 
 .select__valeur--todo .select__icone,
@@ -178,8 +178,8 @@
 }
 
 .select__option--ok[aria-selected='true'] {
-  background: var(--status-ok-surface);
-  color: var(--status-ok-ink);
+  background: var(--status-validated-surface);
+  color: var(--status-validated-ink);
 }
 
 .select__option--todo[aria-selected='true'] {

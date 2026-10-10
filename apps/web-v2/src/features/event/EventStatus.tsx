@@ -22,7 +22,7 @@ type ChosenStatus = 'interesse' | 'en_cours' | 'inscrit'
 const STEPS: SegmentedOption<ChosenStatus>[] = [
   { value: 'interesse', label: 'Intéressé', Icon: Star },
   { value: 'en_cours', label: 'Dossier envoyé', Icon: Clock },
-  { value: 'inscrit', label: 'Inscrit', Icon: Check, brand: true },
+  { value: 'inscrit', label: 'Inscrit', Icon: Check, validated: true },
 ]
 
 function chosen(status: ParticipationStatus | null): ChosenStatus | null {

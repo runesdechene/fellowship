@@ -39,10 +39,10 @@
   color: var(--ink-title);
 }
 
-.segmented__option--brand {
-  background: var(--brand-gradient);
+.segmented__option--validated {
+  background: var(--status-validated-surface);
   font: var(--type-segmented-on);
-  color: var(--brand-ink);
+  color: var(--status-validated-ink);
 }
 
 .segmented__option:disabled {
