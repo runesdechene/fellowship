@@ -54,6 +54,10 @@
      teinte. Pour l'appuyer, descendre d'un cran (--cream-300), pas changer
      de couleur. */
   --surface-control-hover: var(--sand-200);
+  /* Les boutons-icônes de la barre du haut (retour, cloche) : le jour, posés sur le blé et
+     blanchis au survol — l'inverse des autres boutons (Uriel, 11/10/2026). */
+  --icon-button-surface: var(--sand-200);
+  --icon-button-surface-hover: var(--sand-0);
   --surface-chip-neutral: var(--sand-200); /* pastille sans couleur */
   --surface-bar: var(--sand-200); /* mois qui portent au moins une date */
   --surface-bar-empty: var(--sand-300); /* mois à zéro — moins marqué */
@@ -1062,6 +1066,8 @@
   --surface-card-hover: var(--night-150);
   --surface-row-hover: var(--night-150);
   --surface-control-hover: var(--night-200);
+  --icon-button-surface: var(--night-100);
+  --icon-button-surface-hover: var(--night-200);
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
   --poster-empty-surface: var(--night-300);

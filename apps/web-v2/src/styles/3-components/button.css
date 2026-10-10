@@ -25,6 +25,7 @@
   width: var(--topbar-control-height);
   padding: 0;
   justify-content: center;
+  background: var(--icon-button-surface);
   color: var(--ink-title);
 }
 
@@ -66,6 +67,12 @@
    crème sans se retourner complètement. */
 .button--action:hover:not(:disabled) {
   background: var(--action-surface-hover);
+}
+
+/* Les boutons-icônes ont leur propre survol (voir --icon-button-surface) ; il reprend le
+   `:not(:disabled)` pour peser autant que celui de .button (.claude/rules/v2.md). */
+.button--icon:hover:not(:disabled) {
+  background: var(--icon-button-surface-hover);
 }
 
 /* Sans fond au repos, sans fond au survol : c'est son encre qui s'affirme —
