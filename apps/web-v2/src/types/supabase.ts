@@ -1380,7 +1380,7 @@ export type Database = {
       }
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
       community_feed: {
-        Args: { p_actor: string }
+        Args: { p_actor: string; p_before?: string; p_limit?: number }
         Returns: {
           comment: string
           companions: Json

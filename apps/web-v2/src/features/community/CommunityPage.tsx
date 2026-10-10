@@ -47,9 +47,20 @@ function CommunityScreen() {
   const { actor, person, entities } = useAuth()
   const [params, setParams] = useSearchParams()
   const tab = readTab(params.get('voir'))
-  const { lines, crossing, toFollow, followed, loading, error, follow, mark } = useCommunity(
-    actor?.id,
-  )
+  const {
+    lines,
+    hasMore,
+    crossing,
+    toFollow,
+    followed,
+    loading,
+    error,
+    loadingMore,
+    moreFailed,
+    loadMore,
+    follow,
+    mark,
+  } = useCommunity(actor?.id)
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -116,6 +127,23 @@ function CommunityScreen() {
                 </ul>
               </section>
             ))
+          )}
+          {!error && hasMore && (
+            <div className="community__more">
+              {moreFailed && (
+                <p className="community__note">
+                  Les nouvelles plus anciennes n’ont pas pu être chargées.
+                </p>
+              )}
+              <button
+                type="button"
+                className="community__more-button"
+                onClick={() => void loadMore()}
+                disabled={loadingMore}
+              >
+                {loadingMore ? 'Chargement…' : 'Afficher plus'}
+              </button>
+            </div>
           )}
         </div>
 

@@ -243,3 +243,23 @@ export function canFollow(
 ): boolean {
   return !followed.has(id) && !own.has(id)
 }
+
+/** Où commence la page suivante : la plus ancienne nouvelle (jamais « Ça se rassemble »). */
+export function pageCursor(lines: FeedLine[]): string | null {
+  const news = lines.filter((line) => line.kind !== 'gathering')
+  const oldest = news.at(-1)
+  return oldest ? oldest.at.toISOString() : null
+}
+
+/** Ajoute une page d'anciennes nouvelles au bout ; une page pleine en annonce une autre. */
+export function appendPage(
+  lines: FeedLine[],
+  page: FeedLine[],
+  pageSize: number,
+): { lines: FeedLine[]; hasMore: boolean } {
+  const known = new Set(lines.map((line) => line.id))
+  return {
+    lines: [...lines, ...page.filter((line) => !known.has(line.id))],
+    hasMore: page.length >= pageSize,
+  }
+}

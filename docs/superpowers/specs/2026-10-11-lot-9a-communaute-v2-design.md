@@ -38,8 +38,8 @@ barre latérale actuelle (Tableau de bord, Explorer, Calendrier, Communauté, R�
 
 Une fonction SQL (`SECURITY DEFINER`, `SET search_path = public`, `STABLE`), gardée par
 `coalesce(can_act_as(p_actor), false)` (sinon erreur `42501`), révoquée de `PUBLIC` et `anon`,
-accordée à `authenticated`. Elle rend au plus **80 lignes**, les **30 derniers jours**, de la plus
-récente à la plus ancienne :
+accordée à `authenticated`. Elle rend une **page de 40 lignes** (Uriel, 11/10/2026 : « Afficher plus » en bas charge les
+précédentes, `p_before`), sur **un an** au plus, de la plus récente à la plus ancienne :
 
 `(id text, kind text, occurred_at timestamptz, who_id uuid, who_name text, who_avatar text,
 who_slug text, target_id uuid, target_name text, target_slug text, event_id uuid, event_name text,
@@ -135,7 +135,6 @@ gagne son **« Tout voir → »** vers `/communaute`. L'assemblage côté naviga
 ## Hors de ce lot
 
 - Le mobile de la page (avec le mobile des écrans restants).
-- « Charger plus » au-delà de 80 lignes.
 - Les messages privés et le covoiturage (ouverts dans `_État.md`).
 - Les festivaliers.
 - Les autres sections des Réglages (lot 9b).

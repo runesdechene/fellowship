@@ -15,6 +15,8 @@ import {
   readFollowReason,
   readPeople,
   readTab,
+  appendPage,
+  pageCursor,
   type FeedLine,
 } from './community'
 
@@ -234,4 +236,26 @@ test('readPeople : des visages lus, les illisibles ignorés', () => {
     readPeople([{ id: 'a', name: ' Lina ', avatar: null }, { id: 'b', name: '' }, 'x']),
   ).toEqual([{ id: 'a', name: 'Lina', avatarUrl: null, slug: null }])
   expect(readPeople(null)).toEqual([])
+})
+
+describe('les pages du fil', () => {
+  const at = (iso: string, id: string) => line('arrival', { id, occurred_at: iso })
+  const first = [
+    line('gathering', { ...event, detail: '3' }),
+    at('2026-10-11T08:00:00Z', 'a'),
+    at('2026-10-10T08:00:00Z', 'b'),
+  ]
+
+  test('la page suivante part de la plus ancienne nouvelle, jamais du rassemblement', () => {
+    expect(pageCursor(first)).toBe('2026-10-10T08:00:00.000Z')
+    expect(pageCursor([])).toBeNull()
+  })
+
+  test('les anciennes s’ajoutent au bout, sans doublon ; une page pleine en annonce une autre', () => {
+    const next = [at('2026-10-10T08:00:00Z', 'b'), at('2026-10-09T08:00:00Z', 'c')]
+    const page = appendPage(first, next, 2)
+    expect(page.lines.map((l) => l.id)).toEqual(['gathering:1', 'a', 'b', 'c'])
+    expect(page.hasMore).toBe(true)
+    expect(appendPage(first, [at('2026-10-09T08:00:00Z', 'c')], 2).hasMore).toBe(false)
+  })
 })

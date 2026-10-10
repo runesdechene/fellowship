@@ -8,6 +8,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import {
+  appendPage,
+  pageCursor,
   readFeed,
   readFollowReason,
   readPeople,
@@ -39,8 +41,13 @@ export interface ToFollow {
   reason: FollowReason
 }
 
+/** Les nouvelles chargées à la fois ; « Afficher plus » charge les précédentes. */
+const PAGE_SIZE = 40
+
 interface CommunityData {
   lines: FeedLine[]
+  /** Une page pleine : il en reste peut-être d'autres, plus anciennes. */
+  hasMore: boolean
   crossing: Crossing[]
   toFollow: ToFollow[]
   followed: Set<string>
@@ -48,13 +55,15 @@ interface CommunityData {
 
 async function loadCommunity(actorId: string): Promise<CommunityData> {
   const [feed, crossing, toFollow, follows] = await Promise.all([
-    supabase.rpc('community_feed', { p_actor: actorId }),
+    supabase.rpc('community_feed', { p_actor: actorId, p_limit: PAGE_SIZE }),
     supabase.rpc('crossing_dates', { p_actor: actorId }),
     supabase.rpc('accounts_to_follow', { p_actor: actorId }),
     supabase.from('follows').select('following_actor').eq('follower_actor', actorId),
   ])
+  const lines = readFeed(must(feed))
   return {
-    lines: readFeed(must(feed)),
+    lines,
+    hasMore: lines.filter((line) => line.kind !== 'gathering').length >= PAGE_SIZE,
     crossing: must(crossing).map((row) => ({
       eventId: row.event_id,
       name: row.event_name.trim(),
@@ -84,7 +93,13 @@ async function loadCommunity(actorId: string): Promise<CommunityData> {
   }
 }
 
-const EMPTY: CommunityData = { lines: [], crossing: [], toFollow: [], followed: new Set() }
+const EMPTY: CommunityData = {
+  lines: [],
+  hasMore: false,
+  crossing: [],
+  toFollow: [],
+  followed: new Set(),
+}
 
 export function useCommunity(actorId: string | undefined) {
   const { person } = useAuth()
@@ -92,6 +107,8 @@ export function useCommunity(actorId: string | undefined) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [version, setVersion] = useState(0)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [moreFailed, setMoreFailed] = useState(false)
 
   useEffect(() => {
     if (!actorId) return
@@ -113,6 +130,30 @@ export function useCommunity(actorId: string | undefined) {
       cancelled = true
     }
   }, [actorId, version])
+
+  /** « Afficher plus » : la page d'avant la plus ancienne nouvelle, ajoutée au bout. */
+  const loadMore = useCallback(async () => {
+    const before = pageCursor(data.lines)
+    if (!actorId || !before) return
+    setLoadingMore(true)
+    setMoreFailed(false)
+    try {
+      const page = readFeed(
+        must(
+          await supabase.rpc('community_feed', {
+            p_actor: actorId,
+            p_before: before,
+            p_limit: PAGE_SIZE,
+          }),
+        ),
+      )
+      setData((current) => ({ ...current, ...appendPage(current.lines, page, PAGE_SIZE) }))
+    } catch {
+      setMoreFailed(true)
+    } finally {
+      setLoadingMore(false)
+    }
+  }, [actorId, data.lines])
 
   /** Suivre : le bouton disparaît aussitôt ; si l'écriture échoue, il revient. */
   const follow = useCallback(
@@ -155,5 +196,5 @@ export function useCommunity(actorId: string | undefined) {
     [actorId, person],
   )
 
-  return { ...data, loading, error, follow, mark }
+  return { ...data, loading, error, loadingMore, moreFailed, loadMore, follow, mark }
 }
