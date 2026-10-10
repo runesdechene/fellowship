@@ -210,7 +210,6 @@
   width: var(--feed-poster-width);
   height: var(--feed-poster-height);
   border-radius: var(--community-poster-radius);
-  background: var(--community-poster-empty);
   object-fit: cover;
 }
 
@@ -272,7 +271,6 @@
   width: var(--gathering-poster-width);
   height: var(--gathering-poster-height);
   border-radius: var(--community-inset-radius);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 
@@ -387,7 +385,6 @@ a.side-card__row:hover {
   width: var(--side-poster-width);
   height: var(--side-poster-height);
   border-radius: var(--community-poster-radius);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 

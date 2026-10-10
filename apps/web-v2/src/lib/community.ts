@@ -26,6 +26,8 @@ export interface FeedEvent {
   startDate: string
   endDate: string
   imageUrl: string | null
+  /** Ses catégories : une affiche absente prend la couleur et l'icône de la première. */
+  tags: string[]
 }
 
 export interface FeedLine {
@@ -83,7 +85,12 @@ function readEvent(row: Raw): FeedEvent | null {
     startDate,
     endDate,
     imageUrl: word(row.event_image),
+    tags: readTags(row.event_tags),
   }
+}
+
+export function readTags(raw: unknown): string[] {
+  return Array.isArray(raw) ? raw.filter((tag): tag is string => typeof tag === 'string') : []
 }
 
 /** Des visages (`[{id, name, avatar}]`) : compagnons d'un rassemblement ou d'une date. */

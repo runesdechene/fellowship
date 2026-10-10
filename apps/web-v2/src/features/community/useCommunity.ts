@@ -11,6 +11,7 @@ import {
   readFeed,
   readFollowReason,
   readPeople,
+  readTags,
   type FeedLine,
   type FeedPerson,
   type FollowReason,
@@ -23,6 +24,7 @@ export interface Crossing {
   startDate: string
   endDate: string
   imageUrl: string | null
+  tags: string[]
   companions: number
   /** Trois visages au plus, pour les petites bulles (Uriel, 11/10/2026). */
   faces: FeedPerson[]
@@ -59,6 +61,7 @@ async function loadCommunity(actorId: string): Promise<CommunityData> {
       startDate: row.event_start,
       endDate: row.event_end,
       imageUrl: row.event_image,
+      tags: readTags(row.event_tags),
       companions: row.companions,
       faces: readPeople(row.faces),
     })),

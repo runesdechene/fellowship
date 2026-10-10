@@ -713,6 +713,13 @@
   --report-season-width: 226px;
   --report-thumb-width: 56px;
   --report-thumb-height: 78px;
+  /* L'affiche absente (Poster.tsx, planche 2215:2) : la couleur de la catégorie quand on la
+     connaît, la teinte des affiches vides sinon ; l'icône à moitié de la vignette, étouffée. */
+  --poster-empty-surface: var(--sand-300);
+  --poster-empty-ink: var(--ink-soft);
+  --poster-empty-icon: 45%;
+  --poster-empty-icon-opacity: 0.55;
+
   /* La Communauté (lot 9a, maquette 2212:2) : le fil à gauche, deux cartes à droite ; les petites
      surfaces (festival, avis, bouclier) en blé discret, les boutons en filet. */
   /* Plus large que les autres pages : le fil (680) et sa colonne (360) côte à côte, comme la
@@ -725,7 +732,6 @@
   --gathering-radius: var(--round-20);
   --side-row-radius: var(--round-10);
   --community-inset: var(--sand-200);
-  --community-poster-empty: var(--sand-300); /* une affiche absente se voit sur le blé */
   --community-faint-ink: var(--ink-waiting);
   --community-avatar: var(--size-36);
   --community-side-avatar: var(--size-40);
@@ -1041,7 +1047,7 @@
   --surface-control-hover: var(--night-200);
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
-  --community-poster-empty: var(--night-300);
+  --poster-empty-surface: var(--night-300);
   --surface-bar: var(--night-200);
   --surface-bar-empty: var(--night-300);
 

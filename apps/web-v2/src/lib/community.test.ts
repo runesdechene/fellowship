@@ -68,6 +68,7 @@ describe('readFeed', () => {
     expect(read.at).toEqual(new Date('2026-10-11T08:00:00Z'))
     expect(read.who).toEqual({ id: 'a1', name: 'Gautier', avatarUrl: null, slug: 'gautier' })
     expect(read.event?.name).toBe('Les Aventuriales')
+    expect(line('going', { ...event, event_tags: ['Geek', 3] }).event?.tags).toEqual(['Geek'])
   })
 
   test('un auteur masqué par la base reste inconnu', () => {

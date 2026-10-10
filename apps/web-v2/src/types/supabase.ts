@@ -1392,6 +1392,7 @@ export type Database = {
           event_image: string
           event_name: string
           event_start: string
+          event_tags: string[]
           id: string
           kind: string
           occurred_at: string
@@ -1426,6 +1427,7 @@ export type Database = {
           event_image: string
           event_name: string
           event_start: string
+          event_tags: string[]
           faces: Json
         }[]
       }

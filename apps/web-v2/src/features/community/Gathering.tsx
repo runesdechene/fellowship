@@ -6,6 +6,7 @@
 import { Star } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Poster } from '@/components/ui/Poster'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import type { FeedLine } from '@/lib/community'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
@@ -37,11 +38,7 @@ export function Gathering({ line, onMark }: GatheringProps) {
   return (
     <section className="gathering" aria-label="Ça se rassemble">
       <Link className="gathering__poster-link" to={`/evenement/${event.id}`}>
-        {event.imageUrl ? (
-          <img className="gathering__poster" src={event.imageUrl} alt="" />
-        ) : (
-          <span className="gathering__poster" />
-        )}
+        <Poster imageUrl={event.imageUrl} tags={event.tags} className="gathering__poster" />
       </Link>
       <div className="gathering__body">
         <span className="gathering__eyebrow">Ça se rassemble</span>

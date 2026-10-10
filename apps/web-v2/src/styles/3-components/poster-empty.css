@@ -1,0 +1,18 @@
+/**
+ * QUOI     — l'affiche absente (components/ui/Poster.tsx) : fond de la couleur de la catégorie,
+ *            icône étouffée au centre.
+ * POURQUOI — planche Figma 2215:2. Sans couleur connue, la teinte neutre des affiches vides.
+ */
+
+.poster-empty {
+  display: grid;
+  place-items: center;
+  background: var(--tag-bg, var(--poster-empty-surface));
+  color: var(--tag-ink, var(--poster-empty-ink));
+}
+
+.poster-empty__icon {
+  width: var(--poster-empty-icon);
+  height: var(--poster-empty-icon);
+  opacity: var(--poster-empty-icon-opacity);
+}

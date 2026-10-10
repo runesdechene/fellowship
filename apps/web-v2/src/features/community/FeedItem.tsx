@@ -6,6 +6,7 @@
  */
 import { Plus, Shield } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { Poster } from '@/components/ui/Poster'
 import { Avatar } from '@/components/ui/Avatar'
 import { Stars } from '@/components/ui/Stars'
 import { feedPhrase, type FeedLine, type FeedPerson } from '@/lib/community'
@@ -28,11 +29,7 @@ function EventCard({ line }: { line: FeedLine }) {
     : ''
   return (
     <Link className="feed-event" to={`/evenement/${event.id}`}>
-      {event.imageUrl ? (
-        <img className="feed-event__poster" src={event.imageUrl} alt="" />
-      ) : (
-        <span className="feed-event__poster" />
-      )}
+      <Poster imageUrl={event.imageUrl} tags={event.tags} className="feed-event__poster" />
       <span className="feed-event__body">
         <span className="feed-event__name">{event.name}</span>
         <span className="feed-event__meta">
