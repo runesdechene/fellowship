@@ -39,6 +39,12 @@
   color: var(--ink-title);
 }
 
+.segmented__option--sent {
+  background: var(--status-sent-surface);
+  font: var(--type-segmented-on);
+  color: var(--status-sent-ink);
+}
+
 .segmented__option--validated {
   background: var(--status-validated-surface);
   font: var(--type-segmented-on);

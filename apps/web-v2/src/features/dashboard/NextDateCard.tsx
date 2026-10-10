@@ -35,7 +35,7 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
               Inscrit
             </Chip>
           ) : (
-            <Chip tone="pending" icon={<Contrast size={12} strokeWidth={2.4} />}>
+            <Chip tone="sent" icon={<Contrast size={12} strokeWidth={2.4} />}>
               Dossier envoyé
             </Chip>
           )}

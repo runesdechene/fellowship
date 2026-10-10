@@ -13,7 +13,7 @@ import type { CalendarDate } from './useCalendar'
 
 const STATUS: Record<ParticipationStatus, { label: string; tone: ChipTone; icon: typeof Check }> = {
   interesse: { label: 'Intéressé', tone: 'todo', icon: CircleDashed },
-  en_cours: { label: 'Dossier envoyé', tone: 'pending', icon: Contrast },
+  en_cours: { label: 'Dossier envoyé', tone: 'sent', icon: Contrast },
   inscrit: { label: 'Inscrit', tone: 'ok', icon: Check },
   confirme: { label: 'Inscrit', tone: 'ok', icon: Check },
   refuse: { label: 'Refusé', tone: 'neutral', icon: CircleDashed },

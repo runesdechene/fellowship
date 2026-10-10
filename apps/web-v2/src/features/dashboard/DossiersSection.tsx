@@ -53,7 +53,11 @@ export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
                 {dossier.view.dossier.acquired ? (
                   <span className="dossiers__dot dossiers__dot--acquired" />
                 ) : (
-                  <Contrast className="dossiers__icon" size={12} strokeWidth={2.2} />
+                  <Contrast
+                    className="dossiers__icon dossiers__icon--sent"
+                    size={12}
+                    strokeWidth={2.2}
+                  />
                 )}
                 {dossier.view.dossier.label}
               </span>

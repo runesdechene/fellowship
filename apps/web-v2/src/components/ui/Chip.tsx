@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
  *   pending — c’est parti, ça attend chez quelqu’un d’autre (terre du logo)
  *   ok      — c’est acquis (olive)
  */
-export type ChipTone = 'neutral' | 'todo' | 'pending' | 'ok'
+export type ChipTone = 'neutral' | 'todo' | 'sent' | 'ok'
 
 interface ChipProps {
   tone?: ChipTone

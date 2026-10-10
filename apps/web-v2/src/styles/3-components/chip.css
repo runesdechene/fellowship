@@ -34,9 +34,9 @@
   font: var(--type-chip-strong);
 }
 
-.chip--pending {
-  background: var(--status-pending-surface);
-  color: var(--status-pending-ink);
+.chip--sent {
+  background: var(--status-sent-surface);
+  color: var(--status-sent-ink);
   font: var(--type-chip-strong);
 }
 
@@ -50,6 +50,6 @@
   color: var(--status-todo-icon);
 }
 
-.chip--pending .chip__icon {
-  color: var(--status-pending-icon);
+.chip--sent .chip__icon {
+  color: var(--status-sent-ink);
 }

@@ -15,6 +15,8 @@ export interface SegmentedOption<T extends string> {
   Icon?: LucideIcon
   /** Cette option, une fois choisie, porte le dégradé du logo. */
   validated?: boolean
+  /** Choisie, l'option prend le bleu d'un dossier envoyé. */
+  sent?: boolean
 }
 
 interface SegmentedProps<T extends string> {
@@ -37,11 +39,13 @@ export function Segmented<T extends string>({
 }: SegmentedProps<T>) {
   return (
     <div className="segmented" role="group" aria-label={label}>
-      {options.map(({ value: option, label: text, Icon, validated }) => {
+      {options.map(({ value: option, label: text, Icon, validated, sent }) => {
         const selected = option === value
         const classes = ['segmented__option']
-        if (selected)
-          classes.push(validated ? 'segmented__option--validated' : 'segmented__option--on')
+        if (selected) {
+          const tone = validated ? 'validated' : sent ? 'sent' : 'on'
+          classes.push(`segmented__option--${tone}`)
+        }
         return (
           <button
             key={option}

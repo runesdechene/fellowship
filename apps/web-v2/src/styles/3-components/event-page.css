@@ -240,17 +240,33 @@
   display: flex;
   align-items: center;
   gap: var(--companion-gap);
-  margin-top: var(--space-32);
+  margin-top: var(--companions-hover-pull);
+  margin-left: calc(-1 * var(--companions-hover-pad));
+  padding: var(--companions-hover-pad);
+  border-radius: var(--radius-round);
   font: var(--type-event-meta);
   color: var(--ink-soft);
   text-align: left;
   cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
 }
 
-/* Un clic ouvre « Qui y va » (Companions.tsx) : le survol le dit. */
-.event-page__companions:hover .event-page__companions-text {
-  text-decoration: underline;
-  text-underline-offset: var(--space-4);
+/* Un clic ouvre « Qui y va » (Companions.tsx) : au survol, un fond se pose sous toute la ligne,
+   avatars compris — pas de lien souligné (Uriel, 11/10/2026). */
+.event-page__companions:hover {
+  background: var(--companions-hover-surface);
+}
+
+.event-page__companions:active {
+  scale: var(--companions-press-scale);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-page__companions {
+    transition: none;
+  }
 }
 
 .event-page__companions b {

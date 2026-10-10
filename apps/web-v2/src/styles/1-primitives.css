@@ -68,6 +68,11 @@
   --sauge-500: #5e9468; /* point d'un statut validé */
   --sauge-300: #9cc7a5; /* encre d'une mention validée, la nuit */
   --sauge-50: #e8f0e6; /* fond d'une mention validée, le jour */
+  /* Le bleu doux : un dossier envoyé, qui attend sa réponse (Uriel, 11/10/2026). */
+  --bleu-900: #1f2c3b; /* fond d'un dossier envoyé, la nuit */
+  --bleu-700: #3e6590; /* encre d'un dossier envoyé, le jour */
+  --bleu-300: #9db9d8; /* encre d'un dossier envoyé, la nuit */
+  --bleu-50: #e8eef5; /* fond d'un dossier envoyé, le jour */
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLES

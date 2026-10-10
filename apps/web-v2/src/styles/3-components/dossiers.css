@@ -100,6 +100,10 @@
   color: var(--status-pending-icon);
 }
 
+.dossiers__icon--sent {
+  color: var(--status-sent-ink);
+}
+
 .dossiers__dot {
   flex: none;
   width: var(--dot-size);
