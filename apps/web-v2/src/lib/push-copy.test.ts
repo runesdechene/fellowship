@@ -5,6 +5,7 @@
  * ATTENTION — environnement Node (le script lit le disque) :
  * @vitest-environment node
  */
+/// <reference types="node" />
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { expect, test } from 'vitest'
