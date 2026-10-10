@@ -20,18 +20,16 @@ import { AccountSwitcher } from './AccountSwitcher'
 
 /**
  * Les entrées de la maquette, Tableau de bord en tête, puis Réglages (Uriel, 10/10/2026).
- * `to: null` = l'entrée existe visuellement mais aucun écran n'est encore
- * intégré (Explorer). Le jour où il l'est, on renseigne son chemin ici.
  */
 const NAV_ITEMS: ReadonlyArray<{
-  to: string | null
+  to: string
   label: string
   Icon: typeof Telescope
 }> = [
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },
   { to: '/explorer', label: 'Explorer', Icon: Telescope },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
-  { to: null, label: 'Communauté', Icon: Users },
+  { to: '/communaute', label: 'Communauté', Icon: Users },
   { to: '/reglages', label: 'Réglages', Icon: Settings },
 ]
 
@@ -69,11 +67,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </>
           )
 
-          return to === null ? (
-            <span key={label} className="sidebar__item sidebar__item--inert">
-              {content}
-            </span>
-          ) : (
+          return (
             <NavLink
               key={label}
               to={to}

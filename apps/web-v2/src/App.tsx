@@ -7,6 +7,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
+import { CommunityPage } from '@/features/community/CommunityPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EventPage } from '@/features/event/EventPage'
@@ -95,6 +96,16 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <ExplorerPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/communaute"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <CommunityPage />
             </AppShell>
           </ProtectedRoute>
         }

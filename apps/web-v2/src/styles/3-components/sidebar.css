@@ -101,9 +101,6 @@
   color: var(--ink-title);
 }
 
-/* `--inert` = entrée dont l'écran n'est pas encore intégré (Explorer).
-   Elle se comporte comme les autres : même survol, même curseur. */
-
 /* -----------------------------------------------------------------------------
    ÉTAT REPLIÉ
    La colonne se réduit à un rail d'icônes. Les libellés s'effacent, les

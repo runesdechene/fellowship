@@ -1,10 +1,9 @@
 /**
- * QUOI     — la barre d'onglets du téléphone : Explorer, Calendrier, Communauté, Tableau, et
+ * QUOI     — la barre d'onglets du téléphone : Tableau, Explorer, Calendrier, Communauté, et
  *            « Moi » à droite, qui ouvre le menu du compte en feuille.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
- * ATTENTION — invisible sur ordinateur (tab-bar.css). Communauté reste inerte tant que son écran
- *            n'existe pas, comme dans la barre latérale.
+ * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
 import { CalendarDays, Check, CircleGauge, Telescope, Users } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -13,11 +12,11 @@ import { Avatar } from '@/components/ui/Avatar'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
 
-const TABS: ReadonlyArray<{ to: string | null; label: string; Icon: typeof Telescope }> = [
+const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
   { to: '/explorer', label: 'Explorer', Icon: Telescope },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
-  { to: null, label: 'Communauté', Icon: Users },
+  { to: '/communaute', label: 'Communauté', Icon: Users },
 ]
 
 export function TabBar() {
@@ -78,11 +77,7 @@ export function TabBar() {
               <span>{label}</span>
             </>
           )
-          return to === null ? (
-            <span key={label} className="tab-bar__item tab-bar__item--inert">
-              {content}
-            </span>
-          ) : (
+          return (
             <NavLink
               key={label}
               to={to}

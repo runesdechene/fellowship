@@ -32,11 +32,6 @@
     cursor: pointer;
   }
 
-  .tab-bar__item--inert {
-    cursor: default;
-    opacity: 0.6;
-  }
-
   /* L'onglet actif : son icône et son nom prennent la terre du logo. */
   .tab-bar__item--active {
     color: var(--tab-bar-active);

@@ -1,0 +1,422 @@
+/**
+ * QUOI     — les styles de la page Communauté (features/community/) : en-tête et filtres, « Ça se
+ *            rassemble », le fil groupé par jour, et les deux cartes de droite.
+ * POURQUOI — lot 9a, maquette 2212:2. Cartes blanches bordées d'un filet, aucune ombre ; le
+ *            festival et l'avis posés dans une surface de blé discret.
+ */
+
+.community {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+/* --- En-tête -------------------------------------------------------------------------------- */
+.community__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-bottom: var(--space-32);
+}
+
+.community__title {
+  font: var(--type-page-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.community__lead {
+  font: var(--type-gathering-meta);
+  color: var(--ink-soft);
+}
+
+.community__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-20);
+}
+
+.community__tab {
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-community-tab);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.community__tab:hover:not(.community__tab--on) {
+  background: var(--surface-card-hover);
+}
+
+.community__tab--on {
+  border-color: var(--action-surface);
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+/* --- Les deux colonnes ---------------------------------------------------------------------- */
+.community__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--community-side-width);
+  gap: var(--community-gap);
+  align-items: start;
+}
+
+.community__feed,
+.community__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  min-width: 0;
+}
+
+.community__note {
+  font: var(--type-community-text);
+  color: var(--ink-soft);
+}
+
+.community__day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.community__day-label {
+  font: var(--type-community-day);
+  color: var(--community-faint-ink);
+}
+
+.community__list {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+/* --- Une ligne du fil ------------------------------------------------------------------------ */
+.feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-14);
+  padding: var(--space-14);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.feed-item + .feed-item {
+  border-top: 1px solid var(--line-card);
+}
+
+@starting-style {
+  .feed-item {
+    opacity: 0;
+  }
+}
+
+.feed-item__avatar {
+  --avatar-size: var(--community-avatar);
+}
+
+.feed-item__shield {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--community-avatar);
+  height: var(--community-avatar);
+  border-radius: var(--radius-round);
+  background: var(--community-inset);
+  color: var(--ink-soft);
+}
+
+.feed-item__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.feed-item__text {
+  font: var(--type-community-text);
+  color: var(--ink-soft);
+}
+
+.feed-item__text b,
+.feed-item__name {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.feed-item__name:hover {
+  text-decoration: underline;
+}
+
+.feed-item__time {
+  font: var(--type-community-small);
+  color: var(--community-faint-ink);
+}
+
+.feed-item__follow,
+.side-card__follow {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-14) var(--space-6) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-community-tab);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.feed-item__follow:hover,
+.side-card__follow:hover {
+  background: var(--surface-card-hover);
+}
+
+/* Le festival d'une ligne */
+.feed-event {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-6) var(--space-14) var(--space-6) var(--space-6);
+  border-radius: var(--community-inset-radius);
+  background: var(--community-inset);
+}
+
+.feed-event__poster {
+  flex: none;
+  width: var(--feed-poster-width);
+  height: var(--feed-poster-height);
+  border-radius: var(--community-poster-radius);
+  background: var(--community-poster-empty);
+  object-fit: cover;
+}
+
+.feed-event__body,
+.side-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.feed-event__name {
+  font: var(--type-community-card-name);
+  color: var(--ink-title);
+}
+
+.feed-event__meta,
+.side-card__meta {
+  font: var(--type-community-small);
+  color: var(--ink-soft);
+}
+
+/* L'avis d'une ligne */
+.feed-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--community-inset-radius);
+  background: var(--community-inset);
+}
+
+.feed-review__comment {
+  font: var(--type-community-text);
+  color: var(--ink-title);
+}
+
+.feed-review__protected {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-community-tiny);
+  color: var(--community-faint-ink);
+}
+
+/* --- Ça se rassemble ------------------------------------------------------------------------ */
+.gathering {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  padding: var(--space-12) var(--space-24) var(--space-12) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--gathering-radius);
+  background: var(--surface-card);
+}
+
+.gathering__poster {
+  display: block;
+  width: var(--gathering-poster-width);
+  height: var(--gathering-poster-height);
+  border-radius: var(--community-inset-radius);
+  background: var(--surface-chip-neutral);
+  object-fit: cover;
+}
+
+.gathering__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.gathering__eyebrow {
+  font: var(--type-community-day);
+  color: var(--community-faint-ink);
+}
+
+.gathering__name {
+  font: var(--type-gathering-name);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.gathering__meta {
+  font: var(--type-gathering-meta);
+  color: var(--ink-soft);
+}
+
+.gathering__companions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding-top: var(--space-10);
+  font: var(--type-community-tab);
+  color: var(--ink-soft);
+}
+
+.gathering__companions b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.gathering__face {
+  --avatar-size: var(--community-face);
+  --avatar-overlap: var(--community-face-overlap);
+
+  border: var(--community-face-ring) solid var(--surface-card);
+}
+
+.gathering__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  padding: var(--space-6) var(--space-14) var(--space-6) var(--space-12);
+  border-radius: var(--radius-sm);
+  background: var(--action-surface);
+  font: var(--type-community-tab);
+  color: var(--action-ink);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.gathering__mark:hover:not(:disabled) {
+  background: var(--action-surface-hover);
+}
+
+/* --- Les cartes de droite ------------------------------------------------------------------- */
+.side-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--space-8) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.side-card__title {
+  padding: 0 0 var(--space-8) var(--space-10);
+  font: var(--type-community-side-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.side-card__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-card__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-10);
+  border-radius: var(--side-row-radius);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+
+a.side-card__row:hover {
+  background: var(--surface-row-hover);
+}
+
+.side-card__row--leaving {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.side-card__poster {
+  flex: none;
+  width: var(--side-poster-width);
+  height: var(--side-poster-height);
+  border-radius: var(--community-poster-radius);
+  background: var(--surface-chip-neutral);
+  object-fit: cover;
+}
+
+.side-card__avatar {
+  --avatar-size: var(--community-side-avatar);
+}
+
+.side-card__body {
+  flex: 1;
+}
+
+.side-card__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.side-card__follow {
+  padding: var(--space-8);
+}
+
+@media (width <= 1100px) {
+  .community__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gathering {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community__tab,
+  .feed-item,
+  .gathering__mark,
+  .side-card__row,
+  .feed-item__follow,
+  .side-card__follow {
+    transition: none;
+  }
+}

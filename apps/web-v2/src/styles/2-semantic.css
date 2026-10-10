@@ -713,6 +713,43 @@
   --report-season-width: 226px;
   --report-thumb-width: 56px;
   --report-thumb-height: 78px;
+  /* La Communauté (lot 9a, maquette 2212:2) : le fil à gauche, deux cartes à droite ; les petites
+     surfaces (festival, avis, bouclier) en blé discret, les boutons en filet. */
+  --community-side-width: 360px;
+  --community-gap: var(--space-48);
+  --community-inset-radius: var(--round-12);
+  --community-poster-radius: var(--round-6);
+  --gathering-radius: var(--round-20);
+  --side-row-radius: var(--round-10);
+  --community-inset: var(--sand-200);
+  --community-poster-empty: var(--sand-300); /* une affiche absente se voit sur le blé */
+  --community-faint-ink: var(--ink-waiting);
+  --community-avatar: var(--size-36);
+  --community-side-avatar: var(--size-40);
+  --community-face: 28px;
+  --community-face-ring: 2px;
+  --community-face-overlap: -8px;
+  --gathering-poster-width: 140px;
+  --gathering-poster-height: 196px;
+  --feed-poster-width: 34px;
+  --feed-poster-height: 46px;
+  --side-poster-width: 36px;
+  --side-poster-height: 50px;
+  --type-community-tab: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-community-day: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-community-text: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
+  --type-community-small: var(--weight-regular) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-community-tiny: var(--weight-regular) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --type-community-card-name: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-community-side-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-gathering-name: var(--weight-regular) var(--size-40) / 1.05 var(--family-display);
+  --type-gathering-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+
   /* Le bloc « Pour toi » (lot 8d, maquette 2206:2) : l'affiche au gabarit des bilans, « Pas pour
      moi » en petite icône d'interdiction, en encre effacée (Uriel, 10/10/2026), le nombre trouvé du gratuit en grand titre. */
   --suggestion-poster-width: var(--report-thumb-width);
@@ -999,6 +1036,8 @@
   --surface-row-hover: var(--night-150);
   --surface-control-hover: var(--night-200);
   --surface-chip-neutral: var(--night-200);
+  --community-inset: var(--night-200);
+  --community-poster-empty: var(--night-300);
   --surface-bar: var(--night-200);
   --surface-bar-empty: var(--night-300);
 
