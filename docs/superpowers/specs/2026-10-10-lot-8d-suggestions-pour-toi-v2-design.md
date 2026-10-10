@@ -78,9 +78,9 @@ aujourd'hui (heure de Paris) et dans **12 mois**, **sans aucune participation** 
 - **Zone** — le centre de l'acteur est la moyenne des coordonnées de ses festivals de référence ;
   son rayon, le 80e centile de leurs distances au centre, **au moins 100 km**. Un candidat hors du
   rayon, ou sans coordonnées, n'est pas proposé (sauf par les amis, ci-dessous).
-- **Amis** — un bonus fort par ami (vue `friends`, des membres de l'enseigne ou de la personne)
-  dont la participation à ce festival (la sienne ou celle d'une enseigne dont il est membre, comme
-  dans `notify_friend_going`) est **`amis` ou `public`** — jamais `prive`.
+- **Amis** — un bonus fort par ami de l'acteur (vue `friends` : suivi dans les deux sens, entre
+  acteurs) qui y est **programmé** (`inscrit`, `confirme`, `en_cours`) avec une participation
+  **`amis` ou `public`** — jamais `prive`.
 
 **La raison** rendue avec chaque suggestion, la plus forte d'abord :
 
@@ -89,7 +89,9 @@ aujourd'hui (heure de Paris) et dans **12 mois**, **sans aucune participation** 
 3. `{ kind: 'near' }` → « Près de chez toi ».
 
 **Sans historique** (aucun festival de référence) : les festivals où vont ses amis, puis ceux du
-**département** de l'enseigne (`entities.department`, à défaut `users.department`), les plus
+**département** de l'enseigne (`entities.department`, à défaut `users.department`, comparés par
+leur code à deux chiffres : `events.department` est saisi librement, « 63 », « 04100 »,
+« Puy-de-Dôme (63) »), les plus
 proches dans le temps d'abord, raison `near`.
 
 `items` : les **3** meilleurs, chacun avec `event_id`, `name`, `city`, `start_date`, `end_date`,
