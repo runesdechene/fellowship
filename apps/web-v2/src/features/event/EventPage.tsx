@@ -17,7 +17,7 @@ import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from 
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
-import { nameLine } from '@/lib/name-line'
+import { namesLine } from '@/lib/name-line'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
@@ -170,7 +170,8 @@ export function EventPage() {
     )
   }
 
-  const companions = nameLine(
+  // Tout le monde est nommé jusqu'à trois : on doit savoir QUI y va (Uriel, 11/10/2026).
+  const companions = namesLine(
     friends.map((friend) => friend.name),
     { one: 'y va aussi', many: 'y vont aussi' },
   )
@@ -235,12 +236,11 @@ export function EventPage() {
                     </span>
                   ))}
                 </span>
-                {companions && (
-                  <span>
-                    <b>{companions.first}</b>
-                    {companions.rest}
-                  </span>
-                )}
+                <span>
+                  {companions.map((part, index) =>
+                    typeof part === 'string' ? part : <b key={index}>{part.strong}</b>,
+                  )}
+                </span>
               </p>
             )}
           </div>
