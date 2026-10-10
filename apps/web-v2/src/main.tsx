@@ -13,6 +13,13 @@ import './styles/index.css'
 // Avant le premier rendu : la page ne doit jamais s'afficher un instant dans l'autre thème.
 applyTheme(currentTheme())
 
+// « flw.sh/v2 » sans la barre finale sert bien la V2 (netlify.toml de la V1), mais le routeur, de
+// base « /v2/ », n'y reconnaît rien et la page reste vide. On ajoute la barre avant le premier rendu.
+if (`${window.location.pathname}/` === import.meta.env.BASE_URL) {
+  const { search, hash } = window.location
+  window.history.replaceState(null, '', `${import.meta.env.BASE_URL}${search}${hash}`)
+}
+
 // Le service worker du téléphone (public/sw.js) : les notifications, rien d'autre.
 if ('serviceWorker' in navigator) {
   // Un échec (stockage bloqué, fichier introuvable) laisse simplement les notifications
