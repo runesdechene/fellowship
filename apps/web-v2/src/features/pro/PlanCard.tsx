@@ -25,7 +25,7 @@ const PRO = [
       'Fouille l’Explorer et pose des dates sur toute l’année',
       'Un rappel avant chaque clôture de candidature',
       'Prévenu dès qu’un festival que tu as fait annonce sa nouvelle édition',
-      'Tes recherches sauvegardées t’alertent des nouveaux festivals',
+      'Fellowship te trouve des festivals faits pour toi, et te prévient',
       'Les notes détaillées de chaque festival : affluence, organisation, rentabilité',
     ],
   },
