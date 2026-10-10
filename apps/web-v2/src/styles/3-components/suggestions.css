@@ -1,0 +1,138 @@
+/**
+ * QUOI     — les styles du bloc « Pour toi » (features/dashboard/SuggestionsSection.tsx) : trois
+ *            cartes dans une carte bordée, et l'invitation du gratuit posée sur le voile.
+ * POURQUOI — lot 8d, maquettes 2206:2 et 2206:340. Les cartes reprennent le gabarit des bilans
+ *            (affiche 56 × 78, nom, date) : un même tableau de bord, une même lecture.
+ */
+
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.suggestion {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-10);
+  border-radius: var(--radius-sm);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.suggestion:hover {
+  background: var(--surface-control-hover);
+}
+
+@starting-style {
+  .suggestion {
+    opacity: 0;
+    translate: 0 var(--space-6);
+  }
+}
+
+.suggestion--leaving {
+  opacity: var(--suggestion-leaving-opacity);
+  translate: 0 var(--space-6);
+}
+
+.suggestion__open {
+  display: flex;
+  gap: var(--space-12);
+  min-width: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestion__poster {
+  flex: none;
+  width: var(--suggestion-poster-width);
+  height: var(--suggestion-poster-height);
+  border-radius: var(--radius-sm);
+  background: var(--surface-chip-neutral);
+  object-fit: cover;
+}
+
+.suggestion__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.suggestion__name {
+  overflow: hidden;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestion__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.suggestion__reason {
+  font: var(--type-suggestion-reason);
+  color: var(--ink-title);
+}
+
+.suggestion__dismiss {
+  align-self: flex-start;
+  margin-top: var(--space-6);
+  margin-left: calc(var(--suggestion-poster-width) + var(--space-12));
+  font: var(--type-list-meta);
+  color: var(--suggestion-dismiss-ink);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.suggestion__dismiss:hover:not(:disabled) {
+  color: var(--ink-title);
+}
+
+.suggestion--placeholder {
+  height: var(--suggestion-placeholder-height);
+  background: var(--surface-chip-neutral);
+}
+
+/* --- Le gratuit : le nombre trouvé sur le voile --------------------------------------------- */
+.suggestions__invite {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-24);
+  width: 100%;
+  padding: 0 var(--space-32);
+}
+
+.suggestions__invite-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.suggestions__invite-title {
+  font: var(--type-suggestion-invite);
+  color: var(--ink-title);
+}
+
+.suggestions__invite-note {
+  font: var(--type-pro-text);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .suggestion,
+  .suggestion__dismiss {
+    transition: none;
+  }
+}

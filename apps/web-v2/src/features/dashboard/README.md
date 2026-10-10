@@ -11,3 +11,5 @@ les composants ne font qu'afficher.
 - `UpcomingCard.tsx` — les dates suivantes.
 - `SettlementsSection.tsx` — « À régler ».
 - `ReportsSection.tsx` — « Mes bilans ».
+- `SuggestionsSection.tsx` — « Pour toi » : les festivals proches de ceux qu'il fait (Pro), le nombre trouvé (gratuit).
+- `useSuggestions.ts` — les suggestions de l'acteur actif, et « Pas pour moi ».
