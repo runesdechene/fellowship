@@ -15,6 +15,7 @@
 }
 
 .suggestion {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -38,6 +39,7 @@
 }
 
 .suggestion--leaving {
+  pointer-events: none;
   opacity: var(--suggestion-leaving-opacity);
   translate: 0 var(--space-6);
 }
@@ -46,6 +48,8 @@
   display: flex;
   gap: var(--space-12);
   min-width: 0;
+  /* La place de l'icône « Pas pour moi », en haut à droite : le nom ne passe pas dessous. */
+  padding-right: var(--suggestion-dismiss-size);
   text-align: left;
   cursor: pointer;
 }
@@ -85,16 +89,24 @@
 }
 
 .suggestion__dismiss {
-  align-self: flex-start;
-  margin-top: var(--space-6);
-  margin-left: calc(var(--suggestion-poster-width) + var(--space-12));
-  font: var(--type-list-meta);
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  display: grid;
+  place-items: center;
+  width: var(--suggestion-dismiss-size);
+  height: var(--suggestion-dismiss-size);
+  border-radius: var(--radius-round);
   color: var(--suggestion-dismiss-ink);
   cursor: pointer;
-  transition: color var(--duration-fast) var(--ease-out);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
 }
 
-.suggestion__dismiss:hover:not(:disabled) {
+.suggestion__dismiss:hover,
+.suggestion__dismiss:focus-visible {
+  background: var(--surface-chip-neutral);
   color: var(--ink-title);
 }
 

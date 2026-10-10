@@ -86,7 +86,8 @@ export function Dashboard() {
         </section>
       )}
 
-      <SuggestionsSection />
+      {/* Une clé par acteur : changer d'enseigne repart de zéro, jamais les cartes de l'autre. */}
+      <SuggestionsSection key={actor?.id} />
 
       {dossiers.length > 0 && (
         <section className="dashboard__section">

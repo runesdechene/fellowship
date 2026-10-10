@@ -38,7 +38,8 @@ penser. » C'est un argument Pro : le logiciel devient son vrai *sidekick*.
 
 Le bloc vit **sous « Ma prochaine date / À venir », au-dessus de « Mes dossiers »**. Il montre
 **3 cartes** (à 4 ou 5, les textes se coupaient — écart assumé avec le « 3 à 5 » du design) :
-affiche, nom, dates et ville, **la raison**, et « Pas pour moi ».
+affiche, nom, dates et ville, **la raison**, et « Pas pour moi » — une **petite icône
+d'interdiction** en haut à droite de la carte (Uriel, 10/10/2026, « comme sur Spotify »).
 
 ## Ce que le lot livre
 
@@ -68,7 +69,8 @@ Une fonction SQL (`SECURITY DEFINER`, `SET search_path = public`, `STABLE`) qui 
 `confirme`, `en_cours`, et ses bilans (`event_reports`). Un bilan pèse plus (il y est allé).
 
 **Les candidats** : événements **publics** (`is_private = false`), qui commencent entre
-aujourd'hui (heure de Paris) et dans **12 mois**, **sans aucune participation** de l'acteur
+**dans 2 mois** (Uriel : plus tôt, on ne peut plus s'inscrire) et dans **12 mois** (heure de
+Paris), qui ne sont pas la nouvelle édition d'un festival de référence (le lot 8b en prévient déjà), **sans aucune participation** de l'acteur
 (tout statut, `refuse` compris), et **non écartés** (`suggestion_dismissals`).
 
 **La note** de chaque candidat :

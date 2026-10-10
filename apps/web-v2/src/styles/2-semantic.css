@@ -714,11 +714,12 @@
   --report-thumb-width: 56px;
   --report-thumb-height: 78px;
   /* Le bloc « Pour toi » (lot 8d, maquette 2206:2) : l'affiche au gabarit des bilans, « Pas pour
-     moi » en encre effacée, le nombre trouvé du gratuit en grand titre. */
+     moi » en petite icône d'interdiction, en encre effacée (Uriel, 10/10/2026), le nombre trouvé du gratuit en grand titre. */
   --suggestion-poster-width: var(--report-thumb-width);
   --suggestion-poster-height: var(--report-thumb-height);
   --suggestion-placeholder-height: 102px;
   --suggestion-dismiss-ink: var(--ink-waiting);
+  --suggestion-dismiss-size: 26px;
   --suggestion-leaving-opacity: 0;
   --type-suggestion-reason: var(--weight-medium) var(--size-12) / var(--leading-snug)
     var(--family-sans);

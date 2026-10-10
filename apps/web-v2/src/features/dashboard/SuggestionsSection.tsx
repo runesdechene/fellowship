@@ -1,10 +1,10 @@
 /**
  * QUOI     — le bloc « Pour toi » : 3 festivals proches de ceux que l'exposant fait, chacun avec
- *            sa raison et « Pas pour moi » ; en gratuit, le nombre trouvé sous le voile du Pro.
+ *            sa raison et une icône « Pas pour moi » ; en gratuit, le nombre trouvé sous le voile du Pro.
  * POURQUOI — lot 8d, maquettes 2206:2 (Pro) et 2206:340 (gratuit). Rien à proposer, ou une
  *            lecture ratée : le bloc ne s'affiche pas.
  */
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Ban } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
@@ -30,7 +30,7 @@ function SuggestionCard({ item, leaving, onDismiss }: CardProps) {
   const dates = formatDateRange(parseSqlDate(item.startDate), parseSqlDate(item.endDate))
 
   return (
-    <article className={leaving ? 'suggestion suggestion--leaving' : 'suggestion'}>
+    <article className={leaving ? 'suggestion suggestion--leaving' : 'suggestion'} inert={leaving}>
       <button
         type="button"
         className="suggestion__open"
@@ -47,8 +47,14 @@ function SuggestionCard({ item, leaving, onDismiss }: CardProps) {
           <span className="suggestion__reason">{reasonText(item.reason)}</span>
         </span>
       </button>
-      <button type="button" className="suggestion__dismiss" onClick={onDismiss} disabled={leaving}>
-        Pas pour moi
+      <button
+        type="button"
+        className="suggestion__dismiss"
+        onClick={onDismiss}
+        aria-label={`Pas pour moi : ${item.name}`}
+        title="Pas pour moi"
+      >
+        <Ban size={14} strokeWidth={2} />
       </button>
     </article>
   )
