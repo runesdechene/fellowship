@@ -18,6 +18,7 @@ import type { Session, User } from '@supabase/supabase-js'
 import { shouldLoadIdentity } from './session'
 import { supabase } from './supabase'
 import type { Actor, EntityRow, EntityType, UserRow } from '@/types/database'
+import { unsubscribe } from './push-phone'
 
 /** Libellé affiché sous le nom, dans la carte de compte. */
 const ENTITY_ROLE_LABEL: Record<EntityType, string> = {
@@ -181,6 +182,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = useCallback(async () => {
+    // Ce téléphone ne doit plus recevoir les notifications de la personne qui s'en va (lot 8e).
+    await unsubscribe().catch(() => undefined)
     await supabase.auth.signOut({ scope: 'local' })
     setPerson(null)
     setEntities([])

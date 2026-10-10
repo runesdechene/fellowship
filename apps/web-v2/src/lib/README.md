@@ -17,5 +17,6 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `page-chrome.tsx` — le décor qu'une page demande à la coquille.
 - `push-lines.ts` — les six lignes du téléphone et le message envoyé (recopié dans send-push).
 - `push-device.ts` — ce que permet ce téléphone, le « Plus tard » de l'invitation, la clé VAPID.
+- `push-phone.ts` — les gestes du navigateur : lire, s'abonner, se désabonner (aussi à la déconnexion).
 - `usePhonePush.ts` — activer, couper les notifications sur ce téléphone.
 - `usePushMuted.ts` — les lignes coupées de la personne (`users.push_muted`).

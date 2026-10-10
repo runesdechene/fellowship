@@ -15,9 +15,11 @@ applyTheme(currentTheme())
 
 // Le service worker du téléphone (public/sw.js) : les notifications, rien d'autre.
 if ('serviceWorker' in navigator) {
-  void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
-    scope: import.meta.env.BASE_URL,
-  })
+  // Un échec (stockage bloqué, fichier introuvable) laisse simplement les notifications
+  // impossibles : les portes le lisent par getRegistration (lib/push-phone.ts).
+  navigator.serviceWorker
+    .register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL })
+    .catch(() => undefined)
 }
 
 const root = document.getElementById('root')

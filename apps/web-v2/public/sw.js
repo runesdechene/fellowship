@@ -47,10 +47,16 @@ self.addEventListener('notificationclick', (event) => {
     (async () => {
       const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true })
       const open = windows.find((client) => client.url.startsWith(self.registration.scope))
+      // navigate() échoue sur une fenêtre que ce service worker ne contrôle pas encore (après un
+      // rechargement forcé) : on ouvre alors une fenêtre neuve (relecture du 10/10/2026).
       if (open) {
-        await open.focus()
-        await open.navigate(url)
-        return
+        try {
+          await open.focus()
+          await open.navigate(url)
+          return
+        } catch {
+          /* on ouvre une fenêtre neuve */
+        }
       }
       await self.clients.openWindow(url)
     })(),

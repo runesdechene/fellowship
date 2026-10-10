@@ -76,7 +76,8 @@ export interface PushMessage {
   body: string
   /** Un chemin de la V2 (« /evenement/… ») : le service worker le pose sous sa portée. */
   url: string
-  /** Deux nouvelles identiques (à la personne et à son enseigne) n'en font qu'une. */
+  /** Deux nouvelles identiques (à la personne et à son enseigne) n'en font qu'une ; deux nouvelles
+   *  différentes sur un même festival restent deux (relecture du 10/10/2026). */
   tag: string
 }
 
@@ -85,5 +86,15 @@ export function pushMessage(type: string, data: Record<string, unknown>): PushMe
   const said = notificationPhrase(type, data)
   if (!said) return null
   const body = said.text.map((part) => (typeof part === 'string' ? part : part.strong)).join('')
-  return { title: 'Fellowship', body, url: said.href, tag: said.href }
+  return { title: 'Fellowship', body, url: said.href, tag: `${type}:${said.href}` }
+}
+
+// Les services de notification des navigateurs : Chrome et Android, Safari, Firefox, Edge. Une
+// autre adresse ferait poster la fonction n'importe où (relecture de sécurité du 10/10/2026). La
+// même liste garde la table en base (contrainte push_subscriptions_endpoint_host).
+const PUSH_SERVICES =
+  /^https:\/\/(fcm\.googleapis\.com|web\.push\.apple\.com|updates\.push\.services\.mozilla\.com|[a-z0-9-]+\.notify\.windows\.com)\//
+
+export function isPushEndpoint(url: string): boolean {
+  return PUSH_SERVICES.test(url)
 }

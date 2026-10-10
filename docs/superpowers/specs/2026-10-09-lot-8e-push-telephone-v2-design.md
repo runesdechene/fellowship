@@ -132,8 +132,9 @@ Pour chaque notification reçue :
    l'enseigne (`memberships`) ;
 5. écarte celles qui ont coupé cette ligne ;
 6. écrit le texte : titre « Fellowship », corps = **la phrase de la cloche** (sans le gras), lien =
-   l'écran où mène la cloche, `tag` = ce lien (deux nouvelles identiques, à la personne et à son
-   enseigne, n'en font qu'une sur le téléphone) ;
+   l'écran où mène la cloche, `tag` = le type et ce lien (deux nouvelles identiques, à la personne
+   et à son enseigne, n'en font qu'une ; deux nouvelles différentes d'un même festival restent deux —
+   relecture du 10/10/2026) ;
 7. envoie avec `web-push` à chacun de leurs téléphones ; une adresse morte (410, 404) est effacée.
 
 | Ligne | Types de notification |
