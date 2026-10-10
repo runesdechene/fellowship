@@ -71,7 +71,7 @@
 
 .upcoming__pending {
   flex: none;
-  color: var(--status-sent-ink);
+  color: var(--status-sent-mark);
 }
 
 /* Le nom et le compte à rebours, puis la ville en dessous */

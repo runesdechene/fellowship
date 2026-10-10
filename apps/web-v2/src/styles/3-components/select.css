@@ -118,6 +118,11 @@
 
 .select__valeur--ok .select__icone,
 .select__option--ok .select__icone {
+  color: var(--status-validated-mark);
+}
+
+/* Sur l'aplat validé, l'icône prend l'encre de l'aplat (la nuit, foncée sur le néon). */
+.select__valeur--plein.select__valeur--ok .select__icone {
   color: var(--status-validated-ink);
 }
 

@@ -195,6 +195,8 @@
   /* Dossier envoyé : un bleu doux, ni validé ni à faire — il attend (Uriel, 11/10/2026). */
   --status-sent-ink: var(--bleu-700);
   --status-sent-surface: var(--bleu-50);
+  /* Une icône posée seule, sans pastille : elle garde sa couleur, la nuit en néon. */
+  --status-sent-mark: var(--bleu-700);
   --dot-size: var(--space-8);
 
   /* =========================================================================
@@ -1104,11 +1106,13 @@
   --status-pending-surface: var(--night-100);
   --status-pending-surface-hover: var(--night-150);
   --status-pending-icon: var(--cream-650);
-  --status-validated-ink: var(--sauge-300);
-  --status-validated-surface: var(--sauge-900);
+  /* La nuit, la pastille ELLE-MÊME est néon, son encre foncée : elle ressort (Uriel, 11/10/2026). */
+  --status-validated-ink: var(--sauge-950);
+  --status-validated-surface: var(--sauge-300);
   --status-validated-mark: var(--sauge-300);
-  --status-sent-ink: var(--bleu-300);
-  --status-sent-surface: var(--bleu-900);
+  --status-sent-ink: var(--bleu-950);
+  --status-sent-surface: var(--bleu-300);
+  --status-sent-mark: var(--bleu-300);
 
   /* Le bouton principal s'inverse : crème, texte foncé. */
   --action-surface: var(--cream-50);

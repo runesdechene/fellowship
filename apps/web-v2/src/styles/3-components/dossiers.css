@@ -101,7 +101,7 @@
 }
 
 .dossiers__icon--sent {
-  color: var(--status-sent-ink);
+  color: var(--status-sent-mark);
 }
 
 .dossiers__dot {
