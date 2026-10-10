@@ -1,6 +1,6 @@
 /**
- * QUOI     — l'écran du tableau de bord : accueil, bande d'action, frise de saison, prochaine date,
- *            dates à venir, mes dossiers, mes bilans.
+ * QUOI     — l'écran du tableau de bord : accueil, invitation au téléphone, bande d'action, frise
+ *            de saison, prochaine date, dates à venir, mes dossiers, mes bilans.
  * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
  *            il assemble ce que useDashboard prépare.
  */
@@ -10,6 +10,7 @@ import { usePlan } from '@/lib/usePlan'
 import { ActionBanner } from './ActionBanner'
 import { DossiersSection } from './DossiersSection'
 import { NextDateCard } from './NextDateCard'
+import { PhoneInvite } from './PhoneInvite'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
 import { UpcomingCard } from './UpcomingCard'
@@ -58,6 +59,8 @@ export function Dashboard() {
           </p>
         </div>
       </header>
+
+      <PhoneInvite />
 
       {pendingReport && pro && (
         <section className="dashboard__section">

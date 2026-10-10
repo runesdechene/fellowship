@@ -168,6 +168,56 @@
   background: var(--ink-title);
 }
 
+/* --- Le pied : les Réglages, puis le téléphone (lot 8e) -------------------
+   Collé en bas du panneau qui défile : on le trouve sans descendre. */
+.notif-panel__foot {
+  position: sticky;
+  bottom: calc(-1 * var(--space-6));
+  margin-top: auto;
+  margin-bottom: calc(-1 * var(--space-6));
+  padding-bottom: var(--space-6);
+  background: var(--surface-card);
+}
+
+.notif-panel__settings,
+.notif-panel__phone {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid var(--line-card);
+}
+
+.notif-panel__settings {
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-20) var(--space-10);
+  font: var(--type-settings-nav);
+  color: var(--ink-title);
+  text-align: left;
+  cursor: pointer;
+}
+
+.notif-panel__phone {
+  gap: var(--space-10);
+  padding: var(--space-12) var(--space-20);
+  color: var(--ink-soft);
+}
+
+.notif-panel__phone-text {
+  flex: 1;
+  min-width: 0;
+  font: var(--type-settings-nav);
+}
+
+.notif-panel__phone-on {
+  font: var(--type-phone-activate);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.notif-panel__phone-on:disabled {
+  cursor: progress;
+}
+
 @media (width <= 760px) {
   .notif-panel {
     position: fixed;

@@ -25,9 +25,7 @@ export function usePushMuted() {
     async (line: PushLine) => {
       if (!person || saving) return
       const before = current
-      const next = before.includes(line)
-        ? before.filter((key) => key !== line)
-        : [...before, line]
+      const next = before.includes(line) ? before.filter((key) => key !== line) : [...before, line]
       setMuted(next)
       setSaving(true)
       setFailed(false)

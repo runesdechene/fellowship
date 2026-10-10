@@ -28,9 +28,12 @@ for (const name of FILES) {
     const actual = existsSync(to(name)) ? readFileSync(to(name), 'utf8').replace(/\r\n/g, '\n') : ''
     if (actual !== expected) stale.push(name)
   } else {
-    mkdirSync(fileURLToPath(new URL('../../../supabase/functions/send-push/phrases/', import.meta.url)), {
-      recursive: true,
-    })
+    mkdirSync(
+      fileURLToPath(new URL('../../../supabase/functions/send-push/phrases/', import.meta.url)),
+      {
+        recursive: true,
+      },
+    )
     writeFileSync(to(name), expected)
   }
 }

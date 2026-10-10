@@ -824,11 +824,14 @@
     var(--family-sans);
   --type-settings-note: var(--weight-regular) var(--size-13) / var(--leading-snug)
     var(--family-sans);
-  --type-settings-nav: var(--weight-medium) var(--size-13) / var(--leading-snug)
-    var(--family-sans);
+  --type-settings-nav: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-settings-column: var(--weight-medium) var(--size-12) / var(--leading-snug)
     var(--family-sans);
   --type-settings-saved: var(--weight-regular) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-phone-activate: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-phone-invite-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 
   /* =========================================================================

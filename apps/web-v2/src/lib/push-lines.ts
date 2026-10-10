@@ -11,12 +11,7 @@
 import { notificationPhrase } from './notifications'
 
 export type PushLine =
-  | 'deadline'
-  | 'new_edition'
-  | 'friends'
-  | 'discussions'
-  | 'new_followers'
-  | 'weekly'
+  'deadline' | 'new_edition' | 'friends' | 'discussions' | 'new_followers' | 'weekly'
 
 /** Dans l'ordre de la maquette des Réglages. */
 export const PUSH_LINES: { key: PushLine; title: string; detail: string; pro: boolean }[] = [

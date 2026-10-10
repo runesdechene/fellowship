@@ -3,7 +3,7 @@
  *            Aujourd'hui / Cette semaine / Plus tôt.
  * POURQUOI — maquette « Notifications ». Une notification non lue porte un fond et un point ; un
  *            clic la marque lue et mène où elle parle.
- * ATTENTION — « Régler mes notifications » attend les Réglages (lot 9) : pas de lien vers rien.
+ * ATTENTION — le pied (PanelFoot) mène aux Réglages et propose d'activer le téléphone (lot 8e).
  */
 import {
   CalendarPlus,
@@ -21,6 +21,7 @@ import { useState } from 'react'
 import { timeAgo } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { groupByDay, type NotificationIcon, type NotificationView } from '@/lib/notifications'
+import { PanelFoot } from './PanelFoot'
 
 const ICONS: Record<NotificationIcon, LucideIcon> = {
   question: MessageCircle,
@@ -147,6 +148,7 @@ export function NotificationPanel({
           })}
         </section>
       ))}
+      <PanelFoot onClose={onClose} />
     </div>
   )
 }

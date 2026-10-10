@@ -1,0 +1,67 @@
+/**
+ * QUOI     — l'invitation à activer le téléphone, sous « Bonjour » (features/dashboard/PhoneInvite).
+ * POURQUOI — maquette `2027 — Tableau de bord · invitation au téléphone` (lot 8e) : une carte
+ *            blanche bordée, l'icône, deux lignes de texte, « Plus tard » et « Activer ».
+ */
+.phone-invite {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-18) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .phone-invite {
+    opacity: 0;
+  }
+}
+
+.phone-invite__icon {
+  flex: none;
+  color: var(--ink-title);
+}
+
+.phone-invite__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.phone-invite__title {
+  font: var(--type-phone-invite-title);
+  color: var(--ink-title);
+}
+
+.phone-invite__note {
+  font: var(--type-settings-note);
+  color: var(--ink-soft);
+}
+
+.phone-invite__actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-8);
+}
+
+@media (width <= 760px) {
+  .phone-invite {
+    flex-wrap: wrap;
+  }
+
+  .phone-invite__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-invite {
+    transition: none;
+  }
+}
