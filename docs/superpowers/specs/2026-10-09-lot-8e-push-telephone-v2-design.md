@@ -70,12 +70,19 @@ Une fonction pure, testée, sur le modèle de `quelPush` de Runes de Chêne :
 - **Activer** : demande la permission (au clic), abonne le service worker avec la clé publique
   VAPID (`VITE_VAPID_PUBLIC_KEY`), puis inscrit l'adresse en base par la RPC
   `register_push_subscription`. La carte devient « Activées sur ce téléphone » / « Couper ».
-- **Couper** : RPC `unregister_push_subscription`, puis désabonnement du service worker. La carte
+- **Couper** : la ligne de ce téléphone est effacée (la politique « propriétaire seulement » de
+  `push_subscriptions` le permet), puis le service worker se désabonne. La carte
   revient à « Notifications sur ce téléphone » / « Activer ».
 - « Activé » se juge **sur ce téléphone** (un abonnement existe dans son service worker), jamais
   en base : un autre téléphone de la même personne ne compte pas.
 
 ### 4. Les Réglages : la section Notifications
+
+**La page Réglages naît ici** (Uriel, 10/10/2026) : `/reglages`, le titre « Réglages » et la
+colonne des sections, avec **la seule section Notifications** ; le lot 9 y ajoutera Profil, Compte,
+Enseignes et abonnement, Contact. On y entre par « Régler mes notifications », au bas de la cloche
+(maquette `2088:6`) ; l'entrée « Réglages » du menu du compte sur téléphone arrive avec le reste de
+ce menu, au lot 9.
 
 Selon `2189:302` et `2189:982` :
 
@@ -103,9 +110,9 @@ Selon `2189:302` et `2189:982` :
 - **`push_subscriptions`** existe (vide, jamais servie) : `user_id` (l'acteur de la personne),
   `endpoint`, `keys` (`p256dh`, `auth`), `created_at`. On y ajoute l'unicité de `endpoint` (un
   téléphone = une ligne ; s'y réinscrire la rattache à la personne connectée).
-- **`register_push_subscription(p_endpoint, p_p256dh, p_auth)`** et
-  **`unregister_push_subscription(p_endpoint)`** : `SECURITY DEFINER`, la personne est celle de la
-  session (`users.auth_id = auth.uid()`), jamais un paramètre.
+- **`register_push_subscription(p_endpoint, p_p256dh, p_auth)`** : `SECURITY DEFINER`, la
+  personne est celle de la session (`auth.uid()`, qui est son `actor_id`), jamais un paramètre ;
+  un téléphone déjà inscrit au nom d'un autre passe à la personne connectée.
 - **Les lignes coupées** : `users.push_muted text[] NOT NULL DEFAULT '{new_followers}'`, par
   personne (valable pour tous ses téléphones). Les valeurs : `deadline`, `new_edition`, `friends`,
   `discussions`, `new_followers`, `weekly`. La personne lit et écrit sa propre ligne.
@@ -141,9 +148,10 @@ Pour chaque notification reçue :
 `event_updated` et les types de la V1 restent dans la cloche seulement.
 
 **Une seule source pour les phrases** : la fonction se sert du même code que la cloche
-(`apps/web-v2/src/lib/notifications.ts`, pur, sans dépendance hors `dates.ts`). Si l'empaquetage de
-la fonction ne peut pas l'importer, le plan tranche une autre voie qui garde **une** source et la
-teste ; jamais deux copies écrites à la main.
+(`apps/web-v2/src/lib/notifications.ts`, pur, sans dépendance hors `dates.ts`). La fonction ne
+peut pas importer hors de `supabase/functions` sans risque : un script recopie les trois fichiers
+purs (`dates.ts`, `notifications.ts`, `push-lines.ts`) dans `send-push/phrases/`, et un test
+Vitest échoue si la copie diffère de la source. Jamais de copie écrite à la main.
 
 ### 8. Les clés
 
