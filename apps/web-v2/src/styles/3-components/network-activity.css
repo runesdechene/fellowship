@@ -63,3 +63,19 @@
   color: var(--ink-section-pale);
   white-space: nowrap;
 }
+
+/* « Tout voir » : vers la page Communauté (lot 9a). */
+.network-activity__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  align-self: flex-start;
+  padding: var(--space-6) var(--space-12) 0;
+  font: var(--type-activity-time);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.network-activity__more:hover {
+  text-decoration: underline;
+}
