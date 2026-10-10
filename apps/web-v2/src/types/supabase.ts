@@ -1355,6 +1355,17 @@ export type Database = {
       }
     }
     Functions: {
+      accounts_to_follow: {
+        Args: { p_actor: string }
+        Returns: {
+          avatar: string
+          city: string
+          id: string
+          name: string
+          reason: Json
+          slug: string
+        }[]
+      }
       are_friends: {
         Args: { user_a: string; user_b: string }
         Returns: boolean
@@ -1368,6 +1379,32 @@ export type Database = {
         Returns: string
       }
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
+      community_feed: {
+        Args: { p_actor: string }
+        Returns: {
+          comment: string
+          companions: Json
+          detail: string
+          event_city: string
+          event_department: string
+          event_end: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_start: string
+          id: string
+          kind: string
+          occurred_at: string
+          stars: number
+          target_id: string
+          target_name: string
+          target_slug: string
+          who_avatar: string
+          who_id: string
+          who_name: string
+          who_slug: string
+        }[]
+      }
       create_owned_entity: {
         Args: {
           p_brand_name: string
@@ -1379,6 +1416,17 @@ export type Database = {
           p_type: Database['public']['Enums']['entity_type']
         }
         Returns: string
+      }
+      crossing_dates: {
+        Args: { p_actor: string }
+        Returns: {
+          companions: number
+          event_end: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_start: string
+        }[]
       }
       department_code: { Args: { raw: string }; Returns: string }
       ensure_referral_code: {

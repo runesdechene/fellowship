@@ -65,6 +65,7 @@ RETURNS TABLE (
   stars integer, comment text, detail text, companions jsonb
 )
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+#variable_conflict use_column
 DECLARE
   since timestamptz := now() - interval '30 days';
   today date := (now() AT TIME ZONE 'Europe/Paris')::date;
@@ -167,6 +168,7 @@ GRANT EXECUTE ON FUNCTION public.community_feed(uuid) TO authenticated;
 CREATE OR REPLACE FUNCTION public.crossing_dates(p_actor uuid)
 RETURNS TABLE (event_id uuid, event_name text, event_start date, event_end date, event_image text, companions integer)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+#variable_conflict use_column
 BEGIN
   IF NOT coalesce(can_act_as(p_actor), false) THEN
     RAISE EXCEPTION 'crossing_dates: acteur non autorisé' USING ERRCODE = '42501';
@@ -192,6 +194,7 @@ GRANT EXECUTE ON FUNCTION public.crossing_dates(uuid) TO authenticated;
 CREATE OR REPLACE FUNCTION public.accounts_to_follow(p_actor uuid)
 RETURNS TABLE (id uuid, name text, avatar text, slug text, city text, reason jsonb)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+#variable_conflict use_column
 BEGIN
   IF NOT coalesce(can_act_as(p_actor), false) THEN
     RAISE EXCEPTION 'accounts_to_follow: acteur non autorisé' USING ERRCODE = '42501';
