@@ -14,10 +14,10 @@ import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
 
 const TABS: ReadonlyArray<{ to: string | null; label: string; Icon: typeof Telescope }> = [
+  { to: '/', label: 'Tableau', Icon: CircleGauge },
   { to: '/explorer', label: 'Explorer', Icon: Telescope },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
   { to: null, label: 'Communauté', Icon: Users },
-  { to: '/', label: 'Tableau', Icon: CircleGauge },
 ]
 
 export function TabBar() {
