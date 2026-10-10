@@ -49,19 +49,19 @@ stars int, comment text, detail text, companions jsonb)` — les `*_slug` ouvren
 | `kind` | Source | Qui | Champs |
 |---|---|---|---|
 | `arrival` | `actors.created_at` d'une **enseigne** exposant | tout Fellowship | `who_*`, `detail` = « maroquinerie, Nantes » (`craft_type`, `city`) |
-| `going` | `participations.created_at`, statut programmé (`inscrit`, `confirme`, `en_cours`), `visibility IN ('amis','public')` | comptes suivis | `who_*`, `event_*` |
+| `going` | `participations.created_at`, statut programmé (`inscrit`, `confirme`, `en_cours`), `public`, ou `amis` pour un **ami** seulement (suivi dans les deux sens) | comptes suivis | `who_*`, `event_*` |
 | `added` | `events.created_at`, festival public | tout Fellowship ; le créateur nommé s'il a un profil public (`actor_public`), sinon « Quelqu'un » | `who_*`, `event_*` |
 | `review` | `reviews.created_at` | tout Fellowship | `event_*`, `stars` (moyenne des trois notes, arrondie), `comment` ; `who_*` **seulement** si l'avis n'est pas anonyme, que le lecteur n'est pas un compte festival, et que l'auteur est son **ami** (`are_friends`) — sinon NULL, et l'écran dit « Un exposant » |
 | `follow` | `follows.created_at` | comptes suivis qui suivent quelqu'un | `who_*` (le suiveur), `target_id`, `target_name` (le suivi) |
 
-**Jamais** : un festival privé, une participation `prive`, ni les gestes de l'acteur lui-même ou
+**Jamais** : un festival privé, une participation `prive`, une participation `amis` montrée à un simple abonné (revue de sécurité du 11/10/2026), ni les gestes de l'acteur lui-même ou
 de ses enseignes (`can_act_as(who_id)`), ni une arrivée de l'acteur lui-même. `id` est stable
 (`kind || ':' || id source`), pour les clés de liste.
 
 ### 2. « Ça se rassemble » — dans la même lecture
 
 Une ligne à part (`kind = 'gathering'`, hors du compte des 80) : le festival **public à venir**
-où vont le plus de **comptes suivis** (participation programmée, `amis` ou `public`), que
+où vont le plus de **comptes suivis** (participation programmée, `public`, ou `amis` pour un ami), que
 l'acteur n'a **pas encore repéré** (aucune participation). Champs : `event_*`, `detail` = le
 nombre de compagnons, et les 4 premiers compagnons (`companions jsonb` : `[{id, name, avatar}]`).
 Au moins **2** compagnons, sinon rien. Égalité : le plus proche dans le temps.

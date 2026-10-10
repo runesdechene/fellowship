@@ -97,7 +97,7 @@ BEGIN
     FROM participations p JOIN events e ON e.id = p.event_id
     WHERE p.actor_id IN (SELECT actor_id FROM followed)
       AND p.status IN ('inscrit', 'confirme', 'en_cours')
-      AND p.visibility IN ('amis', 'public')
+      AND (p.visibility = 'public' OR (p.visibility = 'amis' AND coalesce(are_friends(p_actor, p.actor_id), false)))
       AND NOT e.is_private AND p.created_at >= since
     UNION ALL
     SELECT 'added:' || e.id, 'added', e.created_at, e.created_by_actor, NULL, e.id, NULL, NULL, NULL, true
@@ -127,7 +127,7 @@ BEGIN
     FROM participations p JOIN events e ON e.id = p.event_id
     WHERE p.actor_id IN (SELECT actor_id FROM followed)
       AND p.status IN ('inscrit', 'confirme', 'en_cours')
-      AND p.visibility IN ('amis', 'public')
+      AND (p.visibility = 'public' OR (p.visibility = 'amis' AND coalesce(are_friends(p_actor, p.actor_id), false)))
       AND NOT e.is_private AND e.start_date >= today
       AND NOT EXISTS (SELECT 1 FROM participations mine WHERE mine.actor_id = p_actor AND mine.event_id = p.event_id)
     GROUP BY p.event_id
@@ -183,7 +183,7 @@ BEGIN
     AND e.start_date >= (now() AT TIME ZONE 'Europe/Paris')::date
     AND p.actor_id IN (SELECT f.following_actor FROM follows f WHERE f.follower_actor = p_actor)
     AND p.status IN ('inscrit', 'confirme', 'en_cours')
-    AND p.visibility IN ('amis', 'public')
+    AND (p.visibility = 'public' OR (p.visibility = 'amis' AND coalesce(are_friends(p_actor, p.actor_id), false)))
   GROUP BY e.id
   ORDER BY e.start_date, e.id
   LIMIT 3;
