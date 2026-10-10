@@ -141,7 +141,7 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
       AND NOT EXISTS (SELECT 1 FROM event_reports er WHERE er.actor_id = p_actor AND er.event_id = e.id)
       AND NOT EXISTS (SELECT 1 FROM suggestion_dismissals s WHERE s.actor_id = p_actor AND s.event_id = e.id)
   ),
-  similar AS (
+  alike AS (
     SELECT DISTINCT ON (c.id) c.id, r.name AS ref_name,
       cardinality(ARRAY(SELECT unnest(c.tags) INTERSECT SELECT unnest(r.tags)))
         * CASE WHEN r.reported THEN 2 ELSE 1 END AS points
@@ -174,7 +174,7 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
     FROM candidates c
     CROSS JOIN zone z
     CROSS JOIN home h
-    LEFT JOIN similar s ON s.id = c.id
+    LEFT JOIN alike s ON s.id = c.id
     LEFT JOIN friendly fr ON fr.id = c.id
     LEFT JOIN reported_match rm ON rm.id = c.id
   )

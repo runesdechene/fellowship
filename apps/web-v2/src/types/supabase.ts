@@ -1,16 +1,10 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: '14.5'
   }
   public: {
     Tables: {
@@ -18,17 +12,17 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          kind: Database["public"]["Enums"]["actor_kind"]
+          kind: Database['public']['Enums']['actor_kind']
         }
         Insert: {
           created_at?: string
           id?: string
-          kind: Database["public"]["Enums"]["actor_kind"]
+          kind: Database['public']['Enums']['actor_kind']
         }
         Update: {
           created_at?: string
           id?: string
-          kind?: Database["public"]["Enums"]["actor_kind"]
+          kind?: Database['public']['Enums']['actor_kind']
         }
         Relationships: []
       }
@@ -77,18 +71,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "content_reports_reporter_actor_id_fkey"
-            columns: ["reporter_actor_id"]
+            foreignKeyName: 'content_reports_reporter_actor_id_fkey'
+            columns: ['reporter_actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "content_reports_resolved_by_actor_id_fkey"
-            columns: ["resolved_by_actor_id"]
+            foreignKeyName: 'content_reports_resolved_by_actor_id_fkey'
+            columns: ['resolved_by_actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -110,18 +104,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "discussion_mutes_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'discussion_mutes_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "discussion_mutes_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'discussion_mutes_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -147,7 +141,7 @@ export type Database = {
           legal_name: string | null
           links: Json
           location: string | null
-          plan: Database["public"]["Enums"]["user_plan"]
+          plan: Database['public']['Enums']['user_plan']
           postal_code: string | null
           public_slug: string | null
           siren: string | null
@@ -155,7 +149,7 @@ export type Database = {
           stripe_subscription_id: string | null
           subscription_status: string | null
           trial_end: string | null
-          type: Database["public"]["Enums"]["entity_type"]
+          type: Database['public']['Enums']['entity_type']
           verified: boolean
           website: string | null
         }
@@ -180,7 +174,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
+          plan?: Database['public']['Enums']['user_plan']
           postal_code?: string | null
           public_slug?: string | null
           siren?: string | null
@@ -188,7 +182,7 @@ export type Database = {
           stripe_subscription_id?: string | null
           subscription_status?: string | null
           trial_end?: string | null
-          type: Database["public"]["Enums"]["entity_type"]
+          type: Database['public']['Enums']['entity_type']
           verified?: boolean
           website?: string | null
         }
@@ -213,7 +207,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
-          plan?: Database["public"]["Enums"]["user_plan"]
+          plan?: Database['public']['Enums']['user_plan']
           postal_code?: string | null
           public_slug?: string | null
           siren?: string | null
@@ -221,17 +215,17 @@ export type Database = {
           stripe_subscription_id?: string | null
           subscription_status?: string | null
           trial_end?: string | null
-          type?: Database["public"]["Enums"]["entity_type"]
+          type?: Database['public']['Enums']['entity_type']
           verified?: boolean
           website?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "entities_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'entities_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: true
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -274,25 +268,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "event_ledger_entries_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'event_ledger_entries_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "event_ledger_entries_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'event_ledger_entries_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "event_ledger_entries_report_id_fkey"
-            columns: ["report_id"]
+            foreignKeyName: 'event_ledger_entries_report_id_fkey'
+            columns: ['report_id']
             isOneToOne: false
-            referencedRelation: "event_reports"
-            referencedColumns: ["id"]
+            referencedRelation: 'event_reports'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -341,25 +335,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "event_reports_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'event_reports_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "event_reports_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'event_reports_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "event_reports_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'event_reports_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -393,25 +387,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "event_thread_replies_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'event_thread_replies_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "event_thread_replies_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'event_thread_replies_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "event_thread_replies_thread_id_fkey"
-            columns: ["thread_id"]
+            foreignKeyName: 'event_thread_replies_thread_id_fkey'
+            columns: ['thread_id']
             isOneToOne: false
-            referencedRelation: "event_threads"
-            referencedColumns: ["id"]
+            referencedRelation: 'event_threads'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -419,7 +413,7 @@ export type Database = {
         Row: {
           acted_by_user_id: string | null
           actor_id: string
-          audience: Database["public"]["Enums"]["thread_audience"]
+          audience: Database['public']['Enums']['thread_audience']
           best_reply_id: string | null
           body: string | null
           created_at: string
@@ -431,7 +425,7 @@ export type Database = {
         Insert: {
           acted_by_user_id?: string | null
           actor_id: string
-          audience: Database["public"]["Enums"]["thread_audience"]
+          audience: Database['public']['Enums']['thread_audience']
           best_reply_id?: string | null
           body?: string | null
           created_at?: string
@@ -443,7 +437,7 @@ export type Database = {
         Update: {
           acted_by_user_id?: string | null
           actor_id?: string
-          audience?: Database["public"]["Enums"]["thread_audience"]
+          audience?: Database['public']['Enums']['thread_audience']
           best_reply_id?: string | null
           body?: string | null
           created_at?: string
@@ -454,32 +448,32 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "event_threads_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'event_threads_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "event_threads_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'event_threads_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "event_threads_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'event_threads_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "fk_best_reply"
-            columns: ["best_reply_id"]
+            foreignKeyName: 'fk_best_reply'
+            columns: ['best_reply_id']
             isOneToOne: false
-            referencedRelation: "event_thread_replies"
-            referencedColumns: ["id"]
+            referencedRelation: 'event_thread_replies'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -579,25 +573,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "events_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'events_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "events_created_by_actor_fkey"
-            columns: ["created_by_actor"]
+            foreignKeyName: 'events_created_by_actor_fkey'
+            columns: ['created_by_actor']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "events_previous_edition_id_fkey"
-            columns: ["previous_edition_id"]
+            foreignKeyName: 'events_previous_edition_id_fkey'
+            columns: ['previous_edition_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -622,18 +616,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "follows_follower_actor_fkey"
-            columns: ["follower_actor"]
+            foreignKeyName: 'follows_follower_actor_fkey'
+            columns: ['follower_actor']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "follows_following_actor_fkey"
-            columns: ["following_actor"]
+            foreignKeyName: 'follows_following_actor_fkey'
+            columns: ['following_actor']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -642,37 +636,37 @@ export type Database = {
           created_at: string
           entity_actor_id: string
           id: string
-          role: Database["public"]["Enums"]["membership_role"]
+          role: Database['public']['Enums']['membership_role']
           user_actor_id: string
         }
         Insert: {
           created_at?: string
           entity_actor_id: string
           id?: string
-          role?: Database["public"]["Enums"]["membership_role"]
+          role?: Database['public']['Enums']['membership_role']
           user_actor_id: string
         }
         Update: {
           created_at?: string
           entity_actor_id?: string
           id?: string
-          role?: Database["public"]["Enums"]["membership_role"]
+          role?: Database['public']['Enums']['membership_role']
           user_actor_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "memberships_entity_actor_id_fkey"
-            columns: ["entity_actor_id"]
+            foreignKeyName: 'memberships_entity_actor_id_fkey'
+            columns: ['entity_actor_id']
             isOneToOne: false
-            referencedRelation: "entities"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "memberships_user_actor_id_fkey"
-            columns: ["user_actor_id"]
+            foreignKeyName: 'memberships_user_actor_id_fkey'
+            columns: ['user_actor_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
         ]
       }
@@ -684,7 +678,7 @@ export type Database = {
           created_at: string
           event_id: string
           id: string
-          visibility: Database["public"]["Enums"]["note_visibility"]
+          visibility: Database['public']['Enums']['note_visibility']
         }
         Insert: {
           acted_by_user_id?: string | null
@@ -693,7 +687,7 @@ export type Database = {
           created_at?: string
           event_id: string
           id?: string
-          visibility?: Database["public"]["Enums"]["note_visibility"]
+          visibility?: Database['public']['Enums']['note_visibility']
         }
         Update: {
           acted_by_user_id?: string | null
@@ -702,29 +696,29 @@ export type Database = {
           created_at?: string
           event_id?: string
           id?: string
-          visibility?: Database["public"]["Enums"]["note_visibility"]
+          visibility?: Database['public']['Enums']['note_visibility']
         }
         Relationships: [
           {
-            foreignKeyName: "notes_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'notes_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "notes_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'notes_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "notes_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'notes_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -735,7 +729,7 @@ export type Database = {
           data: Json
           id: string
           read: boolean
-          type: Database["public"]["Enums"]["notification_type"]
+          type: Database['public']['Enums']['notification_type']
         }
         Insert: {
           actor_id: string
@@ -743,7 +737,7 @@ export type Database = {
           data?: Json
           id?: string
           read?: boolean
-          type: Database["public"]["Enums"]["notification_type"]
+          type: Database['public']['Enums']['notification_type']
         }
         Update: {
           actor_id?: string
@@ -751,15 +745,15 @@ export type Database = {
           data?: Json
           id?: string
           read?: boolean
-          type?: Database["public"]["Enums"]["notification_type"]
+          type?: Database['public']['Enums']['notification_type']
         }
         Relationships: [
           {
-            foreignKeyName: "notifications_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'notifications_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -817,18 +811,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "participation_dossiers_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'participation_dossiers_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "participation_dossiers_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'participation_dossiers_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -844,9 +838,9 @@ export type Database = {
           payments: Json | null
           refusal_note: string | null
           remind_deadline: boolean
-          status: Database["public"]["Enums"]["participation_status"]
+          status: Database['public']['Enums']['participation_status']
           total_cost: number | null
-          visibility: Database["public"]["Enums"]["participation_visibility"]
+          visibility: Database['public']['Enums']['participation_visibility']
         }
         Insert: {
           acted_by_user_id?: string | null
@@ -859,9 +853,9 @@ export type Database = {
           payments?: Json | null
           refusal_note?: string | null
           remind_deadline?: boolean
-          status?: Database["public"]["Enums"]["participation_status"]
+          status?: Database['public']['Enums']['participation_status']
           total_cost?: number | null
-          visibility?: Database["public"]["Enums"]["participation_visibility"]
+          visibility?: Database['public']['Enums']['participation_visibility']
         }
         Update: {
           acted_by_user_id?: string | null
@@ -874,31 +868,31 @@ export type Database = {
           payments?: Json | null
           refusal_note?: string | null
           remind_deadline?: boolean
-          status?: Database["public"]["Enums"]["participation_status"]
+          status?: Database['public']['Enums']['participation_status']
           total_cost?: number | null
-          visibility?: Database["public"]["Enums"]["participation_visibility"]
+          visibility?: Database['public']['Enums']['participation_visibility']
         }
         Relationships: [
           {
-            foreignKeyName: "participations_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'participations_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "participations_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'participations_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "participations_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'participations_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -926,11 +920,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "push_subscriptions_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'push_subscriptions_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
         ]
       }
@@ -952,11 +946,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "referral_codes_owner_entity_id_fkey"
-            columns: ["owner_entity_id"]
+            foreignKeyName: 'referral_codes_owner_entity_id_fkey'
+            columns: ['owner_entity_id']
             isOneToOne: false
-            referencedRelation: "entities"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
           },
         ]
       }
@@ -993,18 +987,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "referrals_filleul_entity_id_fkey"
-            columns: ["filleul_entity_id"]
+            foreignKeyName: 'referrals_filleul_entity_id_fkey'
+            columns: ['filleul_entity_id']
             isOneToOne: true
-            referencedRelation: "entities"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "referrals_parrain_entity_id_fkey"
-            columns: ["parrain_entity_id"]
+            foreignKeyName: 'referrals_parrain_entity_id_fkey'
+            columns: ['parrain_entity_id']
             isOneToOne: false
-            referencedRelation: "entities"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
           },
         ]
       }
@@ -1038,25 +1032,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "review_replies_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'review_replies_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "review_replies_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'review_replies_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "review_replies_review_id_fkey"
-            columns: ["review_id"]
+            foreignKeyName: 'review_replies_review_id_fkey'
+            columns: ['review_id']
             isOneToOne: false
-            referencedRelation: "reviews"
-            referencedColumns: ["id"]
+            referencedRelation: 'reviews'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1099,25 +1093,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_acted_by_user_id_fkey"
-            columns: ["acted_by_user_id"]
+            foreignKeyName: 'reviews_acted_by_user_id_fkey'
+            columns: ['acted_by_user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["actor_id"]
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
           {
-            foreignKeyName: "reviews_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'reviews_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "reviews_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'reviews_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1138,6 +1132,39 @@ export type Database = {
           processed_at?: string
         }
         Relationships: []
+      }
+      suggestion_dismissals: {
+        Row: {
+          actor_id: string
+          created_at: string
+          event_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          event_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'suggestion_dismissals_actor_id_fkey'
+            columns: ['actor_id']
+            isOneToOne: false
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'suggestion_dismissals_event_id_fkey'
+            columns: ['event_id']
+            isOneToOne: false
+            referencedRelation: 'events'
+            referencedColumns: ['id']
+          },
+        ]
       }
       tags: {
         Row: {
@@ -1208,11 +1235,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "testimonials_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'testimonials_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1230,7 +1257,7 @@ export type Database = {
           postal_code: string | null
           push_muted: string[]
           role: string
-          sex: Database["public"]["Enums"]["user_sex"] | null
+          sex: Database['public']['Enums']['user_sex'] | null
         }
         Insert: {
           actor_id: string
@@ -1245,7 +1272,7 @@ export type Database = {
           postal_code?: string | null
           push_muted?: string[]
           role?: string
-          sex?: Database["public"]["Enums"]["user_sex"] | null
+          sex?: Database['public']['Enums']['user_sex'] | null
         }
         Update: {
           actor_id?: string
@@ -1260,15 +1287,15 @@ export type Database = {
           postal_code?: string | null
           push_muted?: string[]
           role?: string
-          sex?: Database["public"]["Enums"]["user_sex"] | null
+          sex?: Database['public']['Enums']['user_sex'] | null
         }
         Relationships: [
           {
-            foreignKeyName: "users_actor_id_fkey"
-            columns: ["actor_id"]
+            foreignKeyName: 'users_actor_id_fkey'
+            columns: ['actor_id']
             isOneToOne: true
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1278,8 +1305,8 @@ export type Database = {
         Row: {
           actor_id: string | null
           avatar_url: string | null
-          entity_type: Database["public"]["Enums"]["entity_type"] | null
-          kind: Database["public"]["Enums"]["actor_kind"] | null
+          entity_type: Database['public']['Enums']['entity_type'] | null
+          kind: Database['public']['Enums']['actor_kind'] | null
           label: string | null
           public_slug: string | null
         }
@@ -1296,11 +1323,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: 'reviews_event_id_fkey'
+            columns: ['event_id']
             isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
+            referencedRelation: 'events'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1311,18 +1338,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "follows_follower_actor_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'follows_follower_actor_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "follows_following_actor_fkey"
-            columns: ["friend_id"]
+            foreignKeyName: 'follows_following_actor_fkey'
+            columns: ['friend_id']
             isOneToOne: false
-            referencedRelation: "actors"
-            referencedColumns: ["id"]
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -1349,10 +1376,11 @@ export type Database = {
           p_department?: string
           p_postal_code?: string
           p_public_slug?: string
-          p_type: Database["public"]["Enums"]["entity_type"]
+          p_type: Database['public']['Enums']['entity_type']
         }
         Returns: string
       }
+      department_code: { Args: { raw: string }; Returns: string }
       ensure_referral_code: {
         Args: { p_base_code: string; p_entity_id: string }
         Returns: string
@@ -1465,6 +1493,10 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
+      km_between: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
@@ -1482,47 +1514,55 @@ export type Database = {
         }[]
       }
       send_deadline_reminders: { Args: never; Returns: number }
+      send_suggestions: { Args: never; Returns: number }
       send_weekly_new_events: { Args: never; Returns: number }
       set_stand_amount: {
         Args: { p_actor_id: string; p_amount: number; p_event_id: string }
         Returns: undefined
       }
       show_limit: { Args: never; Returns: number }
-      show_trgm: { Args: { "": string }; Returns: string[] }
+      show_trgm: { Args: { '': string }; Returns: string[] }
+      suggestion_candidates: {
+        Args: { p_actor: string }
+        Returns: {
+          event_id: string
+          reason: Json
+          score: number
+          start_date: string
+          strong: boolean
+        }[]
+      }
+      suggestions_for: { Args: { p_actor: string }; Returns: Json }
     }
     Enums: {
-      actor_kind: "person" | "entity"
-      entity_type: "exposant" | "festival" | "entreprise"
-      membership_role: "owner" | "admin" | "member"
-      note_visibility: "prive" | "amis"
+      actor_kind: 'person' | 'entity'
+      entity_type: 'exposant' | 'festival' | 'entreprise'
+      membership_role: 'owner' | 'admin' | 'member'
+      note_visibility: 'prive' | 'amis'
       notification_type:
-        | "deadline_reminder"
-        | "friend_going"
-        | "new_follower"
-        | "friend_note"
-        | "event_created"
-        | "event_updated"
-        | "event_image_added"
-        | "event_info_added"
-        | "new_exposant"
-        | "review_reply"
-        | "thread_reply"
-        | "best_reply"
-        | "thread_question"
-        | "new_edition"
-        | "friend_added_event"
-        | "weekly_new_events"
-      participation_status:
-        | "interesse"
-        | "inscrit"
-        | "confirme"
-        | "en_cours"
-        | "refuse"
-      participation_visibility: "prive" | "amis" | "public"
-      thread_audience: "festivalier" | "exposant" | "organisateur"
-      user_plan: "free" | "pro"
-      user_sex: "homme" | "femme" | "indefini"
-      user_type: "exposant" | "public"
+        | 'deadline_reminder'
+        | 'friend_going'
+        | 'new_follower'
+        | 'friend_note'
+        | 'event_created'
+        | 'event_updated'
+        | 'event_image_added'
+        | 'event_info_added'
+        | 'new_exposant'
+        | 'review_reply'
+        | 'thread_reply'
+        | 'best_reply'
+        | 'thread_question'
+        | 'new_edition'
+        | 'friend_added_event'
+        | 'weekly_new_events'
+        | 'suggestion'
+      participation_status: 'interesse' | 'inscrit' | 'confirme' | 'en_cours' | 'refuse'
+      participation_visibility: 'prive' | 'amis' | 'public'
+      thread_audience: 'festivalier' | 'exposant' | 'organisateur'
+      user_plan: 'free' | 'pro'
+      user_sex: 'homme' | 'femme' | 'indefini'
+      user_type: 'exposant' | 'public'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1530,33 +1570,31 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1565,23 +1603,22 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1590,23 +1627,22 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1615,75 +1651,68 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema['Enums'] | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
+    keyof DefaultSchema['CompositeTypes'] | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   public: {
     Enums: {
-      actor_kind: ["person", "entity"],
-      entity_type: ["exposant", "festival", "entreprise"],
-      membership_role: ["owner", "admin", "member"],
-      note_visibility: ["prive", "amis"],
+      actor_kind: ['person', 'entity'],
+      entity_type: ['exposant', 'festival', 'entreprise'],
+      membership_role: ['owner', 'admin', 'member'],
+      note_visibility: ['prive', 'amis'],
       notification_type: [
-        "deadline_reminder",
-        "friend_going",
-        "new_follower",
-        "friend_note",
-        "event_created",
-        "event_updated",
-        "event_image_added",
-        "event_info_added",
-        "new_exposant",
-        "review_reply",
-        "thread_reply",
-        "best_reply",
-        "thread_question",
-        "new_edition",
-        "friend_added_event",
-        "weekly_new_events",
+        'deadline_reminder',
+        'friend_going',
+        'new_follower',
+        'friend_note',
+        'event_created',
+        'event_updated',
+        'event_image_added',
+        'event_info_added',
+        'new_exposant',
+        'review_reply',
+        'thread_reply',
+        'best_reply',
+        'thread_question',
+        'new_edition',
+        'friend_added_event',
+        'weekly_new_events',
+        'suggestion',
       ],
-      participation_status: [
-        "interesse",
-        "inscrit",
-        "confirme",
-        "en_cours",
-        "refuse",
-      ],
-      participation_visibility: ["prive", "amis", "public"],
-      thread_audience: ["festivalier", "exposant", "organisateur"],
-      user_plan: ["free", "pro"],
-      user_sex: ["homme", "femme", "indefini"],
-      user_type: ["exposant", "public"],
+      participation_status: ['interesse', 'inscrit', 'confirme', 'en_cours', 'refuse'],
+      participation_visibility: ['prive', 'amis', 'public'],
+      thread_audience: ['festivalier', 'exposant', 'organisateur'],
+      user_plan: ['free', 'pro'],
+      user_sex: ['homme', 'femme', 'indefini'],
+      user_type: ['exposant', 'public'],
     },
   },
 } as const
