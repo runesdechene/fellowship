@@ -1,0 +1,252 @@
+/**
+ * QUOI     — la page Réglages (features/settings) : le titre, la colonne des sections, la section
+ *            Notifications, la carte du téléphone et les six lignes.
+ * POURQUOI — maquettes `2027 — Réglages · notifications sur le téléphone` et `… avant activation`
+ *            (lot 8e) : des cartes blanches bordées d'un filet, une colonne de 760 px.
+ * ATTENTION — les interrupteurs reprennent les mesures de celui du rappel de clôture (même dessin
+ *            sur la maquette). La liste se grise tant que le téléphone n'est pas activé.
+ */
+.settings {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+.settings__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-24);
+  margin-bottom: var(--space-40);
+}
+
+.settings__title {
+  font: var(--type-page-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.settings__saved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-settings-saved);
+  color: var(--settings-faint-ink);
+}
+
+.settings__body {
+  display: grid;
+  grid-template-columns: var(--settings-nav-width) minmax(0, var(--settings-column-width));
+  gap: var(--settings-columns-gap);
+  align-items: start;
+}
+
+.settings__nav {
+  position: sticky;
+  top: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.settings__nav-item {
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-settings-nav);
+  font: var(--type-settings-nav);
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.settings__nav-item--on {
+  background: var(--settings-nav-on-surface);
+  color: var(--ink-title);
+}
+
+.settings__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--settings-sections-gap);
+}
+
+/* --- Une section --------------------------------------------------------- */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  scroll-margin-top: var(--space-24);
+}
+
+.settings-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settings-section__title {
+  font: var(--type-settings-section);
+  color: var(--ink-title);
+}
+
+.settings-section__note,
+.settings-section__error {
+  font: var(--type-settings-note);
+  color: var(--ink-soft);
+}
+
+/* --- La carte du téléphone ----------------------------------------------- */
+.phone-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-16) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.phone-card__icon {
+  flex: none;
+  color: var(--ink-title);
+}
+
+.phone-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.phone-card__title {
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+}
+
+.phone-card__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Les six lignes ------------------------------------------------------ */
+.push-lines {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.push-lines--off {
+  opacity: var(--settings-off-opacity);
+}
+
+.push-lines__head {
+  padding: var(--space-12) var(--space-20) var(--space-4);
+  font: var(--type-settings-column);
+  color: var(--settings-faint-ink);
+  text-align: right;
+}
+
+.push-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  width: 100%;
+  padding: var(--space-16) var(--space-20);
+  border-top: 1px solid var(--line-card);
+  text-align: left;
+  cursor: pointer;
+}
+
+.push-line:disabled {
+  cursor: default;
+}
+
+.push-line__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.push-line__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+}
+
+.push-line__detail {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.push-line__switch {
+  position: relative;
+  flex: none;
+  width: var(--reminder-switch-width);
+  height: var(--reminder-switch-height);
+  border-radius: var(--radius-round);
+  background: var(--toggle-off-surface);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.push-line__switch::after {
+  content: '';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  width: var(--reminder-switch-knob);
+  height: var(--reminder-switch-knob);
+  border-radius: var(--radius-round);
+  background: var(--toggle-knob);
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.push-line--on .push-line__switch {
+  background: var(--toggle-on-surface);
+}
+
+.push-line--on .push-line__switch::after {
+  translate: var(--reminder-switch-travel) 0;
+}
+
+.push-line--locked .push-line__switch {
+  opacity: var(--reminder-locked-opacity);
+}
+
+@media (width <= 760px) {
+  .settings__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    margin-bottom: var(--space-24);
+  }
+
+  /* Une seule section pour l'instant : la colonne des sections ne sert à rien sur téléphone. */
+  .settings__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .settings__nav {
+    display: none;
+  }
+
+  .phone-card {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .push-lines,
+  .push-line__switch,
+  .push-line__switch::after {
+    transition: none;
+  }
+}

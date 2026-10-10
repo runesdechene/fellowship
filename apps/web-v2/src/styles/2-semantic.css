@@ -811,6 +811,26 @@
   --type-pro-month-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 
+  /* --- Les Réglages (features/settings, lot 8e) --- */
+  --settings-nav-width: 196px;
+  --settings-column-width: 760px;
+  --settings-columns-gap: 36px;
+  --settings-sections-gap: var(--space-48);
+  --settings-off-opacity: 0.45;
+  --settings-faint-ink: var(--ink-waiting);
+  --settings-nav-on-surface: var(--surface-card-hover);
+  --radius-settings-nav: var(--round-8);
+  --type-settings-section: var(--weight-semibold) var(--size-18) / var(--leading-tight)
+    var(--family-sans);
+  --type-settings-note: var(--weight-regular) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-settings-nav: var(--weight-medium) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-settings-column: var(--weight-medium) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-settings-saved: var(--weight-regular) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+
   /* =========================================================================
      LA CLOCHE — le panneau des notifications (features/notifications)
      ====================================================================== */

@@ -1,6 +1,6 @@
 /**
  * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, calendrier, création,
- *            fiche, avis, explorer, bilans, offre Pro, vitrine.
+ *            fiche, avis, explorer, bilans, offre Pro, réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            renvoie les autres sur la V1.
  */
@@ -14,6 +14,7 @@ import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { ProPage } from '@/features/pro/ProPage'
 import { ReportPage } from '@/features/reports/ReportPage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
+import { SettingsPage } from '@/features/settings/SettingsPage'
 import { WriteReviewPage } from '@/features/review/WriteReviewPage'
 import { VitrinePage } from '@/features/vitrine/VitrinePage'
 import { Login } from '@/pages/Login'
@@ -134,6 +135,16 @@ export function App() {
           <ProtectedRoute>
             <AppShell>
               <ProPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reglages"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <SettingsPage />
             </AppShell>
           </ProtectedRoute>
         }

@@ -15,3 +15,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `rich-text.ts` — nettoyage du HTML des descriptions.
 - `navigation.ts` — la navigation animée (View Transitions).
 - `page-chrome.tsx` — le décor qu'une page demande à la coquille.
+- `push-lines.ts` — les six lignes du téléphone et le message envoyé (recopié dans send-push).
+- `push-device.ts` — ce que permet ce téléphone, le « Plus tard » de l'invitation, la clé VAPID.
+- `usePhonePush.ts` — activer, couper les notifications sur ce téléphone.
+- `usePushMuted.ts` — les lignes coupées de la personne (`users.push_muted`).
