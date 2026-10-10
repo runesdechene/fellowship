@@ -70,9 +70,11 @@ function text(data: Record<string, unknown>, key: string): string | null {
   return typeof value === 'string' && value !== '' ? value : null
 }
 
-type Phrase = Pick<NotificationView, 'icon' | 'text' | 'href' | 'eyebrow' | 'action'>
+export type Phrase = Pick<NotificationView, 'icon' | 'text' | 'href' | 'eyebrow' | 'action'>
 
-function phrase(type: string, data: Record<string, unknown>): Phrase | null {
+/** Ce que dit une notification et où elle mène. La cloche l'affiche ; le téléphone la reçoit
+ *  (lib/push-lines.ts). */
+export function notificationPhrase(type: string, data: Record<string, unknown>): Phrase | null {
   const who = text(data, 'actor_name')
   const event = text(data, 'event_name')
   const eventId = text(data, 'event_id')
@@ -194,7 +196,7 @@ function phrase(type: string, data: Record<string, unknown>): Phrase | null {
 }
 
 export function notificationView(row: NotificationRow): NotificationView | null {
-  const said = phrase(row.type, row.data)
+  const said = notificationPhrase(row.type, row.data)
   if (!said) return null
   return {
     id: row.id,
