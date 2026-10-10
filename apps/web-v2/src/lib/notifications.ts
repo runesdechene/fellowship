@@ -226,13 +226,14 @@ export function notificationView(row: NotificationRow): NotificationView | null 
 
 type DayLabel = 'Aujourd’hui' | 'Cette semaine' | 'Plus tôt'
 
-export function groupByDay(
-  views: NotificationView[],
+/** Aujourd'hui · Cette semaine · Plus tôt — pour la cloche et pour le fil de la communauté. */
+export function groupByDay<T extends { at: Date }>(
+  views: T[],
   now: Date,
-): { label: DayLabel; items: NotificationView[] }[] {
+): { label: DayLabel; items: T[] }[] {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6)
-  const groups: { label: DayLabel; items: NotificationView[] }[] = [
+  const groups: { label: DayLabel; items: T[] }[] = [
     { label: 'Aujourd’hui', items: [] },
     { label: 'Cette semaine', items: [] },
     { label: 'Plus tôt', items: [] },
