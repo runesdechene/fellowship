@@ -1,5 +1,5 @@
 /**
- * QUOI     — les six lignes des notifications sur le téléphone : leur nom dans les Réglages, les
+ * QUOI     — les sept lignes des notifications sur le téléphone : leur nom dans les Réglages, les
  *            notifications que chacune porte, et le message envoyé au téléphone.
  * POURQUOI — lot 8e : la cloche reçoit tout ; chaque ligne décide si elle sonne aussi sur le
  *            téléphone (users.push_muted retient les lignes coupées). Le message est la phrase de
@@ -11,7 +11,13 @@
 import { notificationPhrase } from './notifications'
 
 export type PushLine =
-  'deadline' | 'new_edition' | 'friends' | 'discussions' | 'new_followers' | 'weekly'
+  | 'deadline'
+  | 'new_edition'
+  | 'suggestions'
+  | 'friends'
+  | 'discussions'
+  | 'new_followers'
+  | 'weekly'
 
 /** Dans l'ordre de la maquette des Réglages. */
 export const PUSH_LINES: { key: PushLine; title: string; detail: string; pro: boolean }[] = [
@@ -25,6 +31,12 @@ export const PUSH_LINES: { key: PushLine; title: string; detail: string; pro: bo
     key: 'new_edition',
     title: 'Nouvelle édition d’un festival que tu as fait',
     detail: 'Dès que l’organisateur annonce la date',
+    pro: true,
+  },
+  {
+    key: 'suggestions',
+    title: 'Suggestions pour toi',
+    detail: 'Un festival fait pour toi, au plus deux fois par semaine',
     pro: true,
   },
   {
@@ -64,6 +76,7 @@ const LINE_OF_TYPE: Record<string, PushLine> = {
   review_reply: 'discussions',
   new_follower: 'new_followers',
   weekly_new_events: 'weekly',
+  suggestion: 'suggestions',
 }
 
 /** La ligne d'une notification ; null : elle reste dans la cloche. */

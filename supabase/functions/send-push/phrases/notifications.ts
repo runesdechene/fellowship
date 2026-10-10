@@ -9,6 +9,7 @@
  */
 
 import { formatDateSpan, formatDayMonth, parseSqlDate } from './dates.ts'
+import { readReason, reasonInSentence } from './suggestions.ts'
 
 /** Les types que la cloche sait dire. La lecture ne demande QU'EUX : une limite de 50 lignes
  *  remplie de types illisibles viderait la cloche (piège vu en relecture, 09/10/2026). */
@@ -24,6 +25,7 @@ export const KNOWN_TYPES = [
   'deadline_reminder',
   'friend_added_event',
   'weekly_new_events',
+  'suggestion',
 ] as const
 
 export interface NotificationRow {
@@ -46,6 +48,7 @@ export type NotificationIcon =
   | 'edition'
   | 'deadline'
   | 'explore'
+  | 'suggestion'
 
 /** Un morceau de phrase : du texte simple, ou des mots en gras. */
 export type TextPart = string | { strong: string }
@@ -189,6 +192,20 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
         icon: 'explore',
         text: [{ strong: added }, ' sur Fellowship cette semaine.'],
         href: '/explorer',
+      }
+    }
+    case 'suggestion': {
+      const start = text(data, 'start_date')
+      const end = text(data, 'end_date')
+      const city = text(data, 'city')
+      const reason = readReason(data.reason)
+      if (!event || !fiche || !start || !end || !reason) return null
+      const dates = formatDateSpan(parseSqlDate(start), parseSqlDate(end))
+      const where = city ? ` à ${city} ${dates}` : ` ${dates}`
+      return {
+        icon: 'suggestion',
+        text: [{ strong: event }, `${where} pourrait t’intéresser : ${reasonInSentence(reason)}.`],
+        href: fiche,
       }
     }
     default:

@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import {
   KNOWN_TYPES,
   groupByDay,
+  notificationPhrase,
   notificationView,
   type NotificationRow,
   type NotificationView,
@@ -133,6 +134,7 @@ describe('KNOWN_TYPES', () => {
       days_left: 3,
       city: 'Lyon',
       count: 2,
+      reason: { kind: 'near' },
     }
     for (const type of KNOWN_TYPES) expect(notificationView(row(type, full))).not.toBeNull()
     expect(KNOWN_TYPES).toContain('thread_question')
@@ -219,5 +221,39 @@ describe('les alertes planifiées', () => {
 
   it('un récapitulatif sans nombre ne s’affiche pas', () => {
     expect(notificationView(row('weekly_new_events', {}))).toBeNull()
+  })
+})
+
+describe('suggestion', () => {
+  const data = {
+    event_id: 'e1',
+    event_name: 'Fête des Remparts',
+    city: 'Dinan',
+    start_date: '2027-07-12',
+    end_date: '2027-07-13',
+    reason: { kind: 'similar', ref_name: 'Les Médiévales de Provins' },
+  }
+  it('dit le festival, la ville, les dates et la raison', () => {
+    const said = notificationPhrase('suggestion', data)
+    expect(said?.icon).toBe('suggestion')
+    expect(said?.href).toBe('/evenement/e1')
+    expect(said?.text).toEqual([
+      { strong: 'Fête des Remparts' },
+      ' à Dinan du 12 au 13 juillet pourrait t’intéresser : proche des Médiévales de Provins.',
+    ])
+  })
+  it('sans ville, avec un ami', () => {
+    const said = notificationPhrase('suggestion', {
+      ...data,
+      city: null,
+      reason: { kind: 'friends', friend_name: 'Gautier', others: 0 },
+    })
+    expect(said?.text).toEqual([
+      { strong: 'Fête des Remparts' },
+      ' du 12 au 13 juillet pourrait t’intéresser : Gautier y va.',
+    ])
+  })
+  it('une raison illisible n’affiche rien', () => {
+    expect(notificationPhrase('suggestion', { ...data, reason: { kind: 'x' } })).toBeNull()
   })
 })

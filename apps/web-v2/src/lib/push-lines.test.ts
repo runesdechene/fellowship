@@ -1,5 +1,5 @@
 /**
- * QUOI     — tests des six lignes du téléphone et du message envoyé.
+ * QUOI     — tests des sept lignes du téléphone et du message envoyé.
  * POURQUOI — la fonction send-push se sert de ce code (recopié) : une erreur ici sonne, ou se
  *            tait, sur tous les téléphones.
  */
@@ -18,6 +18,7 @@ describe('lineOf', () => {
     ['review_reply', 'discussions'],
     ['new_follower', 'new_followers'],
     ['weekly_new_events', 'weekly'],
+    ['suggestion', 'suggestions'],
   ])('%s sonne sous la ligne %s', (type, line) => {
     expect(lineOf(type)).toBe(line)
   })
@@ -29,10 +30,11 @@ describe('lineOf', () => {
   })
 })
 
-test('les six lignes, dans l’ordre de la maquette, les deux premières Pro', () => {
+test('les sept lignes, dans l’ordre de la maquette, les trois premières Pro', () => {
   expect(PUSH_LINES.map((line) => line.key)).toEqual([
     'deadline',
     'new_edition',
+    'suggestions',
     'friends',
     'discussions',
     'new_followers',
@@ -41,6 +43,7 @@ test('les six lignes, dans l’ordre de la maquette, les deux premières Pro', (
   expect(PUSH_LINES.filter((line) => line.pro).map((line) => line.key)).toEqual([
     'deadline',
     'new_edition',
+    'suggestions',
   ])
 })
 

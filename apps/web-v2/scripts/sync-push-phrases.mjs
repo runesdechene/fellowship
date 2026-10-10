@@ -1,6 +1,6 @@
 /**
  * QUOI     — recopie les phrases de la cloche dans la fonction send-push (dates.ts,
- *            notifications.ts, push-lines.ts → supabase/functions/send-push/phrases/).
+ *            notifications.ts, push-lines.ts, suggestions.ts → supabase/functions/send-push/phrases/).
  * POURQUOI — le téléphone reçoit la même phrase que la cloche, d'une seule source. La fonction ne
  *            peut pas importer hors de supabase/functions sans risque à l'empaquetage : on recopie,
  *            en ajoutant `.ts` aux imports (Deno l'exige).
@@ -9,7 +9,7 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-const FILES = ['dates.ts', 'notifications.ts', 'push-lines.ts']
+const FILES = ['dates.ts', 'notifications.ts', 'push-lines.ts', 'suggestions.ts']
 const from = (name) => fileURLToPath(new URL(`../src/lib/${name}`, import.meta.url))
 const to = (name) =>
   fileURLToPath(new URL(`../../../supabase/functions/send-push/phrases/${name}`, import.meta.url))

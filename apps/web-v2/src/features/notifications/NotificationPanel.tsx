@@ -13,6 +13,7 @@ import {
   MessageCircleReply,
   RefreshCw,
   Star,
+  Sparkles,
   Telescope,
   User,
   type LucideIcon,
@@ -33,6 +34,7 @@ const ICONS: Record<NotificationIcon, LucideIcon> = {
   edition: CalendarPlus,
   deadline: Clock,
   explore: Telescope,
+  suggestion: Sparkles,
 }
 
 interface NotificationPanelProps {
