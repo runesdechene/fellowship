@@ -86,19 +86,22 @@ export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
         </p>
         {(line.kind === 'going' || line.kind === 'added') && <EventCard line={line} />}
         {line.kind === 'review' && <Review line={line} />}
-        <span className="feed-item__time">{timeAgo(line.at, now)}</span>
       </div>
-      {followable && (
-        <button
-          type="button"
-          className="feed-item__follow"
-          onClick={() => onFollow(followable.id)}
-          aria-label={`Suivre ${followable.name}`}
-        >
-          <Plus size={13} strokeWidth={2} />
-          Suivre
-        </button>
-      )}
+      {/* L'âge flotte en haut à droite, Suivre dessous : la ligne gagne une hauteur de texte. */}
+      <div className="feed-item__aside">
+        <span className="feed-item__time">{timeAgo(line.at, now)}</span>
+        {followable && (
+          <button
+            type="button"
+            className="feed-item__follow"
+            onClick={() => onFollow(followable.id)}
+            aria-label={`Suivre ${followable.name}`}
+          >
+            <Plus size={13} strokeWidth={2} />
+            Suivre
+          </button>
+        )}
+      </div>
     </li>
   )
 }

@@ -7,7 +7,14 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { readFeed, readFollowReason, type FeedLine, type FollowReason } from '@/lib/community'
+import {
+  readFeed,
+  readFollowReason,
+  readPeople,
+  type FeedLine,
+  type FeedPerson,
+  type FollowReason,
+} from '@/lib/community'
 import { must, supabase } from '@/lib/supabase'
 
 export interface Crossing {
@@ -17,6 +24,8 @@ export interface Crossing {
   endDate: string
   imageUrl: string | null
   companions: number
+  /** Trois visages au plus, pour les petites bulles (Uriel, 11/10/2026). */
+  faces: FeedPerson[]
 }
 
 export interface ToFollow {
@@ -51,6 +60,7 @@ async function loadCommunity(actorId: string): Promise<CommunityData> {
       endDate: row.event_end,
       imageUrl: row.event_image,
       companions: row.companions,
+      faces: readPeople(row.faces),
     })),
     toFollow: must(toFollow).flatMap((row) => {
       const reason = readFollowReason(row.reason)

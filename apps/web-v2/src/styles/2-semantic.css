@@ -730,6 +730,7 @@
   --community-avatar: var(--size-36);
   --community-side-avatar: var(--size-40);
   --community-face: 28px;
+  --community-side-face: 24px;
   --community-face-ring: 2px;
   --community-face-overlap: -8px;
   --gathering-poster-width: 140px;

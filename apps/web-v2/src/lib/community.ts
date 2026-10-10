@@ -86,7 +86,8 @@ function readEvent(row: Raw): FeedEvent | null {
   }
 }
 
-function readCompanions(raw: unknown): FeedPerson[] {
+/** Des visages (`[{id, name, avatar}]`) : compagnons d'un rassemblement ou d'une date. */
+export function readPeople(raw: unknown): FeedPerson[] {
   if (!Array.isArray(raw)) return []
   return raw
     .map((item) => {
@@ -123,7 +124,7 @@ function readLine(raw: unknown): FeedLine | null {
     stars: typeof row.stars === 'number' ? row.stars : null,
     comment: word(row.comment),
     detail: word(row.detail),
-    companions: readCompanions(row.companions),
+    companions: readPeople(row.companions),
   }
 }
 

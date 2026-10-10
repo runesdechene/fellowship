@@ -37,7 +37,13 @@ function followTarget(line: FeedLine): FeedPerson | null {
   return null
 }
 
+/** Une page par compte : changer d'enseigne repart de zéro, jamais avec le réseau de l'autre. */
 export function CommunityPage() {
+  const { actor } = useAuth()
+  return <CommunityScreen key={actor?.id ?? ''} />
+}
+
+function CommunityScreen() {
   const { actor, person, entities } = useAuth()
   const [params, setParams] = useSearchParams()
   const tab = readTab(params.get('voir'))
@@ -51,7 +57,8 @@ export function CommunityPage() {
   )
 
   const now = new Date()
-  const gathering = tab === 'tout' || tab === 'ou' ? gatheringOf(lines) : null
+  // Après une lecture ratée, rien d'ancien ne reste à l'écran : seul le message parle.
+  const gathering = !error && (tab === 'tout' || tab === 'ou') ? gatheringOf(lines) : null
   const groups = groupByDay(feedFor(lines, tab), now)
 
   function choose(next: CommunityTab) {
@@ -113,12 +120,14 @@ export function CommunityPage() {
         </div>
 
         <aside className="community__side">
-          <CrossingCard crossing={crossing} />
-          <ToFollowCard
-            accounts={toFollow}
-            followed={followed}
-            onFollow={(id) => void follow(id)}
-          />
+          {!error && <CrossingCard crossing={crossing} />}
+          {!error && (
+            <ToFollowCard
+              accounts={toFollow}
+              followed={followed}
+              onFollow={(id) => void follow(id)}
+            />
+          )}
         </aside>
       </div>
     </div>

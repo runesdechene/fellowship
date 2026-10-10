@@ -160,9 +160,18 @@
   text-decoration: underline;
 }
 
+.feed-item__aside {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-8);
+}
+
 .feed-item__time {
   font: var(--type-community-small);
   color: var(--community-faint-ink);
+  white-space: nowrap;
 }
 
 .feed-item__follow,
@@ -380,6 +389,13 @@ a.side-card__row:hover {
   border-radius: var(--community-poster-radius);
   background: var(--surface-chip-neutral);
   object-fit: cover;
+}
+
+.side-card__face {
+  --avatar-size: var(--community-side-face);
+  --avatar-overlap: var(--community-face-overlap);
+
+  border: var(--community-face-ring) solid var(--surface-card);
 }
 
 .side-card__avatar {

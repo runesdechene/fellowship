@@ -13,6 +13,7 @@ import {
   gatheringOf,
   readFeed,
   readFollowReason,
+  readPeople,
   readTab,
   type FeedLine,
 } from './community'
@@ -225,4 +226,11 @@ test('canFollow : jamais un compte suivi, jamais un des siens', () => {
   expect(canFollow('f1', followed, own)).toBe(false)
   expect(canFollow('shop', followed, own)).toBe(false)
   expect(canFollow('other', followed, own)).toBe(true)
+})
+
+test('readPeople : des visages lus, les illisibles ignorés', () => {
+  expect(
+    readPeople([{ id: 'a', name: ' Lina ', avatar: null }, { id: 'b', name: '' }, 'x']),
+  ).toEqual([{ id: 'a', name: 'Lina', avatarUrl: null, slug: null }])
+  expect(readPeople(null)).toEqual([])
 })

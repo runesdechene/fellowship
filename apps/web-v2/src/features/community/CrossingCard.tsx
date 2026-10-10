@@ -1,9 +1,10 @@
 /**
  * QUOI     — « Où vous vous croiserez » : les trois prochaines dates de l'exposant où vont aussi des
- *            comptes qu'il suit.
+ *            comptes qu'il suit, avec leurs visages en petites bulles.
  * POURQUOI — lot 9a, maquette 2212:2. Rien à montrer : la carte ne s'affiche pas.
  */
 import { Link } from 'react-router-dom'
+import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import type { Crossing } from './useCommunity'
 
@@ -30,6 +31,16 @@ export function CrossingCard({ crossing }: { crossing: Crossing[] }) {
                   {date.companions} {date.companions === 1 ? 'compagnon' : 'compagnons'}
                 </span>
               </span>
+              <AvatarStack>
+                {date.faces.map((face) => (
+                  <Avatar
+                    key={face.id}
+                    className="side-card__face"
+                    src={face.avatarUrl}
+                    name={face.name}
+                  />
+                ))}
+              </AvatarStack>
             </Link>
           </li>
         ))}
