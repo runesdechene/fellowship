@@ -85,6 +85,12 @@ export function entityLine(
   }
 }
 
+/** Ce que l'aperçu dit d'une enseigne partagée qui reste : son abonnement s'arrête en fin de
+ *  période (Uriel, 11/10/2026) — personne n'est prélevé après son départ. */
+export function keptNote(endsOn: string | null): string {
+  return endsOn ? ` — son abonnement Pro s’arrête le ${formatFullDate(new Date(endsOn))}` : ''
+}
+
 export function confirmsDeletion(typed: string): boolean {
   return typed.trim() === 'SUPPRIMER'
 }

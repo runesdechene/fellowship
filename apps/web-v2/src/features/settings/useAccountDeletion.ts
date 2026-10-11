@@ -11,7 +11,8 @@ import { supabase } from '@/lib/supabase'
 
 export interface Preview {
   deleted: { entityActorId: string; brandName: string; subscribed: boolean }[]
-  kept: { entityActorId: string; brandName: string }[]
+  /** endsOn : la fin de la période payée, quand l'abonnement de l'enseigne s'y arrête. */
+  kept: { entityActorId: string; brandName: string; endsOn: string | null }[]
 }
 
 export function useAccountDeletion() {

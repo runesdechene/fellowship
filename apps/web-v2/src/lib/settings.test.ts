@@ -8,6 +8,7 @@ import { describe, expect, test } from 'vitest'
 import {
   cleanProfileValue,
   confirmsDeletion,
+  keptNote,
   entityLine,
   profileProblem,
   type EntityBilling,
@@ -119,5 +120,14 @@ describe('confirmsDeletion', () => {
     expect(confirmsDeletion('  SUPPRIMER ')).toBe(true)
     expect(confirmsDeletion('supprimer')).toBe(false)
     expect(confirmsDeletion('SUPPRIME')).toBe(false)
+  })
+})
+
+describe('keptNote', () => {
+  test('une enseigne gardée avec un abonnement : il s’arrête en fin de période', () => {
+    expect(keptNote('2026-11-12T10:00:00Z')).toBe(
+      ' — son abonnement Pro s’arrête le 12 novembre 2026',
+    )
+    expect(keptNote(null)).toBe('')
   })
 })

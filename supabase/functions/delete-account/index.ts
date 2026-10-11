@@ -2,7 +2,7 @@
 //
 // Auth : verify_jwt = true ; la personne ne peut supprimer que SON compte (user.id du jeton).
 // { confirm: false } rend l'aperçu ; { confirm: true } exécute le même plan (deletion-plan.ts).
-// Ordre : héritiers → enseignes supprimées (Stripe, fichiers, ligne actors) → fichiers de la
+// Ordre : enseignes gardées (abonnement arrêté en fin de période, héritiers) → enseignes supprimées (Stripe, fichiers, ligne actors) → fichiers de la
 // personne → ligne actors de la personne (cascade) → connexion. Chaque étape se rejoue sans
 // planter sur ce qui a déjà disparu.
 // Spec : docs/superpowers/specs/2026-10-11-lot-9b-reglages-v2-design.md.
@@ -41,12 +41,20 @@ Deno.serve(async (req) => {
     if (!confirm) {
       return json({
         deleted: plan.deleted.map((e) => ({ ...e, subscribed: subscribed(e.entityActorId) })),
-        kept: plan.kept.map(({ entityActorId, brandName }) => ({ entityActorId, brandName })),
+        kept: plan.kept.map(({ entityActorId, brandName }) => ({
+          entityActorId,
+          brandName,
+          endsOn: subscribed(entityActorId) ? (entities.get(entityActorId)?.current_period_end ?? null) : null,
+        })),
       })
     }
 
     step = 'heirs'
     for (const entity of plan.kept) {
+      // Personne n'est prélevé après son départ : l'abonnement d'une enseigne partagée s'arrête en
+      // fin de période (Uriel, 11/10/2026) ; l'autre membre garde le Pro jusque-là.
+      const subscriptionId = entities.get(entity.entityActorId)?.stripe_subscription_id
+      if (subscriptionId && subscribed(entity.entityActorId)) await endAtPeriodEnd(subscriptionId)
       if (!entity.heirActorId) continue
       await must(admin.from('memberships').update({ role: 'owner' })
         .eq('entity_actor_id', entity.entityActorId).eq('user_actor_id', entity.heirActorId))
@@ -88,7 +96,8 @@ async function readMemberships(admin: ReturnType<typeof getSupabaseAdmin>, perso
   const [all, rows] = await Promise.all([
     admin.from('memberships').select('user_actor_id, entity_actor_id, role, created_at')
       .in('entity_actor_id', ids).order('created_at'),
-    admin.from('entities').select('actor_id, brand_name, stripe_subscription_id, subscription_status')
+    admin.from('entities')
+      .select('actor_id, brand_name, stripe_subscription_id, subscription_status, current_period_end')
       .in('actor_id', ids),
   ])
   if (all.error) throw all.error
@@ -111,6 +120,19 @@ async function cancelSubscription(subscriptionId: string) {
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId)
     if (shouldCancel(subscription.status)) await stripe.subscriptions.cancel(subscriptionId)
+  } catch (err) {
+    if ((err as { code?: string }).code !== 'resource_missing') throw err
+  }
+}
+
+/** Arrête l'abonnement à la fin de la période payée ; un abonnement terminé ou disparu ne gêne pas. */
+async function endAtPeriodEnd(subscriptionId: string) {
+  const stripe = getStripe()
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    if (shouldCancel(subscription.status) && !subscription.cancel_at_period_end) {
+      await stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true })
+    }
   } catch (err) {
     if ((err as { code?: string }).code !== 'resource_missing') throw err
   }

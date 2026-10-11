@@ -9,7 +9,7 @@
 import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { confirmsDeletion } from '@/lib/settings'
+import { confirmsDeletion, keptNote } from '@/lib/settings'
 import { useAccountDeletion } from './useAccountDeletion'
 
 function DeleteDialog({ onClose }: { onClose: () => void }) {
@@ -80,7 +80,10 @@ function DeleteDialog({ onClose }: { onClose: () => void }) {
             <p className="delete-dialog__label">Restent à leurs autres membres</p>
             <ul className="delete-dialog__list">
               {preview.kept.map((entity) => (
-                <li key={entity.entityActorId}>{entity.brandName}</li>
+                <li key={entity.entityActorId}>
+                  <b>{entity.brandName}</b>
+                  {keptNote(entity.endsOn)}
+                </li>
               ))}
             </ul>
           </div>
