@@ -308,7 +308,7 @@
     margin-bottom: var(--space-24);
   }
 
-  /* Une seule section pour l'instant : la colonne des sections ne sert à rien sur téléphone. */
+  /* Sur téléphone, les sections s'empilent : la colonne qui y mène ne sert à rien. */
   .settings__body {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -318,6 +318,25 @@
   }
 
   .phone-card {
+    flex-wrap: wrap;
+  }
+
+  /* Une ligne : le libellé, puis le contrôle dessous ; un champ prend toute la largeur. */
+  .setting-row {
+    flex-wrap: wrap;
+    gap: var(--space-10);
+  }
+
+  .setting-row__control {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+  }
+
+  .setting-input {
+    width: 100%;
+  }
+
+  .delete-account {
     flex-wrap: wrap;
   }
 }

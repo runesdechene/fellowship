@@ -31,8 +31,38 @@ const SAYS: Record<SaveState, string> = {
   failed: 'Pas enregistré — réessaie',
 }
 
+/** La section qui occupe le haut de l'écran : celle que la colonne allume. */
+function useVisibleSection(): string {
+  const [visible, setVisible] = useState<string>(SECTIONS[0].id)
+  useEffect(() => {
+    // L'observateur ne rapporte que ce qui change : on garde l'ensemble des sections présentes
+    // dans le haut de l'écran, et la première dans l'ordre de la page l'emporte.
+    const present = new Set<string>()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) present.add(entry.target.id)
+          else present.delete(entry.target.id)
+        }
+        const first = SECTIONS.find((section) => present.has(section.id))
+        if (first) setVisible(first.id)
+      },
+      { rootMargin: '-10% 0px -55% 0px' }, // la bande sous la barre du haut
+    )
+    for (const { id } of SECTIONS) {
+      const section = document.getElementById(id)
+      if (section) observer.observe(section)
+    }
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+  return visible
+}
+
 export function SettingsPage() {
   const [saveState, setSaveState] = useState<SaveState>('idle')
+  const visible = useVisibleSection()
 
   // « Enregistré » ne reste qu'un instant ; un échec reste jusqu'au prochain essai.
   useEffect(() => {
@@ -62,7 +92,15 @@ export function SettingsPage() {
       <div className="settings__body">
         <nav className="settings__nav" aria-label="Sections des Réglages">
           {SECTIONS.map((section) => (
-            <a key={section.id} className="settings__nav-item" href={`#${section.id}`}>
+            <a
+              key={section.id}
+              className={
+                section.id === visible
+                  ? 'settings__nav-item settings__nav-item--on'
+                  : 'settings__nav-item'
+              }
+              href={`#${section.id}`}
+            >
               {section.label}
             </a>
           ))}

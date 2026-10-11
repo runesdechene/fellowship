@@ -5,7 +5,7 @@
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
  * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
-import { CalendarDays, Check, CircleGauge, Telescope, Users } from 'lucide-react'
+import { CalendarDays, Check, CircleGauge, Settings, Telescope, Users } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
@@ -64,6 +64,17 @@ export function TabBar() {
               {item.id === actor?.id && <Check size={16} strokeWidth={2} />}
             </button>
           ))}
+          <NavLink
+            to="/reglages"
+            role="menuitem"
+            className="tab-sheet__item tab-sheet__link"
+            onClick={() => {
+              setOpen(false)
+            }}
+          >
+            <Settings size={18} strokeWidth={1.8} />
+            <span>Réglages</span>
+          </NavLink>
           <div className="tab-sheet__theme">
             <ThemeSwitch />
           </div>

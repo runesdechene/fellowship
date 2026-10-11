@@ -68,6 +68,15 @@
     background: var(--surface-control-hover);
   }
 
+  /* « Réglages » : une entrée du menu, pas un compte. */
+  .tab-sheet__link {
+    border-top: 1px solid var(--line-card);
+    border-radius: 0;
+    font: var(--type-settings-nav);
+    color: var(--ink-title);
+    text-decoration: none;
+  }
+
   .tab-sheet__avatar {
     --avatar-size: var(--avatar-size-account);
   }

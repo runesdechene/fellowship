@@ -1,8 +1,18 @@
 # features/settings — les Réglages
 
-- `SettingsPage.tsx` — `/reglages` : le titre, la colonne des sections, les sections. Seule la
-  section Notifications existe (lot 8e) ; Profil, Compte, Enseignes et abonnement, Contact
-  arrivent au lot 9.
-- `NotificationSettings.tsx` — la section Notifications : la carte du téléphone, puis les six
-  lignes et leur interrupteur « Téléphone ».
-- `PhoneCard.tsx` — la carte du téléphone : activer, couper, ou dire pourquoi c'est impossible.
+`/reglages` (lot 8e, puis lot 9b, maquette 2206:691). Chaque changement s'enregistre aussitôt.
+
+- `SettingsPage.tsx` — la page : l'en-tête (« Enregistré »), la colonne qui suit le défilement, les
+  sections.
+- `SettingRow.tsx` — la carte et sa ligne (libellé, aide, contrôle) : toutes les sections en sont
+  faites.
+- `ProfileSection.tsx` — photo, nom, ville, code postal, genre, lien vers la vitrine.
+- `useProfileSave.ts` — écrire un morceau de `users` et relire l'identité.
+- `AccountSection.tsx` — l'adresse de connexion, se déconnecter.
+- `NotificationSettings.tsx` — la carte du téléphone, puis les lignes et leur interrupteur.
+- `PhoneCard.tsx` — activer, couper, ou dire pourquoi c'est impossible.
+- `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro.
+- `useUpcomingCounts.ts` — les dates de chaque enseigne sur les 6 prochains mois.
+- `ContactSection.tsx` — écrire à l'équipe.
+- `DeleteAccount.tsx` — la carte « Supprimer mon compte » et sa fenêtre de confirmation.
+- `useAccountDeletion.ts` — l'aperçu puis la suppression, par la fonction serveur `delete-account`.
