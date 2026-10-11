@@ -1,12 +1,13 @@
 /**
- * QUOI     — les styles de la connexion (pages/Login.tsx) : le formulaire à gauche, le mur
- *            d'affiches à droite.
- * POURQUOI — maquettes 2100:2 et 2100:38 (lot 10a) : un titre en serif, un champ bordé d'encre, un
- *            bouton noir pleine largeur ; le mur sombre arrondi occupe la moitié droite.
- * ATTENTION — sur téléphone, le mur disparaît : le formulaire prend toute la largeur.
+ * QUOI     — la « porte d'entrée » : le gabarit commun de la connexion (pages/Login.tsx) et de
+ *            l'arrivée (features/welcome) — logo, formulaire à gauche, panneau arrondi à droite,
+ *            titre en serif, champ bordé, bouton noir pleine largeur.
+ * POURQUOI — maquettes 2100:2, 2100:38, 2102:72, 2244:2, 2244:53 (lot 10a) : les cinq écrans
+ *            partagent ce gabarit ; un seul style pour tous (Méthode, 11/10/2026).
+ * ATTENTION — sur téléphone, le panneau de droite disparaît : le formulaire prend toute la largeur.
  */
 
-.login {
+.door {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-24);
@@ -16,7 +17,7 @@
   color: var(--ink-title);
 }
 
-.login__side {
+.door__side {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -24,7 +25,7 @@
   padding: var(--space-96) var(--space-24);
 }
 
-.login__logo {
+.door__logo {
   position: absolute;
   top: var(--space-32);
   left: var(--space-48);
@@ -32,166 +33,165 @@
   height: 37px;
 }
 
-.login__form {
+.door__form {
   display: flex;
   flex-direction: column;
   gap: var(--space-28);
-  width: min(var(--login-form-width), 100%);
+  width: min(var(--door-form-width), 100%);
   margin-inline: auto;
 }
 
-.login__head {
+.door__head {
   display: flex;
   flex-direction: column;
   gap: var(--space-12);
 }
 
-.login__title {
-  font: var(--type-login-title);
+.door__title {
+  font: var(--type-door-title);
   letter-spacing: var(--tracking-tight);
 }
 
-.login__lead {
-  font: var(--type-login-lead);
+.door__lead {
+  font: var(--type-door-lead);
   color: var(--ink-soft);
 }
 
-.login__lead b {
+.door__lead b {
   font-weight: var(--weight-medium);
   color: var(--ink-title);
 }
 
-.login__field {
+.door__field {
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
 }
 
-.login__label {
-  font: var(--type-login-label);
+.door__label {
+  font: var(--type-door-label);
 }
 
-.login__input {
+.door__input {
   display: flex;
   align-items: center;
   gap: var(--space-10);
-  padding: var(--login-field-padding);
-  border: var(--login-field-line) solid var(--line-card);
-  border-radius: var(--radius-login-field);
+  padding: var(--door-field-padding);
+  border: var(--door-field-line) solid var(--line-card);
+  border-radius: var(--radius-door-field);
   background: var(--surface-card);
   color: var(--ink-soft);
   transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.login__input:focus-within {
+.door__input:focus-within {
   border-color: var(--ink-title);
 }
 
-.login__input input {
+.door__input input {
   flex: 1;
   min-width: 0;
   border: none;
   outline: none;
   background: none;
-  font: var(--type-login-input);
+  font: var(--type-door-input);
   color: var(--ink-title);
 }
 
-.login__submit {
+.door__submit {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-8);
   padding: var(--space-14) var(--space-16);
-  border-radius: var(--radius-login-field);
+  border-radius: var(--radius-door-field);
   background: var(--action-surface);
-  font: var(--type-login-submit);
+  font: var(--type-door-submit);
   color: var(--action-ink);
   cursor: pointer;
   transition: background var(--duration-fast) var(--ease-out);
 }
 
-.login__submit:hover:not(:disabled) {
+.door__submit:hover:not(:disabled) {
   background: var(--action-surface-hover);
 }
 
-.login__submit:disabled {
+.door__submit:disabled {
   cursor: default;
   opacity: var(--settings-off-opacity);
 }
 
-.login__back {
+.door__back {
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
   width: fit-content;
-  font: var(--type-login-label);
+  font: var(--type-door-label);
   color: var(--ink-soft);
   cursor: pointer;
 }
 
-.login__note,
-.login__legal {
-  font: var(--type-login-note);
+.door__note,
+.door__legal {
+  font: var(--type-door-note);
   color: var(--ink-section-pale);
 }
 
-.login__resend {
+.door__resend {
   font: inherit;
   color: var(--ink-title);
   text-decoration: underline;
   cursor: pointer;
 }
 
-.login__error {
-  font: var(--type-login-note);
+.door__error {
+  font: var(--type-door-note);
   color: var(--danger-ink);
 }
 
-.login__legal {
+.door__legal {
   position: absolute;
   bottom: var(--space-24);
   left: 50%;
   translate: -50% 0;
-  width: min(var(--login-form-width), 100%);
-  font: var(--type-login-legal);
+  width: min(var(--door-form-width), 100%);
+  font: var(--type-door-legal);
 }
 
-.login__legal a {
+.door__legal a {
   color: inherit;
   text-decoration: underline;
 }
 
-/* --- Le mur (features/login/LoginWall.tsx) ------------------------------- */
-.login__wall {
+/* --- Le panneau de droite : le mur (connexion) ou la vitrine en direct (arrivée) --- */
+.door__panel {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-login-wall);
-  background: var(--login-wall-surface);
+  border-radius: var(--radius-door-panel);
 }
 
 @media (width <= 760px) {
-  .login {
+  .door {
     grid-template-columns: minmax(0, 1fr);
     padding: 0;
   }
 
-  .login__side {
+  .door__side {
     padding: var(--space-96) var(--mobile-gutter) var(--space-96);
   }
 
-  .login__logo {
+  .door__logo {
     left: var(--mobile-gutter);
   }
 
-  .login__wall {
+  .door__panel {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .login__input,
-  .login__submit {
+  .door__input,
+  .door__submit {
     transition: none;
   }
 }

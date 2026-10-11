@@ -18,6 +18,8 @@
   --sand-50: #fcfbf9; /* le panneau de contenu */
   --sand-100: #f7f6f3; /* survol d'une ligne */
   --sand-200: #f2f0ec; /* surfaces discrètes : pastilles, barres, puces */
+  --sand-75: #f6f2ed; /* la bannière en attente d'une vitrine (fin du dégradé) */
+  --sand-225: #ede7de; /* la bannière en attente d'une vitrine (début du dégradé) */
   --sand-250: #f3f0e9; /* le fond de la barre latérale d'Uriel */
   --sand-300: #ebe9e5; /* les filets */
   --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
@@ -104,6 +106,8 @@
   --size-32: 32px;
   --size-36: 36px;
   --size-40: 40px;
+  --size-38: 38px;
+  --size-44: 44px;
   --size-48: 48px;
   --size-52: 52px;
   --size-56: 56px;
@@ -158,6 +162,7 @@
   --space-48: 48px;
   --space-51: 51px;
   --space-80: 80px;
+  --space-64: 64px;
   --space-96: 96px;
   --space-112: 112px;
   --space-150: 150px; /* la respiration au-dessus du titre d’une fiche */

@@ -70,6 +70,7 @@
 @import './3-components/event-reviews.css';
 @import './3-components/review-form.css';
 @import './3-components/discussion.css';
-@import './3-components/login.css';
+@import './3-components/door.css';
 @import './3-components/code-input.css';
 @import './3-components/login-wall.css';
+@import './3-components/welcome.css';

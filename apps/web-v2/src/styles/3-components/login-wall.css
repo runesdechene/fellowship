@@ -6,6 +6,10 @@
  *            saut. La colonne du milieu va dans l'autre sens.
  */
 
+.login-wall {
+  background: var(--login-wall-surface);
+}
+
 .login-wall__columns {
   position: absolute;
   inset: 0;
@@ -71,7 +75,7 @@
 }
 
 .login-wall__count {
-  font: var(--type-login-note);
+  font: var(--type-door-note);
   opacity: var(--login-wall-count-opacity);
 }
 

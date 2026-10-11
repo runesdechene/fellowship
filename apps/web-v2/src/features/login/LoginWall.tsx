@@ -18,7 +18,7 @@ export function LoginWall() {
   )
 
   return (
-    <div className="login__wall" aria-hidden="true">
+    <div className="door__panel login-wall" aria-hidden="true">
       <div className="login-wall__columns">
         {columns.map((column, index) => (
           <div key={index} className="login-wall__column">

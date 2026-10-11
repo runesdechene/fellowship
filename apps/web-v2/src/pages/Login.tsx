@@ -70,26 +70,26 @@ export function Login() {
   }
 
   return (
-    <div className="login">
-      <div className="login__side">
-        <img className="login__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
+    <div className="door">
+      <div className="door__side">
+        <img className="door__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
         {step === 'email' ? (
           <form
-            className="login__form"
+            className="door__form"
             onSubmit={(event: FormEvent) => {
               event.preventDefault()
               void send()
             }}
           >
-            <div className="login__head">
-              <h1 className="login__title">Bienvenue sur Fellowship</h1>
-              <p className="login__lead">
+            <div className="door__head">
+              <h1 className="door__title">Bienvenue sur Fellowship</h1>
+              <p className="door__lead">
                 Ton e-mail suffit : on t’envoie un code, pas de mot de passe à retenir.
               </p>
             </div>
-            <label className="login__field">
-              <span className="login__label">E-mail</span>
-              <span className="login__input">
+            <label className="door__field">
+              <span className="door__label">E-mail</span>
+              <span className="door__input">
                 <Mail size={16} strokeWidth={1.8} aria-hidden="true" />
                 <input
                   type="email"
@@ -104,20 +104,20 @@ export function Login() {
                 />
               </span>
             </label>
-            <button type="submit" className="login__submit" disabled={busy}>
+            <button type="submit" className="door__submit" disabled={busy}>
               {busy ? 'Envoi…' : 'Recevoir mon code'}
               {!busy && <ArrowRight size={16} strokeWidth={2} />}
             </button>
-            {error && <p className="login__error">{error}</p>}
-            <p className="login__note">
+            {error && <p className="door__error">{error}</p>}
+            <p className="door__note">
               Nouveau ? Le même e-mail crée ton compte en quelques secondes.
             </p>
           </form>
         ) : (
-          <div className="login__form">
+          <div className="door__form">
             <button
               type="button"
-              className="login__back"
+              className="door__back"
               onClick={() => {
                 setStep('email')
                 setError(null)
@@ -126,27 +126,27 @@ export function Login() {
               <ChevronLeft size={14} strokeWidth={2} />
               Changer d’e-mail
             </button>
-            <div className="login__head">
-              <h1 className="login__title">Ton code</h1>
-              <p className="login__lead">
+            <div className="door__head">
+              <h1 className="door__title">Ton code</h1>
+              <p className="door__lead">
                 Envoyé à <b>{email.trim()}</b>.
               </p>
             </div>
             <CodeInput value={code} onChange={onCode} disabled={busy} autoFocus />
-            {error && <p className="login__error">{error}</p>}
-            <p className="login__note">
+            {error && <p className="door__error">{error}</p>}
+            <p className="door__note">
               Pas reçu ? Regarde dans tes indésirables, ou{' '}
               {wait > 0 ? (
                 `renvoie un code dans ${String(wait)} s.`
               ) : (
-                <button type="button" className="login__resend" onClick={() => void send()}>
+                <button type="button" className="door__resend" onClick={() => void send()}>
                   renvoie un code
                 </button>
               )}
             </p>
           </div>
         )}
-        <p className="login__legal">
+        <p className="door__legal">
           En continuant, tu acceptes les <a href="/legal/cgu">CGU</a> et la{' '}
           <a href="/legal/confidentialite">Politique de confidentialité</a>.
         </p>

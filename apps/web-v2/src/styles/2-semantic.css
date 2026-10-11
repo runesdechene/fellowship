@@ -920,11 +920,11 @@
   --delete-dialog-width: 460px;
 
   /* --- La connexion (pages/Login.tsx, lot 10a, maquettes 2100:2 et 2100:38) --- */
-  --login-form-width: 440px;
-  --login-field-padding: 14px 16px;
-  --login-field-line: 1.5px;
-  --radius-login-field: var(--round-12);
-  --radius-login-wall: var(--round-24);
+  --door-form-width: 440px;
+  --door-field-padding: 14px 16px;
+  --door-field-line: 1.5px;
+  --radius-door-field: var(--round-12);
+  --radius-door-panel: var(--round-24);
   --login-wall-surface: var(--ink-950); /* le mur reste sombre dans les deux thèmes */
   --login-wall-empty: var(--ink-850);
   --login-wall-ink: var(--sand-0);
@@ -938,16 +938,30 @@
   --login-wall-poster-opacity: 0.92;
   --login-wall-title-width: 620px;
   --login-wall-count-opacity: 0.7;
+  /* L'arrivée (features/welcome, maquettes 2102:72, 2244:2, 2244:53). */
+  --welcome-dash: 16px;
+  --welcome-dash-current: 28px;
+  --welcome-dash-height: 4px;
+  --welcome-dash-off: var(--sand-400);
+  --welcome-panel-surface: var(--sand-200);
+  --welcome-banner: linear-gradient(to right, var(--sand-225), var(--sand-75));
+  --welcome-banner-height: 180px;
+  --welcome-decor-size: 320px;
+  --welcome-decor-ink: var(--sand-400);
+  --welcome-logo-size: 104px;
+  --welcome-bar-width: 150px;
+  --welcome-block-height: 110px;
+  --type-welcome-name: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
+  --type-welcome-initials: var(--weight-regular) var(--size-38) / 1 var(--family-display);
   --code-box-width: 64px;
   --code-box-height: 72px;
-  --type-login-title: var(--weight-regular) var(--size-52) / 1 var(--family-display);
-  --type-login-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
-  --type-login-label: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
-  --type-login-input: var(--weight-medium) var(--size-16) / var(--leading-snug) var(--family-sans);
-  --type-login-submit: var(--weight-semibold) var(--size-15) / var(--leading-snug)
-    var(--family-sans);
-  --type-login-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
-  --type-login-legal: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-door-title: var(--weight-regular) var(--size-52) / 1 var(--family-display);
+  --type-door-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
+  --type-door-label: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-door-input: var(--weight-medium) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-door-submit: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
+  --type-door-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-door-legal: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-login-wall-title: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
   --type-code-digit: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --setting-input-width: 300px;
@@ -1204,6 +1218,10 @@
   --toggle-off-surface: var(--night-400);
   --toggle-knob: var(--cream-50);
   --danger-ink: var(--brique-400);
+  --welcome-dash-off: var(--night-400);
+  --welcome-panel-surface: var(--night-50);
+  --welcome-banner: linear-gradient(to right, var(--night-200), var(--night-100));
+  --welcome-decor-ink: var(--night-300);
   --required-ink: var(--cream-500);
   --dropzone-border: var(--night-400);
   --report-gauge-track: var(--night-400);
