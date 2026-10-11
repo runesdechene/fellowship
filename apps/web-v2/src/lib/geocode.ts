@@ -8,6 +8,8 @@
  */
 
 const BAN = 'https://api-adresse.data.gouv.fr/search/'
+/** Une BAN lente ne doit jamais retenir la création : passé ce délai, on fait sans elle. */
+const PATIENCE_MS = 3000
 
 export interface PlaceSuggestion {
   label: string
@@ -60,7 +62,7 @@ export function banUrl(query: string, options: { type?: 'municipality'; limit?: 
 
 async function ask(url: string): Promise<PlaceSuggestion[]> {
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, { signal: AbortSignal.timeout(PATIENCE_MS) })
     if (!response.ok) return []
     return readBan(await response.json())
   } catch {

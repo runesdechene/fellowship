@@ -9,7 +9,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 import { canActOn, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { AddressField } from './AddressField'
-import { addressTyped, placePicked, type EventDraft } from './useEventDraft'
+import { addressTyped, placePicked, placeTyped, type EventDraft } from './useEventDraft'
 
 /* --------------------------------- Étapes -------------------------------- */
 
@@ -69,14 +69,14 @@ export function StepPlace({
           <Field label="Ville" required>
             <Input
               value={draft.city}
-              onChange={(event) => update('city', event.target.value)}
+              onChange={(event) => patch(placeTyped('city', event.target.value))}
               placeholder="Provins"
             />
           </Field>
           <Field label="Département" required>
             <Input
               value={draft.department}
-              onChange={(event) => update('department', event.target.value)}
+              onChange={(event) => patch(placeTyped('department', event.target.value))}
               placeholder="77"
             />
           </Field>

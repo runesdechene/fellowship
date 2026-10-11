@@ -3,8 +3,8 @@
  *            d'un code INSEE, adresse de recherche.
  * POURQUOI — lot 10b : une position fausse met un festival au mauvais endroit de la carte.
  */
-import { describe, expect, test } from 'vitest'
-import { banUrl, departmentOfCitycode, readBan } from './geocode'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import { banUrl, departmentOfCitycode, readBan, searchPlaces } from './geocode'
 
 describe('departmentOfCitycode', () => {
   test('deux chiffres, la Corse en lettres, les outre-mer sur trois', () => {
@@ -50,4 +50,20 @@ describe('banUrl', () => {
     )
     expect(banUrl('Ménétrol', { type: 'municipality', limit: 10 })).toContain('&type=municipality')
   })
+})
+
+describe('une BAN qui ne répond pas', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  test('on n’attend pas plus de trois secondes : la recherche rend une liste vide', async () => {
+    // Une BAN qui accepte la connexion mais ne répond jamais : seul l'abandon la fait céder.
+    vi.stubGlobal('fetch', (_url: string, init?: RequestInit) => {
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => reject(new Error('abandon')))
+      })
+    })
+    await expect(searchPlaces('place de jaude')).resolves.toEqual([])
+  }, 4500)
 })

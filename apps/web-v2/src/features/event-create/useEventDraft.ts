@@ -100,9 +100,16 @@ export function placePicked(place: PlaceSuggestion): Partial<EventDraft> {
   }
 }
 
+const NO_POSITION = { latitude: null, longitude: null, geoPrecision: '' } as const
+
 /** Une adresse retouchée à la main ne garde pas la position d'une autre. */
 export function addressTyped(address: string): Partial<EventDraft> {
-  return { address, latitude: null, longitude: null, geoPrecision: '' }
+  return { address, ...NO_POSITION }
+}
+
+/** Ni une ville, ni un département retouchés : la position suivait l'ancien lieu. */
+export function placeTyped(key: 'city' | 'department', value: string): Partial<EventDraft> {
+  return { [key]: value, ...NO_POSITION }
 }
 
 /** Étapes du parcours, dans l'ordre. */
@@ -131,6 +138,15 @@ export function blockingReason(draft: EventDraft, step: number): string | null {
     return draft.tags.length > 0 ? null : 'Choisis au moins une catégorie.'
   }
   return null
+}
+
+/**
+ * La première étape qui bloque, ou `null`. La barre laisse revenir à une étape faite et en
+ * repartir sans repasser par « Continuer » : la création revérifie donc tout.
+ */
+export function firstBlockedStep(draft: EventDraft): number | null {
+  const index = STEPS.findIndex((_, step) => blockingReason(draft, step) !== null)
+  return index === -1 ? null : index
 }
 
 /**

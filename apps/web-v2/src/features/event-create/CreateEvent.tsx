@@ -22,7 +22,7 @@ import { CreateBar } from './CreateBar'
 import { EventPreview } from './EventPreview'
 import { useSimilarEvents } from './useSimilarEvents'
 import { useTags } from './useTags'
-import { blockingReason, STEPS, useEventDraft } from './useEventDraft'
+import { blockingReason, firstBlockedStep, STEPS, useEventDraft } from './useEventDraft'
 import { DuplicateList } from './DuplicateList'
 import { StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
 
@@ -109,6 +109,12 @@ export function CreateEvent() {
 
   async function submit() {
     if (!actor) return
+    const blocked = firstBlockedStep(draft)
+    if (blocked !== null) {
+      setShowBlocker(true)
+      transition('step-back', () => setStep(blocked))
+      return
+    }
     setSaving(true)
     setError(null)
 
