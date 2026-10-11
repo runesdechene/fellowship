@@ -12,7 +12,7 @@
 5. **La couleur vient des affiches et des tags.** Un tag porte toujours sa couleur (réglée dans l'administration).
 6. **La terre du logo dit « pérenne »** (`--brand-gradient`, dégradé orangé, doré) : ce qui dure — bénéfice des bilans, acquis, Pro. Exceptions assumées : l'onglet actif sur mobile, l'action principale de la landing. *(Révisé le 11/10/2026 : « inscrit » et « payé » passent au vert de validation.)*
 7. **Les statuts se lisent par la forme et la couleur** : intéressé = cercle vide, dossier envoyé = cercle à moitié plein, **bleu doux**, **inscrit = vert de validation**. Le gris pour ce qui n'est pas encore décidé.
-8. **Le vert dit « validé »** (inscrit, payé), accordé à la terre du logo. La nuit, les statuts passent au **jade** (validé) et au **bleu glacier** (dossier envoyé) : un voile translucide, un filet de la teinte, une encre lumineuse — jamais d'aplat vif ni de texte blanc. Pas de vert de décor : seul le point « en direct » et les statuts validés en portent. *(Uriel, 11/10/2026 : « plus de vert » visait le décor, pas les statuts.)*
+8. **Le vert dit « validé »** (inscrit, payé), accordé à la terre du logo. La nuit, les statuts passent à la **menthe** (validé) et à la **pervenche** (dossier envoyé) : un voile translucide, un filet de la teinte, une encre lumineuse — jamais d'aplat vif ni de texte blanc. Pas de vert de décor : seul le point « en direct » et les statuts validés en portent. *(Uriel, 11/10/2026 : « plus de vert » visait le décor, pas les statuts.)*
 9. **Le bouton principal est noir** ; un lien est à l'encre, avec une flèche.
 10. **Le Pro se signale par une petite pastille noire « Pro »**, jamais par un cadenas.
 

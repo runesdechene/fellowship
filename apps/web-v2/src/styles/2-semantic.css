@@ -1110,15 +1110,15 @@
   --status-pending-surface-hover: var(--night-150);
   --status-pending-icon: var(--cream-650);
   /* La nuit : un voile translucide de la teinte, un filet de la même teinte, une encre lumineuse —
-     jade pour le validé, bleu glacier pour le dossier envoyé (Uriel, 11/10/2026). */
-  --status-validated-ink: var(--jade-400);
-  --status-validated-surface: color-mix(in srgb, var(--jade-400) 14%, transparent);
-  --status-validated-mark: var(--jade-400);
-  --status-validated-line: color-mix(in srgb, var(--jade-400) 38%, transparent);
-  --status-sent-ink: var(--glacier-300);
-  --status-sent-surface: color-mix(in srgb, var(--glacier-300) 14%, transparent);
-  --status-sent-mark: var(--glacier-300);
-  --status-sent-line: color-mix(in srgb, var(--glacier-300) 38%, transparent);
+     menthe pour le validé, pervenche pour le dossier envoyé (Uriel, 11/10/2026). */
+  --status-validated-ink: var(--menthe-300);
+  --status-validated-surface: color-mix(in srgb, var(--menthe-300) 14%, transparent);
+  --status-validated-mark: var(--menthe-300);
+  --status-validated-line: color-mix(in srgb, var(--menthe-300) 38%, transparent);
+  --status-sent-ink: var(--pervenche-300);
+  --status-sent-surface: color-mix(in srgb, var(--pervenche-300) 14%, transparent);
+  --status-sent-mark: var(--pervenche-300);
+  --status-sent-line: color-mix(in srgb, var(--pervenche-300) 38%, transparent);
 
   /* Le bouton principal s'inverse : crème, texte foncé. */
   --action-surface: var(--cream-50);

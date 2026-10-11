@@ -69,9 +69,9 @@
   /* Le bleu doux : un dossier envoyé, qui attend sa réponse (Uriel, 11/10/2026). */
   --bleu-700: #3e6590; /* encre d'un dossier envoyé, le jour */
   /* La nuit, d'autres teintes (planche « 2027 sombre — pastilles de statut », Uriel, 11/10/2026) :
-     le jade pour le validé, le bleu glacier pour le dossier envoyé. */
-  --jade-400: #4ade80;
-  --glacier-300: #7dd3fc;
+     la menthe pour le validé, la pervenche pour le dossier envoyé. */
+  --menthe-300: #6ee7b7;
+  --pervenche-300: #a5b4fc;
   --bleu-50: #e8eef5; /* fond d'un dossier envoyé, le jour */
 
   /* ---------------------------------------------------------------------
