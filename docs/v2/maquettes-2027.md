@@ -30,8 +30,8 @@
 | Icônes de catégorie | `2027 — Catégories · icônes (proposition)` (`2215:2`) | validé, intégré (11/10/2026) — Biker retiré |
 | Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; toutes les sections (`2206:691`) validées, intégrées (lot 9b, 11/10/2026) |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
-| Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
-| Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
+| Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé, intégré (lot 10a, 11/10/2026) — la V2 crée aussi les comptes ; mur aux vrais chiffres |
+| Arrivée d'un exposant | `2027 — Bienvenue · ta marque (étape 1)` (`2102:72`), `… · ton prénom (étape 2)` (`2244:2`), `… · ton adresse` (`2244:53`) | validé, intégré (lot 10a, 11/10/2026) — la marque d'abord, puis le prénom avec l'aperçu « X de Marque » ; l'écran du choix est **écarté** |
 | Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` | dessiné |
