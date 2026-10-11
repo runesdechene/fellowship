@@ -5,7 +5,7 @@
  *            reste jamais sans propriétaire. Ce plan est aussi l'aperçu montré avant de confirmer.
  */
 import { describe, expect, test } from 'vitest'
-import { deletionPlan, type Membership } from './deletion-plan'
+import { deletionPlan, inChunks, shouldCancel, type Membership } from './deletion-plan'
 
 const me = 'moi'
 function m(entity: string, user: string, role: Membership['role'], createdAt: string): Membership {
@@ -63,5 +63,24 @@ describe('deletionPlan', () => {
     ])
     expect(plan.deleted.map((entity) => entity.entityActorId)).toEqual(['a', 'b'])
     expect(plan.kept.map((entity) => entity.heirActorId)).toEqual(['autre'])
+  })
+})
+
+describe('shouldCancel', () => {
+  test('tout abonnement Stripe qui peut encore facturer se résilie', () => {
+    for (const status of ['active', 'trialing', 'past_due', 'unpaid', 'paused', 'incomplete']) {
+      expect(shouldCancel(status)).toBe(true)
+    }
+  })
+  test('déjà terminé : on ne rappelle pas Stripe (sinon un nouvel essai échoue)', () => {
+    expect(shouldCancel('canceled')).toBe(false)
+    expect(shouldCancel('incomplete_expired')).toBe(false)
+  })
+})
+
+describe('inChunks', () => {
+  test('découpe une liste en paquets de taille bornée', () => {
+    expect(inChunks([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]])
+    expect(inChunks([], 1000)).toEqual([])
   })
 })

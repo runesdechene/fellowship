@@ -104,6 +104,9 @@ describe('entityLine', () => {
     const granted = { ...free, plan: 'pro', subscription_status: 'canceled' }
     expect(entityLine(granted, now, 4)).toEqual({ text: 'Pro', action: 'none', pro: true })
   })
+  test('un compte de dates illisible ne passe pas pour « aucune date »', () => {
+    expect(entityLine(free, now, null).text).toBe('Gratuit')
+  })
   test('un abonnement résilié retombe en gratuit', () => {
     const canceled = { ...free, subscription_status: 'canceled' }
     expect(entityLine(canceled, now, 1).action).toBe('upgrade')

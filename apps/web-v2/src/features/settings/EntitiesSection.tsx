@@ -37,7 +37,7 @@ export function EntitiesSection() {
       </div>
       <SettingCard>
         {entities.map((entity) => {
-          const line = entityLine(entity, now, counts.get(entity.actor_id) ?? 0)
+          const line = entityLine(entity, now, counts ? (counts.get(entity.actor_id) ?? 0) : null)
           return (
             <SettingRow
               key={entity.actor_id}

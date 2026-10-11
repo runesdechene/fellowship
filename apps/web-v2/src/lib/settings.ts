@@ -53,7 +53,8 @@ function datesLabel(count: number): string {
 export function entityLine(
   entity: EntityBilling,
   now: Date,
-  upcomingDates: number,
+  /** null : le compte n'a pas pu être lu — la phrase ne dit alors rien du nombre. */
+  upcomingDates: number | null,
 ): { text: string; action: 'portal' | 'upgrade' | 'none'; pro: boolean } {
   const subscribed =
     entity.subscription_status !== null && SUBSCRIBED.includes(entity.subscription_status)
@@ -75,7 +76,10 @@ export function entityLine(
     return { text, action: 'none', pro: true }
   }
   return {
-    text: `Gratuit · ${datesLabel(upcomingDates)} sur tes 6 prochains mois`,
+    text:
+      upcomingDates === null
+        ? 'Gratuit'
+        : `Gratuit · ${datesLabel(upcomingDates)} sur tes 6 prochains mois`,
     action: 'upgrade',
     pro: false,
   }

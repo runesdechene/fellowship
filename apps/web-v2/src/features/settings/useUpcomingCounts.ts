@@ -2,8 +2,8 @@
  * QUOI     — le nombre de dates programmées de chaque enseigne, d'aujourd'hui à l'horizon des
  *            6 mois du gratuit.
  * POURQUOI — lot 9b : « Gratuit · 2 dates sur tes 6 prochains mois » dans Enseignes et abonnement.
- * ATTENTION — une aide, pas une donnée de l'exposant : une lecture ratée laisse la carte vide, et
- *            la phrase dit « aucune date » (même exception que la recherche de doublons).
+ * ATTENTION — tant que rien n'est lu, ou si la lecture rate, le hook rend null : la phrase se tait
+ *            sur le nombre plutôt que de dire « aucune date » (.claude/rules/v2.md).
  */
 import { useEffect, useState } from 'react'
 import { todayIso } from '@/lib/dates'
@@ -27,19 +27,19 @@ async function loadCounts(ids: string[]): Promise<Map<string, number>> {
   return counts
 }
 
-export function useUpcomingCounts(ids: string[]): Map<string, number> {
-  const [counts, setCounts] = useState<Map<string, number>>(() => new Map())
+export function useUpcomingCounts(ids: string[]): Map<string, number> | null {
+  const [counts, setCounts] = useState<Map<string, number> | null>(null)
   const key = ids.join(',')
 
   useEffect(() => {
     if (key === '') return
     let cancelled = false
     async function run() {
-      let next: Map<string, number>
+      let next: Map<string, number> | null
       try {
         next = await loadCounts(key.split(','))
       } catch {
-        next = new Map()
+        next = null
       }
       if (cancelled) return
       setCounts(next)

@@ -11,9 +11,9 @@ import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 import { getStripe } from '../_shared/stripe.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
-import { deletionPlan, type Membership } from './deletion-plan.ts'
+import { deletionPlan, inChunks, shouldCancel, type Membership } from './deletion-plan.ts'
 
-const ACTIVE = ['active', 'trialing', 'past_due']
+const PAGE = 1000
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
@@ -24,7 +24,9 @@ Deno.serve(async (req) => {
   })
   const { data: { user } } = await userClient.auth.getUser()
   if (!user) return json({ error: 'unauthorized' }, 401)
-  const { confirm } = (await req.json().catch(() => ({}))) as { confirm?: boolean }
+  const body = (await req.json().catch(() => ({}))) as { confirm?: unknown }
+  // Seul un vrai `true` supprime : « "false" » ou « 1 » ne rendent que l'aperçu.
+  const confirm = body.confirm === true
 
   const admin = getSupabaseAdmin()
   let step = 'read'
@@ -33,7 +35,7 @@ Deno.serve(async (req) => {
     const plan = deletionPlan(user.id, memberships)
     const subscribed = (id: string) => {
       const entity = entities.get(id)
-      return Boolean(entity?.stripe_subscription_id && ACTIVE.includes(entity.subscription_status ?? ''))
+      return Boolean(entity?.stripe_subscription_id && shouldCancel(entity.subscription_status ?? ''))
     }
 
     if (!confirm) {
@@ -52,10 +54,8 @@ Deno.serve(async (req) => {
 
     for (const { entityActorId } of plan.deleted) {
       step = `entity:${entityActorId}`
-      const entity = entities.get(entityActorId)
-      if (entity?.stripe_subscription_id && subscribed(entityActorId)) {
-        await getStripe().subscriptions.cancel(entity.stripe_subscription_id)
-      }
+      const subscriptionId = entities.get(entityActorId)?.stripe_subscription_id
+      if (subscriptionId) await cancelSubscription(subscriptionId)
       await removeFolder(admin, 'entity-gallery', entityActorId)
       await removeFolder(admin, 'bilan-media', entityActorId)
       await must(admin.from('actors').delete().eq('id', entityActorId))
@@ -104,22 +104,38 @@ async function readMemberships(admin: ReturnType<typeof getSupabaseAdmin>, perso
   return { memberships, entities }
 }
 
-/** Efface tout un dossier d'un bucket, sous-dossiers compris. Un dossier absent ne gêne pas. */
+/** Résilie l'abonnement Stripe d'après son état chez Stripe (pas d'après la base, que le webhook
+ *  met à jour plus tard) : un abonnement déjà terminé ou disparu ne bloque pas un nouvel essai. */
+async function cancelSubscription(subscriptionId: string) {
+  const stripe = getStripe()
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    if (shouldCancel(subscription.status)) await stripe.subscriptions.cancel(subscriptionId)
+  } catch (err) {
+    if ((err as { code?: string }).code !== 'resource_missing') throw err
+  }
+}
+
+/** Efface tout un dossier d'un bucket, sous-dossiers compris, page par page et par paquets de
+ *  1000. Un dossier absent ne gêne pas. */
 async function removeFolder(admin: ReturnType<typeof getSupabaseAdmin>, bucket: string, prefix: string) {
   const paths: string[] = []
   const queue = [prefix]
   while (queue.length > 0) {
     const folder = queue.shift()!
-    const { data, error } = await admin.storage.from(bucket).list(folder, { limit: 1000 })
-    if (error) throw error
-    for (const item of data ?? []) {
-      const path = `${folder}/${item.name}`
-      if (item.id === null) queue.push(path)
-      else paths.push(path)
+    for (let offset = 0; ; offset += PAGE) {
+      const { data, error } = await admin.storage.from(bucket).list(folder, { limit: PAGE, offset })
+      if (error) throw error
+      for (const item of data ?? []) {
+        const path = `${folder}/${item.name}`
+        if (item.id === null) queue.push(path)
+        else paths.push(path)
+      }
+      if ((data ?? []).length < PAGE) break
     }
   }
-  if (paths.length > 0) {
-    const { error } = await admin.storage.from(bucket).remove(paths)
+  for (const chunk of inChunks(paths, PAGE)) {
+    const { error } = await admin.storage.from(bucket).remove(chunk)
     if (error) throw error
   }
 }
