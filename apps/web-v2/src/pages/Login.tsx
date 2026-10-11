@@ -9,6 +9,7 @@
 import { ArrowRight, ChevronLeft, Mail } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { CodeInput } from '@/components/ui/CodeInput'
+import { LoginWall } from '@/features/login/LoginWall'
 import { useAuth } from '@/lib/auth'
 
 type Step = 'email' | 'code'
@@ -150,7 +151,7 @@ export function Login() {
           <a href="/legal/confidentialite">Politique de confidentialité</a>.
         </p>
       </div>
-      <div className="login__wall" aria-hidden="true" />
+      <LoginWall />
     </div>
   )
 }

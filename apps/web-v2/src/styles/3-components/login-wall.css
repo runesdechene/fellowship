@@ -1,0 +1,82 @@
+/**
+ * QUOI     — le mur d'affiches de la connexion (features/login/LoginWall.tsx).
+ * POURQUOI — maquette 2100:2 (lot 10a) : trois colonnes d'affiches arrondies sur fond sombre, un voile
+ *            en bas, le titre en serif blanc et les chiffres atténués.
+ * ATTENTION — la colonne est doublée : la remonter de la moitié de sa hauteur la fait boucler sans
+ *            saut. La colonne du milieu va dans l'autre sens.
+ */
+
+.login-wall__columns {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-24);
+  padding: 0 var(--space-24);
+}
+
+.login-wall__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  animation: login-wall-scroll var(--login-wall-scroll) linear infinite;
+}
+
+.login-wall__column:nth-child(2) {
+  animation-direction: reverse;
+}
+
+.login-wall__poster {
+  width: 100%;
+  aspect-ratio: var(--login-wall-poster-ratio);
+  border-radius: var(--radius-card);
+  background: var(--login-wall-empty);
+  object-fit: cover;
+  opacity: var(--login-wall-poster-opacity);
+}
+
+@keyframes login-wall-scroll {
+  from {
+    translate: 0 0;
+  }
+
+  to {
+    translate: 0 -50%;
+  }
+}
+
+.login-wall__veil {
+  position: absolute;
+  inset: auto 0 0;
+  height: 50%;
+  background: var(--login-wall-shade);
+  pointer-events: none;
+}
+
+.login-wall__caption {
+  position: absolute;
+  right: var(--space-48);
+  bottom: var(--space-48);
+  left: var(--space-48);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  color: var(--login-wall-ink);
+}
+
+.login-wall__title {
+  max-width: var(--login-wall-title-width);
+  font: var(--type-login-wall-title);
+  letter-spacing: var(--tracking-tight);
+}
+
+.login-wall__count {
+  font: var(--type-login-note);
+  opacity: var(--login-wall-count-opacity);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-wall__column {
+    animation: none;
+  }
+}

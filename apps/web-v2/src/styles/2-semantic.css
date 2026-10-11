@@ -933,6 +933,11 @@
     color-mix(in srgb, var(--ink-950) 92%, transparent),
     transparent
   );
+  --login-wall-scroll: 90s; /* un défilement lent, à peine perceptible */
+  --login-wall-poster-ratio: 256 / 360;
+  --login-wall-poster-opacity: 0.92;
+  --login-wall-title-width: 620px;
+  --login-wall-count-opacity: 0.7;
   --code-box-width: 64px;
   --code-box-height: 72px;
   --type-login-title: var(--weight-regular) var(--size-52) / 1 var(--family-display);
