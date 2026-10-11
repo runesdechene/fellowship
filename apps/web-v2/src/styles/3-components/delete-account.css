@@ -1,0 +1,187 @@
+/**
+ * QUOI     — « Supprimer mon compte » (features/settings/DeleteAccount.tsx) : la carte en bas des
+ *            Réglages et la fenêtre de confirmation.
+ * POURQUOI — maquette 2206:691 : une carte seule, bouton blanc bordé à l'encre brique ; la fenêtre
+ *            reprend le voile et l'apparition de « Qui y va ».
+ */
+
+.delete-account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  margin-top: var(--space-8);
+  padding: var(--space-16) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.delete-account__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.delete-account__title {
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+}
+
+.delete-account__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.delete-account__open,
+.delete-dialog__delete {
+  flex: none;
+  height: var(--setting-button-height);
+  padding: 0 var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  font: var(--type-button);
+  color: var(--danger-ink);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.delete-account__open:hover,
+.delete-dialog__delete:hover:not(:disabled) {
+  background: var(--surface-control-hover);
+}
+
+/* --- La fenêtre ---------------------------------------------------------- */
+.delete-dialog {
+  width: min(var(--delete-dialog-width), calc(100vw - 2 * var(--space-16)));
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-card);
+  background: transparent;
+  color: var(--ink-title);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .delete-dialog[open] {
+    opacity: 0;
+    translate: 0 var(--space-8);
+  }
+}
+
+.delete-dialog::backdrop {
+  background: var(--who-goes-veil);
+}
+
+.delete-dialog__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  padding: var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.delete-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.delete-dialog__title {
+  font: var(--type-who-goes-title);
+  color: var(--ink-title);
+}
+
+.delete-dialog__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--who-goes-close);
+  height: var(--who-goes-close);
+  border-radius: var(--button-radius);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.delete-dialog__text,
+.delete-dialog__list {
+  font: var(--type-settings-note);
+  color: var(--ink-soft);
+}
+
+.delete-dialog__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.delete-dialog__label {
+  font: var(--type-settings-column);
+  color: var(--ink-title);
+}
+
+.delete-dialog__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-left: var(--space-16);
+  list-style: disc;
+}
+
+.delete-dialog__list b {
+  color: var(--ink-title);
+}
+
+.delete-dialog__problem {
+  font: var(--type-settings-note);
+  color: var(--danger-ink);
+}
+
+.delete-dialog__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  font: var(--type-settings-column);
+  color: var(--ink-title);
+}
+
+.delete-dialog__input {
+  border: 1px solid var(--line-card);
+  background: var(--surface-card);
+}
+
+.delete-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}
+
+.delete-dialog__actions .button {
+  height: var(--setting-button-height);
+  padding: 0 var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+}
+
+.delete-dialog__delete:disabled {
+  cursor: default;
+  opacity: var(--settings-off-opacity);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .delete-account__open,
+  .delete-dialog,
+  .delete-dialog__delete {
+    transition: none;
+  }
+}

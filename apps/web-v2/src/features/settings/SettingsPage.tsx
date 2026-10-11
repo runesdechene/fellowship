@@ -9,6 +9,7 @@ import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { AccountSection } from './AccountSection'
 import { ContactSection } from './ContactSection'
+import { DeleteAccount } from './DeleteAccount'
 import { EntitiesSection } from './EntitiesSection'
 import { NotificationSettings } from './NotificationSettings'
 import { ProfileSection } from './ProfileSection'
@@ -72,6 +73,7 @@ export function SettingsPage() {
           <NotificationSettings />
           <EntitiesSection />
           <ContactSection />
+          <DeleteAccount />
         </div>
       </div>
     </div>

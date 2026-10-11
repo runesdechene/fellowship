@@ -917,6 +917,7 @@
   --setting-row-height: 56px; /* une ligne de la maquette 2206:691 */
   /* Les champs et les petits boutons bordés de la maquette 2206:691. */
   --danger-ink: var(--brique-600); /* supprimer, un champ refusé */
+  --delete-dialog-width: 460px;
   --setting-input-width: 300px;
   --setting-input-height: 36px;
   --setting-button-height: 34px;
