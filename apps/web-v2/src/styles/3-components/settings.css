@@ -157,6 +157,21 @@
   text-decoration: none;
 }
 
+.setting-create {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-14) var(--space-20);
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+  text-decoration: none;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.setting-create:hover {
+  background: var(--surface-control-hover);
+}
+
 .setting-row__logo {
   --avatar-size: var(--avatar-size-discussion);
 
