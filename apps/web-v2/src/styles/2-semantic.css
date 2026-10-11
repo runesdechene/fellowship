@@ -413,6 +413,9 @@
   --step-shift: var(--space-20);
 
   --create-mate-width: 360px;
+  --create-bar-link: 18px;
+  --create-bar-number: 20px;
+  --type-create-bar-number: var(--weight-semibold) var(--size-11) / 1 var(--family-sans);
   --create-columns-gap: var(--space-48);
   --create-poster-height: 172px;
 

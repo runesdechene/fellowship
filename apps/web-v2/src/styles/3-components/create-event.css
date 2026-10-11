@@ -20,128 +20,142 @@
   padding: var(--page-padding-top) var(--page-gutter) var(--space-48);
 }
 
-.create__top {
-  display: flex;
+/* --- La barre de création (CreateBar.tsx, maquette 2082:2) ------------------ */
+.create-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-16);
-  margin-bottom: var(--space-70);
+  gap: var(--space-24);
+  margin-bottom: var(--space-64);
 }
 
-.create__quit {
+.create-bar__quit {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-8);
-  font: var(--type-section-link);
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: color var(--menu-motion);
-}
-
-.create__top-right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-16);
-}
-
-/* Le statut et sa corbeille parlent du même objet : ils se tiennent serrés,
-   et c'est le groupe entier qui prend ses distances avec le compteur. */
-.create__draft-group {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.create__progress {
-  font: var(--type-section-link);
-  color: var(--ink-soft);
-}
-
-/* --- Le statut du brouillon ----------------------------------------------- */
-/* Le brouillon part au stockage à chaque frappe : rien à cliquer ici. Ce
-   badge annonce un ÉTAT ACQUIS — même famille que l'action depuis qu'on est
-   réservée aux commandes (voir 1-primitives.css : les deux ne se croisent
-   jamais). C'est la règle qui a chassé le vert du bouton d'événement privé,
-   appliquée ici dans l'autre sens. */
-.create__draft {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  height: 30px;
+  gap: var(--space-6);
+  justify-self: start;
+  height: var(--setting-button-height);
   padding: 0 var(--space-12);
-  border-radius: var(--radius-chip);
-  background: var(--status-ok-surface);
-  color: var(--status-ok-ink);
-  font: var(--type-section-link);
-  white-space: nowrap;
-  animation: draft-appear var(--duration-medium) var(--ease-soft) both;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  font: var(--type-door-label);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
 }
 
-/* Il apparaît à la première saisie : sans ce fondu il surgirait d'un coup à
-   côté du compteur, ce qui se lirait comme une alerte. */
-@keyframes draft-appear {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
+.create-bar__quit:hover {
+  background: var(--surface-control-hover);
 }
 
-/* Le stockage refusé n'est pas une bonne nouvelle : même forme, ton d'alerte. */
-.create__draft--refused {
-  background: var(--status-pending-surface);
-  color: var(--status-pending-ink);
+.create-bar__steps {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
 }
 
-/* --- Abandonner le brouillon ---------------------------------------------- */
-/* La corbeille se tient à côté du statut, pas près de la sortie : elle agit
-   sur le brouillon, pas sur la navigation. Discrète tant qu'on ne la cherche
-   pas — elle ne se colore qu'au survol. */
-.create__draft-drop {
+.create-bar__link {
+  width: var(--create-bar-link);
+  height: 1px;
+  background: var(--line-card);
+}
+
+.create-bar__step {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-chip);
-  color: var(--ink-soft);
-  cursor: pointer;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-12) var(--space-4) var(--space-6);
+  border-radius: var(--radius-round);
+  font: var(--type-door-label);
+  color: var(--ink-section-pale);
   transition:
-    background-color var(--menu-motion),
-    color var(--menu-motion);
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
 }
 
-.create__draft-drop:hover {
-  background: var(--status-pending-surface);
-  color: var(--status-pending-ink);
-}
-
-/* La question prend la place du statut : au même endroit, on parle du même
-   objet. Le ton d'alerte dit qu'on ne parle plus d'une bonne nouvelle. */
-.create__draft--asking {
-  gap: var(--space-10);
-  background: var(--status-pending-surface);
-  color: var(--status-pending-ink);
-}
-
-.create__draft-yes,
-.create__draft-no {
-  font: var(--type-section-link);
+button.create-bar__step {
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
-/* Effacer est irréversible : c'est le seul mot en pleine couleur d'alerte. */
-.create__draft-yes {
-  color: var(--status-pending-ink);
-  font-weight: var(--weight-bold);
+button.create-bar__step:hover {
+  background: var(--surface-control-hover);
 }
 
-.create__draft-no {
+.create-bar__step--done {
   color: var(--ink-soft);
 }
 
-/* --- Les deux colonnes ---------------------------------------------------- */
+.create-bar__step--current {
+  background: var(--welcome-panel-surface);
+  color: var(--ink-title);
+}
+
+.create-bar__number {
+  display: grid;
+  place-items: center;
+  width: var(--create-bar-number);
+  height: var(--create-bar-number);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-create-bar-number);
+}
+
+.create-bar__step--current .create-bar__number {
+  border-color: var(--ink-title);
+  background: var(--ink-title);
+  color: var(--surface-card);
+}
+
+.create-bar__draft {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  justify-self: end;
+  font: var(--type-door-legal);
+  color: var(--ink-section-pale);
+}
+
+/* --- Effacer le brouillon (en bas à gauche) ---------------------------------- */
+.create__discard {
+  font: var(--type-door-note);
+  color: var(--ink-section-pale);
+  cursor: pointer;
+}
+
+.create__discard:hover {
+  color: var(--ink-title);
+}
+
+.create__discard--asking {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-10);
+  color: var(--ink-title);
+  cursor: default;
+}
+
+.create__discard-yes,
+.create__discard-no {
+  font: var(--type-door-label);
+  cursor: pointer;
+}
+
+.create__discard-yes {
+  color: var(--danger-ink);
+}
+
+.create__discard-no {
+  color: var(--ink-soft);
+}
+
+.create__actions-end {
+  display: inline-flex;
+  gap: var(--space-8);
+  margin-left: auto;
+}
+
 .create__body {
   display: grid;
   flex: 0 1 auto;

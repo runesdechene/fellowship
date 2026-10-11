@@ -3,6 +3,7 @@
  * POURQUOI — elle porte le PageChromeProvider : la page (enfant) déclare son décor, la barre du
  *            haut et le mur (frères) le rendent. Elle garde aussi le repli de la barre latérale,
  *            mémorisé sur l'appareil.
+ * ATTENTION — `bare` retire la barre du haut : la création d'une date pose la sienne (lot 10b).
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { PageChromeProvider } from '@/lib/page-chrome'
@@ -21,7 +22,7 @@ function readCollapsed(): boolean {
   }
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, bare = false }: { children: ReactNode; bare?: boolean }) {
   const [collapsed, setCollapsed] = useState(readCollapsed)
 
   // Le repli survit au rechargement : c'est un réglage, pas un état de passage.
@@ -42,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className={collapsed ? 'app-shell app-shell--collapsed' : 'app-shell'}>
         <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
         <main className="app-shell__main">
-          <Topbar />
+          {!bare && <Topbar />}
           {children}
         </main>
         <PosterWall />

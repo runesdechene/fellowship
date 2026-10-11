@@ -112,7 +112,7 @@ export function App() {
         path="/evenement/nouveau"
         element={
           <ProtectedRoute>
-            <AppShell>
+            <AppShell bare>
               <CreateEvent />
             </AppShell>
           </ProtectedRoute>

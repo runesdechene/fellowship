@@ -8,13 +8,15 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
-import { ArrowLeft, Save, Trash2 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { parseSqlDate } from '@/lib/dates'
 import { canActOn } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { supabase } from '@/lib/supabase'
+import { CreateBar } from './CreateBar'
 import { EventPreview } from './EventPreview'
 import { useSimilarEvents } from './useSimilarEvents'
 import { useTags } from './useTags'
@@ -29,12 +31,15 @@ const CONFIRM_MS = 6000
 
 export function CreateEvent() {
   const go = useTransitionNavigate()
+  const navigate = useNavigate()
   const { actor, person } = useAuth()
   const { pro } = usePlan()
   const { draft, update, toggleTag, clear, status } = useEventDraft()
   const tags = useTags()
 
   const [step, setStep] = useState(0)
+  // La plus loin des étapes atteintes : la barre ne rouvre que celles-là.
+  const [reached, setReached] = useState(0)
   const [poster, setPoster] = useState<File | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -62,8 +67,12 @@ export function CreateEvent() {
       return
     }
     setShowBlocker(false)
-    transition('step-next', () => setStep((current) => Math.min(current + 1, STEPS.length - 1)))
-  }, [blocker, transition])
+    const next = Math.min(step + 1, STEPS.length - 1)
+    transition('step-next', () => {
+      setStep(next)
+      setReached((current) => Math.max(current, next))
+    })
+  }, [blocker, step, transition])
 
   const goBack = useCallback(() => {
     setShowBlocker(false)
@@ -89,6 +98,7 @@ export function CreateEvent() {
     setError(null)
     setPoster(null)
     clear()
+    setReached(0)
     transition('step-back', () => setStep(0))
   }, [clear, transition])
 
@@ -170,69 +180,21 @@ export function CreateEvent() {
 
   return (
     <div className="create">
-      <div className="create__top">
-        {/* La sortie normale : on part, le brouillon reste. */}
-        <button type="button" className="create__quit" onClick={() => go('/')}>
-          <ArrowLeft size={15} strokeWidth={2} />
-          Tableau de bord
-        </button>
-
-        <div className="create__top-right">
-          <span className="create__progress">
-            Étape {step + 1} sur {STEPS.length}
-            {isLast && ' · facultative'}
-          </span>
-
-          {/* Tout ce qui concerne le brouillon se dit ici : ce qu'il en est, et
-              le seul moyen de s'en défaire. Rien de destructeur ne traîne du
-              côté de la sortie. */}
-          {status !== 'quiet' &&
-            (askingDiscard ? (
-              <span className="create__draft create__draft--asking">
-                Effacer le brouillon ?
-                <button type="button" className="create__draft-yes" onClick={discardDraft}>
-                  Effacer
-                </button>
-                <button
-                  type="button"
-                  className="create__draft-no"
-                  onClick={() => setAskingDiscard(false)}
-                >
-                  Garder
-                </button>
-              </span>
-            ) : (
-              <span className="create__draft-group">
-                {/* Un statut, pas une commande : le brouillon part au stockage
-                    tout seul, ce badge ne fait que l'annoncer. */}
-                <span
-                  className={
-                    status === 'kept' ? 'create__draft' : 'create__draft create__draft--refused'
-                  }
-                  role="status"
-                  title={
-                    status === 'kept'
-                      ? undefined
-                      : "Ce navigateur refuse le stockage : le brouillon sera perdu en fermant l'onglet."
-                  }
-                >
-                  <Save size={14} strokeWidth={2} />
-                  {status === 'kept' ? 'Brouillon sauvegardé !' : 'Brouillon non gardé'}
-                </span>
-
-                <button
-                  type="button"
-                  className="create__draft-drop"
-                  onClick={() => setAskingDiscard(true)}
-                  aria-label="Abandonner le brouillon"
-                  title="Abandonner le brouillon et repartir d'une fiche vierge"
-                >
-                  <Trash2 size={14} strokeWidth={2} />
-                </button>
-              </span>
-            ))}
-        </div>
-      </div>
+      <CreateBar
+        step={step}
+        reached={reached}
+        draft={status}
+        onStep={(target) => {
+          setShowBlocker(false)
+          transition(target < step ? 'step-back' : 'step-next', () => setStep(target))
+        }}
+        onQuit={() => {
+          // Le brouillon reste : on revient d'où l'on venait, ou au tableau de bord.
+          const fromApp = (window.history.state as { idx?: number } | null)?.idx
+          if (fromApp && fromApp > 0) void navigate(-1)
+          else go('/')
+        }}
+      />
 
       <div className="create__body">
         <div>
@@ -246,16 +208,43 @@ export function CreateEvent() {
           </div>
 
           <div className="create__actions">
-            {step > 0 && <Button onClick={goBack}>Retour</Button>}
-            {isLast ? (
-              <Button variant="action" onClick={() => void submit()} disabled={saving}>
-                {saving ? 'Création…' : "Créer l'événement"}
-              </Button>
-            ) : (
-              <Button variant="action" onClick={goNext}>
-                Continuer
-              </Button>
-            )}
+            {status !== 'quiet' &&
+              (askingDiscard ? (
+                <span className="create__discard create__discard--asking">
+                  Effacer le brouillon ?
+                  <button type="button" className="create__discard-yes" onClick={discardDraft}>
+                    Effacer
+                  </button>
+                  <button
+                    type="button"
+                    className="create__discard-no"
+                    onClick={() => setAskingDiscard(false)}
+                  >
+                    Garder
+                  </button>
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  className="create__discard"
+                  onClick={() => setAskingDiscard(true)}
+                >
+                  Effacer le brouillon
+                </button>
+              ))}
+            <span className="create__actions-end">
+              {step > 0 && <Button onClick={goBack}>Retour</Button>}
+              {isLast ? (
+                <Button variant="action" onClick={() => void submit()} disabled={saving}>
+                  {saving ? 'Création…' : "Créer l'événement"}
+                </Button>
+              ) : (
+                <Button variant="action" onClick={goNext}>
+                  Continuer
+                  <ArrowRight size={15} strokeWidth={2} />
+                </Button>
+              )}
+            </span>
           </div>
 
           {showBlocker && blocker && <p className="create__blocker">{blocker}</p>}
