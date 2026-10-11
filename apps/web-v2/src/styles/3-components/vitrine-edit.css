@@ -1,0 +1,391 @@
+/**
+ * QUOI     — le mode édition de la vitrine (features/vitrine/VitrineEditor.tsx) : la barre, les
+ *            cadres pointillés des éléments modifiables, la sélection au dégradé du logo, la
+ *            bannière qu'on glisse, le logo, les liens, l'adresse, l'atténuation du reste.
+ * POURQUOI — lot 6b, maquette 2231:2 ; Uriel : « avec des animations ». Tout passe par les jetons
+ *            de mouvement et tombe à zéro avec prefers-reduced-motion.
+ */
+
+/* --- La barre ------------------------------------------------------------------------------- */
+.edit-bar {
+  position: sticky;
+  top: var(--space-12);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-bottom: var(--space-16);
+  padding: var(--space-8) var(--space-8) var(--space-8) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition:
+    opacity var(--duration-medium) var(--ease-out),
+    translate var(--duration-medium) var(--ease-out);
+}
+
+@starting-style {
+  .edit-bar {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-16));
+  }
+}
+
+.edit-bar__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-vitrine-meta);
+  color: var(--ink-title);
+}
+
+.edit-bar__hint {
+  color: var(--ink-soft);
+}
+
+.edit-bar__problem {
+  flex: 1;
+  font: var(--type-vitrine-meta);
+  color: var(--status-pending-ink);
+  text-align: right;
+}
+
+.edit-bar__buttons {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.edit-bar__cancel,
+.edit-bar__save {
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--button-radius);
+  font: var(--type-button);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.edit-bar__cancel {
+  background: var(--surface-chip-neutral);
+  color: var(--ink-title);
+}
+
+.edit-bar__save {
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.edit-bar__save:hover:not(:disabled) {
+  background: var(--action-surface-hover);
+}
+
+.edit-bar__save:disabled {
+  cursor: default;
+  background: var(--action-surface-off);
+  color: var(--action-ink-off);
+}
+
+/* --- Un élément modifiable : le cadre pointillé, puis le dégradé du logo sélectionné --------- */
+.edit-zone {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.edit-zone::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--vitrine-edit-pad));
+  z-index: -1;
+  border: var(--vitrine-edit-line) dashed var(--vitrine-edit-dash);
+  border-radius: var(--radius-nav);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    opacity var(--duration-medium) var(--ease-out);
+}
+
+@starting-style {
+  .edit-zone::before {
+    opacity: 0;
+  }
+}
+
+.edit-zone:hover::before {
+  border-color: var(--vitrine-edit-dash-hover);
+}
+
+.edit-zone:focus-within::before {
+  border: var(--vitrine-edit-line) solid transparent;
+  background:
+    linear-gradient(var(--surface-panel), var(--surface-panel)) padding-box,
+    var(--brand-gradient) border-box;
+  box-shadow: 0 0 0 var(--vitrine-edit-halo-size) var(--vitrine-edit-halo);
+}
+
+.edit-field {
+  min-width: var(--vitrine-edit-min-field);
+  padding: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  field-sizing: content;
+}
+
+.edit-field::placeholder {
+  color: var(--vitrine-pale-ink);
+}
+
+textarea.edit-field {
+  width: var(--vitrine-bio-width);
+  min-height: 0;
+  resize: none;
+}
+
+.edit-zone__counter {
+  align-self: flex-end;
+  margin-top: var(--space-4);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.edit-identity {
+  gap: var(--vitrine-edit-gap);
+}
+
+.edit-identity .vitrine-head__meta,
+.edit-identity .vitrine-head__bio {
+  margin-top: 0;
+}
+
+.edit-meta {
+  flex-wrap: wrap;
+  gap: var(--vitrine-edit-gap);
+}
+
+.edit-meta__place {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-14);
+  color: var(--ink-soft);
+}
+
+.edit-meta__place > .edit-zone + .edit-zone {
+  margin-left: calc(var(--vitrine-edit-gap) - var(--space-14));
+}
+
+.edit-meta__department {
+  width: var(--vitrine-edit-department);
+}
+
+/* --- La bannière ---------------------------------------------------------------------------- */
+.edit-banner {
+  position: relative;
+  outline: var(--vitrine-edit-line) dashed var(--vitrine-edit-dash);
+  outline-offset: calc(-1 * var(--vitrine-edit-line));
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.edit-banner--dragging {
+  cursor: grabbing;
+}
+
+.edit-banner__actions {
+  position: absolute;
+  top: var(--space-16);
+  right: var(--space-16);
+  display: flex;
+  gap: var(--space-8);
+  opacity: var(--vitrine-edit-actions-rest);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.edit-banner:hover .edit-banner__actions,
+.edit-banner:focus-within .edit-banner__actions {
+  opacity: 1;
+}
+
+.edit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-14) var(--space-8) var(--space-12);
+  border-radius: var(--button-radius);
+  background: var(--vitrine-edit-pill);
+  font: var(--type-chip-strong);
+  color: var(--vitrine-edit-pill-ink);
+  cursor: pointer;
+}
+
+.edit-pill--hint {
+  cursor: inherit;
+}
+
+/* --- Le logo ------------------------------------------------------------------------------- */
+.edit-logo {
+  position: relative;
+}
+
+.edit-logo__pick {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  display: grid;
+  place-items: center;
+  width: var(--vitrine-edit-logo-pick);
+  height: var(--vitrine-edit-logo-pick);
+  border: var(--vitrine-logo-ring) solid var(--surface-panel);
+  border-radius: var(--radius-round);
+  background: var(--action-surface);
+  color: var(--action-ink);
+  cursor: pointer;
+  transition: scale var(--duration-fast) var(--ease-out);
+}
+
+.edit-logo__pick:hover {
+  scale: var(--vitrine-edit-hover-scale);
+}
+
+/* --- Les liens ----------------------------------------------------------------------------- */
+.edit-links {
+  gap: var(--space-6);
+}
+
+.edit-links__row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--ink-title);
+}
+
+.edit-links__input {
+  font: var(--type-vitrine-link);
+  color: var(--ink-title);
+}
+
+.edit-links__remove {
+  display: grid;
+  place-items: center;
+  color: var(--vitrine-pale-ink);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.edit-links__remove:hover {
+  color: var(--ink-title);
+}
+
+.edit-links__add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-vitrine-meta);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.edit-links__add:hover {
+  color: var(--ink-title);
+}
+
+/* --- L'adresse ----------------------------------------------------------------------------- */
+.edit-address {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--vitrine-edit-gap);
+}
+
+.edit-address__line {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--ink-soft);
+}
+
+.edit-address__host {
+  font: var(--type-vitrine-meta);
+  color: var(--vitrine-pale-ink);
+}
+
+.edit-address__input {
+  min-width: 0;
+  font: var(--type-vitrine-craft);
+  color: var(--ink-title);
+}
+
+.edit-address__note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-list-meta);
+  color: var(--vitrine-edit-warning);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .edit-address__note {
+    opacity: 0;
+  }
+}
+
+.edit-address__note--problem {
+  color: var(--status-pending-ink);
+}
+
+/* --- Ce qui ne se modifie pas ici s'atténue ------------------------------------------------- */
+.edit-muted,
+.vitrine--editing .vitrine-section,
+.vitrine--editing .vitrine__footer {
+  opacity: var(--vitrine-edit-muted);
+  transition: opacity var(--duration-medium) var(--ease-out);
+}
+
+.vitrine__saved {
+  position: fixed;
+  bottom: var(--space-24);
+  left: 50%;
+  z-index: 4;
+  translate: -50% 0;
+  padding: var(--space-10) var(--space-16);
+  border-radius: var(--button-radius);
+  background: var(--action-surface);
+  font: var(--type-button);
+  color: var(--action-ink);
+  transition:
+    opacity var(--duration-medium) var(--ease-out),
+    translate var(--duration-medium) var(--ease-out);
+}
+
+@starting-style {
+  .vitrine__saved {
+    opacity: 0;
+    translate: -50% var(--space-8);
+  }
+}
+
+/* Le mode édition : sur ordinateur seulement (lot 6b). */
+@media (width <= 760px) {
+  .vitrine-head__edit {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-bar,
+  .edit-zone::before,
+  .edit-banner__actions,
+  .edit-logo__pick,
+  .edit-links__remove,
+  .edit-address__note,
+  .edit-muted,
+  .vitrine--editing .vitrine-section,
+  .vitrine--editing .vitrine__footer,
+  .vitrine__saved {
+    transition: none;
+  }
+}

@@ -5,17 +5,22 @@
  * ATTENTION — l'adresse est celle de la V1 (`flw.sh/<slug>`) : la vitrine publique reste servie
  *            par la V1 jusqu'à la bascule (lot 12).
  */
-import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { EscaleCard } from './EscaleCard'
 import { Stamps } from './Stamps'
 import { useVitrine } from './useVitrine'
+import { VitrineEditor } from './VitrineEditor'
 import { VitrineHead } from './VitrineHead'
 
 export function VitrinePage() {
   const { slug } = useParams()
-  const { actor } = useAuth()
-  const { vitrine, loading, notFound, error, toggleFollow } = useVitrine(slug, actor?.id)
+  const { actor, reloadIdentity } = useAuth()
+  const navigate = useNavigate()
+  const { vitrine, loading, notFound, error, toggleFollow, reload } = useVitrine(slug, actor?.id)
+  const [editing, setEditing] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   if (loading) return null
   if (notFound || error || !vitrine) {
@@ -27,16 +32,43 @@ export function VitrinePage() {
   }
 
   const count = vitrine.upcoming.length
+  const isOwner = actor?.id === vitrine.actorId
+
+  /** Publiée : on relit la vitrine (et « Ma vitrine » si l'adresse a changé), puis on sort. */
+  function onSaved(next: string) {
+    setEditing(false)
+    setSaved(true)
+    window.setTimeout(() => {
+      setSaved(false)
+    }, 2600)
+    void reloadIdentity()
+    if (vitrine && next !== vitrine.slug) void navigate(`/${next}`, { replace: true })
+    else reload()
+  }
 
   return (
-    <div className="vitrine">
-      <VitrineHead
-        vitrine={vitrine}
-        isOwner={actor?.id === vitrine.actorId}
-        onToggleFollow={() => {
-          void toggleFollow()
-        }}
-      />
+    <div className={editing ? 'vitrine vitrine--editing' : 'vitrine'}>
+      {saved && <p className="vitrine__saved">Vitrine mise à jour</p>}
+      {editing && isOwner ? (
+        <VitrineEditor
+          vitrine={vitrine}
+          onClose={() => {
+            setEditing(false)
+          }}
+          onSaved={onSaved}
+        />
+      ) : (
+        <VitrineHead
+          vitrine={vitrine}
+          isOwner={isOwner}
+          onEdit={() => {
+            setEditing(true)
+          }}
+          onToggleFollow={() => {
+            void toggleFollow()
+          }}
+        />
+      )}
 
       <section className="vitrine-section">
         <h2 className="vitrine-section__title">

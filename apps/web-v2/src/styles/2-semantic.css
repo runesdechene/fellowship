@@ -991,6 +991,25 @@
   --type-stamp-more: var(--weight-semibold) var(--size-22) / 1 var(--family-sans);
   --vitrine-pale-ink: var(--ink-350); /* compteurs, pied de page */
 
+  /* Le mode édition de la vitrine (lot 6b, maquette 2231:2) */
+  --vitrine-edit-line: 1.5px;
+  --vitrine-edit-pad: var(--space-8); /* le cadre déborde un peu de l'élément qu'il entoure */
+  /* entre deux éléments voisins : deux débords de cadre, puis 12px d'air entre les pointillés */
+  --vitrine-edit-gap: calc(2 * var(--vitrine-edit-pad) + var(--space-12));
+  --vitrine-edit-dash: var(--sand-500);
+  --vitrine-edit-dash-hover: var(--ink-350);
+  --vitrine-edit-halo: color-mix(in srgb, var(--terre-400) 22%, transparent);
+  --vitrine-edit-halo-size: 4px;
+  --vitrine-edit-min-field: 2ch;
+  --vitrine-edit-department: 3ch;
+  --vitrine-edit-pill: color-mix(in srgb, var(--ink-950) 72%, transparent);
+  --vitrine-edit-pill-ink: var(--cream-50); /* sur la pastille sombre, quel que soit le thème */
+  --vitrine-edit-actions-rest: 0.85;
+  --vitrine-edit-logo-pick: 38px;
+  --vitrine-edit-hover-scale: 1.06;
+  --vitrine-edit-warning: var(--terre-700);
+  --vitrine-edit-muted: 0.45; /* ce qui ne se modifie pas dans l'en-tête */
+
   /* =========================================================================
      ACTIVITÉ DU RÉSEAU — le fil en bas de la barre latérale (features/activity)
      ====================================================================== */
@@ -1137,6 +1156,9 @@
   --report-gauge-track: var(--night-400);
   --calendar-month-ink: var(--cream-750);
   --vitrine-pale-ink: var(--cream-750);
+  --vitrine-edit-dash: var(--night-400);
+  --vitrine-edit-dash-hover: var(--cream-750);
+  --vitrine-edit-warning: var(--terre-400);
   --activity-avatar-surface: var(--night-350);
   --tab-bar-active: var(--terre-400);
   --tag-first-ink: var(--night-0);

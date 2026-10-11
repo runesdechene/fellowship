@@ -9,4 +9,14 @@ La vitrine d'un artisan (`/:slug`), dans le langage « 2027 ». Maquette : cadre
 - `Stamps.tsx` — la route passée en tampons.
 - `useVitrine.ts` — le chargement, et Suivre / Ne plus suivre.
 
-La logique pure (libellés, découpage de la route) vit dans `lib/vitrine.ts`.
+Le mode édition (lot 6b, maquette `2231:2`) — le propriétaire modifie sa vitrine en place, sur
+ordinateur ; rien n'est publié avant « Enregistrer » :
+
+- `VitrineEditor.tsx` — l'en-tête en édition, et la confirmation avant de quitter avec des changements.
+- `EditBar.tsx` — « Mode édition », Annuler, Enregistrer, et ce qui empêche d'enregistrer.
+- `EditableText.tsx` · `EditableBanner.tsx` · `EditableLogo.tsx` · `EditableLinks.tsx` ·
+  `EditableAddress.tsx` — un élément modifiable chacun.
+- `useVitrineEdit.ts` — le brouillon, l'envoi des images et l'enregistrement.
+
+La logique pure vit dans `lib/` : `vitrine.ts` (libellés, découpage de la route, liens),
+`vitrine-edit.ts` (règles du brouillon, de l'adresse et des liens), `image-resize.ts`.

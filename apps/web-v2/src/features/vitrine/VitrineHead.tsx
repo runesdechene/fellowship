@@ -3,8 +3,8 @@
  *            le métier et la ville, la présentation, le site, le réseau, et les actions.
  * POURQUOI — c'est la carte de visite de l'artisan : ce qu'un organisateur ou un exposant voit en
  *            premier.
- * ATTENTION — le propriétaire ne se suit pas lui-même : il voit « Modifier ma vitrine », qui mène
- *            à l'éditeur de la V1 tant que la V2 n'a pas le sien.
+ * ATTENTION — le propriétaire ne se suit pas lui-même : il voit « Modifier la vitrine », qui fait
+ *            basculer la page en mode édition (VitrineEditor, lot 6b) — sur ordinateur seulement.
  */
 import {
   BadgeCheck,
@@ -30,6 +30,7 @@ interface VitrineHeadProps {
   vitrine: Vitrine
   isOwner: boolean
   onToggleFollow: () => void
+  onEdit: () => void
 }
 
 /** L'icône de chaque sorte de lien (lot 6b). */
@@ -44,7 +45,7 @@ function publicUrl(slug: string): string {
   return `${window.location.origin}/${slug}`
 }
 
-export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadProps) {
+export function VitrineHead({ vitrine, isOwner, onToggleFollow, onEdit }: VitrineHeadProps) {
   const go = useTransitionNavigate()
   const [copied, setCopied] = useState(false)
   const [followers, companions] = networkCounts(vitrine.followerCount, vitrine.companionCount)
@@ -98,10 +99,14 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadPro
 
         <div className="vitrine-head__actions">
           {isOwner ? (
-            <a className="button button--action" href={publicUrl(vitrine.slug)}>
-              <Pencil size={16} strokeWidth={2} />
-              Modifier ma vitrine
-            </a>
+            <Button
+              variant="action"
+              className="vitrine-head__edit"
+              icon={<Pencil size={16} strokeWidth={2} />}
+              onClick={onEdit}
+            >
+              Modifier la vitrine
+            </Button>
           ) : (
             <Button
               variant="action"
