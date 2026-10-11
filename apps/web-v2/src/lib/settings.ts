@@ -67,12 +67,12 @@ export function entityLine(
     if (entity.legal_name) parts.push(`facture au nom de ${entity.legal_name}`)
     return { text: parts.join(' · '), action: 'portal', pro: true }
   }
-  if (isPro(entity, now) && entity.comped_pro_until) {
-    return {
-      text: `Pro offert jusqu’au ${formatFullDate(new Date(entity.comped_pro_until))}`,
-      action: 'none',
-      pro: true,
-    }
+  if (isPro(entity, now)) {
+    // Pro sans abonnement en cours : offert jusqu'à une date, ou accordé par Fellowship.
+    const text = entity.comped_pro_until
+      ? `Pro offert jusqu’au ${formatFullDate(new Date(entity.comped_pro_until))}`
+      : 'Pro'
+    return { text, action: 'none', pro: true }
   }
   return {
     text: `Gratuit · ${datesLabel(upcomingDates)} sur tes 6 prochains mois`,

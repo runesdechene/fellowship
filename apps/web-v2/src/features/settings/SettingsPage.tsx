@@ -9,6 +9,7 @@ import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { AccountSection } from './AccountSection'
 import { ContactSection } from './ContactSection'
+import { EntitiesSection } from './EntitiesSection'
 import { NotificationSettings } from './NotificationSettings'
 import { ProfileSection } from './ProfileSection'
 import type { SaveState } from './useProfileSave'
@@ -17,6 +18,7 @@ const SECTIONS = [
   { id: 'profil', label: 'Profil' },
   { id: 'compte', label: 'Compte' },
   { id: 'notifications', label: 'Notifications' },
+  { id: 'enseignes', label: 'Enseignes et abonnement' },
   { id: 'contact', label: 'Contact' },
 ] as const
 
@@ -68,6 +70,7 @@ export function SettingsPage() {
           <ProfileSection onSave={setSaveState} />
           <AccountSection />
           <NotificationSettings />
+          <EntitiesSection />
           <ContactSection />
         </div>
       </div>

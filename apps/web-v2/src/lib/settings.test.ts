@@ -100,6 +100,10 @@ describe('entityLine', () => {
       pro: true,
     })
   })
+  test('Pro accordé sans abonnement ni date de fin : « Pro », aucun bouton', () => {
+    const granted = { ...free, plan: 'pro', subscription_status: 'canceled' }
+    expect(entityLine(granted, now, 4)).toEqual({ text: 'Pro', action: 'none', pro: true })
+  })
   test('un abonnement résilié retombe en gratuit', () => {
     const canceled = { ...free, subscription_status: 'canceled' }
     expect(entityLine(canceled, now, 1).action).toBe('upgrade')

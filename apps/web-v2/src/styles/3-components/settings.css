@@ -157,6 +157,12 @@
   text-decoration: none;
 }
 
+.setting-row__logo {
+  --avatar-size: var(--avatar-size-discussion);
+
+  flex: none;
+}
+
 .setting-row__avatar {
   --avatar-size: var(--avatar-size-discussion);
 }
