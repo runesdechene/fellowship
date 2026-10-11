@@ -35,6 +35,10 @@
   color: var(--settings-faint-ink);
 }
 
+.settings__saved--failed {
+  color: var(--danger-ink);
+}
+
 .settings__body {
   display: grid;
   grid-template-columns: var(--settings-nav-width) minmax(0, var(--settings-column-width));
@@ -111,7 +115,8 @@
   padding: var(--space-12) var(--space-20);
 }
 
-.setting-row + .setting-row {
+/* Un filet entre deux lignes ; le message sous un champ reste collé à sa ligne. */
+.setting-card > :not(:first-child, .setting-row__problem) {
   border-top: 1px solid var(--line-card);
 }
 
@@ -135,6 +140,49 @@
 .setting-row__note {
   font: var(--type-list-meta);
   color: var(--ink-soft);
+}
+
+.setting-row__problem {
+  padding: 0 var(--space-20) var(--space-12);
+  font: var(--type-settings-note);
+  color: var(--danger-ink);
+}
+
+.setting-row__avatar {
+  --avatar-size: var(--avatar-size-discussion);
+}
+
+.setting-input {
+  width: var(--setting-input-width);
+  height: var(--setting-input-height);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-input);
+  background: var(--surface-card);
+}
+
+/* Les boutons des Réglages : petits, blancs, bordés d'un filet (maquette 2206:691). Le bouton
+   d'action (« Passer Pro », « Activer ») garde son aplat. */
+.setting-row__control .button:not(.button--action),
+.phone-card .button:not(.button--action) {
+  height: var(--setting-button-height);
+  padding: 0 var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.setting-row__control .button:hover:not(:disabled, .button--action),
+.phone-card .button:hover:not(:disabled, .button--action) {
+  background: var(--surface-control-hover);
+}
+
+.setting-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-button);
+  color: var(--ink-title);
 }
 
 .setting-row__control {
@@ -192,11 +240,6 @@
   font: var(--type-settings-column);
   color: var(--settings-faint-ink);
   text-align: right;
-}
-
-/* La ligne qui suit l'en-tête « Téléphone » garde son filet. */
-.push-lines__head + .setting-row {
-  border-top: 1px solid var(--line-card);
 }
 
 .push-line {

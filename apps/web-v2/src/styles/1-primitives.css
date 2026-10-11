@@ -62,6 +62,8 @@
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
   --terre-400: #cf9251; /* arrivée du dégradé */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
+  --brique-600: #b4432f; /* ce qui détruit ou refuse (maquette 2206:691, « Supprimer… ») */
+  --brique-400: #e0806a; /* la même encre, lisible la nuit */
   /* La sauge : le vert de validation, accordé à la terre du logo (Uriel, 11/10/2026). */
   --sauge-700: #3f6e47; /* encre d'une mention validée, le jour */
   --sauge-500: #5e9468; /* point d'un statut validé */

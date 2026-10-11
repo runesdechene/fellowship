@@ -915,6 +915,13 @@
   --settings-sections-gap: var(--space-48);
   --settings-off-opacity: 0.45;
   --setting-row-height: 56px; /* une ligne de la maquette 2206:691 */
+  /* Les champs et les petits boutons bordés de la maquette 2206:691. */
+  --danger-ink: var(--brique-600); /* supprimer, un champ refusé */
+  --setting-input-width: 300px;
+  --setting-input-height: 36px;
+  --setting-button-height: 34px;
+  --radius-setting-input: var(--round-10);
+  --radius-setting-button: var(--round-8);
   --settings-faint-ink: var(--ink-waiting);
   --settings-nav-on-surface: var(--surface-card-hover);
   --radius-settings-nav: var(--round-8);
@@ -1163,6 +1170,7 @@
   --toggle-on-surface: var(--terre-400);
   --toggle-off-surface: var(--night-400);
   --toggle-knob: var(--cream-50);
+  --danger-ink: var(--brique-400);
   --required-ink: var(--cream-500);
   --dropzone-border: var(--night-400);
   --report-gauge-track: var(--night-400);
