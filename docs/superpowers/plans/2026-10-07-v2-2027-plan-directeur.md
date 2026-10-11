@@ -136,7 +136,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   d'un festival où tu vas, et la **mise en sourdine** d'une discussion. Le lien entre éditions sert
   aussi à afficher **ton bilan de l'an passé** sur la fiche de la nouvelle édition.
 
-### Lot 9 — Communauté et réglages  ☐ · 9a Communauté ☑ (11/10/2026, V2 2.29.0, plan `2026-10-11-lot-9a-communaute-v2.md` — avec « Qui y va », les icônes de catégorie, le vert de validation et l'objectif dans le bilan) → ☐ 9b Réglages (profil, compte, enseignes, suppression)
+### Lot 9 — Communauté et réglages  ☑ (11/10/2026) · 9a Communauté ☑ (11/10/2026, V2 2.29.0, plan `2026-10-11-lot-9a-communaute-v2.md` — avec « Qui y va », les icônes de catégorie, le vert de validation et l'objectif dans le bilan) → 9b Réglages ☑ (11/10/2026, V2 2.31.0, plan `2026-10-11-lot-9b-reglages-v2.md` — profil, compte et déconnexion, enseignes et abonnement, contact, vraie suppression de compte par la fonction `delete-account`, colonnes Stripe verrouillées)
 - **Livre** : Communauté (fil groupé par jour, « Ça se rassemble », suggestions, identité protégée) ;
   Réglages (profil, compte, notifications, enseignes et abonnement, **vraie suppression de compte**).
 - **Cadres** : `2027 — Communauté`, `2027 — Réglages`.

@@ -117,3 +117,13 @@ repeint par-dessus) — il veut la **source** corrigée.
 ⚠️ **Leçon comportement** : quand Uriel donne une directive globale (« purifie partout sauf
 X »), l'exécuter à la **source**, pas page par page, et ne pas dire « c'est réglé » tant que
 la source n'est pas traitée. Lié à [[feedback_no_bandaid]].
+
+## Deno réécrit le `package.json` du dépôt
+
+**Le piège** (11/10/2026, lot 9b) : `npx deno check supabase/functions/…` lancé depuis le dépôt a vu
+`pnpm-workspace.yaml` et a **ajouté `"workspaces"` au `package.json` racine**, sans le demander.
+
+**How to apply :** vérifier une fonction Supabase dans une copie isolée — `_shared/` et le dossier de
+la fonction copiés dans le dossier temporaire, avec un `deno.json` `{"nodeModulesDir":"auto"}` — puis
+`npx --prefix <dépôt> --no-install deno check <fonction>/index.ts`. Une seule erreur y est connue et
+ancienne : la version d'API Stripe de `_shared/stripe.ts` (les fonctions tournent quand même).

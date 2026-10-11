@@ -28,7 +28,7 @@
 | Communauté | `2027 — Communauté (10/10/2026)` (`2212:2`) | validé, intégré (lot 9a, 11/10/2026) |
 | Qui y va (popup de la fiche) | `2027 — Fiche · qui y va (popup)` (`2218:2`), variante sauge ; la nuit `2027 sombre — pastilles de statut` (menthe et pervenche) | validé, intégré (11/10/2026) |
 | Icônes de catégorie | `2027 — Catégories · icônes (proposition)` (`2215:2`) | validé, intégré (11/10/2026) — Biker retiré |
-| Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; autres sections à venir |
+| Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; toutes les sections (`2206:691`) validées, intégrées (lot 9b, 11/10/2026) |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque` (étape 2 sur 5, vitrine en direct) | dessiné — l'écran du choix est **écarté** |
@@ -58,7 +58,7 @@
 - [x] **Notifications** elles-mêmes (lots 8a-8c, 09/10/2026).
 - [x] **Suggestions « Pour toi »** (alerte Pro, lot 8d, 10/10/2026) — remplacent les recherches sauvegardées.
 - [ ] **Lien entre les éditions d'un même festival**, pour l'alerte « nouvelle édition » — rien ne relie aujourd'hui l'édition 2026 à 2027.
-- [ ] **Suppression de compte réelle** : en V1, « Supprimer mon compte » déconnecte seulement (problème RGPD).
+- [x] **Suppression de compte réelle** : livrée dans la V2 (lot 9b, 11/10/2026, fonction `delete-account`) ; la V1 déconnecte seulement jusqu'à la bascule.
 - [x] Les **organisateurs** ne peuvent pas encore créer de compte (Uriel, 07/10/2026) : pas de page organisateur, et la section « Organisateurs » des résultats est masquée dans la maquette.
 - [ ] À vérifier : les **événements récurrents** (« tous les dimanches ») n'existent sans doute pas — la carte de la maquette disparaît dans ce cas.
 
