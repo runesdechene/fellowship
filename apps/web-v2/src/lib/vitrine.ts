@@ -6,6 +6,8 @@
  * ATTENTION — une date en cours est encore « à venir » : on la quitte le lendemain de sa fin.
  */
 
+import { MAX_LINKS, linkLabel, normalizeUrl, type LinkType, type VitrineLink } from './vitrine-edit'
+
 /** « Les Aventuriales » → « Aventuriales » ; « Art to Play 2026 » → « Art to Play ». */
 export function stampName(name: string): string {
   return name
@@ -60,4 +62,25 @@ export function websiteLink(raw: string): { href: string; label: string } {
   } catch {
     return { href, label: raw }
   }
+}
+
+const LINK_TYPES: readonly LinkType[] = ['website', 'instagram', 'shop']
+
+/**
+ * Les liens d'une vitrine (`entities.links`), trois au plus ; une vitrine qui n'en a pas encore
+ * garde le site de la V1 (`website`), le temps qu'on la réédite.
+ */
+export function vitrineLinks(raw: unknown, website: string | null): VitrineLink[] {
+  const links = (Array.isArray(raw) ? raw : []).flatMap((item: unknown): VitrineLink[] => {
+    if (typeof item !== 'object' || item === null) return []
+    const { type, url, label } = item as Record<string, unknown>
+    if (typeof url !== 'string' || url.trim() === '') return []
+    const kind = LINK_TYPES.find((known) => known === type)
+    if (!kind) return []
+    return [{ type: kind, url, label: typeof label === 'string' ? label : '' }]
+  })
+  if (links.length > 0) return links.slice(0, MAX_LINKS)
+  if (!website?.trim()) return []
+  const url = normalizeUrl(website)
+  return [{ type: 'website', url, label: linkLabel({ type: 'website', url, label: '' }) }]
 }

@@ -14,3 +14,4 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `ProBubble.tsx` — l'invitation Pro en bulle, là où un geste est refusé en gratuit.
 - `ProVeil.tsx` — un contenu flouté et inerte, avec l'invitation par-dessus.
 - `Poster.tsx` — l'affiche en vignette ; absente, la couleur et l'icône de sa catégorie.
+- `InstagramIcon.tsx` — le pictogramme Instagram au trait (lucide a retiré ses logos de marque).

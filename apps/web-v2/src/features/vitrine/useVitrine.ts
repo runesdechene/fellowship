@@ -17,11 +17,12 @@ import {
 } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import { isCertified } from '@/lib/plan'
-import { splitRoad } from '@/lib/vitrine'
+import { splitRoad, vitrineLinks } from '@/lib/vitrine'
+import type { VitrineLink } from '@/lib/vitrine-edit'
 
 /** Les colonnes publiques d'une enseigne — jamais la facturation. */
 const PUBLIC_COLUMNS =
-  'actor_id, brand_name, craft_type, bio, website, banner_url, banner_position, avatar_url, public_slug, city, department, plan, verified, comped_pro_until, is_ambassador'
+  'actor_id, brand_name, craft_type, bio, website, links, banner_url, banner_position, avatar_url, public_slug, city, department, plan, verified, comped_pro_until, is_ambassador'
 
 const MAX_FOLLOWER_FACES = 3
 
@@ -44,7 +45,10 @@ export interface Vitrine {
   name: string
   craft: string | null
   bio: string | null
-  website: string | null
+  /** Trois liens au plus (site, Instagram, boutique) ; le site de la V1 à défaut. */
+  links: VitrineLink[]
+  city: string | null
+  department: string | null
   bannerUrl: string | null
   bannerPosition: number
   avatarUrl: string | null
@@ -138,7 +142,9 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
     name: entity.brand_name,
     craft: entity.craft_type,
     bio: entity.bio,
-    website: entity.website,
+    links: vitrineLinks(entity.links, entity.website),
+    city: entity.city,
+    department: entity.department,
     bannerUrl: entity.banner_url,
     bannerPosition: entity.banner_position,
     avatarUrl: entity.avatar_url,
@@ -164,13 +170,15 @@ const EMPTY: VitrineState = { vitrine: null, loading: true, notFound: false, err
 
 export function useVitrine(slug: string | undefined, viewerId: string | null | undefined) {
   const [state, setState] = useState<VitrineState>(EMPTY)
+  // Relire après un enregistrement (lot 6b) : la même vitrine reste à l'écran pendant la relecture.
+  const [version, setVersion] = useState(0)
 
   useEffect(() => {
     if (!slug || !viewerId) return
     let cancelled = false
 
     async function run(currentSlug: string, currentViewer: string) {
-      setState(EMPTY)
+      setState((current) => (current.vitrine?.slug === currentSlug ? current : EMPTY))
       let next: VitrineState
       try {
         const vitrine = await loadVitrine(currentSlug, currentViewer, new Date())
@@ -186,7 +194,11 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
     return () => {
       cancelled = true
     }
-  }, [slug, viewerId])
+  }, [slug, viewerId, version])
+
+  const reload = useCallback(() => {
+    setVersion((current) => current + 1)
+  }, [])
 
   /** Suivre ou ne plus suivre : l'état bascule tout de suite et revient si la base refuse. */
   const toggleFollow = useCallback(async () => {
@@ -216,5 +228,5 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
     if (response.error) flip(wasFollowing, wasFollowing ? 1 : -1)
   }, [state.vitrine, viewerId])
 
-  return { ...state, toggleFollow }
+  return { ...state, toggleFollow, reload }
 }

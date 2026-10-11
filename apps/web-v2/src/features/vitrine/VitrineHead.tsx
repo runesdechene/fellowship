@@ -6,18 +6,37 @@
  * ATTENTION — le propriétaire ne se suit pas lui-même : il voit « Modifier ma vitrine », qui mène
  *            à l'éditeur de la V1 tant que la V2 n'a pas le sien.
  */
-import { BadgeCheck, Check, ExternalLink, MapPin, Pencil, Plus, Share } from 'lucide-react'
-import { useState, type CSSProperties } from 'react'
+import {
+  BadgeCheck,
+  Check,
+  ExternalLink,
+  Globe,
+  MapPin,
+  Pencil,
+  Plus,
+  Share,
+  ShoppingBag,
+} from 'lucide-react'
+import { useState, type ComponentType, type CSSProperties } from 'react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { InstagramIcon } from '@/components/ui/InstagramIcon'
 import { useTransitionNavigate } from '@/lib/navigation'
-import { initials, networkCounts, websiteLink } from '@/lib/vitrine'
+import { initials, networkCounts } from '@/lib/vitrine'
+import { linkLabel, type LinkType } from '@/lib/vitrine-edit'
 import type { Vitrine } from './useVitrine'
 
 interface VitrineHeadProps {
   vitrine: Vitrine
   isOwner: boolean
   onToggleFollow: () => void
+}
+
+/** L'icône de chaque sorte de lien (lot 6b). */
+const LINK_ICONS: Record<LinkType, ComponentType<{ size?: number; strokeWidth?: number }>> = {
+  website: Globe,
+  instagram: InstagramIcon,
+  shop: ShoppingBag,
 }
 
 /** L'adresse publique de la vitrine : celle de la V1, à la racine du domaine. */
@@ -29,7 +48,6 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadPro
   const go = useTransitionNavigate()
   const [copied, setCopied] = useState(false)
   const [followers, companions] = networkCounts(vitrine.followerCount, vitrine.companionCount)
-  const site = vitrine.website ? websiteLink(vitrine.website) : null
 
   async function share() {
     const url = publicUrl(vitrine.slug)
@@ -153,11 +171,26 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow }: VitrineHeadPro
 
         {vitrine.bio && <p className="vitrine-head__bio">{vitrine.bio}</p>}
 
-        {site && (
-          <a className="vitrine-head__site" href={site.href} target="_blank" rel="noreferrer">
-            {site.label}
-            <ExternalLink size={13} strokeWidth={2} />
-          </a>
+        {vitrine.links.length > 0 && (
+          <ul className="vitrine-head__links">
+            {vitrine.links.map((link) => {
+              const Icon = LINK_ICONS[link.type]
+              return (
+                <li key={link.url}>
+                  <a
+                    className="vitrine-head__site"
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon size={14} strokeWidth={1.9} />
+                    {linkLabel(link)}
+                    <ExternalLink size={12} strokeWidth={2} />
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
         )}
 
         <div className="vitrine-head__network">

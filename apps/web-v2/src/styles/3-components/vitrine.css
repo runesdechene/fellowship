@@ -151,11 +151,18 @@
   white-space: pre-line; /* l'artisan écrit sa présentation en paragraphes */
 }
 
+/* Les liens : site, Instagram, boutique, chacun avec son icône (lot 6b). */
+.vitrine-head__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-20);
+  margin-top: var(--space-14);
+}
+
 .vitrine-head__site {
   display: inline-flex;
   align-items: center;
   gap: var(--space-6);
-  margin-top: var(--space-14);
   font: var(--type-vitrine-link);
   color: var(--ink-title);
 }

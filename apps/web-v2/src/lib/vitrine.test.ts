@@ -4,7 +4,7 @@
  *            tampon mal coupé s'y voit tout de suite.
  */
 import { describe, expect, it } from 'vitest'
-import { initials, networkCounts, splitRoad, stampName, websiteLink } from './vitrine'
+import { initials, networkCounts, splitRoad, stampName, vitrineLinks, websiteLink } from './vitrine'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -86,5 +86,29 @@ describe('websiteLink', () => {
       href: 'https://corneetcuir.fr',
       label: 'corneetcuir.fr',
     })
+  })
+})
+
+describe('vitrineLinks', () => {
+  it('lit les liens valides, trois au plus, et ignore les mal formés', () => {
+    const raw = [
+      { type: 'shop', url: 'https://la-bete.sumupstore.com/', label: 'Boutique' },
+      { type: 'instagram', url: 'https://instagram.com/x', label: '@x' },
+      { url: 'https://sans-type.fr' },
+      'x',
+      { type: 'website', url: 'https://a.fr', label: 'a.fr' },
+      { type: 'website', url: 'https://b.fr', label: 'b.fr' },
+    ]
+    expect(vitrineLinks(raw, null).map((link) => link.url)).toEqual([
+      'https://la-bete.sumupstore.com/',
+      'https://instagram.com/x',
+      'https://a.fr',
+    ])
+  })
+  it('sans liens, le site hérité de la V1', () => {
+    expect(vitrineLinks([], 'runesdechene.com')).toEqual([
+      { type: 'website', url: 'https://runesdechene.com', label: 'runesdechene.com' },
+    ])
+    expect(vitrineLinks(null, null)).toEqual([])
   })
 })
