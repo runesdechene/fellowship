@@ -191,12 +191,15 @@
   --status-validated-ink: var(--sauge-700);
   --status-validated-surface: var(--sauge-50);
   --status-validated-mark: var(--sauge-500);
+  /* Le liseré d'une pastille : rien le jour, la teinte en filet la nuit. */
+  --status-validated-line: transparent;
   --dot-confirmed: var(--status-validated-mark);
   /* Dossier envoyé : un bleu doux, ni validé ni à faire — il attend (Uriel, 11/10/2026). */
   --status-sent-ink: var(--bleu-700);
   --status-sent-surface: var(--bleu-50);
   /* Une icône posée seule, sans pastille : elle garde sa couleur, la nuit en néon. */
   --status-sent-mark: var(--bleu-700);
+  --status-sent-line: transparent;
   --dot-size: var(--space-8);
 
   /* =========================================================================
@@ -1106,14 +1109,16 @@
   --status-pending-surface: var(--night-100);
   --status-pending-surface-hover: var(--night-150);
   --status-pending-icon: var(--cream-650);
-  /* La nuit, la pastille ELLE-MÊME est vive et son texte blanc (Uriel, 11/10/2026) ; une icône
-     posée seule garde le néon (`-mark`). */
-  --status-validated-ink: var(--sand-0);
-  --status-validated-surface: var(--sauge-600);
-  --status-validated-mark: var(--sauge-300);
-  --status-sent-ink: var(--sand-0);
-  --status-sent-surface: var(--bleu-600);
-  --status-sent-mark: var(--bleu-300);
+  /* La nuit : un voile translucide de la teinte, un filet de la même teinte, une encre lumineuse —
+     jade pour le validé, bleu glacier pour le dossier envoyé (Uriel, 11/10/2026). */
+  --status-validated-ink: var(--jade-400);
+  --status-validated-surface: color-mix(in srgb, var(--jade-400) 14%, transparent);
+  --status-validated-mark: var(--jade-400);
+  --status-validated-line: color-mix(in srgb, var(--jade-400) 38%, transparent);
+  --status-sent-ink: var(--glacier-300);
+  --status-sent-surface: color-mix(in srgb, var(--glacier-300) 14%, transparent);
+  --status-sent-mark: var(--glacier-300);
+  --status-sent-line: color-mix(in srgb, var(--glacier-300) 38%, transparent);
 
   /* Le bouton principal s'inverse : crème, texte foncé. */
   --action-surface: var(--cream-50);

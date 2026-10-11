@@ -63,15 +63,15 @@
   --terre-400: #cf9251; /* arrivée du dégradé */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
   /* La sauge : le vert de validation, accordé à la terre du logo (Uriel, 11/10/2026). */
-  --sauge-600: #16a34a; /* fond vif d'une mention validée, la nuit : le blanc s'y lit */
   --sauge-700: #3f6e47; /* encre d'une mention validée, le jour */
   --sauge-500: #5e9468; /* point d'un statut validé */
-  --sauge-300: #4be37a; /* le néon d'une mention validée, la nuit (Uriel : « le plus pétant ») */
   --sauge-50: #e8f0e6; /* fond d'une mention validée, le jour */
   /* Le bleu doux : un dossier envoyé, qui attend sa réponse (Uriel, 11/10/2026). */
-  --bleu-600: #3b82f6; /* fond vif d'un dossier envoyé, la nuit : le blanc s'y lit */
   --bleu-700: #3e6590; /* encre d'un dossier envoyé, le jour */
-  --bleu-300: #5aaeff; /* le néon d'un dossier envoyé, la nuit */
+  /* La nuit, d'autres teintes (planche « 2027 sombre — pastilles de statut », Uriel, 11/10/2026) :
+     le jade pour le validé, le bleu glacier pour le dossier envoyé. */
+  --jade-400: #4ade80;
+  --glacier-300: #7dd3fc;
   --bleu-50: #e8eef5; /* fond d'un dossier envoyé, le jour */
 
   /* ---------------------------------------------------------------------

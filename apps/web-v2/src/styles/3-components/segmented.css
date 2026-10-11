@@ -40,12 +40,14 @@
 }
 
 .segmented__option--sent {
+  box-shadow: inset 0 0 0 1px var(--status-sent-line);
   background: var(--status-sent-surface);
   font: var(--type-segmented-on);
   color: var(--status-sent-ink);
 }
 
 .segmented__option--validated {
+  box-shadow: inset 0 0 0 1px var(--status-validated-line);
   background: var(--status-validated-surface);
   font: var(--type-segmented-on);
   color: var(--status-validated-ink);

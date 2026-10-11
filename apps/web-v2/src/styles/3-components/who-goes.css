@@ -151,12 +151,14 @@ a.who-goes__row:hover {
   gap: var(--space-4);
   padding: var(--space-4) var(--space-10) var(--space-4) var(--space-8);
   border-radius: var(--radius-chip);
+  box-shadow: inset 0 0 0 1px var(--status-sent-line);
   background: var(--status-sent-surface);
   font: var(--type-chip-strong);
   color: var(--status-sent-ink);
 }
 
 .who-goes__status--validated {
+  box-shadow: inset 0 0 0 1px var(--status-validated-line);
   background: var(--status-validated-surface);
   font: var(--type-chip-strong);
   color: var(--status-validated-ink);

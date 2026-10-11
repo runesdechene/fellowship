@@ -22,7 +22,7 @@
 }
 
 .chip--ok {
-  border-color: transparent;
+  border-color: var(--status-validated-line);
   background: var(--status-validated-surface);
   color: var(--status-validated-ink);
   font: var(--type-chip-strong);
@@ -35,6 +35,7 @@
 }
 
 .chip--sent {
+  border-color: var(--status-sent-line);
   background: var(--status-sent-surface);
   color: var(--status-sent-ink);
   font: var(--type-chip-strong);
