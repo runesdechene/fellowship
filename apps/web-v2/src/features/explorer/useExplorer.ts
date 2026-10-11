@@ -7,9 +7,8 @@
  *            coordonnées pour l'acteur. Repérer une date, c'est la poser en « Intéressé ».
  */
 import { useCallback, useEffect, useState } from 'react'
-import { isRecent, monthsAhead, parseSqlDate, todayIso } from '@/lib/dates'
-import { searchPattern, windowMonths } from '@/lib/explorer'
-import { proHorizon } from '@/lib/plan'
+import { isRecent, parseSqlDate, todayIso } from '@/lib/dates'
+import { beyondWindow, searchPattern, searchWindow } from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
@@ -119,29 +118,31 @@ async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<
 }
 
 /** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. En
- *  gratuit, la fenêtre s'arrête aux 6 prochains mois (windowMonths). */
+ *  gratuit, la fenêtre s'arrête aux 6 prochains mois (searchWindow). */
 function eventsInWindow(query: ExplorerQuery, today: Date, pro: boolean) {
-  const end = todayIso(monthsAhead(today, windowMonths(query.quand, pro)))
+  const { from, to } = searchWindow(query.quand, pro, today)
   let request = supabase
     .from('events')
     .select(EVENT_COLUMNS)
     .eq('is_private', false)
-    .gte('end_date', todayIso(today))
-    .lt('start_date', end)
+    .gte('end_date', todayIso(from))
+    .lt('start_date', todayIso(to))
   if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
   return request
 }
 
 /** En gratuit : combien de festivals de la même recherche attendent au-delà des 6 mois. */
 async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
+  const beyond = beyondWindow(query.quand, today)
+  if (!beyond) return 0
   const words = searchPattern(query.q)
   const place = searchPattern(query.ou)
   let request = supabase
     .from('events')
     .select('id', { count: 'exact', head: true })
     .eq('is_private', false)
-    .gte('start_date', todayIso(proHorizon(today)))
-    .lt('start_date', todayIso(monthsAhead(today, 12)))
+    .gte('start_date', todayIso(beyond.from))
+    .lt('start_date', todayIso(beyond.to))
   if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
   if (words)
     request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
@@ -152,9 +153,9 @@ async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
 }
 
 async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro: boolean) {
-  const end = todayIso(monthsAhead(today, windowMonths(query.quand, pro)))
+  const { from, to } = searchWindow(query.quand, pro, today)
   const [companions, entity, recentRows] = await Promise.all([
-    fetchCompanions(viewerId, todayIso(today), end, new Set()),
+    fetchCompanions(viewerId, todayIso(from), todayIso(to), new Set()),
     supabase.from('entities').select('department').eq('actor_id', viewerId).maybeSingle(),
     eventsInWindow(query, today, pro).order('created_at', { ascending: false }).limit(ROW_LIMIT),
   ])

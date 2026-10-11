@@ -9,8 +9,10 @@ import {
   QUAND_OPTIONS,
   quandChoices,
   quandMonths,
+  beyondWindow,
   resultsTitle,
   searchPattern,
+  searchWindow,
   windowMonths,
 } from './explorer'
 
@@ -69,5 +71,62 @@ describe('windowMonths', () => {
   })
   it('en Pro, 12 mois par défaut', () => {
     expect(windowMonths(null, true)).toBe(12)
+  })
+})
+
+describe('searchWindow', () => {
+  const today = new Date(2026, 9, 11) // 11 octobre 2026
+
+  it('les N prochains mois, à partir d’aujourd’hui', () => {
+    expect(searchWindow('3', true, today)).toEqual({ from: today, to: new Date(2027, 0, 1) })
+    expect(searchWindow(null, false, today)).toEqual({ from: today, to: new Date(2027, 3, 1) })
+  })
+
+  it('un mois précis (?quand=2026-12) : du 1er au 1er du mois suivant', () => {
+    expect(searchWindow('2026-12', true, today)).toEqual({
+      from: new Date(2026, 11, 1),
+      to: new Date(2027, 0, 1),
+    })
+  })
+
+  it('le mois en cours commence aujourd’hui, pas le 1er', () => {
+    expect(searchWindow('2026-10', true, today)).toEqual({
+      from: today,
+      to: new Date(2026, 10, 1),
+    })
+  })
+
+  it('en gratuit, un mois au-delà des 6 mois est vide', () => {
+    const window = searchWindow('2027-06', false, today)
+    expect(window.to <= window.from).toBe(true)
+  })
+})
+
+describe('beyondWindow', () => {
+  const today = new Date(2026, 9, 11)
+
+  it('sans mois précis : de l’horizon gratuit à douze mois', () => {
+    expect(beyondWindow(null, today)).toEqual({
+      from: new Date(2027, 3, 1),
+      to: new Date(2027, 9, 1),
+    })
+  })
+
+  it('un mois au-delà des 6 mois : ce mois entier', () => {
+    expect(beyondWindow('2027-06', today)).toEqual({
+      from: new Date(2027, 5, 1),
+      to: new Date(2027, 6, 1),
+    })
+  })
+
+  it('un mois avant l’horizon : rien de caché', () => {
+    expect(beyondWindow('2026-12', today)).toBeNull()
+  })
+})
+
+describe('quandChoices avec un mois précis', () => {
+  it('le mois demandé s’ajoute en tête, nommé', () => {
+    const [first] = quandChoices(true, '2026-12')
+    expect(first).toEqual({ value: '2026-12', label: 'Décembre 2026', months: 1 })
   })
 })

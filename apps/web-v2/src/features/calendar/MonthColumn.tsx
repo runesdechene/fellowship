@@ -45,7 +45,7 @@ export function MonthColumn({ month, current, showFriends, showInterested }: Mon
       ))}
 
       {shown.length === 0 && (
-        <Link to="/explorer" className="month-column__free">
+        <Link to={`/explorer?quand=${month.key}`} className="month-column__free">
           <span className="month-column__free-title">Mois libre</span>
           <span className="month-column__free-link">
             Trouver une date en {month.label.toLowerCase()} <ArrowRight size={13} strokeWidth={2} />

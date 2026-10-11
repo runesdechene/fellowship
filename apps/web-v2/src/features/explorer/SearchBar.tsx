@@ -19,7 +19,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ q, ou, quand, onSearch, pro }: SearchBarProps) {
-  const choices = quandChoices(pro)
+  const choices = quandChoices(pro, quand)
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
   const [when, setWhen] = useState(

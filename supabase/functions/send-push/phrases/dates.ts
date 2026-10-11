@@ -68,7 +68,7 @@ export function monthName(date: Date): string {
 }
 
 /** « Septembre » — le nom du mois, initiale en capitale. */
-function formatMonthLabel(date: Date): string {
+export function formatMonthLabel(date: Date): string {
   return capitalize(MONTH_FORMATTER.format(date))
 }
 
