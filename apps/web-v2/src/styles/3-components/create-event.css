@@ -5,19 +5,15 @@
  *            construction ensuite.
  */
 
-/* La barre et la question forment UN bloc, centré ensemble dans la hauteur
-   du panneau. Plaquer la barre en haut la laissait flotter à des centaines
-   de pixels de ce qu'elle décrit, à hauteur du chrome de l'application — on
-   la lisait comme appartenant à celle-ci plutôt qu'à l'atelier. */
+/* Maquette 2082:2 : la barre de création prend la place de la barre du haut,
+   tout en haut du panneau ; la question et l'aperçu partent dessous, calés à
+   gauche sur « Quitter ». */
 .create {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
-  max-width: var(--page-max-width);
-  margin-inline: auto;
-  padding: var(--page-padding-top) var(--page-gutter) var(--space-48);
+  padding: var(--space-32) var(--page-gutter) var(--space-48) var(--create-inset);
 }
 
 /* --- La barre de création (CreateBar.tsx, maquette 2082:2) ------------------ */
@@ -26,7 +22,7 @@
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-24);
-  margin-bottom: var(--space-64);
+  margin-bottom: var(--create-bar-gap);
 }
 
 .create-bar__quit {
@@ -160,6 +156,7 @@ button.create-bar__step:hover {
   display: grid;
   flex: 0 1 auto;
   grid-template-columns: minmax(0, var(--create-step-width)) var(--create-preview-width);
+  justify-content: start;
   gap: var(--create-columns-gap);
   align-items: start;
 }
@@ -202,7 +199,7 @@ button.create-bar__step:hover {
   display: flex;
   align-items: center;
   gap: var(--space-12);
-  margin-top: var(--space-40);
+  margin-top: var(--space-28);
 }
 
 /* Ce qui manque pour avancer, dit à l'endroit où on essaie d'avancer. */
@@ -301,20 +298,19 @@ button.create-bar__step:hover {
   top: var(--space-24);
   display: flex;
   flex-direction: column;
-  gap: var(--space-10);
+  gap: var(--space-4);
 }
 
 .preview__label {
-  font: var(--type-eyebrow);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  margin-bottom: var(--space-10);
+  font: var(--type-preview-label);
+  color: var(--ink-waiting);
 }
 
 .preview__poster {
   width: 100%;
   aspect-ratio: 3 / 4;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
   border-radius: var(--radius-card);
   object-fit: cover;
 }
@@ -326,14 +322,14 @@ button.create-bar__step:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-10);
+  gap: var(--space-8);
   border: var(--preview-dash) dashed var(--line-dashed);
   font: var(--type-list-meta);
   color: var(--ink-waiting);
 }
 
 .preview__name {
-  font: var(--type-create-card-name);
+  font: var(--type-preview-name);
   color: var(--ink-title);
 }
 
@@ -342,8 +338,8 @@ button.create-bar__step:hover {
 }
 
 .preview__meta {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
+  font: var(--type-preview-meta);
+  color: var(--ink-waiting);
 }
 
 .preview__tags {
@@ -355,10 +351,10 @@ button.create-bar__step:hover {
 .preview__note {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
-  margin-top: var(--space-6);
+  gap: var(--space-8);
+  margin-top: var(--space-14);
   font: var(--type-list-meta);
-  color: var(--status-ok-ink);
+  color: var(--ink-soft);
 }
 
 /* --- Doublons possibles --------------------------------------------------- */
@@ -366,6 +362,7 @@ button.create-bar__step:hover {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  margin-top: var(--space-28);
   padding: var(--space-16) var(--space-8) var(--space-8);
   border-radius: var(--radius-card);
   background: var(--welcome-panel-surface);

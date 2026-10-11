@@ -413,6 +413,12 @@
   --step-shift: var(--space-20);
 
   --create-step-width: 620px; /* maquette 2082:2 */
+  --create-inset: 137px; /* du bord du panneau à « Quitter » */
+  --create-bar-gap: 102px; /* de la barre à « Étape 1 sur 4 » */
+  --type-preview-label: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-preview-name: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-preview-meta: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
   --create-preview-width: 300px;
   --preview-dash: 1.5px;
   --create-bar-link: 18px;
@@ -420,13 +426,11 @@
   --dupe-poster-height: 46px;
   --create-bar-number: 20px;
   --type-create-bar-number: var(--weight-semibold) var(--size-11) / 1 var(--family-sans);
-  --create-columns-gap: var(--space-48);
+  --create-columns-gap: 140px; /* de la question à l’aperçu */
 
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */
   --type-create-ask: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
-  --type-create-card-name: var(--weight-semibold) var(--size-18) / var(--leading-snug)
-    var(--family-sans);
 
   /* =========================================================================
      LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
