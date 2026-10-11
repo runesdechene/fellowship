@@ -101,7 +101,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   date en « Intéressé » (ou la retire) ; une date déjà engagée garde son étoile pleine. Les cartes
   sans affiche n'ont pas l'icône de catégorie en filigrane : la V2 n'a pas encore ces icônes.
 
-### Lot 6 — Vitrine d'un artisan  ☑ ordinateur, consultation (07/10/2026) · ☐ édition, QR, intégration, signaler, mobile
+### Lot 6 — Vitrine d'un artisan  ☑ ordinateur, consultation (07/10/2026) · 6b éditeur en place ☑ (11/10/2026, V2 2.30.0, plan `2026-10-11-lot-6b-editeur-vitrine-v2.md`) · ☐ QR, intégration, signaler, mobile
 - **Livre** : page publique (bannière, logo, Certifié = Pro, réseau, prochaines escales, tampons),
   états du propriétaire (modifier, intégrer à mon site), Suivre / Partager / QR / Signaler.
 - **Cadre** : `2027 — Vitrine d’un artisan`. **Dépend de** : lot 1.
@@ -109,7 +109,11 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   Certifié (Pro ou vérifié), Ambassadeur, métier, ville, présentation, site, abonnés et compagnons
   exposants, prochaines escales avec les amis du visiteur, tampons, Suivre / Partager. Le
   propriétaire voit « Modifier ma vitrine », qui ouvre l'éditeur de la V1 en attendant celui de la
-  V2. Reste : l'éditeur, le QR, « Intégrer à mon site », « Signaler » et le menu « … » — absents de
+  V2. **11/10/2026 (6b)** : l'éditeur de la V2 est livré — modification en place (maquette `2231:2`),
+  trois liens (site, Instagram, boutique), adresse libre avec avertissement, Enregistrer / Annuler.
+  « Ma vitrine » entre Communauté et Réglages dans la barre latérale. Limite assumée : quitter par
+  un bouton (pas un lien) ne demande pas confirmation — `useBlocker` exigerait `createBrowserRouter`.
+  Reste : le QR, « Intégrer à mon site », « Signaler » et le menu « … » — absents de
   l'écran plutôt que des boutons morts.
 
 ### Lot 7 — Le Pro et les bilans  ☑ (09/10/2026) · 7a bilans ☑ (08/10/2026, plan `2026-10-08-lot-7a-bilans-v2.md`) · 7b statut Pro ☑ (08/10/2026, plan `2026-10-08-lot-7b-statut-pro-v2.md`) · 7c offre et paiement ☑ (09/10/2026, plan `2026-10-09-lot-7c-offre-pro-v2.md`, fonctions Stripe redéployées)
