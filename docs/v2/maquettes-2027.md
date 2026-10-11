@@ -23,7 +23,9 @@
 | Notifications · nouveaux événements | `2027 — Notifications · nouveaux événements` (`2182:2`) | validé, intégré (lot 8c, 09/10/2026) |
 | Pour toi (suggestions) | `2027 — Tableau de bord · Pour toi (Pro)` (`2206:2`), `… (compte gratuit)` (`2206:340`), `2027 — Réglages · ligne Suggestions pour toi` (`2206:691`) | validé, intégré (lot 8d, 10/10/2026) — « Pas pour moi » en icône d'interdiction |
 | Offre Pro | `2027 — Offre Pro`, `2027 mobile — Offre Pro` | validé, intégré (lot 7c, 09/10/2026) |
-| Communauté | `2027 — Communauté` | dessiné |
+| Communauté | `2027 — Communauté (10/10/2026)` (`2212:2`) | validé, intégré (lot 9a, 11/10/2026) |
+| Qui y va (popup de la fiche) | `2027 — Fiche · qui y va (popup)` (`2218:2`), variante sauge ; la nuit `2027 sombre — pastilles de statut` (menthe et pervenche) | validé, intégré (11/10/2026) |
+| Icônes de catégorie | `2027 — Catégories · icônes (proposition)` (`2215:2`) | validé, intégré (11/10/2026) — Biker retiré |
 | Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; autres sections à venir |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé |
