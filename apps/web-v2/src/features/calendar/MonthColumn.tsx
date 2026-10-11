@@ -6,6 +6,7 @@
  *            mais ne comptent jamais.
  */
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { countLabel } from '@/lib/calendar'
 import { CompanionCard } from './CompanionCard'
 import { PosterCard } from './PosterCard'
@@ -44,12 +45,12 @@ export function MonthColumn({ month, current, showFriends, showInterested }: Mon
       ))}
 
       {shown.length === 0 && (
-        <div className="month-column__free">
+        <Link to="/explorer" className="month-column__free">
           <span className="month-column__free-title">Mois libre</span>
           <span className="month-column__free-link">
             Trouver une date en {month.label.toLowerCase()} <ArrowRight size={13} strokeWidth={2} />
           </span>
-        </div>
+        </Link>
       )}
 
       {companions.length > 0 && (

@@ -209,6 +209,7 @@
   color: var(--ink-title);
 }
 
+/* Un mois libre se fait discret ; il ne s'éveille qu'au survol, et mène à l'Explorer. */
 .month-column__free {
   display: flex;
   flex-direction: column;
@@ -216,6 +217,13 @@
   padding: var(--space-20);
   border: 1px dashed var(--line-dashed);
   border-radius: var(--radius-card);
+  opacity: var(--calendar-free-opacity);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.month-column__free:hover,
+.month-column__free:focus-visible {
+  opacity: 1;
 }
 
 .month-column__free-title {
@@ -228,7 +236,7 @@
   align-items: center;
   gap: var(--space-6);
   font: var(--type-event-meta);
-  color: var(--ink-title);
+  color: var(--ink-soft);
 }
 
 /* --- La carte-affiche ------------------------------------------------------ */
@@ -345,6 +353,7 @@
 @media (prefers-reduced-motion: reduce) {
   .poster-card,
   .companion-card,
+  .month-column__free,
   .calendar-toggle__switch,
   .calendar-toggle__switch::after {
     transition: none;

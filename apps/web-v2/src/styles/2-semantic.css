@@ -972,6 +972,7 @@
   --calendar-padding-top: var(--space-80);
   --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */
   --calendar-muted-opacity: 0.5; /* une date « Intéressé », affichée sur option */
+  --calendar-free-opacity: 0.55; /* « Mois libre » : présent sans peser (Uriel, 11/10/2026) */
 
   /* =========================================================================
      VITRINE — la page publique d'un artisan (features/vitrine)
