@@ -19,6 +19,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `category-icons.ts` — l'icône de chaque catégorie (planche Figma 2215:2).
 - `useTagStyles.ts` — les couleurs des catégories, lues une fois et partagées.
 - `who-goes.ts` — la liste « Qui y va » : statut de chaque ami (Inscrit en vert, Dossier envoyé), ordre.
+- `image-resize.ts` — réduire une image au navigateur avant envoi (WebP, repli JPEG).
 - `vitrine-edit.ts` — les règles de l'éditeur de vitrine : adresse, liens, limites, ce qui a changé.
 - `community.ts` — le fil de la communauté : lire, trier par onglet, dire les lignes et les raisons de suivre.
 - `suggestions.ts` — les suggestions « Pour toi » : lire la réponse, dire la raison (recopié dans send-push).
