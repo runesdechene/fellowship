@@ -414,6 +414,8 @@
 
   --create-mate-width: 360px;
   --create-bar-link: 18px;
+  --dupe-poster-width: 34px; /* la vignette d'un doublon, maquette 2082:2 */
+  --dupe-poster-height: 46px;
   --create-bar-number: 20px;
   --type-create-bar-number: var(--weight-semibold) var(--size-11) / 1 var(--family-sans);
   --create-columns-gap: var(--space-48);

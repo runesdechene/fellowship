@@ -5,13 +5,17 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-interface SimilarEvent {
+export interface SimilarEvent {
   id: string
   name: string
   city: string
   department: string
   startDate: string
   endDate: string
+  imageUrl: string | null
+  tags: string[]
+  /** Les enseignes inscrites (« Inscrit » ou « Confirmé »). */
+  exhibitors: number
 }
 
 /** En dessous, la recherche rendrait n'importe quoi. */
@@ -50,14 +54,7 @@ export function useSimilarEvents(name: string, enabled: boolean): SimilarEvent[]
         search_name: query,
       })
       if (cancelled) return
-      const rows = (data ?? []) as Array<{
-        id: string
-        name: string
-        city: string
-        department: string
-        start_date: string
-        end_date: string
-      }>
+      const rows = data ?? []
       setResult({
         query,
         rows: rows.map((row) => ({
@@ -67,6 +64,9 @@ export function useSimilarEvents(name: string, enabled: boolean): SimilarEvent[]
           department: row.department,
           startDate: row.start_date,
           endDate: row.end_date,
+          imageUrl: row.image_url || null,
+          tags: row.tags,
+          exhibitors: row.exhibitors,
         })),
       })
     }

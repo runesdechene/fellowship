@@ -1,76 +1,14 @@
 /**
- * QUOI     — les quatre étapes du formulaire de création, et l'avertissement de doublon.
+ * QUOI     — les quatre étapes du formulaire de création.
  * POURQUOI — chaque étape est un morceau de formulaire sans état : elle reçoit le brouillon et
  *            la fonction qui le modifie. Le parcours (navigation, envoi) reste dans CreateEvent.
  */
 import { Field, Input, Textarea, Toggle } from '@/components/ui/Field'
-import { parseSqlDate, formatDayMonth } from '@/lib/dates'
-import { canBePreviousEdition } from '@/lib/editions'
+import { parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { canActOn, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
-import type { useSimilarEvents } from './useSimilarEvents'
 import type { EventDraft } from './useEventDraft'
-
-/* ---------------------------------------------------------------------------
-   Le compagnon de la première étape : ce qui existe déjà et lui ressemble.
-   Une fiche vide n'aurait rien dit ; ceci arrive au moment où ça compte.
-   ------------------------------------------------------------------------ */
-export function DuplicateWarning({
-  similar,
-  previousEditionId,
-  onPickEdition,
-}: {
-  similar: ReturnType<typeof useSimilarEvents>
-  previousEditionId: string
-  /** Choisir (ou, recliqué, annuler) l'édition précédente du festival qu'on ajoute. */
-  onPickEdition: (id: string) => void
-}) {
-  const today = new Date()
-  return (
-    <>
-      <p className="mate__label">
-        {similar.length === 1
-          ? 'Un événement ressemble'
-          : `${similar.length} événements ressemblent`}
-      </p>
-      {similar.map((event) => {
-        const past = canBePreviousEdition(event.startDate, today)
-        const picked = previousEditionId === event.id
-        const start = parseSqlDate(event.startDate)
-        return (
-          <div key={event.id} className="dupe">
-            <span className="dupe__identity">
-              <span className="dupe__name">{event.name}</span>
-              <span className="dupe__meta">
-                {event.city} ({event.department}) · {formatDayMonth(start)} {start.getFullYear()}
-              </span>
-            </span>
-            {past && (
-              <button
-                type="button"
-                className={picked ? 'dupe__edition dupe__edition--on' : 'dupe__edition'}
-                aria-pressed={picked}
-                onClick={() => {
-                  onPickEdition(picked ? '' : event.id)
-                }}
-              >
-                {picked
-                  ? `Nouvelle édition de ${event.name} ${start.getFullYear()} ✓`
-                  : 'C’est sa nouvelle édition'}
-              </button>
-            )}
-          </div>
-        )
-      })}
-      <p className="mate__note">
-        Si c'est le même festival à la même date, ouvre-le plutôt que d'en créer un second — tu y
-        retrouveras les autres exposants. Si c'est l'édition d'une autre année, dis-le : ceux qui y
-        étaient seront prévenus.
-      </p>
-    </>
-  )
-}
 
 /* --------------------------------- Étapes -------------------------------- */
 

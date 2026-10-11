@@ -269,30 +269,60 @@ button.create-bar__step:hover {
 }
 
 /* --- Doublons possibles --------------------------------------------------- */
+.dupes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--space-8) var(--space-8);
+  border-radius: var(--radius-card);
+  background: var(--welcome-panel-surface);
+}
+
+.dupes__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 0 var(--space-12) var(--space-6);
+  font: var(--type-reminder-title);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.dupes__note {
+  padding: var(--space-8) var(--space-12) var(--space-4);
+  font: var(--type-door-note);
+  color: var(--ink-soft);
+}
+
 .dupe {
   display: flex;
   align-items: center;
   gap: var(--space-12);
-  width: 100%;
-  padding: var(--space-12) var(--space-14);
-  background: var(--surface-card);
-  border: 1px solid var(--line-card);
+  padding: var(--space-10) var(--space-12);
   border-radius: var(--radius-nav);
-  text-align: left;
-  flex-wrap: wrap;
+  background: var(--surface-card);
+}
+
+.dupe__poster {
+  flex: none;
+  width: var(--dupe-poster-width);
+  height: var(--dupe-poster-height);
+  border-radius: var(--radius-xs);
+  object-fit: cover;
 }
 
 .dupe__identity {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-2);
   min-width: 0;
 }
 
 .dupe__name {
+  overflow: hidden;
   font: var(--type-list-name);
   color: var(--ink-title);
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -300,6 +330,26 @@ button.create-bar__step:hover {
 .dupe__meta {
   font: var(--type-list-meta);
   color: var(--ink-soft);
+}
+
+.dupe__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.dupe__open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-door-label);
+  color: var(--ink-title);
+  text-decoration: none;
+}
+
+.dupe__open:hover {
+  text-decoration: underline;
 }
 
 /* --- La fiche en construction --------------------------------------------- */

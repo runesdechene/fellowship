@@ -21,7 +21,8 @@ import { EventPreview } from './EventPreview'
 import { useSimilarEvents } from './useSimilarEvents'
 import { useTags } from './useTags'
 import { blockingReason, STEPS, useEventDraft } from './useEventDraft'
-import { DuplicateWarning, StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
+import { DuplicateList } from './DuplicateList'
+import { StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
 
 /** Le dépôt public des affiches. */
 const POSTER_BUCKET = 'event-images'
@@ -200,6 +201,15 @@ export function CreateEvent() {
         <div>
           <div className="create__step">
             {step === 0 && <StepIdentity draft={draft} update={update} />}
+            {step === 0 && similar.length > 0 && (
+              <DuplicateList
+                similar={similar}
+                previousEditionId={draft.previousEditionId}
+                onPickEdition={(id) => {
+                  update('previousEditionId', id)
+                }}
+              />
+            )}
             {step === 1 && <StepPlace draft={draft} update={update} />}
             {step === 2 && <StepTags draft={draft} tags={tags} onToggle={toggleTag} />}
             {step === 3 && (
@@ -252,20 +262,7 @@ export function CreateEvent() {
         </div>
 
         <aside className="mate">
-          {step === 0 && similar.length > 0 ? (
-            <DuplicateWarning
-              similar={similar}
-              previousEditionId={draft.previousEditionId}
-              onPickEdition={(id) => {
-                update('previousEditionId', id)
-              }}
-            />
-          ) : (
-            <>
-              <p className="mate__label">Ce que verront les exposants</p>
-              <EventPreview draft={draft} posterUrl={posterUrl} />
-            </>
-          )}
+          <EventPreview draft={draft} posterUrl={posterUrl} />
         </aside>
       </div>
     </div>
