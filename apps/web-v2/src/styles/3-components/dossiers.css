@@ -56,7 +56,6 @@
   width: var(--dossiers-thumb-width);
   height: var(--dossiers-thumb-height);
   border-radius: var(--radius-xs);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 

@@ -5,6 +5,7 @@
  *            envoyer, à payer ou à recevoir.
  * ATTENTION — l'état se lit par la FORME de l'icône ; seul ce qui est acquis porte la terre.
  */
+import { Poster } from '@/components/ui/Poster'
 import { ChevronRight, Circle, Contrast } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
 import type { PaymentTone } from '@/lib/dossiers'
@@ -36,11 +37,11 @@ export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
               onClick={() => go(`/evenement/${dossier.eventId}`)}
             >
               <span className="dossiers__date">
-                {dossier.imageUrl ? (
-                  <img className="dossiers__thumb" src={dossier.imageUrl} alt="" />
-                ) : (
-                  <span className="dossiers__thumb" />
-                )}
+                <Poster
+                  imageUrl={dossier.imageUrl}
+                  tags={dossier.tags}
+                  className="dossiers__thumb"
+                />
                 <span className="dossiers__identity">
                   <span className="dossiers__name">{dossier.name}</span>
                   <span className="dossiers__range">

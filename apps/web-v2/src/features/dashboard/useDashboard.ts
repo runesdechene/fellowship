@@ -47,6 +47,7 @@ export interface Dossier {
   eventId: string
   name: string
   imageUrl: string | null
+  tags: string[] | null
   startDate: Date
   endDate: Date
   view: DossierView
@@ -148,6 +149,7 @@ async function fetchDossiers(
       eventId: date.event.id,
       name: date.event.name,
       imageUrl: date.event.image_url,
+      tags: date.event.tags,
       startDate: date.startDate,
       endDate: parseSqlDate(date.event.end_date),
       view: dossierView({

@@ -6,21 +6,24 @@
  */
 import { ArrowRight, Ban } from 'lucide-react'
 import { useState } from 'react'
+import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { Poster } from '@/components/ui/Poster'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProVeil } from '@/components/ui/ProVeil'
 import { useAuth } from '@/lib/auth'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
-import { foundLabel, reasonText, type Suggestion } from '@/lib/suggestions'
+import { foundLabel, reasonText } from '@/lib/suggestions'
 import { usePlan } from '@/lib/usePlan'
-import { useSuggestions } from './useSuggestions'
+import { useSuggestions, type ShownSuggestion } from './useSuggestions'
 
 /** Les cartes sous le voile gratuit : de fausses, le gratuit n'a pas les vraies. */
 const PLACEHOLDERS = ['a', 'b', 'c']
+const MAX_FACES = 3
 
 interface CardProps {
-  item: Suggestion
+  item: ShownSuggestion
   leaving: boolean
   onDismiss: () => void
 }
@@ -36,15 +39,23 @@ function SuggestionCard({ item, leaving, onDismiss }: CardProps) {
         className="suggestion__open"
         onClick={() => go(`/evenement/${item.eventId}`)}
       >
-        {item.imageUrl ? (
-          <img className="suggestion__poster" src={item.imageUrl} alt="" />
-        ) : (
-          <span className="suggestion__poster" />
-        )}
+        <Poster imageUrl={item.imageUrl} tags={item.tags} className="suggestion__poster" />
         <span className="suggestion__body">
           <span className="suggestion__name">{item.name}</span>
           <span className="suggestion__meta">{item.city ? `${dates} · ${item.city}` : dates}</span>
           <span className="suggestion__reason">{reasonText(item.reason)}</span>
+          {item.friends.length > 0 && (
+            <AvatarStack>
+              {item.friends.slice(0, MAX_FACES).map((friend) => (
+                <Avatar
+                  key={friend.id}
+                  className="suggestion__face"
+                  src={friend.avatarUrl}
+                  name={friend.name}
+                />
+              ))}
+            </AvatarStack>
+          )}
         </span>
       </button>
       <button

@@ -59,7 +59,6 @@
   width: var(--suggestion-poster-width);
   height: var(--suggestion-poster-height);
   border-radius: var(--radius-sm);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 
@@ -86,6 +85,13 @@
 .suggestion__reason {
   font: var(--type-suggestion-reason);
   color: var(--ink-title);
+}
+
+.suggestion__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  margin-top: var(--space-4);
+  border: 2px solid var(--surface-card);
 }
 
 .suggestion__dismiss {

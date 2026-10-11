@@ -6,19 +6,46 @@
  *            l'exposant — même exception que la recherche de doublons (.claude/rules/v2.md).
  */
 import { useCallback, useEffect, useState } from 'react'
-import { readSuggestions, type Suggestions } from '@/lib/suggestions'
+import { fetchFriendsByEvent, type Friend } from '@/lib/friends'
+import { readSuggestions, type Suggestion } from '@/lib/suggestions'
 import { must, supabase } from '@/lib/supabase'
 
-async function loadSuggestions(actorId: string): Promise<Suggestions | null> {
+/** Une suggestion à l'écran : sa catégorie (l'affiche absente) et les amis qui y vont. */
+export interface ShownSuggestion extends Suggestion {
+  tags: string[] | null
+  friends: Friend[]
+}
+
+interface ShownSuggestions {
+  count: number
+  items: ShownSuggestion[]
+}
+
+async function loadSuggestions(actorId: string): Promise<ShownSuggestions | null> {
   try {
-    return readSuggestions(must(await supabase.rpc('suggestions_for', { p_actor: actorId })))
+    const found = readSuggestions(must(await supabase.rpc('suggestions_for', { p_actor: actorId })))
+    const ids = found.items.map((item) => item.eventId)
+    if (ids.length === 0) return { count: found.count, items: [] }
+    const [events, friendsByEvent] = await Promise.all([
+      supabase.from('events').select('id, tags').in('id', ids),
+      fetchFriendsByEvent(actorId, ids),
+    ])
+    const tagsByEvent = new Map(must(events).map((event) => [event.id, event.tags]))
+    return {
+      count: found.count,
+      items: found.items.map((item) => ({
+        ...item,
+        tags: tagsByEvent.get(item.eventId) ?? null,
+        friends: friendsByEvent.get(item.eventId) ?? [],
+      })),
+    }
   } catch {
     return null
   }
 }
 
 export function useSuggestions(actorId: string | undefined) {
-  const [suggestions, setSuggestions] = useState<Suggestions | null>(null)
+  const [suggestions, setSuggestions] = useState<ShownSuggestions | null>(null)
   const [version, setVersion] = useState(0)
 
   useEffect(() => {
