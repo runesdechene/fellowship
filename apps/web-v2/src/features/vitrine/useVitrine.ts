@@ -32,6 +32,7 @@ export interface VitrineDate {
   city: string
   department: string
   imageUrl: string | null
+  tags: string[] | null
   startDate: Date
   endDate: Date
   daysAway: number
@@ -94,7 +95,9 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
   const [participations, followers, friendIds, myFollow] = await Promise.all([
     supabase
       .from('participations')
-      .select('event_id, events!inner(name, start_date, end_date, city, department, image_url)')
+      .select(
+        'event_id, events!inner(name, start_date, end_date, city, department, image_url, tags)',
+      )
       .eq('actor_id', id)
       .in('status', CONFIRMED_STATUSES)
       .eq('events.is_private', false),
@@ -118,6 +121,7 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
       city: row.events.city,
       department: row.events.department,
       imageUrl: row.events.image_url,
+      tags: row.events.tags,
       startDate,
       endDate: parseSqlDate(row.events.end_date),
       daysAway: daysUntil(startDate, today),

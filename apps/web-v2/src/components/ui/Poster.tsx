@@ -6,9 +6,8 @@
  *            du `style`, comme dans Tag.tsx.
  */
 import { createElement, type CSSProperties } from 'react'
-import { categoryIcon, firstCategory } from '@/lib/category-icons'
-import { tagStyleFor } from '@/lib/tags'
-import { useTagStyles } from '@/lib/useTagStyles'
+import { categoryIcon } from '@/lib/category-icons'
+import { useCategoryColors } from '@/lib/useTagStyles'
 
 interface PosterProps {
   imageUrl: string | null
@@ -18,20 +17,14 @@ interface PosterProps {
 }
 
 export function Poster({ imageUrl, tags, className }: PosterProps) {
-  const styles = useTagStyles()
+  const colors = useCategoryColors(tags)
   if (imageUrl) return <img className={className} src={imageUrl} alt="" />
 
-  const category = firstCategory(tags)
-  const style = category ? tagStyleFor(styles, category) : undefined
   return (
     <span
       className={`${className} poster-empty`}
       aria-hidden="true"
-      style={
-        style
-          ? ({ '--tag-bg': style.bgColor, '--tag-ink': style.textColor } as CSSProperties)
-          : undefined
-      }
+      style={{ '--tag-bg': colors?.bgColor, '--tag-ink': colors?.textColor } as CSSProperties}
     >
       {createElement(categoryIcon(tags), { className: 'poster-empty__icon', strokeWidth: 1.5 })}
     </span>

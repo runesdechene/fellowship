@@ -749,6 +749,13 @@
   --poster-empty-ink: var(--ink-soft);
   --poster-empty-icon: 45%;
   --poster-empty-icon-opacity: 0.55;
+  /* La grande affiche sans image (PosterArt.tsx) : la même couleur de catégorie, l'icône en fond,
+     grande et rognée par le coin, et la date adoucie dans l'encre de la catégorie (Uriel, 11/10 :
+     « la date est trop forte »). */
+  --poster-art-icon: 70%;
+  --poster-art-icon-shift: -6%;
+  --poster-art-icon-opacity: 0.16;
+  --poster-art-date-opacity: 0.72;
 
   /* La Communauté (lot 9a, maquette 2212:2) : le fil à gauche, deux cartes à droite ; les petites
      surfaces (festival, avis, bouclier) en blé discret, les boutons en filet. */

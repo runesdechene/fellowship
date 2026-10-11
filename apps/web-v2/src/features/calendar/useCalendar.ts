@@ -28,6 +28,7 @@ export interface CalendarDate {
   name: string
   place: string
   imageUrl: string | null
+  tags: string[] | null
   startDate: Date
   endDate: Date
   status: ParticipationStatus
@@ -93,6 +94,7 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
       name: row.events.name,
       place: `${row.events.city} (${row.events.department})`,
       imageUrl: row.events.image_url,
+      tags: row.events.tags,
       startDate,
       endDate: parseSqlDate(row.events.end_date),
       status: row.status,

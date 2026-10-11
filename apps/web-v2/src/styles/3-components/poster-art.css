@@ -28,13 +28,33 @@
   pointer-events: none;
 }
 
+/* Sans image : la couleur de la catégorie (la teinte neutre sinon), son icône en fond. */
 .poster-art__fallback {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
   padding: 0 var(--space-24);
-  color: var(--ink-title);
+  background: var(--tag-bg, var(--poster-empty-surface));
+  color: var(--tag-ink, var(--poster-empty-ink));
+}
+
+.poster-art__icon {
+  position: absolute;
+  right: var(--poster-art-icon-shift);
+  bottom: var(--poster-art-icon-shift);
+  width: auto;
+  height: var(--poster-art-icon);
+  aspect-ratio: 1;
+  opacity: var(--poster-art-icon-opacity);
+  pointer-events: none;
+}
+
+.poster-art__day,
+.poster-art__month {
+  position: relative;
+  opacity: var(--poster-art-date-opacity);
 }
 
 .poster-art__day {
@@ -43,7 +63,6 @@
 
 .poster-art__month {
   font: var(--type-event-meta);
-  color: var(--ink-soft);
 }
 
 .poster-art__countdown {

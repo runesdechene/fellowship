@@ -31,6 +31,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
     >
       <PosterArt
         imageUrl={date.imageUrl}
+        tags={date.tags}
         startDate={date.startDate}
         daysAway={date.daysAway}
         friends={date.friends}

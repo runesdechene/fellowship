@@ -16,12 +16,14 @@ import type { ParticipationStatus } from '@/types/database'
 
 const ROW_LIMIT = 12
 const SEARCH_LIMIT = 60
-const EVENT_COLUMNS = 'id, name, image_url, start_date, end_date, city, department, created_at'
+const EVENT_COLUMNS =
+  'id, name, image_url, tags, start_date, end_date, city, department, created_at'
 
 export interface ExploreEvent {
   id: string
   name: string
   imageUrl: string | null
+  tags: string[] | null
   startDate: Date
   endDate: Date
   city: string
@@ -80,6 +82,7 @@ interface EventRow {
   id: string
   name: string
   image_url: string | null
+  tags: string[] | null
   start_date: string
   end_date: string
   city: string
@@ -104,6 +107,7 @@ async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<
     id: row.id,
     name: row.name,
     imageUrl: row.image_url,
+    tags: row.tags,
     startDate: parseSqlDate(row.start_date),
     endDate: parseSqlDate(row.end_date),
     city: row.city,

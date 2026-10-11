@@ -19,6 +19,7 @@ export function EscaleCard({ date }: { date: VitrineDate }) {
     <Link to={`/evenement/${date.eventId}`} className="escale-card">
       <PosterArt
         imageUrl={date.imageUrl}
+        tags={date.tags}
         startDate={date.startDate}
         daysAway={date.daysAway}
         friends={date.friends}

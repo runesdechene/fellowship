@@ -6,7 +6,8 @@
  *            affiches retombent sur la teinte neutre, jamais sur une couleur inventée.
  */
 import { useEffect, useState } from 'react'
-import { fetchTags, tagStylesByName, type TagStyle } from './tags'
+import { firstCategory } from './category-icons'
+import { fetchTags, tagStyleFor, tagStylesByName, type TagStyle } from './tags'
 
 let shared: Promise<Map<string, TagStyle>> | null = null
 
@@ -26,4 +27,11 @@ export function useTagStyles(): Map<string, TagStyle> {
   }, [])
 
   return styles
+}
+
+/** Les couleurs de la catégorie d'un festival : la première catégorie connue de ses tags. */
+export function useCategoryColors(tags: readonly string[] | null): TagStyle | undefined {
+  const styles = useTagStyles()
+  const category = firstCategory(tags)
+  return category ? tagStyleFor(styles, category) : undefined
 }
