@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { parseSqlDate } from '@/lib/dates'
+import { locateCity } from '@/lib/geocode'
+import { imageProblem, resizeImage } from '@/lib/image-resize'
 import { canActOn } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { supabase } from '@/lib/supabase'
@@ -26,6 +28,8 @@ import { StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
 
 /** Le dépôt public des affiches. */
 const POSTER_BUCKET = 'event-images'
+/** Assez pour le mur d'affiche de la fiche, en grand écran. */
+const POSTER_WIDTH = 1200
 
 /** Le temps que la question « on efface ? » reste posée avant de se retirer. */
 const CONFIRM_MS = 6000
@@ -110,8 +114,21 @@ export function CreateEvent() {
 
     let imageUrl: string | null = null
     if (poster) {
-      const path = `${crypto.randomUUID()}-${poster.name.replace(/[^\w.-]/g, '_')}`
-      const { error: uploadError } = await supabase.storage.from(POSTER_BUCKET).upload(path, poster)
+      // L'affiche est réduite avant l'envoi, comme la vitrine et le profil : une photo de
+      // téléphone de 10 Mo devient quelques centaines de Ko.
+      let blob: Blob | null = null
+      if (!imageProblem(poster)) blob = await resizeImage(poster, POSTER_WIDTH).catch(() => null)
+      if (!blob) {
+        setSaving(false)
+        setError(
+          'Cette affiche ne peut pas être utilisée. Choisis-en une autre, ou crée la date sans elle.',
+        )
+        return
+      }
+      const path = `${crypto.randomUUID()}.${blob.type === 'image/webp' ? 'webp' : 'jpg'}`
+      const { error: uploadError } = await supabase.storage
+        .from(POSTER_BUCKET)
+        .upload(path, blob, { contentType: blob.type })
       if (uploadError) {
         setSaving(false)
         setError("L'affiche n'a pas pu être envoyée. Réessaie, ou crée l'événement sans elle.")
@@ -119,6 +136,10 @@ export function CreateEvent() {
       }
       imageUrl = supabase.storage.from(POSTER_BUCKET).getPublicUrl(path).data.publicUrl
     }
+
+    // Sans adresse choisie, la date prend la position de sa ville ; une BAN qui ne répond pas
+    // n'empêche jamais la création : la date part alors sans position.
+    const located = draft.geoPrecision ? null : await locateCity(draft.city, draft.department)
 
     const { data: created, error: insertError } = await supabase
       .from('events')
@@ -140,6 +161,9 @@ export function CreateEvent() {
         tags: draft.tags,
         is_private: draft.isPrivate,
         previous_edition_id: draft.previousEditionId || null,
+        latitude: located?.latitude ?? draft.latitude,
+        longitude: located?.longitude ?? draft.longitude,
+        geo_precision: located ? 'city' : draft.geoPrecision || null,
         created_by_actor: actor.id,
         acted_by_user_id: person?.actor_id ?? null,
       })
@@ -174,7 +198,7 @@ export function CreateEvent() {
     // signalé. L'exposant pourra se marquer depuis la fiche.
 
     clear()
-    go('/')
+    go(`/evenement/${created.id}`)
   }
 
   const isLast = step === STEPS.length - 1
@@ -249,7 +273,7 @@ export function CreateEvent() {
               {step > 0 && <Button onClick={goBack}>Retour</Button>}
               {isLast ? (
                 <Button variant="action" onClick={() => void submit()} disabled={saving}>
-                  {saving ? 'Création…' : "Créer l'événement"}
+                  {saving ? 'Création…' : 'Créer la date'}
                 </Button>
               ) : (
                 <Button variant="action" onClick={goNext}>
