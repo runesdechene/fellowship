@@ -8,7 +8,8 @@ import { parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { canActOn, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
-import type { EventDraft } from './useEventDraft'
+import { AddressField } from './AddressField'
+import { addressTyped, placePicked, type EventDraft } from './useEventDraft'
 
 /* --------------------------------- Étapes -------------------------------- */
 
@@ -41,7 +42,15 @@ export function StepIdentity({ draft, update }: { draft: EventDraft; update: Upd
   )
 }
 
-export function StepPlace({ draft, update }: { draft: EventDraft; update: UpdateFn }) {
+export function StepPlace({
+  draft,
+  update,
+  patch,
+}: {
+  draft: EventDraft
+  update: UpdateFn
+  patch: (fields: Partial<EventDraft>) => void
+}) {
   return (
     <>
       <h1 className="create__ask">Où et quand ?</h1>
@@ -49,10 +58,10 @@ export function StepPlace({ draft, update }: { draft: EventDraft; update: Update
 
       <div className="fields">
         <Field label="Adresse ou lieu">
-          <Input
+          <AddressField
             value={draft.address}
-            onChange={(event) => update('address', event.target.value)}
-            placeholder="Place du Châtel, cour du château…"
+            onType={(address) => patch(addressTyped(address))}
+            onPick={(place) => patch(placePicked(place))}
           />
         </Field>
 

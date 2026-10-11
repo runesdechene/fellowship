@@ -35,7 +35,7 @@ export function CreateEvent() {
   const navigate = useNavigate()
   const { actor, person } = useAuth()
   const { pro } = usePlan()
-  const { draft, update, toggleTag, clear, status } = useEventDraft()
+  const { draft, update, patch, toggleTag, clear, status } = useEventDraft()
   const tags = useTags()
 
   const [step, setStep] = useState(0)
@@ -213,7 +213,7 @@ export function CreateEvent() {
                 }}
               />
             )}
-            {step === 1 && <StepPlace draft={draft} update={update} />}
+            {step === 1 && <StepPlace draft={draft} update={update} patch={patch} />}
             {step === 2 && <StepTags draft={draft} tags={tags} onToggle={toggleTag} />}
             {step === 3 && (
               <StepDetails draft={draft} update={update} poster={poster} onPoster={setPoster} />

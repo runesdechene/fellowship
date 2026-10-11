@@ -5,6 +5,7 @@
  *            navigateur, on ne fait pas croire qu'il est conservé).
  */
 import { useCallback, useEffect, useState } from 'react'
+import type { PlaceSuggestion } from '@/lib/geocode'
 
 /**
  * Le brouillon d'un événement en cours de création.
@@ -29,6 +30,10 @@ export interface EventDraft {
   registrationNote: string
   /** L'édition précédente du même festival, choisie parmi les doublons (vide : aucune). */
   previousEditionId: string
+  /** La position d'une adresse choisie parmi les suggestions ; vide si l'adresse est libre. */
+  latitude: number | null
+  longitude: number | null
+  geoPrecision: '' | 'precise' | 'city'
 }
 
 const EMPTY_DRAFT: EventDraft = {
@@ -47,6 +52,9 @@ const EMPTY_DRAFT: EventDraft = {
   contactEmail: '',
   registrationNote: '',
   previousEditionId: '',
+  latitude: null,
+  longitude: null,
+  geoPrecision: '',
 }
 
 const DRAFT_KEY = 'flwsh-event-draft'
@@ -61,16 +69,40 @@ function writeDraft(draft: EventDraft): boolean {
   }
 }
 
-function readDraft(): EventDraft {
+export function parseDraft(raw: string | null): EventDraft {
+  if (!raw) return EMPTY_DRAFT
   try {
-    const raw = localStorage.getItem(DRAFT_KEY)
-    if (!raw) return EMPTY_DRAFT
     // Un brouillon écrit par une version antérieure peut manquer des champs :
     // on part toujours du gabarit vide et on écrase avec ce qu'on a.
     return { ...EMPTY_DRAFT, ...(JSON.parse(raw) as Partial<EventDraft>) }
   } catch {
     return EMPTY_DRAFT
   }
+}
+
+function readDraft(): EventDraft {
+  try {
+    return parseDraft(localStorage.getItem(DRAFT_KEY))
+  } catch {
+    return EMPTY_DRAFT
+  }
+}
+
+/** Une adresse choisie parmi les suggestions remplit le lieu entier, position comprise. */
+export function placePicked(place: PlaceSuggestion): Partial<EventDraft> {
+  return {
+    address: place.address,
+    city: place.city,
+    department: place.department,
+    latitude: place.latitude,
+    longitude: place.longitude,
+    geoPrecision: 'precise',
+  }
+}
+
+/** Une adresse retouchée à la main ne garde pas la position d'une autre. */
+export function addressTyped(address: string): Partial<EventDraft> {
+  return { address, latitude: null, longitude: null, geoPrecision: '' }
 }
 
 /** Étapes du parcours, dans l'ordre. */
@@ -117,11 +149,11 @@ type DraftStatus = 'quiet' | 'kept' | 'refused'
 const SETTLE_MS = 900
 
 /** Un brouillon vierge : le statut se tait tant qu'on n'a rien tapé. */
-function isBlank(draft: EventDraft): boolean {
+export function isBlank(draft: EventDraft): boolean {
   return Object.values(draft).every((value) => {
     if (typeof value === 'string') return value.trim() === ''
     if (Array.isArray(value)) return value.length === 0
-    return value === false // le seul booléen : « événement privé »
+    return value === false || value === null // « événement privé », et la position
   })
 }
 
@@ -165,6 +197,10 @@ export function useEventDraft() {
     }))
   }, [])
 
+  const patch = useCallback((fields: Partial<EventDraft>) => {
+    setDraft((previous) => ({ ...previous, ...fields }))
+  }, [])
+
   const toggleTag = useCallback((tag: string) => {
     setDraft((previous) => ({
       ...previous,
@@ -183,5 +219,5 @@ export function useEventDraft() {
     }
   }, [])
 
-  return { draft, update, toggleTag, clear, status }
+  return { draft, update, patch, toggleTag, clear, status }
 }

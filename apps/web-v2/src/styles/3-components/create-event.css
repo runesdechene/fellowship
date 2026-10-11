@@ -250,6 +250,51 @@ button.create-bar__step:hover {
   color: var(--tag-first-ink);
 }
 
+/* --- L'adresse suggérée --------------------------------------------------- */
+/* Un flottant comme le menu de Select : un liseré le détache, pas d'ombre. */
+.address {
+  position: relative;
+  display: block;
+}
+
+.address__places {
+  position: absolute;
+  top: calc(100% + var(--select-menu-gap));
+  left: 0;
+  right: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-select);
+  background: var(--surface-panel);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.address__place {
+  padding: var(--space-10);
+  border-radius: var(--radius-sm);
+  font: var(--type-select-option);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.address__place:hover,
+.address__place[aria-selected='true'] {
+  background: var(--surface-row-hover);
+}
+
+@starting-style {
+  .address__places {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-4));
+  }
+}
+
 /* --- L'aperçu ------------------------------------------------------------ */
 .preview {
   position: sticky;
@@ -401,7 +446,8 @@ button.create-bar__step:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tag {
+  .tag,
+  .address__places {
     transition: none;
   }
 }
