@@ -49,6 +49,7 @@ describe('slugProblem', () => {
     expect(slugProblem('communaute')).toBe('Cette adresse est réservée')
     expect(slugProblem('v2')).toBe('Au moins 3 caractères')
     expect(slugProblem('reglages')).toBe('Cette adresse est réservée')
+    expect(slugProblem('bienvenue')).toBe('Cette adresse est réservée')
     expect(slugProblem('a_b-c')).toBe('Lettres, chiffres et tirets seulement')
     expect(slugProblem('-abc')).toBe('Lettres, chiffres et tirets seulement')
   })

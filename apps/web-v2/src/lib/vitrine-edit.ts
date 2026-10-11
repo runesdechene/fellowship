@@ -45,6 +45,7 @@ const RESERVED = new Set([
   'reglages',
   'evenement',
   'connexion',
+  'bienvenue',
   'v2',
   'admin',
   'api',

@@ -117,6 +117,7 @@
 }
 
 .welcome-preview__logo {
+  position: relative; /* au-dessus de la bannière, qu'il chevauche */
   display: grid;
   place-items: center;
   overflow: hidden;

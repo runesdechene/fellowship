@@ -1,10 +1,10 @@
 /**
- * QUOI     — les routes de la V2 et leur garde : connexion, tableau de bord, calendrier, création,
+ * QUOI     — les routes de la V2 et leurs gardes : connexion, arrivée, tableau de bord, calendrier, création,
  *            fiche, avis, explorer, bilans, offre Pro, réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
- *            renvoie les autres sur la V1.
+ *            renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par l'arrivée (lot 10a).
  */
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
@@ -18,17 +18,53 @@ import { ReportsPage } from '@/features/reports/ReportsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 import { WriteReviewPage } from '@/features/review/WriteReviewPage'
 import { VitrinePage } from '@/features/vitrine/VitrinePage'
+import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
 import { useAuth } from '@/lib/auth'
 import { useV2Access } from '@/lib/useV2Access'
+import { welcomeKind } from '@/lib/welcome-guard'
 import { useEffect, type ReactNode } from 'react'
 
-function ProtectedRoute({ children }: { children: ReactNode }) {
+/** La garde d'accès seule : la V2 n'ouvre qu'aux admins jusqu'à la bascule (lot 12). */
+function AccessRoute({ children }: { children: ReactNode }) {
   const decision = useV2Access()
   if (decision === 'wait') return null
   if (decision === 'login') return <Navigate to="/connexion" replace />
   if (decision === 'leave') return <LeaveToV1 />
   return <>{children}</>
+}
+
+/** Un compte sans prénom passe d'abord par l'arrivée, puis revient où il allait (lot 10a). */
+function WelcomeGate({ children }: { children: ReactNode }) {
+  const { person, entities } = useAuth()
+  const location = useLocation()
+  const kind = welcomeKind(person, entities.length, null)
+  if (kind) {
+    const back = encodeURIComponent(location.pathname + location.search)
+    return <Navigate to={`/bienvenue?retour=${back}`} replace />
+  }
+  return <>{children}</>
+}
+
+function ProtectedRoute({ children }: { children: ReactNode }) {
+  return (
+    <AccessRoute>
+      <WelcomeGate>{children}</WelcomeGate>
+    </AccessRoute>
+  )
+}
+
+/** `/bienvenue` : l'arrivée à faire, ou le tableau de bord s'il n'y en a aucune. */
+function WelcomeRoute() {
+  const { person, entities } = useAuth()
+  const [search] = useSearchParams()
+  if (!person) return null
+  const kind = welcomeKind(
+    person,
+    entities.length,
+    search.has('nouvelle-enseigne') ? 'nouvelle-enseigne' : null,
+  )
+  return kind ? <WelcomePage kind={kind} /> : <Navigate to="/" replace />
 }
 
 // Hors du routeur de la V2 (basename /v2) : la V1 vit à la racine du domaine.
@@ -47,6 +83,14 @@ export function App() {
       <Route
         path="/connexion"
         element={loading ? null : user ? <Navigate to="/" replace /> : <Login />}
+      />
+      <Route
+        path="/bienvenue"
+        element={
+          <AccessRoute>
+            <WelcomeRoute />
+          </AccessRoute>
+        }
       />
       <Route
         path="/"
