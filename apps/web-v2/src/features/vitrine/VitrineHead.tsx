@@ -140,7 +140,7 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow, onEdit }: Vitrin
         <div className="vitrine-head__title-row">
           <h1 className="vitrine-head__name">{vitrine.name}</h1>
           {vitrine.certified && (
-            <span className="vitrine-badge">
+            <span className="vitrine-badge vitrine-badge--certified">
               <BadgeCheck size={14} strokeWidth={2} />
               Certifié
             </span>

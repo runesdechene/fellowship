@@ -101,6 +101,14 @@
   color: var(--ink-title);
 }
 
+/* Certifié : le dégradé du logo, parce que la certification est un acquis (Uriel, 11/10). */
+.vitrine-badge--certified {
+  border-color: transparent;
+  background: var(--brand-gradient);
+  font: var(--type-chip-strong);
+  color: var(--brand-ink);
+}
+
 .vitrine-badge--empty {
   border-style: dashed;
   border-color: var(--dropzone-border);

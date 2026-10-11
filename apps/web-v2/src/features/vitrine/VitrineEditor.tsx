@@ -90,7 +90,7 @@ export function VitrineEditor({ vitrine, onClose, onSaved }: VitrineEditorProps)
               }}
             />
             {vitrine.certified && (
-              <span className="vitrine-badge">
+              <span className="vitrine-badge vitrine-badge--certified">
                 <BadgeCheck size={14} strokeWidth={2} />
                 Certifié
               </span>
