@@ -914,6 +914,7 @@
   --settings-columns-gap: 36px;
   --settings-sections-gap: var(--space-48);
   --settings-off-opacity: 0.45;
+  --setting-row-height: 56px; /* une ligne de la maquette 2206:691 */
   --settings-faint-ink: var(--ink-waiting);
   --settings-nav-on-surface: var(--surface-card-hover);
   --radius-settings-nav: var(--round-8);

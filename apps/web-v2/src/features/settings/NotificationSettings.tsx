@@ -16,6 +16,7 @@ import { PUSH_LINES } from '@/lib/push-lines'
 import { usePhonePush } from '@/lib/usePhonePush'
 import { usePushMuted } from '@/lib/usePushMuted'
 import { PhoneCard } from './PhoneCard'
+import { SettingCard, SettingRow } from './SettingRow'
 
 export function NotificationSettings() {
   const phone = usePhonePush()
@@ -36,38 +37,39 @@ export function NotificationSettings() {
       </div>
       <PhoneCard phone={phone} />
       <div className={active ? 'push-lines' : 'push-lines push-lines--off'}>
-        <p className="push-lines__head">Téléphone</p>
-        {PUSH_LINES.map((line) => {
-          const locked = line.pro && !anyPro
-          const on = !locked && !lines.muted.includes(line.key)
-          const classes = ['push-line']
-          if (on) classes.push('push-line--on')
-          if (locked) classes.push('push-line--locked')
-          return (
-            <button
-              key={line.key}
-              type="button"
-              role="switch"
-              aria-checked={on}
-              aria-label={line.title}
-              className={classes.join(' ')}
-              disabled={!active || lines.saving}
-              onClick={() => {
-                if (locked) setInviting(true)
-                else void lines.toggle(line.key)
-              }}
-            >
-              <span className="push-line__text">
-                <span className="push-line__title">
-                  {line.title}
-                  {line.pro && <ProBadge />}
-                </span>
-                <span className="push-line__detail">{line.detail}</span>
-              </span>
-              <span className="push-line__switch" />
-            </button>
-          )
-        })}
+        <SettingCard>
+          <p className="push-lines__head">Téléphone</p>
+          {PUSH_LINES.map((line) => {
+            const locked = line.pro && !anyPro
+            const on = !locked && !lines.muted.includes(line.key)
+            const classes = ['push-line']
+            if (on) classes.push('push-line--on')
+            if (locked) classes.push('push-line--locked')
+            return (
+              <SettingRow
+                key={line.key}
+                title={line.title}
+                note={line.detail}
+                badge={line.pro ? <ProBadge /> : undefined}
+              >
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={on}
+                  aria-label={line.title}
+                  className={classes.join(' ')}
+                  disabled={!active || lines.saving}
+                  onClick={() => {
+                    if (locked) setInviting(true)
+                    else void lines.toggle(line.key)
+                  }}
+                >
+                  <span className="push-line__switch" />
+                </button>
+              </SettingRow>
+            )
+          })}
+        </SettingCard>
       </div>
       {lines.failed && (
         <p className="settings-section__error">Ton choix n’a pas pu être enregistré.</p>

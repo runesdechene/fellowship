@@ -94,6 +94,56 @@
   color: var(--ink-soft);
 }
 
+/* --- La carte et sa ligne (SettingRow.tsx) ------------------------------ */
+.setting-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  min-height: var(--setting-row-height);
+  padding: var(--space-12) var(--space-20);
+}
+
+.setting-row + .setting-row {
+  border-top: 1px solid var(--line-card);
+}
+
+.setting-row__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.setting-row__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+}
+
+.setting-row__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.setting-row__control {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-12);
+}
+
 /* --- La carte du téléphone ----------------------------------------------- */
 .phone-card {
   display: flex;
@@ -128,14 +178,8 @@
   color: var(--ink-soft);
 }
 
-/* --- Les six lignes ------------------------------------------------------ */
+/* --- Les six lignes : des SettingRow dont le contrôle est l'interrupteur ---- */
 .push-lines {
-  display: flex;
-  flex-direction: column;
-  padding: 0 var(--space-4);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
@@ -150,41 +194,18 @@
   text-align: right;
 }
 
+/* La ligne qui suit l'en-tête « Téléphone » garde son filet. */
+.push-lines__head + .setting-row {
+  border-top: 1px solid var(--line-card);
+}
+
 .push-line {
   display: flex;
-  align-items: center;
-  gap: var(--space-24);
-  width: 100%;
-  padding: var(--space-16) var(--space-20);
-  border-top: 1px solid var(--line-card);
-  text-align: left;
   cursor: pointer;
 }
 
 .push-line:disabled {
   cursor: default;
-}
-
-.push-line__text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.push-line__title {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-8);
-  font: var(--type-reminder-title);
-  color: var(--ink-title);
-}
-
-.push-line__detail {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
 }
 
 .push-line__switch {
