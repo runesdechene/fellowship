@@ -8,10 +8,14 @@
  * ATTENTION — une adresse ne vaut jamais une page de l'application (RESERVED) : la vitrine vit à
  *            la racine (`flw.sh/<adresse>`), elle cacherait la page.
  */
+import type { Database } from '@/types/supabase'
+
+export type EntityUpdate = Database['public']['Tables']['entities']['Update']
 
 export type LinkType = 'website' | 'instagram' | 'shop'
 
-export interface VitrineLink {
+// Un alias, pas une interface : il doit rester assignable à `Json` (la colonne `entities.links`).
+export type VitrineLink = {
   type: LinkType
   url: string
   label: string
@@ -66,10 +70,15 @@ export function slugProblem(slug: string): string | null {
   return null
 }
 
+/** Une adresse web, et rien d'autre : un `javascript:` finirait dans un href. */
+export function isWebUrl(url: string): boolean {
+  return /^https?:\/\//i.test(url)
+}
+
 export function normalizeUrl(raw: string): string {
   const url = raw.trim()
   if (url === '') return ''
-  return /^[a-z]+:\/\//i.test(url) ? url : `https://${url}`
+  return isWebUrl(url) ? url : `https://${url}`
 }
 
 function host(url: string): string {
@@ -116,8 +125,8 @@ export function fieldProblem(draft: VitrineDraft): string | null {
 const empty = (value: string): string | null => (value.trim() === '' ? null : value.trim())
 
 /** Les colonnes de `entities` qui ont changé, prêtes pour l'`update`. */
-export function changedColumns(before: VitrineDraft, after: VitrineDraft): Record<string, unknown> {
-  const columns: Record<string, unknown> = {}
+export function changedColumns(before: VitrineDraft, after: VitrineDraft): EntityUpdate {
+  const columns: EntityUpdate = {}
   if (after.name.trim() !== before.name.trim()) columns.brand_name = after.name.trim()
   if (after.craft.trim() !== before.craft.trim()) columns.craft_type = empty(after.craft)
   if (after.city.trim() !== before.city.trim()) columns.city = empty(after.city)

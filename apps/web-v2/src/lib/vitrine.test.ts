@@ -111,4 +111,12 @@ describe('vitrineLinks', () => {
     ])
     expect(vitrineLinks(null, null)).toEqual([])
   })
+  it('écarte un lien qui n’est pas une adresse web : il finirait dans un href', () => {
+    const raw = [
+      { type: 'website', url: 'javascript:alert(1)', label: 'x' },
+      { type: 'shop', url: 'data:text/html,x', label: 'x' },
+      { type: 'website', url: 'https://a.fr', label: 'a.fr' },
+    ]
+    expect(vitrineLinks(raw, null).map((link) => link.url)).toEqual(['https://a.fr'])
+  })
 })

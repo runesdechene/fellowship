@@ -6,7 +6,14 @@
  * ATTENTION — une date en cours est encore « à venir » : on la quitte le lendemain de sa fin.
  */
 
-import { MAX_LINKS, linkLabel, normalizeUrl, type LinkType, type VitrineLink } from './vitrine-edit'
+import {
+  MAX_LINKS,
+  isWebUrl,
+  linkLabel,
+  normalizeUrl,
+  type LinkType,
+  type VitrineLink,
+} from './vitrine-edit'
 
 /** « Les Aventuriales » → « Aventuriales » ; « Art to Play 2026 » → « Art to Play ». */
 export function stampName(name: string): string {
@@ -74,7 +81,7 @@ export function vitrineLinks(raw: unknown, website: string | null): VitrineLink[
   const links = (Array.isArray(raw) ? raw : []).flatMap((item: unknown): VitrineLink[] => {
     if (typeof item !== 'object' || item === null) return []
     const { type, url, label } = item as Record<string, unknown>
-    if (typeof url !== 'string' || url.trim() === '') return []
+    if (typeof url !== 'string' || !isWebUrl(url)) return []
     const kind = LINK_TYPES.find((known) => known === type)
     if (!kind) return []
     return [{ type: kind, url, label: typeof label === 'string' ? label : '' }]

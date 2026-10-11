@@ -61,6 +61,10 @@ describe('les liens', () => {
     expect(normalizeUrl('http://x.fr')).toBe('http://x.fr')
     expect(normalizeUrl('')).toBe('')
   })
+  test('normalizeUrl ne garde tel quel que http(s) : le reste devient un nom de site', () => {
+    expect(normalizeUrl('javascript://x')).toBe('https://javascript://x')
+    expect(normalizeUrl('ftp://x.fr')).toBe('https://ftp://x.fr')
+  })
   test.each([
     ['https://instagram.com/runesdechene', 'instagram'],
     ['https://www.instagram.com/runesdechene/', 'instagram'],
