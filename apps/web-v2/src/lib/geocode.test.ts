@@ -4,7 +4,7 @@
  * POURQUOI — lot 10b : une position fausse met un festival au mauvais endroit de la carte.
  */
 import { afterEach, describe, expect, test, vi } from 'vitest'
-import { banUrl, departmentOfCitycode, readBan, searchPlaces } from './geocode'
+import { banUrl, departmentOfCitycode, readBan, searchPlaces, typedDepartment } from './geocode'
 
 describe('departmentOfCitycode', () => {
   test('deux chiffres, la Corse en lettres, les outre-mer sur trois', () => {
@@ -37,9 +37,25 @@ describe('readBan', () => {
       },
     ])
   })
+  test('une commune choisie ne met pas le nom de la ville dans l’adresse', () => {
+    const commune = {
+      ...feature,
+      properties: { ...feature.properties, type: 'municipality', name: 'Clermont-Ferrand' },
+    }
+    expect(readBan({ features: [commune] })[0]?.address).toBe('')
+  })
   test('ce qui est mal formé est ignoré, jamais une erreur', () => {
     expect(readBan(null)).toEqual([])
     expect(readBan({ features: [{ geometry: {}, properties: {} }] })).toEqual([])
+  })
+})
+
+describe('typedDepartment', () => {
+  test('un département tapé se lit comme la BAN l’écrit', () => {
+    expect(typedDepartment('1')).toBe('01')
+    expect(typedDepartment(' 63 ')).toBe('63')
+    expect(typedDepartment('2a')).toBe('2A')
+    expect(typedDepartment('974')).toBe('974')
   })
 })
 

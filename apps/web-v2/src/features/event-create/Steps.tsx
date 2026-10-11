@@ -187,10 +187,19 @@ export function StepDetails({
               type="file"
               accept="image/*"
               hidden
-              onChange={(event) => onPoster(event.target.files?.[0] ?? null)}
+              onChange={(event) => {
+                onPoster(event.target.files?.[0] ?? null)
+                // Rechoisir le même fichier après l'avoir retiré doit encore être vu.
+                event.target.value = ''
+              }}
             />
             {poster ? poster.name : 'Choisis une image'}
           </label>
+          {poster && (
+            <button type="button" className="dropzone__remove" onClick={() => onPoster(null)}>
+              Retirer l’affiche
+            </button>
+          )}
         </Field>
 
         <Field label="Description">

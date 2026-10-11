@@ -43,7 +43,8 @@ export function readBan(json: unknown): PlaceSuggestion[] {
     return [
       {
         label: text(props.label),
-        address: text(props.name),
+        // Une commune n'a pas d'adresse : son nom est déjà celui de la ville.
+        address: props.type === 'municipality' ? '' : text(props.name),
         city: text(props.city),
         department: departmentOfCitycode(citycode),
         latitude,
@@ -74,11 +75,16 @@ export function searchPlaces(query: string): Promise<PlaceSuggestion[]> {
   return ask(banUrl(query, { limit: 5 }))
 }
 
+/** Un département tel qu'on le tape (« 1 », « 2a ») écrit comme la BAN l'écrit (« 01 », « 2A »). */
+export function typedDepartment(typed: string): string {
+  return typed.trim().toUpperCase().padStart(2, '0')
+}
+
 export async function locateCity(
   city: string,
   department: string,
 ): Promise<{ latitude: number; longitude: number } | null> {
   const found = await ask(banUrl(city, { type: 'municipality', limit: 10 }))
-  const match = found.find((place) => place.department === department.trim().toUpperCase())
+  const match = found.find((place) => place.department === typedDepartment(department))
   return match ? { latitude: match.latitude, longitude: match.longitude } : null
 }

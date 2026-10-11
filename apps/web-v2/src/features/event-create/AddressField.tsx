@@ -77,7 +77,7 @@ export function AddressField({ value, onType, onPick }: AddressFieldProps) {
         role="combobox"
         aria-autocomplete="list"
         aria-expanded={places.length > 0}
-        aria-controls={`${id}-places`}
+        aria-controls={places.length > 0 ? `${id}-places` : undefined}
         aria-activedescendant={places.length > 0 ? `${id}-${String(active)}` : undefined}
         autoComplete="off"
         value={value}
@@ -88,6 +88,7 @@ export function AddressField({ value, onType, onPick }: AddressFieldProps) {
           setOpen(true)
         }}
         onKeyDown={onKeyDown}
+        onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
         placeholder="Place du Châtel, cour du château…"
       />
@@ -95,7 +96,7 @@ export function AddressField({ value, onType, onPick }: AddressFieldProps) {
         <ul className="address__places" id={`${id}-places`} role="listbox">
           {places.map((place, index) => (
             <li
-              key={place.label}
+              key={`${String(index)}-${place.label}`}
               id={`${id}-${String(index)}`}
               className="address__place"
               role="option"

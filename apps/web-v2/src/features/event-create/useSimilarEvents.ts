@@ -13,7 +13,8 @@ export interface SimilarEvent {
   startDate: string
   endDate: string
   imageUrl: string | null
-  tags: string[]
+  /** Peut manquer : la colonne est facultative, même si le type rendu par la fonction le cache. */
+  tags: string[] | null
   /** Les enseignes inscrites (« Inscrit » ou « Confirmé »). */
   exhibitors: number
 }

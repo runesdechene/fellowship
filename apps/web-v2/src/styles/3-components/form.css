@@ -146,6 +146,19 @@
   overflow: hidden;
 }
 
+/* Une affiche refusée à l'envoi doit pouvoir s'enlever : on crée alors la date sans elle. */
+.dropzone__remove {
+  align-self: flex-start;
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.dropzone__remove:hover {
+  color: var(--ink-title);
+  text-decoration: underline;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .toggle__switch,
   .toggle__switch::after {
