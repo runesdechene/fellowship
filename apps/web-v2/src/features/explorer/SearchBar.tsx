@@ -5,7 +5,7 @@
  *            la recherche d'avant, un lien se partage.
  * ATTENTION — un formulaire natif : Entrée lance la recherche, sans code maison.
  */
-import { Search, X } from 'lucide-react'
+import { ChevronDown, Search, X } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { quandChoices } from '@/lib/explorer'
 
@@ -73,11 +73,11 @@ export function SearchBar({ q, ou, quand, onSearch, pro }: SearchBarProps) {
           />
         </span>
       </label>
-      <label className="search-bar__field">
+      <label className="search-bar__field search-bar__field--when">
         <span className="search-bar__body">
           <span className="search-bar__label">Quand</span>
           <select
-            className="search-bar__input"
+            className="search-bar__input search-bar__select"
             value={when}
             onChange={(change) => {
               setWhen(change.target.value)
@@ -89,6 +89,7 @@ export function SearchBar({ q, ou, quand, onSearch, pro }: SearchBarProps) {
               </option>
             ))}
           </select>
+          <ChevronDown className="search-bar__chevron" size={14} strokeWidth={2} aria-hidden />
         </span>
       </label>
       <button type="submit" className="search-bar__submit" aria-label="Lancer la recherche">

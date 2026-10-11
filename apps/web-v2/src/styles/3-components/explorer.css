@@ -95,6 +95,26 @@
   color: var(--ink-title);
 }
 
+/* Le menu natif décale son texte de quelques pixels : sans son habillage, la valeur s'aligne sur
+   le libellé « Quand » ; la flèche est redessinée par-dessus, sans capter le clic. */
+.search-bar__field--when .search-bar__body {
+  position: relative;
+}
+
+.search-bar__select {
+  padding-right: var(--space-20);
+  appearance: none;
+  cursor: pointer;
+}
+
+.search-bar__chevron {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-2);
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
 .search-bar__input::placeholder {
   color: var(--ink-section-pale);
 }
