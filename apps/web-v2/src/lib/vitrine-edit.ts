@@ -50,7 +50,10 @@ const RESERVED = new Set([
   'api',
 ])
 
-/** « Atelier Corne & Cuir » → « atelier-corne-cuir ». */
+/**
+ * « Atelier Corne & Cuir » → « atelier-corne-cuir ». Nettoyée à la frappe : le tiret final reste,
+ * sinon on ne pourrait jamais taper « atelier-cuir » ; `slugProblem` le refuse à l'enregistrement.
+ */
 export function cleanSlug(raw: string): string {
   return raw
     .normalize('NFD')
@@ -59,7 +62,7 @@ export function cleanSlug(raw: string): string {
     .replace(/[\s_]+/g, '-')
     .replace(/[^a-z0-9-]/g, '')
     .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
+    .replace(/^-/, '')
 }
 
 export function slugProblem(slug: string): string | null {
@@ -125,6 +128,16 @@ export function fieldProblem(draft: VitrineDraft): string | null {
 const empty = (value: string): string | null => (value.trim() === '' ? null : value.trim())
 
 /** Les colonnes de `entities` qui ont changé, prêtes pour l'`update`. */
+/** Les liens tels qu'ils se publient : complétés de https://, typés, sans les vides. */
+export function cleanLinks(links: VitrineLink[]): VitrineLink[] {
+  return links.flatMap((link) => {
+    const url = normalizeUrl(link.url)
+    if (url === '') return []
+    const type = linkType(url)
+    return [{ type, url, label: linkLabel({ type, url, label: '' }) }]
+  })
+}
+
 export function changedColumns(before: VitrineDraft, after: VitrineDraft): EntityUpdate {
   const columns: EntityUpdate = {}
   if (after.name.trim() !== before.name.trim()) columns.brand_name = after.name.trim()
@@ -133,7 +146,11 @@ export function changedColumns(before: VitrineDraft, after: VitrineDraft): Entit
   if (after.department.trim() !== before.department.trim())
     columns.department = empty(after.department)
   if (after.bio.trim() !== before.bio.trim()) columns.bio = empty(after.bio)
-  if (JSON.stringify(after.links) !== JSON.stringify(before.links)) columns.links = after.links
+  const links = cleanLinks(after.links)
+  if (JSON.stringify(links) !== JSON.stringify(cleanLinks(before.links))) {
+    columns.links = links
+    columns.website = null // le site de la V1 reviendrait sinon comme lien (vitrineLinks)
+  }
   if (after.slug !== before.slug) columns.public_slug = after.slug
   if (after.bannerPosition !== before.bannerPosition) columns.banner_position = after.bannerPosition
   return columns

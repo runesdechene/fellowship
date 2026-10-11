@@ -70,6 +70,11 @@
   color: var(--ink-title);
 }
 
+.edit-bar__cancel:disabled {
+  cursor: default;
+  color: var(--ink-soft);
+}
+
 .edit-bar__save {
   background: var(--action-surface);
   color: var(--action-ink);

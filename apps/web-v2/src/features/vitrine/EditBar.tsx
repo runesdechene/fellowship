@@ -29,6 +29,7 @@ export function EditBar({ edit, onClose }: EditBarProps) {
         <button
           type="button"
           className="edit-bar__cancel"
+          disabled={edit.saving}
           onClick={() => {
             if (edit.dirty && !window.confirm('Abandonner tes modifications ?')) return
             edit.reset()

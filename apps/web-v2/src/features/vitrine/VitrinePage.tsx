@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { EscaleCard } from './EscaleCard'
 import { Stamps } from './Stamps'
-import { useVitrine } from './useVitrine'
+import { useVitrine, type Vitrine } from './useVitrine'
 import { VitrineEditor } from './VitrineEditor'
 import { VitrineHead } from './VitrineHead'
 
@@ -18,7 +18,10 @@ export function VitrinePage() {
   const { slug } = useParams()
   const { actor, reloadIdentity } = useAuth()
   const navigate = useNavigate()
-  const { vitrine, loading, notFound, error, toggleFollow, reload } = useVitrine(slug, actor?.id)
+  const { vitrine, loading, notFound, error, toggleFollow, reload, show } = useVitrine(
+    slug,
+    actor?.id,
+  )
   const [editing, setEditing] = useState(false)
   const [saved, setSaved] = useState(false)
 
@@ -34,15 +37,19 @@ export function VitrinePage() {
   const count = vitrine.upcoming.length
   const isOwner = actor?.id === vitrine.actorId
 
-  /** Publiée : on relit la vitrine (et « Ma vitrine » si l'adresse a changé), puis on sort. */
-  function onSaved(next: string) {
+  /**
+   * Publiée : la vitrine publiée s'affiche aussitôt, puis se relit — par la nouvelle adresse si elle
+   * a changé (la relecture garde la vitrine affichée, son adresse étant déjà la bonne).
+   */
+  function onSaved(next: Vitrine) {
+    show(next)
     setEditing(false)
     setSaved(true)
     window.setTimeout(() => {
       setSaved(false)
     }, 2600)
     void reloadIdentity()
-    if (vitrine && next !== vitrine.slug) void navigate(`/${next}`, { replace: true })
+    if (vitrine && next.slug !== vitrine.slug) void navigate(`/${next.slug}`, { replace: true })
     else reload()
   }
 

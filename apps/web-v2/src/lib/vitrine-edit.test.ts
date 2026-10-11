@@ -32,7 +32,9 @@ const draft: VitrineDraft = {
 describe('cleanSlug', () => {
   test.each([
     ['Atelier Corne & Cuir', 'atelier-corne-cuir'],
-    [' --Éla--  ', 'ela'],
+    [' --Éla--  ', 'ela-'],
+    ['atelier-', 'atelier-'], // on tape « atelier-cuir » : le tiret ne doit pas sauter à la frappe
+    ['Atelier ', 'atelier-'],
     ['Runes_de Chêne', 'runes-de-chene'],
     ['déjà--vu', 'deja-vu'],
   ])('%s → %s', (raw, expected) => {
@@ -125,7 +127,23 @@ describe('changedColumns', () => {
         { type: 'instagram' as const, url: 'https://instagram.com/x', label: '@x' },
       ],
     }
-    expect(Object.keys(changedColumns(draft, more))).toEqual(['links'])
+    // le site hérité de la V1 s'efface : sinon il revient comme lien à la relecture
+    expect(Object.keys(changedColumns(draft, more))).toEqual(['links', 'website'])
+  })
+  test('un lien vide ne se publie pas, un lien tapé sans https:// se complète', () => {
+    const typed = {
+      ...draft,
+      links: [...draft.links, { type: 'website' as const, url: '', label: '' }],
+    }
+    expect(changedColumns(draft, typed)).toEqual({})
+    const bare = {
+      ...draft,
+      links: [{ type: 'website' as const, url: 'instagram.com/runes', label: '' }],
+    }
+    expect(changedColumns(draft, bare)).toEqual({
+      links: [{ type: 'instagram', url: 'https://instagram.com/runes', label: '@runes' }],
+      website: null,
+    })
   })
 })
 

@@ -61,6 +61,7 @@ export function EditableLinks({ links, onChange }: EditableLinksProps) {
               type="url"
               aria-label="Adresse du lien"
               placeholder="monsite.fr, instagram.com/…"
+              autoFocus={link.url === ''}
               value={link.url}
               onChange={(event) => {
                 update(index, event.target.value)

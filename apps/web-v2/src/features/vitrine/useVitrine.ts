@@ -200,6 +200,11 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
     setVersion((current) => current + 1)
   }, [])
 
+  /** La vitrine qu'on vient de publier s'affiche tout de suite ; la relecture suit sans trou. */
+  const show = useCallback((vitrine: Vitrine) => {
+    setState({ vitrine, loading: false, notFound: false, error: null })
+  }, [])
+
   /** Suivre ou ne plus suivre : l'état bascule tout de suite et revient si la base refuse. */
   const toggleFollow = useCallback(async () => {
     const vitrine = state.vitrine
@@ -228,5 +233,5 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
     if (response.error) flip(wasFollowing, wasFollowing ? 1 : -1)
   }, [state.vitrine, viewerId])
 
-  return { ...state, toggleFollow, reload }
+  return { ...state, toggleFollow, reload, show }
 }

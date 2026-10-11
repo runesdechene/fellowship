@@ -48,7 +48,7 @@ function useLeaveGuard(dirty: boolean) {
 interface VitrineEditorProps {
   vitrine: Vitrine
   onClose: () => void
-  onSaved: (slug: string) => void
+  onSaved: (next: Vitrine) => void
 }
 
 export function VitrineEditor({ vitrine, onClose, onSaved }: VitrineEditorProps) {
