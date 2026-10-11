@@ -918,6 +918,33 @@
   /* Les champs et les petits boutons bordés de la maquette 2206:691. */
   --danger-ink: var(--brique-600); /* supprimer, un champ refusé */
   --delete-dialog-width: 460px;
+
+  /* --- La connexion (pages/Login.tsx, lot 10a, maquettes 2100:2 et 2100:38) --- */
+  --login-form-width: 440px;
+  --login-field-padding: 14px 16px;
+  --login-field-line: 1.5px;
+  --radius-login-field: var(--round-12);
+  --radius-login-wall: var(--round-24);
+  --login-wall-surface: var(--ink-950); /* le mur reste sombre dans les deux thèmes */
+  --login-wall-empty: var(--ink-850);
+  --login-wall-ink: var(--sand-0);
+  --login-wall-shade: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ink-950) 92%, transparent),
+    transparent
+  );
+  --code-box-width: 64px;
+  --code-box-height: 72px;
+  --type-login-title: var(--weight-regular) var(--size-52) / 1 var(--family-display);
+  --type-login-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
+  --type-login-label: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-login-input: var(--weight-medium) var(--size-16) / var(--leading-snug) var(--family-sans);
+  --type-login-submit: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-login-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-login-legal: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-login-wall-title: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  --type-code-digit: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --setting-input-width: 300px;
   --setting-input-height: 36px;
   --setting-button-height: 34px;

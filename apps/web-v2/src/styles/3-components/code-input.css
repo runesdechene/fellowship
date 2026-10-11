@@ -1,0 +1,44 @@
+/**
+ * QUOI     — les six cases d'un code (components/ui/CodeInput.tsx).
+ * POURQUOI — maquette 2100:38 (lot 10a) : des cases blanches bordées d'un filet, le chiffre en
+ *            serif, la case active bordée d'encre.
+ */
+
+.code-input {
+  display: flex;
+  gap: var(--space-10);
+}
+
+.code-input__box {
+  width: var(--code-box-width);
+  height: var(--code-box-height);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-login-field);
+  background: var(--surface-card);
+  font: var(--type-code-digit);
+  color: var(--ink-title);
+  text-align: center;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.code-input__box:focus {
+  border: var(--login-field-line) solid var(--ink-title);
+}
+
+.code-input__box:disabled {
+  opacity: var(--settings-off-opacity);
+}
+
+@media (width <= 760px) {
+  .code-input__box {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-input__box {
+    transition: none;
+  }
+}

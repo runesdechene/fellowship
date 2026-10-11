@@ -168,10 +168,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     writeStoredActorId(id)
   }, [])
 
+  // Le même e-mail connecte un habitué ou crée le compte d'un nouveau venu (lot 10a) : le
+  // déclencheur handle_new_user pose sa personne, l'arrivée (/bienvenue) crée son enseigne.
   const signIn = useCallback(async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { shouldCreateUser: false },
+      options: { shouldCreateUser: true },
     })
     return { error: error as Error | null }
   }, [])
