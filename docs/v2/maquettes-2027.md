@@ -19,7 +19,7 @@
 | Calendrier — compagnons en mini-cartes | `2238:2` | validé, intégré (11/10/2026) |
 | Mes bilans | `2027 — Mes bilans`, `2027 mobile — Mes bilans` | validé, intégré (lot 7a, 08/10/2026) |
 | Bilan d'une date | `2027 — Bilan d’une date`, `2027 mobile — Bilan d’une date` | validé, intégré (lot 7a, 08/10/2026) |
-| Ajouter une date | `2027 — Ajouter une date · étape 1` | dessiné (étapes 2-4 au même gabarit) |
+| Ajouter une date | `2027 — Ajouter une date · étape 1` (`2082:2`) | validé, intégré (lot 10b, 11/10/2026) — étapes 2-4 au même gabarit ; adresses suggérées par la BAN ; restent hors maquette : le cadenas de « Événement privé », l'astérisque de « Nom », le téléphone |
 | États Pro | `2027 — Mes bilans · compte gratuit`, `2027 — Points de contact du Pro` (+ notes détaillées, 08/10/2026) | validé, intégré (lot 7b, 08/10/2026) — rappel de clôture au lot 8 |
 | Notifications | `2027 — Notifications` | validé, intégré (lots 8a-8c, 09/10/2026) |
 | Notifications · nouveaux événements | `2027 — Notifications · nouveaux événements` (`2182:2`) | validé, intégré (lot 8c, 09/10/2026) |

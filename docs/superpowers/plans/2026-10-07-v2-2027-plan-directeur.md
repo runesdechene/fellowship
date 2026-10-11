@@ -144,7 +144,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   comme **public de l'exposant** (discussion « Entre exposants / Avec les festivaliers »), pas comme
   clients — l'arrivée reste celle de l'exposant.
 
-### Lot 10 — Connexion, arrivée, création et modification d'une date  ☐ · 10a connexion et arrivée ☑ (11/10/2026, V2 2.32.0, plan `2026-10-11-lot-10a-connexion-arrivee-v2.md` — la V2 crée les comptes, arrivée en 5 étapes marque puis prénom, « Créer un compte exposant ») → ☐ 10b ajouter une date → ☐ 10c modifier un événement
+### Lot 10 — Connexion, arrivée, création et modification d'une date  ☐ · 10a connexion et arrivée ☑ (11/10/2026, V2 2.32.0, plan `2026-10-11-lot-10a-connexion-arrivee-v2.md` — la V2 crée les comptes, arrivée en 5 étapes marque puis prénom, « Créer un compte exposant ») → 10b ajouter une date ☑ (11/10/2026, V2 2.33.0, plan `2026-10-11-lot-10b-ajouter-une-date-v2.md` — barre de création, aperçu en direct, doublons avec affiche et inscrits, adresses de la BAN, position sur la carte, la date créée ouvre sa fiche) → ☐ 10c modifier un événement
 - **Livre** : connexion au nouveau style ; **arrivée d'un exposant** (prénom, marque, métier, ville,
   lien — plus de parcours festivalier) ; création d'une date (4 étapes, doublons enrichis, aperçu en
   direct) ; **modification d'un événement** (info manquante mise en avant, aperçu en direct de la fiche).
