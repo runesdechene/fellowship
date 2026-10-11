@@ -31,3 +31,4 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `deletion-plan.ts` — le plan de suppression d'un compte (recopié dans la fonction delete-account).
 - `welcome.ts` — les règles de l'arrivée : étapes, validité, département, chiffres du mur.
 - `geocode.ts` — les adresses de la Base Adresse Nationale : suggestions, position d'une commune.
+- `create-event.ts` — les phrases de la création d'une date : ligne d'un doublon, lieu de l'aperçu.
