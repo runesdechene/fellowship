@@ -412,14 +412,15 @@
   --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
-  --create-mate-width: 360px;
+  --create-step-width: 620px; /* maquette 2082:2 */
+  --create-preview-width: 300px;
+  --preview-dash: 1.5px;
   --create-bar-link: 18px;
   --dupe-poster-width: 34px; /* la vignette d'un doublon, maquette 2082:2 */
   --dupe-poster-height: 46px;
   --create-bar-number: 20px;
   --type-create-bar-number: var(--weight-semibold) var(--size-11) / 1 var(--family-sans);
   --create-columns-gap: var(--space-48);
-  --create-poster-height: 172px;
 
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */

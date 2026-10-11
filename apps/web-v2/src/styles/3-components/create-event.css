@@ -159,9 +159,9 @@ button.create-bar__step:hover {
 .create__body {
   display: grid;
   flex: 0 1 auto;
-  grid-template-columns: 1fr var(--create-mate-width);
+  grid-template-columns: minmax(0, var(--create-step-width)) var(--create-preview-width);
   gap: var(--create-columns-gap);
-  align-items: center;
+  align-items: start;
 }
 
 /* L'étape est nommée pour la transition : le navigateur l'extrait alors de
@@ -176,6 +176,13 @@ button.create-bar__step:hover {
   view-transition-name: step-content;
   --control-height: 52px;
   --fields-gap: var(--space-20);
+}
+
+.create__over {
+  margin-bottom: var(--space-12);
+  font: var(--type-list-meta);
+  font-weight: var(--weight-medium);
+  color: var(--ink-waiting);
 }
 
 .create__ask {
@@ -243,29 +250,70 @@ button.create-bar__step:hover {
   color: var(--tag-first-ink);
 }
 
-/* --- Le compagnon --------------------------------------------------------- */
-.mate {
+/* --- L'aperçu ------------------------------------------------------------ */
+.preview {
   position: sticky;
   top: var(--space-24);
   display: flex;
   flex-direction: column;
-  gap: var(--space-12);
+  gap: var(--space-10);
 }
 
-.mate__label {
+.preview__label {
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
 
-.mate__note {
-  padding: var(--space-16) var(--space-18);
-  background: var(--status-pending-surface);
-  border-radius: var(--radius-nav);
+.preview__poster {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-card);
+  object-fit: cover;
+}
+
+/* Tant qu'il n'y a pas d'affiche, sa place est tenue en pointillés : la fiche
+   dit ce qu'il reste à faire, et à quelle étape. */
+.preview__poster--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  border: var(--preview-dash) dashed var(--line-dashed);
   font: var(--type-list-meta);
-  line-height: var(--leading-normal);
-  color: var(--status-pending-ink);
+  color: var(--ink-waiting);
+}
+
+.preview__name {
+  font: var(--type-create-card-name);
+  color: var(--ink-title);
+}
+
+.preview__name--empty {
+  color: var(--ink-waiting);
+}
+
+.preview__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.preview__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.preview__note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  font: var(--type-list-meta);
+  color: var(--status-ok-ink);
 }
 
 /* --- Doublons possibles --------------------------------------------------- */
@@ -350,68 +398,6 @@ button.create-bar__step:hover {
 
 .dupe__open:hover {
   text-decoration: underline;
-}
-
-/* --- La fiche en construction --------------------------------------------- */
-.event-card {
-  background: var(--surface-card);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-}
-
-.event-card__poster {
-  display: grid;
-  place-items: center;
-  height: var(--create-poster-height);
-  padding: 0 var(--space-20);
-  background: var(--surface-chip-neutral);
-  color: var(--ink-soft);
-  font: var(--type-list-meta);
-  text-align: center;
-}
-
-.event-card__poster-image {
-  width: 100%;
-  height: var(--create-poster-height);
-  object-fit: cover;
-}
-
-.event-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  padding: var(--space-20) var(--space-23) var(--space-23);
-}
-
-.event-card__name {
-  font: var(--type-create-card-name);
-  color: var(--ink-title);
-}
-
-/* Tant qu'un champ n'est pas rempli, sa place est tenue par un texte éteint :
-   la fiche dit ce qu'il reste à faire sans avoir à l'écrire ailleurs. */
-.event-card__name--waiting,
-.event-card__meta--waiting {
-  color: var(--ink-waiting);
-}
-
-.event-card__meta {
-  font: var(--type-list-name);
-  font-weight: var(--weight-medium);
-  color: var(--ink-soft);
-}
-
-.event-card__meta b {
-  color: var(--ink-title);
-  font-weight: var(--weight-bold);
-}
-
-.event-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-6);
-  margin-top: var(--space-2);
 }
 
 @media (prefers-reduced-motion: reduce) {

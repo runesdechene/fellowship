@@ -200,6 +200,9 @@ export function CreateEvent() {
       <div className="create__body">
         <div>
           <div className="create__step">
+            <p className="create__over">
+              Étape {step + 1} sur {STEPS.length}
+            </p>
             {step === 0 && <StepIdentity draft={draft} update={update} />}
             {step === 0 && similar.length > 0 && (
               <DuplicateList
@@ -261,9 +264,7 @@ export function CreateEvent() {
           {error && <p className="create__blocker">{error}</p>}
         </div>
 
-        <aside className="mate">
-          <EventPreview draft={draft} posterUrl={posterUrl} />
-        </aside>
+        <EventPreview draft={draft} posterUrl={posterUrl} pro={pro} />
       </div>
     </div>
   )

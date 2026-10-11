@@ -34,7 +34,7 @@ export function StepIdentity({ draft, update }: { draft: EventDraft; update: Upd
           checked={draft.isPrivate}
           onChange={(value) => update('isPrivate', value)}
           title="Événement privé"
-          note="Visible par toi seul. N'entre pas dans l'annuaire."
+          note="Visible seulement de toi et des personnes que tu invites"
         />
       </div>
     </>
@@ -44,8 +44,8 @@ export function StepIdentity({ draft, update }: { draft: EventDraft; update: Upd
 export function StepPlace({ draft, update }: { draft: EventDraft; update: UpdateFn }) {
   return (
     <>
-      <h1 className="create__ask">Où et quand se passe-t-il ?</h1>
-      <p className="create__hint">La ville et la date de début suffisent pour l'enregistrer.</p>
+      <h1 className="create__ask">Où et quand ?</h1>
+      <p className="create__hint">L’adresse, la ville et les dates.</p>
 
       <div className="fields">
         <Field label="Adresse ou lieu">
@@ -128,11 +128,8 @@ export function StepTags({
 }) {
   return (
     <>
-      <h1 className="create__ask">De quoi s'agit-il ?</h1>
-      <p className="create__hint">
-        Le premier que tu choisis devient la catégorie principale — c'est elle qui classera
-        l'événement. Tu peux en mettre plusieurs.
-      </p>
+      <h1 className="create__ask">Quelles catégories ?</h1>
+      <p className="create__hint">La première choisie est la principale.</p>
 
       <div className="tag-picker">
         {tags.map((tag) => {
@@ -168,9 +165,9 @@ export function StepDetails({
 }) {
   return (
     <>
-      <h1 className="create__ask">Ce qu'on peut ajouter</h1>
+      <h1 className="create__ask">Les détails</h1>
       <p className="create__hint">
-        Rien n'est obligatoire. Tu peux créer l'événement maintenant et compléter plus tard.
+        L’affiche et ce qui aide les exposants à candidater. Tout est facultatif.
       </p>
 
       <div className="fields">
