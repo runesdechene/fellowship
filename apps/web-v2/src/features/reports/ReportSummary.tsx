@@ -5,6 +5,7 @@
  * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
  *            se fixe ici (ReportGoal), après le festival.
  */
+import { Poster } from '@/components/ui/Poster'
 import { Check } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
@@ -26,11 +27,7 @@ export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummar
   return (
     <div className="report-summary">
       <div className="report-summary__event">
-        {date.imageUrl ? (
-          <img className="report-summary__thumb" src={date.imageUrl} alt="" />
-        ) : (
-          <span className="report-summary__thumb" />
-        )}
+        <Poster imageUrl={date.imageUrl} tags={date.tags} className="report-summary__thumb" />
         <span className="report-summary__event-text">
           <span className="report-summary__name">{date.name}</span>
           <span className="report-summary__dates">

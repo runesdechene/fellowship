@@ -423,7 +423,6 @@
   width: var(--report-summary-thumb-width);
   height: var(--report-summary-thumb-height);
   border-radius: var(--round-8);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 

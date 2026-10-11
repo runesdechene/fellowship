@@ -6,6 +6,7 @@
  *            (/bilans/:eventId). En gratuit (`locked`), le bloc passe sous un voile et une pastille
  *            mène à Mes bilans, qui présente le Pro.
  */
+import { Poster } from '@/components/ui/Poster'
 import { ArrowRight } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { ProBadge } from '@/components/ui/ProBadge'
@@ -23,11 +24,7 @@ function ReportItem({ report }: { report: DashboardReport }) {
 
   return (
     <button type="button" className="report" onClick={() => go(`/bilans/${report.eventId}`)}>
-      {report.imageUrl ? (
-        <img className="report__thumb" src={report.imageUrl} alt="" />
-      ) : (
-        <span className="report__thumb" />
-      )}
+      <Poster imageUrl={report.imageUrl} tags={report.tags} className="report__thumb" />
       <span className="report__body">
         <span className="report__name">{report.name}</span>
         <span className="report__date">

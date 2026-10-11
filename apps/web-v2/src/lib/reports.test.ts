@@ -10,6 +10,7 @@ function date(overrides: Partial<ReportDate> = {}): ReportDate {
     eventId: 'e1',
     name: 'Les Aventuriales',
     imageUrl: null,
+    tags: null,
     place: 'Ménétrole (63)',
     startDate: new Date(2026, 5, 25),
     endDate: new Date(2026, 5, 27),

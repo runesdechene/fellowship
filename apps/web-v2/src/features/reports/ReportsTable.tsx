@@ -5,6 +5,7 @@
  *            déplie la suite sur place.
  * ATTENTION — sur téléphone, seul le bénéfice reste (la colonne CA et frais se cache en CSS).
  */
+import { Poster } from '@/components/ui/Poster'
 import { ArrowRight, ChevronDown, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { formatDayMonthShort } from '@/lib/dates'
@@ -25,11 +26,7 @@ function ReportRow({ date, best }: { date: ReportDate; best: boolean }) {
       onClick={() => go(`/bilans/${date.eventId}`)}
     >
       <span className="reports-table__date">
-        {date.imageUrl ? (
-          <img className="reports-table__thumb" src={date.imageUrl} alt="" />
-        ) : (
-          <span className="reports-table__thumb" />
-        )}
+        <Poster imageUrl={date.imageUrl} tags={date.tags} className="reports-table__thumb" />
         <span className="reports-table__name-block">
           <span className="reports-table__name">{date.name}</span>
           <span className="reports-table__meta">

@@ -58,6 +58,7 @@ async function load(previousId: string, actorId: string): Promise<LastEditionRep
     eventId: event.id,
     name: event.name,
     imageUrl: null,
+    tags: null,
     place: '',
     startDate: parseSqlDate(event.start_date),
     endDate: parseSqlDate(event.end_date),

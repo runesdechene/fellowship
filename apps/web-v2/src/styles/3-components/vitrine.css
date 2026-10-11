@@ -308,10 +308,6 @@
   object-fit: cover;
 }
 
-.stamp__placeholder {
-  color: var(--vitrine-pale-ink);
-}
-
 .stamp__year {
   position: absolute;
   bottom: calc(-1 * var(--space-10));

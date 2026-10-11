@@ -19,6 +19,7 @@ export interface ReportDate {
   eventId: string
   name: string
   imageUrl: string | null
+  tags: string[] | null
   /** « Ménétrole (63) ». */
   place: string
   startDate: Date

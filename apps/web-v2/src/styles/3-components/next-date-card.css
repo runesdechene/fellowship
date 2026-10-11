@@ -40,7 +40,6 @@
   height: 100%;
   border-radius: var(--radius-poster-inset);
   object-fit: cover;
-  background: var(--surface-chip-neutral);
   transition: filter var(--menu-motion);
 }
 

@@ -1,7 +1,6 @@
 /**
- * QUOI     — l'affiche d'une date : l'image (ou, quand il n'y en a pas, la grande date en serif
- *            sur la couleur de la catégorie, son icône en fond), le compte à rebours en haut, les
- *            amis présents en bas.
+ * QUOI     — la grande affiche d'une date : l'affiche (Poster.tsx ; absente, la grande date en
+ *            serif s'y écrit), le compte à rebours en haut, les amis présents en bas.
  * POURQUOI — la même affiche vit dans le calendrier, la vitrine et l'Explorer ; sa hauteur vient du
  *            parent (`--poster-art-height`).
  * ATTENTION — `badge` remplace le compte à rebours (« Nouveau » dans l'Explorer) ; `action` se pose
@@ -9,10 +8,9 @@
  */
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatCountdown } from '@/lib/dates'
-import { createElement, type CSSProperties, type ReactNode } from 'react'
-import { categoryIcon } from '@/lib/category-icons'
+import type { ReactNode } from 'react'
+import { Poster } from '@/components/ui/Poster'
 import type { Friend } from '@/lib/friends'
-import { useCategoryColors } from '@/lib/useTagStyles'
 
 const MONTH_LONG = new Intl.DateTimeFormat('fr-FR', { month: 'long' })
 const MAX_FACES = 3
@@ -40,26 +38,13 @@ export function PosterArt({
   const corner = badge === undefined ? formatCountdown(daysAway) : badge
   const faces = friends.slice(0, MAX_FACES)
   const more = friends.length - faces.length
-  const colors = useCategoryColors(tags)
 
   return (
     <div className="poster-art">
-      {imageUrl ? (
-        <img className="poster-art__image" src={imageUrl} alt="" />
-      ) : (
-        <div
-          className="poster-art__fallback"
-          style={{ '--tag-bg': colors?.bgColor, '--tag-ink': colors?.textColor } as CSSProperties}
-        >
-          {createElement(categoryIcon(tags), {
-            className: 'poster-art__icon',
-            strokeWidth: 1.25,
-            'aria-hidden': true,
-          })}
-          <span className="poster-art__day">{startDate.getDate()}</span>
-          <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
-        </div>
-      )}
+      <Poster imageUrl={imageUrl} tags={tags} className="poster-art__poster">
+        <span className="poster-art__day">{startDate.getDate()}</span>
+        <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
+      </Poster>
       {corner && <span className="poster-art__countdown">{corner}</span>}
       {action && <span className="poster-art__action">{action}</span>}
       {faces.length > 0 && (

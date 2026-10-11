@@ -62,6 +62,7 @@ export interface DashboardReport {
   eventId: string
   name: string
   imageUrl: string | null
+  tags: string[] | null
   date: Date
   /** Somme des entrants. null tant qu'aucune ligne de registre n'existe. */
   revenue: number | null
@@ -184,7 +185,7 @@ async function fetchReports(
   const pastRows = must(
     await supabase
       .from('participations')
-      .select('event_id, events!inner(id, name, image_url, start_date, end_date)')
+      .select('event_id, events!inner(id, name, image_url, tags, start_date, end_date)')
       .eq('actor_id', actorId)
       .in('status', CONFIRMED_STATUSES)
       .gte('events.end_date', yearStart)
@@ -224,6 +225,7 @@ async function fetchReports(
       eventId: event.id,
       name: event.name,
       imageUrl: event.image_url,
+      tags: event.tags,
       date: parseSqlDate(event.start_date),
       revenue: filled ? ledgerRevenue(lines) : null,
       net: filled ? ledgerProfit(lines) : null,

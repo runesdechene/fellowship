@@ -26,7 +26,9 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
   const rows = must(
     await supabase
       .from('participations')
-      .select('event_id, events!inner(id, name, image_url, city, department, start_date, end_date)')
+      .select(
+        'event_id, events!inner(id, name, image_url, tags, city, department, start_date, end_date)',
+      )
       .eq('actor_id', actorId)
       .in('status', CONFIRMED_STATUSES)
       .lt('events.end_date', todayIso()),
@@ -60,6 +62,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
     eventId: event.id,
     name: event.name,
     imageUrl: event.image_url,
+    tags: event.tags,
     place: `${event.city} (${event.department})`,
     startDate: parseSqlDate(event.start_date),
     endDate: parseSqlDate(event.end_date),

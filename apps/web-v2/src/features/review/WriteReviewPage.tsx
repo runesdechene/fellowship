@@ -7,6 +7,7 @@
  * ATTENTION — réservé à un exposant inscrit à la date (la base refuse les autres). Les
  *            organisateurs ne voient jamais le nom de l'auteur.
  */
+import { Poster } from '@/components/ui/Poster'
 import { EyeOff, ShieldCheck, Star, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -210,7 +211,11 @@ export function WriteReviewPage() {
         <p className="review-form__eyebrow">Ce que verront les autres exposants</p>
         <div className="review-form__card review-form__preview-card">
           <div className="review-form__preview-head">
-            {event.image_url && <img src={event.image_url} alt="" />}
+            <Poster
+              imageUrl={event.image_url}
+              tags={event.tags}
+              className="review-form__preview-poster"
+            />
             <span>
               <b>{event.name}</b>
               <span className="review-form__hint">Édition {year}</span>

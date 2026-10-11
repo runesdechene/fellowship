@@ -21,6 +21,7 @@ export function sampleReports(year: number): ReportDate[] {
     eventId: `exemple-${name}`,
     name,
     imageUrl: null,
+    tags: null,
     place: '',
     startDate: new Date(year, month, day),
     endDate: new Date(year, month, day + days - 1),

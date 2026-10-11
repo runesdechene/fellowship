@@ -110,7 +110,6 @@
   width: var(--report-thumb-width);
   height: var(--report-thumb-height);
   border-radius: var(--radius-sm);
-  background: var(--surface-chip-neutral);
   object-fit: cover;
 }
 

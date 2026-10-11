@@ -2,6 +2,7 @@
  * QUOI     — la carte de la prochaine date : affiche, compte à rebours, statut.
  * POURQUOI — la date la plus proche mérite sa propre carte ; un clic ouvre sa fiche.
  */
+import { Poster } from '@/components/ui/Poster'
 import { Check, Contrast } from 'lucide-react'
 import { Chip } from '@/components/ui/Chip'
 import { formatCountdown, formatDateRange, parseSqlDate } from '@/lib/dates'
@@ -14,11 +15,7 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
 
   return (
     <button type="button" className="next-date" onClick={() => go(`/evenement/${event.id}`)}>
-      {event.image_url ? (
-        <img className="next-date__poster" src={event.image_url} alt="" />
-      ) : (
-        <span className="next-date__poster" />
-      )}
+      <Poster imageUrl={event.image_url} tags={event.tags} className="next-date__poster" />
 
       {/* Des `span` et non des `div` : un bouton ne peut contenir que du
           contenu de phrase. Le CSS leur rend leur mise en bloc. */}

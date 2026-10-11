@@ -3,7 +3,7 @@
  *            dessous, le nom court ; au-delà de huit, un « +N ».
  * POURQUOI — l'ancienneté rassure un organisateur : « sur la route depuis 2019 » se lit d'un coup.
  */
-import { CalendarDays } from 'lucide-react'
+import { Poster } from '@/components/ui/Poster'
 import { Link } from 'react-router-dom'
 import { stampYear } from '@/lib/dates'
 import { stampName } from '@/lib/vitrine'
@@ -29,11 +29,7 @@ export function Stamps({ past }: { past: VitrineDate[] }) {
         {shown.map((date) => (
           <Link key={date.eventId} to={`/evenement/${date.eventId}`} className="stamp">
             <span className="stamp__circle">
-              {date.imageUrl ? (
-                <img className="stamp__image" src={date.imageUrl} alt="" />
-              ) : (
-                <CalendarDays className="stamp__placeholder" size={40} strokeWidth={1.2} />
-              )}
+              <Poster imageUrl={date.imageUrl} tags={date.tags} className="stamp__image" />
               <span className="stamp__year">{stampYear(date.startDate)}</span>
             </span>
             <span className="stamp__name">{stampName(date.name)}</span>

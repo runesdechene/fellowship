@@ -214,7 +214,6 @@
   width: var(--reports-thumb-width);
   height: var(--reports-thumb-height);
   border-radius: var(--reports-thumb-radius);
-  background: var(--surface-bar);
   object-fit: cover;
 }
 

@@ -235,7 +235,8 @@
   gap: var(--space-12);
 }
 
-.review-form__preview-head img {
+.review-form__preview-poster {
+  flex: none;
   width: var(--dossiers-thumb-width);
   height: var(--dossiers-thumb-height);
   border-radius: var(--radius-xs);

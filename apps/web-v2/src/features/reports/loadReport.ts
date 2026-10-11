@@ -42,7 +42,9 @@ function toCategory(value: string): LedgerCategory {
 export async function loadReport(eventId: string, actorId: string): Promise<ReportDetail | null> {
   const participation = await supabase
     .from('participations')
-    .select('event_id, events!inner(id, name, image_url, city, department, start_date, end_date)')
+    .select(
+      'event_id, events!inner(id, name, image_url, tags, city, department, start_date, end_date)',
+    )
     .eq('actor_id', actorId)
     .eq('event_id', eventId)
     .in('status', CONFIRMED_STATUSES)
@@ -84,6 +86,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       eventId: event.id,
       name: event.name,
       imageUrl: event.image_url,
+      tags: event.tags,
       place: `${event.city} (${event.department})`,
       startDate: parseSqlDate(event.start_date),
       endDate: parseSqlDate(event.end_date),
