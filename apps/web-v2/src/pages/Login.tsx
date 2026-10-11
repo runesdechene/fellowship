@@ -3,11 +3,11 @@
  * POURQUOI — maquettes 2100:2 et 2100:38 (lot 10a). Le même e-mail connecte un habitué ou crée le
  *            compte d'un nouveau venu ; la session ouverte ici est aussi celle de la V1 (même
  *            origine).
- * ATTENTION — un code complet se vérifie seul, une seule fois : un même code faux ne repart pas en
- *            boucle tant qu'on ne l'a pas changé.
+ * ATTENTION — un code complet se vérifie seul ; un code faux vide les cases et le focus revient à
+ *            la première, prête pour un nouvel essai.
  */
 import { ArrowRight, ChevronLeft, Mail } from 'lucide-react'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { CodeInput } from '@/components/ui/CodeInput'
 import { LoginWall } from '@/features/login/LoginWall'
 import { useAuth } from '@/lib/auth'
@@ -24,7 +24,6 @@ export function Login() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [wait, setWait] = useState(RESEND_AFTER)
-  const tried = useRef('')
 
   // Le décompte avant de pouvoir renvoyer un code, réarmé à chaque envoi.
   useEffect(() => {
@@ -47,13 +46,11 @@ export function Login() {
       return
     }
     setCode('')
-    tried.current = ''
     setWait(RESEND_AFTER)
     setStep('code')
   }
 
   async function check(full: string) {
-    tried.current = full
     setBusy(true)
     setError(null)
     const { error: codeError } = await verifyOtp(email.trim(), full)
@@ -66,7 +63,7 @@ export function Login() {
 
   function onCode(next: string) {
     setCode(next)
-    if (next.length === 6 && next !== tried.current) void check(next)
+    if (next.length === 6) void check(next)
   }
 
   return (

@@ -9,36 +9,49 @@
  *            `attribute_referral` (sans bloquer s'il échoue).
  */
 import { ArrowRight, ChevronLeft } from 'lucide-react'
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { supabase } from '@/lib/supabase'
 import { isSlugTaken } from '@/lib/vitrine-edit'
-import { departmentOf, slugFor, stepProblem, type WelcomeKind } from '@/lib/welcome'
+import {
+  departmentOf,
+  firstProblemStep,
+  safeReturn,
+  slugFor,
+  stepProblem,
+  type WelcomeDraft,
+  type WelcomeKind,
+} from '@/lib/welcome'
 import { ActivityPreview } from './ActivityPreview'
 import { clearWelcome, useWelcomeDraft } from './useWelcomeDraft'
 import { useSlugFree } from './useSlugFree'
 import { WelcomePreview } from './WelcomePreview'
 import { WelcomeStepFields } from './WelcomeStepFields'
 
-/** `?retour=` n'accepte qu'une adresse de l'app, jamais un autre site. */
-function safeReturn(value: string | null): string | null {
-  return value?.startsWith('/') && !value.startsWith('//') ? value : null
-}
-
 export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   const { user, person, entities, actor, reloadIdentity, switchActor } = useAuth()
   const go = useTransitionNavigate()
   const [search] = useSearchParams()
-  const { draft, set, steps, step, index, next, back, goTo } = useWelcomeDraft(kind)
+  const { draft, set: setDraft, steps, step, index, next, back, goTo } = useWelcomeDraft(kind)
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState<string | null>(null)
-  const title = useRef<HTMLDivElement>(null)
+  // L'adresse refusée par la base à la création : « Déjà prise » tant qu'on ne l'a pas changée.
+  const [refused, setRefused] = useState<string | null>(null)
+  // L'enseigne déjà créée : un nouvel essai (après un prénom qui n'a pas pu s'écrire) n'en crée
+  // pas une seconde.
+  const created = useRef<string | null>(null)
+
+  function set(patch: Partial<WelcomeDraft>) {
+    setFailed(null)
+    setDraft(patch)
+  }
 
   const slug = slugFor(draft)
   const problem = stepProblem(step, draft)
-  const slugState = useSlugFree(slug, step === 'address' && problem === null)
+  const checked = useSlugFree(slug, step === 'address' && problem === null)
+  const slugState = slug === refused ? 'taken' : checked
   const last = index === steps.length - 1
   const entity = entities.find((item) => item.actor_id === actor?.id) ?? entities[0]
   const brand = kind === 'nameOnly' ? (entity?.brand_name ?? '') : draft.brand
@@ -48,25 +61,14 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
     : ''
   const blocked = problem !== null || (step === 'address' && slugState === 'taken')
 
-  // Le titre de chaque étape prend le focus : le lecteur d'écran annonce où l'on est.
-  useEffect(() => {
-    title.current?.querySelector('h1')?.focus()
-  }, [step])
-
   async function finish() {
     if (!user) return
     setBusy(true)
     setFailed(null)
     try {
-      if (steps.includes('firstName')) {
-        const { error } = await supabase
-          .from('users')
-          .update({ display_name: draft.firstName.trim() })
-          .eq('actor_id', user.id)
-        if (error) throw error
-      }
-      let created: string | null = null
-      if (kind !== 'nameOnly') {
+      // L'enseigne d'abord, le prénom ensuite : si le prénom échoue, l'arrivée reprend sur lui seul
+      // (« nameOnly ») au lieu de laisser un exposant sans enseigne passer pour un festivalier.
+      if (kind !== 'nameOnly' && !created.current) {
         const { data, error } = await supabase.rpc('create_owned_entity', {
           p_type: 'exposant',
           p_brand_name: draft.brand.trim(),
@@ -77,12 +79,12 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
           p_public_slug: slug,
         })
         if (isSlugTaken(error)) {
-          goTo(steps.indexOf('address'))
-          setFailed('Cette adresse vient d’être prise. Choisis-en une autre.')
+          setRefused(slug)
+          if (step !== 'address') goTo(steps.indexOf('address'))
           return
         }
         if (error) throw error
-        created = data
+        created.current = data
         if (draft.referral) {
           await supabase
             .rpc('attribute_referral', { p_code: draft.referral, p_filleul_entity_id: data })
@@ -92,8 +94,15 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
             )
         }
       }
+      if (steps.includes('firstName')) {
+        const { error } = await supabase
+          .from('users')
+          .update({ display_name: draft.firstName.trim() })
+          .eq('actor_id', user.id)
+        if (error) throw error
+      }
       await reloadIdentity()
-      if (created) switchActor(created)
+      if (created.current) switchActor(created.current)
       clearWelcome()
       go(safeReturn(search.get('retour')) ?? (kind === 'newEntity' ? '/reglages' : '/'))
     } catch {
@@ -106,8 +115,14 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   function submit(event: FormEvent) {
     event.preventDefault()
     if (blocked || busy) return
-    if (last) void finish()
-    else next()
+    if (!last) {
+      next()
+      return
+    }
+    // Un lien vers la dernière étape ouvert ailleurs arrive sans les réponses d'avant.
+    const missing = firstProblemStep(steps, draft)
+    if (missing !== null) goTo(missing)
+    else void finish()
   }
 
   return (
@@ -139,7 +154,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               </span>
             )}
           </div>
-          <div ref={title} className="welcome__body">
+          <div className="welcome__body">
             <WelcomeStepFields
               step={step}
               number={index + 1}
@@ -147,7 +162,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               draft={draft}
               slug={slug}
               slugState={slugState}
-              slugProblem={step === 'address' ? problem : null}
+              problem={problem}
               set={set}
             >
               {step === 'firstName' && (

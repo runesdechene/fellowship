@@ -39,7 +39,7 @@ const TEXTS: Record<WelcomeStep, { over: string; title: string; lead: string }> 
 const SLUG_SAYS: Record<SlugState, string> = {
   checking: 'Vérification…',
   free: '✓ Libre — tu pourras la changer plus tard',
-  taken: 'Déjà prise',
+  taken: 'Déjà prise — choisis-en une autre',
   unknown: '',
 }
 
@@ -92,7 +92,7 @@ interface WelcomeStepFieldsProps {
   draft: WelcomeDraft
   slug: string
   slugState: SlugState
-  slugProblem: string | null
+  problem: string | null
   set: (patch: Partial<WelcomeDraft>) => void
   children?: ReactNode
 }
@@ -104,21 +104,25 @@ export function WelcomeStepFields({
   draft,
   slug,
   slugState,
-  slugProblem,
+  problem,
   set,
   children,
 }: WelcomeStepFieldsProps) {
   const text = TEXTS[step]
+  const slugProblem = step === 'address' ? problem : null
   const slugNote = slugProblem ?? SLUG_SAYS[slugState]
+  // Un nom ou un prénom vide n'a pas besoin d'explication (le bouton reste éteint) ; tout autre refus
+  // se dit sous le champ.
+  const typed = step === 'brand' ? draft.brand : step === 'firstName' ? draft.firstName : 'x'
+  const fieldProblem = step !== 'address' && problem && typed.trim() !== '' ? problem : null
   return (
     <>
       <div className="door__head">
-        <p className="welcome__over">
-          {text.over} · étape {number} sur {total}
+        <p className="welcome__over" aria-live="polite">
+          {text.over}
+          {total > 1 && ` · étape ${String(number)} sur ${String(total)}`}
         </p>
-        <h1 className="door__title" tabIndex={-1}>
-          {text.title}
-        </h1>
+        <h1 className="door__title">{text.title}</h1>
         <p className="door__lead">{text.lead}</p>
       </div>
       {step === 'brand' && (
@@ -188,6 +192,7 @@ export function WelcomeStepFields({
           />
         </>
       )}
+      {fieldProblem && <p className="welcome__note welcome__note--problem">{fieldProblem}</p>}
       {children}
     </>
   )

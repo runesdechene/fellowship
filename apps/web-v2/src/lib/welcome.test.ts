@@ -7,6 +7,9 @@
 import { describe, expect, test } from 'vitest'
 import {
   codeDigits,
+  firstProblemStep,
+  safeReturn,
+  typedCode,
   departmentOf,
   EMPTY_DRAFT,
   initialsOf,
@@ -97,5 +100,42 @@ describe('codeDigits', () => {
     expect(codeDigits('482 913')).toBe('482913')
     expect(codeDigits('482-913-77')).toBe('482913')
     expect(codeDigits('abc')).toBe('')
+  })
+})
+
+describe('firstProblemStep', () => {
+  test('la première étape encore invalide, ou null si tout est bon', () => {
+    const steps = ['brand', 'firstName', 'craft', 'place', 'address'] as const
+    expect(firstProblemStep([...steps], EMPTY_DRAFT)).toBe(0)
+    expect(firstProblemStep([...steps], { ...EMPTY_DRAFT, brand: 'Atelier' })).toBe(1)
+    expect(
+      firstProblemStep([...steps], {
+        ...EMPTY_DRAFT,
+        brand: 'Atelier Sauvage',
+        firstName: 'Uriel',
+      }),
+    ).toBeNull()
+  })
+})
+
+describe('typedCode', () => {
+  test('un chiffre tapé s’écrit dans sa case', () => {
+    expect(typedCode('48', 2, '2')).toBe('482')
+  })
+  test('un code rempli d’un coup (iOS, clavier) remplit toutes les cases', () => {
+    expect(typedCode('', 0, '482913')).toBe('482913')
+    expect(typedCode('4', 1, '482 913')).toBe('482913')
+  })
+  test('rien de chiffré : rien ne change', () => {
+    expect(typedCode('48', 2, 'a')).toBe('48')
+  })
+})
+
+describe('safeReturn', () => {
+  test('seulement une adresse de l’app', () => {
+    expect(safeReturn('/calendrier?mois=2026-12')).toBe('/calendrier?mois=2026-12')
+    expect(safeReturn('//evil.com')).toBeNull()
+    expect(safeReturn('https://evil.com')).toBeNull()
+    expect(safeReturn(null)).toBeNull()
   })
 })

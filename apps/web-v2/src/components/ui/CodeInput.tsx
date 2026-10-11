@@ -6,8 +6,8 @@
  * ATTENTION — `autoComplete="one-time-code"` sur la première case : le téléphone propose le code
  *            reçu, et il arrive collé d'un coup.
  */
-import { useRef, type ClipboardEvent, type KeyboardEvent } from 'react'
-import { codeDigits } from '@/lib/welcome'
+import { useEffect, useRef, type ClipboardEvent, type KeyboardEvent } from 'react'
+import { codeDigits, typedCode } from '@/lib/welcome'
 
 const LENGTH = 6
 const BOXES = Array.from({ length: LENGTH }, (_, index) => index)
@@ -31,12 +31,16 @@ export function CodeInput({
     boxes.current[Math.max(0, Math.min(LENGTH - 1, index))]?.focus()
   }
 
+  // Un code vidé (au départ, ou après un code faux) remet le focus sur la première case.
+  useEffect(() => {
+    if (value === '' && autoFocus) boxes.current[0]?.focus()
+  }, [value, autoFocus])
+
   function type(index: number, raw: string) {
-    const digit = codeDigits(raw).slice(-1)
-    if (digit === '') return
-    const next = (value.slice(0, index) + digit).slice(0, LENGTH)
+    const next = typedCode(value, index, raw)
+    if (next === value) return
     onChange(next)
-    focus(index + 1)
+    focus(next.length)
   }
 
   function erase(index: number, event: KeyboardEvent<HTMLInputElement>) {
@@ -68,10 +72,8 @@ export function CodeInput({
           inputMode="numeric"
           autoComplete={index === 0 ? 'one-time-code' : 'off'}
           aria-label={`Chiffre ${String(index + 1)}`}
-          // Une seule case reçoit la frappe : la première vide, ou la dernière si tout est rempli.
-          autoFocus={autoFocus && index === 0}
           value={value[index] ?? ''}
-          disabled={disabled}
+          readOnly={disabled}
           onFocus={() => {
             if (index > value.length) focus(value.length)
           }}

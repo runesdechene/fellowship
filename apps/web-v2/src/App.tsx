@@ -22,6 +22,7 @@ import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
 import { useAuth } from '@/lib/auth'
 import { useV2Access } from '@/lib/useV2Access'
+import { safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
 import { useEffect, type ReactNode } from 'react'
 
@@ -64,7 +65,12 @@ function WelcomeRoute() {
     entities.length,
     search.has('nouvelle-enseigne') ? 'nouvelle-enseigne' : null,
   )
-  return kind ? <WelcomePage kind={kind} /> : <Navigate to="/" replace />
+  // L'arrivée finie (le prénom vient d'être relu), on rejoint l'adresse demandée au départ.
+  return kind ? (
+    <WelcomePage kind={kind} />
+  ) : (
+    <Navigate to={safeReturn(search.get('retour')) ?? '/'} replace />
+  )
 }
 
 // Hors du routeur de la V2 (basename /v2) : la V1 vit à la racine du domaine.

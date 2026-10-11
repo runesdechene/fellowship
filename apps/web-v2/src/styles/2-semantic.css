@@ -921,7 +921,8 @@
 
   /* --- La connexion (pages/Login.tsx, lot 10a, maquettes 2100:2 et 2100:38) --- */
   --door-form-width: 440px;
-  --door-field-padding: 14px 16px;
+  --door-field-padding: var(--space-14) var(--space-16);
+  --door-logo-height: 37px; /* le logo des maquettes 2100:2 et 2102:72 */
   --door-field-line: 1.5px;
   --radius-door-field: var(--round-12);
   --radius-door-panel: var(--round-24);
@@ -949,6 +950,7 @@
   --welcome-decor-size: 320px;
   --welcome-decor-ink: var(--sand-400);
   --welcome-logo-size: 104px;
+  --welcome-logo-ring: 4px;
   --welcome-bar-width: 150px;
   --welcome-block-height: 110px;
   --type-welcome-name: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);

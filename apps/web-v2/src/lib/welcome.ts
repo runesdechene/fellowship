@@ -99,3 +99,24 @@ export function initialsOf(name: string): string {
 export function codeDigits(text: string): string {
   return text.replace(/\D/g, '').slice(0, 6)
 }
+
+/** La première étape encore invalide (un lien vers l'étape 5 ouvert dans un nouvel onglet arrive
+ *  sans marque ni prénom), ou null si tout est bon. */
+export function firstProblemStep(steps: WelcomeStep[], draft: WelcomeDraft): number | null {
+  const at = steps.findIndex((step) => stepProblem(step, draft) !== null)
+  return at === -1 ? null : at
+}
+
+/** Le code après une frappe dans la case `index` : un chiffre s'y écrit ; plusieurs chiffres d'un
+ *  coup (le code proposé par iOS ou le clavier) remplissent tout le code. */
+export function typedCode(value: string, index: number, raw: string): string {
+  const digits = codeDigits(raw)
+  if (digits === '') return value
+  if (digits.length > 1) return digits
+  return (value.slice(0, index) + digits).slice(0, 6)
+}
+
+/** `?retour=` n'accepte qu'une adresse de l'app, jamais un autre site. */
+export function safeReturn(value: string | null): string | null {
+  return value?.startsWith('/') && !value.startsWith('//') ? value : null
+}
