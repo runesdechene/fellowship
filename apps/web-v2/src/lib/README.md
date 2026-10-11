@@ -28,3 +28,4 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `usePhonePush.ts` — activer, couper les notifications sur ce téléphone.
 - `usePushMuted.ts` — les lignes coupées de la personne (`users.push_muted`).
 - `settings.ts` — les règles des Réglages : champs du profil, phrase d'une enseigne, mot de suppression.
+- `deletion-plan.ts` — le plan de suppression d'un compte (recopié dans la fonction delete-account).
