@@ -148,6 +148,15 @@
   color: var(--danger-ink);
 }
 
+.setting-row__value {
+  font: var(--type-settings-note);
+  color: var(--ink-soft);
+}
+
+.setting-row__control a.button {
+  text-decoration: none;
+}
+
 .setting-row__avatar {
   --avatar-size: var(--avatar-size-discussion);
 }

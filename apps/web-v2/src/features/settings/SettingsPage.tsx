@@ -7,13 +7,17 @@
  */
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { AccountSection } from './AccountSection'
+import { ContactSection } from './ContactSection'
 import { NotificationSettings } from './NotificationSettings'
 import { ProfileSection } from './ProfileSection'
 import type { SaveState } from './useProfileSave'
 
 const SECTIONS = [
   { id: 'profil', label: 'Profil' },
+  { id: 'compte', label: 'Compte' },
   { id: 'notifications', label: 'Notifications' },
+  { id: 'contact', label: 'Contact' },
 ] as const
 
 const SAVED_FOR_MS = 2000
@@ -62,7 +66,9 @@ export function SettingsPage() {
         </nav>
         <div className="settings__sections">
           <ProfileSection onSave={setSaveState} />
+          <AccountSection />
           <NotificationSettings />
+          <ContactSection />
         </div>
       </div>
     </div>
