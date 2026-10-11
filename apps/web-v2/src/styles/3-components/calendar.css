@@ -281,11 +281,11 @@
   flex: none;
 }
 
-/* --- Les compagnons -------------------------------------------------------- */
+/* --- Les compagnons : une mini-carte par festival (maquette 2238:2) ---------- */
 .companions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-14);
+  gap: var(--space-8);
 }
 
 .companions__title {
@@ -293,35 +293,58 @@
   color: var(--ink-section-pale);
 }
 
-.companions__row {
+.companion-card {
   display: flex;
   align-items: center;
-  gap: var(--space-10);
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-12) var(--space-10) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition: translate var(--duration-smooth) var(--ease-soft);
 }
 
-.companions__face {
-  --avatar-size: var(--avatar-size-discussion);
+/* Le même soulèvement que les cartes-affiches. */
+.companion-card:hover {
+  translate: 0 calc(-1 * var(--space-2));
 }
 
-.companions__text {
+.companion-card__poster {
+  flex: none;
+  width: var(--companion-card-poster-width);
+  height: var(--companion-card-poster-height);
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+}
+
+.companion-card__body {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  font: var(--type-list-meta);
-  font-size: var(--size-13);
-  color: var(--ink-soft);
+  gap: var(--space-2);
+  min-width: 0;
 }
 
-.companions__text b {
-  font-weight: var(--weight-semibold);
+.companion-card__name {
+  font: var(--type-list-name);
+  font-size: var(--size-13);
   color: var(--ink-title);
 }
 
-.companions__event {
-  font-weight: var(--weight-medium);
+.companion-card__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.companion-card__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  border: 2px solid var(--surface-card);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .poster-card,
+  .companion-card,
   .calendar-toggle__switch,
   .calendar-toggle__switch::after {
     transition: none;

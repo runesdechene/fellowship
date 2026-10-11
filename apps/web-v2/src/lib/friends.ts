@@ -115,6 +115,8 @@ export async function fetchFriendsByEvent(
 export interface CompanionEvent {
   eventId: string
   name: string
+  imageUrl: string | null
+  tags: string[] | null
   startDate: string
   endDate: string
   friends: Friend[]
@@ -136,7 +138,7 @@ export async function fetchCompanions(
   const [participationsResponse, profiles] = await Promise.all([
     supabase
       .from('participations')
-      .select('actor_id, event_id, events!inner(name, start_date, end_date)')
+      .select('actor_id, event_id, events!inner(name, image_url, tags, start_date, end_date)')
       .in('actor_id', friendIds)
       .in('status', PROGRAMMED_STATUSES)
       .gte('events.end_date', fromSql)
@@ -158,7 +160,15 @@ export async function fetchCompanions(
     const event = events.get(eventId)
     if (!event) return []
     return [
-      { eventId, name: event.name, startDate: event.start_date, endDate: event.end_date, friends },
+      {
+        eventId,
+        name: event.name,
+        imageUrl: event.image_url,
+        tags: event.tags,
+        startDate: event.start_date,
+        endDate: event.end_date,
+        friends,
+      },
     ]
   })
 }

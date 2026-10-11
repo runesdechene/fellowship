@@ -829,6 +829,9 @@
   --reports-row-radius: var(--round-10);
   --reports-thumb-width: 40px;
   --reports-thumb-height: 56px;
+  /* La mini-carte d'un compagnon du calendrier (maquette 2238:2) : la vignette des bilans. */
+  --companion-card-poster-width: var(--reports-thumb-width);
+  --companion-card-poster-height: var(--reports-thumb-height);
   --reports-thumb-radius: var(--round-6);
   --reports-amount-column: 150px;
   --reports-costs-column: 130px;

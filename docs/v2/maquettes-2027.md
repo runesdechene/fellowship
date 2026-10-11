@@ -16,6 +16,7 @@
 | Explorer, résultats | `2027 — Explorer · résultats` | validé |
 | Vitrine d'un artisan | `2027 — Vitrine d’un artisan` (+ états du propriétaire) | validé, intégré (lot 6) |
 | Vitrine, mode édition | `2231:2` | validé, intégré (lot 6b, 11/10/2026) |
+| Calendrier — compagnons en mini-cartes | `2238:2` | validé, intégré (11/10/2026) |
 | Mes bilans | `2027 — Mes bilans`, `2027 mobile — Mes bilans` | validé, intégré (lot 7a, 08/10/2026) |
 | Bilan d'une date | `2027 — Bilan d’une date`, `2027 mobile — Bilan d’une date` | validé, intégré (lot 7a, 08/10/2026) |
 | Ajouter une date | `2027 — Ajouter une date · étape 1` | dessiné (étapes 2-4 au même gabarit) |

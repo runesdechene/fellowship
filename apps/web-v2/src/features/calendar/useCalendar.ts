@@ -39,6 +39,8 @@ export interface CalendarDate {
 export interface CalendarCompanion {
   eventId: string
   name: string
+  imageUrl: string | null
+  tags: string[] | null
   startDate: Date
   endDate: Date
   friends: Friend[]
@@ -106,6 +108,8 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
   const companionDates = companions.map<CalendarCompanion>((c: CompanionEvent) => ({
     eventId: c.eventId,
     name: c.name,
+    imageUrl: c.imageUrl,
+    tags: c.tags,
     startDate: parseSqlDate(c.startDate),
     endDate: parseSqlDate(c.endDate),
     friends: c.friends,

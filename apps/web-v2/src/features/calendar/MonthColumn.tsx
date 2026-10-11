@@ -6,9 +6,8 @@
  *            mais ne comptent jamais.
  */
 import { ArrowRight } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
 import { countLabel } from '@/lib/calendar'
-import { formatDateRange } from '@/lib/dates'
+import { CompanionCard } from './CompanionCard'
 import { PosterCard } from './PosterCard'
 import type { CalendarMonth } from './useCalendar'
 
@@ -56,27 +55,9 @@ export function MonthColumn({ month, current, showFriends, showInterested }: Mon
       {companions.length > 0 && (
         <div className="companions">
           <span className="companions__title">Compagnons</span>
-          {companions.map((companion) => {
-            const first = companion.friends[0]
-            if (!first) return null
-            const others = companion.friends.length - 1
-            return (
-              <div key={companion.eventId} className="companions__row">
-                <Avatar className="companions__face" src={first.avatarUrl} name={first.name} />
-                <span className="companions__text">
-                  <span>
-                    <b>{first.name}</b>
-                    {others > 0
-                      ? ` et ${others} ${others === 1 ? 'autre' : 'autres'} y vont`
-                      : ' y va'}
-                  </span>
-                  <b className="companions__event">
-                    {companion.name} · {formatDateRange(companion.startDate, companion.endDate)}
-                  </b>
-                </span>
-              </div>
-            )
-          })}
+          {companions.map((companion) => (
+            <CompanionCard key={companion.eventId} companion={companion} />
+          ))}
         </div>
       )}
     </section>
