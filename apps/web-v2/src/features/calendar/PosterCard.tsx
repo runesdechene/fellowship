@@ -1,7 +1,7 @@
 /**
  * QUOI     — une carte-affiche du calendrier : l'affiche, puis le nom, le statut et la plage.
  * POURQUOI — c'est l'élément fort de l'écran, comme sur la fiche : la couleur vient des affiches.
- * ATTENTION — le statut se lit par la FORME de l'icône ; ici « Inscrit » reste sobre (calendar.css).
+ * ATTENTION — le statut se lit par la FORME de l'icône et sa couleur, la même que partout ailleurs.
  */
 import { Check, CircleDashed, Contrast } from 'lucide-react'
 import { Link } from 'react-router-dom'

@@ -263,6 +263,7 @@
 }
 
 .poster-card__name {
+  min-width: 0;
   font: var(--type-list-name);
   font-size: var(--size-15);
   color: var(--ink-title);
@@ -274,13 +275,10 @@
   color: var(--ink-soft);
 }
 
-/* Sur une carte-affiche, « Inscrit » reste sobre : le dégradé y criait (Uriel, 07/10/2026) ;
-   la coche suffit. Le dégradé plein vit sur la fiche. */
-.poster-card__row .chip--ok {
-  border-color: var(--line-card);
-  background: var(--surface-card);
-  color: var(--ink-title);
-  font: var(--type-chip);
+/* La pastille garde sa taille : c'est le nom qui passe à la ligne, jamais la pastille qui déborde
+   de la colonne (« Dossier envoyé » perdait son bord droit, Uriel, 11/10/2026). */
+.poster-card__row .chip {
+  flex: none;
 }
 
 /* --- Les compagnons -------------------------------------------------------- */
