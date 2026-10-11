@@ -61,6 +61,7 @@ describe('readSuggestions', () => {
     start_date: '2027-07-12',
     end_date: '2027-07-13',
     image_url: null,
+    tags: ['Médiéval', 42],
     reason: { kind: 'similar', ref_name: 'Les Médiévales de Provins' },
   }
 
@@ -75,6 +76,7 @@ describe('readSuggestions', () => {
           startDate: '2027-07-12',
           endDate: '2027-07-13',
           imageUrl: null,
+          tags: ['Médiéval'],
           reason: { kind: 'similar', refName: 'Les Médiévales de Provins' },
         },
       ],
@@ -93,6 +95,11 @@ describe('readSuggestions', () => {
       kind: 'similar',
       refName: 'Sylak',
     })
+  })
+
+  test('sans catégories lisibles, la carte reste, sans tags', () => {
+    const untagged = { ...item, tags: null }
+    expect(readSuggestions({ count: 1, items: [untagged] }).items[0]?.tags).toEqual([])
   })
 
   test('une réponse vide ou absurde ne propose rien', () => {

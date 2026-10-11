@@ -17,6 +17,8 @@ export interface Suggestion {
   startDate: string
   endDate: string
   imageUrl: string | null
+  /** Les catégories : l'affiche absente en prend la couleur et l'icône. */
+  tags: string[]
   reason: SuggestionReason
 }
 
@@ -71,6 +73,9 @@ function readItem(raw: unknown): Suggestion | null {
     startDate,
     endDate,
     imageUrl: word(item.image_url),
+    tags: Array.isArray(item.tags)
+      ? item.tags.filter((tag): tag is string => typeof tag === 'string')
+      : [],
     reason,
   }
 }

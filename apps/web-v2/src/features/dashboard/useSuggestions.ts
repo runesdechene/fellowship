@@ -10,9 +10,8 @@ import { fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { readSuggestions, type Suggestion } from '@/lib/suggestions'
 import { must, supabase } from '@/lib/supabase'
 
-/** Une suggestion à l'écran : sa catégorie (l'affiche absente) et les amis qui y vont. */
+/** Une suggestion à l'écran, avec les amis qui y vont. */
 export interface ShownSuggestion extends Suggestion {
-  tags: string[] | null
   friends: Friend[]
 }
 
@@ -26,16 +25,11 @@ async function loadSuggestions(actorId: string): Promise<ShownSuggestions | null
     const found = readSuggestions(must(await supabase.rpc('suggestions_for', { p_actor: actorId })))
     const ids = found.items.map((item) => item.eventId)
     if (ids.length === 0) return { count: found.count, items: [] }
-    const [events, friendsByEvent] = await Promise.all([
-      supabase.from('events').select('id, tags').in('id', ids),
-      fetchFriendsByEvent(actorId, ids),
-    ])
-    const tagsByEvent = new Map(must(events).map((event) => [event.id, event.tags]))
+    const friendsByEvent = await fetchFriendsByEvent(actorId, ids)
     return {
       count: found.count,
       items: found.items.map((item) => ({
         ...item,
-        tags: tagsByEvent.get(item.eventId) ?? null,
         friends: friendsByEvent.get(item.eventId) ?? [],
       })),
     }
