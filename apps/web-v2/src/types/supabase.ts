@@ -1558,10 +1558,13 @@ export type Database = {
           city: string
           department: string
           end_date: string
+          exhibitors: number
           id: string
+          image_url: string
           name: string
           score: number
           start_date: string
+          tags: string[]
         }[]
       }
       send_deadline_reminders: { Args: never; Returns: number }
