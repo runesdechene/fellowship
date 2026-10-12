@@ -168,7 +168,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Décidé le 12/10/2026** (Uriel, pendant le 10c) : très demandé par la communauté — voir où est un
   événement par rapport à soi. Juste après la bascule (lot 12), avant les finitions.
 - **Livre** (version minimaliste d'abord) : un seul composant de carte (première carte de la V2,
-  `maplibre-gl` déjà en dépendance, fond de carte à choisir) ; sur ordinateur, la carte s'ouvre à la
+  `maplibre-gl` à ajouter à la V2 — seule la V1 l'a —, fond OpenFreeMap comme la V1) ; sur ordinateur, la carte s'ouvre à la
   place de l'affiche dans le mur de droite de la fiche ; sur téléphone, un écran qui sort de la droite ;
   la distance depuis la position de la personne ou depuis le siège social de son enseigne ; l'onglet
   « Carte » de l'aperçu de la modification (lot 10c), pour vérifier que l'adresse tombe au bon endroit.
