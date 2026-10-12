@@ -256,6 +256,7 @@ export function EventPage() {
           positionError={positionError}
           asking={asking}
           close={closeMap}
+          personal={actor?.kind !== 'entity'}
         />
       )}
       <div className="event-page__main">

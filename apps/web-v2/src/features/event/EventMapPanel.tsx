@@ -27,10 +27,23 @@ interface EventMapPanelProps {
   positionError: string | null
   asking: boolean
   close: () => void
+  /** Un compte personnel n'a pas d'enseigne, donc pas d'atelier : le texte le dit autrement. */
+  personal: boolean
 }
 
 export function EventMapPanel(props: EventMapPanelProps) {
-  const { name, point, place, hasPoster, origin, askPosition, positionError, asking, close } = props
+  const {
+    name,
+    point,
+    place,
+    hasPoster,
+    origin,
+    askPosition,
+    positionError,
+    asking,
+    close,
+    personal,
+  } = props
   const sentence = distanceSentence(point, origin)
   const start = origin.kind === 'none' ? null : { point: origin.point, label: origin.label }
   const panel = useRef<HTMLElement>(null)
@@ -82,9 +95,12 @@ export function EventMapPanel(props: EventMapPanelProps) {
         ) : (
           <>
             <p className="map-panel__hint">
-              {positionError ?? 'Pas de siège ni d’atelier renseigné pour ton enseigne'}
+              {positionError ??
+                (personal
+                  ? 'Ton compte personnel n’a pas d’atelier'
+                  : 'Pas de siège ni d’atelier renseigné pour ton enseigne')}
             </p>
-            {!positionError && (
+            {
               <button
                 type="button"
                 className="map-panel__ask"
@@ -94,7 +110,7 @@ export function EventMapPanel(props: EventMapPanelProps) {
                 <Navigation size={13} strokeWidth={2} />
                 Depuis ma position
               </button>
-            )}
+            }
           </>
         )}
         <p className="map-panel__place">{place}</p>

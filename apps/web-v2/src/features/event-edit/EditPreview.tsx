@@ -16,6 +16,7 @@ import { formatDateRange, formatFullDate, parseSqlDate } from '@/lib/dates'
 import type { MissingField } from '@/lib/event-edit'
 import { tagStyleFor } from '@/lib/tags'
 import { useTagStyles } from '@/lib/useTagStyles'
+import { useCityPoint } from './useCityPoint'
 
 const EventMap = lazy(() => import('@/components/map/EventMap'))
 
@@ -35,6 +36,11 @@ interface Row {
 export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
   const styles = useTagStyles()
   const [view, setView] = useState<'fiche' | 'carte'>('fiche')
+  const cityPoint = useCityPoint(draft.city, draft.department, view === 'carte')
+  const mapPoint =
+    draft.latitude !== null && draft.longitude !== null
+      ? { latitude: draft.latitude, longitude: draft.longitude }
+      : cityPoint
   const start = draft.startDate ? parseSqlDate(draft.startDate) : null
   const end = draft.endDate ? parseSqlDate(draft.endDate) : start
   const place = `${draft.city} (${draft.department})`
@@ -85,14 +91,14 @@ export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
       </div>
       {view === 'carte' ? (
         <div className="edit-preview__map">
-          {draft.latitude !== null && draft.longitude !== null ? (
+          {mapPoint ? (
             <LoadBoundary
               fallback={<p className="edit-preview__map-note">La carte n’a pas pu se charger.</p>}
             >
               <Suspense fallback={null}>
                 <EventMap
                   event={{
-                    point: { latitude: draft.latitude, longitude: draft.longitude },
+                    point: mapPoint,
                     name: draft.name || 'Sans nom',
                   }}
                 />
@@ -100,7 +106,7 @@ export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
             </LoadBoundary>
           ) : (
             <p className="edit-preview__map-note">
-              La position se calcule à l’enregistrement, depuis la ville.
+              Renseigne la ville et le département pour la voir sur la carte.
             </p>
           )}
         </div>

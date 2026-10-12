@@ -39,7 +39,7 @@ export function useEntityBase(entityId: string) {
     }
   }, [entityId])
 
-  async function pick(place: PlaceSuggestion) {
+  async function pick(place: PlaceSuggestion): Promise<void> {
     setError(null)
     const { error: failure } = await supabase.from('entity_bases').upsert({
       entity_id: entityId,

@@ -26,18 +26,19 @@ export function PlaceDistance(props: PlaceDistanceProps) {
     <span className="place-distance">
       {sentence ? (
         <span className="place-distance__line">{sentence}</span>
-      ) : positionError ? (
-        <span className="place-distance__line">{positionError}</span>
       ) : (
-        <button
-          type="button"
-          className="place-distance__ask"
-          disabled={asking}
-          onClick={askPosition}
-        >
-          <Navigation size={12} strokeWidth={2} />
-          Depuis ma position
-        </button>
+        <>
+          {positionError && <span className="place-distance__line">{positionError}</span>}
+          <button
+            type="button"
+            className="place-distance__ask"
+            disabled={asking}
+            onClick={askPosition}
+          >
+            <Navigation size={12} strokeWidth={2} />
+            Depuis ma position
+          </button>
+        </>
       )}
       <button type="button" className="place-distance__open" onClick={openMap}>
         Voir sur la carte <ArrowRight size={12} strokeWidth={2} />
