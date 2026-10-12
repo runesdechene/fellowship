@@ -444,6 +444,7 @@
   --edit-poster-width: 72px;
   --edit-poster-height: 100px;
   --edit-preview-poster-height: 210px;
+  --edit-preview-map-height: 480px;
   --edit-live-dot: var(--live-500); /* le point « en direct » */
   --edit-dot-size: 7px;
   --type-edit-section: var(--weight-semibold) var(--size-17) / var(--leading-tight)

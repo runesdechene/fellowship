@@ -211,6 +211,57 @@
   margin-top: var(--edit-preview-offset);
 }
 
+.edit-preview__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* La bascule Fiche · Carte (maquette 2117:2). */
+.preview-toggle {
+  display: inline-flex;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-chip-neutral);
+}
+
+.preview-toggle__option {
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-sm);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.preview-toggle__option--on {
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.edit-preview__map {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  height: var(--edit-preview-map-height);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-panel);
+  background: var(--map-land);
+}
+
+.edit-preview__map .event-map {
+  height: var(--edit-preview-map-height);
+}
+
+.edit-preview__map-note {
+  padding: var(--space-20);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
 .edit-preview__label {
   display: flex;
   align-items: center;
@@ -369,6 +420,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .preview-toggle__option,
   .edit-event__back,
   .tag-chip__remove,
   .tag-chips__others,
