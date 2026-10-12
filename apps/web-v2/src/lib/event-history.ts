@@ -109,6 +109,8 @@ export function changeBlocks(
   return BLOCK_LABELS.flatMap(([field, label]): ChangeBlock[] => {
     const row = rows.find((candidate) => candidate.field === field)
     if (!row) return []
+    // Vide avant comme après (la version d'origine compare à rien) : rien à montrer.
+    if (shortValue(field, row.before) === null && shortValue(field, row.after) === null) return []
     if (TEXT_FIELDS.includes(field)) {
       const parts = diffWords(asText(row.before), asText(row.after)).map((part) => ({
         text: part.value,

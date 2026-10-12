@@ -196,6 +196,11 @@ button.history__row:hover {
   text-decoration: line-through;
 }
 
+/* Un mot retiré puis son remplaçant : un souffle entre les deux, sinon « vikingpirate ». */
+.version__del + .version__ins {
+  margin-left: var(--space-4);
+}
+
 .version__revert {
   display: flex;
   align-items: center;

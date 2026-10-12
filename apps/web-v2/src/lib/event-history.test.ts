@@ -71,6 +71,15 @@ describe('changeBlocks', () => {
       },
     ])
   })
+  test('un champ vide avant comme après n’a pas de bloc (la version d’origine)', () => {
+    expect(
+      changeBlocks([
+        { field: 'address', before: null, after: null },
+        { field: 'registration_note', before: null, after: null },
+        { field: 'city', before: null, after: 'Riom' },
+      ]),
+    ).toEqual([{ field: 'city', label: 'Ville', kind: 'short', before: null, after: 'Riom' }])
+  })
   test('la description mot à mot, du HTML lu en texte', () => {
     const [block] = changeBlocks([
       {
