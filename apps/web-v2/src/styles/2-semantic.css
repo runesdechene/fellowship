@@ -412,6 +412,11 @@
   --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
+  /* La carte d'un événement (lot 13). */
+  --map-min-height: 240px;
+  --map-pin-dot: 8px;
+  --map-pin-event-dot: var(--terre-400);
+  --type-map-pin: var(--weight-semibold) var(--size-12) / 1 var(--family-sans);
   /* Le fond de carte, lu par lib/map-style.ts (lot 13). */
   --map-land: var(--carte-terre-jour);
   --map-land-alt: var(--carte-terre-2-jour);
