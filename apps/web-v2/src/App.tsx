@@ -11,6 +11,8 @@ import { CommunityPage } from '@/features/community/CommunityPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EditEvent } from '@/features/event-edit/EditEvent'
+import { HistoryPage } from '@/features/event-history/HistoryPage'
+import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { ProPage } from '@/features/pro/ProPage'
@@ -125,6 +127,26 @@ export function App() {
           <ProtectedRoute>
             <AppShell bare>
               <EditEvent />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/evenement/:id/historique"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <HistoryPage />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/evenement/:id/historique/:version"
+        element={
+          <ProtectedRoute>
+            <AppShell>
+              <VersionPage />
             </AppShell>
           </ProtectedRoute>
         }

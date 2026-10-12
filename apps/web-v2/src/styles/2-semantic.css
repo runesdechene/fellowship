@@ -412,6 +412,11 @@
   --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
+  /* L'histoire d'une fiche (lot 10c, maquettes 2253:2 et 2253:299). */
+  --history-avatar-size: 36px;
+  --version-avatar-size: 24px;
+  --type-history-sentence: var(--weight-regular) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
   /* Modifier un événement (lot 10c, maquette 2117:2). */
   --edit-form-width: 680px;
   --edit-preview-width: 400px;

@@ -6,7 +6,7 @@
  * ATTENTION — la position (latitude, longitude, précision) suit l'adresse : elle ne se dit pas à part.
  */
 import { diffWords } from 'diff'
-import { formatDayMonth, formatFullDate, parseSqlDate } from '@/lib/dates'
+import { daysUntil, formatDayMonth, formatFullDate, parseSqlDate } from '@/lib/dates'
 import { htmlToText } from '@/lib/rich-text'
 
 /** Dans l'ordre de la fiche. Les deux dates ne se disent qu'une fois. */
@@ -48,6 +48,18 @@ export function authorName(name: string | null, brand: string | null): string {
 
 export function versionTitle(createdAt: Date): string {
   return `La version du ${formatDayMonth(createdAt)}`
+}
+
+/** Quand une version a été écrite : « aujourd'hui », « hier », « il y a 3 jours », puis la date. */
+export function versionWhen(createdAt: Date, now: Date): string {
+  const days = daysUntil(now, createdAt)
+  if (days === 0) return 'aujourd’hui'
+  if (days === 1) return 'hier'
+  if (days < 7) return `il y a ${String(days)} jours`
+  const day = formatDayMonth(createdAt)
+  return createdAt.getFullYear() === now.getFullYear()
+    ? day
+    : `${day} ${String(createdAt.getFullYear())}`
 }
 
 export type ChangeBlock =

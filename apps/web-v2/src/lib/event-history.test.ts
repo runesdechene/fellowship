@@ -5,7 +5,13 @@
  *            montrer mot à mot ce qu'il a ajouté ou retiré.
  */
 import { describe, expect, test } from 'vitest'
-import { authorName, changeBlocks, versionSentence, versionTitle } from './event-history'
+import {
+  authorName,
+  changeBlocks,
+  versionSentence,
+  versionTitle,
+  versionWhen,
+} from './event-history'
 
 describe('versionSentence', () => {
   test('origine, un champ, deux, plusieurs ; les dates comptent une fois ; la position ne se dit pas', () => {
@@ -77,5 +83,16 @@ describe('changeBlocks', () => {
     if (block?.kind !== 'text') throw new Error('attendu : un texte')
     expect(block.parts.filter((p) => p.removed).map((p) => p.text.trim())).toEqual(['viking'])
     expect(block.parts.filter((p) => p.added).map((p) => p.text.trim())).toEqual(['pirate'])
+  })
+})
+
+describe('versionWhen', () => {
+  const now = new Date(2026, 9, 12, 15)
+  test('aujourd’hui, hier, il y a N jours, puis la date', () => {
+    expect(versionWhen(new Date(2026, 9, 12, 9), now)).toBe('aujourd’hui')
+    expect(versionWhen(new Date(2026, 9, 11, 22), now)).toBe('hier')
+    expect(versionWhen(new Date(2026, 9, 9, 10), now)).toBe('il y a 3 jours')
+    expect(versionWhen(new Date(2026, 8, 12, 10), now)).toBe('12 septembre')
+    expect(versionWhen(new Date(2025, 5, 18, 10), now)).toBe('18 juin 2025')
   })
 })
