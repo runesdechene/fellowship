@@ -363,3 +363,16 @@
     transition: none;
   }
 }
+
+/* Le siège ou l'atelier d'une enseigne (lot 13) : l'adresse suggérée, à la largeur des autres champs. */
+.entity-base {
+  display: block;
+  width: var(--setting-input-width);
+}
+
+.entity-base .control {
+  height: var(--setting-input-height);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-input);
+  background: var(--surface-card);
+}

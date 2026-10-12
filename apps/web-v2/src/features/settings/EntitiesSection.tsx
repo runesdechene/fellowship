@@ -8,7 +8,7 @@
  *            formulaire pour les deux. La section s'affiche donc aussi sans enseigne.
  */
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
@@ -17,6 +17,7 @@ import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { entityLine } from '@/lib/settings'
 import { openPortal } from '@/lib/stripe'
+import { EntityBase } from './EntityBase'
 import { SettingCard, SettingRow } from './SettingRow'
 import { useUpcomingCounts } from './useUpcomingCounts'
 
@@ -39,43 +40,45 @@ export function EntitiesSection() {
         {entities.map((entity) => {
           const line = entityLine(entity, now, counts ? (counts.get(entity.actor_id) ?? 0) : null)
           return (
-            <SettingRow
-              key={entity.actor_id}
-              title={entity.brand_name}
-              note={line.text}
-              badge={line.pro ? <ProBadge /> : undefined}
-              leading={
-                <Avatar
-                  className="setting-row__logo"
-                  src={entity.avatar_url}
-                  name={entity.brand_name}
-                />
-              }
-            >
-              {line.action === 'portal' && (
-                <Button
-                  onClick={() => {
-                    setFailed(false)
-                    openPortal(entity.actor_id).catch(() => {
-                      setFailed(true)
-                    })
-                  }}
-                >
-                  Gérer
-                </Button>
-              )}
-              {line.action === 'upgrade' && (
-                <Button
-                  variant="action"
-                  onClick={() => {
-                    switchActor(entity.actor_id)
-                    go('/pro')
-                  }}
-                >
-                  Passer Pro
-                </Button>
-              )}
-            </SettingRow>
+            <Fragment key={entity.actor_id}>
+              <SettingRow
+                title={entity.brand_name}
+                note={line.text}
+                badge={line.pro ? <ProBadge /> : undefined}
+                leading={
+                  <Avatar
+                    className="setting-row__logo"
+                    src={entity.avatar_url}
+                    name={entity.brand_name}
+                  />
+                }
+              >
+                {line.action === 'portal' && (
+                  <Button
+                    onClick={() => {
+                      setFailed(false)
+                      openPortal(entity.actor_id).catch(() => {
+                        setFailed(true)
+                      })
+                    }}
+                  >
+                    Gérer
+                  </Button>
+                )}
+                {line.action === 'upgrade' && (
+                  <Button
+                    variant="action"
+                    onClick={() => {
+                      switchActor(entity.actor_id)
+                      go('/pro')
+                    }}
+                  >
+                    Passer Pro
+                  </Button>
+                )}
+              </SettingRow>
+              <EntityBase entityId={entity.actor_id} />
+            </Fragment>
           )
         })}
         <Link className="setting-create" to="/bienvenue?nouvelle-enseigne">

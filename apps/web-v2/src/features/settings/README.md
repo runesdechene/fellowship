@@ -16,3 +16,5 @@
 - `ContactSection.tsx` — écrire à l'équipe.
 - `DeleteAccount.tsx` — la carte « Supprimer mon compte » et sa fenêtre de confirmation.
 - `useAccountDeletion.ts` — l'aperçu puis la suppression, par la fonction serveur `delete-account`.
+- `EntityBase.tsx`, `useEntityBase.ts` — « Siège social ou atelier » sous chaque enseigne (lot 13) :
+  sert au calcul des distances, jamais affiché (table `entity_bases`).
