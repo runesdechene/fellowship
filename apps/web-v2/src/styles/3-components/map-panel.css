@@ -1,0 +1,161 @@
+/**
+ * QUOI     — la carte ouverte depuis la fiche (features/event/EventMapPanel.tsx) et la ligne de
+ *            distance sous le lieu (PlaceDistance.tsx).
+ * POURQUOI — lot 13 (maquettes 2263:2, 2263:375, 2263:400) : sur grand écran, la carte prend la place
+ *            de l'affiche dans le mur ; sinon, un écran glisse depuis la droite.
+ */
+
+/* --- La ligne sous le lieu ----------------------------------------------------- */
+.place-distance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.place-distance__line {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.place-distance__ask,
+.place-distance__open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.place-distance__ask {
+  font-weight: var(--weight-medium);
+  color: var(--ink-soft);
+}
+
+.place-distance__ask:hover,
+.place-distance__open:hover {
+  text-decoration: underline;
+}
+
+/* --- L'écran glissant (téléphone, fenêtre étroite, fiche sans affiche) -------- */
+.map-panel {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-map);
+  display: flex;
+  flex-direction: column;
+  background: var(--map-land);
+  transition: translate var(--duration-medium) var(--ease-out);
+}
+
+@starting-style {
+  .map-panel {
+    translate: 100% 0;
+  }
+}
+
+.map-panel__map {
+  flex: 1;
+  min-height: 0;
+}
+
+.map-panel__close,
+.map-panel__back {
+  position: absolute;
+  top: var(--space-16);
+  left: var(--space-16);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-14) var(--space-8) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  font: var(--type-select-value);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.map-panel__close {
+  display: none;
+}
+
+.map-panel__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: var(--space-18) var(--space-20) var(--space-26);
+  border-top: 1px solid var(--line-card);
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+  background: var(--surface-panel);
+}
+
+.map-panel__distance {
+  font: var(--type-map-distance);
+  color: var(--ink-title);
+}
+
+.map-panel__hint {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.map-panel__place {
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}
+
+.map-panel__ask {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-16) var(--space-10) var(--space-14);
+  border-radius: var(--radius-setting-button);
+  background: var(--ink-title);
+  font: var(--type-select-value);
+  color: var(--surface-card);
+  cursor: pointer;
+}
+
+/* --- Le mur (grand écran, fiche avec affiche) ------------------------------------ */
+@media (width > 1100px) {
+  .map-panel--wall {
+    inset: 0 0 0 auto;
+    width: var(--wall-width);
+    transition: opacity var(--duration-medium) var(--ease-out);
+  }
+
+  @starting-style {
+    .map-panel--wall {
+      translate: 0 0;
+      opacity: 0;
+    }
+  }
+
+  .map-panel--wall .map-panel__close {
+    display: inline-flex;
+  }
+
+  .map-panel--wall .map-panel__back {
+    display: none;
+  }
+
+  .map-panel--wall .map-panel__card {
+    position: absolute;
+    bottom: var(--space-24);
+    left: var(--space-24);
+    border: 1px solid var(--line-card);
+    border-radius: var(--radius-card);
+    background: var(--surface-card);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-panel,
+  .map-panel--wall {
+    transition: none;
+  }
+}

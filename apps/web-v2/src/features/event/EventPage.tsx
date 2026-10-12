@@ -7,8 +7,8 @@
  */
 import { ArrowRight, CalendarDays, Clock, MapPin, Pencil, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useEffect, type ReactNode } from 'react'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
@@ -21,6 +21,10 @@ import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
 import { Companions } from './Companions'
+import { EventMapPanel } from './EventMapPanel'
+import { PlaceDistance } from './PlaceDistance'
+import { useOrigin } from './useOrigin'
+import { eventPoint } from '@/lib/distance'
 import { AddMissing, KeptUpToDate } from './KeptUpToDate'
 import { DiscussionBlock } from './DiscussionBlock'
 import { LastEditionReport } from './LastEditionReport'
@@ -84,9 +88,11 @@ type FactData = {
   value: string | null | undefined
   /** Ce qui précise la valeur sans être elle : la durée, la salle, le mode. */
   sub?: string | null
+  /** Ce qui se pose sous la carte : la distance et « Voir sur la carte » pour le lieu. */
+  extra?: ReactNode
 }
 
-function Fact({ Icon, label, value, sub }: FactData) {
+function Fact({ Icon, label, value, sub, extra }: FactData) {
   return (
     <div className="event-page__fact">
       <Icon className="event-page__fact-icon" size={20} strokeWidth={1.8} />
@@ -94,6 +100,7 @@ function Fact({ Icon, label, value, sub }: FactData) {
         <span className="event-page__fact-label">{label}</span>
         <span className="event-page__fact-value">{value}</span>
         {sub && <span className="event-page__fact-sub">{sub}</span>}
+        {extra}
       </span>
     </div>
   )
@@ -103,7 +110,11 @@ export function EventPage() {
   const { id } = useParams<{ id: string }>()
   const { actor, person, entities } = useAuth()
   const { pro } = usePlan()
-  const { hash } = useLocation()
+  const location = useLocation()
+  const { hash } = location
+  const navigate = useNavigate()
+  const [search, setSearch] = useSearchParams()
+  const { origin, askPosition, positionError, asking } = useOrigin()
   const go = useTransitionNavigate()
   const today = new Date()
   const {
@@ -173,6 +184,13 @@ export function EventPage() {
 
   // Les faits se construisent d'abord, se filtrent ensuite : seul ce que
   // l'organisateur a renseigné prend une carte.
+  // La carte s'ouvre dans l'adresse (`?carte`) : le retour du navigateur la referme.
+  const point = eventPoint(event)
+  const closeMap = () => {
+    if ((location.state as { carteOuverte?: boolean } | null)?.carteOuverte) void navigate(-1)
+    else setSearch({}, { replace: true })
+  }
+
   const facts: FactData[] = [
     {
       Icon: CalendarDays,
@@ -186,6 +204,16 @@ export function EventPage() {
       label: 'Lieu',
       value: `${event.city} (${event.department})`,
       sub: event.address,
+      extra: (
+        <PlaceDistance
+          point={point}
+          origin={origin}
+          askPosition={askPosition}
+          positionError={positionError}
+          asking={asking}
+          openMap={() => setSearch({ carte: '' }, { state: { carteOuverte: true } })}
+        />
+      ),
     },
     { Icon: Users, label: 'Fréquentation', value: event.expected_attendance },
     { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
@@ -201,6 +229,19 @@ export function EventPage() {
 
   return (
     <div className="event-page">
+      {search.has('carte') && point && (
+        <EventMapPanel
+          name={event.name}
+          point={point}
+          place={[event.address, `${event.city} (${event.department})`].filter(Boolean).join(', ')}
+          hasPoster={Boolean(event.image_url)}
+          origin={origin}
+          askPosition={askPosition}
+          positionError={positionError}
+          asking={asking}
+          close={closeMap}
+        />
+      )}
       <div className="event-page__main">
         <header className="event-page__hero">
           {/* Sur téléphone, le mur d'affiche disparaît : l'affiche ouvre la fiche. */}

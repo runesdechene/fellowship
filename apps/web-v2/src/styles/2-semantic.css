@@ -225,6 +225,7 @@
   --border-menu: var(--sand-300);
   --menu-motion: var(--duration-fast) var(--ease-out);
   --layer-menu: 20;
+  --layer-map: 30; /* la carte ouverte couvre la barre d'onglets du téléphone */
 
   /* =========================================================================
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)
@@ -415,6 +416,8 @@
   /* La carte d'un événement (lot 13). */
   --map-min-height: 240px;
   --map-pin-dot: 8px;
+  --type-map-distance: var(--weight-semibold) var(--size-18) / var(--leading-snug)
+    var(--family-sans);
   --map-pin-event-dot: var(--terre-400);
   --type-map-pin: var(--weight-semibold) var(--size-12) / 1 var(--family-sans);
   /* Le fond de carte, lu par lib/map-style.ts (lot 13). */

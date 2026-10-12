@@ -4,7 +4,7 @@
  *            donnée ; sinon rien. Changer d'enseigne change le point de départ.
  */
 import { describe, expect, test } from 'vitest'
-import { originFor } from './origin'
+import { distanceSentence, originFor } from './origin'
 
 const atelier = { latitude: 45.78, longitude: 3.08 }
 const ici = { latitude: 48.85, longitude: 2.35 }
@@ -24,5 +24,22 @@ describe('originFor', () => {
       label: 'Ta position',
     })
     expect(originFor(null, new Map([['e1', atelier]]), null)).toEqual({ kind: 'none' })
+  })
+})
+
+describe('distanceSentence', () => {
+  const lyon = { latitude: 45.764, longitude: 4.8357 }
+  test('depuis l’atelier, depuis la position, ou rien', () => {
+    expect(
+      distanceSentence(lyon, {
+        kind: 'base',
+        point: { latitude: 45.7772, longitude: 3.087 },
+        label: 'Ton atelier',
+      }),
+    ).toBe('À 136 km de ton atelier')
+    expect(distanceSentence(lyon, { kind: 'position', point: lyon, label: 'Ta position' })).toBe(
+      'À 0 m de ta position',
+    )
+    expect(distanceSentence(lyon, { kind: 'none' })).toBeNull()
   })
 })
