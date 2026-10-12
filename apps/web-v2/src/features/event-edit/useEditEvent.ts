@@ -7,7 +7,7 @@
  *            messages d'erreur de la base sont déjà en français : ils s'affichent tels quels.
  */
 import { useCallback, useEffect, useState } from 'react'
-import { firstBlockedStep, type EventDraft } from '@/features/event-create/useEventDraft'
+import { editBlocker, type EventDraft } from '@/features/event-create/useEventDraft'
 import { useAuth } from '@/lib/auth'
 import { canEditEvent, changedFields, eventToDraft, type EditableField } from '@/lib/event-edit'
 import { locateCity } from '@/lib/geocode'
@@ -90,11 +90,9 @@ export function useEditEvent(id: string) {
 
   async function save(): Promise<boolean> {
     if (!loaded || !draft) return false
-    const blocked = firstBlockedStep(draft)
-    if (blocked !== null) {
-      setError(
-        'Il manque une information obligatoire : le nom, la ville, le département ou le début.',
-      )
+    const blocked = editBlocker(draft)
+    if (blocked) {
+      setError(blocked)
       return false
     }
     setSaving(true)

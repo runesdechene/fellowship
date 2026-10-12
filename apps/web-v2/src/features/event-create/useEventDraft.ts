@@ -152,6 +152,12 @@ export function firstBlockedStep(draft: EventDraft): number | null {
   return index === -1 ? null : index
 }
 
+/** Ce qui empêche d'enregistrer une fiche modifiée (lot 10c), dit exactement ; `null` sinon. */
+export function editBlocker(draft: EventDraft): string | null {
+  const blocked = firstBlockedStep(draft)
+  return blocked === null ? null : blockingReason(draft, blocked)
+}
+
 /**
  * L'état du brouillon, tel qu'un statut peut l'annoncer.
  * `quiet`   rien à annoncer — fiche vierge, ou frappe encore en cours

@@ -5,6 +5,7 @@
  */
 import {
   addressTyped,
+  editBlocker,
   firstBlockedStep,
   isBlank,
   parseDraft,
@@ -101,5 +102,25 @@ describe('firstBlockedStep', () => {
 
   it('la première étape bloquée l’emporte', () => {
     expect(firstBlockedStep({ ...ready, name: 'P', tags: [] })).toBe(0)
+  })
+})
+
+describe('editBlocker', () => {
+  const ready = {
+    ...parseDraft(null),
+    name: 'Les Médiévales',
+    city: 'Provins',
+    department: '77',
+    startDate: '2026-12-12',
+    tags: ['Médiéval'],
+  }
+
+  it('dit exactement ce qui bloque l’enregistrement d’une fiche', () => {
+    expect(editBlocker(ready)).toBeNull()
+    expect(editBlocker({ ...ready, tags: [] })).toBe('Choisis au moins une catégorie.')
+    expect(editBlocker({ ...ready, endDate: '2026-12-01' })).toBe(
+      'La date de fin tombe avant le début.',
+    )
+    expect(editBlocker({ ...ready, city: ' ' })).toBe('La ville est nécessaire.')
   })
 })
