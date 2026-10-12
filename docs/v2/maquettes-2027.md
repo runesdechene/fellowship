@@ -34,7 +34,7 @@
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque (étape 1)` (`2102:72`), `… · ton prénom (étape 2)` (`2244:2`), `… · ton adresse` (`2244:53`) | validé, intégré (lot 10a, 11/10/2026) — la marque d'abord, puis le prénom avec l'aperçu « X de Marque » ; l'écran du choix est **écarté** |
 | Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
-| Modifier un événement | `2027 — Modifier un événement` | dessiné |
+| Modifier un événement | `2027 — Modifier un événement` (`2117:2`), `2027 — L'histoire de la fiche` (`2253:2`), `… · une version` (`2253:299`), `2027 — Fiche · modifier et infos manquantes` (`2256:2`) | validé, intégré (lot 10c, 12/10/2026) — bascule Fiche / Carte masquée (lot 13) ; « Un mot sur ta modification » ajouté à la maquette |
 | Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
 | Thème sombre — tableau de bord, fiche, calendrier | `2027 sombre — …` (rangée sous le mobile) | validé le 08/10/2026 |
 | Mobile — les autres écrans | — | à dessiner au moment de leur spec |
