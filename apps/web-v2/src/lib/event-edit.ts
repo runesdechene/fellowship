@@ -10,6 +10,7 @@
 import type { EventDraft } from '@/features/event-create/useEventDraft'
 import { htmlToText, isRichTextEmpty, textToHtml } from '@/lib/rich-text'
 import type { EventRow } from '@/types/database'
+import type { Json } from '@/types/supabase'
 
 export type EditableField =
   | 'name'
@@ -59,7 +60,7 @@ const text = (value: string) => value.trim() || null
 type SentField = Exclude<EditableField, 'image_url' | 'description'>
 
 /** Ce que le formulaire envoie pour chaque champ, sous la forme où la fiche le range. */
-function sent(draft: EventDraft): Record<SentField, unknown> {
+function sent(draft: EventDraft): Record<SentField, Json> {
   return {
     name: draft.name.trim(),
     address: text(draft.address),
@@ -83,10 +84,10 @@ function sent(draft: EventDraft): Record<SentField, unknown> {
 export function changedFields(
   event: EventRow,
   draft: EventDraft,
-): Partial<Record<EditableField, unknown>> {
+): Partial<Record<EditableField, Json>> {
   const before = sent(eventToDraft(event))
   const after = sent(draft)
-  const changes: Partial<Record<EditableField, unknown>> = {}
+  const changes: Partial<Record<EditableField, Json>> = {}
   for (const key of Object.keys(after) as SentField[]) {
     if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) changes[key] = after[key]
   }

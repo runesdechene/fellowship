@@ -165,3 +165,22 @@
     transition: none;
   }
 }
+
+/* « Il manquait cette info » (lot 10c, maquette 2117:2) : le champ qu'on vient compléter depuis la
+   fiche, posé sur un aplat. */
+.field-missing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-14) var(--space-16) var(--space-16);
+  border-radius: var(--radius-control);
+  background: var(--surface-chip-neutral);
+}
+
+.field-missing__note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}

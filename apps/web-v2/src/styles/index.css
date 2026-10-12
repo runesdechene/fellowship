@@ -56,6 +56,7 @@
 @import './3-components/form.css';
 @import './3-components/select.css';
 @import './3-components/create-event.css';
+@import './3-components/event-edit.css';
 @import './3-components/poster-wall.css';
 @import './3-components/event-page.css';
 @import './3-components/deadline-reminder.css';

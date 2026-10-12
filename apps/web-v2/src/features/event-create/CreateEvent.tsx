@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { parseSqlDate } from '@/lib/dates'
 import { locateCity } from '@/lib/geocode'
-import { imageProblem, resizeImage } from '@/lib/image-resize'
+import { PosterError, uploadPoster } from '@/lib/poster-upload'
 import { textToHtml } from '@/lib/rich-text'
 import { canActOn } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
@@ -28,9 +28,6 @@ import { DuplicateList } from './DuplicateList'
 import { StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
 
 /** Le dépôt public des affiches. */
-const POSTER_BUCKET = 'event-images'
-/** Assez pour le mur d'affiche de la fiche, en grand écran. */
-const POSTER_WIDTH = 1200
 
 /** Le temps que la question « on efface ? » reste posée avant de se retirer. */
 const CONFIRM_MS = 6000
@@ -121,27 +118,17 @@ export function CreateEvent() {
 
     let imageUrl: string | null = null
     if (poster) {
-      // L'affiche est réduite avant l'envoi, comme la vitrine et le profil : une photo de
-      // téléphone de 10 Mo devient quelques centaines de Ko.
-      let blob: Blob | null = null
-      if (!imageProblem(poster)) blob = await resizeImage(poster, POSTER_WIDTH).catch(() => null)
-      if (!blob) {
+      try {
+        imageUrl = await uploadPoster(poster)
+      } catch (failure) {
         setSaving(false)
         setError(
-          'Cette affiche ne peut pas être utilisée. Choisis-en une autre, ou crée la date sans elle.',
+          failure instanceof PosterError && failure.reason === 'unusable'
+            ? 'Cette affiche ne peut pas être utilisée. Choisis-en une autre, ou crée la date sans elle.'
+            : "L'affiche n'a pas pu être envoyée. Réessaie, ou crée l'événement sans elle.",
         )
         return
       }
-      const path = `${crypto.randomUUID()}.${blob.type === 'image/webp' ? 'webp' : 'jpg'}`
-      const { error: uploadError } = await supabase.storage
-        .from(POSTER_BUCKET)
-        .upload(path, blob, { contentType: blob.type })
-      if (uploadError) {
-        setSaving(false)
-        setError("L'affiche n'a pas pu être envoyée. Réessaie, ou crée l'événement sans elle.")
-        return
-      }
-      imageUrl = supabase.storage.from(POSTER_BUCKET).getPublicUrl(path).data.publicUrl
     }
 
     // Sans adresse choisie, la date prend la position de sa ville ; une BAN qui ne répond pas

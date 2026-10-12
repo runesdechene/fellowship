@@ -1666,7 +1666,7 @@ export type Database = {
         Args: {
           p_as_entity?: string
           p_event: string
-          p_expected_version: number
+          p_expected_version?: number
           p_fields: Json
           p_note?: string
         }

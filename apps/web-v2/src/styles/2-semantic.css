@@ -412,6 +412,24 @@
   --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
+  /* Modifier un événement (lot 10c, maquette 2117:2). */
+  --edit-form-width: 680px;
+  --edit-preview-width: 400px;
+  --edit-columns-gap: 36px;
+  --edit-sections-gap: var(--space-40);
+  --edit-preview-offset: 96px; /* l'aperçu commence à hauteur de la première section */
+  --edit-poster-width: 72px;
+  --edit-poster-height: 100px;
+  --edit-preview-poster-height: 210px;
+  --edit-live-dot: var(--live-500); /* le point « en direct » */
+  --edit-dot-size: 7px;
+  --type-edit-section: var(--weight-semibold) var(--size-17) / var(--leading-tight)
+    var(--family-sans);
+  --type-edit-preview-name: var(--weight-regular) var(--size-32) / 1 var(--family-display);
+  --type-edit-preview-small: var(--weight-regular) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --type-edit-preview-value: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
   --create-step-width: 620px; /* maquette 2082:2 */
   --create-inset: 137px; /* du bord du panneau à « Quitter » */
   --create-bar-gap: 102px; /* de la barre à « Étape 1 sur 4 » */

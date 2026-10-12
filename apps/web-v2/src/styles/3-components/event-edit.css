@@ -1,0 +1,378 @@
+/**
+ * QUOI     — la page « Modifier l'événement » (features/event-edit/, maquette 2117:2) : barre
+ *            d'actions, en-tête, sections, catégories, affiche, mot, et l'aperçu en direct.
+ * POURQUOI — lot 10c : la fiche partagée se corrige à côté de son aperçu, tel que tous la verront.
+ */
+
+.edit-event {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--space-24) var(--page-gutter) var(--space-48) var(--create-inset);
+}
+
+.edit-event__bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-10);
+}
+
+.edit-event__error {
+  margin-right: auto;
+  font: var(--type-list-meta);
+  color: var(--ink-title);
+}
+
+.edit-event__body {
+  display: grid;
+  grid-template-columns: minmax(0, var(--edit-form-width)) var(--edit-preview-width);
+  justify-content: start;
+  align-items: start;
+  gap: var(--edit-columns-gap);
+  margin-top: var(--space-28);
+}
+
+.edit-event__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--edit-sections-gap);
+}
+
+.edit-event__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.edit-event__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.edit-event__back:hover {
+  color: var(--ink-title);
+}
+
+.edit-event__title {
+  font: var(--type-create-ask);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.edit-event__kept,
+.edit-event__state {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Les sections ---------------------------------------------------------- */
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.edit-section__title {
+  font: var(--type-edit-section);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+/* --- Les catégories : leurs couleurs sont des données (voir tag.css) ------- */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: var(--setting-button-height);
+  padding: 0 var(--space-10) 0 var(--space-12);
+  border: 1px solid color-mix(in srgb, var(--tag-ink, var(--tag-badge-ink)) 22%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--tag-bg, var(--tag-badge-surface));
+  color: var(--tag-ink, var(--tag-badge-ink));
+  font: var(--type-card-link);
+}
+
+.tag-chip__remove {
+  display: inline-flex;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.tag-chip__remove:hover {
+  opacity: 1;
+}
+
+.tag-chip--add {
+  border: 1px dashed var(--line-dashed);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tag-chips__others {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  width: 100%;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .tag-chips__others {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-4));
+  }
+}
+
+/* --- L'affiche ------------------------------------------------------------- */
+.edit-poster {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.edit-poster__thumb {
+  width: var(--edit-poster-width);
+  height: var(--edit-poster-height);
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.edit-poster__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.edit-poster__name {
+  font: var(--type-control);
+  color: var(--ink-title);
+}
+
+.edit-poster__actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.edit-poster__button {
+  display: inline-flex;
+  align-items: center;
+  height: var(--setting-button-height);
+  padding: 0 var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.edit-poster__button:hover {
+  background: var(--surface-control-hover);
+}
+
+/* --- Le mot ---------------------------------------------------------------- */
+.edit-note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.edit-note__hint {
+  font: var(--type-list-meta);
+  color: var(--ink-waiting);
+}
+
+/* --- L'aperçu en direct ---------------------------------------------------- */
+.edit-preview {
+  position: sticky;
+  top: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin-top: var(--edit-preview-offset);
+}
+
+.edit-preview__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-preview-label);
+  color: var(--ink-soft);
+}
+
+.edit-preview__dot {
+  width: var(--edit-dot-size);
+  height: var(--edit-dot-size);
+  border-radius: 50%;
+  background: var(--edit-live-dot);
+}
+
+.edit-preview__card {
+  overflow: hidden;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+}
+
+.edit-preview__poster {
+  display: block;
+  width: 100%;
+  height: var(--edit-preview-poster-height);
+  object-fit: cover;
+}
+
+.edit-preview__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-20) var(--space-23);
+}
+
+.edit-preview__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.edit-preview__name {
+  font: var(--type-edit-preview-name);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.edit-preview__meta {
+  font: var(--type-preview-meta);
+  color: var(--ink-soft);
+}
+
+.edit-preview__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+}
+
+.edit-preview__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+}
+
+.edit-preview__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  color: var(--ink-soft);
+}
+
+.edit-preview__fact-label,
+.edit-preview__row-label {
+  font: var(--type-edit-preview-small);
+  color: var(--ink-waiting);
+}
+
+.edit-preview__fact-value,
+.edit-preview__row-value {
+  font: var(--type-edit-preview-value);
+  color: var(--ink-title);
+}
+
+.edit-preview__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.edit-preview__block-title {
+  font: var(--type-report-name);
+  color: var(--ink-title);
+}
+
+.edit-preview__rows {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+}
+
+.edit-preview__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-8) var(--space-10);
+  border: 1px dashed transparent;
+  border-radius: var(--radius-sm);
+  color: var(--ink-soft);
+}
+
+/* Le champ qui manquait, repéré à sa place pendant qu'on le remplit. */
+.edit-preview__row--now {
+  border-color: var(--line-dashed);
+  background: var(--surface-chip-neutral);
+}
+
+.edit-preview__row-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.edit-preview__now {
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-edit-preview-small);
+  color: var(--ink-soft);
+}
+
+.edit-preview__about {
+  display: -webkit-box;
+  overflow: hidden;
+  font: var(--type-list-meta);
+  line-height: var(--leading-normal);
+  color: var(--ink-soft);
+  white-space: pre-line;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.edit-preview__note {
+  font: var(--type-list-meta);
+  line-height: var(--leading-normal);
+  color: var(--ink-waiting);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-event__back,
+  .tag-chip__remove,
+  .tag-chips__others,
+  .edit-poster__button {
+    transition: none;
+  }
+}
