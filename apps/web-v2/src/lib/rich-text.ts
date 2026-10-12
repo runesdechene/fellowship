@@ -62,3 +62,40 @@ export function isRichTextEmpty(html: string | null | undefined): boolean {
       .trim() === ''
   )
 }
+
+/**
+ * Le texte d'une description, pour la modifier (lot 10c) : paragraphes séparés d'une ligne vide,
+ * puces « • ». Le gras et les titres ne survivent pas : c'est assumé (Uriel, 12/10/2026).
+ */
+export function htmlToText(html: string | null): string {
+  if (!html) return ''
+  if (!/<[a-z]/i.test(html)) return html.trim()
+  const doc = new DOMParser().parseFromString(cleanRichText(html), 'text/html')
+  const blocks: string[] = []
+  for (const node of Array.from(doc.body.childNodes)) {
+    if (node instanceof HTMLUListElement || node instanceof HTMLOListElement) {
+      const items = Array.from(node.children).map((item) => `• ${item.textContent.trim()}`)
+      blocks.push(items.join('\n'))
+    } else if (node instanceof HTMLElement) {
+      node.querySelectorAll('br').forEach((br) => br.replaceWith('\n'))
+      blocks.push(node.textContent.trim())
+    } else {
+      blocks.push((node.textContent ?? '').trim())
+    }
+  }
+  return blocks.filter(Boolean).join('\n\n')
+}
+
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+/** Un texte tapé, rendu en HTML pour la fiche : un paragraphe par bloc, un retour par ligne. */
+export function textToHtml(text: string): string | null {
+  const blocks = text
+    .trim()
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+  if (blocks.length === 0) return null
+  return blocks.map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br>')}</p>`).join('')
+}

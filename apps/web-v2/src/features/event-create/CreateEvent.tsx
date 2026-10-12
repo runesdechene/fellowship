@@ -15,6 +15,7 @@ import { useAuth } from '@/lib/auth'
 import { parseSqlDate } from '@/lib/dates'
 import { locateCity } from '@/lib/geocode'
 import { imageProblem, resizeImage } from '@/lib/image-resize'
+import { textToHtml } from '@/lib/rich-text'
 import { canActOn } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { supabase } from '@/lib/supabase'
@@ -157,7 +158,7 @@ export function CreateEvent() {
         // La base exige une date de fin : un événement d'un jour finit le jour même.
         end_date: draft.endDate || draft.startDate,
         address: draft.address.trim() || null,
-        description: draft.description.trim() || null,
+        description: textToHtml(draft.description),
         registration_deadline: draft.registrationDeadline || null,
         registration_url: draft.registrationUrl.trim() || null,
         external_url: draft.externalUrl.trim() || null,
