@@ -4,7 +4,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.5'
+    PostgrestVersion: '13.0.5'
   }
   public: {
     Tables: {
@@ -226,6 +226,38 @@ export type Database = {
             isOneToOne: true
             referencedRelation: 'actors'
             referencedColumns: ['id']
+          },
+        ]
+      }
+      entity_bases: {
+        Row: {
+          address: string
+          entity_id: string
+          latitude: number
+          longitude: number
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          entity_id: string
+          latitude: number
+          longitude: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          entity_id?: string
+          latitude?: number
+          longitude?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'entity_bases_entity_id_fkey'
+            columns: ['entity_id']
+            isOneToOne: true
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
           },
         ]
       }
