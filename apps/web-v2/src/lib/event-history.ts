@@ -85,7 +85,7 @@ function shortValue(field: string, value: unknown): string | null {
   if (value === null || value === undefined || value === '') return null
   if (Array.isArray(value)) return value.length > 0 ? value.join(', ') : null
   if (field === 'image_url') return 'une affiche'
-  if (typeof value !== 'string') return String(value)
+  if (typeof value !== 'string') return JSON.stringify(value)
   return DATE_FIELDS.includes(field) ? formatFullDate(parseSqlDate(value)) : value
 }
 
@@ -100,8 +100,8 @@ export function changeBlocks(
     if (TEXT_FIELDS.includes(field)) {
       const parts = diffWords(asText(row.before), asText(row.after)).map((part) => ({
         text: part.value,
-        added: Boolean(part.added),
-        removed: Boolean(part.removed),
+        added: part.added,
+        removed: part.removed,
       }))
       return [{ field, label, kind: 'text', parts }]
     }
