@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button'
 import { useTags } from '@/features/event-create/useTags'
 import { MISSING_LABELS, type MissingField } from '@/lib/event-edit'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { KeptUpToDate } from '@/features/event/KeptUpToDate'
 import { EditPreview } from './EditPreview'
 import { EditSections } from './EditSections'
 import { useEditEvent } from './useEditEvent'
@@ -100,7 +101,7 @@ export function EditEvent() {
               {event.name}
             </button>
             <h1 className="edit-event__title">Modifier l’événement</h1>
-            <p className="edit-event__kept">Tenu à jour par les exposants</p>
+            <KeptUpToDate eventId={id} />
           </header>
           <EditSections
             draft={draft}

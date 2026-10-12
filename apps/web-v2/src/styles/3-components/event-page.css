@@ -339,8 +339,88 @@
 
 /* --- États ---------------------------------------------------------------- */
 .event-page__state {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
   font: var(--type-event-meta);
   color: var(--ink-soft);
+}
+
+/* --- Modifier la fiche (lot 10c, maquette 2256:2) ---------------------------- */
+.event-page__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.event-page__edit {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-setting-button);
+  background: var(--surface-card);
+  font: var(--type-select-value);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.event-page__edit:hover {
+  background: var(--surface-control-hover);
+}
+
+/* « Tenu à jour par les exposants · modifié par Lina, il y a 3 jours » : ouvre l'histoire. */
+.kept-up {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-10);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-align: left;
+  cursor: pointer;
+}
+
+.kept-up b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.kept-up:hover span {
+  text-decoration: underline;
+}
+
+.add-missing {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-10);
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-chip);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.add-missing:hover {
+  border-color: var(--ink-soft);
+  color: var(--ink-title);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-page__edit,
+  .add-missing {
+    transition: none;
+  }
 }
 
 .event-page__mobile-poster {

@@ -17,9 +17,11 @@ interface InfoRowProps {
   label: string
   children: ReactNode
   sub?: ReactNode
+  /** Posée à droite de la ligne (« + Ajouter » sur une info manquante). */
+  action?: ReactNode
 }
 
-export function InfoRow({ Icon, label, children, sub }: InfoRowProps) {
+export function InfoRow({ Icon, label, children, sub, action }: InfoRowProps) {
   return (
     <li className="info-row">
       <Icon className="info-row__icon" size={16} strokeWidth={1.8} />
@@ -28,6 +30,7 @@ export function InfoRow({ Icon, label, children, sub }: InfoRowProps) {
         <span className="info-row__value">{children}</span>
         {sub && <span className="info-row__sub">{sub}</span>}
       </span>
+      {action}
     </li>
   )
 }

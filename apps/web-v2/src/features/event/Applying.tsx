@@ -3,17 +3,20 @@
  *            dossier en ligne, le contact, et ce que l'exposant a envoyé.
  * POURQUOI — les infos d'inscription étaient éparpillées ; les exposants les ont réclamées au même
  *            endroit, avec la trace de leur propre envoi (maquette 2027, fiche événement).
- * ATTENTION — ce qui n'est pas renseigné n'apparaît pas. « Ce que j'ai envoyé » est privé
+ * ATTENTION — ce qui n'est pas renseigné apparaît en gris avec « + Ajouter » pour qui peut modifier
+ *            la fiche (lot 10c), et n'apparaît pas pour les autres. « Ce que j'ai envoyé » est privé
  *            (participation_dossiers) et n'existe que si l'exposant suit cette date. Le rappel de
  *            clôture (Pro) ne s'affiche que si la date limite est à venir.
  */
-import { Check, Clock, FileText, Link as LinkIcon, Mail } from 'lucide-react'
+import { Check, Clock, FileText, Globe, Link as LinkIcon, Mail } from 'lucide-react'
 import { DraftInput } from '@/components/ui/DraftInput'
 import { InfoRow, InfoRows } from '@/components/ui/InfoRows'
 import { daysUntil, formatCountdown, formatFullDate, parseSqlDate } from '@/lib/dates'
+import { MISSING_LABELS, type MissingField } from '@/lib/event-edit'
 import { websiteLink } from '@/lib/vitrine'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 import { DeadlineReminder } from './DeadlineReminder'
+import { AddMissing } from './KeptUpToDate'
 import type { DossierFields } from './useDossier'
 
 interface ApplyingProps {
@@ -24,6 +27,30 @@ interface ApplyingProps {
   actorId: string | null | undefined
   fields: DossierFields
   save: (patch: Partial<DossierFields>) => Promise<void>
+  /** Qui peut modifier la fiche voit ce qui manque, avec « + Ajouter ». */
+  canEdit: boolean
+  onAdd: (field: MissingField) => void
+}
+
+/** Une info absente de la fiche, pour qui peut la compléter. */
+function Missing({
+  Icon,
+  field,
+  onAdd,
+}: {
+  Icon: typeof Clock
+  field: MissingField
+  onAdd: (field: MissingField) => void
+}) {
+  return (
+    <InfoRow
+      Icon={Icon}
+      label={MISSING_LABELS[field]}
+      action={<AddMissing onClick={() => onAdd(field)} />}
+    >
+      <span className="info-row__missing">Pas encore renseigné</span>
+    </InfoRow>
+  )
 }
 
 /** « dans 12 jours », « clôturé — tu y es inscrit », « clôturé ». */
@@ -34,13 +61,13 @@ function deadlineNote(deadline: Date, status: ParticipationStatus | null): strin
 }
 
 export function Applying(props: ApplyingProps) {
-  const { event, status, setStatus, statusSaving, actorId, fields, save } = props
+  const { event, status, setStatus, statusSaving, actorId, fields, save, canEdit, onAdd } = props
   const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
   const site = event.registration_url ? websiteLink(event.registration_url) : null
   const following = status !== null
   const hasInfo = [deadline, event.registration_note, site, event.contact_email].some(Boolean)
 
-  if (!hasInfo && !following) return null
+  if (!hasInfo && !following && !canEdit) return null
 
   return (
     <section className="event-page__block">
@@ -54,10 +81,16 @@ export function Applying(props: ApplyingProps) {
               {formatFullDate(deadline)}
             </InfoRow>
           )}
+          {!deadline && canEdit && (
+            <Missing Icon={Clock} field="registration_deadline" onAdd={onAdd} />
+          )}
           {event.registration_note && (
             <InfoRow Icon={FileText} label="Comment">
               {event.registration_note}
             </InfoRow>
+          )}
+          {!event.registration_note && canEdit && (
+            <Missing Icon={FileText} field="registration_note" onAdd={onAdd} />
           )}
           {site && (
             <InfoRow Icon={LinkIcon} label="Dossier en ligne">
@@ -66,12 +99,19 @@ export function Applying(props: ApplyingProps) {
               </a>
             </InfoRow>
           )}
+          {!site && canEdit && <Missing Icon={LinkIcon} field="registration_url" onAdd={onAdd} />}
           {event.contact_email && (
             <InfoRow Icon={Mail} label="Contact">
               <a className="info-row__link" href={`mailto:${event.contact_email}`}>
                 {event.contact_email}
               </a>
             </InfoRow>
+          )}
+          {!event.contact_email && canEdit && (
+            <Missing Icon={Mail} field="contact_email" onAdd={onAdd} />
+          )}
+          {!event.external_url && canEdit && (
+            <Missing Icon={Globe} field="external_url" onAdd={onAdd} />
           )}
           {following && (
             <InfoRow Icon={Check} label="Ce que j’ai envoyé">

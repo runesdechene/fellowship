@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { ArrowRight, CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
+import { ArrowRight, CalendarDays, Clock, MapPin, Pencil, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
@@ -15,11 +15,13 @@ import { useAuth } from '@/lib/auth'
 import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from '@/lib/dates'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { canEditEvent, type MissingField } from '@/lib/event-edit'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
 import { Applying } from './Applying'
 import { Companions } from './Companions'
+import { AddMissing, KeptUpToDate } from './KeptUpToDate'
 import { DiscussionBlock } from './DiscussionBlock'
 import { LastEditionReport } from './LastEditionReport'
 import { useLastEditionReport } from './useLastEditionReport'
@@ -99,7 +101,7 @@ function Fact({ Icon, label, value, sub }: FactData) {
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
-  const { actor, person } = useAuth()
+  const { actor, person, entities } = useAuth()
   const { pro } = usePlan()
   const { hash } = useLocation()
   const go = useTransitionNavigate()
@@ -189,6 +191,14 @@ export function EventPage() {
     { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
   ].filter((fait) => Boolean(fait.value))
 
+  const myActorIds = [person?.actor_id, ...entities.map((entity) => entity.actor_id)].filter(
+    (value): value is string => Boolean(value),
+  )
+  const canEdit = canEditEvent(event, myActorIds)
+  const edit = (field?: MissingField) => {
+    go(`/evenement/${event.id}/modifier${field ? `?champ=${field}` : ''}`)
+  }
+
   return (
     <div className="event-page">
       <div className="event-page__main">
@@ -198,7 +208,15 @@ export function EventPage() {
             <img className="event-page__mobile-poster" src={event.image_url} alt="" />
           )}
           <div className="event-page__identity">
-            <h1 className="event-page__title">{event.name}</h1>
+            <div className="event-page__title-row">
+              <h1 className="event-page__title">{event.name}</h1>
+              {canEdit && (
+                <button type="button" className="event-page__edit" onClick={() => edit()}>
+                  <Pencil size={15} strokeWidth={2} />
+                  Modifier la fiche
+                </button>
+              )}
+            </div>
 
             {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
                   ne se scannent pas. Ceux qui se scannent sont plus bas, en
@@ -225,6 +243,7 @@ export function EventPage() {
               subtitle={`${event.name} · ${formatDateRange(startDate, endDate)}`}
               friends={friends}
             />
+            <KeptUpToDate eventId={event.id} />
           </div>
         </header>
 
@@ -260,7 +279,10 @@ export function EventPage() {
               FAITS — dates, lieu, échéance — qui eux se scannent. */}
         <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
           {isRichTextEmpty(event.description) ? (
-            <p className="event-page__state">L’organisateur n’a pas encore décrit cet événement.</p>
+            <p className="event-page__state">
+              L’organisateur n’a pas encore décrit cet événement.
+              {canEdit && <AddMissing onClick={() => edit('description')} />}
+            </p>
           ) : (
             <RichText className="event-page__description" html={event.description ?? ''} />
           )}
@@ -301,6 +323,8 @@ export function EventPage() {
           actorId={actor?.id}
           fields={dossier.fields}
           save={dossier.save}
+          canEdit={canEdit}
+          onAdd={edit}
         />
 
         <EventReviews
