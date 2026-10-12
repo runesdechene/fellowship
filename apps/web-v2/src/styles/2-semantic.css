@@ -412,6 +412,16 @@
   --step-easing: var(--ease-soft);
   --step-shift: var(--space-20);
 
+  /* Le fond de carte, lu par lib/map-style.ts (lot 13). */
+  --map-land: var(--carte-terre-jour);
+  --map-land-alt: var(--carte-terre-2-jour);
+  --map-water: var(--carte-eau-jour);
+  --map-green: var(--carte-vert-jour);
+  --map-building: var(--carte-bati-jour);
+  --map-road: var(--carte-route-jour);
+  --map-road-major: var(--carte-grande-route-jour);
+  --map-text: var(--carte-texte-jour);
+  --map-halo: var(--carte-halo-jour);
   /* L'histoire d'une fiche (lot 10c, maquettes 2253:2 et 2253:299). */
   --history-avatar-size: 36px;
   --version-avatar-size: 24px;
@@ -1179,6 +1189,17 @@
    se voit la nuit. L'attribut `data-theme` est posé par lib/theme.ts : le choix de l'interrupteur,
    ou à défaut le réglage de l'appareil. */
 :root[data-theme='dark'] {
+  /* Le fond de carte, la nuit (lot 13). */
+  --map-land: var(--carte-terre-nuit);
+  --map-land-alt: var(--carte-terre-2-nuit);
+  --map-water: var(--carte-eau-nuit);
+  --map-green: var(--carte-vert-nuit);
+  --map-building: var(--carte-bati-nuit);
+  --map-road: var(--carte-route-nuit);
+  --map-road-major: var(--carte-grande-route-nuit);
+  --map-text: var(--carte-texte-nuit);
+  --map-halo: var(--carte-halo-nuit);
+
   color-scheme: dark;
 
   --surface-app: var(--night-50);

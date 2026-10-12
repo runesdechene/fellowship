@@ -67,6 +67,26 @@
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
   --brique-600: #b4432f; /* ce qui détruit ou refuse (maquette 2206:691, « Supprimer… ») */
   --brique-400: #e0806a; /* la même encre, lisible la nuit */
+  /* Le fond de carte (lot 13) : terres gris chaud désaturées, eau bleu-gris, routes neutres. Jour
+     puis nuit ; teintes relevées sur la carte de la V1, sans en reprendre le code. */
+  --carte-terre-jour: #eeeae4;
+  --carte-terre-2-jour: #e6e1d9;
+  --carte-eau-jour: #cdd9e1;
+  --carte-vert-jour: #dde4d6;
+  --carte-bati-jour: #e2ddd4;
+  --carte-route-jour: #d4cdc3;
+  --carte-grande-route-jour: #c3bbb0;
+  --carte-texte-jour: #5a534b;
+  --carte-halo-jour: #f2efe9;
+  --carte-terre-nuit: #26282b;
+  --carte-terre-2-nuit: #2c2f33;
+  --carte-eau-nuit: #1a2832;
+  --carte-vert-nuit: #283129;
+  --carte-bati-nuit: #31353b;
+  --carte-route-nuit: #3e4247;
+  --carte-grande-route-nuit: #545a61;
+  --carte-texte-nuit: #cbc4bb;
+  --carte-halo-nuit: #1a1c1f;
   /* La sauge : le vert de validation, accordé à la terre du logo (Uriel, 11/10/2026). */
   --sauge-700: #3f6e47; /* encre d'une mention validée, le jour */
   --sauge-500: #5e9468; /* point d'un statut validé */
