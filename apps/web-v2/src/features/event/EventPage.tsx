@@ -188,7 +188,14 @@ export function EventPage() {
   const point = eventPoint(event)
   const closeMap = () => {
     if ((location.state as { carteOuverte?: boolean } | null)?.carteOuverte) void navigate(-1)
-    else setSearch({}, { replace: true })
+    else
+      setSearch(
+        (current) => {
+          current.delete('carte')
+          return current
+        },
+        { replace: true },
+      )
   }
 
   const facts: FactData[] = [
@@ -211,7 +218,16 @@ export function EventPage() {
           askPosition={askPosition}
           positionError={positionError}
           asking={asking}
-          openMap={() => setSearch({ carte: '' }, { state: { carteOuverte: true } })}
+          openMap={() => {
+            if (search.has('carte')) return
+            setSearch(
+              (current) => {
+                current.set('carte', '')
+                return current
+              },
+              { state: { carteOuverte: true } },
+            )
+          }}
         />
       ),
     },

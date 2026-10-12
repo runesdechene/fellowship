@@ -38,3 +38,14 @@ export function eventPoint(event: {
     ? null
     : { latitude: event.latitude, longitude: event.longitude }
 }
+
+/**
+ * Le cadre de deux points, du sud-ouest au nord-est. Passés dans l'ordre brut, un départ à l'est de
+ * l'événement faisait lire à la carte un cadre qui fait le tour de la Terre.
+ */
+export function boundsOf(a: Point, b: Point): [[number, number], [number, number]] {
+  return [
+    [Math.min(a.longitude, b.longitude), Math.min(a.latitude, b.latitude)],
+    [Math.max(a.longitude, b.longitude), Math.max(a.latitude, b.latitude)],
+  ]
+}

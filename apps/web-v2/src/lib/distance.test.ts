@@ -4,7 +4,7 @@
  *            jamais afficher « NaN km ».
  */
 import { describe, expect, test } from 'vitest'
-import { distanceKm, eventPoint, formatDistance } from './distance'
+import { boundsOf, distanceKm, eventPoint, formatDistance } from './distance'
 
 const clermont = { latitude: 45.7772, longitude: 3.087 }
 const lyon = { latitude: 45.764, longitude: 4.8357 }
@@ -31,5 +31,17 @@ describe('eventPoint', () => {
   test('une fiche sans position n’a pas de point', () => {
     expect(eventPoint({ latitude: null, longitude: 3 })).toBeNull()
     expect(eventPoint({ latitude: 45, longitude: 3 })).toEqual({ latitude: 45, longitude: 3 })
+  })
+})
+
+describe('boundsOf', () => {
+  test('le cadre de deux points va du sud-ouest au nord-est, quel que soit leur ordre', () => {
+    const lyon = { latitude: 45.76, longitude: 4.84 }
+    const menetrol = { latitude: 45.87, longitude: 3.12 }
+    expect(boundsOf(lyon, menetrol)).toEqual([
+      [3.12, 45.76],
+      [4.84, 45.87],
+    ])
+    expect(boundsOf(menetrol, lyon)).toEqual(boundsOf(lyon, menetrol))
   })
 })

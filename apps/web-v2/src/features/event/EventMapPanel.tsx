@@ -4,10 +4,14 @@
  * POURQUOI — maquettes 2263:2, 2263:375 et 2263:400 (lot 13) : voir où est l'événement par rapport à
  *            soi, avec la distance en bas.
  * ATTENTION — l'état vit dans l'adresse : le retour du navigateur referme la carte. Une fiche sans
- *            affiche n'a pas de mur : la carte y prend la forme de l'écran glissant.
+ *            affiche n'a pas de mur : la carte y prend la forme de l'écran glissant. Rendue dans
+ *            `document.body` (portail) : le panneau principal porte un nom de transition de vue, qui
+ *            l'enferme dans son propre empilement — la carte passait SOUS le mur d'affiche.
  */
 import { ChevronLeft, Navigation, X } from 'lucide-react'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+import { LoadBoundary } from '@/components/ui/LoadBoundary'
 import type { Point } from '@/lib/distance'
 import { distanceSentence, type Origin } from '@/lib/origin'
 
@@ -29,15 +33,36 @@ export function EventMapPanel(props: EventMapPanelProps) {
   const { name, point, place, hasPoster, origin, askPosition, positionError, asking, close } = props
   const sentence = distanceSentence(point, origin)
   const start = origin.kind === 'none' ? null : { point: origin.point, label: origin.label }
+  const panel = useRef<HTMLElement>(null)
 
-  return (
+  // Le focus passe sur le bouton de retour visible (celui du mur ou celui de l'écran glissant), et
+  // Échap referme, comme le retour du navigateur.
+  useEffect(() => {
+    const buttons = panel.current?.querySelectorAll<HTMLButtonElement>(
+      '.map-panel__close, .map-panel__back',
+    )
+    const visible = [...(buttons ?? [])].find((button) => button.offsetParent !== null)
+    visible?.focus()
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [close])
+
+  return createPortal(
     <section
+      ref={panel}
       className={hasPoster ? 'map-panel map-panel--wall' : 'map-panel'}
       aria-label={`Carte de ${name}`}
     >
-      <Suspense fallback={<div className="event-map" />}>
-        <EventMap event={{ point, name }} origin={start} className="map-panel__map" />
-      </Suspense>
+      <LoadBoundary fallback={<p className="map-panel__failed">La carte n’a pas pu se charger.</p>}>
+        <Suspense fallback={<div className="event-map" />}>
+          <EventMap event={{ point, name }} origin={start} className="map-panel__map" />
+        </Suspense>
+      </LoadBoundary>
 
       <button type="button" className="map-panel__close" onClick={close}>
         <X size={14} strokeWidth={2} />
@@ -74,6 +99,7 @@ export function EventMapPanel(props: EventMapPanelProps) {
         )}
         <p className="map-panel__place">{place}</p>
       </div>
-    </section>
+    </section>,
+    document.body,
   )
 }

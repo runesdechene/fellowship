@@ -9,6 +9,7 @@
 import { CalendarDays, Clock, FileText, Link as LinkIcon, Mail, MapPin } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { lazy, Suspense, useState } from 'react'
+import { LoadBoundary } from '@/components/ui/LoadBoundary'
 import { Tag } from '@/components/ui/Tag'
 import type { EventDraft } from '@/features/event-create/useEventDraft'
 import { formatDateRange, formatFullDate, parseSqlDate } from '@/lib/dates'
@@ -85,14 +86,18 @@ export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
       {view === 'carte' ? (
         <div className="edit-preview__map">
           {draft.latitude !== null && draft.longitude !== null ? (
-            <Suspense fallback={null}>
-              <EventMap
-                event={{
-                  point: { latitude: draft.latitude, longitude: draft.longitude },
-                  name: draft.name || 'Sans nom',
-                }}
-              />
-            </Suspense>
+            <LoadBoundary
+              fallback={<p className="edit-preview__map-note">La carte n’a pas pu se charger.</p>}
+            >
+              <Suspense fallback={null}>
+                <EventMap
+                  event={{
+                    point: { latitude: draft.latitude, longitude: draft.longitude },
+                    name: draft.name || 'Sans nom',
+                  }}
+                />
+              </Suspense>
+            </LoadBoundary>
           ) : (
             <p className="edit-preview__map-note">
               La position se calcule à l’enregistrement, depuis la ville.

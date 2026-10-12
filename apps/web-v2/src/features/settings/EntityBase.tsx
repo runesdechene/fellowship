@@ -30,6 +30,7 @@ export function EntityBase({ entityId }: { entityId: string }) {
         <AddressField
           value={typed ?? base.address ?? ''}
           onType={setTyped}
+          placeholder="12 rue des Gras, Clermont-Ferrand"
           onPick={(place) => {
             setTyped(null)
             void base.pick(place)

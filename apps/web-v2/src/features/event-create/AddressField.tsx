@@ -19,9 +19,15 @@ interface AddressFieldProps {
   value: string
   onType: (address: string) => void
   onPick: (place: PlaceSuggestion) => void
+  placeholder?: string
 }
 
-export function AddressField({ value, onType, onPick }: AddressFieldProps) {
+export function AddressField({
+  value,
+  onType,
+  onPick,
+  placeholder = 'Place du Châtel, cour du château…',
+}: AddressFieldProps) {
   const id = useId()
   // Ce qu'on a TAPÉ, seul à déclencher une recherche : choisir une suggestion change la valeur
   // du champ sans rouvrir la liste.
@@ -90,7 +96,7 @@ export function AddressField({ value, onType, onPick }: AddressFieldProps) {
         onKeyDown={onKeyDown}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
-        placeholder="Place du Châtel, cour du château…"
+        placeholder={placeholder}
       />
       {places.length > 0 && (
         <ul className="address__places" id={`${id}-places`} role="listbox">

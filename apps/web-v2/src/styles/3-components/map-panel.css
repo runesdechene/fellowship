@@ -159,3 +159,11 @@
     transition: none;
   }
 }
+
+.map-panel__failed {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
