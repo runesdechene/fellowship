@@ -477,6 +477,106 @@ export type Database = {
           },
         ]
       }
+      event_versions: {
+        Row: {
+          address: string | null
+          author_entity: string | null
+          author_user: string | null
+          city: string
+          contact_email: string | null
+          created_at: string
+          department: string
+          description: string | null
+          end_date: string
+          event_id: string
+          external_url: string | null
+          geo_precision: string | null
+          id: number
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          note: string | null
+          registration_deadline: string | null
+          registration_note: string | null
+          registration_url: string | null
+          start_date: string
+          tags: string[] | null
+        }
+        Insert: {
+          address?: string | null
+          author_entity?: string | null
+          author_user?: string | null
+          city: string
+          contact_email?: string | null
+          created_at?: string
+          department: string
+          description?: string | null
+          end_date: string
+          event_id: string
+          external_url?: string | null
+          geo_precision?: string | null
+          id?: number
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          note?: string | null
+          registration_deadline?: string | null
+          registration_note?: string | null
+          registration_url?: string | null
+          start_date: string
+          tags?: string[] | null
+        }
+        Update: {
+          address?: string | null
+          author_entity?: string | null
+          author_user?: string | null
+          city?: string
+          contact_email?: string | null
+          created_at?: string
+          department?: string
+          description?: string | null
+          end_date?: string
+          event_id?: string
+          external_url?: string | null
+          geo_precision?: string | null
+          id?: number
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          note?: string | null
+          registration_deadline?: string | null
+          registration_note?: string | null
+          registration_url?: string | null
+          start_date?: string
+          tags?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'event_versions_author_entity_fkey'
+            columns: ['author_entity']
+            isOneToOne: false
+            referencedRelation: 'entities'
+            referencedColumns: ['actor_id']
+          },
+          {
+            foreignKeyName: 'event_versions_author_user_fkey'
+            columns: ['author_user']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
+          },
+          {
+            foreignKeyName: 'event_versions_event_id_fkey'
+            columns: ['event_id']
+            isOneToOne: false
+            referencedRelation: 'events'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       events: {
         Row: {
           acted_by_user_id: string | null
@@ -1355,6 +1455,7 @@ export type Database = {
       }
     }
     Functions: {
+      _evenement_lisible: { Args: { p_event: string }; Returns: boolean }
       accounts_to_follow: {
         Args: { p_actor: string }
         Returns: {
@@ -1542,15 +1643,42 @@ export type Database = {
           updated_at: string
         }[]
       }
+      histoire_evenement: {
+        Args: { p_event: string }
+        Returns: {
+          author_avatar: string
+          author_brand: string
+          author_name: string
+          changed: string[]
+          created_at: string
+          id: number
+          is_origin: boolean
+          note: string
+        }[]
+      }
       is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
       km_between: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      modifier_evenement: {
+        Args: {
+          p_as_entity?: string
+          p_event: string
+          p_expected_version: number
+          p_fields: Json
+          p_note?: string
+        }
+        Returns: number
+      }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
+      }
+      revenir_a_version_evenement: {
+        Args: { p_version: number }
+        Returns: number
       }
       search_similar_events: {
         Args: { search_name: string; search_year?: number; threshold?: number }
@@ -1587,6 +1715,14 @@ export type Database = {
         }[]
       }
       suggestions_for: { Args: { p_actor: string }; Returns: Json }
+      version_evenement: {
+        Args: { p_version: number }
+        Returns: {
+          after: Json
+          before: Json
+          field: string
+        }[]
+      }
     }
     Enums: {
       actor_kind: 'person' | 'entity'
