@@ -164,7 +164,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - Décidé par Uriel quand les lots 1-11 suffisent à remplacer la V1. Redirections, service worker,
   annonce aux utilisateurs. Le mobile des écrans restants est fait au fil des lots, avec chaque écran.
 
-### Lot 13 — La carte d'un événement  ☐
+### Lot 13 — La carte d'un événement  ☑ (12/10/2026, V2 2.35.0, plan `2026-10-12-lot-13-carte-evenement-v2.md` — « Siège social ou atelier » privé dans les Réglages, distance à vol d'oiseau sur la carte « Lieu », carte dans le mur ou écran glissant, « Depuis ma position », onglet « Carte » de l'aperçu)
 - **Décidé le 12/10/2026** (Uriel, pendant le 10c) : très demandé par la communauté — voir où est un
   événement par rapport à soi. Juste après la bascule (lot 12), avant les finitions.
 - **Livre** (version minimaliste d'abord) : un seul composant de carte (première carte de la V2,

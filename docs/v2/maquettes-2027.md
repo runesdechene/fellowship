@@ -28,6 +28,7 @@
 | Communauté | `2027 — Communauté (10/10/2026)` (`2212:2`) | validé, intégré (lot 9a, 11/10/2026) |
 | Qui y va (popup de la fiche) | `2027 — Fiche · qui y va (popup)` (`2218:2`), variante sauge ; la nuit `2027 sombre — pastilles de statut` (menthe et pervenche) | validé, intégré (11/10/2026) |
 | Icônes de catégorie | `2027 — Catégories · icônes (proposition)` (`2215:2`) | validé, intégré (11/10/2026) — Biker retiré |
+| Carte d'un événement | `2027 — Fiche · la carte` (`2263:2`), `2027 mobile — Carte d'un événement` (`2263:375`), `… · sans siège ni atelier` (`2263:400`), `2027 — Réglages · siège social ou atelier` (`2263:425`) | validé, intégré (lot 13, 12/10/2026) — fond OpenFreeMap aux couleurs de l'app, jour et nuit |
 | Réglages | `2027 — Réglages` (section Notifications : `2189:302`, `2189:982`) ; invitations : tableau de bord `2189:625`, cloche `2189:900` | Notifications validé, intégré (lot 8e, 10/10/2026) — bascule allumée en terre du logo (Uriel, 10/10/2026) ; toutes les sections (`2206:691`) validées, intégrées (lot 9b, 11/10/2026) |
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé, intégré (lot 10a, 11/10/2026) — la V2 crée aussi les comptes ; mur aux vrais chiffres |
