@@ -8,12 +8,11 @@ import { parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { canActOn, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
-import { AddressField } from './AddressField'
-import { addressTyped, placePicked, placeTyped, type EventDraft } from './useEventDraft'
+import { ApplyFields } from './ApplyFields'
+import { PlaceFields } from './PlaceFields'
+import type { EventDraft, UpdateFn } from './useEventDraft'
 
 /* --------------------------------- Étapes -------------------------------- */
-
-type UpdateFn = <K extends keyof EventDraft>(key: K, value: EventDraft[K]) => void
 
 export function StepIdentity({ draft, update }: { draft: EventDraft; update: UpdateFn }) {
   return (
@@ -57,47 +56,7 @@ export function StepPlace({
       <p className="create__hint">L’adresse, la ville et les dates.</p>
 
       <div className="fields">
-        <Field label="Adresse ou lieu">
-          <AddressField
-            value={draft.address}
-            onType={(address) => patch(addressTyped(address))}
-            onPick={(place) => patch(placePicked(place))}
-          />
-        </Field>
-
-        <div className="fields__row">
-          <Field label="Ville" required>
-            <Input
-              value={draft.city}
-              onChange={(event) => patch(placeTyped('city', event.target.value))}
-              placeholder="Provins"
-            />
-          </Field>
-          <Field label="Département" required>
-            <Input
-              value={draft.department}
-              onChange={(event) => patch(placeTyped('department', event.target.value))}
-              placeholder="77"
-            />
-          </Field>
-        </div>
-
-        <div className="fields__row">
-          <Field label="Début" required>
-            <Input
-              type="date"
-              value={draft.startDate}
-              onChange={(event) => update('startDate', event.target.value)}
-            />
-          </Field>
-          <Field label="Fin">
-            <Input
-              type="date"
-              value={draft.endDate}
-              onChange={(event) => update('endDate', event.target.value)}
-            />
-          </Field>
-        </div>
+        <PlaceFields draft={draft} update={update} patch={patch} />
         <BeyondHorizon startDate={draft.startDate} />
       </div>
     </>
@@ -210,50 +169,7 @@ export function StepDetails({
           />
         </Field>
 
-        <div className="fields__row">
-          <Field label="Date limite d'inscription">
-            <Input
-              type="date"
-              value={draft.registrationDeadline}
-              onChange={(event) => update('registrationDeadline', event.target.value)}
-            />
-          </Field>
-          <Field label="Lien d'inscription">
-            <Input
-              type="url"
-              value={draft.registrationUrl}
-              onChange={(event) => update('registrationUrl', event.target.value)}
-              placeholder="https://…"
-            />
-          </Field>
-        </div>
-
-        <div className="fields__row">
-          <Field label="Site de l'événement">
-            <Input
-              type="url"
-              value={draft.externalUrl}
-              onChange={(event) => update('externalUrl', event.target.value)}
-              placeholder="https://…"
-            />
-          </Field>
-          <Field label="Email de contact">
-            <Input
-              type="email"
-              value={draft.contactEmail}
-              onChange={(event) => update('contactEmail', event.target.value)}
-              placeholder="contact@exemple.fr"
-            />
-          </Field>
-        </div>
-
-        <Field label="Comment candidater">
-          <Input
-            value={draft.registrationNote}
-            onChange={(event) => update('registrationNote', event.target.value)}
-            placeholder="Ex : envoyer un dossier par mail"
-          />
-        </Field>
+        <ApplyFields draft={draft} update={update} />
       </div>
     </>
   )

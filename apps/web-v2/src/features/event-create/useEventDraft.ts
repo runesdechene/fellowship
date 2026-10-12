@@ -36,6 +36,9 @@ export interface EventDraft {
   geoPrecision: '' | 'precise' | 'city'
 }
 
+/** Modifier un champ du brouillon. */
+export type UpdateFn = <K extends keyof EventDraft>(key: K, value: EventDraft[K]) => void
+
 const EMPTY_DRAFT: EventDraft = {
   name: '',
   isPrivate: false,
