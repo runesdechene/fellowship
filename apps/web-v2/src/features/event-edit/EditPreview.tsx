@@ -90,7 +90,7 @@ export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
         </span>
       </div>
       {view === 'carte' ? (
-        <div className="edit-preview__map">
+        <div key="carte" className="edit-preview__map edit-preview__view">
           {mapPoint ? (
             <LoadBoundary
               fallback={<p className="edit-preview__map-note">La carte n’a pas pu se charger.</p>}
@@ -111,7 +111,7 @@ export function EditPreview({ draft, posterUrl, highlight }: EditPreviewProps) {
           )}
         </div>
       ) : (
-        <div className="edit-preview__card">
+        <div key="fiche" className="edit-preview__card edit-preview__view">
           {posterUrl && <img className="edit-preview__poster" src={posterUrl} alt="" />}
           <div className="edit-preview__body">
             <div className="edit-preview__identity">

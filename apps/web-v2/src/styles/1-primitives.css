@@ -214,6 +214,9 @@
   /* Courbe plus molle : elle démarre et finit sans à-coup, ce qui rend un
      mouvement court doux plutôt que sec. */
   --ease-soft: cubic-bezier(0.33, 0, 0.2, 1);
+  /* Les tiroirs de la boutique Runes de Chêne : glisser et fondre, départ et arrivée en douceur
+     (Uriel, 12/10/2026 : « similaire aux animations sur la boutique »). */
+  --ease-drawer: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* L'ENTRÉE D'UN GRAND ÉLÉMENT n'est pas un survol allongé. Un mouvement de
      survol se remarque à peine ; une arrivée pleine hauteur doit se voir, donc

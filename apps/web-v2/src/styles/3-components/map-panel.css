@@ -47,13 +47,22 @@
   display: flex;
   flex-direction: column;
   background: var(--map-land);
-  transition: translate var(--duration-medium) var(--ease-out);
+  transition:
+    translate var(--duration-medium) var(--ease-drawer),
+    opacity var(--duration-medium) var(--ease-drawer);
 }
 
+/* Le geste des tiroirs de la boutique : il glisse et fond en entrant, à l'inverse en sortant. */
 @starting-style {
   .map-panel {
     translate: 100% 0;
+    opacity: 0;
   }
+}
+
+.map-panel--closing {
+  translate: 100% 0;
+  opacity: 0;
 }
 
 .map-panel__map {
@@ -125,14 +134,18 @@
   .map-panel--wall {
     inset: 0 0 0 auto;
     width: var(--wall-width);
-    transition: opacity var(--duration-medium) var(--ease-out);
   }
 
+  /* Sur le mur, un pas seulement : la carte se pose sur l'affiche, elle ne traverse pas l'écran. */
   @starting-style {
     .map-panel--wall {
-      translate: 0 0;
+      translate: var(--space-24) 0;
       opacity: 0;
     }
+  }
+
+  .map-panel--wall.map-panel--closing {
+    translate: var(--space-24) 0;
   }
 
   .map-panel--wall .map-panel__close {

@@ -9,7 +9,7 @@
  *            l'enferme dans son propre empilement — la carte passait SOUS le mur d'affiche.
  */
 import { ChevronLeft, Navigation, X } from 'lucide-react'
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { LoadBoundary } from '@/components/ui/LoadBoundary'
 import type { Point } from '@/lib/distance'
@@ -47,6 +47,21 @@ export function EventMapPanel(props: EventMapPanelProps) {
   const sentence = distanceSentence(point, origin)
   const start = origin.kind === 'none' ? null : { point: origin.point, label: origin.label }
   const panel = useRef<HTMLElement>(null)
+  const [closing, setClosing] = useState(false)
+
+  // Fermer joue d'abord la sortie (le geste des tiroirs de la boutique), puis referme pour de bon.
+  // Sans mouvement demandé, ou si la fin de transition ne vient pas, on referme tout de suite.
+  const leave = useCallback(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) close()
+    else setClosing(true)
+  }, [close])
+  useEffect(() => {
+    if (!closing) return
+    const fallback = setTimeout(close, 400)
+    return () => {
+      clearTimeout(fallback)
+    }
+  }, [closing, close])
 
   // Le focus passe sur le bouton de retour visible (celui du mur ou celui de l'écran glissant), et
   // Échap referme, comme le retour du navigateur.
@@ -57,18 +72,24 @@ export function EventMapPanel(props: EventMapPanelProps) {
     const visible = [...(buttons ?? [])].find((button) => button.offsetParent !== null)
     visible?.focus()
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close()
+      if (event.key === 'Escape') leave()
     }
     window.addEventListener('keydown', onKey)
     return () => {
       window.removeEventListener('keydown', onKey)
     }
-  }, [close])
+  }, [leave])
 
   return createPortal(
     <section
       ref={panel}
-      className={hasPoster ? 'map-panel map-panel--wall' : 'map-panel'}
+      className={['map-panel', hasPoster && 'map-panel--wall', closing && 'map-panel--closing']
+        .filter(Boolean)
+        .join(' ')}
+      onTransitionEnd={(event) => {
+        if (closing && event.target === event.currentTarget && event.propertyName === 'opacity')
+          close()
+      }}
       aria-label={`Carte de ${name}`}
     >
       <LoadBoundary fallback={<p className="map-panel__failed">La carte n’a pas pu se charger.</p>}>
@@ -77,11 +98,11 @@ export function EventMapPanel(props: EventMapPanelProps) {
         </Suspense>
       </LoadBoundary>
 
-      <button type="button" className="map-panel__close" onClick={close}>
+      <button type="button" className="map-panel__close" onClick={leave}>
         <X size={14} strokeWidth={2} />
         Revenir à l’affiche
       </button>
-      <button type="button" className="map-panel__back" onClick={close}>
+      <button type="button" className="map-panel__back" onClick={leave}>
         <ChevronLeft size={16} strokeWidth={2} />
         {name}
       </button>

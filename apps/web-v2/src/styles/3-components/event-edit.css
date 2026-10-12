@@ -428,3 +428,23 @@
     transition: none;
   }
 }
+
+/* Fiche ↔ Carte : la vue qui arrive glisse et fond, comme les tiroirs de la boutique. */
+.edit-preview__view {
+  transition:
+    translate var(--duration-medium) var(--ease-drawer),
+    opacity var(--duration-medium) var(--ease-drawer);
+}
+
+@starting-style {
+  .edit-preview__view {
+    translate: 0 var(--space-8);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-preview__view {
+    transition: none;
+  }
+}
