@@ -18,5 +18,5 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `SoonBand.tsx` — « Bientôt · Pro » : l'inscription en un clic, le dossier PDF, la veille.
 - `ProBand.tsx` — le Pro : « Gratuit » et le prix (`lib/pricing.ts`) côte à côte, ce que le Pro
   ajoute, l'écran « Pour toi ».
-- `VoicesBand.tsx`, `useTestimonials.ts` — les témoignages d'exposants (table `testimonials`),
-  entre le Pro et le pied de page.
+- `Stories.tsx`, `StoryDialog.tsx`, `useTestimonials.ts` — « Ils en parlent mieux que nous » : le
+  bouton flottant et les stories des témoignages (table `testimonials`, `lib/testimonials.ts`).

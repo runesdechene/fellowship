@@ -172,6 +172,7 @@
   --size-96: 96px;
   --size-72: 72px;
   --size-80: 80px;
+  --size-140: 140px; /* le guillemet d'une story */
   --size-150: 150px; /* la grande date d'une carte sans affiche */
 
   /* ---------------------------------------------------------------------
@@ -269,6 +270,8 @@
      pose. C'est ce qui distingue une chose QUI ARRIVE d'une chose qu'on
      traîne : la vitesse initiale dit l'élan, la fin longue dit le poids. */
   --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Le temps de lire une phrase avant que la story passe à la suivante. */
+  --duration-story: 6s;
 
   /* ---------------------------------------------------------------------
      DIMENSIONS FIXES issues de la maquette

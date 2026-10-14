@@ -1414,10 +1414,36 @@
   --landing-you-next-poster: 170px;
   --type-landing-you-title: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
 
-  /* Les témoignages (ajoutés le 14/10/2026, hors maquette) */
-  --landing-voices-lead-width: 1180px;
-  --landing-voice-face: 44px;
-  --type-landing-voice: var(--weight-regular) var(--size-26) / 1.3 var(--family-display);
+  /* Les stories des témoignages (2332:2) */
+  --landing-stories-face: 36px;
+  --landing-stories-ring: linear-gradient(135deg, var(--fete-200), var(--fete-500));
+  --landing-stories-shadow: 0 14px 36px color-mix(in srgb, var(--fete-850) 35%, transparent);
+  --landing-stories-veil: color-mix(in srgb, var(--fete-950) 94%, transparent);
+  --landing-story-width: 432px;
+  --landing-story-height: 768px;
+  --landing-story-side-width: 216px;
+  --landing-story-side-height: 384px;
+  --landing-story-side-face: 64px;
+  --landing-story-face: 36px;
+  --landing-story-arrow: 44px;
+  --landing-story-bar: 3px;
+  --landing-story-shade: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--fete-950) 25%, transparent),
+    color-mix(in srgb, var(--fete-950) 55%, transparent) 30%,
+    color-mix(in srgb, var(--fete-950) 85%, transparent) 70%,
+    color-mix(in srgb, var(--fete-950) 95%, transparent)
+  );
+  --landing-story-side-dim: color-mix(in srgb, var(--fete-950) 45%, transparent);
+  --landing-story-track: color-mix(in srgb, var(--fete-cream) 30%, transparent);
+  --duration-landing-story: var(--duration-story);
+  --type-landing-story: var(--weight-regular) var(--size-44) / 1.08 var(--family-display);
+  --type-landing-story-long: var(--weight-regular) var(--size-32) / 1.15 var(--family-display);
+  --type-landing-story-mark: var(--weight-regular) var(--size-140) / 0.8 var(--family-display);
+  --type-landing-story-title: var(--weight-regular) var(--size-32) / 1 var(--family-display);
+  --type-landing-story-name: var(--weight-semibold) var(--size-14) / 1.3 var(--family-sans);
+  --type-landing-story-craft: var(--weight-regular) var(--size-12) / 1.3 var(--family-sans);
+  --type-landing-stories-button: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
 }
 
 /* =========================================================================

@@ -1,0 +1,393 @@
+/**
+ * QUOI     — « Ils en parlent mieux que nous » : le bouton flottant de la landing et ses stories
+ *            (features/landing/Stories.tsx, StoryDialog.tsx).
+ * POURQUOI — maquette 2332:2 (Uriel, 14/10/2026) : une pilule crème qui reste en bas à droite ; au
+ *            clic, une story verticale sur un voile de nuit, les exposants voisins de part et d'autre.
+ * ATTENTION — la barre de l'écran en cours est une animation : sa fin fait avancer la story, et sa
+ *            pause (appui long) arrête la story. Sur téléphone, la story prend tout l'écran.
+ */
+
+/* --- Le bouton flottant -------------------------------------------------------------- */
+.landing-stories-button {
+  position: fixed;
+  right: var(--space-40);
+  bottom: var(--space-40);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-8) var(--space-22) var(--space-8) var(--space-8);
+  border: 0;
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-cream);
+  color: var(--landing-ink);
+  font: var(--type-landing-stories-button);
+  box-shadow: var(--landing-stories-shadow);
+  cursor: pointer;
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.landing-stories-button:hover {
+  translate: 0 calc(-1 * var(--space-2));
+}
+
+@starting-style {
+  .landing-stories-button {
+    translate: 0 var(--space-16);
+  }
+}
+
+.landing-stories-button__faces {
+  display: flex;
+}
+
+.landing-stories-button__faces .landing-stories-ring + .landing-stories-ring {
+  margin-left: calc(-1 * var(--space-14));
+}
+
+/* L'anneau de story : le dégradé du logo autour de l'avatar. */
+.landing-stories-ring {
+  --avatar-size: var(--landing-stories-face);
+
+  display: inline-grid;
+  flex: none;
+  padding: var(--space-2);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-stories-ring);
+}
+
+.landing-stories-ring .avatar {
+  border: var(--space-2) solid var(--landing-cream);
+}
+
+/* --- La fenêtre des stories ----------------------------------------------------------
+   Le voile est le fond du <dialog> lui-même, qui couvre l'écran : ::backdrop n'hérite pas des
+   variables de la page dans tous les navigateurs. */
+.landing-stories {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--landing-stories-veil);
+  color: var(--landing-cream);
+  opacity: 0;
+  transition:
+    opacity var(--duration-medium) var(--ease-drawer),
+    overlay var(--duration-medium) var(--ease-drawer) allow-discrete,
+    display var(--duration-medium) var(--ease-drawer) allow-discrete;
+}
+
+.landing-stories[open] {
+  opacity: 1;
+}
+
+@starting-style {
+  .landing-stories[open] {
+    opacity: 0;
+  }
+}
+
+.landing-stories__title {
+  position: absolute;
+  top: var(--space-40);
+  left: var(--space-48);
+  font: var(--type-landing-story-title);
+}
+
+.landing-stories__close {
+  position: absolute;
+  top: var(--space-48);
+  right: var(--space-48);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: var(--type-landing-nav);
+  cursor: pointer;
+}
+
+.landing-stories__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-32);
+  height: 100%;
+}
+
+.landing-stories__arrow {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--landing-story-arrow);
+  height: var(--landing-story-arrow);
+  border: 0;
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-cream);
+  color: var(--landing-ink);
+  cursor: pointer;
+}
+
+.landing-stories__arrow--back {
+  order: 3;
+}
+
+.landing-stories__arrow--next {
+  order: 5;
+}
+
+/* Les exposants voisins : une petite carte avec leur visage, qu'on touche pour y aller. */
+.landing-story-side {
+  --avatar-size: var(--landing-story-side-face);
+
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-14);
+  order: var(--side-order);
+  width: var(--landing-story-side-width);
+  height: var(--landing-story-side-height);
+  padding: var(--space-16);
+  border: 0;
+  border-radius: var(--round-14);
+  background: var(--landing-earth);
+  color: var(--landing-cream);
+  font: var(--type-landing-story-name);
+  text-align: center;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.landing-story-side::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--landing-story-side-dim);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.landing-story-side:hover::after {
+  opacity: 0;
+}
+
+.landing-story-side.is-empty {
+  visibility: hidden;
+}
+
+.landing-story-side .landing-stories-ring {
+  --avatar-size: var(--landing-story-side-face);
+}
+
+/* --- Une story ---------------------------------------------------------------------- */
+.landing-story {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  order: 4;
+  width: var(--landing-story-width);
+  height: min(var(--landing-story-height), calc(100dvh - 2 * var(--space-96)));
+  padding: var(--space-14) var(--space-20) var(--space-20);
+  overflow: hidden;
+  border-radius: var(--round-20);
+  background: var(--landing-earth);
+}
+
+/* La couverture de la vitrine, sous un voile qui fonce vers le bas pour la lecture. */
+.landing-story__cover {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% var(--cover-y);
+}
+
+.landing-story::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--landing-story-shade);
+}
+
+.landing-story__progress {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.landing-story__progress span {
+  flex: 1;
+  height: var(--landing-story-bar);
+  overflow: hidden;
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-story-track);
+}
+
+.landing-story__progress span.is-done {
+  background: var(--landing-cream);
+}
+
+.landing-story__progress i {
+  display: block;
+  height: 100%;
+  background: var(--landing-cream);
+  transform-origin: left;
+  animation: landing-story-bar var(--duration-landing-story) linear forwards;
+}
+
+.landing-story.is-paused .landing-story__progress i {
+  animation-play-state: paused;
+}
+
+@keyframes landing-story-bar {
+  from {
+    scale: 0 1;
+  }
+
+  to {
+    scale: 1 1;
+  }
+}
+
+.landing-story__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-top: var(--space-14);
+}
+
+.landing-story__who {
+  --avatar-size: var(--landing-story-face);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-story__who span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.landing-story__who strong {
+  font: var(--type-landing-story-name);
+}
+
+.landing-story__who small {
+  font: var(--type-landing-story-craft);
+  color: var(--landing-gold-soft);
+}
+
+a.landing-story__who:hover strong {
+  text-decoration: underline;
+}
+
+.landing-story__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Toute la hauteur libre se touche : à gauche on recule, ailleurs on avance. */
+.landing-story__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-8);
+  padding-inline: var(--space-6);
+  cursor: pointer;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.landing-story__mark {
+  font: var(--type-landing-story-mark);
+  color: var(--landing-gold);
+}
+
+.landing-story__quote {
+  font: var(--type-landing-story);
+  letter-spacing: var(--tracking-landing-statement);
+  animation: landing-story-in var(--duration-medium) var(--ease-drawer);
+}
+
+.landing-story__quote.is-long {
+  font: var(--type-landing-story-long);
+}
+
+@keyframes landing-story-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--space-8);
+  }
+}
+
+.landing-story__cta {
+  align-self: flex-start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-stories,
+  .landing-stories-button {
+    transition: none;
+  }
+
+  .landing-story__quote {
+    animation: none;
+  }
+}
+
+/* Sous 1600 px, un seul voisin de chaque côté. */
+@media (width <= 1600px) {
+  .landing-story-side.is-far {
+    display: none;
+  }
+}
+
+/* --- Sous 1200 px : la story seule, sans ses voisins -------------------------------- */
+@media (width <= 1200px) {
+  .landing-story-side,
+  .landing-stories__title {
+    display: none;
+  }
+}
+
+/* --- Téléphone : la story prend tout l'écran ---------------------------------------- */
+@media (width <= 760px) {
+  .landing-stories-button {
+    right: var(--mobile-gutter);
+    bottom: var(--mobile-gutter);
+  }
+
+  .landing-stories__close,
+  .landing-stories__arrow {
+    display: none;
+  }
+
+  .landing-story {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+}

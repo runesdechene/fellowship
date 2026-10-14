@@ -669,71 +669,6 @@ input.landing-search__value::placeholder {
   color: var(--landing-pro-check);
 }
 
-/* --- Les témoignages ------------------------------------------------------------------
-   Lus comme les grands paragraphes : la première phrase pleine, la suite adoucie. */
-.landing-voice {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-20);
-  margin: 0;
-}
-
-.landing-voice blockquote {
-  margin: 0;
-  font: var(--type-landing-voice);
-  letter-spacing: var(--tracking-landing-statement);
-  color: var(--landing-ink-soft);
-}
-
-.landing-voice blockquote strong {
-  font-weight: inherit;
-  color: var(--landing-ink);
-}
-
-.landing-voice--lead {
-  gap: var(--space-28);
-  max-width: var(--landing-voices-lead-width);
-}
-
-.landing-voice--lead blockquote {
-  font: var(--type-landing-statement-s);
-}
-
-.landing-voices__others {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-64) var(--space-80);
-  margin-top: var(--space-96);
-}
-
-.landing-voice__who {
-  display: flex;
-  align-items: center;
-  gap: var(--space-12);
-}
-
-.landing-voice__face {
-  --avatar-size: var(--landing-voice-face);
-
-  object-fit: cover;
-}
-
-.landing-voice__who span {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.landing-voice__who strong {
-  font: var(--type-landing-card-name);
-  color: var(--landing-ink);
-}
-
-.landing-voice__who small {
-  font: var(--type-landing-card-text);
-  color: var(--landing-ink-mute);
-}
-
 .landing-pro__ctas {
   display: flex;
   align-items: center;
@@ -1096,15 +1031,5 @@ input.landing-search__value::placeholder {
 
   .landing-pro__ctas {
     flex-wrap: wrap;
-  }
-
-  .landing-voice--lead blockquote {
-    font: var(--type-landing-statement-mobile);
-  }
-
-  .landing-voices__others {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-48);
-    margin-top: var(--space-64);
   }
 }
