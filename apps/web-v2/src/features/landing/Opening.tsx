@@ -1,5 +1,5 @@
 /**
- * QUOI     — l'ouverture de la landing : la barre, « Mon assistant de festivals. Ma communauté
+ * QUOI     — l'ouverture de la landing : « Mon assistant de festivals. Ma communauté
  *            d'exposants. », la promesse, la recherche, la preuve, et le mur d'affiches.
  * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 14/10/2026 : l'outil d'abord, les
  *            gens ensuite. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
@@ -9,7 +9,6 @@ import { Search } from 'lucide-react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { posterThumb, type Showcase } from '@/lib/landing'
-import { LandingTopBar } from './LandingTopBar'
 import { PosterWall } from './PosterWall'
 
 export function Opening({ showcase }: { showcase: Showcase | null }) {
@@ -26,7 +25,6 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
     <div className="landing-opening">
       <PosterWall posters={showcase?.wall ?? []} crowd={crowd} />
       <div className="landing-opening__veil" aria-hidden />
-      <LandingTopBar />
       <div className="landing-opening__text">
         <h1 className="landing-opening__title">
           Mon assistant de festivals.

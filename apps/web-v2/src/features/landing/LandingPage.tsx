@@ -8,6 +8,7 @@
 import { AssistantBand } from './AssistantBand'
 import { CommunityBand } from './CommunityBand'
 import { FinalCall } from './FinalCall'
+import { LandingTopBar } from './LandingTopBar'
 import { Opening } from './Opening'
 import { ProBand } from './ProBand'
 import { SoonBand } from './SoonBand'
@@ -19,6 +20,7 @@ export function LandingPage() {
 
   return (
     <div className="landing">
+      <LandingTopBar />
       <Opening showcase={showcase} />
       <main>
         <AssistantBand showcase={showcase} />

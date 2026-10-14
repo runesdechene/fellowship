@@ -1,6 +1,7 @@
 /**
  * QUOI     — la fin de la landing, sur la bande nuit : « Ton prochain stand commence ici. », le
- *            bouton « Créer ma vitrine », puis le pied de page (marque, liens, Runes de Chêne).
+ *            bouton « Créer ma vitrine », puis le pied de page (l'encadré des
+ *            organisateurs, la marque, les liens, Runes de Chêne).
  * POURQUOI — maquette 2290:2 (nœuds 2290:1674 et 2298:2). Le dernier appel porte le dégradé du
  *            logo : l'exception propre à la landing (docs/v2/DESIGN-SYSTEM.md).
  * ATTENTION — les pages légales vivent dans la V1 : liens pleins, hors du routeur de la V2.
@@ -8,6 +9,7 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LandingBand } from './LandingBand'
+import { OrganizersBox } from './OrganizersBox'
 
 export function FinalCall({ posters }: { posters: string[] }) {
   return (
@@ -23,6 +25,7 @@ export function FinalCall({ posters }: { posters: string[] }) {
         </Link>
       </div>
       <footer className="landing-foot">
+        <OrganizersBox />
         <div className="landing-foot__top">
           <div className="landing-foot__brand">
             <p className="landing-foot__name">
@@ -45,7 +48,7 @@ export function FinalCall({ posters }: { posters: string[] }) {
             <div>
               <p className="landing-foot__head">Fellowship</p>
               <a href="#assistant">Pourquoi Fellowship</a>
-              <a href="mailto:appfellowship@pm.me">Organisateurs</a>
+              <a href="#organisateurs">Organisateurs</a>
               <a href="mailto:appfellowship@pm.me">Contact</a>
             </div>
             <div>

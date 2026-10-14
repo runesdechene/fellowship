@@ -1230,6 +1230,11 @@
   --landing-logo-width: 43px; /* le logo de la maquette 2290:2 */
   --landing-logo-height: 37px;
   --landing-button-pad: 9px var(--space-16);
+  --landing-bar-height: 101px; /* la barre de la maquette, posée sur l'ouverture */
+  --landing-bar-compact-pad: var(--space-12);
+  --landing-bar-compact-height: 64px;
+  --landing-bar-compact-bg: color-mix(in srgb, var(--fete-900) 92%, transparent);
+  --landing-chapter-line: 2px;
   --landing-slant: 10.4vw; /* 180 px sur 1728 : la pente des bandes */
   --landing-band-pad: var(--space-150);
   --landing-glass: color-mix(in srgb, var(--sand-0) 14%, transparent);
@@ -1249,6 +1254,7 @@
   --type-landing-final-lead: var(--weight-regular) var(--size-20) / 1.5 var(--family-sans);
   --type-landing-foot-brand: var(--weight-regular) var(--size-36) / 1 var(--family-display);
   --type-landing-foot: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
+  --type-landing-orga: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-landing-foot-head: var(--weight-medium) var(--size-13) / normal var(--family-sans);
   --type-landing-small: var(--weight-regular) var(--size-13) / normal var(--family-sans);
   --type-landing-statement-mobile: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);

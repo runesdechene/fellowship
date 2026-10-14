@@ -7,7 +7,9 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `LandingPage.tsx` — la page : l'ouverture, puis les bandes dans l'ordre de la maquette.
 - `useLandingShowcase.ts` — les lectures sans compte, assemblées par `lib/landing.ts`.
 - `LandingBand.tsx` — une bande penchée (papier, terre, nuit), avec ses affiches floues en fond.
-- `LandingTopBar.tsx` — la marque, les ancres, « Se connecter », « Créer ma vitrine ».
+- `LandingTopBar.tsx`, `useLandingNav.ts` — la barre qui reste en haut : la marque, les chapitres
+  (le chapitre lu est souligné), « Se connecter », « Créer ma vitrine ».
+- `OrganizersBox.tsx` — l'encadré des organisateurs, en tête du pied de page (« Bientôt »).
 - `FinalCall.tsx` — « Ton prochain stand commence ici. » et le pied de page.
 - `Opening.tsx`, `PosterWall.tsx` — l'ouverture et son mur de vraies affiches qui défile.
 - `AssistantBand.tsx` — « Mon assistant de festivals », avec le Calendrier et le Tableau de bord.

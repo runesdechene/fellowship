@@ -15,7 +15,7 @@ const Seal = () => <span className="landing-seal">Bientôt · Pro</span>
 
 export function SoonBand({ showcase }: { showcase: Showcase | null }) {
   return (
-    <LandingBand tone="paper" slant="rise" className="landing-soon">
+    <LandingBand tone="paper" slant="rise" id="bientot" className="landing-soon">
       <div className="landing-soon__dossiers">
         <div className="landing-soon__text">
           <Seal />
