@@ -33,7 +33,7 @@
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé, intégré (lot 10a, 11/10/2026) — la V2 crée aussi les comptes ; mur aux vrais chiffres |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque (étape 1)` (`2102:72`), `… · ton prénom (étape 2)` (`2244:2`), `… · ton adresse` (`2244:53`) | validé, intégré (lot 10a, 11/10/2026) — la marque d'abord, puis le prénom avec l'aperçu « X de Marque » ; l'écran du choix est **écarté** |
-| Landing publique | `2027 — Landing` | validé (photos de marché à fournir ; défilé des types en couleurs) |
+| Landing publique | `2027 — Landing` (`2104:2`) | validé, intégré (lot 11a, 14/10/2026) — sous `flw.sh/v2/` pour les visiteurs sans compte ; annuaire public en 11b, photos de marché plus tard |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` (`2117:2`), `2027 — L'histoire de la fiche` (`2253:2`), `… · une version` (`2253:299`), `2027 — Fiche · modifier et infos manquantes` (`2256:2`) | validé, intégré (lot 10c, 12/10/2026) — bascule Fiche / Carte masquée (lot 13) ; « Un mot sur ta modification » ajouté à la maquette |
 | Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
@@ -101,9 +101,9 @@
 - [ ] Les chiffres du mur d'affiches (« 1 200 festivals · 3 400 exposants ») sont **inventés** : à lire en base, en direct.
 - [ ] La page d'accueil actuelle (« Parchemin », derrière `/?v2=1`) est remplacée par la landing « 2027 ».
 - [ ] **Photos de marché à fournir** (Uriel, plus tard) : derrière l'accroche (très atténuée) et derrière le bandeau Organisateurs. Les images actuelles sont des affiches floutées, provisoires.
-- [ ] Landing : le **défilé des types de festivals** de la V1 revient sous la recherche (18 types, défilement continu, fondu sur les bords, pause au survol, figé si `prefers-reduced-motion`) — liste de la V1 : `apps/web/src/pages/LandingV2.tsx` (`MARQUEE_TAGS`), à lire de préférence dans la table des tags.
-- [ ] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel, relu et validé le 08/10/2026), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
-- [ ] **Landing mise à jour le 08/10/2026 (la communauté)** : accroche « Ta saison de festivals, avec ceux qui la font. » ; nouvelle section « Tu n'y vas jamais seul » après « Ce que ça t'apporte » (discussion d'un festival, « Entre exposants / Avec les festivaliers », notification de question, mise en sourdine) ; bande « Festivaliers — Dis à ton public où te retrouver » après Organisateurs ; prix du Pro « 9,99 € HT / mois · 99,90 € HT / an ». Les festivaliers restent un public, pas des clients : l'arrivée ne change pas.
+- [x] Landing : le **défilé des types de festivals** de la V1 revient sous la recherche (18 types, défilement continu, fondu sur les bords, pause au survol, figé si `prefers-reduced-motion`) — liste de la V1 : `apps/web/src/pages/LandingV2.tsx` (`MARQUEE_TAGS`), à lire de préférence dans la table des tags.
+- [x] Landing : l'histoire « Pourquoi Fellowship » (texte d'Uriel, relu et validé le 08/10/2026), « Propulsé par Runes de Chêne » en pied de page, bouton final en dégradé du logo (exception propre à la landing).
+- [x] **Landing mise à jour le 08/10/2026 (la communauté)** : accroche « Ta saison de festivals, avec ceux qui la font. » ; nouvelle section « Tu n'y vas jamais seul » après « Ce que ça t'apporte » (discussion d'un festival, « Entre exposants / Avec les festivaliers », notification de question, mise en sourdine) ; bande « Festivaliers — Dis à ton public où te retrouver » après Organisateurs ; prix du Pro « 9,99 € HT / mois · 99,90 € HT / an ». Les festivaliers restent un public, pas des clients : l'arrivée ne change pas.
 
 ## Points ouverts
 

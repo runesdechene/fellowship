@@ -152,7 +152,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   `2027 — Ajouter une date · étape 1`, `2027 — Modifier un événement`.
 - **Base** : historique des modifications ; vérifier qui peut modifier un événement.
 
-### Lot 11 — Landing publique  ☐
+### Lot 11 — Landing publique  ◐ (11a livré le 14/10/2026, V2 2.37.0 ; 11b : l'annuaire public)
 - **Livre** : la landing « 2027 » (accroche « Ta saison de festivals, avec ceux qui la font. »,
   section « Tu n'y vas jamais seul », bande Festivaliers — mise à jour validée le 08/10/2026 ; recherche sans compte, défilé des types en
   couleurs, festivals, histoire, six fonctions, Pro, organisateurs, « Propulsé par Runes de Chêne ») ;

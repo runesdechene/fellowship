@@ -1202,4 +1202,23 @@ input.landing-search__value {
   .landing-goers__note {
     width: 100%;
   }
+
+  .landing-final {
+    padding-block: var(--landing-final-top) var(--space-80);
+  }
+
+  .landing-final__title {
+    font: var(--type-landing-display-mobile);
+  }
+
+  /* La frise garde ses quatre mois : ils se partagent la largeur. */
+  .landing-art__year {
+    width: 100%;
+    gap: var(--space-10);
+  }
+
+  .landing-art__year li {
+    flex: 1;
+    width: auto;
+  }
 }
