@@ -14,6 +14,8 @@ import { supabase } from '@/lib/supabase'
 
 const UPCOMING = 40
 const RECENT = 3
+/** Le plafond du serveur (max-rows) : au-delà, la lecture serait tronquée sans le dire. */
+const PARTICIPATIONS = 1000
 const COLUMNS = 'id, name, image_url, tags, start_date, end_date, city, department, created_at'
 
 async function loadShowcase(today: Date): Promise<Showcase> {
@@ -52,6 +54,9 @@ async function loadShowcase(today: Date): Promise<Showcase> {
         rows.map((r) => r.id),
       )
       .in('status', CONFIRMED_STATUSES)
+      .order('event_id')
+      .order('actor_id')
+      .limit(PARTICIPATIONS)
     if (!goers.error) {
       for (const g of goers.data) registered.set(g.event_id, (registered.get(g.event_id) ?? 0) + 1)
     }

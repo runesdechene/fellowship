@@ -4,8 +4,8 @@
  *            carte « Atelier Corne & Cuir y va ».
  * POURQUOI — maquette 2290:2 : le mur de la connexion, en grand, « super méga classe » (Uriel,
  *            14/10/2026). Les affiches changent quand Fellowship change.
- * ATTENTION — chaque colonne est doublée pour boucler sans saut ; la copie est cachée aux lecteurs
- *            d'écran. Figé sous `prefers-reduced-motion` (landing.css). Les affiches viennent en
+ * ATTENTION — chaque colonne est doublée à l'identique, carte comprise, pour boucler sans saut ;
+ *            tout le mur est caché aux lecteurs d'écran. Figé sous `prefers-reduced-motion` (landing.css). Les affiches viennent en
  *            miniature de 480 px : le mur en montre une trentaine.
  */
 import { posterThumb } from '@/lib/landing'
@@ -22,19 +22,17 @@ interface PosterWallProps {
 
 function Column({ posters, crowd }: PosterWallProps) {
   const cardAt = crowd?.poster ? posters.indexOf(crowd.poster) : -1
-  const items = (hidden: boolean) =>
+  const items = () =>
     posters.map((url, i) => (
       <div key={`${url}-${String(i)}`} className="landing-wall__item">
         <img className="landing-wall__poster" src={posterThumb(url, POSTER_WIDTH)} alt="" />
-        {!hidden && i === cardAt && crowd && (
+        {i === cardAt && crowd && (
           <div className="landing-wall__goer">
             <span className="landing-wall__face">{DEMO.initials.charAt(0)}</span>
             <span>
               <span className="landing-wall__who">{DEMO.name}</span>
               <span className="landing-wall__goes">
-                {crowd.count > 1
-                  ? `y va, avec ${String(crowd.count - 1)} ${crowd.count === 2 ? 'compagnon' : 'compagnons'}`
-                  : 'y va'}
+                {`y va, avec ${String(crowd.count)} ${crowd.count === 1 ? 'compagnon' : 'compagnons'}`}
               </span>
             </span>
           </div>
@@ -43,10 +41,8 @@ function Column({ posters, crowd }: PosterWallProps) {
     ))
   return (
     <div className="landing-wall__column">
-      {items(false)}
-      <div className="landing-wall__copy" aria-hidden>
-        {items(true)}
-      </div>
+      {items()}
+      <div className="landing-wall__copy">{items()}</div>
     </div>
   )
 }
@@ -61,11 +57,15 @@ export function PosterWall({ posters, crowd }: PosterWallProps) {
   const columns = Array.from({ length: COLUMNS }, (_, c) =>
     filled.filter((_, i) => i % COLUMNS === c),
   )
+  // La carte « y va » sous la première colonne qui porte l'affiche, une seule fois.
+  const cardColumn = crowd?.poster
+    ? columns.findIndex((col) => col.includes(crowd.poster ?? ''))
+    : -1
   return (
     <div className="landing-wall" aria-hidden>
       <div className="landing-wall__tilt">
         {columns.map((column, c) => (
-          <Column key={c} posters={column} crowd={crowd} />
+          <Column key={c} posters={column} crowd={c === cardColumn ? crowd : null} />
         ))}
       </div>
     </div>

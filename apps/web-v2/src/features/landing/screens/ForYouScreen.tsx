@@ -7,7 +7,13 @@
  *            toi » sont de démonstration.
  */
 import { PosterArt } from '@/components/ui/PosterArt'
-import { daysUntil, formatDateRange, formatMonthAbbr } from '@/lib/dates'
+import {
+  daysUntil,
+  formatCountdown,
+  formatDateRange,
+  formatDaysShort,
+  formatMonthAbbr,
+} from '@/lib/dates'
 import { posterThumb, type Showcase } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
 import { AppWindow } from './AppWindow'
@@ -40,7 +46,10 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
               Bonjour, <strong>{DEMO.name}</strong>
             </h3>
             <p className="landing-app__meta">
-              <strong>{total} dates</strong> prévues à ce jour
+              <strong>
+                {total} {total === 1 ? 'date prévue' : 'dates prévues'}
+              </strong>{' '}
+              à ce jour
             </p>
           </div>
         </div>
@@ -73,7 +82,7 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
                     {formatDateRange(next.startDate, next.endDate, 'long')} · {next.place}
                   </p>
                   <p className="landing-you__pills">
-                    <span>Dans {daysUntil(next.startDate, today)} jours</span>
+                    <span>{formatCountdown(daysUntil(next.startDate, today))}</span>
                     <DemoStatus status={next.status} />
                   </p>
                 </div>
@@ -86,7 +95,7 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
                   <p key={d.id}>
                     <strong>{d.name}</strong>
                     <small>
-                      {daysUntil(d.startDate, today)} jours · {d.place}
+                      {formatDaysShort(daysUntil(d.startDate, today))} · {d.place}
                     </small>
                   </p>
                 ))}

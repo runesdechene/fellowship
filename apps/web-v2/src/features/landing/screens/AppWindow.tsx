@@ -41,6 +41,7 @@ export function AppWindow({
   return (
     <div
       className={`landing-window${className ? ` ${className}` : ''}`}
+      aria-hidden
       style={
         {
           '--window-width': `${String(width)}px`,

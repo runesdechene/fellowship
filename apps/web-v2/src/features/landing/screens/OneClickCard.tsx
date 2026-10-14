@@ -13,7 +13,7 @@ const READY = ['Enseigne et SIRET', 'Stand 3 × 3 m, électricité', 'Attestatio
 
 export function OneClickCard({ event }: { event: ShowEvent }) {
   return (
-    <figure className="landing-oneclick">
+    <figure className="landing-oneclick" aria-hidden>
       <figcaption className="landing-caption">Le festival est sur Fellowship</figcaption>
       <div className="landing-oneclick__card">
         {event.imageUrl && <img src={posterThumb(event.imageUrl, 640)} alt="" />}

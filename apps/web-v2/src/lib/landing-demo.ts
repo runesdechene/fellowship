@@ -4,14 +4,14 @@
  * POURQUOI — option B du lot 11c (Uriel, 14/10/2026) : tout ce qui vit sur Fellowship vient de la
  *            base, seule la « personne » est une démonstration. Elle vit ici, et nulle part ailleurs.
  * ATTENTION — jamais le nom ni le logo d'un vrai exposant, jamais Runes de Chêne : un vrai compte
- *            montrerait de vrais chiffres. Rien d'ici n'entre dans la base.
+ *            montrerait de vrais chiffres. Rien d'ici n'entre dans la base. Chaque nom a été cherché
+ *            parmi les enseignes de Fellowship le 14/10/2026 (« Atelier de Jeh' » existait : remplacé).
  */
 export type DemoStatus = 'interesse' | 'envoye' | 'inscrit'
 
 export const DEMO = {
   name: 'Atelier Corne & Cuir',
   initials: 'AC',
-  craft: 'Maroquinerie',
   /** Le statut de la n-ième date à venir ; la liste se répète. */
   statuses: ['inscrit', 'envoye', 'inscrit', 'interesse', 'envoye', 'interesse'] as DemoStatus[],
   /** « Mes dossiers » : ce qui est versé sur le total, pour les quatre premières dates. */
@@ -22,13 +22,13 @@ export const DEMO = {
     { paid: 0, total: 280 },
   ],
   /** « Mes bilans » : la saison passée. */
-  season: { profit: 4210, best: 1180 },
+  season: { profit: 4210 },
   /** Les visages de l'ouverture : des initiales, jamais un vrai exposant. */
   faces: ['M', 'L', 'C', 'T', 'A'],
   /** Le fil de la communauté. */
   feed: [
-    { initial: 'G', who: 'Gaël · La Forge du Nord', text: 'va à' },
-    { initial: 'L', who: 'Lina · Atelier Lune', text: 'a ajouté' },
+    { initial: 'G', who: 'Gaël · La Forge du Nord' },
+    { initial: 'L', who: 'Lina · Atelier Lune' },
   ],
   /** « Qui y va » : les compagnons de démonstration. */
   goers: [
@@ -39,7 +39,7 @@ export const DEMO = {
     { name: 'Forge Lugdunum', craft: 'Coutellerie', status: 'inscrit' },
     { name: 'Les Bijoux d’Ysée', craft: 'Bijouterie', status: 'envoye' },
     { name: 'Papeterie du Rhône', craft: 'Papeterie', status: 'inscrit' },
-    { name: 'Atelier de Jeh’', craft: 'Gravure', status: 'inscrit' },
+    { name: 'Atelier des Brumes', craft: 'Gravure', status: 'inscrit' },
   ] as { name: string; craft: string; status: DemoStatus }[],
   /** Les critères de l'assistant qui part à la chasse. */
   criteria: ['Médiéval, fantasy', 'À moins de 300 km', 'Juin → septembre'],

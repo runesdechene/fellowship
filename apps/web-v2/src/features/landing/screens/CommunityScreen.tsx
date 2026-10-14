@@ -81,8 +81,7 @@ export function CommunityScreen({ showcase }: { showcase: Showcase }) {
                 <span className="landing-com__face">{DEMO.feed[0]?.initial}</span>
                 <div>
                   <p>
-                    <strong>{DEMO.feed[0]?.who.split(' · ')[0]}</strong> va à{' '}
-                    <strong>{going.name}</strong>.
+                    <strong>{DEMO.feed[0]?.who}</strong> va à <strong>{going.name}</strong>.
                   </p>
                   <MiniEvent event={going} />
                 </div>
@@ -93,8 +92,7 @@ export function CommunityScreen({ showcase }: { showcase: Showcase }) {
                 <span className="landing-com__face">{DEMO.feed[1]?.initial}</span>
                 <div>
                   <p>
-                    <strong>{DEMO.feed[1]?.who.split(' · ')[0]}</strong> a ajouté un festival sur
-                    Fellowship.
+                    <strong>{DEMO.feed[1]?.who}</strong> a ajouté un festival sur Fellowship.
                   </p>
                   <MiniEvent event={added} />
                 </div>

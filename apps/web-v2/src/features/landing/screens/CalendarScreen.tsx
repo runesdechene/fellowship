@@ -6,7 +6,13 @@
  * ATTENTION — rien n'est cliquable : c'est une image vivante du produit.
  */
 import { PosterArt } from '@/components/ui/PosterArt'
-import { daysUntil, formatDateRange, formatMonthLabel, monthName } from '@/lib/dates'
+import {
+  daysUntil,
+  formatCountdown,
+  formatDateRange,
+  formatMonthLabel,
+  monthName,
+} from '@/lib/dates'
 import type { Showcase } from '@/lib/landing'
 import { AppWindow } from './AppWindow'
 import { DemoStatus } from './DemoStatus'
@@ -27,12 +33,15 @@ export function CalendarScreen({ months }: { months: Showcase['months'] }) {
       <div className="landing-cal">
         <h3 className="landing-app__title">Calendrier</h3>
         <p className="landing-app__sub">
-          <strong>{count} dates</strong>
+          <strong>
+            {count} {count === 1 ? 'date' : 'dates'}
+          </strong>
           {last ? ` d’ici ${monthName(last.month)}` : ''}
           {next ? (
             <>
               {' '}
-              · la prochaine dans <strong>{daysUntil(next.startDate, today)} jours</strong>
+              · la prochaine{' '}
+              <strong>{formatCountdown(daysUntil(next.startDate, today)).toLowerCase()}</strong>
             </>
           ) : null}
         </p>

@@ -10,7 +10,7 @@ import { DEMO } from '@/lib/landing-demo'
 
 export function PdfSheet({ event }: { event: ShowEvent }) {
   return (
-    <figure className="landing-pdf">
+    <figure className="landing-pdf" aria-hidden>
       <figcaption className="landing-caption">Le festival envoie un PDF</figcaption>
       <div className="landing-pdf__sheet">
         <span className="landing-pdf__done">

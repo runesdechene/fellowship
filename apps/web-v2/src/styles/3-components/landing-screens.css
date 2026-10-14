@@ -9,7 +9,15 @@
  */
 
 /* --- La fenêtre ----------------------------------------------------------------- */
+/* Les écrans restent l'app en clair, même la nuit : les composants de l'app qu'ils
+   réutilisent (PosterArt) lisent ces jetons, ramenés ici à leurs valeurs claires. */
 .landing-window {
+  --surface-card: var(--landing-app-card);
+  --surface-chip-neutral: var(--landing-app-chip);
+  --ink-title: var(--landing-app-ink);
+  --poster-empty-surface: var(--landing-app-line);
+  --poster-empty-ink: var(--landing-app-soft);
+
   width: var(--window-width);
   overflow: hidden;
   border: 1px solid var(--landing-app-window-line);
@@ -873,11 +881,6 @@
   background: var(--landing-app-chip);
 }
 
-.landing-you__bars i.has-3 {
-  height: calc(var(--landing-you-bar) * 1.5);
-  background: var(--landing-app-chip);
-}
-
 .landing-you__bars .is-now i {
   background: var(--landing-app-ink);
   color: var(--landing-app-card);
@@ -1019,5 +1022,15 @@
 
   .landing-pdf__done {
     right: var(--space-12);
+  }
+
+  /* La chasse est dessinée plus petite : elle garde sa propre réduction. */
+  .landing-shot--hunt .landing-window__view {
+    height: auto;
+  }
+
+  .landing-shot--hunt .landing-window__canvas {
+    width: calc((100vw - 2 * var(--mobile-gutter)) / var(--landing-mobile-scale-hunt));
+    transform: scale(var(--landing-mobile-scale-hunt));
   }
 }
