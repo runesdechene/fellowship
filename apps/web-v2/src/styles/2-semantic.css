@@ -1188,212 +1188,71 @@
   --vitrine-mobile-banner: 160px;
   --vitrine-mobile-logo: 96px;
   --type-tab-bar: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
-  /* --- La landing publique (lot 11a, maquette 2104:2) --------------------- */
-  --landing-surface: var(--surface-panel); /* le fond de la maquette, #fcfbf9 */
-  --landing-width: 1344px; /* 1728 moins deux marges de 192 */
-  --landing-gutter: var(--space-32);
-  --landing-bar-padding-y: var(--space-24);
-  --landing-bar-gap: var(--space-32);
-  --landing-logo-width: 43px;
-  --landing-logo-height: 37px;
-  --landing-button-padding: 9px var(--space-16);
-  --landing-button-gap: var(--space-8);
-  --radius-landing-button: var(--round-10);
-  --landing-brand-padding: var(--space-14) var(--space-20) var(--space-14) 22px;
-  --radius-landing-brand: var(--round-12);
-  --landing-final-top: var(--space-48);
-  --landing-final-bottom: 120px;
-  --landing-final-gap: var(--space-24);
-  --landing-foot-top: var(--space-28);
-  --landing-foot-bottom: var(--space-40);
-  --landing-foot-gap: var(--space-16);
-  --landing-foot-inner-top: var(--space-28);
-  --landing-foot-links-gap: var(--space-24);
-  --landing-foot-rule-height: 16px;
-  --landing-foot-mark: 22px;
-  --tracking-landing-display: -0.025em;
-  --tracking-landing-lead: -0.01em;
-  --type-landing-anchor: var(--weight-medium) var(--size-14) / normal var(--family-sans);
-  --type-landing-button: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
-  --type-landing-brand: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
-  --type-landing-final: var(--weight-regular) var(--size-72) / 1.05 var(--family-display);
-  --type-landing-lead: var(--weight-regular) var(--size-18) / var(--leading-normal)
-    var(--family-sans);
-  --type-landing-foot: var(--weight-regular) var(--size-13) / normal var(--family-sans);
-  /* L'accroche (2104:17) et sa photo provisoire (2105:5) */
-  /* Une miniature de 48 px, déjà floue : l'agrandissement fait le flou, sans `filter` (règle du
-     coût du flou, .claude/rules/interface.md). */
-  --landing-hero-image: url('/landing/accroche-flou.png');
-  --landing-hero-image-opacity: 0.22;
-  --landing-hero-image-bleed: 100px;
-  --landing-hero-veil: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--landing-surface) 35%, transparent),
-    color-mix(in srgb, var(--landing-surface) 75%, transparent) 55%,
-    var(--landing-surface)
+
+  /* --- La landing publique (lot 11c, maquette 2290:2) ----------------------
+     Sa propre palette, la même jour et nuit : la landing ne suit pas le thème
+     sombre (.claude/rules/v2.md, « La landing a sa propre direction
+     artistique »). */
+  --landing-paper: var(--fete-paper);
+  --landing-ink: var(--fete-ink);
+  --landing-ink-soft: var(--fete-ink-soft);
+  --landing-ink-mute: var(--fete-ink-mute);
+  --landing-cream: var(--fete-cream);
+  --landing-cream-soft: var(--fete-cream-soft);
+  --landing-gold: var(--fete-200);
+  --landing-gold-soft: var(--fete-gold-soft);
+  --landing-rule: var(--fete-rule);
+  --landing-night-edge: var(--fete-900);
+  --landing-warm: linear-gradient(
+    125deg,
+    var(--fete-850),
+    var(--fete-650) 45%,
+    var(--fete-450) 80%,
+    var(--fete-300)
   );
-  --landing-hero-top: var(--space-96);
-  --landing-hero-bottom: 72px;
-  --landing-hero-gap: 22px;
-  --landing-hero-title-width: 1000px;
-  --landing-hero-lead-width: 720px;
-  --landing-search-top: var(--space-18);
-  --landing-search-padding: var(--space-8);
-  --landing-search-field-padding: var(--space-8) 22px;
-  --landing-search-what: 280px;
-  --landing-search-where: 200px;
-  --landing-search-when: 220px;
-  --landing-search-rule: 28px;
-  --landing-search-submit-padding: var(--space-14);
+  --landing-earth: linear-gradient(115deg, var(--fete-850), var(--fete-700) 55%, var(--fete-500));
+  --landing-night: linear-gradient(180deg, var(--fete-800), var(--fete-950));
+  --landing-veil-left: linear-gradient(
+    90deg,
+    var(--fete-850),
+    color-mix(in srgb, var(--fete-850) 96%, transparent) 38%,
+    color-mix(in srgb, var(--fete-700) 35%, transparent) 55%,
+    transparent 70%
+  );
+  --landing-veil-top: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--fete-850) 95%, transparent),
+    color-mix(in srgb, var(--fete-850) 60%, transparent) 55%,
+    transparent
+  );
+  --landing-width: 1488px;
+  --landing-gutter: 120px;
+  --landing-logo-width: 43px; /* le logo de la maquette 2290:2 */
+  --landing-logo-height: 37px;
+  --landing-button-pad: 9px var(--space-16);
+  --landing-slant: 10.4vw; /* 180 px sur 1728 : la pente des bandes */
+  --landing-band-pad: var(--space-150);
+  --landing-glass: color-mix(in srgb, var(--sand-0) 14%, transparent);
+  --landing-glass-line: color-mix(in srgb, var(--sand-0) 30%, transparent);
+  --landing-blur-night: 0.22;
+  --landing-blur-earth: 0.45;
+  --radius-landing-button: var(--round-10);
+  --radius-landing-pill: var(--round-full);
   --tracking-landing-hero: -0.03em;
-  --type-landing-eyebrow: var(--weight-medium) var(--size-14) / normal var(--family-sans);
-  --type-landing-hero: var(--weight-regular) 96px / 0.95 var(--family-display);
-  --type-landing-hero-mobile: var(--weight-regular) var(--size-52) / 0.95 var(--family-display);
-  --type-landing-hero-lead: var(--weight-regular) 19px / 1.5 var(--family-sans);
-  --type-landing-search-label: var(--weight-semibold) var(--size-12) / normal var(--family-sans);
-  --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
-  --type-landing-note: var(--weight-regular) var(--size-13) / normal var(--family-sans);
-
-  /* Le défilé des catégories (2112:2) */
-  --landing-marquee-height: 64px;
-  --landing-marquee-gap: var(--space-10);
-  --landing-marquee-fade: 220px;
-  --landing-marquee-fade-mobile: var(--space-48);
-  --landing-marquee-duration: 70s;
-  --landing-chip-padding: 9px var(--space-16) 9px var(--space-14);
-  --landing-chip-gap: var(--space-8);
-  --type-landing-chip: var(--weight-medium) var(--size-14) / normal var(--family-sans);
-
-  /* Les prochains festivals (2104:40) */
-  --landing-festivals-top: var(--space-24);
-  --landing-festivals-bottom: var(--space-96);
-  --landing-festivals-head-gap: var(--space-24);
-  --landing-festivals-gap: var(--space-24);
-  --landing-festival-poster: 334px;
-  --landing-festival-medium: 250px;
-  --landing-festival-mobile: 200px;
-  --landing-festival-mobile-poster: 268px;
-  --radius-landing-poster: 14px;
-  --tracking-landing-section: -0.025em;
-  --type-landing-section: var(--weight-semibold) var(--size-28) / normal var(--family-sans);
-  --type-landing-section-lead: var(--weight-regular) var(--size-15) / normal var(--family-sans);
-  --type-landing-link: var(--weight-medium) var(--size-14) / normal var(--family-sans);
-  --type-landing-card-name: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
-  --type-landing-card-meta: var(--weight-regular) var(--size-13) / normal var(--family-sans);
-  --landing-card-text-gap: 3px;
-
-  /* Les titres de section (2105:8, 2104:86) */
-  --landing-eyebrow-gap: var(--space-12);
-  --type-landing-section-eyebrow: var(--weight-medium) var(--size-14) / normal var(--family-sans);
-  --type-landing-display: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
-  --type-landing-display-mobile: var(--weight-regular) var(--size-38) / 1.05 var(--family-display);
-  --tracking-landing-title: -0.02em;
-
-  /* Pourquoi Fellowship (2105:8) */
-  --landing-why-top: var(--space-24);
-  --landing-why-bottom: 120px;
-  --landing-why-gap: var(--space-96);
-  --landing-why-column: 560px;
-  --landing-why-head-gap: var(--space-18);
-  --landing-why-story-top: 44px;
-  --landing-why-story-gap: var(--space-20);
-  --landing-why-signature-gap: var(--space-14);
-  --landing-why-avatar: var(--space-48);
-  --type-landing-story: var(--weight-regular) var(--size-18) / var(--leading-relaxed)
-    var(--family-sans);
-  --type-landing-signature: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
-
-  /* Les six fonctions (2104:86) */
-  --landing-band-surface: var(--surface-card); /* la bande blanche des fonctions */
-  --landing-features-padding: var(--space-96);
-  --landing-features-head-bottom: var(--space-48);
-  --landing-features-gap: var(--space-24);
-  --landing-feature-surface: var(--landing-surface);
-  --landing-feature-padding: var(--space-24);
-  --landing-feature-gap: var(--space-14);
-  --radius-landing-feature: var(--round-20);
-  --landing-art-surface: var(--surface-chip-neutral);
-  --landing-art-deep: var(--line-card);
-  --landing-art-height: 160px;
-  --radius-landing-art: 14px;
-  --radius-landing-sheet: var(--round-10);
-  --landing-art-inset: var(--space-20);
-  --landing-sheet-padding: var(--space-16);
-  --landing-art-thumb-width: 34px;
-  --landing-art-thumb-height: 22px;
-  --landing-art-month-width: 76px;
-  --landing-art-month-height: 96px;
-  --landing-art-month-gap: var(--space-20);
-  --landing-art-face: var(--space-48);
-  --landing-art-face-ring: 3px;
-  --landing-art-face-overlap: -12px;
-  --landing-art-face-1: var(--sand-430);
-  --landing-art-face-2: var(--sand-520);
-  --landing-art-face-3: var(--sand-600);
-  --landing-art-face-4: var(--sand-380);
-  --landing-art-face-ink: var(--brun-700);
-  --landing-art-gauge: 5px;
-  --landing-art-question-width: 220px;
-  --type-landing-feature: var(--weight-semibold) 19px / normal var(--family-sans);
-  --type-landing-feature-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
-  --type-landing-art-tiny: var(--weight-regular) var(--size-10) / normal var(--family-sans);
-  --type-landing-art-small: var(--weight-regular) var(--size-11) / normal var(--family-sans);
-  --type-landing-art: var(--weight-regular) var(--size-12) / normal var(--family-sans);
-  --type-landing-art-medium: var(--weight-medium) var(--size-12) / normal var(--family-sans);
-  --type-landing-art-strong: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
-  --type-landing-art-value: var(--weight-medium) var(--size-13) / normal var(--family-sans);
-  --type-landing-art-month: var(--weight-regular) var(--size-20) / normal var(--family-display);
-  --type-landing-art-score: var(--weight-regular) var(--size-44) / 1 var(--family-display);
-  --type-landing-art-face: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
-
-  /* La communauté et le Pro (2154:2, 2104:145) : deux colonnes, texte et cartes */
-  --landing-split-padding: var(--space-96);
-  --landing-split-gap: var(--space-64);
-  --landing-split-text-gap: var(--space-16);
-  --landing-split-column: 560px;
-  --landing-split-cards: 522px;
-  --landing-note-padding: var(--space-16) var(--space-20);
-  --landing-note-gap: var(--space-6);
-  --radius-landing-note: var(--round-16);
-  --landing-thread-padding: var(--space-20);
-  --landing-thread-gap: var(--space-16);
-  --landing-thread-face: var(--space-32);
-  --landing-thread-face-ink: var(--brun-700);
-  --radius-landing-tabs: var(--round-10);
-  --radius-landing-tab: 7px;
-  --radius-landing-mute: var(--round-8);
-  --landing-large-padding: var(--space-14) var(--space-20) var(--space-14) 22px;
-  --type-landing-split-lead: var(--weight-regular) var(--size-17) / 1.55 var(--family-sans);
-  --type-landing-note-kicker: var(--weight-medium) var(--size-12) / normal var(--family-sans);
-  --type-landing-note-text: var(--weight-regular) var(--size-15) / var(--leading-normal)
-    var(--family-sans);
-  --type-landing-thread-title: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
-  --type-landing-tab: var(--weight-medium) var(--size-13) / normal var(--family-sans);
-  --type-landing-tab-on: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
-  --type-landing-price: var(--weight-regular) var(--size-14) / normal var(--family-sans);
-
-  /* Le bandeau Organisateurs (2104:166) : sombre dans les deux thèmes */
-  --landing-organizers-bottom: var(--space-96);
-  --landing-organizers-padding: var(--space-56);
-  --radius-landing-organizers: var(--round-28);
-  --landing-organizers-surface: var(--ink-950);
-  --landing-organizers-ink: var(--sand-0);
-  --landing-organizers-soft: var(--sand-430);
-  --landing-organizers-eyebrow: var(--ink-350);
-  --landing-organizers-image: url('/landing/accroche-flou.png');
-  --landing-organizers-image-opacity: 0.4;
-  --landing-organizers-lead-width: 620px;
-  --type-landing-banner: var(--weight-regular) var(--size-44) / normal var(--family-display);
-  --type-landing-banner-lead: var(--weight-regular) var(--size-16) / 1.55 var(--family-sans);
-  --tracking-landing-banner: -0.015em;
-
-  /* La bande Festivaliers (2154:34) */
-  --landing-goers-bottom: var(--space-96);
-  --landing-goers-padding: var(--space-48) var(--space-56);
-  --radius-landing-goers: var(--round-24);
-  --landing-goers-surface: var(--surface-chip-neutral);
-  --landing-goers-note: 462px;
-  --type-landing-goers-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
+  --tracking-landing-statement: -0.028em;
+  --type-landing-nav: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --type-landing-button: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-button-l: var(--weight-semibold) var(--size-16) / normal var(--family-sans);
+  --type-landing-statement: var(--weight-regular) var(--size-54) / 1.08 var(--family-display);
+  --type-landing-statement-s: var(--weight-regular) var(--size-46) / 1.1 var(--family-display);
+  --type-landing-final: var(--weight-regular) var(--size-96) / 1 var(--family-display);
+  --type-landing-final-lead: var(--weight-regular) var(--size-20) / 1.5 var(--family-sans);
+  --type-landing-foot-brand: var(--weight-regular) var(--size-36) / 1 var(--family-display);
+  --type-landing-foot: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
+  --type-landing-foot-head: var(--weight-medium) var(--size-13) / normal var(--family-sans);
+  --type-landing-small: var(--weight-regular) var(--size-13) / normal var(--family-sans);
+  --type-landing-statement-mobile: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
+  --type-landing-final-mobile: var(--weight-regular) var(--size-52) / 1 var(--family-display);
 }
 
 /* =========================================================================
@@ -1504,5 +1363,4 @@
   --activity-avatar-surface: var(--night-350);
   --tab-bar-active: var(--terre-400);
   --tag-first-ink: var(--night-0);
-  --landing-thread-face-ink: var(--cream-200); /* les initiales de la discussion dessinée */
 }

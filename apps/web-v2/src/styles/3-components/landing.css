@@ -1,1265 +1,329 @@
 /**
  * QUOI     — la landing publique (features/landing/) : la page, la barre du haut, les boutons,
- *            l'appel final et le pied ; les sections s'ajoutent en dessous, dans l'ordre.
- * POURQUOI — maquette `2027 — Landing` (2104:2), une colonne de 1344 px centrée.
- * ATTENTION — `--landing-surface` est le fond de la page entière : la landing n'a pas la coquille
- *            de l'app (barre latérale, panneau).
+ *            les bandes penchées, la fin et le pied ; chaque bande ajoute ses règles plus bas.
+ * POURQUOI — maquette validée 2290:2 (14/10/2026) : une colonne de 1488 px, des bandes papier,
+ *            terre et nuit qui s'emboîtent de biais.
+ * ATTENTION — palette fixe, la même jour et nuit (--landing-*). Jamais de `filter: blur` sur un
+ *            grand calque : les fonds flous sont des miniatures agrandies.
  */
 
 .landing {
   min-height: 100dvh;
-  background: var(--landing-surface);
-  color: var(--ink-title);
+  overflow-x: clip;
+  background: var(--landing-paper);
+  color: var(--landing-ink);
 }
 
-/* Chaque bloc pose sa propre colonne, centrée, avec ses gouttières. */
+/* Le contenu de chaque bloc : une colonne centrée, ses gouttières. */
 .landing-bar,
-.landing-final,
-.landing-foot,
-.landing-section {
+.landing-band__inner {
   width: min(100%, calc(var(--landing-width) + 2 * var(--landing-gutter)));
   margin-inline: auto;
   padding-inline: var(--landing-gutter);
 }
 
-/* --- La barre du haut ---------------------------------------------------- */
+/* --- L'ouverture ------------------------------------------------------------ */
+.landing-opening {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--landing-warm);
+  color: var(--landing-cream);
+}
+
+/* --- La barre du haut -------------------------------------------------------- */
 .landing-bar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--landing-bar-gap);
-  padding-block: var(--landing-bar-padding-y);
+  gap: var(--space-32);
+  padding-block: var(--space-32);
 }
 
 .landing-bar__logo {
   width: var(--landing-logo-width);
   height: var(--landing-logo-height);
-  object-fit: cover;
 }
 
 .landing-bar__anchors {
   display: flex;
-  gap: var(--landing-bar-gap);
-  font: var(--type-landing-anchor);
-  color: var(--ink-soft);
+  gap: var(--space-32);
+  font: var(--type-landing-nav);
+  color: var(--landing-cream-soft);
 }
 
 .landing-bar__anchors a:hover {
-  color: var(--ink-title);
+  color: var(--landing-cream);
 }
 
 .landing-bar__actions {
   display: flex;
-  gap: var(--landing-button-gap);
+  gap: var(--space-8);
 }
 
-/* --- Les boutons de la landing ------------------------------------------- */
+/* --- Les boutons de la landing ---------------------------------------------- */
 .landing-button {
   display: inline-flex;
   align-items: center;
-  gap: var(--landing-button-gap);
-  padding: var(--landing-button-padding);
-  border: 1px solid var(--line-card);
+  gap: var(--space-8);
+  padding: var(--landing-button-pad);
+  border: 1px solid transparent;
   border-radius: var(--radius-landing-button);
-  background: var(--surface-card);
-  color: var(--ink-title);
   font: var(--type-landing-button);
   white-space: nowrap;
-  transition: background var(--menu-motion);
+  transition: filter var(--menu-motion);
 }
 
 .landing-button:hover {
-  background: var(--surface-control-hover);
+  filter: brightness(var(--hover-brightness));
 }
 
-.landing-button--dark {
-  border-color: transparent;
-  background: var(--action-surface);
-  color: var(--action-ink);
+.landing-button--glass {
+  border-color: var(--landing-glass-line);
+  background: var(--landing-glass);
+  color: var(--landing-cream);
 }
 
-.landing-button--dark:hover {
-  background: var(--action-surface-hover);
+.landing-button--cream {
+  background: var(--landing-cream);
+  color: var(--landing-ink);
+}
+
+.landing-button--ink {
+  background: var(--landing-ink);
+  color: var(--landing-cream);
+}
+
+/* Les grands appels : en pilule. */
+.landing-button--brand,
+.landing-button--pill {
+  padding: var(--space-16) var(--space-26);
+  border-radius: var(--radius-landing-pill);
+  font: var(--type-landing-button-l);
 }
 
 /* L'exception de la landing : le dernier appel porte le dégradé du logo. */
 .landing-button--brand {
-  padding: var(--landing-brand-padding);
-  border: 0;
-  border-radius: var(--radius-landing-brand);
   background: var(--brand-gradient);
   color: var(--brand-ink);
-  font: var(--type-landing-brand);
-  letter-spacing: var(--tracking-landing-lead);
 }
 
-.landing-button--brand:hover {
-  background: var(--brand-gradient);
-  filter: brightness(var(--hover-brightness));
-}
-
-/* --- L'accroche et sa photo provisoire ------------------------------------ */
-.landing-top {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-/* La photo floutée déborde vers le haut, puis le voile la fond dans la page. */
-.landing-top::before,
-.landing-top::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-
-.landing-top::before {
-  top: calc(-1 * var(--landing-hero-image-bleed));
-  background: var(--landing-hero-image) center / cover;
-  opacity: var(--landing-hero-image-opacity);
-}
-
-.landing-top::after {
-  background: var(--landing-hero-veil);
-}
-
-.landing-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--landing-hero-gap);
-  padding: var(--landing-hero-top) var(--landing-gutter) var(--landing-hero-bottom);
-  text-align: center;
-}
-
-.landing-hero__eyebrow {
-  font: var(--type-landing-eyebrow);
-  color: var(--ink-soft);
-}
-
-.landing-hero__title {
-  max-width: var(--landing-hero-title-width);
-  font: var(--type-landing-hero);
-  letter-spacing: var(--tracking-landing-hero);
-}
-
-.landing-hero__lead {
-  max-width: var(--landing-hero-lead-width);
-  font: var(--type-landing-hero-lead);
-  letter-spacing: var(--tracking-landing-lead);
-  color: var(--ink-soft);
-}
-
-.landing-hero__note {
-  font: var(--type-landing-note);
-  color: var(--ink-section-pale);
-}
-
-/* --- La recherche ---------------------------------------------------------- */
-.landing-search {
-  display: flex;
-  align-items: center;
-  margin-top: var(--landing-search-top);
-  padding: var(--landing-search-padding);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-round);
-  background: var(--surface-card);
-  text-align: left;
-}
-
-.landing-search__field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  align-items: flex-start;
-  padding: var(--landing-search-field-padding);
-  text-align: left;
-  cursor: pointer;
-}
-
-.landing-search__field--what {
-  width: var(--landing-search-what);
-  cursor: text;
-}
-
-.landing-search__field--where {
-  width: var(--landing-search-where);
-}
-
-.landing-search__field--when {
-  width: var(--landing-search-when);
-}
-
-.landing-search__label {
-  font: var(--type-landing-search-label);
-  color: var(--ink-title);
-}
-
-.landing-search__value {
-  font: var(--type-landing-search-value);
-  color: var(--ink-section-pale);
-}
-
-.landing-search__value::placeholder {
-  color: var(--ink-section-pale);
-}
-
-input.landing-search__value {
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: none;
-  color: var(--ink-title);
-}
-
-.landing-search__rule {
-  width: 1px;
-  height: var(--landing-search-rule);
-  background: var(--line-card);
-}
-
-.landing-search__submit {
-  display: grid;
-  place-items: center;
-  padding: var(--landing-search-submit-padding);
-  border-radius: var(--radius-round);
-  background: var(--action-surface);
-  color: var(--action-ink);
-  cursor: pointer;
-}
-
-.landing-search__submit:hover {
-  background: var(--action-surface-hover);
-}
-
-/* --- Le défilé des catégories ---------------------------------------------- */
-.landing-marquee {
-  display: flex;
-  align-items: center;
-  height: var(--landing-marquee-height);
-  overflow: hidden;
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    var(--landing-surface) var(--landing-marquee-fade),
-    var(--landing-surface) calc(100% - var(--landing-marquee-fade)),
-    transparent
-  );
-}
-
-.landing-marquee__track {
-  display: flex;
-  gap: var(--landing-marquee-gap);
-  width: max-content;
-  animation: landing-marquee var(--landing-marquee-duration) linear infinite;
-}
-
-.landing-marquee:hover .landing-marquee__track {
-  animation-play-state: paused;
-}
-
-.landing-marquee__list {
-  display: flex;
-  gap: var(--landing-marquee-gap);
-}
-
-.landing-marquee__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--landing-chip-gap);
-  padding: var(--landing-chip-padding);
-  border: 1px solid color-mix(in srgb, var(--tag-ink, var(--ink-soft)) 22%, transparent);
-  border-radius: var(--radius-round);
-  background: var(--tag-bg, var(--surface-chip-neutral));
-  font: var(--type-landing-chip);
-  color: var(--ink-title);
-  white-space: nowrap;
-}
-
-.landing-marquee__chip svg {
-  flex-shrink: 0;
-  color: var(--tag-ink, var(--ink-soft));
-}
-
-/* La piste porte deux fois la liste : reculer d'une liste et d'un écart boucle sans saut. */
-@keyframes landing-marquee {
-  to {
-    transform: translateX(calc(-50% - var(--landing-marquee-gap) / 2));
-  }
-}
-
-/* --- Les prochains festivals ----------------------------------------------- */
-.landing-festivals {
-  padding-block: var(--landing-festivals-top) var(--landing-festivals-bottom);
-}
-
-.landing-festivals__head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--landing-festivals-head-gap);
-  padding-bottom: var(--landing-festivals-head-gap);
-}
-
-.landing-festivals__title {
-  font: var(--type-landing-section);
-  letter-spacing: var(--tracking-landing-section);
-}
-
-.landing-festivals__lead {
-  margin-top: var(--space-4);
-  font: var(--type-landing-section-lead);
-  letter-spacing: var(--tracking-landing-lead);
-  color: var(--ink-soft);
-}
-
-.landing-festivals__all {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: var(--space-6);
-  font: var(--type-landing-link);
-}
-
-.landing-festivals__row {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: var(--landing-festivals-gap);
-}
-
-.landing-festival {
-  --poster-art-height: var(--landing-festival-poster);
-  --radius-card: var(--radius-landing-poster);
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-}
-
-.landing-festival .poster-art {
-  transition: translate var(--duration-smooth) var(--ease-soft);
-}
-
-/* Pas d'avatars sur la landing : le voile du pied, qui les porte, n'a rien à porter. */
-.landing-festival .poster-art::after {
-  display: none;
-}
-
-.landing-festival:hover .poster-art {
-  translate: 0 calc(-1 * var(--space-4));
-}
-
-.landing-festival__name {
-  font: var(--type-landing-card-name);
-  letter-spacing: var(--tracking-landing-lead);
-}
-
-.landing-festival__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--landing-card-text-gap);
-}
-
-.landing-festival__meta {
-  font: var(--type-landing-card-meta);
-  color: var(--ink-soft);
-}
-
-/* --- Les titres de section partagés --------------------------------------- */
-.landing-eyebrow {
-  font: var(--type-landing-section-eyebrow);
-  color: var(--ink-section-pale);
-}
-
-.landing-display {
-  margin-top: var(--landing-eyebrow-gap);
-  font: var(--type-landing-display);
-  letter-spacing: var(--tracking-landing-title);
-}
-
-/* --- Pourquoi Fellowship --------------------------------------------------- */
-.landing-why {
-  display: flex;
-  gap: var(--landing-why-gap);
-  padding-block: var(--landing-why-top) var(--landing-why-bottom);
-}
-
-.landing-why__head {
-  display: flex;
-  flex-direction: column;
-  gap: var(--landing-why-head-gap);
-  width: var(--landing-why-column);
-}
-
-.landing-why__title {
-  font: var(--type-landing-display);
-  letter-spacing: var(--tracking-landing-title);
-}
-
-.landing-why__story {
-  display: flex;
-  flex-direction: column;
-  gap: var(--landing-why-story-gap);
-  width: var(--landing-why-column);
-  padding-top: var(--landing-why-story-top);
-  font: var(--type-landing-story);
-  letter-spacing: var(--tracking-landing-lead);
-  color: var(--ink-soft);
-}
-
-.landing-why__story strong {
-  font-weight: var(--weight-bold);
-  color: var(--ink-title);
-}
-
-.landing-why__signature {
-  display: flex;
-  align-items: center;
-  gap: var(--landing-why-signature-gap);
-  padding-top: var(--space-8);
-}
-
-.landing-why__signature img {
-  width: var(--landing-why-avatar);
-  height: var(--landing-why-avatar);
-}
-
-.landing-why__name {
-  font: var(--type-landing-signature);
-  color: var(--ink-title);
-}
-
-.landing-why__role {
-  margin-top: var(--space-2);
-  font: var(--type-landing-card-meta);
-}
-
-/* --- Les six fonctions ----------------------------------------------------- */
+/* --- Les bandes penchées ------------------------------------------------------ */
+/* Chaque bande remonte sous la précédente de la hauteur de la pente, et ne garde
+   que son bord haut en biais : la suivante recouvre son bord bas. */
 .landing-band {
-  background: var(--landing-band-surface);
-}
-
-.landing-features {
-  padding-block: var(--landing-features-padding);
-}
-
-.landing-features__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--landing-features-gap);
-  margin-top: var(--landing-features-head-bottom);
-}
-
-.landing-feature {
-  display: flex;
-  flex-direction: column;
-  gap: var(--landing-feature-gap);
-  padding: var(--landing-feature-padding);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-landing-feature);
-  background: var(--landing-feature-surface);
-}
-
-.landing-feature__title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-10);
-  font: var(--type-landing-feature);
-  letter-spacing: var(--tracking-landing-section);
-}
-
-.landing-feature__title svg {
-  flex-shrink: 0;
-}
-
-.landing-feature__text {
-  font: var(--type-landing-feature-text);
-  color: var(--ink-soft);
-}
-
-/* --- Les vignettes : des dessins, pas des données -------------------------- */
-.landing-art {
-  display: flex;
-  align-items: center;
-  height: var(--landing-art-height);
-  padding: var(--landing-art-inset);
-  overflow: hidden;
-  border-radius: var(--radius-landing-art);
-  background: var(--landing-art-surface);
-  font: var(--type-landing-art);
-  color: var(--ink-title);
-}
-
-.landing-art img {
-  object-fit: cover;
-}
-
-.landing-art__sheet {
-  width: 100%;
-  border-radius: var(--radius-landing-sheet);
-  background: var(--surface-card);
-}
-
-.landing-art__soft {
-  color: var(--ink-soft);
-}
-
-.landing-art__pale {
-  color: var(--ink-section-pale);
-}
-
-.landing-art__strong {
-  font: var(--type-landing-art-strong);
-}
-
-/* Le calendrier sur son site */
-.landing-art__sheet--embed {
-  overflow: hidden;
-}
-
-.landing-art__url {
-  padding: var(--space-6) var(--space-12);
-  background: var(--landing-art-deep);
-  font: var(--type-landing-art-tiny);
-  color: var(--ink-section-pale);
-}
-
-.landing-art__embed-rows {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-10) var(--space-16);
-  font: var(--type-landing-art-medium);
-}
-
-.landing-art__embed-rows li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-10);
-}
-
-.landing-art__embed-rows img {
-  width: var(--landing-art-thumb-width);
-  height: var(--landing-art-thumb-height);
-  border-radius: var(--radius-xs);
-}
-
-/* L'année d'un coup d'œil */
-.landing-art__year {
-  display: flex;
-  gap: var(--landing-art-month-gap);
-}
-
-.landing-art__year li {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  width: var(--landing-art-month-width);
-}
-
-.landing-art__month {
-  font: var(--type-landing-art-month);
-  color: var(--ink-section-pale);
-}
-
-.landing-art__month--now .landing-art__month {
-  color: var(--ink-title);
-}
-
-.landing-art__year img,
-.landing-art__free {
-  width: 100%;
-  height: var(--landing-art-month-height);
-  border-radius: var(--radius-sm);
-}
-
-.landing-art__free {
-  background: var(--landing-art-deep);
-}
-
-/* Les dates grâce aux amis */
-.landing-art__friends {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-14);
-  font: var(--type-landing-card-meta);
-  color: var(--ink-soft);
-}
-
-.landing-art__friends strong {
-  font-weight: var(--weight-semibold);
-  color: var(--ink-title);
-}
-
-.landing-art__faces {
-  display: flex;
-}
-
-.landing-art__faces li {
-  display: grid;
-  place-items: center;
-  width: var(--landing-art-face);
-  height: var(--landing-art-face);
-  margin-right: var(--landing-art-face-overlap);
-  border: var(--landing-art-face-ring) solid var(--landing-art-surface);
-  border-radius: var(--radius-round);
-  font: var(--type-landing-art-face);
-  color: var(--landing-art-face-ink);
-}
-
-.landing-art__faces li:nth-child(1) {
-  background: var(--landing-art-face-1);
-}
-
-.landing-art__faces li:nth-child(2) {
-  background: var(--landing-art-face-2);
-}
-
-.landing-art__faces li:nth-child(3) {
-  background: var(--landing-art-face-3);
-}
-
-.landing-art__faces li:nth-child(4) {
-  background: var(--landing-art-face-4);
-}
-
-.landing-art__faces li:last-child {
-  margin-right: 0;
-  background: var(--surface-card);
-  color: var(--ink-title);
-}
-
-/* Les dossiers et les paiements */
-.landing-art__sheet--dossier,
-.landing-art__sheet--infos,
-.landing-art__sheet--question {
-  display: flex;
-  flex-direction: column;
-  padding: var(--landing-sheet-padding);
-}
-
-.landing-art__sheet--dossier {
-  gap: var(--space-8);
-}
-
-.landing-art__gauge {
-  height: var(--landing-art-gauge);
-  margin-block: var(--space-6);
-  border-radius: var(--radius-round);
-  background: var(--landing-art-deep);
-}
-
-.landing-art__gauge span {
-  display: block;
-  width: calc(100% / 3);
-  height: 100%;
-  border-radius: inherit;
-  background: var(--brand-gradient);
-}
-
-/* Les infos d'inscription */
-.landing-art__sheet--infos {
-  gap: var(--space-4);
-}
-
-.landing-art__sheet--infos dt {
-  font: var(--type-landing-art-small);
-  color: var(--ink-section-pale);
-}
-
-.landing-art__sheet--infos dd {
-  margin: 0;
-  font: var(--type-landing-art-value);
-}
-
-/* Les avis et les questions */
-.landing-art__reviews {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-24);
-  width: 100%;
-}
-
-.landing-art__score {
-  margin-bottom: var(--space-12);
-  font: var(--type-landing-art-score);
-  letter-spacing: var(--tracking-landing-title);
-}
-
-.landing-art__sheet--question {
-  gap: var(--space-10);
-  width: var(--landing-art-question-width);
-  align-self: stretch;
-}
-
-.landing-art__question {
-  font: var(--type-landing-art-medium);
-}
-
-/* Entre le téléphone et l'écran large : deux colonnes, l'histoire sur la largeur. */
-@media (width <= 1280px) {
-  .landing-features__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .landing-why {
-    gap: var(--space-48);
-  }
-
-  .landing-why__head,
-  .landing-why__story {
-    flex: 1;
-    width: auto;
-  }
-}
-
-/* --- Deux colonnes : la communauté et le Pro ------------------------------- */
-.landing-split {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--landing-split-gap);
-  padding-block: var(--landing-split-padding);
-}
-
-.landing-split--centered {
-  align-items: center;
-}
-
-.landing-split__text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--landing-split-text-gap);
-  width: var(--landing-split-column);
-}
-
-.landing-split__title {
-  font: var(--type-landing-display);
-  letter-spacing: var(--tracking-landing-title);
-}
-
-.landing-split__lead {
-  font: var(--type-landing-split-lead);
-  color: var(--ink-soft);
-}
-
-.landing-split__lead strong {
-  font-weight: var(--weight-bold);
-}
-
-.landing-split__cards {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-10);
-  width: var(--landing-split-cards);
-}
-
-.landing-pro__price {
-  font: var(--type-landing-price);
-  color: var(--ink-soft);
-}
-
-.landing-pro__price strong {
-  font-weight: var(--weight-semibold);
-  color: var(--ink-title);
-}
-
-.landing-button--large {
-  margin-top: var(--space-8);
-  padding: var(--landing-large-padding);
-  border-radius: var(--radius-landing-brand);
-  font: var(--type-landing-brand);
-  letter-spacing: var(--tracking-landing-lead);
-}
-
-/* Une carte de notification dessinée */
-.landing-note {
-  display: flex;
-  flex-direction: column;
-  gap: var(--landing-note-gap);
-  padding: var(--landing-note-padding);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-landing-note);
-  background: var(--surface-card);
-}
-
-.landing-note__kicker {
-  font: var(--type-landing-note-kicker);
-  color: var(--ink-section-pale);
-}
-
-.landing-note__text {
-  font: var(--type-landing-note-text);
-  color: var(--ink-title);
-}
-
-/* La discussion dessinée */
-.landing-thread {
-  gap: var(--landing-thread-gap);
-  padding: var(--landing-thread-padding);
-}
-
-.landing-thread__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.landing-thread__title {
-  font: var(--type-landing-thread-title);
-}
-
-.landing-thread__mute {
-  padding: var(--space-4) var(--space-10);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-landing-mute);
-  font: var(--type-landing-note-kicker);
-  color: var(--ink-soft);
-}
-
-.landing-thread__tabs {
-  display: flex;
-  align-self: flex-start;
-  gap: var(--space-4);
-  padding: var(--space-4);
-  border-radius: var(--radius-landing-tabs);
-  background: var(--landing-art-surface);
-}
-
-.landing-thread__tab {
-  padding: var(--space-6) var(--space-14);
-  border-radius: var(--radius-landing-tab);
-  font: var(--type-landing-tab);
-  color: var(--ink-soft);
-}
-
-.landing-thread__tab--on {
-  background: var(--surface-card);
-  font: var(--type-landing-tab-on);
-  color: var(--ink-title);
-}
-
-.landing-thread__message {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-12);
-}
-
-.landing-thread__message .landing-note__kicker {
-  margin-bottom: var(--landing-card-text-gap);
-}
-
-.landing-thread__face {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: var(--landing-thread-face);
-  height: var(--landing-thread-face);
-  border-radius: var(--radius-round);
-  background: var(--landing-art-surface);
-  font: var(--type-landing-art-strong);
-  color: var(--landing-thread-face-ink);
-}
-
-/* --- Le bandeau Organisateurs ---------------------------------------------- */
-.landing-organizers-wrap {
-  padding-bottom: var(--landing-organizers-bottom);
-}
-
-.landing-organizers {
   position: relative;
   isolation: isolate;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-32);
-  padding: var(--landing-organizers-padding);
+  margin-top: calc(-1 * var(--landing-slant));
+  padding-block: calc(var(--landing-slant) + var(--space-64)) var(--landing-band-pad);
   overflow: hidden;
-  border-radius: var(--radius-landing-organizers);
-  background: var(--landing-organizers-surface);
-  color: var(--landing-organizers-ink);
 }
 
-/* La photo provisoire : la même miniature floue que l'accroche, agrandie sans `filter`. */
-.landing-organizers::before {
-  content: '';
+.landing-band--rise {
+  clip-path: polygon(0 var(--landing-slant), 100% 0, 100% 100%, 0 100%);
+}
+
+.landing-band--fall {
+  clip-path: polygon(0 0, 100% var(--landing-slant), 100% 100%, 0 100%);
+}
+
+.landing-band--paper {
+  background: var(--landing-paper);
+  color: var(--landing-ink);
+}
+
+.landing-band--earth {
+  background: var(--landing-earth);
+  color: var(--landing-cream);
+}
+
+.landing-band--night {
+  background: var(--landing-night);
+  color: var(--landing-cream);
+}
+
+.landing-band__blur {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--landing-organizers-image) center / cover;
-  opacity: var(--landing-organizers-image-opacity);
+  opacity: var(--landing-blur-night);
 }
 
-.landing-organizers__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-14);
+.landing-band--earth .landing-band__blur {
+  opacity: var(--landing-blur-earth);
+  mix-blend-mode: soft-light;
 }
 
-.landing-organizers__eyebrow {
-  font: var(--type-landing-section-eyebrow);
-  color: var(--landing-organizers-eyebrow);
+/* Quatre affiches de 12 px, agrandies et fondues l'une dans l'autre : une lumière de festival. */
+.landing-band__blur img {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  mask-image: radial-gradient(closest-side, var(--landing-ink) 45%, transparent);
 }
 
-.landing-organizers__title {
-  font: var(--type-landing-banner);
-  letter-spacing: var(--tracking-landing-banner);
+.landing-band__blur img:nth-child(2) {
+  left: 25%;
 }
 
-.landing-organizers__lead {
-  max-width: var(--landing-organizers-lead-width);
-  font: var(--type-landing-banner-lead);
-  color: var(--landing-organizers-soft);
+.landing-band__blur img:nth-child(3) {
+  left: 50%;
 }
 
-/* Le bouton clair du bandeau : clair dans les deux thèmes, comme le bandeau reste sombre. */
-.landing-button--light {
-  flex-shrink: 0;
-  padding: var(--landing-large-padding);
-  border: 0;
-  border-radius: var(--radius-landing-brand);
-  background: var(--landing-organizers-ink);
-  color: var(--landing-organizers-surface);
-  font: var(--type-landing-brand);
-  letter-spacing: var(--tracking-landing-lead);
+.landing-band__blur img:nth-child(4) {
+  left: 50%;
+  top: 30%;
 }
 
-.landing-button--light:hover {
-  background: var(--landing-organizers-ink);
-  filter: brightness(var(--hover-brightness));
+.landing-band__inner {
+  position: relative;
 }
 
-/* --- La bande Festivaliers ------------------------------------------------- */
-.landing-goers-wrap {
-  padding-bottom: var(--landing-goers-bottom);
+/* Les grands paragraphes : la première phrase pleine, la suite adoucie. */
+.landing-statement {
+  font: var(--type-landing-statement);
+  letter-spacing: var(--tracking-landing-statement);
+  color: var(--landing-ink-soft);
 }
 
-.landing-goers {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-32);
-  padding: var(--landing-goers-padding);
-  border-radius: var(--radius-landing-goers);
-  background: var(--landing-goers-surface);
+.landing-statement strong {
+  font-weight: inherit;
+  color: var(--landing-ink);
 }
 
-.landing-goers__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
-  max-width: var(--landing-split-column);
+.landing-band--earth .landing-statement,
+.landing-band--night .landing-statement {
+  color: var(--landing-gold-soft);
 }
 
-.landing-goers__title {
-  font: var(--type-landing-banner);
+.landing-band--earth .landing-statement strong,
+.landing-band--night .landing-statement strong {
+  color: var(--landing-cream);
 }
 
-.landing-goers__lead {
-  font: var(--type-landing-goers-lead);
-  color: var(--ink-soft);
+/* --- La fin ------------------------------------------------------------------ */
+.landing-end {
+  padding-bottom: var(--space-40);
 }
 
-.landing-goers__note {
-  flex-shrink: 0;
-  width: var(--landing-goers-note);
-  padding: var(--space-20);
-}
-
-@media (width <= 1280px) {
-  .landing-split__text,
-  .landing-split__cards {
-    flex: 1;
-    width: auto;
-  }
-
-  .landing-goers__note {
-    flex-shrink: 1;
-  }
-}
-
-/* --- L'appel final ------------------------------------------------------- */
 .landing-final {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--landing-final-gap);
-  padding-block: var(--landing-final-top) var(--landing-final-bottom);
+  gap: var(--space-26);
+  padding-block: var(--space-80) var(--space-150);
   text-align: center;
 }
 
 .landing-final__title {
   font: var(--type-landing-final);
-  letter-spacing: var(--tracking-landing-display);
+  letter-spacing: var(--tracking-landing-hero);
 }
 
 .landing-final__lead {
-  font: var(--type-landing-lead);
-  letter-spacing: var(--tracking-landing-lead);
-  color: var(--ink-soft);
+  font: var(--type-landing-final-lead);
+  color: var(--landing-cream-soft);
 }
 
-/* --- Le pied de page ----------------------------------------------------- */
+/* --- Le pied de page ----------------------------------------------------------- */
 .landing-foot {
-  display: flex;
-  padding-block: var(--landing-foot-top) var(--landing-foot-bottom);
+  border-top: 1px solid var(--landing-glass-line);
   font: var(--type-landing-foot);
-  color: var(--ink-soft);
+  color: var(--landing-cream-soft);
 }
 
-/* Le filet du haut ne court que sur la colonne, pas sous les gouttières. */
-.landing-foot__inner {
+.landing-foot__top {
   display: flex;
-  flex: 1;
-  align-items: center;
   justify-content: space-between;
-  gap: var(--landing-foot-gap);
-  padding-top: var(--landing-foot-inner-top);
-  border-top: 1px solid var(--line-card);
+  gap: var(--space-48);
+  padding-block: var(--space-56) var(--space-64);
 }
 
 .landing-foot__brand {
   display: flex;
-  align-items: center;
-  gap: var(--landing-foot-gap);
-  color: var(--ink-section-pale);
+  flex-direction: column;
+  gap: var(--space-16);
+  opacity: 0.85;
 }
 
-.landing-foot__rule {
-  width: 1px;
-  height: var(--landing-foot-rule-height);
-  background: var(--line-card);
+.landing-foot__name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  font: var(--type-landing-foot-brand);
+  color: var(--landing-cream);
+}
+
+.landing-foot__name img {
+  width: var(--landing-logo-width);
+  height: var(--landing-logo-height);
+}
+
+.landing-foot__links {
+  display: flex;
+  gap: var(--space-96);
+}
+
+.landing-foot__links div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.landing-foot__head {
+  font: var(--type-landing-foot-head);
+  opacity: 0.6;
+}
+
+.landing-foot a:hover {
+  color: var(--landing-cream);
+}
+
+.landing-foot__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--type-landing-small);
+  opacity: 0.7;
 }
 
 .landing-foot__rdc {
   display: flex;
   align-items: center;
-  gap: var(--landing-button-gap);
-  color: var(--ink-soft);
+  gap: var(--space-10);
 }
 
-.landing-foot__rdc img {
-  width: var(--landing-foot-mark);
-  height: var(--landing-foot-mark);
-}
-
-.landing-foot__rdc strong {
-  font-weight: var(--weight-semibold);
-  color: var(--ink-title);
-}
-
-.landing-foot__links {
-  display: flex;
-  gap: var(--landing-foot-links-gap);
-}
-
-.landing-foot a:hover {
-  color: var(--ink-title);
-}
-
-/* --- Téléphone ----------------------------------------------------------- */
-/* Entre le téléphone et l'écran large, cinq colonnes écraseraient les affiches : la rangée
-   défile, comme sur téléphone. */
-@media (width <= 1280px) {
-  .landing-festivals__row {
-    display: flex;
-    margin-inline: calc(-1 * var(--landing-gutter));
-    padding-inline: var(--landing-gutter);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--landing-gutter);
-  }
-
-  .landing-festivals__row > li {
-    flex: none;
-    width: var(--landing-festival-medium);
-    scroll-snap-align: start;
-  }
-}
-
+/* --- Téléphone ------------------------------------------------------------------ */
 @media (width <= 760px) {
   .landing-bar,
-  .landing-final,
-  .landing-foot,
-  .landing-section {
+  .landing-band__inner {
     padding-inline: var(--mobile-gutter);
   }
 
-  .landing-bar__anchors {
+  .landing-bar__anchors,
+  .landing-button--glass {
     display: none;
   }
 
-  .landing-foot__inner,
-  .landing-foot__brand {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .landing-foot__rule {
-    display: none;
-  }
-
-  .landing-hero {
-    padding-inline: var(--mobile-gutter);
-  }
-
-  .landing-marquee {
-    --landing-marquee-fade: var(--landing-marquee-fade-mobile);
-  }
-
-  .landing-hero__title {
-    font: var(--type-landing-hero-mobile);
-  }
-
-  /* Sur téléphone, la recherche se réduit à son premier champ et à la loupe. */
-  .landing-search {
-    width: 100%;
-  }
-
-  .landing-search__field--what {
-    flex: 1;
-    width: auto;
-  }
-
-  .landing-search__field--where,
-  .landing-search__field--when,
-  .landing-search__rule {
-    display: none;
-  }
-
-  .landing-festivals__head {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* La rangée défile à l'horizontale, comme les rangées de l'Explorer sur téléphone. */
-  .landing-festivals__row {
-    display: flex;
-    margin-inline: calc(-1 * var(--mobile-gutter));
-    padding-inline: var(--mobile-gutter);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--mobile-gutter);
-  }
-
-  .landing-festivals__row > li {
-    flex: none;
-    width: var(--landing-festival-mobile);
-    scroll-snap-align: start;
-  }
-
-  .landing-festival {
-    --poster-art-height: var(--landing-festival-mobile-poster);
-  }
-
-  .landing-display,
-  .landing-why__title {
-    font: var(--type-landing-display-mobile);
-  }
-
-  .landing-why {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .landing-why__head,
-  .landing-why__story {
-    width: auto;
-  }
-
-  .landing-why__story {
-    padding-top: var(--space-24);
-  }
-
-  .landing-features__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .landing-features {
-    padding-block: var(--space-64);
-  }
-
-  .landing-split__title {
-    font: var(--type-landing-display-mobile);
-  }
-
-  .landing-split {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-32);
-    padding-block: var(--space-64);
-  }
-
-  .landing-organizers,
-  .landing-goers {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: var(--space-32) var(--space-24);
-  }
-
-  .landing-organizers__title,
-  .landing-goers__title {
-    font: var(--type-landing-display-mobile);
-  }
-
-  .landing-goers__note {
-    width: 100%;
-  }
-
-  .landing-final {
-    padding-block: var(--landing-final-top) var(--space-80);
+  .landing-statement {
+    font: var(--type-landing-statement-mobile);
   }
 
   .landing-final__title {
-    font: var(--type-landing-display-mobile);
+    font: var(--type-landing-final-mobile);
   }
 
-  /* La frise garde ses quatre mois : ils se partagent la largeur. */
-  .landing-art__year {
-    width: 100%;
-    gap: var(--space-10);
+  .landing-foot__top,
+  .landing-foot__bottom {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .landing-art__year li {
-    flex: 1;
-    width: auto;
-  }
-}
-
-/* Sans animation, les catégories passent à la ligne : rien n'est caché sous le fondu, rien ne
-   défile dans la page. */
-@media (prefers-reduced-motion: reduce) {
-  .landing-marquee {
-    height: auto;
-    padding-block: var(--space-12);
-    mask-image: none;
-  }
-
-  .landing-marquee__track {
-    width: auto;
-    animation: none;
-    margin-inline: auto;
-    padding-inline: var(--landing-gutter);
-  }
-
-  .landing-marquee__list {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .landing-festival .poster-art,
-  .landing-button,
-  .landing-search__submit {
-    transition: none;
-  }
-
-  .landing-festival:hover .poster-art {
-    translate: none;
-  }
-
-  .landing-marquee__list[aria-hidden] {
-    display: none;
+  .landing-foot__links {
+    gap: var(--space-32);
   }
 }

@@ -24,12 +24,37 @@
   --sand-300: #ebe9e5; /* les filets */
   --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
   --sand-400: #dedad4; /* pointillés, « à remplir » */
-  --sand-500: #d3cec8;
-  --sand-380: #e1dcd5; /* les visages des vignettes de la landing */
-  --sand-430: #d8d3cc;
-  --sand-520: #c9c2b9;
-  --sand-600: #b9b1a7;
-  --brun-700: #564444; /* valeurs éteintes */
+  --sand-500: #d3cec8; /* valeurs éteintes */
+
+  /* ---------------------------------------------------------------------
+     PALETTE — FÊTE : la landing publique seule (maquette 2290:2, 14/10/2026).
+     Les terres du logo poussées vers la nuit d'un festival. Jamais dans l'app.
+     --------------------------------------------------------------------- */
+  --fete-950: #1e0e07; /* la nuit du bas de page */
+  --fete-900: #24110a;
+  --fete-850: #2b140b; /* le brun de l'ouverture */
+  --fete-800: #3a1a0d;
+  --fete-700: #5e2b16;
+  --fete-650: #6e3219;
+  --fete-500: #a5592a;
+  --fete-450: #a9592b;
+  --fete-300: #d79a55; /* l'ocre doré du bord de l'ouverture */
+  --fete-200: #e3a85f;
+  --fete-ink: #2b1a12; /* l'encre sur papier */
+  --fete-ink-soft: #9a8475; /* la suite adoucie des grands paragraphes */
+  --fete-ink-mute: #7a6152;
+  --fete-gold-soft: #d9b894; /* la suite adoucie sur fond sombre */
+  --fete-paper: #fbf3e8; /* le papier des bandes claires */
+  --fete-cream: #fff7ee;
+  --fete-cream-soft: #f3e6d6;
+  --fete-rule: #dccbb9;
+  --fete-highlight: #f7ece0; /* un champ rempli par l'assistant */
+  --fete-highlight-line: #ecd5bd;
+  --fete-face-1: #c98a5a; /* les visages de démonstration */
+  --fete-face-2: #a86f4c;
+  --fete-face-3: #d9a77a;
+  --fete-face-4: #8f5a3c;
+  --fete-face-5: #e2bf98;
 
   /* ---------------------------------------------------------------------
      PALETTE — ENCRE
@@ -134,11 +159,14 @@
   --size-40: 40px;
   --size-38: 38px;
   --size-44: 44px;
+  --size-46: 46px;
   --size-48: 48px;
   --size-52: 52px;
+  --size-54: 54px;
   --size-56: 56px;
   --size-60: 60px;
   --size-64: 64px;
+  --size-96: 96px;
   --size-72: 72px;
   --size-150: 150px; /* la grande date d'une carte sans affiche */
 
