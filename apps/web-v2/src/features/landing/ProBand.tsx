@@ -16,10 +16,10 @@ import { ForYouScreen } from './screens/ForYouScreen'
 /** Ce que donne le gratuit, puis ce que le Pro ajoute : résumés de la page /pro (PlanCard.tsx). */
 const FREE = [
   'Ton calendrier et tes dossiers sur 6 mois',
-  'L’Explorer sur tes 6 prochains mois',
+  'Trouve des dates sur tes 6 prochains mois',
   'Tes amis, l’activité du réseau et la communauté',
   'Les notes, les avis et les questions sur chaque festival',
-  'Ta vitrine, à intégrer sur ton site',
+  'Ton calendrier à synchroniser sur ton site',
 ]
 
 const PRO_ADDS = [
