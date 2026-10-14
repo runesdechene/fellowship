@@ -1267,7 +1267,7 @@
   --landing-wall-gap: var(--space-20);
   --landing-wall-poster-width: 220px;
   --landing-wall-poster-ratio: 220 / 310;
-  --landing-wall-rotate: 8deg;
+  --landing-wall-rotate: -8deg;
   --landing-wall-scroll: 120s; /* lent : on regarde les affiches, on ne les poursuit pas */
   --radius-landing-poster: var(--round-16);
   --radius-landing-card: 14px;
