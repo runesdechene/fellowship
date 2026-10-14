@@ -12,3 +12,7 @@ Un composant par section de la maquette `2027 — Landing`, dans son ordre.
 - `NextFestivals.tsx` — les cinq prochaines dates publiques, choisies par `lib/landing.ts`.
 - `WhyFellowship.tsx` — l'histoire, signée Uriel (texte validé le 08/10/2026).
 - `Features.tsx` — les six fonctions et leurs vignettes dessinées en HTML et CSS.
+- `Community.tsx` — « Tu n'y vas jamais seul. », une discussion dessinée.
+- `ProTeaser.tsx` — le Pro, son prix lu dans `lib/pricing.ts`.
+- `Organizers.tsx` — le bandeau sombre des organisateurs, « Nous écrire ».
+- `Festivalgoers.tsx` — la bande des festivaliers.

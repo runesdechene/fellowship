@@ -1344,6 +1344,55 @@
   --type-landing-art-month: var(--weight-regular) var(--size-20) / normal var(--family-display);
   --type-landing-art-score: var(--weight-regular) var(--size-44) / 1 var(--family-display);
   --type-landing-art-face: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
+
+  /* La communauté et le Pro (2154:2, 2104:145) : deux colonnes, texte et cartes */
+  --landing-split-padding: var(--space-96);
+  --landing-split-gap: var(--space-64);
+  --landing-split-text-gap: var(--space-16);
+  --landing-split-column: 560px;
+  --landing-split-cards: 522px;
+  --landing-note-padding: var(--space-16) var(--space-20);
+  --landing-note-gap: var(--space-6);
+  --radius-landing-note: var(--round-16);
+  --landing-thread-padding: var(--space-20);
+  --landing-thread-gap: var(--space-16);
+  --landing-thread-face: var(--space-32);
+  --landing-thread-face-ink: var(--brun-700);
+  --radius-landing-tabs: var(--round-10);
+  --radius-landing-tab: 7px;
+  --radius-landing-mute: var(--round-8);
+  --landing-large-padding: var(--space-14) var(--space-20) var(--space-14) 22px;
+  --type-landing-split-lead: var(--weight-regular) var(--size-17) / 1.55 var(--family-sans);
+  --type-landing-note-kicker: var(--weight-medium) var(--size-12) / normal var(--family-sans);
+  --type-landing-note-text: var(--weight-regular) var(--size-15) / var(--leading-normal)
+    var(--family-sans);
+  --type-landing-thread-title: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
+  --type-landing-tab: var(--weight-medium) var(--size-13) / normal var(--family-sans);
+  --type-landing-tab-on: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-price: var(--weight-regular) var(--size-14) / normal var(--family-sans);
+
+  /* Le bandeau Organisateurs (2104:166) : sombre dans les deux thèmes */
+  --landing-organizers-bottom: var(--space-96);
+  --landing-organizers-padding: var(--space-56);
+  --radius-landing-organizers: var(--round-28);
+  --landing-organizers-surface: var(--ink-950);
+  --landing-organizers-ink: var(--sand-0);
+  --landing-organizers-soft: var(--sand-430);
+  --landing-organizers-eyebrow: var(--ink-350);
+  --landing-organizers-image: url('/landing/accroche-flou.png');
+  --landing-organizers-image-opacity: 0.4;
+  --landing-organizers-lead-width: 620px;
+  --type-landing-banner: var(--weight-regular) var(--size-44) / normal var(--family-display);
+  --type-landing-banner-lead: var(--weight-regular) var(--size-16) / 1.55 var(--family-sans);
+  --tracking-landing-banner: -0.015em;
+
+  /* La bande Festivaliers (2154:34) */
+  --landing-goers-bottom: var(--space-96);
+  --landing-goers-padding: var(--space-48) var(--space-56);
+  --radius-landing-goers: var(--round-24);
+  --landing-goers-surface: var(--surface-chip-neutral);
+  --landing-goers-note: 462px;
+  --type-landing-goers-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
 }
 
 /* =========================================================================
@@ -1454,4 +1503,5 @@
   --activity-avatar-surface: var(--night-350);
   --tab-bar-active: var(--terre-400);
   --tag-first-ink: var(--night-0);
+  --landing-thread-face-ink: var(--cream-200); /* les initiales de la discussion dessinée */
 }

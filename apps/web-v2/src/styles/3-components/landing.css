@@ -729,6 +729,271 @@ input.landing-search__value {
   }
 }
 
+/* --- Deux colonnes : la communauté et le Pro ------------------------------- */
+.landing-split {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--landing-split-gap);
+  padding-block: var(--landing-split-padding);
+}
+
+.landing-split--centered {
+  align-items: center;
+}
+
+.landing-split__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--landing-split-text-gap);
+  width: var(--landing-split-column);
+}
+
+.landing-split__title {
+  font: var(--type-landing-display);
+  letter-spacing: var(--tracking-landing-title);
+}
+
+.landing-split__lead {
+  font: var(--type-landing-split-lead);
+  color: var(--ink-soft);
+}
+
+.landing-split__lead strong {
+  font-weight: var(--weight-bold);
+}
+
+.landing-split__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  width: var(--landing-split-cards);
+}
+
+.landing-pro__price {
+  font: var(--type-landing-price);
+  color: var(--ink-soft);
+}
+
+.landing-pro__price strong {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.landing-button--large {
+  margin-top: var(--space-8);
+  padding: var(--landing-large-padding);
+  border-radius: var(--radius-landing-brand);
+  font: var(--type-landing-brand);
+  letter-spacing: var(--tracking-landing-lead);
+}
+
+/* Une carte de notification dessinée */
+.landing-note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-note-gap);
+  padding: var(--landing-note-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-landing-note);
+  background: var(--surface-card);
+}
+
+.landing-note__kicker {
+  font: var(--type-landing-note-kicker);
+  color: var(--ink-section-pale);
+}
+
+.landing-note__text {
+  font: var(--type-landing-note-text);
+  color: var(--ink-title);
+}
+
+/* La discussion dessinée */
+.landing-thread {
+  gap: var(--landing-thread-gap);
+  padding: var(--landing-thread-padding);
+}
+
+.landing-thread__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing-thread__title {
+  font: var(--type-landing-thread-title);
+}
+
+.landing-thread__mute {
+  padding: var(--space-4) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-landing-mute);
+  font: var(--type-landing-note-kicker);
+  color: var(--ink-soft);
+}
+
+.landing-thread__tabs {
+  display: flex;
+  align-self: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-landing-tabs);
+  background: var(--landing-art-surface);
+}
+
+.landing-thread__tab {
+  padding: var(--space-6) var(--space-14);
+  border-radius: var(--radius-landing-tab);
+  font: var(--type-landing-tab);
+  color: var(--ink-soft);
+}
+
+.landing-thread__tab--on {
+  background: var(--surface-card);
+  font: var(--type-landing-tab-on);
+  color: var(--ink-title);
+}
+
+.landing-thread__message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.landing-thread__message .landing-note__kicker {
+  margin-bottom: var(--landing-card-text-gap);
+}
+
+.landing-thread__face {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--landing-thread-face);
+  height: var(--landing-thread-face);
+  border-radius: var(--radius-round);
+  background: var(--landing-art-surface);
+  font: var(--type-landing-art-strong);
+  color: var(--landing-thread-face-ink);
+}
+
+/* --- Le bandeau Organisateurs ---------------------------------------------- */
+.landing-organizers-wrap {
+  padding-bottom: var(--landing-organizers-bottom);
+}
+
+.landing-organizers {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-32);
+  padding: var(--landing-organizers-padding);
+  overflow: hidden;
+  border-radius: var(--radius-landing-organizers);
+  background: var(--landing-organizers-surface);
+  color: var(--landing-organizers-ink);
+}
+
+/* La photo provisoire : la même miniature floue que l'accroche, agrandie sans `filter`. */
+.landing-organizers::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--landing-organizers-image) center / cover;
+  opacity: var(--landing-organizers-image-opacity);
+}
+
+.landing-organizers__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.landing-organizers__eyebrow {
+  font: var(--type-landing-section-eyebrow);
+  color: var(--landing-organizers-eyebrow);
+}
+
+.landing-organizers__title {
+  font: var(--type-landing-banner);
+  letter-spacing: var(--tracking-landing-banner);
+}
+
+.landing-organizers__lead {
+  max-width: var(--landing-organizers-lead-width);
+  font: var(--type-landing-banner-lead);
+  color: var(--landing-organizers-soft);
+}
+
+/* Le bouton clair du bandeau : clair dans les deux thèmes, comme le bandeau reste sombre. */
+.landing-button--light {
+  flex-shrink: 0;
+  padding: var(--landing-large-padding);
+  border: 0;
+  border-radius: var(--radius-landing-brand);
+  background: var(--landing-organizers-ink);
+  color: var(--landing-organizers-surface);
+  font: var(--type-landing-brand);
+  letter-spacing: var(--tracking-landing-lead);
+}
+
+.landing-button--light:hover {
+  background: var(--landing-organizers-ink);
+  filter: brightness(var(--hover-brightness));
+}
+
+/* --- La bande Festivaliers ------------------------------------------------- */
+.landing-goers-wrap {
+  padding-bottom: var(--landing-goers-bottom);
+}
+
+.landing-goers {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-32);
+  padding: var(--landing-goers-padding);
+  border-radius: var(--radius-landing-goers);
+  background: var(--landing-goers-surface);
+}
+
+.landing-goers__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  max-width: var(--landing-split-column);
+}
+
+.landing-goers__title {
+  font: var(--type-landing-banner);
+}
+
+.landing-goers__lead {
+  font: var(--type-landing-goers-lead);
+  color: var(--ink-soft);
+}
+
+.landing-goers__note {
+  flex-shrink: 0;
+  width: var(--landing-goers-note);
+  padding: var(--space-20);
+}
+
+@media (width <= 1280px) {
+  .landing-split__text,
+  .landing-split__cards {
+    flex: 1;
+    width: auto;
+  }
+
+  .landing-goers__note {
+    flex-shrink: 1;
+  }
+}
+
 /* --- L'appel final ------------------------------------------------------- */
 .landing-final {
   display: flex;
@@ -909,5 +1174,32 @@ input.landing-search__value {
 
   .landing-features {
     padding-block: var(--space-64);
+  }
+
+  .landing-split__title {
+    font: var(--type-landing-display-mobile);
+  }
+
+  .landing-split {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-32);
+    padding-block: var(--space-64);
+  }
+
+  .landing-organizers,
+  .landing-goers {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-32) var(--space-24);
+  }
+
+  .landing-organizers__title,
+  .landing-goers__title {
+    font: var(--type-landing-display-mobile);
+  }
+
+  .landing-goers__note {
+    width: 100%;
   }
 }
