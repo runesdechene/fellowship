@@ -1,6 +1,7 @@
 /**
- * QUOI     — les routes de la V2 et leurs gardes : connexion, arrivée, tableau de bord, calendrier, création,
- *            fiche, avis, explorer, bilans, offre Pro, réglages, vitrine.
+ * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte, sur `/`), connexion, arrivée,
+ *            tableau de bord, calendrier, création, fiche, avis, explorer, bilans, offre Pro,
+ *            réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
  *            l'arrivée (lot 10a).
@@ -16,6 +17,7 @@ import { HistoryPage } from '@/features/event-history/HistoryPage'
 import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
+import { LandingPage } from '@/features/landing/LandingPage'
 import { ProPage } from '@/features/pro/ProPage'
 import { ReportPage } from '@/features/reports/ReportPage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
@@ -30,11 +32,12 @@ import { safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
 import { useEffect, type ReactNode } from 'react'
 
-/** La garde d'accès seule : la V2 n'ouvre qu'aux admins et au rôle `v2` jusqu'à la bascule (lot 12). */
-function AccessRoute({ children }: { children: ReactNode }) {
+/** La garde d'accès seule : la V2 n'ouvre qu'aux admins et au rôle `v2` jusqu'à la bascule (lot 12).
+ *  `guest` remplace la connexion pour un visiteur sans compte (la landing, sur `/`). */
+function AccessRoute({ children, guest }: { children: ReactNode; guest?: ReactNode }) {
   const decision = useV2Access()
   if (decision === 'wait') return null
-  if (decision === 'login') return <Navigate to="/connexion" replace />
+  if (decision === 'login') return guest ?? <Navigate to="/connexion" replace />
   if (decision === 'leave') return <LeaveToV1 />
   return <>{children}</>
 }
@@ -51,9 +54,9 @@ function WelcomeGate({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-function ProtectedRoute({ children }: { children: ReactNode }) {
+function ProtectedRoute({ children, guest }: { children: ReactNode; guest?: ReactNode }) {
   return (
-    <AccessRoute>
+    <AccessRoute guest={guest}>
       <WelcomeGate>{children}</WelcomeGate>
     </AccessRoute>
   )
@@ -105,7 +108,7 @@ export function App() {
       <Route
         path="/"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute guest={<LandingPage />}>
             <AppShell>
               <Dashboard />
             </AppShell>

@@ -1188,6 +1188,38 @@
   --vitrine-mobile-banner: 160px;
   --vitrine-mobile-logo: 96px;
   --type-tab-bar: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
+  /* --- La landing publique (lot 11a, maquette 2104:2) --------------------- */
+  --landing-surface: var(--surface-panel); /* le fond de la maquette, #fcfbf9 */
+  --landing-width: 1344px; /* 1728 moins deux marges de 192 */
+  --landing-gutter: var(--space-32);
+  --landing-bar-padding-y: var(--space-24);
+  --landing-bar-gap: var(--space-32);
+  --landing-logo-width: 43px;
+  --landing-logo-height: 37px;
+  --landing-button-padding: 9px var(--space-16);
+  --landing-button-gap: var(--space-8);
+  --radius-landing-button: var(--round-10);
+  --landing-brand-padding: var(--space-14) var(--space-20) var(--space-14) 22px;
+  --radius-landing-brand: var(--round-12);
+  --landing-final-top: var(--space-48);
+  --landing-final-bottom: 120px;
+  --landing-final-gap: var(--space-24);
+  --landing-foot-top: var(--space-28);
+  --landing-foot-bottom: var(--space-40);
+  --landing-foot-gap: var(--space-16);
+  --landing-foot-inner-top: var(--space-28);
+  --landing-foot-links-gap: var(--space-24);
+  --landing-foot-rule-height: 16px;
+  --landing-foot-mark: 22px;
+  --tracking-landing-display: -0.025em;
+  --tracking-landing-lead: -0.01em;
+  --type-landing-anchor: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --type-landing-button: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-brand: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
+  --type-landing-final: var(--weight-regular) var(--size-72) / 1.05 var(--family-display);
+  --type-landing-lead: var(--weight-regular) var(--size-18) / var(--leading-normal)
+    var(--family-sans);
+  --type-landing-foot: var(--weight-regular) var(--size-13) / normal var(--family-sans);
 }
 
 /* =========================================================================

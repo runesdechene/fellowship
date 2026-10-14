@@ -1,6 +1,7 @@
 # features — un dossier par écran
 
 - `dashboard/` — le tableau de bord (`/`).
+- `landing/` — la landing publique (`/`, sans compte).
 - `event/` — la fiche d’un événement (`/evenement/:id`).
 - `event-create/` — la création d’un événement (`/evenement/nouveau`).
 - `community/` — la Communauté (`/communaute`).

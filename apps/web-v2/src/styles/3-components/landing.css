@@ -1,0 +1,202 @@
+/**
+ * QUOI     — la landing publique (features/landing/) : la page, la barre du haut, les boutons,
+ *            l'appel final et le pied ; les sections s'ajoutent en dessous, dans l'ordre.
+ * POURQUOI — maquette `2027 — Landing` (2104:2), une colonne de 1344 px centrée.
+ * ATTENTION — `--landing-surface` est le fond de la page entière : la landing n'a pas la coquille
+ *            de l'app (barre latérale, panneau).
+ */
+
+.landing {
+  min-height: 100dvh;
+  background: var(--landing-surface);
+  color: var(--ink-title);
+}
+
+/* Chaque bloc pose sa propre colonne, centrée, avec ses gouttières. */
+.landing-bar,
+.landing-final,
+.landing-foot,
+.landing-section {
+  width: min(100%, calc(var(--landing-width) + 2 * var(--landing-gutter)));
+  margin-inline: auto;
+  padding-inline: var(--landing-gutter);
+}
+
+/* --- La barre du haut ---------------------------------------------------- */
+.landing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--landing-bar-gap);
+  padding-block: var(--landing-bar-padding-y);
+}
+
+.landing-bar__logo {
+  width: var(--landing-logo-width);
+  height: var(--landing-logo-height);
+  object-fit: cover;
+}
+
+.landing-bar__anchors {
+  display: flex;
+  gap: var(--landing-bar-gap);
+  font: var(--type-landing-anchor);
+  color: var(--ink-soft);
+}
+
+.landing-bar__anchors a:hover {
+  color: var(--ink-title);
+}
+
+.landing-bar__actions {
+  display: flex;
+  gap: var(--landing-button-gap);
+}
+
+/* --- Les boutons de la landing ------------------------------------------- */
+.landing-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--landing-button-gap);
+  padding: var(--landing-button-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-landing-button);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  font: var(--type-landing-button);
+  white-space: nowrap;
+  transition: background var(--menu-motion);
+}
+
+.landing-button:hover {
+  background: var(--surface-control-hover);
+}
+
+.landing-button--dark {
+  border-color: transparent;
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.landing-button--dark:hover {
+  background: var(--action-surface-hover);
+}
+
+/* L'exception de la landing : le dernier appel porte le dégradé du logo. */
+.landing-button--brand {
+  padding: var(--landing-brand-padding);
+  border: 0;
+  border-radius: var(--radius-landing-brand);
+  background: var(--brand-gradient);
+  color: var(--brand-ink);
+  font: var(--type-landing-brand);
+  letter-spacing: var(--tracking-landing-lead);
+}
+
+.landing-button--brand:hover {
+  background: var(--brand-gradient);
+  filter: brightness(var(--hover-brightness));
+}
+
+/* --- L'appel final ------------------------------------------------------- */
+.landing-final {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--landing-final-gap);
+  padding-block: var(--landing-final-top) var(--landing-final-bottom);
+  text-align: center;
+}
+
+.landing-final__title {
+  font: var(--type-landing-final);
+  letter-spacing: var(--tracking-landing-display);
+}
+
+.landing-final__lead {
+  font: var(--type-landing-lead);
+  letter-spacing: var(--tracking-landing-lead);
+  color: var(--ink-soft);
+}
+
+/* --- Le pied de page ----------------------------------------------------- */
+.landing-foot {
+  display: flex;
+  padding-block: var(--landing-foot-top) var(--landing-foot-bottom);
+  font: var(--type-landing-foot);
+  color: var(--ink-soft);
+}
+
+/* Le filet du haut ne court que sur la colonne, pas sous les gouttières. */
+.landing-foot__inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--landing-foot-gap);
+  padding-top: var(--landing-foot-inner-top);
+  border-top: 1px solid var(--line-card);
+}
+
+.landing-foot__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--landing-foot-gap);
+  color: var(--ink-section-pale);
+}
+
+.landing-foot__rule {
+  width: 1px;
+  height: var(--landing-foot-rule-height);
+  background: var(--line-card);
+}
+
+.landing-foot__rdc {
+  display: flex;
+  align-items: center;
+  gap: var(--landing-button-gap);
+  color: var(--ink-soft);
+}
+
+.landing-foot__rdc img {
+  width: var(--landing-foot-mark);
+  height: var(--landing-foot-mark);
+}
+
+.landing-foot__rdc strong {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.landing-foot__links {
+  display: flex;
+  gap: var(--landing-foot-links-gap);
+}
+
+.landing-foot a:hover {
+  color: var(--ink-title);
+}
+
+/* --- Téléphone ----------------------------------------------------------- */
+@media (width <= 760px) {
+  .landing-bar,
+  .landing-final,
+  .landing-foot,
+  .landing-section {
+    padding-inline: var(--mobile-gutter);
+  }
+
+  .landing-bar__anchors {
+    display: none;
+  }
+
+  .landing-foot__inner,
+  .landing-foot__brand {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .landing-foot__rule {
+    display: none;
+  }
+}
