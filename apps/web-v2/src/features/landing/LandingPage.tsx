@@ -9,6 +9,7 @@ import { AssistantBand } from './AssistantBand'
 import { CommunityBand } from './CommunityBand'
 import { FinalCall } from './FinalCall'
 import { Opening } from './Opening'
+import { SoonBand } from './SoonBand'
 import { useLandingShowcase } from './useLandingShowcase'
 
 export function LandingPage() {
@@ -21,6 +22,7 @@ export function LandingPage() {
       <main>
         <AssistantBand showcase={showcase} />
         <CommunityBand showcase={showcase} />
+        <SoonBand showcase={showcase} />
       </main>
       <FinalCall posters={posters} />
     </div>

@@ -547,3 +547,269 @@
   flex: 1;
   min-width: 0;
 }
+
+/* --- La légende au-dessus d'un visuel ---------------------------------------------------- */
+.landing-caption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-20);
+  font: var(--type-landing-caption);
+  color: var(--landing-caption-ink);
+}
+
+.landing-caption::before {
+  content: '';
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-terre);
+}
+
+/* --- L'inscription en un clic ------------------------------------------------------------- */
+.landing-oneclick__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  width: var(--landing-oneclick-width);
+  padding: var(--space-12) var(--space-12) var(--space-18);
+  border: 1px solid var(--landing-paper-line);
+  border-radius: var(--round-20);
+  background: var(--landing-paper-card);
+  box-shadow: var(--landing-card-shadow);
+}
+
+.landing-oneclick__card > img {
+  width: 100%;
+  aspect-ratio: 306 / 200;
+  border-radius: var(--round-12);
+  object-fit: cover;
+}
+
+.landing-oneclick__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-inline: var(--space-6);
+  font: var(--type-landing-card-text);
+  color: var(--landing-ink-mute);
+}
+
+.landing-oneclick__body strong {
+  font: var(--type-landing-card-name);
+  color: var(--landing-ink);
+}
+
+.landing-oneclick__ready {
+  margin-top: var(--space-4);
+  font: var(--type-landing-card-label);
+  color: var(--landing-ink-soft);
+}
+
+.landing-oneclick__check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.landing-oneclick__check svg {
+  color: var(--landing-check);
+}
+
+.landing-oneclick__button {
+  padding: var(--space-12);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-ink);
+  font: var(--type-landing-button);
+  color: var(--landing-cream);
+  text-align: center;
+}
+
+/* --- Le dossier PDF ------------------------------------------------------------------------ */
+.landing-pdf__sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  width: var(--landing-pdf-width);
+  padding: var(--space-32) var(--space-40);
+  border: 1px solid var(--landing-paper-line);
+  border-radius: var(--round-6);
+  background: var(--landing-paper-card);
+  box-shadow: var(--landing-card-shadow);
+}
+
+.landing-pdf__done {
+  position: absolute;
+  top: calc(-1 * var(--space-18));
+  right: calc(-1 * var(--space-28));
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-16);
+  border: 1px solid var(--landing-paper-line);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-paper-card);
+  font: var(--type-landing-caption);
+  color: var(--landing-ink);
+  box-shadow: var(--landing-card-shadow);
+}
+
+.landing-pdf__done i {
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-landing-pill);
+  background: var(--brand-gradient);
+}
+
+.landing-pdf__kicker {
+  font: var(--type-landing-pdf-kicker);
+  letter-spacing: var(--tracking-landing-kicker);
+  text-transform: uppercase;
+  color: var(--landing-app-pale);
+}
+
+.landing-pdf__title {
+  padding-bottom: var(--space-14);
+  border-bottom: 1px solid var(--landing-paper-line-soft);
+  font: var(--type-landing-pdf-title);
+  color: var(--landing-ink);
+}
+
+.landing-pdf__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  font: var(--type-landing-card-text);
+  color: var(--landing-app-soft);
+}
+
+.landing-pdf__field strong {
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--landing-paper-line);
+  border-radius: var(--round-6);
+  background: var(--landing-highlight);
+  font: var(--type-landing-pdf-value);
+  color: var(--landing-highlight-ink);
+}
+
+.landing-pdf__field--empty strong {
+  border-color: var(--landing-paper-line-soft);
+  background: var(--landing-paper-card);
+  font-weight: var(--weight-regular);
+  color: var(--landing-app-pale);
+}
+
+/* --- L'assistant parti à la chasse ---------------------------------------------------------- */
+.landing-shot--hunt .landing-app__main {
+  padding: 0;
+}
+
+.landing-hunt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  padding: var(--space-28) var(--space-32);
+}
+
+.landing-hunt__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font: var(--type-landing-hunt-title);
+}
+
+.landing-hunt__title i {
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-landing-pill);
+  background: var(--brand-gradient);
+}
+
+.landing-hunt__criteria {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.landing-hunt__criteria span {
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-chip);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-hunt__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-12) var(--space-14);
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--round-14);
+}
+
+.landing-hunt__row img,
+.landing-hunt__row i {
+  flex-shrink: 0;
+  width: var(--landing-hunt-thumb-width);
+  height: var(--landing-hunt-thumb-height);
+  border-radius: var(--round-8);
+  background: var(--landing-app-chip);
+  object-fit: cover;
+}
+
+.landing-hunt__row > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.landing-hunt__row strong {
+  overflow: hidden;
+  font: var(--type-landing-app-strong-s);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-hunt__row small {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-hunt__source {
+  color: var(--landing-app-pale);
+}
+
+.landing-hunt__add {
+  padding: var(--space-8) var(--space-14);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-ink);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-card);
+}
+
+.landing-hunt__row--ghost {
+  border-color: transparent;
+  background: var(--landing-app-chip);
+}
+
+.landing-hunt__row--ghost i {
+  background: var(--landing-app-line);
+}
+
+.landing-hunt__row--ghost b {
+  display: block;
+  height: var(--space-10);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-line);
+}
+
+.landing-hunt__row--ghost b:first-child {
+  width: 60%;
+}
+
+.landing-hunt__row--ghost b:last-child {
+  width: 40%;
+}

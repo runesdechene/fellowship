@@ -495,6 +495,53 @@ input.landing-search__value::placeholder {
   left: calc(var(--landing-gutter) + var(--landing-community-who-left));
 }
 
+/* --- La bande « Bientôt · Pro » ------------------------------------------------------ */
+.landing-seal {
+  display: inline-block;
+  padding: var(--space-6) var(--space-14);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-ink);
+  font: var(--type-landing-button);
+  color: var(--landing-cream);
+}
+
+.landing-statement--s {
+  font: var(--type-landing-statement-s);
+}
+
+.landing-soon__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-28);
+}
+
+.landing-soon__dossiers {
+  display: grid;
+  grid-template-columns: var(--landing-soon-text) var(--landing-oneclick-width) var(
+      --landing-pdf-width
+    );
+  justify-content: space-between;
+  align-items: start;
+  padding-top: var(--space-48);
+}
+
+.landing-soon__dossiers .landing-oneclick {
+  margin-top: var(--landing-oneclick-top);
+}
+
+.landing-soon__hunt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-64);
+  margin-top: var(--space-96);
+}
+
+.landing-soon__hunt .landing-soon__text {
+  max-width: var(--landing-hunt-text);
+}
+
 /* --- La fin ------------------------------------------------------------------ */
 .landing-end {
   padding-bottom: var(--space-40);
@@ -694,6 +741,25 @@ input.landing-search__value::placeholder {
   }
 
   .landing-who {
+    width: 100%;
+  }
+
+  .landing-soon__dossiers {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-40);
+  }
+
+  .landing-soon__dossiers .landing-oneclick {
+    margin-top: 0;
+  }
+
+  .landing-soon__hunt {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .landing-pdf__sheet,
+  .landing-oneclick__card {
     width: 100%;
   }
 }

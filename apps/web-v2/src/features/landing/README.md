@@ -13,3 +13,4 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `AssistantBand.tsx` — « Mon assistant de festivals », avec le Calendrier et le Tableau de bord.
 - `screens/` — les écrans de l'app reproduits pour la landing, dans une fenêtre (`AppWindow`).
 - `CommunityBand.tsx` — « Ma communauté d'exposants », avec l'écran Communauté et « Qui y va ».
+- `SoonBand.tsx` — « Bientôt · Pro » : l'inscription en un clic, le dossier PDF, la veille.
