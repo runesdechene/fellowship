@@ -33,7 +33,8 @@
 | Page d'un organisateur | — | **pas maintenant** : les organisateurs ne peuvent pas encore créer de compte |
 | Connexion (e-mail, code) | `2027 — Connexion`, `2027 — Connexion · code` | validé, intégré (lot 10a, 11/10/2026) — la V2 crée aussi les comptes ; mur aux vrais chiffres |
 | Arrivée d'un exposant | `2027 — Bienvenue · ta marque (étape 1)` (`2102:72`), `… · ton prénom (étape 2)` (`2244:2`), `… · ton adresse` (`2244:53`) | validé, intégré (lot 10a, 11/10/2026) — la marque d'abord, puis le prénom avec l'aperçu « X de Marque » ; l'écran du choix est **écarté** |
-| Landing publique | `2027 — Landing` (`2104:2`) | validé, intégré (lot 11a, 14/10/2026) — sous `flw.sh/v2/` pour les visiteurs sans compte ; annuaire public en 11b, photos de marché plus tard |
+| Landing publique | `2027 — Landing (validée le 14/10/2026)` (`2290:2`) | **validé le 14/10/2026, à intégrer** (lot 11c) — nouvelle direction : ouverture en mur d'affiches incliné sur fond chaud, bandes penchées qui s'emboîtent (assistant, communauté, « Bientôt · Pro » : dossiers et agent, Pro, fin), vrais écrans de l'app. Le code de la 11a suit l'ancien cadre `2104:2`, remplacé |
+| Recherche publique | `2027 — Recherche publique (validée le 14/10/2026)` (`2314:2`) | **validé le 14/10/2026, à intégrer** (lot 11b) — 3 mois sans compte, bande « N festivals de plus t'attendent après {mois} » |
 | Écrire un avis | `2027 — Écrire un avis` | dessiné |
 | Modifier un événement | `2027 — Modifier un événement` (`2117:2`), `2027 — L'histoire de la fiche` (`2253:2`), `… · une version` (`2253:299`), `2027 — Fiche · modifier et infos manquantes` (`2256:2`) | validé, intégré (lot 10c, 12/10/2026) — bascule Fiche / Carte masquée (lot 13) ; « Un mot sur ta modification » ajouté à la maquette |
 | Mobile — tableau de bord, calendrier, fiche, Explorer | `2027 mobile — …` (rangée sous les écrans ordinateur) | dessiné |
