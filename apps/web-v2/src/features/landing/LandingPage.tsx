@@ -7,11 +7,12 @@
 import { FinalCall } from './FinalCall'
 import { Hero } from './Hero'
 import { LandingTopBar } from './LandingTopBar'
+import { NextFestivals } from './NextFestivals'
 import { TypeMarquee } from './TypeMarquee'
 import { useLanding } from './useLanding'
 
 export function LandingPage() {
-  const { tags } = useLanding()
+  const { tags, festivals } = useLanding()
 
   return (
     <div className="landing">
@@ -22,6 +23,7 @@ export function LandingPage() {
       </div>
       <main>
         <TypeMarquee tags={tags} />
+        <NextFestivals festivals={festivals} />
       </main>
       <FinalCall />
     </div>

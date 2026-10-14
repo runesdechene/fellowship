@@ -304,6 +304,83 @@ input.landing-search__value {
   }
 }
 
+/* --- Les prochains festivals ----------------------------------------------- */
+.landing-festivals {
+  padding-block: var(--landing-festivals-top) var(--landing-festivals-bottom);
+}
+
+.landing-festivals__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--landing-festivals-head-gap);
+  padding-bottom: var(--landing-festivals-head-gap);
+}
+
+.landing-festivals__title {
+  font: var(--type-landing-section);
+  letter-spacing: var(--tracking-landing-section);
+}
+
+.landing-festivals__lead {
+  margin-top: var(--space-4);
+  font: var(--type-landing-section-lead);
+  letter-spacing: var(--tracking-landing-lead);
+  color: var(--ink-soft);
+}
+
+.landing-festivals__all {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-landing-link);
+}
+
+.landing-festivals__row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--landing-festivals-gap);
+}
+
+.landing-festival {
+  --poster-art-height: var(--landing-festival-poster);
+  --radius-card: var(--radius-landing-poster);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.landing-festival .poster-art {
+  transition: translate var(--duration-smooth) var(--ease-soft);
+}
+
+/* Pas d'avatars sur la landing : le voile du pied, qui les porte, n'a rien à porter. */
+.landing-festival .poster-art::after {
+  display: none;
+}
+
+.landing-festival:hover .poster-art {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.landing-festival__name {
+  font: var(--type-landing-card-name);
+  letter-spacing: var(--tracking-landing-lead);
+}
+
+.landing-festival__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-card-text-gap);
+}
+
+.landing-festival__meta {
+  font: var(--type-landing-card-meta);
+  color: var(--ink-soft);
+}
+
 /* --- L'appel final ------------------------------------------------------- */
 .landing-final {
   display: flex;
@@ -432,5 +509,30 @@ input.landing-search__value {
   .landing-search__field--when,
   .landing-search__rule {
     display: none;
+  }
+
+  .landing-festivals__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* La rangée défile à l'horizontale, comme les rangées de l'Explorer sur téléphone. */
+  .landing-festivals__row {
+    display: flex;
+    margin-inline: calc(-1 * var(--mobile-gutter));
+    padding-inline: var(--mobile-gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--mobile-gutter);
+  }
+
+  .landing-festivals__row > li {
+    flex: none;
+    width: var(--landing-festival-mobile);
+    scroll-snap-align: start;
+  }
+
+  .landing-festival {
+    --poster-art-height: var(--landing-festival-mobile-poster);
   }
 }

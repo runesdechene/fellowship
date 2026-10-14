@@ -1262,6 +1262,23 @@
   --landing-chip-padding: 9px var(--space-16) 9px var(--space-14);
   --landing-chip-gap: var(--space-8);
   --type-landing-chip: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+
+  /* Les prochains festivals (2104:40) */
+  --landing-festivals-top: var(--space-24);
+  --landing-festivals-bottom: var(--space-96);
+  --landing-festivals-head-gap: var(--space-24);
+  --landing-festivals-gap: var(--space-24);
+  --landing-festival-poster: 334px;
+  --landing-festival-mobile: 200px;
+  --landing-festival-mobile-poster: 268px;
+  --radius-landing-poster: 14px;
+  --tracking-landing-section: -0.025em;
+  --type-landing-section: var(--weight-semibold) var(--size-28) / normal var(--family-sans);
+  --type-landing-section-lead: var(--weight-regular) var(--size-15) / normal var(--family-sans);
+  --type-landing-link: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --type-landing-card-name: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
+  --type-landing-card-meta: var(--weight-regular) var(--size-13) / normal var(--family-sans);
+  --landing-card-text-gap: 3px;
 }
 
 /* =========================================================================

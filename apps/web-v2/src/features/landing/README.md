@@ -9,3 +9,4 @@ Un composant par section de la maquette `2027 — Landing`, dans son ordre.
 - `FinalCall.tsx` — « Ton prochain stand commence ici. » et le pied de page.
 - `Hero.tsx` — l'accroche et la recherche (qui mène à la connexion jusqu'au lot 11b).
 - `TypeMarquee.tsx` — le défilé des catégories, dans leurs couleurs de la base.
+- `NextFestivals.tsx` — les cinq prochaines dates publiques, choisies par `lib/landing.ts`.
