@@ -29,8 +29,9 @@ Personne d'anonyme ne passe par `/v2/` avant la bascule : 11a seul est relisable
 | Session avec accès V2     | le tableau de bord (inchangé)     |
 | Session sans accès V2     | renvoyé vers la V1 (inchangé)     |
 
-Le changement vit dans la garde (`lib/access.ts`), en fonction pure testée : sur `/`, « pas de
-session » rend « landing » au lieu de « connexion ». `/connexion` ne change pas.
+La décision de la garde (`lib/access.ts`) ne change pas : elle répond toujours « connexion » sans
+session. C'est la route `/` qui en fait autre chose : sa garde (`AccessRoute`, `App.tsx`) reçoit
+la landing à montrer à la place de la redirection. `/connexion` ne change pas.
 
 ## La page
 
@@ -100,8 +101,8 @@ bascule.
 
 ## Tests
 
-- Fonctions pures, vitest : la décision de la garde pour `/` sans session ; la sélection des
-  prochains festivals (tri, affiche d'abord, « Nouveau », « Populaire » et son seuil).
+- Fonction pure, vitest : la sélection des prochains festivals (tri, affiche d'abord, lieu,
+  « Nouveau », « Populaire », son seuil et l'égalité). La route se vérifie dans le navigateur.
 - Navigateur, `pnpm dev:v2` sans être connecté : chaque section contre la maquette, clair et
   sombre, ordinateur et téléphone, chaque lien.
 - Puis lint, tests, build, déploiement de la V2 (`.claude/rules/deploiement.md`).
