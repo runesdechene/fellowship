@@ -1253,6 +1253,50 @@
   --type-landing-small: var(--weight-regular) var(--size-13) / normal var(--family-sans);
   --type-landing-statement-mobile: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-landing-final-mobile: var(--weight-regular) var(--size-52) / 1 var(--family-display);
+
+  /* L'ouverture (2290:3) */
+  --landing-opening-height: 1000px;
+  --landing-opening-top: 130px;
+  --landing-opening-title-width: 780px;
+  --landing-opening-lead-width: 560px;
+  --type-landing-hero: var(--weight-regular) var(--size-80) / 0.98 var(--family-display);
+  --type-landing-hero-mobile: var(--weight-regular) var(--size-44) / 1 var(--family-display);
+  --type-landing-lead: var(--weight-regular) var(--size-19) / 1.5 var(--family-sans);
+  --landing-wall-top: 260px;
+  --landing-wall-left: 52%;
+  --landing-wall-gap: var(--space-20);
+  --landing-wall-poster-width: 220px;
+  --landing-wall-poster-ratio: 220 / 310;
+  --landing-wall-rotate: 8deg;
+  --landing-wall-scroll: 120s; /* lent : on regarde les affiches, on ne les poursuit pas */
+  --radius-landing-poster: var(--round-16);
+  --radius-landing-card: 14px;
+  --landing-poster-shadow: 0 18px 36px color-mix(in srgb, var(--fete-950) 35%, transparent);
+  --landing-face-s: 30px;
+  --landing-face-m: 34px;
+  --landing-face-overlap: -10px;
+  --landing-face-ring: 3px;
+  --landing-face-ring-color: var(--fete-700);
+  --landing-face-1: var(--fete-face-1);
+  --landing-face-2: var(--fete-face-2);
+  --landing-face-3: var(--fete-face-3);
+  --landing-face-4: var(--fete-face-4);
+  --landing-face-5: var(--fete-face-5);
+  --type-landing-face: var(--weight-semibold) var(--size-12) / 1 var(--family-sans);
+  --type-landing-goer-who: var(--weight-medium) var(--size-11) / normal var(--family-sans);
+  --type-landing-goer: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-proof: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --landing-cream-paper: var(--sand-0);
+  --landing-terre: var(--terre-700);
+  --landing-search-shadow: 0 20px 40px color-mix(in srgb, var(--fete-950) 30%, transparent);
+  --landing-search-line: var(--sand-300);
+  --landing-search-placeholder: var(--ink-350);
+  --landing-search-what: 260px;
+  --landing-search-where: 180px;
+  --landing-search-when: 200px;
+  --type-landing-search-label: var(--weight-semibold) var(--size-12) / normal var(--family-sans);
+  --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
+  --landing-mobile-wall: 440px;
 }
 
 /* =========================================================================

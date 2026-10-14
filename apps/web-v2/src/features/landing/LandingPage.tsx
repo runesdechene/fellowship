@@ -6,7 +6,7 @@
  * ATTENTION — l'ordre des bandes est celui de la maquette ; elles s'emboîtent de biais.
  */
 import { FinalCall } from './FinalCall'
-import { LandingTopBar } from './LandingTopBar'
+import { Opening } from './Opening'
 import { useLandingShowcase } from './useLandingShowcase'
 
 export function LandingPage() {
@@ -15,9 +15,7 @@ export function LandingPage() {
 
   return (
     <div className="landing">
-      <div className="landing-opening">
-        <LandingTopBar />
-      </div>
+      <Opening showcase={showcase} />
       <main />
       <FinalCall posters={posters} />
     </div>

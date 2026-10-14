@@ -26,9 +26,254 @@
 .landing-opening {
   position: relative;
   isolation: isolate;
+  min-height: var(--landing-opening-height);
   overflow: hidden;
   background: var(--landing-warm);
   color: var(--landing-cream);
+}
+
+/* Le fond reprend la main à gauche, et sous la barre, pour que le texte respire. */
+.landing-opening__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--landing-veil-top), var(--landing-veil-left);
+  pointer-events: none;
+}
+
+.landing-opening__text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-28);
+  width: min(100%, calc(var(--landing-width) + 2 * var(--landing-gutter)));
+  margin-inline: auto;
+  padding: var(--landing-opening-top) var(--landing-gutter) var(--space-150);
+}
+
+.landing-opening__title {
+  max-width: var(--landing-opening-title-width);
+  font: var(--type-landing-hero);
+  letter-spacing: var(--tracking-landing-hero);
+}
+
+.landing-opening__lead {
+  max-width: var(--landing-opening-lead-width);
+  font: var(--type-landing-lead);
+  color: var(--landing-cream-soft);
+}
+
+/* --- Le mur d'affiches -------------------------------------------------------- */
+.landing-wall {
+  position: absolute;
+  top: calc(-1 * var(--landing-wall-top));
+  left: var(--landing-wall-left);
+  z-index: -2;
+  height: calc(100% + 2 * var(--landing-wall-top));
+}
+
+.landing-wall__tilt {
+  display: flex;
+  gap: var(--landing-wall-gap);
+  height: 100%;
+  rotate: var(--landing-wall-rotate);
+}
+
+.landing-wall__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-wall-gap);
+  width: var(--landing-wall-poster-width);
+  animation: landing-wall-scroll var(--landing-wall-scroll) linear infinite;
+}
+
+.landing-wall__column:nth-child(even) {
+  animation-direction: reverse;
+}
+
+.landing-wall__copy {
+  display: contents;
+}
+
+.landing-wall__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.landing-wall__poster {
+  width: 100%;
+  aspect-ratio: var(--landing-wall-poster-ratio);
+  border-radius: var(--radius-landing-poster);
+  object-fit: cover;
+  box-shadow: var(--landing-poster-shadow);
+}
+
+/* Qui y va : la carte défile avec sa colonne, sous l'affiche. */
+.landing-wall__goer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-landing-card);
+  background: var(--landing-cream);
+  color: var(--landing-ink);
+  box-shadow: var(--landing-poster-shadow);
+}
+
+.landing-wall__face,
+.landing-proof__face {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-landing-pill);
+  font: var(--type-landing-face);
+  color: var(--landing-ink);
+}
+
+.landing-wall__face {
+  width: var(--landing-face-s);
+  height: var(--landing-face-s);
+  background: var(--landing-face-1);
+}
+
+.landing-wall__who,
+.landing-wall__goes {
+  white-space: nowrap;
+}
+
+.landing-wall__who {
+  display: block;
+  font: var(--type-landing-goer-who);
+  color: var(--landing-ink-mute);
+}
+
+.landing-wall__goes {
+  display: block;
+  font: var(--type-landing-goer);
+}
+
+@keyframes landing-wall-scroll {
+  to {
+    translate: 0 calc(-50% - var(--landing-wall-gap) / 2);
+  }
+}
+
+/* --- La recherche --------------------------------------------------------------- */
+.landing-search {
+  display: flex;
+  align-items: center;
+  padding: var(--space-8);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-cream-paper);
+  color: var(--landing-ink);
+  box-shadow: var(--landing-search-shadow);
+}
+
+.landing-search__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-22);
+  text-align: left;
+  cursor: pointer;
+}
+
+.landing-search__field + .landing-search__field {
+  border-left: 1px solid var(--landing-search-line);
+}
+
+.landing-search__field--what {
+  width: var(--landing-search-what);
+  cursor: text;
+}
+
+.landing-search__field--where {
+  width: var(--landing-search-where);
+}
+
+.landing-search__field--when {
+  width: var(--landing-search-when);
+}
+
+.landing-search__label {
+  font: var(--type-landing-search-label);
+}
+
+.landing-search__value {
+  font: var(--type-landing-search-value);
+  color: var(--landing-search-placeholder);
+}
+
+input.landing-search__value {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--landing-ink);
+}
+
+input.landing-search__value::placeholder {
+  color: var(--landing-search-placeholder);
+}
+
+.landing-search__submit {
+  display: grid;
+  place-items: center;
+  padding: var(--space-14);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-terre);
+  color: var(--landing-cream);
+  cursor: pointer;
+}
+
+/* --- La preuve : des visages, et le vrai nombre d'exposants ----------------------- */
+.landing-proof {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font: var(--type-landing-proof);
+  color: var(--landing-cream-soft);
+}
+
+.landing-proof__faces {
+  display: flex;
+}
+
+.landing-proof__face {
+  width: var(--landing-face-m);
+  height: var(--landing-face-m);
+  margin-right: var(--landing-face-overlap);
+  border: var(--landing-face-ring) solid var(--landing-face-ring-color);
+}
+
+.landing-proof__face:nth-child(1) {
+  background: var(--landing-face-1);
+}
+
+.landing-proof__face:nth-child(2) {
+  background: var(--landing-face-2);
+}
+
+.landing-proof__face:nth-child(3) {
+  background: var(--landing-face-3);
+}
+
+.landing-proof__face:nth-child(4) {
+  background: var(--landing-face-4);
+}
+
+.landing-proof__face:nth-child(5) {
+  background: var(--landing-face-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-wall__column {
+    animation: none;
+  }
 }
 
 /* --- La barre du haut -------------------------------------------------------- */
@@ -306,6 +551,40 @@
 
   .landing-bar__anchors,
   .landing-button--glass {
+    display: none;
+  }
+
+  /* Le mur passe sous le texte, plus court. */
+  .landing-opening {
+    min-height: 0;
+  }
+
+  .landing-opening__text {
+    padding: var(--space-32) var(--mobile-gutter) var(--landing-mobile-wall);
+  }
+
+  .landing-opening__title {
+    font: var(--type-landing-hero-mobile);
+  }
+
+  .landing-wall {
+    top: auto;
+    bottom: calc(-1 * var(--space-64));
+    left: calc(-1 * var(--space-48));
+    height: var(--landing-mobile-wall);
+  }
+
+  .landing-search {
+    width: 100%;
+  }
+
+  .landing-search__field--what {
+    flex: 1;
+    width: auto;
+  }
+
+  .landing-search__field--where,
+  .landing-search__field--when {
     display: none;
   }
 

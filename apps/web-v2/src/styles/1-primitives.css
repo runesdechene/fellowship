@@ -149,6 +149,7 @@
   --size-16: 16px;
   --size-17: 17px;
   --size-18: 18px;
+  --size-19: 19px;
   --size-20: 20px;
   --size-22: 22px;
   --size-26: 26px;
@@ -168,6 +169,7 @@
   --size-64: 64px;
   --size-96: 96px;
   --size-72: 72px;
+  --size-80: 80px;
   --size-150: 150px; /* la grande date d'une carte sans affiche */
 
   /* ---------------------------------------------------------------------
@@ -207,6 +209,7 @@
   --space-17: 17px;
   --space-18: 18px;
   --space-20: 20px;
+  --space-22: 22px;
   --space-23: 23px;
   --space-24: 24px;
   --space-26: 26px;
