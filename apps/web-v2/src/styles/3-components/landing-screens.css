@@ -813,3 +813,184 @@
 .landing-hunt__row--ghost b:last-child {
   width: 40%;
 }
+
+/* --- Pour toi : l'accueil d'un compte Pro --------------------------------------------------- */
+.landing-you {
+  max-width: var(--landing-app-content);
+}
+
+.landing-you__hello {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.landing-you__title {
+  font: var(--type-landing-you-title);
+}
+
+.landing-you__title strong,
+.landing-you__hello .landing-app__meta strong {
+  font-weight: var(--weight-semibold);
+}
+
+.landing-you__bars {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-12);
+  align-items: end;
+  margin-top: var(--space-32);
+}
+
+.landing-you__bars span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-pale);
+}
+
+.landing-you__bars i {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--space-4);
+  border-radius: var(--round-8);
+  background: var(--landing-app-line);
+  font: var(--type-landing-app-strong-s);
+  font-style: normal;
+  color: var(--landing-app-ink);
+}
+
+.landing-you__bars i.has-1 {
+  height: var(--landing-you-bar);
+  background: var(--landing-app-chip);
+}
+
+.landing-you__bars i.has-2 {
+  height: calc(var(--landing-you-bar) * 1.25);
+  background: var(--landing-app-chip);
+}
+
+.landing-you__bars i.has-3 {
+  height: calc(var(--landing-you-bar) * 1.5);
+  background: var(--landing-app-chip);
+}
+
+.landing-you__bars .is-now i {
+  background: var(--landing-app-ink);
+  color: var(--landing-app-card);
+}
+
+.landing-you__bars .is-now small {
+  color: var(--landing-app-ink);
+}
+
+.landing-you__row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-24);
+}
+
+.landing-you__next,
+.landing-you__soon,
+.landing-you__picks {
+  margin-top: var(--space-12);
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--round-16);
+  background: var(--landing-app-card);
+}
+
+.landing-you__next {
+  --poster-art-height: var(--landing-you-next-poster);
+
+  display: grid;
+  grid-template-columns: calc(var(--landing-you-next-poster) * 0.72) 1fr;
+  gap: var(--space-24);
+  align-items: center;
+  padding: var(--space-12);
+}
+
+.landing-you__name {
+  margin-bottom: var(--space-8);
+  font: var(--type-landing-app-event);
+}
+
+.landing-you__pills {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+
+.landing-you__pills > span:first-child {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-chip);
+  font: var(--type-landing-app-small);
+}
+
+.landing-you__soon {
+  padding: var(--space-8) var(--space-16);
+}
+
+.landing-you__soon p {
+  padding-block: var(--space-12);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-you__soon p + p {
+  border-top: 1px solid var(--landing-app-line);
+}
+
+.landing-you__soon strong,
+.landing-you__picks strong {
+  display: block;
+  overflow: hidden;
+  font: var(--type-landing-app-strong-s);
+  color: var(--landing-app-ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-you__picks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-16);
+  padding: var(--space-16);
+}
+
+.landing-you__picks > span {
+  display: flex;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.landing-you__picks img,
+.landing-you__picks i {
+  flex-shrink: 0;
+  width: var(--landing-dash-thumb-width);
+  height: var(--landing-dash-thumb-height);
+  border-radius: var(--round-6);
+  background: var(--landing-app-chip);
+  object-fit: cover;
+}
+
+.landing-you__picks > span > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.landing-you__picks small {
+  overflow: hidden;
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-you__why {
+  color: var(--landing-app-ink);
+}

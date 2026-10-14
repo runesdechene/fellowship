@@ -1311,6 +1311,7 @@
   --landing-app-soft: var(--ink-600);
   --landing-app-pale: var(--ink-350);
   --landing-app-side-width: 263px;
+  --landing-app-content: 1040px; /* la colonne de contenu de l’app, réduite avec l’écran */
   --landing-app-avatar: 35px;
   --radius-landing-window: var(--round-16);
   --landing-window-shadow:
@@ -1383,6 +1384,14 @@
   --tracking-landing-kicker: 0.14em;
   --landing-hunt-thumb-width: 48px;
   --landing-hunt-thumb-height: 66px;
+
+  /* La bande Pro (2302:2) */
+  --landing-pro-text: 633px;
+  --landing-pro-rule: color-mix(in srgb, var(--fete-gold-soft) 35%, transparent);
+  --type-landing-price: var(--weight-regular) var(--size-80) / 1 var(--family-display);
+  --landing-you-bar: 52px;
+  --landing-you-next-poster: 170px;
+  --type-landing-you-title: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
 }
 
 /* =========================================================================

@@ -542,6 +542,64 @@ input.landing-search__value::placeholder {
   max-width: var(--landing-hunt-text);
 }
 
+/* --- La bande Pro ---------------------------------------------------------------------- */
+.landing-pro .landing-band__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-48);
+}
+
+.landing-pro__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+  max-width: var(--landing-pro-text);
+}
+
+.landing-pro__offers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-56);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--landing-pro-rule);
+}
+
+.landing-pro__offers > div + div {
+  padding-left: var(--space-56);
+  border-left: 1px solid var(--landing-pro-rule);
+}
+
+.landing-pro__big {
+  font: var(--type-landing-price);
+  letter-spacing: var(--tracking-landing-hero);
+}
+
+.landing-pro__label {
+  margin-top: var(--space-10);
+  font: var(--type-landing-button);
+}
+
+.landing-pro__note {
+  margin-top: var(--space-10);
+  font: var(--type-landing-card-text);
+  color: var(--landing-gold-soft);
+}
+
+.landing-pro__ctas {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+}
+
+.landing-pro__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-landing-button-l);
+  color: var(--landing-cream);
+}
+
 /* --- La fin ------------------------------------------------------------------ */
 .landing-end {
   padding-bottom: var(--space-40);
@@ -761,5 +819,24 @@ input.landing-search__value::placeholder {
   .landing-pdf__sheet,
   .landing-oneclick__card {
     width: 100%;
+  }
+
+  .landing-pro .landing-band__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .landing-pro__offers {
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+  }
+
+  .landing-pro__offers > div + div {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .landing-pro__ctas {
+    flex-wrap: wrap;
   }
 }
