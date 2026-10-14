@@ -117,7 +117,6 @@
 .landing-top::before {
   top: calc(-1 * var(--landing-hero-image-bleed));
   background: var(--landing-hero-image) center / cover;
-  filter: blur(var(--landing-hero-image-blur));
   opacity: var(--landing-hero-image-opacity);
 }
 
@@ -381,6 +380,355 @@ input.landing-search__value {
   color: var(--ink-soft);
 }
 
+/* --- Les titres de section partagés --------------------------------------- */
+.landing-eyebrow {
+  font: var(--type-landing-section-eyebrow);
+  color: var(--ink-section-pale);
+}
+
+.landing-display {
+  margin-top: var(--landing-eyebrow-gap);
+  font: var(--type-landing-display);
+  letter-spacing: var(--tracking-landing-title);
+}
+
+/* --- Pourquoi Fellowship --------------------------------------------------- */
+.landing-why {
+  display: flex;
+  gap: var(--landing-why-gap);
+  padding-block: var(--landing-why-top) var(--landing-why-bottom);
+}
+
+.landing-why__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-why-head-gap);
+  width: var(--landing-why-column);
+}
+
+.landing-why__title {
+  font: var(--type-landing-display);
+  letter-spacing: var(--tracking-landing-title);
+}
+
+.landing-why__story {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-why-story-gap);
+  width: var(--landing-why-column);
+  padding-top: var(--landing-why-story-top);
+  font: var(--type-landing-story);
+  letter-spacing: var(--tracking-landing-lead);
+  color: var(--ink-soft);
+}
+
+.landing-why__story strong {
+  font-weight: var(--weight-bold);
+  color: var(--ink-title);
+}
+
+.landing-why__signature {
+  display: flex;
+  align-items: center;
+  gap: var(--landing-why-signature-gap);
+  padding-top: var(--space-8);
+}
+
+.landing-why__signature img {
+  width: var(--landing-why-avatar);
+  height: var(--landing-why-avatar);
+}
+
+.landing-why__name {
+  font: var(--type-landing-signature);
+  color: var(--ink-title);
+}
+
+.landing-why__role {
+  margin-top: var(--space-2);
+  font: var(--type-landing-card-meta);
+}
+
+/* --- Les six fonctions ----------------------------------------------------- */
+.landing-band {
+  background: var(--landing-band-surface);
+}
+
+.landing-features {
+  padding-block: var(--landing-features-padding);
+}
+
+.landing-features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--landing-features-gap);
+  margin-top: var(--landing-features-head-bottom);
+}
+
+.landing-feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--landing-feature-gap);
+  padding: var(--landing-feature-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-landing-feature);
+  background: var(--landing-feature-surface);
+}
+
+.landing-feature__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  font: var(--type-landing-feature);
+  letter-spacing: var(--tracking-landing-section);
+}
+
+.landing-feature__title svg {
+  flex-shrink: 0;
+}
+
+.landing-feature__text {
+  font: var(--type-landing-feature-text);
+  color: var(--ink-soft);
+}
+
+/* --- Les vignettes : des dessins, pas des données -------------------------- */
+.landing-art {
+  display: flex;
+  align-items: center;
+  height: var(--landing-art-height);
+  padding: var(--landing-art-inset);
+  overflow: hidden;
+  border-radius: var(--radius-landing-art);
+  background: var(--landing-art-surface);
+  font: var(--type-landing-art);
+  color: var(--ink-title);
+}
+
+.landing-art img {
+  object-fit: cover;
+}
+
+.landing-art__sheet {
+  width: 100%;
+  border-radius: var(--radius-landing-sheet);
+  background: var(--surface-card);
+}
+
+.landing-art__soft {
+  color: var(--ink-soft);
+}
+
+.landing-art__pale {
+  color: var(--ink-section-pale);
+}
+
+.landing-art__strong {
+  font: var(--type-landing-art-strong);
+}
+
+/* Le calendrier sur son site */
+.landing-art__sheet--embed {
+  overflow: hidden;
+}
+
+.landing-art__url {
+  padding: var(--space-6) var(--space-12);
+  background: var(--landing-art-deep);
+  font: var(--type-landing-art-tiny);
+  color: var(--ink-section-pale);
+}
+
+.landing-art__embed-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-16);
+  font: var(--type-landing-art-medium);
+}
+
+.landing-art__embed-rows li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.landing-art__embed-rows img {
+  width: var(--landing-art-thumb-width);
+  height: var(--landing-art-thumb-height);
+  border-radius: var(--radius-xs);
+}
+
+/* L'année d'un coup d'œil */
+.landing-art__year {
+  display: flex;
+  gap: var(--landing-art-month-gap);
+}
+
+.landing-art__year li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  width: var(--landing-art-month-width);
+}
+
+.landing-art__month {
+  font: var(--type-landing-art-month);
+  color: var(--ink-section-pale);
+}
+
+.landing-art__month--now .landing-art__month {
+  color: var(--ink-title);
+}
+
+.landing-art__year img,
+.landing-art__free {
+  width: 100%;
+  height: var(--landing-art-month-height);
+  border-radius: var(--radius-sm);
+}
+
+.landing-art__free {
+  background: var(--landing-art-deep);
+}
+
+/* Les dates grâce aux amis */
+.landing-art__friends {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  font: var(--type-landing-card-meta);
+  color: var(--ink-soft);
+}
+
+.landing-art__friends strong {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
+}
+
+.landing-art__faces {
+  display: flex;
+}
+
+.landing-art__faces li {
+  display: grid;
+  place-items: center;
+  width: var(--landing-art-face);
+  height: var(--landing-art-face);
+  margin-right: var(--landing-art-face-overlap);
+  border: var(--landing-art-face-ring) solid var(--landing-art-surface);
+  border-radius: var(--radius-round);
+  font: var(--type-landing-art-face);
+  color: var(--landing-art-face-ink);
+}
+
+.landing-art__faces li:nth-child(1) {
+  background: var(--landing-art-face-1);
+}
+
+.landing-art__faces li:nth-child(2) {
+  background: var(--landing-art-face-2);
+}
+
+.landing-art__faces li:nth-child(3) {
+  background: var(--landing-art-face-3);
+}
+
+.landing-art__faces li:nth-child(4) {
+  background: var(--landing-art-face-4);
+}
+
+.landing-art__faces li:last-child {
+  margin-right: 0;
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+/* Les dossiers et les paiements */
+.landing-art__sheet--dossier,
+.landing-art__sheet--infos,
+.landing-art__sheet--question {
+  display: flex;
+  flex-direction: column;
+  padding: var(--landing-sheet-padding);
+}
+
+.landing-art__sheet--dossier {
+  gap: var(--space-8);
+}
+
+.landing-art__gauge {
+  height: var(--landing-art-gauge);
+  margin-block: var(--space-6);
+  border-radius: var(--radius-round);
+  background: var(--landing-art-deep);
+}
+
+.landing-art__gauge span {
+  display: block;
+  width: calc(100% / 3);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-gradient);
+}
+
+/* Les infos d'inscription */
+.landing-art__sheet--infos {
+  gap: var(--space-4);
+}
+
+.landing-art__sheet--infos dt {
+  font: var(--type-landing-art-small);
+  color: var(--ink-section-pale);
+}
+
+.landing-art__sheet--infos dd {
+  margin: 0;
+  font: var(--type-landing-art-value);
+}
+
+/* Les avis et les questions */
+.landing-art__reviews {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-24);
+  width: 100%;
+}
+
+.landing-art__score {
+  margin-bottom: var(--space-12);
+  font: var(--type-landing-art-score);
+  letter-spacing: var(--tracking-landing-title);
+}
+
+.landing-art__sheet--question {
+  gap: var(--space-10);
+  width: var(--landing-art-question-width);
+  align-self: stretch;
+}
+
+.landing-art__question {
+  font: var(--type-landing-art-medium);
+}
+
+/* Entre le téléphone et l'écran large : deux colonnes, l'histoire sur la largeur. */
+@media (width <= 1280px) {
+  .landing-features__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-why {
+    gap: var(--space-48);
+  }
+
+  .landing-why__head,
+  .landing-why__story {
+    flex: 1;
+    width: auto;
+  }
+}
+
 /* --- L'appel final ------------------------------------------------------- */
 .landing-final {
   display: flex;
@@ -534,5 +882,32 @@ input.landing-search__value {
 
   .landing-festival {
     --poster-art-height: var(--landing-festival-mobile-poster);
+  }
+
+  .landing-display,
+  .landing-why__title {
+    font: var(--type-landing-display-mobile);
+  }
+
+  .landing-why {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .landing-why__head,
+  .landing-why__story {
+    width: auto;
+  }
+
+  .landing-why__story {
+    padding-top: var(--space-24);
+  }
+
+  .landing-features__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .landing-features {
+    padding-block: var(--space-64);
   }
 }

@@ -4,12 +4,14 @@
  *            celle de flw.sh à la bascule (lot 12).
  * ATTENTION — un composant par section de la maquette `2027 — Landing`, dans son ordre.
  */
+import { Features } from './Features'
 import { FinalCall } from './FinalCall'
 import { Hero } from './Hero'
 import { LandingTopBar } from './LandingTopBar'
 import { NextFestivals } from './NextFestivals'
 import { TypeMarquee } from './TypeMarquee'
 import { useLanding } from './useLanding'
+import { WhyFellowship } from './WhyFellowship'
 
 export function LandingPage() {
   const { tags, festivals } = useLanding()
@@ -24,6 +26,8 @@ export function LandingPage() {
       <main>
         <TypeMarquee tags={tags} />
         <NextFestivals festivals={festivals} />
+        <WhyFellowship />
+        <Features />
       </main>
       <FinalCall />
     </div>

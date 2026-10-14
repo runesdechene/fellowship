@@ -24,7 +24,12 @@
   --sand-300: #ebe9e5; /* les filets */
   --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
   --sand-400: #dedad4; /* pointillés, « à remplir » */
-  --sand-500: #d3cec8; /* valeurs éteintes */
+  --sand-500: #d3cec8;
+  --sand-380: #e1dcd5; /* les visages des vignettes de la landing */
+  --sand-430: #d8d3cc;
+  --sand-520: #c9c2b9;
+  --sand-600: #b9b1a7;
+  --brun-700: #564444; /* valeurs éteintes */
 
   /* ---------------------------------------------------------------------
      PALETTE — ENCRE

@@ -1221,8 +1221,9 @@
     var(--family-sans);
   --type-landing-foot: var(--weight-regular) var(--size-13) / normal var(--family-sans);
   /* L'accroche (2104:17) et sa photo provisoire (2105:5) */
-  --landing-hero-image: url('/landing-hero.png');
-  --landing-hero-image-blur: 14px;
+  /* Une miniature de 48 px, déjà floue : l'agrandissement fait le flou, sans `filter` (règle du
+     coût du flou, .claude/rules/interface.md). */
+  --landing-hero-image: url('/landing/accroche-flou.png');
   --landing-hero-image-opacity: 0.22;
   --landing-hero-image-bleed: 100px;
   --landing-hero-veil: linear-gradient(
@@ -1279,6 +1280,70 @@
   --type-landing-card-name: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
   --type-landing-card-meta: var(--weight-regular) var(--size-13) / normal var(--family-sans);
   --landing-card-text-gap: 3px;
+
+  /* Les titres de section (2105:8, 2104:86) */
+  --landing-eyebrow-gap: var(--space-12);
+  --type-landing-section-eyebrow: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --type-landing-display: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
+  --type-landing-display-mobile: var(--weight-regular) var(--size-38) / 1.05 var(--family-display);
+  --tracking-landing-title: -0.02em;
+
+  /* Pourquoi Fellowship (2105:8) */
+  --landing-why-top: var(--space-24);
+  --landing-why-bottom: 120px;
+  --landing-why-gap: var(--space-96);
+  --landing-why-column: 560px;
+  --landing-why-head-gap: var(--space-18);
+  --landing-why-story-top: 44px;
+  --landing-why-story-gap: var(--space-20);
+  --landing-why-signature-gap: var(--space-14);
+  --landing-why-avatar: var(--space-48);
+  --type-landing-story: var(--weight-regular) var(--size-18) / var(--leading-relaxed)
+    var(--family-sans);
+  --type-landing-signature: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
+
+  /* Les six fonctions (2104:86) */
+  --landing-band-surface: var(--surface-card); /* la bande blanche des fonctions */
+  --landing-features-padding: var(--space-96);
+  --landing-features-head-bottom: var(--space-48);
+  --landing-features-gap: var(--space-24);
+  --landing-feature-surface: var(--landing-surface);
+  --landing-feature-padding: var(--space-24);
+  --landing-feature-gap: var(--space-14);
+  --radius-landing-feature: var(--round-20);
+  --landing-art-surface: var(--surface-chip-neutral);
+  --landing-art-deep: var(--line-card);
+  --landing-art-height: 160px;
+  --radius-landing-art: 14px;
+  --radius-landing-sheet: var(--round-10);
+  --landing-art-inset: var(--space-20);
+  --landing-sheet-padding: var(--space-16);
+  --landing-art-thumb-width: 34px;
+  --landing-art-thumb-height: 22px;
+  --landing-art-month-width: 76px;
+  --landing-art-month-height: 96px;
+  --landing-art-month-gap: var(--space-20);
+  --landing-art-face: var(--space-48);
+  --landing-art-face-ring: 3px;
+  --landing-art-face-overlap: -12px;
+  --landing-art-face-1: var(--sand-430);
+  --landing-art-face-2: var(--sand-520);
+  --landing-art-face-3: var(--sand-600);
+  --landing-art-face-4: var(--sand-380);
+  --landing-art-face-ink: var(--brun-700);
+  --landing-art-gauge: 5px;
+  --landing-art-question-width: 220px;
+  --type-landing-feature: var(--weight-semibold) 19px / normal var(--family-sans);
+  --type-landing-feature-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
+  --type-landing-art-tiny: var(--weight-regular) var(--size-10) / normal var(--family-sans);
+  --type-landing-art-small: var(--weight-regular) var(--size-11) / normal var(--family-sans);
+  --type-landing-art: var(--weight-regular) var(--size-12) / normal var(--family-sans);
+  --type-landing-art-medium: var(--weight-medium) var(--size-12) / normal var(--family-sans);
+  --type-landing-art-strong: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-art-value: var(--weight-medium) var(--size-13) / normal var(--family-sans);
+  --type-landing-art-month: var(--weight-regular) var(--size-20) / normal var(--family-display);
+  --type-landing-art-score: var(--weight-regular) var(--size-44) / 1 var(--family-display);
+  --type-landing-art-face: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
 }
 
 /* =========================================================================
