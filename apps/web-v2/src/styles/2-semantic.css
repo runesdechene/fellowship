@@ -1342,6 +1342,21 @@
   --landing-assistant-calendar-left: 680px;
   --landing-assistant-dashboard-left: 431px;
   --landing-assistant-dashboard-top: 545px;
+  --landing-com-side: 360px;
+  --landing-com-crowd-width: 140px;
+  --landing-com-crowd-height: 190px;
+  --landing-com-face: 30px;
+  --landing-who-width: 378px;
+  --type-landing-app-event: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
+  --type-landing-who-title: var(--weight-semibold) var(--size-17) / 1.3 var(--family-sans);
+
+  /* La bande Communauté (2290:97) */
+  --landing-community-height: 900px;
+  --landing-community-text-left: 980px;
+  --landing-community-text-top: 165px;
+  --landing-community-text-width: 540px;
+  --landing-community-who-left: 538px;
+  --landing-community-who-top: 315px;
 }
 
 /* =========================================================================

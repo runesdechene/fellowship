@@ -333,3 +333,217 @@
   font: var(--type-landing-app-figure);
   color: var(--landing-terre);
 }
+
+/* --- La Communauté --------------------------------------------------------------------- */
+.landing-com {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--landing-com-side);
+  gap: var(--space-32);
+  margin-top: var(--space-32);
+}
+
+.landing-com__crowd,
+.landing-com__feed,
+.landing-com__box {
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--round-16);
+  background: var(--landing-app-card);
+}
+
+.landing-com__crowd {
+  display: flex;
+  gap: var(--space-20);
+  padding: var(--space-12);
+}
+
+.landing-com__crowd > img,
+.landing-com__crowd > i {
+  width: var(--landing-com-crowd-width);
+  height: var(--landing-com-crowd-height);
+  border-radius: var(--round-10);
+  background: var(--landing-app-chip);
+  object-fit: cover;
+}
+
+.landing-com__crowd small {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-pale);
+}
+
+.landing-com__crowd h4 {
+  margin-block: var(--space-6);
+  font: var(--type-landing-app-event);
+}
+
+.landing-com__goers {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-block: var(--space-12);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-com__goers strong {
+  color: var(--landing-app-ink);
+}
+
+.landing-com__pile {
+  display: flex;
+}
+
+.landing-com__pile span,
+.landing-com__face {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--landing-com-face);
+  height: var(--landing-com-face);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-chip);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-com__pile span {
+  margin-right: var(--landing-face-overlap);
+  border: 2px solid var(--landing-app-card);
+}
+
+.landing-com__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--round-8);
+  background: var(--landing-app-ink);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-card);
+}
+
+.landing-com__day {
+  margin: var(--space-20) 0 var(--space-8);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-pale);
+}
+
+.landing-com__item {
+  display: flex;
+  gap: var(--space-14);
+  padding: var(--space-16);
+  font: var(--type-landing-app-text);
+}
+
+.landing-com__item + .landing-com__item {
+  border-top: 1px solid var(--landing-app-line);
+}
+
+.landing-com__mini {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  margin-top: var(--space-8);
+  padding: var(--space-8);
+  border-radius: var(--round-10);
+  background: var(--landing-app-chip);
+}
+
+.landing-com__box .landing-com__mini {
+  background: none;
+}
+
+.landing-com__mini img,
+.landing-com__mini i {
+  flex-shrink: 0;
+  width: var(--landing-dash-thumb-width);
+  height: var(--landing-dash-thumb-height);
+  border-radius: var(--round-6);
+  background: var(--landing-app-line);
+  object-fit: cover;
+}
+
+.landing-com__mini strong,
+.landing-com__follow strong,
+.landing-who strong {
+  display: block;
+  overflow: hidden;
+  font: var(--type-landing-app-strong-s);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-com__mini small,
+.landing-com__follow small,
+.landing-who small {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-com__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.landing-com__box {
+  padding: var(--space-16);
+}
+
+.landing-com__box h5 {
+  font: var(--type-landing-app-strong-s);
+}
+
+.landing-com__follow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  margin-top: var(--space-12);
+}
+
+.landing-com__follow > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Qui y va : la fenêtre posée sur l'écran --------------------------------------------- */
+.landing-who {
+  width: var(--landing-who-width);
+  padding: var(--space-16);
+  border-radius: var(--round-16);
+  background: var(--landing-app-card);
+  color: var(--landing-app-ink);
+  box-shadow: var(--landing-window-shadow-dark);
+}
+
+.landing-who header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-10);
+}
+
+.landing-who header strong {
+  font: var(--type-landing-who-title);
+}
+
+.landing-who__close {
+  display: grid;
+  place-items: center;
+  width: var(--landing-com-face);
+  height: var(--landing-com-face);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-chip);
+}
+
+.landing-who__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-6);
+  border-radius: var(--round-10);
+}
+
+.landing-who__row > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}

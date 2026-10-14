@@ -6,6 +6,7 @@
  * ATTENTION — l'ordre des bandes est celui de la maquette ; elles s'emboîtent de biais.
  */
 import { AssistantBand } from './AssistantBand'
+import { CommunityBand } from './CommunityBand'
 import { FinalCall } from './FinalCall'
 import { Opening } from './Opening'
 import { useLandingShowcase } from './useLandingShowcase'
@@ -19,6 +20,7 @@ export function LandingPage() {
       <Opening showcase={showcase} />
       <main>
         <AssistantBand showcase={showcase} />
+        <CommunityBand showcase={showcase} />
       </main>
       <FinalCall posters={posters} />
     </div>
