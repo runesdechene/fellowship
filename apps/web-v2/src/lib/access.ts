@@ -1,9 +1,9 @@
 /**
  * QUOI     — décide, à partir de la session et de la réponse de la base, si la V2 s'ouvre.
- * POURQUOI — la V2 se construit sous les yeux des seuls admins (is_admin(), déjà en base).
+ * POURQUOI — la V2 ne s'ouvre qu'aux admins et au rôle `v2` (can_use_v2(), en base).
  *            Fonctions pures : toute la garde se lit et se teste ici, sans navigateur.
  * ATTENTION — une erreur de vérification renvoie vers la V1 : pendant la construction, mieux
- *            vaut un admin qui recharge qu'un écran blanc. Pas de PWA côté V2, donc pas
+ *            vaut un compte qui recharge qu'un écran blanc. Pas de PWA côté V2, donc pas
  *            d'usage hors ligne à protéger.
  */
 export type AccessCheck = 'pending' | 'allowed' | 'refused' | 'error'
@@ -36,7 +36,7 @@ export function toAccessState(input: {
 
 // Combine une nouvelle réponse de la base avec la précédente, pour le même compte. Un échec de
 // re-vérification (jeton qui se rafraîchit, onglet qui revient sur un réseau instable) ne doit
-// pas éjecter un admin déjà admis au milieu d'une saisie ; un accès RETIRÉ, lui, s'applique.
+// pas éjecter un compte déjà admis au milieu d'une saisie ; un accès RETIRÉ, lui, s'applique.
 export function settleCheck(
   previous: AccessCheck | undefined,
   result: Exclude<AccessCheck, 'pending'>,

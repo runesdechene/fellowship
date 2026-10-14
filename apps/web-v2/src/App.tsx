@@ -2,7 +2,8 @@
  * QUOI     — les routes de la V2 et leurs gardes : connexion, arrivée, tableau de bord, calendrier, création,
  *            fiche, avis, explorer, bilans, offre Pro, réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
- *            renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par l'arrivée (lot 10a).
+ *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
+ *            l'arrivée (lot 10a).
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
@@ -29,7 +30,7 @@ import { safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
 import { useEffect, type ReactNode } from 'react'
 
-/** La garde d'accès seule : la V2 n'ouvre qu'aux admins jusqu'à la bascule (lot 12). */
+/** La garde d'accès seule : la V2 n'ouvre qu'aux admins et au rôle `v2` jusqu'à la bascule (lot 12). */
 function AccessRoute({ children }: { children: ReactNode }) {
   const decision = useV2Access()
   if (decision === 'wait') return null

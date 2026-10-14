@@ -1,10 +1,10 @@
 /**
  * QUOI     — demande à la base si le compte connecté peut ouvrir la V2.
  * POURQUOI — la coquille mince autour de access.ts : elle lit la session (useAuth), appelle
- *            is_admin() quand le compte change, et rend la décision.
+ *            can_use_v2() quand le compte change, et rend la décision.
  * ATTENTION — la vérification suit l'id du compte, pas l'objet `user` : supabase en recrée un à
  *            chaque rafraîchissement de jeton ou retour sur l'onglet. Et une re-vérification en
- *            échec ne fait pas sortir un admin déjà admis (settleCheck) — sinon un réseau
+ *            échec ne fait pas sortir un compte déjà admis (settleCheck) — sinon un réseau
  *            instable le renverrait sur la V1 au milieu d'une saisie.
  */
 import { useEffect, useState } from 'react'
@@ -31,7 +31,7 @@ export function useV2Access(): AccessDecision {
     // Sans réponse en 8 s (réseau bloqué, portail captif), la vérification échoue au lieu de
     // laisser l'écran blanc : l'abandon devient une erreur comme une autre.
     void supabase
-      .rpc('is_admin')
+      .rpc('can_use_v2')
       .abortSignal(AbortSignal.timeout(ACCESS_TIMEOUT_MS))
       .then(({ data, error }) => {
         if (cancelled) return
