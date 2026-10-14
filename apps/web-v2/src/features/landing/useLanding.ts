@@ -7,6 +7,7 @@
  */
 import { useEffect, useState } from 'react'
 import { todayIso } from '@/lib/dates'
+import { CONFIRMED_STATUSES } from '@/lib/friends'
 import { CANDIDATES, pickNextFestivals, type LandingFestival } from '@/lib/landing'
 import { supabase } from '@/lib/supabase'
 import { fetchTags, type TagRow } from '@/lib/tags'
@@ -36,7 +37,7 @@ async function loadFestivals(today: Date): Promise<LandingFestival[] | null> {
         'event_id',
         events.data.map((e) => e.id),
       )
-      .in('status', ['inscrit', 'confirme'])
+      .in('status', CONFIRMED_STATUSES)
     // Sans les inscrits, la rangée s'affiche quand même, sans « Populaire ».
     if (!goers.error) {
       for (const g of goers.data) registered.set(g.event_id, (registered.get(g.event_id) ?? 0) + 1)

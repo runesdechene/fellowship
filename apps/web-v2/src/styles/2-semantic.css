@@ -1270,6 +1270,7 @@
   --landing-festivals-head-gap: var(--space-24);
   --landing-festivals-gap: var(--space-24);
   --landing-festival-poster: 334px;
+  --landing-festival-medium: 250px;
   --landing-festival-mobile: 200px;
   --landing-festival-mobile-poster: 268px;
   --radius-landing-poster: 14px;
