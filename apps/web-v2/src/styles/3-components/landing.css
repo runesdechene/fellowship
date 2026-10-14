@@ -621,9 +621,18 @@ input.landing-search__value::placeholder {
 .landing-pro__offers {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-56);
+  gap: 0 var(--space-56);
   padding-top: var(--space-24);
   border-top: 1px solid var(--landing-pro-rule);
+}
+
+/* Les deux colonnes partagent leurs rangées : prix, libellé, note, puis les avantages, alignés
+   même quand une note tient sur deux lignes. */
+.landing-pro__offers > div {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  align-content: start;
 }
 
 .landing-pro__offers > div + div {
@@ -1022,6 +1031,10 @@ input.landing-search__value::placeholder {
   .landing-pro__offers {
     grid-template-columns: 1fr;
     gap: var(--space-24);
+  }
+
+  .landing-pro__offers > div {
+    display: block;
   }
 
   .landing-pro__offers > div + div {
