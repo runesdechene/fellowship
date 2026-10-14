@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
   Compass, CalendarClock, Heart, LayoutDashboard, CalendarDays, Users, Store, User, Settings,
-  Shield, Check, LogOut, Lock, Sparkles, Map, Gift, type LucideIcon,
+  Shield, Check, LogOut, Lock, Sparkles, Map, Gift, ArrowLeftRight, type LucideIcon,
 } from 'lucide-react'
 import { mobileSecondaryFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -20,7 +20,7 @@ function initials(label: string): string {
 /** Feuille (bottom sheet) ouverte depuis la tête de compte de la BottomBar mobile :
  *  switch d'acteur + liens secondaires + thème + déconnexion. Remplace la sidebar (absente sur mobile). */
 export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { person, entities, currentActor, currentActorRow, switchActor, isAdmin, signOut } = useAuth()
+  const { person, entities, currentActor, currentActorRow, switchActor, isAdmin, canUseV2, signOut } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -101,6 +101,12 @@ export function AccountSheet({ open, onClose }: { open: boolean; onClose: () => 
             <Shield strokeWidth={1.8} />
             <span className="sheet-item-lbl">Admin</span>
           </button>
+        )}
+        {canUseV2 && (
+          <a className="sheet-item" href="/v2/">
+            <ArrowLeftRight strokeWidth={1.8} />
+            <span className="sheet-item-lbl">Passer à la V2</span>
+          </a>
         )}
 
         <div className="sheet-divider" />

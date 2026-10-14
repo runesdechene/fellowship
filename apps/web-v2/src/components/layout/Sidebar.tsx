@@ -3,9 +3,11 @@
  *            fil « Activité du réseau » et l'interrupteur Clair / Sombre en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
- *            on ne pouvait pas accéder à sa propre vitrine).
+ *            on ne pouvait pas accéder à sa propre vitrine). « Revenir à la V1 » ferme la liste : ceux
+ *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
  */
 import {
+  ArrowLeftRight,
   CalendarDays,
   CircleGauge,
   PanelRightClose,
@@ -94,6 +96,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </NavLink>
           )
         })}
+        {/* La V1 est une autre application : un lien plein, pas une route de la V2. */}
+        <a className="sidebar__item" href="/">
+          <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+          <span className="sidebar__item-label">Revenir à la V1</span>
+        </a>
       </nav>
 
       <div className="sidebar__foot">

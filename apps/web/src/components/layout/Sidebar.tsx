@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, Gift, type LucideIcon } from 'lucide-react'
+import { CalendarDays, CalendarClock, Compass, User, Settings, Heart, LayoutDashboard, Store, Users, Shield, Lock, Sparkles, PanelLeftClose, PanelLeft, Map, Gift, ArrowLeftRight, type LucideIcon } from 'lucide-react'
 import { navItemsFor, entryState, planForActor, vitrineHref, NAV_DEFS } from '@/lib/navModel'
 import { useMyParticipations } from '@/hooks/use-participations'
 import { useAdminPendingReportsCount } from '@/hooks/use-content-reports'
@@ -20,7 +20,7 @@ export function Sidebar() {
   useEffect(() => {
     document.documentElement.style.setProperty('--sidebar-w', collapsed ? '76px' : '262px')
   }, [collapsed])
-  const { currentActor, currentActorRow, person, isAdmin } = useAuth()
+  const { currentActor, currentActorRow, person, isAdmin, canUseV2 } = useAuth()
   const navigate = useNavigate()
   const plan = planForActor(currentActor, currentActorRow)
   const keys = navItemsFor(currentActor)
@@ -93,6 +93,12 @@ export function Sidebar() {
             <span className="navlabel">Admin</span>
             {pendingReportsCount > 0 && <span className="navbadge">{pendingReportsCount}</span>}
           </NavLink>
+        )}
+        {canUseV2 && (
+          <a href="/v2/" title={collapsed ? 'Passer à la V2' : undefined}>
+            <ArrowLeftRight strokeWidth={2} />
+            <span className="navlabel">Passer à la V2</span>
+          </a>
         )}
       </nav>
 

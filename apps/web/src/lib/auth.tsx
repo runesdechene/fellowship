@@ -28,6 +28,7 @@ interface AuthContextType {
   refreshProfile: () => Promise<void>
   needsOnboarding: boolean
   isAdmin: boolean
+  canUseV2: boolean
   // Debug admin : force le plan perçu de l'entité active (pur client, n'écrit rien en base).
   planOverride: PlanOverride
   setPlanOverride: (v: PlanOverride) => void
@@ -152,6 +153,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Rôle admin : source de vérité = users.role (modèle acteur). Le legacy profiles.role a été
   // backfillé vers users.role en Plan 4 / Phase 5a avant le retrait de la table profiles.
   const isAdmin = person?.role === 'admin'
+  // La V2 s'ouvre aux admins et au rôle `v2` (can_use_v2() en base) : ils passent de l'une à l'autre.
+  const canUseV2 = isAdmin || person?.role === 'v2'
 
   // Debug admin : surcharge du plan perçu de l'entité active (n'écrit rien en base).
   const currentActorRow = (isAdmin && planOverride && currentActor?.kind === 'entity' && rawActorRow)
@@ -163,7 +166,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user, session,
         person, entities, currentActor, currentActorRow, switchActor, can,
-        loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin,
+        loading, identityLoading, signIn, verifyOtp, signOut, refreshProfile, needsOnboarding, isAdmin, canUseV2,
         planOverride, setPlanOverride,
       }}
     >

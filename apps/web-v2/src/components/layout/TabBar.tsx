@@ -3,9 +3,19 @@
  *            « Moi » à droite, qui ouvre le menu du compte en feuille.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
+ *            Le menu se clôt sur « Revenir à la V1 » (Uriel, 14/10/2026).
  * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
-import { CalendarDays, Check, CircleGauge, Plus, Settings, Telescope, Users } from 'lucide-react'
+import {
+  ArrowLeftRight,
+  CalendarDays,
+  Check,
+  CircleGauge,
+  Plus,
+  Settings,
+  Telescope,
+  Users,
+} from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
@@ -86,6 +96,10 @@ export function TabBar() {
             <Settings size={18} strokeWidth={1.8} />
             <span>Réglages</span>
           </NavLink>
+          <a href="/" role="menuitem" className="tab-sheet__item tab-sheet__link">
+            <ArrowLeftRight size={18} strokeWidth={1.8} />
+            <span>Revenir à la V1</span>
+          </a>
           <div className="tab-sheet__theme">
             <ThemeSwitch />
           </div>

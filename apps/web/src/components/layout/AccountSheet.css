@@ -90,6 +90,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   border-radius: 12px;
+  text-decoration: none;
 }
 .sheet-item:hover { background: var(--field); }
 .sheet-item svg { width: 20px; height: 20px; stroke: currentColor; flex-shrink: 0; }
