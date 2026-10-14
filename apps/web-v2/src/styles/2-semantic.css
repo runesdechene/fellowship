@@ -1253,8 +1253,8 @@
   --type-landing-statement-s: var(--weight-regular) var(--size-46) / 1.1 var(--family-display);
   --type-landing-final: var(--weight-regular) var(--size-96) / 1 var(--family-display);
   --type-landing-final-lead: var(--weight-regular) var(--size-20) / 1.5 var(--family-sans);
-  --type-landing-bar-brand: var(--weight-regular) var(--size-28) / 1 var(--family-display);
-  --type-landing-foot-brand: var(--weight-regular) var(--size-36) / 1 var(--family-display);
+  --type-landing-bar-brand: var(--weight-semibold) var(--size-28) / 1 var(--family-brand);
+  --type-landing-foot-brand: var(--weight-semibold) var(--size-32) / 1 var(--family-brand);
   --type-landing-foot: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
   --type-landing-orga: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-landing-foot-head: var(--weight-medium) var(--size-13) / normal var(--family-sans);

@@ -36,7 +36,9 @@ export function LandingTopBar() {
       <div className="landing-bar__inner">
         <a className="landing-bar__brand" href="#" aria-label="Fellowship, haut de la page">
           <img className="landing-bar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
-          Fellowship
+          <span>
+            Fellowship<span className="landing-brand-dot">.</span>
+          </span>
         </a>
         <nav
           ref={nav}

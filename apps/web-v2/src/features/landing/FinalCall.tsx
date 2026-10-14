@@ -30,7 +30,9 @@ export function FinalCall({ posters }: { posters: string[] }) {
           <div className="landing-foot__brand">
             <p className="landing-foot__name">
               <img src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
-              Fellowship
+              <span>
+                Fellowship<span className="landing-brand-dot">.</span>
+              </span>
             </p>
             <p>
               Le calendrier communautaire

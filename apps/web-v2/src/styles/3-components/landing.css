@@ -321,6 +321,11 @@ input.landing-search__value::placeholder {
   color: var(--landing-cream);
 }
 
+/* Le point final du nom, dans l'orange clair du logo (Uriel, 14/10/2026). */
+.landing-brand-dot {
+  color: var(--landing-gold);
+}
+
 .landing-bar__logo {
   width: var(--landing-logo-width);
   height: var(--landing-logo-height);

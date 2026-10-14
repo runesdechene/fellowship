@@ -136,6 +136,8 @@
      --------------------------------------------------------------------- */
   --family-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --family-display: 'Instrument Serif', georgia, 'Times New Roman', serif;
+  /* Le nom Fellowship : la police de Runes de Chêne (Uriel, 14/10/2026 ; décision 0007). */
+  --family-brand: 'Cabin', system-ui, sans-serif;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)
