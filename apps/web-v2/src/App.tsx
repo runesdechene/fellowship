@@ -1,7 +1,7 @@
 /**
- * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte, sur `/`), connexion, arrivée,
- *            tableau de bord, calendrier, création, fiche, avis, explorer, bilans, offre Pro,
- *            réglages, vitrine.
+ * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte sur `/`, pour tous sur
+ *            `/decouvrir`), connexion, arrivée, tableau de bord, calendrier, création, fiche, avis,
+ *            explorer, bilans, offre Pro, réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
  *            l'arrivée (lot 10a).
@@ -93,6 +93,8 @@ export function App() {
 
   return (
     <Routes>
+      {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
+      <Route path="/decouvrir" element={<LandingPage />} />
       <Route
         path="/connexion"
         element={loading ? null : user ? <Navigate to="/" replace /> : <Login />}
