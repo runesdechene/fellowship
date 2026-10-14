@@ -9,3 +9,6 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `LandingBand.tsx` — une bande penchée (papier, terre, nuit), avec ses affiches floues en fond.
 - `LandingTopBar.tsx` — la marque, les ancres, « Se connecter », « Créer ma vitrine ».
 - `FinalCall.tsx` — « Ton prochain stand commence ici. » et le pied de page.
+- `Opening.tsx`, `PosterWall.tsx` — l'ouverture et son mur de vraies affiches qui défile.
+- `AssistantBand.tsx` — « Mon assistant de festivals », avec le Calendrier et le Tableau de bord.
+- `screens/` — les écrans de l'app reproduits pour la landing, dans une fenêtre (`AppWindow`).

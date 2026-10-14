@@ -5,6 +5,7 @@
  *            vivante — chaque élément vient de la base, seul l'exposant est une démonstration.
  * ATTENTION — l'ordre des bandes est celui de la maquette ; elles s'emboîtent de biais.
  */
+import { AssistantBand } from './AssistantBand'
 import { FinalCall } from './FinalCall'
 import { Opening } from './Opening'
 import { useLandingShowcase } from './useLandingShowcase'
@@ -16,7 +17,9 @@ export function LandingPage() {
   return (
     <div className="landing">
       <Opening showcase={showcase} />
-      <main />
+      <main>
+        <AssistantBand showcase={showcase} />
+      </main>
       <FinalCall posters={posters} />
     </div>
   )

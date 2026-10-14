@@ -1297,6 +1297,51 @@
   --type-landing-search-label: var(--weight-semibold) var(--size-12) / normal var(--family-sans);
   --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
   --landing-mobile-wall: 440px;
+
+  /* Les écrans de l'app dans la landing : l'app en clair, toujours */
+  --landing-app-bg: var(--sand-50);
+  --landing-app-side: var(--sand-250);
+  --landing-app-card: var(--sand-0);
+  --landing-app-line: var(--sand-300);
+  --landing-app-chip: var(--sand-200);
+  --landing-app-nav-on: var(--sand-350);
+  --landing-app-bar: var(--sand-75);
+  --landing-app-window-line: var(--fete-rule);
+  --landing-app-ink: var(--ink-950);
+  --landing-app-soft: var(--ink-600);
+  --landing-app-pale: var(--ink-350);
+  --landing-app-side-width: 263px;
+  --landing-app-avatar: 35px;
+  --radius-landing-window: var(--round-16);
+  --landing-window-shadow:
+    0 18px 44px color-mix(in srgb, var(--fete-850) 8%, transparent),
+    0 2px 6px color-mix(in srgb, var(--fete-850) 6%, transparent);
+  --landing-window-shadow-dark: 0 34px 70px color-mix(in srgb, var(--fete-950) 40%, transparent);
+  --landing-window-dot: 9px;
+  --landing-window-dot-1: var(--fete-face-5);
+  --landing-window-dot-2: var(--fete-face-3);
+  --landing-window-dot-3: var(--fete-face-1);
+  --landing-cal-column: 280px;
+  --landing-cal-poster: 380px;
+  --landing-dash-thumb-width: 32px;
+  --landing-dash-thumb-height: 44px;
+  --type-landing-window-bar: var(--weight-regular) var(--size-12) / normal var(--family-sans);
+  --type-landing-app-title: var(--weight-semibold) var(--size-30) / 1.2 var(--family-sans);
+  --type-landing-app-section: var(--weight-semibold) var(--size-20) / 1.3 var(--family-sans);
+  --type-landing-app-month: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
+  --type-landing-app-figure: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --type-landing-app-text: var(--weight-regular) var(--size-16) / 1.4 var(--family-sans);
+  --type-landing-app-nav: var(--weight-medium) var(--size-16) / 1.3 var(--family-sans);
+  --type-landing-app-strong-s: var(--weight-semibold) var(--size-15) / 1.3 var(--family-sans);
+  --type-landing-app-small: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
+
+  /* La bande Assistant (2290:96) */
+  --landing-assistant-height: 980px;
+  --landing-assistant-text-top: 235px;
+  --landing-assistant-text-width: 600px;
+  --landing-assistant-calendar-left: 680px;
+  --landing-assistant-dashboard-left: 431px;
+  --landing-assistant-dashboard-top: 545px;
 }
 
 /* =========================================================================

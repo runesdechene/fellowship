@@ -1,0 +1,335 @@
+/**
+ * QUOI     — les écrans de l'application reproduits dans la landing (features/landing/screens/) :
+ *            la fenêtre, la barre latérale, le Calendrier, le Tableau de bord, la Communauté, Qui
+ *            y va, la chasse aux festivals, Pour toi, le dossier PDF et l'inscription en un clic.
+ * POURQUOI — maquette 2290:2 : les bandes montrent le vrai produit, nourri par la base. Chaque
+ *            écran est dessiné à la taille de l'app (1728 px) puis réduit par `--window-scale`.
+ * ATTENTION — couleurs de l'app en clair, fixes (--landing-app-*) : la landing ne suit pas le
+ *            thème sombre, ses écrans non plus.
+ */
+
+/* --- La fenêtre ----------------------------------------------------------------- */
+.landing-window {
+  width: var(--window-width);
+  overflow: hidden;
+  border: 1px solid var(--landing-app-window-line);
+  border-radius: var(--radius-landing-window);
+  background: var(--landing-app-bg);
+  color: var(--landing-app-ink);
+  box-shadow: var(--landing-window-shadow);
+}
+
+.landing-band--earth .landing-window,
+.landing-band--night .landing-window {
+  border-color: transparent;
+  box-shadow: var(--landing-window-shadow-dark);
+}
+
+.landing-window__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-12) var(--space-16);
+  background: var(--landing-app-bar);
+  font: var(--type-landing-window-bar);
+  color: var(--landing-app-soft);
+}
+
+.landing-window__dots {
+  width: var(--landing-window-dot);
+  height: var(--landing-window-dot);
+  margin-right: calc(2 * var(--landing-window-dot) + var(--space-8));
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-window-dot-1);
+  box-shadow:
+    calc(var(--landing-window-dot) + var(--space-6)) 0 var(--landing-window-dot-2),
+    calc(2 * (var(--landing-window-dot) + var(--space-6))) 0 var(--landing-window-dot-3);
+}
+
+.landing-window__view {
+  height: var(--window-height);
+  overflow: hidden;
+}
+
+/* L'écran à sa vraie taille, réduit d'un coup. */
+.landing-window__canvas {
+  display: flex;
+  width: calc(var(--window-width) / var(--window-scale));
+  min-height: calc(var(--window-height) / var(--window-scale));
+  transform: scale(var(--window-scale));
+  transform-origin: 0 0;
+}
+
+/* --- La barre latérale de l'exposant de démonstration ------------------------------ */
+.landing-app__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  flex-shrink: 0;
+  width: var(--landing-app-side-width);
+  padding: var(--space-56) var(--space-24);
+  background: var(--landing-app-side);
+}
+
+.landing-app__side > img {
+  align-self: center;
+  width: var(--landing-logo-width);
+  height: var(--landing-logo-height);
+}
+
+.landing-app__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--round-12);
+  background: var(--landing-app-card);
+  font: var(--type-landing-app-small);
+}
+
+.landing-app__account strong {
+  display: block;
+  font: var(--type-landing-app-strong-s);
+}
+
+.landing-app__account small {
+  color: var(--landing-app-pale);
+}
+
+.landing-app__avatar {
+  display: grid;
+  place-items: center;
+  width: var(--landing-app-avatar);
+  height: var(--landing-app-avatar);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-face-3);
+  font: var(--type-landing-app-strong-s);
+  color: var(--landing-ink);
+}
+
+.landing-app__side nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font: var(--type-landing-app-nav);
+  color: var(--landing-app-soft);
+}
+
+.landing-app__side nav span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--round-12);
+}
+
+.landing-app__side nav .is-on {
+  background: var(--landing-app-nav-on);
+  color: var(--landing-app-ink);
+}
+
+.landing-app__main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-64) var(--space-80);
+}
+
+.landing-app__title {
+  font: var(--type-landing-app-title);
+}
+
+.landing-app__section {
+  margin-top: var(--space-32);
+  font: var(--type-landing-app-section);
+}
+
+.landing-app__sub {
+  margin-top: var(--space-6);
+  font: var(--type-landing-app-text);
+  color: var(--landing-app-soft);
+}
+
+.landing-app__sub strong {
+  color: var(--landing-app-ink);
+}
+
+.landing-app__meta {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+/* --- Le statut d'une date ------------------------------------------------------------ */
+.landing-status {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-8);
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--radius-landing-pill);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-status--inscrit svg {
+  color: var(--landing-terre);
+}
+
+/* --- Le Calendrier --------------------------------------------------------------------- */
+.landing-cal__months {
+  display: grid;
+  grid-template-columns: repeat(4, var(--landing-cal-column));
+  gap: var(--space-32);
+  margin-top: var(--space-48);
+}
+
+.landing-cal__month h4 {
+  font: var(--type-landing-app-month);
+}
+
+.landing-cal__month h4.is-free {
+  color: var(--landing-app-pale);
+}
+
+.landing-cal__month > .landing-app__meta {
+  margin-bottom: var(--space-20);
+}
+
+.landing-cal__date {
+  --poster-art-height: var(--landing-cal-poster);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-24);
+}
+
+.landing-cal__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  font: var(--type-landing-app-strong-s);
+}
+
+.landing-cal__line strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-cal__free {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-20);
+  border: 1px dashed var(--landing-app-line);
+  border-radius: var(--round-12);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-cal__free strong {
+  color: var(--landing-app-ink);
+}
+
+/* --- Le Tableau de bord ------------------------------------------------------------------ */
+.landing-dash {
+  margin-top: calc(-1 * var(--space-32));
+}
+
+.landing-dash__table {
+  margin-top: var(--space-16);
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--round-12);
+  background: var(--landing-app-card);
+}
+
+.landing-dash__head,
+.landing-dash__row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-12) var(--space-20);
+}
+
+.landing-dash__head {
+  border-bottom: 1px solid var(--landing-app-line);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-pale);
+}
+
+.landing-dash__row + .landing-dash__row {
+  border-top: 1px solid var(--landing-app-line);
+}
+
+.landing-dash__row .landing-status {
+  justify-self: start;
+}
+
+.landing-dash__event {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.landing-dash__event img,
+.landing-dash__event i {
+  flex-shrink: 0;
+  width: var(--landing-dash-thumb-width);
+  height: var(--landing-dash-thumb-height);
+  border-radius: var(--round-6);
+  background: var(--landing-app-chip);
+  object-fit: cover;
+}
+
+.landing-dash__event strong,
+.landing-dash__pay strong {
+  display: block;
+  overflow: hidden;
+  font: var(--type-landing-app-strong-s);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-dash__event small,
+.landing-dash__pay small {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-dash__gauge {
+  display: block;
+  height: var(--space-4);
+  margin-top: var(--space-6);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-chip);
+}
+
+.landing-dash__gauge span {
+  display: block;
+  width: var(--paid);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-gradient);
+}
+
+.landing-dash__season {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-16);
+  margin-top: var(--space-12);
+  padding: var(--space-20);
+  border: 1px solid var(--landing-app-line);
+  border-radius: var(--round-12);
+  background: var(--landing-app-card);
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+}
+
+.landing-dash__season strong {
+  font: var(--type-landing-app-figure);
+  color: var(--landing-terre);
+}
