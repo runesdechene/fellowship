@@ -1,9 +1,9 @@
 /**
- * QUOI     — la barre du haut de la landing : le logo et le nom, les chapitres de la page, « Se connecter »
+ * QUOI     — la barre du haut de la landing : le logo complet, les chapitres de la page, « Se connecter »
  *            et « Créer ma vitrine ». Elle reste en haut, devient compacte et souligne le chapitre lu.
  * POURQUOI — maquette 2290:2 ; les liens suivent les bandes de la page (Uriel, 14/10/2026), les
  *            organisateurs ont leur encadré dans le pied de page.
- * ATTENTION — « Créer ma vitrine » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
+ * ATTENTION — logo-light.png est logo.png au texte passé en crème, pour le fond brun. « Créer ma vitrine » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
  */
 import { useLayoutEffect, useRef } from 'react'
@@ -35,8 +35,7 @@ export function LandingTopBar() {
     <header className={`landing-bar${compact ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
         <a className="landing-bar__brand" href="#" aria-label="Fellowship, haut de la page">
-          <img className="landing-bar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
-          Fellowship
+          <img src={`${import.meta.env.BASE_URL}logo-light.png`} alt="" />
         </a>
         <nav
           ref={nav}
