@@ -1231,9 +1231,10 @@
   --landing-logo-height: 37px;
   --landing-button-pad: 9px var(--space-16);
   --landing-bar-height: 101px; /* la barre de la maquette, posée sur l'ouverture */
-  --landing-bar-compact-pad: var(--space-12);
-  --landing-bar-compact-height: 64px;
-  --landing-bar-compact-bg: color-mix(in srgb, var(--fete-900) 92%, transparent);
+  --landing-bar-compact-pad: var(--space-20);
+  --landing-bar-compact-height: 80px;
+  --landing-bar-compact-bg: color-mix(in srgb, var(--fete-900) 62%, transparent);
+  --landing-bar-blur: 18px;
   --landing-chapter-line: 2px;
   --landing-slant: 10.4vw; /* 180 px sur 1728 : la pente des bandes */
   --landing-band-pad: var(--space-150);

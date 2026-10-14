@@ -284,7 +284,8 @@ input.landing-search__value::placeholder {
 }
 
 /* --- La barre du haut -------------------------------------------------------- */
-/* La barre reste en haut : posée sur l'ouverture, puis compacte sur un brun presque plein. */
+/* La barre reste en haut : posée sur l'ouverture, puis sur un brun translucide qui floute la page.
+   Un flou sur une barre de 80 px reste léger, contrairement à un grand calque (interface.md). */
 .landing-bar {
   position: fixed;
   inset: 0 0 auto;
@@ -295,6 +296,7 @@ input.landing-search__value::placeholder {
 
 .landing-bar.is-compact {
   background: var(--landing-bar-compact-bg);
+  backdrop-filter: blur(var(--landing-bar-blur));
 }
 
 .landing-bar__inner {
