@@ -994,3 +994,30 @@
 .landing-you__why {
   color: var(--landing-app-ink);
 }
+
+/* --- Téléphone : chaque écran est réduit à la largeur de l'écran ------------------------ */
+@media (width <= 760px) {
+  .landing-window {
+    width: 100%;
+  }
+
+  .landing-window__view {
+    height: calc(var(--window-height) / var(--window-scale) * var(--landing-mobile-scale));
+  }
+
+  .landing-window__canvas {
+    width: calc((100vw - 2 * var(--mobile-gutter)) / var(--landing-mobile-scale));
+    min-height: 0;
+    transform: scale(var(--landing-mobile-scale));
+  }
+
+  .landing-who,
+  .landing-pdf__sheet,
+  .landing-oneclick__card {
+    width: 100%;
+  }
+
+  .landing-pdf__done {
+    right: var(--space-12);
+  }
+}

@@ -1297,6 +1297,7 @@
   --type-landing-search-label: var(--weight-semibold) var(--size-12) / normal var(--family-sans);
   --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
   --landing-mobile-wall: 440px;
+  --landing-mobile-scale: 0.2; /* un écran de 1728 px ramené à un téléphone */
 
   /* Les écrans de l'app dans la landing : l'app en clair, toujours */
   --landing-app-bg: var(--sand-50);

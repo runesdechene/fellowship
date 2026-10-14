@@ -767,11 +767,6 @@ input.landing-search__value::placeholder {
     position: static;
   }
 
-  .landing-window {
-    --window-width: calc(100vw - 2 * var(--mobile-gutter));
-    --window-scale: 0.2;
-  }
-
   .landing-foot__top,
   .landing-foot__bottom {
     flex-direction: column;
