@@ -96,7 +96,7 @@ export function TabBar() {
             <Settings size={18} strokeWidth={1.8} />
             <span>Réglages</span>
           </NavLink>
-          <a href="/" role="menuitem" className="tab-sheet__item tab-sheet__link">
+          <a href="/explorer" role="menuitem" className="tab-sheet__item tab-sheet__link">
             <ArrowLeftRight size={18} strokeWidth={1.8} />
             <span>Revenir à la V1</span>
           </a>

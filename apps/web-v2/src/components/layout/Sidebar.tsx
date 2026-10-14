@@ -96,8 +96,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </NavLink>
           )
         })}
-        {/* La V1 est une autre application : un lien plein, pas une route de la V2. */}
-        <a className="sidebar__item" href="/">
+        {/* La V1 est une autre application : un lien plein, vers son Explorer (sa racine est la landing). */}
+        <a className="sidebar__item" href="/explorer">
           <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />
           <span className="sidebar__item-label">Revenir à la V1</span>
         </a>
