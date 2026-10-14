@@ -98,6 +98,212 @@
   filter: brightness(var(--hover-brightness));
 }
 
+/* --- L'accroche et sa photo provisoire ------------------------------------ */
+.landing-top {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* La photo floutée déborde vers le haut, puis le voile la fond dans la page. */
+.landing-top::before,
+.landing-top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.landing-top::before {
+  top: calc(-1 * var(--landing-hero-image-bleed));
+  background: var(--landing-hero-image) center / cover;
+  filter: blur(var(--landing-hero-image-blur));
+  opacity: var(--landing-hero-image-opacity);
+}
+
+.landing-top::after {
+  background: var(--landing-hero-veil);
+}
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--landing-hero-gap);
+  padding: var(--landing-hero-top) var(--landing-gutter) var(--landing-hero-bottom);
+  text-align: center;
+}
+
+.landing-hero__eyebrow {
+  font: var(--type-landing-eyebrow);
+  color: var(--ink-soft);
+}
+
+.landing-hero__title {
+  max-width: var(--landing-hero-title-width);
+  font: var(--type-landing-hero);
+  letter-spacing: var(--tracking-landing-hero);
+}
+
+.landing-hero__lead {
+  max-width: var(--landing-hero-lead-width);
+  font: var(--type-landing-hero-lead);
+  letter-spacing: var(--tracking-landing-lead);
+  color: var(--ink-soft);
+}
+
+.landing-hero__note {
+  font: var(--type-landing-note);
+  color: var(--ink-section-pale);
+}
+
+/* --- La recherche ---------------------------------------------------------- */
+.landing-search {
+  display: flex;
+  align-items: center;
+  margin-top: var(--landing-search-top);
+  padding: var(--landing-search-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  text-align: left;
+}
+
+.landing-search__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  padding: var(--landing-search-field-padding);
+  text-align: left;
+  cursor: pointer;
+}
+
+.landing-search__field--what {
+  width: var(--landing-search-what);
+  cursor: text;
+}
+
+.landing-search__field--where {
+  width: var(--landing-search-where);
+}
+
+.landing-search__field--when {
+  width: var(--landing-search-when);
+}
+
+.landing-search__label {
+  font: var(--type-landing-search-label);
+  color: var(--ink-title);
+}
+
+.landing-search__value {
+  font: var(--type-landing-search-value);
+  color: var(--ink-section-pale);
+}
+
+.landing-search__value::placeholder {
+  color: var(--ink-section-pale);
+}
+
+input.landing-search__value {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--ink-title);
+}
+
+.landing-search__rule {
+  width: 1px;
+  height: var(--landing-search-rule);
+  background: var(--line-card);
+}
+
+.landing-search__submit {
+  display: grid;
+  place-items: center;
+  padding: var(--landing-search-submit-padding);
+  border-radius: var(--radius-round);
+  background: var(--action-surface);
+  color: var(--action-ink);
+  cursor: pointer;
+}
+
+.landing-search__submit:hover {
+  background: var(--action-surface-hover);
+}
+
+/* --- Le défilé des catégories ---------------------------------------------- */
+.landing-marquee {
+  display: flex;
+  align-items: center;
+  height: var(--landing-marquee-height);
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--landing-surface) var(--landing-marquee-fade),
+    var(--landing-surface) calc(100% - var(--landing-marquee-fade)),
+    transparent
+  );
+}
+
+.landing-marquee__track {
+  display: flex;
+  gap: var(--landing-marquee-gap);
+  width: max-content;
+  animation: landing-marquee var(--landing-marquee-duration) linear infinite;
+}
+
+.landing-marquee:hover .landing-marquee__track {
+  animation-play-state: paused;
+}
+
+.landing-marquee__list {
+  display: flex;
+  gap: var(--landing-marquee-gap);
+}
+
+.landing-marquee__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--landing-chip-gap);
+  padding: var(--landing-chip-padding);
+  border: 1px solid color-mix(in srgb, var(--tag-ink, var(--ink-soft)) 22%, transparent);
+  border-radius: var(--radius-round);
+  background: var(--tag-bg, var(--surface-chip-neutral));
+  font: var(--type-landing-chip);
+  color: var(--ink-title);
+  white-space: nowrap;
+}
+
+.landing-marquee__chip svg {
+  flex-shrink: 0;
+  color: var(--tag-ink, var(--ink-soft));
+}
+
+/* La piste porte deux fois la liste : reculer d'une liste et d'un écart boucle sans saut. */
+@keyframes landing-marquee {
+  to {
+    transform: translateX(calc(-50% - var(--landing-marquee-gap) / 2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-marquee {
+    overflow-x: auto;
+  }
+
+  .landing-marquee__track {
+    animation: none;
+  }
+
+  .landing-marquee__list[aria-hidden] {
+    display: none;
+  }
+}
+
 /* --- L'appel final ------------------------------------------------------- */
 .landing-final {
   display: flex;
@@ -197,6 +403,34 @@
   }
 
   .landing-foot__rule {
+    display: none;
+  }
+
+  .landing-hero {
+    padding-inline: var(--mobile-gutter);
+  }
+
+  .landing-marquee {
+    --landing-marquee-fade: var(--landing-marquee-fade-mobile);
+  }
+
+  .landing-hero__title {
+    font: var(--type-landing-hero-mobile);
+  }
+
+  /* Sur téléphone, la recherche se réduit à son premier champ et à la loupe. */
+  .landing-search {
+    width: 100%;
+  }
+
+  .landing-search__field--what {
+    flex: 1;
+    width: auto;
+  }
+
+  .landing-search__field--where,
+  .landing-search__field--when,
+  .landing-search__rule {
     display: none;
   }
 }

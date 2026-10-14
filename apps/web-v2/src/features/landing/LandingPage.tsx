@@ -5,13 +5,24 @@
  * ATTENTION — un composant par section de la maquette `2027 — Landing`, dans son ordre.
  */
 import { FinalCall } from './FinalCall'
+import { Hero } from './Hero'
 import { LandingTopBar } from './LandingTopBar'
+import { TypeMarquee } from './TypeMarquee'
+import { useLanding } from './useLanding'
 
 export function LandingPage() {
+  const { tags } = useLanding()
+
   return (
     <div className="landing">
-      <LandingTopBar />
-      <main />
+      {/* La photo de marché provisoire court sous la barre et l'accroche (maquette 2105:5). */}
+      <div className="landing-top">
+        <LandingTopBar />
+        <Hero />
+      </div>
+      <main>
+        <TypeMarquee tags={tags} />
+      </main>
       <FinalCall />
     </div>
   )

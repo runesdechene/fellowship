@@ -1220,6 +1220,48 @@
   --type-landing-lead: var(--weight-regular) var(--size-18) / var(--leading-normal)
     var(--family-sans);
   --type-landing-foot: var(--weight-regular) var(--size-13) / normal var(--family-sans);
+  /* L'accroche (2104:17) et sa photo provisoire (2105:5) */
+  --landing-hero-image: url('/landing-hero.png');
+  --landing-hero-image-blur: 14px;
+  --landing-hero-image-opacity: 0.22;
+  --landing-hero-image-bleed: 100px;
+  --landing-hero-veil: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--landing-surface) 35%, transparent),
+    color-mix(in srgb, var(--landing-surface) 75%, transparent) 55%,
+    var(--landing-surface)
+  );
+  --landing-hero-top: var(--space-96);
+  --landing-hero-bottom: 72px;
+  --landing-hero-gap: 22px;
+  --landing-hero-title-width: 1000px;
+  --landing-hero-lead-width: 720px;
+  --landing-search-top: var(--space-18);
+  --landing-search-padding: var(--space-8);
+  --landing-search-field-padding: var(--space-8) 22px;
+  --landing-search-what: 280px;
+  --landing-search-where: 200px;
+  --landing-search-when: 220px;
+  --landing-search-rule: 28px;
+  --landing-search-submit-padding: var(--space-14);
+  --tracking-landing-hero: -0.03em;
+  --type-landing-eyebrow: var(--weight-medium) var(--size-14) / normal var(--family-sans);
+  --type-landing-hero: var(--weight-regular) 96px / 0.95 var(--family-display);
+  --type-landing-hero-mobile: var(--weight-regular) var(--size-52) / 0.95 var(--family-display);
+  --type-landing-hero-lead: var(--weight-regular) 19px / 1.5 var(--family-sans);
+  --type-landing-search-label: var(--weight-semibold) var(--size-12) / normal var(--family-sans);
+  --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
+  --type-landing-note: var(--weight-regular) var(--size-13) / normal var(--family-sans);
+
+  /* Le défilé des catégories (2112:2) */
+  --landing-marquee-height: 64px;
+  --landing-marquee-gap: var(--space-10);
+  --landing-marquee-fade: 220px;
+  --landing-marquee-fade-mobile: var(--space-48);
+  --landing-marquee-duration: 70s;
+  --landing-chip-padding: 9px var(--space-16) 9px var(--space-14);
+  --landing-chip-gap: var(--space-8);
+  --type-landing-chip: var(--weight-medium) var(--size-14) / normal var(--family-sans);
 }
 
 /* =========================================================================
