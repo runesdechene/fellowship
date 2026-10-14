@@ -158,7 +158,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
   couleurs, festivals, histoire, six fonctions, Pro, organisateurs, « Propulsé par Runes de Chêne ») ;
   remplace la page « Parchemin ».
 - **Cadre** : `2027 — Landing`. **À fournir par Uriel** : photos de marché, relecture de l'histoire.
-- **Règle du 08/10/2026** : la recherche publique (sans compte) se fouille sur **6 mois**, comme l'Explorer gratuit, avec le même compteur « N festivals t'attendent après {mois} » ; les fiches restent ouvertes par lien direct (et indexables).
+- **Règle du 14/10/2026** (remplace celle du 08/10, qui disait 6 mois) : la recherche publique (sans compte) se fouille sur **3 mois** ; un compte gratuit en ouvre 6 (l'Explorer gratuit), le Pro toute l'année ; même compteur « N festivals t'attendent après {mois} » ; les fiches restent ouvertes par lien direct (et indexables).
 
 ### Lot 12 — Bascule de `flw.sh` vers la V2  ☐
 - Décidé par Uriel quand les lots 1-11 suffisent à remplacer la V1. Redirections, service worker,

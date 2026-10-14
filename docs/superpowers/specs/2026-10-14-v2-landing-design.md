@@ -14,7 +14,7 @@ jour où la V2 passe à tout le monde (lot 12). Un seul changement de design, as
 
 - **11a (ce spec)** : la landing elle-même, toutes les sections de la maquette, données réelles.
 - **11b (plus tard)** : l'annuaire public — Explorer et fiche ouverts sans compte, recherche sur
-  6 mois, compteur « N festivals t'attendent après {mois} ». En 11a, tout ce qui y mènera pointe
+  3 mois (règle du 14/10/2026 ; 6 mois avec un compte gratuit), compteur « N festivals t'attendent après {mois} ». En 11a, tout ce qui y mènera pointe
   vers `/connexion`.
 
 Personne d'anonyme ne passe par `/v2/` avant la bascule : 11a seul est relisable en entier.
