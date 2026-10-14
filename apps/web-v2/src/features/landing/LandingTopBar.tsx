@@ -1,5 +1,5 @@
 /**
- * QUOI     — la barre du haut de la landing : la marque, les chapitres de la page, « Se connecter »
+ * QUOI     — la barre du haut de la landing : le logo et le nom, les chapitres de la page, « Se connecter »
  *            et « Créer ma vitrine ». Elle reste en haut, devient compacte et souligne le chapitre lu.
  * POURQUOI — maquette 2290:2 ; les liens suivent les bandes de la page (Uriel, 14/10/2026), les
  *            organisateurs ont leur encadré dans le pied de page.
@@ -34,8 +34,9 @@ export function LandingTopBar() {
   return (
     <header className={`landing-bar${compact ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
-        <a href="#" aria-label="Fellowship, haut de la page">
+        <a className="landing-bar__brand" href="#" aria-label="Fellowship, haut de la page">
           <img className="landing-bar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
+          Fellowship
         </a>
         <nav
           ref={nav}

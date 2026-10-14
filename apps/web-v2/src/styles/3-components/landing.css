@@ -312,6 +312,15 @@ input.landing-search__value::placeholder {
   padding-block: var(--landing-bar-compact-pad);
 }
 
+/* La marque : le logo et le nom, en blanc, comme dans le pied de page. */
+.landing-bar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font: var(--type-landing-bar-brand);
+  color: var(--landing-cream);
+}
+
 .landing-bar__logo {
   width: var(--landing-logo-width);
   height: var(--landing-logo-height);
