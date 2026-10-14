@@ -4,7 +4,8 @@
  * POURQUOI — lot 11c (spec 2026-10-14-v2-landing-11c-design.md) : chaque élément de la landing
  *            change quand Fellowship change ; seule la « personne » vient de lib/landing-demo.ts.
  * ATTENTION — une donnée manquante rend un tableau vide ou null : l'écran qui en dépend se cache,
- *            jamais un zéro ni une case vide.
+ *            jamais un zéro ni une case vide. Les visages de la preuve sont de vrais avatars :
+ *            Runes de Chêne d'abord, puis d'autres exposants tirés au hasard (Uriel, 14/10/2026).
  */
 import { parseSqlDate } from './dates'
 import { DEMO, type DemoStatus } from './landing-demo'
@@ -15,6 +16,15 @@ const PER_MONTH = 2
 const DOSSIERS = 4
 const FOR_YOU = 3
 const DAY = 24 * 60 * 60 * 1000
+const FACES = 5
+
+/** Runes de Chêne, toujours le premier visage de la preuve (Uriel, 14/10/2026). */
+export const RUNES_DE_CHENE = '558a7cf4-29d3-49ba-bba9-ffb015c97c20'
+
+export interface FaceRow {
+  actor_id: string
+  avatar_url: string
+}
 
 export interface ShowcaseRow {
   id: string
@@ -42,6 +52,7 @@ export interface Showcase {
   wall: string[]
   crowd: { event: ShowEvent; count: number } | null
   exhibitors: number | null
+  faces: string[]
   months: { month: Date; events: (ShowEvent & { status: DemoStatus })[] }[]
   dossiers: (ShowEvent & { status: DemoStatus; paid: number; total: number })[]
   oneClick: ShowEvent | null
@@ -57,6 +68,19 @@ export function placeOf(city: string, department: string | null): string {
   const inParens = /\(([0-9AB]{2,3})\)/.exec(raw)?.[1]
   const dept = inParens ?? (/^\d{5}$/.test(raw) ? raw.slice(0, 2) : raw)
   return `${city} (${dept})`
+}
+
+/** Runes de Chêne, puis des avatars tirés au hasard : la preuve change à chaque visite. */
+export function pickFaces(people: FaceRow[], random: () => number): string[] {
+  const first = people.filter((p) => p.actor_id === RUNES_DE_CHENE)
+  const others = people.filter((p) => p.actor_id !== RUNES_DE_CHENE)
+  // Le mélange de Fisher-Yates : chaque ordre a la même chance.
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1))
+    const [a, b] = [others[i], others[j]]
+    if (a && b) [others[i], others[j]] = [b, a]
+  }
+  return [...first, ...others].slice(0, FACES).map((p) => p.avatar_url)
 }
 
 const OBJECT = '/storage/v1/object/public/'
@@ -89,6 +113,7 @@ export function buildShowcase(
     registered: ReadonlyMap<string, number>
     recent: ShowcaseRow[]
     exhibitors: number | null
+    faces: string[]
   },
   today: Date,
 ): Showcase {
@@ -135,6 +160,7 @@ export function buildShowcase(
     wall: withPoster.slice(0, WALL_POSTERS).flatMap((e) => (e.imageUrl ? [e.imageUrl] : [])),
     crowd,
     exhibitors: input.exhibitors,
+    faces: input.faces,
     months,
     dossiers,
     oneClick,

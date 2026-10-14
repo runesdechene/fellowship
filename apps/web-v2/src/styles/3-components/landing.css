@@ -235,7 +235,7 @@ input.landing-search__value::placeholder {
   cursor: pointer;
 }
 
-/* --- La preuve : des visages, et le vrai nombre d'exposants ----------------------- */
+/* --- La preuve : de vrais avatars, et le vrai nombre d'exposants ----------------------- */
 .landing-proof {
   display: flex;
   align-items: center;
@@ -253,6 +253,7 @@ input.landing-search__value::placeholder {
   height: var(--landing-face-m);
   margin-right: var(--landing-face-overlap);
   border: var(--landing-face-ring) solid var(--landing-face-ring-color);
+  object-fit: cover;
 }
 
 .landing-proof__face:nth-child(1) {

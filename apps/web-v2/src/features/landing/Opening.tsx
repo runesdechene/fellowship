@@ -2,14 +2,13 @@
  * QUOI     — l'ouverture de la landing : la barre, « Mon assistant de festivals. Ma communauté
  *            d'exposants. », la promesse, la recherche, la preuve, et le mur d'affiches.
  * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 14/10/2026 : l'outil d'abord, les
- *            gens ensuite. Le nombre d'exposants est lu en base ; les visages sont de démonstration.
+ *            gens ensuite. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
  * ATTENTION — jusqu'à l'annuaire public (lot 11b), la recherche mène à la connexion.
  */
 import { Search } from 'lucide-react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Showcase } from '@/lib/landing'
-import { DEMO } from '@/lib/landing-demo'
+import { posterThumb, type Showcase } from '@/lib/landing'
 import { LandingTopBar } from './LandingTopBar'
 import { PosterWall } from './PosterWall'
 
@@ -69,13 +68,18 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
         </form>
         {showcase?.exhibitors ? (
           <p className="landing-proof">
-            <span className="landing-proof__faces" aria-hidden>
-              {DEMO.faces.map((initial) => (
-                <span key={initial} className="landing-proof__face">
-                  {initial}
-                </span>
-              ))}
-            </span>
+            {showcase.faces.length > 0 && (
+              <span className="landing-proof__faces" aria-hidden>
+                {showcase.faces.map((url) => (
+                  <img
+                    key={url}
+                    className="landing-proof__face"
+                    src={posterThumb(url, 96)}
+                    alt=""
+                  />
+                ))}
+              </span>
+            )}
             {showcase.exhibitors.toLocaleString('fr-FR')} exposants y tiennent déjà leur saison
           </p>
         ) : null}

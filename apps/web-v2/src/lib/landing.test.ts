@@ -5,7 +5,14 @@
  *            (méthode du dépôt : .claude/rules/dev.md).
  */
 import { describe, expect, it } from 'vitest'
-import { buildShowcase, placeOf, posterThumb, type ShowcaseRow } from './landing'
+import {
+  buildShowcase,
+  pickFaces,
+  placeOf,
+  posterThumb,
+  RUNES_DE_CHENE,
+  type ShowcaseRow,
+} from './landing'
 import { DEMO } from './landing-demo'
 
 const TODAY = new Date(2026, 9, 14)
@@ -26,7 +33,7 @@ function row(id: string, start: string, over: Partial<ShowcaseRow> = {}): Showca
 }
 
 const none = new Map<string, number>()
-const empty = { upcoming: [], registered: none, recent: [], exhibitors: null }
+const empty = { upcoming: [], registered: none, recent: [], exhibitors: null, faces: [] }
 
 describe('placeOf', () => {
   it('écrit « Ville (dép.) », ou la ville seule', () => {
@@ -151,5 +158,27 @@ describe('buildShowcase', () => {
     const show = buildShowcase({ ...empty, upcoming, registered }, TODAY)
     expect(show.forYou).toHaveLength(3)
     expect(show.forYou.map((e) => e.id)).not.toContain('a')
+  })
+})
+
+describe('pickFaces', () => {
+  const rdc = { actor_id: RUNES_DE_CHENE, avatar_url: 'rdc' }
+  const others = ['a', 'b', 'c', 'd', 'e', 'f'].map((id) => ({ actor_id: id, avatar_url: id }))
+  const people = [...others.slice(0, 3), rdc, ...others.slice(3)]
+
+  it('pose Runes de Chêne en premier, puis quatre autres avatars différents', () => {
+    const faces = pickFaces(people, Math.random)
+    expect(faces).toHaveLength(5)
+    expect(faces[0]).toBe('rdc')
+    expect(new Set(faces).size).toBe(5)
+  })
+
+  it('tire les quatre autres au hasard', () => {
+    expect(pickFaces(people, () => 0)).not.toEqual(pickFaces(people, () => 0.99))
+  })
+
+  it('rend ce qu’il y a quand la base en a peu, et rien sans avatar', () => {
+    expect(pickFaces(others.slice(0, 2), Math.random).sort()).toEqual(['a', 'b'])
+    expect(pickFaces([], Math.random)).toEqual([])
   })
 })

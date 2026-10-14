@@ -1,6 +1,6 @@
 /**
  * QUOI     — ce que la landing lit en base, sans compte : les festivals publics à venir, leurs
- *            inscrits, les derniers festivals ajoutés et le nombre d'exposants.
+ *            inscrits, les derniers festivals ajoutés, le nombre d'exposants et leurs avatars.
  * POURQUOI — lot 11c : chaque élément de la landing est vivant. Tout ici est lisible sans compte
  *            (events, participations, entities — vérifié le 14/10/2026).
  * ATTENTION — une lecture ratée rend une liste vide ou null, jamais une exception : l'écran qui en
@@ -9,18 +9,19 @@
 import { useEffect, useState } from 'react'
 import { todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
-import { buildShowcase, type Showcase, type ShowcaseRow } from '@/lib/landing'
+import { buildShowcase, pickFaces, type Showcase, type ShowcaseRow } from '@/lib/landing'
 import { supabase } from '@/lib/supabase'
 
 const UPCOMING = 40
 const RECENT = 3
 /** Le plafond du serveur (max-rows) : au-delà, la lecture serait tronquée sans le dire. */
 const PARTICIPATIONS = 1000
+const AVATARS = 200
 const COLUMNS = 'id, name, image_url, tags, start_date, end_date, city, department, created_at'
 
 async function loadShowcase(today: Date): Promise<Showcase> {
   const from = todayIso(today)
-  const [upcoming, recent, exhibitors] = await Promise.all([
+  const [upcoming, recent, exhibitors, avatars] = await Promise.all([
     supabase
       .from('events')
       .select(COLUMNS)
@@ -41,6 +42,13 @@ async function loadShowcase(today: Date): Promise<Showcase> {
       .from('entities')
       .select('actor_id', { count: 'exact', head: true })
       .eq('type', 'exposant'),
+    supabase
+      .from('entities')
+      .select('actor_id, avatar_url')
+      .eq('type', 'exposant')
+      .not('avatar_url', 'is', null)
+      .order('actor_id')
+      .limit(AVATARS),
   ])
   const rows: ShowcaseRow[] = upcoming.error ? [] : upcoming.data
 
@@ -68,6 +76,12 @@ async function loadShowcase(today: Date): Promise<Showcase> {
       registered,
       recent: recent.error ? [] : recent.data,
       exhibitors: exhibitors.error ? null : exhibitors.count,
+      faces: avatars.error
+        ? []
+        : pickFaces(
+            avatars.data.flatMap((a) => (a.avatar_url ? [{ ...a, avatar_url: a.avatar_url }] : [])),
+            Math.random,
+          ),
     },
     today,
   )
@@ -81,7 +95,10 @@ export function useLandingShowcase(): Showcase | null {
     async function run() {
       const today = new Date()
       const next = await loadShowcase(today).catch(() =>
-        buildShowcase({ upcoming: [], registered: new Map(), recent: [], exhibitors: null }, today),
+        buildShowcase(
+          { upcoming: [], registered: new Map(), recent: [], exhibitors: null, faces: [] },
+          today,
+        ),
       )
       if (!cancelled) setShowcase(next)
     }
