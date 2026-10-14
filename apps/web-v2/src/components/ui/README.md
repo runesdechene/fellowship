@@ -17,5 +17,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
   catégorie. Sa taille vient de la classe passée.
 - `PosterArt.tsx` — la grande affiche (calendrier, Explorer, vitrine) : compose `Poster`, y écrit
   la date quand l'image manque, et pose compte à rebours et amis par-dessus.
+- `Wordmark.tsx` — la marque écrite : pictogramme, « Fellowship » en Cabin, point orange ; sa
+  couleur et sa taille viennent du contexte.
 - `InstagramIcon.tsx` — le pictogramme Instagram au trait (lucide a retiré ses logos de marque).
 - `CodeInput.tsx` — les six cases d'un code reçu par e-mail (frappe, collage, retour arrière).

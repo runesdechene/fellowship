@@ -8,6 +8,7 @@
  */
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { Wordmark } from '@/components/ui/Wordmark'
 import { LandingBand } from './LandingBand'
 import { OrganizersBox } from './OrganizersBox'
 
@@ -29,10 +30,7 @@ export function FinalCall({ posters }: { posters: string[] }) {
         <div className="landing-foot__top">
           <div className="landing-foot__brand">
             <p className="landing-foot__name">
-              <img src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
-              <span>
-                Fellowship<span className="landing-brand-dot">.</span>
-              </span>
+              <Wordmark />
             </p>
             <p>
               Le calendrier communautaire

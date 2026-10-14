@@ -8,6 +8,7 @@
  */
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Wordmark } from '@/components/ui/Wordmark'
 import { useLandingNav } from './useLandingNav'
 
 const CHAPTERS = [
@@ -35,10 +36,7 @@ export function LandingTopBar() {
     <header className={`landing-bar${compact ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
         <a className="landing-bar__brand" href="#" aria-label="Fellowship, haut de la page">
-          <img className="landing-bar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="" />
-          <span>
-            Fellowship<span className="landing-brand-dot">.</span>
-          </span>
+          <Wordmark />
         </a>
         <nav
           ref={nav}

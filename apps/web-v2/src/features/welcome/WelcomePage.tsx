@@ -11,6 +11,7 @@
 import { ArrowRight, ChevronLeft } from 'lucide-react'
 import { useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { Wordmark } from '@/components/ui/Wordmark'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { supabase } from '@/lib/supabase'
@@ -128,7 +129,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   return (
     <div className="door">
       <div className="door__side">
-        <img className="door__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
+        <Wordmark className="door__logo" />
         <form className="door__form" onSubmit={submit}>
           <div className="welcome__top">
             {index > 0 && (

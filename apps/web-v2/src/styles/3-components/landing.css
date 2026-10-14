@@ -312,23 +312,9 @@ input.landing-search__value::placeholder {
   padding-block: var(--landing-bar-compact-pad);
 }
 
-/* La marque : le logo et le nom, en blanc, comme dans le pied de page. */
+/* La marque, en crème sur le brun. */
 .landing-bar__brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-12);
-  font: var(--type-landing-bar-brand);
-  color: var(--landing-cream);
-}
-
-/* Le point final du nom, dans l'orange clair du logo (Uriel, 14/10/2026). */
-.landing-brand-dot {
-  color: var(--landing-gold);
-}
-
-.landing-bar__logo {
-  width: var(--landing-logo-width);
-  height: var(--landing-logo-height);
+  --wordmark-ink: var(--landing-cream);
 }
 
 .landing-bar__anchors {
@@ -769,16 +755,12 @@ input.landing-search__value::placeholder {
 }
 
 .landing-foot__name {
-  display: flex;
-  align-items: center;
-  gap: var(--space-14);
-  font: var(--type-landing-foot-brand);
-  color: var(--landing-cream);
+  --wordmark-ink: var(--landing-cream);
+  --wordmark-gap: var(--space-14);
 }
 
-.landing-foot__name img {
-  width: var(--landing-logo-width);
-  height: var(--landing-logo-height);
+.landing-foot__name .wordmark {
+  font: var(--type-landing-foot-brand);
 }
 
 .landing-foot__links {

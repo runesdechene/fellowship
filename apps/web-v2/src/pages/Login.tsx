@@ -8,6 +8,7 @@
  */
 import { ArrowRight, ChevronLeft, Mail } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
+import { Wordmark } from '@/components/ui/Wordmark'
 import { CodeInput } from '@/components/ui/CodeInput'
 import { LoginWall } from '@/features/login/LoginWall'
 import { useAuth } from '@/lib/auth'
@@ -69,7 +70,7 @@ export function Login() {
   return (
     <div className="door">
       <div className="door__side">
-        <img className="door__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
+        <Wordmark className="door__logo" />
         {step === 'email' ? (
           <form
             className="door__form"

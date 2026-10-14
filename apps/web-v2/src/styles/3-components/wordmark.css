@@ -1,0 +1,25 @@
+/**
+ * QUOI     — la marque écrite (components/ui/Wordmark.tsx) : pictogramme, nom en Cabin, point
+ *            orange.
+ * POURQUOI — un seul nom partout ; chaque contexte règle sa couleur et sa taille par les
+ *            variables --wordmark-*.
+ */
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wordmark-gap);
+  font: var(--type-wordmark);
+  color: var(--wordmark-ink);
+}
+
+/* Le logo ne s'arrondit jamais (interface.md). */
+.wordmark img {
+  display: block;
+  width: var(--wordmark-logo-width);
+  height: var(--wordmark-logo-height);
+}
+
+.wordmark__dot {
+  color: var(--wordmark-dot);
+}

@@ -974,7 +974,13 @@
   /* --- La connexion (pages/Login.tsx, lot 10a, maquettes 2100:2 et 2100:38) --- */
   --door-form-width: 440px;
   --door-field-padding: var(--space-14) var(--space-16);
-  --door-logo-height: 37px; /* le logo des maquettes 2100:2 et 2102:72 */
+  /* La marque écrite (Wordmark) : gris foncé des titres, crème en thème sombre et sur la landing. */
+  --wordmark-ink: var(--ink-title);
+  --wordmark-dot: var(--fete-200); /* l'orange clair du logo */
+  --wordmark-gap: var(--space-12);
+  --wordmark-logo-width: 43px;
+  --wordmark-logo-height: 37px;
+  --type-wordmark: var(--weight-semibold) var(--size-28) / 1 var(--family-brand);
   --door-field-line: 1.5px;
   --radius-door-field: var(--round-12);
   --radius-door-panel: var(--round-24);
@@ -1253,7 +1259,6 @@
   --type-landing-statement-s: var(--weight-regular) var(--size-46) / 1.1 var(--family-display);
   --type-landing-final: var(--weight-regular) var(--size-96) / 1 var(--family-display);
   --type-landing-final-lead: var(--weight-regular) var(--size-20) / 1.5 var(--family-sans);
-  --type-landing-bar-brand: var(--weight-semibold) var(--size-28) / 1 var(--family-brand);
   --type-landing-foot-brand: var(--weight-semibold) var(--size-32) / 1 var(--family-brand);
   --type-landing-foot: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
   --type-landing-orga: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
