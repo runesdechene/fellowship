@@ -49,10 +49,10 @@ describe('placeOf', () => {
 })
 
 describe('posterThumb', () => {
-  it('demande au stockage une miniature de l’affiche', () => {
+  it('demande au stockage une miniature de l’image entière, sans la découper', () => {
     const url = 'https://x.supabase.co/storage/v1/object/public/event-images/a.webp'
     expect(posterThumb(url, 40)).toBe(
-      'https://x.supabase.co/storage/v1/render/image/public/event-images/a.webp?width=40&quality=60',
+      'https://x.supabase.co/storage/v1/render/image/public/event-images/a.webp?width=40&resize=contain&quality=60',
     )
   })
 

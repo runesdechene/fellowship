@@ -86,10 +86,13 @@ export function pickFaces(people: FaceRow[], random: () => number): string[] {
 const OBJECT = '/storage/v1/object/public/'
 const RENDER = '/storage/v1/render/image/public/'
 
-/** Une miniature de l'affiche, servie par le stockage : les fonds flous et le mur restent légers. */
+/**
+ * Une miniature de l'image, servie par le stockage : les fonds flous et le mur restent légers.
+ * `resize=contain` : sans lui, le stockage garde la hauteur d'origine et découpe une bande au centre.
+ */
 export function posterThumb(url: string, width: number): string {
   if (!url.includes(OBJECT)) return url
-  return `${url.replace(OBJECT, RENDER)}?width=${String(width)}&quality=60`
+  return `${url.replace(OBJECT, RENDER)}?width=${String(width)}&resize=contain&quality=60`
 }
 
 function toEvent(r: ShowcaseRow): ShowEvent {
