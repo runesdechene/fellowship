@@ -1404,6 +1404,8 @@
   --landing-pro-text: 633px;
   --landing-pro-rule: color-mix(in srgb, var(--fete-gold-soft) 35%, transparent);
   --type-landing-price: var(--weight-regular) var(--size-80) / 1 var(--family-display);
+  --landing-pro-check: var(--landing-gold);
+  --type-landing-pro-add: var(--weight-regular) var(--size-15) / 1.4 var(--family-sans);
   --landing-you-bar: 52px;
   --landing-you-thumb-s-width: 26px;
   --landing-you-thumb-s-height: 36px;
@@ -1411,6 +1413,11 @@
   --landing-cal-nav-height: 64px;
   --landing-you-next-poster: 170px;
   --type-landing-you-title: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
+
+  /* Les témoignages (ajoutés le 14/10/2026, hors maquette) */
+  --landing-voices-lead-width: 1180px;
+  --landing-voice-face: 44px;
+  --type-landing-voice: var(--weight-regular) var(--size-26) / 1.3 var(--family-display);
 }
 
 /* =========================================================================

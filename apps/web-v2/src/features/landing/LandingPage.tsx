@@ -3,7 +3,8 @@
  *            monde sur `/decouvrir`.
  * POURQUOI — lot 11c (spec 2026-10-14-v2-landing-11c-design.md) : la maquette validée 2290:2,
  *            vivante — chaque élément vient de la base, seul l'exposant est une démonstration.
- * ATTENTION — l'ordre des bandes est celui de la maquette ; elles s'emboîtent de biais.
+ * ATTENTION — l'ordre des bandes est celui de la maquette ; elles s'emboîtent de biais. Les
+ *            témoignages, ajoutés après (Uriel, 14/10/2026), suivent le Pro.
  */
 import { AssistantBand } from './AssistantBand'
 import { CommunityBand } from './CommunityBand'
@@ -12,10 +13,13 @@ import { LandingTopBar } from './LandingTopBar'
 import { Opening } from './Opening'
 import { ProBand } from './ProBand'
 import { SoonBand } from './SoonBand'
+import { useTestimonials } from './useTestimonials'
+import { VoicesBand } from './VoicesBand'
 import { useLandingShowcase } from './useLandingShowcase'
 
 export function LandingPage() {
   const showcase = useLandingShowcase()
+  const testimonials = useTestimonials()
   const posters = showcase?.wall ?? []
 
   return (
@@ -27,6 +31,7 @@ export function LandingPage() {
         <CommunityBand showcase={showcase} />
         <SoonBand showcase={showcase} />
         <ProBand showcase={showcase} />
+        <VoicesBand testimonials={testimonials} />
       </main>
       <FinalCall posters={posters} />
     </div>

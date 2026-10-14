@@ -16,4 +16,7 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `screens/` — les écrans de l'app reproduits pour la landing, dans une fenêtre (`AppWindow`).
 - `CommunityBand.tsx` — « Ma communauté d'exposants », avec l'écran Communauté et « Qui y va ».
 - `SoonBand.tsx` — « Bientôt · Pro » : l'inscription en un clic, le dossier PDF, la veille.
-- `ProBand.tsx` — le Pro : « Gratuit » et le prix (`lib/pricing.ts`) côte à côte, l'écran « Pour toi ».
+- `ProBand.tsx` — le Pro : « Gratuit » et le prix (`lib/pricing.ts`) côte à côte, ce que le Pro
+  ajoute, l'écran « Pour toi ».
+- `VoicesBand.tsx`, `useTestimonials.ts` — les témoignages d'exposants (table `testimonials`),
+  entre le Pro et le pied de page.
