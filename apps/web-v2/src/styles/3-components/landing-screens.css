@@ -184,9 +184,67 @@
 }
 
 /* --- Le Calendrier --------------------------------------------------------------------- */
+/* La frise des douze mois, en haut à droite, comme dans l'app : une barre par mois, haute de
+   ses dates, et la fenêtre sur les mois visibles. */
+.landing-cal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-32);
+}
+
+.landing-cal__nav {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: var(--landing-cal-nav-height);
+}
+
+.landing-cal__window {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: calc(var(--window-size) * 100%);
+  border-radius: var(--round-8);
+  background: var(--landing-app-chip);
+}
+
+.landing-cal__bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-6);
+  width: var(--space-40);
+  height: 100%;
+  padding-bottom: var(--space-4);
+}
+
+.landing-cal__bar i {
+  width: var(--space-6);
+  height: calc(var(--space-6) + var(--bar-ratio) * var(--space-32));
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-app-ink);
+}
+
+.landing-cal__bar i.is-empty {
+  height: var(--space-2);
+  background: var(--landing-app-line);
+}
+
+.landing-cal__bar small {
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-pale);
+}
+
+.landing-cal__bar.is-in-view small {
+  color: var(--landing-app-ink);
+}
+
 .landing-cal__months {
   display: grid;
-  grid-template-columns: repeat(4, var(--landing-cal-column));
+  grid-template-columns: repeat(5, var(--landing-cal-column));
   gap: var(--space-32);
   margin-top: var(--space-48);
 }
@@ -283,8 +341,7 @@
   min-width: 0;
 }
 
-.landing-dash__event img,
-.landing-dash__event i {
+.landing-dash__thumb {
   flex-shrink: 0;
   width: var(--landing-dash-thumb-width);
   height: var(--landing-dash-thumb-height);
@@ -756,8 +813,8 @@
   border-radius: var(--round-14);
 }
 
-.landing-hunt__row img,
-.landing-hunt__row i {
+.landing-hunt__thumb,
+.landing-hunt__row--ghost i {
   flex-shrink: 0;
   width: var(--landing-hunt-thumb-width);
   height: var(--landing-hunt-thumb-height);
@@ -881,6 +938,11 @@
   background: var(--landing-app-chip);
 }
 
+.landing-you__bars i.has-3 {
+  height: calc(var(--landing-you-bar) * 1.5);
+  background: var(--landing-app-chip);
+}
+
 .landing-you__bars .is-now i {
   background: var(--landing-app-ink);
   color: var(--landing-app-card);
@@ -898,7 +960,9 @@
 
 .landing-you__next,
 .landing-you__soon,
-.landing-you__picks {
+.landing-you__picks,
+.landing-you__dossiers,
+.landing-you__reports {
   margin-top: var(--space-12);
   border: 1px solid var(--landing-app-line);
   border-radius: var(--round-16);
@@ -970,14 +1034,18 @@
   min-width: 0;
 }
 
-.landing-you__picks img,
-.landing-you__picks i {
+.landing-you__thumb {
   flex-shrink: 0;
   width: var(--landing-dash-thumb-width);
   height: var(--landing-dash-thumb-height);
   border-radius: var(--round-6);
   background: var(--landing-app-chip);
   object-fit: cover;
+}
+
+.landing-you__thumb--s {
+  width: var(--landing-you-thumb-s-width);
+  height: var(--landing-you-thumb-s-height);
 }
 
 .landing-you__picks > span > span {
@@ -995,6 +1063,80 @@
 }
 
 .landing-you__why {
+  color: var(--landing-app-ink);
+}
+
+/* Mes dossiers et Mes bilans : une ligne par date, comme « À venir ». */
+.landing-you__dossiers,
+.landing-you__reports {
+  padding: var(--space-4) var(--space-16);
+}
+
+.landing-you__dossiers p,
+.landing-you__report {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding-block: var(--space-10);
+}
+
+.landing-you__dossiers p + p,
+.landing-you__reports p + p {
+  border-top: 1px solid var(--landing-app-line);
+}
+
+.landing-you__dossiers p > span:not(.landing-you__thumb),
+.landing-you__report > span:not(.landing-you__thumb) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.landing-you__dossiers strong,
+.landing-you__report strong {
+  overflow: hidden;
+  font: var(--type-landing-app-strong-s);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-you__dossiers small,
+.landing-you__reports small {
+  overflow: hidden;
+  font: var(--type-landing-app-small);
+  color: var(--landing-app-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landing-you__season {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-12);
+}
+
+.landing-you__season strong {
+  font: var(--type-landing-you-net);
+  color: var(--landing-app-ink);
+}
+
+.landing-you__season b {
+  color: var(--landing-app-ink);
+}
+
+.landing-you__report b {
+  font: var(--type-landing-app-strong-s);
+  color: var(--landing-terre);
+}
+
+.landing-you__report em {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  font: var(--type-landing-app-small);
+  font-style: normal;
   color: var(--landing-app-ink);
 }
 

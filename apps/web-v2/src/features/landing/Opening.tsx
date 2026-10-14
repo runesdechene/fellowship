@@ -58,7 +58,7 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
             }}
           >
             <span className="landing-search__label">Quand</span>
-            <span className="landing-search__value">Les 12 prochains mois</span>
+            <span className="landing-search__value">Les 3 prochains mois</span>
           </button>
           <button type="submit" className="landing-search__submit" aria-label="Rechercher">
             <Search size={18} strokeWidth={2.2} />

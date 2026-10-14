@@ -4,8 +4,10 @@
  * POURQUOI — maquette 2290:2 (nœud 2309:5) : Fellowship fait la veille des festivals, fonction Pro
  *            à venir. La maquette disait « depuis le site de la mairie » : la base ne connaît pas la
  *            source, on écrit donc la vraie ancienneté (spec du lot 11c).
- * ATTENTION — les critères sont de démonstration ; les festivals sont réels.
+ * ATTENTION — les critères sont de démonstration ; les festivals sont réels. Sans affiche, la
+ *            vignette prend la couleur et l'icône de sa catégorie, comme dans l'app (Poster).
  */
+import { Poster } from '@/components/ui/Poster'
 import { formatDateRange } from '@/lib/dates'
 import { posterThumb, type Showcase } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
@@ -39,7 +41,11 @@ export function HuntScreen({ recent }: { recent: Showcase['recent'] }) {
         </div>
         {recent.map((e) => (
           <div key={e.id} className="landing-hunt__row">
-            {e.imageUrl ? <img src={posterThumb(e.imageUrl, 120)} alt="" /> : <i />}
+            <Poster
+              imageUrl={e.imageUrl ? posterThumb(e.imageUrl, 120) : null}
+              tags={e.tags}
+              className="landing-hunt__thumb"
+            />
             <span>
               <strong>{e.name}</strong>
               <small>

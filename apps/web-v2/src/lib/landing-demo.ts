@@ -21,8 +21,13 @@ export const DEMO = {
     { paid: 0, total: 320 },
     { paid: 0, total: 280 },
   ],
-  /** « Mes bilans » : la saison passée. */
-  season: { profit: 4210 },
+  /** « Mes bilans » : la saison en cours, et les bilans des trois dernières dates passées
+   *  (null : le bilan reste à remplir). */
+  season: { profit: 4210, revenue: 11850, goal: 15000 },
+  reports: [{ revenue: 1840, net: 960 }, { revenue: 1320, net: 610 }, null] as ({
+    revenue: number
+    net: number
+  } | null)[],
   /** Les visages de l'ouverture : des initiales, jamais un vrai exposant. */
   faces: ['M', 'L', 'C', 'T', 'A'],
   /** Le fil de la communauté. */

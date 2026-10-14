@@ -5,22 +5,13 @@
  * ATTENTION — les montants sont de démonstration : jamais les chiffres d'un vrai exposant.
  */
 import type { CSSProperties } from 'react'
+import { Poster } from '@/components/ui/Poster'
 import { formatDateRange } from '@/lib/dates'
-import { posterThumb, type Showcase } from '@/lib/landing'
+import { paymentOf, posterThumb, type Showcase } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
 import { formatEuros } from '@/lib/money'
 import { AppWindow } from './AppWindow'
 import { DemoStatus } from './DemoStatus'
-
-function payment(paid: number, total: number): { label: string; note: string } {
-  if (paid >= total) return { label: 'Payé', note: `${formatEuros(total)} réglés` }
-  if (paid > 0)
-    return {
-      label: 'Acompte versé',
-      note: `${formatEuros(paid)} sur ${formatEuros(total)} · solde à venir`,
-    }
-  return { label: 'À payer', note: `${formatEuros(total)} si le dossier est accepté` }
-}
 
 export function DashboardScreen({ dossiers }: { dossiers: Showcase['dossiers'] }) {
   if (dossiers.length === 0) return null
@@ -38,11 +29,15 @@ export function DashboardScreen({ dossiers }: { dossiers: Showcase['dossiers'] }
             <span>Paiement</span>
           </div>
           {dossiers.map((d) => {
-            const pay = payment(d.paid, d.total)
+            const pay = paymentOf(d.paid, d.total)
             return (
               <div key={d.id} className="landing-dash__row">
                 <span className="landing-dash__event">
-                  {d.imageUrl ? <img src={posterThumb(d.imageUrl, 80)} alt="" /> : <i />}
+                  <Poster
+                    imageUrl={d.imageUrl ? posterThumb(d.imageUrl, 80) : null}
+                    tags={d.tags}
+                    className="landing-dash__thumb"
+                  />
                   <span>
                     <strong>{d.name}</strong>
                     <small>{formatDateRange(d.startDate, d.endDate)}</small>

@@ -1,40 +1,48 @@
 /**
  * QUOI     — l'écran d'accueil d'un compte Pro dans la landing : « Bonjour, Atelier Corne & Cuir »,
- *            la saison en barres, la prochaine date, « À venir » et « Pour toi ».
- * POURQUOI — maquette 2290:2 (nœud 2290:1334), reproduite d'après le tableau de bord de l'app. La
- *            maquette disait « Bonjour, Runes de Chêne » : jamais un vrai exposant (spec du lot 11c).
- * ATTENTION — les festivals viennent de la base ; le nom, les statuts et les raisons de « Pour
- *            toi » sont de démonstration.
+ *            la saison en barres, la prochaine date, « À venir », « Pour toi », puis ce qui reste à
+ *            payer et les bilans.
+ * POURQUOI — maquette 2290:2 (nœud 2290:1334), reproduite d'après le tableau de bord de l'app ; les
+ *            dossiers et les bilans y sont (Uriel, 14/10/2026 : « il manque des éléments »). La
+ *            maquette disait « Bonjour, Runes de Chêne » : jamais les chiffres d'un vrai exposant.
+ * ATTENTION — les festivals viennent de la base ; le nom, les statuts, les montants et les raisons
+ *            de « Pour toi » sont de démonstration.
  */
+import { ArrowRight } from 'lucide-react'
+import { Poster } from '@/components/ui/Poster'
 import { PosterArt } from '@/components/ui/PosterArt'
 import {
   daysUntil,
   formatCountdown,
   formatDateRange,
   formatDaysShort,
+  formatFullDate,
   formatMonthAbbr,
 } from '@/lib/dates'
-import { posterThumb, type Showcase } from '@/lib/landing'
+import { paymentOf, posterThumb, type Showcase, type ShowEvent } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { AppWindow } from './AppWindow'
 import { DemoStatus } from './DemoStatus'
 
-const BARS = 12
+const Thumb = ({ event, className }: { event: ShowEvent; className: string }) => (
+  <Poster
+    imageUrl={event.imageUrl ? posterThumb(event.imageUrl, 120) : null}
+    tags={event.tags}
+    className={className}
+  />
+)
 
 export function ForYouScreen({ showcase }: { showcase: Showcase }) {
   const today = new Date()
-  const { months, dossiers, forYou } = showcase
+  const { months, dossiers, forYou, reports } = showcase
   const next = dossiers[0]
-  const total = months.reduce((n, m) => n + m.events.length, 0)
-  const bars = Array.from({ length: BARS }, (_, k) => ({
-    month: new Date(today.getFullYear(), today.getMonth() + k, 1),
-    count: months[k]?.events.length ?? 0,
-  }))
+  const total = months.reduce((n, m) => n + m.count, 0)
   return (
     <AppWindow
       title="Pour toi"
       width={864}
-      height={540}
+      height={640}
       active="Tableau de bord"
       className="landing-shot--foryou"
     >
@@ -54,12 +62,12 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
           </div>
         </div>
         <div className="landing-you__bars">
-          {bars.map((b, k) => (
-            <span key={b.month.toISOString()} className={k === 0 ? 'is-now' : undefined}>
-              <i className={b.count ? `has-${String(Math.min(b.count, 3))}` : undefined}>
-                {b.count || null}
+          {months.map((m, k) => (
+            <span key={m.month.toISOString()} className={k === 0 ? 'is-now' : undefined}>
+              <i className={m.count ? `has-${String(Math.min(m.count, 3))}` : undefined}>
+                {m.count || null}
               </i>
-              <small>{formatMonthAbbr(b.month)}</small>
+              <small>{formatMonthAbbr(m.month)}</small>
             </span>
           ))}
         </div>
@@ -112,7 +120,7 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
             <div className="landing-you__picks">
               {forYou.map((e) => (
                 <span key={e.id}>
-                  {e.imageUrl ? <img src={posterThumb(e.imageUrl, 120)} alt="" /> : <i />}
+                  <Thumb event={e} className="landing-you__thumb" />
                   <span>
                     <strong>{e.name}</strong>
                     <small>
@@ -125,6 +133,62 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
             </div>
           </section>
         )}
+        <div className="landing-you__row">
+          {dossiers.length > 0 && (
+            <section>
+              <h4 className="landing-app__section">Mes dossiers</h4>
+              <div className="landing-you__dossiers">
+                {dossiers.map((d) => {
+                  const pay = paymentOf(d.paid, d.total)
+                  return (
+                    <p key={d.id}>
+                      <Thumb event={d} className="landing-you__thumb landing-you__thumb--s" />
+                      <span>
+                        <strong>{d.name}</strong>
+                        <small>{formatDateRange(d.startDate, d.endDate)}</small>
+                      </span>
+                      <span>
+                        <strong>{pay.label}</strong>
+                        <small>{pay.note}</small>
+                      </span>
+                    </p>
+                  )
+                })}
+              </div>
+            </section>
+          )}
+          <section>
+            <h4 className="landing-app__section">Mes bilans</h4>
+            <div className="landing-you__reports">
+              <p className="landing-you__season">
+                <small>Bénéfice {today.getFullYear()}</small>
+                <strong>{formatSignedEuros(DEMO.season.profit)}</strong>
+                <small>
+                  sur <b>{formatEuros(DEMO.season.revenue)}</b> de chiffre d’affaires
+                </small>
+              </p>
+              {reports.map((r) => (
+                <p key={r.id} className="landing-you__report">
+                  <Thumb event={r} className="landing-you__thumb landing-you__thumb--s" />
+                  <span>
+                    <strong>{r.name}</strong>
+                    <small>
+                      {formatFullDate(r.startDate)}
+                      {r.revenue !== null && ` · ${formatEuros(r.revenue)}`}
+                    </small>
+                  </span>
+                  {r.net !== null ? (
+                    <b>{formatSignedEuros(r.net)}</b>
+                  ) : (
+                    <em>
+                      Bilan à remplir <ArrowRight size={12} strokeWidth={2} />
+                    </em>
+                  )}
+                </p>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     </AppWindow>
   )

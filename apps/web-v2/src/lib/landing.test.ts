@@ -7,6 +7,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildShowcase,
+  paymentOf,
   pickFaces,
   placeOf,
   posterThumb,
@@ -33,7 +34,7 @@ function row(id: string, start: string, over: Partial<ShowcaseRow> = {}): Showca
 }
 
 const none = new Map<string, number>()
-const empty = { upcoming: [], registered: none, recent: [], exhibitors: null, faces: [] }
+const empty = { upcoming: [], registered: none, recent: [], past: [], exhibitors: null, faces: [] }
 
 describe('placeOf', () => {
   it('écrit « Ville (dép.) », ou la ville seule', () => {
@@ -67,7 +68,8 @@ describe('buildShowcase', () => {
     expect(show.wall).toEqual([])
     expect(show.crowd).toBeNull()
     expect(show.exhibitors).toBeNull()
-    expect(show.months).toHaveLength(4)
+    expect(show.months).toHaveLength(12)
+    expect(show.reports).toEqual([])
     expect(show.months.every((m) => m.events.length === 0)).toBe(true)
     expect(show.dossiers).toEqual([])
     expect(show.oneClick).toBeNull()
@@ -98,7 +100,7 @@ describe('buildShowcase', () => {
     expect(show.crowd).toBeNull()
   })
 
-  it('range le calendrier sur quatre mois, deux dates au plus, un mois vide compris', () => {
+  it('range le calendrier sur les douze mois du Pro, deux dates montrées, toutes comptées', () => {
     const upcoming = [
       row('o1', '2026-10-20'),
       row('o2', '2026-10-25'),
@@ -106,13 +108,16 @@ describe('buildShowcase', () => {
       row('d1', '2026-12-05'),
     ]
     const show = buildShowcase({ ...empty, upcoming }, TODAY)
-    expect(show.months.map((m) => m.month.getMonth())).toEqual([9, 10, 11, 0])
-    expect(show.months.map((m) => m.events.map((e) => e.id))).toEqual([
+    expect(show.months.map((m) => m.month.getMonth())).toEqual([
+      9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8,
+    ])
+    expect(show.months.slice(0, 4).map((m) => m.events.map((e) => e.id))).toEqual([
       ['o1', 'o2'],
       [],
       ['d1'],
       [],
     ])
+    expect(show.months.slice(0, 4).map((m) => m.count)).toEqual([3, 0, 1, 0])
   })
 
   it('donne à chaque date le statut de la démonstration, le même partout', () => {
@@ -180,5 +185,22 @@ describe('pickFaces', () => {
   it('rend ce qu’il y a quand la base en a peu, et rien sans avatar', () => {
     expect(pickFaces(others.slice(0, 2), Math.random).sort()).toEqual(['a', 'b'])
     expect(pickFaces([], Math.random)).toEqual([])
+  })
+})
+
+describe('les bilans de la démonstration', () => {
+  it('posent les montants de la démonstration sur les dernières dates passées', () => {
+    const past = [row('p1', '2026-09-20'), row('p2', '2026-09-06'), row('p3', '2026-08-15')]
+    const show = buildShowcase({ ...empty, past }, TODAY)
+    expect(show.reports.map((r) => r.id)).toEqual(['p1', 'p2', 'p3'])
+    expect(show.reports.map((r) => r.net)).toEqual(DEMO.reports.map((r) => r?.net ?? null))
+  })
+})
+
+describe('paymentOf', () => {
+  it('dit où en est l’argent d’un dossier', () => {
+    expect(paymentOf(450, 450).label).toBe('Payé')
+    expect(paymentOf(150, 450).label).toBe('Acompte versé')
+    expect(paymentOf(0, 320).label).toBe('À payer')
   })
 })

@@ -8,10 +8,12 @@
  *            Runes de Chêne d'abord, puis d'autres exposants tirés au hasard (Uriel, 14/10/2026).
  */
 import { parseSqlDate } from './dates'
+import { formatEuros } from './money'
 import { DEMO, type DemoStatus } from './landing-demo'
 
 export const WALL_POSTERS = 30
-const MONTHS = 4
+/** Le compte de démonstration est Pro : son calendrier voit douze mois. */
+const MONTHS = 12
 const PER_MONTH = 2
 const DOSSIERS = 4
 const FOR_YOU = 3
@@ -53,12 +55,14 @@ export interface Showcase {
   crowd: { event: ShowEvent; count: number } | null
   exhibitors: number | null
   faces: string[]
-  months: { month: Date; events: (ShowEvent & { status: DemoStatus })[] }[]
+  /** `events` : les dates montrées (deux au plus) ; `count` : toutes celles du mois. */
+  months: { month: Date; count: number; events: (ShowEvent & { status: DemoStatus })[] }[]
   dossiers: (ShowEvent & { status: DemoStatus; paid: number; total: number })[]
   oneClick: ShowEvent | null
   pdf: ShowEvent | null
   recent: (ShowEvent & { daysAgo: number })[]
   forYou: ShowEvent[]
+  reports: (ShowEvent & { revenue: number | null; net: number | null })[]
 }
 
 /** « Limoges (87) » — un code postal ou un « Orne (61) » ramené au numéro du département. */
@@ -107,6 +111,17 @@ function toEvent(r: ShowcaseRow): ShowEvent {
   }
 }
 
+/** Où en est l'argent d'un dossier, dit comme dans « Mes dossiers ». */
+export function paymentOf(paid: number, total: number): { label: string; note: string } {
+  if (paid >= total) return { label: 'Payé', note: `${formatEuros(total)} réglés` }
+  if (paid > 0)
+    return {
+      label: 'Acompte versé',
+      note: `${formatEuros(paid)} sur ${formatEuros(total)} · solde à venir`,
+    }
+  return { label: 'À payer', note: `${formatEuros(total)} si le dossier est accepté` }
+}
+
 const statusOf = (index: number): DemoStatus =>
   DEMO.statuses[index % DEMO.statuses.length] ?? 'interesse'
 
@@ -115,6 +130,7 @@ export function buildShowcase(
     upcoming: ShowcaseRow[]
     registered: ReadonlyMap<string, number>
     recent: ShowcaseRow[]
+    past: ShowcaseRow[]
     exhibitors: number | null
     faces: string[]
   },
@@ -138,8 +154,7 @@ export function buildShowcase(
           e.startDate.getFullYear() === month.getFullYear() &&
           e.startDate.getMonth() === month.getMonth(),
       )
-      .slice(0, PER_MONTH)
-    return { month, events: inMonth }
+    return { month, count: inMonth.length, events: inMonth.slice(0, PER_MONTH) }
   })
 
   const dossiers = events.slice(0, DOSSIERS).map((e, i) => ({
@@ -170,5 +185,10 @@ export function buildShowcase(
     pdf,
     recent,
     forYou,
+    reports: input.past.map((r, i) => ({
+      ...toEvent(r),
+      revenue: DEMO.reports[i]?.revenue ?? null,
+      net: DEMO.reports[i]?.net ?? null,
+    })),
   }
 }

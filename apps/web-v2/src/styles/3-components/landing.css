@@ -598,6 +598,12 @@ input.landing-search__value::placeholder {
 }
 
 /* --- La bande Pro ---------------------------------------------------------------------- */
+/* La bande de fin monte de gauche à droite : à droite, elle recouvre toute la pente. L'écran Pro,
+   posé à droite, garde donc la pente en plus de la marge. */
+.landing-pro {
+  padding-bottom: calc(var(--landing-slant) + var(--space-64));
+}
+
 .landing-pro .landing-band__inner {
   display: flex;
   align-items: center;
