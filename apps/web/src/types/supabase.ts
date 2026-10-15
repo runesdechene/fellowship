@@ -92,6 +92,39 @@ export type Database = {
           },
         ]
       }
+      discussion_mutes: {
+        Row: {
+          actor_id: string
+          created_at: string
+          event_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          event_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_mutes_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discussion_mutes_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       entities: {
         Row: {
           actor_id: string
@@ -199,6 +232,38 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "actors"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      entity_bases: {
+        Row: {
+          address: string
+          entity_id: string
+          latitude: number
+          longitude: number
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          entity_id: string
+          latitude: number
+          longitude: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          entity_id?: string
+          latitude?: number
+          longitude?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entity_bases_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: true
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
           },
         ]
       }
@@ -330,6 +395,226 @@ export type Database = {
           },
         ]
       }
+      event_thread_replies: {
+        Row: {
+          acted_by_user_id: string | null
+          actor_id: string
+          body: string
+          created_at: string
+          id: string
+          thread_id: string
+          updated_at: string
+        }
+        Insert: {
+          acted_by_user_id?: string | null
+          actor_id: string
+          body: string
+          created_at?: string
+          id?: string
+          thread_id: string
+          updated_at?: string
+        }
+        Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          thread_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_thread_replies_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "event_thread_replies_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_thread_replies_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "event_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_threads: {
+        Row: {
+          acted_by_user_id: string | null
+          actor_id: string
+          audience: Database["public"]["Enums"]["thread_audience"]
+          best_reply_id: string | null
+          body: string | null
+          created_at: string
+          event_id: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          acted_by_user_id?: string | null
+          actor_id: string
+          audience: Database["public"]["Enums"]["thread_audience"]
+          best_reply_id?: string | null
+          body?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          acted_by_user_id?: string | null
+          actor_id?: string
+          audience?: Database["public"]["Enums"]["thread_audience"]
+          best_reply_id?: string | null
+          body?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_threads_acted_by_user_id_fkey"
+            columns: ["acted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "event_threads_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_threads_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_best_reply"
+            columns: ["best_reply_id"]
+            isOneToOne: false
+            referencedRelation: "event_thread_replies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_versions: {
+        Row: {
+          address: string | null
+          author_entity: string | null
+          author_user: string | null
+          city: string
+          contact_email: string | null
+          created_at: string
+          department: string
+          description: string | null
+          end_date: string
+          event_id: string
+          external_url: string | null
+          geo_precision: string | null
+          id: number
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          note: string | null
+          registration_deadline: string | null
+          registration_note: string | null
+          registration_url: string | null
+          start_date: string
+          tags: string[] | null
+        }
+        Insert: {
+          address?: string | null
+          author_entity?: string | null
+          author_user?: string | null
+          city: string
+          contact_email?: string | null
+          created_at?: string
+          department: string
+          description?: string | null
+          end_date: string
+          event_id: string
+          external_url?: string | null
+          geo_precision?: string | null
+          id?: number
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          note?: string | null
+          registration_deadline?: string | null
+          registration_note?: string | null
+          registration_url?: string | null
+          start_date: string
+          tags?: string[] | null
+        }
+        Update: {
+          address?: string | null
+          author_entity?: string | null
+          author_user?: string | null
+          city?: string
+          contact_email?: string | null
+          created_at?: string
+          department?: string
+          description?: string | null
+          end_date?: string
+          event_id?: string
+          external_url?: string | null
+          geo_precision?: string | null
+          id?: number
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          note?: string | null
+          registration_deadline?: string | null
+          registration_note?: string | null
+          registration_url?: string | null
+          start_date?: string
+          tags?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_versions_author_entity_fkey"
+            columns: ["author_entity"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "event_versions_author_user_fkey"
+            columns: ["author_user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "event_versions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           acted_by_user_id: string | null
@@ -352,6 +637,7 @@ export type Database = {
           longitude: number | null
           name: string
           opening_hours: string | null
+          previous_edition_id: string | null
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
@@ -382,6 +668,7 @@ export type Database = {
           longitude?: number | null
           name: string
           opening_hours?: string | null
+          previous_edition_id?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
@@ -412,6 +699,7 @@ export type Database = {
           longitude?: number | null
           name?: string
           opening_hours?: string | null
+          previous_edition_id?: string | null
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
@@ -434,6 +722,13 @@ export type Database = {
             columns: ["created_by_actor"]
             isOneToOne: false
             referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_previous_edition_id_fkey"
+            columns: ["previous_edition_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
         ]
@@ -621,6 +916,54 @@ export type Database = {
         }
         Relationships: []
       }
+      participation_dossiers: {
+        Row: {
+          actor_id: string
+          application_note: string | null
+          application_sent_on: string | null
+          balance_due_on: string | null
+          deposit_amount: number | null
+          event_id: string
+          revenue_goal: number | null
+          updated_at: string
+        }
+        Insert: {
+          actor_id: string
+          application_note?: string | null
+          application_sent_on?: string | null
+          balance_due_on?: string | null
+          deposit_amount?: number | null
+          event_id: string
+          revenue_goal?: number | null
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string
+          application_note?: string | null
+          application_sent_on?: string | null
+          balance_due_on?: string | null
+          deposit_amount?: number | null
+          event_id?: string
+          revenue_goal?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participation_dossiers_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participation_dossiers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       participations: {
         Row: {
           acted_by_user_id: string | null
@@ -632,6 +975,7 @@ export type Database = {
           payment_status: string | null
           payments: Json | null
           refusal_note: string | null
+          remind_deadline: boolean
           status: Database["public"]["Enums"]["participation_status"]
           total_cost: number | null
           visibility: Database["public"]["Enums"]["participation_visibility"]
@@ -646,6 +990,7 @@ export type Database = {
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
+          remind_deadline?: boolean
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
@@ -660,6 +1005,7 @@ export type Database = {
           payment_status?: string | null
           payments?: Json | null
           refusal_note?: string | null
+          remind_deadline?: boolean
           status?: Database["public"]["Enums"]["participation_status"]
           total_cost?: number | null
           visibility?: Database["public"]["Enums"]["participation_visibility"]
@@ -851,6 +1197,7 @@ export type Database = {
           acted_by_user_id: string | null
           actor_id: string
           affluence: number
+          anonymous: boolean
           comment: string | null
           created_at: string
           event_id: string
@@ -862,6 +1209,7 @@ export type Database = {
           acted_by_user_id?: string | null
           actor_id: string
           affluence: number
+          anonymous?: boolean
           comment?: string | null
           created_at?: string
           event_id: string
@@ -873,6 +1221,7 @@ export type Database = {
           acted_by_user_id?: string | null
           actor_id?: string
           affluence?: number
+          anonymous?: boolean
           comment?: string | null
           created_at?: string
           event_id?: string
@@ -921,6 +1270,39 @@ export type Database = {
           processed_at?: string
         }
         Relationships: []
+      }
+      suggestion_dismissals: {
+        Row: {
+          actor_id: string
+          created_at: string
+          event_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          event_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggestion_dismissals_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "suggestion_dismissals_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tags: {
         Row: {
@@ -1011,6 +1393,7 @@ export type Database = {
           email: string
           handle: string | null
           postal_code: string | null
+          push_muted: string[]
           role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1025,6 +1408,7 @@ export type Database = {
           email: string
           handle?: string | null
           postal_code?: string | null
+          push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1039,6 +1423,7 @@ export type Database = {
           email?: string
           handle?: string | null
           postal_code?: string | null
+          push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
         }
@@ -1108,6 +1493,18 @@ export type Database = {
       }
     }
     Functions: {
+      _evenement_lisible: { Args: { p_event: string }; Returns: boolean }
+      accounts_to_follow: {
+        Args: { p_actor: string }
+        Returns: {
+          avatar: string
+          city: string
+          id: string
+          name: string
+          reason: Json
+          slug: string
+        }[]
+      }
       are_friends: {
         Args: { user_a: string; user_b: string }
         Returns: boolean
@@ -1121,6 +1518,41 @@ export type Database = {
         Returns: string
       }
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
+      can_use_v2: { Args: never; Returns: boolean }
+      community_feed: {
+        Args: { p_actor: string; p_before?: string; p_limit?: number }
+        Returns: {
+          comment: string
+          companions: Json
+          detail: string
+          event_city: string
+          event_department: string
+          event_end: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_start: string
+          event_tags: string[]
+          id: string
+          kind: string
+          occurred_at: string
+          stars: number
+          target_id: string
+          target_name: string
+          target_slug: string
+          who_avatar: string
+          who_id: string
+          who_name: string
+          who_slug: string
+        }[]
+      }
+      compter_avis_et_questions: {
+        Args: { p_event: string }
+        Returns: {
+          avis: number
+          questions: number
+        }[]
+      }
       create_owned_entity: {
         Args: {
           p_brand_name: string
@@ -1133,6 +1565,20 @@ export type Database = {
         }
         Returns: string
       }
+      crossing_dates: {
+        Args: { p_actor: string }
+        Returns: {
+          companions: number
+          event_end: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_start: string
+          event_tags: string[]
+          faces: Json
+        }[]
+      }
+      department_code: { Args: { raw: string }; Returns: string }
       ensure_referral_code: {
         Args: { p_base_code: string; p_entity_id: string }
         Returns: string
@@ -1146,6 +1592,25 @@ export type Database = {
         Returns: {
           shared_events: number
           suggested_actor: string
+        }[]
+      }
+      get_event_reviews: {
+        Args: { p_event_id: string; p_viewer_actor: string }
+        Returns: {
+          affluence: number
+          anonymous: boolean
+          author_actor_id: string
+          author_avatar_url: string
+          author_label: string
+          author_slug: string
+          comment: string
+          created_at: string
+          event_id: string
+          identity_visible: boolean
+          is_self: boolean
+          organisation: number
+          rentabilite: number
+          review_id: string
         }[]
       }
       get_follow_suggestions: {
@@ -1186,6 +1651,19 @@ export type Database = {
           src_actor: string
         }[]
       }
+      get_network_reviews: {
+        Args: { p_actor_id: string; p_since: string }
+        Returns: {
+          actor_id: string
+          affluence: number
+          comment: string
+          created_at: string
+          event_id: string
+          id: string
+          organisation: number
+          rentabilite: number
+        }[]
+      }
       get_referral_overview: {
         Args: { p_entity_id: string }
         Returns: {
@@ -1195,22 +1673,103 @@ export type Database = {
           rewarded_count: number
         }[]
       }
+      get_review_replies: {
+        Args: { p_review_id: string; p_viewer_actor: string }
+        Returns: {
+          author_actor_id: string
+          author_avatar_url: string
+          author_label: string
+          author_slug: string
+          body: string
+          created_at: string
+          identity_visible: boolean
+          is_self: boolean
+          reply_id: string
+          review_id: string
+          updated_at: string
+        }[]
+      }
+      histoire_evenement: {
+        Args: { p_event: string }
+        Returns: {
+          author_avatar: string
+          author_brand: string
+          author_name: string
+          changed: string[]
+          created_at: string
+          id: number
+          is_origin: boolean
+          note: string
+        }[]
+      }
+      identifiant_pris: { Args: { p_handle: string }; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
+      km_between: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
+      modifier_evenement: {
+        Args: {
+          p_as_entity?: string
+          p_event: string
+          p_expected_version?: number
+          p_fields: Json
+          p_note?: string
+        }
+        Returns: number
+      }
+      register_push_subscription: {
+        Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
+        Returns: undefined
+      }
+      revenir_a_version_evenement: {
+        Args: { p_version: number }
+        Returns: number
+      }
       search_similar_events: {
         Args: { search_name: string; search_year?: number; threshold?: number }
         Returns: {
           city: string
           department: string
           end_date: string
+          exhibitors: number
           id: string
+          image_url: string
           name: string
           score: number
           start_date: string
+          tags: string[]
         }[]
+      }
+      send_deadline_reminders: { Args: never; Returns: number }
+      send_suggestions: { Args: never; Returns: number }
+      send_weekly_new_events: { Args: never; Returns: number }
+      set_stand_amount: {
+        Args: { p_actor_id: string; p_amount: number; p_event_id: string }
+        Returns: undefined
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      suggestion_candidates: {
+        Args: { p_actor: string }
+        Returns: {
+          event_id: string
+          reason: Json
+          score: number
+          start_date: string
+          strong: boolean
+        }[]
+      }
+      suggestions_for: { Args: { p_actor: string }; Returns: Json }
+      version_evenement: {
+        Args: { p_version: number }
+        Returns: {
+          after: Json
+          before: Json
+          field: string
+        }[]
+      }
     }
     Enums: {
       actor_kind: "person" | "entity"
@@ -1228,6 +1787,13 @@ export type Database = {
         | "event_info_added"
         | "new_exposant"
         | "review_reply"
+        | "thread_reply"
+        | "best_reply"
+        | "thread_question"
+        | "new_edition"
+        | "friend_added_event"
+        | "weekly_new_events"
+        | "suggestion"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -1235,6 +1801,7 @@ export type Database = {
         | "en_cours"
         | "refuse"
       participation_visibility: "prive" | "amis" | "public"
+      thread_audience: "festivalier" | "exposant" | "organisateur"
       user_plan: "free" | "pro"
       user_sex: "homme" | "femme" | "indefini"
       user_type: "exposant" | "public"
@@ -1253,12 +1820,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1282,11 +1849,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1307,11 +1874,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1332,11 +1899,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1349,11 +1916,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -1380,6 +1947,13 @@ export const Constants = {
         "event_info_added",
         "new_exposant",
         "review_reply",
+        "thread_reply",
+        "best_reply",
+        "thread_question",
+        "new_edition",
+        "friend_added_event",
+        "weekly_new_events",
+        "suggestion",
       ],
       participation_status: [
         "interesse",
@@ -1389,6 +1963,7 @@ export const Constants = {
         "refuse",
       ],
       participation_visibility: ["prive", "amis", "public"],
+      thread_audience: ["festivalier", "exposant", "organisateur"],
       user_plan: ["free", "pro"],
       user_sex: ["homme", "femme", "indefini"],
       user_type: ["exposant", "public"],

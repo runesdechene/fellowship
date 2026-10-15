@@ -53,23 +53,17 @@ export async function fetchActorProfiles(ids: string[]): Promise<Map<string, Fri
   const byId = new Map<string, Friend>()
   if (ids.length === 0) return byId
 
-  const [entitiesResponse, usersResponse] = await Promise.all([
-    supabase.from('entities').select('actor_id, brand_name, avatar_url').in('actor_id', ids),
-    supabase.from('users').select('actor_id, display_name, avatar_url').in('actor_id', ids),
-  ])
+  // actor_public réunit personnes et enseignes sans rien de privé : `users` ne se lit plus
+  // que sur sa propre ligne.
+  const actors = must(
+    await supabase.from('actor_public').select('actor_id, label, avatar_url').in('actor_id', ids),
+  )
 
-  for (const row of must(entitiesResponse)) {
+  for (const row of actors) {
+    if (!row.actor_id) continue
     byId.set(row.actor_id, {
       id: row.actor_id,
-      name: row.brand_name,
-      avatarUrl: row.avatar_url,
-    })
-  }
-  for (const row of must(usersResponse)) {
-    if (byId.has(row.actor_id)) continue
-    byId.set(row.actor_id, {
-      id: row.actor_id,
-      name: row.display_name ?? 'Ami',
+      name: row.label ?? 'Ami',
       avatarUrl: row.avatar_url,
     })
   }

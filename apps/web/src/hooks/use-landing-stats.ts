@@ -59,7 +59,7 @@ export type DisplayTestimonial = Testimonial & {
 }
 
 /** Témoignages actifs pour la Landing. Lecture anonyme (RLS public = actifs only).
- *  Résout le compte lié (entities/users en direct, tous deux anon-OK) pour en dériver
+ *  Résout le compte lié (actor_public, anon-OK) pour en dériver
  *  l'avatar de secours et le lien vitrine. */
 export function useTestimonials(): { testimonials: DisplayTestimonial[]; loading: boolean } {
   const [state, setState] = useState<{ testimonials: DisplayTestimonial[]; loading: boolean }>({
@@ -78,24 +78,20 @@ export function useTestimonials(): { testimonials: DisplayTestimonial[]; loading
       const list = data ?? []
 
       const actorIds = [...new Set(list.map(t => t.actor_id).filter((x): x is string => !!x))]
-      let entityMap: Record<string, { avatar_url: string | null; public_slug: string | null }> = {}
-      let userMap: Record<string, { avatar_url: string | null }> = {}
+      let actorMap: Record<string, { avatar_url: string | null; public_slug: string | null }> = {}
       if (actorIds.length > 0) {
-        const [ents, usrs] = await Promise.all([
-          supabase.from('entities').select('actor_id, avatar_url, public_slug').in('actor_id', actorIds),
-          supabase.from('users').select('actor_id, avatar_url').in('actor_id', actorIds),
-        ])
-        entityMap = Object.fromEntries((ents.data ?? []).map(e => [e.actor_id, e]))
-        userMap = Object.fromEntries((usrs.data ?? []).map(u => [u.actor_id, u]))
+        // actor_public : personnes et enseignes, sans e-mail — `users` n'est plus lisible par les autres.
+        const { data: actors } = await supabase
+          .from('actor_public').select('actor_id, avatar_url, public_slug').in('actor_id', actorIds)
+        actorMap = Object.fromEntries((actors ?? []).flatMap(a => a.actor_id ? [[a.actor_id, a]] : []))
       }
 
       const resolved: DisplayTestimonial[] = list.map(t => {
-        const e = t.actor_id ? entityMap[t.actor_id] : undefined
-        const u = t.actor_id ? userMap[t.actor_id] : undefined
+        const a = t.actor_id ? actorMap[t.actor_id] : undefined
         return {
           ...t,
-          resolvedAvatar: t.avatar_url ?? e?.avatar_url ?? u?.avatar_url ?? null,
-          resolvedSlug: t.entity_slug ?? e?.public_slug ?? null,
+          resolvedAvatar: t.avatar_url ?? a?.avatar_url ?? null,
+          resolvedSlug: t.entity_slug ?? a?.public_slug ?? null,
         }
       })
       if (cancelled) return

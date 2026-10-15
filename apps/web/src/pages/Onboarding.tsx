@@ -79,8 +79,9 @@ export function OnboardingPage() {
     setError(null)
     try {
       const isHandleTaken = async (h: string) => {
-        const { data } = await supabase.from('users').select('actor_id').eq('handle', h).maybeSingle()
-        return !!data
+        const { data, error: e } = await supabase.rpc('identifiant_pris', { p_handle: h })
+        if (e) throw e
+        return data
       }
       // En add-entity, la personne existe déjà → on ne (re)calcule pas de handle ni ne la touche.
       const handle = flow.case === 'add-entity' ? '' : await resolveUniqueHandle(form.prenom, isHandleTaken)

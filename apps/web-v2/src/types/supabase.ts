@@ -1696,6 +1696,7 @@ export type Database = {
           note: string
         }[]
       }
+      identifiant_pris: { Args: { p_handle: string }; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_entity_owner: { Args: { target_entity: string }; Returns: boolean }
       km_between: {
