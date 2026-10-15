@@ -11,6 +11,7 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
   (le chapitre lu est souligné), « Se connecter », « Créer ma vitrine ».
 - `OrganizersBox.tsx` — l'encadré des organisateurs, en tête du pied de page (« Bientôt »).
 - `FinalCall.tsx` — « Ton prochain stand commence ici. » et le pied de page.
+- `LandingSearch.tsx` — la recherche, qui mène à `/festivals` (lot 11b).
 - `LandingFoot.tsx` — le pied de page, partagé avec la recherche publique (`away` hors de la landing).
 - `Opening.tsx`, `PosterWall.tsx` — l'ouverture et son mur de vraies affiches qui défile.
 - `AssistantBand.tsx` — « Mon assistant de festivals », avec le Calendrier et le Tableau de bord.

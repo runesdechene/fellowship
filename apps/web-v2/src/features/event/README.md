@@ -15,3 +15,6 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `Companions.tsx` — la ligne des amis (« A, B, C et 5 autres y vont aussi ») et sa popup.
 - `WhoGoesDialog.tsx` — la popup « Qui y va » : tous les amis programmés, leur métier, leur statut.
 - `useWhoGoes.ts` — la liste de la popup, chargée à l'ouverture.
+- `GuestTeaser.tsx` — sans compte, l'aperçu flouté des avis et des questions ; `useEventTeaser.ts`
+  en lit les nombres (lot 11b).
+- `MyReportBlock.tsx` — « Mon bilan » d'une date passée.

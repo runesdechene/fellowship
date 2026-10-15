@@ -127,6 +127,10 @@ async function loadEvent(eventId: string, actorId: string | null | undefined): P
   ])
   const event = must(eventResponse)
   if (!event) return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
+  // Sans compte (lot 11b), une fiche privée n'existe pas : la base la laisse lire à anon
+  // (anon_read_events, docs/v2/purge-back.md), l'app ne la montre pas.
+  if (!actorId && event.is_private)
+    return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
 
   const tagStyles = tagStylesByName(tagRows)
   const startDate = parseSqlDate(event.start_date)

@@ -9,6 +9,7 @@
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { GuestShell } from '@/components/layout/GuestShell'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
@@ -175,7 +176,13 @@ export function App() {
       <Route
         path="/evenement/:id"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute
+            guest={
+              <GuestShell>
+                <EventPage />
+              </GuestShell>
+            }
+          >
             <AppShell>
               <EventPage />
             </AppShell>

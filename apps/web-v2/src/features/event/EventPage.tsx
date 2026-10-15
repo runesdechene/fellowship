@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { ArrowRight, CalendarDays, Clock, MapPin, Pencil, Store, Users } from 'lucide-react'
+import { CalendarDays, Clock, MapPin, Pencil, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -13,7 +13,6 @@ import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
 import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from '@/lib/dates'
-import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { canEditEvent, type MissingField } from '@/lib/event-edit'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
@@ -27,18 +26,17 @@ import { useOrigin } from './useOrigin'
 import { eventPoint } from '@/lib/distance'
 import { AddMissing, KeptUpToDate } from './KeptUpToDate'
 import { DiscussionBlock } from './DiscussionBlock'
+import { GuestTeaser } from './GuestTeaser'
+import { MyReportBlock } from './MyReportBlock'
 import { LastEditionReport } from './LastEditionReport'
 import { useLastEditionReport } from './useLastEditionReport'
 import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
-import { MyReportCard } from './MyReportCard'
 import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
-import { ProBadge } from '@/components/ui/ProBadge'
-import { ProVeil } from '@/components/ui/ProVeil'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
@@ -108,7 +106,9 @@ function Fact({ Icon, label, value, sub, extra }: FactData) {
 
 export function EventPage() {
   const { id } = useParams<{ id: string }>()
-  const { actor, person, entities } = useAuth()
+  const { user, actor, person, entities } = useAuth()
+  // Sans compte (lot 11b) : la fiche se lit, elle ne se pilote pas.
+  const member = Boolean(user)
   const { pro } = usePlan()
   const location = useLocation()
   const { hash } = location
@@ -296,23 +296,29 @@ export function EventPage() {
             {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
                   de l'identité de la date, au même titre que son lieu — ça ne
                   méritait ni un titre de section ni une carte. */}
-            <Companions
-              eventId={event.id}
-              subtitle={`${event.name} · ${formatDateRange(startDate, endDate)}`}
-              friends={friends}
-            />
-            <KeptUpToDate eventId={event.id} />
+            {member && (
+              <>
+                <Companions
+                  eventId={event.id}
+                  subtitle={`${event.name} · ${formatDateRange(startDate, endDate)}`}
+                  friends={friends}
+                />
+                <KeptUpToDate eventId={event.id} />
+              </>
+            )}
           </div>
         </header>
 
-        <EventStatus
-          status={status}
-          setStatus={setStatus}
-          saving={saving}
-          writeError={writeError}
-          locked={!canChangeStatus(startDate, status !== null, pro, today)}
-          monthsAway={monthsBeyond(startDate, today)}
-        />
+        {member && (
+          <EventStatus
+            status={status}
+            setStatus={setStatus}
+            saving={saving}
+            writeError={writeError}
+            locked={!canChangeStatus(startDate, status !== null, pro, today)}
+            monthsAway={monthsBeyond(startDate, today)}
+          />
+        )}
 
         {lastEdition && <LastEditionReport report={lastEdition} />}
 
@@ -385,51 +391,22 @@ export function EventPage() {
           onAdd={edit}
         />
 
-        <EventReviews
-          eventId={event.id}
-          viewerId={actor?.id}
-          canReview={past && status === 'inscrit'}
-        />
+        {member ? (
+          <>
+            <EventReviews
+              eventId={event.id}
+              viewerId={actor?.id}
+              canReview={past && status === 'inscrit'}
+            />
 
-        <DiscussionBlock eventId={event.id} status={status} />
+            <DiscussionBlock eventId={event.id} status={status} />
+          </>
+        ) : (
+          <GuestTeaser eventId={event.id} />
+        )}
 
-        {past && (
-          <section className="event-page__block">
-            <div className="event-page__block-head">
-              <h2 className="event-page__block-title">Mon bilan</h2>
-              {pro && net !== null && revenue !== null && (
-                <p className="event-page__block-total">
-                  <b>{formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
-                  <b>{formatEuros(revenue)}</b>
-                </p>
-              )}
-            </div>
-            {pro ? (
-              <>
-                <MyReportCard ledger={ledger} />
-                <button
-                  type="button"
-                  className="event-page__link-button"
-                  onClick={() => go(`/bilans/${event.id}`)}
-                >
-                  Ouvrir le bilan
-                  <ArrowRight size={13} strokeWidth={2} />
-                </button>
-              </>
-            ) : (
-              <ProVeil
-                invitation={
-                  <button type="button" className="reports__invite" onClick={() => go('/bilans')}>
-                    <ProBadge />
-                    Tes bilans avec le Pro
-                    <ArrowRight size={14} strokeWidth={2} />
-                  </button>
-                }
-              >
-                <MyReportCard ledger={ledger} />
-              </ProVeil>
-            )}
-          </section>
+        {past && member && (
+          <MyReportBlock eventId={event.id} ledger={ledger} net={net} revenue={revenue} pro={pro} />
         )}
       </div>
     </div>

@@ -135,7 +135,8 @@ export function Applying(props: ApplyingProps) {
           )}
         </InfoRows>
       </div>
-      {deadline && daysUntil(deadline) >= 0 && (
+      {/* Sans compte (lot 11b), pas de rappel : il s'allume pour un acteur. */}
+      {deadline && actorId && daysUntil(deadline) >= 0 && (
         <DeadlineReminder
           eventId={event.id}
           actorId={actorId}
