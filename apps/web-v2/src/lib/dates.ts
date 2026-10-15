@@ -35,6 +35,12 @@ export function daysUntil(target: Date, today: Date = new Date()): number {
   return Math.round((startOfDay(target).getTime() - startOfDay(today).getTime()) / MS_PER_DAY)
 }
 
+/** Mois calendaires entiers de `from` à `to` (to ≥ from) : du 15 oct. au 14 mars, 4 mois. */
+export function wholeMonthsBetween(from: Date, to: Date): number {
+  const months = (to.getFullYear() - from.getFullYear()) * 12 + to.getMonth() - from.getMonth()
+  return to.getDate() < from.getDate() ? months - 1 : months
+}
+
 /** « Dans 11 jours », « Demain », « Aujourd'hui ». */
 export function formatCountdown(days: number): string {
   if (days <= 0) return "Aujourd'hui"

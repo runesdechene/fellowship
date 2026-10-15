@@ -13,6 +13,7 @@ import {
   monthsAhead,
   stampYear,
   timeAgo,
+  wholeMonthsBetween,
   formatCountdown,
   formatDayMonth,
   formatDaysShort,
@@ -209,5 +210,13 @@ describe('formatDateSpan', () => {
   })
   it('un seul jour', () => {
     expect(formatDateSpan(new Date(2027, 6, 4), new Date(2027, 6, 4))).toBe('le 4 juillet')
+  })
+})
+
+describe('wholeMonthsBetween', () => {
+  it('compte les mois calendaires entiers', () => {
+    expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2027, 2, 15))).toBe(5)
+    expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2027, 2, 14))).toBe(4)
+    expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2026, 9, 20))).toBe(0)
   })
 })
