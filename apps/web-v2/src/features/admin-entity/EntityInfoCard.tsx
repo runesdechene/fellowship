@@ -6,7 +6,7 @@
 import { Info } from 'lucide-react'
 import { AdminCard } from '@/components/ui/AdminCard'
 import { TypeChip } from '@/components/ui/TypeChip'
-import { SheetRow } from './SheetRow'
+import { SheetRow } from '@/components/ui/SheetRow'
 import type { EntityFields } from './useAdminEntity'
 
 const NONE = '—'

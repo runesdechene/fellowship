@@ -25,3 +25,4 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `TypeChip.tsx` — la pastille du type d'enseigne (exposant, festival, entreprise, sans enseigne).
 - `OfferBadge.tsx` — l'offre d'une enseigne : Pro / Essai / Gratuit, puis le détail.
 - `AdminCard.tsx` — un bloc de fiche d'administration : icône teintée, titre, action.
+- `SheetRow.tsx` — une rangée clé/valeur de fiche d'administration (enseigne et personne).

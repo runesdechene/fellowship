@@ -273,3 +273,67 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* La fiche d'une personne (features/admin-person) */
+.person-tiles {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.person-entity__logo {
+  border-radius: var(--radius-sm);
+}
+
+.person-entity__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.person-entity__end {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.person-role {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-xs);
+  background: var(--surface-chip-neutral);
+  font: var(--type-tag-badge);
+  color: var(--ink-title);
+}
+
+.person-role--suspended {
+  background: var(--tone-brique-surface);
+  color: var(--tone-brique-ink);
+}
+
+.access-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-bottom: var(--space-12);
+}
+
+.access-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-12) 0;
+  border-top: 1px solid var(--line-card);
+}
+
+.access-note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+@media (width <= 760px) {
+  .person-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

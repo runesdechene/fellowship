@@ -12,7 +12,7 @@ import { formatPrice } from '@/lib/money'
 import { offerOf, type Offer } from '@/lib/offer'
 import { PRICES } from '@/lib/pricing'
 import { renewalAhead } from '@/lib/renewal'
-import { SheetRow } from './SheetRow'
+import { SheetRow } from '@/components/ui/SheetRow'
 import type { EntityFields } from './useAdminEntity'
 
 const NONE = '—'
