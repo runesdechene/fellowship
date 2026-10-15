@@ -1591,6 +1591,10 @@ export type Database = {
           questions: number
         }[]
       }
+      admin_ambassadeur: {
+        Args: { p_entity: string; p_oui: boolean }
+        Returns: undefined
+      }
       admin_cherche: {
         Args: { p_q: string; p_valeur: string }
         Returns: boolean
@@ -1606,6 +1610,28 @@ export type Database = {
           pro: number
           pro_offerts: number
         }[]
+      }
+      admin_corriger_enseigne: {
+        Args: {
+          p_brand_name: string
+          p_city: string
+          p_craft_type: string
+          p_id: string
+          p_legal_name: string
+          p_public_slug: string
+          p_siren: string
+        }
+        Returns: undefined
+      }
+      admin_corriger_personne: {
+        Args: {
+          p_display_name: string
+          p_handle: string
+          p_id: string
+          p_phone: string
+          p_postal_code: string
+        }
+        Returns: undefined
       }
       admin_enseigne: {
         Args: { p_id: string }
@@ -1712,6 +1738,10 @@ export type Database = {
       }
       admin_offre: {
         Args: { p_comped: string; p_plan: string; p_status: string }
+        Returns: string
+      }
+      admin_offrir_mois: {
+        Args: { p_entity: string; p_mois: number }
         Returns: string
       }
       admin_personne: {
