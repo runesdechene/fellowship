@@ -23,7 +23,7 @@ const FREE = [
 ]
 
 const PRO_ADDS = [
-  'Tout ce que donne le gratuit',
+  'Toutes les fonctionnalités gratuites',
   'Les notes détaillées : affluence, organisation, rentabilité',
   'Toute l’année, pour candidater à temps aux plus gros festivals',
   'Un rappel avant chaque clôture de candidature',
