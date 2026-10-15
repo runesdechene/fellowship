@@ -2,17 +2,21 @@
  * QUOI     — le bloc Abonnement : offre et prix, prochain renouvellement, qui paie, puis parrainage,
  *            mois offerts, remise et ambassadeur.
  * POURQUOI — l'administrateur lit l'état exact de l'offre ; les prix viennent de lib/pricing.ts.
- *            Les boutons d'action (offrir, remise, ambassadeur) et le repli sur l'e-mail du client
- *            Stripe arrivent plus tard.
+ *            Dessous, ses gestes : offrir des mois, nommer ou retirer un ambassadeur (la remise
+ *            arrive plus tard). `reload` relit la fiche après chaque geste.
  */
-import { CreditCard } from 'lucide-react'
+import { useState } from 'react'
+import { CreditCard, Gift, Percent, Star } from 'lucide-react'
 import { AdminCard } from '@/components/ui/AdminCard'
+import { Button } from '@/components/ui/Button'
 import { formatFullDate } from '@/lib/dates'
 import { formatPrice } from '@/lib/money'
 import { offerOf, type Offer } from '@/lib/offer'
 import { PRICES } from '@/lib/pricing'
 import { renewalAhead } from '@/lib/renewal'
+import { supabase } from '@/lib/supabase'
 import { SheetRow } from '@/components/ui/SheetRow'
+import { GiftMonths } from './GiftMonths'
 import type { EntityFields } from './useAdminEntity'
 
 const NONE = '—'
@@ -49,9 +53,14 @@ function discountLine(entity: EntityFields): string {
 interface Props {
   entity: EntityFields
   ownerId: string | null
+  reload: () => void
 }
 
-export function SubscriptionCard({ entity, ownerId }: Props) {
+export function SubscriptionCard({ entity, ownerId, reload }: Props) {
+  const [giving, setGiving] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const now = new Date()
   const offer = offerOf(entity, now)
   const { title, price } = offerTitle(entity, offer)
@@ -61,6 +70,20 @@ export function SubscriptionCard({ entity, ownerId }: Props) {
   const paidBy = entity.paid_by_name
     ? `${entity.paid_by_name}${owns ? ' (propriétaire)' : ''}`
     : NONE
+
+  async function setAmbassador(yes: boolean) {
+    if (busy) return
+    setBusy(true)
+    setError(null)
+    const { error: failure } = await supabase.rpc('admin_ambassadeur', {
+      p_entity: entity.actor_id,
+      p_oui: yes,
+    })
+    setBusy(false)
+    setConfirming(false)
+    if (failure) setError(failure.message)
+    else reload()
+  }
 
   return (
     <AdminCard
@@ -102,6 +125,55 @@ export function SubscriptionCard({ entity, ownerId }: Props) {
         <SheetRow label="Remise">{discountLine(entity)}</SheetRow>
         <SheetRow label="Ambassadeur">{entity.is_ambassador ? 'Oui' : 'Non'}</SheetRow>
       </dl>
+      <div className="sheet-actions">
+        <button
+          type="button"
+          className="sheet-actions__button"
+          aria-expanded={giving}
+          onClick={() => setGiving((open) => !open)}
+        >
+          <Gift size={16} aria-hidden /> Offrir des mois
+        </button>
+        <button type="button" className="sheet-actions__button" disabled title="Bientôt">
+          <Percent size={16} aria-hidden /> Poser une remise
+        </button>
+        {confirming ? (
+          <span className="sheet-actions__confirm">
+            Retirer le statut d’ambassadeur ?
+            <Button onClick={() => void setAmbassador(false)} disabled={busy}>
+              Retirer
+            </Button>
+            <Button variant="bare" onClick={() => setConfirming(false)} disabled={busy}>
+              Annuler
+            </Button>
+          </span>
+        ) : (
+          <button
+            type="button"
+            className="sheet-actions__button"
+            disabled={busy}
+            onClick={() => (entity.is_ambassador ? setConfirming(true) : void setAmbassador(true))}
+          >
+            <Star size={16} aria-hidden />
+            {entity.is_ambassador ? ' Retirer ambassadeur' : ' Passer ambassadeur'}
+          </button>
+        )}
+      </div>
+      {error && (
+        <p className="sheet-form__error" role="alert">
+          {error}
+        </p>
+      )}
+      {giving && (
+        <GiftMonths
+          entity={entity}
+          onClose={() => setGiving(false)}
+          onGifted={() => {
+            setGiving(false)
+            reload()
+          }}
+        />
+      )}
     </AdminCard>
   )
 }

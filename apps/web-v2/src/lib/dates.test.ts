@@ -15,6 +15,7 @@ import {
   timeAgo,
   wholeMonthsBetween,
   formatCountdown,
+  giftEnd,
   formatDayMonth,
   formatDaysShort,
   monthKey,
@@ -218,5 +219,22 @@ describe('wholeMonthsBetween', () => {
     expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2027, 2, 15))).toBe(5)
     expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2027, 2, 14))).toBe(4)
     expect(wholeMonthsBetween(new Date(2026, 9, 15), new Date(2026, 9, 20))).toBe(0)
+  })
+})
+
+describe('giftEnd', () => {
+  it('part d’aujourd’hui sans Pro offert', () => {
+    expect(giftEnd(null, 2, new Date(2026, 9, 15))).toEqual(new Date(2026, 11, 15))
+  })
+  it('prolonge un Pro offert encore futur', () => {
+    const current = new Date(2026, 11, 31).toISOString()
+    expect(giftEnd(current, 1, new Date(2026, 9, 15))).toEqual(new Date(2027, 0, 31))
+  })
+  it('part d’aujourd’hui quand le Pro offert est échu', () => {
+    const current = new Date(2026, 8, 1).toISOString()
+    expect(giftEnd(current, 1, new Date(2026, 9, 15))).toEqual(new Date(2026, 10, 15))
+  })
+  it('s’arrête au dernier jour d’un mois plus court, comme la base', () => {
+    expect(giftEnd(null, 2, new Date(2026, 11, 31))).toEqual(new Date(2027, 1, 28))
   })
 })

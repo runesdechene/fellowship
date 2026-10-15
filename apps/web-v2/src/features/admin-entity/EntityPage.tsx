@@ -84,7 +84,7 @@ export function EntityPage() {
       </header>
       <div className="sheet__columns">
         <div className="sheet__column">
-          <SubscriptionCard entity={entity} ownerId={owner?.actor_id ?? null} />
+          <SubscriptionCard entity={entity} ownerId={owner?.actor_id ?? null} reload={reload} />
           <ActivityCard entity={entity} gestures={gestures} />
         </div>
         <div className="sheet__column sheet__column--side">
