@@ -3,131 +3,43 @@
  *            va disparaître avant de demander le mot SUPPRIMER.
  * POURQUOI — lot 9b (Uriel, 11/10/2026) : la suppression est immédiate et définitive ; les enseignes
  *            dont on est seul membre partent avec, les partagées restent. La fenêtre les nomme.
- * ATTENTION — l'élément <dialog> du navigateur fait le voile, Échap et le piège du focus. Pendant la
- *            suppression, ni Échap ni le voile ne ferment la fenêtre.
+ * ATTENTION — la fenêtre est `DeletionDialog` (components/ui), partagée avec l'administration.
  */
-import { X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/components/ui/Button'
-import { confirmsDeletion, keptNote } from '@/lib/settings'
+import { useEffect, useState } from 'react'
+import { DeletionDialog } from '@/components/ui/DeletionDialog'
+import { confirmsDeletion } from '@/lib/settings'
 import { useAccountDeletion } from './useAccountDeletion'
 
 function DeleteDialog({ onClose }: { onClose: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null)
   const { preview, loading, failed, deleting, load, run } = useAccountDeletion()
   const [typed, setTyped] = useState('')
 
   useEffect(() => {
-    dialog.current?.showModal()
     void load()
   }, [load])
 
-  function close() {
-    if (!deleting) onClose()
-  }
+  const problem = failed
+    ? preview
+      ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à appfellowship@pm.me.'
+      : 'L’aperçu n’a pas pu être chargé.'
+    : null
 
   return (
-    <dialog
-      ref={dialog}
-      className="delete-dialog"
-      aria-labelledby="delete-dialog-title"
-      onCancel={(event) => {
-        event.preventDefault()
-        close()
-      }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) close()
-      }}
-    >
-      <div className="delete-dialog__card">
-        <header className="delete-dialog__head">
-          <h2 id="delete-dialog-title" className="delete-dialog__title">
-            Supprimer ton compte
-          </h2>
-          <button
-            type="button"
-            className="delete-dialog__close"
-            onClick={close}
-            aria-label="Fermer"
-            disabled={deleting}
-          >
-            <X size={18} strokeWidth={2} />
-          </button>
-        </header>
-
-        <p className="delete-dialog__text">
-          C’est immédiat et définitif. Disparaissent : ton profil, tes dates, tes bilans, tes avis.
-        </p>
-
-        {loading && <p className="delete-dialog__text">Un instant…</p>}
-
-        {preview && preview.deleted.length > 0 && (
-          <div className="delete-dialog__group">
-            <p className="delete-dialog__label">Supprimées avec ton compte</p>
-            <ul className="delete-dialog__list">
-              {preview.deleted.map((entity) => (
-                <li key={entity.entityActorId}>
-                  <b>{entity.brandName}</b>
-                  {entity.subscribed && ' — son abonnement Pro est résilié'}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {preview && preview.kept.length > 0 && (
-          <div className="delete-dialog__group">
-            <p className="delete-dialog__label">Restent à leurs autres membres</p>
-            <ul className="delete-dialog__list">
-              {preview.kept.map((entity) => (
-                <li key={entity.entityActorId}>
-                  <b>{entity.brandName}</b>
-                  {keptNote(entity.endsOn)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {failed && (
-          <p className="delete-dialog__problem">
-            {preview
-              ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à appfellowship@pm.me.'
-              : 'L’aperçu n’a pas pu être chargé.'}
-          </p>
-        )}
-
-        {preview && (
-          <>
-            <label className="delete-dialog__confirm">
-              <span>Tape SUPPRIMER pour confirmer</span>
-              <input
-                className="control delete-dialog__input"
-                value={typed}
-                autoComplete="off"
-                disabled={deleting}
-                onChange={(event) => {
-                  setTyped(event.target.value)
-                }}
-              />
-            </label>
-            <div className="delete-dialog__actions">
-              <Button onClick={close} disabled={deleting}>
-                Annuler
-              </Button>
-              <button
-                type="button"
-                className="delete-dialog__delete"
-                disabled={!confirmsDeletion(typed) || deleting}
-                onClick={() => void run()}
-              >
-                {deleting ? 'Suppression…' : 'Supprimer définitivement'}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </dialog>
+    <DeletionDialog
+      title="Supprimer ton compte"
+      intro="C’est immédiat et définitif. Disparaissent : ton profil, tes dates, tes bilans, tes avis."
+      deletedHeading="Supprimées avec ton compte"
+      preview={preview}
+      loading={loading}
+      problem={problem}
+      deleting={deleting}
+      confirmPrompt="Tape SUPPRIMER pour confirmer"
+      typed={typed}
+      onTyped={setTyped}
+      confirmed={confirmsDeletion(typed)}
+      onClose={onClose}
+      onConfirm={() => void run()}
+    />
   )
 }
 

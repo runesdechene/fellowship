@@ -27,3 +27,4 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `AdminCard.tsx` — un bloc de fiche d'administration : icône teintée, titre, action.
 - `SheetRow.tsx` — une rangée clé/valeur de fiche d'administration (enseigne et personne).
 - `NotesCard.tsx` — le bloc « Notes internes » des fiches d'administration : étiquettes et notes d'un acteur.
+- `DeletionDialog.tsx` — la fenêtre de suppression d'un compte (aperçu, confirmation), partagée par Réglages et l'administration.

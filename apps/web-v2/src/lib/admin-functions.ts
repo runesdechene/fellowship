@@ -5,6 +5,7 @@
  *            adresse prise…) remonte en phrase française.
  */
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import type { DeletionPreview } from './deletion-preview'
 import { supabase } from './supabase'
 
 export interface Invoice {
@@ -28,16 +29,14 @@ export interface Coupon {
   months: number | null
 }
 
-export interface DeletionPreview {
-  deleted: { entityActorId: string; brandName: string; subscribed: boolean }[]
-  kept: { entityActorId: string; brandName: string; endsOn: string | null }[]
-}
-
 const KNOWN_ERRORS: Record<string, string> = {
   self: 'Ce n’est pas possible sur ton propre compte.',
   email_taken: 'Cette adresse est déjà utilisée par un autre compte.',
   invalid_email: 'Cette adresse n’est pas valable.',
   forbidden: 'Tu n’as pas le droit de faire ça.',
+  invalid_body: 'La demande n’est pas valable.',
+  unauthorized: 'Ta session a expiré : reconnecte-toi.',
+  failed: 'Le serveur n’a pas pu le faire. Réessaie.',
 }
 
 /** La phrase d'un refus connu du serveur, lue dans le corps JSON de sa réponse. */

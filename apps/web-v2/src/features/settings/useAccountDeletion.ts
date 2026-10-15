@@ -6,18 +6,13 @@
  *            l'accueil, qui repart propre.
  */
 import { useCallback, useState } from 'react'
+import type { DeletionPreview } from '@/lib/deletion-preview'
 import { useAuth } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
 
-export interface Preview {
-  deleted: { entityActorId: string; brandName: string; subscribed: boolean }[]
-  /** endsOn : la fin de la période payée, quand l'abonnement de l'enseigne s'y arrête. */
-  kept: { entityActorId: string; brandName: string; endsOn: string | null }[]
-}
-
 export function useAccountDeletion() {
   const { signOut } = useAuth()
-  const [preview, setPreview] = useState<Preview | null>(null)
+  const [preview, setPreview] = useState<DeletionPreview | null>(null)
   const [loading, setLoading] = useState(false)
   const [failed, setFailed] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -25,7 +20,7 @@ export function useAccountDeletion() {
   const load = useCallback(async () => {
     setLoading(true)
     setFailed(false)
-    const response = await supabase.functions.invoke<Preview>('delete-account', {
+    const response = await supabase.functions.invoke<DeletionPreview>('delete-account', {
       body: { confirm: false },
     })
     const found = response.error ? null : response.data

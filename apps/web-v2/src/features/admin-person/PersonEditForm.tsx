@@ -37,6 +37,11 @@ export function PersonEditForm({ person, onCancel, onSaved }: Props) {
     setForm((current) => ({ ...current, [key]: event.target.value }))
 
   async function save() {
+    const email = form.email.trim()
+    if (!email) {
+      setError('L’e-mail ne peut pas être vide.')
+      return
+    }
     setSaving(true)
     setError(null)
     const { error: failure } = await supabase.rpc('admin_corriger_personne', {
@@ -51,13 +56,13 @@ export function PersonEditForm({ person, onCancel, onSaved }: Props) {
       setError(readable(failure))
       return
     }
-    const email = form.email.trim()
     if (email !== (person.email || '')) {
       try {
         await changeEmail(person.actor_id, email)
       } catch (problem) {
         setSaving(false)
-        setError(problem instanceof Error ? problem.message : 'L’e-mail n’a pas changé.')
+        const reason = problem instanceof Error ? problem.message : 'erreur inconnue'
+        setError(`Les autres champs sont enregistrés ; l’e-mail n’a pas changé : ${reason}`)
         return
       }
     }
