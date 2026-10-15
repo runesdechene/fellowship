@@ -36,6 +36,12 @@ export function daysUntil(target: Date, today: Date = new Date()): number {
   return Math.round((startOfDay(target).getTime() - startOfDay(today).getTime()) / MS_PER_DAY)
 }
 
+/** Mois calendaires entiers de `from` à `to` (to ≥ from) : du 15 oct. au 14 mars, 4 mois. */
+export function wholeMonthsBetween(from: Date, to: Date): number {
+  const months = (to.getFullYear() - from.getFullYear()) * 12 + to.getMonth() - from.getMonth()
+  return to.getDate() < from.getDate() ? months - 1 : months
+}
+
 /** « Dans 11 jours », « Demain », « Aujourd'hui ». */
 export function formatCountdown(days: number): string {
   if (days <= 0) return "Aujourd'hui"
@@ -174,6 +180,22 @@ export function timeAgo(date: Date, now: Date): string {
 /** Le premier jour du mois, `months` mois après celui d'aujourd'hui : la fin d'une fenêtre. */
 export function monthsAhead(today: Date, months: number): Date {
   return new Date(today.getFullYear(), today.getMonth() + months, 1)
+}
+
+/**
+ * La fin d'un Pro offert : `months` mois après la fin en cours si elle est encore future, sinon
+ * après maintenant. Un jour absent du mois d'arrivée tombe sur son dernier jour (31 déc. + 2 mois
+ * = 28 fév.), comme l'intervalle SQL de `admin_offrir_mois`.
+ */
+export function giftEnd(current: string | null, months: number, now: Date): Date {
+  const running = current ? new Date(current) : null
+  const start = running && running > now ? running : now
+  const end = new Date(start)
+  end.setDate(1)
+  end.setMonth(end.getMonth() + months)
+  const lastDay = new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate()
+  end.setDate(Math.min(start.getDate(), lastDay))
+  return end
 }
 
 const RECENT_DAYS = 14
