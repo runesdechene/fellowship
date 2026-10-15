@@ -13,6 +13,7 @@ import { LandingFoot } from '@/features/landing/LandingFoot'
 import { LandingSearch } from '@/features/landing/LandingSearch'
 import { LandingTopBar } from '@/features/landing/LandingTopBar'
 import { GUEST_MONTHS, beyondTitle, lastOpenMonth, publicTitle, windowMonths } from '@/lib/explorer'
+import { loginReturning } from '@/lib/welcome'
 import { PublicEventCard } from './PublicEventCard'
 import { usePublicSearch } from './usePublicSearch'
 
@@ -83,7 +84,10 @@ export function PublicSearchPage() {
               tes collègues exposants.
             </p>
             <div className="landing-pro__ctas">
-              <Link className="landing-button landing-button--brand" to="/connexion">
+              <Link
+                className="landing-button landing-button--brand"
+                to={loginReturning(`/explorer?${params.toString()}`)}
+              >
                 Créer mon compte gratuit
                 <ArrowRight size={18} strokeWidth={2} aria-hidden />
               </Link>

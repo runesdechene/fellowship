@@ -120,3 +120,9 @@ export function typedCode(value: string, index: number, raw: string): string {
 export function safeReturn(value: string | null): string | null {
   return value?.startsWith('/') && !value.startsWith('//') ? value : null
 }
+
+/** La connexion qui ramène où l'on était : « Crée ton compte gratuit pour les lire » revient sur
+ *  la fiche (lot 11b). La route /connexion relit `retour` par safeReturn. */
+export function loginReturning(path: string): string {
+  return `/connexion?retour=${encodeURIComponent(path)}`
+}

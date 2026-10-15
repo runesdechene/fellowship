@@ -7,6 +7,8 @@
  *            la V1 : affiché s'il existe, jamais proposé.
  */
 import { useCallback, useEffect, useState } from 'react'
+import { hiddenFromVisitor } from '@/lib/access'
+import { useAuth } from '@/lib/auth'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
@@ -118,7 +120,11 @@ const EMPTY: EventData = {
  * Charge la fiche d'un événement pour un acteur (ou sans acteur : l'événement seul). Lève
  * l'erreur de la première requête qui échoue (must).
  */
-async function loadEvent(eventId: string, actorId: string | null | undefined): Promise<EventData> {
+async function loadEvent(
+  eventId: string,
+  actorId: string | null | undefined,
+  signedIn: boolean,
+): Promise<EventData> {
   // Les couleurs des catégories ne dépendent pas de l'événement : elles partent en même temps
   // que lui plutôt qu'après.
   const [eventResponse, tagRows] = await Promise.all([
@@ -127,9 +133,7 @@ async function loadEvent(eventId: string, actorId: string | null | undefined): P
   ])
   const event = must(eventResponse)
   if (!event) return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
-  // Sans compte (lot 11b), une fiche privée n'existe pas : la base la laisse lire à anon
-  // (anon_read_events, docs/v2/purge-back.md), l'app ne la montre pas.
-  if (!actorId && event.is_private)
+  if (hiddenFromVisitor(event.is_private, signedIn))
     return { ...EMPTY, loading: false, error: 'Cet événement est introuvable.' }
 
   const tagStyles = tagStylesByName(tagRows)
@@ -195,6 +199,8 @@ export function useEvent(
   actorId: string | null | undefined,
   personActorId?: string | null,
 ): EventData & EventActions {
+  // La session, pas l'acteur : c'est elle qui fait d'une personne un visiteur (lot 11b).
+  const signedIn = Boolean(useAuth().user)
   const [state, setState] = useState<EventData>(EMPTY)
   const [saving, setSaving] = useState(false)
   const [writeError, setWriteError] = useState<string | null>(null)
@@ -213,7 +219,7 @@ export function useEvent(
     async function run(currentEventId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
       try {
-        const next = await loadEvent(currentEventId, actorId)
+        const next = await loadEvent(currentEventId, actorId, signedIn)
         if (cancelled) return
         setState(next)
       } catch (reason) {
@@ -230,7 +236,7 @@ export function useEvent(
     return () => {
       cancelled = true
     }
-  }, [eventId, actorId])
+  }, [eventId, actorId, signedIn])
 
   // L'affichage bouge AVANT la base : cocher un cran doit répondre tout de
   // suite. Si l'écriture échoue, on remet l'état d'avant et on le dit — un

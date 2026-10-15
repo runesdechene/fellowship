@@ -83,6 +83,16 @@ function WelcomeRoute() {
   )
 }
 
+/** `/connexion` : une session ouverte repart où on l'attendait (`?retour`, lot 11b), sinon à
+ *  l'accueil ; un compte neuf passe d'abord par l'arrivée, qui l'y ramène ensuite. */
+function LoginRoute() {
+  const { user, loading } = useAuth()
+  const [search] = useSearchParams()
+  if (loading) return null
+  if (user) return <Navigate to={safeReturn(search.get('retour')) ?? '/'} replace />
+  return <Login />
+}
+
 /** `/festivals` : la recherche publique pour un visiteur ; un compte connecté retrouve sa
  *  recherche dans l'Explorer (6 mois en gratuit, toute l'année en Pro). */
 function PublicSearchRoute() {
@@ -102,17 +112,12 @@ function LeaveToV1() {
 }
 
 export function App() {
-  const { user, loading } = useAuth()
-
   return (
     <Routes>
       {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
       <Route path="/decouvrir" element={<LandingPage />} />
       <Route path="/festivals" element={<PublicSearchRoute />} />
-      <Route
-        path="/connexion"
-        element={loading ? null : user ? <Navigate to="/" replace /> : <Login />}
-      />
+      <Route path="/connexion" element={<LoginRoute />} />
       <Route
         path="/bienvenue"
         element={

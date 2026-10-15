@@ -56,3 +56,10 @@ export function decideAccess(state: AccessState): AccessDecision {
       return state.hasAccess ? 'allow' : 'leave'
   }
 }
+
+/** Une fiche privée n'existe pas pour une personne sans session (lot 11b) : la base la laisse
+ *  lire à anon (anon_read_events), l'app ne la montre pas. Décidé sur la SESSION, pas sur
+ *  l'acteur : une identité pas encore chargée n'est pas un visiteur. */
+export function hiddenFromVisitor(isPrivate: boolean, signedIn: boolean): boolean {
+  return isPrivate && !signedIn
+}

@@ -8,6 +8,7 @@ import { describe, expect, test } from 'vitest'
 import {
   codeDigits,
   firstProblemStep,
+  loginReturning,
   safeReturn,
   typedCode,
   departmentOf,
@@ -137,5 +138,14 @@ describe('safeReturn', () => {
     expect(safeReturn('//evil.com')).toBeNull()
     expect(safeReturn('https://evil.com')).toBeNull()
     expect(safeReturn(null)).toBeNull()
+  })
+})
+
+describe('loginReturning', () => {
+  it('la connexion garde l’adresse où revenir, relisible par safeReturn', () => {
+    const link = loginReturning('/evenement/abc?carte')
+    expect(link).toBe('/connexion?retour=%2Fevenement%2Fabc%3Fcarte')
+    const back = new URLSearchParams(link.split('?')[1]).get('retour')
+    expect(safeReturn(back)).toBe('/evenement/abc?carte')
   })
 })

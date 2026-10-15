@@ -2,7 +2,7 @@
  * QUOI     — tests de lib/access.ts : la garde d'accès à la V2 (toAccessState, decideAccess).
  * POURQUOI — la logique pure se teste ici, sans navigateur (méthode du dépôt : .claude/rules/dev.md).
  */
-import { decideAccess, settleCheck, toAccessState } from './access'
+import { decideAccess, settleCheck, toAccessState, hiddenFromVisitor } from './access'
 
 describe('toAccessState', () => {
   it('attend tant que la session se lit', () => {
@@ -68,5 +68,13 @@ describe('settleCheck', () => {
   })
   it('applique un accès retiré, même après un accès accordé', () => {
     expect(settleCheck('allowed', 'refused')).toBe('refused')
+  })
+})
+
+describe('hiddenFromVisitor', () => {
+  it('une fiche privée est cachée sans session, jamais à une session ouverte', () => {
+    expect(hiddenFromVisitor(true, false)).toBe(true)
+    expect(hiddenFromVisitor(true, true)).toBe(false)
+    expect(hiddenFromVisitor(false, false)).toBe(false)
   })
 })

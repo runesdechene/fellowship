@@ -7,12 +7,14 @@
  *            ni question, l'aperçu ne s'affiche pas.
  */
 import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { teaserLine } from '@/lib/teaser'
+import { loginReturning } from '@/lib/welcome'
 import { useEventTeaser } from './useEventTeaser'
 
 export function GuestTeaser({ eventId }: { eventId: string }) {
   const counts = useEventTeaser(eventId)
+  const { pathname } = useLocation()
   const line = counts ? teaserLine(counts.reviews, counts.questions) : null
   if (!line) return null
 
@@ -27,7 +29,7 @@ export function GuestTeaser({ eventId }: { eventId: string }) {
         <span className="guest-teaser__line" />
         <span className="guest-teaser__line" />
       </div>
-      <Link className="guest-teaser__cta" to="/connexion">
+      <Link className="guest-teaser__cta" to={loginReturning(pathname)}>
         Crée ton compte gratuit pour les lire
         <ArrowRight size={14} strokeWidth={2} aria-hidden />
       </Link>
