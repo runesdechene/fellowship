@@ -55,14 +55,13 @@ export function ProBand({ showcase }: { showcase: Showcase | null }) {
     >
       <div className="landing-pro__text">
         <p className="landing-statement">
-          <strong>Quand les festivals sont ton métier.</strong> Les plus gros ferment leurs
-          candidatures des mois à l’avance : le Pro te les montre à temps, te prévient avant chaque
-          clôture et te dit lesquels rapportent.
+          <strong>Ne rate plus les bons festivals.</strong> Le Pro te les montre à temps et te dit
+          lesquels rapportent.
         </p>
         <div className="landing-pro__offers">
           <div>
             <p className="landing-pro__big">Gratuit</p>
-            <p className="landing-pro__label">Tout pour tenir ta saison</p>
+            <p className="landing-pro__label">La base pour tenir ta saison</p>
             <p className="landing-pro__note">Sans carte bancaire, sans limite de durée.</p>
             <Advantages items={FREE} />
           </div>
