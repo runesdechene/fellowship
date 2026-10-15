@@ -4,8 +4,10 @@
  * POURQUOI — maquette 2342:2. Les paiements, les notes et les actions viendront dans leurs blocs.
  */
 import { ChevronLeft, ExternalLink } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { Button } from '@/components/ui/Button'
 import { NotesCard } from '@/components/ui/NotesCard'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { TypeChip } from '@/components/ui/TypeChip'
@@ -20,7 +22,8 @@ import { useAdminEntity } from './useAdminEntity'
 
 export function EntityPage() {
   const { id = '' } = useParams()
-  const { data, error } = useAdminEntity(id)
+  const { data, error, reload } = useAdminEntity(id)
+  const [editing, setEditing] = useState(false)
 
   if (error) return <p className="admin-page__error">{error}</p>
   if (!data) return null
@@ -73,6 +76,11 @@ export function EntityPage() {
             Voir la vitrine
           </a>
         )}
+        {!editing && (
+          <Button className="sheet__action" onClick={() => setEditing(true)}>
+            Modifier
+          </Button>
+        )}
       </header>
       <div className="sheet__columns">
         <div className="sheet__column">
@@ -81,7 +89,16 @@ export function EntityPage() {
         </div>
         <div className="sheet__column sheet__column--side">
           <MembersCard members={members} paidBy={entity.paid_by_user} />
-          <EntityInfoCard entity={entity} phone={owner?.phone ?? null} />
+          <EntityInfoCard
+            entity={entity}
+            ownerPhone={owner?.phone ?? null}
+            editing={editing}
+            onEdit={() => setEditing(true)}
+            onDone={(saved) => {
+              setEditing(false)
+              if (saved) reload()
+            }}
+          />
           <NotesCard key={entity.actor_id} actorId={entity.actor_id} />
         </div>
       </div>

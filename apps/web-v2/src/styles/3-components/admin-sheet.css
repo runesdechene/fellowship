@@ -337,3 +337,36 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Le mode correction d'un bloc Informations : champs, erreur, boutons. */
+.sheet-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.sheet-form__error {
+  font: var(--type-list-meta);
+  color: var(--tone-brique-ink);
+}
+
+.sheet-form__actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+/* « Corriger » : un lien qui est un bouton. */
+.sheet-link--button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* La phrase qui précède « Admin » : texte et deux boutons sur une ligne. */
+.access-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}

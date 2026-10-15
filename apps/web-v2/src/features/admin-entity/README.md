@@ -1,6 +1,6 @@
 # features/admin-entity
 
-L'administration, fiche d'une enseigne (`/admin/enseignes/:id`), en lecture.
+L'administration, fiche d'une enseigne (`/admin/enseignes/:id`).
 
 - `EntityPage.tsx` — la page : retour, en-tête, deux colonnes.
 - `useAdminEntity.ts` — charge l'enseigne, ses comptes reliés et ses gestes.
@@ -8,3 +8,4 @@ L'administration, fiche d'une enseigne (`/admin/enseignes/:id`), en lecture.
 - `ActivityCard.tsx` — cinq chiffres et les derniers gestes.
 - `MembersCard.tsx` — les comptes reliés.
 - `EntityInfoCard.tsx` — nom, type, ville, vitrine, société, téléphone.
+- `EntityEditForm.tsx` — le formulaire de correction (nom, métier, ville, vitrine, société, SIREN).

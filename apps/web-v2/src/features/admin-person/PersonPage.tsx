@@ -4,8 +4,10 @@
  * POURQUOI — maquette 2344:2. Les notes internes et les corrections viendront dans leurs blocs.
  */
 import { ChevronLeft } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { Button } from '@/components/ui/Button'
 import { NotesCard } from '@/components/ui/NotesCard'
 import { formatFullDate, timeAgo } from '@/lib/dates'
 import { AccessCard } from './AccessCard'
@@ -17,7 +19,8 @@ import { useAdminPerson } from './useAdminPerson'
 
 export function PersonPage() {
   const { id = '' } = useParams()
-  const { data, error } = useAdminPerson(id)
+  const { data, error, reload } = useAdminPerson(id)
+  const [editing, setEditing] = useState(false)
 
   if (error) return <p className="admin-page__error">{error}</p>
   if (!data) return null
@@ -53,15 +56,28 @@ export function PersonPage() {
           </div>
           <p className="sheet__meta">{meta}</p>
         </div>
+        {!editing && (
+          <Button className="sheet__action" onClick={() => setEditing(true)}>
+            Modifier
+          </Button>
+        )}
       </header>
       <div className="sheet__columns">
         <div className="sheet__column">
           <PersonEntitiesCard personId={person.actor_id} entities={entities} />
           <PersonActivityCard person={person} gestures={gestures} />
-          <AccessCard person={person} />
+          <AccessCard person={person} onChanged={reload} />
         </div>
         <div className="sheet__column sheet__column--side">
-          <PersonInfoCard person={person} />
+          <PersonInfoCard
+            person={person}
+            editing={editing}
+            onEdit={() => setEditing(true)}
+            onDone={(saved) => {
+              setEditing(false)
+              if (saved) reload()
+            }}
+          />
           <NotesCard key={person.actor_id} actorId={person.actor_id} />
         </div>
       </div>
