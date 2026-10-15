@@ -1540,6 +1540,13 @@ export type Database = {
           who_slug: string
         }[]
       }
+      compter_avis_et_questions: {
+        Args: { p_event: string }
+        Returns: {
+          avis: number
+          questions: number
+        }[]
+      }
       create_owned_entity: {
         Args: {
           p_brand_name: string
