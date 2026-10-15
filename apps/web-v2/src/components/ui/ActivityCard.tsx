@@ -1,29 +1,28 @@
 /**
- * QUOI     — le bloc Activité : quatre chiffres, puis les derniers gestes de la personne et de ses enseignes.
- * POURQUOI — voir d'un coup d'œil si le compte vit (dates suivies, avis, questions et réponses, fiches).
+ * QUOI     — le bloc Activité des fiches d'administration : des chiffres, puis les derniers gestes.
+ * POURQUOI — voir d'un coup d'œil si le compte vit ; la fiche d'une enseigne et celle d'une
+ *            personne le montrent pareil, seules les tuiles changent.
  */
 import { Activity } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { AdminCard } from '@/components/ui/AdminCard'
 import { timeAgo } from '@/lib/dates'
-import type { Gesture, PersonFields } from './useAdminPerson'
 
-export function PersonActivityCard({
-  person,
-  gestures,
-}: {
-  person: PersonFields
-  gestures: Gesture[]
-}) {
+interface Tile {
+  label: string
+  value: number
+}
+
+interface Gesture {
+  quand: string
+  quoi: string
+}
+
+export function ActivityCard({ tiles, gestures }: { tiles: Tile[]; gestures: Gesture[] }) {
   const now = new Date()
-  const tiles = [
-    { label: 'Dates suivies', value: person.dates },
-    { label: 'Avis écrits', value: person.avis },
-    { label: 'Questions et réponses', value: person.questions },
-    { label: 'Fiches créées', value: person.fiches },
-  ]
   return (
     <AdminCard title="Activité" Icon={Activity} tone="bleu">
-      <div className="sheet-tiles person-tiles">
+      <div className="sheet-tiles" style={{ '--tiles': String(tiles.length) } as CSSProperties}>
         {tiles.map((tile) => (
           <div key={tile.label} className="sheet-tile">
             <span className="sheet-tile__value">{tile.value}</span>
@@ -33,8 +32,8 @@ export function PersonActivityCard({
       </div>
       {gestures.length > 0 && (
         <ul className="sheet-gestures">
-          {gestures.map((gesture) => (
-            <li key={`${gesture.quand}-${gesture.quoi}`} className="sheet-gesture">
+          {gestures.map((gesture, index) => (
+            <li key={`${index}-${gesture.quand}`} className="sheet-gesture">
               <span className="sheet-gesture__when">{timeAgo(new Date(gesture.quand), now)}</span>
               <span className="sheet-gesture__what">{gesture.quoi}</span>
             </li>

@@ -36,6 +36,10 @@ const FILTERS: Record<AccountsView, readonly { value: string; label: string }[]>
 
 const DEFAULT_FILTER: Record<AccountsView, string> = { enseignes: 'toutes', personnes: 'tous' }
 
+export function defaultFilter(view: AccountsView): string {
+  return DEFAULT_FILTER[view]
+}
+
 export function filtersFor(view: AccountsView): readonly { value: string; label: string }[] {
   return FILTERS[view]
 }

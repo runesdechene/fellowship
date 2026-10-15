@@ -159,7 +159,7 @@
 
 .sheet-tiles {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(var(--tiles, 5), 1fr);
   gap: var(--space-10);
 }
 
@@ -275,10 +275,6 @@
 }
 
 /* La fiche d'une personne (features/admin-person) */
-.person-tiles {
-  grid-template-columns: repeat(4, 1fr);
-}
-
 .person-entity__logo {
   border-radius: var(--radius-sm);
 }
@@ -330,12 +326,6 @@
 .access-note {
   font: var(--type-list-meta);
   color: var(--ink-soft);
-}
-
-@media (width <= 760px) {
-  .person-tiles {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* Le mode correction d'un bloc Informations : champs, erreur, boutons. */

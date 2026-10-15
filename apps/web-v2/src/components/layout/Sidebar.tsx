@@ -4,7 +4,8 @@
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
  *            on ne pouvait pas accéder à sa propre vitrine). « Revenir à la V1 » ferme la liste : ceux
- *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026). « Administration » n'apparaît que pour les admins.
+ *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
+ *            « Administration » n'apparaît que pour les admins.
  */
 import {
   ArrowLeftRight,

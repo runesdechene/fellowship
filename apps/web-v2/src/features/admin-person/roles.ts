@@ -8,6 +8,8 @@ export const ROLES = [
   { value: 'admin', label: 'Admin' },
 ]
 
+// Rôle posé par l'admin V1 (à retirer avec elle) : il se lit, mais n'est pas une option du sélecteur.
 export function personRoleLabel(role: string): string {
+  if (role === 'suspended') return 'Suspendu par la V1'
   return ROLES.find((entry) => entry.value === role)?.label ?? role
 }

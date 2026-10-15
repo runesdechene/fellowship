@@ -6,19 +6,24 @@
 import { ChevronLeft } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ActivityCard } from '@/components/ui/ActivityCard'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { NotesCard } from '@/components/ui/NotesCard'
 import { formatFullDate, timeAgo } from '@/lib/dates'
 import { AccessCard } from './AccessCard'
-import { PersonActivityCard } from './PersonActivityCard'
 import { PersonEntitiesCard } from './PersonEntitiesCard'
 import { PersonInfoCard } from './PersonInfoCard'
 import { personRoleLabel } from './roles'
 import { useAdminPerson } from './useAdminPerson'
 
+// `key={id}` : passer d'une personne à l'autre remet à zéro la correction et les confirmations.
 export function PersonPage() {
   const { id = '' } = useParams()
+  return <PersonSheet key={id} id={id} />
+}
+
+function PersonSheet({ id }: { id: string }) {
   const { data, error, reload } = useAdminPerson(id)
   const [editing, setEditing] = useState(false)
 
@@ -65,7 +70,15 @@ export function PersonPage() {
       <div className="sheet__columns">
         <div className="sheet__column">
           <PersonEntitiesCard personId={person.actor_id} entities={entities} />
-          <PersonActivityCard person={person} gestures={gestures} />
+          <ActivityCard
+            tiles={[
+              { label: 'Dates suivies', value: person.dates },
+              { label: 'Avis écrits', value: person.avis },
+              { label: 'Questions et réponses', value: person.questions },
+              { label: 'Fiches créées', value: person.fiches },
+            ]}
+            gestures={gestures}
+          />
           <AccessCard person={person} onChanged={reload} />
         </div>
         <div className="sheet__column sheet__column--side">

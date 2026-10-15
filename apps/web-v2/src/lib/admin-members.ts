@@ -17,7 +17,7 @@ export function membersSummary(count: number): string {
 
 const ROLES: Record<string, string> = {
   owner: 'propriétaire',
-  admin: 'administrateur',
+  admin: 'admin',
   member: 'membre',
 }
 

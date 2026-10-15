@@ -29,7 +29,7 @@ describe('membersSummary', () => {
 describe('roleLabel', () => {
   it('traduit les rôles de memberships', () => {
     expect(roleLabel('owner')).toBe('propriétaire')
-    expect(roleLabel('admin')).toBe('administrateur')
+    expect(roleLabel('admin')).toBe('admin')
     expect(roleLabel('member')).toBe('membre')
   })
 })

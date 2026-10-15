@@ -25,6 +25,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `TypeChip.tsx` — la pastille du type d'enseigne (exposant, festival, entreprise, sans enseigne).
 - `OfferBadge.tsx` — l'offre d'une enseigne : Pro / Essai / Gratuit, puis le détail.
 - `AdminCard.tsx` — un bloc de fiche d'administration : icône teintée, titre, action.
+- `ActivityCard.tsx` — le bloc Activité des fiches d'administration : des chiffres, puis les derniers gestes.
 - `SheetRow.tsx` — une rangée clé/valeur de fiche d'administration (enseigne et personne).
 - `NotesCard.tsx` — le bloc « Notes internes » des fiches d'administration : étiquettes et notes d'un acteur.
 - `DeletionDialog.tsx` — la fenêtre de suppression d'un compte (aperçu, confirmation), partagée par Réglages et l'administration.

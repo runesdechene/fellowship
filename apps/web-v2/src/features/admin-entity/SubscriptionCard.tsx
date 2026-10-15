@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/Button'
 import { formatFullDate } from '@/lib/dates'
 import { formatPrice } from '@/lib/money'
 import { offerOf, type Offer } from '@/lib/offer'
+import { billingAction } from '@/lib/plan'
 import { PRICES } from '@/lib/pricing'
 import { renewalAhead } from '@/lib/renewal'
 import { supabase } from '@/lib/supabase'
@@ -21,8 +22,6 @@ import { GiftMonths } from './GiftMonths'
 import type { EntityFields } from './useAdminEntity'
 
 const NONE = '—'
-// admin_enseigne ne rend pas l'id d'abonnement : l'état en tient lieu.
-const LIVE_STATUSES = ['active', 'trialing', 'past_due']
 
 function offerTitle(entity: EntityFields, offer: Offer): { title: string; price: string } {
   if (offer.kind === 'essai') return { title: 'Essai', price: offer.detail }
@@ -72,7 +71,7 @@ export function SubscriptionCard({ entity, ownerId, customerEmail, reload }: Pro
   const { title, price } = offerTitle(entity, offer)
   const next = renewal(entity, now)
   const gifted = offer.kind === 'pro' && entity.plan !== 'pro'
-  const subscribed = LIVE_STATUSES.includes(entity.subscription_status)
+  const subscribed = billingAction(entity) === 'portal'
   const owns = entity.paid_by_user === ownerId
   const paidBy = entity.paid_by_name
     ? `${entity.paid_by_name}${owns ? ' (propriétaire)' : ''}`

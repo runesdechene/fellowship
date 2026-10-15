@@ -2,8 +2,8 @@
  * QUOI     — charge la fiche d'une enseigne : ses champs, ses comptes reliés, ses derniers gestes.
  * POURQUOI — trois fonctions admin_* gardées en base ; `reload` relit après une correction.
  */
-import { useCallback, useEffect, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
+import { useAdminSheet } from '@/lib/useAdminSheet'
 import type { Database } from '@/types/supabase'
 
 type Fn = Database['public']['Functions']
@@ -28,37 +28,5 @@ async function loadEntity(id: string): Promise<EntitySheet | null> {
 }
 
 export function useAdminEntity(id: string) {
-  const [state, setState] = useState<{
-    id: string
-    data: EntitySheet | null
-    error: string | null
-  }>({ id, data: null, error: null })
-  const [round, setRound] = useState(0)
-  const reload = useCallback(() => setRound((value) => value + 1), [])
-
-  useEffect(() => {
-    let cancelled = false
-    async function run() {
-      try {
-        const data = await loadEntity(id)
-        if (cancelled) return
-        setState({ id, data, error: data ? null : 'Enseigne introuvable' })
-      } catch (error) {
-        if (cancelled) return
-        setState({
-          id,
-          data: null,
-          error: error instanceof Error ? error.message : 'Chargement impossible',
-        })
-      }
-    }
-    void run()
-    return () => {
-      cancelled = true
-    }
-  }, [id, round])
-
-  // Tant que l'enseigne de l'adresse n'est pas chargée, l'ancienne ne s'affiche pas dessous.
-  if (state.id !== id) return { data: null, error: null, reload }
-  return { data: state.data, error: state.error, reload }
+  return useAdminSheet(id, loadEntity, 'Enseigne introuvable')
 }

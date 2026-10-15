@@ -11,6 +11,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `money.ts` — **tous** les montants et le registre de bilan ; non négociable.
 - `friends.ts` — les amis présents sur une date, statuts programmés / confirmés.
 - `threads.ts` — la logique des fils de discussion (tri, canaux, meilleure réponse).
+- `useAdminSheet.ts` — charge la fiche d'une enseigne ou d'une personne de l'administration (id, rechargement).
 - `useAdminNotes.ts` — les notes internes et les étiquettes d'un acteur (admins seuls).
 - `tags.ts` — les catégories réglées dans l'administration.
 - `explorer.ts` + `event-search.ts` — l'horizon de recherche (3 / 6 mois / sans borne) et la requête de festivals publics, sans acteur.

@@ -1,8 +1,8 @@
 /**
  * QUOI     — le formulaire de correction d'une personne, posé dans le bloc Informations : prénom,
  *            e-mail, identifiant, téléphone, code postal.
- * POURQUOI — écrit par `admin_corriger_personne` (gardée admin, vide = effacé). L'e-mail n'y est
- *            échoue. L'e-mail change aussi l'adresse de connexion : il passe par la fonction
+ * POURQUOI — écrit par `admin_corriger_personne` (gardée admin, vide = effacé). L'e-mail n'y passe pas :
+ *            il change aussi l'adresse de connexion : il passe par la fonction
  *            admin-compte, après les autres champs, et seulement s'il a changé.
  */
 import { useState } from 'react'

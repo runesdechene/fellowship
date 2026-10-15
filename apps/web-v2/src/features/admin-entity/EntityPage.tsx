@@ -6,6 +6,7 @@
 import { ChevronLeft, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { ActivityCard } from '@/components/ui/ActivityCard'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { NotesCard } from '@/components/ui/NotesCard'
@@ -14,15 +15,19 @@ import { TypeChip } from '@/components/ui/TypeChip'
 import { formatFullDate } from '@/lib/dates'
 import { entityTypeOf } from '@/lib/entity-type'
 import { offerOf } from '@/lib/offer'
-import { ActivityCard } from './ActivityCard'
 import { EntityInfoCard } from './EntityInfoCard'
 import { MembersCard } from './MembersCard'
 import { PaymentsCard } from './PaymentsCard'
 import { SubscriptionCard } from './SubscriptionCard'
 import { useAdminEntity } from './useAdminEntity'
 
+// `key={id}` : passer d'une enseigne à l'autre remet à zéro la correction en cours.
 export function EntityPage() {
   const { id = '' } = useParams()
+  return <EntitySheet key={id} id={id} />
+}
+
+function EntitySheet({ id }: { id: string }) {
   const { data, error, reload } = useAdminEntity(id)
   const [editing, setEditing] = useState(false)
   const [customerEmail, setCustomerEmail] = useState<string | null>(null)
@@ -97,7 +102,16 @@ export function EntityPage() {
             entityId={entity.actor_id}
             onCustomerEmail={setCustomerEmail}
           />
-          <ActivityCard entity={entity} gestures={gestures} />
+          <ActivityCard
+            tiles={[
+              { label: 'Dates suivies', value: entity.dates },
+              { label: 'Avis écrits', value: entity.avis },
+              { label: 'Bilans', value: entity.bilans },
+              { label: 'Fiches créées', value: entity.fiches },
+              { label: 'Abonnés', value: entity.abonnes },
+            ]}
+            gestures={gestures}
+          />
         </div>
         <div className="sheet__column sheet__column--side">
           <MembersCard members={members} paidBy={entity.paid_by_user} />

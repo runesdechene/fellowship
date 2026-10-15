@@ -6,6 +6,7 @@
 import { useSearchParams } from 'react-router-dom'
 import { Segmented } from '@/components/ui/Segmented'
 import {
+  defaultFilter,
   readAccountsQuery,
   writeAccountsQuery,
   type AccountsQuery,
@@ -21,14 +22,17 @@ export function AccountsPage() {
   const [search, setSearch] = useSearchParams()
   const query = readAccountsQuery(search)
   const { data, error } = useAccounts(query)
+  // Seule la recherche change : elle remplace l'entrée d'historique, le retour arrière saute les frappes.
   const go = (next: Partial<AccountsQuery>) =>
-    setSearch(writeAccountsQuery({ ...query, page: 0, ...next }))
+    setSearch(writeAccountsQuery({ ...query, page: 0, ...next }), {
+      replace: Object.keys(next).join() === 'q',
+    })
   const switchView = (view: AccountsView) =>
     setSearch(
       writeAccountsQuery({
         view,
         q: query.q,
-        filter: view === 'personnes' ? 'tous' : 'toutes',
+        filter: defaultFilter(view),
         page: 0,
       }),
     )

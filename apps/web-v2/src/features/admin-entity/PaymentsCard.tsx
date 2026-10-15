@@ -15,6 +15,7 @@ import { formatPrice } from '@/lib/money'
 const VISIBLE_ROWS = 4
 
 const STATUSES: Record<string, { label: string; className: string }> = {
+  draft: { label: 'Brouillon', className: '' },
   paid: { label: 'Payé', className: 'payment-status--paid' },
   open: { label: 'À payer', className: '' },
   void: { label: 'Annulé', className: '' },

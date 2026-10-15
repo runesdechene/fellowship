@@ -39,12 +39,13 @@ export function AccessCard({ person, onChanged }: { person: PersonFields; onChan
       .from('users')
       .update({ role })
       .eq('actor_id', person.actor_id)
-    const { data: read } = failure
-      ? { data: null }
+    const reading = failure
+      ? null
       : await supabase.from('users').select('role').eq('actor_id', person.actor_id).maybeSingle()
     setSaving(false)
     if (failure) setError(failure.message)
-    else if (read?.role !== role) setError('Le rôle n’a pas changé.')
+    else if (reading?.error) setError(reading.error.message)
+    else if (reading?.data?.role !== role) setError('Le rôle n’a pas changé.')
     onChanged()
   }
 
@@ -68,7 +69,10 @@ export function AccessCard({ person, onChanged }: { person: PersonFields; onChan
           label="Rôle"
           options={ROLES}
           value={person.role}
-          onChange={(role) => (role === 'admin' ? setAsking(true) : void changeRole(role))}
+          onChange={(role) => {
+            if (role !== 'admin') void changeRole(role)
+            else if (person.role !== 'admin') setAsking(true)
+          }}
           disabled={own || saving}
         />
         {own && <p className="access-note">Ton propre rôle ne se change pas ici.</p>}
@@ -95,7 +99,7 @@ export function AccessCard({ person, onChanged }: { person: PersonFields; onChan
           <div className="access-row">
             <p className="access-note">
               {person.suspended_at
-                ? `Suspendu depuis le ${formatFullDate(new Date(person.suspended_at))} : la connexion est bloquée.`
+                ? `Compte suspendu depuis le ${formatFullDate(new Date(person.suspended_at))} : la connexion est bloquée.`
                 : 'Bloque la connexion ; le contenu reste visible.'}
             </p>
             <Button disabled={saving} onClick={() => setSuspending(true)}>
