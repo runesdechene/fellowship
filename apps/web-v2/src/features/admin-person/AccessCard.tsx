@@ -7,13 +7,8 @@ import { ShieldCheck } from 'lucide-react'
 import { AdminCard } from '@/components/ui/AdminCard'
 import { Button } from '@/components/ui/Button'
 import { Segmented } from '@/components/ui/Segmented'
+import { ROLES } from './roles'
 import type { PersonFields } from './useAdminPerson'
-
-const ROLES = [
-  { value: 'user', label: 'Utilisateur' },
-  { value: 'v2', label: 'V2' },
-  { value: 'admin', label: 'Admin' },
-]
 
 export function AccessCard({ person }: { person: PersonFields }) {
   return (

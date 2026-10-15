@@ -1,5 +1,5 @@
 /**
- * QUOI     — le tableau des personnes : compte, enseigne, offre, inscription, dernière venue, activité.
+ * QUOI     — le tableau des personnes : compte, enseigne, offre, inscription, dernière visite, activité.
  * POURQUOI — chaque ligne ouvre la fiche de la personne (maquette 2340:2).
  */
 import { ChevronRight } from 'lucide-react'
@@ -28,7 +28,7 @@ export function PeopleTable({ rows }: { rows: PersonRow[] }) {
           <th scope="col">Enseigne</th>
           <th scope="col">Offre</th>
           <th scope="col">Inscrit</th>
-          <th scope="col">Dernière venue</th>
+          <th scope="col">Dernière visite</th>
           <th scope="col">Activité</th>
           <th scope="col">
             <span className="admin-table__sr">Ouvrir</span>
@@ -49,7 +49,7 @@ export function PeopleTable({ rows }: { rows: PersonRow[] }) {
                   <span className="admin-table__name">{row.display_name || 'Sans prénom'}</span>
                   <span className="admin-table__meta">{row.email}</span>
                 </span>
-                {row.suspended_at && <span className="admin-table__flag">Suspendu</span>}
+                {row.suspended_at && <span className="admin-table__flag">Compte suspendu</span>}
               </Link>
             </td>
             <td>

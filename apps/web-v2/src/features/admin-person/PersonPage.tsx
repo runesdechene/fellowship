@@ -11,9 +11,8 @@ import { AccessCard } from './AccessCard'
 import { PersonActivityCard } from './PersonActivityCard'
 import { PersonEntitiesCard } from './PersonEntitiesCard'
 import { PersonInfoCard } from './PersonInfoCard'
+import { personRoleLabel } from './roles'
 import { useAdminPerson } from './useAdminPerson'
-
-const ROLE_NAMES: Record<string, string> = { user: 'Utilisateur', v2: 'V2', admin: 'Admin' }
 
 export function PersonPage() {
   const { id = '' } = useParams()
@@ -24,12 +23,12 @@ export function PersonPage() {
 
   const { person, entities, gestures } = data
   const lastSeen = person.last_sign_in_at
-    ? `dernière venue ${timeAgo(new Date(person.last_sign_in_at), new Date())}`
-    : 'jamais venue'
+    ? `dernière visite ${timeAgo(new Date(person.last_sign_in_at), new Date())}`
+    : 'aucune connexion'
   const meta = [
     person.email,
     person.handle && `@${person.handle}`,
-    `inscrit le ${formatFullDate(new Date(person.created_at))}`,
+    `inscription le ${formatFullDate(new Date(person.created_at))}`,
     lastSeen,
   ]
     .filter(Boolean)
@@ -46,9 +45,9 @@ export function PersonPage() {
         <div className="sheet__identity">
           <div className="sheet__name-line">
             <h1 className="sheet__name">{person.display_name || 'Sans prénom'}</h1>
-            <span className="person-role">{ROLE_NAMES[person.role] ?? person.role}</span>
+            <span className="person-role">{personRoleLabel(person.role)}</span>
             {person.suspended_at && (
-              <span className="person-role person-role--suspended">Suspendu</span>
+              <span className="person-role person-role--suspended">Compte suspendu</span>
             )}
           </div>
           <p className="sheet__meta">{meta}</p>
