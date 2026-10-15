@@ -417,9 +417,10 @@ select.landing-search__value {
   font: var(--type-landing-button-l);
 }
 
-/* L'exception de la landing : le dernier appel porte le dégradé du logo. */
+/* L'exception de la landing : le dernier appel porte le dégradé du logo. Il part du bord de la
+   bordure (transparente) : sinon il se répète dessous, et son bout clair fait un liseré à gauche. */
 .landing-button--brand {
-  background: var(--brand-gradient);
+  background: var(--brand-gradient) border-box;
   color: var(--brand-ink);
 }
 
