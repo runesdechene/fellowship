@@ -1,7 +1,7 @@
 /**
  * QUOI     — la fiche d'une enseigne dans l'administration (/admin/enseignes/:id) : en-tête, puis
  *            abonnement et activité à gauche, comptes reliés et informations à droite.
- * POURQUOI — maquette 2342:2. Les paiements, les notes et les actions viendront dans leurs blocs.
+ * POURQUOI — maquette 2342:2. Les paiements viennent de Stripe, chargés à part.
  */
 import { ChevronLeft, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
@@ -17,6 +17,7 @@ import { offerOf } from '@/lib/offer'
 import { ActivityCard } from './ActivityCard'
 import { EntityInfoCard } from './EntityInfoCard'
 import { MembersCard } from './MembersCard'
+import { PaymentsCard } from './PaymentsCard'
 import { SubscriptionCard } from './SubscriptionCard'
 import { useAdminEntity } from './useAdminEntity'
 
@@ -24,6 +25,7 @@ export function EntityPage() {
   const { id = '' } = useParams()
   const { data, error, reload } = useAdminEntity(id)
   const [editing, setEditing] = useState(false)
+  const [customerEmail, setCustomerEmail] = useState<string | null>(null)
 
   if (error) return <p className="admin-page__error">{error}</p>
   if (!data) return null
@@ -84,7 +86,17 @@ export function EntityPage() {
       </header>
       <div className="sheet__columns">
         <div className="sheet__column">
-          <SubscriptionCard entity={entity} ownerId={owner?.actor_id ?? null} reload={reload} />
+          <SubscriptionCard
+            entity={entity}
+            ownerId={owner?.actor_id ?? null}
+            customerEmail={customerEmail}
+            reload={reload}
+          />
+          <PaymentsCard
+            key={entity.actor_id}
+            entityId={entity.actor_id}
+            onCustomerEmail={setCustomerEmail}
+          />
           <ActivityCard entity={entity} gestures={gestures} />
         </div>
         <div className="sheet__column sheet__column--side">

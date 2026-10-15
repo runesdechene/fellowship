@@ -2,8 +2,8 @@
  * QUOI     — le bloc Abonnement : offre et prix, prochain renouvellement, qui paie, puis parrainage,
  *            mois offerts, remise et ambassadeur.
  * POURQUOI — l'administrateur lit l'état exact de l'offre ; les prix viennent de lib/pricing.ts.
- *            Dessous, ses gestes : offrir des mois, nommer ou retirer un ambassadeur (la remise
- *            arrive plus tard). `reload` relit la fiche après chaque geste.
+ *            Dessous, ses gestes : offrir des mois, nommer ou retirer un ambassadeur, poser une
+ *            remise. `reload` relit la fiche après chaque geste.
  */
 import { useState } from 'react'
 import { CreditCard, Gift, Percent, Star } from 'lucide-react'
@@ -16,10 +16,13 @@ import { PRICES } from '@/lib/pricing'
 import { renewalAhead } from '@/lib/renewal'
 import { supabase } from '@/lib/supabase'
 import { SheetRow } from '@/components/ui/SheetRow'
+import { DiscountPicker } from './DiscountPicker'
 import { GiftMonths } from './GiftMonths'
 import type { EntityFields } from './useAdminEntity'
 
 const NONE = '—'
+// admin_enseigne ne rend pas l'id d'abonnement : l'état en tient lieu.
+const LIVE_STATUSES = ['active', 'trialing', 'past_due']
 
 function offerTitle(entity: EntityFields, offer: Offer): { title: string; price: string } {
   if (offer.kind === 'essai') return { title: 'Essai', price: offer.detail }
@@ -53,11 +56,14 @@ function discountLine(entity: EntityFields): string {
 interface Props {
   entity: EntityFields
   ownerId: string | null
+  /** L'e-mail du client Stripe : « Payée par » s'en sert quand aucun compte n'est relié. */
+  customerEmail: string | null
   reload: () => void
 }
 
-export function SubscriptionCard({ entity, ownerId, reload }: Props) {
+export function SubscriptionCard({ entity, ownerId, customerEmail, reload }: Props) {
   const [giving, setGiving] = useState(false)
+  const [discounting, setDiscounting] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -66,10 +72,11 @@ export function SubscriptionCard({ entity, ownerId, reload }: Props) {
   const { title, price } = offerTitle(entity, offer)
   const next = renewal(entity, now)
   const gifted = offer.kind === 'pro' && entity.plan !== 'pro'
+  const subscribed = LIVE_STATUSES.includes(entity.subscription_status)
   const owns = entity.paid_by_user === ownerId
   const paidBy = entity.paid_by_name
     ? `${entity.paid_by_name}${owns ? ' (propriétaire)' : ''}`
-    : NONE
+    : (customerEmail ?? NONE)
 
   async function setAmbassador(yes: boolean) {
     if (busy) return
@@ -134,7 +141,14 @@ export function SubscriptionCard({ entity, ownerId, reload }: Props) {
         >
           <Gift size={16} aria-hidden /> Offrir des mois
         </button>
-        <button type="button" className="sheet-actions__button" disabled title="Bientôt">
+        <button
+          type="button"
+          className="sheet-actions__button"
+          disabled={!subscribed}
+          title={subscribed ? undefined : 'Pas d’abonnement Stripe en cours'}
+          aria-expanded={discounting}
+          onClick={() => setDiscounting((open) => !open)}
+        >
           <Percent size={16} aria-hidden /> Poser une remise
         </button>
         {confirming ? (
@@ -170,6 +184,16 @@ export function SubscriptionCard({ entity, ownerId, reload }: Props) {
           onClose={() => setGiving(false)}
           onGifted={() => {
             setGiving(false)
+            reload()
+          }}
+        />
+      )}
+      {discounting && subscribed && (
+        <DiscountPicker
+          entityId={entity.actor_id}
+          onClose={() => setDiscounting(false)}
+          onApplied={() => {
+            setDiscounting(false)
             reload()
           }}
         />

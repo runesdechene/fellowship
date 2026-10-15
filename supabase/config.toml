@@ -423,3 +423,7 @@ verify_jwt = false
 [functions.delete-account]
 # Auth = le jeton de la personne : elle ne peut supprimer que son propre compte.
 verify_jwt = true
+
+[functions.admin-stripe]
+# Auth = le jeton d'un admin (is_admin() vérifié dans la fonction).
+verify_jwt = true

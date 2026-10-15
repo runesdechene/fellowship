@@ -210,6 +210,7 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
       discount_end: discountEnd,
       discount_label: discountLabel,
       plan,
+      ...(sub.metadata?.paid_by_user ? { paid_by_user: sub.metadata.paid_by_user } : {}),
     })
     .eq('actor_id', entityActorId)
   if (error) throw error

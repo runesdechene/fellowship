@@ -140,7 +140,7 @@ Deno.serve(async (req) => {
       line_items: [{ price, quantity: 1 }],
       subscription_data: {
         trial_period_days: trialDays,
-        metadata: { entity_actor_id: entity.actor_id },
+        metadata: { entity_actor_id: entity.actor_id, paid_by_user: user.id },
       },
       automatic_tax: { enabled: true },
       // ⚠️ tax_id_collection EXIGE customer_update[name]='auto' pour un Customer existant
@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
           ? `${appUrl}/v2/pro?statut=succes&session_id={CHECKOUT_SESSION_ID}`
           : `${appUrl}/abonnement?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: body.returnTo === 'v2' ? `${appUrl}/v2/pro` : `${appUrl}/boutique?status=cancel`,
-      metadata: { entity_actor_id: entity.actor_id },
+      metadata: { entity_actor_id: entity.actor_id, paid_by_user: user.id },
     })
 
     return json({ url: session.url })

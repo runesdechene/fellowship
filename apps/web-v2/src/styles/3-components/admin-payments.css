@@ -1,0 +1,37 @@
+/**
+ * QUOI     — les styles du tableau des paiements d'une enseigne et de l'état de chaque facture.
+ * POURQUOI — « Payé » en sauge, « Impayé » en brique, les autres états restent neutres ; les
+ *            teintes viennent des jetons `--tone-*` de la couche 2.
+ */
+
+.payments {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.payments th {
+  padding: var(--space-4) var(--space-8) var(--space-8) 0;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.payments td {
+  padding: var(--space-8) var(--space-8) var(--space-8) 0;
+  border-top: 1px solid var(--line-card);
+}
+
+.payments__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.payment-status--paid {
+  color: var(--tone-sauge-ink);
+}
+
+.payment-status--late {
+  color: var(--tone-brique-ink);
+}
