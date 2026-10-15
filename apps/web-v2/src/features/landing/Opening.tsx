@@ -3,20 +3,13 @@
  *            d'exposants. », la promesse, la recherche, la preuve, et le mur d'affiches.
  * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 14/10/2026 : l'outil d'abord, les
  *            gens ensuite. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
- * ATTENTION — jusqu'à l'annuaire public (lot 11b), la recherche mène à la connexion.
+ * ATTENTION — la recherche mène aux résultats publics, /festivals (lot 11b).
  */
-import { Search } from 'lucide-react'
-import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { posterThumb, type Showcase } from '@/lib/landing'
+import { LandingSearch } from './LandingSearch'
 import { PosterWall } from './PosterWall'
 
 export function Opening({ showcase }: { showcase: Showcase | null }) {
-  const navigate = useNavigate()
-  function toLogin(event?: FormEvent) {
-    event?.preventDefault()
-    void navigate('/connexion')
-  }
   const crowd = showcase?.crowd
     ? { poster: showcase.crowd.event.imageUrl, count: showcase.crowd.count }
     : null
@@ -35,35 +28,7 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
           Trouve tes dates en voyant où vont tes amis, suis tes dossiers et tes paiements, et
           synchronise ton calendrier sur ton site, gratuitement.
         </p>
-        <form className="landing-search" role="search" onSubmit={toLogin}>
-          <label className="landing-search__field landing-search__field--what">
-            <span className="landing-search__label">Rechercher</span>
-            <input className="landing-search__value" placeholder="Un festival, une ville…" />
-          </label>
-          <button
-            type="button"
-            className="landing-search__field landing-search__field--where"
-            onClick={() => {
-              toLogin()
-            }}
-          >
-            <span className="landing-search__label">Où</span>
-            <span className="landing-search__value">Toute la France</span>
-          </button>
-          <button
-            type="button"
-            className="landing-search__field landing-search__field--when"
-            onClick={() => {
-              toLogin()
-            }}
-          >
-            <span className="landing-search__label">Quand</span>
-            <span className="landing-search__value">Les 3 prochains mois</span>
-          </button>
-          <button type="submit" className="landing-search__submit" aria-label="Rechercher">
-            <Search size={18} strokeWidth={2.2} />
-          </button>
-        </form>
+        <LandingSearch />
         {showcase?.exhibitors ? (
           <p className="landing-proof">
             {showcase.faces.length > 0 && (

@@ -9,7 +9,7 @@
  *            Le motif retire les caractères qui casseraient un filtre PostgREST (virgule,
  *            parenthèses, %, _) : une recherche ne doit jamais faire échouer la requête.
  */
-import { formatMonthLabel, monthsAhead } from './dates'
+import { formatMonthLabel, monthName, monthsAhead } from './dates'
 
 export const QUAND_OPTIONS = [
   { value: '12', label: 'Les 12 prochains mois', months: 12 },
@@ -107,6 +107,21 @@ export function quandMonths(value: string | null): number {
 export function resultsTitle(count: number, query: string): string {
   if (count === 0) return `Aucun résultat pour « ${query} »`
   return `${count} ${count > 1 ? 'résultats' : 'résultat'} pour « ${query} »`
+}
+
+/** Le titre de la recherche publique : « 16 festivals dans les 3 prochains mois. » ; avec des
+ *  mots, celui des résultats. */
+export function publicTitle(count: number, query: string, months: number): string {
+  if (query.trim() !== '') return `${resultsTitle(count, query.trim())}.`
+  const when = months === 1 ? 'ce mois-ci' : `dans les ${months} prochains mois`
+  if (count === 0) return `Aucun festival ${when}.`
+  return `${count} ${count > 1 ? 'festivals' : 'festival'} ${when}.`
+}
+
+/** « 13 festivals de plus t'attendent après décembre. » */
+export function beyondTitle(count: number, month: Date): string {
+  const verb = count > 1 ? 'festivals de plus t’attendent' : 'festival de plus t’attend'
+  return `${count} ${verb} après ${monthName(month)}.`
 }
 
 /** « %Lyon% » pour un `ilike`, ou null s'il ne reste rien à chercher. */

@@ -1392,6 +1392,18 @@
   --type-landing-card-name: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
   --type-landing-card-text: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
   --type-landing-card-label: var(--weight-medium) var(--size-12) / 1.4 var(--family-sans);
+  /* La recherche publique (maquette 2314:2, lot 11b). */
+  --type-landing-results-title: var(--weight-regular) var(--size-76) / 1.05 var(--family-display);
+  --type-landing-results-lead: var(--weight-regular) var(--size-17) / 1.5 var(--family-sans);
+  --type-landing-result-name: var(--weight-semibold) var(--size-18) / normal var(--family-sans);
+  --type-landing-result-meta: var(--weight-regular) var(--size-14) / normal var(--family-sans);
+  --tracking-landing-results: -0.025em;
+  --landing-results-lead: color-mix(in srgb, var(--fete-cream-soft) 80%, transparent);
+  --landing-results-gap: 33px;
+  --landing-results-link: var(--terre-700);
+  --radius-landing-result: 18px;
+  --landing-results-beyond-width: 760px;
+  --landing-result-shadow: 0 16px 36px color-mix(in srgb, var(--fete-ink) 10%, transparent);
   --type-landing-pdf-kicker: var(--weight-semibold) var(--size-10) / normal var(--family-sans);
   --type-landing-pdf-title: var(--weight-regular) var(--size-26) / 1.2 var(--family-display);
   --type-landing-pdf-value: var(--weight-medium) var(--size-13) / 1.3 var(--family-sans);

@@ -1,0 +1,113 @@
+/**
+ * QUOI     — la recherche publique (features/public-search/), maquette 2314:2.
+ * POURQUOI — la direction artistique de la landing : bandes penchées, serif, affiches ; les bandes
+ *            elles-mêmes viennent de landing.css (LandingBand).
+ */
+/* La première bande : rien au-dessus d'elle à recouvrir, donc ni remontée ni bord en biais. */
+.public-search__head {
+  margin-top: 0;
+  padding-top: var(--space-48);
+  clip-path: none;
+}
+
+.public-search__head .landing-band__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-24);
+  padding-top: var(--landing-bar-height);
+}
+
+.public-search__title {
+  margin-top: var(--space-32);
+  font: var(--type-landing-results-title);
+  letter-spacing: var(--tracking-landing-results);
+  color: var(--landing-cream);
+}
+
+.public-search__lead {
+  font: var(--type-landing-results-lead);
+  color: var(--landing-results-lead);
+}
+
+.public-search__results .landing-band__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-48);
+}
+
+.public-search__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-48) var(--landing-results-gap);
+  width: 100%;
+}
+
+.public-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--landing-ink);
+}
+
+.public-card__poster {
+  width: 100%;
+  aspect-ratio: 474 / 600;
+  margin-bottom: var(--space-10);
+  border-radius: var(--radius-landing-result);
+  object-fit: cover;
+  box-shadow: var(--landing-result-shadow);
+  transition: translate var(--duration-smooth) var(--ease-drawer);
+}
+
+.public-card:hover .public-card__poster {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.public-card__name {
+  font: var(--type-landing-result-name);
+}
+
+.public-card__meta {
+  font: var(--type-landing-result-meta);
+  color: var(--landing-ink-mute);
+}
+
+.public-search__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-landing-button-l);
+  color: var(--landing-results-link);
+}
+
+.public-search__state {
+  font: var(--type-landing-results-lead);
+  color: var(--landing-ink-mute);
+}
+
+.public-search__beyond {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-36);
+  max-width: var(--landing-results-beyond-width);
+  margin-bottom: var(--space-96);
+}
+
+@media (width <= 900px) {
+  .public-search__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-search__title {
+    font: var(--type-landing-statement-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-card__poster {
+    transition: none;
+  }
+}

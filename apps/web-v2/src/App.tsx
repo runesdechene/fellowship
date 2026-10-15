@@ -1,7 +1,8 @@
 /**
  * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte sur `/`, pour tous sur
- *            `/decouvrir`), connexion, arrivée, tableau de bord, calendrier, création, fiche, avis,
- *            explorer, bilans, offre Pro, réglages, vitrine.
+ *            `/decouvrir`), recherche publique (`/festivals`), connexion, arrivée, tableau de
+ *            bord, calendrier, création, fiche (ouverte sans compte), avis, explorer, bilans,
+ *            offre Pro, réglages, vitrine.
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
  *            l'arrivée (lot 10a).
@@ -18,6 +19,7 @@ import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { LandingPage } from '@/features/landing/LandingPage'
+import { PublicSearchPage } from '@/features/public-search/PublicSearchPage'
 import { ProPage } from '@/features/pro/ProPage'
 import { ReportPage } from '@/features/reports/ReportPage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
@@ -80,6 +82,16 @@ function WelcomeRoute() {
   )
 }
 
+/** `/festivals` : la recherche publique pour un visiteur ; un compte connecté retrouve sa
+ *  recherche dans l'Explorer (6 mois en gratuit, toute l'année en Pro). */
+function PublicSearchRoute() {
+  const { user, loading } = useAuth()
+  const location = useLocation()
+  if (loading) return null
+  if (user) return <Navigate to={`/explorer${location.search}`} replace />
+  return <PublicSearchPage />
+}
+
 // Hors du routeur de la V2 (basename /v2) : la V1 vit à la racine du domaine.
 function LeaveToV1() {
   useEffect(() => {
@@ -95,6 +107,7 @@ export function App() {
     <Routes>
       {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
       <Route path="/decouvrir" element={<LandingPage />} />
+      <Route path="/festivals" element={<PublicSearchRoute />} />
       <Route
         path="/connexion"
         element={loading ? null : user ? <Navigate to="/" replace /> : <Login />}

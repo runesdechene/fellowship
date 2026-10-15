@@ -9,6 +9,8 @@ import {
   FREE_MONTHS,
   GUEST_MONTHS,
   QUAND_OPTIONS,
+  beyondTitle,
+  publicTitle,
   lastOpenMonth,
   quandChoices,
   quandMonths,
@@ -168,5 +170,29 @@ describe('lastOpenMonth', () => {
   it('le dernier mois fouillé : décembre sans compte, mars en gratuit', () => {
     expect(lastOpenMonth(today, GUEST_MONTHS)).toEqual(new Date(2026, 11, 1))
     expect(lastOpenMonth(today, FREE_MONTHS)).toEqual(new Date(2027, 2, 1))
+  })
+})
+
+describe('publicTitle', () => {
+  it('sans mots : le nombre et la fenêtre', () => {
+    expect(publicTitle(16, '', 3)).toBe('16 festivals dans les 3 prochains mois.')
+    expect(publicTitle(1, '', 3)).toBe('1 festival dans les 3 prochains mois.')
+    expect(publicTitle(4, '', 1)).toBe('4 festivals ce mois-ci.')
+    expect(publicTitle(0, '', 3)).toBe('Aucun festival dans les 3 prochains mois.')
+  })
+  it('avec des mots : le titre des résultats', () => {
+    expect(publicTitle(2, 'Lyon', 3)).toBe('2 résultats pour « Lyon ».')
+    expect(publicTitle(0, 'zzz', 3)).toBe('Aucun résultat pour « zzz ».')
+  })
+})
+
+describe('beyondTitle', () => {
+  it('accorde et nomme le mois', () => {
+    expect(beyondTitle(13, new Date(2026, 11, 1))).toBe(
+      '13 festivals de plus t’attendent après décembre.',
+    )
+    expect(beyondTitle(1, new Date(2026, 11, 1))).toBe(
+      '1 festival de plus t’attend après décembre.',
+    )
   })
 })

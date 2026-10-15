@@ -194,6 +194,7 @@
 
 .landing-search__field--where {
   width: var(--landing-search-where);
+  cursor: text;
 }
 
 .landing-search__field--when {
@@ -224,6 +225,18 @@ input.landing-search__value {
 
 input.landing-search__value::placeholder {
   color: var(--landing-search-placeholder);
+}
+
+/* « Quand » : un menu natif, habillé comme le texte du champ. */
+select.landing-search__value {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--landing-ink);
+  cursor: pointer;
+  appearance: none;
 }
 
 .landing-search__submit {
