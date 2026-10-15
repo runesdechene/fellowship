@@ -7,10 +7,11 @@
  */
 import { CreditCard } from 'lucide-react'
 import { AdminCard } from '@/components/ui/AdminCard'
-import { daysUntil, formatFullDate } from '@/lib/dates'
+import { formatFullDate } from '@/lib/dates'
 import { formatPrice } from '@/lib/money'
 import { offerOf, type Offer } from '@/lib/offer'
 import { PRICES } from '@/lib/pricing'
+import { renewalAhead } from '@/lib/renewal'
 import { SheetRow } from './SheetRow'
 import type { EntityFields } from './useAdminEntity'
 
@@ -29,9 +30,7 @@ function offerTitle(entity: EntityFields, offer: Offer): { title: string; price:
 function renewal(entity: EntityFields, now: Date): { date: string; ahead: string } {
   if (!entity.current_period_end) return { date: NONE, ahead: '' }
   const end = new Date(entity.current_period_end)
-  const days = Math.max(0, daysUntil(end, now))
-  const ahead = days >= 60 ? `dans ${Math.round(days / 30)} mois` : `dans ${days} j`
-  return { date: formatFullDate(end), ahead }
+  return { date: formatFullDate(end), ahead: renewalAhead(end, now) }
 }
 
 function sponsorship(entity: EntityFields): string {

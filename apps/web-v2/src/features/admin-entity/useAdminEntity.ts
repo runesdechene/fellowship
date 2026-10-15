@@ -28,10 +28,11 @@ async function loadEntity(id: string): Promise<EntitySheet | null> {
 }
 
 export function useAdminEntity(id: string) {
-  const [state, setState] = useState<{ data: EntitySheet | null; error: string | null }>({
-    data: null,
-    error: null,
-  })
+  const [state, setState] = useState<{
+    id: string
+    data: EntitySheet | null
+    error: string | null
+  }>({ id, data: null, error: null })
   const [round, setRound] = useState(0)
   const reload = useCallback(() => setRound((value) => value + 1), [])
 
@@ -41,10 +42,11 @@ export function useAdminEntity(id: string) {
       try {
         const data = await loadEntity(id)
         if (cancelled) return
-        setState({ data, error: data ? null : 'Enseigne introuvable' })
+        setState({ id, data, error: data ? null : 'Enseigne introuvable' })
       } catch (error) {
         if (cancelled) return
         setState({
+          id,
           data: null,
           error: error instanceof Error ? error.message : 'Chargement impossible',
         })
@@ -56,5 +58,7 @@ export function useAdminEntity(id: string) {
     }
   }, [id, round])
 
-  return { ...state, reload }
+  // Tant que l'enseigne de l'adresse n'est pas chargée, l'ancienne ne s'affiche pas dessous.
+  if (state.id !== id) return { data: null, error: null, reload }
+  return { data: state.data, error: state.error, reload }
 }
