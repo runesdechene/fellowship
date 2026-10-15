@@ -6,7 +6,10 @@
  */
 import { describe, expect, it } from 'vitest'
 import {
+  FREE_MONTHS,
+  GUEST_MONTHS,
   QUAND_OPTIONS,
+  lastOpenMonth,
   quandChoices,
   quandMonths,
   beyondWindow,
@@ -54,23 +57,35 @@ describe('quandMonths', () => {
 
 describe('quandChoices', () => {
   it('le Pro choisit jusqu’à 12 mois', () => {
-    expect(quandChoices(true).map((option) => option.months)).toEqual([12, 3, 1])
+    expect(quandChoices(null).map((option) => option.months)).toEqual([12, 3, 1])
   })
   it('le gratuit fouille ses 6 prochains mois au plus', () => {
-    expect(quandChoices(false).map((option) => option.months)).toEqual([6, 3, 1])
+    expect(quandChoices(FREE_MONTHS).map((option) => option.months)).toEqual([6, 3, 1])
+    expect(quandChoices(FREE_MONTHS)[0]?.label).toBe('Les 6 prochains mois')
+  })
+  it('sans compte, 3 mois au plus', () => {
+    expect(quandChoices(GUEST_MONTHS)).toEqual([
+      { value: '3', label: 'Les 3 prochains mois', months: 3 },
+      { value: '1', label: 'Ce mois-ci', months: 1 },
+    ])
   })
 })
 
 describe('windowMonths', () => {
   it('en gratuit, une adresse qui demande 12 mois est ramenée à 6', () => {
-    expect(windowMonths('12', false)).toBe(6)
-    expect(windowMonths(null, false)).toBe(6)
+    expect(windowMonths('12', FREE_MONTHS)).toBe(6)
+    expect(windowMonths(null, FREE_MONTHS)).toBe(6)
   })
   it('en gratuit, 3 mois restent 3 mois', () => {
-    expect(windowMonths('3', false)).toBe(3)
+    expect(windowMonths('3', FREE_MONTHS)).toBe(3)
   })
   it('en Pro, 12 mois par défaut', () => {
-    expect(windowMonths(null, true)).toBe(12)
+    expect(windowMonths(null, null)).toBe(12)
+  })
+  it('sans compte, jamais plus de 3 mois', () => {
+    expect(windowMonths(null, GUEST_MONTHS)).toBe(3)
+    expect(windowMonths('12', GUEST_MONTHS)).toBe(3)
+    expect(windowMonths('1', GUEST_MONTHS)).toBe(1)
   })
 })
 
@@ -78,26 +93,36 @@ describe('searchWindow', () => {
   const today = new Date(2026, 9, 11) // 11 octobre 2026
 
   it('les N prochains mois, à partir d’aujourd’hui', () => {
-    expect(searchWindow('3', true, today)).toEqual({ from: today, to: new Date(2027, 0, 1) })
-    expect(searchWindow(null, false, today)).toEqual({ from: today, to: new Date(2027, 3, 1) })
+    expect(searchWindow('3', null, today)).toEqual({ from: today, to: new Date(2027, 0, 1) })
+    expect(searchWindow(null, FREE_MONTHS, today)).toEqual({
+      from: today,
+      to: new Date(2027, 3, 1),
+    })
+  })
+
+  it('sans compte, les 3 prochains mois', () => {
+    expect(searchWindow(null, GUEST_MONTHS, today)).toEqual({
+      from: today,
+      to: new Date(2027, 0, 1),
+    })
   })
 
   it('un mois précis (?quand=2026-12) : du 1er au 1er du mois suivant', () => {
-    expect(searchWindow('2026-12', true, today)).toEqual({
+    expect(searchWindow('2026-12', null, today)).toEqual({
       from: new Date(2026, 11, 1),
       to: new Date(2027, 0, 1),
     })
   })
 
   it('le mois en cours commence aujourd’hui, pas le 1er', () => {
-    expect(searchWindow('2026-10', true, today)).toEqual({
+    expect(searchWindow('2026-10', null, today)).toEqual({
       from: today,
       to: new Date(2026, 10, 1),
     })
   })
 
   it('en gratuit, un mois au-delà des 6 mois est vide', () => {
-    const window = searchWindow('2027-06', false, today)
+    const window = searchWindow('2027-06', FREE_MONTHS, today)
     expect(window.to <= window.from).toBe(true)
   })
 })
@@ -106,27 +131,42 @@ describe('beyondWindow', () => {
   const today = new Date(2026, 9, 11)
 
   it('sans mois précis : de l’horizon gratuit à douze mois', () => {
-    expect(beyondWindow(null, today)).toEqual({
+    expect(beyondWindow(null, today, FREE_MONTHS)).toEqual({
       from: new Date(2027, 3, 1),
       to: new Date(2027, 9, 1),
     })
   })
 
   it('un mois au-delà des 6 mois : ce mois entier', () => {
-    expect(beyondWindow('2027-06', today)).toEqual({
+    expect(beyondWindow('2027-06', today, FREE_MONTHS)).toEqual({
       from: new Date(2027, 5, 1),
       to: new Date(2027, 6, 1),
     })
   })
 
+  it('sans compte : de janvier à douze mois', () => {
+    expect(beyondWindow(null, today, GUEST_MONTHS)).toEqual({
+      from: new Date(2027, 0, 1),
+      to: new Date(2027, 9, 1),
+    })
+  })
+
   it('un mois avant l’horizon : rien de caché', () => {
-    expect(beyondWindow('2026-12', today)).toBeNull()
+    expect(beyondWindow('2026-12', today, FREE_MONTHS)).toBeNull()
   })
 })
 
 describe('quandChoices avec un mois précis', () => {
   it('le mois demandé s’ajoute en tête, nommé', () => {
-    const [first] = quandChoices(true, '2026-12')
+    const [first] = quandChoices(null, '2026-12')
     expect(first).toEqual({ value: '2026-12', label: 'Décembre 2026', months: 1 })
+  })
+})
+
+describe('lastOpenMonth', () => {
+  const today = new Date(2026, 9, 11)
+  it('le dernier mois fouillé : décembre sans compte, mars en gratuit', () => {
+    expect(lastOpenMonth(today, GUEST_MONTHS)).toEqual(new Date(2026, 11, 1))
+    expect(lastOpenMonth(today, FREE_MONTHS)).toEqual(new Date(2027, 2, 1))
   })
 })

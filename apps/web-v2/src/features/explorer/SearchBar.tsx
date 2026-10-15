@@ -7,19 +7,19 @@
  */
 import { ChevronDown, Search, X } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { quandChoices } from '@/lib/explorer'
+import { quandChoices, type Horizon } from '@/lib/explorer'
 
 interface SearchBarProps {
   q: string
   ou: string
   quand: string | null
   onSearch: (next: { q: string; ou: string; quand: string }) => void
-  /** En gratuit, le choix le plus large est « Les 6 prochains mois » (lib/explorer.ts). */
-  pro: boolean
+  /** Le choix le plus large suit l'horizon : 3 mois sans compte, 6 en gratuit (lib/explorer.ts). */
+  horizon: Horizon
 }
 
-export function SearchBar({ q, ou, quand, onSearch, pro }: SearchBarProps) {
-  const choices = quandChoices(pro, quand)
+export function SearchBar({ q, ou, quand, onSearch, horizon }: SearchBarProps) {
+  const choices = quandChoices(horizon, quand)
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
   const [when, setWhen] = useState(

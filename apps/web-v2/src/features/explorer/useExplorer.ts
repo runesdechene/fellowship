@@ -8,10 +8,19 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { isRecent, parseSqlDate, todayIso } from '@/lib/dates'
-import { beyondWindow, searchPattern, searchWindow } from '@/lib/explorer'
+import {
+  FREE_MONTHS,
+  beyondWindow,
+  searchPattern,
+  searchWindow,
+  type Horizon,
+} from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
+
+/** Connecté : sans borne en Pro, 6 mois en gratuit. */
+const horizonOf = (pro: boolean): Horizon => (pro ? null : FREE_MONTHS)
 
 const ROW_LIMIT = 12
 const SEARCH_LIMIT = 60
@@ -120,7 +129,7 @@ async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<
 /** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. En
  *  gratuit, la fenêtre s'arrête aux 6 prochains mois (searchWindow). */
 function eventsInWindow(query: ExplorerQuery, today: Date, pro: boolean) {
-  const { from, to } = searchWindow(query.quand, pro, today)
+  const { from, to } = searchWindow(query.quand, horizonOf(pro), today)
   let request = supabase
     .from('events')
     .select(EVENT_COLUMNS)
@@ -133,7 +142,7 @@ function eventsInWindow(query: ExplorerQuery, today: Date, pro: boolean) {
 
 /** En gratuit : combien de festivals de la même recherche attendent au-delà des 6 mois. */
 async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
-  const beyond = beyondWindow(query.quand, today)
+  const beyond = beyondWindow(query.quand, today, FREE_MONTHS)
   if (!beyond) return 0
   const words = searchPattern(query.q)
   const place = searchPattern(query.ou)
@@ -153,7 +162,7 @@ async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
 }
 
 async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro: boolean) {
-  const { from, to } = searchWindow(query.quand, pro, today)
+  const { from, to } = searchWindow(query.quand, horizonOf(pro), today)
   const [companions, entity, recentRows] = await Promise.all([
     fetchCompanions(viewerId, todayIso(from), todayIso(to), new Set()),
     supabase.from('entities').select('department').eq('actor_id', viewerId).maybeSingle(),

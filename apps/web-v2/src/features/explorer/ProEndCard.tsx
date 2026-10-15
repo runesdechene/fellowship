@@ -6,14 +6,15 @@
  */
 import { ArrowRight } from 'lucide-react'
 import { ProBadge } from '@/components/ui/ProBadge'
-import { monthName, monthsAhead } from '@/lib/dates'
+import { monthName } from '@/lib/dates'
+import { FREE_MONTHS, lastOpenMonth } from '@/lib/explorer'
 import { useTransitionNavigate } from '@/lib/navigation'
 
 export function ProEndCard({ count }: { count: number }) {
   const go = useTransitionNavigate()
   if (count === 0) return null
-  // Le dernier mois que le gratuit fouille : celui qui précède l'horizon (lib/plan.ts).
-  const lastMonth = monthName(monthsAhead(new Date(), 5))
+  // Le dernier mois que le gratuit fouille : celui qui précède l'horizon.
+  const lastMonth = monthName(lastOpenMonth(new Date(), FREE_MONTHS))
 
   return (
     <article className="pro-end-card">

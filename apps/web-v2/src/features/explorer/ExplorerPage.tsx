@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
+import { FREE_MONTHS } from '@/lib/explorer'
 import { nameLine } from '@/lib/name-line'
 import { fetchTags, type TagRow } from '@/lib/tags'
 import { CategoryChips } from './CategoryChips'
@@ -79,7 +80,7 @@ export function ExplorerPage() {
       )}
 
       <SearchBar
-        pro={pro}
+        horizon={pro ? null : FREE_MONTHS}
         key={`${q}|${ou}|${quand ?? ''}`}
         q={q}
         ou={ou}
