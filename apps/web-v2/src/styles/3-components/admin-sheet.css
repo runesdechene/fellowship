@@ -1,0 +1,275 @@
+/**
+ * QUOI     — les styles de la fiche d'une enseigne dans l'administration
+ *            (features/admin-entity) : retour, en-tête, deux colonnes, rangées clé/valeur,
+ *            chiffres d'activité, comptes reliés.
+ * POURQUOI — maquette 2342:2 ; tout vient des jetons `--admin-sheet-*` de la couche 2. Le logo
+ *            reprend les teintes `admin-table__logo--<teinte>` de la liste.
+ */
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.sheet__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: fit-content;
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+}
+
+.sheet__back:hover {
+  color: var(--ink-title);
+}
+
+.sheet__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-20);
+}
+
+.sheet__logo {
+  --avatar-size: var(--admin-sheet-logo-size);
+
+  border-radius: var(--radius-card);
+}
+
+.sheet__identity {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.sheet__name-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.sheet__name {
+  font: var(--type-display-m);
+  color: var(--ink-title);
+}
+
+.sheet__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet__action {
+  flex: none;
+  gap: var(--space-8);
+}
+
+.sheet-link {
+  width: fit-content;
+  font: var(--type-card-link);
+  color: var(--ink-link);
+}
+
+.sheet-link:hover {
+  text-decoration: underline;
+}
+
+.sheet__columns {
+  display: grid;
+  grid-template-columns: 1fr var(--admin-sheet-side-width);
+  gap: var(--space-24);
+  align-items: start;
+}
+
+.sheet__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  min-width: 0;
+}
+
+.sheet-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-16);
+}
+
+.sheet-summary__cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.sheet-summary__label {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-summary__value {
+  font: var(--type-admin-summary);
+  color: var(--ink-title);
+}
+
+.sheet-summary__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-10) 0;
+}
+
+.sheet-row + .sheet-row {
+  border-top: 1px solid var(--line-card);
+}
+
+.sheet-row__label {
+  flex: none;
+  width: var(--admin-sheet-label-width);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-row__value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  min-width: 0;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.sheet-row__aside {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-tiles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-10);
+}
+
+.sheet-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-14);
+  border-radius: var(--round-12);
+  background: var(--admin-tile-surface);
+}
+
+.sheet-tile__value {
+  font: var(--type-admin-tile);
+  color: var(--ink-title);
+}
+
+.sheet-tile__label {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-gestures {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-gesture {
+  display: flex;
+  gap: var(--space-16);
+  padding: var(--space-8) 0;
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.sheet-gesture + .sheet-gesture {
+  border-top: 1px solid var(--line-card);
+}
+
+.sheet-gesture__when {
+  flex: none;
+  width: var(--admin-sheet-label-width);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-members {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) 0;
+}
+
+.sheet-members li + li {
+  border-top: 1px solid var(--line-card);
+}
+
+.sheet-member__face {
+  --avatar-size: var(--admin-sheet-face-size);
+}
+
+.sheet-member__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sheet-member__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.sheet-member__meta,
+.sheet-member__role {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.sheet-member__role {
+  flex: none;
+}
+
+.sheet-member:hover .sheet-member__name {
+  text-decoration: underline;
+}
+
+.sheet-empty {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+@media (width <= 1100px) {
+  .sheet__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (width <= 760px) {
+  .sheet__head {
+    flex-wrap: wrap;
+  }
+
+  .sheet-summary,
+  .sheet-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

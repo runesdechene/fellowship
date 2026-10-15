@@ -1099,6 +1099,15 @@
   --admin-face-size: 26px;
   --admin-face-overlap: -8px;
   --type-admin-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  /* La fiche d'une enseigne (features/admin-entity) */
+  --admin-sheet-side-width: 440px;
+  --admin-sheet-logo-size: 72px;
+  --admin-sheet-label-width: 150px;
+  --admin-sheet-face-size: 40px;
+  --admin-tile-surface: var(--surface-chip-neutral);
+  --type-admin-tile: var(--weight-regular) var(--size-28) / 1 var(--family-display);
+  --type-admin-summary: var(--weight-regular) var(--size-20) / var(--leading-snug)
+    var(--family-display);
   /* =========================================================================
      CALENDRIER — la frise des douze mois (features/calendar)
      ====================================================================== */
