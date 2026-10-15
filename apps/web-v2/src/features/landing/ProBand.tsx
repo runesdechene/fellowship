@@ -26,8 +26,10 @@ const PRO_ADDS = [
   'Les notes détaillées : affluence, organisation, rentabilité',
   'Toute l’année, pour candidater à temps aux plus gros festivals',
   'Un rappel avant chaque clôture de candidature',
-  'Des festivals trouvés pour toi, et chaque nouvelle édition signalée',
-  'Tes objectifs de chiffre d’affaires et tes bilans',
+  'Des festivals trouvés pour toi',
+  'L’alerte de chaque nouvelle édition',
+  'Tes objectifs de chiffre d’affaires',
+  'Le bilan de chaque festival',
   'Le badge Certifié sur ta vitrine',
 ]
 
