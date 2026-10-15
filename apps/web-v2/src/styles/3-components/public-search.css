@@ -47,14 +47,14 @@
 .public-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-8);
   color: var(--landing-ink);
 }
 
 .public-card__poster {
   width: 100%;
   aspect-ratio: 474 / 600;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-12);
   border-radius: var(--radius-landing-result);
   object-fit: cover;
   box-shadow: var(--landing-result-shadow);
