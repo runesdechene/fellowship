@@ -26,6 +26,71 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_labels: {
+        Row: {
+          actor_id: string
+          created_at: string
+          label: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          label: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          label?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'admin_labels_actor_id_fkey'
+            columns: ['actor_id']
+            isOneToOne: false
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      admin_notes: {
+        Row: {
+          actor_id: string
+          author_user_id: string | null
+          body: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          actor_id: string
+          author_user_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          actor_id?: string
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'admin_notes_actor_id_fkey'
+            columns: ['actor_id']
+            isOneToOne: false
+            referencedRelation: 'actors'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'admin_notes_author_user_id_fkey'
+            columns: ['author_user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
+          },
+        ]
+      }
       content_reports: {
         Row: {
           admin_note: string | null
@@ -141,6 +206,7 @@ export type Database = {
           legal_name: string | null
           links: Json
           location: string | null
+          paid_by_user: string | null
           plan: Database['public']['Enums']['user_plan']
           postal_code: string | null
           public_slug: string | null
@@ -174,6 +240,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
+          paid_by_user?: string | null
           plan?: Database['public']['Enums']['user_plan']
           postal_code?: string | null
           public_slug?: string | null
@@ -207,6 +274,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
+          paid_by_user?: string | null
           plan?: Database['public']['Enums']['user_plan']
           postal_code?: string | null
           public_slug?: string | null
@@ -226,6 +294,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: 'actors'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'entities_paid_by_user_fkey'
+            columns: ['paid_by_user']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['actor_id']
           },
         ]
       }
@@ -1386,10 +1461,12 @@ export type Database = {
           display_name: string | null
           email: string
           handle: string | null
+          phone: string | null
           postal_code: string | null
           push_muted: string[]
           role: string
           sex: Database['public']['Enums']['user_sex'] | null
+          suspended_at: string | null
         }
         Insert: {
           actor_id: string
@@ -1401,10 +1478,12 @@ export type Database = {
           display_name?: string | null
           email: string
           handle?: string | null
+          phone?: string | null
           postal_code?: string | null
           push_muted?: string[]
           role?: string
           sex?: Database['public']['Enums']['user_sex'] | null
+          suspended_at?: string | null
         }
         Update: {
           actor_id?: string
@@ -1416,10 +1495,12 @@ export type Database = {
           display_name?: string | null
           email?: string
           handle?: string | null
+          phone?: string | null
           postal_code?: string | null
           push_muted?: string[]
           role?: string
           sex?: Database['public']['Enums']['user_sex'] | null
+          suspended_at?: string | null
         }
         Relationships: [
           {
