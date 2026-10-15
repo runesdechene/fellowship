@@ -4,7 +4,7 @@
  *            texte tapé garder ses paragraphes une fois affiché sur la fiche.
  */
 import { describe, expect, test } from 'vitest'
-import { htmlToText, textToHtml } from './rich-text'
+import { htmlToText, textToHtml, descriptionExcerpt } from './rich-text'
 
 describe('htmlToText', () => {
   test('les paragraphes deviennent des lignes vides, les puces des « • »', () => {
@@ -33,5 +33,17 @@ describe('textToHtml', () => {
   test('aller-retour stable', () => {
     const text = 'Un\n\n• Viking\n• Médiéval'
     expect(htmlToText(textToHtml(text))).toBe(text)
+  })
+})
+
+describe('descriptionExcerpt', () => {
+  test('une description riche devient une seule phrase continue', () => {
+    expect(
+      descriptionExcerpt('<p>Deux jours d’encre.</p><ul><li>Flash</li></ul><p>Et  plus.</p>'),
+    ).toBe('Deux jours d’encre. • Flash Et plus.')
+  })
+  test('vide ou absente : rien', () => {
+    expect(descriptionExcerpt(null)).toBe('')
+    expect(descriptionExcerpt('<p> </p>')).toBe('')
   })
 })

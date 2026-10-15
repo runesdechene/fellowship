@@ -1397,9 +1397,11 @@
   --type-landing-results-lead: var(--weight-regular) var(--size-17) / 1.5 var(--family-sans);
   --type-landing-result-name: var(--weight-semibold) var(--size-18) / normal var(--family-sans);
   --type-landing-result-meta: var(--weight-regular) var(--size-14) / normal var(--family-sans);
+  --type-landing-result-place: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
+  --type-landing-result-text: var(--weight-regular) var(--size-14) / 1.45 var(--family-sans);
+  --tracking-landing-place: 0.06em;
   --tracking-landing-results: -0.025em;
   --landing-results-lead: color-mix(in srgb, var(--fete-cream-soft) 80%, transparent);
-  --landing-results-gap: 33px;
   --landing-results-link: var(--terre-700);
   --radius-landing-result: 18px;
   --landing-results-beyond-width: 760px;

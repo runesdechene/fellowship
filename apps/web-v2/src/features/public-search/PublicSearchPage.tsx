@@ -1,6 +1,6 @@
 /**
  * QUOI     — la recherche publique (/festivals) : la recherche, « N festivals dans les 3 prochains
- *            mois. », six affiches puis toutes, ce qui attend au-delà, le pied de page.
+ *            mois. », huit affiches puis toutes, ce qui attend au-delà, le pied de page.
  * POURQUOI — lot 11b, maquette 2314:2 : sans compte, on fouille 3 mois (règle du 14/10/2026) ; la
  *            suite se débloque avec un compte gratuit (6 mois) ou le Pro (toute l'année).
  * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?quand, ?tout) ; un compte connecté est
@@ -17,8 +17,8 @@ import { loginReturning } from '@/lib/welcome'
 import { PublicEventCard } from './PublicEventCard'
 import { usePublicSearch } from './usePublicSearch'
 
-/** La maquette montre six affiches avant « Voir les N festivals ». */
-const PREVIEW = 6
+/** Deux lignes de quatre affiches avant « Voir les N festivals » (Uriel, 15/10/2026). */
+const PREVIEW = 8
 
 export function PublicSearchPage() {
   const [params] = useSearchParams()

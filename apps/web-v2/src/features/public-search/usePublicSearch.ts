@@ -2,7 +2,8 @@
  * QUOI     — charge la recherche publique : les festivals des 3 prochains mois (ou moins) qui
  *            répondent à ?q / ?ou / ?quand, leur total, et combien attendent au-delà.
  * POURQUOI — lot 11b : la même requête que l'Explorer (lib/event-search.ts), sans acteur ;
- *            la fonction rend l'état, l'effet l'applique une fois.
+ *            la fonction rend l'état, l'effet l'applique une fois. Les descriptions viennent
+ *            d'une seconde lecture : la carte publique les montre, l'Explorer non.
  */
 import { useEffect, useState } from 'react'
 import {
@@ -13,13 +14,19 @@ import {
   type SearchQuery,
 } from '@/lib/event-search'
 import { GUEST_MONTHS } from '@/lib/explorer'
-import { must } from '@/lib/supabase'
+import { descriptionExcerpt } from '@/lib/rich-text'
+import { must, supabase } from '@/lib/supabase'
 
 /** Au-delà, « Voir les N festivals » annonce le vrai total mais la grille s'arrête là. */
 const PUBLIC_LIMIT = 100
 
+export interface PublicEvent extends SearchEvent {
+  /** L'extrait de la description, vide si le festival n'en a pas. */
+  description: string
+}
+
 interface PublicSearch {
-  events: SearchEvent[]
+  events: PublicEvent[]
   total: number
   hiddenCount: number
   loading: boolean
@@ -37,8 +44,23 @@ async function loadPublicSearch(query: SearchQuery): Promise<PublicSearch> {
     countBeyond(query, today, GUEST_MONTHS),
   ])
   const rows = must(response)
+  const texts = rows.length
+    ? must(
+        await supabase
+          .from('events')
+          .select('id, description')
+          .in(
+            'id',
+            rows.map((row) => row.id),
+          ),
+      )
+    : []
+  const descriptions = new Map(texts.map((row) => [row.id, descriptionExcerpt(row.description)]))
   return {
-    events: rows.map((row) => toSearchEvent(row, today)),
+    events: rows.map((row) => ({
+      ...toSearchEvent(row, today),
+      description: descriptions.get(row.id) ?? '',
+    })),
     total: response.count ?? rows.length,
     hiddenCount,
     loading: false,

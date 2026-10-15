@@ -99,3 +99,9 @@ export function textToHtml(text: string): string | null {
   if (blocks.length === 0) return null
   return blocks.map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br>')}</p>`).join('')
 }
+
+/** Une description en une phrase continue, pour un extrait coupé à l'affichage (recherche
+ *  publique, lot 11b) : `htmlToText`, puis les retours à la ligne fondus. */
+export function descriptionExcerpt(html: string | null): string {
+  return htmlToText(html).replace(/\s+/g, ' ').trim()
+}
