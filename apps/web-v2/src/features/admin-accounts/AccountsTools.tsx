@@ -78,7 +78,18 @@ interface PagerProps {
 }
 
 export function AccountsPager({ page, shown, total, onPage }: PagerProps) {
-  if (total === 0) return <p className="admin-pager__range">Aucun compte ne correspond.</p>
+  if (total === 0) {
+    return (
+      <footer className="admin-pager">
+        <span className="admin-pager__range">Aucun compte ne correspond.</span>
+        {page > 0 && (
+          <button type="button" className="admin-pager__button" onClick={() => onPage(0)}>
+            Revenir au début
+          </button>
+        )}
+      </footer>
+    )
+  }
   const first = page * PAGE_SIZE + 1
   return (
     <footer className="admin-pager">

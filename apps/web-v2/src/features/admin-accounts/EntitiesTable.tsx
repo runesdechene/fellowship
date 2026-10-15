@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { OfferBadge } from '@/components/ui/OfferBadge'
 import { TypeChip } from '@/components/ui/TypeChip'
+import { entityTypeOf } from '@/lib/entity-type'
 import { membersSummary, roleLabel } from '@/lib/admin-members'
 import { offerOf } from '@/lib/offer'
 import { activityLabel } from './activity'
@@ -50,7 +51,7 @@ export function EntitiesTable({ rows, members }: Props) {
                   <Avatar
                     src={row.avatar_url}
                     name={row.brand_name}
-                    className="admin-table__logo"
+                    className={`admin-table__logo admin-table__logo--${entityTypeOf(row.type).tone}`}
                   />
                   <span className="admin-table__identity">
                     <span className="admin-table__name">{row.brand_name}</span>

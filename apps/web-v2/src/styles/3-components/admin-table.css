@@ -61,6 +61,41 @@
   border-radius: var(--radius-sm);
 }
 
+.admin-table__logo--terre {
+  background: var(--tone-terre-surface);
+  color: var(--tone-terre-ink);
+}
+
+.admin-table__logo--prune {
+  background: var(--tone-prune-surface);
+  color: var(--tone-prune-ink);
+}
+
+.admin-table__logo--bleu {
+  background: var(--tone-bleu-surface);
+  color: var(--tone-bleu-ink);
+}
+
+.admin-table__logo--sauge {
+  background: var(--tone-sauge-surface);
+  color: var(--tone-sauge-ink);
+}
+
+.admin-table__logo--ocre {
+  background: var(--tone-ocre-surface);
+  color: var(--tone-ocre-ink);
+}
+
+.admin-table__logo--brique {
+  background: var(--tone-brique-surface);
+  color: var(--tone-brique-ink);
+}
+
+.admin-table__logo--gris {
+  background: var(--tone-gris-surface);
+  color: var(--tone-gris-ink);
+}
+
 .admin-table__face {
   --avatar-size: var(--admin-face-size);
   --avatar-overlap: var(--admin-face-overlap);
