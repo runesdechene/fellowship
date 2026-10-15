@@ -7,14 +7,17 @@
  *            coordonnées pour l'acteur. Repérer une date, c'est la poser en « Intéressé ».
  */
 import { useCallback, useEffect, useState } from 'react'
-import { isRecent, parseSqlDate, todayIso } from '@/lib/dates'
+import { todayIso } from '@/lib/dates'
 import {
-  FREE_MONTHS,
-  beyondWindow,
-  searchPattern,
-  searchWindow,
-  type Horizon,
-} from '@/lib/explorer'
+  countBeyond,
+  eventsInWindow,
+  searchEvents,
+  toSearchEvent,
+  type EventRow,
+  type SearchEvent,
+  type SearchQuery,
+} from '@/lib/event-search'
+import { FREE_MONTHS, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
@@ -24,19 +27,7 @@ const horizonOf = (pro: boolean): Horizon => (pro ? null : FREE_MONTHS)
 
 const ROW_LIMIT = 12
 const SEARCH_LIMIT = 60
-const EVENT_COLUMNS =
-  'id, name, image_url, tags, start_date, end_date, city, department, created_at'
-
-export interface ExploreEvent {
-  id: string
-  name: string
-  imageUrl: string | null
-  tags: string[] | null
-  startDate: Date
-  endDate: Date
-  city: string
-  department: string
-  isNew: boolean
+export interface ExploreEvent extends SearchEvent {
   friends: Friend[]
   myStatus: ParticipationStatus | null
 }
@@ -51,13 +42,7 @@ export interface Exhibitor {
   following: boolean
 }
 
-export interface ExplorerQuery {
-  q: string
-  ou: string
-  quand: string | null
-  /** Les deux écritures d'une catégorie dans `events.tags` : son nom et son slug. */
-  tag: { name: string; slug: string } | null
-}
+export type ExplorerQuery = SearchQuery
 
 export interface ExplorerData {
   friends: ExploreEvent[]
@@ -86,18 +71,6 @@ const EMPTY: ExplorerData = {
   error: null,
 }
 
-interface EventRow {
-  id: string
-  name: string
-  image_url: string | null
-  tags: string[] | null
-  start_date: string
-  end_date: string
-  city: string
-  department: string
-  created_at: string
-}
-
 /** Les amis présents et ma propre position sur chaque date, en deux requêtes pour toutes. */
 async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<ExploreEvent[]> {
   if (rows.length === 0) return []
@@ -112,53 +85,10 @@ async function enrich(rows: EventRow[], viewerId: string, today: Date): Promise<
   ])
   const statusByEvent = new Map(must(mine).map((row) => [row.event_id, row.status]))
   return rows.map((row) => ({
-    id: row.id,
-    name: row.name,
-    imageUrl: row.image_url,
-    tags: row.tags,
-    startDate: parseSqlDate(row.start_date),
-    endDate: parseSqlDate(row.end_date),
-    city: row.city,
-    department: row.department,
-    isNew: isRecent(row.created_at, today),
+    ...toSearchEvent(row, today),
     friends: friendsByEvent.get(row.id) ?? [],
     myStatus: statusByEvent.get(row.id) ?? null,
   }))
-}
-
-/** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. En
- *  gratuit, la fenêtre s'arrête aux 6 prochains mois (searchWindow). */
-function eventsInWindow(query: ExplorerQuery, today: Date, pro: boolean) {
-  const { from, to } = searchWindow(query.quand, horizonOf(pro), today)
-  let request = supabase
-    .from('events')
-    .select(EVENT_COLUMNS)
-    .eq('is_private', false)
-    .gte('end_date', todayIso(from))
-    .lt('start_date', todayIso(to))
-  if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
-  return request
-}
-
-/** En gratuit : combien de festivals de la même recherche attendent au-delà des 6 mois. */
-async function countBeyond(query: ExplorerQuery, today: Date): Promise<number> {
-  const beyond = beyondWindow(query.quand, today, FREE_MONTHS)
-  if (!beyond) return 0
-  const words = searchPattern(query.q)
-  const place = searchPattern(query.ou)
-  let request = supabase
-    .from('events')
-    .select('id', { count: 'exact', head: true })
-    .eq('is_private', false)
-    .gte('start_date', todayIso(beyond.from))
-    .lt('start_date', todayIso(beyond.to))
-  if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
-  if (words)
-    request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
-  if (place) request = request.or(`city.ilike.${place},department.ilike.${place}`)
-  const { count, error } = await request
-  if (error) throw new Error(error.message)
-  return count ?? 0
 }
 
 async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro: boolean) {
@@ -166,14 +96,16 @@ async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro
   const [companions, entity, recentRows] = await Promise.all([
     fetchCompanions(viewerId, todayIso(from), todayIso(to), new Set()),
     supabase.from('entities').select('department').eq('actor_id', viewerId).maybeSingle(),
-    eventsInWindow(query, today, pro).order('created_at', { ascending: false }).limit(ROW_LIMIT),
+    eventsInWindow(query, today, horizonOf(pro))
+      .order('created_at', { ascending: false })
+      .limit(ROW_LIMIT),
   ])
   const department = must(entity)?.department ?? null
 
   const [friendRows, nearRows] = await Promise.all([
     companions.length === 0
       ? Promise.resolve({ data: [], error: null })
-      : eventsInWindow(query, today, pro)
+      : eventsInWindow(query, today, horizonOf(pro))
           .in(
             'id',
             companions.map((companion) => companion.eventId),
@@ -181,7 +113,7 @@ async function loadHome(query: ExplorerQuery, viewerId: string, today: Date, pro
           .order('start_date', { ascending: true })
           .limit(ROW_LIMIT),
     department
-      ? eventsInWindow(query, today, pro)
+      ? eventsInWindow(query, today, horizonOf(pro))
           .eq('department', department)
           .order('start_date', { ascending: true })
           .limit(ROW_LIMIT)
@@ -203,9 +135,7 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
   const words = searchPattern(query.q)
   const place = searchPattern(query.ou)
 
-  let events = eventsInWindow(query, today, pro)
-  if (words) events = events.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
-  if (place) events = events.or(`city.ilike.${place},department.ilike.${place}`)
+  const events = searchEvents(query, today, horizonOf(pro))
 
   let entities = supabase
     .from('entities')
@@ -272,7 +202,7 @@ export function useExplorer(
           searching
             ? loadSearch(current, viewer, today, pro)
             : loadHome(current, viewer, today, pro),
-          pro ? Promise.resolve(0) : countBeyond(current, today),
+          pro ? Promise.resolve(0) : countBeyond(current, today, FREE_MONTHS),
         ])
         next = { ...EMPTY, ...found, hiddenCount, loading: false }
       } catch {

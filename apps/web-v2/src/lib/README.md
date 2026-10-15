@@ -12,6 +12,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `friends.ts` — les amis présents sur une date, statuts programmés / confirmés.
 - `threads.ts` — la logique des fils de discussion (tri, canaux, meilleure réponse).
 - `tags.ts` — les catégories réglées dans l'administration.
+- `explorer.ts` + `event-search.ts` — l'horizon de recherche (3 / 6 mois / sans borne) et la requête de festivals publics, sans acteur.
 - `rich-text.ts` — nettoyage du HTML des descriptions.
 - `navigation.ts` — la navigation animée (View Transitions).
 - `page-chrome.tsx` — le décor qu'une page demande à la coquille.
