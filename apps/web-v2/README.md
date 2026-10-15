@@ -1,8 +1,9 @@
 # web-v2 — l'app Fellowship, V2
 
 Front neuf, écrit de zéro sur la maquette Parchemin, servi sous `flw.sh/v2/`. Même base Supabase
-que la V1 (`apps/web`), qu'elle remplacera. Réservé aux admins (`is_admin()`) pendant la
-construction : un autre compte retourne sur la V1.
+que la V1 (`apps/web`), qu'elle remplacera. Ouverte aux admins et au rôle `v2` (`can_use_v2()`, en base) pendant la
+construction : un autre compte retourne sur la V1. L'administration des comptes vit sous
+`/v2/admin` (admins seulement).
 
 - **Maquette Figma — fait foi** :
   https://www.figma.com/design/9CmmBD3t5rAk4tD583cdN3/FELLOWSHIP?node-id=0-1
