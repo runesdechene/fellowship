@@ -200,6 +200,21 @@
   /* Une icône posée seule, sans pastille : elle garde sa couleur, la nuit en néon. */
   --status-sent-mark: var(--bleu-700);
   --status-sent-line: transparent;
+  /* Les tons de l'administration : encre et fond d'une pastille de type ou d'une icône de bloc. */
+  --tone-terre-ink: var(--terre-700);
+  --tone-terre-surface: var(--terre-50);
+  --tone-prune-ink: var(--prune-700);
+  --tone-prune-surface: var(--prune-50);
+  --tone-bleu-ink: var(--bleu-700);
+  --tone-bleu-surface: var(--bleu-50);
+  --tone-sauge-ink: var(--sauge-700);
+  --tone-sauge-surface: var(--sauge-50);
+  --tone-ocre-ink: var(--ocre-700);
+  --tone-ocre-surface: var(--ocre-50);
+  --tone-brique-ink: var(--brique-600);
+  --tone-brique-surface: var(--brique-50);
+  --tone-gris-ink: var(--ink-600);
+  --tone-gris-surface: var(--sand-100);
   --dot-size: var(--space-8);
 
   /* =========================================================================
@@ -1539,6 +1554,20 @@
   --status-sent-surface: color-mix(in srgb, var(--pervenche-300) 14%, transparent);
   --status-sent-mark: var(--pervenche-300);
   --status-sent-line: color-mix(in srgb, var(--pervenche-300) 38%, transparent);
+  --tone-terre-ink: var(--terre-400);
+  --tone-terre-surface: var(--terre-900);
+  --tone-prune-ink: var(--prune-300);
+  --tone-prune-surface: color-mix(in srgb, var(--prune-300) 14%, transparent);
+  --tone-bleu-ink: var(--pervenche-300);
+  --tone-bleu-surface: color-mix(in srgb, var(--pervenche-300) 14%, transparent);
+  --tone-sauge-ink: var(--menthe-300);
+  --tone-sauge-surface: color-mix(in srgb, var(--menthe-300) 14%, transparent);
+  --tone-ocre-ink: var(--ocre-300);
+  --tone-ocre-surface: color-mix(in srgb, var(--ocre-300) 14%, transparent);
+  --tone-brique-ink: var(--brique-400);
+  --tone-brique-surface: color-mix(in srgb, var(--brique-400) 14%, transparent);
+  --tone-gris-ink: var(--cream-500);
+  --tone-gris-surface: var(--night-200);
 
   /* Le bouton principal s'inverse : crème, texte foncé. */
   --action-surface: var(--cream-50);
