@@ -6,7 +6,7 @@
  * ATTENTION — une écriture refusée s'affiche sous le bloc et la saisie reste : rien n'est perdu.
  */
 import { Plus, StickyNote, X } from 'lucide-react'
-import { useState, type KeyboardEvent } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import { formatDayMonthShort } from '@/lib/dates'
 import { useAdminNotes } from '@/lib/useAdminNotes'
 import { AdminCard } from './AdminCard'
@@ -17,6 +17,9 @@ export function NotesCard({ actorId }: { actorId: string }) {
   const [labelDraft, setLabelDraft] = useState<string | null>(null)
   const [failure, setFailure] = useState<string | null>(null)
 
+  const [busy, setBusy] = useState(false)
+  const pending = useRef(false)
+
   async function attempt(job: Promise<void>): Promise<boolean> {
     try {
       await job
@@ -25,16 +28,31 @@ export function NotesCard({ actorId }: { actorId: string }) {
     } catch (e) {
       setFailure(e instanceof Error ? e.message : 'Enregistrement impossible')
       return false
+    } finally {
+      pending.current = false
+      setBusy(false)
     }
   }
 
+  // Une écriture à la fois : un double clic ne poste pas deux fois.
+  function start(): boolean {
+    if (pending.current) return false
+    pending.current = true
+    setBusy(true)
+    return true
+  }
+
   async function submitNote() {
-    if (!draft.trim()) return
+    if (!draft.trim() || !start()) return
     if (await attempt(addNote(draft))) setDraft('')
   }
 
   async function submitLabel() {
-    if (!labelDraft?.trim() || (await attempt(addLabel(labelDraft)))) setLabelDraft(null)
+    if (!labelDraft?.trim()) {
+      setLabelDraft(null)
+      return
+    }
+    if (start() && (await attempt(addLabel(labelDraft)))) setLabelDraft(null)
   }
 
   function onNoteKey(event: KeyboardEvent<HTMLTextAreaElement>) {
@@ -64,7 +82,7 @@ export function NotesCard({ actorId }: { actorId: string }) {
               type="button"
               className="notes__label-remove"
               aria-label={`Retirer l'étiquette ${label}`}
-              onClick={() => void attempt(removeLabel(label))}
+              onClick={() => start() && void attempt(removeLabel(label))}
             >
               <X size={12} strokeWidth={2} aria-hidden="true" />
             </button>
@@ -114,7 +132,7 @@ export function NotesCard({ actorId }: { actorId: string }) {
         <button
           type="button"
           className="notes__submit"
-          disabled={!draft.trim()}
+          disabled={busy || !draft.trim()}
           onClick={() => void submitNote()}
         >
           Ajouter

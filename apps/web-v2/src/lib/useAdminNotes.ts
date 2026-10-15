@@ -15,6 +15,8 @@ export interface Note {
   author: string | null
 }
 
+const LABEL_EXISTS = 'Cette étiquette existe déjà.'
+
 async function loadNotes(actorId: string): Promise<{ notes: Note[]; labels: string[] }> {
   const [notes, labels] = await Promise.all([
     supabase
@@ -77,11 +79,15 @@ export function useAdminNotes(actorId: string) {
     }
   }, [actorId, round])
 
-  const write = useCallback(async (job: PromiseLike<{ error: { message: string } | null }>) => {
-    const { error } = await job
-    if (error) throw new Error(error.message)
-    setRound((r) => r + 1)
-  }, [])
+  const write = useCallback(
+    async (job: PromiseLike<{ error: { message: string; code?: string } | null }>) => {
+      const { error } = await job
+      if (error?.code === '23505') throw new Error(LABEL_EXISTS)
+      if (error) throw new Error(error.message)
+      setRound((r) => r + 1)
+    },
+    [],
+  )
 
   return {
     ...state,
@@ -93,8 +99,13 @@ export function useAdminNotes(actorId: string) {
           author_user_id: person?.actor_id ?? null,
         }),
       ),
-    addLabel: (label: string) =>
-      write(supabase.from('admin_labels').insert({ actor_id: actorId, label: label.trim() })),
+    addLabel: (label: string) => {
+      const clean = label.trim()
+      if (state.labels.some((l) => l.toLowerCase() === clean.toLowerCase())) {
+        return Promise.reject(new Error(LABEL_EXISTS))
+      }
+      return write(supabase.from('admin_labels').insert({ actor_id: actorId, label: clean }))
+    },
     removeLabel: (label: string) =>
       write(supabase.from('admin_labels').delete().eq('actor_id', actorId).eq('label', label)),
   }

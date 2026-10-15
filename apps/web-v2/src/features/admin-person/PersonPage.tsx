@@ -62,7 +62,7 @@ export function PersonPage() {
         </div>
         <div className="sheet__column sheet__column--side">
           <PersonInfoCard person={person} />
-          <NotesCard actorId={person.actor_id} />
+          <NotesCard key={person.actor_id} actorId={person.actor_id} />
         </div>
       </div>
     </div>

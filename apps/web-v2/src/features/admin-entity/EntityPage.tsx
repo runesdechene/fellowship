@@ -82,7 +82,7 @@ export function EntityPage() {
         <div className="sheet__column sheet__column--side">
           <MembersCard members={members} paidBy={entity.paid_by_user} />
           <EntityInfoCard entity={entity} phone={owner?.phone ?? null} />
-          <NotesCard actorId={entity.actor_id} />
+          <NotesCard key={entity.actor_id} actorId={entity.actor_id} />
         </div>
       </div>
     </div>
