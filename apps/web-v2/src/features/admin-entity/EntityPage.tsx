@@ -6,6 +6,7 @@
 import { ChevronLeft, ExternalLink } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { NotesCard } from '@/components/ui/NotesCard'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { TypeChip } from '@/components/ui/TypeChip'
 import { formatFullDate } from '@/lib/dates'
@@ -81,6 +82,7 @@ export function EntityPage() {
         <div className="sheet__column sheet__column--side">
           <MembersCard members={members} paidBy={entity.paid_by_user} />
           <EntityInfoCard entity={entity} phone={owner?.phone ?? null} />
+          <NotesCard actorId={entity.actor_id} />
         </div>
       </div>
     </div>

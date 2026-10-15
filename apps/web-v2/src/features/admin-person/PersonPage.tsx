@@ -6,6 +6,7 @@
 import { ChevronLeft } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { NotesCard } from '@/components/ui/NotesCard'
 import { formatFullDate, timeAgo } from '@/lib/dates'
 import { AccessCard } from './AccessCard'
 import { PersonActivityCard } from './PersonActivityCard'
@@ -61,6 +62,7 @@ export function PersonPage() {
         </div>
         <div className="sheet__column sheet__column--side">
           <PersonInfoCard person={person} />
+          <NotesCard actorId={person.actor_id} />
         </div>
       </div>
     </div>

@@ -1105,6 +1105,10 @@
   --admin-sheet-label-width: 150px;
   --admin-sheet-face-size: 40px;
   --admin-tile-surface: var(--surface-chip-neutral);
+  /* Les notes internes (components/ui/NotesCard) */
+  --admin-note-label-width: 120px;
+  --admin-note-input-height: 40px;
+  --admin-note-input-max-height: 200px;
   --type-admin-tile: var(--weight-regular) var(--size-28) / 1 var(--family-display);
   --type-admin-summary: var(--weight-regular) var(--size-20) / var(--leading-snug)
     var(--family-display);

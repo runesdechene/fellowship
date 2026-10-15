@@ -1,0 +1,162 @@
+/**
+ * QUOI     — les styles du bloc « Notes internes » (NotesCard) : étiquettes, notes, saisie.
+ * POURQUOI — le même bloc sert les deux fiches d'administration ; les valeurs viennent des
+ *            jetons `--admin-note-*` et des tons de la couche 2.
+ */
+
+.notes__labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.notes__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-chip);
+  background: var(--tone-ocre-surface);
+  font: var(--type-chip);
+  color: var(--tone-ocre-ink);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+/* La croix n'apparaît qu'au survol (ou au focus clavier) de la pastille. */
+.notes__label-remove {
+  display: grid;
+  place-items: center;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: inherit;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.notes__label:hover .notes__label-remove,
+.notes__label-remove:focus-visible {
+  width: auto;
+  opacity: 1;
+}
+
+.notes__add-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-8);
+  border: 1px dashed var(--line-card);
+  border-radius: var(--radius-chip);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+}
+
+.notes__add-label:hover {
+  background: var(--surface-row-hover);
+}
+
+.notes__label-input {
+  width: var(--admin-note-label-width);
+  padding: var(--space-2) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--control-surface);
+  font: var(--type-chip);
+  color: var(--control-ink);
+}
+
+.notes__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.notes__note {
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--radius-sm);
+  background: var(--surface-row-hover);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .notes__note,
+  .notes__label {
+    opacity: 0;
+  }
+}
+
+.notes__meta {
+  font: var(--type-chip);
+  color: var(--ink-soft);
+}
+
+.notes__body {
+  margin-top: var(--space-4);
+  font: var(--type-control);
+  color: var(--ink-body);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.notes__form {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-8);
+}
+
+/* Une ligne qui grandit avec le texte. */
+.notes__input {
+  flex: 1 1 auto;
+  min-height: var(--admin-note-input-height);
+  max-height: var(--admin-note-input-max-height);
+  padding: var(--space-8) var(--control-padding-x);
+  border-radius: var(--radius-control);
+  background: var(--control-surface);
+  field-sizing: content;
+  resize: none;
+  font: var(--type-control);
+  line-height: var(--leading-normal);
+  color: var(--control-ink);
+}
+
+.notes__input::placeholder {
+  color: var(--control-placeholder);
+}
+
+.notes__input:focus-visible,
+.notes__label-input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.notes__submit {
+  flex: none;
+  min-height: var(--admin-note-input-height);
+  padding: 0 var(--space-14);
+  border-radius: var(--radius-control);
+  background: var(--surface-control);
+  font: var(--type-chip-strong);
+  color: var(--ink-title);
+}
+
+.notes__submit:hover:not(:disabled) {
+  background: var(--surface-control-hover);
+}
+
+.notes__submit:disabled {
+  color: var(--ink-soft);
+  cursor: default;
+}
+
+.notes__error {
+  font: var(--type-chip);
+  color: var(--danger-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notes__label,
+  .notes__label-remove,
+  .notes__note {
+    transition: none;
+  }
+}
