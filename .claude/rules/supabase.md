@@ -176,6 +176,17 @@ La liste grantée doit couvrir EXACTEMENT ce que l'app lit côté `<role>` (sino
 
 Cas Fellowship : `entities` exposait stripe_customer_id / subscription_status / siren / legal_name… à `anon` (la vitrine faisait `select('*')`). Fix : `revoke select on entities from anon` + `grant select (<PUBLIC_ENTITY_COLUMNS>) to anon` (migration `20260626100145`), et `use-vitrine.ts` / `Embed.tsx` passés sur la const `PUBLIC_ENTITY_COLUMNS` (apps/web/src/lib/vitrine.ts). `authenticated` garde le grant table (le proprio lit ses infos billing). **Résidu connu** : un user authentifié peut encore lire le billing d'une autre entité via un select brut (IDOR authentifié) ; vrai fix = sortir les colonnes billing dans une table séparée RLS own-row-only. Vérifier toute restriction colonne par `set role <role>; select <col>` (erreur = OK). Lié : [[reference_storage_rls_security_definer]].
 
+## `users` ne se lit que sur sa propre ligne — les autres passent par `actor_public`
+
+**Le piège** (15/10/2026) : `users_select_all` (USING true, sans rôle) laissait lire toute la table
+`users`, e-mails compris, **sans compte**, avec la clé publique — depuis mai. Fermée par
+`20261015180000` : chacun sa ligne (`actor_id` ou `auth_id`), un admin tout, un visiteur rien.
+
+**How to apply :** le nom ou l'avatar d'un autre acteur se lit dans `actor_public` (vue au
+propriétaire, sans e-mail) ; une question sur les autres (« cet identifiant est-il pris ? ») passe
+par une fonction SECURITY DEFINER qui ne rend que la réponse (`identifiant_pris`). Une lecture
+directe de `users` sur un autre compte rend **vide sans erreur** — c'est le symptôme à reconnaître.
+
 ## reference_storage_rls_security_definer
 
 **Pour un bucket Storage, créer le JEU COMPLET de policies, SELECT inclus.** Cause racine vécue (bucket `testimonials`, 2026-06-25) : j'avais INSERT/UPDATE/DELETE mais **pas de SELECT** → `supabase.storage.upload(path,file,{upsert:true})` doit LIRE l'objet (vérif existence + readback de la ligne) → sans SELECT, upload échoue en `400 "new row violates row-level security policy"` (message trompeur : c'est le readback, pas l'INSERT, qui manque). Tous les buckets sains ont un `*_select_public`.
