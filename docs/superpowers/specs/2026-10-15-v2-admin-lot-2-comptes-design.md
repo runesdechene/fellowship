@@ -151,9 +151,10 @@ repris **depuis sa définition live** pour passer quand `is_admin()`.
 - `admin-stripe` : `paiements` (factures d'un client), `coupons` (la liste des coupons Stripe
   existants), `remise` (applique un coupon choisi à l'abonnement ; le webhook remplit ensuite
   `discount_label` comme aujourd'hui).
-- `admin-compte` : `suspendre`, `reactiver` (`auth.admin.updateUserById`, `ban_duration`),
-  `supprimer`. L'effacement de `delete-account` sort dans `_shared/` pour servir les deux, sans
-  changer son comportement.
+- `admin-compte` : `suspendre`, `reactiver` (`auth.admin.updateUserById`, `ban_duration`), `email`
+  (l'adresse de connexion et `users.email` ensemble).
+- `delete-account` accepte `userId` quand l'appelant est admin : un seul effacement, le même que
+  celui des Réglages (son plan, `deletion-plan.ts`, est une copie synchronisée de la V2).
 
 ## Ce qui sort, ce qui reste
 
@@ -165,7 +166,8 @@ repris **depuis sa définition live** pour passer quand `is_admin()`.
 
 ## Vérifier
 
-- **Tests** : `offerOf` et la recherche (normalisation) en fonctions pures.
+- **Tests** : `offerOf`, la lecture de l'adresse de la liste et le résumé des membres, en fonctions
+  pures. La recherche (sans accents ni casse) vit en SQL : elle se vérifie par des appels.
 - **Base** : après chaque migration, un appel sans être admin doit échouer, un appel admin rendre
   les bonnes lignes.
 - **À l'œil** : chaque écran comparé à sa maquette (`get_screenshot` à côté de la capture), sur
