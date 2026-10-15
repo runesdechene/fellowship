@@ -370,3 +370,15 @@
   align-items: center;
   gap: var(--space-8);
 }
+
+/* « Supprimer… » : le seul bouton brique de la fiche. */
+.access-danger {
+  flex: none;
+  height: var(--setting-button-height);
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-setting-button);
+  background: var(--tone-brique-surface);
+  font: var(--type-button);
+  color: var(--tone-brique-ink);
+  cursor: pointer;
+}

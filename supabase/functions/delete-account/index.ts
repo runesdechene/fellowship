@@ -1,6 +1,7 @@
 // delete-account : supprime pour de vrai le compte de la personne connectée (lot 9b, 11/10/2026).
 //
-// Auth : verify_jwt = true ; la personne ne peut supprimer que SON compte (user.id du jeton).
+// Auth : verify_jwt = true ; la personne ne supprime que SON compte (user.id du jeton) ou, pour un
+// admin (is_admin()), celui qu'il vise par `userId` (administration V2, lot 2) — sinon 403.
 // { confirm: false } rend l'aperçu ; { confirm: true } exécute le même plan (deletion-plan.ts).
 // Ordre : enseignes gardées (abonnement arrêté en fin de période, héritiers) → enseignes supprimées (Stripe, fichiers, ligne actors) → fichiers de la
 // personne → ligne actors de la personne (cascade) → connexion. Chaque étape se rejoue sans
@@ -24,15 +25,22 @@ Deno.serve(async (req) => {
   })
   const { data: { user } } = await userClient.auth.getUser()
   if (!user) return json({ error: 'unauthorized' }, 401)
-  const body = (await req.json().catch(() => ({}))) as { confirm?: unknown }
+  const body = (await req.json().catch(() => ({}))) as { confirm?: unknown; userId?: unknown }
   // Seul un vrai `true` supprime : « "false" » ou « 1 » ne rendent que l'aperçu.
   const confirm = body.confirm === true
+  // Un admin peut viser un autre compte (administration V2, lot 2) ; jamais une personne ordinaire.
+  let targetId = user.id
+  if (typeof body.userId === 'string' && body.userId !== user.id) {
+    const { data: isAdmin } = await userClient.rpc('is_admin')
+    if (isAdmin !== true) return json({ error: 'forbidden' }, 403)
+    targetId = body.userId
+  }
 
   const admin = getSupabaseAdmin()
   let step = 'read'
   try {
-    const { memberships, entities } = await readMemberships(admin, user.id)
-    const plan = deletionPlan(user.id, memberships)
+    const { memberships, entities } = await readMemberships(admin, targetId)
+    const plan = deletionPlan(targetId, memberships)
     const subscribed = (id: string) => {
       const entity = entities.get(id)
       return Boolean(entity?.stripe_subscription_id && shouldCancel(entity.subscription_status ?? ''))
@@ -70,14 +78,14 @@ Deno.serve(async (req) => {
     }
 
     step = 'files'
-    await removeFolder(admin, 'avatars', user.id)
-    await removeFolder(admin, 'bilan-media', user.id)
+    await removeFolder(admin, 'avatars', targetId)
+    await removeFolder(admin, 'bilan-media', targetId)
 
     step = 'person'
-    await must(admin.from('actors').delete().eq('id', user.id))
+    await must(admin.from('actors').delete().eq('id', targetId))
 
     step = 'auth'
-    const { error } = await admin.auth.admin.deleteUser(user.id)
+    const { error } = await admin.auth.admin.deleteUser(targetId)
     if (error && error.status !== 404) throw error
 
     return json({ done: true })

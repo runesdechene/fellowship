@@ -1,13 +1,14 @@
 /**
  * QUOI     — le formulaire de correction d'une personne, posé dans le bloc Informations : prénom,
- *            identifiant, téléphone, code postal.
+ *            e-mail, identifiant, téléphone, code postal.
  * POURQUOI — écrit par `admin_corriger_personne` (gardée admin, vide = effacé). L'e-mail n'y est
- *            pas : il change aussi l'adresse de connexion. Les valeurs saisies restent si l'écriture
- *            échoue.
+ *            échoue. L'e-mail change aussi l'adresse de connexion : il passe par la fonction
+ *            admin-compte, après les autres champs, et seulement s'il a changé.
  */
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Field, Input } from '@/components/ui/Field'
+import { changeEmail } from '@/lib/admin-functions'
 import { supabase } from '@/lib/supabase'
 import type { PersonFields } from './useAdminPerson'
 
@@ -24,6 +25,7 @@ function readable(error: { code?: string; message: string }): string {
 export function PersonEditForm({ person, onCancel, onSaved }: Props) {
   const [form, setForm] = useState({
     displayName: person.display_name || '',
+    email: person.email || '',
     handle: person.handle || '',
     phone: person.phone || '',
     postalCode: person.postal_code || '',
@@ -44,9 +46,23 @@ export function PersonEditForm({ person, onCancel, onSaved }: Props) {
       p_phone: form.phone,
       p_postal_code: form.postalCode,
     })
+    if (failure) {
+      setSaving(false)
+      setError(readable(failure))
+      return
+    }
+    const email = form.email.trim()
+    if (email !== (person.email || '')) {
+      try {
+        await changeEmail(person.actor_id, email)
+      } catch (problem) {
+        setSaving(false)
+        setError(problem instanceof Error ? problem.message : 'L’e-mail n’a pas changé.')
+        return
+      }
+    }
     setSaving(false)
-    if (failure) setError(readable(failure))
-    else onSaved()
+    onSaved()
   }
 
   return (
@@ -60,6 +76,9 @@ export function PersonEditForm({ person, onCancel, onSaved }: Props) {
       <div className="fields">
         <Field label="Prénom">
           <Input value={form.displayName} onChange={set('displayName')} />
+        </Field>
+        <Field label="E-mail">
+          <Input value={form.email} onChange={set('email')} type="email" />
         </Field>
         <Field label="Identifiant">
           <Input value={form.handle} onChange={set('handle')} />

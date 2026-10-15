@@ -6,7 +6,8 @@ L'administration, fiche d'une personne (`/admin/personnes/:id`).
 - `useAdminPerson.ts` — charge la personne, ses enseignes et ses gestes.
 - `PersonEntitiesCard.tsx` — ses enseignes, leur offre et son rôle dans chacune.
 - `PersonActivityCard.tsx` — quatre chiffres et les derniers gestes.
-- `AccessCard.tsx` — rôle (modifiable), suspension et suppression (désactivées pour l’instant).
+- `AccessCard.tsx` — rôle (modifiable), suspendre / réactiver et supprimer (absents sur sa propre fiche).
+- `DeletePersonDialog.tsx` — la fenêtre de suppression : aperçu, puis retaper le prénom.
 - `PersonInfoCard.tsx` — (mode correction : `PersonEditForm.tsx`) prénom, e-mail, téléphone, identifiant, code postal, notifications.
 - `roles.ts` — les trois rôles et leur libellé, partagés par l'en-tête et l'accès.
-- `PersonEditForm.tsx` — le formulaire de correction (prénom, identifiant, téléphone, code postal).
+- `PersonEditForm.tsx` — le formulaire de correction (prénom, e-mail, identifiant, téléphone, code postal).
