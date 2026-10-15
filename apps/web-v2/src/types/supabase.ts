@@ -1580,6 +1580,188 @@ export type Database = {
           slug: string
         }[]
       }
+      admin_activite: {
+        Args: { p_actors: string[] }
+        Returns: {
+          abonnes: number
+          avis: number
+          bilans: number
+          dates: number
+          fiches: number
+          questions: number
+        }[]
+      }
+      admin_cherche: {
+        Args: { p_q: string; p_valeur: string }
+        Returns: boolean
+      }
+      admin_chiffres: {
+        Args: never
+        Returns: {
+          comptes: number
+          comptes_semaine: number
+          echecs: number
+          essais: number
+          essais_bientot: number
+          pro: number
+          pro_offerts: number
+        }[]
+      }
+      admin_enseigne: {
+        Args: { p_id: string }
+        Returns: {
+          abonnes: number
+          actor_id: string
+          avatar_url: string
+          avis: number
+          bilans: number
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          craft_type: string
+          created_at: string
+          current_period_end: string
+          dates: number
+          discount_end: string
+          discount_label: string
+          fiches: number
+          filleuls: number
+          is_ambassador: boolean
+          legal_name: string
+          paid_by_name: string
+          paid_by_user: string
+          parrain_nom: string
+          plan: string
+          public_slug: string
+          questions: number
+          siren: string
+          stripe_customer_id: string
+          subscription_status: string
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_enseignes: {
+        Args: { p_filtre?: string; p_page?: number; p_q?: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          created_at: string
+          dates: number
+          discount_label: string
+          is_ambassador: boolean
+          paid_by_name: string
+          plan: string
+          subscription_status: string
+          total: number
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_enseignes_de: {
+        Args: { p_person: string }
+        Returns: {
+          avatar_url: string
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          discount_label: string
+          entity_id: string
+          paid_by_user: string
+          plan: string
+          role: string
+          subscription_status: string
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_filtres: {
+        Args: { p_q?: string; p_vue: string }
+        Returns: {
+          filtre: string
+          nombre: number
+        }[]
+      }
+      admin_garde: { Args: never; Returns: undefined }
+      admin_gestes: {
+        Args: { p_actors: string[] }
+        Returns: {
+          quand: string
+          quoi: string
+        }[]
+      }
+      admin_membres: {
+        Args: { p_entities: string[] }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          entity_id: string
+          phone: string
+          role: string
+        }[]
+      }
+      admin_offre: {
+        Args: { p_comped: string; p_plan: string; p_status: string }
+        Returns: string
+      }
+      admin_personne: {
+        Args: { p_id: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          city: string
+          created_at: string
+          dates: number
+          display_name: string
+          email: string
+          fiches: number
+          handle: string
+          last_sign_in_at: string
+          phone: string
+          postal_code: string
+          push_muted: string[]
+          questions: number
+          role: string
+          suspended_at: string
+        }[]
+      }
+      admin_personnes: {
+        Args: { p_filtre?: string; p_page?: number; p_q?: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          billing_interval: string
+          brand_name: string
+          comped_pro_until: string
+          created_at: string
+          dates: number
+          discount_label: string
+          display_name: string
+          email: string
+          entity_id: string
+          entity_type: string
+          last_sign_in_at: string
+          plan: string
+          role: string
+          subscription_status: string
+          suspended_at: string
+          total: number
+          trial_end: string
+        }[]
+      }
+      admin_tel: { Args: { p_q: string; p_tel: string }; Returns: boolean }
       are_friends: {
         Args: { user_a: string; user_b: string }
         Returns: boolean
