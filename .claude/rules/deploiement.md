@@ -41,7 +41,7 @@ R="$(git rev-parse --show-toplevel)"
 # V1 — depuis apps/web : brouillon, vérifications, puis prod
 pnpm build && netlify deploy --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
 netlify deploy --prod --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
-# V2 — depuis apps/web-v2
+# V2 — `pnpm deploy:v2` depuis n'importe où dans le dépôt fait exactement ceci (script cmd : Windows)
 pnpm build && netlify deploy --prod --no-build --dir "$R/apps/web-v2/dist" --site fba73713-7b5e-4750-a8e2-b8e62e6ae4f7
 ```
 

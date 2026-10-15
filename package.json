@@ -8,7 +8,8 @@
     "build": "pnpm --filter web build",
     "build:v2": "pnpm --filter web-v2 build",
     "test": "pnpm -r test",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "deploy:v2": "pnpm --filter web-v2 run deploy:prod"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.86.0",
