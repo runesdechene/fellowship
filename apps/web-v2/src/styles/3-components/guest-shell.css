@@ -1,0 +1,22 @@
+/**
+ * QUOI     — le cadre d'une page vue sans compte (components/layout/GuestShell.tsx).
+ * POURQUOI — la fiche garde sa mise en page de l'app : le contenu, et le mur d'affiche collé à
+ *            droite ; la barre de la landing, fixe, passe au-dessus.
+ */
+.guest-shell {
+  display: flex;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--surface-app);
+  font-family: var(--family-sans);
+}
+
+.guest-shell__main {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: var(--landing-bar-height);
+}

@@ -5,6 +5,8 @@
  *            organisateurs ont leur encadré dans le pied de page.
  * ATTENTION — « Créer ma vitrine » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
+ *            `away` : la barre posée sur une page publique (résultats, fiche, lot 11b) — ses liens
+ *            ramènent à la landing, et elle est compacte d'emblée (rien de sombre derrière elle).
  */
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -21,9 +23,11 @@ const CHAPTERS = [
 
 const IDS = CHAPTERS.map((c) => c.id)
 
-export function LandingTopBar() {
+export function LandingTopBar({ away = false }: { away?: boolean }) {
   const { compact, active } = useLandingNav(IDS)
   const nav = useRef<HTMLElement>(null)
+  // Hors de la landing, une ancre seule ne mène nulle part : elle passe par la landing.
+  const home = away ? import.meta.env.BASE_URL : ''
 
   useLayoutEffect(() => {
     const link = nav.current?.querySelector<HTMLElement>('[aria-current]')
@@ -33,9 +37,13 @@ export function LandingTopBar() {
   }, [active])
 
   return (
-    <header className={`landing-bar${compact ? ' is-compact' : ''}`}>
+    <header className={`landing-bar${compact || away ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
-        <a className="landing-bar__brand" href="#" aria-label="Fellowship, haut de la page">
+        <a
+          className="landing-bar__brand"
+          href={away ? home : '#'}
+          aria-label={away ? 'Fellowship, accueil' : 'Fellowship, haut de la page'}
+        >
           <Wordmark />
         </a>
         <nav
@@ -46,7 +54,7 @@ export function LandingTopBar() {
           {CHAPTERS.map((chapter) => (
             <a
               key={chapter.id}
-              href={`#${chapter.id}`}
+              href={`${home}#${chapter.id}`}
               aria-current={chapter.id === active ? 'location' : undefined}
             >
               {chapter.label}

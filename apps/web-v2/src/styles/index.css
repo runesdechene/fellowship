@@ -22,6 +22,7 @@
 @import './2-semantic.css';
 
 @import './3-components/app-shell.css';
+@import './3-components/guest-shell.css';
 @import './3-components/page-transition.css';
 @import './3-components/sidebar.css';
 @import './3-components/tab-bar.css';
