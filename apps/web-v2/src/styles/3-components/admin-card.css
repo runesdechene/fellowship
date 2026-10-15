@@ -1,0 +1,150 @@
+/**
+ * QUOI     — les styles des briques de l'administration : le bloc de fiche (AdminCard), la
+ *            pastille d'icône teintée (IconTile), la pastille de type (TypeChip) et l'offre
+ *            (OfferBadge).
+ * POURQUOI — une teinte par sujet, toujours la même, tirée des jetons `--tone-*` de la couche 2 ;
+ *            le jour comme la nuit, ce sont ces jetons qui changent, pas ces règles.
+ */
+
+.admin-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-24);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.admin-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Le titre pousse l'action à droite. */
+.admin-card__title {
+  flex: 1 1 auto;
+  font: var(--type-card-title);
+  color: var(--ink-title);
+}
+
+.icon-tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--size-30);
+  height: var(--size-30);
+  border-radius: var(--radius-sm);
+}
+
+.type-chip {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: var(--space-2) var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  font: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
+}
+
+.offer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.offer-badge__trial {
+  display: inline-block;
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-xs);
+  background: var(--tone-bleu-surface);
+  font: var(--type-pro-badge);
+  color: var(--tone-bleu-ink);
+}
+
+.offer-badge__detail {
+  font: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  color: var(--ink-soft);
+}
+
+.offer-badge__detail--alert {
+  color: var(--tone-brique-ink);
+}
+
+.icon-tile--terre {
+  background: var(--tone-terre-surface);
+  color: var(--tone-terre-ink);
+}
+
+.type-chip--terre {
+  border-color: color-mix(in srgb, var(--tone-terre-ink) 22%, transparent);
+  background: var(--tone-terre-surface);
+  color: var(--tone-terre-ink);
+}
+
+.icon-tile--prune {
+  background: var(--tone-prune-surface);
+  color: var(--tone-prune-ink);
+}
+
+.type-chip--prune {
+  border-color: color-mix(in srgb, var(--tone-prune-ink) 22%, transparent);
+  background: var(--tone-prune-surface);
+  color: var(--tone-prune-ink);
+}
+
+.icon-tile--bleu {
+  background: var(--tone-bleu-surface);
+  color: var(--tone-bleu-ink);
+}
+
+.type-chip--bleu {
+  border-color: color-mix(in srgb, var(--tone-bleu-ink) 22%, transparent);
+  background: var(--tone-bleu-surface);
+  color: var(--tone-bleu-ink);
+}
+
+.icon-tile--sauge {
+  background: var(--tone-sauge-surface);
+  color: var(--tone-sauge-ink);
+}
+
+.type-chip--sauge {
+  border-color: color-mix(in srgb, var(--tone-sauge-ink) 22%, transparent);
+  background: var(--tone-sauge-surface);
+  color: var(--tone-sauge-ink);
+}
+
+.icon-tile--ocre {
+  background: var(--tone-ocre-surface);
+  color: var(--tone-ocre-ink);
+}
+
+.type-chip--ocre {
+  border-color: color-mix(in srgb, var(--tone-ocre-ink) 22%, transparent);
+  background: var(--tone-ocre-surface);
+  color: var(--tone-ocre-ink);
+}
+
+.icon-tile--brique {
+  background: var(--tone-brique-surface);
+  color: var(--tone-brique-ink);
+}
+
+.type-chip--brique {
+  border-color: color-mix(in srgb, var(--tone-brique-ink) 22%, transparent);
+  background: var(--tone-brique-surface);
+  color: var(--tone-brique-ink);
+}
+
+.icon-tile--gris {
+  background: var(--tone-gris-surface);
+  color: var(--tone-gris-ink);
+}
+
+.type-chip--gris {
+  border-color: color-mix(in srgb, var(--tone-gris-ink) 22%, transparent);
+  background: var(--tone-gris-surface);
+  color: var(--tone-gris-ink);
+}

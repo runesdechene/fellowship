@@ -2,14 +2,18 @@
  * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte sur `/`, pour tous sur
  *            `/decouvrir`), recherche publique (`/festivals`), connexion, arrivée, tableau de
  *            bord, calendrier, création, fiche (ouverte sans compte), avis, explorer, bilans,
- *            offre Pro, réglages, vitrine.
+ *            offre Pro, réglages, vitrine, administration (admins seulement, `/admin`).
  * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
  *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
  *            l'arrivée (lot 10a).
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
+import { AdminShell } from '@/components/layout/AdminShell'
 import { AppShell } from '@/components/layout/AppShell'
 import { GuestShell } from '@/components/layout/GuestShell'
+import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
+import { EntityPage } from '@/features/admin-entity/EntityPage'
+import { PersonPage } from '@/features/admin-person/PersonPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
@@ -62,6 +66,25 @@ function ProtectedRoute({ children, guest }: { children: ReactNode; guest?: Reac
     <AccessRoute guest={guest}>
       <WelcomeGate>{children}</WelcomeGate>
     </AccessRoute>
+  )
+}
+
+/** L'administration : les admins seulement. Elle ne protège que l'affichage — chaque fonction
+ *  admin_* refuse en base tout appel qui ne vient pas d'un admin. */
+function AdminRoute({ children }: { children: ReactNode }) {
+  const { person } = useAuth()
+  if (!person) return null
+  if (person.role !== 'admin') return <Navigate to="/" replace />
+  return <>{children}</>
+}
+
+function AdminPage({ children }: { children: ReactNode }) {
+  return (
+    <ProtectedRoute>
+      <AdminRoute>
+        <AdminShell>{children}</AdminShell>
+      </AdminRoute>
+    </ProtectedRoute>
   )
 }
 
@@ -272,6 +295,31 @@ export function App() {
               <SettingsPage />
             </AppShell>
           </ProtectedRoute>
+        }
+      />
+      <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />
+      <Route
+        path="/admin/comptes"
+        element={
+          <AdminPage>
+            <AccountsPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/enseignes/:id"
+        element={
+          <AdminPage>
+            <EntityPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/personnes/:id"
+        element={
+          <AdminPage>
+            <PersonPage />
+          </AdminPage>
         }
       />
       {/* Une vitrine à la racine, comme dans la V1 : les adresses fixes au-dessus l'emportent. */}

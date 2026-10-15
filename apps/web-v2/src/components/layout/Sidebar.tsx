@@ -4,7 +4,7 @@
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
  *            on ne pouvait pas accéder à sa propre vitrine). « Revenir à la V1 » ferme la liste : ceux
- *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
+ *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026). « Administration » n'apparaît que pour les admins.
  */
 import {
   ArrowLeftRight,
@@ -13,6 +13,7 @@ import {
   PanelRightClose,
   PanelRightOpen,
   Settings,
+  ShieldCheck,
   Store,
   Telescope,
   Users,
@@ -54,7 +55,7 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
-  const { actor, entities } = useAuth()
+  const { actor, entities, person } = useAuth()
   const items = navFor(entities.find((entity) => entity.actor_id === actor?.id)?.public_slug)
 
   return (
@@ -96,6 +97,12 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </NavLink>
           )
         })}
+        {person?.role === 'admin' && (
+          <NavLink to="/admin" className="sidebar__item">
+            <ShieldCheck className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+            <span className="sidebar__item-label">Administration</span>
+          </NavLink>
+        )}
         {/* La V1 est une autre application : un lien plein, vers son Explorer (sa racine est la landing). */}
         <a className="sidebar__item" href="/explorer">
           <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />

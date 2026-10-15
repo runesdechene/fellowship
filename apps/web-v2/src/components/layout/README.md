@@ -11,4 +11,6 @@ le châssis le rend.
 - `PosterWall.tsx` — le mur d'affiche sur le bord droit.
 - `GuestShell.tsx` — le cadre d'une page vue sans compte : barre de la landing, page, mur d'affiche (lot 11b).
 
+- `AdminShell.tsx` — la coquille de l'administration : barre à navigation propre, panneau pleine largeur.
+
 Styles : `styles/3-components/` (un fichier par composant).
