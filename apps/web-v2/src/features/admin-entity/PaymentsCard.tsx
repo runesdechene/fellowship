@@ -33,6 +33,7 @@ export function PaymentsCard({ entityId, onCustomerEmail }: Props) {
 
   useEffect(() => {
     let cancelled = false
+    onCustomerEmail(null) // jamais l'e-mail de l'enseigne précédente
     fetchPayments(entityId)
       .then((result) => {
         if (cancelled) return
@@ -40,7 +41,9 @@ export function PaymentsCard({ entityId, onCustomerEmail }: Props) {
         onCustomerEmail(result.customerEmail)
       })
       .catch((error: unknown) => {
-        if (!cancelled) setFailure(error instanceof Error ? error.message : 'Stripe ne répond pas')
+        if (cancelled) return
+        onCustomerEmail(null)
+        setFailure(error instanceof Error ? error.message : 'Stripe ne répond pas')
       })
     return () => {
       cancelled = true

@@ -24,7 +24,8 @@ Deno.serve(async (req) => {
   const { data: isAdmin } = await userClient.rpc('is_admin')
   if (isAdmin !== true) return json({ error: 'forbidden' }, 403)
 
-  const body = (await req.json().catch(() => ({}))) as Body
+  const body = parseBody(await req.json().catch(() => null))
+  if (!body) return json({ error: 'invalid_body' }, 400)
   const stripe = getStripe()
   try {
     if (body.action === 'coupons') {
@@ -53,7 +54,7 @@ Deno.serve(async (req) => {
         invoices: invoices.data.map((i) => ({
           id: i.id,
           date: new Date(i.created * 1000).toISOString(),
-          amountCents: i.subtotal_excluding_tax ?? i.subtotal,
+          amountCents: i.total_excluding_tax ?? i.total,
           label: i.lines.data[0]?.description ?? '',
           status: i.status,
           url: i.hosted_invoice_url,
@@ -72,6 +73,19 @@ Deno.serve(async (req) => {
     return json({ error: 'failed' }, 500)
   }
 })
+
+function filled(value: unknown): value is string {
+  return typeof value === 'string' && value !== ''
+}
+
+function parseBody(raw: unknown): Body | null {
+  if (typeof raw !== 'object' || raw === null) return null
+  const { action, entityId, couponId } = raw as Record<string, unknown>
+  if (action === 'coupons') return { action }
+  if (action === 'paiements' && filled(entityId)) return { action, entityId }
+  if (action === 'remise' && filled(entityId) && filled(couponId)) return { action, entityId, couponId }
+  return null
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })

@@ -88,6 +88,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const sub = await getStripe().subscriptions.retrieve(session.subscription as string)
   await syncSubscriptionToDB(entityActorId, sub)
 
+  // Qui paie (administration V2) : écrit ici seulement, à part. Si le payeur a supprimé son compte
+  // entre-temps, la clé étrangère refuse : on le journalise sans casser le reste du traitement.
+  const paidByUser = session.metadata?.paid_by_user
+  if (paidByUser) {
+    const { error } = await getSupabaseAdmin()
+      .from('entities')
+      .update({ paid_by_user: paidByUser })
+      .eq('actor_id', entityActorId)
+    if (error) console.error('[webhook] paid_by_user not recorded', entityActorId, session.id, error)
+  }
+
   // Raison sociale : collectée par Stripe au Checkout (customer_update[name]=auto). On la
   // recopie dans notre base pour garder entities.legal_name juste (la modale ne la demande
   // plus au checkout pour éviter la double saisie).
@@ -210,7 +221,6 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
       discount_end: discountEnd,
       discount_label: discountLabel,
       plan,
-      ...(sub.metadata?.paid_by_user ? { paid_by_user: sub.metadata.paid_by_user } : {}),
     })
     .eq('actor_id', entityActorId)
   if (error) throw error
