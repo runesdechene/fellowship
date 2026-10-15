@@ -53,11 +53,6 @@
   padding: var(--space-56);
 }
 
-.admin-page__title {
-  font: var(--type-card-title);
-  color: var(--ink-title);
-}
-
 /* Téléphone : la barre s'efface (app-shell.css), le panneau se resserre. */
 @media (width <= 760px) {
   .admin-shell__main {

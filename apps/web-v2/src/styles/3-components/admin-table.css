@@ -1,0 +1,129 @@
+/**
+ * QUOI     — les styles des deux tableaux de l'administration : enseignes et personnes
+ *            (features/admin-accounts/EntitiesTable.tsx, PeopleTable.tsx).
+ * POURQUOI — une carte blanche bordée, des lignes séparées d'un filet, le survol des lignes de
+ *            « Mes dossiers » ; la ligne entière est un lien, étendu depuis la première cellule
+ *            (maquette 2338:2).
+ */
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  padding: var(--admin-table-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.admin-table th {
+  padding: var(--admin-cell-padding-x);
+  border-bottom: 1px solid var(--line-card);
+  font: var(--type-admin-head);
+  color: var(--ink-section-pale);
+  text-align: left;
+}
+
+.admin-table td {
+  padding: var(--admin-cell-padding-y) var(--admin-cell-padding-x);
+  vertical-align: middle;
+}
+
+.admin-table__row {
+  position: relative;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.admin-table__row:hover {
+  background: var(--surface-control-hover);
+}
+
+.admin-table__row + .admin-table__row td {
+  border-top: 1px solid var(--line-card);
+}
+
+.admin-table__row-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Le lien couvre la ligne entière : la cellule n'est pas positionnée, c'est la ligne qui l'est. */
+.admin-table__row-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.admin-table__logo {
+  --avatar-size: var(--admin-logo-size);
+
+  border-radius: var(--radius-sm);
+}
+
+.admin-table__face {
+  --avatar-size: var(--admin-face-size);
+  --avatar-overlap: var(--admin-face-overlap);
+}
+
+.admin-table__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.admin-table__people {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.admin-table__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.admin-table__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.admin-table__text {
+  font: var(--type-list-meta);
+  color: var(--ink-title);
+}
+
+.admin-table__flag {
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-xs);
+  background: var(--tone-brique-surface);
+  font: var(--type-tag-badge);
+  color: var(--tone-brique-ink);
+}
+
+.admin-table__end {
+  text-align: right;
+  color: var(--ink-section-pale);
+}
+
+.admin-table__end > svg {
+  vertical-align: middle;
+}
+
+.admin-table__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-table__row {
+    transition: none;
+  }
+}

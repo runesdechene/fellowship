@@ -1085,6 +1085,21 @@
   --avatar-size-hero: var(--width-avatar-hero);
   --avatar-size-account: var(--width-avatar-account);
   /* =========================================================================
+     ADMINISTRATION — la liste des comptes (features/admin-accounts)
+     ====================================================================== */
+  --admin-stat-gap: var(--space-12);
+  --admin-stat-padding: var(--space-20);
+  --type-admin-stat: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --admin-search-width: 460px;
+  --admin-search-height: 38px;
+  --admin-table-padding: var(--space-10);
+  --admin-cell-padding-x: var(--space-12);
+  --admin-cell-padding-y: var(--space-12);
+  --admin-logo-size: 36px;
+  --admin-face-size: 26px;
+  --admin-face-overlap: -8px;
+  --type-admin-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  /* =========================================================================
      CALENDRIER — la frise des douze mois (features/calendar)
      ====================================================================== */
   --calendar-column-width: var(--width-calendar-column);
