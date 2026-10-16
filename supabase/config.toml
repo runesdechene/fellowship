@@ -431,3 +431,7 @@ verify_jwt = true
 [functions.admin-compte]
 # Auth = le jeton d'un admin (is_admin() vérifié dans la fonction).
 verify_jwt = true
+
+[functions.prospect-send]
+# Auth = le jeton d'un admin (is_admin() vérifié dans la fonction).
+verify_jwt = true

@@ -1,5 +1,5 @@
 /**
- * QUOI     — les appels de l'administration aux fonctions serveur (admin-stripe, admin-compte, delete-account) et la forme de
+ * QUOI     — les appels de l'administration aux fonctions serveur (admin-stripe, admin-compte, delete-account, prospect-send) et la forme de
  *            leurs réponses.
  * POURQUOI — un seul endroit qui connaît leurs noms et leurs corps ; les écrans n'appellent que ça. Un refus connu du serveur (soi-même,
  *            adresse prise…) remonte en phrase française.
@@ -37,6 +37,12 @@ const KNOWN_ERRORS: Record<string, string> = {
   invalid_body: 'La demande n’est pas valable.',
   unauthorized: 'Ta session a expiré : reconnecte-toi.',
   failed: 'Le serveur n’a pas pu le faire. Réessaie.',
+  no_email: 'Ce prospect n’a pas d’adresse e-mail.',
+  unsubscribed: 'Ce prospect est désinscrit : plus aucun e-mail ne peut partir.',
+  not_owner: 'Ce prospect est suivi par quelqu’un d’autre : prends le relais pour lui écrire.',
+  no_sender: 'Tu n’as pas d’adresse d’envoi active : ajoute-la dans Modèles et expéditeurs.',
+  empty: 'L’objet et le texte ne peuvent pas être vides.',
+  send_failed: 'Resend a refusé l’envoi. Réessaie dans un instant.',
 }
 
 /** La phrase d'un refus connu du serveur, lue dans le corps JSON de sa réponse. */
@@ -76,3 +82,11 @@ export const previewDeletion = (userId: string) =>
   call<DeletionPreview>('delete-account', { confirm: false, userId })
 export const deleteAccount = (userId: string) =>
   call<{ done: true }>('delete-account', { confirm: true, userId }).then(() => undefined)
+
+/** Envoie un e-mail de prospection depuis l'adresse @equipe.flw.sh de l'admin connecté. */
+export const sendProspectEmail = (input: {
+  prospectId: string
+  templateId: string | null
+  subject: string
+  body: string
+}) => call<{ done: true }>('prospect-send', input).then(() => undefined)
