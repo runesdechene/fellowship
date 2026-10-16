@@ -315,3 +315,15 @@ insert dans `prospects`, une mise à jour de `users`) a échoué en production p
 **How to apply :** une fonction qui sert dans un index d'expression (ou un `check`, un défaut de
 colonne) doit rester exécutable par **tous** les rôles qui écrivent la table. Ne retirer `EXECUTE`
 qu'aux fonctions qui lisent des données ; une fonction pure et immuable s'ouvre à tous.
+
+## Un secret ne passe jamais dans une commande `!`
+
+**Le piège** (16/10/2026, lot 3b) : j'ai fait lancer à Uriel
+`! supabase secrets set RESEND_API_KEY=re_… RESEND_WEBHOOK_SECRET=whsec_…`. Une commande `!` est
+recopiée dans la conversation avec sa sortie : les deux clés se sont retrouvées dans l'historique de
+la session, il a fallu les régénérer.
+
+**How to apply :** Uriel écrit les valeurs dans un fichier ignoré par Git (`.env.<nom>.local`,
+couvert par `.env.*.local`) avec son éditeur, puis lance
+`! node_modules/supabase/bin/supabase.exe secrets set --env-file .env.<nom>.local --project-ref trbxpsknbtisqwefqoub`.
+Aucune valeur n'apparaît ni dans la commande ni dans sa sortie.
