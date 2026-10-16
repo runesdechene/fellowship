@@ -435,3 +435,11 @@ verify_jwt = true
 [functions.prospect-send]
 # Auth = le jeton d'un admin (is_admin() vérifié dans la fonction).
 verify_jwt = true
+
+[functions.prospect-events]
+# Auth = la signature Svix des webhooks de Resend (pas de JWT Supabase).
+verify_jwt = false
+
+[functions.prospect-unsubscribe]
+# Auth = le jeton du lien de désinscription : un prospect n'a pas de compte.
+verify_jwt = false
