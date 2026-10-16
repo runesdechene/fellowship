@@ -58,9 +58,15 @@ export interface ProspectsData {
 
 async function loadProspects({ q, filter, source, page }: ProspectsQuery): Promise<ProspectsData> {
   const [list, stats, filters, sources, matches] = await Promise.all([
-    supabase.rpc('admin_prospects', { p_q: q, p_filtre: filter, p_source: source, p_page: page }),
+    supabase.rpc('admin_prospects', {
+      p_q: q,
+      p_filtre: filter,
+      p_source: source,
+      p_suivi: '',
+      p_page: page,
+    }),
     supabase.rpc('admin_prospects_chiffres'),
-    supabase.rpc('admin_prospects_filtres', { p_q: q, p_source: source }),
+    supabase.rpc('admin_prospects_filtres', { p_q: q, p_source: source, p_suivi: '' }),
     supabase.rpc('admin_prospects_sources'),
     supabase.rpc('admin_prospects_a_rapprocher'),
   ])

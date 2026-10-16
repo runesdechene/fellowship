@@ -1109,6 +1109,162 @@ export type Database = {
           },
         ]
       }
+      prospect_messages: {
+        Row: {
+          body_text: string
+          created_at: string
+          delivery: string | null
+          direction: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          in_reply_to: string | null
+          message_id: string | null
+          prospect_id: string | null
+          received_at: string | null
+          references_ids: string[]
+          resend_id: string | null
+          sender_id: string | null
+          sent_at: string | null
+          subject: string
+          template_id: string | null
+          to_email: string
+        }
+        Insert: {
+          body_text?: string
+          created_at?: string
+          delivery?: string | null
+          direction: string
+          from_email: string
+          has_attachments?: boolean
+          id?: string
+          in_reply_to?: string | null
+          message_id?: string | null
+          prospect_id?: string | null
+          received_at?: string | null
+          references_ids?: string[]
+          resend_id?: string | null
+          sender_id?: string | null
+          sent_at?: string | null
+          subject?: string
+          template_id?: string | null
+          to_email: string
+        }
+        Update: {
+          body_text?: string
+          created_at?: string
+          delivery?: string | null
+          direction?: string
+          from_email?: string
+          has_attachments?: boolean
+          id?: string
+          in_reply_to?: string | null
+          message_id?: string | null
+          prospect_id?: string | null
+          received_at?: string | null
+          references_ids?: string[]
+          resend_id?: string | null
+          sender_id?: string | null
+          sent_at?: string | null
+          subject?: string
+          template_id?: string | null
+          to_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospect_messages_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospect_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "prospect_senders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospect_messages_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "prospect_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prospect_senders: {
+        Row: {
+          active: boolean
+          alias: string
+          created_at: string
+          display_name: string
+          id: string
+          signature: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          alias: string
+          created_at?: string
+          display_name: string
+          id?: string
+          signature?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          alias?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          signature?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospect_senders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      prospect_templates: {
+        Row: {
+          archived_at: string | null
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          archived_at?: string | null
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: string
+          name: string
+          subject?: string
+        }
+        Update: {
+          archived_at?: string | null
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       prospects: {
         Row: {
           a_relancer: boolean
@@ -1126,8 +1282,11 @@ export type Database = {
           linked_by: string | null
           name: string | null
           note: string | null
+          owner_id: string | null
           phone: string | null
           source: string | null
+          unsubscribe_token: string
+          unsubscribed_at: string | null
           user_id: string | null
         }
         Insert: {
@@ -1146,8 +1305,11 @@ export type Database = {
           linked_by?: string | null
           name?: string | null
           note?: string | null
+          owner_id?: string | null
           phone?: string | null
           source?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
           user_id?: string | null
         }
         Update: {
@@ -1166,11 +1328,21 @@ export type Database = {
           linked_by?: string | null
           name?: string | null
           note?: string | null
+          owner_id?: string | null
           phone?: string | null
           source?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "prospects_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
           {
             foreignKeyName: "prospects_user_id_fkey"
             columns: ["user_id"]
@@ -1868,6 +2040,30 @@ export type Database = {
           trial_end: string
         }[]
       }
+      admin_prospect: {
+        Args: { p_id: string }
+        Returns: {
+          a_relancer: boolean
+          activity: string
+          brand: string
+          city: string
+          contact_channel: string
+          contacted_on: string
+          created_at: string
+          email: string
+          email_status: string
+          id: string
+          name: string
+          note: string
+          owner_id: string
+          owner_name: string
+          phone: string
+          source: string
+          unsubscribed_at: string
+          user_id: string
+          user_name: string
+        }[]
+      }
       admin_prospect_de: {
         Args: { p_user: string }
         Returns: {
@@ -1879,12 +2075,58 @@ export type Database = {
           source: string
         }[]
       }
+      admin_prospect_expediteurs: {
+        Args: never
+        Returns: {
+          active: boolean
+          alias: string
+          display_name: string
+          envoyes_aujourdhui: number
+          id: string
+          palier: number
+          signature: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_prospect_messages: {
+        Args: { p_id: string }
+        Returns: {
+          at: string
+          body_text: string
+          delivery: string
+          direction: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          message_id: string
+          references_ids: string[]
+          sender_name: string
+          sender_user_id: string
+          subject: string
+          to_email: string
+        }[]
+      }
+      admin_prospect_modeles: {
+        Args: never
+        Returns: {
+          archived_at: string
+          body: string
+          envois: number
+          id: string
+          kind: string
+          name: string
+          reponses: number
+          subject: string
+        }[]
+      }
       admin_prospects: {
         Args: {
           p_filtre?: string
           p_page?: number
           p_q?: string
           p_source?: string
+          p_suivi?: string
         }
         Returns: {
           a_relancer: boolean
@@ -1901,9 +2143,12 @@ export type Database = {
           linked_by: string
           name: string
           note: string
+          owner_id: string
+          owner_name: string
           phone: string
           source: string
           total: number
+          unsubscribed_at: string
           user_id: string
           user_name: string
         }[]
@@ -1932,7 +2177,7 @@ export type Database = {
         }[]
       }
       admin_prospects_filtres: {
-        Args: { p_q?: string; p_source?: string }
+        Args: { p_q?: string; p_source?: string; p_suivi?: string }
         Returns: {
           filtre: string
           nombre: number
@@ -2176,6 +2421,13 @@ export type Database = {
         Args: {
           p: Database["public"]["Tables"]["prospects"]["Row"]
           p_filtre: string
+        }
+        Returns: boolean
+      }
+      prospect_suivi: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_suivi: string
         }
         Returns: boolean
       }

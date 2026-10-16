@@ -6,12 +6,11 @@
  */
 import { formatDayMonthShort, parseSqlDate } from './dates'
 
-export type EmailStatus = 'pas_envoye' | 'envoye' | 'ouvert' | 'repondu' | 'rebond'
+export type EmailStatus = 'pas_envoye' | 'envoye' | 'repondu' | 'rebond'
 
 export const EMAIL_STATUSES: readonly { value: EmailStatus; label: string }[] = [
   { value: 'pas_envoye', label: 'Pas envoyé' },
   { value: 'envoye', label: 'Envoyé' },
-  { value: 'ouvert', label: 'Ouvert' },
   { value: 'repondu', label: 'Répondu' },
   { value: 'rebond', label: 'Rebond' },
 ]
