@@ -8,7 +8,6 @@
  *            l'arrivée (lot 10a).
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
-import { AdminShell } from '@/components/layout/AdminShell'
 import { AppShell } from '@/components/layout/AppShell'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
@@ -82,7 +81,9 @@ function AdminPage({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute>
       <AdminRoute>
-        <AdminShell>{children}</AdminShell>
+        <AppShell bare>
+          <div className="admin-content">{children}</div>
+        </AppShell>
       </AdminRoute>
     </ProtectedRoute>
   )

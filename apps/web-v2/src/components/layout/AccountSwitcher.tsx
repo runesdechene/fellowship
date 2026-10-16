@@ -1,14 +1,21 @@
 /**
  * QUOI     — la carte de compte en haut de la barre latérale, et le menu pour changer d'enseigne.
  * POURQUOI — un exposant peut agir sous plusieurs enseignes (modèle acteur) : le choix vit dans
- *            useAuth().switchActor, ce composant ne fait que l'afficher.
+ *            useAuth().switchActor, ce composant ne fait que l'afficher. Un admin y trouve une identité
+ *            de plus, « Administration » : la choisir ouvre l'administration, choisir une enseigne
+ *            en sort (Uriel, 16/10/2026).
  * ATTENTION — barre repliée : le clic rouvre la colonne au lieu d'ouvrir un menu que le rail
  *            rognerait.
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ChevronDown } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { ADMIN_HOME, isAdminPath } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
+
+const ADMIN_LABEL = 'Administration'
+const ADMIN_NOTE = 'Réservé aux admins'
 
 interface AccountSwitcherProps {
   /** Colonne repliée : le menu serait rogné par le rail, on le déplie d'abord. */
@@ -17,7 +24,10 @@ interface AccountSwitcherProps {
 }
 
 export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
-  const { actor, actors, switchActor } = useAuth()
+  const { actor, actors, person, switchActor } = useAuth()
+  const navigate = useNavigate()
+  const inAdmin = isAdminPath(useLocation().pathname)
+  const isAdmin = person?.role === 'admin'
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
 
@@ -55,11 +65,18 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
     (id: string) => {
       switchActor(id)
       setOpen(false)
+      if (inAdmin) void navigate('/')
     },
-    [switchActor],
+    [switchActor, inAdmin, navigate],
   )
 
-  const hasChoice = actors.length > 1
+  const chooseAdmin = useCallback(() => {
+    setOpen(false)
+    void navigate(ADMIN_HOME)
+  }, [navigate])
+
+  const hasChoice = actors.length > 1 || isAdmin
+  const shown = inAdmin ? { avatarUrl: null, label: ADMIN_LABEL, roleLabel: ADMIN_NOTE } : actor
 
   return (
     <div className="account-switcher" ref={root}>
@@ -70,10 +87,10 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
         aria-expanded={open}
         aria-haspopup={hasChoice ? 'menu' : undefined}
       >
-        <Avatar className="account-switcher__avatar" src={actor?.avatarUrl} name={actor?.label} />
+        <Avatar className="account-switcher__avatar" src={shown?.avatarUrl} name={shown?.label} />
         <span className="account-switcher__identity">
-          <span className="account-switcher__name">{actor?.label ?? '—'}</span>
-          <span className="account-switcher__role">{actor?.roleLabel ?? ''}</span>
+          <span className="account-switcher__name">{shown?.label ?? '—'}</span>
+          <span className="account-switcher__role">{shown?.roleLabel ?? ''}</span>
         </span>
         {hasChoice && (
           <ChevronDown
@@ -107,11 +124,28 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
                 <span className="account-switcher__name">{candidate.label}</span>
                 <span className="account-switcher__role">{candidate.roleLabel}</span>
               </span>
-              {candidate.id === actor?.id && (
+              {!inAdmin && candidate.id === actor?.id && (
                 <Check className="account-switcher__check" size={16} strokeWidth={2.25} />
               )}
             </button>
           ))}
+          {isAdmin && (
+            <button
+              type="button"
+              role="menuitem"
+              className="account-switcher__option"
+              onClick={chooseAdmin}
+            >
+              <Avatar className="account-switcher__avatar" name={ADMIN_LABEL} />
+              <span className="account-switcher__identity">
+                <span className="account-switcher__name">{ADMIN_LABEL}</span>
+                <span className="account-switcher__role">{ADMIN_NOTE}</span>
+              </span>
+              {inAdmin && (
+                <Check className="account-switcher__check" size={16} strokeWidth={2.25} />
+              )}
+            </button>
+          )}
         </div>
       )}
     </div>

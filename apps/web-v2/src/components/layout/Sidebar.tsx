@@ -5,7 +5,10 @@
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
  *            on ne pouvait pas accéder à sa propre vitrine). « Revenir à la V1 » ferme la liste : ceux
  *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
- *            « Administration » n'apparaît que pour les admins.
+ *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
+ *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
+ * ATTENTION — seules les sections codées sont listées : Prospects arrive au lot 3, Signalements,
+ *            Événements, Catégories et Témoignages au lot 4.
  */
 import {
   ArrowLeftRight,
@@ -14,12 +17,12 @@ import {
   PanelRightClose,
   PanelRightOpen,
   Settings,
-  ShieldCheck,
   Store,
   Telescope,
   Users,
 } from 'lucide-react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
+import { isAdminPath } from '@/lib/admin-mode'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
@@ -49,6 +52,16 @@ function navFor(vitrine: string | null | undefined): NavItem[] {
   return [...NAV_ITEMS.slice(0, -1), mine, ...NAV_ITEMS.slice(-1)]
 }
 
+/** Les sections de l'administration ; « Comptes » reste allumé sur les fiches qui en descendent. */
+const ADMIN_ITEMS = [
+  {
+    to: '/admin/comptes',
+    label: 'Comptes',
+    Icon: Users,
+    prefixes: ['/admin/comptes', '/admin/enseignes', '/admin/personnes'],
+  },
+] as const
+
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
@@ -56,7 +69,8 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
-  const { actor, entities, person } = useAuth()
+  const { actor, entities } = useAuth()
+  const { pathname } = useLocation()
   const items = navFor(entities.find((entity) => entity.actor_id === actor?.id)?.public_slug)
 
   return (
@@ -76,40 +90,53 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 
-      <nav className="sidebar__nav">
-        {items.map(({ to, label, Icon }) => {
-          const content = (
-            <>
-              <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-              <span className="sidebar__item-label">{label}</span>
-            </>
-          )
+      {isAdminPath(pathname) ? (
+        <nav className="sidebar__nav">
+          {ADMIN_ITEMS.map(({ to, label, Icon, prefixes }) => {
+            const active = prefixes.some((prefix) => pathname.startsWith(prefix))
+            return (
+              <NavLink
+                key={to}
+                to={to}
+                className={active ? 'sidebar__item sidebar__item--active' : 'sidebar__item'}
+                aria-current={active ? 'page' : undefined}
+              >
+                <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+                <span className="sidebar__item-label">{label}</span>
+              </NavLink>
+            )
+          })}
+        </nav>
+      ) : (
+        <nav className="sidebar__nav">
+          {items.map(({ to, label, Icon }) => {
+            const content = (
+              <>
+                <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+                <span className="sidebar__item-label">{label}</span>
+              </>
+            )
 
-          return (
-            <NavLink
-              key={label}
-              to={to}
-              end
-              className={({ isActive }) =>
-                isActive ? 'sidebar__item sidebar__item--active' : 'sidebar__item'
-              }
-            >
-              {content}
-            </NavLink>
-          )
-        })}
-        {person?.role === 'admin' && (
-          <NavLink to="/admin" className="sidebar__item">
-            <ShieldCheck className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-            <span className="sidebar__item-label">Administration</span>
-          </NavLink>
-        )}
-        {/* La V1 est une autre application : un lien plein, vers son Explorer (sa racine est la landing). */}
-        <a className="sidebar__item" href="/explorer">
-          <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-          <span className="sidebar__item-label">Revenir à la V1</span>
-        </a>
-      </nav>
+            return (
+              <NavLink
+                key={label}
+                to={to}
+                end
+                className={({ isActive }) =>
+                  isActive ? 'sidebar__item sidebar__item--active' : 'sidebar__item'
+                }
+              >
+                {content}
+              </NavLink>
+            )
+          })}
+          {/* La V1 est une autre application : un lien plein, vers son Explorer (sa racine est la landing). */}
+          <a className="sidebar__item" href="/explorer">
+            <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+            <span className="sidebar__item-label">Revenir à la V1</span>
+          </a>
+        </nav>
+      )}
 
       <div className="sidebar__foot">
         {!collapsed && <NetworkActivity />}

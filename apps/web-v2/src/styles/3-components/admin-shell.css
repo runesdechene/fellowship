@@ -1,65 +1,21 @@
 /**
- * QUOI     — les styles de la coquille de l'administration (components/layout/AdminShell.tsx).
- * POURQUOI — elle réutilise la barre latérale et le panneau de l'app (app-shell.css, sidebar.css) ;
- *            ici seulement ce qui change : la pastille « Administration », le lien de retour en
- *            bas de la barre, et le panneau pleine largeur, sans mur d'affiche.
+ * QUOI     — la marge des écrans de l'administration, posés dans la coquille de l'app (App.tsx).
+ * POURQUOI — l'administration garde la barre latérale de l'app (Uriel, 16/10/2026) ; ses tableaux
+ *            larges prennent tout le panneau, sans barre du haut ni mur d'affiche.
+ * ATTENTION — la marge vit sur ce bloc, PAS sur le panneau : son fond est une couche collée dans le
+ *            flux (app-shell.css), qu'une marge du panneau décalerait avec le contenu.
  */
 
-/* La barre est une colonne : « Revenir à l'application » se colle en bas avec margin-top: auto. */
-.admin-shell__nav {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: var(--space-24);
-}
-
-.admin-shell__badge {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--sidebar-logo-gap);
-  padding: var(--space-10) var(--space-14);
-  border: 1px solid var(--line-card);
-  border-radius: var(--round-10);
-  background: var(--surface-card);
-}
-
-.admin-shell__badge-title {
-  font: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
-  color: var(--ink-title);
-}
-
-.admin-shell__badge-note {
-  font: var(--weight-regular) var(--size-10) / var(--leading-snug) var(--family-sans);
-  color: var(--ink-soft);
-}
-
-.admin-shell__back {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  margin-top: auto;
-  padding: 0 var(--sidebar-item-inset);
-  font: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
-  color: var(--ink-soft);
-}
-
-.admin-shell__back:hover {
-  color: var(--ink-title);
-}
-
-/* Le panneau prend tout l'espace à droite de la barre : pas de mur d'affiche, pas de largeur max.
-   La marge vit sur un bloc intérieur, PAS sur le panneau : son fond est une couche collée dans le
-   flux (app-shell.css), qu'une marge du panneau décalerait avec le contenu au lieu de l'entourer. */
-.admin-shell__content {
+.admin-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-24);
   padding: var(--space-56);
 }
 
-/* Téléphone : la barre s'efface (app-shell.css), le panneau se resserre. */
+/* Téléphone : le panneau se resserre. */
 @media (width <= 760px) {
-  .admin-shell__content {
+  .admin-content {
     padding: var(--space-24) var(--space-16);
   }
 }
