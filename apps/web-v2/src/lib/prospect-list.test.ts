@@ -60,3 +60,9 @@ describe('suivi', () => {
     ).toBe('suivi=moi')
   })
 })
+
+describe('filtre À répondre', () => {
+  it('se lit dans l’adresse', () => {
+    expect(readProspectsQuery(new URLSearchParams('filtre=a_repondre')).filter).toBe('a_repondre')
+  })
+})

@@ -26,12 +26,15 @@ export function ProspectPage() {
   const { prospect, messages, senders } = data
   const me = person.actor_id
 
+  const waiting = messages[messages.length - 1]?.direction === 'in'
   const status = prospect.unsubscribed_at
     ? { value: 'desinscrit', label: 'Désinscrit' }
-    : (EMAIL_STATUSES.find((s) => s.value === prospect.email_status) ?? {
-        value: 'pas_envoye',
-        label: 'Pas envoyé',
-      })
+    : waiting
+      ? { value: 'a-repondre', label: 'À répondre' }
+      : (EMAIL_STATUSES.find((s) => s.value === prospect.email_status) ?? {
+          value: 'pas_envoye',
+          label: 'Pas envoyé',
+        })
   const meta = [
     prospect.brand,
     prospect.activity,

@@ -39,9 +39,10 @@ interface Props {
   onAskUnlink: (row: ProspectRow) => void
 }
 
-/** Le statut se lit (le fil le tient) ; un prospect désinscrit l'affiche à la place. */
+/** Le statut se lit (le fil le tient) ; « Désinscrit » puis « À répondre » passent devant. */
 function statusOf(row: ProspectRow): { value: string; label: string } {
   if (row.unsubscribed_at) return { value: 'desinscrit', label: 'Désinscrit' }
+  if (row.a_repondre) return { value: 'a-repondre', label: 'À répondre' }
   return (
     EMAIL_STATUSES.find((status) => status.value === row.email_status) ?? {
       value: 'pas_envoye',

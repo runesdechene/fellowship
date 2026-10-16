@@ -5,7 +5,7 @@
  * ATTENTION — les valeurs de filtre sont celles qu'attend admin_prospects (SQL).
  */
 export type ProspectFilter =
-  'tous' | 'a_contacter' | 'contactes' | 'repondu' | 'compte' | 'a_relancer'
+  'tous' | 'a_contacter' | 'contactes' | 'repondu' | 'a_repondre' | 'compte' | 'a_relancer'
 
 export interface ProspectsQuery {
   q: string
@@ -21,6 +21,7 @@ export const PROSPECT_FILTERS: readonly { value: ProspectFilter; label: string }
   { value: 'a_contacter', label: 'À contacter' },
   { value: 'contactes', label: 'Contactés' },
   { value: 'repondu', label: 'Ont répondu' },
+  { value: 'a_repondre', label: 'À répondre' },
   { value: 'compte', label: 'Ont un compte' },
   { value: 'a_relancer', label: 'À relancer' },
 ]

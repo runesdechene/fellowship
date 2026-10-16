@@ -175,3 +175,15 @@
   flex: 1;
   min-width: 0;
 }
+
+/* Le message cité d'une réponse, plié. */
+.prospect-thread__quoted summary {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.prospect-thread__quoted .prospect-thread__body {
+  margin-top: var(--space-6);
+  color: var(--ink-soft);
+}

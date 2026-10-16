@@ -296,3 +296,8 @@
 .prospect-source--next {
   margin-left: 0;
 }
+
+/* Le prospect attend une réponse : en brique, comme la relance. */
+.prospect-status--a-repondre {
+  color: var(--tone-brique-ink);
+}

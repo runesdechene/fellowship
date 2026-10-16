@@ -58,7 +58,10 @@ export function ComposeCard({ sheet, me, onSent, onTakeOver }: Props) {
     }
   }
 
-  const initial = pickTemplate(live, search.get('modele'), outgoing.length > 0)
+  // Un prospect « À relancer » dont le dernier message est un envoi : le modèle de relance est prêt.
+  const lastIsOut = messages[messages.length - 1]?.direction === 'out'
+  const wanted = search.get('modele') ?? (prospect.a_relancer && lastIsOut ? 'relance' : null)
+  const initial = pickTemplate(live, wanted, outgoing.length > 0)
   const [templateId, setTemplateId] = useState<string | null>(initial)
   const [draft, setDraft] = useState(() => draftFor(initial))
   const [busy, setBusy] = useState(false)
