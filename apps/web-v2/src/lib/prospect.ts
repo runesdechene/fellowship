@@ -34,6 +34,13 @@ export function contactLabel(channel: string | null, on: string | null): string 
   return parts.length ? parts.join(' · ') : null
 }
 
+const FIRST_YEAR = 2000
+
+/** Une date de contact complète et plausible : le champ date rend « 0002-10-16 » en pleine frappe. */
+export function validContactDate(iso: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(iso) && Number(iso.slice(0, 4)) >= FIRST_YEAR
+}
+
 export function percent(part: number, whole: number): number {
   return whole > 0 ? Math.round((part * 100) / whole) : 0
 }

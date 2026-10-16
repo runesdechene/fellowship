@@ -6,7 +6,7 @@
  *            un échec rend l'ancienne et affiche le message.
  */
 import { useRef, useState } from 'react'
-import { CHANNELS, contactLabel } from '@/lib/prospect'
+import { CHANNELS, contactLabel, validContactDate } from '@/lib/prospect'
 
 type Save<T> = (next: T) => Promise<void>
 
@@ -43,6 +43,7 @@ export function TextCell({
   onSave,
   autoOpen = false,
   normalize = (text: string) => text.trim() || null,
+  onClose,
 }: {
   value: string | null
   label: string
@@ -50,6 +51,8 @@ export function TextCell({
   autoOpen?: boolean
   /** La forme enregistrée de ce qui est tapé (l'e-mail se range en minuscules). */
   normalize?: (text: string) => string | null
+  /** À la fermeture du champ : ce qui part en écriture, null si rien (vide ou Échap). */
+  onClose?: (sent: string | null) => void
 }) {
   const { shown, problem, save } = usePending(value)
   const [editing, setEditing] = useState(autoOpen)
@@ -79,7 +82,9 @@ export function TextCell({
         }}
         onBlur={() => {
           setEditing(false)
-          if (!cancelled.current) void save(normalize(draft), onSave)
+          const next = cancelled.current ? null : normalize(draft)
+          if (!cancelled.current) void save(next, onSave)
+          onClose?.(next)
         }}
       />
     )
@@ -165,6 +170,13 @@ export function CheckCell({
   )
 }
 
+type ContactPatch = { contact_channel?: string | null; contacted_on?: string | null }
+
+/**
+ * Le canal et la date se modifient en brouillon : rien ne part tant que le focus n'a pas quitté
+ * la cellule (ou sur Entrée) ; Échap annule. Le champ date rend « 0002-10-16 » en pleine frappe :
+ * une date incomplète n'est jamais écrite.
+ */
 export function ContactCell({
   channel,
   on,
@@ -172,28 +184,47 @@ export function ContactCell({
 }: {
   channel: string | null
   on: string | null
-  onSave: (patch: {
-    contact_channel?: string | null
-    contacted_on?: string | null
-  }) => Promise<void>
+  onSave: (patch: ContactPatch) => Promise<void>
 }) {
   const [open, setOpen] = useState(false)
+  const [draft, setDraft] = useState({ channel: '', on: '' })
   const [problem, setProblem] = useState<string | null>(null)
-  async function write(patch: { contact_channel?: string | null; contacted_on?: string | null }) {
+  const cancelled = useRef(false)
+
+  function start() {
+    cancelled.current = false
+    setDraft({ channel: channel ?? '', on: on ?? '' })
     setProblem(null)
+    setOpen(true)
+  }
+
+  async function commit() {
+    setOpen(false)
+    if (cancelled.current) return
+    const patch: ContactPatch = {}
+    if ((draft.channel || null) !== channel) patch.contact_channel = draft.channel || null
+    if ((draft.on || null) !== on) {
+      if (draft.on && !validContactDate(draft.on)) {
+        setProblem('Date incomplète : rien n’est enregistré.')
+        return
+      }
+      patch.contacted_on = draft.on || null
+    }
+    if (Object.keys(patch).length === 0) return
     try {
       await onSave(patch)
     } catch (error) {
       setProblem(error instanceof Error ? error.message : 'Enregistrement impossible')
     }
   }
+
   if (!open) {
     return (
       <span className="prospect-cell">
         <button
           type="button"
           className="prospect-cell__button"
-          onClick={() => setOpen(true)}
+          onClick={start}
           aria-label="Contact"
         >
           {contactLabel(channel, on) ?? <span className="prospect-cell__empty">—</span>}
@@ -206,18 +237,22 @@ export function ContactCell({
     <span
       className="prospect-contact"
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false)
+        if (!event.currentTarget.contains(event.relatedTarget)) void commit()
       }}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') setOpen(false)
+        if (event.key === 'Escape') cancelled.current = true
+        if (event.key === 'Escape' || event.key === 'Enter') {
+          event.preventDefault()
+          if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+        }
       }}
     >
       <select
         className="prospect-contact__channel"
         aria-label="Canal"
         autoFocus
-        value={channel ?? ''}
-        onChange={(event) => void write({ contact_channel: event.target.value || null })}
+        value={draft.channel}
+        onChange={(event) => setDraft({ ...draft, channel: event.target.value })}
       >
         <option value="">—</option>
         {CHANNELS.map((option) => (
@@ -230,8 +265,8 @@ export function ContactCell({
         type="date"
         className="prospect-contact__date"
         aria-label="Date du contact"
-        value={on ?? ''}
-        onChange={(event) => void write({ contacted_on: event.target.value || null })}
+        value={draft.on}
+        onChange={(event) => setDraft({ ...draft, on: event.target.value })}
       />
     </span>
   )

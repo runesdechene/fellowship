@@ -4,7 +4,7 @@
  * POURQUOI — ce sont les règles que le tableau affiche ; un message d'erreur doit parler français.
  */
 import { describe, expect, it } from 'vitest'
-import { contactLabel, normalizeEmail, percent, writeError } from './prospect'
+import { contactLabel, normalizeEmail, percent, validContactDate, writeError } from './prospect'
 
 describe('contactLabel', () => {
   it('le canal et la date', () => {
@@ -42,5 +42,15 @@ describe('normalizeEmail', () => {
     expect(normalizeEmail('  Manon@CuirDeLune.fr ')).toBe('manon@cuirdelune.fr')
     expect(normalizeEmail('   ')).toBeNull()
     expect(normalizeEmail(null)).toBeNull()
+  })
+})
+
+describe('validContactDate', () => {
+  it('une date complète et plausible', () => {
+    expect(validContactDate('2026-10-10')).toBe(true)
+  })
+  it('une année en cours de frappe ou vide ne passe pas', () => {
+    expect(validContactDate('0002-10-16')).toBe(false)
+    expect(validContactDate('')).toBe(false)
   })
 })

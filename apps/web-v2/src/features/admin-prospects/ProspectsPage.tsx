@@ -145,6 +145,7 @@ export function ProspectsPage() {
           rows={data.rows}
           adding={adding}
           onAdd={add}
+          onCancelAdd={() => setAdding(false)}
           onChanged={reload}
           onAskDelete={(row) => setPending({ kind: 'supprimer', row })}
           onAskUnlink={(row) => setPending({ kind: 'defaire', row })}

@@ -304,3 +304,14 @@ Uriel veut des **buckets de storage très bien rangés, sans mélange injustifi�
 **Why:** Il tient à l'organisation propre du storage ; mélanger des types de contenu sans raison (ex. logos d'entité dans un bucket `avatars` pensé pour les photos perso) crée du désordre durable et difficile à défaire.
 
 **How to apply:** Avant de uploader vers un bucket, vérifier que le contenu correspond vraiment à la vocation du bucket. En cas de doute (nouveau type de média, ex. logos d'entité vs avatars perso, bannières, images d'œuvres de la vitrine), proposer un bucket dédié et **demander confirmation** plutôt que d'assumer la réutilisation. Énoncé le 2026-05-25 pendant le brainstorm onboarding (où je m'apprêtais à réutiliser `avatars` pour les logos d'entité). Lié à [[feedback_save_credentials_to_env]], [[fellowship-progress-tracker]].
+
+## Un index d'expression s'évalue avec les droits de celui qui écrit
+
+**Le piège** (16/10/2026, lot 3) : `create index … on users (phone_key(phone))`, alors que
+`phone_key` avait `revoke execute … from authenticated`. Toute écriture qui recalcule l'index (un
+insert dans `prospects`, une mise à jour de `users`) a échoué en production pendant cinq minutes :
+« permission denied for function phone_key ».
+
+**How to apply :** une fonction qui sert dans un index d'expression (ou un `check`, un défaut de
+colonne) doit rester exécutable par **tous** les rôles qui écrivent la table. Ne retirer `EXECUTE`
+qu'aux fonctions qui lisent des données ; une fonction pure et immuable s'ouvre à tous.

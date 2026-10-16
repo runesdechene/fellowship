@@ -32,6 +32,8 @@ interface Props {
   /** Un prospect en cours d'ajout : la ligne de tête n'a que son nom. */
   adding: boolean
   onAdd: (name: string | null) => Promise<void>
+  /** La ligne d'ajout quittée sans rien taper (ou par Échap) disparaît. */
+  onCancelAdd: () => void
   onChanged: () => void
   onAskDelete: (row: ProspectRow) => void
   onAskUnlink: (row: ProspectRow) => void
@@ -45,6 +47,7 @@ export function ProspectsTable({
   rows,
   adding,
   onAdd,
+  onCancelAdd,
   onChanged,
   onAskDelete,
   onAskUnlink,
@@ -67,7 +70,15 @@ export function ProspectsTable({
         {adding && (
           <tr className="admin-table__row prospect-row--draft">
             <td>
-              <TextCell value={null} label="Nom" autoOpen onSave={onAdd} />
+              <TextCell
+                value={null}
+                label="Nom"
+                autoOpen
+                onSave={onAdd}
+                onClose={(sent) => {
+                  if (sent === null) onCancelAdd()
+                }}
+              />
             </td>
             {COLUMNS.slice(1).map((column) => (
               <td key={column} className="admin-table__text prospect-cell__empty">

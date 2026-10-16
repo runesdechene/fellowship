@@ -9,6 +9,7 @@
 import Papa from 'papaparse'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { decodeCsv } from '@/lib/csv-text'
 import { emailsOf, planImport } from '@/lib/prospect-import'
 import { importProspects, knownEmails } from './prospect-writes'
 
@@ -19,14 +20,10 @@ function prospects(count: number): string {
   return count === 1 ? '1 prospect' : `${count} prospects`
 }
 
-function readCsv(file: File): Promise<string[][]> {
-  return new Promise((resolve, reject) => {
-    Papa.parse<string[]>(file, {
-      skipEmptyLines: 'greedy',
-      complete: (result) => resolve(result.data),
-      error: (error) => reject(error),
-    })
-  })
+/** Le texte d'abord (UTF-8 ou Windows-1252, lib/csv-text), puis les lignes ; Papa devine le séparateur. */
+async function readCsv(file: File): Promise<string[][]> {
+  const text = decodeCsv(await file.arrayBuffer())
+  return Papa.parse<string[]>(text, { skipEmptyLines: 'greedy' }).data
 }
 
 /** Le fichier lu et les e-mails déjà dans la liste : l'aperçu se recalcule quand la source change. */
@@ -103,8 +100,8 @@ export function ImportDialog({ onClose, onDone }: Props) {
           Importer un fichier
         </h2>
         <p className="confirm-dialog__text">
-          Un fichier CSV exporté d’Excel ou de Google Sheets (CSV UTF-8), avec les titres en
-          première ligne : nom, marque, activité, ville, e-mail, téléphone, source, note.
+          Un fichier CSV exporté d’Excel ou de Google Sheets, avec les titres en première ligne :
+          nom, marque, activité, ville, e-mail, téléphone, source, note.
         </p>
         <input
           type="file"
