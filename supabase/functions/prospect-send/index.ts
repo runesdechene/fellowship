@@ -49,6 +49,13 @@ Deno.serve(async (req) => {
     })
     if (refusal || !sender) return json({ error: refusal ?? 'no_sender' }, 400)
 
+    // Réclamer le prospect en une seule écriture : si un autre admin l'a pris entre-temps, rien ne part.
+    const { data: claimed, error: cErr } = await admin.from('prospects').update({ owner_id: user.id })
+      .eq('id', prospectId).or(`owner_id.is.null,owner_id.eq.${user.id}`)
+      .select('id').maybeSingle()
+    if (cErr) throw cErr
+    if (!claimed) return json({ error: 'not_owner' }, 409)
+
     const { data: last, error: lErr } = await admin.from('prospect_messages')
       .select('message_id, references_ids')
       .eq('prospect_id', prospectId)
@@ -76,36 +83,48 @@ Deno.serve(async (req) => {
       headers['References'] = references.join(' ')
     }
 
+    // Le message est noté AVANT l'envoi : un e-mail parti n'est jamais perdu pour le fil, ni renvoyé.
+    const { data: row, error: mErr } = await admin.from('prospect_messages').insert({
+      prospect_id: prospectId, direction: 'out', sender_id: sender.id, from_email: from,
+      to_email: prospect.email, subject: subject.trim(), body_text: mail.text, message_id: messageId,
+      in_reply_to: inReplyTo, references_ids: references, template_id: templateId,
+    }).select('id').single()
+    if (mErr) throw mErr
+
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
+        'Content-Type': 'application/json',
+        // Une répétition de la même demande n'envoie pas deux fois.
+        'Idempotency-Key': row.id,
+      },
       body: JSON.stringify({
         // Lot 3b : les réponses vont à la boîte personnelle de l'expéditeur ; le lot 3c les recevra ici.
-        from: `${sender.display_name} <${from}>`, to: [prospect.email], reply_to: replyTo,
-        subject: subject.trim(), text: mail.text, html: mail.html, headers,
-        tags: [{ name: 'prospect', value: prospectId }],
+        // Le nom affiché entre guillemets (une virgule casserait l'adresse) ; l'objet sur une ligne.
+        from: `"${sender.display_name.replace(/["\\]/g, '')}" <${from}>`, to: [prospect.email],
+        reply_to: replyTo, subject: subject.trim().replace(/[\r\n]+/g, ' '), text: mail.text,
+        html: mail.html, headers, tags: [{ name: 'prospect', value: prospectId }],
       }),
     })
     const sent = (await response.json().catch(() => null)) as { id?: string } | null
     if (!response.ok || !sent?.id) {
       console.error('[prospect-send] resend', response.status, sent)
+      await admin.from('prospect_messages').delete().eq('id', row.id)
       return json({ error: 'send_failed' }, 502)
     }
 
-    const now = new Date().toISOString()
-    const { error: mErr } = await admin.from('prospect_messages').insert({
-      prospect_id: prospectId, direction: 'out', sender_id: sender.id, from_email: from,
-      to_email: prospect.email, subject: subject.trim(), body_text: mail.text, message_id: messageId,
-      in_reply_to: inReplyTo, references_ids: references, resend_id: sent.id, template_id: templateId,
-      delivery: 'envoye', sent_at: now,
-    })
-    if (mErr) throw mErr
+    // L'e-mail est parti : une écriture qui échoue ensuite se note dans les journaux, sans faire
+    // croire à un échec (qui pousserait à renvoyer).
+    const { error: sentErr } = await admin.from('prospect_messages')
+      .update({ resend_id: sent.id, delivery: 'envoye', sent_at: new Date().toISOString() })
+      .eq('id', row.id)
+    if (sentErr) console.error('[prospect-send] message', sentErr)
     const { error: uErr } = await admin.from('prospects').update({
-      owner_id: prospect.owner_id ?? user.id,
       email_status: prospect.email_status === 'repondu' ? 'repondu' : 'envoye',
       contact_channel: 'mail', contacted_on: PARIS_DAY.format(new Date()), a_relancer: false,
     }).eq('id', prospectId)
-    if (uErr) throw uErr
+    if (uErr) console.error('[prospect-send] prospect', uErr)
     return json({ done: true })
   } catch (err) {
     console.error('[prospect-send]', err)

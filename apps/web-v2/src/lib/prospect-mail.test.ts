@@ -18,6 +18,25 @@ describe('toHtml', () => {
   })
 })
 
+describe('toHtml, les liens', () => {
+  it('laisse la ponctuation finale hors du lien', () => {
+    expect(toHtml('Viens voir https://flw.sh/v2/festivals.')).toBe(
+      '<p>Viens voir <a href="https://flw.sh/v2/festivals">https://flw.sh/v2/festivals</a>.</p>',
+    )
+  })
+  it('un lien entre parenthèses ou entre chevrons', () => {
+    expect(toHtml('(https://flw.sh)')).toBe('<p>(<a href="https://flw.sh">https://flw.sh</a>)</p>')
+    expect(toHtml('<https://flw.sh>')).toBe(
+      '<p>&lt;<a href="https://flw.sh">https://flw.sh</a>&gt;</p>',
+    )
+  })
+  it('un lien entre guillemets', () => {
+    expect(toHtml('"https://flw.sh"')).toBe(
+      '<p>&quot;<a href="https://flw.sh">https://flw.sh</a>&quot;</p>',
+    )
+  })
+})
+
 describe('composeEmail', () => {
   it('ajoute la signature puis le pied de désinscription', () => {
     const mail = composeEmail({
@@ -57,5 +76,9 @@ describe('sendRefusal', () => {
     expect(sendRefusal({ ...ok, ownerId: 'u2' })).toBe('not_owner')
     expect(sendRefusal({ ...ok, senderActive: false })).toBe('no_sender')
     expect(sendRefusal({ ...ok, body: '  ' })).toBe('empty')
+  })
+  it('refuse un emplacement resté entre accolades', () => {
+    expect(sendRefusal({ ...ok, body: 'Bonjour {prenom},' })).toBe('placeholder')
+    expect(sendRefusal({ ...ok, subject: 'Vu chez {marque}' })).toBe('placeholder')
   })
 })

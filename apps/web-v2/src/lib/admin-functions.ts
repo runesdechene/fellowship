@@ -43,6 +43,7 @@ const KNOWN_ERRORS: Record<string, string> = {
   no_sender: 'Tu n’as pas d’adresse d’envoi active : ajoute-la dans Modèles et expéditeurs.',
   empty: 'L’objet et le texte ne peuvent pas être vides.',
   send_failed: 'Resend a refusé l’envoi. Réessaie dans un instant.',
+  placeholder: 'Un emplacement est resté entre accolades ({…}) : corrige-le avant d’envoyer.',
 }
 
 /** La phrase d'un refus connu du serveur, lue dans le corps JSON de sa réponse. */

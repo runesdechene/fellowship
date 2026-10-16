@@ -8,14 +8,28 @@ function escape(text: string): string {
   return text.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c)
 }
 
-function linkify(escaped: string): string {
-  return escaped.replace(/https?:\/\/[^\s<]+/g, (url) => `<a href="${url}">${url}</a>`)
+// Une adresse s'arrête aux espaces, guillemets et chevrons ; la ponctuation qui la termine
+// (« voir https://flw.sh. ») reste du texte.
+const URL_PATTERN = /https?:\/\/[^\s<>"]+/g
+const TRAILING = /[.,;:!?)\]']+$/
+
+/** Échappe le texte et rend les adresses cliquables, en travaillant sur le texte brut. */
+function linkify(raw: string): string {
+  let html = ''
+  let last = 0
+  for (const match of raw.matchAll(URL_PATTERN)) {
+    const start = match.index
+    const url = match[0].replace(TRAILING, '')
+    html += escape(raw.slice(last, start)) + `<a href="${escape(url)}">${escape(url)}</a>`
+    last = start + url.length
+  }
+  return html + escape(raw.slice(last))
 }
 
 export function toHtml(text: string): string {
   return text
     .split(/\n{2,}/)
-    .map((paragraph) => `<p>${linkify(escape(paragraph)).replace(/\n/g, '<br>')}</p>`)
+    .map((paragraph) => `<p>${linkify(paragraph).replace(/\n/g, '<br>')}</p>`)
     .join('')
 }
 
@@ -31,7 +45,13 @@ export function composeEmail(o: { body: string; signature: string; unsubscribeUr
   return { text, html }
 }
 
-export type Refusal = 'no_email' | 'unsubscribed' | 'not_owner' | 'no_sender' | 'empty'
+export type Refusal =
+  | 'no_email'
+  | 'unsubscribed'
+  | 'not_owner'
+  | 'no_sender'
+  | 'empty'
+  | 'placeholder'
 
 export function sendRefusal(o: {
   email: string | null
@@ -47,5 +67,7 @@ export function sendRefusal(o: {
   if (o.ownerId && o.ownerId !== o.callerId) return 'not_owner'
   if (!o.senderActive) return 'no_sender'
   if (!o.subject.trim() || !o.body.trim()) return 'empty'
+  // Un emplacement de modèle resté entre accolades ({prenom} mal tapé) ne doit jamais partir.
+  if (/\{[^{}\s]+\}/.test(o.subject + o.body)) return 'placeholder'
   return null
 }

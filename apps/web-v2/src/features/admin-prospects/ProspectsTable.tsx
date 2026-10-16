@@ -201,14 +201,16 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
         </span>
       </td>
       <td className="admin-table__end">
-        <button
-          type="button"
-          className="prospect-row__delete"
-          aria-label="Supprimer ce prospect"
-          onClick={() => onAskDelete(row)}
-        >
-          <Trash2 size={15} strokeWidth={1.75} />
-        </button>
+        {!row.unsubscribed_at && (
+          <button
+            type="button"
+            className="prospect-row__delete"
+            aria-label="Supprimer ce prospect"
+            onClick={() => onAskDelete(row)}
+          >
+            <Trash2 size={15} strokeWidth={1.75} />
+          </button>
+        )}
       </td>
     </tr>
   )

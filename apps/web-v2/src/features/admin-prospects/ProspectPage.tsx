@@ -4,7 +4,7 @@
  * POURQUOI — la prospection se fait dans Fellowship (Uriel, 16/10/2026) : chaque prospect a son fil.
  */
 import { ChevronLeft } from 'lucide-react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { formatFullDate } from '@/lib/dates'
 import { EMAIL_STATUSES } from '@/lib/prospect'
@@ -19,6 +19,7 @@ export function ProspectPage() {
   const { id = '' } = useParams()
   const { person } = useAuth()
   const { data, error, reload } = useProspect(id)
+  const [, setSearch] = useSearchParams()
 
   if (error) return <p className="admin-page__error">{error}</p>
   if (!data || !person) return null
@@ -78,8 +79,14 @@ export function ProspectPage() {
             key={messages.length}
             sheet={data}
             me={me}
-            onSent={reload}
-            onTakeOver={() => void updateProspect(prospect.id, { owner_id: me }).then(reload)}
+            onSent={() => {
+              // La bienvenue est partie : on ne la repropose pas (`?modele=bienvenue`).
+              setSearch(new URLSearchParams(), { replace: true })
+              reload()
+            }}
+            onTakeOver={() =>
+              void updateProspect(prospect.id, { owner_id: me }).then(reload, reload)
+            }
           />
         </div>
         <div className="sheet__column sheet__column--side">

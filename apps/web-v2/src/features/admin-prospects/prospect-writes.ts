@@ -26,9 +26,15 @@ export async function insertProspect(fields: ProspectPatch) {
   check(error)
 }
 
+/** La base refuse de supprimer un prospect désinscrit (il reviendrait par un réimport) : aucune ligne. */
 export async function deleteProspect(id: string) {
-  const { error } = await supabase.from('prospects').delete().eq('id', id)
+  const { data, error } = await supabase.from('prospects').delete().eq('id', id).select('id')
   check(error)
+  if (!data.length) {
+    throw new Error(
+      'Ce prospect est désinscrit : il reste dans la liste pour ne plus jamais lui écrire.',
+    )
+  }
 }
 
 export async function unlinkProspect(id: string) {
