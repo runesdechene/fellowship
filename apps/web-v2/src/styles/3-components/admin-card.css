@@ -148,3 +148,13 @@
   background: var(--tone-gris-surface);
   color: var(--tone-gris-ink);
 }
+
+/* Dans une carte blanche (et dans une fenêtre), un champ et un bouton ne se distinguent plus du
+   fond : ils sont faits pour le panneau sable. Un filet les cerne, comme sur les maquettes des
+   fiches (2342:2, 2344:2). Le bouton plein (« Enregistrer ») garde son fond. */
+.admin-card :is(.control, .notes__input, .notes__label-input, .notes__submit),
+:is(.confirm-dialog__card, .delete-dialog__card) .control,
+:is(.admin-card, .confirm-dialog__card, .delete-dialog__card)
+  .button:not(.button--action, .button--bare, .button--icon) {
+  border: 1px solid var(--line-card);
+}

@@ -101,7 +101,7 @@ export function PersonEditForm({ person, onCancel, onSaved }: Props) {
         </p>
       )}
       <div className="sheet-form__actions">
-        <Button type="submit" disabled={saving}>
+        <Button type="submit" variant="action" disabled={saving}>
           Enregistrer
         </Button>
         <Button onClick={onCancel} disabled={saving}>
