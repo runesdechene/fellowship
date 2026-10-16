@@ -24,8 +24,9 @@ function writtenPart(body: string): string {
 
 function meta(message: ThreadMessage): string {
   const date = new Date(message.at)
+  // Une réponse reçue n'a pas de nom d'expéditeur : son adresse suffit, une seule fois.
   return [
-    message.sender_name ?? message.from_email,
+    message.sender_name,
     message.from_email,
     `${formatDayMonthShort(date)}, ${formatTime(date)}`,
     message.delivery ? DELIVERY[message.delivery] : undefined,
