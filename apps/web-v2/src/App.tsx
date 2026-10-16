@@ -35,6 +35,7 @@ import { WriteReviewPage } from '@/features/review/WriteReviewPage'
 import { VitrinePage } from '@/features/vitrine/VitrinePage'
 import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
+import { Unsubscribe } from '@/pages/Unsubscribe'
 import { useAuth } from '@/lib/auth'
 import { useV2Access } from '@/lib/useV2Access'
 import { safeReturn } from '@/lib/welcome'
@@ -144,6 +145,7 @@ export function App() {
       {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
       <Route path="/decouvrir" element={<LandingPage />} />
       <Route path="/festivals" element={<PublicSearchRoute />} />
+      <Route path="/desinscription" element={<Unsubscribe />} />
       <Route path="/connexion" element={<LoginRoute />} />
       <Route
         path="/bienvenue"

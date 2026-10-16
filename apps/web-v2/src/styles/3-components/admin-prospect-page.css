@@ -160,6 +160,18 @@
 
 /* Dans la colonne de côté, une valeur longue (un e-mail) passe à la ligne au lieu de déborder. */
 .sheet-row__value .prospect-cell__button {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   white-space: normal;
+}
+
+/* Une valeur modifiable prend la place restante de la ligne (sinon elle se cale sur son contenu
+   le plus étroit et replie « Atelier Essai » sur deux lignes). */
+.sheet-row__value:has(.prospect-cell) {
+  flex: 1;
+  min-width: 0;
+}
+
+.sheet-row__value .prospect-cell {
+  flex: 1;
+  min-width: 0;
 }
