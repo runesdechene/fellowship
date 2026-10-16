@@ -286,3 +286,8 @@
     transition: none;
   }
 }
+
+/* Le nom ouvre la page du prospect. */
+.prospect-name:hover {
+  text-decoration: underline;
+}

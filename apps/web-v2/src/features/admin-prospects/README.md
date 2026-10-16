@@ -12,3 +12,9 @@ La page Prospects de l'administration (`/admin/prospects`, lot 3, maquette `2343
 - `prospect-writes.ts` — les écritures : cellule, ajout, suppression, rapprochement, import.
 - `ImportDialog.tsx` — la fenêtre d'import CSV, avec son aperçu.
 - `MatchDialog.tsx` — la fenêtre « Voir et rapprocher ».
+- `ProspectPage.tsx` — la page d'un prospect : fil, écriture, suiveur, informations (lot 3b).
+- `useProspect.ts` — charge le prospect, son fil, les modèles et les expéditeurs.
+- `ThreadCard.tsx` — le fil des échanges.
+- `ComposeCard.tsx` — écrire : modèle, objet, texte, envoi par prospect-send.
+- `OwnerMenu.tsx` — « Suivi par » : changer le suiveur, prendre le relais.
+- `ProspectSideCards.tsx` — informations modifiables, note, compte créé.

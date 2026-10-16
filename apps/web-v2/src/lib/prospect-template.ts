@@ -1,6 +1,6 @@
 /**
- * QUOI     — remplir un modèle d'e-mail de prospection avec ce qu'on sait du prospect, et
- *            l'accroche d'un relais.
+ * QUOI     — remplir un modèle d'e-mail de prospection avec ce qu'on sait du prospect, choisir le
+ *            modèle proposé à l'ouverture, et l'accroche d'un relais.
  * POURQUOI — le prospectant choisit un modèle et retouche le texte rempli (spec messagerie) ; un
  *            emplacement vide s'efface proprement.
  */
@@ -35,4 +35,32 @@ export function fillTemplate(text: string, values: Record<string, string>): stri
 /** « Je prends le relais de Mathéo. » quand le dernier e-mail venait d'un autre prospectant. */
 export function relayIntro(previous: string | null): string {
   return previous ? `Je prends le relais de ${previous}. ` : ''
+}
+
+/**
+ * Le modèle proposé à l'ouverture : celui demandé par l'adresse (`?modele=bienvenue`), sinon le
+ * premier « premier contact » tant qu'aucun e-mail n'est parti, sinon aucun (réponse libre).
+ */
+export function pickTemplate(
+  templates: readonly { id: string; kind: string; archived_at: string | null }[],
+  wanted: string | null,
+  hasOutgoing: boolean,
+): string | null {
+  const kind = wanted ?? (hasOutgoing ? null : 'premier_contact')
+  if (!kind) return null
+  return templates.find((t) => t.kind === kind && !t.archived_at)?.id ?? null
+}
+
+/** Qui écrivait avant moi : le dernier expéditeur sortant, s'il n'est pas moi. */
+export function previousWriter(
+  messages: readonly {
+    direction: string
+    sender_user_id: string | null
+    sender_name: string | null
+  }[],
+  me: string,
+): string | null {
+  const last = [...messages].reverse().find((m) => m.direction === 'out')
+  if (!last?.sender_user_id || last.sender_user_id === me) return null
+  return last.sender_name
 }

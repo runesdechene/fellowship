@@ -25,7 +25,7 @@ const COLUMNS = [
   'Relance',
 ] as const
 
-type TextField = 'name' | 'brand' | 'activity' | 'city' | 'phone' | 'source' | 'note'
+type TextField = 'brand' | 'activity' | 'city' | 'phone' | 'source' | 'note'
 
 interface Props {
   rows: ProspectRow[]
@@ -120,9 +120,9 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
     <tr className="admin-table__row">
       <td>
         <span className="admin-table__identity">
-          <span className="admin-table__name">
-            <TextCell value={row.name} label="Nom" onSave={text('name')} />
-          </span>
+          <Link to={`/admin/prospects/${row.id}`} className="admin-table__name prospect-name">
+            {row.name ?? row.email ?? 'Sans nom'}
+          </Link>
           <span className="admin-table__meta">
             <TextCell value={row.brand} label="Marque" onSave={text('brand')} />
           </span>

@@ -1103,6 +1103,10 @@
   --prospect-note-width: 180px;
   --prospect-dot-size: 7px;
   --confirm-dialog-wide-width: 680px;
+  --type-prospect-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
+  --prospect-message-width: 600px;
+  --prospect-compose-label-width: 70px;
+  --prospect-compose-text-height: 180px;
   /* La fiche d'une enseigne (features/admin-entity) */
   --admin-sheet-side-width: 440px;
   --admin-sheet-logo-size: 72px;

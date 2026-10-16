@@ -1,0 +1,165 @@
+/**
+ * QUOI     — les styles de la page d'un prospect (features/admin-prospects/ProspectPage) : l'initiale,
+ *            le menu du suiveur, le fil des échanges et la zone d'écriture.
+ * POURQUOI — maquettes 2355:2 et 2355:273 ; la mise en page reprend admin-sheet.css (sheet__…).
+ */
+
+.prospect-page__initial {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--admin-sheet-logo-size);
+  height: var(--admin-sheet-logo-size);
+  border-radius: var(--radius-round);
+  background: var(--tone-prune-surface);
+  font: var(--type-display-m);
+  color: var(--tone-prune-ink);
+}
+
+.prospect-page__status {
+  cursor: default;
+}
+
+.prospect-status--desinscrit {
+  color: var(--ink-soft);
+}
+
+/* --- Le suiveur ----------------------------------------------------------- */
+.prospect-owner {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.prospect-owner__label {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.prospect-owner__select {
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+/* --- Le fil --------------------------------------------------------------- */
+.prospect-thread__count,
+.prospect-thread__empty {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.prospect-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.prospect-thread__message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: var(--prospect-message-width);
+  padding: var(--space-14) var(--space-16);
+  border-radius: var(--radius-sm);
+}
+
+.prospect-thread__message--out {
+  align-self: flex-end;
+  background: var(--surface-chip-neutral);
+}
+
+.prospect-thread__message--in {
+  align-self: flex-start;
+  border: 1px solid var(--line-card);
+  background: var(--surface-card);
+}
+
+.prospect-thread__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+}
+
+.prospect-thread__subject {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.prospect-thread__body {
+  font: var(--type-prospect-text);
+  color: var(--ink-title);
+  white-space: pre-wrap;
+}
+
+/* --- L'écriture ----------------------------------------------------------- */
+.prospect-compose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.prospect-compose__row {
+  display: grid;
+  grid-template-columns: var(--prospect-compose-label-width) 1fr;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.prospect-compose__label,
+.prospect-compose__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.prospect-compose__field,
+.prospect-compose__text {
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-prospect-text);
+  color: var(--ink-title);
+}
+
+.prospect-compose__field--choice {
+  background: var(--surface-chip-neutral);
+  cursor: pointer;
+}
+
+.prospect-compose__text {
+  min-height: var(--prospect-compose-text-height);
+  resize: vertical;
+}
+
+.prospect-compose__problem {
+  font: var(--type-list-meta);
+  color: var(--tone-brique-ink);
+}
+
+.prospect-compose__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.prospect-compose__blocked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-prospect-text);
+  color: var(--ink-soft);
+}
+
+/* Dans la colonne de côté, une valeur longue (un e-mail) passe à la ligne au lieu de déborder. */
+.sheet-row__value .prospect-cell__button {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
