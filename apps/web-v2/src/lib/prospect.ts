@@ -15,6 +15,13 @@ export const EMAIL_STATUSES: readonly { value: EmailStatus; label: string }[] = 
   { value: 'rebond', label: 'Rebond' },
 ]
 
+/** Les usages d'un modèle d'e-mail (valeurs du check de prospect_templates.kind). */
+export const TEMPLATE_KINDS = [
+  { value: 'premier_contact', label: 'Premier contact' },
+  { value: 'relance', label: 'Relance' },
+  { value: 'bienvenue', label: 'Bienvenue' },
+] as const
+
 export type ContactChannel = 'mail' | 'appel' | 'salon' | 'message'
 
 export const CHANNELS: readonly { value: ContactChannel; label: string }[] = [
@@ -44,9 +51,14 @@ export function percent(part: number, whole: number): number {
   return whole > 0 ? Math.round((part * 100) / whole) : 0
 }
 
-/** 23505 : la contrainte unique de l'e-mail. */
+/** Les refus de la base en français : 23505 = déjà pris, 23514 = forme refusée. */
 export function writeError(error: { code?: string; message: string }): string {
-  return error.code === '23505' ? 'Cet e-mail est déjà dans la liste.' : error.message
+  const alias = error.message.includes('prospect_senders_alias')
+  if (error.code === '23505')
+    return alias ? 'Cette adresse est déjà prise.' : 'Cet e-mail est déjà dans la liste.'
+  if (error.code === '23514' && alias)
+    return 'Lettres minuscules, chiffres, points et tirets seulement.'
+  return error.message
 }
 
 /** L'e-mail est rangé en minuscules, sans espaces (contrainte de la table). */

@@ -32,6 +32,20 @@ describe('writeError', () => {
       'Cet e-mail est déjà dans la liste.',
     )
   })
+  it('une adresse d’expéditeur prise ou mal formée parle d’adresse', () => {
+    expect(
+      writeError({
+        code: '23505',
+        message: 'violates unique constraint "prospect_senders_alias_key"',
+      }),
+    ).toBe('Cette adresse est déjà prise.')
+    expect(
+      writeError({
+        code: '23514',
+        message: 'violates check constraint "prospect_senders_alias_check"',
+      }),
+    ).toBe('Lettres minuscules, chiffres, points et tirets seulement.')
+  })
   it('sinon le message de la base', () => {
     expect(writeError({ message: 'réservé aux admins' })).toBe('réservé aux admins')
   })

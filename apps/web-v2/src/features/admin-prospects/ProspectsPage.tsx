@@ -8,7 +8,7 @@
  */
 import { Plus, Upload } from 'lucide-react'
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AdminPager } from '@/components/ui/AdminPager'
 import { AdminSearch } from '@/components/ui/AdminSearch'
 import { Button } from '@/components/ui/Button'
@@ -96,6 +96,9 @@ export function ProspectsPage() {
           </p>
         </div>
         <div className="prospect-actions">
+          <Link to="/admin/prospects/modeles" className="button">
+            Modèles et expéditeurs
+          </Link>
           <Button onClick={() => setImporting(true)}>
             <Upload size={16} strokeWidth={2} aria-hidden="true" />
             Importer un fichier

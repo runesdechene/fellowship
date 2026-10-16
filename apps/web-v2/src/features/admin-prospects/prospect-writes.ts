@@ -1,6 +1,6 @@
 /**
  * QUOI     — les écritures de la liste des prospects : une cellule, une ligne ajoutée, supprimée,
- *            un rapprochement fait ou défait, un import.
+ *            un rapprochement fait ou défait, un import, les modèles et les expéditeurs.
  * POURQUOI — elles vont droit sur la table, que la RLS réserve aux admins : pas de fonction maison
  *            par champ.
  * ATTENTION — un échec lève une Error au message français (writeError) : la cellule l'affiche.
@@ -65,5 +65,54 @@ export async function importProspects(rows: NewProspect[]) {
   const { error } = await supabase
     .from('prospects')
     .upsert(rows, { onConflict: 'email', ignoreDuplicates: true })
+  check(error)
+}
+
+export interface TemplateInput {
+  id?: string
+  kind: string
+  name: string
+  subject: string
+  body: string
+}
+
+export async function saveTemplate({ id, ...fields }: TemplateInput) {
+  const { error } = id
+    ? await supabase.from('prospect_templates').update(fields).eq('id', id)
+    : await supabase.from('prospect_templates').insert(fields)
+  check(error)
+}
+
+/** Un modèle utilisé garde ses chiffres : il s'archive, il ne se supprime pas. */
+export async function archiveTemplate(id: string) {
+  const { error } = await supabase
+    .from('prospect_templates')
+    .update({ archived_at: new Date().toISOString() })
+    .eq('id', id)
+  check(error)
+}
+
+export interface SenderInput {
+  id?: string
+  user_id: string
+  alias: string
+  display_name: string
+  signature: string
+  active: boolean
+}
+
+export async function saveSender({ id, ...fields }: SenderInput) {
+  const { error } = id
+    ? await supabase.from('prospect_senders').update(fields).eq('id', id)
+    : await supabase.from('prospect_senders').insert(fields)
+  check(error)
+}
+
+/** Les prospects d'un suiveur qui part passent à un autre, ou à personne. */
+export async function reassignProspects(fromUser: string, toUser: string | null) {
+  const { error } = await supabase
+    .from('prospects')
+    .update({ owner_id: toUser })
+    .eq('owner_id', fromUser)
   check(error)
 }

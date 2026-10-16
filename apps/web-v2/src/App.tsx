@@ -13,6 +13,7 @@ import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
 import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
+import { TemplatesPage } from '@/features/admin-prospects/TemplatesPage'
 import { EntityPage } from '@/features/admin-entity/EntityPage'
 import { PersonPage } from '@/features/admin-person/PersonPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
@@ -314,6 +315,14 @@ export function App() {
         element={
           <AdminPage>
             <ProspectsPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/prospects/modeles"
+        element={
+          <AdminPage>
+            <TemplatesPage />
           </AdminPage>
         }
       />

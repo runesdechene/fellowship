@@ -1,0 +1,133 @@
+/**
+ * QUOI     — les styles de « Modèles et expéditeurs » (features/admin-prospects/TemplatesPage) :
+ *            les lignes d'expéditeurs et de modèles, l'éditeur, la fenêtre d'un expéditeur.
+ * POURQUOI — maquette 2356:2 ; les champs reprennent ceux de l'écriture (admin-prospect-page.css).
+ */
+
+.templates-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.templates-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto auto;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-12) 0;
+}
+
+.templates-row + .templates-row {
+  border-top: 1px solid var(--line-card);
+}
+
+.templates-group .templates-row {
+  grid-template-columns: 1fr auto auto auto;
+}
+
+.templates-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.templates-row__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.templates-row__text {
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}
+
+.templates-row__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.templates-row__meta--alert {
+  color: var(--tone-brique-ink);
+}
+
+.templates-empty {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.templates-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.templates-group__title {
+  font: var(--type-admin-head);
+  color: var(--ink-section-pale);
+  text-transform: uppercase;
+}
+
+/* --- L'éditeur ------------------------------------------------------------ */
+.template-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.template-editor__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.template-editor__label {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.template-editor__places {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.template-editor__place {
+  padding: var(--space-2) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-xs);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.template-editor__place:hover {
+  background: var(--surface-chip-neutral);
+}
+
+.template-editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-8);
+}
+
+/* --- La fenêtre d'un expéditeur ------------------------------------------- */
+.sender-dialog__address {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.sender-dialog__active {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .template-editor__place {
+    transition: none;
+  }
+}

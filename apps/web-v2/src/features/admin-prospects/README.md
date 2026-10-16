@@ -18,3 +18,7 @@ La page Prospects de l'administration (`/admin/prospects`, lot 3, maquette `2343
 - `ComposeCard.tsx` — écrire : modèle, objet, texte, envoi par prospect-send.
 - `OwnerMenu.tsx` — « Suivi par » : changer le suiveur, prendre le relais.
 - `ProspectSideCards.tsx` — informations modifiables, note, compte créé.
+- `TemplatesPage.tsx` — « Modèles et expéditeurs » (`/admin/prospects/modeles`).
+- `useTemplates.ts` — charge modèles, expéditeurs et comptes admins.
+- `SendersCard.tsx`, `SenderDialog.tsx` — les adresses @equipe.flw.sh et leur fenêtre.
+- `TemplatesCard.tsx`, `TemplateEditor.tsx` — les modèles et leur éditeur.
