@@ -1,7 +1,7 @@
 /**
- * QUOI     — le bandeau « N prospects ont le même e-mail ou téléphone qu'un compte Fellowship ».
- * POURQUOI — le rapprochement automatique ne voit que les inscriptions ; ce bandeau montre le reste
- *            (comptes plus anciens, téléphone saisi plus tard), confirmé d'un clic (maquette 2343:2).
+ * QUOI     — le bandeau « N prospects viennent de créer leur compte ».
+ * POURQUOI — Fellowship repère les inscriptions, un admin les confirme : la réussite se voit au lieu
+ *            de s'effacer (Uriel, 16/10/2026, maquette 2356:522).
  */
 import { Link2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -14,14 +14,14 @@ export function MatchBanner({ count, onOpen }: { count: number; onOpen: () => vo
       <div className="prospect-banner__text">
         <p className="prospect-banner__title">
           {count === 1
-            ? '1 prospect a le même e-mail ou téléphone qu’un compte Fellowship'
-            : `${count} prospects ont le même e-mail ou téléphone qu’un compte Fellowship`}
+            ? '1 prospect vient de créer son compte'
+            : `${count} prospects viennent de créer leur compte`}
         </p>
         <p className="prospect-banner__note">
-          Rapprocher coche « Compte créé » et relie le prospect à la fiche de la personne.
+          Confirme chacun : « Compte créé » se coche, et tu peux lui écrire un mot de bienvenue.
         </p>
       </div>
-      <Button onClick={onOpen}>Voir et rapprocher</Button>
+      <Button onClick={onOpen}>Voir et confirmer</Button>
     </aside>
   )
 }

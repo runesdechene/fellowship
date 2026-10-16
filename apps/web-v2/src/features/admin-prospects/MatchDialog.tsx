@@ -1,12 +1,12 @@
 /**
- * QUOI     — la fenêtre « Voir et rapprocher » : chaque prospect qui a l'e-mail ou le téléphone d'un
- *            compte, le compte trouvé, la raison, et « Rapprocher ».
- * POURQUOI — le rapprochement automatique ne voit que les inscriptions ; le reste se confirme ici,
- *            d'un clic par ligne (spec du lot 3).
- * ATTENTION — la page recharge après chaque rapprochement ; plus de correspondance, la fenêtre se
- *            ferme seule.
+ * QUOI     — la fenêtre « Voir et confirmer » : chaque prospect qui a l'e-mail ou le téléphone d'un
+ *            compte, le compte trouvé, la raison, et « Confirmer ».
+ * POURQUOI — un admin confirme chaque rapprochement (Uriel, 16/10/2026) ; la confirmation ouvre la
+ *            page du prospect, avec le modèle de bienvenue.
+ * ATTENTION — plus de correspondance, la fenêtre se ferme seule.
  */
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { linkProspect } from './prospect-writes'
 import type { Match } from './useProspects'
@@ -14,10 +14,10 @@ import type { Match } from './useProspects'
 interface Props {
   matches: Match[]
   onClose: () => void
-  onLinked: () => void
 }
 
-export function MatchDialog({ matches, onClose, onLinked }: Props) {
+export function MatchDialog({ matches, onClose }: Props) {
+  const navigate = useNavigate()
   const dialog = useRef<HTMLDialogElement>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [problems, setProblems] = useState<Map<string, string>>(new Map())
@@ -34,7 +34,8 @@ export function MatchDialog({ matches, onClose, onLinked }: Props) {
     setBusy(match.prospect_id)
     try {
       await linkProspect(match.prospect_id, match.user_id, match.par)
-      onLinked()
+      // La confirmation mène à la page du prospect, la bienvenue prête à écrire.
+      void navigate(`/admin/prospects/${match.prospect_id}?modele=bienvenue`)
     } catch (failure) {
       const text = failure instanceof Error ? failure.message : 'Le rapprochement n’a pas abouti.'
       setProblems((previous) => new Map(previous).set(match.prospect_id, text))
@@ -58,7 +59,7 @@ export function MatchDialog({ matches, onClose, onLinked }: Props) {
     >
       <div className="confirm-dialog__card">
         <h2 id="match-dialog-title" className="confirm-dialog__title">
-          Rapprocher les prospects
+          Confirmer les nouveaux comptes
         </h2>
         <ul className="prospect-matches">
           {matches.map((match) => (
@@ -74,7 +75,7 @@ export function MatchDialog({ matches, onClose, onLinked }: Props) {
                 {match.par === 'email' ? 'même e-mail' : 'même téléphone'}
               </span>
               <Button variant="action" disabled={busy !== null} onClick={() => void link(match)}>
-                {busy === match.prospect_id ? 'Un instant…' : 'Rapprocher'}
+                {busy === match.prospect_id ? 'Un instant…' : 'Confirmer'}
               </Button>
               {problems.get(match.prospect_id) && (
                 <span className="confirm-dialog__problem">{problems.get(match.prospect_id)}</span>

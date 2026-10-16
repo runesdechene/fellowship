@@ -1,5 +1,5 @@
 /**
- * QUOI     — l'état de la liste des prospects (recherche, filtre, source, page) lu et écrit dans
+ * QUOI     — l'état de la liste des prospects (recherche, filtre, source, suiveur, page) lu et écrit dans
  *            l'adresse.
  * POURQUOI — tout état navigable est une URL (règle V2).
  * ATTENTION — les valeurs de filtre sont celles qu'attend admin_prospects (SQL).
@@ -11,6 +11,8 @@ export interface ProspectsQuery {
   q: string
   filter: ProspectFilter
   source: string
+  /** '' = tous, 'moi', ou l'identifiant d'un suiveur. */
+  suivi: string
   page: number
 }
 
@@ -33,6 +35,7 @@ export function readProspectsQuery(search: URLSearchParams): ProspectsQuery {
     q: (search.get('q') ?? '').trim(),
     filter: isFilter(raw) ? raw : 'tous',
     source: search.get('source') ?? '',
+    suivi: search.get('suivi') ?? '',
     page: Math.max(0, Number.parseInt(search.get('page') ?? '0', 10) || 0),
   }
 }
@@ -42,6 +45,7 @@ export function writeProspectsQuery(query: ProspectsQuery): URLSearchParams {
   if (query.q) params.set('q', query.q)
   if (query.filter !== 'tous') params.set('filtre', query.filter)
   if (query.source) params.set('source', query.source)
+  if (query.suivi) params.set('suivi', query.suivi)
   if (query.page > 0) params.set('page', String(query.page))
   return params
 }

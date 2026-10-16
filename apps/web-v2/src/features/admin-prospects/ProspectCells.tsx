@@ -1,5 +1,5 @@
 /**
- * QUOI     — les cellules modifiables du tableau des prospects : texte, liste, contact, case.
+ * QUOI     — les cellules modifiables du tableau des prospects : texte, contact, case.
  * POURQUOI — le prospectant travaille sans quitter le tableau (spec du lot 3) : un clic ouvre le
  *            texte, Entrée ou la sortie du champ enregistre, Échap annule.
  * ATTENTION — pendant l'écriture et le rechargement, la cellule montre déjà la nouvelle valeur ;
@@ -99,42 +99,6 @@ export function TextCell({
       >
         {shown ?? <span className="prospect-cell__empty">—</span>}
       </button>
-      <Problem text={problem} />
-    </span>
-  )
-}
-
-export function SelectCell<T extends string>({
-  value,
-  label,
-  options,
-  className,
-  onSave,
-}: {
-  value: T | null
-  label: string
-  options: readonly { value: T; label: string }[]
-  className: (shown: T | null) => string
-  onSave: Save<T | null>
-}) {
-  const { shown, problem, save } = usePending(value)
-  return (
-    <span className="prospect-cell">
-      <select
-        className={className(shown)}
-        aria-label={label}
-        value={shown ?? ''}
-        onChange={(event) => {
-          const next = options.find((option) => option.value === event.target.value)
-          void save(next ? next.value : null, onSave)
-        }}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
       <Problem text={problem} />
     </span>
   )

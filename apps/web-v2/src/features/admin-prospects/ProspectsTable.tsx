@@ -7,8 +7,8 @@
  */
 import { Link2, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { EMAIL_STATUSES, normalizeEmail, type EmailStatus } from '@/lib/prospect'
-import { CheckCell, ContactCell, SelectCell, TextCell } from './ProspectCells'
+import { EMAIL_STATUSES, normalizeEmail } from '@/lib/prospect'
+import { CheckCell, ContactCell, TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
 import type { ProspectRow } from './useProspects'
 
@@ -16,16 +16,16 @@ const COLUMNS = [
   'Personne',
   'Activité',
   'E-mail',
-  'Téléphone',
+  'Suivi par',
   'Source',
-  'Contact',
+  'Dernier échange',
   'Statut e-mail',
   'Compte créé',
   'Note',
   'Relance',
 ] as const
 
-type TextField = 'brand' | 'activity' | 'city' | 'phone' | 'source' | 'note'
+type TextField = 'brand' | 'activity' | 'city' | 'source' | 'note'
 
 interface Props {
   rows: ProspectRow[]
@@ -39,8 +39,15 @@ interface Props {
   onAskUnlink: (row: ProspectRow) => void
 }
 
-function statusOf(value: string): EmailStatus {
-  return EMAIL_STATUSES.find((status) => status.value === value)?.value ?? 'pas_envoye'
+/** Le statut se lit (le fil le tient) ; un prospect désinscrit l'affiche à la place. */
+function statusOf(row: ProspectRow): { value: string; label: string } {
+  if (row.unsubscribed_at) return { value: 'desinscrit', label: 'Désinscrit' }
+  return (
+    EMAIL_STATUSES.find((status) => status.value === row.email_status) ?? {
+      value: 'pas_envoye',
+      label: 'Pas envoyé',
+    }
+  )
 }
 
 export function ProspectsTable({
@@ -114,6 +121,7 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
     await updateProspect(row.id, patch)
     onChanged()
   }
+  const status = statusOf(row)
   const text = (field: TextField) => (next: string | null) => save({ [field]: next })
 
   return (
@@ -143,9 +151,7 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
           onSave={(next) => save({ email: next })}
         />
       </td>
-      <td className="admin-table__text">
-        <TextCell value={row.phone} label="Téléphone" onSave={text('phone')} />
-      </td>
+      <td className="admin-table__text">{row.owner_name ?? '—'}</td>
       <td className="admin-table__text">
         <TextCell value={row.source} label="Source" onSave={text('source')} />
       </td>
@@ -153,15 +159,9 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
         <ContactCell channel={row.contact_channel} on={row.contacted_on} onSave={save} />
       </td>
       <td>
-        <SelectCell
-          value={statusOf(row.email_status)}
-          label="Statut de l’e-mail"
-          options={EMAIL_STATUSES}
-          className={(shown) =>
-            `prospect-status prospect-status--${(shown ?? 'pas_envoye').replace('_', '-')}`
-          }
-          onSave={(next) => save({ email_status: next ?? 'pas_envoye' })}
-        />
+        <span className={`prospect-status prospect-status--${status.value.replace('_', '-')}`}>
+          {status.label}
+        </span>
       </td>
       <td>
         <span className="prospect-account">

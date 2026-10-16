@@ -33,6 +33,9 @@ export interface ProspectRow {
   user_name: string | null
   linked_at: string | null
   linked_by: string | null
+  owner_id: string | null
+  owner_name: string | null
+  unsubscribed_at: string | null
   created_at: string
   total: number
 }
@@ -54,21 +57,30 @@ export interface ProspectsData {
   counts: Map<string, number>
   sources: string[]
   matches: Match[]
+  /** Les suiveurs possibles (comptes qui ont une adresse d'envoi active), pour le menu « Suivi par ». */
+  followers: { id: string; name: string }[]
 }
 
-async function loadProspects({ q, filter, source, page }: ProspectsQuery): Promise<ProspectsData> {
-  const [list, stats, filters, sources, matches] = await Promise.all([
+async function loadProspects({
+  q,
+  filter,
+  source,
+  suivi,
+  page,
+}: ProspectsQuery): Promise<ProspectsData> {
+  const [list, stats, filters, sources, matches, senders] = await Promise.all([
     supabase.rpc('admin_prospects', {
       p_q: q,
       p_filtre: filter,
       p_source: source,
-      p_suivi: '',
+      p_suivi: suivi,
       p_page: page,
     }),
     supabase.rpc('admin_prospects_chiffres'),
-    supabase.rpc('admin_prospects_filtres', { p_q: q, p_source: source, p_suivi: '' }),
+    supabase.rpc('admin_prospects_filtres', { p_q: q, p_source: source, p_suivi: suivi }),
     supabase.rpc('admin_prospects_sources'),
     supabase.rpc('admin_prospects_a_rapprocher'),
+    supabase.rpc('admin_prospect_expediteurs'),
   ])
   const rows = must(list)
   return {
@@ -78,10 +90,13 @@ async function loadProspects({ q, filter, source, page }: ProspectsQuery): Promi
     counts: new Map(must(filters).map((row) => [row.filtre, row.nombre])),
     sources: must(sources).map((row) => row.source),
     matches: must(matches),
+    followers: must(senders)
+      .filter((s) => s.active)
+      .map((s) => ({ id: s.user_id, name: s.user_name || s.display_name })),
   }
 }
 
-export function useProspects({ q, filter, source, page }: ProspectsQuery) {
+export function useProspects({ q, filter, source, suivi, page }: ProspectsQuery) {
   const [version, setVersion] = useState(0)
   const [state, setState] = useState<{ data: ProspectsData | null; error: string | null }>({
     data: null,
@@ -91,7 +106,7 @@ export function useProspects({ q, filter, source, page }: ProspectsQuery) {
     let cancelled = false
     async function run() {
       try {
-        const data = await loadProspects({ q, filter, source, page })
+        const data = await loadProspects({ q, filter, source, suivi, page })
         if (cancelled) return
         setState({ data, error: null })
       } catch (error) {
@@ -106,7 +121,7 @@ export function useProspects({ q, filter, source, page }: ProspectsQuery) {
     return () => {
       cancelled = true
     }
-  }, [q, filter, source, page, version])
+  }, [q, filter, source, suivi, page, version])
   const reload = useCallback(() => setVersion((value) => value + 1), [])
   return { ...state, reload }
 }

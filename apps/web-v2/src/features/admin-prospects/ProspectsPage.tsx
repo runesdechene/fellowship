@@ -126,6 +126,22 @@ export function ProspectsPage() {
           onChange={(filter) => go({ filter })}
         />
         <label className="prospect-source">
+          <span className="admin-table__sr">Suivi par</span>
+          <select
+            className="prospect-source__select"
+            value={query.suivi}
+            onChange={(event) => go({ suivi: event.target.value })}
+          >
+            <option value="">Suivi par : tous</option>
+            <option value="moi">Suivi par : moi</option>
+            {data?.followers.map((f) => (
+              <option key={f.id} value={f.id}>
+                Suivi par : {f.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="prospect-source prospect-source--next">
           <span className="admin-table__sr">Source</span>
           <select
             className="prospect-source__select"
@@ -194,7 +210,7 @@ export function ProspectsPage() {
         />
       )}
       {matching && data && (
-        <MatchDialog matches={data.matches} onClose={() => setMatching(false)} onLinked={reload} />
+        <MatchDialog matches={data.matches} onClose={() => setMatching(false)} />
       )}
     </div>
   )

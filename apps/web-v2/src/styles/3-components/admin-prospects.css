@@ -291,3 +291,8 @@
 .prospect-name:hover {
   text-decoration: underline;
 }
+
+/* Deux menus côte à côte : seul le premier se pousse à droite. */
+.prospect-source--next {
+  margin-left: 0;
+}
