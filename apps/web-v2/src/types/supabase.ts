@@ -1892,6 +1892,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      admin_ecarter_message: { Args: { p_message: string }; Returns: undefined }
       admin_enseigne: {
         Args: { p_id: string }
         Returns: {
@@ -2084,6 +2085,10 @@ export type Database = {
           linked_by: string
           source: string
         }[]
+      }
+      admin_prospect_depuis_message: {
+        Args: { p_message: string }
+        Returns: string
       }
       admin_prospect_expediteurs: {
         Args: never

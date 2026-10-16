@@ -49,7 +49,9 @@ export function FileDialog({ messageId, sender, onClose, onFiled }: Props) {
             p_page: 0,
           }),
         )
-        if (!cancelled) setFound(rows.slice(0, SHOWN))
+        if (cancelled) return
+        setFound(rows.slice(0, SHOWN))
+        setProblem(null)
       } catch (failure) {
         if (!cancelled)
           setProblem(failure instanceof Error ? failure.message : 'Recherche impossible')

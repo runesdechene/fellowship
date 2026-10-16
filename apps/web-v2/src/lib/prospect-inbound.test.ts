@@ -6,7 +6,9 @@ import { describe, expect, it } from 'vitest'
 import {
   bodyText,
   emailAddress,
+  isAutoReply,
   threadKeys,
+  trustedSender,
 } from '../../../../supabase/functions/_shared/prospect-inbound'
 
 describe('emailAddress', () => {
@@ -40,5 +42,44 @@ describe('bodyText', () => {
   it('un HTML en data:base64', () => {
     const html = `data:text/html;base64,${btoa('<p>Oui</p>')}`
     expect(bodyText({ text: null, html })).toBe('Oui')
+  })
+})
+
+describe('bodyText, les cas difficiles', () => {
+  it('retire les blocs style, script et head', () => {
+    expect(
+      bodyText({
+        text: null,
+        html: '<head><title>T</title><style>p{color:red}</style></head><p>Oui</p><script>x()</script>',
+      }),
+    ).toBe('Oui')
+  })
+  it('décode les entités nommées et numériques courantes', () => {
+    expect(bodyText({ text: null, html: '<p>C&rsquo;est l&#233;ger, &eacute;t&eacute;</p>' })).toBe(
+      'C’est léger, été',
+    )
+  })
+  it('un data: en base64 invalide ne fait pas échouer', () => {
+    expect(bodyText({ text: null, html: 'data:text/html;base64,%%%' })).toBe('')
+  })
+})
+
+describe('trustedSender', () => {
+  it('se fie à l’adresse seulement si DMARC passe', () => {
+    expect(trustedSender({ spf: 'pass', dkim: 'pass', dmarc: 'pass' })).toBe(true)
+    expect(trustedSender({ spf: 'pass', dkim: 'fail', dmarc: 'fail' })).toBe(false)
+    expect(trustedSender(undefined)).toBe(false)
+  })
+})
+
+describe('isAutoReply', () => {
+  it('reconnaît un absent du bureau', () => {
+    expect(isAutoReply({ 'Auto-Submitted': 'auto-replied' })).toBe(true)
+    expect(isAutoReply({ 'x-autoreply': 'yes' })).toBe(true)
+    expect(isAutoReply({ Precedence: 'auto_reply' })).toBe(true)
+  })
+  it('une réponse écrite par une personne n’en est pas une', () => {
+    expect(isAutoReply({ 'Auto-Submitted': 'no' })).toBe(false)
+    expect(isAutoReply({})).toBe(false)
   })
 })

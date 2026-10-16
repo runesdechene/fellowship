@@ -1,9 +1,9 @@
 /**
  * QUOI     — « Non classés » (`/admin/prospects/non-classes`) : les réponses reçues sur
  *            @equipe.flw.sh qu'on n'a rattachées à aucun prospect.
- * POURQUOI — rien ne se perd (spec messagerie, lot 3c) : chacune se range sous un prospect, ou en
- *            devient un nouveau. Pas de maquette : la page reprend le style des fiches (validé par
- *            Uriel, 16/10/2026).
+ * POURQUOI — rien ne se perd (spec messagerie, lot 3c) : chacune se range sous un prospect, en
+ *            devient un nouveau, ou s'écarte (spam). Pas de maquette : la page reprend le style des
+ *            fiches (validé par Uriel, 16/10/2026).
  */
 import { ChevronLeft } from 'lucide-react'
 import { useState } from 'react'
@@ -12,25 +12,36 @@ import { Button } from '@/components/ui/Button'
 import { formatDayMonthShort, formatTime } from '@/lib/dates'
 import { splitQuoted } from '@/lib/quoted'
 import { FileDialog } from './FileDialog'
-import { createProspect, fileMessage } from './prospect-writes'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { dismissMessage, prospectFromMessage } from './prospect-writes'
 import { useUnclassified, type Unclassified } from './useUnclassified'
 
 export function UnclassifiedPage() {
   const { data, error, reload } = useUnclassified()
   const navigate = useNavigate()
   const [filing, setFiling] = useState<Unclassified | null>(null)
+  const [dismissing, setDismissing] = useState<Unclassified | null>(null)
+  const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
 
-  async function newProspect(message: Unclassified) {
+  async function run(action: () => Promise<void>) {
+    setBusy(true)
     setProblem(null)
     try {
-      const id = await createProspect({ email: message.from_email })
-      await fileMessage(message.id, id)
-      void navigate(`/admin/prospects/${id}`)
+      await action()
     } catch (failure) {
-      setProblem(failure instanceof Error ? failure.message : 'Le prospect n’a pas été créé.')
+      setProblem(failure instanceof Error ? failure.message : 'L’action n’a pas abouti.')
+    } finally {
+      setBusy(false)
     }
   }
+
+  // Retrouve ou crée le prospect de l'expéditeur, y range tous ses messages, et ouvre sa page.
+  const newProspect = (message: Unclassified) =>
+    run(async () => {
+      const id = await prospectFromMessage(message.id)
+      void navigate(`/admin/prospects/${id}`)
+    })
 
   return (
     <div className="admin-page">
@@ -68,14 +79,36 @@ export function UnclassifiedPage() {
               </details>
             )}
             <div className="unclassified__actions">
-              <Button onClick={() => setFiling(message)}>Ranger sous un prospect</Button>
-              <Button variant="action" onClick={() => void newProspect(message)}>
+              <Button onClick={() => setFiling(message)} disabled={busy}>
+                Ranger sous un prospect
+              </Button>
+              <Button variant="action" onClick={() => void newProspect(message)} disabled={busy}>
                 Nouveau prospect
+              </Button>
+              <Button onClick={() => setDismissing(message)} disabled={busy}>
+                Écarter
               </Button>
             </div>
           </article>
         )
       })}
+      {dismissing && (
+        <ConfirmDialog
+          title="Écarter ce message ?"
+          text={`Le message de ${dismissing.from_email} disparaît des Non classés. C’est définitif.`}
+          confirmLabel="Écarter"
+          busy={busy}
+          problem={problem}
+          onConfirm={() =>
+            void run(async () => {
+              await dismissMessage(dismissing.id)
+              setDismissing(null)
+              reload()
+            })
+          }
+          onClose={() => setDismissing(null)}
+        />
+      )}
       {filing && (
         <FileDialog
           messageId={filing.id}

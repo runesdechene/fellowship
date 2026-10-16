@@ -132,10 +132,17 @@ export async function fileMessage(messageId: string, prospectId: string) {
   check(error)
 }
 
-/** Un nouveau prospect, et l'identifiant pour y ranger la réponse qui l'a fait naître. */
-export async function createProspect(fields: ProspectPatch): Promise<string> {
-  const { data, error } = await supabase.from('prospects').insert(fields).select('id').single()
+/** Retrouve ou crée le prospect de l'expéditeur, et y range tous ses messages en attente. */
+export async function prospectFromMessage(messageId: string): Promise<string> {
+  const { data, error } = await supabase.rpc('admin_prospect_depuis_message', {
+    p_message: messageId,
+  })
   check(error)
-  if (!data) throw new Error('Le prospect n’a pas été créé.')
-  return data.id
+  return data ?? ''
+}
+
+/** Écarter un Non classé (spam, hors sujet) : il disparaît de la liste. */
+export async function dismissMessage(messageId: string) {
+  const { error } = await supabase.rpc('admin_ecarter_message', { p_message: messageId })
+  check(error)
 }
