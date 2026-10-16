@@ -96,6 +96,13 @@ export function formatDayMonthShort(date: Date): string {
 const DAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { day: 'numeric' })
 const MONTH_SHORT_FORMATTER = new Intl.DateTimeFormat('fr-FR', { month: 'short' })
 
+const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' })
+
+/** « 09:05 » — l'heure d'un message. */
+export function formatTime(date: Date): string {
+  return TIME_FORMATTER.format(date)
+}
+
 /** « 30 oct. », « 25–27 oct. », « 30 oct.–2 nov. » — ou « 25–27 septembre » en toutes lettres. */
 export function formatDateRange(start: Date, end: Date, month: 'short' | 'long' = 'short'): string {
   const dayMonth = month === 'long' ? formatDayMonth : formatDayMonthShort

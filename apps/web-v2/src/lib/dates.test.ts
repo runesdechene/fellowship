@@ -24,6 +24,7 @@ import {
   todayIso,
   monthName,
   formatDateSpan,
+  formatTime,
 } from './dates'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
@@ -160,6 +161,12 @@ describe('durationLabel', () => {
 })
 
 const now = new Date('2026-10-07T18:00:00')
+
+describe('formatTime', () => {
+  it('l’heure et les minutes sur deux chiffres', () => {
+    expect(formatTime(new Date(2026, 9, 3, 9, 5))).toBe('09:05')
+  })
+})
 
 describe('timeAgo', () => {
   it('moins d’une minute : à l’instant', () => {

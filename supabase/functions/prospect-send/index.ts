@@ -9,6 +9,8 @@ import { composeEmail, sendRefusal } from '../_shared/prospect-mail.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 
 const DOMAIN = 'equipe.flw.sh'
+// Le jour du contact à Paris (« AAAA-MM-JJ ») : l'UTC rendrait la veille entre minuit et 2 h.
+const PARIS_DAY = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' })
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
@@ -101,7 +103,7 @@ Deno.serve(async (req) => {
     const { error: uErr } = await admin.from('prospects').update({
       owner_id: prospect.owner_id ?? user.id,
       email_status: prospect.email_status === 'repondu' ? 'repondu' : 'envoye',
-      contact_channel: 'mail', contacted_on: now.slice(0, 10), a_relancer: false,
+      contact_channel: 'mail', contacted_on: PARIS_DAY.format(new Date()), a_relancer: false,
     }).eq('id', prospectId)
     if (uErr) throw uErr
     return json({ done: true })
