@@ -18,6 +18,14 @@
   gap: var(--space-24);
 }
 
+/* Le contrôle segmenté partage sa gouttière en parts égales (fiche événement) ; ici, la bascule et
+   les filtres portent un nombre : chaque option prend la largeur de son texte, sur une ligne. */
+.admin-page .segmented__option {
+  flex: none;
+  padding: 0 var(--space-12);
+  white-space: nowrap;
+}
+
 .admin-page__title {
   font: var(--type-page-title);
   color: var(--ink-title);

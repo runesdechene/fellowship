@@ -56,7 +56,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
           Revenir à l’application
         </Link>
       </aside>
-      <main className="app-shell__main admin-shell__main">{children}</main>
+      <main className="app-shell__main">
+        <div className="admin-shell__content">{children}</div>
+      </main>
     </div>
   )
 }
