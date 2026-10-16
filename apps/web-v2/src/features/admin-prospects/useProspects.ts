@@ -61,6 +61,8 @@ export interface ProspectsData {
   matches: Match[]
   /** Les suiveurs possibles (comptes qui ont une adresse d'envoi active), pour le menu « Suivi par ». */
   followers: { id: string; name: string }[]
+  /** Les réponses reçues qu'on n'a pas su rattacher (« Non classés »). */
+  unclassified: number
 }
 
 async function loadProspects({
@@ -70,7 +72,7 @@ async function loadProspects({
   suivi,
   page,
 }: ProspectsQuery): Promise<ProspectsData> {
-  const [list, stats, filters, sources, matches, senders] = await Promise.all([
+  const [list, stats, filters, sources, matches, senders, unclassified] = await Promise.all([
     supabase.rpc('admin_prospects', {
       p_q: q,
       p_filtre: filter,
@@ -83,6 +85,7 @@ async function loadProspects({
     supabase.rpc('admin_prospects_sources'),
     supabase.rpc('admin_prospects_a_rapprocher'),
     supabase.rpc('admin_prospect_expediteurs'),
+    supabase.rpc('admin_prospects_non_classes'),
   ])
   const rows = must(list)
   return {
@@ -92,6 +95,7 @@ async function loadProspects({
     counts: new Map(must(filters).map((row) => [row.filtre, row.nombre])),
     sources: must(sources).map((row) => row.source),
     matches: must(matches),
+    unclassified: must(unclassified).length,
     followers: must(senders)
       .filter((s) => s.active)
       .map((s) => ({ id: s.user_id, name: s.user_name || s.display_name })),

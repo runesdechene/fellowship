@@ -22,3 +22,4 @@ La page Prospects de l'administration (`/admin/prospects`, lot 3, maquette `2343
 - `useTemplates.ts` — charge modèles, expéditeurs et comptes admins.
 - `SendersCard.tsx`, `SenderDialog.tsx` — les adresses @equipe.flw.sh et leur fenêtre.
 - `TemplatesCard.tsx`, `TemplateEditor.tsx` — les modèles et leur éditeur.
+- `UnclassifiedPage.tsx`, `useUnclassified.ts`, `FileDialog.tsx` — « Non classés » : les réponses sans prospect, à ranger.

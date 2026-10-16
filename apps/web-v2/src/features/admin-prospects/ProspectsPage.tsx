@@ -96,6 +96,11 @@ export function ProspectsPage() {
           </p>
         </div>
         <div className="prospect-actions">
+          {data && data.unclassified > 0 && (
+            <Link to="/admin/prospects/non-classes" className="button">
+              Non classés · {data.unclassified}
+            </Link>
+          )}
           <Link to="/admin/prospects/modeles" className="button">
             Modèles et expéditeurs
           </Link>

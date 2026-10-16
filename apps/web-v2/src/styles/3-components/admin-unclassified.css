@@ -1,0 +1,33 @@
+/**
+ * QUOI     — les styles de « Non classés » (features/admin-prospects/UnclassifiedPage) et de sa
+ *            fenêtre de rangement.
+ * POURQUOI — une carte par réponse reçue, comme un message du fil, avec ses deux actions.
+ */
+
+.unclassified {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-20) var(--space-24);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.unclassified__actions {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-6);
+}
+
+.unclassified-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--space-10) 0;
+}
+
+.unclassified-choice + .unclassified-choice {
+  border-top: 1px solid var(--line-card);
+}

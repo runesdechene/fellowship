@@ -122,3 +122,20 @@ export async function reassignProspects(fromUser: string, toUser: string | null)
     .eq('owner_id', fromUser)
   check(error)
 }
+
+/** Ranger une réponse non classée sous un prospect : elle rejoint son fil, il passe « Répondu ». */
+export async function fileMessage(messageId: string, prospectId: string) {
+  const { error } = await supabase.rpc('admin_ranger_message', {
+    p_message: messageId,
+    p_prospect: prospectId,
+  })
+  check(error)
+}
+
+/** Un nouveau prospect, et l'identifiant pour y ranger la réponse qui l'a fait naître. */
+export async function createProspect(fields: ProspectPatch): Promise<string> {
+  const { data, error } = await supabase.from('prospects').insert(fields).select('id').single()
+  check(error)
+  if (!data) throw new Error('Le prospect n’a pas été créé.')
+  return data.id
+}

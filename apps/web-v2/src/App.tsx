@@ -14,6 +14,7 @@ import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
 import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
 import { TemplatesPage } from '@/features/admin-prospects/TemplatesPage'
+import { UnclassifiedPage } from '@/features/admin-prospects/UnclassifiedPage'
 import { EntityPage } from '@/features/admin-entity/EntityPage'
 import { PersonPage } from '@/features/admin-person/PersonPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
@@ -325,6 +326,14 @@ export function App() {
         element={
           <AdminPage>
             <TemplatesPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/prospects/non-classes"
+        element={
+          <AdminPage>
+            <UnclassifiedPage />
           </AdminPage>
         }
       />
