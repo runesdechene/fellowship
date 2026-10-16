@@ -199,7 +199,11 @@ export function giftEnd(current: string | null, months: number, now: Date): Date
 
 const RECENT_DAYS = 14
 
-/** Ajouté il y a moins de quatorze jours : le badge « Nouveau ». */
-export function isRecent(createdAt: string, today: Date = new Date()): boolean {
-  return today.getTime() - new Date(createdAt).getTime() < RECENT_DAYS * 24 * HOUR
+/** Ajouté il y a moins de `days` jours (quatorze par défaut) : le badge « Nouveau ». */
+export function isRecent(
+  createdAt: string,
+  today: Date = new Date(),
+  days: number = RECENT_DAYS,
+): boolean {
+  return today.getTime() - new Date(createdAt).getTime() < days * 24 * HOUR
 }

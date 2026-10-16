@@ -7,19 +7,14 @@ import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { OfferBadge } from '@/components/ui/OfferBadge'
 import { TypeChip } from '@/components/ui/TypeChip'
-import { formatDayMonthShort, formatFullDate, timeAgo } from '@/lib/dates'
+import { timeAgo } from '@/lib/dates'
 import { offerOf } from '@/lib/offer'
 import { activityLabel } from './activity'
+import { SignupDate } from './SignupDate'
 import type { PersonRow } from './useAccounts'
 
 export function PeopleTable({ rows }: { rows: PersonRow[] }) {
   const now = new Date()
-  const signedUp = (value: string) => {
-    const date = new Date(value)
-    return date.getFullYear() === now.getFullYear()
-      ? formatDayMonthShort(date)
-      : formatFullDate(date)
-  }
   return (
     <table className="admin-table">
       <thead>
@@ -65,7 +60,9 @@ export function PeopleTable({ rows }: { rows: PersonRow[] }) {
                 <span className="admin-table__text">Gratuit</span>
               )}
             </td>
-            <td className="admin-table__text">{signedUp(row.created_at)}</td>
+            <td className="admin-table__text">
+              <SignupDate createdAt={row.created_at} now={now} />
+            </td>
             <td className="admin-table__text">
               {row.last_sign_in_at
                 ? timeAgo(new Date(row.last_sign_in_at), now)

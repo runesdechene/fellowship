@@ -162,3 +162,11 @@
     transition: none;
   }
 }
+
+/* La date d'inscription, et « Nouveau » à côté quand elle a moins de sept jours. */
+.admin-table__signup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  white-space: nowrap;
+}

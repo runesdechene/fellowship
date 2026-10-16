@@ -1,5 +1,6 @@
 /**
- * QUOI     — le tableau des enseignes : identité, offre, comptes reliés, qui paie, activité.
+ * QUOI     — le tableau des enseignes : identité, offre, inscription, comptes reliés, qui paie,
+ *            activité.
  * POURQUOI — chaque ligne ouvre la fiche de l'enseigne ; le lien de la première cellule est étendu
  *            à la ligne entière en CSS (admin-table__row-link).
  */
@@ -12,6 +13,7 @@ import { entityTypeOf } from '@/lib/entity-type'
 import { membersSummary, roleLabel } from '@/lib/admin-members'
 import { offerOf } from '@/lib/offer'
 import { activityLabel } from './activity'
+import { SignupDate } from './SignupDate'
 import type { EntityRow, MemberRow } from './useAccounts'
 
 const MAX_FACES = 3
@@ -29,6 +31,7 @@ export function EntitiesTable({ rows, members }: Props) {
         <tr>
           <th scope="col">Enseigne</th>
           <th scope="col">Offre</th>
+          <th scope="col">Inscrite le</th>
           <th scope="col">Comptes reliés</th>
           <th scope="col">Payée par</th>
           <th scope="col">Activité</th>
@@ -64,6 +67,9 @@ export function EntitiesTable({ rows, members }: Props) {
               </td>
               <td>
                 <OfferBadge offer={offer} />
+              </td>
+              <td className="admin-table__text">
+                <SignupDate createdAt={row.created_at} now={now} />
               </td>
               <td>
                 {first && (
