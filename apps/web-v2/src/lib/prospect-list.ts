@@ -1,0 +1,47 @@
+/**
+ * QUOI     — l'état de la liste des prospects (recherche, filtre, source, page) lu et écrit dans
+ *            l'adresse.
+ * POURQUOI — tout état navigable est une URL (règle V2).
+ * ATTENTION — les valeurs de filtre sont celles qu'attend admin_prospects (SQL).
+ */
+export type ProspectFilter =
+  'tous' | 'a_contacter' | 'contactes' | 'repondu' | 'compte' | 'a_relancer'
+
+export interface ProspectsQuery {
+  q: string
+  filter: ProspectFilter
+  source: string
+  page: number
+}
+
+export const PROSPECT_FILTERS: readonly { value: ProspectFilter; label: string }[] = [
+  { value: 'tous', label: 'Tous' },
+  { value: 'a_contacter', label: 'À contacter' },
+  { value: 'contactes', label: 'Contactés' },
+  { value: 'repondu', label: 'Ont répondu' },
+  { value: 'compte', label: 'Ont un compte' },
+  { value: 'a_relancer', label: 'À relancer' },
+]
+
+function isFilter(value: string): value is ProspectFilter {
+  return PROSPECT_FILTERS.some((filter) => filter.value === value)
+}
+
+export function readProspectsQuery(search: URLSearchParams): ProspectsQuery {
+  const raw = search.get('filtre') ?? ''
+  return {
+    q: (search.get('q') ?? '').trim(),
+    filter: isFilter(raw) ? raw : 'tous',
+    source: search.get('source') ?? '',
+    page: Math.max(0, Number.parseInt(search.get('page') ?? '0', 10) || 0),
+  }
+}
+
+export function writeProspectsQuery(query: ProspectsQuery): URLSearchParams {
+  const params = new URLSearchParams()
+  if (query.q) params.set('q', query.q)
+  if (query.filter !== 'tous') params.set('filtre', query.filter)
+  if (query.source) params.set('source', query.source)
+  if (query.page > 0) params.set('page', String(query.page))
+  return params
+}

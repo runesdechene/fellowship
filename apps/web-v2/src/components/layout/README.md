@@ -11,5 +11,4 @@ le châssis le rend.
 - `PosterWall.tsx` — le mur d'affiche sur le bord droit.
 - `GuestShell.tsx` — le cadre d'une page vue sans compte : barre de la landing, page, mur d'affiche (lot 11b).
 
-
 Styles : `styles/3-components/` (un fichier par composant).
