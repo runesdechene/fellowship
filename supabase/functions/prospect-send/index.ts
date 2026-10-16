@@ -65,10 +65,7 @@ Deno.serve(async (req) => {
     const inReplyTo = last?.message_id ?? null
     const references = inReplyTo ? [...(last?.references_ids ?? []), inReplyTo] : []
 
-    const { data: me, error: meErr } = await admin.from('users').select('email').eq('actor_id', user.id).maybeSingle()
-    if (meErr) throw meErr
     const from = `${sender.alias}@${DOMAIN}`
-    const replyTo = me?.email ?? from
     const messageId = `<${crypto.randomUUID()}@${DOMAIN}>`
     const unsubscribeUrl =
       `${Deno.env.get('SUPABASE_URL')}/functions/v1/prospect-unsubscribe?t=${prospect.unsubscribe_token}`
@@ -100,10 +97,9 @@ Deno.serve(async (req) => {
         'Idempotency-Key': row.id,
       },
       body: JSON.stringify({
-        // Lot 3b : les réponses vont à la boîte personnelle de l'expéditeur ; le lot 3c les recevra ici.
         // Le nom affiché entre guillemets (une virgule casserait l'adresse) ; l'objet sur une ligne.
         from: `"${sender.display_name.replace(/["\\]/g, '')}" <${from}>`, to: [prospect.email],
-        reply_to: replyTo, subject: subject.trim().replace(/[\r\n]+/g, ' '), text: mail.text,
+        reply_to: from, subject: subject.trim().replace(/[\r\n]+/g, ' '), text: mail.text,
         html: mail.html, headers, tags: [{ name: 'prospect', value: prospectId }],
       }),
     })

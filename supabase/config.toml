@@ -443,3 +443,7 @@ verify_jwt = false
 [functions.prospect-unsubscribe]
 # Auth = le jeton du lien de désinscription : un prospect n'a pas de compte.
 verify_jwt = false
+
+[functions.prospect-inbound]
+# Auth = la signature Svix du webhook de réception de Resend (pas de JWT Supabase).
+verify_jwt = false
