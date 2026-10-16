@@ -30,7 +30,7 @@ export async function insertProspect(fields: ProspectPatch) {
 export async function deleteProspect(id: string) {
   const { data, error } = await supabase.from('prospects').delete().eq('id', id).select('id')
   check(error)
-  if (!data.length) {
+  if (!data?.length) {
     throw new Error(
       'Ce prospect est désinscrit : il reste dans la liste pour ne plus jamais lui écrire.',
     )
