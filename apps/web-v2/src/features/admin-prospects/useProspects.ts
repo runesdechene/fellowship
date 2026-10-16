@@ -36,6 +36,8 @@ export interface ProspectRow {
   owner_id: string | null
   owner_name: string | null
   unsubscribed_at: string | null
+  /** Le dernier message du fil vient du prospect. */
+  a_repondre: boolean
   created_at: string
   total: number
 }

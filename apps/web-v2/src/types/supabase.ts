@@ -1284,6 +1284,7 @@ export type Database = {
           note: string | null
           owner_id: string | null
           phone: string | null
+          relance_vue_pour: string | null
           source: string | null
           unsubscribe_token: string
           unsubscribed_at: string | null
@@ -1307,6 +1308,7 @@ export type Database = {
           note?: string | null
           owner_id?: string | null
           phone?: string | null
+          relance_vue_pour?: string | null
           source?: string | null
           unsubscribe_token?: string
           unsubscribed_at?: string | null
@@ -1330,6 +1332,7 @@ export type Database = {
           note?: string | null
           owner_id?: string | null
           phone?: string | null
+          relance_vue_pour?: string | null
           source?: string | null
           unsubscribe_token?: string
           unsubscribed_at?: string | null
@@ -1342,6 +1345,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "prospects_relance_vue_pour_fkey"
+            columns: ["relance_vue_pour"]
+            isOneToOne: false
+            referencedRelation: "prospect_messages"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "prospects_user_id_fkey"
@@ -2130,6 +2140,7 @@ export type Database = {
         }
         Returns: {
           a_relancer: boolean
+          a_repondre: boolean
           activity: string
           brand: string
           city: string
@@ -2183,11 +2194,27 @@ export type Database = {
           nombre: number
         }[]
       }
+      admin_prospects_non_classes: {
+        Args: never
+        Returns: {
+          body_text: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          received_at: string
+          subject: string
+          to_email: string
+        }[]
+      }
       admin_prospects_sources: {
         Args: never
         Returns: {
           source: string
         }[]
+      }
+      admin_ranger_message: {
+        Args: { p_message: string; p_prospect: string }
+        Returns: undefined
       }
       admin_rapprocher: {
         Args: { p_par: string; p_prospect: string; p_user: string }
@@ -2409,6 +2436,10 @@ export type Database = {
         Returns: number
       }
       phone_key: { Args: { p_tel: string }; Returns: string }
+      prospect_attend_reponse: {
+        Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }
+        Returns: boolean
+      }
       prospect_cherche: {
         Args: {
           p: Database["public"]["Tables"]["prospects"]["Row"]
@@ -2431,6 +2462,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      prospects_relancer: { Args: never; Returns: undefined }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
