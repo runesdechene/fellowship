@@ -42,6 +42,11 @@ export function Login() {
     setError(null)
     const { error: sendError } = await signIn(email.trim())
     setBusy(false)
+    // 429 : un code est parti il y a moins d'une minute. Ce n'est pas une panne, il faut attendre.
+    if (sendError?.status === 429) {
+      setError('Un code vient de partir. Patiente une minute avant d’en demander un autre.')
+      return
+    }
     if (sendError) {
       setError('L’envoi n’a pas abouti. Vérifie ton adresse, puis réessaie.')
       return

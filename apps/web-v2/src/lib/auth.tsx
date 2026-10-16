@@ -14,7 +14,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import type { Session, User } from '@supabase/supabase-js'
+import type { AuthError, Session, User } from '@supabase/supabase-js'
 import { shouldLoadIdentity } from './session'
 import { supabase } from './supabase'
 import type { Actor, EntityRow, EntityType, UserRow } from '@/types/database'
@@ -78,7 +78,7 @@ interface AuthContextValue {
   switchActor: (actorId: string) => void
   /** Vrai tant que la session initiale n'a pas été résolue. */
   loading: boolean
-  signIn: (email: string) => Promise<{ error: Error | null }>
+  signIn: (email: string) => Promise<{ error: AuthError | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   /** Relit les enseignes : après un paiement, le statut Pro arrive par le webhook (lib/stripe.ts). */
@@ -175,7 +175,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       options: { shouldCreateUser: true },
     })
-    return { error: error as Error | null }
+    return { error }
   }, [])
 
   const verifyOtp = useCallback(async (email: string, token: string) => {
