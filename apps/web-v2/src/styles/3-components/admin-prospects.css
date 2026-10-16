@@ -1,0 +1,288 @@
+/**
+ * QUOI     — les styles de la page Prospects (features/admin-prospects) : boutons d'en-tête,
+ *            bandeau, menu des sources, cellules modifiables, statut de l'e-mail, relance,
+ *            corbeille, import et rapprochement, et le bloc « Prospect d'origine » de la fiche.
+ * POURQUOI — maquette 2343:2 ; le tableau reprend admin-table.css, on n'ajoute que ce qui change.
+ */
+
+.prospect-actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+/* --- Le bandeau des correspondances --------------------------------------- */
+.prospect-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-16) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  color: var(--ink-title);
+}
+
+.prospect-banner__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.prospect-banner__title {
+  font: var(--type-list-name);
+}
+
+.prospect-banner__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Le menu des sources, posé à droite des filtres ----------------------- */
+.prospect-source {
+  margin-left: auto;
+}
+
+.prospect-source__select {
+  border: 0;
+  background: transparent;
+  font: var(--type-list-meta);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+/* --- Les cellules modifiables -------------------------------------------- */
+.prospect-cell {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.prospect-cell__button {
+  display: block;
+  max-width: 100%;
+  margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-4));
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-xs);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: text;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.prospect-cell__button:hover {
+  background: var(--surface-chip-neutral);
+}
+
+.prospect-cell__empty {
+  color: var(--ink-section-pale);
+}
+
+.prospect-cell__problem {
+  font: var(--type-list-meta);
+  color: var(--tone-brique-ink);
+}
+
+.prospect-cell__input,
+.prospect-contact__channel,
+.prospect-contact__date {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-xs);
+  background: var(--surface-card);
+  font: var(--type-list-meta);
+  color: var(--ink-title);
+}
+
+.prospect-contact {
+  display: inline-flex;
+  gap: var(--space-4);
+}
+
+.prospect-pair {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.prospect-note .prospect-cell__button {
+  max-width: var(--prospect-note-width);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Le statut de l'e-mail : un point, puis le mot, dans sa couleur ------- */
+.prospect-status {
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-14);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: radial-gradient(
+      circle at var(--space-6) 50%,
+      currentcolor calc(var(--prospect-dot-size) / 2),
+      transparent calc(var(--prospect-dot-size) / 2 + 0.5px)
+    )
+    no-repeat;
+  font: var(--type-list-meta);
+  appearance: none;
+  cursor: pointer;
+}
+
+.prospect-status:hover {
+  background-color: var(--surface-chip-neutral);
+}
+
+.prospect-status--pas-envoye {
+  color: var(--ink-soft);
+}
+
+.prospect-status--envoye {
+  color: var(--tone-gris-ink);
+}
+
+.prospect-status--ouvert {
+  color: var(--tone-bleu-ink);
+}
+
+.prospect-status--repondu {
+  color: var(--tone-sauge-ink);
+}
+
+.prospect-status--rebond {
+  color: var(--tone-brique-ink);
+}
+
+/* --- Compte créé, relance, corbeille ------------------------------------- */
+.prospect-account,
+.prospect-relance {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.prospect-account__link {
+  color: var(--ink-soft);
+}
+
+.prospect-account__link:hover {
+  color: var(--ink-title);
+}
+
+.prospect-check {
+  accent-color: var(--tone-sauge-ink);
+  cursor: pointer;
+}
+
+.prospect-check:disabled {
+  cursor: default;
+}
+
+.prospect-relance__text {
+  font: var(--type-list-meta);
+  color: var(--tone-brique-ink);
+}
+
+.prospect-row__delete {
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-xs);
+  color: var(--ink-soft);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.admin-table__row:hover .prospect-row__delete,
+.prospect-row__delete:focus-visible {
+  opacity: 1;
+}
+
+.prospect-row__delete:hover {
+  color: var(--tone-brique-ink);
+}
+
+/* --- Import et rapprochement --------------------------------------------- */
+.prospect-import__file {
+  font: var(--type-list-meta);
+}
+
+.prospect-import__source {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.prospect-import__label,
+.prospect-match__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.prospect-import__summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.prospect-import__count {
+  font: var(--type-list-name);
+}
+
+.prospect-matches {
+  display: flex;
+  flex-direction: column;
+}
+
+.prospect-match {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto auto;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) 0;
+  font: var(--type-list-meta);
+}
+
+.prospect-match + .prospect-match {
+  border-top: 1px solid var(--line-card);
+}
+
+.prospect-match__prospect {
+  font: var(--type-list-name);
+}
+
+.prospect-match__account {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Le bloc « Prospect d'origine » de la fiche d'une personne ------------ */
+.prospect-origin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.prospect-origin__line {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.prospect-origin__meta {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prospect-cell__button,
+  .prospect-row__delete {
+    transition: none;
+  }
+}

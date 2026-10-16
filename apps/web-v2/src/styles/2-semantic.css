@@ -1099,6 +1099,10 @@
   --admin-face-size: 26px;
   --admin-face-overlap: -8px;
   --type-admin-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  /* Les prospects (features/admin-prospects) */
+  --prospect-note-width: 180px;
+  --prospect-dot-size: 7px;
+  --confirm-dialog-wide-width: 680px;
   /* La fiche d'une enseigne (features/admin-entity) */
   --admin-sheet-side-width: 440px;
   --admin-sheet-logo-size: 72px;

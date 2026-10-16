@@ -8,5 +8,6 @@ L'administration, fiche d'une personne (`/admin/personnes/:id`).
 - `AccessCard.tsx` — rôle (modifiable), suspendre / réactiver et supprimer (absents sur sa propre fiche).
 - `DeletePersonDialog.tsx` — la fenêtre de suppression : aperçu, puis retaper le prénom.
 - `PersonInfoCard.tsx` — (mode correction : `PersonEditForm.tsx`) prénom, e-mail, téléphone, identifiant, code postal, notifications.
+- `ProspectOriginCard.tsx` — le bloc « Prospect d'origine », quand un prospect est relié à la personne.
 - `roles.ts` — les trois rôles et leur libellé, partagés par l'en-tête et l'accès.
 - `PersonEditForm.tsx` — le formulaire de correction (prénom, e-mail, identifiant, téléphone, code postal).

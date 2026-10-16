@@ -11,6 +11,7 @@ import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-rou
 import { AppShell } from '@/components/layout/AppShell'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
+import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
 import { EntityPage } from '@/features/admin-entity/EntityPage'
 import { PersonPage } from '@/features/admin-person/PersonPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
@@ -304,6 +305,14 @@ export function App() {
         element={
           <AdminPage>
             <AccountsPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/prospects"
+        element={
+          <AdminPage>
+            <ProspectsPage />
           </AdminPage>
         }
       />

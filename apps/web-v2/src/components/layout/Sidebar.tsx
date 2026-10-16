@@ -7,8 +7,8 @@
  *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
  *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
  *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
- * ATTENTION — seules les sections codées sont listées : Prospects arrive au lot 3, Signalements,
- *            Événements, Catégories et Témoignages au lot 4.
+ * ATTENTION — seules les sections codées sont listées : Signalements, Événements, Catégories et
+ *            Témoignages arrivent au lot 4.
  */
 import {
   ArrowLeftRight,
@@ -18,6 +18,7 @@ import {
   PanelRightOpen,
   Settings,
   Store,
+  Target,
   Telescope,
   Users,
 } from 'lucide-react'
@@ -60,6 +61,7 @@ const ADMIN_ITEMS = [
     Icon: Users,
     prefixes: ['/admin/comptes', '/admin/enseignes', '/admin/personnes'],
   },
+  { to: '/admin/prospects', label: 'Prospects', Icon: Target, prefixes: ['/admin/prospects'] },
 ] as const
 
 interface SidebarProps {

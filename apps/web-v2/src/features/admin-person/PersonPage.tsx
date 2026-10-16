@@ -14,6 +14,7 @@ import { formatFullDate, timeAgo } from '@/lib/dates'
 import { AccessCard } from './AccessCard'
 import { PersonEntitiesCard } from './PersonEntitiesCard'
 import { PersonInfoCard } from './PersonInfoCard'
+import { ProspectOriginCard } from './ProspectOriginCard'
 import { personRoleLabel } from './roles'
 import { useAdminPerson } from './useAdminPerson'
 
@@ -92,6 +93,7 @@ function PersonSheet({ id }: { id: string }) {
             }}
           />
           <NotesCard key={person.actor_id} actorId={person.actor_id} />
+          <ProspectOriginCard key={`origine-${person.actor_id}`} userId={person.actor_id} />
         </div>
       </div>
     </div>

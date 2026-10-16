@@ -27,5 +27,8 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `AdminCard.tsx` — un bloc de fiche d'administration : icône teintée, titre, action.
 - `ActivityCard.tsx` — le bloc Activité des fiches d'administration : des chiffres, puis les derniers gestes.
 - `SheetRow.tsx` — une rangée clé/valeur de fiche d'administration (enseigne et personne).
+- `AdminSearch.tsx` — le champ de recherche des listes de l'administration (attend 300 ms).
+- `AdminPager.tsx` — le pied d'une liste de l'administration : « 1–50 sur 173 », pages.
+- `ConfirmDialog.tsx` — une fenêtre de confirmation : titre, texte, échec, Annuler et l'action.
 - `NotesCard.tsx` — le bloc « Notes internes » des fiches d'administration : étiquettes et notes d'un acteur.
 - `DeletionDialog.tsx` — la fenêtre de suppression d'un compte (aperçu, confirmation), partagée par Réglages et l'administration.

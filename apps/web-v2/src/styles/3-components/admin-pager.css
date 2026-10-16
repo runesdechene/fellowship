@@ -1,0 +1,26 @@
+/**
+ * QUOI     — les styles du pied de liste de l'administration (components/ui/AdminPager.tsx).
+ * POURQUOI — partagé par les Comptes et les Prospects.
+ */
+
+.admin-pager {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: 0 var(--admin-cell-padding-x);
+}
+
+.admin-pager__range {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.admin-pager__button {
+  font: var(--type-card-link);
+  color: var(--ink-link);
+  cursor: pointer;
+}
+
+.admin-pager__button:hover {
+  text-decoration: underline;
+}

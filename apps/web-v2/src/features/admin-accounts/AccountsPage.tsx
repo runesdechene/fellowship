@@ -4,6 +4,7 @@
  * POURQUOI — c'est l'enseigne qu'on regarde le plus (Uriel, 15/10/2026) : vue par défaut.
  */
 import { useSearchParams } from 'react-router-dom'
+import { AdminPager } from '@/components/ui/AdminPager'
 import { Segmented } from '@/components/ui/Segmented'
 import {
   defaultFilter,
@@ -13,7 +14,7 @@ import {
   type AccountsView,
 } from '@/lib/admin-list'
 import { AccountsStats } from './AccountsStats'
-import { AccountsPager, AccountsTools } from './AccountsTools'
+import { AccountsTools } from './AccountsTools'
 import { EntitiesTable } from './EntitiesTable'
 import { PeopleTable } from './PeopleTable'
 import { useAccounts } from './useAccounts'
@@ -69,11 +70,12 @@ export function AccountsPage() {
       {data?.view === 'enseignes' && <EntitiesTable rows={data.rows} members={data.members} />}
       {data?.view === 'personnes' && <PeopleTable rows={data.rows} />}
       {data && (
-        <AccountsPager
+        <AdminPager
           page={query.page}
           shown={data.rows.length}
           total={data.total}
           onPage={(page) => go({ page })}
+          empty="Aucun compte ne correspond."
         />
       )}
     </div>

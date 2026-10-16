@@ -89,33 +89,6 @@
   gap: var(--space-16);
 }
 
-.admin-search {
-  display: flex;
-  flex: 0 1 var(--admin-search-width);
-  align-items: center;
-  gap: var(--space-10);
-  height: var(--admin-search-height);
-  padding: 0 var(--space-14);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-nav);
-  background: var(--surface-card);
-  color: var(--ink-soft);
-}
-
-.admin-search__input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  background: transparent;
-  font: var(--type-list-name);
-  color: var(--ink-title);
-  outline: none;
-}
-
-.admin-search__input::placeholder {
-  color: var(--ink-section-pale);
-}
-
 /* Le tri est un texte : « Les plus récents » est le seul. Il se pose à droite. */
 .admin-tools__sort {
   display: inline-flex;
@@ -124,28 +97,6 @@
   margin-left: auto;
   font: var(--type-list-meta);
   color: var(--ink-soft);
-}
-
-.admin-pager {
-  display: flex;
-  align-items: center;
-  gap: var(--space-16);
-  padding: 0 var(--admin-cell-padding-x);
-}
-
-.admin-pager__range {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
-}
-
-.admin-pager__button {
-  font: var(--type-card-link);
-  color: var(--ink-link);
-  cursor: pointer;
-}
-
-.admin-pager__button:hover {
-  text-decoration: underline;
 }
 
 @media (width <= 900px) {
