@@ -1,9 +1,9 @@
 /**
  * QUOI     — la barre du haut de la landing : le logo et le nom, les chapitres de la page, « Se connecter »
- *            et « Créer ma vitrine ». Elle reste en haut, devient compacte et souligne le chapitre lu.
+ *            et « Commencer ». Elle reste en haut, devient compacte et souligne le chapitre lu.
  * POURQUOI — maquette 2290:2 ; les liens suivent les bandes de la page (Uriel, 14/10/2026), les
  *            organisateurs ont leur encadré dans le pied de page.
- * ATTENTION — « Créer ma vitrine » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
+ * ATTENTION — « Commencer » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
  *            `away` : la barre posée sur une page publique (résultats, fiche, lot 11b) — ses liens
  *            ramènent à la landing, et elle est compacte d'emblée (rien de sombre derrière elle).
@@ -66,7 +66,7 @@ export function LandingTopBar({ away = false }: { away?: boolean }) {
             Se connecter
           </Link>
           <Link className="landing-button landing-button--cream" to="/connexion">
-            Créer ma vitrine
+            Commencer
           </Link>
         </div>
       </div>

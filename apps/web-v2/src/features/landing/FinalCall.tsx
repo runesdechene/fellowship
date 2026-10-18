@@ -1,6 +1,6 @@
 /**
  * QUOI     — la fin de la landing, sur la bande nuit : « Ton prochain stand commence ici. », le
- *            bouton « Créer ma vitrine », puis le pied de page (LandingFoot), l'encadré des
+ *            bouton « Commencer gratuitement », puis le pied de page (LandingFoot), l'encadré des
  *            organisateurs en tête.
  * POURQUOI — maquette 2290:2 (nœuds 2290:1674 et 2298:2). Le dernier appel porte le dégradé du
  *            logo : l'exception propre à la landing (docs/v2/DESIGN-SYSTEM.md).
@@ -17,10 +17,10 @@ export function FinalCall({ posters }: { posters: string[] }) {
       <div className="landing-final">
         <h2 className="landing-final__title">Ton prochain stand commence ici.</h2>
         <p className="landing-final__lead">
-          Crée ta vitrine en deux minutes. Gratuit, sans carte bancaire.
+          Ta saison démarre en deux minutes. Gratuit, sans carte bancaire.
         </p>
         <Link className="landing-button landing-button--brand" to="/connexion">
-          Créer ma vitrine
+          Commencer gratuitement
           <ArrowRight size={18} strokeWidth={2} aria-hidden />
         </Link>
       </div>

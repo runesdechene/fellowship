@@ -2,7 +2,7 @@
  * QUOI     — les stories des témoignages : une carte verticale par exposant, sa couverture de vitrine
  *            en fond, une phrase par écran ; les exposants voisins de part et d'autre.
  * POURQUOI — maquette 2332:2 (Uriel, 14/10/2026). Le nom mène à la vitrine ; le bouton, à
- *            « Créer ma vitrine » : on sort d'une story convaincu, c'est le moment de s'inscrire.
+ *            « Commencer gratuitement » : on sort d'une story convaincu, c'est le moment de s'inscrire.
  * ATTENTION — l'élément <dialog> fait le voile, Échap et le piège du focus. Un écran avance à la fin
  *            de sa barre (animationend) : appuyer longtemps met la barre, donc la story, en pause.
  *            Toucher à gauche recule, ailleurs avance ; glisser change d'exposant.
@@ -240,7 +240,7 @@ function StoryPlayer({ testimonials, start, onPerson, onClose }: StoryPlayerProp
           className="landing-button landing-button--pill landing-button--cream landing-story__cta"
           to="/connexion"
         >
-          Créer ma vitrine
+          Commencer gratuitement
           <ArrowRight size={17} strokeWidth={2} aria-hidden />
         </Link>
       </article>

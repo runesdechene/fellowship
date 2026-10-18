@@ -2,7 +2,7 @@
  * QUOI     — le cadre d'une page vue sans compte (la fiche d'un festival) : la barre de la landing,
  *            la page, le mur d'affiche à droite.
  * POURQUOI — lot 11b : un visiteur n'a ni barre latérale, ni cloche, ni compte ; il garde la
- *            barre qu'il connaît depuis la landing, avec « Se connecter » et « Créer ma vitrine ».
+ *            barre qu'il connaît depuis la landing, avec « Se connecter » et « Commencer ».
  * ATTENTION — le PageChromeProvider enveloppe tout : la fiche déclare son affiche, le mur la rend.
  */
 import type { ReactNode } from 'react'
