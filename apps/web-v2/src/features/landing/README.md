@@ -14,7 +14,7 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
 - `LandingSearch.tsx` — la recherche, qui mène à `/festivals` (lot 11b).
 - `LandingFoot.tsx` — le pied de page, partagé avec la recherche publique (`away` hors de la landing).
 - `Opening.tsx`, `PosterWall.tsx` — l'ouverture et son mur de vraies affiches qui défile.
-- `AssistantBand.tsx` — « Ton copilote de saison », avec le Calendrier et le Tableau de bord.
+- `AssistantBand.tsx` — « Fellowship, c'est ton copilote », avec le Calendrier et le Tableau de bord.
 - `screens/` — les écrans de l'app reproduits pour la landing, dans une fenêtre (`AppWindow`).
 - `CommunityBand.tsx` — « Tes amis, ta boussole », avec l'écran Communauté et « Qui y va ».
 - `SoonBand.tsx` — « Bientôt · Pro » : l'inscription en un clic, le dossier PDF, la veille.
