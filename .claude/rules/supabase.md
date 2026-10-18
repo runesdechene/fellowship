@@ -327,3 +327,15 @@ la session, il a fallu les régénérer.
 couvert par `.env.*.local`) avec son éditeur, puis lance
 `! node_modules/supabase/bin/supabase.exe secrets set --env-file .env.<nom>.local --project-ref trbxpsknbtisqwefqoub`.
 Aucune valeur n'apparaît ni dans la commande ni dans sa sortie.
+
+## Une politique de `users` ne relit jamais `users` — passer par `is_admin()`
+
+**Le piège** (18/10/2026) : `users_select_self_or_admin` (15/10) contient des sous-requêtes
+(`(select auth.uid())`). Dès lors, Postgres refuse toute politique de `users` qui relit `users` :
+`admin_update_users` faisait `(select role from users …) = 'admin'`, et **toute** mise à jour de
+`users` — un admin qui nomme un admin, chacun qui modifie son profil — a échoué trois jours en
+« infinite recursion detected in policy for relation "users" ». Corrigé par `20261018120000`.
+
+**How to apply :** dans une politique, le rôle de l'appelant se lit par `is_admin()` (SECURITY
+DEFINER), jamais par une sous-requête sur `users`. Après toute politique touchée sur `users`,
+sonder un UPDATE en `begin; set_config('request.jwt.claims', …); set local role authenticated; … rollback;`.
