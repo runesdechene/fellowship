@@ -1,5 +1,5 @@
 /**
- * QUOI     — l'ouverture de la landing : « Ne rate plus un seul bon festival. », la promesse, la
+ * QUOI     — l'ouverture de la landing : « Ne rate plus jamais un bon festival. », la promesse, la
  *            recherche, la preuve, et le mur d'affiches.
  * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 19/10/2026 : ne plus rien rater,
  *            grâce au calendrier connecté aux amis. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
@@ -19,7 +19,9 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
       <PosterWall posters={showcase?.wall ?? []} crowd={crowd} />
       <div className="landing-opening__veil" aria-hidden />
       <div className="landing-opening__text">
-        <h1 className="landing-opening__title">Ne rate plus un seul bon festival.</h1>
+        <h1 className="landing-opening__title">
+          Ne rate plus jamais un bon festival<span className="landing-opening__dot">.</span>
+        </h1>
         <p className="landing-opening__lead">
           Fellowship t’aide à trouver des dates en suivant tes collègues, garde tes dossiers et tes
           candidatures à jour, puis synchronise ta saison sur ton site, automatiquement.

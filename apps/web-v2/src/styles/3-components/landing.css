@@ -61,6 +61,10 @@
   letter-spacing: var(--tracking-landing-hero);
 }
 
+.landing-opening__dot {
+  color: var(--landing-opening-dot);
+}
+
 .landing-opening__lead {
   max-width: var(--landing-opening-lead-width);
   font: var(--type-landing-lead);
