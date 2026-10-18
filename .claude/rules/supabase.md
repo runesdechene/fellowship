@@ -174,7 +174,7 @@ grant  select (col_a, col_b, …safe…) on public.<table> to <role>;
 ```
 La liste grantée doit couvrir EXACTEMENT ce que l'app lit côté `<role>` (sinon les requêtes existantes cassent en `42501 permission denied for table`). Et tout `select('*')` du rôle restreint échoue désormais → narrower les requêtes vers une liste blanche AVANT le revoke.
 
-Cas Fellowship : `entities` exposait stripe_customer_id / subscription_status / siren / legal_name… à `anon` (la vitrine faisait `select('*')`). Fix : `revoke select on entities from anon` + `grant select (<PUBLIC_ENTITY_COLUMNS>) to anon` (migration `20260626100145`), et `use-vitrine.ts` / `Embed.tsx` passés sur la const `PUBLIC_ENTITY_COLUMNS` (apps/web/src/lib/vitrine.ts). `authenticated` garde le grant table (le proprio lit ses infos billing). **Résidu connu** : un user authentifié peut encore lire le billing d'une autre entité via un select brut (IDOR authentifié) ; vrai fix = sortir les colonnes billing dans une table séparée RLS own-row-only. Vérifier toute restriction colonne par `set role <role>; select <col>` (erreur = OK). Lié : [[reference_storage_rls_security_definer]].
+Cas Fellowship : `entities` exposait stripe_customer_id / subscription_status / siren / legal_name… à `anon` (la vitrine faisait `select('*')`). Fix : `revoke select on entities from anon` + `grant select (<PUBLIC_ENTITY_COLUMNS>) to anon` (migration `20260626100145`), et `use-vitrine.ts` / `Embed.tsx` passés sur la const `PUBLIC_ENTITY_COLUMNS` (apps/web/src/lib/vitrine.ts). `authenticated` garde le grant table (le proprio lit ses infos billing). **Fermé aussi pour `authenticated` le 19/10/2026** (`20261019130000`) : même liste blanche ; ses propres enseignes, facturation comprise, se lisent par `mes_enseignes()` (SECURITY DEFINER, triée par adhésion). Toute nouvelle lecture d'`entities` côté client nomme ses colonnes — un `select('*')` ou `entities(*)` rend 42501. Vérifier toute restriction colonne par `set role <role>; select <col>` (erreur = OK). Lié : [[reference_storage_rls_security_definer]].
 
 ## `users` ne se lit que sur sa propre ligne — les autres passent par `actor_public`
 
@@ -247,8 +247,10 @@ Feature « événements privés » (`events.is_private`, v0.7.277, modèle unlis
 - RPC SQL `search_similar_events` (dédup création) et `get_coevent_suggestions` — recréées avec `is_private=false`.
 - **Triggers DB de notif** `notify_friend_going` + `notify_friend_note` (`AFTER INSERT` participations/notes) : garde `IF event_is_private THEN RETURN NEW`. 🔴 **Le piège #1** : l'auto-participation du créateur à un event privé déclenchait `notify_friend_going` → nom + lien de l'event privé poussés à TOUS ses abonnés.
 
+**Depuis le 19/10/2026 (`20261019120000`), la base ferme elle-même une fiche privée** à tout autre que son créateur (`can_act_as(created_by_actor)`) et les admins : le modèle « par lien » est mort. Les filtres ci-dessus restent utiles pour que le créateur ne voie pas ses fiches privées dans les listes publiques.
+
 **NE PAS filtrer (accès légitime) :**
-- `useEvent(key, by)` (lookup unitaire par id/slug) = l'accès par lien.
+- `useEvent(key, by)` (lookup unitaire par id/slug) — ne rend plus une fiche privée qu'à son créateur.
 - `useMyParticipations` (events(*)) = Calendrier/Cockpit du créateur (ses propres dates, privés inclus, avec cadenas).
 - Les RPC `get_*_with_dates` / `get_friend_ids` = graphe de follow uniquement, ne renvoient PAS d'events.
 
