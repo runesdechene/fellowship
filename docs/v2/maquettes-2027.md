@@ -75,7 +75,7 @@
 - [ ] Intégration du calendrier sur son site : gratuite avec la mention Fellowship, Pro sans la marque et personnalisable.
 - [ ] Gratuit : tableau de bord, amis, activité, communauté, avis et questions, vitrine.
 - [x] Prix repris de la V1 : 11,99 € HT/mois ou 119,88 € HT/an, essai 14 jours — confirmés par Uriel (08/10/2026).
-- [ ] La FAQ promet « on te prévient trois jours avant la fin de l'essai » — **à vérifier côté Stripe**, sinon retirer la phrase.
+- [x] La FAQ ne promet pas de rappel avant la fin de l'essai : phrase retirée (08/10/2026), on ne prévient pas pour l'instant (19/10/2026).
 - [ ] À terme : calcul du coût de la route selon le véhicule (Pro).
 
 ## Écran par écran — ce qui change par rapport au code actuel
