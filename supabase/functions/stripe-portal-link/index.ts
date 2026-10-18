@@ -1,7 +1,7 @@
 // stripe-portal-link : génère une session Stripe Customer Portal pour qu'un owner
 // d'entité gère son abonnement (factures, CB, annulation, changement de plan).
 //
-// Auth : verify_jwt = true. Authz : can_act_as(entityId).
+// Auth : verify_jwt = true. Authz : is_entity_owner(entityId), le propriétaire seul.
 // Spec : docs/superpowers/specs/2026-05-28-stripe-mvp-design.md §3.2.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2'
@@ -32,11 +32,11 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as Body
     if (!body.entityId) return json({ error: 'invalid_body' }, 400)
 
-    // ⚠️ Le param SQL s'appelle target_actor (pas target_actor_id) — sinon PGRST202.
-    const { data: canAct, error: canActErr } = await userClient
-      .rpc('can_act_as', { target_actor: body.entityId })
-    if (canActErr) return json({ error: 'authz_failed' }, 500)
-    if (!canAct) return json({ error: 'forbidden' }, 403)
+    // Le propriétaire seul gère l'abonnement : can_act_as accepterait n'importe quel membre.
+    const { data: isOwner, error: ownerErr } = await userClient
+      .rpc('is_entity_owner', { target_entity: body.entityId })
+    if (ownerErr) return json({ error: 'authz_failed' }, 500)
+    if (!isOwner) return json({ error: 'forbidden' }, 403)
 
     const { data: entity } = await getSupabaseAdmin()
       .from('entities')

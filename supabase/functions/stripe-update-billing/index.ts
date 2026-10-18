@@ -3,7 +3,7 @@
 // checkout (abonnés existants qui se mettent en règle).
 //
 // Auth : verify_jwt = true côté config.toml → la gateway Supabase valide déjà le JWT.
-// Authz : vérification côté DB via can_act_as(target_actor) (owner ou admin only).
+// Authz : vérification côté DB via is_entity_owner(target_entity) : le propriétaire seul.
 // Spec : docs/superpowers/specs/2026-06-22-siren-facturation-design.md.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2'
@@ -32,14 +32,14 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as Body
     if (!body.entityId || !body.legalName?.trim()) return json({ error: 'invalid_body' }, 400)
 
-    // Vérif owner via RPC Postgres. ⚠️ param target_actor (pas target_actor_id) — sinon PGRST202.
-    const { data: canAct, error: canActErr } = await userClient
-      .rpc('can_act_as', { target_actor: body.entityId })
-    if (canActErr) {
-      console.error('[update-billing] can_act_as error', canActErr)
+    // Le propriétaire seul corrige la facturation : can_act_as accepterait n'importe quel membre.
+    const { data: isOwner, error: ownerErr } = await userClient
+      .rpc('is_entity_owner', { target_entity: body.entityId })
+    if (ownerErr) {
+      console.error('[update-billing] is_entity_owner error', ownerErr)
       return json({ error: 'authz_failed' }, 500)
     }
-    if (!canAct) return json({ error: 'forbidden' }, 403)
+    if (!isOwner) return json({ error: 'forbidden' }, 403)
 
     const noSiren = body.noSiren === true
     const siren = noSiren ? null : ((body.siren ?? '').replace(/\D/g, '') || null)

@@ -3,7 +3,7 @@
 // rediriger l'utilisateur.
 //
 // Auth : verify_jwt = true côté config.toml → la gateway Supabase valide déjà le JWT.
-// Authz : vérification côté DB via can_act_as(entity_actor_id) (owner ou admin only).
+// Authz : vérification côté DB via is_entity_owner(entity_actor_id) : le propriétaire seul.
 // Spec : docs/superpowers/specs/2026-05-28-stripe-mvp-design.md §3.2.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2'
@@ -50,15 +50,14 @@ Deno.serve(async (req) => {
       return json({ error: 'invalid_body' }, 400)
     }
 
-    // Vérif owner via RPC Postgres (utilise auth.uid() de la session courante).
-    // ⚠️ Le param SQL s'appelle target_actor (pas target_actor_id) — sinon PGRST202.
-    const { data: canAct, error: canActErr } = await userClient
-      .rpc('can_act_as', { target_actor: body.entityId })
-    if (canActErr) {
-      console.error('[checkout-session] can_act_as error', canActErr)
+    // Le propriétaire seul paie : can_act_as accepterait n'importe quel membre.
+    const { data: isOwner, error: ownerErr } = await userClient
+      .rpc('is_entity_owner', { target_entity: body.entityId })
+    if (ownerErr) {
+      console.error('[checkout-session] is_entity_owner error', ownerErr)
       return json({ error: 'authz_failed' }, 500)
     }
-    if (!canAct) return json({ error: 'forbidden' }, 403)
+    if (!isOwner) return json({ error: 'forbidden' }, 403)
 
     // Lecture entité via admin (bypass RLS pour lire stripe_customer_id même si plan='free').
     const admin = getSupabaseAdmin()
