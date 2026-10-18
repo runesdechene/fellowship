@@ -61,8 +61,8 @@
   letter-spacing: var(--tracking-landing-hero);
 }
 
-.landing-opening__dot {
-  color: var(--landing-opening-dot);
+.landing-opening__accent {
+  color: var(--landing-opening-accent);
 }
 
 .landing-opening__lead {

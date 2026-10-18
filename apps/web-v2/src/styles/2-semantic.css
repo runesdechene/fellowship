@@ -992,7 +992,7 @@
   /* La marque écrite (Wordmark) : gris foncé des titres, crème en thème sombre et sur la landing. */
   --wordmark-ink: var(--ink-title);
   --wordmark-dot: var(--fete-200); /* l'orange clair du logo */
-  --landing-opening-dot: var(--fete-200); /* le point du titre, celui du logo */
+  --landing-opening-accent: var(--fete-200); /* « bon » et le point du titre, l'orange du logo */
   --wordmark-gap: var(--space-12);
   --wordmark-logo-width: 43px;
   --wordmark-logo-height: 37px;

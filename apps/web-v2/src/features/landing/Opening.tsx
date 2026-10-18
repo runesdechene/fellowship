@@ -22,7 +22,8 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
         <h1 className="landing-opening__title">
           Ne rate plus jamais un
           <br />
-          bon festival<span className="landing-opening__dot">.</span>
+          <span className="landing-opening__accent">bon</span> festival
+          <span className="landing-opening__accent">.</span>
         </h1>
         <p className="landing-opening__lead">
           Fellowship t’aide à trouver des dates en suivant tes collègues, garde tes dossiers et tes
