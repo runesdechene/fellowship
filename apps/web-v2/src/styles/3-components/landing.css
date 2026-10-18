@@ -804,6 +804,10 @@ select.landing-search__value {
   opacity: 0.85;
 }
 
+.landing-foot__word {
+  max-width: var(--landing-foot-word-width);
+}
+
 .landing-foot__name {
   --wordmark-ink: var(--landing-cream);
   --wordmark-gap: var(--space-14);

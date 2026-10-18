@@ -1323,6 +1323,7 @@
   --landing-opening-height: 1000px;
   --landing-opening-top: 130px;
   --landing-opening-title-width: 780px;
+  --landing-foot-word-width: 380px; /* l'histoire de la marque, une colonne lisible */
   --landing-opening-lead-width: 560px;
   --type-landing-hero: var(--weight-regular) var(--size-80) / 0.98 var(--family-display);
   --type-landing-hero-mobile: var(--weight-regular) var(--size-44) / 1 var(--family-display);

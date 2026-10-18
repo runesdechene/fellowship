@@ -1,5 +1,5 @@
 /**
- * QUOI     — le pied de page de la landing : la marque, les liens, Runes de Chêne ; en tête, ce
+ * QUOI     — le pied de page de la landing : la marque et son histoire, les liens, Runes de Chêne ; en tête, ce
  *            que la page y pose (l'encadré des organisateurs sur la landing).
  * POURQUOI — la landing et la recherche publique (lot 11b, maquette 2314:2) finissent pareil.
  * ATTENTION — les pages légales vivent dans la V1 : liens pleins, hors du routeur de la V2.
@@ -19,10 +19,11 @@ export function LandingFoot({ children, away = false }: { children?: ReactNode; 
           <p className="landing-foot__name">
             <Wordmark />
           </p>
-          <p>
-            Le calendrier communautaire
-            <br />
-            des exposants de festivals.
+          <p className="landing-foot__word">
+            Fellowship est né sur les stands de Runes de Chêne, d’une saison qui tenait sur des
+            post‑it, un tableau Excel et des « tu fais quoi cet été ? ». Partagé d’abord entre
+            collègues, il est aujourd’hui ouvert à toute la communauté des exposants, créateurs et
+            artisans nomades.
           </p>
         </div>
         <nav className="landing-foot__links" aria-label="Plan du site">
