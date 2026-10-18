@@ -14,7 +14,7 @@ import { Wordmark } from '@/components/ui/Wordmark'
 import { useLandingNav } from './useLandingNav'
 
 const CHAPTERS = [
-  { id: 'assistant', label: 'Mon assistant' },
+  { id: 'assistant', label: 'Mon copilote' },
   { id: 'communaute', label: 'Ma communauté' },
   { id: 'bientot', label: 'Bientôt' },
   { id: 'pro', label: 'Le Pro' },

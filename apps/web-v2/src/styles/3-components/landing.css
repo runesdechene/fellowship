@@ -57,6 +57,7 @@
 .landing-opening__title {
   max-width: var(--landing-opening-title-width);
   font: var(--type-landing-hero);
+  text-wrap: balance;
   letter-spacing: var(--tracking-landing-hero);
 }
 
