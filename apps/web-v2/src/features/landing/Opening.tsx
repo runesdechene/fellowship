@@ -1,8 +1,8 @@
 /**
- * QUOI     — l'ouverture de la landing : « Mon assistant de festivals. Ma communauté
- *            d'exposants. », la promesse, la recherche, la preuve, et le mur d'affiches.
- * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 14/10/2026 : l'outil d'abord, les
- *            gens ensuite. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
+ * QUOI     — l'ouverture de la landing : « Ne rate plus un seul bon festival. », la promesse, la
+ *            recherche, la preuve, et le mur d'affiches.
+ * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 19/10/2026 : ne plus rien rater,
+ *            grâce au calendrier connecté aux amis. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
  * ATTENTION — la recherche mène aux résultats publics, /festivals (lot 11b).
  */
 import { posterThumb, type Showcase } from '@/lib/landing'
@@ -19,14 +19,11 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
       <PosterWall posters={showcase?.wall ?? []} crowd={crowd} />
       <div className="landing-opening__veil" aria-hidden />
       <div className="landing-opening__text">
-        <h1 className="landing-opening__title">
-          Mon assistant de festivals.
-          <br />
-          Ma communauté d’exposants.
-        </h1>
+        <h1 className="landing-opening__title">Ne rate plus un seul bon festival.</h1>
         <p className="landing-opening__lead">
-          Trouve tes dates en voyant où vont tes amis, suis tes dossiers et tes paiements, et
-          synchronise ton calendrier sur ton site, gratuitement.
+          Ton calendrier connecté à tes amis : vois où ils vont, trouve les bonnes dates avant les
+          autres. Fellowship te rappelle chaque clôture d’inscription et tient tes dossiers et tes
+          paiements à jour. Fini les post-it.
         </p>
         <LandingSearch />
         {showcase?.exhibitors ? (
