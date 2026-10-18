@@ -21,8 +21,8 @@ export function LandingFoot({ children, away = false }: { children?: ReactNode; 
           </p>
           <p className="landing-foot__word">
             Fellowship est né sur les stands de la marque Runes de Chêne, d’une saison qui tenait
-            sur des post‑it, un tableau Excel et des « tu fais quoi cet été ? ». Partagé d’abord
-            entre collègues, il est aujourd’hui ouvert à toute la communauté des exposants,
+            sur des post‑it, un tableau Excel et des « c’est quoi ta prochaine date ? ». Partagé
+            d’abord entre collègues, il est aujourd’hui ouvert à toute la communauté des exposants,
             créateurs et artisans nomades.
           </p>
         </div>
