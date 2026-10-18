@@ -21,9 +21,8 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
       <div className="landing-opening__text">
         <h1 className="landing-opening__title">Ne rate plus un seul bon festival.</h1>
         <p className="landing-opening__lead">
-          Ton calendrier connecté à tes amis : vois où ils vont, trouve les bonnes dates avant les
-          autres. Fellowship te rappelle chaque clôture d’inscription et tient tes dossiers et tes
-          paiements à jour. Fini les post-it.
+          Fellowship t’aide à trouver des dates en suivant tes collègues, garde tes dossiers et tes
+          candidatures à jour, puis synchronise ta saison sur ton site, automatiquement.
         </p>
         <LandingSearch />
         {showcase?.exhibitors ? (
