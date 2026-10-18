@@ -2430,6 +2430,49 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      mes_enseignes: {
+        Args: never
+        Returns: {
+          actor_id: string
+          avatar_url: string | null
+          banner_position: number
+          banner_url: string | null
+          billing_interval: string | null
+          billing_no_siren: boolean
+          bio: string | null
+          brand_name: string
+          city: string | null
+          comped_pro_until: string | null
+          craft_type: string | null
+          created_at: string
+          current_period_end: string | null
+          department: string | null
+          discount_end: string | null
+          discount_label: string | null
+          is_ambassador: boolean
+          legal_name: string | null
+          links: Json
+          location: string | null
+          paid_by_user: string | null
+          plan: Database["public"]["Enums"]["user_plan"]
+          postal_code: string | null
+          public_slug: string | null
+          siren: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
+          trial_end: string | null
+          type: Database["public"]["Enums"]["entity_type"]
+          verified: boolean
+          website: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "entities"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       modifier_evenement: {
         Args: {
           p_as_entity?: string

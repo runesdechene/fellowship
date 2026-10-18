@@ -32,6 +32,71 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_labels: {
+        Row: {
+          actor_id: string
+          created_at: string
+          label: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          label: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          label?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_labels_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_notes: {
+        Row: {
+          actor_id: string
+          author_user_id: string | null
+          body: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          actor_id: string
+          author_user_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          actor_id?: string
+          author_user_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_notes_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_notes_author_user_id_fkey"
+            columns: ["author_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       content_reports: {
         Row: {
           admin_note: string | null
@@ -147,6 +212,7 @@ export type Database = {
           legal_name: string | null
           links: Json
           location: string | null
+          paid_by_user: string | null
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
@@ -180,6 +246,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
+          paid_by_user?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
@@ -213,6 +280,7 @@ export type Database = {
           legal_name?: string | null
           links?: Json
           location?: string | null
+          paid_by_user?: string | null
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
@@ -232,6 +300,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "actors"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entities_paid_by_user_fkey"
+            columns: ["paid_by_user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
           },
         ]
       }
@@ -1034,6 +1109,259 @@ export type Database = {
           },
         ]
       }
+      prospect_messages: {
+        Row: {
+          body_text: string
+          created_at: string
+          delivery: string | null
+          direction: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          in_reply_to: string | null
+          message_id: string | null
+          prospect_id: string | null
+          received_at: string | null
+          references_ids: string[]
+          resend_id: string | null
+          sender_id: string | null
+          sent_at: string | null
+          subject: string
+          template_id: string | null
+          to_email: string
+        }
+        Insert: {
+          body_text?: string
+          created_at?: string
+          delivery?: string | null
+          direction: string
+          from_email: string
+          has_attachments?: boolean
+          id?: string
+          in_reply_to?: string | null
+          message_id?: string | null
+          prospect_id?: string | null
+          received_at?: string | null
+          references_ids?: string[]
+          resend_id?: string | null
+          sender_id?: string | null
+          sent_at?: string | null
+          subject?: string
+          template_id?: string | null
+          to_email: string
+        }
+        Update: {
+          body_text?: string
+          created_at?: string
+          delivery?: string | null
+          direction?: string
+          from_email?: string
+          has_attachments?: boolean
+          id?: string
+          in_reply_to?: string | null
+          message_id?: string | null
+          prospect_id?: string | null
+          received_at?: string | null
+          references_ids?: string[]
+          resend_id?: string | null
+          sender_id?: string | null
+          sent_at?: string | null
+          subject?: string
+          template_id?: string | null
+          to_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospect_messages_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospect_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "prospect_senders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospect_messages_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "prospect_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prospect_senders: {
+        Row: {
+          active: boolean
+          alias: string
+          created_at: string
+          display_name: string
+          id: string
+          signature: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          alias: string
+          created_at?: string
+          display_name: string
+          id?: string
+          signature?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          alias?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          signature?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospect_senders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      prospect_templates: {
+        Row: {
+          archived_at: string | null
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          name: string
+          subject: string
+        }
+        Insert: {
+          archived_at?: string | null
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: string
+          name: string
+          subject?: string
+        }
+        Update: {
+          archived_at?: string | null
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          name?: string
+          subject?: string
+        }
+        Relationships: []
+      }
+      prospects: {
+        Row: {
+          a_relancer: boolean
+          activity: string | null
+          brand: string | null
+          city: string | null
+          contact_channel: string | null
+          contacted_on: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          email_status: string
+          id: string
+          linked_at: string | null
+          linked_by: string | null
+          name: string | null
+          note: string | null
+          owner_id: string | null
+          phone: string | null
+          relance_vue_pour: string | null
+          source: string | null
+          unsubscribe_token: string
+          unsubscribed_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          a_relancer?: boolean
+          activity?: string | null
+          brand?: string | null
+          city?: string | null
+          contact_channel?: string | null
+          contacted_on?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          email_status?: string
+          id?: string
+          linked_at?: string | null
+          linked_by?: string | null
+          name?: string | null
+          note?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          relance_vue_pour?: string | null
+          source?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          a_relancer?: boolean
+          activity?: string | null
+          brand?: string | null
+          city?: string | null
+          contact_channel?: string | null
+          contacted_on?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          email_status?: string
+          id?: string
+          linked_at?: string | null
+          linked_by?: string | null
+          name?: string | null
+          note?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          relance_vue_pour?: string | null
+          source?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospects_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+          {
+            foreignKeyName: "prospects_relance_vue_pour_fkey"
+            columns: ["relance_vue_pour"]
+            isOneToOne: false
+            referencedRelation: "prospect_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospects_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       push_subscriptions: {
         Row: {
           created_at: string
@@ -1392,10 +1720,12 @@ export type Database = {
           display_name: string | null
           email: string
           handle: string | null
+          phone: string | null
           postal_code: string | null
           push_muted: string[]
           role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
+          suspended_at: string | null
         }
         Insert: {
           actor_id: string
@@ -1407,10 +1737,12 @@ export type Database = {
           display_name?: string | null
           email: string
           handle?: string | null
+          phone?: string | null
           postal_code?: string | null
           push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
+          suspended_at?: string | null
         }
         Update: {
           actor_id?: string
@@ -1422,10 +1754,12 @@ export type Database = {
           display_name?: string | null
           email?: string
           handle?: string | null
+          phone?: string | null
           postal_code?: string | null
           push_muted?: string[]
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
+          suspended_at?: string | null
         }
         Relationships: [
           {
@@ -1505,6 +1839,393 @@ export type Database = {
           slug: string
         }[]
       }
+      admin_activite: {
+        Args: { p_actors: string[] }
+        Returns: {
+          abonnes: number
+          avis: number
+          bilans: number
+          dates: number
+          fiches: number
+          questions: number
+        }[]
+      }
+      admin_ambassadeur: {
+        Args: { p_entity: string; p_oui: boolean }
+        Returns: undefined
+      }
+      admin_cherche: {
+        Args: { p_q: string; p_valeur: string }
+        Returns: boolean
+      }
+      admin_chiffres: {
+        Args: never
+        Returns: {
+          comptes: number
+          comptes_semaine: number
+          echecs: number
+          essais: number
+          essais_bientot: number
+          pro: number
+          pro_offerts: number
+        }[]
+      }
+      admin_corriger_enseigne: {
+        Args: {
+          p_brand_name: string
+          p_city: string
+          p_craft_type: string
+          p_id: string
+          p_legal_name: string
+          p_public_slug: string
+          p_siren: string
+        }
+        Returns: undefined
+      }
+      admin_corriger_personne: {
+        Args: {
+          p_display_name: string
+          p_handle: string
+          p_id: string
+          p_phone: string
+          p_postal_code: string
+        }
+        Returns: undefined
+      }
+      admin_ecarter_message: { Args: { p_message: string }; Returns: undefined }
+      admin_enseigne: {
+        Args: { p_id: string }
+        Returns: {
+          abonnes: number
+          actor_id: string
+          avatar_url: string
+          avis: number
+          bilans: number
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          craft_type: string
+          created_at: string
+          current_period_end: string
+          dates: number
+          discount_end: string
+          discount_label: string
+          fiches: number
+          filleuls: number
+          is_ambassador: boolean
+          legal_name: string
+          paid_by_name: string
+          paid_by_user: string
+          parrain_nom: string
+          plan: string
+          public_slug: string
+          questions: number
+          siren: string
+          stripe_customer_id: string
+          subscription_status: string
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_enseignes: {
+        Args: { p_filtre?: string; p_page?: number; p_q?: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          created_at: string
+          dates: number
+          discount_label: string
+          is_ambassador: boolean
+          paid_by_name: string
+          plan: string
+          subscription_status: string
+          total: number
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_enseignes_de: {
+        Args: { p_person: string }
+        Returns: {
+          avatar_url: string
+          billing_interval: string
+          brand_name: string
+          city: string
+          comped_pro_until: string
+          discount_label: string
+          entity_id: string
+          paid_by_user: string
+          plan: string
+          role: string
+          subscription_status: string
+          trial_end: string
+          type: string
+        }[]
+      }
+      admin_filtres: {
+        Args: { p_q?: string; p_vue: string }
+        Returns: {
+          filtre: string
+          nombre: number
+        }[]
+      }
+      admin_garde: { Args: never; Returns: undefined }
+      admin_gestes: {
+        Args: { p_actors: string[] }
+        Returns: {
+          quand: string
+          quoi: string
+        }[]
+      }
+      admin_membres: {
+        Args: { p_entities: string[] }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          entity_id: string
+          phone: string
+          role: string
+        }[]
+      }
+      admin_offre: {
+        Args: { p_comped: string; p_plan: string; p_status: string }
+        Returns: string
+      }
+      admin_offrir_mois: {
+        Args: { p_entity: string; p_mois: number }
+        Returns: string
+      }
+      admin_personne: {
+        Args: { p_id: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          city: string
+          created_at: string
+          dates: number
+          display_name: string
+          email: string
+          fiches: number
+          handle: string
+          last_sign_in_at: string
+          phone: string
+          postal_code: string
+          push_muted: string[]
+          questions: number
+          role: string
+          suspended_at: string
+        }[]
+      }
+      admin_personnes: {
+        Args: { p_filtre?: string; p_page?: number; p_q?: string }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          avis: number
+          billing_interval: string
+          brand_name: string
+          comped_pro_until: string
+          created_at: string
+          dates: number
+          discount_label: string
+          display_name: string
+          email: string
+          entity_id: string
+          entity_type: string
+          last_sign_in_at: string
+          plan: string
+          role: string
+          subscription_status: string
+          suspended_at: string
+          total: number
+          trial_end: string
+        }[]
+      }
+      admin_prospect: {
+        Args: { p_id: string }
+        Returns: {
+          a_relancer: boolean
+          activity: string
+          brand: string
+          city: string
+          contact_channel: string
+          contacted_on: string
+          created_at: string
+          email: string
+          email_status: string
+          id: string
+          name: string
+          note: string
+          owner_id: string
+          owner_name: string
+          phone: string
+          source: string
+          unsubscribed_at: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_prospect_de: {
+        Args: { p_user: string }
+        Returns: {
+          contact_channel: string
+          contacted_on: string
+          id: string
+          linked_at: string
+          linked_by: string
+          source: string
+        }[]
+      }
+      admin_prospect_depuis_message: {
+        Args: { p_message: string }
+        Returns: string
+      }
+      admin_prospect_expediteurs: {
+        Args: never
+        Returns: {
+          active: boolean
+          alias: string
+          display_name: string
+          envoyes_aujourdhui: number
+          id: string
+          palier: number
+          signature: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_prospect_messages: {
+        Args: { p_id: string }
+        Returns: {
+          at: string
+          body_text: string
+          delivery: string
+          direction: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          message_id: string
+          references_ids: string[]
+          sender_name: string
+          sender_user_id: string
+          subject: string
+          to_email: string
+        }[]
+      }
+      admin_prospect_modeles: {
+        Args: never
+        Returns: {
+          archived_at: string
+          body: string
+          envois: number
+          id: string
+          kind: string
+          name: string
+          reponses: number
+          subject: string
+        }[]
+      }
+      admin_prospects: {
+        Args: {
+          p_filtre?: string
+          p_page?: number
+          p_q?: string
+          p_source?: string
+          p_suivi?: string
+        }
+        Returns: {
+          a_relancer: boolean
+          a_repondre: boolean
+          activity: string
+          brand: string
+          city: string
+          contact_channel: string
+          contacted_on: string
+          created_at: string
+          email: string
+          email_status: string
+          id: string
+          linked_at: string
+          linked_by: string
+          name: string
+          note: string
+          owner_id: string
+          owner_name: string
+          phone: string
+          source: string
+          total: number
+          unsubscribed_at: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_prospects_a_rapprocher: {
+        Args: never
+        Returns: {
+          par: string
+          prospect_brand: string
+          prospect_id: string
+          prospect_name: string
+          user_email: string
+          user_id: string
+          user_name: string
+        }[]
+      }
+      admin_prospects_chiffres: {
+        Args: never
+        Returns: {
+          comptes: number
+          comptes_pro: number
+          contactes: number
+          repondu: number
+          semaine: number
+          total: number
+        }[]
+      }
+      admin_prospects_filtres: {
+        Args: { p_q?: string; p_source?: string; p_suivi?: string }
+        Returns: {
+          filtre: string
+          nombre: number
+        }[]
+      }
+      admin_prospects_non_classes: {
+        Args: never
+        Returns: {
+          body_text: string
+          from_email: string
+          has_attachments: boolean
+          id: string
+          received_at: string
+          subject: string
+          to_email: string
+        }[]
+      }
+      admin_prospects_sources: {
+        Args: never
+        Returns: {
+          source: string
+        }[]
+      }
+      admin_ranger_message: {
+        Args: { p_message: string; p_prospect: string }
+        Returns: undefined
+      }
+      admin_rapprocher: {
+        Args: { p_par: string; p_prospect: string; p_user: string }
+        Returns: undefined
+      }
+      admin_tel: { Args: { p_q: string; p_tel: string }; Returns: boolean }
       are_friends: {
         Args: { user_a: string; user_b: string }
         Returns: boolean
@@ -1709,6 +2430,49 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      mes_enseignes: {
+        Args: never
+        Returns: {
+          actor_id: string
+          avatar_url: string | null
+          banner_position: number
+          banner_url: string | null
+          billing_interval: string | null
+          billing_no_siren: boolean
+          bio: string | null
+          brand_name: string
+          city: string | null
+          comped_pro_until: string | null
+          craft_type: string | null
+          created_at: string
+          current_period_end: string | null
+          department: string | null
+          discount_end: string | null
+          discount_label: string | null
+          is_ambassador: boolean
+          legal_name: string | null
+          links: Json
+          location: string | null
+          paid_by_user: string | null
+          plan: Database["public"]["Enums"]["user_plan"]
+          postal_code: string | null
+          public_slug: string | null
+          siren: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
+          trial_end: string | null
+          type: Database["public"]["Enums"]["entity_type"]
+          verified: boolean
+          website: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "entities"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       modifier_evenement: {
         Args: {
           p_as_entity?: string
@@ -1719,6 +2483,34 @@ export type Database = {
         }
         Returns: number
       }
+      phone_key: { Args: { p_tel: string }; Returns: string }
+      prospect_attend_reponse: {
+        Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }
+        Returns: boolean
+      }
+      prospect_cherche: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_q: string
+          p_source: string
+        }
+        Returns: boolean
+      }
+      prospect_dans_filtre: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_filtre: string
+        }
+        Returns: boolean
+      }
+      prospect_suivi: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_suivi: string
+        }
+        Returns: boolean
+      }
+      prospects_relancer: { Args: never; Returns: undefined }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined

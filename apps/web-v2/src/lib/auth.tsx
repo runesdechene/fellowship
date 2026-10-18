@@ -106,19 +106,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle()
     if (!personError) setPerson(personRow)
 
-    // Le TRI est indispensable : sans lui, Postgres rend les lignes dans un
-    // ordre arbitraire qui peut changer d'un appel à l'autre. Comme l'acteur
-    // par défaut est « le premier de la liste » et que l'identité est
-    // rechargée plusieurs fois par Supabase, l'app basculait silencieusement
-    // d'une enseigne à l'autre — et le tableau de bord se vidait tout seul.
-    const { data: memberships, error: membershipsError } = await supabase
-      .from('memberships')
-      .select('created_at, entities(*)')
-      .eq('user_actor_id', authUid)
-      .order('created_at', { ascending: true })
-    if (membershipsError) return
-    const rows = memberships
-    setEntities(rows.map((r) => r.entities).filter((e): e is EntityRow => Boolean(e)))
+    // `mes_enseignes` rend ses enseignes facturation comprise, que `entities` ne montre plus,
+    // TRIÉES par adhésion : l'acteur par défaut est « le premier de la liste », et sans tri
+    // l'app basculait silencieusement d'une enseigne à l'autre.
+    const { data: rows, error: entitiesError } = await supabase.rpc('mes_enseignes')
+    if (entitiesError) return
+    setEntities(rows)
   }, [])
 
   useEffect(() => {

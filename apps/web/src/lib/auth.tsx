@@ -72,12 +72,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const fetchIdentity = async (authUid: string) => {
     const { data: u } = await supabase.from('users').select('*').eq('actor_id', authUid).single()
     setPerson((u as UserRow) ?? null)
-    const { data: ms } = await supabase
-      .from('memberships')
-      .select('entity_actor_id, entities(*)')
-      .eq('user_actor_id', authUid)
-    const rows = (ms ?? []) as unknown as Array<{ entities: EntityRow | null }>
-    setEntities(rows.map(r => r.entities).filter((e): e is EntityRow => !!e))
+    // `mes_enseignes` : ses enseignes facturation comprise (que `entities` ne montre plus), triées par adhésion.
+    const { data: rows } = await supabase.rpc('mes_enseignes')
+    setEntities(rows ?? [])
   }
 
   const refreshProfile = async () => {
