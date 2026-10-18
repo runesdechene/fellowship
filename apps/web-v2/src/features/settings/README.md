@@ -11,7 +11,8 @@
 - `AccountSection.tsx` — l'adresse de connexion, se déconnecter.
 - `NotificationSettings.tsx` — la carte du téléphone, puis les lignes et leur interrupteur.
 - `PhoneCard.tsx` — activer, couper, ou dire pourquoi c'est impossible.
-- `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro.
+- `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro, supprimer.
+- `DeleteEntityDialog.tsx` — supprimer une enseigne (retaper son nom), par `delete-account`.
 - `useUpcomingCounts.ts` — les dates de chaque enseigne sur les 6 prochains mois.
 - `ContactSection.tsx` — écrire à l'équipe.
 - `DeleteAccount.tsx` — la carte « Supprimer mon compte » et sa fenêtre de confirmation.

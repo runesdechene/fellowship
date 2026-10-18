@@ -3,12 +3,14 @@
 // Auth : verify_jwt = true ; la personne ne supprime que SON compte (user.id du jeton) ou, pour un
 // admin (is_admin()), celui qu'il vise par `userId` (administration V2, lot 2) — sinon 403.
 // { confirm: false } rend l'aperçu ; { confirm: true } exécute le même plan (deletion-plan.ts).
+// { entityId, confirm: true } ne supprime que cette enseigne, pour son propriétaire ou un admin
+// (Réglages, 18/10/2026) : le compte reste.
 // Ordre : enseignes gardées (abonnement arrêté en fin de période, héritiers) → enseignes supprimées (Stripe, fichiers, ligne actors) → fichiers de la
 // personne → ligne actors de la personne (cascade) → connexion. Chaque étape se rejoue sans
 // planter sur ce qui a déjà disparu.
 // Spec : docs/superpowers/specs/2026-10-11-lot-9b-reglages-v2-design.md.
 
-import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 import { getStripe } from '../_shared/stripe.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
@@ -25,9 +27,17 @@ Deno.serve(async (req) => {
   })
   const { data: { user } } = await userClient.auth.getUser()
   if (!user) return json({ error: 'unauthorized' }, 401)
-  const body = (await req.json().catch(() => ({}))) as { confirm?: unknown; userId?: unknown }
+  const body = (await req.json().catch(() => ({}))) as {
+    confirm?: unknown
+    userId?: unknown
+    entityId?: unknown
+  }
   // Seul un vrai `true` supprime : « "false" » ou « 1 » ne rendent que l'aperçu.
   const confirm = body.confirm === true
+  if (typeof body.entityId === 'string') {
+    if (!confirm) return json({ error: 'confirm_required' }, 400)
+    return await deleteOneEntity(userClient, user.id, body.entityId)
+  }
   // Un admin peut viser un autre compte (administration V2, lot 2) ; jamais une personne ordinaire.
   let targetId = user.id
   if (typeof body.userId === 'string' && body.userId !== user.id) {
@@ -70,11 +80,7 @@ Deno.serve(async (req) => {
 
     for (const { entityActorId } of plan.deleted) {
       step = `entity:${entityActorId}`
-      const subscriptionId = entities.get(entityActorId)?.stripe_subscription_id
-      if (subscriptionId) await cancelSubscription(subscriptionId)
-      await removeFolder(admin, 'entity-gallery', entityActorId)
-      await removeFolder(admin, 'bilan-media', entityActorId)
-      await must(admin.from('actors').delete().eq('id', entityActorId))
+      await removeEntity(admin, entityActorId, entities.get(entityActorId)?.stripe_subscription_id)
     }
 
     step = 'files'
@@ -94,6 +100,41 @@ Deno.serve(async (req) => {
     return json({ error: 'failed', step }, 500)
   }
 })
+
+/** Supprime une seule enseigne, depuis les Réglages (18/10/2026) : son propriétaire ou un admin. */
+async function deleteOneEntity(userClient: SupabaseClient, userId: string, entityId: string) {
+  const admin = getSupabaseAdmin()
+  const { data: membership } = await admin.from('memberships').select('role')
+    .eq('entity_actor_id', entityId).eq('user_actor_id', userId).maybeSingle()
+  if (membership?.role !== 'owner') {
+    const { data: isAdmin } = await userClient.rpc('is_admin')
+    if (isAdmin !== true) return json({ error: 'forbidden' }, 403)
+  }
+  try {
+    const { data: entity, error } = await admin.from('entities').select('stripe_subscription_id')
+      .eq('actor_id', entityId).maybeSingle()
+    if (error) throw error
+    if (!entity) return json({ error: 'not_found' }, 404)
+    await removeEntity(admin, entityId, entity.stripe_subscription_id)
+    return json({ done: true })
+  } catch (err) {
+    console.error('[delete-account]', `entity:${entityId}`, err)
+    return json({ error: 'failed' }, 500)
+  }
+}
+
+/** Abonnement résilié, fichiers effacés, puis la ligne actors : la cascade emporte l'enseigne, ses
+ *  membres et ses parrainages. */
+async function removeEntity(
+  admin: ReturnType<typeof getSupabaseAdmin>,
+  entityId: string,
+  subscriptionId: string | null | undefined,
+) {
+  if (subscriptionId) await cancelSubscription(subscriptionId)
+  await removeFolder(admin, 'entity-gallery', entityId)
+  await removeFolder(admin, 'bilan-media', entityId)
+  await must(admin.from('actors').delete().eq('id', entityId))
+}
 
 async function readMemberships(admin: ReturnType<typeof getSupabaseAdmin>, personId: string) {
   const { data: mine, error } = await admin.from('memberships').select('entity_actor_id')
