@@ -19,6 +19,9 @@ describe('lineOf', () => {
     ['new_follower', 'new_followers'],
     ['weekly_new_events', 'weekly'],
     ['suggestion', 'suggestions'],
+    ['app_update', 'updates'],
+    ['app_update_reply', 'discussions'],
+    ['app_update_comment', 'discussions'],
   ])('%s sonne sous la ligne %s', (type, line) => {
     expect(lineOf(type)).toBe(line)
   })
@@ -30,7 +33,7 @@ describe('lineOf', () => {
   })
 })
 
-test('les sept lignes, dans l’ordre de la maquette, les trois premières Pro', () => {
+test('les huit lignes, dans l’ordre de la maquette puis les Nouveautés, les trois premières Pro', () => {
   expect(PUSH_LINES.map((line) => line.key)).toEqual([
     'deadline',
     'new_edition',
@@ -39,6 +42,7 @@ test('les sept lignes, dans l’ordre de la maquette, les trois premières Pro',
     'discussions',
     'new_followers',
     'weekly',
+    'updates',
   ])
   expect(PUSH_LINES.filter((line) => line.pro).map((line) => line.key)).toEqual([
     'deadline',

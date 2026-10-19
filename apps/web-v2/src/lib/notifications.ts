@@ -25,6 +25,9 @@ export const KNOWN_TYPES = [
   'friend_added_event',
   'weekly_new_events',
   'suggestion',
+  'app_update',
+  'app_update_reply',
+  'app_update_comment',
 ] as const
 
 export interface NotificationRow {
@@ -239,6 +242,29 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
         icon: 'explore',
         text: [{ strong: added }, ' sur Fellowship cette semaine.'],
         href: '/explorer',
+      }
+    }
+    case 'app_update': {
+      const title = text(data, 'title')
+      if (!title) return null
+      return { icon: 'update', text: ['Nouveauté : ', { strong: title }], href: '/nouveautes' }
+    }
+    case 'app_update_reply': {
+      const title = text(data, 'title')
+      if (!who || !title) return null
+      return {
+        icon: 'reply',
+        text: [{ strong: who }, ` a répondu à ton commentaire sur « ${title} »`],
+        href: '/nouveautes',
+      }
+    }
+    case 'app_update_comment': {
+      const title = text(data, 'title')
+      if (!who || !title) return null
+      return {
+        icon: 'reply',
+        text: [{ strong: who }, ` a commenté « ${title} »`],
+        href: '/nouveautes',
       }
     }
     case 'suggestion': {

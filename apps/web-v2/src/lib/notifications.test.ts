@@ -164,6 +164,7 @@ describe('KNOWN_TYPES', () => {
       city: 'Lyon',
       count: 2,
       reason: { kind: 'near' },
+      title: 'La nouvelle Fellowship est là',
     }
     for (const type of KNOWN_TYPES) expect(notificationView(row(type, full))).not.toBeNull()
     expect(KNOWN_TYPES).toContain('thread_question')
@@ -284,5 +285,30 @@ describe('suggestion', () => {
   })
   it('une raison illisible n’affiche rien', () => {
     expect(notificationPhrase('suggestion', { ...data, reason: { kind: 'x' } })).toBeNull()
+  })
+})
+
+describe('les Nouveautés', () => {
+  const title = 'La nouvelle Fellowship est là'
+  it('une mise à jour publiée mène à la page Nouveautés', () => {
+    expect(notificationPhrase('app_update', { title, version: '3.0.0' })).toEqual({
+      icon: 'update',
+      text: ['Nouveauté : ', { strong: title }],
+      href: '/nouveautes',
+    })
+  })
+  it('une réponse à ton commentaire', () => {
+    expect(notificationPhrase('app_update_reply', { title, actor_name: 'Gautier' })?.text).toEqual([
+      { strong: 'Gautier' },
+      ` a répondu à ton commentaire sur « ${title} »`,
+    ])
+  })
+  it('un commentaire, pour les admins', () => {
+    expect(
+      notificationPhrase('app_update_comment', { title, actor_name: 'Gautier (Atelier)' })?.text,
+    ).toEqual([{ strong: 'Gautier (Atelier)' }, ` a commenté « ${title} »`])
+  })
+  it('sans titre, rien n’est affiché', () => {
+    expect(notificationPhrase('app_update', {})).toBeNull()
   })
 })
