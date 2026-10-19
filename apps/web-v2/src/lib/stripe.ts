@@ -5,6 +5,7 @@
  * ATTENTION — le statut Pro n'arrive en base que par le webhook, quelques secondes après le
  *            paiement : le retour relit l'identité, au plus MAX_POLLS fois (nextPoll).
  */
+import { sirenDigits, type BillingDraft } from './billing'
 import { supabase } from './supabase'
 
 export type CheckoutOutcome =
@@ -39,6 +40,19 @@ export async function openPortal(entityId: string): Promise<void> {
   const url = response.error ? null : response.data?.url
   if (!url) throw new Error('portal')
   window.location.assign(url)
+}
+
+/** La raison sociale et le SIREN, en base et chez Stripe (propriétaire de l'enseigne seulement). */
+export async function updateBilling(entityId: string, draft: BillingDraft): Promise<void> {
+  const response = await supabase.functions.invoke<{ ok?: boolean }>('stripe-update-billing', {
+    body: {
+      entityId,
+      legalName: draft.legalName.trim(),
+      siren: draft.noSiren ? null : sirenDigits(draft.siren),
+      noSiren: draft.noSiren,
+    },
+  })
+  if (response.error || !response.data?.ok) throw new Error('billing')
 }
 
 export async function startCheckout(entityId: string, interval: 'month' | 'year'): Promise<void> {

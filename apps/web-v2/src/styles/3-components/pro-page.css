@@ -1,5 +1,6 @@
 /**
- * QUOI     — les styles de la page de l'offre /pro (features/pro : ProPage, PlanCard, ProFaq).
+ * QUOI     — les styles de la page de l'offre /pro (features/pro : ProPage, PlanCard, ProFaq,
+ *            ReferralCard).
  * POURQUOI — maquettes `2027 — Offre Pro` et `2027 mobile — Offre Pro` : deux cartes côte à côte,
  *            le Pro au liseré terre ; sur téléphone, l'une sous l'autre, le Pro d'abord.
  */
@@ -287,6 +288,22 @@
 }
 
 /* --- Téléphone ----------------------------------------------------------- */
+/* Le parrainage reprend la carte d'offre, en pleine largeur sous les deux offres. */
+.referral-card {
+  width: 100%;
+}
+
+.referral-card__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.referral-card__row .plan-card__big {
+  margin-right: auto;
+}
+
 @media (width <= 760px) {
   .pro-page {
     gap: var(--space-32);

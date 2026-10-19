@@ -3,15 +3,15 @@
  * POURQUOI — lot 10a : un rechargement ne fait rien perdre. Les réponses vivent en mémoire de
  *            session, l'étape dans l'adresse (`?etape=N`), donc le retour du navigateur recule
  *            d'une étape.
- * ATTENTION — le code de parrainage se pré-remplit depuis `?r=`, puis depuis la clé que la V1 pose
- *            déjà (`flwsh.referralCode`, même origine).
+ * ATTENTION — le code de parrainage se pré-remplit depuis `?r=`, puis depuis la clé où l'arrivée
+ *            sur le site l'a gardé (lib/referral.ts ; la V1 pose la même, même origine).
  */
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { REFERRAL_KEY } from '@/lib/referral'
 import { EMPTY_DRAFT, welcomeSteps, type WelcomeDraft, type WelcomeKind } from '@/lib/welcome'
 
 const DRAFT_KEY = 'flwsh-welcome'
-export const REFERRAL_KEY = 'flwsh.referralCode'
 
 function storedReferral(search: URLSearchParams): string {
   let code = search.get('r') ?? ''

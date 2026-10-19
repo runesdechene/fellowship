@@ -1,6 +1,6 @@
 /**
- * QUOI     — l'écran du tableau de bord : accueil, invitation au téléphone, bande d'action, frise
- *            de saison, prochaine date, dates à venir, pour toi, mes dossiers, mes bilans.
+ * QUOI     — l'écran du tableau de bord : accueil, paiement échoué, invitation au téléphone, bande
+ *            d'action, frise de saison, prochaine date, dates à venir, pour toi, mes dossiers, mes bilans.
  * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
  *            il assemble ce que useDashboard prépare.
  */
@@ -10,6 +10,7 @@ import { usePlan } from '@/lib/usePlan'
 import { ActionBanner } from './ActionBanner'
 import { DossiersSection } from './DossiersSection'
 import { NextDateCard } from './NextDateCard'
+import { PaymentBanner } from './PaymentBanner'
 import { PhoneInvite } from './PhoneInvite'
 import { ReportsSection } from './ReportsSection'
 import { SeasonChart } from './SeasonChart'
@@ -18,7 +19,10 @@ import { UpcomingCard } from './UpcomingCard'
 import { useDashboard } from './useDashboard'
 
 export function Dashboard() {
-  const { actor } = useAuth()
+  const { actor, entities } = useAuth()
+  const unpaid = entities.some(
+    (entity) => entity.actor_id === actor?.id && entity.subscription_status === 'past_due',
+  )
   // En gratuit, les bilans se devinent sous un voile et la bande qui les réclame se tait.
   const { pro } = usePlan()
   const {
@@ -60,6 +64,12 @@ export function Dashboard() {
           </p>
         </div>
       </header>
+
+      {unpaid && actor && (
+        <section className="dashboard__section">
+          <PaymentBanner entityId={actor.id} />
+        </section>
+      )}
 
       <PhoneInvite />
 

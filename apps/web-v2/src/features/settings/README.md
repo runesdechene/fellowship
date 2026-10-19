@@ -12,6 +12,8 @@
 - `NotificationSettings.tsx` — la carte du téléphone, puis les lignes et leur interrupteur.
 - `PhoneCard.tsx` — activer, couper, ou dire pourquoi c'est impossible.
 - `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro, supprimer.
+- `BillingRow.tsx`, `BillingDialog.tsx` — « Facturation » sous une enseigne abonnée : raison sociale
+  et SIREN, enregistrés en base et chez Stripe (chantier 3, sans maquette).
 - `DeleteEntityDialog.tsx` — supprimer une enseigne (retaper son nom), par `delete-account`.
 - `useUpcomingCounts.ts` — les dates de chaque enseigne sur les 6 prochains mois.
 - `ContactSection.tsx` — écrire à l'équipe.

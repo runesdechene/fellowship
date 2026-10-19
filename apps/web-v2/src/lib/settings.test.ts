@@ -24,6 +24,9 @@ const free: EntityBilling = {
   current_period_end: null,
   trial_end: null,
   legal_name: null,
+  discount_end: null,
+  discount_label: null,
+  cancel_at: null,
 }
 
 describe('profileProblem', () => {
@@ -90,8 +93,28 @@ describe('entityLine', () => {
     }
     expect(entityLine(trial, now, 0).text).toBe('Pro mensuel · essai jusqu’au 25 octobre 2026')
     const late = { ...trial, subscription_status: 'past_due', trial_end: null }
-    expect(entityLine(late, now, 0).text).toBe('Pro mensuel · paiement en attente')
+    expect(entityLine(late, now, 0).text).toBe('Pro mensuel · paiement échoué')
     expect(entityLine(late, now, 0).action).toBe('portal')
+  })
+  test('résiliation programmée et code promo passent avant le renouvellement', () => {
+    const pro = {
+      ...free,
+      plan: 'pro',
+      subscription_status: 'active',
+      billing_interval: 'month',
+      current_period_end: '2026-11-12T10:00:00Z',
+    }
+    expect(entityLine({ ...pro, cancel_at: '2026-11-12T10:00:00Z' }, now, 0).text).toBe(
+      'Pro mensuel · s’arrête le 12 novembre 2026',
+    )
+    const promo = { ...pro, discount_end: '2026-12-01T00:00:00Z', discount_label: 'RUNE-2026' }
+    expect(entityLine(promo, now, 0).text).toBe(
+      'Pro mensuel · offert jusqu’au 1 décembre 2026 (RUNE-2026)',
+    )
+    // Un code promo échu ne dit plus rien : la facture normale a repris.
+    expect(entityLine({ ...promo, discount_end: '2026-10-01T00:00:00Z' }, now, 0).text).toBe(
+      'Pro mensuel · renouvelé le 12 novembre 2026',
+    )
   })
   test('Pro offert : la date de fin, aucun bouton', () => {
     const comped = { ...free, comped_pro_until: '2027-01-31T00:00:00Z' }

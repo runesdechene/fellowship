@@ -1,6 +1,7 @@
 /**
  * QUOI     — /pro, la page de l'offre : l'accroche, la formule (mensuel / annuel), les cartes
- *            Gratuit et Pro, « Le coût de la route », la FAQ ; et le bandeau du retour de Stripe.
+ *            Gratuit et Pro, le parrainage, « Le coût de la route », la FAQ ; et le bandeau du retour
+ *            de Stripe.
  * POURQUOI — toutes les invitations du gratuit mènent ici (maquette « Offre Pro »). La formule vit
  *            dans l'adresse, le retour arrière la suit.
  * ATTENTION — sur téléphone, la carte Pro passe en premier (ordre CSS).
@@ -8,18 +9,24 @@
 import { useSearchParams } from 'react-router-dom'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { useAuth } from '@/lib/auth'
+import { formatFullDate } from '@/lib/dates'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { annualSaving, formulaFrom, type Formula } from '@/lib/pricing'
 import { billingAction } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { FreeCard, ProCard } from './PlanCard'
 import { ProFaq, ProSoon } from './ProFaq'
+import { ReferralCard } from './ReferralCard'
 import { useCheckoutReturn, type ReturnState } from './useCheckoutReturn'
 
-const BANNER: Record<Exclude<ReturnState, 'none'>, string> = {
-  waiting: 'Bienvenue dans le Pro. Ton essai de 14 jours commence.',
-  welcome: 'Bienvenue dans le Pro. Ton essai de 14 jours commence.',
-  late: 'Ton paiement est enregistré ; ton compte passe au Pro dans quelques instants.',
+/** L'essai dure 14 jours, 30 pour un filleul : la date vient de Stripe, jamais d'un nombre écrit ici.
+ *  Elle ne se lit qu'une fois le Pro arrivé : avant, `trial_end` peut être celui d'un ancien essai. */
+function bannerText(state: Exclude<ReturnState, 'none'>, trialEnd: string | null): string {
+  if (state === 'late')
+    return 'Ton paiement est enregistré ; ton compte passe au Pro dans quelques instants.'
+  return state === 'welcome' && trialEnd
+    ? `Bienvenue dans le Pro. Ton essai court jusqu’au ${formatFullDate(new Date(trialEnd))}.`
+    : 'Bienvenue dans le Pro. Ton essai commence.'
 }
 
 function FormulaSwitch({ value, onChange }: { value: Formula; onChange: (next: Formula) => void }) {
@@ -67,7 +74,7 @@ export function ProPage() {
     <div className="pro-page">
       {back !== 'none' && (
         <p className="pro-page__banner" role="status">
-          {BANNER[back]}
+          {bannerText(back, entity?.trial_end ?? null)}
         </p>
       )}
       <header className="pro-page__head">
@@ -101,6 +108,7 @@ export function ProPage() {
           settling={back === 'waiting' || back === 'late'}
         />
       </div>
+      {entity && <ReferralCard entityId={entity.actor_id} brandName={entity.brand_name} />}
       <ProSoon />
       <ProFaq />
     </div>

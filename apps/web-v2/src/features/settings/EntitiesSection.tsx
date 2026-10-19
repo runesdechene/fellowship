@@ -1,6 +1,7 @@
 /**
  * QUOI     — la section Enseignes et abonnement des Réglages : une ligne par enseigne, son
- *            abonnement en une phrase, le bon geste (gérer, passer Pro, rien), et Supprimer…
+ *            abonnement en une phrase, le bon geste (gérer, passer Pro, rien), et Supprimer… ; sous
+ *            une enseigne abonnée, sa facturation (raison sociale, SIREN).
  * POURQUOI — lot 9b, maquette 2206:691 : chaque enseigne a sa vitrine et son propre abonnement.
  *            « Gérer » ouvre l'espace Stripe ; « Passer Pro » fait de l'enseigne le compte actif,
  *            puis ouvre l'offre.
@@ -17,6 +18,7 @@ import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { entityLine } from '@/lib/settings'
 import { openPortal } from '@/lib/stripe'
+import { BillingRow } from './BillingRow'
 import { DeleteEntityDialog } from './DeleteEntityDialog'
 import { EntityBase } from './EntityBase'
 import { SettingCard, SettingRow } from './SettingRow'
@@ -96,6 +98,13 @@ export function EntitiesSection() {
                   Supprimer…
                 </button>
               </SettingRow>
+              {line.action === 'portal' && (
+                <BillingRow
+                  entityId={entity.actor_id}
+                  brandName={entity.brand_name}
+                  billing={entity}
+                />
+              )}
               <EntityBase entityId={entity.actor_id} />
             </Fragment>
           )

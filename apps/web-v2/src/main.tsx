@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { App } from './App'
 import { AuthProvider } from './lib/auth'
+import { captureReferral } from './lib/referral'
 import { applyTheme, currentTheme } from './lib/theme'
 import './styles/index.css'
 
@@ -19,6 +20,9 @@ if (`${window.location.pathname}/` === import.meta.env.BASE_URL) {
   const { search, hash } = window.location
   window.history.replaceState(null, '', `${import.meta.env.BASE_URL}${search}${hash}`)
 }
+
+// Un lien de parrainage (`?r=`) arrive sur n'importe quelle page : le code attend l'inscription.
+captureReferral(window.location.search)
 
 // Le service worker du téléphone (public/sw.js) : les notifications, rien d'autre.
 if ('serviceWorker' in navigator) {

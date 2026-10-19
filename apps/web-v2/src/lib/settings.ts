@@ -2,8 +2,8 @@
  * QUOI     — les règles des Réglages : les champs du profil (validation, valeur à écrire), la
  *            phrase d'une enseigne et son geste de facturation, le mot qui confirme la suppression.
  * POURQUOI — lot 9b, maquette 2206:691. Les écrans affichent ; ce qui se décide se teste ici.
- * ATTENTION — `entity.current_period_end` ne dit pas si l'abonnement est résilié en fin de période
- *            (Stripe ne nous l'écrit pas) : « renouvelé le » est la seule lecture possible.
+ * ATTENTION — l'ordre de la phrase compte : un paiement échoué, puis un arrêt programmé, puis un
+ *            code promo qui couvre la facture passent avant « renouvelé le », qui serait faux.
  */
 import { formatFullDate } from './dates'
 import { isPro } from './plan'
@@ -40,6 +40,9 @@ export interface EntityBilling {
   current_period_end: string | null
   trial_end: string | null
   legal_name: string | null
+  discount_end: string | null
+  discount_label: string | null
+  cancel_at: string | null
 }
 
 const SUBSCRIBED = ['active', 'trialing', 'past_due']
@@ -60,7 +63,14 @@ export function entityLine(
     entity.subscription_status !== null && SUBSCRIBED.includes(entity.subscription_status)
   if (subscribed) {
     const parts = [entity.billing_interval === 'year' ? 'Pro annuel' : 'Pro mensuel']
-    if (entity.subscription_status === 'past_due') parts.push('paiement en attente')
+    if (entity.subscription_status === 'past_due') parts.push('paiement échoué')
+    else if (entity.cancel_at)
+      parts.push(`s’arrête le ${formatFullDate(new Date(entity.cancel_at))}`)
+    else if (entity.discount_end && new Date(entity.discount_end) > now)
+      parts.push(
+        `offert jusqu’au ${formatFullDate(new Date(entity.discount_end))}` +
+          (entity.discount_label ? ` (${entity.discount_label})` : ''),
+      )
     else if (entity.subscription_status === 'trialing' && entity.trial_end)
       parts.push(`essai jusqu’au ${formatFullDate(new Date(entity.trial_end))}`)
     else if (entity.current_period_end)

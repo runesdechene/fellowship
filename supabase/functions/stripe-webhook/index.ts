@@ -139,6 +139,7 @@ async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
       current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
       discount_end: null,
       discount_label: null,
+      cancel_at: null,
     })
     .eq('actor_id', entityActorId)
 }
@@ -209,6 +210,10 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
   const activeDiscount: DiscountLike = (discounts && discounts[0]) || legacyDiscount || null
   const discountEnd = activeDiscount?.end ? new Date(activeDiscount.end * 1000).toISOString() : null
   const discountLabel = activeDiscount?.coupon?.name ?? activeDiscount?.coupon?.id ?? null
+  // Résiliation programmée dans l'espace Stripe : le Pro court jusqu'à cette date, puis s'arrête.
+  const cancelAt = sub.cancel_at
+    ? new Date(sub.cancel_at * 1000).toISOString()
+    : sub.cancel_at_period_end ? periodEnd : null
 
   const { error } = await getSupabaseAdmin()
     .from('entities')
@@ -220,6 +225,7 @@ async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscript
       current_period_end: periodEnd,
       discount_end: discountEnd,
       discount_label: discountLabel,
+      cancel_at: cancelAt,
       plan,
     })
     .eq('actor_id', entityActorId)

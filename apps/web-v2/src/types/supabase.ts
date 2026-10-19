@@ -200,6 +200,7 @@ export type Database = {
           billing_no_siren: boolean
           bio: string | null
           brand_name: string
+          cancel_at: string | null
           city: string | null
           comped_pro_until: string | null
           craft_type: string | null
@@ -234,6 +235,7 @@ export type Database = {
           billing_no_siren?: boolean
           bio?: string | null
           brand_name: string
+          cancel_at?: string | null
           city?: string | null
           comped_pro_until?: string | null
           craft_type?: string | null
@@ -268,6 +270,7 @@ export type Database = {
           billing_no_siren?: boolean
           bio?: string | null
           brand_name?: string
+          cancel_at?: string | null
           city?: string | null
           comped_pro_until?: string | null
           craft_type?: string | null
@@ -2498,6 +2501,7 @@ export type Database = {
           billing_no_siren: boolean
           bio: string | null
           brand_name: string
+          cancel_at: string | null
           city: string | null
           comped_pro_until: string | null
           craft_type: string | null
