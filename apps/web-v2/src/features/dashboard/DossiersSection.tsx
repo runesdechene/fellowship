@@ -3,10 +3,12 @@
  *            où en est l'argent (à payer, acompte, payé ; ou, pour un cachet, à recevoir, reçu).
  * POURQUOI — la fonction plébiscitée par les exposants : savoir d'un coup d'œil ce qui reste à
  *            envoyer, à payer ou à recevoir.
+ *            Sur téléphone (maquette 2120:2), trois dossiers et « Tout » pour déplier les autres.
  * ATTENTION — l'état se lit par la FORME de l'icône ; seul ce qui est acquis porte la terre.
  */
 import { Poster } from '@/components/ui/Poster'
 import { ChevronRight, Circle, Contrast } from 'lucide-react'
+import { useState } from 'react'
 import { formatDateRange } from '@/lib/dates'
 import type { PaymentTone } from '@/lib/dossiers'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -18,66 +20,91 @@ function PaymentIcon({ tone }: { tone: PaymentTone }) {
   return <Circle className="dossiers__icon" size={12} strokeWidth={2.2} />
 }
 
+/** Ce que le téléphone montre avant « Tout » ; l'ordinateur montre tout. */
+const SHOWN_ON_PHONE = 3
+
 export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
   const go = useTransitionNavigate()
+  const [all, setAll] = useState(false)
 
   return (
-    <div className="dossiers">
-      <div className="dossiers__head" aria-hidden="true">
-        <span>Date</span>
-        <span>Dossier</span>
-        <span>Paiement</span>
+    <section className="dashboard__section">
+      <div className="dashboard__section-head">
+        <h2 className="dashboard__section-title">Mes dossiers</h2>
+        {dossiers.length > SHOWN_ON_PHONE && (
+          <button
+            type="button"
+            className="dossiers__more"
+            aria-expanded={all}
+            onClick={() => {
+              setAll((value) => !value)
+            }}
+          >
+            {all ? 'Moins' : 'Tout'}
+            <ChevronRight size={14} strokeWidth={2} />
+          </button>
+        )}
       </div>
-      <ul className="dossiers__list">
-        {dossiers.map((dossier) => (
-          <li key={dossier.participationId}>
-            <button
-              type="button"
-              className="dossiers__row"
-              onClick={() => go(`/evenement/${dossier.eventId}`)}
-            >
-              <span className="dossiers__date">
-                <Poster
-                  imageUrl={dossier.imageUrl}
-                  tags={dossier.tags}
-                  className="dossiers__thumb"
-                />
-                <span className="dossiers__identity">
-                  <span className="dossiers__name">{dossier.name}</span>
-                  <span className="dossiers__range">
-                    {formatDateRange(dossier.startDate, dossier.endDate)}
+      <p className="dashboard__section-note">
+        Ce qui reste à envoyer, à payer ou à recevoir sur tes prochaines dates
+      </p>
+      <div className={all ? 'dossiers dossiers--all' : 'dossiers'}>
+        <div className="dossiers__head" aria-hidden="true">
+          <span>Date</span>
+          <span>Dossier</span>
+          <span>Paiement</span>
+        </div>
+        <ul className="dossiers__list">
+          {dossiers.map((dossier) => (
+            <li key={dossier.participationId}>
+              <button
+                type="button"
+                className="dossiers__row"
+                onClick={() => go(`/evenement/${dossier.eventId}`)}
+              >
+                <span className="dossiers__date">
+                  <Poster
+                    imageUrl={dossier.imageUrl}
+                    tags={dossier.tags}
+                    className="dossiers__thumb"
+                  />
+                  <span className="dossiers__identity">
+                    <span className="dossiers__name">{dossier.name}</span>
+                    <span className="dossiers__range">
+                      {formatDateRange(dossier.startDate, dossier.endDate)}
+                    </span>
                   </span>
                 </span>
-              </span>
 
-              <span className="dossiers__state">
-                {dossier.view.dossier.acquired ? (
-                  <span className="dossiers__dot dossiers__dot--acquired" />
-                ) : (
-                  <Contrast
-                    className="dossiers__icon dossiers__icon--sent"
-                    size={12}
-                    strokeWidth={2.2}
-                  />
-                )}
-                {dossier.view.dossier.label}
-              </span>
-
-              <span className="dossiers__payment">
                 <span className="dossiers__state">
-                  <PaymentIcon tone={dossier.view.payment.tone} />
-                  {dossier.view.payment.label}
+                  {dossier.view.dossier.acquired ? (
+                    <span className="dossiers__dot dossiers__dot--acquired" />
+                  ) : (
+                    <Contrast
+                      className="dossiers__icon dossiers__icon--sent"
+                      size={12}
+                      strokeWidth={2.2}
+                    />
+                  )}
+                  {dossier.view.dossier.label}
                 </span>
-                {dossier.view.payment.detail && (
-                  <span className="dossiers__detail">{dossier.view.payment.detail}</span>
-                )}
-              </span>
 
-              <ChevronRight className="dossiers__chevron" size={16} strokeWidth={1.8} />
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+                <span className="dossiers__payment">
+                  <span className="dossiers__state">
+                    <PaymentIcon tone={dossier.view.payment.tone} />
+                    {dossier.view.payment.label}
+                  </span>
+                  {dossier.view.payment.detail && (
+                    <span className="dossiers__detail">{dossier.view.payment.detail}</span>
+                  )}
+                </span>
+
+                <ChevronRight className="dossiers__chevron" size={16} strokeWidth={1.8} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   )
 }

@@ -888,6 +888,8 @@
      moi » en petite icône d'interdiction, en encre effacée (Uriel, 10/10/2026), le nombre trouvé du gratuit en grand titre. */
   --suggestion-poster-width: var(--report-thumb-width);
   --suggestion-poster-height: var(--report-thumb-height);
+  /* Sur téléphone, une carte de « Pour toi » laisse dépasser la suivante. */
+  --suggestion-mobile-width: 85%;
   --suggestion-placeholder-height: 102px;
   --suggestion-dismiss-ink: var(--ink-waiting);
   --suggestion-dismiss-size: 26px;
@@ -1273,6 +1275,8 @@
   /* La taille des icônes de la barre : l'avatar de « Moi » ne pousse pas son nom plus bas. */
   --tab-bar-avatar: 22px;
   --tab-sheet-veil: var(--who-goes-veil);
+  /* L'ombre de la barre d'onglets monte vers la page : elle la pose au-dessus du contenu. */
+  --tab-bar-shadow: 0 -6px 24px color-mix(in srgb, var(--ink-950) 12%, transparent);
   --tab-sheet-motion: var(--duration-medium) var(--ease-out);
   --tab-sheet-grab-width: var(--space-40);
   --tab-bar-active: var(--terre-700);

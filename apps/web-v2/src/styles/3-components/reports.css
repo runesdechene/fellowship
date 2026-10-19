@@ -174,8 +174,10 @@
     border-right: none;
   }
 
-  .reports__latest {
-    grid-template-columns: 1fr;
+  /* Maquette 2120:2 : le téléphone ne garde que le bénéfice de l'année ; les dates sont dans
+     Mes bilans, à un « Tout voir ». Sans chiffre de l'année, les dates restent. */
+  .reports:has(.reports__season) .reports__latest {
+    display: none;
   }
 }
 

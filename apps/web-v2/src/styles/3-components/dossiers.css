@@ -125,37 +125,96 @@
   }
 }
 
-/* Téléphone : plus de colonnes — la vignette, puis le nom, le dossier et le paiement l'un sous
-   l'autre. */
+/* « Tout » : le téléphone seul en a besoin, l'ordinateur montre déjà chaque dossier. */
+.dossiers__more {
+  display: none;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-section-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.dossiers__more svg {
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.dossiers__more[aria-expanded='true'] svg {
+  rotate: -90deg;
+}
+
+/* Téléphone (maquette 2120:2) : plus de colonnes — la vignette, et à côté le nom, le dossier et
+   le paiement l'un sous l'autre, en petit. Trois dossiers, « Tout » déplie les autres. */
 @media (width <= 760px) {
-  .dossiers__head {
+  .dossiers {
+    padding: var(--space-4) var(--space-8);
+  }
+
+  .dossiers__head,
+  .dossiers__range {
+    display: none;
+  }
+
+  .dossiers__more {
+    display: inline-flex;
+  }
+
+  .dossiers:not(.dossiers--all) .dossiers__list > li:nth-child(n + 4) {
     display: none;
   }
 
   .dossiers__row {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'date date chevron'
-      'state state chevron'
-      'payment payment chevron';
-    row-gap: var(--space-4);
+      'thumb name chevron'
+      'thumb state chevron'
+      'thumb payment chevron';
+    gap: var(--space-2) var(--space-12);
     height: auto;
-    padding: var(--space-12);
+    padding: var(--space-12) var(--space-4);
   }
 
+  /* La vignette et le nom deviennent des cases de la grille. */
   .dossiers__date {
-    grid-area: date;
+    display: contents;
+  }
+
+  .dossiers__thumb {
+    grid-area: thumb;
+  }
+
+  .dossiers__identity {
+    grid-area: name;
   }
 
   .dossiers__row > .dossiers__state {
     grid-area: state;
   }
 
+  .dossiers__state {
+    gap: var(--space-6);
+    font: var(--type-list-meta);
+    color: var(--ink-soft);
+  }
+
   .dossiers__payment {
     grid-area: payment;
+    flex-flow: row wrap;
+    align-items: center;
+    column-gap: var(--space-4);
+  }
+
+  .dossiers__detail::before {
+    content: '· ';
   }
 
   .dossiers__chevron {
     grid-area: chevron;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossiers__more svg {
+    transition: none;
   }
 }

@@ -149,6 +149,33 @@
   color: var(--ink-soft);
 }
 
+/* Téléphone : trois cartes côte à côte n'y tiennent pas ; elles glissent en rangée, comme celles
+   de l'Explorer, et la suivante dépasse pour dire qu'il y en a d'autres. */
+@media (width <= 760px) {
+  .suggestions {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .suggestions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .suggestion {
+    flex: none;
+    width: var(--suggestion-mobile-width);
+    scroll-snap-align: start;
+  }
+
+  .suggestions__invite {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 var(--space-20);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .suggestion,
   .suggestion__dismiss {

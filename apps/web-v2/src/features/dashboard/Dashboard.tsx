@@ -102,15 +102,7 @@ export function Dashboard() {
       {/* Une clé par acteur : changer d'enseigne repart de zéro, jamais les cartes de l'autre. */}
       <SuggestionsSection key={actor?.id} />
 
-      {dossiers.length > 0 && (
-        <section className="dashboard__section">
-          <h2 className="dashboard__section-title">Mes dossiers</h2>
-          <p className="dashboard__section-note">
-            Ce qui reste à envoyer, à payer ou à recevoir sur tes prochaines dates
-          </p>
-          <DossiersSection dossiers={dossiers} />
-        </section>
-      )}
+      {dossiers.length > 0 && <DossiersSection dossiers={dossiers} />}
 
       {reports.length > 0 && (
         <ReportsSection
