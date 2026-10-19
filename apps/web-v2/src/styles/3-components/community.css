@@ -561,9 +561,11 @@ a.side-card__row:hover {
     margin-top: var(--space-6);
   }
 
-  /* « Mes amis », « Mes abonnés » : l'en-tête fondu ne porte plus sa marge, la liste la reprend. */
+  /* « Mes amis », « Mes abonnés » : la liste prend la place du fil, sous les onglets (rangés plus
+     bas, `order: 2`, pour la Communauté) ; l'en-tête fondu ne porte plus sa marge, elle la reprend. */
   .community__header + .network-list,
   .community__header + .community__note {
+    order: 3;
     margin-top: var(--space-24);
   }
 
