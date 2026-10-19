@@ -86,7 +86,7 @@
   --night-400: #494643; /* pointillés, interrupteur éteint */
   --cream-50: #f3efe9; /* titres, texte, bouton principal la nuit */
   --cream-200: #d9d3cb; /* survol du bouton principal la nuit */
-  --cream-350: #bdb7af; /* les entrées inactives de la barre latérale la nuit */
+  --cream-350: #b0aaa2; /* les menus inactifs la nuit (barre latérale, onglets) */
   --cream-500: #a39d95; /* texte secondaire la nuit */
   --cream-650: #857f78; /* signes de statut la nuit */
   --cream-750: #6f6962; /* libellés discrets la nuit */
@@ -95,6 +95,8 @@
   --live-500: #3fa35c; /* le point « en direct », seul vert de l'interface */
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
   --terre-400: #cf9251; /* arrivée du dégradé */
+  --terre-500: #f0824a; /* départ du dégradé des bénéfices, la nuit */
+  --terre-200: #ffd391; /* arrivée du dégradé des bénéfices, la nuit */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
   --brique-600: #b4432f; /* ce qui détruit ou refuse (maquette 2206:691, « Supprimer… ») */
   --brique-400: #e0806a; /* la même encre, lisible la nuit */

@@ -30,7 +30,7 @@
     align-items: center;
     gap: var(--space-4);
     font: var(--type-tab-bar);
-    color: var(--ink-section-pale);
+    color: var(--tab-bar-ink);
     cursor: pointer;
   }
 

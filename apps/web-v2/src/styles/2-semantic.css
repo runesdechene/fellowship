@@ -125,6 +125,7 @@
   /* LE DÉGRADÉ DU LOGO — « c'est acquis » (inscrit, payé, bénéfice). Pas pour un
      bouton, un lien ou un titre de l'application. */
   --brand-gradient: linear-gradient(90deg, var(--terre-700), var(--terre-400));
+  --net-gradient: var(--brand-gradient); /* le chiffre du bénéfice */
   --brand-ink: var(--sand-0); /* le texte posé sur le dégradé, dans les deux thèmes */
   /* Le filet qui détache une carte blanche du panneau : les plans se lisent au
      trait fin, plus à l'aplat beige (langage « 2027 »). */
@@ -1313,6 +1314,7 @@
   --tab-bar-shadow: 0 -6px 24px color-mix(in srgb, var(--ink-950) 12%, transparent);
   --tab-sheet-motion: var(--duration-medium) var(--ease-out);
   --tab-sheet-grab-width: var(--space-40);
+  --tab-bar-ink: var(--ink-section-pale);
   --tab-bar-active: var(--terre-700);
   --mobile-gutter: var(--space-20);
   --mobile-padding-top: var(--space-80);
@@ -1721,6 +1723,10 @@
   --vitrine-edit-warning: var(--terre-400);
   --activity-avatar-surface: var(--night-350);
   --tab-bar-active: var(--terre-400);
+  /* Les onglets inactifs, comme les menus de la barre latérale : en gris pâle, ils disparaissaient. */
+  --tab-bar-ink: var(--ink-nav);
+  /* Le bénéfice la nuit : le dégradé de marque partait d'une brique qui se perdait dans le fond. */
+  --net-gradient: linear-gradient(90deg, var(--terre-500), var(--terre-200));
   --tag-first-ink: var(--night-0);
 }
 

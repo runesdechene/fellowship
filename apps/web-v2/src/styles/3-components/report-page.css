@@ -455,7 +455,7 @@
 
 .report-summary__net {
   width: fit-content;
-  background: var(--brand-gradient);
+  background: var(--net-gradient);
   background-clip: text;
   font: var(--type-report-summary-net);
   letter-spacing: var(--tracking-tight);
