@@ -14,6 +14,7 @@ import { Tag } from '@/components/ui/Tag'
 import { durationLabel, formatMonthAbbr, parseSqlDate } from '@/lib/dates'
 import { parseEmbedParams } from '@/lib/embed'
 import { tagStyleFor } from '@/lib/tags'
+import { posterThumb } from '@/lib/poster-thumb'
 import { useEmbed } from './useEmbed'
 import { useHostTheme, useReportHeight } from './useHostFrame'
 
@@ -112,7 +113,9 @@ export function EmbedPage() {
                   <i>{start.getFullYear()}</i>
                 </span>
                 <span className="embed-date__poster">
-                  {date.image_url && <img src={date.image_url} alt="" loading="lazy" />}
+                  {date.image_url && (
+                    <img src={posterThumb(date.image_url, 400, 80)} alt="" loading="lazy" />
+                  )}
                 </span>
                 <span className="embed-date__info">
                   <span className="embed-date__name">{date.name}</span>

@@ -9,6 +9,7 @@
  */
 import { createElement, type CSSProperties, type ReactNode } from 'react'
 import { categoryIcon } from '@/lib/category-icons'
+import { posterThumb } from '@/lib/poster-thumb'
 import { useCategoryColors } from '@/lib/useTagStyles'
 
 interface PosterProps {
@@ -21,7 +22,8 @@ interface PosterProps {
 
 export function Poster({ imageUrl, tags, className, children }: PosterProps) {
   const colors = useCategoryColors(tags)
-  if (imageUrl) return <img className={className} src={imageUrl} alt="" />
+  // Assez large pour la plus grande affiche posée dans une page, en écran dense.
+  if (imageUrl) return <img className={className} src={posterThumb(imageUrl, 800, 80)} alt="" />
 
   return (
     <span

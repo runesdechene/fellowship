@@ -19,7 +19,8 @@ import {
   formatFullDate,
   formatMonthAbbr,
 } from '@/lib/dates'
-import { paymentOf, posterThumb, type Showcase, type ShowEvent } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
+import { paymentOf, type Showcase, type ShowEvent } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
 import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { AppWindow } from './AppWindow'

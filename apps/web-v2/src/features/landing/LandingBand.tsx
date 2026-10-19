@@ -7,7 +7,7 @@
  *            un flou sur un grand calque fige le rendu (.claude/rules/interface.md).
  */
 import type { ReactNode } from 'react'
-import { posterThumb } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
 
 const BLUR_TILES = 4
 const BLUR_WIDTH = 12

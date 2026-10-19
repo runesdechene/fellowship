@@ -10,7 +10,6 @@ import {
   paymentOf,
   pickFaces,
   placeOf,
-  posterThumb,
   RUNES_DE_CHENE,
   type ShowcaseRow,
 } from './landing'
@@ -46,19 +45,6 @@ describe('placeOf', () => {
   it('ramène un code postal ou un « Orne (61) » au numéro du département', () => {
     expect(placeOf('Grenoble', '38000')).toBe('Grenoble (38)')
     expect(placeOf('Domfront', 'Orne (61)')).toBe('Domfront (61)')
-  })
-})
-
-describe('posterThumb', () => {
-  it('demande au stockage une miniature de l’image entière, sans la découper', () => {
-    const url = 'https://x.supabase.co/storage/v1/object/public/event-images/a.webp'
-    expect(posterThumb(url, 40)).toBe(
-      'https://x.supabase.co/storage/v1/render/image/public/event-images/a.webp?width=40&resize=contain&quality=60',
-    )
-  })
-
-  it('laisse intacte une affiche hébergée ailleurs', () => {
-    expect(posterThumb('https://ailleurs.fr/a.jpg', 40)).toBe('https://ailleurs.fr/a.jpg')
   })
 })
 

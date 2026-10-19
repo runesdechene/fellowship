@@ -7,7 +7,8 @@
  */
 import { Plus, Star } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
-import { posterThumb, type Showcase, type ShowEvent } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
+import type { Showcase, ShowEvent } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
 import { AppWindow } from './AppWindow'
 

@@ -37,6 +37,7 @@ import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
+import { posterThumb } from '@/lib/poster-thumb'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
@@ -267,7 +268,11 @@ export function EventPage() {
         <header className="event-page__hero">
           {/* Sur téléphone, le mur d'affiche disparaît : l'affiche ouvre la fiche. */}
           {event.image_url && (
-            <img className="event-page__mobile-poster" src={event.image_url} alt="" />
+            <img
+              className="event-page__mobile-poster"
+              src={posterThumb(event.image_url, 800, 80)}
+              alt=""
+            />
           )}
           <div className="event-page__identity">
             <h1 className="event-page__title">{event.name}</h1>

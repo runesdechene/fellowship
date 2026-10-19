@@ -9,7 +9,8 @@
  */
 import { Poster } from '@/components/ui/Poster'
 import { formatDateRange } from '@/lib/dates'
-import { posterThumb, type Showcase } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
+import type { Showcase } from '@/lib/landing'
 import { DEMO } from '@/lib/landing-demo'
 import { AppWindow } from './AppWindow'
 

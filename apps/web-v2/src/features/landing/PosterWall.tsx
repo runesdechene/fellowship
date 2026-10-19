@@ -8,7 +8,7 @@
  *            tout le mur est caché aux lecteurs d'écran. Figé sous `prefers-reduced-motion` (landing.css). Les affiches viennent en
  *            miniature de 480 px : le mur en montre une trentaine.
  */
-import { posterThumb } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
 import { DEMO } from '@/lib/landing-demo'
 
 const COLUMNS = 6

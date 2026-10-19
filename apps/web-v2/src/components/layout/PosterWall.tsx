@@ -7,6 +7,7 @@
  */
 import { useCallback, useState } from 'react'
 import { usePageChrome } from '@/lib/page-chrome'
+import { posterThumb } from '@/lib/poster-thumb'
 
 /**
  * LE MUR D'AFFICHE — le bord droit de l'écran, du haut au bas.
@@ -51,15 +52,17 @@ export function PosterWall() {
   const echouer = useCallback((source: string) => setArrivee(source), [])
 
   if (!poster) return null
+  // La largeur d'envoi d'une affiche : le mur couvre toute la hauteur de l'écran.
+  const source = posterThumb(poster, 1200, 80)
 
   return (
     <aside
-      className={arrivee === poster ? 'poster-wall poster-wall--entre' : 'poster-wall'}
+      className={arrivee === source ? 'poster-wall poster-wall--entre' : 'poster-wall'}
       aria-hidden="true"
     >
       <img
         className="poster-wall__image"
-        src={poster}
+        src={source}
         alt=""
         ref={noter}
         onLoad={(evenement) => noter(evenement.currentTarget)}

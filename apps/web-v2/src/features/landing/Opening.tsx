@@ -5,7 +5,8 @@
  *            grâce au calendrier connecté aux amis. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
  * ATTENTION — la recherche mène aux résultats publics, /festivals (lot 11b).
  */
-import { posterThumb, type Showcase } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
+import type { Showcase } from '@/lib/landing'
 import { LandingSearch } from './LandingSearch'
 import { PosterWall } from './PosterWall'
 

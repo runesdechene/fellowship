@@ -7,7 +7,8 @@
  */
 import { Check } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
-import { posterThumb, type ShowEvent } from '@/lib/landing'
+import { posterThumb } from '@/lib/poster-thumb'
+import type { ShowEvent } from '@/lib/landing'
 
 const READY = ['Enseigne et SIRET', 'Stand 3 × 3 m, électricité', 'Attestation d’assurance']
 

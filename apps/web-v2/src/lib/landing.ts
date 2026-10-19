@@ -87,18 +87,6 @@ export function pickFaces(people: FaceRow[], random: () => number): string[] {
   return [...first, ...others].slice(0, FACES).map((p) => p.avatar_url)
 }
 
-const OBJECT = '/storage/v1/object/public/'
-const RENDER = '/storage/v1/render/image/public/'
-
-/**
- * Une miniature de l'image, servie par le stockage : les fonds flous et le mur restent légers.
- * `resize=contain` : sans lui, le stockage garde la hauteur d'origine et découpe une bande au centre.
- */
-export function posterThumb(url: string, width: number): string {
-  if (!url.includes(OBJECT)) return url
-  return `${url.replace(OBJECT, RENDER)}?width=${String(width)}&resize=contain&quality=60`
-}
-
 function toEvent(r: ShowcaseRow): ShowEvent {
   return {
     id: r.id,
