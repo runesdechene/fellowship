@@ -13,7 +13,9 @@
   height: var(--topbar-control-height);
   padding: 0 var(--space-24);
   border-radius: var(--button-radius);
-  background: var(--surface-control);
+  /* Le gris de la cloche et du retour, pour tout bouton (Uriel, 19/10/2026 : « Annuler » était
+     trop clair, presque le fond du site) */
+  background: var(--icon-button-surface);
   color: var(--ink-strong);
   font: var(--type-button);
   white-space: nowrap;
@@ -25,7 +27,6 @@
   width: var(--topbar-control-height);
   padding: 0;
   justify-content: center;
-  background: var(--icon-button-surface);
   color: var(--ink-title);
 }
 
@@ -60,7 +61,7 @@
    besoin : sans lui elles pèsent moins lourd que la première et se feraient
    écraser par elle, chacune repeignant alors sa surface en crème. */
 .button:hover:not(:disabled) {
-  background: var(--surface-control-hover);
+  background: var(--icon-button-surface-hover);
 }
 
 /* Elle part d'une surface sombre, pas claire : elle ne peut pas hériter du
@@ -71,10 +72,6 @@
 
 /* Les boutons-icônes ont leur propre survol (voir --icon-button-surface) ; il reprend le
    `:not(:disabled)` pour peser autant que celui de .button (.claude/rules/v2.md). */
-.button--icon:hover:not(:disabled) {
-  background: var(--icon-button-surface-hover);
-}
-
 /* Sans fond au repos, sans fond au survol : c'est son encre qui s'affirme —
    lui donner une surface ici la ferait apparaître de nulle part. */
 .button--bare:hover:not(:disabled) {
