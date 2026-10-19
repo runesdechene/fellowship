@@ -1121,6 +1121,13 @@
   --type-admin-tile: var(--weight-regular) var(--size-28) / 1 var(--family-display);
   --type-admin-summary: var(--weight-regular) var(--size-20) / var(--leading-snug)
     var(--family-display);
+  /* Le lot 4 : la pastille de Signalements (maquette 2338:23), les lignes à actions, la citation */
+  --sidebar-count-surface: var(--action-surface);
+  --sidebar-count-ink: var(--action-ink);
+  --sidebar-count-padding: var(--space-2) var(--space-7);
+  --type-sidebar-count: var(--weight-semibold) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --admin-quote-width: 360px;
   /* =========================================================================
      CALENDRIER — la frise des douze mois (features/calendar)
      ====================================================================== */

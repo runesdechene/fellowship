@@ -14,6 +14,8 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `useAdminSheet.ts` — charge la fiche d'une enseigne ou d'une personne de l'administration (id, rechargement).
 - `useAdminNotes.ts` — les notes internes et les étiquettes d'un acteur (admins seuls).
 - `tags.ts` — les catégories réglées dans l'administration.
+- `moderation.ts` — les signalements : statuts dans l'adresse, motifs, libellé de la cible.
+- `admin-events.ts` — la liste des événements de l'administration : recherche et page dans l'adresse.
 - `explorer.ts` + `event-search.ts` — l'horizon de recherche (3 / 6 mois / sans borne) et la requête de festivals publics, sans acteur.
 - `rich-text.ts` — nettoyage du HTML des descriptions.
 - `navigation.ts` — la navigation animée (View Transitions).

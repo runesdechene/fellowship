@@ -8,6 +8,7 @@ La vitrine d'un artisan (`/:slug`), dans le langage « 2027 ». Maquette : cadre
 - `EscaleCard.tsx` — une prochaine escale, avec les amis du visiteur qui y vont.
 - `Stamps.tsx` — la route passée en tampons.
 - `useVitrine.ts` — le chargement, et Suivre / Ne plus suivre.
+- `ReportProfile.tsx` — « Signaler ce profil » au pied de page, et sa fenêtre (motif, commentaire).
 
 Le mode édition (lot 6b, maquette `2231:2`) — le propriétaire modifie sa vitrine en place, sur
 ordinateur ; rien n'est publié avant « Enregistrer » :

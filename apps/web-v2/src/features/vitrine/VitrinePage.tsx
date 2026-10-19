@@ -1,6 +1,6 @@
 /**
  * QUOI     — l'écran Vitrine d'un artisan (/:slug) : l'en-tête, les prochaines escales, la route
- *            passée en tampons, et le pied de page avec l'adresse publique.
+ *            passée en tampons, et le pied de page avec l'adresse publique et « Signaler ce profil ».
  * POURQUOI — la page publique d'un artisan, reprise de la V1 dans le langage « 2027 ».
  * ATTENTION — l'adresse est celle de la V1 (`flw.sh/<slug>`) : la vitrine publique reste servie
  *            par la V1 jusqu'à la bascule (lot 12).
@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { EscaleCard } from './EscaleCard'
+import { ReportProfile } from './ReportProfile'
 import { Stamps } from './Stamps'
 import { useVitrine, type Vitrine } from './useVitrine'
 import { VitrineEditor } from './VitrineEditor'
@@ -99,6 +100,7 @@ export function VitrinePage() {
 
       <footer className="vitrine__footer">
         Carnet de route Fellowship · flw.sh/{vitrine.slug}
+        {!isOwner && <ReportProfile targetId={vitrine.actorId} />}
       </footer>
     </div>
   )

@@ -90,6 +90,20 @@
   flex: none;
 }
 
+/* Le nombre de signalements en attente, poussé au bout de l'entrée (maquette 2338:23). */
+.sidebar__count {
+  margin-left: auto;
+  padding: var(--sidebar-count-padding);
+  border-radius: var(--radius-round);
+  background: var(--sidebar-count-surface);
+  font: var(--type-sidebar-count);
+  color: var(--sidebar-count-ink);
+}
+
+.app-shell--collapsed .sidebar__count {
+  display: none;
+}
+
 .sidebar__item:hover {
   background-color: var(--surface-nav-hover);
   color: var(--ink-title);

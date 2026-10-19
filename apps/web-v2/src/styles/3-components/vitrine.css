@@ -343,6 +343,10 @@
 
 /* --- Pied de page ---------------------------------------------------------- */
 .vitrine__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
   margin: var(--vitrine-section-gap) 0 0 var(--vitrine-inset);
   padding-top: var(--space-24);
   border-top: 1px solid var(--line-card);
@@ -351,9 +355,24 @@
   color: var(--vitrine-pale-ink);
 }
 
+/* « Signaler ce profil », au bout du pied de page (maquette 2076:699). */
+.vitrine__report {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: inherit;
+  color: inherit;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.vitrine__report:hover {
+  color: var(--ink-soft);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .escale-card,
-  .stamp__circle {
+  .stamp__circle,
+  .vitrine__report {
     transition: none;
   }
 }

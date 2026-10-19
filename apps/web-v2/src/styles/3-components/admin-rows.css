@@ -1,0 +1,36 @@
+/**
+ * QUOI     — ce que les tableaux du lot 4 ajoutent à admin-table.css : la cellule d'actions d'une
+ *            ligne, la citation qui passe à la ligne, l'en-tête de page avec son bouton.
+ * POURQUOI — signalements, événements, catégories et témoignages (features/admin-moderation,
+ *            admin-events, admin-categories, admin-testimonials) reprennent le tableau des comptes ;
+ *            on n'écrit ici que ce qui change.
+ */
+
+/* Une ligne-lien (admin-table__row-link) couvre toute la ligne : les boutons passent au-dessus. */
+.admin-table__actions {
+  position: relative;
+  z-index: 1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-table__actions > .button + .button {
+  margin-left: var(--space-6);
+}
+
+.admin-table__quote {
+  max-width: var(--admin-quote-width);
+  font: var(--type-list-meta);
+  color: var(--ink-title);
+  white-space: normal;
+}
+
+.admin-table__wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.admin-page__head > .button {
+  flex: none;
+}

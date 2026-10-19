@@ -17,6 +17,10 @@ import { TemplatesPage } from '@/features/admin-prospects/TemplatesPage'
 import { UnclassifiedPage } from '@/features/admin-prospects/UnclassifiedPage'
 import { EntityPage } from '@/features/admin-entity/EntityPage'
 import { PersonPage } from '@/features/admin-person/PersonPage'
+import { ModerationPage } from '@/features/admin-moderation/ModerationPage'
+import { AdminEventsPage } from '@/features/admin-events/AdminEventsPage'
+import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
+import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
@@ -342,6 +346,38 @@ export function App() {
         element={
           <AdminPage>
             <ProspectPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/signalements"
+        element={
+          <AdminPage>
+            <ModerationPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/evenements"
+        element={
+          <AdminPage>
+            <AdminEventsPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/categories"
+        element={
+          <AdminPage>
+            <CategoriesPage />
+          </AdminPage>
+        }
+      />
+      <Route
+        path="/admin/temoignages"
+        element={
+          <AdminPage>
+            <TestimonialsPage />
           </AdminPage>
         }
       />

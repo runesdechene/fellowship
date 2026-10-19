@@ -7,5 +7,6 @@
 - `community/` — la Communauté (`/communaute`).
 - `settings/` — les Réglages (`/reglages`).
 - `admin-accounts/`, `admin-entity/`, `admin-person/` — l’administration : comptes, fiche enseigne, fiche personne (`/admin/…`).
+- `admin-moderation/`, `admin-events/`, `admin-categories/`, `admin-testimonials/` — l’administration, lot 4 : signalements, événements, catégories, témoignages.
 
 Chaque dossier porte son écran, ses morceaux et ses hooks. Un écran n’importe pas un autre écran : ce qui se partage monte dans `components/` ou `lib/`.

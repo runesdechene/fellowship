@@ -7,17 +7,20 @@
  *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
  *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
  *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
- * ATTENTION — seules les sections codées sont listées : Signalements, Événements, Catégories et
- *            Témoignages arrivent au lot 4.
+ * ATTENTION — Signalements porte le nombre en attente (maquette 2338:23), relu à chaque changement
+ *            d'adresse.
  */
 import {
   ArrowLeftRight,
   CalendarDays,
   CircleGauge,
+  Flag,
+  MessageSquare,
   PanelRightClose,
   PanelRightOpen,
   Settings,
   Store,
+  Tag,
   Target,
   Telescope,
   Users,
@@ -27,6 +30,7 @@ import { isAdminPath } from '@/lib/admin-mode'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
+import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
 
 /**
@@ -62,6 +66,25 @@ const ADMIN_ITEMS = [
     prefixes: ['/admin/comptes', '/admin/enseignes', '/admin/personnes'],
   },
   { to: '/admin/prospects', label: 'Prospects', Icon: Target, prefixes: ['/admin/prospects'] },
+  {
+    to: '/admin/signalements',
+    label: 'Signalements',
+    Icon: Flag,
+    prefixes: ['/admin/signalements'],
+  },
+  {
+    to: '/admin/evenements',
+    label: 'Événements',
+    Icon: CalendarDays,
+    prefixes: ['/admin/evenements'],
+  },
+  { to: '/admin/categories', label: 'Catégories', Icon: Tag, prefixes: ['/admin/categories'] },
+  {
+    to: '/admin/temoignages',
+    label: 'Témoignages',
+    Icon: MessageSquare,
+    prefixes: ['/admin/temoignages'],
+  },
 ] as const
 
 interface SidebarProps {
@@ -74,6 +97,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { actor, entities } = useAuth()
   const { pathname } = useLocation()
   const items = navFor(entities.find((entity) => entity.actor_id === actor?.id)?.public_slug)
+  const adminMode = isAdminPath(pathname)
+  const pendingReports = usePendingReports(adminMode ? pathname : '')
 
   return (
     <aside className="sidebar">
@@ -92,7 +117,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 
-      {isAdminPath(pathname) ? (
+      {adminMode ? (
         <nav className="sidebar__nav">
           {ADMIN_ITEMS.map(({ to, label, Icon, prefixes }) => {
             const active = prefixes.some((prefix) => pathname.startsWith(prefix))
@@ -105,6 +130,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               >
                 <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
                 <span className="sidebar__item-label">{label}</span>
+                {to === '/admin/signalements' && pendingReports > 0 && (
+                  <span className="sidebar__count">{pendingReports}</span>
+                )}
               </NavLink>
             )
           })}
