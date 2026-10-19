@@ -16,15 +16,17 @@ import {
 } from './useAdminTestimonials'
 
 export function TestimonialsPage() {
-  const { testimonials, slugs, error, reload } = useAdminTestimonials()
+  const { testimonials, vitrines, error, reload } = useAdminTestimonials()
   // `null` : la fenêtre d'ajout ; un témoignage : sa fenêtre de modification.
   const [editing, setEditing] = useState<AdminTestimonial | null | undefined>(undefined)
   const [doomed, setDoomed] = useState<AdminTestimonial | null>(null)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
   const nextOrder = Math.max(0, ...(testimonials ?? []).map((t) => t.sort_order)) + 1
-  const slugOf = (t: AdminTestimonial) =>
-    t.entity_slug || (t.actor_id && slugs.get(t.actor_id)) || ''
+  const vitrineOf = (t: AdminTestimonial) => (t.actor_id ? vitrines.get(t.actor_id) : undefined)
+  const slugOf = (t: AdminTestimonial) => t.entity_slug || vitrineOf(t)?.slug || ''
+  // Sans photo à lui, le témoignage prend le logo de sa vitrine, comme dans les stories de la landing.
+  const avatarOf = (t: AdminTestimonial) => t.avatar_url ?? vitrineOf(t)?.avatarUrl ?? null
 
   async function remove(testimonial: AdminTestimonial) {
     setBusy(true)
@@ -78,7 +80,7 @@ export function TestimonialsPage() {
                   <td>
                     <span className="admin-table__people">
                       <Avatar
-                        src={testimonial.avatar_url}
+                        src={avatarOf(testimonial)}
                         name={testimonial.name}
                         className="admin-table__logo"
                       />
@@ -115,6 +117,7 @@ export function TestimonialsPage() {
         <TestimonialDialog
           testimonial={editing}
           slug={editing ? slugOf(editing) : ''}
+          vitrineAvatar={editing ? (vitrineOf(editing)?.avatarUrl ?? null) : null}
           nextOrder={nextOrder}
           onClose={() => setEditing(undefined)}
           onDone={() => {

@@ -22,12 +22,21 @@ interface Props {
   testimonial: AdminTestimonial | null
   /** L'adresse actuelle de la vitrine reliée, lue par son `actor_id`. */
   slug: string
+  /** Le logo de la vitrine reliée : la photo par défaut, comme sur la landing. */
+  vitrineAvatar: string | null
   nextOrder: number
   onClose: () => void
   onDone: () => void
 }
 
-export function TestimonialDialog({ testimonial, slug, nextOrder, onClose, onDone }: Props) {
+export function TestimonialDialog({
+  testimonial,
+  slug,
+  vitrineAvatar,
+  nextOrder,
+  onClose,
+  onDone,
+}: Props) {
   const dialog = useRef<HTMLDialogElement>(null)
   const picker = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState<TestimonialDraft>({
@@ -107,7 +116,11 @@ export function TestimonialDialog({ testimonial, slug, nextOrder, onClose, onDon
         </h2>
         <Field label="Photo">
           <span className="admin-table__people">
-            <Avatar src={draft.avatar_url} name={draft.name} className="admin-table__logo" />
+            <Avatar
+              src={draft.avatar_url ?? vitrineAvatar}
+              name={draft.name}
+              className="admin-table__logo"
+            />
             <Button onClick={() => picker.current?.click()} disabled={busy}>
               {draft.avatar_url ? 'Changer' : 'Choisir une photo'}
             </Button>

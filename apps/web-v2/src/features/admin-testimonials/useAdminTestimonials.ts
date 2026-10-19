@@ -66,38 +66,51 @@ export async function deleteTestimonial(id: string): Promise<void> {
   if (error) throw new Error(error.message)
 }
 
-/** Les témoignages, et l'adresse de la vitrine reliée de chacun (par `actor_id`, comme la landing). */
+/** Ce que la vitrine reliée prête au témoignage : son adresse, et son logo quand il n'a pas de photo. */
+export interface LinkedVitrine {
+  slug: string
+  avatarUrl: string | null
+}
+
+/** Les témoignages, et la vitrine reliée de chacun (par `actor_id`, comme la landing). */
 async function loadTestimonials() {
   const testimonials = must(
     await supabase.from('testimonials').select('*').order('sort_order').order('id'),
   )
   const actors = testimonials.flatMap((t) => (t.actor_id ? [t.actor_id] : []))
   const entities = actors.length
-    ? must(await supabase.from('entities').select('actor_id, public_slug').in('actor_id', actors))
+    ? must(
+        await supabase
+          .from('entities')
+          .select('actor_id, public_slug, avatar_url')
+          .in('actor_id', actors),
+      )
     : []
-  const slugs = new Map(entities.map((e) => [e.actor_id, e.public_slug ?? '']))
-  return { testimonials, slugs }
+  const vitrines = new Map<string, LinkedVitrine>(
+    entities.map((e) => [e.actor_id, { slug: e.public_slug ?? '', avatarUrl: e.avatar_url }]),
+  )
+  return { testimonials, vitrines }
 }
 
 export function useAdminTestimonials() {
   const [state, setState] = useState<{
     testimonials: AdminTestimonial[] | null
-    slugs: Map<string, string>
+    vitrines: Map<string, LinkedVitrine>
     error: string | null
-  }>({ testimonials: null, slugs: new Map(), error: null })
+  }>({ testimonials: null, vitrines: new Map(), error: null })
   const [round, setRound] = useState(0)
   useEffect(() => {
     let cancelled = false
     async function run() {
       try {
-        const { testimonials, slugs } = await loadTestimonials()
+        const { testimonials, vitrines } = await loadTestimonials()
         if (cancelled) return
-        setState({ testimonials, slugs, error: null })
+        setState({ testimonials, vitrines, error: null })
       } catch (error) {
         if (cancelled) return
         setState({
           testimonials: null,
-          slugs: new Map(),
+          vitrines: new Map(),
           error: error instanceof Error ? error.message : 'Chargement impossible',
         })
       }
