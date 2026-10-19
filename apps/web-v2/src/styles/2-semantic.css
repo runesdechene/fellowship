@@ -1609,7 +1609,7 @@
   --surface-app: var(--night-50);
   --surface-panel: var(--night-0);
   --surface-card: var(--night-100);
-  --surface-raised: var(--night-100);
+  --surface-raised: var(--night-200); /* la carte de compte se détache de la barre latérale */
   --surface-control: var(--night-100);
   --surface-nav-active: var(--night-350);
   --surface-nav-hover: var(--night-350);
