@@ -41,6 +41,7 @@
 .community__tab {
   padding: var(--space-8) var(--space-14);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-community-tab);
@@ -113,6 +114,7 @@
 .community__more-button {
   padding: var(--space-8) var(--space-20);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--button-radius);
   background: var(--surface-card);
   font: var(--type-community-tab);
@@ -210,6 +212,7 @@
   gap: var(--space-6);
   padding: var(--space-6) var(--space-14) var(--space-6) var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--button-radius);
   background: var(--surface-card);
   font: var(--type-community-tab);

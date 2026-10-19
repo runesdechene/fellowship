@@ -50,6 +50,7 @@
 .discussion__canal[aria-pressed='true'] {
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   font: var(--type-canal-on);
   color: var(--ink-title);
 }

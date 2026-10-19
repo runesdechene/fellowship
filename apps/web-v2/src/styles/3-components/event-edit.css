@@ -177,6 +177,7 @@
   height: var(--setting-button-height);
   padding: 0 var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
   font: var(--type-card-link);
@@ -334,6 +335,7 @@
   gap: var(--space-6);
   padding: var(--space-10) var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   color: var(--ink-soft);
@@ -367,6 +369,7 @@
   flex-direction: column;
   padding: 0 var(--space-2);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
 }

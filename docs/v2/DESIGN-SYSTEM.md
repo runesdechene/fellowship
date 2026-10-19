@@ -6,7 +6,7 @@
 ## 0. Le langage « 2027 » en dix règles
 
 1. **Fond blanc à peine chaud** (`--sand-50`) ; la barre latérale garde le beige d'Uriel et son panneau à arrondi inversé.
-2. **Les plans se lisent au filet** (`--line-card`), plus à l'aplat beige : une carte est blanche et bordée, avec une seule ombre très douce, `--shadow-block` (19/10/2026), réservée aux blocs.
+2. **Les plans se lisent au filet** (`--line-card`), plus à l'aplat beige : une carte est blanche et bordée, avec une seule ombre très douce, `--shadow-block` (19/10/2026), sur tout élément blanc bordé.
 3. **Deux polices** : Inter pour tout ; **Instrument Serif** pour les grands moments seulement — nom d'un festival, d'une enseigne, d'un mois, chiffre phare (`--type-display-*`, `--type-event-title`).
 4. **Deux encres** (`--ink-950`, `--ink-600`) et un tertiaire (`--ink-350`). La hiérarchie vient de la taille et de la graisse.
 5. **La couleur vient des affiches et des tags.** Un tag porte toujours sa couleur (réglée dans l'administration).

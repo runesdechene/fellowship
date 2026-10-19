@@ -211,6 +211,7 @@ button.history__row:hover {
 .version__revert-button {
   padding: var(--space-10) var(--space-16);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
   font: var(--type-select-value);

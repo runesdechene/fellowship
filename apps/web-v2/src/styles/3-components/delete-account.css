@@ -41,6 +41,7 @@
   height: var(--setting-button-height);
   padding: 0 var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
   font: var(--type-button);
@@ -158,6 +159,7 @@
 
 .delete-dialog__input {
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   background: var(--surface-card);
 }
 
@@ -171,6 +173,7 @@
   height: var(--setting-button-height);
   padding: 0 var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
 }

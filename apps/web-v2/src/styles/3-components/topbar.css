@@ -53,6 +53,17 @@
   display: none;
 }
 
+/* « Modifier la fiche » : blanc bordé, posé de l'ombre des blocs, comme sur la fiche avant */
+.topbar__edit {
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
+  background: var(--surface-card);
+}
+
+.topbar__edit:hover:not(:disabled) {
+  background: var(--surface-control-hover);
+}
+
 /* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
 @media (width <= 760px) {
   .topbar {
@@ -70,7 +81,8 @@
     display: none;
   }
 
-  .topbar .button--action {
+  .topbar .button--action,
+  .topbar__edit {
     width: var(--topbar-control-height);
     padding: 0;
     justify-content: center;

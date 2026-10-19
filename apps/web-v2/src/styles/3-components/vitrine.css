@@ -95,6 +95,7 @@
   height: 25px;
   padding: 0 var(--space-10);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-chip);
@@ -315,6 +316,7 @@
   translate: -50% 0;
   padding: var(--space-2) var(--space-8);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-chip-strong);

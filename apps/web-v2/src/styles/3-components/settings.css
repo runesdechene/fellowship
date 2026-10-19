@@ -187,6 +187,7 @@
   width: var(--setting-input-width);
   height: var(--setting-input-height);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-input);
   background: var(--surface-card);
 }
@@ -198,6 +199,7 @@
   height: var(--setting-button-height);
   padding: 0 var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
   color: var(--ink-title);
@@ -375,6 +377,7 @@
 .entity-base .control {
   height: var(--setting-input-height);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-input);
   background: var(--surface-card);
 }

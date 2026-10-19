@@ -11,6 +11,7 @@
   height: var(--admin-search-height);
   padding: 0 var(--space-14);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-nav);
   background: var(--surface-card);
   color: var(--ink-soft);

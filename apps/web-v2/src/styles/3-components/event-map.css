@@ -17,6 +17,7 @@
   gap: var(--space-6);
   padding: var(--space-6) var(--space-12) var(--space-6) var(--space-10);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-map-pin);

@@ -13,6 +13,7 @@
   width: var(--code-box-width);
   height: var(--code-box-height);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-door-field);
   background: var(--surface-card);
   font: var(--type-code-digit);

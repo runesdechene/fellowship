@@ -58,6 +58,7 @@
   gap: var(--space-6);
   padding: var(--space-2) var(--space-10);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-chip);
   background: var(--surface-card);
   font: var(--type-chip);
@@ -140,6 +141,7 @@
   width: 100%;
   padding: var(--space-12) var(--space-14);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   font: var(--type-dossier-value);
@@ -164,6 +166,7 @@
   gap: var(--space-6);
   padding: var(--space-14) var(--space-16);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   font: var(--type-list-meta);

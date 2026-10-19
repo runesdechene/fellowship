@@ -76,6 +76,7 @@
   gap: var(--space-10);
   padding: var(--door-field-padding);
   border: var(--door-field-line) solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-door-field);
   background: var(--surface-card);
   color: var(--ink-soft);

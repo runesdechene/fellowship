@@ -1,9 +1,9 @@
 /**
  * QUOI     — le décor qu'une page demande à la coquille : l'affiche du mur, le repère et le retour
- *            de la barre du haut.
+ *            de la barre du haut, et « Modifier la fiche » à sa droite.
  * POURQUOI — la page sait quoi afficher mais ne peut pas le rendre (c'est hors de son panneau) :
  *            elle le déclare, la coquille le rend.
- * ATTENTION — deux contextes (lecture, écriture), et `back` est un chemin, jamais une fonction :
+ * ATTENTION — deux contextes (lecture, écriture), et `back` / `edit` sont des chemins, jamais des fonctions :
  *            sinon la déclaration boucle.
  */
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
@@ -33,9 +33,14 @@ type PageChrome = {
    * relancerait la déclaration en boucle.
    */
   back: string | null
+  /**
+   * Où mène « Modifier la fiche », à droite de la barre du haut. Absent ou `null` = pas de bouton.
+   * Un chemin, pour la même raison que `back`.
+   */
+  edit?: string | null
 }
 
-const NU: PageChrome = { poster: null, lead: null, back: null }
+const NU: PageChrome = { poster: null, lead: null, back: null, edit: null }
 
 /**
  * DEUX contextes, pas un. Le lecteur change à chaque déclaration ; l'écrivain
@@ -71,13 +76,13 @@ export function usePageChrome(): PageChrome {
  * reconstruit à chaque rendu ne relance pas l'effet.
  */
 // eslint-disable-next-line react-refresh/only-export-components -- le fournisseur et ses hooks vivent ensemble
-export function useDeclarePageChrome({ poster, lead, back }: PageChrome): void {
+export function useDeclarePageChrome({ poster, lead, back, edit = null }: PageChrome): void {
   // Le poseur vient du contexte d’écriture, qui ne change JAMAIS : l’effet ne
   // se relance donc que si le décor lui-même a changé.
   const declarer = useContext(EcritureContext)
 
   useEffect(() => {
-    declarer({ poster, lead, back })
+    declarer({ poster, lead, back, edit })
     return () => declarer(NU)
-  }, [declarer, poster, lead, back])
+  }, [declarer, poster, lead, back, edit])
 }

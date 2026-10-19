@@ -1,10 +1,10 @@
 /**
- * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite la
- *            cloche et « Ajouter une date ».
+ * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite
+ *            « Modifier la fiche » (si la page le déclare), la cloche et « Ajouter une date ».
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
  */
-import { ArrowLeft, CirclePlus } from 'lucide-react'
+import { ArrowLeft, CirclePlus, Pencil } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
@@ -29,7 +29,7 @@ import { usePageChrome } from '@/lib/page-chrome'
  */
 export function Topbar() {
   const go = useTransitionNavigate()
-  const { lead, back } = usePageChrome()
+  const { lead, back, edit } = usePageChrome()
   const navigate = useNavigate()
   const transition = useViewTransition()
   // « default » : la première entrée de l'onglet — aucune page de l'application avant elle.
@@ -70,6 +70,16 @@ export function Topbar() {
           )}
           {lead && <p className="topbar__lead">{lead}</p>}
         </div>
+      )}
+      {edit && (
+        <Button
+          className="topbar__edit"
+          icon={<Pencil size={18} strokeWidth={1.75} />}
+          onClick={() => go(edit)}
+          aria-label="Modifier la fiche"
+        >
+          <span className="topbar__add-label">Modifier la fiche</span>
+        </Button>
       )}
       <NotificationBell />
       <Button

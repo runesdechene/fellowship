@@ -41,6 +41,7 @@
 .prospect-owner__select {
   padding: var(--space-8) var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   font: var(--type-card-link);
@@ -78,6 +79,7 @@
 .prospect-thread__message--in {
   align-self: flex-start;
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   background: var(--surface-card);
 }
 
@@ -121,6 +123,7 @@
 .prospect-compose__text {
   padding: var(--space-8) var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   font: var(--type-prospect-text);

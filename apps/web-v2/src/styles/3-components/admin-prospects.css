@@ -95,6 +95,7 @@
   min-width: 0;
   padding: var(--space-4) var(--space-6);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-xs);
   background: var(--surface-card);
   font: var(--type-list-meta);

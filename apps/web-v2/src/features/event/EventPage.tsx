@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { CalendarDays, Clock, MapPin, Pencil, Store, Users } from 'lucide-react'
+import { CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -146,12 +146,20 @@ export function EventPage() {
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
   // remplit le mur de droite, la flèche de retour et le compte à rebours
   // prennent le coin gauche de la barre du haut.
+  const myActorIds = [person?.actor_id, ...entities.map((entity) => entity.actor_id)].filter(
+    (value): value is string => Boolean(value),
+  )
+  const canEdit = event ? canEditEvent(event, myActorIds) : false
+
   // Déclaré AVANT tout retour anticipé — c'est un hook, et la flèche doit
-  // exister même quand la fiche charge ou n'existe pas.
+  // exister même quand la fiche charge ou n'existe pas. « Modifier la fiche » monte dans la barre
+  // du haut, à côté d'« Ajouter une date » (Uriel, 19/10/2026 : à côté du titre, il prenait trop
+  // de place).
   useDeclarePageChrome({
     poster: event?.image_url ?? null,
     lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
     back: '/',
+    edit: event && canEdit ? `/evenement/${event.id}/modifier` : null,
   })
 
   // Une notification mène à « #discussions » : le bloc n'existe qu'une fois la fiche chargée, et le
@@ -235,10 +243,6 @@ export function EventPage() {
     { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
   ].filter((fait) => Boolean(fait.value))
 
-  const myActorIds = [person?.actor_id, ...entities.map((entity) => entity.actor_id)].filter(
-    (value): value is string => Boolean(value),
-  )
-  const canEdit = canEditEvent(event, myActorIds)
   const edit = (field?: MissingField) => {
     go(`/evenement/${event.id}/modifier${field ? `?champ=${field}` : ''}`)
   }
@@ -266,15 +270,7 @@ export function EventPage() {
             <img className="event-page__mobile-poster" src={event.image_url} alt="" />
           )}
           <div className="event-page__identity">
-            <div className="event-page__title-row">
-              <h1 className="event-page__title">{event.name}</h1>
-              {canEdit && (
-                <button type="button" className="event-page__edit" onClick={() => edit()}>
-                  <Pencil size={15} strokeWidth={2} />
-                  Modifier la fiche
-                </button>
-              )}
-            </div>
+            <h1 className="event-page__title">{event.name}</h1>
 
             {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
                   ne se scannent pas. Ceux qui se scannent sont plus bas, en

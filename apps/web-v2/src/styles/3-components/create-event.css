@@ -33,6 +33,7 @@
   height: var(--setting-button-height);
   padding: 0 var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-button);
   background: var(--surface-card);
   font: var(--type-door-label);
@@ -93,6 +94,7 @@ button.create-bar__step:hover {
   width: var(--create-bar-number);
   height: var(--create-bar-number);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-round);
   background: var(--surface-card);
   font: var(--type-create-bar-number);
@@ -227,6 +229,7 @@ button.create-bar__step:hover {
   border-radius: var(--radius-sm);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   color: var(--ink-soft);
   font: var(--type-list-name);
   cursor: pointer;

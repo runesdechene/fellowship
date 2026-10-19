@@ -220,6 +220,7 @@
   width: var(--report-add-amount-width);
   padding: var(--space-8) var(--space-12);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--round-10);
   background: var(--surface-card);
 }
@@ -308,6 +309,7 @@
 
 .tag-list__input {
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   background: var(--surface-card);
   color: var(--ink-title);
 }
@@ -321,6 +323,7 @@
   min-height: var(--space-96);
   padding: var(--space-14) var(--space-16);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--round-12);
   background: var(--surface-card);
   font: var(--type-report-note);
