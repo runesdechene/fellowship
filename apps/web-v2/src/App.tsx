@@ -3,9 +3,8 @@
  *            `/decouvrir`), recherche publique (`/festivals`), connexion, arrivée, tableau de
  *            bord, calendrier, création, fiche (ouverte sans compte), avis, explorer, bilans,
  *            offre Pro, réglages, vitrine, administration (admins seulement, `/admin`).
- * POURQUOI — chaque écran a une adresse ; la garde (useV2Access) n'ouvre la V2 qu'aux admins et
- *            au rôle `v2`, et renvoie les autres sur la V1 ; un compte sans prénom passe d'abord par
- *            l'arrivée (lot 10a).
+ * POURQUOI — chaque écran a une adresse ; tout compte connecté entre depuis la bascule (lot 12) ;
+ *            un compte sans prénom passe d'abord par l'arrivée (lot 10a).
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
@@ -43,20 +42,17 @@ import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
 import { Unsubscribe } from '@/pages/Unsubscribe'
 import { useAuth } from '@/lib/auth'
-import { useV2Access } from '@/lib/useV2Access'
 import { safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
-import { useEffect, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
-/** La garde d'accès seule : la V2 n'ouvre qu'aux admins et au rôle `v2` jusqu'à la bascule (lot 12).
- *  `guest` remplace la connexion pour un visiteur sans compte (la landing, sur `/`). */
+/** La garde d'accès seule : une session ouverte entre. `guest` remplace la connexion pour un
+ *  visiteur sans compte (la landing, sur `/`). */
 function AccessRoute({ children, guest }: { children: ReactNode; guest?: ReactNode }) {
-  const decision = useV2Access()
-  const { identityFailed } = useAuth()
-  if (decision === 'wait') return null
-  if (identityFailed && decision === 'allow') return <IdentityError />
-  if (decision === 'login') return guest ?? <Navigate to="/connexion" replace />
-  if (decision === 'leave') return <LeaveToV1 />
+  const { user, loading, identityFailed } = useAuth()
+  if (loading) return null
+  if (!user) return guest ?? <Navigate to="/connexion" replace />
+  if (identityFailed) return <IdentityError />
   return <>{children}</>
 }
 
@@ -137,14 +133,6 @@ function PublicSearchRoute() {
   if (loading) return null
   if (user) return <Navigate to={`/explorer${location.search}`} replace />
   return <PublicSearchPage />
-}
-
-// Hors du routeur de la V2 (basename /v2) : la V1 vit à la racine du domaine.
-function LeaveToV1() {
-  useEffect(() => {
-    window.location.replace('/')
-  }, [])
-  return null
 }
 
 export function App() {

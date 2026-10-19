@@ -3,15 +3,13 @@
  *            fil « Activité du réseau » et l'interrupteur Clair / Sombre en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
- *            on ne pouvait pas accéder à sa propre vitrine). « Revenir à la V1 » ferme la liste : ceux
- *            qui ont la V2 passent de l'une à l'autre, comme chez Runes de Chêne (Uriel, 14/10/2026).
+ *            on ne pouvait pas accéder à sa propre vitrine).
  *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
  *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
  * ATTENTION — Signalements porte le nombre en attente (maquette 2338:23), relu à chaque changement
  *            d'adresse.
  */
 import {
-  ArrowLeftRight,
   CalendarDays,
   CircleGauge,
   Flag,
@@ -160,11 +158,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               </NavLink>
             )
           })}
-          {/* La V1 est une autre application : un lien plein, vers son Explorer (sa racine est la landing). */}
-          <a className="sidebar__item" href="/explorer">
-            <ArrowLeftRight className="sidebar__item-icon" size={24} strokeWidth={1.75} />
-            <span className="sidebar__item-label">Revenir à la V1</span>
-          </a>
         </nav>
       )}
 

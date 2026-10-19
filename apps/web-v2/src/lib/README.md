@@ -6,7 +6,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 
 - `supabase.ts` — le client unique.
 - `auth.tsx` — session, casquettes, acteur actif, connexion par code (`useAuth`).
-- `access.ts` + `useV2Access.ts` — qui peut ouvrir la V2 (les admins).
+- `access.ts` — ce qu'un visiteur sans compte ne voit pas (fiche privée).
 - `dates.ts` — **toute** la logique de dates ; non négociable (fuseau surveillé).
 - `money.ts` — **tous** les montants et le registre de bilan ; non négociable.
 - `friends.ts` — les amis présents sur une date, statuts programmés / confirmés.
