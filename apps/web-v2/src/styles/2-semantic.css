@@ -196,6 +196,16 @@
   /* Le liseré d'une pastille : rien le jour, la teinte en filet la nuit. */
   --status-validated-line: transparent;
   --dot-confirmed: var(--status-validated-mark);
+  /* Un dossier réglé (inscrit, tout payé) : la ligne en vert pâle, la vignette sous un voile
+     vert et une coche. */
+  --dossier-settled-surface: var(--status-validated-surface);
+  --dossier-settled-surface-hover: color-mix(
+    in srgb,
+    var(--status-validated-mark) 16%,
+    transparent
+  );
+  --dossier-settled-veil: color-mix(in srgb, var(--status-validated-mark) 80%, transparent);
+  --dossier-settled-check: var(--sand-0);
   /* Dossier envoyé : un bleu doux, ni validé ni à faire — il attend (Uriel, 11/10/2026). */
   --status-sent-ink: var(--bleu-700);
   --status-sent-surface: var(--bleu-50);

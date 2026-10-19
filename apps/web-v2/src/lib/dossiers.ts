@@ -26,6 +26,8 @@ export interface DossierInput {
 export interface DossierView {
   dossier: { label: string; acquired: boolean }
   payment: { label: string; detail: string | null; tone: PaymentTone }
+  /** Inscrit et tout réglé : il n'y a plus rien à faire sur cette date. */
+  settled: boolean
 }
 
 const LABELS = {
@@ -67,7 +69,16 @@ export function dossierView(input: DossierInput): DossierView {
       detail: detailOf(input, tone, receives),
       tone,
     },
+    settled: acquired && tone === 'done',
   }
+}
+
+/** Les dossiers réglés passent en dernier : en tête, ce qui demande encore quelque chose. */
+export function settledLast<T extends { view: DossierView }>(dossiers: readonly T[]): T[] {
+  return [
+    ...dossiers.filter((dossier) => !dossier.view.settled),
+    ...dossiers.filter((dossier) => dossier.view.settled),
+  ]
 }
 
 /**

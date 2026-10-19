@@ -3,14 +3,15 @@
  *            où en est l'argent (à payer, acompte, payé ; ou, pour un cachet, à recevoir, reçu).
  * POURQUOI — la fonction plébiscitée par les exposants : savoir d'un coup d'œil ce qui reste à
  *            envoyer, à payer ou à recevoir.
- *            Sur téléphone (maquette 2120:2), trois dossiers et « Tout » pour déplier les autres.
+ *            Un dossier réglé (inscrit, tout payé) passe en vert, coché, et en bas de la liste
+ *            (Uriel, 19/10/2026). Sur téléphone (maquette 2120:2), trois dossiers et « Tout » pour déplier les autres.
  * ATTENTION — l'état se lit par la FORME de l'icône ; seul ce qui est acquis porte la terre.
  */
 import { Poster } from '@/components/ui/Poster'
-import { ChevronRight, Circle, Contrast } from 'lucide-react'
+import { Check, ChevronRight, Circle, Contrast } from 'lucide-react'
 import { useState } from 'react'
 import { formatDateRange } from '@/lib/dates'
-import type { PaymentTone } from '@/lib/dossiers'
+import { settledLast, type PaymentTone } from '@/lib/dossiers'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { Dossier } from './useDashboard'
 
@@ -55,19 +56,28 @@ export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
           <span>Paiement</span>
         </div>
         <ul className="dossiers__list">
-          {dossiers.map((dossier) => (
+          {settledLast(dossiers).map((dossier) => (
             <li key={dossier.participationId}>
               <button
                 type="button"
-                className="dossiers__row"
+                className={
+                  dossier.view.settled ? 'dossiers__row dossiers__row--settled' : 'dossiers__row'
+                }
                 onClick={() => go(`/evenement/${dossier.eventId}`)}
               >
                 <span className="dossiers__date">
-                  <Poster
-                    imageUrl={dossier.imageUrl}
-                    tags={dossier.tags}
-                    className="dossiers__thumb"
-                  />
+                  <span className="dossiers__thumb">
+                    <Poster
+                      imageUrl={dossier.imageUrl}
+                      tags={dossier.tags}
+                      className="dossiers__poster"
+                    />
+                    {dossier.view.settled && (
+                      <span className="dossiers__settled">
+                        <Check size={16} strokeWidth={2.5} />
+                      </span>
+                    )}
+                  </span>
                   <span className="dossiers__identity">
                     <span className="dossiers__name">{dossier.name}</span>
                     <span className="dossiers__range">

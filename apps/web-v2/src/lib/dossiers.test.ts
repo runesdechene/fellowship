@@ -5,7 +5,7 @@
  *            fois ou oublier un solde.
  */
 import { describe, expect, it } from 'vitest'
-import { balanceOf, dossierView } from './dossiers'
+import { balanceOf, dossierView, settledLast } from './dossiers'
 import { formatEuros } from './money'
 
 const base = {
@@ -26,6 +26,32 @@ describe('dossierView — le dossier', () => {
   it('inscrit ou confirmé, c’est acquis', () => {
     expect(dossierView(base).dossier).toEqual({ label: 'Inscrit', acquired: true })
     expect(dossierView({ ...base, status: 'confirme' }).dossier.acquired).toBe(true)
+  })
+})
+
+describe('dossierView — réglé', () => {
+  it('inscrit et payé, il n’y a plus rien à faire', () => {
+    expect(dossierView({ ...base, paymentStatus: 'paye' }).settled).toBe(true)
+    expect(dossierView({ ...base, paymentStatus: 'paye', orientation: 'paye' }).settled).toBe(true)
+  })
+
+  it('payé sans être inscrit, ou inscrit sans être payé, ce n’est pas réglé', () => {
+    expect(dossierView({ ...base, status: 'en_cours', paymentStatus: 'paye' }).settled).toBe(false)
+    expect(dossierView({ ...base, paymentStatus: 'acompte_verse' }).settled).toBe(false)
+  })
+
+  it('les réglés passent en dernier, chaque groupe gardant son ordre', () => {
+    const row = (id: string, paymentStatus: string) => ({
+      id,
+      view: dossierView({ ...base, paymentStatus }),
+    })
+    const ordered = settledLast([
+      row('a', 'paye'),
+      row('b', 'a_payer'),
+      row('c', 'paye'),
+      row('d', 'acompte_verse'),
+    ])
+    expect(ordered.map((dossier) => dossier.id)).toEqual(['b', 'd', 'a', 'c'])
   })
 })
 
