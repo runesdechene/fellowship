@@ -24,7 +24,7 @@
 .settings__title {
   font: var(--type-page-title);
   letter-spacing: var(--tracking-tight);
-  color: var(--ink-title);
+  color: var(--ink-page-title);
 }
 
 .settings__saved {

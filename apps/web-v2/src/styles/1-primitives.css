@@ -86,6 +86,7 @@
   --night-400: #494643; /* pointillés, interrupteur éteint */
   --cream-50: #f3efe9; /* titres, texte, bouton principal la nuit */
   --cream-200: #d9d3cb; /* survol du bouton principal la nuit */
+  --cream-350: #bdb7af; /* les entrées inactives de la barre latérale la nuit */
   --cream-500: #a39d95; /* texte secondaire la nuit */
   --cream-650: #857f78; /* signes de statut la nuit */
   --cream-750: #6f6962; /* libellés discrets la nuit */

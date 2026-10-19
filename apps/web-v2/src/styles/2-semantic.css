@@ -76,6 +76,7 @@
      la taille et la graisse, pas par la pâleur — la pâleur marche sur un
      écran calibré, pas sur celui d’un exposant en plein soleil. */
   --ink-soft: var(--ink-600); /* métadonnées, mois, dates */
+  --ink-nav: var(--ink-soft); /* les entrées inactives de la barre latérale */
   /* LA LIGNE SOUS LE TITRE D UNE FICHE, et elle seule.
      Releve au pixel sur la maquette d Uriel : #a79f9f, soit --brown-400 —
      la meme teinte pour toute la ligne, la date n etant que mise en GRAS et
@@ -92,6 +93,7 @@
      manquante doit se LIRE, c'est elle qu'on viendra completer. */
   /* Grands titres posés au-dessus des blocs. */
   --ink-section: var(--ink-950);
+  --ink-page-title: var(--ink-section); /* les grands titres de page suivent ceux des sections */
   /* Le même titre quand son bloc est encore vide : il garde sa place, il ne
      réclame plus le regard. */
   --ink-section-pale: var(--ink-350);
@@ -1640,6 +1642,7 @@
   --ink-total: var(--cream-50);
   --ink-link: var(--cream-50);
   --ink-soft: var(--cream-500);
+  --ink-nav: var(--cream-350); /* un cran plus clair que les métadonnées : les menus s'effaçaient (19/10/2026) */
   --ink-hero-meta: var(--cream-500);
   --ink-body: var(--cream-500);
   --ink-section-pale: var(--cream-750);

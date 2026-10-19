@@ -32,7 +32,7 @@
 
 .dashboard__greeting {
   font: var(--type-greeting);
-  color: var(--ink-title);
+  color: var(--ink-page-title);
 }
 
 /* Le nom de l'enseigne, en gras dans la même ligne */

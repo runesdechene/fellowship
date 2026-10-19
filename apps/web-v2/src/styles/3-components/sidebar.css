@@ -84,7 +84,7 @@
   padding: 0 var(--sidebar-item-inset);
   border-radius: var(--radius-nav);
   font: var(--type-nav);
-  color: var(--ink-soft);
+  color: var(--ink-nav);
   background-color: transparent;
   cursor: pointer;
   transition:

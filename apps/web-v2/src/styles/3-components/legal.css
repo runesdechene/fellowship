@@ -28,7 +28,7 @@
 
 .legal__title {
   font: var(--type-page-title);
-  color: var(--ink-title);
+  color: var(--ink-page-title);
 }
 
 .legal__updated {
