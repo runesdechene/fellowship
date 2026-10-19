@@ -16,7 +16,9 @@
      rien : seuls ses enfants reçoivent le clic. */
   left: var(--topbar-right);
   pointer-events: none;
-  z-index: 1;
+  /* Au calque des menus : le panneau de la cloche, qui vit dedans, doit couvrir les étoiles
+     « Repérer » des affiches (z-index 1, plus bas dans la page). */
+  z-index: var(--layer-menu);
   display: flex;
   align-items: center;
   justify-content: flex-end;

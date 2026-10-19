@@ -4,6 +4,7 @@
  * POURQUOI — maquette « Notifications ». Une notification non lue porte un fond et un point ; un
  *            clic la marque lue et mène où elle parle.
  *            En tête, le bloc « Demandes d'ami · Nouveaux abonnés » (NetworkBlock), quand il a à dire.
+ *            Sur téléphone, il prend toute la page et se ferme par sa croix (Uriel, 19/10/2026).
  * ATTENTION — le pied (PanelFoot) mène aux Réglages et propose d'activer le téléphone (lot 8e).
  */
 import {
@@ -17,6 +18,7 @@ import {
   Sparkles,
   Telescope,
   User,
+  X,
   type LucideIcon,
 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
@@ -102,6 +104,14 @@ export function NotificationPanel({
             Tout marquer comme lu
           </button>
         )}
+        <button
+          type="button"
+          className="notif-panel__close"
+          aria-label="Fermer les notifications"
+          onClick={onClose}
+        >
+          <X size={20} strokeWidth={1.75} />
+        </button>
       </div>
       {network}
       {failed && (

@@ -58,6 +58,12 @@
   color: var(--ink-title);
 }
 
+.notif-panel__close {
+  display: none;
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
 .notif-panel__all {
   font: var(--type-reports-label);
   color: var(--ink-soft);
@@ -219,12 +225,32 @@
 }
 
 @media (width <= 760px) {
+  /* Pleine page ; la croix remplace la cloche, cachée dessous. La barre d'onglets se pose sur
+     une bordure de la couleur du panneau : ses coins arrondis ne laissent rien voir de la page,
+     et rien ne défile sous elle (une bordure est hors de la zone qui défile). */
   .notif-panel {
     position: fixed;
-    top: var(--mobile-padding-top);
-    right: var(--mobile-gutter);
-    left: var(--mobile-gutter);
+    inset: 0;
     width: auto;
+    max-height: none;
+    padding: env(safe-area-inset-top) 0 0;
+    border: none;
+    border-bottom: var(--tab-bar-height) solid var(--surface-card);
+    border-radius: 0;
+  }
+
+  .notif-panel__head {
+    gap: var(--space-12);
+    padding: var(--space-20) var(--mobile-gutter) var(--space-12);
+  }
+
+  .notif-panel__all {
+    margin-left: auto;
+  }
+
+  .notif-panel__close {
+    display: grid;
+    place-items: center;
   }
 }
 
