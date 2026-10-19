@@ -1,19 +1,42 @@
 /**
- * QUOI     — le service worker de la V2 : afficher une notification reçue sur le téléphone, et
- *            ouvrir le bon écran quand on la touche.
- * POURQUOI — lot 8e. Sa portée est /v2/ : plus précise que celle de la V1 (/), elle l'emporte sur
- *            les pages de la V2, et la V1 n'est pas touchée. Pas de cache : la V2 reste servie par
- *            le réseau.
+ * QUOI     — le service worker de Fellowship : afficher une notification reçue sur le téléphone,
+ *            ouvrir le bon écran quand on la touche, et, une fois, prendre la suite de la V1.
+ * POURQUOI — lot 8e, puis la bascule (lot 12) : sa portée est `/`, et il est publié à la même
+ *            adresse que celui de la V1 (`/sw.js`). Le navigateur le prend donc comme une mise à
+ *            jour : à l'activation, il efface les caches que la V1 servait (`workbox-*`) et, s'il
+ *            en a trouvé, recharge les fenêtres ouvertes, qui arrivent sur la V2. Pas de cache :
+ *            la V2 reste servie par le réseau.
  * ATTENTION — le message vient de la fonction send-push : { title, body, url, tag }, où url est un
- *            chemin de la V2 (« /evenement/… ») qu'on pose sous la portée. À la bascule, il prendra
- *            la portée / (spec du lot 8e, §1).
+ *            chemin de l'app (« /evenement/… ») qu'on pose sous la portée. Ne jamais renommer ni
+ *            déplacer ce fichier : un téléphone qui a encore la V1 ne serait plus mis à jour.
  */
 self.addEventListener('install', () => {
   self.skipWaiting()
 })
 
+// La V1 servait sa page depuis ces caches : tant qu'ils restent, une fenêtre ouverte garde la V1.
+async function leaveV1() {
+  const keys = (await caches.keys()).filter((key) => key.startsWith('workbox-'))
+  await Promise.all(keys.map((key) => caches.delete(key)))
+  return keys.length > 0
+}
+
+// Le rechargement part APRÈS l'activation, hors de waitUntil : une navigation attend que le
+// service worker soit actif, et l'activation qui attendrait cette navigation ne finirait jamais
+// (la page restait figée, vérifié en Edge sans tête le 19/10/2026).
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim())
+  const cleaned = leaveV1().then(async (hadV1) => {
+    await self.clients.claim()
+    return hadV1
+  })
+  event.waitUntil(cleaned)
+  void cleaned.then(async (hadV1) => {
+    if (!hadV1) return
+    const windows = await self.clients.matchAll({ type: 'window' })
+    windows.forEach((client) => {
+      client.navigate(client.url).catch(() => undefined)
+    })
+  })
 })
 
 function inScope(path) {

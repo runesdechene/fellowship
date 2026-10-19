@@ -17,12 +17,24 @@ applyTheme(currentTheme())
 // Un lien de parrainage (`?r=`) arrive sur n'importe quelle page : le code attend l'inscription.
 captureReferral(window.location.search)
 
-// Le service worker du téléphone (public/sw.js) : les notifications, rien d'autre.
+// Le service worker (public/sw.js) : les notifications, et la passation de la V1 à la bascule.
 if ('serviceWorker' in navigator) {
   // Un échec (stockage bloqué, fichier introuvable) laisse simplement les notifications
   // impossibles : les portes le lisent par getRegistration (lib/push-phone.ts).
   navigator.serviceWorker
     .register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL })
+    .catch(() => undefined)
+  // L'ancienne inscription sous /v2/ (avant la bascule, lot 12) gardait ses abonnements aux
+  // notifications : on la retire, sinon l'app se croirait sans notifications puis les doublerait.
+  void navigator.serviceWorker
+    .getRegistrations()
+    .then((registrations) =>
+      Promise.all(
+        registrations
+          .filter((registration) => registration.scope.endsWith('/v2/'))
+          .map((registration) => registration.unregister()),
+      ),
+    )
     .catch(() => undefined)
 }
 
