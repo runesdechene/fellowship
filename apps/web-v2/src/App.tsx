@@ -23,6 +23,7 @@ import { AdminEventsPage } from '@/features/admin-events/AdminEventsPage'
 import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
 import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
 import { UpdatesPage } from '@/features/updates/UpdatesPage'
+import { UpdatesAdminPage } from '@/features/admin-updates/UpdatesAdminPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { NetworkPage } from '@/features/community/NetworkPage'
@@ -123,6 +124,22 @@ function AdminPage({ children }: { children: ReactNode }) {
     </ProtectedRoute>
   )
 }
+
+/** L'administration : chaque section derrière la même garde (AdminPage). */
+const ADMIN_ROUTES: [string, ReactNode][] = [
+  ['/admin/comptes', <AccountsPage />],
+  ['/admin/prospects', <ProspectsPage />],
+  ['/admin/prospects/modeles', <TemplatesPage />],
+  ['/admin/prospects/non-classes', <UnclassifiedPage />],
+  ['/admin/prospects/:id', <ProspectPage />],
+  ['/admin/signalements', <ModerationPage />],
+  ['/admin/evenements', <AdminEventsPage />],
+  ['/admin/categories', <CategoriesPage />],
+  ['/admin/mises-a-jour', <UpdatesAdminPage />],
+  ['/admin/temoignages', <TestimonialsPage />],
+  ['/admin/enseignes/:id', <EntityPage />],
+  ['/admin/personnes/:id', <PersonPage />],
+]
 
 /** `/bienvenue` : l'arrivée à faire, ou le tableau de bord s'il n'y en a aucune. */
 function WelcomeRoute() {
@@ -331,96 +348,9 @@ export function App() {
           }
         />
         <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />
-        <Route
-          path="/admin/comptes"
-          element={
-            <AdminPage>
-              <AccountsPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/prospects"
-          element={
-            <AdminPage>
-              <ProspectsPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/prospects/modeles"
-          element={
-            <AdminPage>
-              <TemplatesPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/prospects/non-classes"
-          element={
-            <AdminPage>
-              <UnclassifiedPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/prospects/:id"
-          element={
-            <AdminPage>
-              <ProspectPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/signalements"
-          element={
-            <AdminPage>
-              <ModerationPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/evenements"
-          element={
-            <AdminPage>
-              <AdminEventsPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/categories"
-          element={
-            <AdminPage>
-              <CategoriesPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/temoignages"
-          element={
-            <AdminPage>
-              <TestimonialsPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/enseignes/:id"
-          element={
-            <AdminPage>
-              <EntityPage />
-            </AdminPage>
-          }
-        />
-        <Route
-          path="/admin/personnes/:id"
-          element={
-            <AdminPage>
-              <PersonPage />
-            </AdminPage>
-          }
-        />
-        {/* Une vitrine à la racine, comme dans la V1, lisible sans compte (lot 12) : les adresses
-          fixes au-dessus l'emportent. */}
+        {ADMIN_ROUTES.map(([path, element]) => (
+          <Route key={path} path={path} element={<AdminPage>{element}</AdminPage>} />
+        ))}
         <Route
           path="/:slug"
           element={

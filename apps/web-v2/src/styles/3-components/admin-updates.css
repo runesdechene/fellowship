@@ -1,0 +1,201 @@
+/**
+ * QUOI     — les styles de l'administration des mises à jour (features/admin-updates) : le
+ *            formulaire, le choix du poids, l'aperçu, la liste des publiées.
+ * POURQUOI — maquette 2373:65 : deux blocs blancs côte à côte, le formulaire large, les publiées
+ *            en colonne.
+ */
+
+.admin-updates {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--admin-updates-list-width);
+  align-items: start;
+  gap: var(--space-24);
+}
+
+.admin-update-form,
+.admin-updates__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  padding: var(--space-24);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+}
+
+.admin-updates__list {
+  gap: 0;
+}
+
+.admin-update-form__title {
+  font: var(--type-community-rail-title);
+  color: var(--ink-title);
+}
+
+.admin-update-form__row {
+  display: grid;
+  grid-template-columns: var(--admin-updates-version-width) minmax(0, 1fr);
+  gap: var(--space-16);
+}
+
+.admin-update-form__serif {
+  font: var(--type-admin-updates-serif);
+}
+
+.admin-update-form__drop {
+  padding: var(--space-20);
+  border: 1px dashed var(--line-card);
+  border-radius: var(--radius-nav);
+  font: var(--type-updates-meta);
+  color: var(--ink-soft);
+}
+
+.admin-update-form__image {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.admin-update-form__image img {
+  width: var(--admin-updates-thumb-width);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.admin-update-form__weights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  border: 0;
+}
+
+.admin-update-form__weights legend {
+  margin-bottom: var(--space-8);
+  font: var(--type-updates-action);
+  color: var(--ink-soft);
+}
+
+.admin-update-form__weight {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4) var(--space-8);
+  align-items: center;
+  padding: var(--space-14) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-nav);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.admin-update-form__weight:has(input:checked) {
+  border-color: var(--ink-title);
+}
+
+.admin-update-form__weights:disabled .admin-update-form__weight {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.admin-update-form__weight input {
+  accent-color: var(--ink-title);
+}
+
+.admin-update-form__weight-title {
+  font: var(--type-updates-summary);
+  color: var(--ink-title);
+}
+
+.admin-update-form__weight-detail {
+  grid-column: 2;
+  font: var(--type-updates-meta);
+  color: var(--ink-soft);
+}
+
+.admin-update-form__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.admin-update-form__warning {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-updates-meta);
+  color: var(--ink-soft);
+}
+
+.admin-update-form__preview {
+  animation: updates-unfold var(--duration-medium) var(--ease-drawer);
+}
+
+.admin-updates__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-14) 0;
+  border-top: 1px solid var(--line-card);
+}
+
+.admin-updates__item:first-of-type {
+  margin-top: var(--space-14);
+}
+
+.admin-updates__weight {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-chip);
+  background: var(--surface-chip-neutral);
+  font: var(--type-updates-weight);
+  color: var(--ink-soft);
+}
+
+.admin-updates__weight--big {
+  background: var(--updates-weight-big-surface);
+  color: var(--updates-weight-big-ink);
+}
+
+.admin-updates__title {
+  font: var(--type-updates-comment-name);
+  color: var(--ink-title);
+}
+
+.admin-updates__stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-14);
+  font: var(--type-updates-meta);
+  color: var(--ink-soft);
+}
+
+.admin-updates__stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.admin-updates__stats button {
+  background: none;
+  font: var(--type-updates-action);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+@media (width <= 1100px) {
+  .admin-updates {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-update-form__weight {
+    transition: none;
+  }
+
+  .admin-update-form__preview {
+    animation: none;
+  }
+}

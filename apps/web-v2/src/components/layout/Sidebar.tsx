@@ -14,6 +14,7 @@ import {
   CalendarDays,
   CircleGauge,
   Flag,
+  Megaphone,
   MessageSquare,
   PanelRightClose,
   PanelRightOpen,
@@ -86,6 +87,12 @@ const ADMIN_ITEMS = [
     label: 'Témoignages',
     Icon: MessageSquare,
     prefixes: ['/admin/temoignages'],
+  },
+  {
+    to: '/admin/mises-a-jour',
+    label: 'Mises à jour',
+    Icon: Megaphone,
+    prefixes: ['/admin/mises-a-jour'],
   },
 ] as const
 
