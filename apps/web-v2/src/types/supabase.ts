@@ -97,6 +97,145 @@ export type Database = {
           },
         ]
       }
+      app_update_comments: {
+        Row: {
+          actor_id: string
+          body: string
+          created_at: string
+          entity_actor_id: string | null
+          id: string
+          parent_id: string | null
+          update_id: string
+        }
+        Insert: {
+          actor_id: string
+          body: string
+          created_at?: string
+          entity_actor_id?: string | null
+          id?: string
+          parent_id?: string | null
+          update_id: string
+        }
+        Update: {
+          actor_id?: string
+          body?: string
+          created_at?: string
+          entity_actor_id?: string | null
+          id?: string
+          parent_id?: string | null
+          update_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_update_comments_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_update_comments_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_update_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "app_update_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_update_comments_update_id_fkey"
+            columns: ["update_id"]
+            isOneToOne: false
+            referencedRelation: "app_updates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_update_hearts: {
+        Row: {
+          actor_id: string
+          created_at: string
+          update_id: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          update_id: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          update_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_update_hearts_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "app_update_hearts_update_id_fkey"
+            columns: ["update_id"]
+            isOneToOne: false
+            referencedRelation: "app_updates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_updates: {
+        Row: {
+          author_id: string | null
+          body: string
+          email_count: number | null
+          email_sent_at: string | null
+          id: string
+          image_url: string | null
+          published_at: string
+          title: string
+          version: string
+          weight: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          email_count?: number | null
+          email_sent_at?: string | null
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          title: string
+          version: string
+          weight: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          email_count?: number | null
+          email_sent_at?: string | null
+          id?: string
+          image_url?: string | null
+          published_at?: string
+          title?: string
+          version?: string
+          weight?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_updates_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_reports: {
         Row: {
           admin_note: string | null
@@ -1745,6 +1884,7 @@ export type Database = {
           department: string | null
           display_name: string | null
           email: string
+          email_token: string
           handle: string | null
           phone: string | null
           postal_code: string | null
@@ -1752,6 +1892,8 @@ export type Database = {
           role: string
           sex: Database["public"]["Enums"]["user_sex"] | null
           suspended_at: string | null
+          updates_email_off: boolean
+          updates_seen_at: string
         }
         Insert: {
           actor_id: string
@@ -1762,6 +1904,7 @@ export type Database = {
           department?: string | null
           display_name?: string | null
           email: string
+          email_token?: string
           handle?: string | null
           phone?: string | null
           postal_code?: string | null
@@ -1769,6 +1912,8 @@ export type Database = {
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
           suspended_at?: string | null
+          updates_email_off?: boolean
+          updates_seen_at?: string
         }
         Update: {
           actor_id?: string
@@ -1779,6 +1924,7 @@ export type Database = {
           department?: string | null
           display_name?: string | null
           email?: string
+          email_token?: string
           handle?: string | null
           phone?: string | null
           postal_code?: string | null
@@ -1786,6 +1932,8 @@ export type Database = {
           role?: string
           sex?: Database["public"]["Enums"]["user_sex"] | null
           suspended_at?: string | null
+          updates_email_off?: boolean
+          updates_seen_at?: string
         }
         Relationships: [
           {
@@ -2309,6 +2457,15 @@ export type Database = {
         }[]
       }
       admin_tel: { Args: { p_q: string; p_tel: string }; Returns: boolean }
+      app_update_audience: { Args: never; Returns: number }
+      app_update_email_recipients: {
+        Args: never
+        Returns: {
+          email: string
+          token: string
+        }[]
+      }
+      app_update_people: { Args: never; Returns: string[] }
       are_friends: {
         Args: { user_a: string; user_b: string }
         Returns: boolean
@@ -2617,6 +2774,16 @@ export type Database = {
         Returns: boolean
       }
       prospects_relancer: { Args: never; Returns: undefined }
+      publish_app_update: {
+        Args: {
+          p_body: string
+          p_image_url: string
+          p_title: string
+          p_version: string
+          p_weight: string
+        }
+        Returns: string
+      }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
@@ -2692,6 +2859,9 @@ export type Database = {
         | "friend_added_event"
         | "weekly_new_events"
         | "suggestion"
+        | "app_update"
+        | "app_update_reply"
+        | "app_update_comment"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -2852,6 +3022,9 @@ export const Constants = {
         "friend_added_event",
         "weekly_new_events",
         "suggestion",
+        "app_update",
+        "app_update_reply",
+        "app_update_comment",
       ],
       participation_status: [
         "interesse",

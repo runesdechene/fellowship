@@ -266,3 +266,4 @@ un tag en base impose de compléter le frontend dans le même lot.
 
 Une feature « privé / caché » doit filtrer **partout** : les hooks, les RPCs, les
 `select` imbriqués et les triggers. Une seule surface oubliée et l'événement fuit.
+- **Publier une Nouveauté passe par `publish_app_update`** (SECURITY DEFINER, admin) : la note et les notifications d'un coup. Jamais d'INSERT direct dans `app_updates` (aucune politique ne l'ouvre). Le poids et `email_sent_at` ne s'écrivent pas depuis l'app (droits par colonne).
