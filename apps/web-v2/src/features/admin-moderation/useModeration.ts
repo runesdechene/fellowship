@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { ModerationStatus } from '@/lib/moderation'
 import { must, supabase } from '@/lib/supabase'
 import type { Database } from '@/types/supabase'
+import { REPORT_HANDLED } from './usePendingReports'
 
 export type Report = Database['public']['Functions']['admin_signalements']['Returns'][number]
 
@@ -27,6 +28,7 @@ export async function resolveReport(
     })
     .eq('id', id)
   if (error) throw new Error(error.message)
+  window.dispatchEvent(new Event(REPORT_HANDLED))
 }
 
 export function useModeration(status: ModerationStatus) {

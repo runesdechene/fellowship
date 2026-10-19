@@ -3,7 +3,8 @@
  *            comprises — et les supprime.
  * POURQUOI — la landing lit les actifs (features/landing/useTestimonials.ts) ; ici, les politiques
  *            admin de `testimonials` donnent tout. La vitrine reliée se saisit par son adresse
- *            (`flw.sh/…`) et s'enregistre par son `actor_id`, comme la lit la landing.
+ *            (`flw.sh/…`) et s'enregistre par son `actor_id` seul : la landing en lit l'adresse du
+ *            jour (`entity_slug`, l'ancien remplacement manuel de la V1, est vidé).
  * ATTENTION — une erreur de la base s'affiche telle quelle : jamais une liste vide qui ment.
  */
 import { useCallback, useEffect, useState } from 'react'
@@ -52,7 +53,8 @@ async function actorOf(slug: string): Promise<string | null> {
 
 export async function saveTestimonial(id: string | null, draft: TestimonialDraft): Promise<void> {
   const { slug, ...fields } = draft
-  const row = { ...fields, actor_id: await actorOf(slug), entity_slug: slug || null }
+  // `entity_slug` reste vide : le lien suit l'adresse réelle de l'enseigne, même si elle en change.
+  const row = { ...fields, actor_id: await actorOf(slug), entity_slug: null }
   const { error } = id
     ? await supabase.from('testimonials').update(row).eq('id', id)
     : await supabase.from('testimonials').insert(row)

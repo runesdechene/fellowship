@@ -61,7 +61,9 @@ export function TestimonialDialog({ testimonial, slug, nextOrder, onClose, onDon
     setBusy(true)
     setProblem(null)
     try {
-      setDraft({ ...draft, avatar_url: await uploadPhoto(file) })
+      const url = await uploadPhoto(file)
+      // Ce qui a été tapé pendant l'envoi reste : on repart du brouillon du moment.
+      setDraft((current) => ({ ...current, avatar_url: url }))
     } catch (failure) {
       setProblem(failure instanceof Error ? failure.message : 'L’envoi de la photo n’a pas abouti.')
     }

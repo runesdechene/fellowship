@@ -69,7 +69,7 @@ export function AdminEventsPage() {
               <th scope="col">Dates</th>
               <th scope="col">Catégories</th>
               <th scope="col">Créé par</th>
-              <th scope="col">Exposants</th>
+              <th scope="col">Suivie par</th>
               <th scope="col">Créé le</th>
               <th scope="col">
                 <span className="admin-table__sr">Agir</span>

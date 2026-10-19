@@ -17,7 +17,7 @@ import { VitrineHead } from './VitrineHead'
 
 export function VitrinePage() {
   const { slug } = useParams()
-  const { actor, reloadIdentity } = useAuth()
+  const { actor, entities, reloadIdentity } = useAuth()
   const navigate = useNavigate()
   const { vitrine, loading, notFound, error, toggleFollow, reload, show } = useVitrine(
     slug,
@@ -100,7 +100,10 @@ export function VitrinePage() {
 
       <footer className="vitrine__footer">
         Carnet de route Fellowship · flw.sh/{vitrine.slug}
-        {!isOwner && <ReportProfile targetId={vitrine.actorId} />}
+        {/* Pas de signalement de sa propre enseigne, même sous son nom de personne. */}
+        {!entities.some((entity) => entity.actor_id === vitrine.actorId) && (
+          <ReportProfile targetId={vitrine.actorId} />
+        )}
       </footer>
     </div>
   )

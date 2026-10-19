@@ -95,10 +95,10 @@ interface SidebarProps {
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
   const { actor, entities } = useAuth()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const items = navFor(entities.find((entity) => entity.actor_id === actor?.id)?.public_slug)
   const adminMode = isAdminPath(pathname)
-  const pendingReports = usePendingReports(adminMode ? pathname : '')
+  const pendingReports = usePendingReports(adminMode ? pathname + search : '')
 
   return (
     <aside className="sidebar">
