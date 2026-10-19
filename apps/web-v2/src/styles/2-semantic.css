@@ -241,6 +241,7 @@
   --menu-motion: var(--duration-fast) var(--ease-out);
   --layer-menu: 20;
   --layer-map: 30; /* la carte ouverte couvre la barre d'onglets du téléphone */
+  --layer-update: 40; /* le bandeau « nouvelle version » passe au-dessus de tout (lot 12) */
 
   /* =========================================================================
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)

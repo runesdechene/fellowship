@@ -9,6 +9,7 @@
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { IdentityError } from '@/components/layout/IdentityError'
+import { UpdateBanner } from '@/components/layout/UpdateBanner'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
@@ -149,273 +150,278 @@ function PublicSearchRoute() {
 }
 
 export function App() {
+  const { pathname } = useLocation()
   return (
-    <Routes>
-      {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
-      <Route path="/decouvrir" element={<LandingPage />} />
-      <Route path="/festivals" element={<PublicSearchRoute />} />
-      <Route path="/desinscription" element={<Unsubscribe />} />
-      <Route path="/connexion" element={<LoginRoute />} />
-      <Route path="/legal/:doc" element={<LegalRoute />} />
-      {/* Le calendrier intégré chez un artiste : ni coque, ni session (lot 12). */}
-      <Route path="/:slug/embed" element={<EmbedPage />} />
-      {/* L'ancien lien partagé d'un événement (V1) : il cherche la fiche par son slug (lot 12). */}
-      <Route
-        path="/e/:slug"
-        element={
-          <OpenRoute>
-            <EventSlugRedirect />
-          </OpenRoute>
-        }
-      />
-      <Route
-        path="/bienvenue"
-        element={
-          <AccessRoute>
-            <WelcomeRoute />
-          </AccessRoute>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute guest={<LandingPage />}>
-            <AppShell>
-              <Dashboard />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/evenement/nouveau"
-        element={
-          <ProtectedRoute>
-            <AppShell bare>
-              <CreateEvent />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/evenement/:id/modifier"
-        element={
-          <ProtectedRoute>
-            <AppShell bare>
-              <EditEvent />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/evenement/:id/historique"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <HistoryPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/evenement/:id/historique/:version"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <VersionPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      {/* « /evenement/nouveau » l'emporte sur ce motif : le routeur classe les
+    <>
+      {/* Partout sauf dans le calendrier intégré, qui vit chez un artiste (lot 12). */}
+      {!pathname.endsWith('/embed') && <UpdateBanner />}
+      <Routes>
+        {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
+        <Route path="/decouvrir" element={<LandingPage />} />
+        <Route path="/festivals" element={<PublicSearchRoute />} />
+        <Route path="/desinscription" element={<Unsubscribe />} />
+        <Route path="/connexion" element={<LoginRoute />} />
+        <Route path="/legal/:doc" element={<LegalRoute />} />
+        {/* Le calendrier intégré chez un artiste : ni coque, ni session (lot 12). */}
+        <Route path="/:slug/embed" element={<EmbedPage />} />
+        {/* L'ancien lien partagé d'un événement (V1) : il cherche la fiche par son slug (lot 12). */}
+        <Route
+          path="/e/:slug"
+          element={
+            <OpenRoute>
+              <EventSlugRedirect />
+            </OpenRoute>
+          }
+        />
+        <Route
+          path="/bienvenue"
+          element={
+            <AccessRoute>
+              <WelcomeRoute />
+            </AccessRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute guest={<LandingPage />}>
+              <AppShell>
+                <Dashboard />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/evenement/nouveau"
+          element={
+            <ProtectedRoute>
+              <AppShell bare>
+                <CreateEvent />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/evenement/:id/modifier"
+          element={
+            <ProtectedRoute>
+              <AppShell bare>
+                <EditEvent />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/evenement/:id/historique"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <HistoryPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/evenement/:id/historique/:version"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <VersionPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        {/* « /evenement/nouveau » l'emporte sur ce motif : le routeur classe les
           segments fixes avant les variables, quel que soit l'ordre écrit ici. */}
-      <Route
-        path="/evenement/:id"
-        element={
-          <OpenRoute>
-            <EventPage />
-          </OpenRoute>
-        }
-      />
-      <Route
-        path="/evenement/:id/avis"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <WriteReviewPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/explorer"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <ExplorerPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/communaute"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <CommunityPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/calendrier"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <CalendarPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/bilans"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <ReportsPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/bilans/:eventId"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <ReportPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/pro"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <ProPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/reglages"
-        element={
-          <ProtectedRoute>
-            <AppShell>
-              <SettingsPage />
-            </AppShell>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />
-      <Route
-        path="/admin/comptes"
-        element={
-          <AdminPage>
-            <AccountsPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/prospects"
-        element={
-          <AdminPage>
-            <ProspectsPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/prospects/modeles"
-        element={
-          <AdminPage>
-            <TemplatesPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/prospects/non-classes"
-        element={
-          <AdminPage>
-            <UnclassifiedPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/prospects/:id"
-        element={
-          <AdminPage>
-            <ProspectPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/signalements"
-        element={
-          <AdminPage>
-            <ModerationPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/evenements"
-        element={
-          <AdminPage>
-            <AdminEventsPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/categories"
-        element={
-          <AdminPage>
-            <CategoriesPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/temoignages"
-        element={
-          <AdminPage>
-            <TestimonialsPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/enseignes/:id"
-        element={
-          <AdminPage>
-            <EntityPage />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/personnes/:id"
-        element={
-          <AdminPage>
-            <PersonPage />
-          </AdminPage>
-        }
-      />
-      {/* Une vitrine à la racine, comme dans la V1, lisible sans compte (lot 12) : les adresses
+        <Route
+          path="/evenement/:id"
+          element={
+            <OpenRoute>
+              <EventPage />
+            </OpenRoute>
+          }
+        />
+        <Route
+          path="/evenement/:id/avis"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <WriteReviewPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/explorer"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <ExplorerPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/communaute"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <CommunityPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendrier"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <CalendarPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bilans"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <ReportsPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bilans/:eventId"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <ReportPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pro"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <ProPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reglages"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <SettingsPage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />
+        <Route
+          path="/admin/comptes"
+          element={
+            <AdminPage>
+              <AccountsPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/prospects"
+          element={
+            <AdminPage>
+              <ProspectsPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/prospects/modeles"
+          element={
+            <AdminPage>
+              <TemplatesPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/prospects/non-classes"
+          element={
+            <AdminPage>
+              <UnclassifiedPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/prospects/:id"
+          element={
+            <AdminPage>
+              <ProspectPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/signalements"
+          element={
+            <AdminPage>
+              <ModerationPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/evenements"
+          element={
+            <AdminPage>
+              <AdminEventsPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/categories"
+          element={
+            <AdminPage>
+              <CategoriesPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/temoignages"
+          element={
+            <AdminPage>
+              <TestimonialsPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/enseignes/:id"
+          element={
+            <AdminPage>
+              <EntityPage />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/personnes/:id"
+          element={
+            <AdminPage>
+              <PersonPage />
+            </AdminPage>
+          }
+        />
+        {/* Une vitrine à la racine, comme dans la V1, lisible sans compte (lot 12) : les adresses
           fixes au-dessus l'emportent. */}
-      <Route
-        path="/:slug"
-        element={
-          <OpenRoute>
-            <VitrinePage />
-          </OpenRoute>
-        }
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route
+          path="/:slug"
+          element={
+            <OpenRoute>
+              <VitrinePage />
+            </OpenRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   )
 }

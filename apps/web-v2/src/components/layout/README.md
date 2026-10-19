@@ -13,3 +13,5 @@ le châssis le rend.
 - `GuestShell.tsx` — le cadre d'une page vue sans compte : barre de la landing, page, mur d'affiche (lot 11b).
 
 Styles : `styles/3-components/` (un fichier par composant).
+
+- `UpdateBanner.tsx` — « Une nouvelle version de Fellowship est disponible » et « Recharger » (lot 12).
