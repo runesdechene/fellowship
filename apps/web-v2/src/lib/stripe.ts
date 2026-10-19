@@ -1,7 +1,7 @@
 /**
  * QUOI     — ouvrir le paiement Stripe ou l'espace de gestion de l'abonnement, depuis la V2.
  * POURQUOI — les fonctions serveur existent (stripe-checkout-session, stripe-portal-link) ;
- *            `returnTo: 'v2'` leur demande de ramener l'exposant sur /v2/pro.
+ *            elles ramènent l'exposant sur /pro.
  * ATTENTION — le statut Pro n'arrive en base que par le webhook, quelques secondes après le
  *            paiement : le retour relit l'identité, au plus MAX_POLLS fois (nextPoll).
  */
@@ -35,7 +35,7 @@ export function nextPoll(attempt: number, pro: boolean): 'stop-pro' | 'wait' | '
 
 export async function openPortal(entityId: string): Promise<void> {
   const response = await supabase.functions.invoke<FunctionReply>('stripe-portal-link', {
-    body: { entityId, returnTo: 'v2' },
+    body: { entityId },
   })
   const url = response.error ? null : response.data?.url
   if (!url) throw new Error('portal')
@@ -57,7 +57,7 @@ export async function updateBilling(entityId: string, draft: BillingDraft): Prom
 
 export async function startCheckout(entityId: string, interval: 'month' | 'year'): Promise<void> {
   const response = await supabase.functions.invoke<FunctionReply>('stripe-checkout-session', {
-    body: { entityId, billingInterval: interval, returnTo: 'v2' },
+    body: { entityId, billingInterval: interval },
   })
   if (response.error) throw new Error('checkout')
   const outcome = checkoutOutcome(response.data)

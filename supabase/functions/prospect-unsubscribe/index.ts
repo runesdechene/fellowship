@@ -1,15 +1,16 @@
 // prospect-unsubscribe : la désinscription d'un prospect, par le jeton de son lien.
 // Public (verify_jwt = false) : le jeton fait foi. Supabase sert le HTML de ses fonctions en texte
 // brut (protection contre l'hameçonnage) : la page est donc celle de la V2, publique.
-// GET (le lien de l'e-mail) redirige vers flw.sh/v2/desinscription ; POST désinscrit — depuis le
+// GET (le lien de l'e-mail) redirige vers flw.sh/desinscription ; POST désinscrit — depuis le
 // bouton de cette page (jeton dans le corps JSON) ou depuis une messagerie (« List-Unsubscribe-Post »,
 // jeton dans l'adresse). Aucune information sur le prospect n'est rendue.
 // Spec : docs/superpowers/specs/2026-10-16-v2-admin-messagerie-prospection-design.md.
 
+import { APP_URL } from '../_shared/app-url.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 
-const PAGE = 'https://flw.sh/v2/desinscription'
+const PAGE = `${APP_URL}/desinscription`
 const TOKEN = /^[0-9a-f]{64}$/
 
 Deno.serve(async (req) => {

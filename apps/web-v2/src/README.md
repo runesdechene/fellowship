@@ -1,6 +1,6 @@
 # src — le code de la V2
 
-- `App.tsx` — les routes et la garde d'accès ; `main.tsx` — le montage (base `/v2`).
+- `App.tsx` — les routes et la garde d'accès ; `main.tsx` — le montage (à la racine).
 - `components/layout/` — le châssis ; `components/ui/` — les briques.
 - `features/<écran>/` — un dossier par écran, avec ses hooks.
 - `pages/` — les écrans hors coquille (connexion).

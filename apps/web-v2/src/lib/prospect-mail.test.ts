@@ -20,8 +20,8 @@ describe('toHtml', () => {
 
 describe('toHtml, les liens', () => {
   it('laisse la ponctuation finale hors du lien', () => {
-    expect(toHtml('Viens voir https://flw.sh/v2/festivals.')).toBe(
-      '<p>Viens voir <a href="https://flw.sh/v2/festivals">https://flw.sh/v2/festivals</a>.</p>',
+    expect(toHtml('Viens voir https://flw.sh/festivals.')).toBe(
+      '<p>Viens voir <a href="https://flw.sh/festivals">https://flw.sh/festivals</a>.</p>',
     )
   })
   it('un lien entre parenthèses ou entre chevrons', () => {

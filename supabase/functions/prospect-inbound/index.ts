@@ -8,6 +8,7 @@
 
 import { Webhook } from 'npm:svix@1.45.1'
 import { bodyText, emailAddress, isAutoReply, threadKeys, trustedSender } from '../_shared/prospect-inbound.ts'
+import { APP_URL } from '../_shared/app-url.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 
 type Received = { type: string; data: { email_id?: string } }
@@ -18,7 +19,7 @@ type Email = {
   authentication?: { spf?: string; dkim?: string; dmarc?: string }
 }
 const DOMAIN = '@equipe.flw.sh'
-const PAGE = 'https://flw.sh/v2/admin/prospects'
+const PAGE = `${APP_URL}/admin/prospects`
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return new Response('method_not_allowed', { status: 405 })
