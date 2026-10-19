@@ -47,7 +47,9 @@
   --hover-brightness: 0.96;
   --surface-card-hover: var(--sand-100);
   --surface-row-hover: var(--sand-100);
-  --surface-control: var(--sand-0); /* surface claire : notes de l’administration, anneau du point de la cloche */
+  --surface-control: var(
+    --sand-0
+  ); /* surface claire : notes de l’administration, anneau du point de la cloche */
   /* Le survol d'un bouton. TROIS points de clarté en dessous — c'est le même
      écart que --surface-card → --surface-card-hover, et c'est ce qui rend
      l'effet « léger » : la subtilité est une affaire de CLARTÉ, pas de
