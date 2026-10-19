@@ -1723,8 +1723,8 @@
   --vitrine-edit-warning: var(--terre-400);
   --activity-avatar-surface: var(--night-350);
   --tab-bar-active: var(--terre-400);
-  /* Les onglets inactifs, comme les menus de la barre latérale : en gris pâle, ils disparaissaient. */
-  --tab-bar-ink: var(--ink-nav);
+  /* Les onglets inactifs du téléphone : à mi-chemin entre le gris pâle, invisible, et celui des menus, trop clair. */
+  --tab-bar-ink: var(--cream-650);
   /* Le bénéfice la nuit : le dégradé de marque partait d'une brique qui se perdait dans le fond. */
   --net-gradient: linear-gradient(90deg, var(--terre-500), var(--terre-200));
   --tag-first-ink: var(--night-0);

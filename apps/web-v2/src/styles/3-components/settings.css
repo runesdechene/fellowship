@@ -320,6 +320,11 @@
 }
 
 @media (width <= 760px) {
+  /* Les marges du téléphone, comme toutes les pages : alignées sur le logo de la barre du haut. */
+  .settings {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
   .settings__header {
     flex-direction: column;
     align-items: flex-start;
