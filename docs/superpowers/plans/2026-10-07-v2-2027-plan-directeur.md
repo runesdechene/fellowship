@@ -160,7 +160,7 @@ La bascule de `flw.sh` vers la V2 est un lot à part, en dernier, décidé par U
 - **Cadres** : `2027 — Landing (validée le 14/10/2026)` (`2290:2`) et `2027 — Recherche publique (validée le 14/10/2026)` (`2314:2`). L'ancien `2027 — Landing` (`2104:2`) est remplacé. Positionnement : « Mon assistant de festivals. Ma communauté d'exposants. » (vault, 14/10/2026). **À fournir par Uriel** : les photos de festival pour les fonds flous (affiches floutées en attendant).
 - **Règle du 14/10/2026** (remplace celle du 08/10, qui disait 6 mois) : la recherche publique (sans compte) se fouille sur **3 mois** ; un compte gratuit en ouvre 6 (l'Explorer gratuit), le Pro toute l'année ; même compteur « N festivals t'attendent après {mois} » ; les fiches restent ouvertes par lien direct (et indexables).
 
-### Lot 12 — Bascule de `flw.sh` vers la V2  ☐
+### Lot 12 — Bascule de `flw.sh` vers la V2  ☑ (19/10/2026, V2 3.0.0, spec `2026-10-19-lot-12-bascule-v2-design.md`, plan `2026-10-19-lot-12-bascule-v2.md` — la V2 à la racine pour tous, la V1 plus servie ; pages légales, calendrier intégré, `/e/:slug`, `/@slug`, vitrine sans compte, 301 des adresses V1 et `/v2/…`, service worker qui prend la suite de la V1, bandeau « Recharger »)
 - Décidé par Uriel quand les lots 1-11 suffisent à remplacer la V1. Redirections, service worker,
   annonce aux utilisateurs. Le mobile des écrans restants est fait au fil des lots, avec chaque écran.
 
