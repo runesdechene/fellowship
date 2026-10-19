@@ -129,7 +129,10 @@ Deno.serve(async (req) => {
       .eq('status', 'attributed')
       .eq('filleul_gift_granted', false)
       .maybeSingle()
-    const trialDays = pendingRef ? 30 : 14
+    // Un seul essai par enseigne (Uriel, 19/10/2026) : un client Stripe qui a déjà eu un
+    // abonnement, quel qu'en soit l'état, se réabonne sans essai. Stripe fait foi, pas notre base.
+    const earlier = await stripe.subscriptions.list({ customer: customerId, status: 'all', limit: 1 })
+    const trialDays = earlier.data.length > 0 ? 0 : pendingRef ? 30 : 14
 
     const price = body.billingInterval === 'month' ? STRIPE_PRICE_MONTHLY : STRIPE_PRICE_YEARLY
 
@@ -138,7 +141,7 @@ Deno.serve(async (req) => {
       customer: customerId,
       line_items: [{ price, quantity: 1 }],
       subscription_data: {
-        trial_period_days: trialDays,
+        ...(trialDays > 0 && { trial_period_days: trialDays }),
         metadata: { entity_actor_id: entity.actor_id, paid_by_user: user.id },
       },
       automatic_tax: { enabled: true },

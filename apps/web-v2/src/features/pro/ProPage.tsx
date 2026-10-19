@@ -24,9 +24,10 @@ import { useCheckoutReturn, type ReturnState } from './useCheckoutReturn'
 function bannerText(state: Exclude<ReturnState, 'none'>, trialEnd: string | null): string {
   if (state === 'late')
     return 'Ton paiement est enregistré ; ton compte passe au Pro dans quelques instants. Recharge la page si rien ne change.'
-  return state === 'welcome' && trialEnd
+  // Sans essai (un seul par enseigne), `trial_end` est vide ou passé : rien à annoncer.
+  return state === 'welcome' && trialEnd && new Date(trialEnd) > new Date()
     ? `Bienvenue dans le Pro. Ton essai court jusqu’au ${formatFullDate(new Date(trialEnd))}.`
-    : 'Bienvenue dans le Pro. Ton essai commence.'
+    : 'Bienvenue dans le Pro.'
 }
 
 function FormulaSwitch({ value, onChange }: { value: Formula; onChange: (next: Formula) => void }) {
@@ -106,6 +107,7 @@ export function ProPage() {
           action={billingAction(entity)}
           compedUntil={compedUntil}
           settling={back === 'waiting' || back === 'late'}
+          trialUsed={Boolean(entity?.stripe_subscription_id)}
         />
       </div>
       {entity && <ReferralCard entityId={entity.actor_id} brandName={entity.brand_name} />}

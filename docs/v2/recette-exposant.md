@@ -59,9 +59,10 @@ passer un compte neuf vers l'arrivée.
   Pro offert, ce qui rouvrait un second paiement) ; après 16 s, le bandeau dit de recharger.
 - La carte de parrainage parlait de « 30 jours de Pro offerts » : c'est un essai de 30 jours.
 
-**À trancher par Uriel :**
-- Chaque nouvel abonnement repart avec un essai gratuit : un exposant qui résilie puis se réabonne
-  a de nouveau 14 jours, sans limite. Faut-il un seul essai par enseigne ?
+**Tranché par Uriel le 19/10/2026 — un seul essai par enseigne** (l'Atelier du Pooka avait reprofité
+de 14 jours en se réabonnant). `stripe-checkout-session` demande à Stripe si le client a déjà eu un
+abonnement, quel qu'en soit l'état ; si oui, pas d'essai. Le bouton dit alors « M'abonner »
+(V2 2.55.2).
 
 **Pour la bascule (chantier 5), certains :**
 - `can_use_v2()` n'ouvre la V2 qu'aux rôles `admin` et `v2` : à élargir à tous le jour J, sinon

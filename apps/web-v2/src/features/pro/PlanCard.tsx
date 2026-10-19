@@ -82,14 +82,24 @@ interface ProCardProps {
   compedUntil: string | null
   /** Juste après un paiement, le temps que Stripe prévienne la base : on ne propose rien. */
   settling: boolean
+  /** L'enseigne a déjà eu un abonnement : un seul essai par enseigne (Uriel, 19/10/2026). */
+  trialUsed: boolean
 }
 
-function ctaLabel(action: ProCardProps['action'], pro: boolean): string {
+function ctaLabel(action: ProCardProps['action'], pro: boolean, trialUsed: boolean): string {
   if (action === 'portal') return 'Gérer mon abonnement'
-  return pro ? 'M’abonner' : 'Essayer 14 jours gratuitement'
+  return pro || trialUsed ? 'M’abonner' : 'Essayer 14 jours gratuitement'
 }
 
-export function ProCard({ formula, pro, entityId, action, compedUntil, settling }: ProCardProps) {
+export function ProCard({
+  formula,
+  pro,
+  entityId,
+  action,
+  compedUntil,
+  settling,
+  trialUsed,
+}: ProCardProps) {
   const [opening, setOpening] = useState(false)
   const [failed, setFailed] = useState(false)
   const { big, unit, note } = proPriceLines(formula)
@@ -125,7 +135,7 @@ export function ProCard({ formula, pro, entityId, action, compedUntil, settling 
         aria-describedby={action === 'none' ? 'plan-card-hint' : undefined}
         onClick={open}
       >
-        {opening ? 'Ouverture…' : ctaLabel(action, pro)}
+        {opening ? 'Ouverture…' : ctaLabel(action, pro, trialUsed)}
         {!opening && <ArrowRight size={15} strokeWidth={2} />}
       </button>
       {compedUntil && action === 'checkout' && (
