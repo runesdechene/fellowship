@@ -1636,7 +1636,7 @@
 
   --ink-title: var(--cream-50);
   --ink-strong: var(--cream-50);
-  --ink-section: var(--cream-50);
+  --ink-section: var(--cream-200); /* gris clair : en crème plein, les grands titres éblouissaient (19/10/2026) */
   --ink-total: var(--cream-50);
   --ink-link: var(--cream-50);
   --ink-soft: var(--cream-500);
