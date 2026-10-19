@@ -28,6 +28,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `image-resize.ts` — réduire une image au navigateur avant envoi (WebP, repli JPEG).
 - `vitrine-edit.ts` — les règles de l'éditeur de vitrine : adresse, liens, limites, ce qui a changé.
 - `community.ts` — le fil de la communauté : lire, trier par onglet, dire les lignes et les raisons de suivre.
+- `network.ts` — le réseau de l'acteur actif : abonnés, amis, demandes d'ami ; suivre en retour, refuser.
 - `suggestions.ts` — les suggestions « Pour toi » : lire la réponse, dire la raison (recopié dans send-push).
 - `push-device.ts` — ce que permet ce téléphone, le « Plus tard » de l'invitation, la clé VAPID.
 - `push-phone.ts` — les gestes du navigateur : lire, s'abonner, se désabonner (aussi à la déconnexion).

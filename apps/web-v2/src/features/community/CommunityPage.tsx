@@ -64,7 +64,7 @@ function CommunityScreen() {
     follow,
     mark,
   } = useCommunity(actor?.id)
-  const { network, declined, decline } = useNetwork()
+  const { network, answered, followBack, decline } = useNetwork()
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -155,9 +155,9 @@ function CommunityScreen() {
           {!error && network && (
             <NetworkCard
               network={network}
-              answered={new Set([...followed, ...declined])}
-              onFollow={(id) => void follow(id)}
-              onDecline={(id) => void decline(id)}
+              answered={answered}
+              onFollow={followBack}
+              onDecline={decline}
             />
           )}
           {!error && <CrossingCard crossing={crossing} />}

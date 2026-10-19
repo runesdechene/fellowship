@@ -12,7 +12,7 @@ import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
-import { requestsLabel } from '@/lib/community'
+import { requestsLabel } from '@/lib/network'
 
 const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
@@ -108,7 +108,7 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
             <NavLink
               key={label}
               to={to}
-              end
+              end={to === '/'}
               className={({ isActive }) =>
                 isActive ? 'tab-bar__item tab-bar__item--active' : 'tab-bar__item'
               }

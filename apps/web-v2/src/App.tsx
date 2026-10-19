@@ -24,6 +24,7 @@ import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
 import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
+import { NetworkPage } from '@/features/community/NetworkPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
 import { EditEvent } from '@/features/event-edit/EditEvent'
@@ -99,6 +100,15 @@ function AdminRoute({ children }: { children: ReactNode }) {
   if (!person) return null
   if (person.role !== 'admin') return <Navigate to="/" replace />
   return <>{children}</>
+}
+
+/** Un écran de l'app : connecté, dans la coque. */
+function AppPage({ children }: { children: ReactNode }) {
+  return (
+    <ProtectedRoute>
+      <AppShell>{children}</AppShell>
+    </ProtectedRoute>
+  )
 }
 
 function AdminPage({ children }: { children: ReactNode }) {
@@ -216,21 +226,17 @@ export function App() {
         <Route
           path="/evenement/:id/historique"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <HistoryPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <HistoryPage />
+            </AppPage>
           }
         />
         <Route
           path="/evenement/:id/historique/:version"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <VersionPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <VersionPage />
+            </AppPage>
           }
         />
         {/* « /evenement/nouveau » l'emporte sur ce motif : le routeur classe les
@@ -246,81 +252,73 @@ export function App() {
         <Route
           path="/evenement/:id/avis"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <WriteReviewPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <WriteReviewPage />
+            </AppPage>
           }
         />
         <Route
           path="/explorer"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <ExplorerPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <ExplorerPage />
+            </AppPage>
           }
         />
         <Route
           path="/communaute"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <CommunityPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <CommunityPage />
+            </AppPage>
+          }
+        />
+        <Route
+          path="/communaute/:liste"
+          element={
+            <AppPage>
+              <NetworkPage />
+            </AppPage>
           }
         />
         <Route
           path="/calendrier"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <CalendarPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <CalendarPage />
+            </AppPage>
           }
         />
         <Route
           path="/bilans"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <ReportsPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <ReportsPage />
+            </AppPage>
           }
         />
         <Route
           path="/bilans/:eventId"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <ReportPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <ReportPage />
+            </AppPage>
           }
         />
         <Route
           path="/pro"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <ProPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <ProPage />
+            </AppPage>
           }
         />
         <Route
           path="/reglages"
           element={
-            <ProtectedRoute>
-              <AppShell>
-                <SettingsPage />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage>
+              <SettingsPage />
+            </AppPage>
           }
         />
         <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />

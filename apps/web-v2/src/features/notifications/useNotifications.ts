@@ -12,6 +12,10 @@ import { must, supabase } from '@/lib/supabase'
 
 const LIMIT = 50
 
+/** La cloche dit tout sauf les nouveaux abonnés : son bloc « Demandes d'ami · Nouveaux abonnés »
+ *  les montre (19/10/2026). La phrase reste dans KNOWN_TYPES pour la notification du téléphone. */
+const BELL_TYPES = KNOWN_TYPES.filter((type) => type !== 'new_follower')
+
 export function useNotifications() {
   const { person, entities } = useAuth()
   const actorIds = useMemo(
@@ -34,7 +38,7 @@ export function useNotifications() {
             .from('notifications')
             .select('id, actor_id, type, data, read, created_at')
             .in('actor_id', ids)
-            .in('type', [...KNOWN_TYPES])
+            .in('type', BELL_TYPES)
             .order('created_at', { ascending: false })
             .limit(LIMIT),
         )

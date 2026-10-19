@@ -843,6 +843,8 @@
      maquette — à 918, le fil s'écrasait. */
   --community-page-width: calc(1088px + 2 * var(--page-gutter));
   --community-side-width: 360px;
+  --network-list-width: 640px;
+  --notif-network-avatar: var(--size-32);
   --community-gap: var(--space-48);
   --community-inset: var(--sand-200);
   --community-faint-ink: var(--ink-waiting);

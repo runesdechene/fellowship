@@ -2376,6 +2376,7 @@ export type Database = {
         Args: { p_actor: string }
         Returns: {
           avatar: string
+          city: string
           id: string
           name: string
           slug: string

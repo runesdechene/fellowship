@@ -1,5 +1,5 @@
 /**
- * QUOI     — « Ta communauté » : amis et abonnés, ce qu'est un ami, et les demandes d'ami en
+ * QUOI     — « Ta communauté » : amis et abonnés (deux liens vers leurs listes), ce qu'est un ami, et les demandes d'ami en
  *            attente : une croix pour refuser, un + pour suivre en retour.
  * POURQUOI — Uriel, 19/10/2026 : il faut que les exposants aient envie de se connecter entre eux.
  *            Une demande, c'est un compte qui te suit sans que tu le suives : le suivre en retour
@@ -7,9 +7,9 @@
  *            s'efface aussitôt, la relecture du réseau fait le reste.
  */
 import { Plus, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
-import { networkCounts, requestsLabel } from '@/lib/community'
-import type { Network } from '@/lib/friends'
+import { peopleCount, requestsLabel, type Network } from '@/lib/network'
 
 /** Trois demandes à la fois, comme les autres encadrés ; suivre fait monter les suivantes. */
 const SHOWN = 3
@@ -30,7 +30,15 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
         Ta communauté
       </h2>
       <div className="network-card__intro">
-        <p className="network-card__counts">{networkCounts(friends, followers)}</p>
+        <p className="network-card__counts">
+          <Link className="network-card__count" to="/communaute/amis">
+            {peopleCount(friends.length, 'ami')}
+          </Link>
+          {' · '}
+          <Link className="network-card__count" to="/communaute/abonnes">
+            {peopleCount(followers.length, 'abonné')}
+          </Link>
+        </p>
         <p className="side-card__meta">
           Un ami, c’est un exposant que tu suis et qui te suit : chacun voit où l’autre va.
         </p>

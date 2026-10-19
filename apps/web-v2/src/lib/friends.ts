@@ -6,6 +6,7 @@
  */
 
 import { groupCompanions } from '@/lib/calendar'
+import { readFollows } from '@/lib/network'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
 
@@ -24,59 +25,10 @@ export const PROGRAMMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme'
 /** Statuts qui valent pastille verte ; le reste passe en pastille terre. */
 export const CONFIRMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme']
 
-/** Qui l'acteur suit, et qui le suit, les plus récents d'abord. */
-async function readFollows(actorId: string) {
-  const follows = must(
-    await supabase
-      .from('follows')
-      .select('follower_actor, following_actor')
-      .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`)
-      .order('created_at', { ascending: false }),
-  )
-
-  const following = new Set<string>()
-  const followers: string[] = []
-  for (const row of follows) {
-    if (row.follower_actor === actorId) following.add(row.following_actor)
-    if (row.following_actor === actorId) followers.push(row.follower_actor)
-  }
-  return { following, followers }
-}
-
 /** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
 async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
   const { following, followers } = await readFollows(actorId)
-  return followers.filter((id) => following.has(id))
-}
-
-/** L'état du réseau : qui me suit, mes amis, et les exposants qui attendent que je les suive. */
-export interface Network {
-  followers: number
-  friends: number
-  /** Les demandes d'ami en attente, refusées exclues : me suivre en retour en fait des amis. */
-  requests: Friend[]
-}
-
-/**
- * `own` : les comptes de la même personne, qui ne sont ni des abonnés ni des amis. Les demandes
- * viennent de friend_requests : seul un exposant en fait une, et un refus l'efface.
- */
-export async function fetchNetwork(actorId: string, own: ReadonlySet<string>): Promise<Network> {
-  const [{ following, followers }, requests] = await Promise.all([
-    readFollows(actorId),
-    supabase.rpc('friend_requests', { p_actor: actorId }),
-  ])
-  const others = followers.filter((id) => !own.has(id))
-  return {
-    followers: others.length,
-    friends: others.filter((id) => following.has(id)).length,
-    requests: must(requests).map((row) => ({ id: row.id, name: row.name, avatarUrl: row.avatar })),
-  }
-}
-
-/** Refuser une demande : elle ne revient plus, l'abonné reste abonné. */
-export async function declineRequest(actorId: string, followerId: string): Promise<void> {
-  must(await supabase.rpc('decline_friend_request', { p_actor: actorId, p_follower: followerId }))
+  return followers.map((follower) => follower.id).filter((id) => following.has(id))
 }
 
 /**

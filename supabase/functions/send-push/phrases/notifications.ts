@@ -145,7 +145,7 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
       return { icon: 'update', text: [{ strong: event }, ' a été mis à jour.'], href: fiche }
     case 'new_follower':
       if (!who) return null
-      return { icon: 'follow', text: [{ strong: who }, ' suit maintenant ta vitrine.'], href: '/' }
+      return { icon: 'follow', text: [{ strong: who }, ' suit maintenant ta vitrine.'], href: '/communaute/abonnes' }
     case 'deadline_reminder': {
       const deadline = text(data, 'deadline')
       const days = data.days_left

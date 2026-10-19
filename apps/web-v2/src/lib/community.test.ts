@@ -10,8 +10,6 @@ import {
   feedFor,
   feedPhrase,
   followReason,
-  networkCounts,
-  requestsLabel,
   gatheringOf,
   readFeed,
   readFollowReason,
@@ -259,17 +257,5 @@ describe('les pages du fil', () => {
     expect(page.lines.map((l) => l.id)).toEqual(['gathering:1', 'a', 'b', 'c'])
     expect(page.hasMore).toBe(true)
     expect(appendPage(first, [at('2026-10-09T08:00:00Z', 'c')], 2).hasMore).toBe(false)
-  })
-})
-
-describe('le réseau en mots', () => {
-  test('accorde amis et abonnés', () => {
-    expect(networkCounts(0, 1)).toBe('0 amis · 1 abonné')
-    expect(networkCounts(1, 12)).toBe('1 ami · 12 abonnés')
-  })
-
-  test('compte les demandes en attente', () => {
-    expect(requestsLabel(1)).toBe('1 demande d’ami en attente')
-    expect(requestsLabel(3)).toBe('3 demandes d’ami en attente')
   })
 })

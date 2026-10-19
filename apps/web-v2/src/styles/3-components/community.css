@@ -452,10 +452,34 @@ a.side-card__row:hover {
   color: var(--ink-title);
 }
 
+.network-card__count {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.network-card__count:hover {
+  color: var(--ink-soft);
+}
+
 .network-card__requests {
   padding: var(--space-8) var(--space-10) var(--space-2);
   font: var(--type-community-day);
   color: var(--danger-ink);
+}
+
+/* Mes amis / Mes abonnés : la liste dans une carte, à la largeur d'une lecture */
+.network-list {
+  max-width: var(--network-list-width);
+}
+
+.network-list__actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-6);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.network-list__actions--leaving {
+  opacity: 0;
 }
 
 @media (width <= 1100px) {
@@ -474,6 +498,7 @@ a.side-card__row:hover {
   .feed-item,
   .gathering__mark,
   .side-card__row,
+  .network-list__actions,
   .feed-item__follow,
   .side-card__follow {
     transition: none;

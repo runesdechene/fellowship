@@ -7,8 +7,8 @@
  */
 import { Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { networkCounts, requestsLabel } from '@/lib/community'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { peopleCount, requestsLabel } from '@/lib/network'
 import { useNetwork } from '@/features/community/useNetwork'
 
 export function CommunitySummary() {
@@ -26,7 +26,7 @@ export function CommunitySummary() {
           {waiting ? requestsLabel(requests.length) : 'Ta communauté'}
         </span>
         <span className="community-summary__note">
-          {networkCounts(friends, followers)}.{' '}
+          {peopleCount(friends.length, 'ami')} · {peopleCount(followers.length, 'abonné')}.{' '}
           {waiting
             ? 'Suis en retour ceux qui te suivent : vous verrez où l’autre va.'
             : 'Suis les exposants que tu croises : vous verrez où l’autre va.'}

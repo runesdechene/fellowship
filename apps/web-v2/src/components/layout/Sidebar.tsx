@@ -27,7 +27,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
-import { requestsLabel } from '@/lib/community'
+import { requestsLabel } from '@/lib/network'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
@@ -159,7 +159,7 @@ export function Sidebar({ collapsed, onToggle, friendRequests }: SidebarProps) {
               <NavLink
                 key={label}
                 to={to}
-                end
+                end={to === '/'}
                 className={({ isActive }) =>
                   isActive ? 'sidebar__item sidebar__item--active' : 'sidebar__item'
                 }

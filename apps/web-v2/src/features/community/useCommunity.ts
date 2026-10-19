@@ -3,6 +3,7 @@
  *            « À suivre », et qui il suit déjà ; Suivre et Repérer.
  * POURQUOI — lot 9a. La base rend des lignes prêtes à afficher (community_feed, crossing_dates,
  *            accounts_to_follow), l'identité protégée déjà appliquée ; ce hook les lit et relit.
+ *            Tout Suivre (événement `reseau-change`) relit la page.
  * ATTENTION — une lecture ratée est une erreur affichée, jamais un fil vide (.claude/rules/v2.md).
  */
 import { useCallback, useEffect, useState } from 'react'
@@ -111,6 +112,13 @@ export function useCommunity(actorId: string | undefined) {
   const [loadingMore, setLoadingMore] = useState(false)
   const [moreFailed, setMoreFailed] = useState(false)
 
+  // Un Suivre ou un Refuser, ici ou ailleurs (la cloche, « Ta communauté ») : tout se relit.
+  useEffect(() => {
+    const reload = () => setVersion((current) => current + 1)
+    window.addEventListener(NETWORK_CHANGED, reload)
+    return () => window.removeEventListener(NETWORK_CHANGED, reload)
+  }, [])
+
   useEffect(() => {
     if (!actorId) return
     let cancelled = false
@@ -172,7 +180,6 @@ export function useCommunity(actorId: string | undefined) {
         })
         return
       }
-      setVersion((current) => current + 1)
       window.dispatchEvent(new Event(NETWORK_CHANGED))
     },
     [actorId],

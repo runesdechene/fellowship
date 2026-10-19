@@ -1,22 +1,26 @@
 /**
- * QUOI     — l'état du réseau de l'acteur actif : abonnés, amis, demandes d'ami en attente.
- * POURQUOI — la pastille de Communauté, le résumé du tableau de bord et « Ta communauté » lisent la
- *            même chose. Relu quand `when` change (l'adresse, pour la navigation) et après chaque
- *            Suivre ou Refuser (événement `reseau-change`), pour que la pastille s'éteigne aussitôt.
- * ATTENTION — un échec rend null : la pastille et les encadrés se taisent plutôt que de mentir.
+ * QUOI     — l'état du réseau de l'acteur actif (lib/network.ts), et les deux réponses à une
+ *            demande d'ami : suivre en retour, refuser.
+ * POURQUOI — la pastille de Communauté, la cloche, le résumé du tableau de bord, « Ta communauté »
+ *            et les listes Mes amis / Mes abonnés lisent la même chose. Relu quand `when` change
+ *            (l'adresse, pour la navigation) et après chaque Suivre ou Refuser (événement
+ *            `reseau-change`), pour que tous s'accordent aussitôt.
+ * ATTENTION — un échec de lecture rend `failed` : la pastille et les encadrés se taisent, une liste
+ *            le dit. Une réponse est optimiste (`answered`) ; si l'écriture échoue, elle revient.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { declineRequest, fetchNetwork, type Network } from '@/lib/friends'
+import { declineRequest, fetchNetwork, followBack, type Network } from '@/lib/network'
 
-/** L'événement envoyé après un Suivre ou un Refuser réussi. */
+/** L'événement envoyé après un Suivre ou un Refuser réussi, où qu'il ait eu lieu. */
 export const NETWORK_CHANGED = 'reseau-change'
 
 export function useNetwork(when = '') {
   const { actor, person, entities } = useAuth()
   const [network, setNetwork] = useState<Network | null>(null)
+  const [failed, setFailed] = useState(false)
   const [round, setRound] = useState(0)
-  const [declined, setDeclined] = useState<ReadonlySet<string>>(new Set())
+  const [answered, setAnswered] = useState<ReadonlySet<string>>(new Set())
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -34,28 +38,41 @@ export function useNetwork(when = '') {
     if (!actorId) return
     let cancelled = false
     fetchNetwork(actorId, own).then(
-      (next) => !cancelled && setNetwork(next),
-      () => !cancelled && setNetwork(null),
+      (next) => {
+        if (cancelled) return
+        setNetwork(next)
+        setFailed(false)
+      },
+      () => {
+        if (cancelled) return
+        setNetwork(null)
+        setFailed(true)
+      },
     )
     return () => {
       cancelled = true
     }
   }, [actorId, own, when, round])
 
-  /** Refuser : la demande s'efface aussitôt ; si l'écriture échoue, elle revient. */
-  const decline = useCallback(
-    async (followerId: string) => {
+  const answer = useCallback(
+    async (id: string, write: (actorId: string, id: string) => Promise<void>) => {
       if (!actorId) return
-      setDeclined((current) => new Set([...current, followerId]))
+      setAnswered((current) => new Set([...current, id]))
       try {
-        await declineRequest(actorId, followerId)
+        await write(actorId, id)
         window.dispatchEvent(new Event(NETWORK_CHANGED))
       } catch {
-        setDeclined((current) => new Set([...current].filter((id) => id !== followerId)))
+        setAnswered((current) => new Set([...current].filter((other) => other !== id)))
       }
     },
     [actorId],
   )
 
-  return { network, declined, decline }
+  return {
+    network,
+    failed,
+    answered,
+    followBack: (id: string) => void answer(id, followBack),
+    decline: (id: string) => void answer(id, declineRequest),
+  }
 }

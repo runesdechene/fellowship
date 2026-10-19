@@ -234,3 +234,68 @@
     transition: none;
   }
 }
+
+/* --- Demandes d'ami et nouveaux abonnés, en tête du panneau (NetworkBlock) ----------------- */
+.notif-network {
+  border-bottom: 1px solid var(--line-card);
+}
+
+.notif-network__alert {
+  color: var(--danger-ink);
+}
+
+.notif-network .notif {
+  align-items: center;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+
+.notif-network__row--leaving {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.notif-network__avatar {
+  --avatar-size: var(--notif-network-avatar);
+}
+
+.notif-network__face {
+  --avatar-size: var(--community-side-face);
+  --avatar-overlap: var(--community-face-overlap);
+
+  border: var(--community-face-ring) solid var(--surface-card);
+}
+
+.notif-network__name {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.notif-network__actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-6);
+}
+
+.notif-network__more {
+  padding: 0 var(--space-20) var(--space-12);
+  font: var(--type-report-small);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.notif-network__newcomers {
+  cursor: pointer;
+}
+
+.notif-network__newcomers:hover,
+.notif-network__more:hover {
+  color: var(--ink-title);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif-network .notif {
+    transition: none;
+  }
+}

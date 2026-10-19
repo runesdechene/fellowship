@@ -3,6 +3,7 @@
  *            Aujourd'hui / Cette semaine / Plus tôt.
  * POURQUOI — maquette « Notifications ». Une notification non lue porte un fond et un point ; un
  *            clic la marque lue et mène où elle parle.
+ *            En tête, le bloc « Demandes d'ami · Nouveaux abonnés » (NetworkBlock), quand il a à dire.
  * ATTENTION — le pied (PanelFoot) mène aux Réglages et propose d'activer le téléphone (lot 8e).
  */
 import {
@@ -18,7 +19,7 @@ import {
   User,
   type LucideIcon,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { timeAgo } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { groupByDay, type NotificationIcon, type NotificationView } from '@/lib/notifications'
@@ -43,6 +44,8 @@ interface NotificationPanelProps {
   onRead: (id: string) => void
   onReadAll: () => void
   onClose: () => void
+  /** Le bloc des demandes d'ami et des nouveaux abonnés, posé en tête ; null s'il est vide. */
+  network: ReactNode
   /** « Repérer » : rend vrai si la date est posée. */
   onMark: (ownerId: string, eventId: string) => Promise<boolean>
 }
@@ -84,6 +87,7 @@ export function NotificationPanel({
   onReadAll,
   onClose,
   onMark,
+  network,
 }: NotificationPanelProps) {
   const go = useTransitionNavigate()
   const now = new Date()
@@ -99,10 +103,11 @@ export function NotificationPanel({
           </button>
         )}
       </div>
+      {network}
       {failed && (
         <p className="notif-panel__empty">Tes notifications n’ont pas pu être chargées.</p>
       )}
-      {!failed && groups.length === 0 && (
+      {!failed && !network && groups.length === 0 && (
         <p className="notif-panel__empty">Rien de neuf pour l’instant.</p>
       )}
       {groups.map((group) => (
