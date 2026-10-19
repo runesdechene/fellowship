@@ -9,6 +9,7 @@
   gap: var(--space-12);
   padding: var(--space-20);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
   filter: blur(var(--space-4));

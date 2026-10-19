@@ -98,6 +98,7 @@
   gap: var(--space-20);
   padding: var(--space-32);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-invitation);
   background: var(--surface-card);
 }

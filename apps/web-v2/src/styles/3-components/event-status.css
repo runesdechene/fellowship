@@ -46,6 +46,7 @@
   margin-top: var(--space-14);
   padding: 0 var(--dossier-card-padding);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--dossier-card-radius);
   background: var(--surface-card);
 }

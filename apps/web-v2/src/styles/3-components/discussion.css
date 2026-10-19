@@ -79,6 +79,7 @@
   border-radius: var(--radius-card);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   text-align: left;
   cursor: pointer;
   transition: background-color var(--menu-motion);
@@ -123,6 +124,7 @@
   border-radius: var(--radius-card);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
 }
 
 .discussion__composer--question {
@@ -201,6 +203,7 @@
   flex-direction: column;
   padding: 0 var(--dossier-card-padding);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--dossier-card-radius);
   background: var(--surface-card);
 }

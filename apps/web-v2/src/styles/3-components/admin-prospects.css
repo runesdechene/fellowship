@@ -17,6 +17,7 @@
   gap: var(--space-14);
   padding: var(--space-16) var(--space-20);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
   color: var(--ink-title);

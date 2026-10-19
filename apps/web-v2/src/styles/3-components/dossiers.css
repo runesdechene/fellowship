@@ -8,6 +8,7 @@
 .dossiers {
   padding: var(--dossiers-padding);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }

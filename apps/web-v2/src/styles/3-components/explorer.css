@@ -469,6 +469,7 @@
   gap: var(--space-16);
   padding: var(--space-20) var(--space-16) var(--space-16);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }

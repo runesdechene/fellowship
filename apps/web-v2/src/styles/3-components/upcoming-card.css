@@ -15,6 +15,7 @@
   padding: calc(var(--space-20) - var(--list-row-gap) / 2) var(--card-padding) var(--space-20);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
 }
 

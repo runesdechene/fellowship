@@ -161,6 +161,7 @@
     bottom: var(--space-24);
     left: var(--space-24);
     border: 1px solid var(--line-card);
+    box-shadow: var(--shadow-block);
     border-radius: var(--radius-card);
     background: var(--surface-card);
   }

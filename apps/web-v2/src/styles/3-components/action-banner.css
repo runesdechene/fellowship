@@ -21,6 +21,7 @@
   padding: var(--banner-padding-y) var(--banner-padding-x);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-banner);
 }
 

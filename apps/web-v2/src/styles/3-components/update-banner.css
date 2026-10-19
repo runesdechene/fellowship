@@ -18,6 +18,7 @@
   padding: var(--space-12) var(--space-12) var(--space-12) var(--space-20);
   background: var(--surface-card);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-banner);
   transition:
     opacity var(--duration-medium) var(--ease-drawer),

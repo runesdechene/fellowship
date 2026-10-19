@@ -842,6 +842,8 @@
   /* Plus large que les autres pages : le fil (680) et sa colonne (360) côte à côte, comme la
      maquette — à 918, le fil s'écrasait. */
   --community-page-width: calc(1088px + 2 * var(--page-gutter));
+  /* L'ombre des blocs blancs bordés, partout (Uriel, 19/10/2026) */
+  --shadow-block: 1px 1px 30px -25px rgb(0 0 0 / 40%);
   --community-side-width: 360px;
   --network-list-width: 640px;
   --notif-network-avatar: var(--size-32);

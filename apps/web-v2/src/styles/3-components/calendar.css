@@ -310,6 +310,7 @@
   gap: var(--space-12);
   padding: var(--space-10) var(--space-12) var(--space-10) var(--space-10);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
   transition: translate var(--duration-smooth) var(--ease-soft);

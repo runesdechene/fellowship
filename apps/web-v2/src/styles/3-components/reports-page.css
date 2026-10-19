@@ -60,6 +60,7 @@
   align-items: flex-start;
   padding-block: var(--reports-card-padding-y);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }
@@ -171,6 +172,7 @@
   flex-direction: column;
   padding: var(--space-4) var(--space-8);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }
@@ -417,6 +419,7 @@
   width: min(100%, var(--pro-invitation-width));
   padding: var(--space-32) var(--space-40);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-invitation);
   background: var(--surface-card);
 }

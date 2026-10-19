@@ -68,6 +68,7 @@
   margin-top: var(--space-32);
   padding: 0 var(--space-20);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--dossier-card-radius);
   background: var(--surface-card);
 }

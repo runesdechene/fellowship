@@ -24,6 +24,7 @@
   width: var(--pro-bubble-width);
   padding: var(--space-18) var(--space-20);
   border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
   transition:
