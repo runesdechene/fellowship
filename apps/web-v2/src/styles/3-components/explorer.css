@@ -228,6 +228,14 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  cursor: grab;
+}
+
+/* Pendant un glisser, l'aimantation lâcherait la rangée à chaque carte : elle revient au relâcher. */
+.rail__track--dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
 }
 
 .rail__track::-webkit-scrollbar {

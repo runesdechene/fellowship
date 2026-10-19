@@ -1,6 +1,6 @@
 /**
  * QUOI     — une rangée de l'Explorer : un titre, une phrase, les flèches, et les cartes qui
- *            glissent de gauche à droite.
+ *            glissent de gauche à droite, au doigt comme à la souris.
  * POURQUOI — l'accueil se parcourt par thèmes (où vont tes amis, ajoutés récemment, près de chez
  *            toi), chacun sur une ligne (maquette 2027).
  * ATTENTION — comme la frise du calendrier, une rangée est une zone à défilement horizontal :
@@ -8,6 +8,7 @@
  */
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef } from 'react'
+import { useDragScroll } from '@/lib/useDragScroll'
 import { ExploreCard } from './ExploreCard'
 import { ProEndCard } from './ProEndCard'
 import type { ExploreEvent } from './useExplorer'
@@ -23,6 +24,7 @@ interface EventRailProps {
 
 export function EventRail({ title, subtitle, events, onMark, hiddenCount }: EventRailProps) {
   const track = useRef<HTMLDivElement>(null)
+  const { dragging, handlers } = useDragScroll()
 
   function slide(direction: 1 | -1) {
     const el = track.current
@@ -62,7 +64,11 @@ export function EventRail({ title, subtitle, events, onMark, hiddenCount }: Even
           </button>
         </div>
       </header>
-      <div className="rail__track" ref={track}>
+      <div
+        className={dragging ? 'rail__track rail__track--dragging' : 'rail__track'}
+        ref={track}
+        {...handlers}
+      >
         {events.map((event) => (
           <ExploreCard key={event.id} event={event} onMark={onMark} />
         ))}

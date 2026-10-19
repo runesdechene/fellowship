@@ -22,6 +22,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `page-chrome.tsx` — le décor qu'une page demande à la coquille.
 - `push-lines.ts` — les sept lignes du téléphone et le message envoyé (recopié dans send-push).
 - `category-icons.ts` — l'icône de chaque catégorie (planche Figma 2215:2).
+- `useDragScroll.ts` — tirer une zone à défilement horizontal à la souris (frise du calendrier, rangées de l'Explorer).
 - `useTagStyles.ts` — les couleurs des catégories, lues une fois et partagées.
 - `who-goes.ts` — la liste « Qui y va » : statut de chaque ami (Inscrit en vert, Dossier envoyé), ordre.
 - `image-resize.ts` — réduire une image au navigateur avant envoi (WebP, repli JPEG).
