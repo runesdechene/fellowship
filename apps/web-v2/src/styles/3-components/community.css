@@ -460,6 +460,35 @@ a.side-card__row:hover {
   color: var(--ink-soft);
 }
 
+.network-card__wall {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-block: var(--space-6);
+}
+
+/* Des carrés aux coins doux plutôt que des ronds : un petit mur de visages. Le mur en préfixe
+   l'emporte sur le rond de .avatar, chargé après. */
+.network-card__wall .network-card__tile {
+  --avatar-size: 100%;
+
+  aspect-ratio: 1;
+  border-radius: var(--radius-xs);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.network-card__wall:hover .network-card__tile {
+  opacity: 0.85;
+}
+
+.network-card__more {
+  display: grid;
+  place-items: center;
+  background: var(--surface-chip-neutral);
+  font: var(--type-chip-strong);
+  color: var(--ink-soft);
+}
+
 .network-card__requests {
   padding: var(--space-8) var(--space-10) var(--space-2);
   font: var(--type-community-day);

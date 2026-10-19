@@ -134,6 +134,18 @@ export function peopleCount(count: number, word: 'ami' | 'abonné'): string {
   return `${String(count)} ${word}${count === 1 ? '' : 's'}`
 }
 
+/**
+ * Le mur de visages de « Ta communauté » : les amis d'abord, ceux qui ont une photo avant les
+ * initiales. `room` cases en tout ; s'il y a plus de monde, la dernière dit « +N » (`more`).
+ */
+export function wallOf(network: Network, room: number): { faces: Member[]; more: number } {
+  const friends = new Set(network.friends.map((member) => member.id))
+  const rank = (member: Member) => (friends.has(member.id) ? 0 : 2) + (member.avatarUrl ? 0 : 1)
+  const sorted = [...network.followers].sort((a, b) => rank(a) - rank(b))
+  if (sorted.length <= room) return { faces: sorted, more: 0 }
+  return { faces: sorted.slice(0, room - 1), more: sorted.length - (room - 1) }
+}
+
 /** « Mathéo, Nolroc et 1 autre suivent ta vitrine » : la ligne des nouveaux abonnés. */
 export function newcomersPhrase(names: string[]): string {
   const [first, second] = names

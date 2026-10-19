@@ -6,6 +6,7 @@
 import { describe, expect, test } from 'vitest'
 import {
   kindLabel,
+  wallOf,
   newcomersPhrase,
   newFollowers,
   peopleCount,
@@ -30,6 +31,21 @@ describe('les nouveaux abonnés', () => {
       member('personne', '2026-10-10T09:00:00Z'),
     ]
     expect(newFollowers(followers, NOW)).toEqual([fresh, festival])
+  })
+})
+
+describe('le mur de visages', () => {
+  const friend = { ...member('exposant', '2026-10-01T00:00:00Z'), id: 'ami', avatarUrl: 'a.jpg' }
+  const bare = { ...member('personne', '2026-10-02T00:00:00Z'), id: 'nu' }
+  const photo = { ...member('personne', '2026-10-03T00:00:00Z'), id: 'photo', avatarUrl: 'p.jpg' }
+  const network = { followers: [bare, photo, friend], friends: [friend], requests: [] }
+
+  test('met les amis puis les photos en tête', () => {
+    expect(wallOf(network, 12)).toEqual({ faces: [friend, photo, bare], more: 0 })
+  })
+
+  test('garde la dernière case pour « +N » quand il y a trop de monde', () => {
+    expect(wallOf(network, 2)).toEqual({ faces: [friend], more: 2 })
   })
 })
 

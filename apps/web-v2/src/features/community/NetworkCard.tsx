@@ -1,7 +1,8 @@
 /**
  * QUOI     — « Ta communauté » : amis et abonnés (deux liens vers leurs listes), ce qu'est un ami, et les demandes d'ami en
  *            attente : une croix pour refuser, un + pour suivre en retour.
- * POURQUOI — Uriel, 19/10/2026 : il faut que les exposants aient envie de se connecter entre eux.
+ * POURQUOI — Uriel, 19/10/2026 : il faut que les exposants aient envie de se connecter entre eux ;
+ *            un mur de visages montre qu'il y a du monde, mieux qu'un nombre seul.
  *            Une demande, c'est un compte qui te suit sans que tu le suives : le suivre en retour
  *            en fait un ami ; la refuser la retire, l'abonné reste abonné. Une demande répondue
  *            s'efface aussitôt, la relecture du réseau fait le reste.
@@ -9,10 +10,13 @@
 import { Plus, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
-import { peopleCount, requestsLabel, type Network } from '@/lib/network'
+import { peopleCount, requestsLabel, wallOf, type Network } from '@/lib/network'
 
 /** Trois demandes à la fois, comme les autres encadrés ; suivre fait monter les suivantes. */
 const SHOWN = 3
+
+/** Deux rangées de six : assez de visages pour montrer qu'il y a du monde. */
+const WALL = 12
 
 interface NetworkCardProps {
   network: Network
@@ -24,6 +28,7 @@ interface NetworkCardProps {
 
 export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkCardProps) {
   const { friends, followers, requests } = network
+  const wall = wallOf(network, WALL)
   return (
     <section className="side-card" aria-labelledby="network-title">
       <h2 id="network-title" className="side-card__title">
@@ -39,6 +44,25 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
             {peopleCount(followers.length, 'abonné')}
           </Link>
         </p>
+        {wall.faces.length > 0 && (
+          <Link
+            className="network-card__wall"
+            to="/communaute/abonnes"
+            aria-label={`Voir tes ${peopleCount(followers.length, 'abonné')}`}
+          >
+            {wall.faces.map((member) => (
+              <Avatar
+                key={member.id}
+                className="network-card__tile"
+                src={member.avatarUrl}
+                name={member.name}
+              />
+            ))}
+            {wall.more > 0 && (
+              <span className="network-card__tile network-card__more">+{wall.more}</span>
+            )}
+          </Link>
+        )}
         <p className="side-card__meta">
           Un ami, c’est un exposant que tu suis et qui te suit : chacun voit où l’autre va.
         </p>
