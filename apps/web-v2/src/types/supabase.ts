@@ -157,6 +157,29 @@ export type Database = {
           },
         ]
       }
+      declined_follows: {
+        Row: {
+          declined_at: string
+          follow_id: string
+        }
+        Insert: {
+          declined_at?: string
+          follow_id: string
+        }
+        Update: {
+          declined_at?: string
+          follow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "declined_follows_follow_id_fkey"
+            columns: ["follow_id"]
+            isOneToOne: true
+            referencedRelation: "follows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discussion_mutes: {
         Row: {
           actor_id: string
@@ -2359,11 +2382,11 @@ export type Database = {
           faces: Json
         }[]
       }
-      department_code: { Args: { raw: string }; Returns: string }
       decline_friend_request: {
         Args: { p_actor: string; p_follower: string }
         Returns: undefined
       }
+      department_code: { Args: { raw: string }; Returns: string }
       ensure_referral_code: {
         Args: { p_base_code: string; p_entity_id: string }
         Returns: string
@@ -2557,6 +2580,14 @@ export type Database = {
           p_note?: string
         }
         Returns: number
+      }
+      mutual_friends: {
+        Args: { p_actor: string; p_others: string[] }
+        Returns: {
+          faces: Json
+          other_id: string
+          total: number
+        }[]
       }
       phone_key: { Args: { p_tel: string }; Returns: string }
       prospect_attend_reponse: {

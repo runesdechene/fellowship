@@ -11,6 +11,7 @@ import {
   feedPhrase,
   followReason,
   gatheringOf,
+  mutualLabel,
   readFeed,
   readFollowReason,
   readPeople,
@@ -257,5 +258,12 @@ describe('les pages du fil', () => {
     expect(page.lines.map((l) => l.id)).toEqual(['gathering:1', 'a', 'b', 'c'])
     expect(page.hasMore).toBe(true)
     expect(appendPage(first, [at('2026-10-09T08:00:00Z', 'c')], 2).hasMore).toBe(false)
+  })
+})
+
+describe('mutualLabel', () => {
+  test('le nombre d’amis en commun, au singulier comme au pluriel', () => {
+    expect(mutualLabel(1)).toBe('1 ami en commun')
+    expect(mutualLabel(3)).toBe('3 amis en commun')
   })
 })

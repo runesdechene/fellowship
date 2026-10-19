@@ -877,8 +877,16 @@
   --gathering-poster-height: 196px;
   --gathering-mobile-poster-width: 100px;
   --gathering-mobile-poster-height: 140px;
-  /* Sur téléphone, une carte de la rangée laisse dépasser la suivante. */
-  --community-mobile-card: 85%;
+  /* Sur téléphone (maquette 2363:25) : « Ta tribu », la carte d'une personne, celle d'une date. */
+  --community-tribe-face: 38px;
+  --community-tribe-overlap: -12px;
+  --community-person-card: 156px;
+  --community-person-avatar: 72px;
+  --community-date-card: 150px;
+  --community-date-poster-height: 200px;
+  --community-follow-hover-opacity: 0.9;
+  --type-community-rail-title: var(--weight-semibold) var(--size-18) / var(--leading-snug)
+    var(--family-sans);
   --feed-poster-width: 34px;
   --feed-poster-height: 46px;
   --side-poster-width: 36px;
@@ -1038,10 +1046,10 @@
   --wordmark-logo-width: 43px;
   --wordmark-logo-height: 37px;
   --type-wordmark: var(--weight-semibold) var(--size-28) / 1 var(--family-brand);
-  /* La marque de la barre du haut, sur téléphone. */
-  --type-wordmark-mobile: var(--weight-semibold) var(--size-22) / 1 var(--family-brand);
-  --topbar-logo-width: 32px;
-  --topbar-logo-height: 28px;
+  /* La marque compacte : la barre latérale, et la barre du haut sur téléphone. */
+  --type-wordmark-small: var(--weight-semibold) var(--size-22) / 1 var(--family-brand);
+  --wordmark-small-logo-width: 32px;
+  --wordmark-small-logo-height: 28px;
   --door-field-line: 1.5px;
   --radius-door-field: var(--round-12);
   --radius-door-panel: var(--round-24);

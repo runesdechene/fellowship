@@ -73,9 +73,12 @@ describe('notificationView', () => {
 
 describe('pictureOf', () => {
   it('ce qu’une personne a fait montre son visage, l’avatar noté à l’envoi en attendant', () => {
-    expect(
-      pictureOf('friend_going', { ...event, actor_id: 'p1', actor_name: 'Gautier' }),
-    ).toEqual({ kind: 'avatar', id: 'p1', name: 'Gautier', url: null })
+    expect(pictureOf('friend_going', { ...event, actor_id: 'p1', actor_name: 'Gautier' })).toEqual({
+      kind: 'avatar',
+      id: 'p1',
+      name: 'Gautier',
+      url: null,
+    })
     expect(
       pictureOf('new_follower', { actor_id: 'p2', actor_name: 'Ysée', actor_avatar_url: 'y.png' }),
     ).toEqual({ kind: 'avatar', id: 'p2', name: 'Ysée', url: 'y.png' })

@@ -26,13 +26,25 @@
     padding var(--sidebar-collapse-motion);
 }
 
-/* --- Logo, centré en haut ------------------------------------------------- */
-.sidebar__logo {
-  display: block;
-  height: 37px;
-  width: auto;
-  margin: var(--sidebar-logo-top) auto 0;
+/* --- La marque, en haut, au-dessus du sélecteur d'enseigne (Uriel, 19/10/2026) ---------
+   La double classe l'emporte sur `.wordmark`, importé après. Repliée, le pictogramme seul. */
+.sidebar .sidebar__logo {
+  --wordmark-gap: var(--space-8);
+  --wordmark-logo-width: var(--wordmark-small-logo-width);
+  --wordmark-logo-height: var(--wordmark-small-logo-height);
+
+  display: flex;
+  margin-top: var(--sidebar-logo-top);
+  font: var(--type-wordmark-small);
   transition: margin-top var(--sidebar-collapse-motion);
+}
+
+.app-shell--collapsed .sidebar__logo {
+  justify-content: center;
+}
+
+.app-shell--collapsed .sidebar__logo > span {
+  display: none;
 }
 
 /* --- Bouton de repli, calé en haut à droite ------------------------------- */

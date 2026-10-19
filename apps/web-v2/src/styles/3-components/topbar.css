@@ -51,7 +51,9 @@
   color: var(--ink-soft);
 }
 
-.topbar__brand {
+/* Sur ordinateur, la marque est dans la barre latérale (Uriel, 19/10/2026). La double classe
+   l'emporte sur `.wordmark`, importé après. */
+.topbar .topbar__brand {
   display: none;
 }
 
@@ -65,12 +67,12 @@
   /* La marque écrite, à la taille du téléphone (wordmark.css lit ces variables). */
   .topbar .topbar__brand {
     --wordmark-gap: var(--space-8);
-    --wordmark-logo-width: var(--topbar-logo-width);
-    --wordmark-logo-height: var(--topbar-logo-height);
+    --wordmark-logo-width: var(--wordmark-small-logo-width);
+    --wordmark-logo-height: var(--wordmark-small-logo-height);
 
     display: inline-flex;
     margin-right: auto;
-    font: var(--type-wordmark-mobile);
+    font: var(--type-wordmark-small);
   }
 
   .topbar__add-label {

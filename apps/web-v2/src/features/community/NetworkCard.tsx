@@ -7,6 +7,8 @@
  *            Une demande, c'est un compte qui te suit sans que tu le suives : le suivre en retour
  *            en fait un ami ; la refuser la retire, l'abonné reste abonné. Une demande répondue
  *            s'efface aussitôt, la relecture du réseau fait le reste.
+ *            Sur téléphone (maquette 2363:25) : la demande en avant, « Suivre » écrit dans la terre
+ *            du logo, et les deux listes en boutons.
  */
 import { Plus, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -31,7 +33,7 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
   const { friends, followers, requests } = network
   const faces = facesOf(network, FACES)
   return (
-    <section className="side-card" aria-labelledby="network-title">
+    <section className="side-card side-card--network" aria-labelledby="network-title">
       <Link className="network-card__intro" to="/communaute/amis">
         <h2 id="network-title" className="side-card__title">
           Ta communauté
@@ -73,8 +75,10 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
                     name={request.name}
                   />
                   <span className="side-card__body">
-                    <span className="side-card__name">{request.name}</span>
-                    <span className="side-card__meta">te suit</span>
+                    <span className="side-card__name">
+                      {request.name} <span className="network-card__verb">te suit</span>
+                    </span>
+                    <span className="side-card__meta">Suis en retour : vous serez amis</span>
                   </span>
                   <button
                     type="button"
@@ -86,11 +90,12 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
                   </button>
                   <button
                     type="button"
-                    className="side-card__follow"
+                    className="side-card__follow side-card__follow--back"
                     onClick={() => onFollow(request.id)}
                     aria-label={`Suivre ${request.name} en retour`}
                   >
                     <Plus size={13} strokeWidth={2} />
+                    <span className="side-card__follow-label">Suivre</span>
                   </button>
                 </li>
               )
@@ -98,6 +103,14 @@ export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkC
           </ul>
         </>
       )}
+      <div className="network-card__lists">
+        <Link className="network-card__list" to="/communaute/amis">
+          Mes amis
+        </Link>
+        <Link className="network-card__list" to="/communaute/abonnes">
+          Mes abonnés
+        </Link>
+      </div>
     </section>
   )
 }

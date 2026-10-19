@@ -41,6 +41,8 @@ export interface ToFollow {
   slug: string | null
   city: string | null
   reason: FollowReason
+  /** Ses amis qui sont aussi les tiens : leur nombre et trois visages (mutual_friends). */
+  mutual: { total: number; faces: FeedPerson[] }
 }
 
 /** Les nouvelles chargées à la fois ; « Afficher plus » charge les précédentes. */
@@ -76,23 +78,40 @@ async function loadCommunity(actorId: string): Promise<CommunityData> {
       companions: row.companions,
       faces: readPeople(row.faces),
     })),
-    toFollow: must(toFollow).flatMap((row) => {
-      const reason = readFollowReason(row.reason)
-      return reason
-        ? [
-            {
-              id: row.id,
-              name: row.name,
-              avatarUrl: row.avatar,
-              slug: row.slug,
-              city: row.city,
-              reason,
-            },
-          ]
-        : []
-    }),
+    toFollow: await withMutual(actorId, must(toFollow)),
     followed: new Set(must(follows).map((row) => row.following_actor)),
   }
+}
+
+/** Les comptes à suivre, chacun avec ses amis en commun (une seconde lecture, sur leurs ids). */
+async function withMutual(
+  actorId: string,
+  rows: { id: string; name: string; avatar: string; slug: string; city: string; reason: unknown }[],
+): Promise<ToFollow[]> {
+  const ids = rows.map((row) => row.id)
+  const mutual =
+    ids.length === 0
+      ? []
+      : must(await supabase.rpc('mutual_friends', { p_actor: actorId, p_others: ids }))
+  const byId = new Map(
+    mutual.map((row) => [row.other_id, { total: row.total, faces: readPeople(row.faces) }]),
+  )
+  return rows.flatMap((row) => {
+    const reason = readFollowReason(row.reason)
+    return reason
+      ? [
+          {
+            id: row.id,
+            name: row.name,
+            avatarUrl: row.avatar,
+            slug: row.slug,
+            city: row.city,
+            reason,
+            mutual: byId.get(row.id) ?? { total: 0, faces: [] },
+          },
+        ]
+      : []
+  })
 }
 
 const EMPTY: CommunityData = {

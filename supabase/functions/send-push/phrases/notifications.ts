@@ -67,6 +67,50 @@ export interface NotificationView {
   /** La phrase, ses mots en gras à part : un nom, un festival, « 7 jours ». */
   text: TextPart[]
   href: string
+  /** Ce qui illustre la ligne à la place de l'icône : la personne qui agit, ou l'affiche de la
+   *  date. `url` est relue au chargement (useNotifications) ; absente, l'icône reste. */
+  picture: NotificationPicture | null
+}
+
+export interface NotificationPicture {
+  kind: 'avatar' | 'poster'
+  /** L'acteur (avatar) ou l'événement (affiche) dont on lit l'image. */
+  id: string
+  name: string
+  url: string | null
+}
+
+/** Ce qu'une personne a fait : on montre son visage (Uriel, 19/10/2026). */
+const BY_SOMEONE = new Set([
+  'thread_question',
+  'thread_reply',
+  'review_reply',
+  'friend_going',
+  'new_follower',
+  'friend_added_event',
+])
+
+/** Ce qui arrive à une date : on montre son affiche. */
+const ABOUT_A_DATE = new Set([
+  'new_edition',
+  'best_reply',
+  'event_updated',
+  'deadline_reminder',
+  'suggestion',
+])
+
+/** L'image d'une notification ; le récapitulatif de la semaine garde son icône. */
+export function pictureOf(type: string, data: Record<string, unknown>): NotificationPicture | null {
+  const who = text(data, 'actor_id')
+  const eventId = text(data, 'event_id')
+  if (BY_SOMEONE.has(type) && who) {
+    const name = text(data, 'actor_name') ?? ''
+    return { kind: 'avatar', id: who, name, url: text(data, 'actor_avatar_url') }
+  }
+  if (ABOUT_A_DATE.has(type) && eventId) {
+    return { kind: 'poster', id: eventId, name: text(data, 'event_name') ?? '', url: null }
+  }
+  return null
 }
 
 function text(data: Record<string, unknown>, key: string): string | null {
@@ -226,6 +270,7 @@ export function notificationView(row: NotificationRow): NotificationView | null 
     read: row.read,
     at: new Date(row.created_at),
     ...said,
+    picture: pictureOf(row.type, row.data),
   }
 }
 

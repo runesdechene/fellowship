@@ -445,6 +445,35 @@ a.side-card__row:hover {
   padding: var(--space-8);
 }
 
+/* Les amis en commun d'un compte à suivre, sous sa ville */
+.side-card__mutual {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-community-small);
+  color: var(--ink-soft);
+}
+
+.network-card__verb {
+  font-weight: var(--weight-regular);
+  color: var(--ink-soft);
+}
+
+/* « Suivre » écrit et les listes en boutons : le téléphone seul (maquette 2363:25). */
+.side-card__follow-label,
+.network-card__lists {
+  display: none;
+}
+
+.network-card__list {
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  font: var(--type-community-tab);
+  color: var(--ink-title);
+}
+
 /* « Ta communauté » : tout le haut est un lien vers Mes amis — titre, visages et nombres, ce
    qu'est un ami ; puis les demandes en attente */
 .network-card__intro {
@@ -532,28 +561,187 @@ a.side-card__row:hover {
     margin-top: var(--space-6);
   }
 
-  /* Les cartes à la même hauteur : la rangée a la taille de la plus haute de toute façon. */
+  /* Maquette 2363:25 : « Ta tribu » en carte, puis deux rangées qui glissent, chacune faite de
+     cartes identiques — « Tu connais peut-être », « Où vous vous croiserez ». */
   .community__side {
-    flex-direction: row;
-    align-items: stretch;
-    gap: var(--space-12);
+    gap: var(--space-28);
     order: 1;
-    margin: var(--space-24) calc(-1 * var(--mobile-gutter)) 0;
-    padding: 0 var(--mobile-gutter) var(--space-4);
+    margin-top: var(--space-24);
+  }
+
+  .side-card--network {
+    order: 1;
+    gap: var(--space-12);
+    padding: var(--space-16);
+  }
+
+  .side-card--to-follow {
+    order: 2;
+  }
+
+  .side-card--crossing {
+    order: 3;
+  }
+
+  /* --- Ta tribu --- */
+  .side-card--network .side-card__title,
+  .network-card__requests {
+    display: none;
+  }
+
+  .network-card__intro {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .network-card__counts,
+  .network-card__intro .side-card__meta {
+    padding-inline: 0;
+  }
+
+  .network-card__counts .side-card__face {
+    --avatar-size: var(--community-tribe-face);
+    --avatar-overlap: var(--community-tribe-overlap);
+  }
+
+  .side-card--network .side-card__list {
+    gap: var(--space-8);
+  }
+
+  .side-card--network .side-card__row {
+    padding: var(--space-10);
+    border-radius: var(--radius-nav);
+    background: var(--surface-row-hover);
+  }
+
+  /* Le seul bouton en couleur de l'écran : suivre en retour, c'est devenir amis. */
+  .side-card__follow--back {
+    border-color: transparent;
+    background: var(--brand-gradient) border-box;
+    color: var(--action-ink);
+  }
+
+  .side-card__follow--back:hover {
+    background: var(--brand-gradient) border-box;
+    opacity: var(--community-follow-hover-opacity);
+  }
+
+  .network-card__lists {
+    display: flex;
+    gap: var(--space-8);
+  }
+
+  /* Sur téléphone, les boutons disent « Suivre » au lieu du + */
+  .side-card__follow-label {
+    display: inline;
+  }
+
+  .side-card__follow:has(.side-card__follow-label) svg {
+    display: none;
+  }
+
+  .side-card__follow:has(.side-card__follow-label) {
+    padding: var(--space-6) var(--space-14);
+  }
+
+  /* --- Les deux rangées --- */
+  .side-card--to-follow,
+  .side-card--crossing {
+    gap: var(--space-12);
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .side-card--to-follow .side-card__title,
+  .side-card--crossing .side-card__title {
+    padding: 0;
+    font: var(--type-community-rail-title);
+  }
+
+  .side-card--to-follow .side-card__list,
+  .side-card--crossing .side-card__list {
+    flex-direction: row;
+    gap: var(--space-12);
+    margin: 0 calc(-1 * var(--mobile-gutter));
+    padding: 0 var(--mobile-gutter) var(--space-6);
     overflow-x: auto;
-    /* Sans aimantation ni ancrage : « Ta communauté » arrive après les autres cartes, et le
-       navigateur gardait la rangée calée sur la deuxième. */
+    /* Sans ancrage : une rangée relue ne se cale pas ailleurs qu'à son début. */
     overflow-anchor: none;
     scrollbar-width: none;
   }
 
-  .community__side::-webkit-scrollbar {
+  .side-card--to-follow .side-card__list::-webkit-scrollbar,
+  .side-card--crossing .side-card__list::-webkit-scrollbar {
     display: none;
   }
 
-  .community__side > * {
+  /* La carte d'une personne : grand visage, nom, ville, amis en commun, Suivre. */
+  .side-card--to-follow .side-card__row {
     flex: none;
-    width: var(--community-mobile-card);
+    flex-direction: column;
+    gap: var(--space-4);
+    width: var(--community-person-card);
+    padding: var(--space-18) var(--space-12) var(--space-14);
+    border: 1px solid var(--line-card);
+    box-shadow: var(--shadow-block);
+    border-radius: var(--radius-card);
+    background: var(--surface-card);
+    text-align: center;
+  }
+
+  .side-card--to-follow .side-card__avatar {
+    --avatar-size: var(--community-person-avatar);
+
+    margin-bottom: var(--space-6);
+  }
+
+  .side-card--to-follow .side-card__body {
+    align-items: center;
+    width: 100%;
+  }
+
+  .side-card--to-follow .side-card__mutual {
+    padding: var(--space-6) 0 var(--space-10);
+  }
+
+  .side-card--to-follow .side-card__follow {
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+    border-color: transparent;
+    background: var(--action-surface);
+    color: var(--action-ink);
+  }
+
+  .side-card--to-follow .side-card__follow:hover {
+    background: var(--action-surface-hover);
+  }
+
+  /* La carte d'une date : l'affiche, puis le nom, la date et les compagnons dessous. */
+  .side-card--crossing .side-card__list > li {
+    flex: none;
+    width: var(--community-date-card);
+  }
+
+  .side-card--crossing .side-card__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: 0;
+  }
+
+  .side-card--crossing a.side-card__row:hover {
+    background: transparent;
+  }
+
+  .side-card--crossing .side-card__poster {
+    width: 100%;
+    height: var(--community-date-poster-height);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-block);
+    border-radius: var(--radius-card);
   }
 
   .community__tabs {

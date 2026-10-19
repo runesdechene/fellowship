@@ -12,7 +12,7 @@ import type { Crossing } from './useCommunity'
 export function CrossingCard({ crossing }: { crossing: Crossing[] }) {
   if (crossing.length === 0) return null
   return (
-    <section className="side-card" aria-labelledby="crossing-title">
+    <section className="side-card side-card--crossing" aria-labelledby="crossing-title">
       <h2 id="crossing-title" className="side-card__title">
         Où vous vous croiserez
       </h2>

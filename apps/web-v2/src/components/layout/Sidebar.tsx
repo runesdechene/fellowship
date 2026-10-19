@@ -26,6 +26,7 @@ import {
 import { NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
+import { Wordmark } from '@/components/ui/Wordmark'
 import { useAuth } from '@/lib/auth'
 import { requestsLabel } from '@/lib/network'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
@@ -112,8 +113,8 @@ export function Sidebar({ collapsed, onToggle, friendRequests }: SidebarProps) {
         <ToggleIcon size={17} strokeWidth={1.75} />
       </button>
 
-      {/* La marque seule — logo.png est le lockup complet, réservé à la connexion */}
-      <img className="sidebar__logo" src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
+      {/* La marque écrite, comme sur la landing ; repliée, le pictogramme seul (sidebar.css). */}
+      <Wordmark className="sidebar__logo" />
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 

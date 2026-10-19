@@ -235,6 +235,11 @@ export function followReason(reason: FollowReason): string {
   }
 }
 
+/** « 2 amis en commun » : sous un compte à suivre, à la place de sa raison quand il y en a. */
+export function mutualLabel(total: number): string {
+  return total === 1 ? '1 ami en commun' : `${String(total)} amis en commun`
+}
+
 /** Un bouton Suivre n'a de sens ni sur un compte déjà suivi, ni sur un des siens. */
 export function canFollow(
   id: string,
