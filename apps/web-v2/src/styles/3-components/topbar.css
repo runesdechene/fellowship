@@ -62,10 +62,15 @@
     left: var(--mobile-gutter);
   }
 
-  .topbar__brand {
-    display: block;
-    width: var(--space-32);
+  /* La marque écrite, à la taille du téléphone (wordmark.css lit ces variables). */
+  .topbar .topbar__brand {
+    --wordmark-gap: var(--space-8);
+    --wordmark-logo-width: var(--topbar-logo-width);
+    --wordmark-logo-height: var(--topbar-logo-height);
+
+    display: inline-flex;
     margin-right: auto;
+    font: var(--type-wordmark-mobile);
   }
 
   .topbar__add-label {

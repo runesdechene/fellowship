@@ -4,6 +4,7 @@
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
  */
+import { Wordmark } from '@/components/ui/Wordmark'
 import { ArrowLeft, CirclePlus, Pencil } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
@@ -47,14 +48,9 @@ export function Topbar() {
 
   return (
     <div className="topbar">
-      {/* Sur téléphone, la barre latérale disparaît : la marque monte en haut à gauche. */}
-      {!back && (
-        <img
-          className="topbar__brand"
-          src={`${import.meta.env.BASE_URL}icon.png`}
-          alt="Fellowship"
-        />
-      )}
+      {/* Sur téléphone, la barre latérale disparaît : la marque monte en haut à gauche, écrite
+          comme sur la landing (Uriel, 19/10/2026). */}
+      {!back && <Wordmark className="topbar__brand" />}
       {(back || lead) && (
         <div className="topbar__coin">
           {/* La MEME variante que la cloche, pas une imitation à côté. Le

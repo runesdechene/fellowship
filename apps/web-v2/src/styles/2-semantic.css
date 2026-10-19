@@ -1038,6 +1038,10 @@
   --wordmark-logo-width: 43px;
   --wordmark-logo-height: 37px;
   --type-wordmark: var(--weight-semibold) var(--size-28) / 1 var(--family-brand);
+  /* La marque de la barre du haut, sur téléphone. */
+  --type-wordmark-mobile: var(--weight-semibold) var(--size-22) / 1 var(--family-brand);
+  --topbar-logo-width: 32px;
+  --topbar-logo-height: 28px;
   --door-field-line: 1.5px;
   --radius-door-field: var(--round-12);
   --radius-door-panel: var(--round-24);
