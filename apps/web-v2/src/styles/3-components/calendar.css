@@ -163,11 +163,14 @@
   scroll-padding-inline: var(--calendar-gutter);
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  cursor: grab;
 }
 
 /* Pendant un glisser, l'aimantation lâcherait la frise à chaque mois : elle revient au relâcher. */
 .calendar__frieze--dragging {
   scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
 }
 
 .calendar__frieze::-webkit-scrollbar {

@@ -3,11 +3,11 @@
  *            mois, puis la frise horizontale des mois.
  * POURQUOI — l'artisan voit son année d'un coup : où il va, où en est chaque dossier, qui sera là.
  * ATTENTION — le mois visible vit dans l'adresse (?mois=AAAA-MM) : le retour du navigateur ramène
- *            au bon endroit. La frise glisse de gauche à droite — seule exception admise au « jamais
+ *            au bon endroit. La frise glisse de gauche à droite, au doigt comme à la souris — seule exception admise au « jamais
  *            de scroll interne » (décision du 07/10/2026). Les filtres sont retenus sur l'appareil.
  */
 import { Star, Users } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { calendarHeadline, navWindow, scrollFromPointer } from '@/lib/calendar'
@@ -21,6 +21,7 @@ import { useCalendar } from './useCalendar'
 
 const FRIENDS_KEY = 'flw-calendrier-amis'
 const INTERESTED_KEY = 'flw-calendrier-interesse'
+const DRAG_THRESHOLD = 4
 
 /** Un réglage retenu sur l'appareil ; la page marche sans (navigation privée, stockage bloqué). */
 function useStoredToggle(key: string, initial: boolean): [boolean, () => void] {
@@ -141,6 +142,37 @@ export function CalendarPage() {
     if (month) pick(month.key)
   }
 
+  // La frise se tire aussi à la souris, comme au doigt (demandé par Uriel le 19/10/2026). Le
+  // tactile défile déjà seul ; après un vrai glisser, le clic qui suit est avalé.
+  const grab = useRef<{ x: number; left: number; moved: boolean } | null>(null)
+  const swallowClick = useRef(false)
+
+  function onGrab(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return
+    grab.current = { x: event.clientX, left: event.currentTarget.scrollLeft, moved: false }
+  }
+
+  function onPull(event: PointerEvent<HTMLDivElement>) {
+    const current = grab.current
+    if (!current) return
+    if (!current.moved) {
+      if (Math.abs(event.clientX - current.x) < DRAG_THRESHOLD) return
+      current.moved = true
+      event.currentTarget.setPointerCapture(event.pointerId)
+      setDragging(true)
+    }
+    glideTo(current.left - (event.clientX - current.x))
+  }
+
+  function onRelease() {
+    const current = grab.current
+    grab.current = null
+    if (!current?.moved) return
+    swallowClick.current = true
+    setDragging(false)
+    settle()
+  }
+
   return (
     <div className="calendar">
       <header className="calendar__head">
@@ -178,6 +210,19 @@ export function CalendarPage() {
         className={dragging ? 'calendar__frieze calendar__frieze--dragging' : 'calendar__frieze'}
         ref={frieze}
         onScroll={measure}
+        onPointerDown={onGrab}
+        onPointerMove={onPull}
+        onPointerUp={onRelease}
+        onPointerCancel={onRelease}
+        onDragStart={(event) => {
+          event.preventDefault()
+        }}
+        onClickCapture={(event) => {
+          if (!swallowClick.current) return
+          swallowClick.current = false
+          event.stopPropagation()
+          event.preventDefault()
+        }}
       >
         {months.map((month, index) => (
           <MonthColumn
