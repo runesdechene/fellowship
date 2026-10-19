@@ -512,6 +512,84 @@ a.side-card__row:hover {
   }
 }
 
+/* --- Téléphone ------------------------------------------------------------------------------ */
+/* Les cartes de droite remontent sous le titre, en rangée qui glisse (la suivante dépasse) ;
+   puis les filtres, collés au fil qu'ils filtrent. L'en-tête et le corps s'effacent pour que
+   leurs enfants se rangent dans une seule colonne (Uriel, 19/10/2026). */
+@media (width <= 760px) {
+  .community {
+    display: flex;
+    flex-direction: column;
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .community__header,
+  .community__body {
+    display: contents;
+  }
+
+  .community__lead {
+    margin-top: var(--space-6);
+  }
+
+  /* Les cartes à la même hauteur : la rangée a la taille de la plus haute de toute façon. */
+  .community__side {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--space-12);
+    order: 1;
+    margin: var(--space-24) calc(-1 * var(--mobile-gutter)) 0;
+    padding: 0 var(--mobile-gutter) var(--space-4);
+    overflow-x: auto;
+    /* Sans aimantation ni ancrage : « Ta communauté » arrive après les autres cartes, et le
+       navigateur gardait la rangée calée sur la deuxième. */
+    overflow-anchor: none;
+    scrollbar-width: none;
+  }
+
+  .community__side::-webkit-scrollbar {
+    display: none;
+  }
+
+  .community__side > * {
+    flex: none;
+    width: var(--community-mobile-card);
+  }
+
+  .community__tabs {
+    order: 2;
+    margin-top: var(--space-24);
+  }
+
+  .community__feed {
+    order: 3;
+    margin-top: var(--space-20);
+  }
+
+  /* L'affiche à gauche, le festival à droite : plus de vide à côté de l'affiche. */
+  .gathering {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-16);
+    padding: var(--space-12);
+  }
+
+  .gathering__poster {
+    width: var(--gathering-mobile-poster-width);
+    height: var(--gathering-mobile-poster-height);
+  }
+
+  .gathering__name {
+    font: var(--type-gathering-name-mobile);
+  }
+
+  .gathering__companions {
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    padding-top: var(--space-4);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .community__tab,
   .feed-item,

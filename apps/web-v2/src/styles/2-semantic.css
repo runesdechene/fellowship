@@ -875,6 +875,10 @@
   --community-face-overlap: -8px;
   --gathering-poster-width: 140px;
   --gathering-poster-height: 196px;
+  --gathering-mobile-poster-width: 100px;
+  --gathering-mobile-poster-height: 140px;
+  /* Sur téléphone, une carte de la rangée laisse dépasser la suivante. */
+  --community-mobile-card: 85%;
   --feed-poster-width: 34px;
   --feed-poster-height: 46px;
   --side-poster-width: 36px;
@@ -891,6 +895,7 @@
   --type-community-side-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
   --type-gathering-name: var(--weight-regular) var(--size-40) / 1.05 var(--family-display);
+  --type-gathering-name-mobile: var(--weight-regular) var(--size-26) / 1.05 var(--family-display);
   --type-gathering-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
