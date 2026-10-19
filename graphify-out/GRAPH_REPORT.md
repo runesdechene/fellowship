@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-10-19)
 
 ## Corpus Check
-- 766 files · ~1,020,541 words
+- 766 files · ~1,020,759 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2270 nodes · 1862 edges · 751 communities detected
+- 2272 nodes · 1864 edges · 751 communities detected
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -1097,52 +1097,52 @@ Cohesion: 0.4
 Nodes (2): distanceKm(), radians()
 
 ### Community 74 - "Community 74"
-Cohesion: 0.33
-Nodes (0): 
+Cohesion: 0.47
+Nodes (3): detailOf(), dossierView(), toneOf()
 
 ### Community 75 - "Community 75"
 Cohesion: 0.33
 Nodes (0): 
 
 ### Community 76 - "Community 76"
-Cohesion: 0.47
-Nodes (3): compress(), reportPhotoPath(), uploadReportPhoto()
-
-### Community 77 - "Community 77"
 Cohesion: 0.33
 Nodes (0): 
 
+### Community 77 - "Community 77"
+Cohesion: 0.47
+Nodes (3): compress(), reportPhotoPath(), uploadReportPhoto()
+
 ### Community 78 - "Community 78"
+Cohesion: 0.33
+Nodes (0): 
+
+### Community 79 - "Community 79"
 Cohesion: 0.47
 Nodes (3): checkoutOutcome(), openPortal(), startCheckout()
 
-### Community 79 - "Community 79"
+### Community 80 - "Community 80"
 Cohesion: 0.53
 Nodes (4): composeEmail(), escape(), linkify(), toHtml()
 
-### Community 80 - "Community 80"
+### Community 81 - "Community 81"
 Cohesion: 0.4
 Nodes (1): ErrorBoundary
 
-### Community 81 - "Community 81"
+### Community 82 - "Community 82"
 Cohesion: 0.5
 Nodes (2): hexToHsl(), hexToTagColors()
-
-### Community 82 - "Community 82"
-Cohesion: 0.4
-Nodes (0): 
 
 ### Community 83 - "Community 83"
 Cohesion: 0.4
 Nodes (0): 
 
 ### Community 84 - "Community 84"
-Cohesion: 0.5
-Nodes (2): getTagIcon(), TagBadge()
-
-### Community 85 - "Community 85"
 Cohesion: 0.4
 Nodes (0): 
+
+### Community 85 - "Community 85"
+Cohesion: 0.5
+Nodes (2): getTagIcon(), TagBadge()
 
 ### Community 86 - "Community 86"
 Cohesion: 0.4
@@ -1166,19 +1166,19 @@ Nodes (0):
 
 ### Community 91 - "Community 91"
 Cohesion: 0.4
-Nodes (1): categoryLabel()
+Nodes (0): 
 
 ### Community 92 - "Community 92"
-Cohesion: 0.5
-Nodes (2): resolveUniqueHandle(), slugify()
+Cohesion: 0.4
+Nodes (1): categoryLabel()
 
 ### Community 93 - "Community 93"
 Cohesion: 0.5
-Nodes (2): hashName(), networkListItemDisplay()
+Nodes (2): resolveUniqueHandle(), slugify()
 
 ### Community 94 - "Community 94"
-Cohesion: 0.4
-Nodes (0): 
+Cohesion: 0.5
+Nodes (2): hashName(), networkListItemDisplay()
 
 ### Community 95 - "Community 95"
 Cohesion: 0.4
@@ -1189,12 +1189,12 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 97 - "Community 97"
-Cohesion: 0.7
-Nodes (4): erase(), focus(), paste(), type()
-
-### Community 98 - "Community 98"
 Cohesion: 0.4
 Nodes (0): 
+
+### Community 98 - "Community 98"
+Cohesion: 0.7
+Nodes (4): erase(), focus(), paste(), type()
 
 ### Community 99 - "Community 99"
 Cohesion: 0.4
@@ -1205,52 +1205,52 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 101 - "Community 101"
+Cohesion: 0.4
+Nodes (0): 
+
+### Community 102 - "Community 102"
 Cohesion: 0.6
 Nodes (3): onPointerDown(), onPointerMove(), ratioAt()
 
-### Community 102 - "Community 102"
+### Community 103 - "Community 103"
 Cohesion: 0.5
 Nodes (2): followable(), followTarget()
 
-### Community 103 - "Community 103"
+### Community 104 - "Community 104"
 Cohesion: 0.6
 Nodes (3): fetchDossiers(), fetchReports(), loadDashboard()
 
-### Community 104 - "Community 104"
+### Community 105 - "Community 105"
 Cohesion: 0.4
 Nodes (0): 
-
-### Community 105 - "Community 105"
-Cohesion: 0.6
-Nodes (3): leave(), pickPhoto(), write()
 
 ### Community 106 - "Community 106"
 Cohesion: 0.6
-Nodes (3): countEntities(), isFollowing(), loadVitrine()
+Nodes (3): leave(), pickPhoto(), write()
 
 ### Community 107 - "Community 107"
+Cohesion: 0.6
+Nodes (3): countEntities(), isFollowing(), loadVitrine()
+
+### Community 108 - "Community 108"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 108 - "Community 108"
+### Community 109 - "Community 109"
 Cohesion: 0.5
 Nodes (2): readDraft(), storedReferral()
 
-### Community 109 - "Community 109"
+### Community 110 - "Community 110"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 110 - "Community 110"
+### Community 111 - "Community 111"
 Cohesion: 0.6
 Nodes (3): at(), line(), row()
 
-### Community 111 - "Community 111"
+### Community 112 - "Community 112"
 Cohesion: 0.8
 Nodes (4): dates(), duplicateLine(), place(), previewPlace()
-
-### Community 112 - "Community 112"
-Cohesion: 0.6
-Nodes (3): detailOf(), dossierView(), toneOf()
 
 ### Community 113 - "Community 113"
 Cohesion: 0.5
@@ -2994,15 +2994,15 @@ Nodes (0):
 
 ### Community 548 - "Community 548"
 Cohesion: 1.0
-Nodes (2): Flat Surfaces (no shadows, lin background), Rationale: Inverted Surfaces (warm white / lin cards)
+Nodes (0): 
 
 ### Community 549 - "Community 549"
 Cohesion: 1.0
-Nodes (2): Boilerplate Leftover (scaffold artifact to clean up), Vite Default Logo (lightning bolt)
+Nodes (2): Flat Surfaces (no shadows, lin background), Rationale: Inverted Surfaces (warm white / lin cards)
 
 ### Community 550 - "Community 550"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (2): Boilerplate Leftover (scaffold artifact to clean up), Vite Default Logo (lightning bolt)
 
 ### Community 551 - "Community 551"
 Cohesion: 1.0
@@ -4279,367 +4279,367 @@ Nodes (1): Pastel Tag System
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 514`** (2 nodes): `deletion-plan.test.ts`, `m()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 515`** (2 nodes): `editions.ts`, `canBePreviousEdition()`
+- **Thin community `Community 515`** (2 nodes): `dossiers.test.ts`, `row()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 516`** (2 nodes): `entity-type.ts`, `entityTypeOf()`
+- **Thin community `Community 516`** (2 nodes): `editions.ts`, `canBePreviousEdition()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 517`** (2 nodes): `image-resize.test.ts`, `file()`
+- **Thin community `Community 517`** (2 nodes): `entity-type.ts`, `entityTypeOf()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 518`** (2 nodes): `landing.test.ts`, `row()`
+- **Thin community `Community 518`** (2 nodes): `image-resize.test.ts`, `file()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 519`** (2 nodes): `network.test.ts`, `member()`
+- **Thin community `Community 519`** (2 nodes): `landing.test.ts`, `row()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 520`** (2 nodes): `offer.ts`, `offerOf()`
+- **Thin community `Community 520`** (2 nodes): `network.test.ts`, `member()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 521`** (2 nodes): `phone.ts`, `phoneKey()`
+- **Thin community `Community 521`** (2 nodes): `offer.ts`, `offerOf()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 522`** (2 nodes): `plan.test.ts`, `entity()`
+- **Thin community `Community 522`** (2 nodes): `phone.ts`, `phoneKey()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 523`** (2 nodes): `poster-thumb.ts`, `posterThumb()`
+- **Thin community `Community 523`** (2 nodes): `plan.test.ts`, `entity()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 524`** (2 nodes): `prospect-template.test.ts`, `out()`
+- **Thin community `Community 524`** (2 nodes): `poster-thumb.ts`, `posterThumb()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 525`** (2 nodes): `quoted.ts`, `splitQuoted()`
+- **Thin community `Community 525`** (2 nodes): `prospect-template.test.ts`, `out()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 526`** (2 nodes): `renewal.ts`, `renewalAhead()`
+- **Thin community `Community 526`** (2 nodes): `quoted.ts`, `splitQuoted()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 527`** (2 nodes): `reports.test.ts`, `date()`
+- **Thin community `Community 527`** (2 nodes): `renewal.ts`, `renewalAhead()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 528`** (2 nodes): `session.ts`, `shouldLoadIdentity()`
+- **Thin community `Community 528`** (2 nodes): `reports.test.ts`, `date()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 529`** (2 nodes): `supabase.ts`, `must()`
+- **Thin community `Community 529`** (2 nodes): `session.ts`, `shouldLoadIdentity()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 530`** (2 nodes): `teaser.ts`, `teaserLine()`
+- **Thin community `Community 530`** (2 nodes): `supabase.ts`, `must()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 531`** (2 nodes): `testimonials.test.ts`, `row()`
+- **Thin community `Community 531`** (2 nodes): `teaser.ts`, `teaserLine()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 532`** (2 nodes): `useAdminSheet.ts`, `useAdminSheet()`
+- **Thin community `Community 532`** (2 nodes): `testimonials.test.ts`, `row()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 533`** (2 nodes): `useDragScroll.ts`, `useDragScroll()`
+- **Thin community `Community 533`** (2 nodes): `useAdminSheet.ts`, `useAdminSheet()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 534`** (2 nodes): `usePhonePush.ts`, `usePhonePush()`
+- **Thin community `Community 534`** (2 nodes): `useDragScroll.ts`, `useDragScroll()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 535`** (2 nodes): `usePushMuted.ts`, `usePushMuted()`
+- **Thin community `Community 535`** (2 nodes): `usePhonePush.ts`, `usePhonePush()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 536`** (2 nodes): `welcome-guard.ts`, `welcomeKind()`
+- **Thin community `Community 536`** (2 nodes): `usePushMuted.ts`, `usePushMuted()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 537`** (2 nodes): `write-queue.test.ts`, `deferred()`
+- **Thin community `Community 537`** (2 nodes): `welcome-guard.ts`, `welcomeKind()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 538`** (2 nodes): `write-queue.ts`, `createWriteQueue()`
+- **Thin community `Community 538`** (2 nodes): `write-queue.test.ts`, `deferred()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 539`** (2 nodes): `Unsubscribe.tsx`, `confirm()`
+- **Thin community `Community 539`** (2 nodes): `write-queue.ts`, `createWriteQueue()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 540`** (2 nodes): `LegalFrame.tsx`, `LegalFrame()`
+- **Thin community `Community 540`** (2 nodes): `Unsubscribe.tsx`, `confirm()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 541`** (2 nodes): `LegalNotice.tsx`, `LegalNotice()`
+- **Thin community `Community 541`** (2 nodes): `LegalFrame.tsx`, `LegalFrame()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 542`** (2 nodes): `LegalPrivacy.tsx`, `LegalPrivacy()`
+- **Thin community `Community 542`** (2 nodes): `LegalNotice.tsx`, `LegalNotice()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 543`** (2 nodes): `LegalRoute.tsx`, `LegalRoute()`
+- **Thin community `Community 543`** (2 nodes): `LegalPrivacy.tsx`, `LegalPrivacy()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 544`** (2 nodes): `LegalTerms.tsx`, `LegalTerms()`
+- **Thin community `Community 544`** (2 nodes): `LegalRoute.tsx`, `LegalRoute()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 545`** (2 nodes): `syncCustomerBilling()`, `billing.ts`
+- **Thin community `Community 545`** (2 nodes): `LegalTerms.tsx`, `LegalTerms()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 546`** (2 nodes): `getStripe()`, `stripe.ts`
+- **Thin community `Community 546`** (2 nodes): `syncCustomerBilling()`, `billing.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 547`** (2 nodes): `getSupabaseAdmin()`, `supabase-admin.ts`
+- **Thin community `Community 547`** (2 nodes): `getStripe()`, `stripe.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 548`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
+- **Thin community `Community 548`** (2 nodes): `getSupabaseAdmin()`, `supabase-admin.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 549`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
+- **Thin community `Community 549`** (2 nodes): `Flat Surfaces (no shadows, lin background)`, `Rationale: Inverted Surfaces (warm white / lin cards)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 550`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 550`** (2 nodes): `Boilerplate Leftover (scaffold artifact to clean up)`, `Vite Default Logo (lightning bolt)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 551`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 551`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 552`** (1 nodes): `vitest.config.ts`
+- **Thin community `Community 552`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 553`** (1 nodes): `version.ts`
+- **Thin community `Community 553`** (1 nodes): `vitest.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 554`** (1 nodes): `ErrorFallback.tsx`
+- **Thin community `Community 554`** (1 nodes): `version.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 555`** (1 nodes): `theme-toggle.tsx`
+- **Thin community `Community 555`** (1 nodes): `ErrorFallback.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 556`** (1 nodes): `AdminReports.tsx`
+- **Thin community `Community 556`** (1 nodes): `theme-toggle.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 557`** (1 nodes): `BillingInfoForm.tsx`
+- **Thin community `Community 557`** (1 nodes): `AdminReports.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 558`** (1 nodes): `BillingInfoModal.tsx`
+- **Thin community `Community 558`** (1 nodes): `BillingInfoForm.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 559`** (1 nodes): `YearView.tsx`
+- **Thin community `Community 559`** (1 nodes): `BillingInfoModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 560`** (1 nodes): `BilanBanner.tsx`
+- **Thin community `Community 560`** (1 nodes): `YearView.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 561`** (1 nodes): `CompagnonsDeRoute.tsx`
+- **Thin community `Community 561`** (1 nodes): `BilanBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 562`** (1 nodes): `ConvergenceList.tsx`
+- **Thin community `Community 562`** (1 nodes): `CompagnonsDeRoute.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 563`** (1 nodes): `EventDashboardMobile.tsx`
+- **Thin community `Community 563`** (1 nodes): `ConvergenceList.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 564`** (1 nodes): `EventGrid.tsx`
+- **Thin community `Community 564`** (1 nodes): `EventDashboardMobile.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 565`** (1 nodes): `EventGridCard.tsx`
+- **Thin community `Community 565`** (1 nodes): `EventGrid.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 566`** (1 nodes): `AppLayout.tsx`
+- **Thin community `Community 566`** (1 nodes): `EventGridCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 567`** (1 nodes): `DebugPlanSwitch.tsx`
+- **Thin community `Community 567`** (1 nodes): `AppLayout.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 568`** (1 nodes): `FloatingActions.tsx`
+- **Thin community `Community 568`** (1 nodes): `DebugPlanSwitch.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 569`** (1 nodes): `Sidebar.tsx`
+- **Thin community `Community 569`** (1 nodes): `FloatingActions.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 570`** (1 nodes): `DateQuotaModal.tsx`
+- **Thin community `Community 570`** (1 nodes): `Sidebar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 571`** (1 nodes): `EmailSignupPlaceholder.tsx`
+- **Thin community `Community 571`** (1 nodes): `DateQuotaModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 572`** (1 nodes): `FriendsModal.tsx`
+- **Thin community `Community 572`** (1 nodes): `EmailSignupPlaceholder.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 573`** (1 nodes): `NetworkListItem.tsx`
+- **Thin community `Community 573`** (1 nodes): `FriendsModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 574`** (1 nodes): `ProfileNetworkStats.tsx`
+- **Thin community `Community 574`** (1 nodes): `NetworkListItem.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 575`** (1 nodes): `BilanModal.tsx`
+- **Thin community `Community 575`** (1 nodes): `ProfileNetworkStats.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 576`** (1 nodes): `ReportButton.tsx`
+- **Thin community `Community 576`** (1 nodes): `BilanModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 577`** (1 nodes): `ReviewAvatar.tsx`
+- **Thin community `Community 577`** (1 nodes): `ReportButton.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 578`** (1 nodes): `button.tsx`
+- **Thin community `Community 578`** (1 nodes): `ReviewAvatar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 579`** (1 nodes): `VitrineEmptyRoad.tsx`
+- **Thin community `Community 579`** (1 nodes): `button.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 580`** (1 nodes): `VitrineHeader.tsx`
+- **Thin community `Community 580`** (1 nodes): `VitrineEmptyRoad.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 581`** (1 nodes): `actorModel.test.ts`
+- **Thin community `Community 581`** (1 nodes): `VitrineHeader.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 582`** (1 nodes): `avatar-gradient.test.ts`
+- **Thin community `Community 582`** (1 nodes): `actorModel.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 583`** (1 nodes): `bilan-snooze.test.ts`
+- **Thin community `Community 583`** (1 nodes): `avatar-gradient.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 584`** (1 nodes): `calendar-format.test.ts`
+- **Thin community `Community 584`** (1 nodes): `bilan-snooze.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 585`** (1 nodes): `community-seen.test.ts`
+- **Thin community `Community 585`** (1 nodes): `calendar-format.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 586`** (1 nodes): `content-reports.test.ts`
+- **Thin community `Community 586`** (1 nodes): `community-seen.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 587`** (1 nodes): `embed-snippet.test.ts`
+- **Thin community `Community 587`** (1 nodes): `content-reports.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 588`** (1 nodes): `event-link.test.ts`
+- **Thin community `Community 588`** (1 nodes): `embed-snippet.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 589`** (1 nodes): `event-threads.test.ts`
+- **Thin community `Community 589`** (1 nodes): `event-link.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 590`** (1 nodes): `landing-v2.test.ts`
+- **Thin community `Community 590`** (1 nodes): `event-threads.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 591`** (1 nodes): `ledger.test.ts`
+- **Thin community `Community 591`** (1 nodes): `landing-v2.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 592`** (1 nodes): `map-style.test.ts`
+- **Thin community `Community 592`** (1 nodes): `ledger.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 593`** (1 nodes): `nav-back.test.ts`
+- **Thin community `Community 593`** (1 nodes): `map-style.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 594`** (1 nodes): `navModel.test.ts`
+- **Thin community `Community 594`** (1 nodes): `nav-back.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 595`** (1 nodes): `onboarding.test.ts`
+- **Thin community `Community 595`** (1 nodes): `navModel.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 596`** (1 nodes): `referral.test.ts`
+- **Thin community `Community 596`** (1 nodes): `onboarding.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 597`** (1 nodes): `review-replies.test.ts`
+- **Thin community `Community 597`** (1 nodes): `referral.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 598`** (1 nodes): `review-visibility.test.ts`
+- **Thin community `Community 598`** (1 nodes): `review-replies.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 599`** (1 nodes): `search.test.ts`
+- **Thin community `Community 599`** (1 nodes): `review-visibility.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 600`** (1 nodes): `siren.test.ts`
+- **Thin community `Community 600`** (1 nodes): `search.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 601`** (1 nodes): `supabase.ts`
+- **Thin community `Community 601`** (1 nodes): `siren.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 602`** (1 nodes): `theme.test.ts`
+- **Thin community `Community 602`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 603`** (1 nodes): `user-sex.test.ts`
+- **Thin community `Community 603`** (1 nodes): `theme.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 604`** (1 nodes): `vitrine-edit.test.ts`
+- **Thin community `Community 604`** (1 nodes): `user-sex.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 605`** (1 nodes): `legal.test.ts`
+- **Thin community `Community 605`** (1 nodes): `vitrine-edit.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 606`** (1 nodes): `Notifications.tsx`
+- **Thin community `Community 606`** (1 nodes): `legal.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 607`** (1 nodes): `PublicProfile.tsx`
+- **Thin community `Community 607`** (1 nodes): `Notifications.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 608`** (1 nodes): `CGU.tsx`
+- **Thin community `Community 608`** (1 nodes): `PublicProfile.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 609`** (1 nodes): `Charte.tsx`
+- **Thin community `Community 609`** (1 nodes): `CGU.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 610`** (1 nodes): `Confidentialite.tsx`
+- **Thin community `Community 610`** (1 nodes): `Charte.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 611`** (1 nodes): `setup.ts`
+- **Thin community `Community 611`** (1 nodes): `Confidentialite.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 612`** (1 nodes): `smoke.test.ts`
+- **Thin community `Community 612`** (1 nodes): `setup.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 613`** (1 nodes): `database.ts`
+- **Thin community `Community 613`** (1 nodes): `smoke.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 614`** (1 nodes): `supabase.ts`
+- **Thin community `Community 614`** (1 nodes): `database.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 615`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 615`** (1 nodes): `supabase.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 616`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 616`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 617`** (1 nodes): `vitest.config.ts`
+- **Thin community `Community 617`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 618`** (1 nodes): `main.tsx`
+- **Thin community `Community 618`** (1 nodes): `vitest.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 619`** (1 nodes): `vite-env.d.ts`
+- **Thin community `Community 619`** (1 nodes): `main.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 620`** (1 nodes): `AdminPager.tsx`
+- **Thin community `Community 620`** (1 nodes): `vite-env.d.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 621`** (1 nodes): `Poster.tsx`
+- **Thin community `Community 621`** (1 nodes): `AdminPager.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 622`** (1 nodes): `PosterArt.tsx`
+- **Thin community `Community 622`** (1 nodes): `Poster.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 623`** (1 nodes): `NetworkActivity.tsx`
+- **Thin community `Community 623`** (1 nodes): `PosterArt.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 624`** (1 nodes): `EntitiesTable.tsx`
+- **Thin community `Community 624`** (1 nodes): `NetworkActivity.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 625`** (1 nodes): `PeopleTable.tsx`
+- **Thin community `Community 625`** (1 nodes): `EntitiesTable.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 626`** (1 nodes): `SignupDate.tsx`
+- **Thin community `Community 626`** (1 nodes): `PeopleTable.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 627`** (1 nodes): `EntityInfoCard.tsx`
+- **Thin community `Community 627`** (1 nodes): `SignupDate.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 628`** (1 nodes): `EntityPage.tsx`
+- **Thin community `Community 628`** (1 nodes): `EntityInfoCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 629`** (1 nodes): `PaymentsCard.tsx`
+- **Thin community `Community 629`** (1 nodes): `EntityPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 630`** (1 nodes): `PersonPage.tsx`
+- **Thin community `Community 630`** (1 nodes): `PaymentsCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 631`** (1 nodes): `ProspectPage.tsx`
+- **Thin community `Community 631`** (1 nodes): `PersonPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 632`** (1 nodes): `TemplatesCard.tsx`
+- **Thin community `Community 632`** (1 nodes): `ProspectPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 633`** (1 nodes): `CrossingCard.tsx`
+- **Thin community `Community 633`** (1 nodes): `TemplatesCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 634`** (1 nodes): `FeedItem.tsx`
+- **Thin community `Community 634`** (1 nodes): `CrossingCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 635`** (1 nodes): `NetworkCard.tsx`
+- **Thin community `Community 635`** (1 nodes): `FeedItem.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 636`** (1 nodes): `NetworkPage.tsx`
+- **Thin community `Community 636`** (1 nodes): `NetworkCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 637`** (1 nodes): `ToFollowCard.tsx`
+- **Thin community `Community 637`** (1 nodes): `NetworkPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 638`** (1 nodes): `CommunitySummary.tsx`
+- **Thin community `Community 638`** (1 nodes): `ToFollowCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 639`** (1 nodes): `Dashboard.tsx`
+- **Thin community `Community 639`** (1 nodes): `CommunitySummary.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 640`** (1 nodes): `DossiersSection.tsx`
+- **Thin community `Community 640`** (1 nodes): `Dashboard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 641`** (1 nodes): `NextDateCard.tsx`
+- **Thin community `Community 641`** (1 nodes): `DossiersSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 642`** (1 nodes): `PaymentBanner.tsx`
+- **Thin community `Community 642`** (1 nodes): `NextDateCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 643`** (1 nodes): `UpcomingCard.tsx`
+- **Thin community `Community 643`** (1 nodes): `PaymentBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 644`** (1 nodes): `Applying.tsx`
+- **Thin community `Community 644`** (1 nodes): `UpcomingCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 645`** (1 nodes): `DiscussionBlock.tsx`
+- **Thin community `Community 645`** (1 nodes): `Applying.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 646`** (1 nodes): `MyReportBlock.tsx`
+- **Thin community `Community 646`** (1 nodes): `DiscussionBlock.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 647`** (1 nodes): `PlaceDistance.tsx`
+- **Thin community `Community 647`** (1 nodes): `MyReportBlock.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 648`** (1 nodes): `WhoGoesDialog.tsx`
+- **Thin community `Community 648`** (1 nodes): `PlaceDistance.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 649`** (1 nodes): `CreateBar.tsx`
+- **Thin community `Community 649`** (1 nodes): `WhoGoesDialog.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 650`** (1 nodes): `DuplicateList.tsx`
+- **Thin community `Community 650`** (1 nodes): `CreateBar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 651`** (1 nodes): `EventPreview.tsx`
+- **Thin community `Community 651`** (1 nodes): `DuplicateList.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 652`** (1 nodes): `PlaceFields.tsx`
+- **Thin community `Community 652`** (1 nodes): `EventPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 653`** (1 nodes): `Steps.tsx`
+- **Thin community `Community 653`** (1 nodes): `PlaceFields.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 654`** (1 nodes): `useEventDraft.test.ts`
+- **Thin community `Community 654`** (1 nodes): `Steps.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 655`** (1 nodes): `EditPreview.tsx`
+- **Thin community `Community 655`** (1 nodes): `useEventDraft.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 656`** (1 nodes): `TagPicker.tsx`
+- **Thin community `Community 656`** (1 nodes): `EditPreview.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 657`** (1 nodes): `CategoryChips.tsx`
+- **Thin community `Community 657`** (1 nodes): `TagPicker.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 658`** (1 nodes): `SearchResults.tsx`
+- **Thin community `Community 658`** (1 nodes): `CategoryChips.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 659`** (1 nodes): `CommunityBand.tsx`
+- **Thin community `Community 659`** (1 nodes): `SearchResults.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 660`** (1 nodes): `LandingFoot.tsx`
+- **Thin community `Community 660`** (1 nodes): `CommunityBand.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 661`** (1 nodes): `LandingTopBar.tsx`
+- **Thin community `Community 661`** (1 nodes): `LandingFoot.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 662`** (1 nodes): `Opening.tsx`
+- **Thin community `Community 662`** (1 nodes): `LandingTopBar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 663`** (1 nodes): `PosterWall.tsx`
+- **Thin community `Community 663`** (1 nodes): `Opening.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 664`** (1 nodes): `DashboardScreen.tsx`
+- **Thin community `Community 664`** (1 nodes): `PosterWall.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 665`** (1 nodes): `ForYouScreen.tsx`
+- **Thin community `Community 665`** (1 nodes): `DashboardScreen.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 666`** (1 nodes): `OneClickCard.tsx`
+- **Thin community `Community 666`** (1 nodes): `ForYouScreen.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 667`** (1 nodes): `LoginWall.tsx`
+- **Thin community `Community 667`** (1 nodes): `OneClickCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 668`** (1 nodes): `NetworkBlock.tsx`
+- **Thin community `Community 668`** (1 nodes): `LoginWall.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 669`** (1 nodes): `PanelFoot.tsx`
+- **Thin community `Community 669`** (1 nodes): `NetworkBlock.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 670`** (1 nodes): `PublicSearchPage.tsx`
+- **Thin community `Community 670`** (1 nodes): `PanelFoot.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 671`** (1 nodes): `ClearReport.tsx`
+- **Thin community `Community 671`** (1 nodes): `PublicSearchPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 672`** (1 nodes): `ReportPage.tsx`
+- **Thin community `Community 672`** (1 nodes): `ClearReport.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 673`** (1 nodes): `ReportPhotos.tsx`
+- **Thin community `Community 673`** (1 nodes): `ReportPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 674`** (1 nodes): `ReportSummary.tsx`
+- **Thin community `Community 674`** (1 nodes): `ReportPhotos.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 675`** (1 nodes): `DeleteAccount.tsx`
+- **Thin community `Community 675`** (1 nodes): `ReportSummary.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 676`** (1 nodes): `EntitiesSection.tsx`
+- **Thin community `Community 676`** (1 nodes): `DeleteAccount.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 677`** (1 nodes): `EntityBase.tsx`
+- **Thin community `Community 677`** (1 nodes): `EntitiesSection.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 678`** (1 nodes): `NotificationSettings.tsx`
+- **Thin community `Community 678`** (1 nodes): `EntityBase.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 679`** (1 nodes): `PhoneCard.tsx`
+- **Thin community `Community 679`** (1 nodes): `NotificationSettings.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 680`** (1 nodes): `EditableAddress.tsx`
+- **Thin community `Community 680`** (1 nodes): `PhoneCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 681`** (1 nodes): `EditableBanner.tsx`
+- **Thin community `Community 681`** (1 nodes): `EditableAddress.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 682`** (1 nodes): `EditableLogo.tsx`
+- **Thin community `Community 682`** (1 nodes): `EditableBanner.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 683`** (1 nodes): `EditableText.tsx`
+- **Thin community `Community 683`** (1 nodes): `EditableLogo.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 684`** (1 nodes): `access.test.ts`
+- **Thin community `Community 684`** (1 nodes): `EditableText.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 685`** (1 nodes): `admin-events.test.ts`
+- **Thin community `Community 685`** (1 nodes): `access.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 686`** (1 nodes): `admin-list.test.ts`
+- **Thin community `Community 686`** (1 nodes): `admin-events.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 687`** (1 nodes): `admin-members.test.ts`
+- **Thin community `Community 687`** (1 nodes): `admin-list.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 688`** (1 nodes): `app-version.test.ts`
+- **Thin community `Community 688`** (1 nodes): `admin-members.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 689`** (1 nodes): `billing.test.ts`
+- **Thin community `Community 689`** (1 nodes): `app-version.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 690`** (1 nodes): `category-icons.test.ts`
+- **Thin community `Community 690`** (1 nodes): `billing.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 691`** (1 nodes): `create-event.test.ts`
+- **Thin community `Community 691`** (1 nodes): `category-icons.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 692`** (1 nodes): `csv-text.test.ts`
+- **Thin community `Community 692`** (1 nodes): `create-event.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 693`** (1 nodes): `deletion-preview.ts`
+- **Thin community `Community 693`** (1 nodes): `csv-text.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 694`** (1 nodes): `distance.test.ts`
+- **Thin community `Community 694`** (1 nodes): `deletion-preview.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 695`** (1 nodes): `dossiers.test.ts`
+- **Thin community `Community 695`** (1 nodes): `distance.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 696`** (1 nodes): `editions.test.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
