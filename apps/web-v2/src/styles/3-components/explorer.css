@@ -307,8 +307,18 @@
   width: auto;
 }
 
-.explore-card__star--on svg {
-  fill: currentcolor;
+.explore-card__star-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.explore-card__star-from {
+  stop-color: var(--star-marked-from);
+}
+
+.explore-card__star-to {
+  stop-color: var(--star-marked-to);
 }
 
 .explore-card__star:disabled {

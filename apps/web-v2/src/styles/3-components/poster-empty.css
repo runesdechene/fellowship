@@ -1,14 +1,23 @@
 /**
  * QUOI     — l'affiche absente (components/ui/Poster.tsx) : fond de la couleur de la catégorie,
  *            icône étouffée au centre.
- * POURQUOI — planche Figma 2215:2. Sans couleur connue, la teinte neutre des affiches vides.
+ * POURQUOI — planche Figma 2215:2. Sans couleur connue, la teinte neutre des affiches vides ;
+ *            connue, adoucie vers le fond des cartes (les aplats criaient, 19/10/2026).
  */
 
 .poster-empty {
   display: grid;
   place-items: center;
-  background: var(--tag-bg, var(--poster-empty-surface));
-  color: var(--tag-ink, var(--poster-empty-ink));
+  background: color-mix(
+    in srgb,
+    var(--tag-bg, var(--poster-empty-surface)) var(--poster-empty-tint),
+    var(--surface-card)
+  );
+  color: color-mix(
+    in srgb,
+    var(--tag-ink, var(--poster-empty-ink)) var(--poster-empty-ink-tint),
+    var(--surface-card)
+  );
 }
 
 .poster-empty__icon {

@@ -821,6 +821,17 @@
   --poster-empty-ink: var(--ink-soft);
   --poster-empty-icon: 45%;
   --poster-empty-icon-opacity: 0.55;
+  /* Les couleurs de catégorie, mêlées au fond des cartes : en aplat sur toute une affiche, elles
+     criaient (retour des exposants, 19/10/2026). La part qui reste de la couleur. */
+  --poster-empty-tint: 55%;
+  --poster-empty-ink-tint: 75%;
+  /* « Nouveau » sur l'affiche : en noir sur blanc le jour, pour trancher sur n'importe quelle
+     affiche (Uriel, 19/10/2026) ; la nuit garde la pastille claire du compte à rebours. */
+  --poster-badge-surface: var(--action-surface);
+  --poster-badge-ink: var(--action-ink);
+  /* Une date repérée : son étoile prend le dégradé du logo (Uriel, 19/10/2026). */
+  --star-marked-from: var(--terre-700);
+  --star-marked-to: var(--terre-400);
   /* La grande affiche sans image (PosterArt.tsx) : la même couleur de catégorie, l'icône en fond,
      grande et rognée par le coin, et la date adoucie dans l'encre de la catégorie (Uriel, 11/10 :
      « la date est trop forte »). */
@@ -1561,6 +1572,8 @@
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
   --poster-empty-surface: var(--night-300);
+  --poster-badge-surface: var(--surface-card);
+  --poster-badge-ink: var(--ink-title);
   --surface-bar: var(--night-200);
   --surface-bar-empty: var(--night-300);
 

@@ -9,7 +9,7 @@
  *            ne se repère pas : l'étoile ouvre l'invitation Pro (lib/plan.ts).
  */
 import { Check, Star } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { PosterArt } from '@/components/ui/PosterArt'
@@ -36,6 +36,7 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
   const locked = !canChangeStatus(event.startDate, marked, pro, today)
   const [inviting, setInviting] = useState(false)
   const card = useRef<HTMLElement>(null)
+  const gradient = useId()
 
   // Un clic ailleurs referme l'invitation.
   useEffect(() => {
@@ -64,7 +65,7 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
       </Link>
       <button
         type="button"
-        className={marked ? 'explore-card__star explore-card__star--on' : 'explore-card__star'}
+        className="explore-card__star"
         aria-pressed={marked}
         aria-label={marked ? 'Retirer de mes repérages' : 'Repérer cette date'}
         title={engaged ? 'Déjà dans ton calendrier' : undefined}
@@ -74,7 +75,19 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
           else onMark(event)
         }}
       >
-        <Star size={14} strokeWidth={2} />
+        {/* Le dégradé du logo, que l'étoile repérée peint en trait et en fond. */}
+        <svg className="explore-card__star-defs" aria-hidden="true">
+          <linearGradient id={gradient}>
+            <stop offset="0" className="explore-card__star-from" />
+            <stop offset="1" className="explore-card__star-to" />
+          </linearGradient>
+        </svg>
+        <Star
+          size={14}
+          strokeWidth={2}
+          fill={marked ? `url(#${gradient})` : 'none'}
+          stroke={marked ? `url(#${gradient})` : 'currentColor'}
+        />
       </button>
       {inviting && (
         <ProBubble

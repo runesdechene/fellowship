@@ -46,7 +46,17 @@ export function PosterArt({
         <span className="poster-art__day">{startDate.getDate()}</span>
         <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
       </Poster>
-      {corner && <span className="poster-art__countdown">{corner}</span>}
+      {corner && (
+        <span
+          className={
+            badge === undefined
+              ? 'poster-art__countdown'
+              : 'poster-art__countdown poster-art__countdown--badge'
+          }
+        >
+          {corner}
+        </span>
+      )}
       {action && <span className="poster-art__action">{action}</span>}
       {faces.length > 0 && (
         <span className="poster-art__friends">

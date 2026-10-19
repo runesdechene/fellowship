@@ -75,6 +75,12 @@
   color: var(--ink-title);
 }
 
+/* Une étiquette à la place du compte à rebours (« Nouveau ») : elle doit trancher. */
+.poster-art__countdown--badge {
+  background: var(--poster-badge-surface);
+  color: var(--poster-badge-ink);
+}
+
 .poster-art__action {
   position: absolute;
   top: var(--space-10);
