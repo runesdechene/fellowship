@@ -40,13 +40,13 @@ import { ReportPage } from '@/features/reports/ReportPage'
 import { ReportsPage } from '@/features/reports/ReportsPage'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 import { WriteReviewPage } from '@/features/review/WriteReviewPage'
-import { VitrinePage } from '@/features/vitrine/VitrinePage'
+import { VitrineRoute } from '@/features/vitrine/VitrineRoute'
 import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
 import { LegalRoute } from '@/pages/legal/LegalRoute'
 import { Unsubscribe } from '@/pages/Unsubscribe'
 import { useAuth } from '@/lib/auth'
-import { safeReturn } from '@/lib/welcome'
+import { loginReturning, safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
 import { type ReactNode } from 'react'
 
@@ -54,8 +54,10 @@ import { type ReactNode } from 'react'
  *  visiteur sans compte (la landing, sur `/`). */
 function AccessRoute({ children, guest }: { children: ReactNode; guest?: ReactNode }) {
   const { user, loading, identityFailed } = useAuth()
+  const { pathname, search } = useLocation()
   if (loading) return null
-  if (!user) return guest ?? <Navigate to="/connexion" replace />
+  // Un favori ou un lien d'e-mail ouvert sans session y revient après la connexion (lot 12).
+  if (!user) return guest ?? <Navigate to={loginReturning(pathname + search)} replace />
   if (identityFailed) return <IdentityError />
   return <>{children}</>
 }
@@ -416,7 +418,7 @@ export function App() {
           path="/:slug"
           element={
             <OpenRoute>
-              <VitrinePage />
+              <VitrineRoute />
             </OpenRoute>
           }
         />

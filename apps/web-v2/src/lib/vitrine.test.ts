@@ -4,7 +4,15 @@
  *            tampon mal coupé s'y voit tout de suite.
  */
 import { describe, expect, it } from 'vitest'
-import { initials, networkCounts, splitRoad, stampName, vitrineLinks, websiteLink } from './vitrine'
+import {
+  initials,
+  networkCounts,
+  splitRoad,
+  stampName,
+  vitrineAddress,
+  vitrineLinks,
+  websiteLink,
+} from './vitrine'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -118,5 +126,20 @@ describe('vitrineLinks', () => {
       { type: 'website', url: 'https://a.fr', label: 'a.fr' },
     ]
     expect(vitrineLinks(raw, null).map((link) => link.url)).toEqual(['https://a.fr'])
+  })
+})
+
+describe('vitrineAddress', () => {
+  it('une adresse ordinaire est le slug de la vitrine', () => {
+    expect(vitrineAddress('runesdechene')).toEqual({ kind: 'slug', slug: 'runesdechene' })
+  })
+
+  it('l’adresse « @slug » de la V1 mène à l’adresse sans @ (lot 12)', () => {
+    expect(vitrineAddress('@runesdechene')).toEqual({ kind: 'redirect', to: '/runesdechene' })
+  })
+
+  it('l’identifiant d’un acteur, accepté par la V1, se cherche par l’identifiant', () => {
+    const id = '558a7cf4-29d3-49ba-bba9-ffb015c97c20'
+    expect(vitrineAddress(id)).toEqual({ kind: 'actor', id })
   })
 })

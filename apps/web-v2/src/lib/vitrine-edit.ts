@@ -49,6 +49,25 @@ const RESERVED = new Set([
   'v2',
   'admin',
   'api',
+  // Servies à la racine ou redirigées par netlify.toml depuis la bascule (lot 12) : une vitrine
+  // de ce nom ne serait jamais atteinte.
+  'festivals',
+  'decouvrir',
+  'desinscription',
+  'legal',
+  'boutique',
+  'abonnement',
+  'profil',
+  'carte',
+  'suivis',
+  'login',
+  'dashboard',
+  'onboarding',
+  'notifications',
+  'mes-dates',
+  'tableau-de-bord',
+  'mes-createurs',
+  'auth',
 ])
 
 /**

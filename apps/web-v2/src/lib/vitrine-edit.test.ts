@@ -53,6 +53,29 @@ describe('slugProblem', () => {
     expect(slugProblem('a_b-c')).toBe('Lettres, chiffres et tirets seulement')
     expect(slugProblem('-abc')).toBe('Lettres, chiffres et tirets seulement')
   })
+  test('les adresses servies à la racine depuis la bascule sont réservées (lot 12)', () => {
+    for (const slug of [
+      'festivals',
+      'decouvrir',
+      'desinscription',
+      'legal',
+      'boutique',
+      'abonnement',
+      'profil',
+      'carte',
+      'suivis',
+      'login',
+      'dashboard',
+      'onboarding',
+      'notifications',
+      'mes-dates',
+      'tableau-de-bord',
+      'mes-createurs',
+      'auth',
+    ]) {
+      expect(slugProblem(slug)).toBe('Cette adresse est réservée')
+    }
+  })
   test('une adresse valide', () => {
     expect(slugProblem('runes-de-chene')).toBeNull()
   })

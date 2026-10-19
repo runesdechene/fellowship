@@ -1,7 +1,8 @@
 # web — la V1 de Fellowship
 
-> Servie sur `flw.sh`. **En maintenance : on y corrige, on n'y construit plus** — le neuf va dans
-> `apps/web-v2`. Règles générales : `CLAUDE.md` racine.
+> **Plus servie depuis la bascule (lot 12, 19/10/2026)** : `flw.sh` sert la V2 (`apps/web-v2`). Le
+> code reste ici comme référence ; on n'y construit ni n'y déploie plus. Règles générales :
+> `CLAUDE.md` racine.
 
 ## Commandes (depuis la racine du dépôt)
 
@@ -35,5 +36,5 @@ Le `.env` vit à la racine du monorepo (`envDir` dans `vite.config.ts`) :
 
 ## Déploiement
 
-Site Netlify `fellowship-app`, **manuel**, depuis ce dossier : `.claude/rules/deploiement.md`.
-`netlify.toml` porte la redirection `/v2/*` vers le site de la V2.
+Aucun : le site `fellowship-app` sert la V2 depuis la bascule (`.claude/rules/deploiement.md`).
+**Ne jamais redéployer la V1 sur `fellowship-app`** : elle remplacerait la V2 sur `flw.sh`.

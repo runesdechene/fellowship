@@ -36,6 +36,10 @@ Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirect
   build local.
 - **`--no-build`** : le build est fait en local, le `.env` racine fournit les variables.
 
+**Monter la version de `apps/web-v2/package.json` avant chaque déploiement** : elle part dans
+`/version.json`, et c'est elle qui fait paraître « Recharger » dans les onglets ouverts. Même
+version, aucun bandeau : les onglets gardent l'ancien code.
+
 **Toujours en brouillon d'abord**, puis `--prod` sur le même `dist/` (le script de prod ne
 rebâtit pas : il publie exactement ce qui a été vérifié).
 

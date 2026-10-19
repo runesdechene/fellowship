@@ -9,8 +9,8 @@
 
 | Quoi                                                     | Où                                                        |
 | -------------------------------------------------------- | --------------------------------------------------------- |
-| V1 en production (`flw.sh`) — maintenance                | `apps/web/` — voir son `CLAUDE.md`                        |
-| V2 en construction (`flw.sh/v2/`, admins seulement)      | `apps/web-v2/` — carnet : `docs/v2/`                      |
+| V1 — plus servie depuis la bascule (19/10/2026), code gardé | `apps/web/` — voir son `CLAUDE.md`                        |
+| V2 en production (`flw.sh`, à la racine, pour tous)       | `apps/web-v2/` — carnet : `docs/v2/`                      |
 | Design system de la V2                                   | `docs/v2/DESIGN-SYSTEM.md`                                |
 | Maquette de la V2 — **fait foi**                         | Figma, lien dans `apps/web-v2/README.md`                  |
 | Base, migrations, fonctions                              | `supabase/`                                               |

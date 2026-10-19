@@ -21,3 +21,5 @@ ordinateur ; rien n'est publié avant « Enregistrer » :
 
 La logique pure vit dans `lib/` : `vitrine.ts` (libellés, découpage de la route, liens),
 `vitrine-edit.ts` (règles du brouillon, de l'adresse et des liens), `image-resize.ts`.
+
+- `VitrineRoute.tsx` — `/:slug` : la vitrine, ou une adresse de la V1 (`/@slug`, identifiant) qui y mène (lot 12).

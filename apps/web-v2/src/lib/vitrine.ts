@@ -91,3 +91,16 @@ export function vitrineLinks(raw: unknown, website: string | null): VitrineLink[
   const url = normalizeUrl(website)
   return [{ type: 'website', url, label: linkLabel({ type: 'website', url, label: '' }) }]
 }
+
+export type VitrineAddress =
+  { kind: 'slug'; slug: string } | { kind: 'redirect'; to: string } | { kind: 'actor'; id: string }
+
+const ACTOR_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+/** Ce que désigne `/:slug` : une vitrine, ou une adresse de la V1 qui y mène — `/@slug`, que la
+ *  V1 donnait partout, et l'identifiant de l'acteur, qu'elle acceptait aussi (lot 12). */
+export function vitrineAddress(param: string): VitrineAddress {
+  if (param.startsWith('@')) return { kind: 'redirect', to: `/${param.slice(1)}` }
+  if (ACTOR_ID.test(param)) return { kind: 'actor', id: param }
+  return { kind: 'slug', slug: param }
+}
