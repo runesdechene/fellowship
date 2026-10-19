@@ -185,18 +185,33 @@ export function feedPhrase(line: FeedLine): TextPart[] {
   }
 }
 
+export interface ActivityText {
+  verb: string
+  /** Le festival ou le compte cité, et où il mène (null : un compte sans vitrine). */
+  object: { name: string; to: string | null } | null
+}
+
 /** Ce qui suit le nom dans « Activité du réseau » ; null : la ligne n'y va pas. */
-export function activityText(line: FeedLine): string | null {
+export function activityText(line: FeedLine): ActivityText | null {
   if (!line.who) return null
+  const event = line.event && { name: line.event.name, to: `/evenement/${line.event.id}` }
   switch (line.kind) {
     case 'arrival':
-      return 'vient de rejoindre Fellowship'
+      return { verb: 'vient de rejoindre Fellowship', object: null }
     case 'going':
-      return line.event ? `va à ${line.event.name}` : null
+      return event ? { verb: 'va à', object: event } : null
     case 'added':
-      return line.event ? `a ajouté ${line.event.name}` : null
+      return event ? { verb: 'a ajouté', object: event } : null
     case 'follow':
-      return line.target ? `suit ${line.target.name}` : null
+      return line.target
+        ? {
+            verb: 'suit',
+            object: {
+              name: line.target.name,
+              to: line.target.slug ? `/${line.target.slug}` : null,
+            },
+          }
+        : null
     case 'review':
     case 'gathering':
       return null

@@ -53,9 +53,14 @@
   color: var(--ink-soft);
 }
 
-.network-activity__text b {
+.network-activity__name {
   font-weight: var(--weight-semibold);
   color: var(--ink-title);
+}
+
+/* Les noms et festivals cités mènent à leur fiche, sans changer d'allure. */
+.network-activity__text a:hover {
+  text-decoration: underline;
 }
 
 .network-activity__time {

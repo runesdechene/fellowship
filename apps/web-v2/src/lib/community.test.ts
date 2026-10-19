@@ -189,12 +189,24 @@ describe('feedPhrase', () => {
 
 describe('activityText (barre latérale)', () => {
   test('les lignes du réseau', () => {
-    expect(activityText(line('arrival'))).toBe('vient de rejoindre Fellowship')
-    expect(activityText(line('going', event))).toBe('va à Les Aventuriales')
-    expect(activityText(line('added', event))).toBe('a ajouté Les Aventuriales')
-    expect(activityText(line('follow', { target_id: 't1', target_name: 'Forge Lugdunum' }))).toBe(
-      'suit Forge Lugdunum',
-    )
+    const aventuriales = { name: 'Les Aventuriales', to: '/evenement/e1' }
+    expect(activityText(line('arrival'))).toEqual({
+      verb: 'vient de rejoindre Fellowship',
+      object: null,
+    })
+    expect(activityText(line('going', event))).toEqual({ verb: 'va à', object: aventuriales })
+    expect(activityText(line('added', event))).toEqual({ verb: 'a ajouté', object: aventuriales })
+    expect(
+      activityText(
+        line('follow', { target_id: 't1', target_name: 'Forge Lugdunum', target_slug: 'forge' }),
+      ),
+    ).toEqual({ verb: 'suit', object: { name: 'Forge Lugdunum', to: '/forge' } })
+  })
+
+  test('un compte suivi sans vitrine reste du texte', () => {
+    expect(
+      activityText(line('follow', { target_id: 't1', target_name: 'Forge Lugdunum' }))?.object,
+    ).toEqual({ name: 'Forge Lugdunum', to: null })
   })
 
   test('ni avis, ni rassemblement, ni auteur inconnu', () => {

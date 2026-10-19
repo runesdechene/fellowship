@@ -9,7 +9,28 @@ import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { timeAgo } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { Link } from 'react-router-dom'
 import { useNetworkActivity } from './useNetworkActivity'
+
+/** Un nom cité : un lien quand il mène quelque part, du texte sinon. */
+function Mention({
+  name,
+  to,
+  strong = false,
+}: {
+  name: string
+  to: string | null
+  strong?: boolean
+}) {
+  const className = strong ? 'network-activity__name' : undefined
+  return to ? (
+    <Link className={className} to={to}>
+      {name}
+    </Link>
+  ) : (
+    <span className={className}>{name}</span>
+  )
+}
 
 export function NetworkActivity() {
   const { actor } = useAuth()
@@ -29,19 +50,35 @@ export function NetworkActivity() {
         <p className="network-activity__text">Le fil n’a pas pu être chargé.</p>
       ) : (
         <ul className="network-activity__list">
-          {items.map((item) => (
-            <li key={item.id} className="network-activity__item">
-              <Avatar
-                className="network-activity__face"
-                src={item.actor.avatarUrl}
-                name={item.actor.name}
-              />
-              <span className="network-activity__text">
-                <b>{item.actor.name}</b> {item.text}
-              </span>
-              <span className="network-activity__time">{timeAgo(item.occurredAt, now)}</span>
-            </li>
-          ))}
+          {items.map((item) => {
+            const { actor, text } = item
+            const face = (
+              <Avatar className="network-activity__face" src={actor.avatarUrl} name={actor.name} />
+            )
+            return (
+              <li key={item.id} className="network-activity__item">
+                {/* Le visage double le nom : un seul arrêt au clavier, celui du nom. */}
+                {actor.slug ? (
+                  <Link to={`/${actor.slug}`} tabIndex={-1} aria-hidden="true">
+                    {face}
+                  </Link>
+                ) : (
+                  face
+                )}
+                <span className="network-activity__text">
+                  <Mention name={actor.name} to={actor.slug && `/${actor.slug}`} strong />{' '}
+                  {text.verb}
+                  {text.object && (
+                    <>
+                      {' '}
+                      <Mention name={text.object.name} to={text.object.to} />
+                    </>
+                  )}
+                </span>
+                <span className="network-activity__time">{timeAgo(item.occurredAt, now)}</span>
+              </li>
+            )
+          })}
         </ul>
       )}
       <button type="button" className="network-activity__more" onClick={() => go('/communaute')}>

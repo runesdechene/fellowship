@@ -5,8 +5,7 @@
  *            la page Communauté (community_feed), sans les avis, dont l'identité est protégée.
  */
 import { useEffect, useState } from 'react'
-import { activityText, readFeed } from '@/lib/community'
-import type { Friend } from '@/lib/friends'
+import { activityText, readFeed, type ActivityText, type FeedPerson } from '@/lib/community'
 import { must, supabase } from '@/lib/supabase'
 
 const LIMIT = 4
@@ -14,9 +13,9 @@ const LIMIT = 4
 export interface ActivityItem {
   id: string
   occurredAt: Date
-  actor: Friend
+  actor: FeedPerson
   /** Ce qui suit le nom : « vient de rejoindre Fellowship », « va à Sylak »… */
-  text: string
+  text: ActivityText
 }
 
 async function loadActivity(me: string): Promise<ActivityItem[]> {
@@ -29,7 +28,7 @@ async function loadActivity(me: string): Promise<ActivityItem[]> {
             {
               id: line.id,
               occurredAt: line.at,
-              actor: { id: line.who.id, name: line.who.name, avatarUrl: line.who.avatarUrl },
+              actor: line.who,
               text,
             },
           ]
