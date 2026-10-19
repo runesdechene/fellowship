@@ -22,16 +22,16 @@ describe('annualSaving', () => {
 describe('proPriceLines', () => {
   it('en annuel : l’équivalent mensuel, et le détail facturé', () => {
     expect(proPriceLines('annuel')).toEqual({
-      big: '9,99 €',
+      big: '8,33 €',
       unit: 'HT / mois',
-      note: 'Facturé 119,88 € HT par an · ou 11,99 € HT en mensuel',
+      note: 'Facturé 99,90 € HT par an · ou 9,99 € HT en mensuel',
     })
   })
   it('en mensuel : le prix du mois, et l’annuel en regard', () => {
     expect(proPriceLines('mensuel')).toEqual({
-      big: '11,99 €',
+      big: '9,99 €',
       unit: 'HT / mois',
-      note: 'ou 9,99 € HT par mois en annuel',
+      note: 'ou 8,33 € HT par mois en annuel',
     })
   })
 })

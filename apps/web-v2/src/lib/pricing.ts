@@ -1,7 +1,7 @@
 /**
  * QUOI     — les prix du Pro et ce que la page de l'offre en dit.
- * POURQUOI — un seul endroit : le changement de prix (9,99 € HT / 99,90 € HT, après la V2) ne
- *            touchera que ce fichier, en même temps que Stripe.
+ * POURQUOI — un seul endroit : un changement de prix ne touche que ce fichier, en même temps que
+ *            Stripe.
  * ATTENTION — ces montants DOIVENT être ceux que Stripe facture (prix STRIPE_PRICE_MONTHLY et
  *            STRIPE_PRICE_YEARLY des fonctions serveur) : afficher un prix et en facturer un autre
  *            est le pire des bugs.
@@ -11,7 +11,7 @@ import { formatPrice } from './money'
 export type Formula = 'annuel' | 'mensuel'
 
 /** En centimes HT. */
-export const PRICES = { monthly: 1199, yearly: 11988 } as const
+export const PRICES = { monthly: 999, yearly: 9990 } as const
 
 export function formulaFrom(raw: string | null): Formula {
   return raw === 'mensuel' ? 'mensuel' : 'annuel'
