@@ -1,11 +1,12 @@
 /**
  * QUOI     — « Ta communauté » : amis et abonnés, ce qu'est un ami, et les demandes d'ami en
- *            attente avec un + pour suivre en retour.
+ *            attente : une croix pour refuser, un + pour suivre en retour.
  * POURQUOI — Uriel, 19/10/2026 : il faut que les exposants aient envie de se connecter entre eux.
  *            Une demande, c'est un compte qui te suit sans que tu le suives : le suivre en retour
- *            en fait un ami. Elle s'efface aussitôt, la relecture du réseau fait le reste.
+ *            en fait un ami ; la refuser la retire, l'abonné reste abonné. Une demande répondue
+ *            s'efface aussitôt, la relecture du réseau fait le reste.
  */
-import { Plus } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { networkCounts, requestsLabel } from '@/lib/community'
 import type { Network } from '@/lib/friends'
@@ -15,11 +16,13 @@ const SHOWN = 3
 
 interface NetworkCardProps {
   network: Network
-  followed: ReadonlySet<string>
+  /** Les demandes suivies en retour ou refusées : elles s'effacent avant la relecture. */
+  answered: ReadonlySet<string>
   onFollow: (id: string) => void
+  onDecline: (id: string) => void
 }
 
-export function NetworkCard({ network, followed, onFollow }: NetworkCardProps) {
+export function NetworkCard({ network, answered, onFollow, onDecline }: NetworkCardProps) {
   const { friends, followers, requests } = network
   return (
     <section className="side-card" aria-labelledby="network-title">
@@ -37,7 +40,7 @@ export function NetworkCard({ network, followed, onFollow }: NetworkCardProps) {
           <h3 className="network-card__requests">{requestsLabel(requests.length)}</h3>
           <ul className="side-card__list">
             {requests.slice(0, SHOWN).map((request) => {
-              const leaving = followed.has(request.id)
+              const leaving = answered.has(request.id)
               return (
                 <li
                   key={request.id}
@@ -53,6 +56,14 @@ export function NetworkCard({ network, followed, onFollow }: NetworkCardProps) {
                     <span className="side-card__name">{request.name}</span>
                     <span className="side-card__meta">te suit</span>
                   </span>
+                  <button
+                    type="button"
+                    className="side-card__follow"
+                    onClick={() => onDecline(request.id)}
+                    aria-label={`Refuser la demande de ${request.name}`}
+                  >
+                    <X size={13} strokeWidth={2} />
+                  </button>
                   <button
                     type="button"
                     className="side-card__follow"

@@ -49,25 +49,34 @@ async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
   return followers.filter((id) => following.has(id))
 }
 
-/** L'état du réseau : qui me suit, mes amis, et ceux qui me suivent sans que je les suive. */
+/** L'état du réseau : qui me suit, mes amis, et les exposants qui attendent que je les suive. */
 export interface Network {
   followers: number
   friends: number
-  /** Les demandes d'ami en attente : me suivre en retour en fait des amis. */
+  /** Les demandes d'ami en attente, refusées exclues : me suivre en retour en fait des amis. */
   requests: Friend[]
 }
 
-/** `own` : les comptes de la même personne, qui ne sont ni des abonnés ni des demandes. */
+/**
+ * `own` : les comptes de la même personne, qui ne sont ni des abonnés ni des amis. Les demandes
+ * viennent de friend_requests : seul un exposant en fait une, et un refus l'efface.
+ */
 export async function fetchNetwork(actorId: string, own: ReadonlySet<string>): Promise<Network> {
-  const { following, followers } = await readFollows(actorId)
+  const [{ following, followers }, requests] = await Promise.all([
+    readFollows(actorId),
+    supabase.rpc('friend_requests', { p_actor: actorId }),
+  ])
   const others = followers.filter((id) => !own.has(id))
-  const requestIds = others.filter((id) => !following.has(id))
-  const profiles = await fetchActorProfiles(requestIds)
   return {
     followers: others.length,
-    friends: others.length - requestIds.length,
-    requests: requestIds.flatMap((id) => profiles.get(id) ?? []),
+    friends: others.filter((id) => following.has(id)).length,
+    requests: must(requests).map((row) => ({ id: row.id, name: row.name, avatarUrl: row.avatar })),
   }
+}
+
+/** Refuser une demande : elle ne revient plus, l'abonné reste abonné. */
+export async function declineRequest(actorId: string, followerId: string): Promise<void> {
+  must(await supabase.rpc('decline_friend_request', { p_actor: actorId, p_follower: followerId }))
 }
 
 /**

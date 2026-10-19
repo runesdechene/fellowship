@@ -12,7 +12,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 import { useNetwork } from '@/features/community/useNetwork'
 
 export function CommunitySummary() {
-  const network = useNetwork()
+  const { network } = useNetwork()
   const go = useTransitionNavigate()
   if (!network) return null
 

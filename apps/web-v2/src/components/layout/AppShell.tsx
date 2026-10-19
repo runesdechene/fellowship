@@ -39,7 +39,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
   // Les demandes d'ami, pour la pastille de Communauté : relues à chaque changement d'adresse.
-  const friendRequests = useNetwork(useLocation().pathname)?.requests.length ?? 0
+  const friendRequests = useNetwork(useLocation().pathname).network?.requests.length ?? 0
 
   // Le fournisseur enveloppe TOUT : la page qui déclare son décor est un
   // enfant, la barre du haut et le mur qui le rendent sont ses frères.

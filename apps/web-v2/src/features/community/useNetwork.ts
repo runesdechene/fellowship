@@ -2,20 +2,21 @@
  * QUOI     — l'état du réseau de l'acteur actif : abonnés, amis, demandes d'ami en attente.
  * POURQUOI — la pastille de Communauté, le résumé du tableau de bord et « Ta communauté » lisent la
  *            même chose. Relu quand `when` change (l'adresse, pour la navigation) et après chaque
- *            Suivre (événement `reseau-change`), pour que la pastille s'éteigne aussitôt.
+ *            Suivre ou Refuser (événement `reseau-change`), pour que la pastille s'éteigne aussitôt.
  * ATTENTION — un échec rend null : la pastille et les encadrés se taisent plutôt que de mentir.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
-import { fetchNetwork, type Network } from '@/lib/friends'
+import { declineRequest, fetchNetwork, type Network } from '@/lib/friends'
 
-/** L'événement envoyé par useCommunity après un Suivre réussi. */
+/** L'événement envoyé après un Suivre ou un Refuser réussi. */
 export const NETWORK_CHANGED = 'reseau-change'
 
-export function useNetwork(when = ''): Network | null {
+export function useNetwork(when = '') {
   const { actor, person, entities } = useAuth()
   const [network, setNetwork] = useState<Network | null>(null)
   const [round, setRound] = useState(0)
+  const [declined, setDeclined] = useState<ReadonlySet<string>>(new Set())
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -41,5 +42,20 @@ export function useNetwork(when = ''): Network | null {
     }
   }, [actorId, own, when, round])
 
-  return network
+  /** Refuser : la demande s'efface aussitôt ; si l'écriture échoue, elle revient. */
+  const decline = useCallback(
+    async (followerId: string) => {
+      if (!actorId) return
+      setDeclined((current) => new Set([...current, followerId]))
+      try {
+        await declineRequest(actorId, followerId)
+        window.dispatchEvent(new Event(NETWORK_CHANGED))
+      } catch {
+        setDeclined((current) => new Set([...current].filter((id) => id !== followerId)))
+      }
+    },
+    [actorId],
+  )
+
+  return { network, declined, decline }
 }

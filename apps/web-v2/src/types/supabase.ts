@@ -2360,6 +2360,10 @@ export type Database = {
         }[]
       }
       department_code: { Args: { raw: string }; Returns: string }
+      decline_friend_request: {
+        Args: { p_actor: string; p_follower: string }
+        Returns: undefined
+      }
       ensure_referral_code: {
         Args: { p_base_code: string; p_entity_id: string }
         Returns: string
@@ -2367,6 +2371,15 @@ export type Database = {
       events_base_slug: {
         Args: { p_city: string; p_name: string }
         Returns: string
+      }
+      friend_requests: {
+        Args: { p_actor: string }
+        Returns: {
+          avatar: string
+          id: string
+          name: string
+          slug: string
+        }[]
       }
       get_coevent_suggestions: {
         Args: { p_actor_id: string }
