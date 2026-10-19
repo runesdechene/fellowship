@@ -307,18 +307,14 @@
   width: auto;
 }
 
-.explore-card__star-defs {
-  position: absolute;
-  width: 0;
-  height: 0;
+/* Une date repérée : le rond prend le dégradé du logo, l'étoile reste blanche (Uriel, 19/10/2026). */
+.explore-card__star[aria-pressed='true'] {
+  background: var(--brand-gradient);
+  color: var(--brand-ink);
 }
 
-.explore-card__star-from {
-  stop-color: var(--star-marked-from);
-}
-
-.explore-card__star-to {
-  stop-color: var(--star-marked-to);
+.explore-card__star[aria-pressed='true'] svg {
+  fill: currentcolor;
 }
 
 .explore-card__star:disabled {
