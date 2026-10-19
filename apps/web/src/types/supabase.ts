@@ -1854,6 +1854,29 @@ export type Database = {
         Args: { p_entity: string; p_oui: boolean }
         Returns: undefined
       }
+      admin_categorie_enregistrer: {
+        Args: {
+          p_bg: string
+          p_id: string
+          p_name: string
+          p_ordre: number
+          p_slug: string
+          p_text: string
+        }
+        Returns: string
+      }
+      admin_categories: {
+        Args: never
+        Returns: {
+          bg_color: string
+          evenements: number
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          text_color: string
+        }[]
+      }
       admin_cherche: {
         Args: { p_q: string; p_valeur: string }
         Returns: boolean
@@ -1966,6 +1989,23 @@ export type Database = {
           subscription_status: string
           trial_end: string
           type: string
+        }[]
+      }
+      admin_evenements: {
+        Args: { p_page?: number; p_q?: string }
+        Returns: {
+          city: string
+          created_at: string
+          creator_name: string
+          department: string
+          end_date: string
+          exposants: number
+          id: string
+          is_private: boolean
+          name: string
+          start_date: string
+          tags: string[]
+          total: number
         }[]
       }
       admin_filtres: {
@@ -2224,6 +2264,23 @@ export type Database = {
       admin_rapprocher: {
         Args: { p_par: string; p_prospect: string; p_user: string }
         Returns: undefined
+      }
+      admin_signalements: {
+        Args: { p_statut?: string }
+        Returns: {
+          admin_note: string
+          comment: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_avatar: string
+          reporter_name: string
+          resolved_at: string
+          status: string
+          target_name: string
+          target_path: string
+          target_type: string
+        }[]
       }
       admin_tel: { Args: { p_q: string; p_tel: string }; Returns: boolean }
       are_friends: {
