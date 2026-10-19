@@ -307,10 +307,10 @@
   width: auto;
 }
 
-/* Une date repérée : le rond prend le dégradé du logo, l'étoile reste blanche (Uriel, 19/10/2026). */
+/* Une date repérée : le rond passe en noir, l'étoile reste blanche (Uriel, 19/10/2026). */
 .explore-card__star[aria-pressed='true'] {
-  background: var(--brand-gradient);
-  color: var(--brand-ink);
+  background: var(--action-surface);
+  color: var(--action-ink);
 }
 
 .explore-card__star[aria-pressed='true'] svg {
