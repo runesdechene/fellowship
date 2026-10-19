@@ -439,54 +439,38 @@ a.side-card__row:hover {
   padding: var(--space-8);
 }
 
-/* « Ta communauté » : les nombres, ce qu'est un ami, puis les demandes en attente */
+/* « Ta communauté » : tout le haut est un lien vers Mes amis — titre, visages et nombres, ce
+   qu'est un ami ; puis les demandes en attente */
 .network-card__intro {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: 0 var(--space-10) var(--space-8);
+  /* Le survol déborde au-dessus du titre sans le décaler par rapport aux autres encadrés */
+  margin-top: calc(-1 * var(--space-8));
+  padding-bottom: var(--space-8);
+  border-radius: var(--radius-nav);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.network-card__intro:hover {
+  background: var(--surface-row-hover);
+}
+
+.network-card__intro .side-card__title {
+  padding-top: var(--space-8);
 }
 
 .network-card__counts {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding-inline: var(--space-10);
   font: var(--type-list-name);
   color: var(--ink-title);
 }
 
-.network-card__count {
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.network-card__count:hover {
-  color: var(--ink-soft);
-}
-
-.network-card__wall {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--space-4);
-  margin-block: var(--space-6);
-}
-
-/* Des carrés aux coins doux plutôt que des ronds : un petit mur de visages. Le mur en préfixe
-   l'emporte sur le rond de .avatar, chargé après. */
-.network-card__wall .network-card__tile {
-  --avatar-size: 100%;
-
-  aspect-ratio: 1;
-  border-radius: var(--radius-xs);
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.network-card__wall:hover .network-card__tile {
-  opacity: 0.85;
-}
-
-.network-card__more {
-  display: grid;
-  place-items: center;
-  background: var(--surface-chip-neutral);
-  font: var(--type-chip-strong);
-  color: var(--ink-soft);
+.network-card__intro .side-card__meta {
+  padding-inline: var(--space-10);
 }
 
 .network-card__requests {
@@ -527,6 +511,7 @@ a.side-card__row:hover {
   .feed-item,
   .gathering__mark,
   .side-card__row,
+  .network-card__intro,
   .network-list__actions,
   .feed-item__follow,
   .side-card__follow {
