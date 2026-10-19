@@ -183,15 +183,14 @@ export function useExplorer(
   const [state, setState] = useState<ExplorerData>(EMPTY)
   const searching = query.q.trim() !== '' || query.ou.trim() !== ''
   const { q, ou, quand } = query
-  // Des valeurs simples en dépendances : l'objet `tag` est recréé à chaque rendu de la page.
-  const tagName = query.tag?.name ?? null
-  const tagSlug = query.tag?.slug ?? null
+  // Une valeur simple en dépendance : la liste `tags` est recréée à chaque rendu de la page.
+  const tagKey = query.tags.join('|')
 
   useEffect(() => {
     if (!viewerId) return
     let cancelled = false
-    const tag = tagName !== null && tagSlug !== null ? { name: tagName, slug: tagSlug } : null
-    const current: ExplorerQuery = { q, ou, quand, tag }
+    const tags = tagKey ? tagKey.split('|') : []
+    const current: ExplorerQuery = { q, ou, quand, tags }
 
     async function run(viewer: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
@@ -216,7 +215,7 @@ export function useExplorer(
     return () => {
       cancelled = true
     }
-  }, [viewerId, pro, searching, q, ou, quand, tagName, tagSlug])
+  }, [viewerId, pro, searching, q, ou, quand, tagKey])
 
   /** Repérer une date (« Intéressé ») ou la retirer. Une date déjà engagée ne se touche pas ici. */
   const toggleMark = useCallback(

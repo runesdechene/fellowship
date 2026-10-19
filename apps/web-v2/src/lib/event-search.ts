@@ -1,6 +1,6 @@
 /**
- * QUOI     — la recherche de festivals publics, sans acteur : la requête d'une fenêtre (catégorie
- *            comprise), ses mots et son lieu, le compte de ce qui attend au-delà de l'horizon.
+ * QUOI     — la recherche de festivals publics, sans acteur : la requête d'une fenêtre (catégories
+ *            comprises), ses mots et son lieu, le compte de ce qui attend au-delà de l'horizon.
  * POURQUOI — l'Explorer connecté et la recherche publique (lot 11b) cherchent pareil ; seuls
  *            l'horizon et ce qu'on ajoute autour (amis, statut) changent.
  * ATTENTION — seules les fiches publiques : `is_private = false` dans chaque requête.
@@ -16,8 +16,9 @@ export interface SearchQuery {
   q: string
   ou: string
   quand: string | null
-  /** Les deux écritures d'une catégorie dans `events.tags` : son nom et son slug. */
-  tag: { name: string; slug: string } | null
+  /** Les écritures des catégories retenues dans `events.tags` (nom et slug de chacune) ; une
+   *  date en porte au moins une. Vide : toutes les catégories. */
+  tags: string[]
 }
 
 export interface EventRow {
@@ -68,7 +69,7 @@ export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon
     .eq('is_private', false)
     .gte('end_date', todayIso(from))
     .lt('start_date', todayIso(to))
-  if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
+  if (query.tags.length > 0) request = request.overlaps('tags', query.tags)
   return request
 }
 
@@ -99,7 +100,7 @@ export async function countBeyond(
     .eq('is_private', false)
     .gte('start_date', todayIso(beyond.from))
     .lt('start_date', todayIso(beyond.to))
-  if (query.tag) request = request.overlaps('tags', [query.tag.name, query.tag.slug])
+  if (query.tags.length > 0) request = request.overlaps('tags', query.tags)
   if (words)
     request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
   if (place) request = request.or(`city.ilike.${place},department.ilike.${place}`)

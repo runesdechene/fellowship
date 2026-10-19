@@ -137,6 +137,16 @@
   color: var(--status-pending-icon);
 }
 
+/* La couleur d'une donnée (une catégorie), dessinée comme sa pastille dans la page. */
+.select__pastille {
+  flex: none;
+  width: var(--space-10);
+  height: var(--space-10);
+  border: 1px solid var(--swatch-ink);
+  border-radius: var(--radius-round);
+  background: var(--swatch-bg);
+}
+
 /* --- Le menu -------------------------------------------------------------- */
 /* Sans ombre dans cette interface : c'est un liseré qui détache le menu du
    contenu qu'il recouvre, comme pour tous les flottants de l'app. */

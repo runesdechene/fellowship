@@ -26,7 +26,7 @@ export function PublicSearchPage() {
   const ou = params.get('ou') ?? ''
   const quand = params.get('quand')
   const all = params.has('tout')
-  const data = usePublicSearch({ q, ou, quand, tag: null })
+  const data = usePublicSearch({ q, ou, quand, tags: [] })
   const shown = all ? data.events : data.events.slice(0, PREVIEW)
   const posters = data.events.flatMap((event) => (event.imageUrl ? [event.imageUrl] : []))
 

@@ -3,8 +3,8 @@
  *            trois rangées de l'accueil, soit les résultats d'une recherche.
  * POURQUOI — trouver où poser son stand : par ses amis, par la nouveauté, près de chez soi, ou en
  *            cherchant un mot (maquette 2027).
- * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?quand, ?categorie, ?voir) : le retour du
- *            navigateur ramène la recherche d'avant. La barre se remonte quand l'adresse change.
+ * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?quand, ?categorie=a,b, ?voir) : le retour
+ *            du navigateur ramène la recherche d'avant. La barre se remonte quand l'adresse change.
  */
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -45,13 +45,16 @@ export function ExplorerPage() {
   const q = params.get('q') ?? ''
   const ou = params.get('ou') ?? ''
   const quand = params.get('quand')
-  const categorie = params.get('categorie')
+  const selected = (params.get('categorie') ?? '').split(',').filter(Boolean)
   const tab = readTab(params.get('voir'))
-  const tagRow = tags.find((tag) => tag.slug === categorie) ?? null
-  const tag = tagRow ? { name: tagRow.name, slug: tagRow.slug } : null
+  const chosen = tags.filter((tag) => selected.includes(tag.slug))
 
   const { pro } = usePlan()
-  const data = useExplorer({ q, ou, quand, tag }, actor?.id, pro)
+  const data = useExplorer(
+    { q, ou, quand, tags: chosen.flatMap((tag) => [tag.name, tag.slug]) },
+    actor?.id,
+    pro,
+  )
 
   /** Réécrit l'adresse : une valeur vide s'efface plutôt que de traîner en « ?q= ». */
   function update(patch: Record<string, string | null>) {
@@ -97,9 +100,9 @@ export function ExplorerPage() {
 
       <CategoryChips
         tags={tags}
-        selected={categorie}
-        onSelect={(slug) => {
-          update({ categorie: slug })
+        selected={selected}
+        onChange={(slugs) => {
+          update({ categorie: slugs.join(',') })
         }}
       />
 

@@ -77,7 +77,7 @@ export function usePublicSearch({ q, ou, quand }: SearchQuery): PublicSearch {
       setState((current) => ({ ...current, loading: true, error: null }))
       let next: PublicSearch
       try {
-        next = await loadPublicSearch({ q, ou, quand, tag: null })
+        next = await loadPublicSearch({ q, ou, quand, tags: [] })
       } catch {
         next = { ...EMPTY, loading: false, error: 'La recherche n’a pas pu être chargée.' }
       }

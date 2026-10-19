@@ -4,7 +4,7 @@
  *            (une étoile pour « intéressé », un sablier pour « à payer »).
  * ATTENTION — ce qu'on réécrit, on le réécrit entier : clavier, clic dehors, rôles ARIA.
  */
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -37,6 +37,8 @@ export type SelectOption<T> = {
   Icon?: LucideIcon
   /** Ce que l'état raconte : rien, un geste à faire, ou c'est acquis. */
   tone?: SelectTone
+  /** Une couleur venue des données (une catégorie) : une pastille devant le mot. */
+  swatch?: { bg: string; ink: string }
 }
 
 export function Select<T>({
@@ -47,6 +49,7 @@ export function Select<T>({
   filled = false,
   onChange,
   className,
+  placeholder,
 }: {
   /** Ce que le contrôle demande — lu par les lecteurs d'écran. */
   label: string
@@ -62,6 +65,8 @@ export function Select<T>({
   onChange: (value: T) => void
   /** Le modificateur de l'écran qui l'accueille, pour sa largeur. */
   className?: string
+  /** Ce qu'affiche le bouton tant qu'aucune option n'est la valeur — un menu qui ajoute. */
+  placeholder?: string
 }) {
   const [ouvert, setOuvert] = useState(false)
   const [survol, setSurvol] = useState(0)
@@ -69,11 +74,9 @@ export function Select<T>({
   const bouton = useRef<HTMLButtonElement>(null)
   const id = useId()
 
-  const index = Math.max(
-    0,
-    options.findIndex((option) => option.value === value),
-  )
-  const courant = options[index] ?? options[0]
+  const trouve = options.findIndex((option) => option.value === value)
+  const index = Math.max(0, trouve)
+  const courant = trouve < 0 && placeholder ? undefined : (options[index] ?? options[0])
 
   // Un clic ailleurs referme. `mousedown` et non `click` : sinon le clic qui
   // ferme déclencherait aussi ce qu'il y a dessous.
@@ -173,7 +176,7 @@ export function Select<T>({
         onKeyDown={auClavier}
       >
         {courant?.Icon && <courant.Icon className="select__icone" size={16} strokeWidth={2} />}
-        <span className="select__mot">{courant?.label}</span>
+        <span className="select__mot">{courant?.label ?? placeholder}</span>
         <ChevronDown className="select__chevron" size={14} strokeWidth={2} />
       </button>
 
@@ -186,7 +189,7 @@ export function Select<T>({
                 id={`${id}-${position}`}
                 className={`select__option select__option--${ton(option)}`}
                 role="option"
-                aria-selected={position === index}
+                aria-selected={position === trouve}
                 data-survol={position === survol ? 'oui' : 'non'}
                 // `mousedown` plutôt que `click` : le bouton perd le focus au
                 // premier, et on veut choisir avant que le clic dehors ferme.
@@ -198,6 +201,17 @@ export function Select<T>({
                 tabIndex={-1}
               >
                 {option.Icon && <option.Icon className="select__icone" size={16} strokeWidth={2} />}
+                {option.swatch && (
+                  <span
+                    className="select__pastille"
+                    style={
+                      {
+                        '--swatch-bg': option.swatch.bg,
+                        '--swatch-ink': option.swatch.ink,
+                      } as CSSProperties
+                    }
+                  />
+                )}
                 <span className="select__mot">{option.label}</span>
               </button>
             </li>

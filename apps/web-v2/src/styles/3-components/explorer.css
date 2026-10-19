@@ -167,10 +167,29 @@
   opacity: 0.85;
 }
 
-.category-chip[aria-pressed='true'] {
+.category-chip[aria-pressed='true'],
+.category-chip--chosen {
   border-color: var(--tag-ink, var(--ink-title));
   outline: 1px solid var(--tag-ink, var(--ink-title));
   outline-offset: -2px;
+}
+
+/* Une catégorie retenue se retire d'un clic : la croix le dit. */
+.category-chip--chosen {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* Le menu qui ajoute une catégorie prend la forme d'une pastille, à la suite des autres. */
+.category-select .select__valeur {
+  height: var(--category-chip-height);
+  padding: 0 var(--space-14);
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-round);
+  background: transparent;
+  font: var(--type-chip);
+  color: var(--ink-soft);
 }
 
 .category-chip--all[aria-pressed='true'] {
@@ -516,16 +535,6 @@
 
   .search-bar__field:not(.search-bar__field--words) {
     display: none;
-  }
-
-  .category-chips {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .category-chip {
-    flex: none;
   }
 
   .explore-card,
