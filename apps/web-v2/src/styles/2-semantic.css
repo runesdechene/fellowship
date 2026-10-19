@@ -491,6 +491,8 @@
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */
   --type-create-ask: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  /* Sur téléphone, la question tient en deux ou trois lignes. */
+  --type-create-ask-mobile: var(--weight-regular) var(--size-32) / 1.05 var(--family-display);
 
   /* =========================================================================
      LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
@@ -1268,7 +1270,11 @@
      TÉLÉPHONE — la barre d'onglets et les marges d'écran étroit
      ====================================================================== */
   --tab-bar-height: 68px;
-  --tab-bar-avatar: 24px;
+  /* La taille des icônes de la barre : l'avatar de « Moi » ne pousse pas son nom plus bas. */
+  --tab-bar-avatar: 22px;
+  --tab-sheet-veil: var(--who-goes-veil);
+  --tab-sheet-motion: var(--duration-medium) var(--ease-out);
+  --tab-sheet-grab-width: var(--space-40);
   --tab-bar-active: var(--terre-700);
   --mobile-gutter: var(--space-20);
   --mobile-padding-top: var(--space-80);

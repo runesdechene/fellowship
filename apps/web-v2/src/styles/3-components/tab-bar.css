@@ -5,8 +5,7 @@
  *            du logo. Invisible sur ordinateur.
  */
 
-.tab-bar,
-.tab-sheet {
+.tab-bar {
   display: none;
 }
 
@@ -54,17 +53,57 @@
     --avatar-size: var(--tab-bar-avatar);
   }
 
+  /* La feuille « Moi » : collée au bas de l'écran, elle monte sur un voile. Le <dialog> ne fait
+     que la poser ; c'est son bloc intérieur qui se voit et suit le doigt. */
   .tab-sheet {
-    position: fixed;
-    inset: auto var(--space-12) calc(var(--tab-bar-height) + var(--space-12));
-    z-index: 11;
+    width: 100%;
+    max-width: none;
+    margin: auto 0 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--ink-title);
+    transition: translate var(--tab-sheet-motion);
+  }
+
+  @starting-style {
+    .tab-sheet[open] {
+      translate: 0 100%;
+    }
+  }
+
+  .tab-sheet__body {
     display: flex;
     flex-direction: column;
-    padding: var(--space-8);
-    border: 1px solid var(--line-card);
+    padding: var(--space-8) var(--space-8) calc(var(--space-12) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-card);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
     box-shadow: var(--shadow-block);
-    border-radius: var(--radius-card);
     background: var(--surface-card);
+    /* Le doigt tire la feuille : le navigateur ne doit pas faire défiler la page à sa place. */
+    touch-action: none;
+    user-select: none;
+    translate: 0 var(--sheet-pull);
+    transition: translate var(--tab-sheet-motion);
+  }
+
+  /* Sous le doigt, la feuille suit sans retard ; lâchée, elle remonte en glissant. */
+  .tab-sheet__body--pulled {
+    transition: none;
+  }
+
+  .tab-sheet::backdrop {
+    background: var(--tab-sheet-veil);
+  }
+
+  /* La poignée : on voit qu'on peut tirer vers le bas. */
+  .tab-sheet__grab {
+    align-self: center;
+    width: var(--tab-sheet-grab-width);
+    height: var(--space-4);
+    margin: var(--space-4) 0 var(--space-8);
+    border-radius: var(--round-full);
+    background: var(--line-card);
   }
 
   .tab-sheet__item {
@@ -105,5 +144,12 @@
   .tab-sheet__identity b {
     font: var(--type-list-name);
     color: var(--ink-title);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-sheet,
+  .tab-sheet__body {
+    transition: none;
   }
 }
