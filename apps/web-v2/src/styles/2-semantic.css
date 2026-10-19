@@ -562,6 +562,9 @@
   --select-height: var(--height-control);
   --select-option-height: var(--height-option);
   --select-menu-max-width: var(--width-menu-max);
+  /* Huit options et demie : la moitié coupée dit qu'il y a une suite. Jamais plus de la moitié
+     de l'écran, sinon le menu sort par le bas sur un petit écran. */
+  --select-menu-max-height: min(calc(var(--select-option-height) * 8.5), 50dvh);
   --select-menu-gap: var(--space-4);
   --select-inset: var(--space-12);
   --select-gap: var(--space-8);

@@ -89,6 +89,11 @@ export function Select<T>({
     return () => document.removeEventListener('mousedown', dehors)
   }, [ouvert])
 
+  // Au clavier, l'option désignée reste visible dans un menu qui défile.
+  useEffect(() => {
+    if (ouvert) document.getElementById(`${id}-${survol}`)?.scrollIntoView({ block: 'nearest' })
+  }, [ouvert, survol, id])
+
   function ouvrir() {
     setSurvol(index)
     setOuvert(true)
