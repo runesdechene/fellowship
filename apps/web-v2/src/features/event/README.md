@@ -10,6 +10,7 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `useDossier.ts` — le dossier privé (participation_dossiers) : lecture et écriture.
 - `EventDiscussion.tsx` — la discussion du festival : canaux, formulaire, écritures.
 - `DiscussionThread.tsx` — le rendu d’un fil : la question, ses réponses, qui parle et quand.
+- `EventSlugRedirect.tsx` — `/e/:slug`, l'ancien lien de la V1, mène à la fiche (lot 12).
 - `useEvent.ts` — l'événement, la participation, et leurs écritures.
 - `useEventThreads.ts` — les fils de discussion.
 - `Companions.tsx` — la ligne des amis (« A, B, C et 5 autres y vont aussi ») et sa popup.

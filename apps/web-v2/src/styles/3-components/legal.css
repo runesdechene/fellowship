@@ -1,0 +1,77 @@
+/**
+ * QUOI     — les styles des pages légales (pages/legal/).
+ * POURQUOI — un texte long à lire sans compte : une colonne, de vrais titres de section, les liens
+ *            soulignés. Pas de maquette (lot 12) : les jetons de l'app, rien d'inventé.
+ */
+
+.legal {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-48) var(--space-16) var(--space-96);
+  background: var(--surface-app);
+}
+
+.legal__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+  width: 100%;
+  max-width: var(--legal-reading-width);
+}
+
+.legal__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.legal__title {
+  font: var(--type-page-title);
+  color: var(--ink-title);
+}
+
+.legal__updated {
+  font: var(--type-page-subtitle);
+  color: var(--ink-soft);
+}
+
+.legal__body {
+  font: var(--type-event-description);
+  color: var(--ink-body);
+}
+
+.legal__body > * + * {
+  margin-top: var(--rich-paragraph-gap);
+}
+
+.legal__body h2 {
+  margin-top: var(--space-32);
+  font: var(--type-section-title);
+  color: var(--ink-title);
+}
+
+.legal__body :is(ul, ol) {
+  padding-left: var(--rich-list-inset);
+  list-style: disc;
+}
+
+.legal__body strong {
+  color: var(--ink-title);
+  font-weight: var(--weight-bold);
+}
+
+.legal__body a,
+.legal__others a {
+  color: var(--ink-link);
+  text-decoration: underline;
+}
+
+.legal__others {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-24);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--line-card);
+  font: var(--type-page-subtitle);
+}

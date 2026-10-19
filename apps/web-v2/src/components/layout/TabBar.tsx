@@ -5,15 +5,7 @@
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
  * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
-import {
-  CalendarDays,
-  Check,
-  CircleGauge,
-  Plus,
-  Settings,
-  Telescope,
-  Users,
-} from 'lucide-react'
+import { CalendarDays, Check, CircleGauge, Plus, Settings, Telescope, Users } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'

@@ -29,6 +29,7 @@ import { EditEvent } from '@/features/event-edit/EditEvent'
 import { HistoryPage } from '@/features/event-history/HistoryPage'
 import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
+import { EventSlugRedirect } from '@/features/event/EventSlugRedirect'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { LandingPage } from '@/features/landing/LandingPage'
 import { PublicSearchPage } from '@/features/public-search/PublicSearchPage'
@@ -40,6 +41,7 @@ import { WriteReviewPage } from '@/features/review/WriteReviewPage'
 import { VitrinePage } from '@/features/vitrine/VitrinePage'
 import { WelcomePage } from '@/features/welcome/WelcomePage'
 import { Login } from '@/pages/Login'
+import { LegalRoute } from '@/pages/legal/LegalRoute'
 import { Unsubscribe } from '@/pages/Unsubscribe'
 import { useAuth } from '@/lib/auth'
 import { safeReturn } from '@/lib/welcome'
@@ -143,6 +145,24 @@ export function App() {
       <Route path="/festivals" element={<PublicSearchRoute />} />
       <Route path="/desinscription" element={<Unsubscribe />} />
       <Route path="/connexion" element={<LoginRoute />} />
+      <Route path="/legal/:doc" element={<LegalRoute />} />
+      {/* L'ancien lien partagé d'un événement (V1) : il cherche la fiche par son slug (lot 12). */}
+      <Route
+        path="/e/:slug"
+        element={
+          <ProtectedRoute
+            guest={
+              <GuestShell>
+                <EventSlugRedirect />
+              </GuestShell>
+            }
+          >
+            <AppShell>
+              <EventSlugRedirect />
+            </AppShell>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/bienvenue"
         element={

@@ -666,6 +666,7 @@
      paragraphes, ses titres et ses listes. */
   --rich-paragraph-gap: var(--space-12);
   --rich-list-inset: var(--space-20);
+  --legal-reading-width: 680px; /* une page légale : une colonne de lecture (lot 12) */
 
   --type-event-description: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
     var(--family-sans);
