@@ -69,3 +69,33 @@ export function signingEntity(
   if (actor.kind === 'entity') return actor.id
   return entities[0]?.actor_id ?? null
 }
+
+export interface TextPiece {
+  text: string
+  href?: string
+}
+
+// Même découpe que les e-mails (supabase/functions/_shared/prospect-mail.ts) : une adresse s'arrête
+// aux espaces, guillemets et chevrons ; la ponctuation qui la termine reste du texte.
+const URL_PATTERN = /https?:\/\/[^\s<>"]+/g
+const TRAILING = /[.,;:!?)\]']+$/
+
+/** Le texte d'une note en paragraphes (lignes vides), adresses cliquables : jamais de HTML injecté. */
+export function paragraphsOf(body: string): TextPiece[][] {
+  return body
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph) => {
+      const pieces: TextPiece[] = []
+      let last = 0
+      for (const match of paragraph.matchAll(URL_PATTERN)) {
+        const url = match[0].replace(TRAILING, '')
+        if (match.index > last) pieces.push({ text: paragraph.slice(last, match.index) })
+        pieces.push({ text: url, href: url })
+        last = match.index + url.length
+      }
+      if (last < paragraph.length) pieces.push({ text: paragraph.slice(last) })
+      return pieces
+    })
+}

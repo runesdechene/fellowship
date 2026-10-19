@@ -1,0 +1,365 @@
+/**
+ * QUOI     — les styles de la page Nouveautés (features/updates) : la carte d'une mise à jour, ses
+ *            réactions, sa conversation, et les notes repliées.
+ * POURQUOI — maquettes 2371:65 (ordinateur, fil centré) et 2371:707 (téléphone). Les cartes suivent
+ *            le langage « 2027 » : blanches, bordées d'un filet, posées de --shadow-block.
+ */
+
+.updates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--updates-gap);
+  width: 100%;
+  max-width: var(--updates-page-width);
+  margin-inline: auto;
+  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+}
+
+.updates__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.updates__title {
+  font: var(--type-page-title);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-page-title);
+}
+
+.updates__lead,
+.updates__note {
+  font: var(--type-gathering-meta);
+  color: var(--ink-soft);
+}
+
+/* --- Une mise à jour ----------------------------------------------------------------------- */
+.update-card {
+  overflow: hidden;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+}
+
+.update-card__image {
+  display: block;
+  width: 100%;
+  height: var(--updates-image-height);
+  object-fit: cover;
+}
+
+.update-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  padding: var(--space-24) var(--updates-card-padding) var(--space-20);
+}
+
+.update-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  font: var(--type-updates-meta);
+  color: var(--ink-waiting);
+}
+
+.update-card__weight {
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-chip);
+  background: var(--surface-chip-neutral);
+  font: var(--type-updates-weight);
+  color: var(--ink-soft);
+}
+
+.update-card--big .update-card__weight {
+  background: var(--updates-weight-big-surface);
+  color: var(--updates-weight-big-ink);
+}
+
+.update-card__title {
+  font: var(--type-updates-title);
+  color: var(--ink-title);
+}
+
+.update-card--big .update-card__title {
+  font: var(--type-updates-title-big);
+}
+
+.update-card__text {
+  font: var(--type-updates-text);
+  color: var(--ink-title);
+  overflow-wrap: anywhere;
+}
+
+.update-card:not(.update-card--big) .update-card__text {
+  color: var(--ink-soft);
+}
+
+.update-card__text a {
+  color: var(--ink-link);
+  text-decoration: underline;
+}
+
+/* --- Réactions ----------------------------------------------------------------------------- */
+.update-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-14) var(--updates-card-padding);
+  border-top: 1px solid var(--line-card);
+}
+
+.update-reactions__heart,
+.update-reactions__count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-7);
+  padding: var(--space-7) var(--space-12);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-updates-count);
+  color: var(--ink-title);
+}
+
+.update-reactions__heart {
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+}
+
+.update-reactions__heart:hover:not(:disabled) {
+  background: var(--surface-row-hover);
+}
+
+.update-reactions__heart:active:not(:disabled) {
+  scale: 0.94;
+}
+
+.update-reactions__heart--on,
+.update-reactions__heart--on:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--updates-heart-on-surface);
+  color: var(--updates-heart-on-ink);
+}
+
+.update-reactions__heart--on svg {
+  fill: currentcolor;
+}
+
+.update-reactions__likers {
+  font: var(--type-updates-meta);
+  color: var(--ink-waiting);
+}
+
+/* --- Conversation -------------------------------------------------------------------------- */
+.update-conversation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  padding: var(--space-20) var(--updates-card-padding) var(--space-24);
+  border-top: 1px solid var(--line-card);
+}
+
+.update-conversation__list,
+.update-conversation__replies {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+}
+
+.update-conversation__thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.update-conversation__replies {
+  padding-left: var(--updates-reply-indent);
+}
+
+.update-comment {
+  --avatar-size: var(--updates-avatar);
+
+  display: flex;
+  gap: var(--space-12);
+}
+
+.update-comment__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.update-comment__head {
+  font: var(--type-updates-meta);
+  color: var(--ink-waiting);
+}
+
+.update-comment__head strong {
+  font: var(--type-updates-comment-name);
+  color: var(--ink-title);
+}
+
+.update-comment__text {
+  font: var(--type-updates-comment);
+  color: var(--ink-title);
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.update-comment__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.update-comment__actions button,
+.update-conversation__more,
+.update-conversation__replying button {
+  background: none;
+  font: var(--type-updates-action);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.update-comment__actions button:hover,
+.update-conversation__more:hover {
+  color: var(--ink-title);
+}
+
+/* La corbeille n'apparaît qu'au survol du commentaire, comme celle des prospects. */
+.update-comment__delete {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.update-comment:hover .update-comment__delete,
+.update-comment__delete:focus-visible {
+  opacity: 1;
+}
+
+.update-conversation__more {
+  align-self: flex-start;
+}
+
+.update-conversation__problem {
+  font: var(--type-updates-meta);
+  color: var(--danger-ink);
+}
+
+.update-conversation__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.update-conversation__replying {
+  display: flex;
+  gap: var(--space-8);
+  font: var(--type-updates-meta);
+  color: var(--ink-soft);
+}
+
+.update-conversation__field {
+  width: 100%;
+  padding: var(--space-10) var(--space-16);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  font: var(--type-updates-comment);
+  color: var(--ink-title);
+}
+
+.update-conversation__field::placeholder {
+  color: var(--ink-waiting);
+}
+
+/* --- Les mises à jour précédentes, repliées sur leur titre ---------------------------------- */
+.updates__older {
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+}
+
+.updates__older[open] {
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+}
+
+.updates__summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding: var(--space-16) var(--space-20);
+  list-style: none;
+  cursor: pointer;
+}
+
+.updates__summary::-webkit-details-marker {
+  display: none;
+}
+
+.updates__older[open] .updates__summary {
+  padding-inline: var(--space-4);
+}
+
+.updates__summary-title {
+  font: var(--type-updates-summary);
+  color: var(--ink-title);
+}
+
+.updates__summary-meta {
+  flex-shrink: 0;
+  font: var(--type-updates-meta);
+  color: var(--ink-waiting);
+}
+
+.updates__older[open] .update-card {
+  animation: updates-unfold var(--duration-medium) var(--ease-drawer);
+}
+
+@keyframes updates-unfold {
+  from {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-8));
+  }
+}
+
+@media (width <= 760px) {
+  .update-card__image {
+    height: var(--updates-image-height-mobile);
+  }
+
+  .update-card__body,
+  .update-reactions,
+  .update-conversation {
+    padding-inline: var(--updates-card-padding-mobile);
+  }
+
+  .update-card--big .update-card__title {
+    font: var(--type-updates-title-big-mobile);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-reactions__heart,
+  .update-comment__delete {
+    transition: none;
+  }
+
+  .updates__older[open] .update-card {
+    animation: none;
+  }
+}

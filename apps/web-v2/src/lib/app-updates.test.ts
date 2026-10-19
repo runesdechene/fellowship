@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 import {
   isUnread,
   likersLabel,
+  paragraphsOf,
   signature,
   signingEntity,
   threadOf,
@@ -78,5 +79,21 @@ describe('signingEntity', () => {
   it('signe au nom de la première enseigne depuis la personne', () => {
     expect(signingEntity({ id: 'p', kind: 'person' }, entities)).toBe('rdc')
     expect(signingEntity({ id: 'p', kind: 'person' }, [])).toBeNull()
+  })
+})
+
+describe('paragraphsOf', () => {
+  it('coupe aux lignes vides et rend les adresses cliquables, sans la ponctuation finale', () => {
+    expect(paragraphsOf('Bonjour.\n\nVoir https://flw.sh/pro. Merci')).toEqual([
+      [{ text: 'Bonjour.' }],
+      [
+        { text: 'Voir ' },
+        { text: 'https://flw.sh/pro', href: 'https://flw.sh/pro' },
+        { text: '. Merci' },
+      ],
+    ])
+  })
+  it('ignore les paragraphes vides', () => {
+    expect(paragraphsOf('\n\n\nUn\n\n\n')).toEqual([[{ text: 'Un' }]])
   })
 })

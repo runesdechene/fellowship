@@ -913,6 +913,42 @@
   --type-gathering-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
+  /* Les Nouveautés (maquettes 2371:65, 2371:707) : un fil centré, la grosse mise à jour s'annonce
+     (image, titre en serif, étiquette pleine), la petite reste sobre ; le cœur mis prend la brique. */
+  --updates-page-width: calc(680px + 2 * var(--page-gutter));
+  --updates-gap: var(--space-24);
+  --updates-card-padding: var(--space-28);
+  --updates-card-padding-mobile: var(--space-18);
+  --updates-image-height: 240px;
+  --updates-image-height-mobile: 170px;
+  --updates-avatar: var(--size-32);
+  --updates-reply-indent: 44px;
+  --updates-heart-on-surface: var(--tone-brique-surface);
+  --updates-heart-on-ink: var(--tone-brique-ink);
+  --updates-weight-big-surface: var(--action-surface);
+  --updates-weight-big-ink: var(--action-ink);
+  --updates-faint-ink: var(--ink-waiting);
+  --type-updates-weight: var(--weight-semibold) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --type-updates-meta: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-updates-title-big: var(--weight-regular) var(--size-40) / var(--leading-tight)
+    var(--family-display);
+  --type-updates-title-big-mobile: var(--weight-regular) var(--size-32) / var(--leading-tight)
+    var(--family-display);
+  --type-updates-title: var(--weight-semibold) var(--size-19) / var(--leading-snug)
+    var(--family-sans);
+  --type-updates-text: var(--weight-regular) var(--size-15) / var(--leading-relaxed)
+    var(--family-sans);
+  --type-updates-comment-name: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-updates-comment: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
+  --type-updates-action: var(--weight-medium) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-updates-count: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-updates-summary: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+
   /* Le bloc « Pour toi » (lot 8d, maquette 2206:2) : l'affiche au gabarit des bilans, « Pas pour
      moi » en petite icône d'interdiction, en encre effacée (Uriel, 10/10/2026), le nombre trouvé du gratuit en grand titre. */
   --suggestion-poster-width: var(--report-thumb-width);

@@ -22,6 +22,7 @@ import { ModerationPage } from '@/features/admin-moderation/ModerationPage'
 import { AdminEventsPage } from '@/features/admin-events/AdminEventsPage'
 import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
 import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
+import { UpdatesPage } from '@/features/updates/UpdatesPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { NetworkPage } from '@/features/community/NetworkPage'
@@ -310,6 +311,14 @@ export function App() {
           element={
             <AppPage>
               <ProPage />
+            </AppPage>
+          }
+        />
+        <Route
+          path="/nouveautes"
+          element={
+            <AppPage>
+              <UpdatesPage />
             </AppPage>
           }
         />
