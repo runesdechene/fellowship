@@ -3,12 +3,14 @@
  *            d'ami en attente, avec un bouton vers la page Communauté.
  * POURQUOI — Uriel, 19/10/2026 : il faut que les exposants aient envie de se connecter entre eux ;
  *            l'état du réseau se voit dès l'arrivée, pas seulement sur la page Communauté.
+ *            Seulement s'il y a du nouveau — une demande d'ami, un nouvel abonné (ceux de la cloche) :
+ *            sinon la carte se tait (Uriel, 19/10/2026).
  * ATTENTION — une lecture ratée tait la carte : le tableau de bord ne s'arrête pas pour elle.
  */
 import { Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useTransitionNavigate } from '@/lib/navigation'
-import { peopleCount, requestsLabel } from '@/lib/network'
+import { newFollowers, peopleCount, requestsLabel } from '@/lib/network'
 import { useNetwork } from '@/features/community/useNetwork'
 
 export function CommunitySummary() {
@@ -18,6 +20,7 @@ export function CommunitySummary() {
 
   const { friends, followers, requests } = network
   const waiting = requests.length > 0
+  if (!waiting && newFollowers(followers, new Date()).length === 0) return null
   return (
     <section className="dashboard__section community-summary">
       <Users size={20} strokeWidth={1.8} className="community-summary__icon" />
