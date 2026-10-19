@@ -422,6 +422,48 @@
   color: var(--ink-waiting);
 }
 
+/* --- Téléphone ------------------------------------------------------------ */
+/* Comme la création : une colonne, l'aperçu s'efface, les boutons au pouce. */
+@media (width <= 760px) {
+  .edit-event {
+    padding: var(--space-16) var(--mobile-gutter) var(--space-40);
+  }
+
+  .edit-event__bar {
+    flex-wrap: wrap;
+  }
+
+  .edit-event__bar > .button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .edit-event__error {
+    width: 100%;
+  }
+
+  .edit-event__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .edit-event__body .edit-preview {
+    display: none;
+  }
+
+  .edit-event__title {
+    font: var(--type-create-ask-mobile);
+  }
+
+  /* Le nom du fichier peut être long : il passe à la ligne au lieu de pousser la page. */
+  .edit-poster__side {
+    min-width: 0;
+  }
+
+  .edit-poster__name {
+    overflow-wrap: anywhere;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .preview-toggle__option,
   .edit-event__back,
