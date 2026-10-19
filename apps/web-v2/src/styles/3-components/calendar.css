@@ -289,14 +289,19 @@
 
 /* La pastille garde sa taille : c'est le nom qui passe à la ligne, jamais la pastille qui déborde
    de la colonne (« Dossier envoyé » perdait son bord droit, Uriel, 11/10/2026). */
-/* Les amis sous le lieu : le téléphone seul, l'ordinateur les pose sur l'affiche. */
+/* Les amis sous la date, visages et noms, comme dans l'Explorer. */
 .poster-card__friends {
-  display: none;
+  display: flex;
   align-items: center;
   gap: var(--space-6);
   margin-top: var(--space-4);
   font: var(--type-list-meta);
   color: var(--ink-soft);
+}
+
+.poster-card__friends b {
+  font-weight: var(--weight-semibold);
+  color: var(--ink-title);
 }
 
 .poster-card__face {
@@ -405,17 +410,9 @@
     width: var(--calendar-mobile-column);
   }
 
-  /* Une affiche moins haute, et les amis sous le lieu plutôt que sur l'affiche. */
+  /* Une affiche moins haute. */
   .poster-card {
     --poster-art-height: var(--calendar-mobile-poster-height);
-  }
-
-  .poster-card .poster-art__friends {
-    display: none;
-  }
-
-  .poster-card__friends {
-    display: flex;
   }
 }
 
