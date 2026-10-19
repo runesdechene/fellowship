@@ -11875,7 +11875,7 @@
       "label": "formatDateRange()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\features\\explorer\\ExploreCard.tsx",
-      "source_location": "L113",
+      "source_location": "L100",
       "id": "explorecard_formatdaterange",
       "community": 247,
       "norm_label": "formatdaterange()"
@@ -32229,7 +32229,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\features\\explorer\\ExploreCard.tsx",
-      "source_location": "L113",
+      "source_location": "L100",
       "weight": 1.0,
       "_src": "apps_web_v2_src_features_explorer_explorecard_tsx",
       "_tgt": "explorecard_formatdaterange",
