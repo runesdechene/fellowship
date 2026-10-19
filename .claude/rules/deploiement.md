@@ -11,15 +11,19 @@ paths:
 > Netlify, service worker, embeds. Ce qui casse en ligne sans casser en local.
 > Regroupé le 25/09/2026 depuis la mémoire locale, pour que ce savoir voyage avec le dépôt.
 
-## Les deux sites et le cycle de déploiement
+## Le site et le cycle de déploiement
 
 Depuis le 07/10/2026 : **déploiement manuel uniquement**. L'auto-deploy GitHub est coupé
 (`stop_builds: true`) — un push sur `main` ne déploie rien.
 
-| Site                | Id                                     | Sert                                   | Dossier         |
-| ------------------- | -------------------------------------- | -------------------------------------- | --------------- |
-| `fellowship-app`    | `8c479753-ecff-4c88-8069-2b25e7514925` | `flw.sh` (V1)                          | `apps/web`      |
-| `fellowship-web-v2` | `fba73713-7b5e-4750-a8e2-b8e62e6ae4f7` | `flw.sh/v2/*` via redirection de la V1 | `apps/web-v2`   |
+**Depuis la bascule (lot 12, 19/10/2026), un seul site sert `flw.sh` : la V2.**
+
+| Site                | Id                                     | Sert                         | Dossier       |
+| ------------------- | -------------------------------------- | ---------------------------- | ------------- |
+| `fellowship-app`    | `8c479753-ecff-4c88-8069-2b25e7514925` | `flw.sh` (la V2, à la racine) | `apps/web-v2` |
+| `fellowship-web-v2` | `fba73713-7b5e-4750-a8e2-b8e62e6ae4f7` | plus rien (l'ancienne `/v2/`) | —             |
+
+La V1 (`apps/web`) n'est plus déployée nulle part ; son code reste dans le dépôt.
 
 **Déployer depuis le dossier de l'app** : la CLI y lit `netlify.toml` (redirections, en-têtes).
 Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirections (05/10/2026).
@@ -28,35 +32,30 @@ Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirect
 - **`--site` prend l'id, pas le nom** : `--site fellowship-web-v2` répondait « Not Found » (chez
   RdC c'était l'inverse — ne pas s'y fier).
 - **`--dir` en chemin absolu** : la CLI a résolu `--dir dist` depuis la racine du dépôt et publié
-  le vieux `dist/` de la racine (un build de la V2 sans `/v2/`). Après un déploiement, comparer
-  le hash du JS servi à celui du build local.
+  le vieux `dist/` de la racine. Après un déploiement, comparer le hash du JS servi à celui du
+  build local.
 - **`--no-build`** : le build est fait en local, le `.env` racine fournit les variables.
 
-**La V1 passe d'abord en brouillon** (sans `--prod`) : vérifier sur l'URL unique les en-têtes
-(CSP, `frame-ancestors *` sur `/*/embed`, cache d'une heure sur `/embed.js`) et `/v2/`, puis
-seulement `--prod`.
+**Toujours en brouillon d'abord**, puis `--prod` sur le même `dist/` (le script de prod ne
+rebâtit pas : il publie exactement ce qui a été vérifié).
 
 ```bash
-R="$(git rev-parse --show-toplevel)"
-# V1 — depuis apps/web : brouillon, vérifications, puis prod
-pnpm build && netlify deploy --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
-netlify deploy --prod --no-build --dir "$R/apps/web/dist" --site 8c479753-ecff-4c88-8069-2b25e7514925
-# V2 — `pnpm deploy:v2` depuis n'importe où dans le dépôt fait exactement ceci (script cmd : Windows)
-pnpm build && netlify deploy --prod --no-build --dir "$R/apps/web-v2/dist" --site fba73713-7b5e-4750-a8e2-b8e62e6ae4f7
+pnpm deploy:v2        # build + brouillon sur fellowship-app : vérifier l'URL unique
+pnpm deploy:v2:prod   # publie le même dist/ sur flw.sh
 ```
 
-**Vérifier après chaque déploiement** : `curl -s https://flw.sh/v2/ | grep -o 'src="/v2/assets/[^"]*"'`
-(la V2 répond sous `/v2/`) et `curl -s https://flw.sh/sw.js | grep -c v2` (la denylist est là).
+**Vérifier, sur le brouillon puis sur `flw.sh`** (`curl -sI`) : la CSP sur `/` ;
+`frame-ancestors *` sur `/<vitrine>/embed` ; `max-age=3600` sur `/embed.js` ; `no-cache` sur
+`/sw.js` et `/version.json` ; une 301 de la V1 (`/abonnement` → `/pro`) et de l'ancienne V2
+(`/v2/pro?r=X` → `/pro?r=X`).
 
-## Le service worker de la V1 doit ignorer `/v2`
+## Le service worker de la V1, remplacé à la bascule
 
-**Le piège** : la PWA de la V1 a une portée `/`. Sans exclusion, sa navigation de repli sert le
-shell de la V1 à la place de `/v2/` — chez tous ceux qui ont déjà la V1 installée, et rien ne se
-voit dans un navigateur neuf.
-
-**How to apply :** garder `/^\/v2(\/|$)/` dans `navigateFallbackDenylist`
-(`apps/web/vite.config.ts`). Vérifier dans `apps/web/dist/sw.js` après un changement de config
-PWA, puis en prod sur un navigateur qui avait déjà la V1 (recharger deux fois).
+La V1 avait un service worker Workbox à `/sw.js`, portée `/`, qui servait sa coque depuis son
+cache. Le `sw.js` de la V2 est publié à la **même adresse** : le navigateur le prend comme mise à
+jour. À son activation, il supprime les caches `workbox-*` et, s'il en a trouvé, recharge les
+fenêtres ouvertes (`apps/web-v2/public/sw.js`). **Ne jamais renommer ni déplacer `/sw.js`** :
+un téléphone qui a encore la V1 ne serait plus jamais mis à jour.
 
 ## reference_netlify_header_order
 

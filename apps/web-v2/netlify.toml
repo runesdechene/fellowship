@@ -1,8 +1,127 @@
-# Site fellowship-web-v2 — joint par la V1 via la redirection /v2/* (apps/web/netlify.toml).
-# Il sert dist/ à sa racine ; tout chemin inconnu revient à index.html (le routeur décide).
+# Site fellowship-app : il porte le domaine flw.sh et sert la V2 à sa racine depuis la bascule
+# (lot 12, 19/10/2026). La V1 n'est plus servie. Déploiement : .claude/rules/deploiement.md.
 [build]
   command = "pnpm build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Les adresses de la V1 et de l'ancienne V2 sous /v2/ mènent à leur équivalent (301 : le
+# référencement suit). La query string (?r= du parrainage) est conservée par Netlify.
+[[redirects]]
+  from = "/v2/*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/login"
+  to = "/connexion"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/auth/callback"
+  to = "/connexion"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/onboarding"
+  to = "/bienvenue"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tableau-de-bord"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/mes-dates"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/notifications"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/carte"
+  to = "/explorer"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/suivis"
+  to = "/communaute"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/mes-createurs"
+  to = "/communaute"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/profil"
+  to = "/reglages"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/boutique"
+  to = "/pro"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/abonnement"
+  to = "/pro"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/admin/events"
+  to = "/admin/evenements"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/admin/users"
+  to = "/admin/comptes"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/admin/tags"
+  to = "/admin/categories"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/admin/testimonials"
+  to = "/admin/temoignages"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/admin/reports"
+  to = "/admin/signalements"
+  status = 301
+  force = true
 
 # Un fichier de build introuvable (onglet resté sur une ancienne version) répond 404, et non
 # index.html : sinon le navigateur reçoit du HTML à la place d'un script, mis en cache pour un an.
@@ -15,3 +134,56 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# En-têtes repris de la V1 à l'identique (la V2 tournait déjà sous eux, servie par sa redirection).
+# X-Frame-Options est omis exprès : `frame-ancestors` règle l'intégration chemin par chemin.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self), interest-cohort=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co https://tiles.openfreemap.org; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://tiles.openfreemap.org https://api-adresse.data.gouv.fr https://photon.komoot.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self' blob:;"
+
+# Le calendrier intégré : public, il doit pouvoir s'afficher dans le site d'un artiste.
+[[headers]]
+  for = "/*/embed"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(self), interest-cohort=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co https://tiles.openfreemap.org; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://tiles.openfreemap.org; frame-ancestors *; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self' blob:;"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ATTENTION — les exceptions viennent APRÈS /*.js : à plusieurs règles, Netlify applique la
+# DERNIÈRE du fichier, pas la plus précise (deploiement.md). Avant, l'immuable les écrasait.
+[[headers]]
+  for = "/embed.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# Le service worker et la version se relisent toujours : un sw.js figé un an bloquerait les mises
+# à jour, un version.json en cache cacherait le bandeau « Recharger ».
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/version.json"
+  [headers.values]
+    Cache-Control = "no-cache"

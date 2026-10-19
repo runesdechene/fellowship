@@ -1,6 +1,6 @@
 /**
  * QUOI     — le point d'entrée : monte l'app dans #root, avec le routeur et la session.
- * POURQUOI — le routeur a pour base /v2 : la V2 vit sous flw.sh/v2/, la V1 à la racine.
+ * POURQUOI — la V2 vit à la racine de flw.sh depuis la bascule (lot 12).
  */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -13,13 +13,6 @@ import './styles/index.css'
 
 // Avant le premier rendu : la page ne doit jamais s'afficher un instant dans l'autre thème.
 applyTheme(currentTheme())
-
-// « flw.sh/v2 » sans la barre finale sert bien la V2 (netlify.toml de la V1), mais le routeur, de
-// base « /v2/ », n'y reconnaît rien et la page reste vide. On ajoute la barre avant le premier rendu.
-if (`${window.location.pathname}/` === import.meta.env.BASE_URL) {
-  const { search, hash } = window.location
-  window.history.replaceState(null, '', `${import.meta.env.BASE_URL}${search}${hash}`)
-}
 
 // Un lien de parrainage (`?r=`) arrive sur n'importe quelle page : le code attend l'inscription.
 captureReferral(window.location.search)

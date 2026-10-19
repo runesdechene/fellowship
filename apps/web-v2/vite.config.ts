@@ -7,10 +7,9 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8')) as { version: st
 
 // Fellowship V2 — pas de Tailwind, pas de PWA : uniquement React + CSS natif.
 // Toute la mise en forme vit dans src/styles/ (voir docs/v2/DESIGN-SYSTEM.md).
-// Servie sous /v2/ : `base` préfixe tous les fichiers générés. En dev, le proxy sert la V1
-// sur le même port : lancer `pnpm dev` ET `pnpm dev:v2`, puis tout ouvrir sur :5174.
+// Servie à la racine de flw.sh depuis la bascule (lot 12, 19/10/2026) ; la V1 n'est plus servie.
 export default defineConfig({
-  base: '/v2/',
+  base: '/',
   envDir: path.resolve(__dirname, '../..'),
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
@@ -19,9 +18,6 @@ export default defineConfig({
   server: {
     port: 5174,
     strictPort: true,
-    proxy: {
-      '^/(?!v2(/|$)).*': { target: 'http://localhost:5173', ws: true },
-    },
   },
   resolve: {
     alias: {
