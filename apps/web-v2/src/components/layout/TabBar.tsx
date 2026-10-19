@@ -5,10 +5,12 @@
  *            suit la maquette 2123:66 ; l'administration et le thème s'y ajoutent, comme sur ordinateur.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
- *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026).
+ *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026). Un
+ *            autre sur « Moi » : une nouveauté attend, et le menu mène aux Nouveautés (maquette 2371:443).
  * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
 import {
+  Bell,
   CalendarDays,
   ChartColumn,
   Check,
@@ -40,7 +42,13 @@ const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }>
 // Au-delà de cette descente, la feuille lâchée se ferme ; en deçà, elle remonte.
 const SWIPE_TO_CLOSE = 80
 
-export function TabBar({ friendRequests }: { friendRequests: number }) {
+export function TabBar({
+  friendRequests,
+  updatesUnread,
+}: {
+  friendRequests: number
+  updatesUnread: boolean
+}) {
   const { actor, actors, entities, person, switchActor, signOut } = useAuth()
   const go = useTransitionNavigate()
   // Les mêmes accès que la barre latérale : sa vitrine, et l'administration pour un admin.
@@ -133,6 +141,14 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
             <Settings size={18} strokeWidth={1.8} />
             <span>Réglages</span>
           </NavLink>
+          <NavLink to="/nouveautes" className="tab-sheet__item tab-sheet__link" onClick={close}>
+            <span className="version-line__bell">
+              <Bell size={18} strokeWidth={1.8} />
+              {updatesUnread && <span className="version-line__dot" />}
+            </span>
+            <span className="tab-sheet__grow">Nouveautés</span>
+            <span className="tab-sheet__version">Fellowship {__APP_VERSION__}</span>
+          </NavLink>
           <NavLink
             to="/bienvenue?nouvelle-enseigne"
             className="tab-sheet__item tab-sheet__link"
@@ -199,6 +215,7 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
         >
           <Avatar className="tab-bar__avatar" src={actor?.avatarUrl} name={actor?.label} />
           <span>Moi</span>
+          {updatesUnread && <span className="tab-bar__dot" aria-label="Une nouveauté à lire" />}
         </button>
       </nav>
     </>

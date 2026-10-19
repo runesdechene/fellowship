@@ -1,6 +1,7 @@
 /**
  * QUOI     — la barre latérale : repli, marque, carte de compte, les entrées de la maquette, et le
- *            fil « Activité du réseau » et l'interrupteur Clair / Sombre en bas.
+ *            fil « Activité du réseau », la ligne de version (les Nouveautés) et l'interrupteur
+ *            Clair / Sombre en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
  *            on ne pouvait pas accéder à sa propre vitrine).
@@ -32,6 +33,7 @@ import { requestsLabel } from '@/lib/network'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
+import { VersionLine } from './VersionLine'
 
 /**
  * Les entrées de la maquette, Tableau de bord en tête, puis Réglages (Uriel, 10/10/2026).
@@ -91,9 +93,10 @@ interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
   friendRequests: number
+  updatesUnread: boolean
 }
 
-export function Sidebar({ collapsed, onToggle, friendRequests }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, friendRequests, updatesUnread }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
   const { actor, entities } = useAuth()
   const { pathname, search } = useLocation()
@@ -174,6 +177,7 @@ export function Sidebar({ collapsed, onToggle, friendRequests }: SidebarProps) {
 
       <div className="sidebar__foot">
         {!collapsed && <NetworkActivity />}
+        <VersionLine unread={updatesUnread} />
         <ThemeSwitch compact={collapsed} />
       </div>
     </aside>

@@ -1,0 +1,41 @@
+/**
+ * QUOI     — la ligne de version du pied de la barre latérale (components/layout/VersionLine.tsx)
+ *            et sa pastille.
+ * POURQUOI — maquette 2371:403 : sous l'activité du réseau, séparée par un filet ; texte doux une
+ *            fois lu, appuyé tant qu'une nouveauté attend, et la pastille de la brique des alertes.
+ */
+
+.version-line {
+  height: var(--version-line-height);
+  margin: var(--space-12) 0;
+  border-top: 1px solid var(--line-card);
+  border-radius: 0 0 var(--radius-nav) var(--radius-nav);
+  font: var(--type-version-line);
+}
+
+.version-line--unread,
+.version-line.sidebar__item--active {
+  border-top-color: transparent;
+  border-radius: var(--radius-nav);
+  font: var(--type-version-line-on);
+  color: var(--ink-title);
+}
+
+.version-line__bell {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  width: var(--version-line-bell-slot);
+}
+
+.version-line__dot {
+  position: absolute;
+  top: calc(-1 * var(--space-2));
+  right: var(--version-line-dot-offset);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border: 1.5px solid var(--surface-app);
+  border-radius: var(--radius-round);
+  background: var(--nav-alert-surface);
+}

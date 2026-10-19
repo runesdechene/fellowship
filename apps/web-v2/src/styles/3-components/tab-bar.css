@@ -146,6 +146,16 @@
     text-decoration: none;
   }
 
+  /* La ligne Nouveautés (maquette 2371:443) : la version en gris au bout. */
+  .tab-sheet__grow {
+    flex: 1;
+  }
+
+  .tab-sheet__version {
+    font: var(--type-updates-meta);
+    color: var(--ink-waiting);
+  }
+
   .tab-sheet__avatar {
     --avatar-size: var(--avatar-size-account);
   }

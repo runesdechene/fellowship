@@ -382,6 +382,14 @@
      l'état : c'est le fond qui change, jamais la position. */
   --sidebar-item-inset: var(--space-17);
   --sidebar-icon-gap: var(--space-15);
+  /* La ligne de version (maquette 2371:403) : plus basse qu'une entrée, la cloche dans le même
+     emplacement que les icônes de la navigation. */
+  --version-line-height: 38px;
+  --version-line-bell-slot: 24px;
+  --version-line-dot-offset: var(--space-2);
+  --type-version-line: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-version-line-on: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
   --sidebar-item-motion: var(--duration-fast) var(--ease-out);
 
   /* Barre du haut : elle flotte au-dessus du contenu, comme sur la maquette */

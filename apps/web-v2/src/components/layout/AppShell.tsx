@@ -3,12 +3,15 @@
  * POURQUOI — elle porte le PageChromeProvider : la page (enfant) déclare son décor, la barre du
  *            haut et le mur (frères) le rendent. Elle garde aussi le repli de la barre latérale,
  *            mémorisé sur l'appareil.
- *            Elle lit les demandes d'ami une fois pour la barre latérale et la barre d'onglets.
+ *            Elle lit les demandes d'ami et la pastille des Nouveautés une fois pour la barre
+ *            latérale et la barre d'onglets.
  * ATTENTION — `bare` retire la barre du haut : la création d'une date pose la sienne (lot 10b).
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useNetwork } from '@/features/community/useNetwork'
+import { useUpdatesUnread } from '@/features/updates/useUpdatesUnread'
+import { useAuth } from '@/lib/auth'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
@@ -39,20 +42,27 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
   // Les demandes d'ami, pour la pastille de Communauté : relues à chaque changement d'adresse.
-  const friendRequests = useNetwork(useLocation().pathname).network?.requests.length ?? 0
+  const { pathname } = useLocation()
+  const friendRequests = useNetwork(pathname).network?.requests.length ?? 0
+  const updatesUnread = useUpdatesUnread(pathname, useAuth().person?.actor_id)
 
   // Le fournisseur enveloppe TOUT : la page qui déclare son décor est un
   // enfant, la barre du haut et le mur qui le rendent sont ses frères.
   return (
     <PageChromeProvider>
       <div className={collapsed ? 'app-shell app-shell--collapsed' : 'app-shell'}>
-        <Sidebar collapsed={collapsed} onToggle={toggleSidebar} friendRequests={friendRequests} />
+        <Sidebar
+          collapsed={collapsed}
+          onToggle={toggleSidebar}
+          friendRequests={friendRequests}
+          updatesUnread={updatesUnread}
+        />
         <main className="app-shell__main">
           {!bare && <Topbar />}
           {children}
         </main>
         <PosterWall />
-        <TabBar friendRequests={friendRequests} />
+        <TabBar friendRequests={friendRequests} updatesUnread={updatesUnread} />
       </div>
     </PageChromeProvider>
   )
