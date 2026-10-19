@@ -7,7 +7,7 @@ import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { APP_URL } from '../_shared/app-url.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
-import { chunks, composeUpdateEmail } from '../_shared/update-mail.ts'
+import { chunks, composeUpdateEmail, releaseClaim } from '../_shared/update-mail.ts'
 
 const FROM = '"Fellowship" <nouveautes@flw.sh>'
 // La limite de l'envoi groupé de Resend.
@@ -38,8 +38,13 @@ Deno.serve(async (req) => {
     if (cErr) throw cErr
     if (!note) return json({ error: 'already_sent' }, 409)
 
+    // Une panne avant tout envoi rend la note envoyable : sinon seul un SQL la rattraperait.
+    const release = () => admin.from('app_updates').update({ email_sent_at: null }).eq('id', updateId)
     const { data: people, error: rErr } = await admin.rpc('app_update_email_recipients')
-    if (rErr) throw rErr
+    if (rErr) {
+      await release()
+      throw rErr
+    }
     const recipients = (people ?? []) as { email: string; token: string }[]
 
     let sent = 0
@@ -71,6 +76,10 @@ Deno.serve(async (req) => {
       else console.error('[app-update-email] lot', index, response.status, await response.text())
     }
 
+    if (releaseClaim(sent, recipients.length)) {
+      await release()
+      return json({ error: 'send_failed' }, 502)
+    }
     const { error: uErr } = await admin.from('app_updates').update({ email_count: sent }).eq('id', updateId)
     if (uErr) console.error('[app-update-email] compte', uErr)
     return json({ sent })

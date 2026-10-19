@@ -41,3 +41,9 @@ export function chunks<T>(list: T[], size: number): T[][] {
   for (let i = 0; i < list.length; i += size) lots.push(list.slice(i, i + size))
   return lots
 }
+
+/** Rien n'est parti alors qu'il y avait des destinataires : la note redevient envoyable (le même
+ *  Idempotency-Key rend le nouvel essai sûr). Dès qu'un lot est parti, jamais de second envoi. */
+export function releaseClaim(sent: number, recipients: number): boolean {
+  return recipients > 0 && sent === 0
+}

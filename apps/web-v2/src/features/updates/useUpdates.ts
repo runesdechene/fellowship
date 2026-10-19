@@ -97,6 +97,9 @@ export function useUpdates(personId: string | undefined) {
         const loaded = await loadUpdates()
         if (cancelled) return
         setState({ ...loaded, error: null })
+        // Le bouton se libère quand la relecture est là : avant, un second clic partirait de
+        // l'état d'avant (un cœur « pas mis » déjà mis).
+        setBusy(false)
       } catch (error) {
         if (cancelled) return
         setState({
@@ -104,6 +107,7 @@ export function useUpdates(personId: string | undefined) {
           profiles: new Map(),
           error: error instanceof Error ? error.message : 'Chargement impossible',
         })
+        setBusy(false)
       }
     }
     void run()
@@ -127,7 +131,6 @@ export function useUpdates(personId: string | undefined) {
       setProblem(null)
       const { error } = await action()
       if (error) setProblem(error.message)
-      setBusy(false)
       setRound((r) => r + 1)
     },
     [],

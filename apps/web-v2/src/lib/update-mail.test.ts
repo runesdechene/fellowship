@@ -4,7 +4,11 @@
  * POURQUOI — le fichier est pur (sans Deno) : on le teste ici, avec le reste.
  */
 import { describe, expect, it } from 'vitest'
-import { chunks, composeUpdateEmail } from '../../../../supabase/functions/_shared/update-mail'
+import {
+  chunks,
+  composeUpdateEmail,
+  releaseClaim,
+} from '../../../../supabase/functions/_shared/update-mail'
 
 const base = {
   title: 'La nouvelle\nFellowship est là',
@@ -46,5 +50,17 @@ describe('chunks', () => {
     const list = Array.from({ length: 250 }, (_, i) => i)
     expect(chunks(list, 100).map((lot) => lot.length)).toEqual([100, 100, 50])
     expect(chunks([], 100)).toEqual([])
+  })
+})
+
+describe('releaseClaim', () => {
+  it('rend la note à l’envoi quand aucun lot n’est parti', () => {
+    expect(releaseClaim(0, 41)).toBe(true)
+  })
+  it('garde la note envoyée dès qu’un lot est parti : jamais de doublon', () => {
+    expect(releaseClaim(100, 250)).toBe(false)
+  })
+  it('sans destinataire, la note reste envoyée', () => {
+    expect(releaseClaim(0, 0)).toBe(false)
   })
 })

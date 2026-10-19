@@ -41,7 +41,8 @@ const WEIGHTS: { key: UpdateWeight; title: string; detail: string }[] = [
 interface Props {
   editing: PublishedUpdate | null
   audience: number | null
-  onDone: () => void
+  /** `notice` : ce qu'il faut savoir une fois la note publiée (un e-mail raté). */
+  onDone: (notice?: string) => void
 }
 
 export function UpdateForm({ editing, audience, onDone }: Props) {
@@ -53,13 +54,14 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
   const ready = draft.version.trim() && draft.title.trim() && draft.body.trim()
   const set = (fields: Partial<UpdateDraft>) => setDraft((current) => ({ ...current, ...fields }))
 
-  async function run(action: () => Promise<unknown>) {
+  /** `action` rend ce qu'il faudra savoir une fois la note partie (ou null). */
+  async function run(action: () => Promise<string | null>) {
     setBusy(true)
     setProblem(null)
     try {
-      await action()
+      const result = await action()
       setConfirming(false)
-      onDone()
+      onDone(result ?? undefined)
     } catch (failure) {
       setProblem(failure instanceof Error ? failure.message : 'L’enregistrement n’a pas abouti.')
     }
@@ -69,9 +71,13 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
   function submit(event: FormEvent) {
     event.preventDefault()
     if (!ready || busy) return
-    if (editing) void run(() => saveUpdate(editing.id, draft))
+    if (editing)
+      void run(async () => {
+        await saveUpdate(editing.id, draft)
+        return null
+      })
     else if (draft.weight === 'big') setConfirming(true)
-    else void run(() => publishUpdate(draft))
+    else void run(async () => (await publishUpdate(draft)).mailProblem)
   }
 
   async function addImage(file: File | undefined) {
@@ -182,7 +188,7 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
           confirmLabel="Publier et envoyer"
           busy={busy}
           problem={problem}
-          onConfirm={() => void run(() => publishUpdate(draft))}
+          onConfirm={() => void run(async () => (await publishUpdate(draft)).mailProblem)}
           onClose={() => setConfirming(false)}
         />
       )}

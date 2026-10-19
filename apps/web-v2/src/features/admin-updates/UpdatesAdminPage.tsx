@@ -10,7 +10,12 @@ import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { formatDayMonthShort } from '@/lib/dates'
 import { UpdateForm } from './UpdateForm'
-import { deleteUpdate, useAdminUpdates, type PublishedUpdate } from './useAdminUpdates'
+import {
+  deleteUpdate,
+  sendUpdateEmail,
+  useAdminUpdates,
+  type PublishedUpdate,
+} from './useAdminUpdates'
 
 export function UpdatesAdminPage() {
   const { updates, audience, error, reload } = useAdminUpdates()
@@ -20,10 +25,22 @@ export function UpdatesAdminPage() {
   const [doomed, setDoomed] = useState<PublishedUpdate | null>(null)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+  // Ce qui reste à savoir après une publication : un e-mail qui n'est pas parti.
+  const [notice, setNotice] = useState<string | null>(null)
 
   function startNew() {
     setEditing(null)
     setFormKey((k) => k + 1)
+  }
+
+  async function mail(update: PublishedUpdate) {
+    setNotice(null)
+    try {
+      await sendUpdateEmail(update.id)
+    } catch (failure) {
+      setNotice(failure instanceof Error ? failure.message : 'L’e-mail n’est pas parti.')
+    }
+    reload()
   }
 
   async function remove(update: PublishedUpdate) {
@@ -54,12 +71,14 @@ export function UpdatesAdminPage() {
         </Button>
       </header>
       {error && <p className="admin-page__error">{error}</p>}
+      {notice && <p className="admin-page__error">{notice}</p>}
       <div className="admin-updates">
         <UpdateForm
           key={editing ? editing.id : `nouvelle-${String(formKey)}`}
           editing={editing}
           audience={audience}
-          onDone={() => {
+          onDone={(next) => {
+            setNotice(next ?? null)
             startNew()
             reload()
           }}
@@ -100,6 +119,11 @@ export function UpdatesAdminPage() {
                     <Mail size={13} strokeWidth={1.9} />
                     E-mail envoyé à {update.emailCount}
                   </span>
+                )}
+                {update.weight === 'big' && update.emailCount === null && (
+                  <button type="button" onClick={() => void mail(update)}>
+                    Envoyer l’e-mail
+                  </button>
                 )}
                 <button type="button" onClick={() => setEditing(update)}>
                   Modifier
