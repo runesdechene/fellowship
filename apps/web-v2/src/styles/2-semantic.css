@@ -1271,7 +1271,7 @@
   /* =========================================================================
      TÉLÉPHONE — la barre d'onglets et les marges d'écran étroit
      ====================================================================== */
-  --tab-bar-height: 80px;
+  --tab-bar-height: 84px;
   /* La taille des icônes de la barre : l'avatar de « Moi » ne pousse pas son nom plus bas. */
   --tab-bar-avatar: 22px;
   --tab-sheet-veil: var(--who-goes-veil);
