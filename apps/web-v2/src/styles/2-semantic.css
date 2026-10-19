@@ -1293,6 +1293,7 @@
   --mobile-gutter: var(--space-20);
   --mobile-padding-top: var(--space-80);
   --calendar-mobile-column: 240px;
+  --calendar-mobile-poster-height: 280px;
   --explore-mobile-card: 180px;
   --mobile-poster-height: 420px;
   --vitrine-mobile-banner: 160px;
