@@ -32,7 +32,7 @@ export function CreateBar({ step, reached, onStep, onQuit, draft }: CreateBarPro
           const content = (
             <>
               <span className="create-bar__number">{index + 1}</span>
-              {label}
+              <span className="create-bar__label">{label}</span>
             </>
           )
           return (

@@ -445,6 +445,94 @@ button.create-bar__step:hover {
   text-decoration: underline;
 }
 
+/* --- Téléphone ------------------------------------------------------------ */
+/* Une seule colonne : la question prend la largeur, l'aperçu s'efface (comme celui de
+   l'accueil), la barre ne garde que les numéros et le nom de l'étape en cours. */
+@media (width <= 760px) {
+  .create {
+    padding: var(--space-16) var(--mobile-gutter) var(--space-40);
+  }
+
+  .create-bar {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+  }
+
+  .create-bar__steps {
+    justify-self: end;
+    gap: var(--space-2);
+  }
+
+  .create-bar__link {
+    width: var(--space-8);
+  }
+
+  .create-bar__label {
+    white-space: nowrap;
+  }
+
+  .create-bar__step:not(.create-bar__step--current) {
+    padding-right: var(--space-6);
+  }
+
+  .create-bar__step:not(.create-bar__step--current) .create-bar__label {
+    display: none;
+  }
+
+  .create-bar__draft {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .create-bar__draft:empty {
+    display: none;
+  }
+
+  .create__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .create__body .preview {
+    display: none;
+  }
+
+  .create__ask {
+    font: var(--type-create-ask-mobile);
+  }
+
+  .create__hint {
+    margin-bottom: var(--space-24);
+  }
+
+  /* Les boutons au pouce, sur toute la largeur ; « Effacer le brouillon » passe dessous. */
+  .create__actions {
+    flex-wrap: wrap;
+  }
+
+  .create__actions-end {
+    width: 100%;
+  }
+
+  .create__actions-end > * {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .create__discard {
+    order: 1;
+  }
+
+  .dupe {
+    flex-wrap: wrap;
+  }
+
+  .dupe__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tag,
   .address__places {
