@@ -16561,19 +16561,19 @@
       "norm_label": "peoplecount()"
     },
     {
-      "label": "wallOf()",
+      "label": "facesOf()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L141",
-      "id": "network_wallof",
+      "source_location": "L138",
+      "id": "network_facesof",
       "community": 16,
-      "norm_label": "wallof()"
+      "norm_label": "facesof()"
     },
     {
       "label": "newcomersPhrase()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L150",
+      "source_location": "L145",
       "id": "network_newcomersphrase",
       "community": 16,
       "norm_label": "newcomersphrase()"
@@ -16582,7 +16582,7 @@
       "label": "requestsLabel()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L160",
+      "source_location": "L155",
       "id": "network_requestslabel",
       "community": 16,
       "norm_label": "requestslabel()"
@@ -38019,19 +38019,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L141",
+      "source_location": "L138",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_ts",
-      "_tgt": "network_wallof",
+      "_tgt": "network_facesof",
       "source": "apps_web_v2_src_lib_network_ts",
-      "target": "network_wallof",
+      "target": "network_facesof",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L150",
+      "source_location": "L145",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_ts",
       "_tgt": "network_newcomersphrase",
@@ -38043,7 +38043,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L160",
+      "source_location": "L155",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_ts",
       "_tgt": "network_requestslabel",
