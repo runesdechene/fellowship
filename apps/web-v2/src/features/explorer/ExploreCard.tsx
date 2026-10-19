@@ -1,7 +1,7 @@
 /**
  * QUOI     — une carte de l'Explorer : l'affiche (« Nouveau » si la date vient d'être ajoutée,
  *            l'étoile « Repérer » en haut à droite), le nom, la plage, la ville, et les amis qui y
- *            vont.
+ *            vont — leurs visages sur la même ligne que leurs noms (Uriel, 19/10/2026).
  * POURQUOI — on parcourt l'Explorer à l'affiche, comme le calendrier ; l'étoile pose la date en
  *            « Intéressé » sans quitter l'écran.
  * ATTENTION — une date déjà engagée (dossier envoyé, inscrit) garde son étoile pleine et ne se
@@ -11,6 +11,7 @@
 import { Check, Star } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { PosterArt } from '@/components/ui/PosterArt'
 import { ProBubble } from '@/components/ui/ProBubble'
 import { formatDateRange } from '@/lib/dates'
@@ -18,6 +19,8 @@ import { nameLine } from '@/lib/name-line'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import type { ExploreEvent } from './useExplorer'
+
+const MAX_FACES = 3
 
 interface ExploreCardProps {
   event: ExploreEvent
@@ -56,7 +59,6 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
           tags={event.tags}
           startDate={event.startDate}
           daysAway={0}
-          friends={event.friends}
           badge={event.isNew ? 'Nouveau' : null}
         />
       </Link>
@@ -99,8 +101,20 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
         </span>
         {goers && (
           <span className="explore-card__goers">
-            <b>{goers.first}</b>
-            {goers.rest}
+            <AvatarStack>
+              {event.friends.slice(0, MAX_FACES).map((friend) => (
+                <Avatar
+                  key={friend.id}
+                  className="explore-card__face"
+                  src={friend.avatarUrl}
+                  name={friend.name}
+                />
+              ))}
+            </AvatarStack>
+            <span>
+              <b>{goers.first}</b>
+              {goers.rest}
+            </span>
           </span>
         )}
       </Link>

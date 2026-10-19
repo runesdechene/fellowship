@@ -20,7 +20,8 @@ interface PosterArtProps {
   tags: readonly string[] | null
   startDate: Date
   daysAway: number
-  friends: Friend[]
+  /** Les amis présents, en bas de l'affiche ; l'Explorer les pose sous le nom, d'où l'option. */
+  friends?: Friend[]
   /** Le texte du coin haut gauche ; par défaut, le compte à rebours. */
   badge?: string | null
   action?: ReactNode
@@ -31,7 +32,7 @@ export function PosterArt({
   tags,
   startDate,
   daysAway,
-  friends,
+  friends = [],
   badge,
   action,
 }: PosterArtProps) {

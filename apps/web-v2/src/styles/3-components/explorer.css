@@ -355,6 +355,18 @@
   color: var(--ink-soft);
 }
 
+.explore-card__goers {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.explore-card__face {
+  --avatar-size: var(--avatar-size-pile);
+
+  border: 2px solid var(--surface-card);
+}
+
 .explore-card__goers b {
   font-weight: var(--weight-semibold);
   color: var(--ink-title);
