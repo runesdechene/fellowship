@@ -57,7 +57,7 @@
   /* Les boutons-icônes de la barre du haut (retour, cloche) : le jour, posés sur le blé et
      blanchis au survol — l'inverse des autres boutons (Uriel, 11/10/2026). */
   --icon-button-surface: var(--sand-200);
-  --icon-button-surface-hover: var(--sand-0);
+  --icon-button-surface-hover: var(--sand-300); /* en clair, le survol fonce d’un cran */
   --surface-chip-neutral: var(--sand-200); /* pastille sans couleur */
   --surface-bar: var(--sand-200); /* mois qui portent au moins une date */
   --surface-bar-empty: var(--sand-300); /* mois à zéro — moins marqué */
