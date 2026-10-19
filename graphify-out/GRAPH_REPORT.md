@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-10-19)
 
 ## Corpus Check
-- 764 files · ~1,019,346 words
+- 764 files · ~1,019,744 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2268 nodes · 1861 edges · 749 communities detected
+- 2269 nodes · 1862 edges · 749 communities detected
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -863,16 +863,16 @@ Cohesion: 0.32
 Nodes (11): applyCoupon(), call(), changeEmail(), deleteAccount(), fetchCoupons(), fetchPayments(), previewDeletion(), reactivateAccount() (+3 more)
 
 ### Community 16 - "Community 16"
+Cohesion: 0.2
+Nodes (3): fetchNetwork(), readFollows(), readMembers()
+
+### Community 17 - "Community 17"
 Cohesion: 0.27
 Nodes (7): defaultRouteForActor(), isPublicProfilePath(), isRouteValidFor(), mobilePrimaryFor(), mobileSecondaryFor(), navItemsFor(), planForActor()
 
-### Community 17 - "Community 17"
+### Community 18 - "Community 18"
 Cohesion: 0.2
 Nodes (2): handleJoin(), handleMarkApplied()
-
-### Community 18 - "Community 18"
-Cohesion: 0.22
-Nodes (3): fetchNetwork(), readFollows(), readMembers()
 
 ### Community 19 - "Community 19"
 Cohesion: 0.25

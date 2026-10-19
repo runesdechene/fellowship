@@ -5730,7 +5730,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L1",
       "id": "apps_web_src_lib_navmodel_ts",
-      "community": 16,
+      "community": 17,
       "norm_label": "navmodel.ts"
     },
     {
@@ -5739,7 +5739,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L42",
       "id": "navmodel_navitemsfor",
-      "community": 16,
+      "community": 17,
       "norm_label": "navitemsfor()"
     },
     {
@@ -5748,7 +5748,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L48",
       "id": "navmodel_mobileprimaryfor",
-      "community": 16,
+      "community": 17,
       "norm_label": "mobileprimaryfor()"
     },
     {
@@ -5757,7 +5757,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L54",
       "id": "navmodel_mobilesecondaryfor",
-      "community": 16,
+      "community": 17,
       "norm_label": "mobilesecondaryfor()"
     },
     {
@@ -5766,7 +5766,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L60",
       "id": "navmodel_entrystate",
-      "community": 16,
+      "community": 17,
       "norm_label": "entrystate()"
     },
     {
@@ -5775,7 +5775,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L85",
       "id": "navmodel_ispublicprofilepath",
-      "community": 16,
+      "community": 17,
       "norm_label": "ispublicprofilepath()"
     },
     {
@@ -5784,7 +5784,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L95",
       "id": "navmodel_isroutevalidfor",
-      "community": 16,
+      "community": 17,
       "norm_label": "isroutevalidfor()"
     },
     {
@@ -5793,7 +5793,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L104",
       "id": "navmodel_vitrinehref",
-      "community": 16,
+      "community": 17,
       "norm_label": "vitrinehref()"
     },
     {
@@ -5802,7 +5802,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L112",
       "id": "navmodel_planforactor",
-      "community": 16,
+      "community": 17,
       "norm_label": "planforactor()"
     },
     {
@@ -5811,7 +5811,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L126",
       "id": "navmodel_iscertified",
-      "community": 16,
+      "community": 17,
       "norm_label": "iscertified()"
     },
     {
@@ -5820,7 +5820,7 @@
       "source_file": "apps\\web\\src\\lib\\navModel.ts",
       "source_location": "L135",
       "id": "navmodel_defaultrouteforactor",
-      "community": 16,
+      "community": 17,
       "norm_label": "defaultrouteforactor()"
     },
     {
@@ -6711,7 +6711,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L1",
       "id": "apps_web_src_pages_eventpage_tsx",
-      "community": 17,
+      "community": 18,
       "norm_label": "eventpage.tsx"
     },
     {
@@ -6720,7 +6720,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L43",
       "id": "eventpage_hashname",
-      "community": 17,
+      "community": 18,
       "norm_label": "hashname()"
     },
     {
@@ -6729,7 +6729,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L49",
       "id": "eventpage_formatdate",
-      "community": 17,
+      "community": 18,
       "norm_label": "formatdate()"
     },
     {
@@ -6738,7 +6738,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L63",
       "id": "eventpage_handleback",
-      "community": 17,
+      "community": 18,
       "norm_label": "handleback()"
     },
     {
@@ -6747,7 +6747,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L136",
       "id": "eventpage_handlejoin",
-      "community": 17,
+      "community": 18,
       "norm_label": "handlejoin()"
     },
     {
@@ -6756,7 +6756,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L150",
       "id": "eventpage_handleleave",
-      "community": 17,
+      "community": 18,
       "norm_label": "handleleave()"
     },
     {
@@ -6765,7 +6765,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L157",
       "id": "eventpage_handlemarkapplied",
-      "community": 17,
+      "community": 18,
       "norm_label": "handlemarkapplied()"
     },
     {
@@ -6774,7 +6774,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L167",
       "id": "eventpage_sharepage",
-      "community": 17,
+      "community": 18,
       "norm_label": "sharepage()"
     },
     {
@@ -6783,7 +6783,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L177",
       "id": "eventpage_startediting",
-      "community": 17,
+      "community": 18,
       "norm_label": "startediting()"
     },
     {
@@ -6792,7 +6792,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L210",
       "id": "eventpage_handlesaveedit",
-      "community": 17,
+      "community": 18,
       "norm_label": "handlesaveedit()"
     },
     {
@@ -6801,7 +6801,7 @@
       "source_file": "apps\\web\\src\\pages\\EventPage.tsx",
       "source_location": "L297",
       "id": "eventpage_handleaddposter",
-      "community": 17,
+      "community": 18,
       "norm_label": "handleaddposter()"
     },
     {
@@ -16474,7 +16474,7 @@
       "label": "member()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.test.ts",
-      "source_location": "L18",
+      "source_location": "L19",
       "id": "network_test_member",
       "community": 520,
       "norm_label": "member()"
@@ -16485,7 +16485,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L1",
       "id": "apps_web_v2_src_lib_network_ts",
-      "community": 18,
+      "community": 16,
       "norm_label": "network.ts"
     },
     {
@@ -16494,7 +16494,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L37",
       "id": "network_readfollows",
-      "community": 18,
+      "community": 16,
       "norm_label": "readfollows()"
     },
     {
@@ -16503,7 +16503,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L58",
       "id": "network_readmembers",
-      "community": 18,
+      "community": 16,
       "norm_label": "readmembers()"
     },
     {
@@ -16512,7 +16512,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L87",
       "id": "network_fetchnetwork",
-      "community": 18,
+      "community": 16,
       "norm_label": "fetchnetwork()"
     },
     {
@@ -16521,7 +16521,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L106",
       "id": "network_followback",
-      "community": 18,
+      "community": 16,
       "norm_label": "followback()"
     },
     {
@@ -16530,7 +16530,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L111",
       "id": "network_declinerequest",
-      "community": 18,
+      "community": 16,
       "norm_label": "declinerequest()"
     },
     {
@@ -16539,7 +16539,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L116",
       "id": "network_newfollowers",
-      "community": 18,
+      "community": 16,
       "norm_label": "newfollowers()"
     },
     {
@@ -16548,7 +16548,7 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L128",
       "id": "network_kindlabel",
-      "community": 18,
+      "community": 16,
       "norm_label": "kindlabel()"
     },
     {
@@ -16557,25 +16557,34 @@
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
       "source_location": "L133",
       "id": "network_peoplecount",
-      "community": 18,
+      "community": 16,
       "norm_label": "peoplecount()"
+    },
+    {
+      "label": "wallOf()",
+      "file_type": "code",
+      "source_file": "apps\\web-v2\\src\\lib\\network.ts",
+      "source_location": "L141",
+      "id": "network_wallof",
+      "community": 16,
+      "norm_label": "wallof()"
     },
     {
       "label": "newcomersPhrase()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L138",
+      "source_location": "L150",
       "id": "network_newcomersphrase",
-      "community": 18,
+      "community": 16,
       "norm_label": "newcomersphrase()"
     },
     {
       "label": "requestsLabel()",
       "file_type": "code",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L148",
+      "source_location": "L160",
       "id": "network_requestslabel",
-      "community": 18,
+      "community": 16,
       "norm_label": "requestslabel()"
     },
     {
@@ -37902,7 +37911,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.test.ts",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_test_ts",
       "_tgt": "network_test_member",
@@ -38010,7 +38019,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L138",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_src": "apps_web_v2_src_lib_network_ts",
+      "_tgt": "network_wallof",
+      "source": "apps_web_v2_src_lib_network_ts",
+      "target": "network_wallof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "apps\\web-v2\\src\\lib\\network.ts",
+      "source_location": "L150",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_ts",
       "_tgt": "network_newcomersphrase",
@@ -38022,7 +38043,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps\\web-v2\\src\\lib\\network.ts",
-      "source_location": "L148",
+      "source_location": "L160",
       "weight": 1.0,
       "_src": "apps_web_v2_src_lib_network_ts",
       "_tgt": "network_requestslabel",
