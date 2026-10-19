@@ -104,8 +104,10 @@
     width: 100%;
   }
 
+  /* Empilées, les deux colonnes deviennent deux sections : l'écart des sections, pas des cartes. */
   .dashboard__columns {
     flex-direction: column;
+    gap: var(--gap-section);
   }
 
   .dashboard__greeting {
