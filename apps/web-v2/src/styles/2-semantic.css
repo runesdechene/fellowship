@@ -1638,11 +1638,13 @@
 
   --ink-title: var(--cream-50);
   --ink-strong: var(--cream-50);
-  --ink-section: var(--cream-200); /* gris clair : en crème plein, les grands titres éblouissaient (19/10/2026) */
+  /* Gris clair : en crème plein, les grands titres éblouissaient (19/10/2026). */
+  --ink-section: var(--cream-200);
   --ink-total: var(--cream-50);
   --ink-link: var(--cream-50);
   --ink-soft: var(--cream-500);
-  --ink-nav: var(--cream-350); /* un cran plus clair que les métadonnées : les menus s'effaçaient (19/10/2026) */
+  /* Un cran plus clair que les métadonnées : les menus s'effaçaient (19/10/2026). */
+  --ink-nav: var(--cream-350);
   --ink-hero-meta: var(--cream-500);
   --ink-body: var(--cream-500);
   --ink-section-pale: var(--cream-750);
