@@ -1,4 +1,5 @@
-// prospect-unsubscribe : la désinscription d'un prospect, par le jeton de son lien.
+// prospect-unsubscribe : la désinscription d'un prospect — ou d'un compte, pour les e-mails des
+// Nouveautés (users.email_token, même forme) — par le jeton de son lien.
 // Public (verify_jwt = false) : le jeton fait foi. Supabase sert le HTML de ses fonctions en texte
 // brut (protection contre l'hameçonnage) : la page est donc celle de la V2, publique.
 // GET (le lien de l'e-mail) redirige vers flw.sh/desinscription ; POST désinscrit — depuis le
@@ -26,11 +27,14 @@ Deno.serve(async (req) => {
   const token = typeof body?.token === 'string' ? body.token : fromUrl
   if (!TOKEN.test(token)) return json({ error: 'invalid_token' }, 400)
 
-  const { error } = await getSupabaseAdmin().from('prospects')
+  const admin = getSupabaseAdmin()
+  const { error } = await admin.from('prospects')
     .update({ unsubscribed_at: new Date().toISOString() })
     .eq('unsubscribe_token', token).is('unsubscribed_at', null)
-  if (error) {
-    console.error('[prospect-unsubscribe]', error)
+  // Le même lien sert aux e-mails des Nouveautés : le jeton est celui d'un compte.
+  const { error: uErr } = await admin.from('users').update({ updates_email_off: true }).eq('email_token', token)
+  if (error || uErr) {
+    console.error('[prospect-unsubscribe]', error ?? uErr)
     return json({ error: 'failed' }, 500)
   }
   return json({ done: true })
