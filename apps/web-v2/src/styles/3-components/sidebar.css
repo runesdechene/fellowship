@@ -34,13 +34,10 @@
   --wordmark-logo-height: var(--wordmark-small-logo-height);
 
   display: flex;
+  justify-content: center;
   margin-top: var(--sidebar-logo-top);
   font: var(--type-wordmark-small);
   transition: margin-top var(--sidebar-collapse-motion);
-}
-
-.app-shell--collapsed .sidebar__logo {
-  justify-content: center;
 }
 
 .app-shell--collapsed .sidebar__logo > span {
