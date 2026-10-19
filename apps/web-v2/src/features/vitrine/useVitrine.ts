@@ -82,7 +82,23 @@ async function countEntities(ids: string[]): Promise<number> {
   return response.count ?? 0
 }
 
-async function loadVitrine(slug: string, viewerId: string, today: Date): Promise<Vitrine | null> {
+/** Ce visiteur suit-il déjà la vitrine ? */
+async function isFollowing(viewerId: string, actorId: string): Promise<boolean> {
+  const response = await supabase
+    .from('follows')
+    .select('id')
+    .eq('follower_actor', viewerId)
+    .eq('following_actor', actorId)
+    .maybeSingle()
+  return must(response) !== null
+}
+
+/** `viewerId` nul : un visiteur sans compte (lot 12), qui ne suit personne et n'a pas d'amis. */
+async function loadVitrine(
+  slug: string,
+  viewerId: string | null,
+  today: Date,
+): Promise<Vitrine | null> {
   const entityResponse = await supabase
     .from('entities')
     .select(PUBLIC_COLUMNS)
@@ -92,7 +108,7 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
   if (!entity) return null
   const id = entity.actor_id
 
-  const [participations, followers, friendIds, myFollow] = await Promise.all([
+  const [participations, followers, friendIds, following] = await Promise.all([
     supabase
       .from('participations')
       .select(
@@ -103,12 +119,7 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
       .eq('events.is_private', false),
     supabase.rpc('get_followers_with_dates', { p_actor_id: id }),
     supabase.rpc('get_friend_ids', { p_user_id: id }),
-    supabase
-      .from('follows')
-      .select('id')
-      .eq('follower_actor', viewerId)
-      .eq('following_actor', id)
-      .maybeSingle(),
+    viewerId ? isFollowing(viewerId, id) : false,
   ])
 
   const followerRows = must(followers)
@@ -134,10 +145,12 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
   const [faces, companionEntities, friendsByEvent] = await Promise.all([
     fetchActorProfiles(followerRows.slice(0, MAX_FOLLOWER_FACES).map((r) => r.follower_id)),
     countEntities(companions),
-    fetchFriendsByEvent(
-      viewerId,
-      upcoming.map((date) => date.eventId),
-    ),
+    viewerId
+      ? fetchFriendsByEvent(
+          viewerId,
+          upcoming.map((date) => date.eventId),
+        )
+      : new Map<string, Friend[]>(),
   ])
 
   return {
@@ -161,7 +174,7 @@ async function loadVitrine(slug: string, viewerId: string, today: Date): Promise
     followerCount: followerRows.length,
     followerFaces: [...faces.values()],
     companionCount: companionEntities,
-    following: must(myFollow) !== null,
+    following,
     upcoming: upcoming.map((date) => ({
       ...date,
       friends: (friendsByEvent.get(date.eventId) ?? []).filter((f) => f.id !== id),
@@ -178,10 +191,10 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
   const [version, setVersion] = useState(0)
 
   useEffect(() => {
-    if (!slug || !viewerId) return
+    if (!slug) return
     let cancelled = false
 
-    async function run(currentSlug: string, currentViewer: string) {
+    async function run(currentSlug: string, currentViewer: string | null) {
       setState((current) => (current.vitrine?.slug === currentSlug ? current : EMPTY))
       let next: VitrineState
       try {
@@ -194,7 +207,7 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
       setState(next)
     }
 
-    void run(slug, viewerId)
+    void run(slug, viewerId ?? null)
     return () => {
       cancelled = true
     }

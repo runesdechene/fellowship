@@ -29,6 +29,8 @@ import type { Vitrine } from './useVitrine'
 interface VitrineHeadProps {
   vitrine: Vitrine
   isOwner: boolean
+  /** Sans compte (lot 12) : ni « Suivre », ni ce qui exige une session. */
+  signedIn: boolean
   onToggleFollow: () => void
   onEdit: () => void
 }
@@ -45,7 +47,13 @@ function publicUrl(slug: string): string {
   return `${window.location.origin}/${slug}`
 }
 
-export function VitrineHead({ vitrine, isOwner, onToggleFollow, onEdit }: VitrineHeadProps) {
+export function VitrineHead({
+  vitrine,
+  isOwner,
+  signedIn,
+  onToggleFollow,
+  onEdit,
+}: VitrineHeadProps) {
   const go = useTransitionNavigate()
   const [copied, setCopied] = useState(false)
   const [followers, companions] = networkCounts(vitrine.followerCount, vitrine.companionCount)
@@ -108,20 +116,22 @@ export function VitrineHead({ vitrine, isOwner, onToggleFollow, onEdit }: Vitrin
               Modifier la vitrine
             </Button>
           ) : (
-            <Button
-              variant="action"
-              icon={
-                vitrine.following ? (
-                  <Check size={16} strokeWidth={2.2} />
-                ) : (
-                  <Plus size={16} strokeWidth={2.2} />
-                )
-              }
-              aria-pressed={vitrine.following}
-              onClick={onToggleFollow}
-            >
-              {vitrine.following ? 'Suivi' : 'Suivre'}
-            </Button>
+            signedIn && (
+              <Button
+                variant="action"
+                icon={
+                  vitrine.following ? (
+                    <Check size={16} strokeWidth={2.2} />
+                  ) : (
+                    <Plus size={16} strokeWidth={2.2} />
+                  )
+                }
+                aria-pressed={vitrine.following}
+                onClick={onToggleFollow}
+              >
+                {vitrine.following ? 'Suivi' : 'Suivre'}
+              </Button>
+            )
           )}
           <Button
             variant="icon"

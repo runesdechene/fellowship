@@ -78,6 +78,16 @@ function ProtectedRoute({ children, guest }: { children: ReactNode; guest?: Reac
   )
 }
 
+/** Une page ouverte sans compte (fiche, vitrine) : le cadre de la landing pour un visiteur, celui
+ *  de l'app pour un compte. */
+function OpenRoute({ children }: { children: ReactNode }) {
+  return (
+    <ProtectedRoute guest={<GuestShell>{children}</GuestShell>}>
+      <AppShell>{children}</AppShell>
+    </ProtectedRoute>
+  )
+}
+
 /** L'administration : les admins seulement. Elle ne protège que l'affichage — chaque fonction
  *  admin_* refuse en base tout appel qui ne vient pas d'un admin. */
 function AdminRoute({ children }: { children: ReactNode }) {
@@ -150,17 +160,9 @@ export function App() {
       <Route
         path="/e/:slug"
         element={
-          <ProtectedRoute
-            guest={
-              <GuestShell>
-                <EventSlugRedirect />
-              </GuestShell>
-            }
-          >
-            <AppShell>
-              <EventSlugRedirect />
-            </AppShell>
-          </ProtectedRoute>
+          <OpenRoute>
+            <EventSlugRedirect />
+          </OpenRoute>
         }
       />
       <Route
@@ -226,17 +228,9 @@ export function App() {
       <Route
         path="/evenement/:id"
         element={
-          <ProtectedRoute
-            guest={
-              <GuestShell>
-                <EventPage />
-              </GuestShell>
-            }
-          >
-            <AppShell>
-              <EventPage />
-            </AppShell>
-          </ProtectedRoute>
+          <OpenRoute>
+            <EventPage />
+          </OpenRoute>
         }
       />
       <Route
@@ -408,15 +402,14 @@ export function App() {
           </AdminPage>
         }
       />
-      {/* Une vitrine à la racine, comme dans la V1 : les adresses fixes au-dessus l'emportent. */}
+      {/* Une vitrine à la racine, comme dans la V1, lisible sans compte (lot 12) : les adresses
+          fixes au-dessus l'emportent. */}
       <Route
         path="/:slug"
         element={
-          <ProtectedRoute>
-            <AppShell>
-              <VitrinePage />
-            </AppShell>
-          </ProtectedRoute>
+          <OpenRoute>
+            <VitrinePage />
+          </OpenRoute>
         }
       />
       <Route path="*" element={<Navigate to="/" replace />} />

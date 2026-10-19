@@ -17,7 +17,7 @@ import { VitrineHead } from './VitrineHead'
 
 export function VitrinePage() {
   const { slug } = useParams()
-  const { actor, entities, reloadIdentity } = useAuth()
+  const { user, actor, entities, reloadIdentity } = useAuth()
   const navigate = useNavigate()
   const { vitrine, loading, notFound, error, toggleFollow, reload, show } = useVitrine(
     slug,
@@ -69,6 +69,7 @@ export function VitrinePage() {
         <VitrineHead
           vitrine={vitrine}
           isOwner={isOwner}
+          signedIn={Boolean(user)}
           onEdit={() => {
             setEditing(true)
           }}
@@ -99,9 +100,9 @@ export function VitrinePage() {
       <Stamps past={vitrine.past} />
 
       <footer className="vitrine__footer">
-        Carnet de route Fellowship · flw.sh/{vitrine.slug}
-        {/* Pas de signalement de sa propre enseigne, même sous son nom de personne. */}
-        {!entities.some((entity) => entity.actor_id === vitrine.actorId) && (
+        Carnet de route Fellowship · {window.location.host}/{vitrine.slug}
+        {/* Pas de signalement de sa propre enseigne, même sous son nom de personne, ni sans compte. */}
+        {user && !entities.some((entity) => entity.actor_id === vitrine.actorId) && (
           <ReportProfile targetId={vitrine.actorId} />
         )}
       </footer>
