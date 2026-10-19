@@ -107,13 +107,14 @@ export function firstProblemStep(steps: WelcomeStep[], draft: WelcomeDraft): num
   return at === -1 ? null : at
 }
 
-/** Le code après une frappe dans la case `index` : un chiffre s'y écrit ; plusieurs chiffres d'un
- *  coup (le code proposé par iOS ou le clavier) remplissent tout le code. */
+/** Le code après une frappe dans la case `index` : un chiffre s'y écrit, à la place de celui qui y
+ *  était ; plusieurs chiffres d'un coup (le code proposé par iOS ou le clavier) remplissent tout. */
 export function typedCode(value: string, index: number, raw: string): string {
-  const digits = codeDigits(raw)
+  // `raw` contient encore le chiffre déjà présent dans la case : on ne garde que le nouveau.
+  const digits = codeDigits(raw.replace(value[index] ?? '', ''))
   if (digits === '') return value
   if (digits.length > 1) return digits
-  return (value.slice(0, index) + digits).slice(0, 6)
+  return value.slice(0, index) + digits + value.slice(index + 1)
 }
 
 /** `?retour=` n'accepte qu'une adresse de l'app, jamais un autre site. */

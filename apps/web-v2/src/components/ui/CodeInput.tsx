@@ -7,6 +7,7 @@
  *            reçu, et il arrive collé d'un coup.
  */
 import { useEffect, useRef, type ClipboardEvent, type KeyboardEvent } from 'react'
+import { flushSync } from 'react-dom'
 import { codeDigits, typedCode } from '@/lib/welcome'
 
 const LENGTH = 6
@@ -39,8 +40,12 @@ export function CodeInput({
   function type(index: number, raw: string) {
     const next = typedCode(value, index, raw)
     if (next === value) return
-    onChange(next)
-    focus(next.length)
+    // flushSync : la case visée doit voir le code à jour quand elle reçoit le focus, sinon son
+    // onFocus (code d'avant) renvoie le curseur en arrière et la frappe suivante écrase tout.
+    flushSync(() => {
+      onChange(next)
+    })
+    focus(next.length === LENGTH ? LENGTH - 1 : index + 1)
   }
 
   function erase(index: number, event: KeyboardEvent<HTMLInputElement>) {
@@ -56,7 +61,9 @@ export function CodeInput({
     event.preventDefault()
     const digits = codeDigits(event.clipboardData.getData('text'))
     if (digits === '') return
-    onChange(digits)
+    flushSync(() => {
+      onChange(digits)
+    })
     focus(digits.length)
   }
 

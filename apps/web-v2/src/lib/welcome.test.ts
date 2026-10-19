@@ -130,6 +130,11 @@ describe('typedCode', () => {
   test('rien de chiffré : rien ne change', () => {
     expect(typedCode('48', 2, 'a')).toBe('48')
   })
+  test('un chiffre tapé dans une case pleine la remplace, sans toucher aux autres', () => {
+    expect(typedCode('4829', 1, '87')).toBe('4729')
+    expect(typedCode('4829', 1, '78')).toBe('4729')
+    expect(typedCode('4829', 1, '88')).toBe('4829')
+  })
 })
 
 describe('safeReturn', () => {
