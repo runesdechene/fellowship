@@ -4,7 +4,8 @@
  * POURQUOI — maquette « Notifications ». Une notification non lue porte un fond et un point ; un
  *            clic la marque lue et mène où elle parle.
  *            En tête, le bloc « Demandes d'ami · Nouveaux abonnés » (NetworkBlock), quand il a à dire.
- *            Sur téléphone, il prend toute la page et se ferme par sa croix (Uriel, 19/10/2026).
+ *            Une personne montre son visage, une date son affiche ; sans image, l'icône (Uriel,
+ *            19/10/2026). Sur téléphone, il prend toute la page et se ferme par sa croix (Uriel, 19/10/2026).
  * ATTENTION — le pied (PanelFoot) mène aux Réglages et propose d'activer le téléphone (lot 8e).
  */
 import {
@@ -22,7 +23,9 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
+import { Avatar } from '@/components/ui/Avatar'
 import { timeAgo } from '@/lib/dates'
+import { posterThumb } from '@/lib/poster-thumb'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { groupByDay, type NotificationIcon, type NotificationView } from '@/lib/notifications'
 import { PanelFoot } from './PanelFoot'
@@ -133,9 +136,19 @@ export function NotificationPanel({
             return (
               // Une ligne, pas un bouton : elle peut contenir le bouton « Repérer ».
               <div key={view.id} className={view.read ? 'notif' : 'notif notif--unread'}>
-                <span className="notif__icon">
-                  <Icon size={16} strokeWidth={1.8} />
-                </span>
+                {view.picture?.kind === 'avatar' ? (
+                  <Avatar
+                    className="notif__avatar"
+                    src={view.picture.url}
+                    name={view.picture.name}
+                  />
+                ) : view.picture?.url ? (
+                  <img className="notif__poster" src={posterThumb(view.picture.url, 120)} alt="" />
+                ) : (
+                  <span className="notif__icon">
+                    <Icon size={16} strokeWidth={1.8} />
+                  </span>
+                )}
                 <span className="notif__body">
                   {view.eyebrow && (
                     <span className="notif__eyebrow">

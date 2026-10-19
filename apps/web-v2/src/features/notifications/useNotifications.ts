@@ -4,6 +4,7 @@
  *            V1 : une question sur un festival arrive à l'enseigne, un abonné à la personne.
  * ATTENTION — pas de temps réel : relu à l'ouverture de l'app et à chaque ouverture du panneau
  *            (refresh). Les écritures sont optimistes ; un échec relit la base.
+ *            Les images (avatars, affiches) sont relues à part : si elles manquent, l'icône reste.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
@@ -15,6 +16,30 @@ const LIMIT = 50
 /** La cloche dit tout sauf les nouveaux abonnés : son bloc « Demandes d'ami · Nouveaux abonnés »
  *  les montre (19/10/2026). La phrase reste dans KNOWN_TYPES pour la notification du téléphone. */
 const BELL_TYPES = KNOWN_TYPES.filter((type) => type !== 'new_follower')
+
+/** Les avatars d'aujourd'hui et les affiches, en deux lectures pour toute la liste. Une lecture
+ *  ratée garde l'icône : l'image décore, elle ne doit pas taire la cloche. */
+async function withPictures(views: NotificationView[]): Promise<NotificationView[]> {
+  const ids = (kind: 'avatar' | 'poster') => [
+    ...new Set(views.flatMap((view) => (view.picture?.kind === kind ? [view.picture.id] : []))),
+  ]
+  const [people, events] = await Promise.all([
+    supabase.from('actor_public').select('actor_id, avatar_url').in('actor_id', ids('avatar')),
+    supabase.from('events').select('id, image_url').in('id', ids('poster')),
+  ])
+  const urls = new Map<string, string | null>([
+    ...(people.data ?? []).map((row) => [row.actor_id ?? '', row.avatar_url] as const),
+    ...(events.data ?? []).map((row) => [row.id, row.image_url] as const),
+  ])
+  return views.map((view) =>
+    view.picture
+      ? {
+          ...view,
+          picture: { ...view.picture, url: urls.get(view.picture.id) ?? view.picture.url },
+        }
+      : view,
+  )
+}
 
 export function useNotifications() {
   const { person, entities } = useAuth()
@@ -42,8 +67,7 @@ export function useNotifications() {
             .order('created_at', { ascending: false })
             .limit(LIMIT),
         )
-        if (cancelled) return
-        setViews(
+        const pictured = await withPictures(
           rows.flatMap((row) => {
             const data =
               row.data && typeof row.data === 'object' && !Array.isArray(row.data) ? row.data : {}
@@ -51,6 +75,8 @@ export function useNotifications() {
             return view ? [view] : []
           }),
         )
+        if (cancelled) return
+        setViews(pictured)
         setFailed(false)
       } catch {
         if (!cancelled) setFailed(true)

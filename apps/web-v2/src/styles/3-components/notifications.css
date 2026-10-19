@@ -152,6 +152,19 @@
   color: var(--ink-soft);
 }
 
+/* La personne ou l'affiche, à la place de l'icône (maquette : l'affiche d'une nouvelle édition). */
+.notif__avatar {
+  --avatar-size: var(--notif-picture-size);
+}
+
+.notif__poster {
+  flex: none;
+  width: var(--notif-picture-size);
+  height: var(--notif-poster-height);
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+}
+
 .notif__body {
   display: flex;
   flex: 1;

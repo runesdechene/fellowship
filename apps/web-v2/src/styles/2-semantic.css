@@ -1102,6 +1102,8 @@
      LA CLOCHE — le panneau des notifications (features/notifications)
      ====================================================================== */
   --notif-panel-width: 420px;
+  --notif-picture-size: 32px; /* la taille de la pastille d’icône */
+  --notif-poster-height: 44px;
   --notif-panel-max-height: min(652px, 75vh);
 
   /* =========================================================================

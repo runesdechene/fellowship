@@ -8,6 +8,7 @@ import {
   groupByDay,
   notificationPhrase,
   notificationView,
+  pictureOf,
   type NotificationRow,
   type NotificationView,
 } from './notifications'
@@ -67,6 +68,31 @@ describe('notificationView', () => {
   it('un type inconnu, ou un nom manquant, n’est pas affiché', () => {
     expect(notificationView(row('friend_note', event))).toBeNull()
     expect(notificationView(row('thread_reply', { event_id: 'e1' }))).toBeNull()
+  })
+})
+
+describe('pictureOf', () => {
+  it('ce qu’une personne a fait montre son visage, l’avatar noté à l’envoi en attendant', () => {
+    expect(
+      pictureOf('friend_going', { ...event, actor_id: 'p1', actor_name: 'Gautier' }),
+    ).toEqual({ kind: 'avatar', id: 'p1', name: 'Gautier', url: null })
+    expect(
+      pictureOf('new_follower', { actor_id: 'p2', actor_name: 'Ysée', actor_avatar_url: 'y.png' }),
+    ).toEqual({ kind: 'avatar', id: 'p2', name: 'Ysée', url: 'y.png' })
+  })
+
+  it('ce qui arrive à une date montre son affiche', () => {
+    expect(pictureOf('event_updated', event)).toEqual({
+      kind: 'poster',
+      id: 'e1',
+      name: 'Arbor Pagan Fest',
+      url: null,
+    })
+  })
+
+  it('le récapitulatif, ou une personne sans identifiant, garde l’icône', () => {
+    expect(pictureOf('weekly_new_events', { count: 3 })).toBeNull()
+    expect(pictureOf('friend_going', { ...event, actor_name: 'Gautier' })).toBeNull()
   })
 })
 
