@@ -31,7 +31,8 @@ export function ReferralCard({ entityId, brandName }: { entityId: string; brandN
         <span className="plan-card__note">Offre un mois, gagne un mois</span>
       </div>
       <p className="plan-card__hint">
-        Ton filleul a 30 jours de Pro offerts. Tu gagnes un mois dès qu’il paie sa première facture.
+        Ton filleul essaie le Pro 30 jours au lieu de 14. Tu gagnes un mois dès qu’il paie sa
+        première facture.
       </p>
       {failed && (
         <p className="plan-card__hint">Ton code n’a pas pu se charger. Recharge la page.</p>

@@ -9,6 +9,7 @@ le châssis le rend.
 - `AccountSwitcher.tsx` — la carte de compte, le choix d'enseigne et, pour un admin, l'entrée en administration.
 - `Topbar.tsx` — la barre du haut : retour, repère, cloche, « Ajouter une date ».
 - `PosterWall.tsx` — le mur d'affiche sur le bord droit.
+- `IdentityError.tsx` — « Ton compte n'a pas pu se charger » et « Réessayer », à la place de l'app.
 - `GuestShell.tsx` — le cadre d'une page vue sans compte : barre de la landing, page, mur d'affiche (lot 11b).
 
 Styles : `styles/3-components/` (un fichier par composant).

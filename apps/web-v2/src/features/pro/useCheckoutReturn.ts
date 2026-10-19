@@ -5,12 +5,14 @@
  *            relire, l'écran dirait « gratuit » à quelqu'un qui vient de payer.
  * ATTENTION — la relecture est bornée (lib/stripe.ts, nextPoll) : jamais de boucle. L'issue s'écrit
  *            dans l'adresse (statut=bienvenue ou statut=en-cours), à la place de session_id.
+ *            On attend l'ABONNEMENT, pas le Pro : un Pro offert l'est déjà avant le webhook, et le
+ *            bouton rouvrirait un second paiement.
  */
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { nextPoll, POLL_EVERY_MS } from '@/lib/stripe'
-import { usePlan } from '@/lib/usePlan'
+import { billingAction } from '@/lib/plan'
 
 export type ReturnState = 'none' | 'waiting' | 'welcome' | 'late'
 
@@ -22,14 +24,15 @@ const FROM_URL: Record<string, ReturnState> = {
 
 export function useCheckoutReturn(): ReturnState {
   const [params, setParams] = useSearchParams()
-  const { reloadIdentity } = useAuth()
-  const { pro } = usePlan()
+  const { reloadIdentity, actor, entities } = useAuth()
+  const subscribed =
+    billingAction(entities.find((entity) => entity.actor_id === actor?.id) ?? null) === 'portal'
   const state = FROM_URL[params.get('statut') ?? ''] ?? 'none'
   const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     if (state !== 'waiting') return
-    const step = nextPoll(attempt, pro)
+    const step = nextPoll(attempt, subscribed)
     if (step !== 'wait') {
       setParams(
         (current) => {
@@ -52,7 +55,7 @@ export function useCheckoutReturn(): ReturnState {
     return () => {
       window.clearTimeout(timer)
     }
-  }, [state, attempt, pro, reloadIdentity, setParams])
+  }, [state, attempt, subscribed, reloadIdentity, setParams])
 
   return state
 }

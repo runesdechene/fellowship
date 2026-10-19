@@ -23,7 +23,7 @@ import { useCheckoutReturn, type ReturnState } from './useCheckoutReturn'
  *  Elle ne se lit qu'une fois le Pro arrivé : avant, `trial_end` peut être celui d'un ancien essai. */
 function bannerText(state: Exclude<ReturnState, 'none'>, trialEnd: string | null): string {
   if (state === 'late')
-    return 'Ton paiement est enregistré ; ton compte passe au Pro dans quelques instants.'
+    return 'Ton paiement est enregistré ; ton compte passe au Pro dans quelques instants. Recharge la page si rien ne change.'
   return state === 'welcome' && trialEnd
     ? `Bienvenue dans le Pro. Ton essai court jusqu’au ${formatFullDate(new Date(trialEnd))}.`
     : 'Bienvenue dans le Pro. Ton essai commence.'

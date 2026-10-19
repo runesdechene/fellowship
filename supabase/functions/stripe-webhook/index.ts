@@ -131,6 +131,7 @@ async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
 async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
   const entityActorId = await lookupEntityIdFromSubscription(sub)
   if (!entityActorId) return
+  if (await anotherSubscriptionRuns(entityActorId, sub.id)) return
   await getSupabaseAdmin()
     .from('entities')
     .update({
@@ -149,12 +150,10 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const sub = await getStripe().subscriptions.retrieve(invoice.subscription as string)
   const entityActorId = await lookupEntityIdFromSubscription(sub)
   if (!entityActorId) return
-  // Garde plan='pro' pendant la grace period (Stripe retry auto pendant ~3 semaines).
-  // Si après les retries Stripe abandonne, on recevra customer.subscription.deleted.
-  await getSupabaseAdmin()
-    .from('entities')
-    .update({ subscription_status: 'past_due' })
-    .eq('actor_id', entityActorId)
+  // L'état réel de l'abonnement, relu à l'instant, et non un « past_due » écrit d'office : au dernier
+  // échec, Stripe envoie aussi customer.subscription.deleted, et l'ordre d'arrivée n'est pas garanti.
+  // Pendant les relances, l'abonnement est past_due et garde le Pro.
+  await syncSubscriptionToDB(entityActorId, sub)
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
@@ -193,10 +192,28 @@ async function lookupEntityIdFromSubscription(sub: Stripe.Subscription): Promise
   return byCustomer?.actor_id ?? null
 }
 
+const LIVE_STATUSES = ['active', 'trialing', 'past_due']
+
+// Un ancien abonnement (résilié, impayé) ne remplace jamais celui qui court aujourd'hui : ses
+// derniers événements arrivent parfois après le paiement d'un nouvel abonnement.
+async function anotherSubscriptionRuns(entityActorId: string, subId: string): Promise<boolean> {
+  const { data } = await getSupabaseAdmin()
+    .from('entities')
+    .select('stripe_subscription_id, subscription_status')
+    .eq('actor_id', entityActorId)
+    .maybeSingle()
+  return Boolean(
+    data?.stripe_subscription_id &&
+      data.stripe_subscription_id !== subId &&
+      LIVE_STATUSES.includes(data.subscription_status ?? ''),
+  )
+}
+
 async function syncSubscriptionToDB(entityActorId: string, sub: Stripe.Subscription) {
   const status = sub.status
+  if (!LIVE_STATUSES.includes(status) && (await anotherSubscriptionRuns(entityActorId, sub.id))) return
   // plan='pro' tant que la sub est active/trialing/past_due (grace), sinon 'free'.
-  const plan = ['active', 'trialing', 'past_due'].includes(status) ? 'pro' : 'free'
+  const plan = LIVE_STATUSES.includes(status) ? 'pro' : 'free'
   const interval = sub.items.data[0]?.price.recurring?.interval ?? null
   const trialEnd = sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null
   const periodEnd = new Date(sub.current_period_end * 1000).toISOString()

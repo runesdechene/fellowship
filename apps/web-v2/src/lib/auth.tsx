@@ -11,6 +11,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
@@ -78,6 +79,8 @@ interface AuthContextValue {
   switchActor: (actorId: string) => void
   /** Vrai tant que la session initiale n'a pas été résolue. */
   loading: boolean
+  /** Le premier chargement de l'identité a échoué : rien n'est connu, rien ne doit s'afficher. */
+  identityFailed: boolean
   signIn: (email: string) => Promise<{ error: AuthError | null }>
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
@@ -94,6 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [entities, setEntities] = useState<EntityRow[]>([])
   const [actorId, setActorId] = useState<string | null>(readStoredActorId)
   const [loading, setLoading] = useState(true)
+  const [identityFailed, setIdentityFailed] = useState(false)
+  // Une identité déjà chargée survit à un raté de relecture ; un PREMIER chargement raté, lui, ne
+  // doit pas laisser croire à un compte sans enseigne (l'arrivée en ferait créer une deuxième).
+  const identityLoaded = useRef(false)
 
   // Une lecture ratée GARDE l'identité déjà connue : elle est relue à chaque rafraîchissement de
   // jeton, et un raté réseau à ce moment-là viderait les enseignes — l'app changerait d'acteur
@@ -104,13 +111,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select('*')
       .eq('actor_id', authUid)
       .maybeSingle()
-    if (!personError) setPerson(personRow)
-
     // `mes_enseignes` rend ses enseignes facturation comprise, que `entities` ne montre plus,
     // TRIÉES par adhésion : l'acteur par défaut est « le premier de la liste », et sans tri
     // l'app basculait silencieusement d'une enseigne à l'autre.
     const { data: rows, error: entitiesError } = await supabase.rpc('mes_enseignes')
-    if (entitiesError) return
+    if (personError || entitiesError) {
+      if (!identityLoaded.current) setIdentityFailed(true)
+      return
+    }
+    identityLoaded.current = true
+    setIdentityFailed(false)
+    setPerson(personRow)
     setEntities(rows)
   }, [])
 
@@ -121,6 +132,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(nextSession)
       const nextUser = nextSession?.user ?? null
       if (!nextUser) {
+        identityLoaded.current = false
+        setIdentityFailed(false)
         setUser(null)
         setPerson(null)
         setEntities([])
@@ -201,6 +214,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       actors,
       switchActor,
       loading,
+      identityFailed,
       signIn,
       verifyOtp,
       signOut,
@@ -215,6 +229,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       actors,
       switchActor,
       loading,
+      identityFailed,
       signIn,
       verifyOtp,
       signOut,

@@ -9,6 +9,7 @@
  */
 import { Navigate, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { IdentityError } from '@/components/layout/IdentityError'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
@@ -51,7 +52,9 @@ import { useEffect, type ReactNode } from 'react'
  *  `guest` remplace la connexion pour un visiteur sans compte (la landing, sur `/`). */
 function AccessRoute({ children, guest }: { children: ReactNode; guest?: ReactNode }) {
   const decision = useV2Access()
+  const { identityFailed } = useAuth()
   if (decision === 'wait') return null
+  if (identityFailed && decision === 'allow') return <IdentityError />
   if (decision === 'login') return guest ?? <Navigate to="/connexion" replace />
   if (decision === 'leave') return <LeaveToV1 />
   return <>{children}</>
