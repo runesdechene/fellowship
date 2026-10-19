@@ -30,6 +30,7 @@ import { HistoryPage } from '@/features/event-history/HistoryPage'
 import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
 import { EventSlugRedirect } from '@/features/event/EventSlugRedirect'
+import { EmbedPage } from '@/features/embed/EmbedPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { LandingPage } from '@/features/landing/LandingPage'
 import { PublicSearchPage } from '@/features/public-search/PublicSearchPage'
@@ -156,6 +157,8 @@ export function App() {
       <Route path="/desinscription" element={<Unsubscribe />} />
       <Route path="/connexion" element={<LoginRoute />} />
       <Route path="/legal/:doc" element={<LegalRoute />} />
+      {/* Le calendrier intégré chez un artiste : ni coque, ni session (lot 12). */}
+      <Route path="/:slug/embed" element={<EmbedPage />} />
       {/* L'ancien lien partagé d'un événement (V1) : il cherche la fiche par son slug (lot 12). */}
       <Route
         path="/e/:slug"

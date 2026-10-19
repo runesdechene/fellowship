@@ -1,0 +1,270 @@
+/**
+ * QUOI     — les styles du calendrier intégré (features/embed/).
+ * POURQUOI — il vit dans une iframe chez un artiste : fond transparent, thème du site hôte
+ *            (`.embed--light` / `.embed--dark`, 2-semantic.css), allure des cartes de la V1.
+ * ATTENTION — `html:has(.embed)` retire le fond de l'app et la barre de défilement, et rend à la
+ *            page la hauteur de son contenu (le reset la fixe à 100 %) : sans ça, sa taille ne
+ *            change jamais et l'iframe garde sa première hauteur (features/embed/useHostFrame.ts).
+ */
+
+html:has(.embed),
+html:has(.embed) body,
+html:has(.embed) #root {
+  height: auto;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.embed {
+  color: var(--embed-ink);
+}
+
+.embed__column {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--embed-max-width);
+  margin: auto;
+}
+
+.embed__message {
+  padding: var(--space-48) var(--space-24);
+  font: var(--type-embed-place);
+  color: var(--embed-muted);
+  text-align: center;
+}
+
+/* L'en-tête : le logo, le nom, le métier et la ville, centrés. */
+.embed__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  padding-bottom: var(--space-18);
+  text-align: center;
+}
+
+.embed__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-64);
+  height: var(--space-64);
+  border-radius: var(--radius-round);
+  object-fit: cover;
+}
+
+.embed__avatar--initial {
+  font: var(--type-embed-name);
+  color: var(--embed-initial-ink);
+  background: var(--embed-accent);
+}
+
+.embed__name {
+  font: var(--type-embed-name);
+  letter-spacing: var(--tracking-tight);
+}
+
+.embed__subtitle {
+  font: var(--type-embed-subtitle);
+  color: var(--embed-muted);
+}
+
+.embed__dates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+/* Une date : le jour, l'affiche, le nom, les catégories, le lieu, la durée. */
+.embed-date {
+  display: flex;
+  gap: var(--space-18);
+  align-items: center;
+  padding: var(--space-16) var(--space-18);
+  color: inherit;
+  text-decoration: none;
+  background: var(--embed-card);
+  border: 1px solid var(--embed-line);
+  border-radius: var(--round-16);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.embed-date:hover {
+  border-color: var(--embed-line-hover);
+  translate: 0 -1px;
+}
+
+.embed-date__day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  width: var(--space-56);
+  text-align: center;
+}
+
+.embed-date__day b {
+  font: var(--type-embed-day);
+}
+
+.embed-date__day span {
+  font: var(--type-embed-month);
+  letter-spacing: var(--tracking-wide);
+  color: var(--embed-muted);
+  text-transform: uppercase;
+}
+
+.embed-date__day i {
+  font: var(--type-embed-year);
+  font-style: normal;
+  color: var(--embed-muted);
+}
+
+.embed-date__poster {
+  flex-shrink: 0;
+  width: var(--space-80);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--embed-surface);
+  border-radius: var(--round-10);
+}
+
+.embed-date__poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.embed-date__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.embed-date__name {
+  font: var(--type-embed-title);
+}
+
+.embed-date__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.embed-date__place,
+.embed-date__duration {
+  display: flex;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.embed-date__place {
+  font: var(--type-embed-place);
+}
+
+.embed-date__place svg,
+.embed-date__duration {
+  color: var(--embed-muted);
+}
+
+.embed-date__duration {
+  font: var(--type-embed-small);
+}
+
+.embed-date__chevron {
+  flex-shrink: 0;
+  font: var(--type-embed-name);
+  color: var(--embed-muted);
+}
+
+.embed__more {
+  margin-top: var(--space-14);
+  padding: var(--space-12) var(--space-16);
+  font: var(--type-embed-button);
+  color: var(--embed-ink);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--embed-line);
+  border-radius: var(--round-14);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.embed__more:hover {
+  background: var(--embed-card);
+  border-color: var(--embed-line-hover);
+}
+
+.embed__empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-48) var(--space-24);
+  font: var(--type-embed-place);
+  color: var(--embed-muted);
+}
+
+/* Le pied : la marque Fellowship, qui mène à la vitrine, et la phrase. */
+.embed__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center;
+  margin-top: var(--space-28);
+  padding-top: var(--space-20);
+  text-align: center;
+  border-top: 1px solid var(--embed-line);
+}
+
+.embed__brand {
+  display: inline-flex;
+  gap: var(--space-8);
+  align-items: center;
+  font: var(--type-embed-brand);
+  color: var(--embed-ink);
+  text-decoration: none;
+}
+
+.embed__brand img {
+  width: var(--space-24);
+  height: var(--space-24);
+  object-fit: contain;
+}
+
+.embed__brand-dot {
+  color: var(--embed-brand-dot);
+}
+
+.embed__slogan {
+  font: var(--type-embed-small);
+  color: var(--embed-muted);
+}
+
+/* Un calendrier étroit (une colonne de site) : la date et l'affiche se resserrent. */
+@media (width <= 380px) {
+  .embed-date {
+    gap: var(--space-12);
+    padding: var(--space-14);
+  }
+
+  .embed-date__day {
+    width: var(--space-42);
+  }
+
+  .embed-date__poster {
+    width: var(--space-56);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .embed-date,
+  .embed__more {
+    transition: none;
+  }
+}

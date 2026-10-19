@@ -1644,3 +1644,42 @@
   --tab-bar-active: var(--terre-400);
   --tag-first-ink: var(--night-0);
 }
+
+/* ===================================================================== 
+   CALENDRIER INTÉGRÉ (lot 12) — il vit dans une iframe chez un artiste : son thème suit le site
+   hôte (classe posée par features/embed), jamais le réglage de l'app. Teintes reprises de la V1,
+   pour que les calendriers déjà collés ne changent pas d'allure.
+   ===================================================================== */
+.embed--light {
+  --embed-surface: hsl(35deg 29% 92%);
+  --embed-ink: hsl(24deg 21% 20%);
+  --embed-card: hsl(39deg 40% 94%);
+  --embed-muted: hsl(28deg 11% 44%);
+  --embed-line: hsl(30deg 14% 84%);
+}
+
+.embed--dark {
+  --embed-surface: hsl(9deg 24% 7%);
+  --embed-ink: hsl(35deg 60% 95%);
+  --embed-card: hsl(9deg 22% 12%);
+  --embed-muted: hsl(28deg 17% 64%);
+  --embed-line: hsl(33deg 16% 20%);
+}
+
+.embed {
+  --embed-line-hover: hsl(33deg 16% 34%);
+  --embed-brand-dot: #c87941;
+  --embed-initial-ink: #fff;
+  --type-embed-name: var(--weight-bold) var(--size-20) / var(--leading-tight) var(--family-sans);
+  --type-embed-subtitle: var(--weight-regular) var(--size-13) / var(--leading-normal)
+    var(--family-sans);
+  --type-embed-day: var(--weight-bold) var(--size-28) / 1 var(--family-sans);
+  --type-embed-month: var(--weight-bold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-embed-year: var(--weight-regular) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-embed-title: var(--weight-bold) var(--size-18) / var(--leading-tight) var(--family-sans);
+  --type-embed-place: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-embed-small: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-embed-button: var(--weight-semibold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+  --type-embed-brand: var(--weight-bold) var(--size-17) / var(--leading-tight) var(--family-sans);
+}
