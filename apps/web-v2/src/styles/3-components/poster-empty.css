@@ -20,6 +20,21 @@
   );
 }
 
+/* La nuit : la couleur pleine de la catégorie (`--tag-ink`) au lieu de son voile, le texte vers le
+   crème — comme les pastilles de catégorie (tag.css). */
+:root[data-theme='dark'] .poster-empty {
+  background: color-mix(
+    in srgb,
+    var(--tag-ink, var(--poster-empty-surface)) var(--poster-empty-night-tint),
+    var(--surface-card)
+  );
+  color: color-mix(
+    in oklab,
+    var(--tag-ink, var(--poster-empty-ink)) var(--poster-empty-night-ink-tint),
+    var(--ink-title)
+  );
+}
+
 .poster-empty__icon {
   width: var(--poster-empty-icon);
   height: var(--poster-empty-icon);

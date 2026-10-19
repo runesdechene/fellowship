@@ -1625,6 +1625,10 @@
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
   --poster-empty-surface: var(--night-300);
+  /* La nuit, la couleur vient du texte de la catégorie, pas de son voile à 10 % : mêlé au fond
+     sombre, le voile donnait des affiches presque noires (Uriel, 19/10/2026). */
+  --poster-empty-night-tint: 40%;
+  --poster-empty-night-ink-tint: 55%;
   --poster-badge-surface: var(--surface-card);
   --poster-badge-ink: var(--ink-title);
   --surface-bar: var(--night-200);
