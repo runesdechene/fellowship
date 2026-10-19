@@ -7,6 +7,14 @@
  *            change jamais et l'iframe garde sa première hauteur (features/embed/useHostFrame.ts).
  */
 
+/* Le thème de l'app (sombre chez qui l'a choisi) pose `color-scheme: dark` sur la page : une
+   iframe dont le schéma diffère de celui du site hôte est peinte d'un fond opaque par le
+   navigateur — le calendrier sortait en noir sur un site clair (19/10/2026). Il garde le schéma
+   par défaut, celui des sites. Même poids que `:root[data-theme='dark']`, déclaré après. */
+:root:has(.embed) {
+  color-scheme: normal;
+}
+
 html:has(.embed),
 html:has(.embed) body,
 html:has(.embed) #root {
