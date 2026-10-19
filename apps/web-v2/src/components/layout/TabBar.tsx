@@ -1,7 +1,8 @@
 /**
  * QUOI     — la barre d'onglets du téléphone : Tableau, Explorer, Calendrier, Communauté, et
  *            « Moi » à droite, qui ouvre le menu du compte en feuille : elle monte du bas, sur un
- *            voile, et se ferme d'un geste vers le bas (comme la V1, Uriel, 19/10/2026).
+ *            voile, et se ferme d'un geste vers le bas (comme la V1, Uriel, 19/10/2026). Son contenu
+ *            suit la maquette 2123:66 ; l'administration et le thème s'y ajoutent, comme sur ordinateur.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
  *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026).
@@ -9,8 +10,10 @@
  */
 import {
   CalendarDays,
+  ChartColumn,
   Check,
   CircleGauge,
+  LogOut,
   Plus,
   Settings,
   Shield,
@@ -24,6 +27,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
+import { useTransitionNavigate } from '@/lib/navigation'
 import { requestsLabel } from '@/lib/network'
 
 const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
@@ -37,7 +41,8 @@ const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }>
 const SWIPE_TO_CLOSE = 80
 
 export function TabBar({ friendRequests }: { friendRequests: number }) {
-  const { actor, actors, entities, person, switchActor } = useAuth()
+  const { actor, actors, entities, person, switchActor, signOut } = useAuth()
+  const go = useTransitionNavigate()
   // Les mêmes accès que la barre latérale : sa vitrine, et l'administration pour un admin.
   const vitrine = entities.find((entity) => entity.actor_id === actor?.id)?.public_slug
   const [open, setOpen] = useState(false)
@@ -91,11 +96,16 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
           onPointerCancel={release}
         >
           <span className="tab-sheet__grab" aria-hidden="true" />
+          <p className="tab-sheet__label">Tes comptes</p>
           {actors.map((item) => (
             <button
               key={item.id}
               type="button"
-              className="tab-sheet__item"
+              className={
+                item.id === actor?.id
+                  ? 'tab-sheet__item tab-sheet__item--current'
+                  : 'tab-sheet__item'
+              }
               onClick={() => {
                 switchActor(item.id)
                 close()
@@ -115,6 +125,14 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
               <span>Ma vitrine</span>
             </NavLink>
           )}
+          <NavLink to="/bilans" className="tab-sheet__item tab-sheet__link" onClick={close}>
+            <ChartColumn size={18} strokeWidth={1.8} />
+            <span>Mes bilans</span>
+          </NavLink>
+          <NavLink to="/reglages" className="tab-sheet__item tab-sheet__link" onClick={close}>
+            <Settings size={18} strokeWidth={1.8} />
+            <span>Réglages</span>
+          </NavLink>
           <NavLink
             to="/bienvenue?nouvelle-enseigne"
             className="tab-sheet__item tab-sheet__link"
@@ -123,16 +141,25 @@ export function TabBar({ friendRequests }: { friendRequests: number }) {
             <Plus size={18} strokeWidth={1.8} />
             <span>Créer un compte exposant</span>
           </NavLink>
-          <NavLink to="/reglages" className="tab-sheet__item tab-sheet__link" onClick={close}>
-            <Settings size={18} strokeWidth={1.8} />
-            <span>Réglages</span>
-          </NavLink>
           {person?.role === 'admin' && (
             <NavLink to={ADMIN_HOME} className="tab-sheet__item tab-sheet__link" onClick={close}>
               <Shield size={18} strokeWidth={1.8} />
               <span>Administration</span>
             </NavLink>
           )}
+          <button
+            type="button"
+            className="tab-sheet__item tab-sheet__link"
+            onClick={() => {
+              close()
+              void signOut().then(() => {
+                go('/connexion')
+              })
+            }}
+          >
+            <LogOut size={18} strokeWidth={1.8} />
+            <span>Se déconnecter</span>
+          </button>
           <div className="tab-sheet__theme">
             <ThemeSwitch />
           </div>

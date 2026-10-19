@@ -122,10 +122,25 @@
     background: var(--surface-control-hover);
   }
 
-  /* « Réglages » : une entrée du menu, pas un compte. */
-  .tab-sheet__link {
+  .tab-sheet__label {
+    padding: 0 var(--space-10) var(--space-6);
+    font: var(--type-list-meta);
+    color: var(--ink-section-pale);
+  }
+
+  /* Le compte actif, sur un fond (maquette 2123:66). */
+  .tab-sheet__item--current {
+    background: var(--surface-nav-active);
+  }
+
+  /* Ma vitrine, Réglages… : des entrées du menu, pas des comptes ; un filet les sépare des comptes. */
+  .tab-sheet__item:not(.tab-sheet__link) + .tab-sheet__link {
+    margin-top: var(--space-8);
     border-top: 1px solid var(--line-card);
     border-radius: 0;
+  }
+
+  .tab-sheet__link {
     font: var(--type-settings-nav);
     color: var(--ink-title);
     text-decoration: none;
