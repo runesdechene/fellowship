@@ -61,18 +61,24 @@
   background: var(--surface-row-hover);
 }
 
-/* Pastille de statut */
-.upcoming__dot {
+/* Pastille de statut : un disque teinté, l'icône au centre */
+.upcoming__status {
+  display: grid;
   flex: none;
-  width: var(--dot-size);
-  height: var(--dot-size);
+  place-items: center;
+  width: var(--upcoming-status-size);
+  height: var(--upcoming-status-size);
   border-radius: var(--radius-round);
-  background: var(--dot-confirmed);
 }
 
-.upcoming__pending {
-  flex: none;
-  color: var(--status-sent-mark);
+.upcoming__status--confirmed {
+  background: var(--status-validated-surface);
+  color: var(--status-validated-ink);
+}
+
+.upcoming__status--sent {
+  background: var(--status-sent-surface);
+  color: var(--status-sent-ink);
 }
 
 /* Le nom et le compte à rebours, puis la ville en dessous */

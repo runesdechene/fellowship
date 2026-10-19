@@ -193,9 +193,9 @@
   /* Pastille ronde devant chaque date à venir */
   /* VALIDÉ ≠ PÉRENNE (Uriel, 11/10/2026) : la terre dit ce qui dure (bénéfice, Pro), la sauge dit
      ce qui est validé (inscrit, payé). */
-  --status-validated-ink: var(--sauge-700);
-  --status-validated-surface: var(--sauge-50);
-  --status-validated-mark: var(--sauge-500);
+  --status-validated-ink: var(--jade-600);
+  --status-validated-surface: var(--jade-50);
+  --status-validated-mark: var(--jade-600);
   /* Le liseré d'une pastille : rien le jour, la teinte en filet la nuit. */
   --status-validated-line: transparent;
   --dot-confirmed: var(--status-validated-mark);
@@ -210,11 +210,13 @@
   --dossier-settled-veil: color-mix(in srgb, var(--status-validated-mark) 80%, transparent);
   --dossier-settled-check: var(--sand-0);
   /* Dossier envoyé : un bleu doux, ni validé ni à faire — il attend (Uriel, 11/10/2026). */
-  --status-sent-ink: var(--bleu-700);
-  --status-sent-surface: var(--bleu-50);
+  --status-sent-ink: var(--indigo-600);
+  --status-sent-surface: var(--indigo-50);
   /* Une icône posée seule, sans pastille : elle garde sa couleur, la nuit en néon. */
-  --status-sent-mark: var(--bleu-700);
+  --status-sent-mark: var(--indigo-600);
   --status-sent-line: transparent;
+  /* Les pastilles de « À venir » : inscrit, une coche ; dossier envoyé, un dossier qui entre. */
+  --upcoming-status-size: var(--space-24);
   /* Les tons de l'administration : encre et fond d'une pastille de type ou d'une icône de bloc. */
   --tone-terre-ink: var(--terre-700);
   --tone-terre-surface: var(--terre-50);

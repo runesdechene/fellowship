@@ -8,7 +8,8 @@
  * ATTENTION — l'état se lit par la FORME de l'icône ; seul ce qui est acquis porte la terre.
  */
 import { Poster } from '@/components/ui/Poster'
-import { Check, ChevronRight, Circle, Contrast } from 'lucide-react'
+import { Check, ChevronRight, Circle, Contrast, FolderInput } from 'lucide-react'
+import { Chip } from '@/components/ui/Chip'
 import { useState } from 'react'
 import { formatDateRange } from '@/lib/dates'
 import { settledLast, type PaymentTone } from '@/lib/dossiers'
@@ -87,16 +88,18 @@ export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
                 </span>
 
                 <span className="dossiers__state">
-                  {dossier.view.dossier.acquired ? (
-                    <span className="dossiers__dot dossiers__dot--acquired" />
-                  ) : (
-                    <Contrast
-                      className="dossiers__icon dossiers__icon--sent"
-                      size={12}
-                      strokeWidth={2.2}
-                    />
-                  )}
-                  {dossier.view.dossier.label}
+                  <Chip
+                    tone={dossier.view.dossier.acquired ? 'ok' : 'sent'}
+                    icon={
+                      dossier.view.dossier.acquired ? (
+                        <Check size={12} strokeWidth={2.4} />
+                      ) : (
+                        <FolderInput size={12} strokeWidth={2.4} />
+                      )
+                    }
+                  >
+                    {dossier.view.dossier.label}
+                  </Chip>
                 </span>
 
                 <span className="dossiers__payment">

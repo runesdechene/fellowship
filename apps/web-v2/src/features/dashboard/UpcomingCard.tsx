@@ -2,7 +2,7 @@
  * QUOI     — la liste des dates suivantes, avec la ville et les amis présents.
  * POURQUOI — « X utilisateurs de Fellowship y vont » : on ne voit que son réseau.
  */
-import { ArrowRight, Contrast } from 'lucide-react'
+import { ArrowRight, Check, FolderInput } from 'lucide-react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatDaysShort } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -27,9 +27,21 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
                 onClick={() => go(`/evenement/${date.event.id}`)}
               >
                 {date.confirmed ? (
-                  <span className="upcoming__dot" />
+                  <span
+                    className="upcoming__status upcoming__status--confirmed"
+                    role="img"
+                    aria-label="Inscrit"
+                  >
+                    <Check size={14} strokeWidth={2.6} />
+                  </span>
                 ) : (
-                  <Contrast className="upcoming__pending" size={12} strokeWidth={2.4} />
+                  <span
+                    className="upcoming__status upcoming__status--sent"
+                    role="img"
+                    aria-label="Dossier envoyé"
+                  >
+                    <FolderInput size={14} strokeWidth={2.2} />
+                  </span>
                 )}
                 <span className="upcoming__identity">
                   <span className="upcoming__line">

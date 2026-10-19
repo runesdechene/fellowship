@@ -131,6 +131,11 @@
   --menthe-300: #6ee7b7;
   --pervenche-300: #a5b4fc;
   --bleu-50: #e8eef5; /* fond d'un dossier envoyé, le jour */
+  /* Inscrit et dossier envoyé, de la maquette d'Uriel (19/10/2026) : une coche verte, un dossier bleu. */
+  --jade-600: #47947f;
+  --jade-50: #e1e8e4;
+  --indigo-600: #3c56bc;
+  --indigo-50: #dee5ff;
   /* Les teintes de l'administration (maquettes « Admin — … », validées le 15/10/2026) : une
      pastille par type d'enseigne, une icône par bloc. */
   --prune-700: #7a4f78; /* encre d'un festival, des comptes reliés, le jour */

@@ -4,7 +4,7 @@
  *            Sur téléphone, les amis présents passent de l'affiche à sous le lieu (Uriel, 19/10/2026).
  * ATTENTION — le statut se lit par la FORME de l'icône et sa couleur, la même que partout ailleurs.
  */
-import { Check, CircleDashed, Contrast } from 'lucide-react'
+import { Check, CircleDashed, FolderInput } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Chip, type ChipTone } from '@/components/ui/Chip'
@@ -15,7 +15,7 @@ import type { CalendarDate } from './useCalendar'
 
 const STATUS: Record<ParticipationStatus, { label: string; tone: ChipTone; icon: typeof Check }> = {
   interesse: { label: 'Intéressé', tone: 'todo', icon: CircleDashed },
-  en_cours: { label: 'Dossier envoyé', tone: 'sent', icon: Contrast },
+  en_cours: { label: 'Dossier envoyé', tone: 'sent', icon: FolderInput },
   inscrit: { label: 'Inscrit', tone: 'ok', icon: Check },
   confirme: { label: 'Inscrit', tone: 'ok', icon: Check },
   refuse: { label: 'Refusé', tone: 'neutral', icon: CircleDashed },

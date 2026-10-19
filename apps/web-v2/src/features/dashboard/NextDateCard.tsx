@@ -3,7 +3,7 @@
  * POURQUOI — la date la plus proche mérite sa propre carte ; un clic ouvre sa fiche.
  */
 import { Poster } from '@/components/ui/Poster'
-import { Check, Contrast } from 'lucide-react'
+import { Check, FolderInput } from 'lucide-react'
 import { Chip } from '@/components/ui/Chip'
 import { formatCountdown, formatDateRange, parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -32,7 +32,7 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
               Inscrit
             </Chip>
           ) : (
-            <Chip tone="sent" icon={<Contrast size={12} strokeWidth={2.4} />}>
+            <Chip tone="sent" icon={<FolderInput size={12} strokeWidth={2.4} />}>
               Dossier envoyé
             </Chip>
           )}

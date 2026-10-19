@@ -10,7 +10,7 @@
  *            pose pas (`locked`) : le choix ouvre l'invitation Pro ; une date déjà posée, elle,
  *            reste toujours modifiable (lib/plan.ts).
  */
-import { Check, Clock, Star } from 'lucide-react'
+import { Check, FolderInput, Star } from 'lucide-react'
 import { useState } from 'react'
 import { ProBubble } from '@/components/ui/ProBubble'
 import { Segmented, type SegmentedOption } from '@/components/ui/Segmented'
@@ -20,7 +20,7 @@ type ChosenStatus = 'interesse' | 'en_cours' | 'inscrit'
 
 const STEPS: SegmentedOption<ChosenStatus>[] = [
   { value: 'interesse', label: 'Intéressé', Icon: Star },
-  { value: 'en_cours', label: 'Dossier envoyé', Icon: Clock, sent: true },
+  { value: 'en_cours', label: 'Dossier envoyé', Icon: FolderInput, sent: true },
   { value: 'inscrit', label: 'Inscrit', Icon: Check, validated: true },
 ]
 
