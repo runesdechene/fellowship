@@ -529,7 +529,10 @@
      pour devenir une texture. Ce n'est pas une graduation, c'est un
      basculement — le franchir se décide, ne s'ajuste pas. */
   --wall-veil: var(--ink-950);
-  --wall-veil-opacity: 0.45;
+  /* En clair, l'affiche garde ses couleurs d'origine (Uriel, 19/10/2026) : la page claire la porte
+     sans s'effacer, et l'affiche se montre telle que l'organisateur l'a faite. Le voile ne vit plus
+     que la nuit, où une affiche fluo éblouirait (thème sombre, plus bas). */
+  --wall-veil-opacity: 0;
 
   /* L'ARRIVÉE DU MUR. Il entre par la droite quand son image est prête — pas
      au chargement de la page : l'affiche vient après la requête, et un
@@ -1573,6 +1576,7 @@
   --surface-control-hover: var(--night-200);
   --icon-button-surface: var(--night-100);
   --icon-button-surface-hover: var(--night-200);
+  --wall-veil-opacity: 0.45; /* la nuit, le voile brun calme l'affiche (voir --wall-veil) */
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
   --poster-empty-surface: var(--night-300);
