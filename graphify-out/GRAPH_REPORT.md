@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-10-19)
 
 ## Corpus Check
-- 756 files · ~1,015,308 words
+- 756 files · ~1,015,468 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2246 nodes · 1845 edges · 741 communities detected
+- 2249 nodes · 1849 edges · 741 communities detected
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
@@ -859,12 +859,12 @@ Cohesion: 0.27
 Nodes (7): defaultRouteForActor(), isPublicProfilePath(), isRouteValidFor(), mobilePrimaryFor(), mobileSecondaryFor(), navItemsFor(), planForActor()
 
 ### Community 17 - "Community 17"
-Cohesion: 0.25
-Nodes (6): applyTheme(), currentTheme(), deviceTheme(), readThemeChoice(), resolveTheme(), storedThemeChoice()
-
-### Community 18 - "Community 18"
 Cohesion: 0.2
 Nodes (2): handleJoin(), handleMarkApplied()
+
+### Community 18 - "Community 18"
+Cohesion: 0.25
+Nodes (6): applyTheme(), currentTheme(), deviceTheme(), readThemeChoice(), resolveTheme(), storedThemeChoice()
 
 ### Community 19 - "Community 19"
 Cohesion: 0.2
@@ -999,28 +999,28 @@ Cohesion: 0.33
 Nodes (2): actorOf(), saveTestimonial()
 
 ### Community 52 - "Community 52"
-Cohesion: 0.43
-Nodes (4): changedFields(), eventToDraft(), sent(), text()
+Cohesion: 0.38
+Nodes (3): onRelease(), pick(), settle()
 
 ### Community 53 - "Community 53"
 Cohesion: 0.43
-Nodes (5): emptyProspect(), fieldOf(), planImport(), readRow(), simplify()
+Nodes (4): changedFields(), eventToDraft(), sent(), text()
 
 ### Community 54 - "Community 54"
+Cohesion: 0.43
+Nodes (5): emptyProspect(), fieldOf(), planImport(), readRow(), simplify()
+
+### Community 55 - "Community 55"
 Cohesion: 0.57
 Nodes (6): readPhone(), registration(), remember(), subscribe(), thisPhone(), unsubscribe()
 
-### Community 55 - "Community 55"
+### Community 56 - "Community 56"
 Cohesion: 0.43
 Nodes (4): cleanRichText(), descriptionExcerpt(), htmlToText(), isRichTextEmpty()
 
-### Community 56 - "Community 56"
-Cohesion: 0.33
-Nodes (2): datesLabel(), entityLine()
-
 ### Community 57 - "Community 57"
 Cohesion: 0.33
-Nodes (0): 
+Nodes (2): datesLabel(), entityLine()
 
 ### Community 58 - "Community 58"
 Cohesion: 0.33
@@ -1039,16 +1039,16 @@ Cohesion: 0.33
 Nodes (0): 
 
 ### Community 62 - "Community 62"
+Cohesion: 0.33
+Nodes (0): 
+
+### Community 63 - "Community 63"
 Cohesion: 0.47
 Nodes (3): handleCodeChange(), handlePaste(), handleVerify()
 
-### Community 63 - "Community 63"
+### Community 64 - "Community 64"
 Cohesion: 0.4
 Nodes (2): handleSubmit(), update()
-
-### Community 64 - "Community 64"
-Cohesion: 0.33
-Nodes (0): 
 
 ### Community 65 - "Community 65"
 Cohesion: 0.33
@@ -1059,76 +1059,76 @@ Cohesion: 0.33
 Nodes (0): 
 
 ### Community 67 - "Community 67"
+Cohesion: 0.33
+Nodes (0): 
+
+### Community 68 - "Community 68"
 Cohesion: 0.53
 Nodes (4): avatarOf(), editing(), slugOf(), vitrineOf()
 
-### Community 68 - "Community 68"
+### Community 69 - "Community 69"
 Cohesion: 0.33
 Nodes (0): 
-
-### Community 69 - "Community 69"
-Cohesion: 0.6
-Nodes (4): enrich(), horizonOf(), loadHome(), loadSearch()
 
 ### Community 70 - "Community 70"
 Cohesion: 0.6
-Nodes (4): jump(), moveTo(), onPointerUp(), step()
+Nodes (4): enrich(), horizonOf(), loadHome(), loadSearch()
 
 ### Community 71 - "Community 71"
+Cohesion: 0.6
+Nodes (4): jump(), moveTo(), onPointerUp(), step()
+
+### Community 72 - "Community 72"
 Cohesion: 0.53
 Nodes (5): billingNote(), billingReady(), sirenDigits(), spaced(), validSiren()
 
-### Community 72 - "Community 72"
+### Community 73 - "Community 73"
 Cohesion: 0.4
 Nodes (2): distanceKm(), radians()
-
-### Community 73 - "Community 73"
-Cohesion: 0.33
-Nodes (0): 
 
 ### Community 74 - "Community 74"
 Cohesion: 0.33
 Nodes (0): 
 
 ### Community 75 - "Community 75"
-Cohesion: 0.47
-Nodes (3): compress(), reportPhotoPath(), uploadReportPhoto()
-
-### Community 76 - "Community 76"
 Cohesion: 0.33
 Nodes (0): 
 
+### Community 76 - "Community 76"
+Cohesion: 0.47
+Nodes (3): compress(), reportPhotoPath(), uploadReportPhoto()
+
 ### Community 77 - "Community 77"
+Cohesion: 0.33
+Nodes (0): 
+
+### Community 78 - "Community 78"
 Cohesion: 0.47
 Nodes (3): checkoutOutcome(), openPortal(), startCheckout()
 
-### Community 78 - "Community 78"
+### Community 79 - "Community 79"
 Cohesion: 0.53
 Nodes (4): composeEmail(), escape(), linkify(), toHtml()
 
-### Community 79 - "Community 79"
+### Community 80 - "Community 80"
 Cohesion: 0.4
 Nodes (1): ErrorBoundary
 
-### Community 80 - "Community 80"
+### Community 81 - "Community 81"
 Cohesion: 0.5
 Nodes (2): hexToHsl(), hexToTagColors()
-
-### Community 81 - "Community 81"
-Cohesion: 0.4
-Nodes (0): 
 
 ### Community 82 - "Community 82"
 Cohesion: 0.4
 Nodes (0): 
 
 ### Community 83 - "Community 83"
-Cohesion: 0.5
-Nodes (2): getTagIcon(), TagBadge()
-
-### Community 84 - "Community 84"
 Cohesion: 0.4
 Nodes (0): 
+
+### Community 84 - "Community 84"
+Cohesion: 0.5
+Nodes (2): getTagIcon(), TagBadge()
 
 ### Community 85 - "Community 85"
 Cohesion: 0.4
@@ -1152,19 +1152,19 @@ Nodes (0):
 
 ### Community 90 - "Community 90"
 Cohesion: 0.4
-Nodes (1): categoryLabel()
+Nodes (0): 
 
 ### Community 91 - "Community 91"
-Cohesion: 0.5
-Nodes (2): resolveUniqueHandle(), slugify()
+Cohesion: 0.4
+Nodes (1): categoryLabel()
 
 ### Community 92 - "Community 92"
 Cohesion: 0.5
-Nodes (2): hashName(), networkListItemDisplay()
+Nodes (2): resolveUniqueHandle(), slugify()
 
 ### Community 93 - "Community 93"
-Cohesion: 0.4
-Nodes (0): 
+Cohesion: 0.5
+Nodes (2): hashName(), networkListItemDisplay()
 
 ### Community 94 - "Community 94"
 Cohesion: 0.4
@@ -1175,12 +1175,12 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 96 - "Community 96"
-Cohesion: 0.7
-Nodes (4): erase(), focus(), paste(), type()
-
-### Community 97 - "Community 97"
 Cohesion: 0.4
 Nodes (0): 
+
+### Community 97 - "Community 97"
+Cohesion: 0.7
+Nodes (4): erase(), focus(), paste(), type()
 
 ### Community 98 - "Community 98"
 Cohesion: 0.4
@@ -1191,84 +1191,84 @@ Cohesion: 0.4
 Nodes (0): 
 
 ### Community 100 - "Community 100"
+Cohesion: 0.4
+Nodes (0): 
+
+### Community 101 - "Community 101"
 Cohesion: 0.6
 Nodes (3): onPointerDown(), onPointerMove(), ratioAt()
 
-### Community 101 - "Community 101"
+### Community 102 - "Community 102"
 Cohesion: 0.5
 Nodes (2): followable(), followTarget()
 
-### Community 102 - "Community 102"
+### Community 103 - "Community 103"
 Cohesion: 0.6
 Nodes (3): fetchDossiers(), fetchReports(), loadDashboard()
 
-### Community 103 - "Community 103"
+### Community 104 - "Community 104"
 Cohesion: 0.4
 Nodes (0): 
-
-### Community 104 - "Community 104"
-Cohesion: 0.6
-Nodes (3): leave(), pickPhoto(), write()
 
 ### Community 105 - "Community 105"
 Cohesion: 0.6
-Nodes (3): countEntities(), isFollowing(), loadVitrine()
+Nodes (3): leave(), pickPhoto(), write()
 
 ### Community 106 - "Community 106"
+Cohesion: 0.6
+Nodes (3): countEntities(), isFollowing(), loadVitrine()
+
+### Community 107 - "Community 107"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 107 - "Community 107"
+### Community 108 - "Community 108"
 Cohesion: 0.5
 Nodes (2): readDraft(), storedReferral()
 
-### Community 108 - "Community 108"
+### Community 109 - "Community 109"
 Cohesion: 0.4
 Nodes (0): 
 
-### Community 109 - "Community 109"
+### Community 110 - "Community 110"
 Cohesion: 0.6
 Nodes (3): at(), line(), row()
 
-### Community 110 - "Community 110"
+### Community 111 - "Community 111"
 Cohesion: 0.8
 Nodes (4): dates(), duplicateLine(), place(), previewPlace()
 
-### Community 111 - "Community 111"
+### Community 112 - "Community 112"
 Cohesion: 0.6
 Nodes (3): detailOf(), dossierView(), toneOf()
 
-### Community 112 - "Community 112"
+### Community 113 - "Community 113"
 Cohesion: 0.5
 Nodes (2): eventsInWindow(), searchEvents()
 
-### Community 113 - "Community 113"
+### Community 114 - "Community 114"
 Cohesion: 0.8
 Nodes (4): fetchActorProfiles(), fetchCompanions(), fetchFriendsByEvent(), fetchMutualFriendIds()
 
-### Community 114 - "Community 114"
+### Community 115 - "Community 115"
 Cohesion: 0.6
 Nodes (3): fitWithin(), resizeImage(), toBlob()
-
-### Community 115 - "Community 115"
-Cohesion: 0.4
-Nodes (0): 
 
 ### Community 116 - "Community 116"
 Cohesion: 0.4
 Nodes (0): 
 
 ### Community 117 - "Community 117"
-Cohesion: 0.6
-Nodes (3): isFilled(), reportFigures(), yearSummary()
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 118 - "Community 118"
 Cohesion: 0.6
-Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
+Nodes (3): isFilled(), reportFigures(), yearSummary()
 
 ### Community 119 - "Community 119"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.6
+Nodes (5): Branding Mismatch (SVG placeholder vs PNG branded), PWA Icon 192x192 (PNG, branded Fellowship logo), PWA Icon 192x192 (SVG, placeholder F on black), PWA Icon 512x512 (PNG, branded Fellowship logo), PWA Icon 512x512 (SVG, placeholder F on black)
 
 ### Community 120 - "Community 120"
 Cohesion: 0.5
@@ -1279,16 +1279,16 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 122 - "Community 122"
-Cohesion: 0.67
-Nodes (2): datesLabel(), shortDate()
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 123 - "Community 123"
 Cohesion: 0.67
-Nodes (2): addTag(), handleKeyDown()
+Nodes (2): datesLabel(), shortDate()
 
 ### Community 124 - "Community 124"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.67
+Nodes (2): addTag(), handleKeyDown()
 
 ### Community 125 - "Community 125"
 Cohesion: 0.5
@@ -1311,36 +1311,36 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 130 - "Community 130"
+Cohesion: 0.5
+Nodes (0): 
+
+### Community 131 - "Community 131"
 Cohesion: 0.67
 Nodes (2): useCommunityFeed(), useNetworkActivityMini()
 
-### Community 131 - "Community 131"
+### Community 132 - "Community 132"
 Cohesion: 0.5
 Nodes (0): 
-
-### Community 132 - "Community 132"
-Cohesion: 0.83
-Nodes (3): getLastSeen(), markSeenNow(), seenKey()
 
 ### Community 133 - "Community 133"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.83
+Nodes (3): getLastSeen(), markSeenNow(), seenKey()
 
 ### Community 134 - "Community 134"
 Cohesion: 0.5
 Nodes (0): 
 
 ### Community 135 - "Community 135"
+Cohesion: 0.5
+Nodes (0): 
+
+### Community 136 - "Community 136"
 Cohesion: 0.83
 Nodes (3): billingFormReady(), luhnValid(), validateSiren()
 
-### Community 136 - "Community 136"
+### Community 137 - "Community 137"
 Cohesion: 0.67
 Nodes (2): openCustomerPortal(), startCheckout()
-
-### Community 137 - "Community 137"
-Cohesion: 0.5
-Nodes (0): 
 
 ### Community 138 - "Community 138"
 Cohesion: 0.5
@@ -1348,19 +1348,19 @@ Nodes (0):
 
 ### Community 139 - "Community 139"
 Cohesion: 0.5
-Nodes (1): LoadBoundary
+Nodes (0): 
 
 ### Community 140 - "Community 140"
-Cohesion: 0.67
-Nodes (2): readable(), save()
+Cohesion: 0.5
+Nodes (1): LoadBoundary
 
 ### Community 141 - "Community 141"
 Cohesion: 0.67
 Nodes (2): readable(), save()
 
 ### Community 142 - "Community 142"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.67
+Nodes (2): readable(), save()
 
 ### Community 143 - "Community 143"
 Cohesion: 0.5
@@ -1371,8 +1371,8 @@ Cohesion: 0.5
 Nodes (0): 
 
 ### Community 145 - "Community 145"
-Cohesion: 0.67
-Nodes (2): pick(), settle()
+Cohesion: 0.5
+Nodes (0): 
 
 ### Community 146 - "Community 146"
 Cohesion: 0.5
