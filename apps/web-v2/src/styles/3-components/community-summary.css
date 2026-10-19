@@ -1,0 +1,50 @@
+/**
+ * QUOI     — le résumé de la communauté sur le tableau de bord (features/dashboard/CommunitySummary).
+ * POURQUOI — même carte que l'invitation au téléphone : blanche bordée, l'icône, deux lignes de
+ *            texte, un bouton.
+ */
+.community-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-18) var(--space-20);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .community-summary {
+    opacity: 0;
+  }
+}
+
+.community-summary__icon {
+  flex: none;
+  color: var(--ink-title);
+}
+
+.community-summary__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.community-summary__title {
+  font: var(--type-phone-invite-title);
+  color: var(--ink-title);
+}
+
+.community-summary__note {
+  font: var(--type-settings-note);
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-summary {
+    transition: none;
+  }
+}

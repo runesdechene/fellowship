@@ -7,7 +7,7 @@
  *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
  *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
  * ATTENTION — Signalements porte le nombre en attente (maquette 2338:23), relu à chaque changement
- *            d'adresse.
+ *            d'adresse ; Communauté, en rouge, les demandes d'ami en attente (Uriel, 19/10/2026).
  */
 import {
   CalendarDays,
@@ -27,6 +27,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
+import { requestsLabel } from '@/lib/community'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
@@ -88,9 +89,10 @@ const ADMIN_ITEMS = [
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
+  friendRequests: number
 }
 
-export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, friendRequests }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
   const { actor, entities } = useAuth()
   const { pathname, search } = useLocation()
@@ -142,6 +144,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               <>
                 <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
                 <span className="sidebar__item-label">{label}</span>
+                {to === '/communaute' && friendRequests > 0 && (
+                  <span
+                    className="sidebar__count sidebar__count--alert"
+                    aria-label={requestsLabel(friendRequests)}
+                  >
+                    {friendRequests}
+                  </span>
+                )}
               </>
             )
 

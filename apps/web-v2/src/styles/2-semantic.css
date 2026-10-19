@@ -1137,6 +1137,9 @@
   /* Le lot 4 : la pastille de Signalements (maquette 2338:23), les lignes à actions, la citation */
   --sidebar-count-surface: var(--action-surface);
   --sidebar-count-ink: var(--action-ink);
+  /* Une demande d'ami en attente : la seule pastille rouge de la navigation, jour comme nuit */
+  --nav-alert-surface: var(--brique-600);
+  --nav-alert-ink: var(--sand-0);
   --sidebar-count-padding: var(--space-2) var(--space-7);
   --type-sidebar-count: var(--weight-semibold) var(--size-11) / var(--leading-snug)
     var(--family-sans);

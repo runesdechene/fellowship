@@ -1,6 +1,7 @@
 /**
  * QUOI     — l'écran Communauté : titre, filtres (dans l'adresse), « Ça se rassemble », le fil
- *            groupé par jour, et à droite « Où vous vous croiserez » et « À suivre ».
+ *            groupé par jour, et à droite « Ta communauté », « Où vous vous croiserez » et
+ *            « Tu connais peut-être ».
  * POURQUOI — lot 9a, maquette 2212:2 : d'abord ce que vit la tribu, ensuite agrandir son réseau.
  *            L'écran n'invente rien : useCommunity lit, lib/community.ts dit.
  */
@@ -20,8 +21,10 @@ import { groupByDay } from '@/lib/notifications'
 import { CrossingCard } from './CrossingCard'
 import { FeedItem } from './FeedItem'
 import { Gathering } from './Gathering'
+import { NetworkCard } from './NetworkCard'
 import { ToFollowCard } from './ToFollowCard'
 import { useCommunity } from './useCommunity'
+import { useNetwork } from './useNetwork'
 
 const TABS: { key: CommunityTab; label: string }[] = [
   { key: 'tout', label: 'Tout' },
@@ -61,6 +64,7 @@ function CommunityScreen() {
     follow,
     mark,
   } = useCommunity(actor?.id)
+  const network = useNetwork()
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -148,6 +152,9 @@ function CommunityScreen() {
         </div>
 
         <aside className="community__side">
+          {!error && network && (
+            <NetworkCard network={network} followed={followed} onFollow={(id) => void follow(id)} />
+          )}
           {!error && <CrossingCard crossing={crossing} />}
           {!error && (
             <ToFollowCard

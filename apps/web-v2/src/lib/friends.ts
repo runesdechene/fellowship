@@ -24,22 +24,50 @@ export const PROGRAMMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme'
 /** Statuts qui valent pastille verte ; le reste passe en pastille terre. */
 export const CONFIRMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme']
 
-/** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
-async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
+/** Qui l'acteur suit, et qui le suit, les plus récents d'abord. */
+async function readFollows(actorId: string) {
   const follows = must(
     await supabase
       .from('follows')
       .select('follower_actor, following_actor')
-      .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`),
+      .or(`follower_actor.eq.${actorId},following_actor.eq.${actorId}`)
+      .order('created_at', { ascending: false }),
   )
 
   const following = new Set<string>()
-  const followers = new Set<string>()
+  const followers: string[] = []
   for (const row of follows) {
     if (row.follower_actor === actorId) following.add(row.following_actor)
-    if (row.following_actor === actorId) followers.add(row.follower_actor)
+    if (row.following_actor === actorId) followers.push(row.follower_actor)
   }
-  return [...following].filter((id) => followers.has(id))
+  return { following, followers }
+}
+
+/** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
+async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
+  const { following, followers } = await readFollows(actorId)
+  return followers.filter((id) => following.has(id))
+}
+
+/** L'état du réseau : qui me suit, mes amis, et ceux qui me suivent sans que je les suive. */
+export interface Network {
+  followers: number
+  friends: number
+  /** Les demandes d'ami en attente : me suivre en retour en fait des amis. */
+  requests: Friend[]
+}
+
+/** `own` : les comptes de la même personne, qui ne sont ni des abonnés ni des demandes. */
+export async function fetchNetwork(actorId: string, own: ReadonlySet<string>): Promise<Network> {
+  const { following, followers } = await readFollows(actorId)
+  const others = followers.filter((id) => !own.has(id))
+  const requestIds = others.filter((id) => !following.has(id))
+  const profiles = await fetchActorProfiles(requestIds)
+  return {
+    followers: others.length,
+    friends: others.length - requestIds.length,
+    requests: requestIds.flatMap((id) => profiles.get(id) ?? []),
+  }
 }
 
 /**

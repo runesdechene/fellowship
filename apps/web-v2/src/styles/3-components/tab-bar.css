@@ -23,6 +23,7 @@
   }
 
   .tab-bar__item {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,6 +31,17 @@
     font: var(--type-tab-bar);
     color: var(--ink-section-pale);
     cursor: pointer;
+  }
+
+  /* Une demande d'ami en attente, en haut à droite de l'icône de Communauté */
+  .tab-bar__dot {
+    position: absolute;
+    top: 0;
+    left: calc(50% + var(--space-6));
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: var(--round-full);
+    background: var(--nav-alert-surface);
   }
 
   /* L'onglet actif : son icône et son nom prennent la terre du logo. */

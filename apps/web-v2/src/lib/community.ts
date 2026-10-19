@@ -263,3 +263,13 @@ export function appendPage(
     hasMore: page.length >= pageSize,
   }
 }
+
+/** « 5 amis · 12 abonnés » : l'état du réseau, dans « Ta communauté » et sur le tableau de bord. */
+export function networkCounts(friends: number, followers: number): string {
+  return `${String(friends)} ${friends === 1 ? 'ami' : 'amis'} · ${String(followers)} ${followers === 1 ? 'abonné' : 'abonnés'}`
+}
+
+/** « 2 demandes d’ami en attente » : ceux qui te suivent sans que tu les suives. */
+export function requestsLabel(count: number): string {
+  return count === 1 ? '1 demande d’ami en attente' : `${String(count)} demandes d’ami en attente`
+}

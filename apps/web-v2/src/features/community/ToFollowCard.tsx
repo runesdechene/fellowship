@@ -1,6 +1,6 @@
 /**
- * QUOI     — « À suivre » : trois enseignes, chacune avec sa raison (« suivi par Tom et 2 autres »),
- *            et un + pour la suivre.
+ * QUOI     — « Tu connais peut-être » (« À suivre » jusqu'au 19/10/2026) : trois enseignes,
+ *            chacune avec sa raison (« suivi par Tom et 2 autres »), et un + pour la suivre.
  * POURQUOI — lot 9a, maquette 2212:2 : agrandir son réseau tant que la communauté est jeune. Une
  *            enseigne suivie s'efface aussitôt ; la relecture la remplace par la suivante.
  */
@@ -21,7 +21,7 @@ export function ToFollowCard({ accounts, followed, onFollow }: ToFollowCardProps
   return (
     <section className="side-card" aria-labelledby="to-follow-title">
       <h2 id="to-follow-title" className="side-card__title">
-        À suivre
+        Tu connais peut-être
       </h2>
       <ul className="side-card__list">
         {accounts.map((account) => {

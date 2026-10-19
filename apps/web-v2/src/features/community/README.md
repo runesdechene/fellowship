@@ -10,4 +10,6 @@ appliquée ; `lib/community.ts` les lit et les dit.
 - `FeedItem.tsx` — une ligne du fil (phrase, festival ou avis, âge, Suivre).
 - `Gathering.tsx` — « Ça se rassemble ».
 - `CrossingCard.tsx` — « Où vous vous croiserez ».
-- `ToFollowCard.tsx` — « À suivre ».
+- `ToFollowCard.tsx` — « Tu connais peut-être ».
+- `NetworkCard.tsx` — « Ta communauté » : amis, abonnés, demandes d'ami en attente.
+- `useNetwork.ts` — l'état du réseau, lu aussi par la pastille de la navigation et le tableau de bord.

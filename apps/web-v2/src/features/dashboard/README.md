@@ -5,6 +5,7 @@ les composants ne font qu'afficher.
 
 - `Dashboard.tsx` — l'écran : assemble les blocs.
 - `useDashboard.ts` — les données : participations, amis, registre des bilans → `DashboardData`.
+- `CommunitySummary.tsx` — la communauté : amis, abonnés, demandes d'ami en attente.
 - `ActionBanner.tsx` — la bande qui réclame le dernier bilan.
 - `PaymentBanner.tsx` — la même bande quand le dernier paiement a échoué : vers l'espace Stripe.
 - `SeasonChart.tsx` — la frise des mois.

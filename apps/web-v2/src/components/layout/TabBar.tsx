@@ -3,6 +3,7 @@
  *            « Moi » à droite, qui ouvre le menu du compte en feuille.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
+ *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026).
  * ATTENTION — invisible sur ordinateur (tab-bar.css).
  */
 import { CalendarDays, Check, CircleGauge, Plus, Settings, Telescope, Users } from 'lucide-react'
@@ -11,6 +12,7 @@ import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { useAuth } from '@/lib/auth'
+import { requestsLabel } from '@/lib/community'
 
 const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
@@ -19,7 +21,7 @@ const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }>
   { to: '/communaute', label: 'Communauté', Icon: Users },
 ]
 
-export function TabBar() {
+export function TabBar({ friendRequests }: { friendRequests: number }) {
   const { actor, actors, switchActor } = useAuth()
   const [open, setOpen] = useState(false)
   const sheet = useRef<HTMLDivElement>(null)
@@ -97,6 +99,9 @@ export function TabBar() {
             <>
               <Icon size={22} strokeWidth={1.75} />
               <span>{label}</span>
+              {to === '/communaute' && friendRequests > 0 && (
+                <span className="tab-bar__dot" aria-label={requestsLabel(friendRequests)} />
+              )}
             </>
           )
           return (

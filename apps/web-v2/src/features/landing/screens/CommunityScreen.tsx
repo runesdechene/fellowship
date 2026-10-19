@@ -1,9 +1,9 @@
 /**
  * QUOI     — l'écran Communauté de la landing : « Ça se rassemble » sur le festival à venir le plus
- *            suivi, le fil de la tribu, « Où vous vous croiserez » et « À suivre ».
+ *            suivi, le fil de la tribu, « Où vous vous croiserez » et « Tu connais peut-être ».
  * POURQUOI — maquette 2290:2 (nœud 2290:653), reproduite d'après la Communauté de l'app. Les
  *            festivals et le nombre d'inscrits viennent de la base ; les prénoms sont de démonstration.
- * ATTENTION — jamais le nom d'un vrai exposant : le fil et « À suivre » sont des démonstrations.
+ * ATTENTION — jamais le nom d'un vrai exposant : le fil et « Tu connais peut-être » sont des démonstrations.
  */
 import { Plus, Star } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
@@ -108,7 +108,7 @@ export function CommunityScreen({ showcase }: { showcase: Showcase }) {
             ))}
           </div>
           <div className="landing-com__box">
-            <h5>À suivre</h5>
+            <h5>Tu connais peut-être</h5>
             {DEMO.goers.slice(5, 8).map((g) => (
               <span key={g.name} className="landing-com__follow">
                 <span className="landing-com__face">{g.name.charAt(0)}</span>

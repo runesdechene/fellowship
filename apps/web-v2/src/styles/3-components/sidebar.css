@@ -100,6 +100,11 @@
   color: var(--sidebar-count-ink);
 }
 
+.sidebar__count--alert {
+  background: var(--nav-alert-surface);
+  color: var(--nav-alert-ink);
+}
+
 .app-shell--collapsed .sidebar__count {
   display: none;
 }

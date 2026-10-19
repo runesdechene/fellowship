@@ -1,6 +1,6 @@
 /**
- * QUOI     — l'écran du tableau de bord : accueil, paiement échoué, invitation au téléphone, bande
- *            d'action, frise de saison, prochaine date, dates à venir, pour toi, mes dossiers, mes bilans.
+ * QUOI     — l'écran du tableau de bord : accueil, paiement échoué, invitation au téléphone, la
+ *            communauté, bande d'action, frise de saison, prochaine date, dates à venir, pour toi, mes dossiers, mes bilans.
  * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
  *            il assemble ce que useDashboard prépare.
  */
@@ -8,6 +8,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { usePlan } from '@/lib/usePlan'
 import { ActionBanner } from './ActionBanner'
+import { CommunitySummary } from './CommunitySummary'
 import { DossiersSection } from './DossiersSection'
 import { NextDateCard } from './NextDateCard'
 import { PaymentBanner } from './PaymentBanner'
@@ -72,6 +73,8 @@ export function Dashboard() {
       )}
 
       <PhoneInvite />
+
+      <CommunitySummary />
 
       {pendingReport && pro && (
         <section className="dashboard__section">

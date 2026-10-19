@@ -19,6 +19,7 @@ import {
   type FollowReason,
 } from '@/lib/community'
 import { must, supabase } from '@/lib/supabase'
+import { NETWORK_CHANGED } from './useNetwork'
 
 export interface Crossing {
   eventId: string
@@ -172,6 +173,7 @@ export function useCommunity(actorId: string | undefined) {
         return
       }
       setVersion((current) => current + 1)
+      window.dispatchEvent(new Event(NETWORK_CHANGED))
     },
     [actorId],
   )
