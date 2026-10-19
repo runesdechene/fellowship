@@ -39,10 +39,6 @@
   gap: var(--space-16);
 }
 
-.admin-update-form__serif {
-  font: var(--type-admin-updates-serif);
-}
-
 .admin-update-form__drop {
   padding: var(--space-20);
   border: 1px dashed var(--line-card);
@@ -68,6 +64,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-12);
+  margin: 0;
+  padding: 0;
   border: 0;
 }
 

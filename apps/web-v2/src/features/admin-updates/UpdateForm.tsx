@@ -102,7 +102,6 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
         </Field>
         <Field label="Titre" required>
           <Input
-            className="admin-update-form__serif"
             value={draft.title}
             maxLength={200}
             onChange={(e) => set({ title: e.target.value })}

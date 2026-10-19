@@ -961,8 +961,6 @@
   --admin-updates-list-width: 520px;
   --admin-updates-version-width: 160px;
   --admin-updates-thumb-width: 160px;
-  --type-admin-updates-serif: var(--weight-regular) var(--size-22) / var(--leading-snug)
-    var(--family-display);
 
   /* Le bloc « Pour toi » (lot 8d, maquette 2206:2) : l'affiche au gabarit des bilans, « Pas pour
      moi » en petite icône d'interdiction, en encre effacée (Uriel, 10/10/2026), le nombre trouvé du gratuit en grand titre. */
