@@ -1,6 +1,6 @@
 /**
  * QUOI     — l'écran du tableau de bord : accueil, paiement échoué, invitation au téléphone, la
- *            communauté, bande d'action, frise de saison, prochaine date, dates à venir, pour toi, mes dossiers, mes bilans.
+ *            communauté, bande d'action, frise de saison, prochaine date, dates à venir, mes dossiers, pour toi, mes bilans.
  * POURQUOI — c'est l'écran de la maquette, et le seul point d'entrée de la V2. Il ne calcule rien :
  *            il assemble ce que useDashboard prépare.
  */
@@ -99,10 +99,10 @@ export function Dashboard() {
         </section>
       )}
 
+      {dossiers.length > 0 && <DossiersSection dossiers={dossiers} />}
+
       {/* Une clé par acteur : changer d'enseigne repart de zéro, jamais les cartes de l'autre. */}
       <SuggestionsSection key={actor?.id} />
-
-      {dossiers.length > 0 && <DossiersSection dossiers={dossiers} />}
 
       {reports.length > 0 && (
         <ReportsSection

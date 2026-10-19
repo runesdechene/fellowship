@@ -399,6 +399,9 @@
   --chart-bar-min: 80px; /* hauteur d'un mois à une date */
   --chart-bar-max: 128px; /* hauteur du mois le plus chargé */
   --chart-bar-empty: 3px; /* le trait d'un mois vide */
+  /* Sur téléphone, les gélules à moitié de hauteur (Uriel, 19/10/2026). */
+  --chart-bar-min-mobile: 40px;
+  --chart-bar-max-mobile: 64px;
   --chart-label-gap: var(--space-12); /* barre ↔ nom du mois */
 
   /* =========================================================================

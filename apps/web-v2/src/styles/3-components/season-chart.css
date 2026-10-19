@@ -67,7 +67,14 @@
 
 @media (width <= 760px) {
   .season-chart {
+    --chart-bar-min: var(--chart-bar-min-mobile);
+    --chart-bar-max: var(--chart-bar-max-mobile);
+
     gap: var(--space-4);
+  }
+
+  .season-chart__bar {
+    padding-top: var(--space-6);
   }
 
   .season-chart__value {
