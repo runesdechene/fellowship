@@ -3,12 +3,13 @@
  * POURQUOI — un exposant peut agir sous plusieurs enseignes (modèle acteur) : le choix vit dans
  *            useAuth().switchActor, ce composant ne fait que l'afficher. Un admin y trouve une identité
  *            de plus, « Administration » : la choisir ouvre l'administration, choisir une enseigne
- *            en sort (Uriel, 16/10/2026).
+ *            en sort (Uriel, 16/10/2026). En bas, « Ajouter un compte exposant » ouvre l'arrivée
+ *            d'une nouvelle enseigne : le menu s'ouvre donc pour tous (Uriel, 21/10/2026).
  * ATTENTION — barre repliée : le clic rouvre la colonne au lieu d'ouvrir un menu que le rail
  *            rognerait.
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Check, ChevronDown } from 'lucide-react'
+import { Check, ChevronDown, Plus } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { ADMIN_HOME, isAdminPath } from '@/lib/admin-mode'
@@ -75,7 +76,6 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
     void navigate(ADMIN_HOME)
   }, [navigate])
 
-  const hasChoice = actors.length > 1 || isAdmin
   const shown = inAdmin ? { avatarUrl: null, label: ADMIN_LABEL, roleLabel: ADMIN_NOTE } : actor
 
   return (
@@ -85,27 +85,25 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
         className="account-switcher__trigger"
         onClick={toggle}
         aria-expanded={open}
-        aria-haspopup={hasChoice ? 'menu' : undefined}
+        aria-haspopup="menu"
       >
         <Avatar className="account-switcher__avatar" src={shown?.avatarUrl} name={shown?.label} />
         <span className="account-switcher__identity">
           <span className="account-switcher__name">{shown?.label ?? '—'}</span>
           <span className="account-switcher__role">{shown?.roleLabel ?? ''}</span>
         </span>
-        {hasChoice && (
-          <ChevronDown
-            className={
-              open
-                ? 'account-switcher__chevron account-switcher__chevron--open'
-                : 'account-switcher__chevron'
-            }
-            size={19}
-            strokeWidth={1.75}
-          />
-        )}
+        <ChevronDown
+          className={
+            open
+              ? 'account-switcher__chevron account-switcher__chevron--open'
+              : 'account-switcher__chevron'
+          }
+          size={19}
+          strokeWidth={1.75}
+        />
       </button>
 
-      {open && hasChoice && (
+      {open && (
         <div className="account-switcher__menu" role="menu">
           {actors.map((candidate) => (
             <button
@@ -146,6 +144,20 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
               )}
             </button>
           )}
+          <button
+            type="button"
+            role="menuitem"
+            className="account-switcher__option account-switcher__add"
+            onClick={() => {
+              setOpen(false)
+              void navigate('/bienvenue?nouvelle-enseigne')
+            }}
+          >
+            <span className="account-switcher__add-icon">
+              <Plus size={16} strokeWidth={2} />
+            </span>
+            <span className="account-switcher__name">Ajouter un compte exposant</span>
+          </button>
         </div>
       )}
     </div>

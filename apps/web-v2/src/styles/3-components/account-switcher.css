@@ -95,6 +95,25 @@
   background-color: var(--surface-nav-hover);
 }
 
+/* Le bandeau du bas : séparé des comptes par un liseré, son « + » tient la place d'un avatar. */
+.account-switcher__add {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--border-menu);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  padding-top: var(--space-10);
+}
+
+.account-switcher__add-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--avatar-size-account);
+  height: var(--avatar-size-account);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+}
+
 .account-switcher__check {
   flex: none;
   color: var(--status-ok-ink);
