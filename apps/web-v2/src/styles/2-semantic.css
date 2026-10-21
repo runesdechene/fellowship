@@ -1149,7 +1149,8 @@
   --welcome-dash-height: 4px;
   --welcome-dash-off: var(--sand-400);
   --welcome-panel-surface: var(--sand-200);
-  /* le cadre d’un refus (« Aucun code de parrainage trouvé », adresse prise) */
+  /* les cadres d’un verdict sur la saisie : code trouvé, refus */
+  --welcome-free-line: color-mix(in srgb, var(--jade-600) 30%, transparent);
   --welcome-problem-line: color-mix(in srgb, var(--brique-600) 30%, transparent);
   --welcome-banner: linear-gradient(to right, var(--sand-225), var(--sand-75));
   --welcome-banner-height: 180px;
@@ -1791,6 +1792,7 @@
   --danger-ink: var(--brique-400);
   --welcome-dash-off: var(--night-400);
   --welcome-panel-surface: var(--night-50);
+  --welcome-free-line: var(--status-validated-line);
   --welcome-problem-line: color-mix(in srgb, var(--brique-400) 35%, transparent);
   --welcome-banner: linear-gradient(to right, var(--night-200), var(--night-100));
   --welcome-decor-ink: var(--night-300);

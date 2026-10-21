@@ -132,17 +132,27 @@
   color: var(--ink-section-pale);
 }
 
-.welcome__note--free {
-  color: var(--status-validated-ink);
-}
-
+/* Un verdict sur la saisie (code trouvé, adresse prise…) se pose dans un cadre à sa teinte. */
+.welcome__note--free,
 .welcome__note--problem {
   display: block;
   padding: var(--space-8) var(--space-12);
-  border: 1px solid var(--welcome-problem-line);
+  border: 1px solid var(--note-line);
   border-radius: var(--radius-sm);
-  background: var(--tone-brique-surface);
-  color: var(--danger-ink);
+  background: var(--note-surface);
+  color: var(--note-ink);
+}
+
+.welcome__note--free {
+  --note-ink: var(--status-validated-ink);
+  --note-surface: var(--status-validated-surface);
+  --note-line: var(--welcome-free-line);
+}
+
+.welcome__note--problem {
+  --note-ink: var(--danger-ink);
+  --note-surface: var(--tone-brique-surface);
+  --note-line: var(--welcome-problem-line);
 }
 
 /* --- La vitrine en direct --------------------------------------------------- */
