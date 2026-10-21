@@ -151,7 +151,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
     await reloadIdentity()
     if (draft.createdId) switchActor(draft.createdId)
     clearWelcome()
-    go(safeReturn(search.get('retour')) ?? (kind === 'newEntity' ? '/reglages' : '/'))
+    go(safeReturn(search.get('retour')) ?? '/')
   }
 
   async function run(work: () => Promise<void>) {
