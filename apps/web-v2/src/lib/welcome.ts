@@ -1,23 +1,35 @@
 /**
  * QUOI     — les règles de l'arrivée d'un exposant : les étapes selon le cas, la validité de chaque
- *            étape, l'adresse tirée de la marque, le département d'un code postal, l'arrondi des
- *            chiffres du mur de connexion, les initiales, les chiffres d'un code collé.
- * POURQUOI — lot 10a (Uriel, 11/10/2026) : la marque d'abord, puis le prénom. Les écrans
- *            affichent ; ce qui se décide se teste ici.
+ *            étape, la phrase du code de parrainage, l'adresse tirée de la marque, le département
+ *            d'un code postal, l'arrondi des chiffres du mur de connexion, les initiales, les
+ *            chiffres d'un code collé.
+ * POURQUOI — lot 10a (Uriel, 11/10/2026) : la marque d'abord, puis le prénom. Sept étapes depuis
+ *            le 21/10/2026 (spec 2026-10-21-arrivee-sept-etapes) : la photo et la bannière avant
+ *            la création, les exposants et les festivals après. Les écrans affichent ; ce qui se
+ *            décide se teste ici.
  */
 import { cleanSlug, slugProblem } from './vitrine-edit'
 
-export type WelcomeStep = 'brand' | 'firstName' | 'craft' | 'place' | 'address'
+export type WelcomeStep =
+  'brand' | 'firstName' | 'craft' | 'place' | 'address' | 'design' | 'people' | 'festivals'
 export type WelcomeKind = 'new' | 'nameOnly' | 'newEntity'
 
 const STEPS: Record<WelcomeKind, WelcomeStep[]> = {
-  new: ['brand', 'firstName', 'craft', 'place', 'address'],
+  new: ['brand', 'firstName', 'craft', 'place', 'address', 'design', 'people', 'festivals'],
   nameOnly: ['firstName'],
-  newEntity: ['brand', 'craft', 'place', 'address'],
+  newEntity: ['brand', 'craft', 'place', 'address', 'design', 'people', 'festivals'],
 }
+
+/** L'enseigne se crée en quittant cette étape ; les suivantes travaillent sur l'enseigne créée. */
+export const CREATION_STEP: WelcomeStep = 'design'
 
 export function welcomeSteps(kind: WelcomeKind): WelcomeStep[] {
   return STEPS[kind]
+}
+
+export function isAfterCreation(steps: WelcomeStep[], index: number): boolean {
+  const creation = steps.indexOf(CREATION_STEP)
+  return creation !== -1 && index > creation
 }
 
 export interface WelcomeDraft {
@@ -31,6 +43,8 @@ export interface WelcomeDraft {
   slug: string
   slugTouched: boolean
   referral: string
+  /** L'enseigne créée : un retour en arrière ou un nouvel essai n'en crée pas une seconde. */
+  createdId: string | null
 }
 
 export const EMPTY_DRAFT: WelcomeDraft = {
@@ -43,6 +57,7 @@ export const EMPTY_DRAFT: WelcomeDraft = {
   slug: '',
   slugTouched: false,
   referral: '',
+  createdId: null,
 }
 
 /** La ville d'une enseigne nomade : l'emplacement public de sa vitrine, modifiable ensuite. */
@@ -74,6 +89,26 @@ export function stepProblem(step: WelcomeStep, draft: WelcomeDraft): string | nu
     }
     case 'address':
       return slugProblem(slugFor(draft))
+    case 'design':
+    case 'people':
+    case 'festivals':
+      return null
+  }
+}
+
+/** La note du code de parrainage : `owner` vaut `undefined` tant que rien n'est vérifié, `null`
+ *  pour un code inconnu. Le gain est celui du filleul : un essai Pro de 30 jours au lieu de 14. */
+export function referralNote(
+  code: string,
+  owner: string | null | undefined,
+): { text: string; tone: 'free' | 'problem' | null } {
+  if (code === '' || owner === undefined) {
+    return { text: 'Le parrain et toi gagnez un mois de Pro.', tone: null }
+  }
+  if (owner === null) return { text: 'Aucun code de parrainage trouvé.', tone: 'problem' }
+  return {
+    text: `✓ Code de ${owner} : ton essai Pro passe à 30 jours si tu l’actives dans tes réglages.`,
+    tone: 'free',
   }
 }
 

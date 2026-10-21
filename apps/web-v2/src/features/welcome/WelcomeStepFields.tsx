@@ -6,7 +6,7 @@
 import type { ReactNode } from 'react'
 import { Check } from 'lucide-react'
 import { cleanSlug } from '@/lib/vitrine-edit'
-import { NOMAD_CITY, type WelcomeDraft, type WelcomeStep } from '@/lib/welcome'
+import { NOMAD_CITY, referralNote, type WelcomeDraft, type WelcomeStep } from '@/lib/welcome'
 import type { SlugState } from './useSlugFree'
 
 const TEXTS: Record<WelcomeStep, { over: string; title: string; lead: string }> = {
@@ -34,6 +34,21 @@ const TEXTS: Record<WelcomeStep, { over: string; title: string; lead: string }> 
     over: 'Ton enseigne',
     title: 'Ton adresse sur Fellowship',
     lead: 'Ta vitrine, ton calendrier et ton QR code vivront ici.',
+  },
+  design: {
+    over: 'Ton enseigne',
+    title: 'Ta photo et ta bannière',
+    lead: 'Elles habillent ta vitrine. Tu pourras les changer plus tard.',
+  },
+  people: {
+    over: 'Ton enseigne',
+    title: 'Tu les connais peut-être',
+    lead: 'Des exposants de ton métier et de ta région. Suis-les pour voir où ils exposent.',
+  },
+  festivals: {
+    over: 'Ton enseigne',
+    title: 'Ces festivals t’intéressent ?',
+    lead: 'Choisis ceux qui te plaisent : on te proposera des festivals qui te ressemblent.',
   },
 }
 
@@ -214,7 +229,9 @@ export function WelcomeStepFields({
             value={draft.referral}
             placeholder="Ex. RUNES-4F2K"
             onChange={(referral) => set({ referral: referral.replace(/\s/g, '').toUpperCase() })}
-            note={<span className="welcome__note">Le parrain et toi gagnez un mois de Pro.</span>}
+            note={
+              <span className="welcome__note">{referralNote(draft.referral, undefined).text}</span>
+            }
           />
         </>
       )}

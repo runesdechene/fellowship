@@ -14,6 +14,8 @@ import {
   departmentOf,
   EMPTY_DRAFT,
   initialsOf,
+  isAfterCreation,
+  referralNote,
   slugFor,
   stepProblem,
   wallCount,
@@ -21,18 +23,60 @@ import {
 } from './welcome'
 
 describe('welcomeSteps', () => {
-  test('un nouveau compte : la marque, puis le prénom, le métier, la ville, l’adresse', () => {
-    expect(welcomeSteps('new')).toEqual(['brand', 'firstName', 'craft', 'place', 'address'])
+  test('un nouveau compte : la marque, le prénom, le métier, la ville, l’adresse, puis le reste', () => {
+    expect(welcomeSteps('new')).toEqual([
+      'brand',
+      'firstName',
+      'craft',
+      'place',
+      'address',
+      'design',
+      'people',
+      'festivals',
+    ])
   })
   test('une enseigne existe déjà : le prénom seul', () => {
     expect(welcomeSteps('nameOnly')).toEqual(['firstName'])
   })
   test('créer un compte exposant : tout sauf le prénom', () => {
-    expect(welcomeSteps('newEntity')).toEqual(['brand', 'craft', 'place', 'address'])
+    expect(welcomeSteps('newEntity')).toEqual([
+      'brand',
+      'craft',
+      'place',
+      'address',
+      'design',
+      'people',
+      'festivals',
+    ])
+  })
+  test('isAfterCreation : les exposants et les festivals, pas le design', () => {
+    const steps = welcomeSteps('newEntity')
+    expect(isAfterCreation(steps, steps.indexOf('design'))).toBe(false)
+    expect(isAfterCreation(steps, steps.indexOf('people'))).toBe(true)
+  })
+})
+
+describe('referralNote', () => {
+  test('inconnu, reconnu, vide', () => {
+    expect(referralNote('RUNES9Z3Q', null)).toEqual({
+      text: 'Aucun code de parrainage trouvé.',
+      tone: 'problem',
+    })
+    expect(referralNote('RUNESDECHENE', 'Runes de Chêne').text).toBe(
+      '✓ Code de Runes de Chêne : ton essai Pro passe à 30 jours si tu l’actives dans tes réglages.',
+    )
+    expect(referralNote('', undefined).tone).toBeNull()
+  })
+  test('pendant la vérification, la phrase par défaut', () => {
+    expect(referralNote('RUNES', undefined)).toEqual(referralNote('', undefined))
   })
 })
 
 describe('stepProblem', () => {
+  test('les étapes après l’adresse ne bloquent jamais', () => {
+    for (const step of ['design', 'people', 'festivals'] as const)
+      expect(stepProblem(step, EMPTY_DRAFT)).toBeNull()
+  })
   const draft = { ...EMPTY_DRAFT, brand: 'Atelier Sauvage', firstName: 'Uriel' }
   test('la marque et le prénom sont obligatoires, 60 caractères au plus', () => {
     expect(stepProblem('brand', { ...draft, brand: '  ' })).toBe('Le nom de ta marque')
