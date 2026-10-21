@@ -26,6 +26,8 @@ export interface WelcomeDraft {
   craft: string
   city: string
   postalCode: string
+  /** Pas d'atelier fixe : la ville devient `NOMAD_CITY`, sans code postal. */
+  nomad: boolean
   slug: string
   slugTouched: boolean
   referral: string
@@ -37,10 +39,14 @@ export const EMPTY_DRAFT: WelcomeDraft = {
   craft: '',
   city: '',
   postalCode: '',
+  nomad: false,
   slug: '',
   slugTouched: false,
   referral: '',
 }
+
+/** La ville d'une enseigne nomade : l'emplacement public de sa vitrine, modifiable ensuite. */
+export const NOMAD_CITY = 'Entreprise nomade'
 
 const MAX_TEXT = 60
 
@@ -61,6 +67,7 @@ export function stepProblem(step: WelcomeStep, draft: WelcomeDraft): string | nu
     case 'craft':
       return tooLong(draft.craft)
     case 'place': {
+      if (draft.nomad) return null
       const postal = draft.postalCode.trim()
       if (postal !== '' && !/^\d{5}$/.test(postal)) return 'Cinq chiffres'
       return tooLong(draft.city)

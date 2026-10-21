@@ -57,6 +57,30 @@
   gap: var(--space-12);
 }
 
+/* « Je suis nomade » : la case native, à l'encre des titres. */
+.welcome__check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  font: var(--type-door-input);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+.welcome__check input {
+  inline-size: 22px;
+  block-size: 22px;
+  margin: 0;
+  accent-color: var(--ink-title);
+  cursor: pointer;
+}
+
+.welcome__check-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
 .welcome__prefix {
   font: var(--type-door-input);
   color: var(--ink-section-pale);

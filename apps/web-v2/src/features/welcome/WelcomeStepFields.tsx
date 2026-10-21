@@ -1,11 +1,11 @@
 /**
  * QUOI     — le contenu d'une étape de l'arrivée : sur-titre, titre, phrase, et ses champs.
- * POURQUOI — maquettes 2102:72 (marque), 2244:2 (prénom), 2244:53 (adresse) ; le métier et la
- *            ville suivent le même gabarit (lot 10a, textes validés dans la spec).
+ * POURQUOI — maquettes 2102:72 (marque), 2244:2 (prénom), 2383:124 et 2383:201 (atelier, nomade),
+ *            2244:53 (adresse) ; le métier suit le même gabarit (lot 10a, textes validés dans la spec).
  */
 import type { ReactNode } from 'react'
 import { cleanSlug } from '@/lib/vitrine-edit'
-import type { WelcomeDraft, WelcomeStep } from '@/lib/welcome'
+import { NOMAD_CITY, type WelcomeDraft, type WelcomeStep } from '@/lib/welcome'
 import type { SlugState } from './useSlugFree'
 
 const TEXTS: Record<WelcomeStep, { over: string; title: string; lead: string }> = {
@@ -151,15 +151,37 @@ export function WelcomeStepFields({
         />
       )}
       {step === 'place' && (
-        <div className="welcome__pair">
-          <Field label="Ville" value={draft.city} autoFocus onChange={(city) => set({ city })} />
-          <Field
-            label="Code postal"
-            value={draft.postalCode}
-            inputMode="numeric"
-            onChange={(postalCode) => set({ postalCode })}
-          />
-        </div>
+        <>
+          {!draft.nomad && (
+            <div className="welcome__pair">
+              <Field
+                label="Ville"
+                value={draft.city}
+                autoFocus
+                onChange={(city) => set({ city })}
+              />
+              <Field
+                label="Code postal"
+                value={draft.postalCode}
+                inputMode="numeric"
+                onChange={(postalCode) => set({ postalCode })}
+              />
+            </div>
+          )}
+          <label className="welcome__check">
+            <input
+              type="checkbox"
+              checked={draft.nomad}
+              onChange={(event) => set({ nomad: event.target.checked })}
+            />
+            <span className="welcome__check-text">
+              Je suis nomade
+              <span className="welcome__note">
+                Pas d’atelier fixe : ta vitrine affichera « {NOMAD_CITY} ».
+              </span>
+            </span>
+          </label>
+        </>
       )}
       {step === 'address' && (
         <>

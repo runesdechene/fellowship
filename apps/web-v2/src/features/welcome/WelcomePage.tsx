@@ -19,6 +19,7 @@ import { isSlugTaken } from '@/lib/vitrine-edit'
 import {
   departmentOf,
   firstProblemStep,
+  NOMAD_CITY,
   safeReturn,
   slugFor,
   stepProblem,
@@ -56,10 +57,10 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   const last = index === steps.length - 1
   const entity = entities.find((item) => item.actor_id === actor?.id) ?? entities[0]
   const brand = kind === 'nameOnly' ? (entity?.brand_name ?? '') : draft.brand
-  const department = departmentOf(draft.postalCode)
-  const place = draft.city.trim()
-    ? `${draft.city.trim()}${department ? ` (${department})` : ''}`
-    : ''
+  const city = draft.nomad ? NOMAD_CITY : draft.city.trim()
+  const postalCode = draft.nomad ? '' : draft.postalCode.trim()
+  const department = departmentOf(postalCode)
+  const place = city ? `${city}${department ? ` (${department})` : ''}` : ''
   const blocked = problem !== null || (step === 'address' && slugState === 'taken')
 
   async function finish() {
@@ -74,8 +75,8 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
           p_type: 'exposant',
           p_brand_name: draft.brand.trim(),
           p_craft_type: draft.craft.trim() || undefined,
-          p_city: draft.city.trim() || undefined,
-          p_postal_code: draft.postalCode.trim() || undefined,
+          p_city: city || undefined,
+          p_postal_code: postalCode || undefined,
           p_department: department ?? undefined,
           p_public_slug: slug,
         })
