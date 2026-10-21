@@ -22,6 +22,8 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `InstagramIcon.tsx` — le pictogramme Instagram au trait (lucide a retiré ses logos de marque).
 - `CodeInput.tsx` — les six cases d'un code reçu par e-mail (frappe, collage, retour arrière).
 - `ImageDrop.tsx` — le dépôt d’une image : cadre en pointillés, puis la ligne de l’image choisie.
+- `PersonCard.tsx` — la carte d’une personne : visage, nom, raison, action (arrivée).
+- `DateCard.tsx` — la carte d’une date : affiche, nom, période, action (arrivée).
 - `IconTile.tsx` — la pastille carrée teintée qui porte une icône (sept tons de l'administration).
 - `TypeChip.tsx` — la pastille du type d'enseigne (exposant, festival, entreprise, sans enseigne).
 - `OfferBadge.tsx` — l'offre d'une enseigne : Pro / Essai / Gratuit, puis le détail.

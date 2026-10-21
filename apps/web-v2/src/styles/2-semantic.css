@@ -819,6 +819,18 @@
   --image-drop-cover-radius: var(--round-6);
   --type-image-drop-name: var(--weight-medium) var(--size-15) / var(--leading-snug)
     var(--family-sans);
+  /* Les cartes personne et date (maquettes 2363:2 et 2363:14), et leur bouton bascule. */
+  --person-card-width: 156px;
+  --person-card-avatar: 72px;
+  --date-card-width: 150px;
+  --date-card-poster-height: 200px;
+  --type-card-person-name: var(--weight-semibold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
+  --type-card-person-meta: var(--weight-regular) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-card-person-reason: var(--weight-medium) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --type-pill-toggle: var(--weight-semibold) var(--size-13) / var(--leading-snug) var(--family-sans);
 
   --type-field-label: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
   --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);

@@ -1,0 +1,125 @@
+/**
+ * QUOI     — la carte d'une personne (components/ui/PersonCard), la carte d'une date
+ *            (components/ui/DateCard), et le bouton bascule qu'elles portent (« Suivre »,
+ *            « Ça m'intéresse »).
+ * POURQUOI — maquettes 2363:2 et 2363:14, posées à l'arrivée (2392:65, 2392:271) : une carte
+ *            blanche bordée d'un filet pour une personne, l'affiche nue pour une date.
+ */
+
+.person-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: var(--person-card-width);
+  padding: var(--space-18) var(--space-12) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  text-align: center;
+}
+
+.person-card__avatar {
+  --avatar-size: var(--person-card-avatar);
+
+  margin-bottom: var(--space-6);
+}
+
+.person-card__name {
+  max-width: 100%;
+  overflow: hidden;
+  font: var(--type-card-person-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-card__meta {
+  max-width: 100%;
+  overflow: hidden;
+  font: var(--type-card-person-meta);
+  color: var(--ink-soft);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.person-card__reason {
+  padding: var(--space-6) 0 var(--space-10);
+  font: var(--type-card-person-reason);
+  color: var(--ink-soft);
+}
+
+.date-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: var(--date-card-width);
+}
+
+.date-card__poster {
+  width: 100%;
+  height: var(--date-card-poster-height);
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-block);
+  object-fit: cover;
+}
+
+.date-card__name {
+  font: var(--type-card-person-name);
+  color: var(--ink-title);
+}
+
+.date-card__when {
+  margin-bottom: var(--space-6);
+  font: var(--type-card-person-meta);
+  color: var(--ink-soft);
+}
+
+/* Le bouton bascule : plein pour l'action à faire, au trait une fois fait (ou l'inverse). */
+.pill-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  width: 100%;
+  margin-top: auto;
+  padding: var(--space-6) var(--space-14);
+  border: var(--door-field-line) solid var(--line-card);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-pill-toggle);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.pill-toggle--filled {
+  border-color: var(--action-surface);
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.pill-toggle:hover:not(:disabled) {
+  border-color: var(--ink-soft);
+}
+
+.pill-toggle--filled:hover:not(:disabled) {
+  border-color: var(--action-surface-hover);
+  background: var(--action-surface-hover);
+}
+
+.pill-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-toggle {
+    transition: none;
+  }
+}
