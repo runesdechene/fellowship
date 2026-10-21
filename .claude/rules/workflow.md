@@ -23,6 +23,16 @@ prod ↔ branche du ship 0.7.168 avait coûté ~2 h de `migration repair`.
 
 [[reference-supabase-db-diverge-recovery]]
 
+## Le rappel de push parle à Uriel, jamais à Claude
+
+**Le piège** (21/10/2026) : le hook `Stop` part à la fin de **chaque** réponse, pas à la fermeture.
+Il glissait son rappel dans le contexte de Claude (`additionalContext`), ce qui relançait Claude, dont
+la réponse relançait le hook : une boucle sans fin tant qu'un commit attendait, c'est-à-dire toute la
+session, puisqu'on ne pousse qu'à la fin. Le rappel passe par `systemMessage`, affiché dans le terminal.
+
+**How to apply :** un hook `Stop` ne renvoie jamais d'`additionalContext` sur une condition qui reste
+vraie d'un tour à l'autre.
+
 ## Check git diff before editing dirty files
 
 Always check `git diff HEAD -- <file>` before editing a file that's already modified in git status. Existing uncommitted changes may contain valid fixes from prior sessions.
