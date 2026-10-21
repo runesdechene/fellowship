@@ -40,6 +40,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
       className={muted ? 'poster-card poster-card--muted' : 'poster-card'}
     >
       <PosterArt
+        eventId={date.eventId}
         imageUrl={date.imageUrl}
         tags={date.tags}
         startDate={date.startDate}

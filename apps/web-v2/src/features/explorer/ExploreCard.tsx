@@ -55,6 +55,7 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
     <article className="explore-card" ref={card}>
       <Link to={`/evenement/${event.id}`} className="explore-card__link">
         <PosterArt
+          eventId={event.id}
           imageUrl={event.imageUrl}
           tags={event.tags}
           startDate={event.startDate}

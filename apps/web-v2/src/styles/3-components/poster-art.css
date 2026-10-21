@@ -111,3 +111,36 @@
   font: var(--type-chip-strong);
   color: var(--ink-title);
 }
+
+/* Le bouton qui ajoute une affiche absente (AddPoster.tsx) : discret, en bas à droite. */
+.add-poster {
+  position: absolute;
+  right: var(--space-10);
+  bottom: var(--space-10);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  border: 0;
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  color: var(--ink-title);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.add-poster:hover:not(:disabled),
+.add-poster:focus-visible {
+  opacity: 1;
+}
+
+.add-poster:disabled {
+  cursor: progress;
+  opacity: 0.4;
+}
+
+.add-poster--error {
+  color: var(--danger-ink);
+  opacity: 1;
+}

@@ -4,11 +4,13 @@
  * POURQUOI — la même affiche vit dans le calendrier, la vitrine et l'Explorer ; sa hauteur vient du
  *            parent (`--poster-art-height`).
  * ATTENTION — `badge` remplace le compte à rebours (« Nouveau » dans l'Explorer) ; `action` se pose
- *            en haut à droite (l'étoile « Repérer »).
+ *            en haut à droite (l'étoile « Repérer ») ; `eventId` pose, sur une affiche absente, le
+ *            bouton qui en ajoute une (AddPoster.tsx).
  */
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatCountdown } from '@/lib/dates'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
+import { AddPoster } from '@/components/ui/AddPoster'
 import { Poster } from '@/components/ui/Poster'
 import type { Friend } from '@/lib/friends'
 
@@ -25,6 +27,8 @@ interface PosterArtProps {
   /** Le texte du coin haut gauche ; par défaut, le compte à rebours. */
   badge?: string | null
   action?: ReactNode
+  /** La fiche à qui ajouter l'affiche, quand elle manque. */
+  eventId?: string
 }
 
 export function PosterArt({
@@ -35,14 +39,17 @@ export function PosterArt({
   friends = [],
   badge,
   action,
+  eventId,
 }: PosterArtProps) {
+  const [added, setAdded] = useState<string | null>(null)
+  const poster = imageUrl ?? added
   const corner = badge === undefined ? formatCountdown(daysAway) : badge
   const faces = friends.slice(0, MAX_FACES)
   const more = friends.length - faces.length
 
   return (
     <div className="poster-art">
-      <Poster imageUrl={imageUrl} tags={tags} className="poster-art__poster">
+      <Poster imageUrl={poster} tags={tags} className="poster-art__poster">
         <span className="poster-art__day">{startDate.getDate()}</span>
         <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
       </Poster>
@@ -58,6 +65,7 @@ export function PosterArt({
         </span>
       )}
       {action && <span className="poster-art__action">{action}</span>}
+      {eventId && !poster && <AddPoster eventId={eventId} onAdded={setAdded} />}
       {faces.length > 0 && (
         <span className="poster-art__friends">
           <AvatarStack>
