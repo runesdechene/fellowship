@@ -357,3 +357,14 @@ par `can_act_as` répondait « non autorisé ».
 `20261021120000_events_within.sql` posée le même jour par une autre session ; le push a échoué sur
 `schema_migrations_pkey` (rien d'appliqué, la transaction s'annule). Avant de nommer une migration :
 `ls supabase/migrations | tail -3`, et prendre un horodatage plus haut que le dernier.
+
+## Une fonction SECURITY DEFINER qui lit `participations` filtre `visibility = 'public'`
+
+**Le piège** (21/10/2026) : `welcome_exhibitors` comptait les « festivals en commun » sur toutes les
+participations des autres. SECURITY DEFINER passe outre `participations_select`, qui cache les
+lignes `prive` et `amis` : marquer un festival puis lire les exposants proposés révélait qui y allait
+en privé. En prod une heure, fermé par `20261021160000`.
+
+**How to apply :** toute fonction SECURITY DEFINER qui lit les participations d'un AUTRE acteur
+garde `visibility = 'public'` (comme `get_coevent_suggestions`), ou réutilise une fonction qui le
+fait déjà au lieu de recopier la jointure.
