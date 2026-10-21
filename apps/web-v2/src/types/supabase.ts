@@ -2824,6 +2824,7 @@ export type Database = {
         }
         Returns: string
       }
+      referral_owner: { Args: { p_code: string }; Returns: string }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
@@ -2873,6 +2874,29 @@ export type Database = {
           after: Json
           before: Json
           field: string
+        }[]
+      }
+      welcome_exhibitors: {
+        Args: { p_actor: string }
+        Returns: {
+          avatar: string
+          city: string
+          id: string
+          name: string
+          reason: string
+          slug: string
+        }[]
+      }
+      welcome_festivals: {
+        Args: { p_actor: string }
+        Returns: {
+          city: string
+          end_date: string
+          id: string
+          image_url: string
+          name: string
+          start_date: string
+          tags: string[]
         }[]
       }
     }

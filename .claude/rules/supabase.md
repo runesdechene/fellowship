@@ -341,3 +341,19 @@ Aucune valeur n'apparaît ni dans la commande ni dans sa sortie.
 **How to apply :** dans une politique, le rôle de l'appelant se lit par `is_admin()` (SECURITY
 DEFINER), jamais par une sous-requête sur `users`. Après toute politique touchée sur `users`,
 sonder un UPDATE en `begin; set_config('request.jwt.claims', …); set local role authenticated; … rollback;`.
+
+## Sonder une RPC « au nom de » quelqu'un : une seule instruction
+
+**Le piège** (21/10/2026) : `supabase db query --linked` passe par l'API de gestion, qui n'enchaîne
+pas un `begin; set_config('request.jwt.claims', …); select …` dans la même session : la RPC gardée
+par `can_act_as` répondait « non autorisé ».
+
+**How to apply :** tout dans une requête, l'identité posée dans un `with` et la RPC appelée en
+`lateral` (`with who as (select …, set_config('request.jwt.claims', json_build_object('sub', <user>)::text, true)) select … from who, lateral ma_rpc(who.ent)`).
+
+## Deux migrations ne partagent jamais un horodatage
+
+**Le piège** (21/10/2026) : `20261021120000_welcome_steps.sql` est tombée sur une
+`20261021120000_events_within.sql` posée le même jour par une autre session ; le push a échoué sur
+`schema_migrations_pkey` (rien d'appliqué, la transaction s'annule). Avant de nommer une migration :
+`ls supabase/migrations | tail -3`, et prendre un horodatage plus haut que le dernier.
