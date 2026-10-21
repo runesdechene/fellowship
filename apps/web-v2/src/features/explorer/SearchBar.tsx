@@ -3,20 +3,21 @@
  *            exposant) · Où, avec son rayon en menu dessous · Quand, et le bouton rond.
  * POURQUOI — la recherche vit dans l'adresse (?q, ?ou, ?rayon, ?quand) : le retour du navigateur ramène
  *            la recherche d'avant, un lien se partage.
- * ATTENTION — un formulaire natif : Entrée lance la recherche, sans code maison. Le menu du
- *            rayon s'ouvre au focus de « Où » et garde le focus dans le champ : les flèches
- *            changent le rayon, Échap le ferme. Il reprend le dessin du Select maison.
+ * ATTENTION — un formulaire natif : Entrée lance la recherche, sans code maison. Le panneau du
+ *            rayon s'ouvre au focus de « Où » : une frise native (`input type=range`) de 0 à
+ *            500 km. Il se referme sur un clic dehors, Échap, ou quand le focus quitte le champ.
  */
 import { ChevronDown, Search, X } from 'lucide-react'
-import { useState, type FormEvent, type KeyboardEvent } from 'react'
-import { RAYON_OPTIONS, quandChoices, type Horizon } from '@/lib/explorer'
+import { useEffect, useRef, useState, type FocusEvent, type FormEvent } from 'react'
+import { RAYON_MAX, RAYON_STEP, quandChoices, type Horizon } from '@/lib/explorer'
 
 interface SearchBarProps {
   q: string
   ou: string
-  rayon: string
+  /** En km ; 0 : le lieu seul. */
+  rayon: number
   quand: string | null
-  onSearch: (next: { q: string; ou: string; rayon: string; quand: string }) => void
+  onSearch: (next: { q: string; ou: string; rayon: number; quand: string }) => void
   /** Le choix le plus large suit l'horizon : 3 mois sans compte, 6 en gratuit (lib/explorer.ts). */
   horizon: Horizon
 }
@@ -27,22 +28,26 @@ export function SearchBar({ q, ou, rayon, quand, onSearch, horizon }: SearchBarP
   const [place, setPlace] = useState(ou)
   const [around, setAround] = useState(rayon)
   const [aroundOpen, setAroundOpen] = useState(false)
-  const aroundIndex = Math.max(
-    0,
-    RAYON_OPTIONS.findIndex((option) => option.value === around),
-  )
+  const where = useRef<HTMLDivElement>(null)
 
-  /** Les flèches font défiler le rayon sans quitter le champ ; Échap referme le menu. */
-  function aroundKeys(event: KeyboardEvent<HTMLInputElement>) {
-    const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
-    if (step) {
-      event.preventDefault()
-      const next = Math.min(Math.max(aroundIndex + step, 0), RAYON_OPTIONS.length - 1)
-      setAround(RAYON_OPTIONS[next]?.value ?? '')
-      setAroundOpen(true)
+  // Un clic hors du champ referme le panneau ; `mousedown`, comme le Select maison.
+  useEffect(() => {
+    if (!aroundOpen) return
+    function outside(event: MouseEvent) {
+      if (!where.current?.contains(event.target as Node)) setAroundOpen(false)
     }
-    if (event.key === 'Escape') setAroundOpen(false)
+    document.addEventListener('mousedown', outside)
+    return () => {
+      document.removeEventListener('mousedown', outside)
+    }
+  }, [aroundOpen])
+
+  /** Au clavier, Tab hors du champ referme ; un clic dans le panneau ne déplace pas le focus. */
+  function leaveWhere(event: FocusEvent) {
+    const next = event.relatedTarget
+    if (next instanceof Node && !where.current?.contains(next)) setAroundOpen(false)
   }
+
   const [when, setWhen] = useState(
     choices.some((option) => option.value === quand) ? (quand ?? '') : (choices[0]?.value ?? ''),
   )
@@ -81,57 +86,71 @@ export function SearchBar({ q, ou, rayon, quand, onSearch, horizon }: SearchBarP
           </button>
         )}
       </label>
-      <label className="search-bar__field search-bar__field--where">
-        <span className="search-bar__body">
+      <div
+        ref={where}
+        className="search-bar__field search-bar__field--where"
+        onBlur={leaveWhere}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') setAroundOpen(false)
+        }}
+      >
+        <label className="search-bar__body">
           <span className="search-bar__label">
-            Où{around && <span className="search-bar__around"> · {around} km</span>}
+            Où{around > 0 && <span className="search-bar__around"> · {around} km</span>}
           </span>
           <input
             className="search-bar__input"
             value={place}
             placeholder="Toute la France"
-            aria-haspopup="listbox"
             aria-expanded={aroundOpen}
             onFocus={() => {
               setAroundOpen(true)
             }}
-            onBlur={() => {
-              setAroundOpen(false)
-            }}
-            onKeyDown={aroundKeys}
             onChange={(change) => {
               setPlace(change.target.value)
             }}
           />
-        </span>
-        {aroundOpen && (
-          <ul
-            className="select__menu search-bar__menu"
-            role="listbox"
-            aria-label="Rayon autour du lieu"
+        </label>
+        {(place || around > 0) && (
+          <button
+            type="button"
+            className="search-bar__clear"
+            aria-label="Effacer le lieu et le rayon"
+            onClick={() => {
+              setPlace('')
+              setAround(0)
+              setAroundOpen(false)
+              onSearch({ q: words.trim(), ou: '', rayon: 0, quand: when })
+            }}
           >
-            {RAYON_OPTIONS.map((option, position) => (
-              <li key={option.value}>
-                <button
-                  type="button"
-                  className="select__option"
-                  role="option"
-                  aria-selected={position === aroundIndex}
-                  tabIndex={-1}
-                  // `mousedown` : choisir avant que le champ perde le focus et referme le menu.
-                  onMouseDown={(event) => {
-                    event.preventDefault()
-                    setAround(option.value)
-                    setAroundOpen(false)
-                  }}
-                >
-                  <span className="select__mot">{option.label}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+            <X size={12} strokeWidth={2.2} />
+          </button>
         )}
-      </label>
+        {aroundOpen && (
+          <div className="search-bar__around-panel">
+            <div className="search-bar__around-head">
+              <span>Rayon autour du lieu</span>
+              <strong>{around > 0 ? `${around} km` : 'Le lieu seul'}</strong>
+            </div>
+            <input
+              type="range"
+              className="search-bar__range"
+              aria-label="Rayon autour du lieu, en km"
+              min={0}
+              max={RAYON_MAX}
+              step={RAYON_STEP}
+              value={around}
+              onChange={(change) => {
+                setAround(Number(change.target.value))
+              }}
+            />
+            <span className="search-bar__range-ends" aria-hidden>
+              <span>0</span>
+              <span>{RAYON_MAX} km</span>
+            </span>
+          </div>
+        )}
+      </div>
       <label className="search-bar__field search-bar__field--when">
         <span className="search-bar__body">
           <span className="search-bar__label">Quand</span>

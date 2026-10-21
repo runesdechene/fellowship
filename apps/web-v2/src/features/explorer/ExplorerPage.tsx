@@ -88,13 +88,13 @@ export function ExplorerPage() {
         key={`${q}|${ou}|${rayon ?? ''}|${quand ?? ''}`}
         q={q}
         ou={ou}
-        rayon={rayon ? String(rayon) : ''}
+        rayon={rayon ?? 0}
         quand={quand}
         onSearch={(next) => {
           update({
             q: next.q,
             ou: next.ou,
-            rayon: next.rayon,
+            rayon: next.rayon ? String(next.rayon) : null,
             quand: next.quand === '12' ? null : next.quand,
             voir: null,
           })

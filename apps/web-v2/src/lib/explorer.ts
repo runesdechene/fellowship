@@ -17,20 +17,14 @@ export const QUAND_OPTIONS = [
   { value: '1', label: 'Ce mois-ci', months: 1 },
 ] as const
 
-/** Le rayon autour du lieu (?rayon) ; « Le lieu seul » cherche sur le nom de la ville. */
-export const RAYON_OPTIONS = [
-  { value: '', label: 'Le lieu seul' },
-  { value: '25', label: '25 km autour' },
-  { value: '50', label: '50 km autour' },
-  { value: '100', label: '100 km autour' },
-  { value: '200', label: '200 km autour' },
-] as const
+/** Le rayon autour du lieu (?rayon), en km, réglé sur une frise de 0 à 500 ; 0 : le lieu seul. */
+export const RAYON_MAX = 500
+export const RAYON_STEP = 5
 
-/** Un rayon de l'adresse, s'il fait partie des choix ; sinon pas de rayon. */
+/** Un rayon de l'adresse, s'il tient dans la frise ; sinon pas de rayon. */
 export function readRayon(value: string | null): number | null {
-  return RAYON_OPTIONS.some((option) => option.value && option.value === value)
-    ? Number(value)
-    : null
+  const km = Number(value)
+  return Number.isInteger(km) && km > 0 && km <= RAYON_MAX ? km : null
 }
 
 /** Les mois que la recherche fouille : 3 sans compte, 6 en gratuit, `null` en Pro — sans borne. */

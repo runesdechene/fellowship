@@ -69,17 +69,51 @@
   padding-left: 0;
 }
 
-/* Le menu du rayon s'accroche sous « Où », à la largeur de ses options. */
+/* Le panneau du rayon s'accroche sous « Où » ; il prend le dessin du menu du Select maison. */
 .search-bar__field--where {
   position: relative;
 }
 
-.search-bar__menu {
+.search-bar__around-panel {
+  position: absolute;
   top: calc(100% + var(--space-12));
+  left: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  width: var(--search-around-width);
+  padding: var(--space-16);
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-select);
+  background: var(--surface-panel);
+  cursor: default;
 }
 
-.search-bar__menu .select__option:hover {
-  background: var(--surface-row-hover);
+.search-bar__around-head {
+  display: flex;
+  justify-content: space-between;
+  font: var(--type-select-option);
+  color: var(--ink-soft);
+}
+
+.search-bar__around-head strong {
+  color: var(--ink-title);
+}
+
+/* La frise native : le navigateur fournit glisser, clavier et lecteur d'écran ; on n'en
+   colore que la piste parcourue et le curseur. */
+.search-bar__range {
+  width: 100%;
+  accent-color: var(--action-surface);
+  cursor: pointer;
+}
+
+.search-bar__range-ends {
+  display: flex;
+  justify-content: space-between;
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
 }
 
 .search-bar__around {

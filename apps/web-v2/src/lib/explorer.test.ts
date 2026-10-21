@@ -199,10 +199,13 @@ describe('beyondTitle', () => {
 })
 
 describe('readRayon', () => {
-  it('lit un rayon proposé, refuse le reste', () => {
+  it('lit un rayon de la frise, refuse le reste', () => {
     expect(readRayon('50')).toBe(50)
+    expect(readRayon('500')).toBe(500)
     expect(readRayon(null)).toBeNull()
     expect(readRayon('')).toBeNull()
-    expect(readRayon('7')).toBeNull()
+    expect(readRayon('0')).toBeNull()
+    expect(readRayon('501')).toBeNull()
+    expect(readRayon('12.5')).toBeNull()
   })
 })
