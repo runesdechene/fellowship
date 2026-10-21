@@ -109,6 +109,8 @@ interface WelcomeStepFieldsProps {
   slug: string
   slugState: SlugState
   problem: string | null
+  /** Le parrain du code tapé : `null` s'il n'existe pas, `undefined` tant que rien n'est sûr. */
+  referralOwner: string | null | undefined
   set: (patch: Partial<WelcomeDraft>) => void
   children?: ReactNode
 }
@@ -121,10 +123,12 @@ export function WelcomeStepFields({
   slug,
   slugState,
   problem,
+  referralOwner,
   set,
   children,
 }: WelcomeStepFieldsProps) {
   const text = TEXTS[step]
+  const referral = referralNote(draft.referral, referralOwner)
   const slugProblem = step === 'address' ? problem : null
   const slugNote = slugProblem ?? SLUG_SAYS[slugState]
   // Un nom ou un prénom vide n'a pas besoin d'explication (le bouton reste éteint) ; tout autre refus
@@ -230,7 +234,13 @@ export function WelcomeStepFields({
             placeholder="Ex. RUNES-4F2K"
             onChange={(referral) => set({ referral: referral.replace(/\s/g, '').toUpperCase() })}
             note={
-              <span className="welcome__note">{referralNote(draft.referral, undefined).text}</span>
+              <span
+                className={
+                  referral.tone ? `welcome__note welcome__note--${referral.tone}` : 'welcome__note'
+                }
+              >
+                {referral.text}
+              </span>
             }
           />
         </>

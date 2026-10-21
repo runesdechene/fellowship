@@ -28,6 +28,7 @@ import {
 } from '@/lib/welcome'
 import { ActivityPreview } from './ActivityPreview'
 import { clearWelcome, useWelcomeDraft } from './useWelcomeDraft'
+import { useReferralOwner } from './useReferralOwner'
 import { useSlugFree } from './useSlugFree'
 import { WelcomePreview } from './WelcomePreview'
 import { WelcomeStepFields } from './WelcomeStepFields'
@@ -53,6 +54,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   const slug = slugFor(draft)
   const problem = stepProblem(step, draft)
   const checked = useSlugFree(slug, step === 'address' && problem === null)
+  const referralOwner = useReferralOwner(draft.referral, step === 'address')
   const slugState = slug === refused ? 'taken' : checked
   const last = index === steps.length - 1
   const entity = entities.find((item) => item.actor_id === actor?.id) ?? entities[0]
@@ -165,6 +167,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               slug={slug}
               slugState={slugState}
               problem={problem}
+              referralOwner={referralOwner}
               set={set}
             >
               {step === 'firstName' && (
