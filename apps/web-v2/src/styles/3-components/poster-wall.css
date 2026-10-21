@@ -137,3 +137,10 @@
   aspect-ratio: 1;
   opacity: var(--poster-art-icon-opacity);
 }
+
+/* Le bouton d'ajout (AddPoster.tsx) monte en haut à droite du mur, bien décollé des bords. */
+.poster-wall .add-poster {
+  top: var(--space-32);
+  right: var(--space-32);
+  bottom: auto;
+}

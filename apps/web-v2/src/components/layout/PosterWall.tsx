@@ -63,7 +63,11 @@ export function PosterWall() {
     return (
       <aside className="poster-wall">
         <Poster imageUrl={null} tags={posterTags ?? null} className="poster-wall__empty" />
-        <AddPoster eventId={posterEvent} onAdded={(url) => setAdded({ event: posterEvent, url })} />
+        <AddPoster
+          labeled
+          eventId={posterEvent}
+          onAdded={(url) => setAdded({ event: posterEvent, url })}
+        />
       </aside>
     )
   }

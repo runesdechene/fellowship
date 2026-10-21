@@ -144,3 +144,12 @@
   color: var(--danger-ink);
   opacity: 1;
 }
+
+/* Avec son texte (le mur de la fiche) : une vraie pastille, pleinement visible. */
+.add-poster--labeled {
+  gap: var(--space-8);
+  grid-auto-flow: column;
+  padding: var(--space-10) var(--space-16);
+  font: var(--type-chip-strong);
+  opacity: 1;
+}

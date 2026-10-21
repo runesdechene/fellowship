@@ -4,6 +4,7 @@
  * POURQUOI — Uriel, 21/10/2026 : compléter les affiches manquantes sans passer par « Modifier ».
  *            Même porte d'écriture que la modification (`modifier_evenement`), qui garde les droits.
  * ATTENTION — l'affiche vit souvent dans un lien vers la fiche : le clic ne doit pas y naviguer.
+ *            `labeled` écrit le texte à côté de l'icône (le mur de la fiche, PosterWall.tsx).
  */
 import { ImagePlus } from 'lucide-react'
 import { useRef, useState, type MouseEvent } from 'react'
@@ -14,9 +15,10 @@ import { supabase } from '@/lib/supabase'
 interface AddPosterProps {
   eventId: string
   onAdded: (imageUrl: string) => void
+  labeled?: boolean
 }
 
-export function AddPoster({ eventId, onAdded }: AddPosterProps) {
+export function AddPoster({ eventId, onAdded, labeled = false }: AddPosterProps) {
   const { actor } = useAuth()
   const input = useRef<HTMLInputElement>(null)
   const [sending, setSending] = useState(false)
@@ -53,13 +55,16 @@ export function AddPoster({ eventId, onAdded }: AddPosterProps) {
     <>
       <button
         type="button"
-        className={error ? 'add-poster add-poster--error' : 'add-poster'}
+        className={['add-poster', labeled && 'add-poster--labeled', error && 'add-poster--error']
+          .filter(Boolean)
+          .join(' ')}
         aria-label={label}
         title={label}
         disabled={sending}
         onClick={open}
       >
-        <ImagePlus size={14} strokeWidth={2} />
+        <ImagePlus size={labeled ? 16 : 14} strokeWidth={2} />
+        {labeled && label}
       </button>
       <input
         ref={input}
