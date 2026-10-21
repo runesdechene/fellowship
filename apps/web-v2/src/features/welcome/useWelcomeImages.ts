@@ -4,7 +4,7 @@
  *            partent qu'à « Créer ma vitrine », quand l'enseigne existe.
  * ATTENTION — un fichier ne se garde pas en mémoire de session : un rechargement les perd (accepté).
  */
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { prepareImage, type ImageKind, type PendingImage } from '@/lib/entity-images'
 
 export interface ChosenImage extends PendingImage {
@@ -17,22 +17,28 @@ export function useWelcomeImages() {
   const [images, setImages] = useState<ByKind<ChosenImage | null>>({ avatar: null, cover: null })
   const [problems, setProblems] = useState<ByKind<string | null>>({ avatar: null, cover: null })
 
-  // Une adresse locale d'aperçu se rend au navigateur dès qu'elle ne sert plus.
+  // Une adresse locale d'aperçu se rend au navigateur quand une autre la remplace, et toutes en
+  // quittant l'arrivée — jamais tant qu'elle s'affiche encore.
+  const latest = useRef(images)
   useEffect(() => {
-    const { avatar, cover } = images
-    return () => {
-      if (avatar) URL.revokeObjectURL(avatar.preview)
-      if (cover) URL.revokeObjectURL(cover.preview)
-    }
+    latest.current = images
   }, [images])
+  useEffect(
+    () => () => {
+      for (const image of Object.values(latest.current))
+        if (image) URL.revokeObjectURL(image.preview)
+    },
+    [],
+  )
 
   const pick = useCallback(async (kind: ImageKind, file: File) => {
     const image = await prepareImage(kind, file)
     const refused = typeof image === 'string' ? image : null
     setProblems((current) => ({ ...current, [kind]: refused }))
-    if (typeof image !== 'string') {
-      setImages((current) => ({ ...current, [kind]: { ...image, name: file.name } }))
-    }
+    if (typeof image === 'string') return
+    const replaced = latest.current[kind]
+    if (replaced) URL.revokeObjectURL(replaced.preview)
+    setImages((current) => ({ ...current, [kind]: { ...image, name: file.name } }))
   }, [])
 
   return { images, problems, pick }

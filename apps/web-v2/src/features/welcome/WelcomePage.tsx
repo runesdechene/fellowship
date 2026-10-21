@@ -12,7 +12,7 @@
  *            fin : relue plus tôt, `WelcomeRoute` verrait l'enseigne et sortirait de l'arrivée.
  */
 import { ArrowRight, ChevronLeft } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { ImageDrop } from '@/components/ui/ImageDrop'
 import { Wordmark } from '@/components/ui/Wordmark'
@@ -24,6 +24,8 @@ import { isSlugTaken } from '@/lib/vitrine-edit'
 import {
   CREATION_STEP,
   departmentOf,
+  draftFate,
+  EMPTY_DRAFT,
   firstProblemStep,
   isAfterCreation,
   NOMAD_CITY,
@@ -85,6 +87,22 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   const department = departmentOf(postalCode)
   const place = city ? `${city}${department ? ` (${department})` : ''}` : ''
   const blocked = problem !== null || (step === 'address' && slugState === 'taken')
+
+  // Un brouillon qui porte déjà une enseigne ne revient jamais avant la création : soit l'arrivée
+  // est finie (on repart de zéro), soit c'est un retour arrière (on reprend aux festivals).
+  const fate = draftFate(
+    steps,
+    index,
+    draft.createdId,
+    entities.map((item) => item.actor_id),
+  )
+  useEffect(() => {
+    if (fate === 'reset') {
+      setDraft(EMPTY_DRAFT)
+      goTo(0)
+    }
+    if (fate === 'resume') goTo(steps.indexOf('festivals'))
+  }, [fate, goTo, setDraft, steps])
 
   /** L'enseigne, créée une seule fois : un retour en arrière ou un nouvel essai la retrouve. */
   async function create(): Promise<string | null> {

@@ -80,7 +80,7 @@ travaillent sur l'enseigne créée.
 ### La fin
 
 Comme aujourd'hui : `reloadIdentity`, `switchActor` sur la nouvelle enseigne, `clearWelcome`, puis
-`retour` ou la page par défaut. **Ce n'est fait qu'à la fin de l'étape festivals** : relire l'identité
+`retour` ou la page par défaut. **Ce n'est fait qu'à la fin de la dernière étape (exposants)** : relire l'identité
 plus tôt ferait sortir `WelcomeRoute` de l'arrivée (l'enseigne existe), et les étapes 6 et 7
 disparaîtraient.
 

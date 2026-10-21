@@ -96,6 +96,20 @@ export function stepProblem(step: WelcomeStep, draft: WelcomeDraft): string | nu
   }
 }
 
+/** Que faire d'un brouillon qui porte déjà une enseigne créée, quand on se trouve à une étape
+ *  d'avant la création : `reset` si le compte connaît déjà cette enseigne (une arrivée finie ou
+ *  quittée, dont le brouillon est resté en session), `resume` sinon (un retour arrière dans la même
+ *  arrivée : on reprend aux festivals, rien de ce qui précède ne se modifie plus). */
+export function draftFate(
+  steps: WelcomeStep[],
+  index: number,
+  createdId: string | null,
+  knownIds: readonly string[],
+): 'keep' | 'resume' | 'reset' {
+  if (!createdId || !steps.includes(CREATION_STEP) || isAfterCreation(steps, index)) return 'keep'
+  return knownIds.includes(createdId) ? 'reset' : 'resume'
+}
+
 export type ExhibitorReason = 'festivals' | 'craft' | 'nearby' | 'recent'
 
 const REASONS: Record<Exclude<ExhibitorReason, 'festivals'>, string> = {

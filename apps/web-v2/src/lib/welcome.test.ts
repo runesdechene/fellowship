@@ -14,6 +14,7 @@ import {
   departmentOf,
   EMPTY_DRAFT,
   initialsOf,
+  draftFate,
   exhibitorReason,
   isAfterCreation,
   referralNote,
@@ -58,6 +59,26 @@ describe('welcomeSteps', () => {
   test('les festivals avant les exposants : un festival sert à croiser les gens', () => {
     const steps = welcomeSteps('new')
     expect(steps.indexOf('festivals')).toBeLessThan(steps.indexOf('people'))
+  })
+})
+
+describe('draftFate', () => {
+  const steps = welcomeSteps('newEntity')
+  const design = steps.indexOf('design')
+  test('sans enseigne créée, le brouillon se garde', () => {
+    expect(draftFate(steps, design, null, [])).toBe('keep')
+  })
+  test('enseigne créée, revenu avant la création : on reprend aux festivals', () => {
+    expect(draftFate(steps, design, 'e1', [])).toBe('resume')
+  })
+  test('enseigne déjà connue du compte : brouillon d’une arrivée finie, on repart de zéro', () => {
+    expect(draftFate(steps, 0, 'e1', ['e1'])).toBe('reset')
+  })
+  test('le prénom seul n’a pas d’étape de création : rien ne bouge', () => {
+    expect(draftFate(welcomeSteps('nameOnly'), 0, 'e1', ['e1'])).toBe('keep')
+  })
+  test('après la création, rien ne bouge', () => {
+    expect(draftFate(steps, steps.indexOf('people'), 'e1', [])).toBe('keep')
   })
 })
 
