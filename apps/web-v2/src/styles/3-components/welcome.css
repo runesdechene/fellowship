@@ -137,6 +137,11 @@
 }
 
 .welcome__note--problem {
+  display: block;
+  padding: var(--space-8) var(--space-12);
+  border: 1px solid var(--welcome-problem-line);
+  border-radius: var(--radius-sm);
+  background: var(--tone-brique-surface);
   color: var(--danger-ink);
 }
 
