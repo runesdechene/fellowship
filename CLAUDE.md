@@ -59,7 +59,7 @@ Un nom de colonne ou une signature de RPC ne se devine jamais : graph, `docs/db/
 
 ## Livrer
 
-- Front modifié → `pnpm dev` (V1) et `pnpm dev:v2` (V2), le parcours testé dans le navigateur,
+- Front modifié → `pnpm dev` (V2 ; la V1, plus servie, par `pnpm dev:v1`), le parcours testé dans le navigateur,
   puis le build de l'app concernée.
 - Commit à chaque étape qui marche ; push par lots, **toujours en fin de session**.
 - Déploiement manuel, quand un lot est prêt : `.claude/rules/deploiement.md`.

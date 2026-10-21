@@ -16,20 +16,18 @@ construction : un autre compte retourne sur la V1. L'administration des comptes 
 
 | Commande                      | Effet                                       |
 | ----------------------------- | ------------------------------------------- |
-| `pnpm dev:v2`                 | serveur local sur http://localhost:5174/v2/ |
+| `pnpm dev`                    | serveur local sur http://localhost:5174/    |
 | `pnpm --filter web-v2 test`   | tests                                       |
 | `pnpm --filter web-v2 lint`   | ESLint, stylelint, prettier, en-têtes       |
 | `pnpm --filter web-v2 format` | remet la mise en forme d'aplomb (prettier)  |
-| `pnpm build:v2`               | build de production dans `apps/web-v2/dist` |
+| `pnpm build`                  | build de production dans `apps/web-v2/dist` |
 
 ## Tester en local avec une session
 
-La V2 lit la session de la V1 (même origine). En local :
+En local :
 
-1. `pnpm dev` (V1, port 5173) **et** `pnpm dev:v2` (V2, port 5174) ;
-2. ouvrir **http://localhost:5174/** — c'est la V1, servie par le proxy de la V2 — et se
-   connecter avec le code reçu par e-mail ;
-3. ouvrir **http://localhost:5174/v2/** : même origine, même session.
+1. `pnpm dev` ;
+2. ouvrir **http://localhost:5174/** et se connecter avec le code reçu par e-mail.
 
 ## Où sont les choses
 

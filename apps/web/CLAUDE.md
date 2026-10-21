@@ -8,8 +8,8 @@
 
 | Commande                   | Effet                                         |
 | -------------------------- | --------------------------------------------- |
-| `pnpm dev`                 | serveur local sur http://localhost:5173       |
-| `pnpm build`               | typecheck + build dans `apps/web/dist`        |
+| `pnpm dev:v1`              | serveur local sur http://localhost:5173       |
+| `pnpm build:v1`            | typecheck + build dans `apps/web/dist`        |
 | `pnpm --filter web test`   | tests                                         |
 | `pnpm --filter web lint`   | ESLint                                        |
 
