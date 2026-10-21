@@ -69,6 +69,23 @@
   padding-left: 0;
 }
 
+/* Le menu du rayon s'accroche sous « Où », à la largeur de ses options. */
+.search-bar__field--where {
+  position: relative;
+}
+
+.search-bar__menu {
+  top: calc(100% + var(--space-12));
+}
+
+.search-bar__menu .select__option:hover {
+  background: var(--surface-row-hover);
+}
+
+.search-bar__around {
+  color: var(--ink-soft);
+}
+
 .search-bar__icon {
   flex: none;
   color: var(--ink-title);

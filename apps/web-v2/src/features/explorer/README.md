@@ -4,7 +4,7 @@ L'écran Explorer (`/explorer`), maquettes `2027 — Explorer` et `2027 — Expl
 
 - `ExplorerPage.tsx` — l'écran : titre, recherche, catégories, rangées ou résultats. Tout l'état
   vit dans l'adresse.
-- `SearchBar.tsx` — Rechercher · Où · Rayon · Quand. Le rayon cherche dans un cercle autour de la
+- `SearchBar.tsx` — Rechercher · Où (son rayon en menu dessous) · Quand. Le rayon cherche dans un cercle autour de la
   commune (BAN + `events_within`) ; une commune introuvable retombe sur le texte.
 - `CategoryChips.tsx` — « Tout » et les catégories dans leurs couleurs.
 - `EventRail.tsx` — une rangée de cartes qui glisse à l'horizontale, avec ses flèches.
