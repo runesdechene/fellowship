@@ -69,7 +69,8 @@
   padding-left: 0;
 }
 
-/* Le panneau du rayon s'accroche sous « Où » ; il prend le dessin du menu du Select maison. */
+/* Le panneau du rayon s'accroche sous « Où », habillé comme la barre : fond de carte, liseré
+   et ombre des conteneurs, pour se détacher de la page (Uriel, 21/10/2026). */
 .search-bar__field--where {
   position: relative;
 }
@@ -84,9 +85,10 @@
   gap: var(--space-10);
   width: var(--search-around-width);
   padding: var(--space-16);
-  border: 1px solid var(--border-menu);
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   border-radius: var(--radius-select);
-  background: var(--surface-panel);
+  background: var(--surface-card);
   cursor: default;
 }
 
