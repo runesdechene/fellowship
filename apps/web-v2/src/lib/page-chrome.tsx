@@ -20,8 +20,14 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
  * la coquille nue : c'est le cas de tous les autres écrans.
  */
 type PageChrome = {
-  /** L'affiche qui remplit le mur de droite. `null` = pas de mur du tout. */
+  /** L'affiche qui remplit le mur de droite. `null` = pas d'image. */
   poster: string | null
+  /**
+   * La fiche dont c'est le mur. Posée, le mur existe même sans image : la couleur de la catégorie
+   * (`posterTags`) et le bouton qui ajoute l'affiche. Absente ou `null` = pas de mur sans image.
+   */
+  posterEvent?: string | null
+  posterTags?: readonly string[] | null
   /** Le mot posé à gauche de la barre du haut (« Dans 32 jours »). */
   lead: string | null
   /**
@@ -40,7 +46,14 @@ type PageChrome = {
   edit?: string | null
 }
 
-const NU: PageChrome = { poster: null, lead: null, back: null, edit: null }
+const NU: PageChrome = {
+  poster: null,
+  posterEvent: null,
+  posterTags: null,
+  lead: null,
+  back: null,
+  edit: null,
+}
 
 /**
  * DEUX contextes, pas un. Le lecteur change à chaque déclaration ; l'écrivain
@@ -76,13 +89,20 @@ export function usePageChrome(): PageChrome {
  * reconstruit à chaque rendu ne relance pas l'effet.
  */
 // eslint-disable-next-line react-refresh/only-export-components -- le fournisseur et ses hooks vivent ensemble
-export function useDeclarePageChrome({ poster, lead, back, edit = null }: PageChrome): void {
+export function useDeclarePageChrome({
+  poster,
+  posterEvent = null,
+  posterTags = null,
+  lead,
+  back,
+  edit = null,
+}: PageChrome): void {
   // Le poseur vient du contexte d’écriture, qui ne change JAMAIS : l’effet ne
   // se relance donc que si le décor lui-même a changé.
   const declarer = useContext(EcritureContext)
 
   useEffect(() => {
-    declarer({ poster, lead, back, edit })
+    declarer({ poster, posterEvent, posterTags, lead, back, edit })
     return () => declarer(NU)
-  }, [declarer, poster, lead, back, edit])
+  }, [declarer, poster, posterEvent, posterTags, lead, back, edit])
 }

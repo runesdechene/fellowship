@@ -117,3 +117,23 @@
     display: none;
   }
 }
+
+/* L'affiche absente (Poster.tsx) remplit le mur : l'icône de la catégorie en fond, grande et rognée
+   par le coin, comme la grande affiche du calendrier (poster-art.css). Rien ne glisse : il n'y a pas
+   d'image à attendre. */
+.poster-wall__empty {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--wall-radius) 0 0 var(--wall-radius);
+}
+
+.poster-wall__empty .poster-empty__icon {
+  position: absolute;
+  right: var(--poster-art-icon-shift);
+  bottom: var(--poster-art-icon-shift);
+  width: auto;
+  height: var(--poster-art-icon);
+  aspect-ratio: 1;
+  opacity: var(--poster-art-icon-opacity);
+}

@@ -3,9 +3,12 @@
  * POURQUOI — pour un exposant, l'affiche EST l'artefact qui fait dire oui ; le détail de ses
  *            choix (netteté, entrée après chargement) est dans le commentaire du composant.
  * ATTENTION — la glissade attend que l'image soit arrivée, cache compris, et une image en erreur
- *            compte comme arrivée.
+ *            compte comme arrivée. Sans image, le mur est l'affiche absente (Poster.tsx) et son
+ *            bouton d'ajout (AddPoster.tsx), Uriel 21/10/2026.
  */
 import { useCallback, useState } from 'react'
+import { AddPoster } from '@/components/ui/AddPoster'
+import { Poster } from '@/components/ui/Poster'
 import { usePageChrome } from '@/lib/page-chrome'
 import { posterThumb } from '@/lib/poster-thumb'
 
@@ -32,7 +35,9 @@ import { posterThumb } from '@/lib/poster-thumb'
  * que personne ne regarde est pire que pas de canevas du tout.
  */
 export function PosterWall() {
-  const { poster } = usePageChrome()
+  const { poster, posterEvent, posterTags } = usePageChrome()
+  // L'affiche ajoutée depuis le mur, rangée avec sa fiche : la coquille survit au changement de fiche.
+  const [added, setAdded] = useState<{ event: string; url: string } | null>(null)
   // L'affiche dont l'image est arrivée. C'est ELLE qui déclenche la glissade,
   // et non le chargement de la page : l'affiche vient après la requête, et un
   // cadre qui glisse puis se remplit est précisément ce qui fait bricolé.
@@ -51,9 +56,20 @@ export function PosterWall() {
   // toujours.
   const echouer = useCallback((source: string) => setArrivee(source), [])
 
-  if (!poster) return null
+  const image = poster ?? (added && added.event === posterEvent ? added.url : null)
+
+  if (!image) {
+    if (!posterEvent) return null
+    return (
+      <aside className="poster-wall">
+        <Poster imageUrl={null} tags={posterTags ?? null} className="poster-wall__empty" />
+        <AddPoster eventId={posterEvent} onAdded={(url) => setAdded({ event: posterEvent, url })} />
+      </aside>
+    )
+  }
+
   // La largeur d'envoi d'une affiche : le mur couvre toute la hauteur de l'écran.
-  const source = posterThumb(poster, 1200, 80)
+  const source = posterThumb(image, 1200, 80)
 
   return (
     <aside

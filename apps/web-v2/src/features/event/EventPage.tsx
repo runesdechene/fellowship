@@ -158,6 +158,8 @@ export function EventPage() {
   // de place).
   useDeclarePageChrome({
     poster: event?.image_url ?? null,
+    posterEvent: event?.id ?? null,
+    posterTags: event?.tags ?? null,
     lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
     back: '/',
     edit: event && canEdit ? `/evenement/${event.id}/modifier` : null,
