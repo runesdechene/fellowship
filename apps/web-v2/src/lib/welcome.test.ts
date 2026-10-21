@@ -14,6 +14,7 @@ import {
   departmentOf,
   EMPTY_DRAFT,
   initialsOf,
+  exhibitorReason,
   isAfterCreation,
   referralNote,
   slugFor,
@@ -31,8 +32,8 @@ describe('welcomeSteps', () => {
       'place',
       'address',
       'design',
-      'people',
       'festivals',
+      'people',
     ])
   })
   test('une enseigne existe déjà : le prénom seul', () => {
@@ -45,14 +46,28 @@ describe('welcomeSteps', () => {
       'place',
       'address',
       'design',
-      'people',
       'festivals',
+      'people',
     ])
   })
-  test('isAfterCreation : les exposants et les festivals, pas le design', () => {
+  test('isAfterCreation : les festivals et les exposants, pas le design', () => {
     const steps = welcomeSteps('newEntity')
     expect(isAfterCreation(steps, steps.indexOf('design'))).toBe(false)
-    expect(isAfterCreation(steps, steps.indexOf('people'))).toBe(true)
+    expect(isAfterCreation(steps, steps.indexOf('festivals'))).toBe(true)
+  })
+  test('les festivals avant les exposants : un festival sert à croiser les gens', () => {
+    const steps = welcomeSteps('new')
+    expect(steps.indexOf('festivals')).toBeLessThan(steps.indexOf('people'))
+  })
+})
+
+describe('exhibitorReason', () => {
+  test('festivals en commun, métier, région, nouveaux', () => {
+    expect(exhibitorReason('festivals', 1)).toBe('1 festival en commun')
+    expect(exhibitorReason('festivals', 3)).toBe('3 festivals en commun')
+    expect(exhibitorReason('craft', 0)).toBe('Même métier')
+    expect(exhibitorReason('nearby', 0)).toBe('Près de chez toi')
+    expect(exhibitorReason('recent', 0)).toBe('Nouveau sur Fellowship')
   })
 })
 

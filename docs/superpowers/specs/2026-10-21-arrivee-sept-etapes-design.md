@@ -13,12 +13,18 @@ parrainage dit enfin s'il est bon.
 
 | Cas         | Étapes                                                                          |
 | ----------- | ------------------------------------------------------------------------------- |
-| `newEntity` | marque · métier · atelier · adresse · **design** · **exposants** · **festivals** |
-| `new`       | marque · prénom · métier · atelier · adresse · design · exposants · festivals    |
+| `newEntity` | marque · métier · atelier · adresse · **design** · **festivals** · **exposants** |
+| `new`       | marque · prénom · métier · atelier · adresse · design · festivals · exposants    |
 | `nameOnly`  | prénom (inchangé)                                                               |
 
 **La création a lieu en quittant l'étape design** (« Créer ma vitrine »). Les deux étapes suivantes
 travaillent sur l'enseigne créée.
+
+> **Révisé le 21/10/2026 (Uriel)** : les festivals passent avant les exposants — « un fest sert à
+> croiser les gens ». Les exposants proposés sont ceux des mêmes festivals (« 2 festivals en commun »),
+> puis du même métier, de la même région, et à défaut les inscrits récents (« Nouveau sur
+> Fellowship ») : migration `20261021150000`. Sur l'étape festivals, le lien devient « Aucun de ces
+> festivals ne m'intéresse, passer cette étape » ; « Commencer » termine l'étape exposants.
 
 ## Ce que fait chaque étape
 

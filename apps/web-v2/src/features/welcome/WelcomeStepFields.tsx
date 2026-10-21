@@ -43,7 +43,7 @@ const TEXTS: Record<WelcomeStep, { over: string; title: string; lead: string }> 
   people: {
     over: 'Ton enseigne',
     title: 'Tu les connais peut-être',
-    lead: 'Des exposants de ton métier et de ta région. Suis-les pour voir où ils exposent.',
+    lead: 'Des exposants qui font les mêmes festivals que toi, de ton métier ou de ta région. Suis-les pour voir où ils exposent.',
   },
   festivals: {
     over: 'Ton enseigne',

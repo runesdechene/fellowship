@@ -2884,6 +2884,7 @@ export type Database = {
           id: string
           name: string
           reason: string
+          shared: number
           slug: string
         }[]
       }

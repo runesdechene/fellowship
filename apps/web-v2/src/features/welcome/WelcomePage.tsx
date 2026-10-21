@@ -266,13 +266,8 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               {!busy && <ArrowRight size={16} strokeWidth={2} />}
             </button>
             {step === 'festivals' && (
-              <button
-                type="button"
-                className="welcome__skip"
-                disabled={busy}
-                onClick={() => void run(enter)}
-              >
-                Aucun de ces festivals ne m’intéresse, commencer quand même
+              <button type="button" className="welcome__skip" disabled={busy} onClick={next}>
+                Aucun de ces festivals ne m’intéresse, passer cette étape
               </button>
             )}
           </div>

@@ -80,7 +80,9 @@ export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon
   const { from, to } = searchWindow(query.quand, horizon, today)
   let request = (
     query.zone
-      ? supabase.rpc('events_within', zoneArgs(query.zone), { count: 'exact' }).select(EVENT_COLUMNS)
+      ? supabase
+          .rpc('events_within', zoneArgs(query.zone), { count: 'exact' })
+          .select(EVENT_COLUMNS)
       : supabase.from('events').select(EVENT_COLUMNS, { count: 'exact' })
   )
     .eq('is_private', false)

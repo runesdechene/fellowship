@@ -1,6 +1,6 @@
 /**
- * QUOI     — « Tu les connais peut-être » : jusqu'à douze exposants du même métier, puis de la même
- *            région, à suivre d'un clic.
+ * QUOI     — « Tu les connais peut-être » : jusqu'à douze exposants des mêmes festivals, puis du
+ *            même métier, de la même région, et à défaut les nouveaux venus, à suivre d'un clic.
  * POURQUOI — spec du 21/10/2026, maquette 2392:65 : l'enseigne qui arrive repart reliée. Le suivi
  *            part au clic, comme dans la Communauté, et revient en arrière si l'écriture échoue.
  * ATTENTION — une liste vide n'affiche rien ; une lecture ratée le dit, sans passer pour une liste
@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react'
 import { PersonCard } from '@/components/ui/PersonCard'
 import { must, supabase } from '@/lib/supabase'
+import { exhibitorReason, type ExhibitorReason } from '@/lib/welcome'
 
 interface Suggested {
   id: string
@@ -25,7 +26,7 @@ async function loadPeople(actorId: string): Promise<Suggested[]> {
     name: row.name,
     avatarUrl: row.avatar,
     city: row.city,
-    reason: row.reason === 'craft' ? 'Même métier' : 'Près de chez toi',
+    reason: exhibitorReason(row.reason as ExhibitorReason, row.shared),
   }))
 }
 

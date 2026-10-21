@@ -5,7 +5,7 @@
  *            chiffres d'un code collé.
  * POURQUOI — lot 10a (Uriel, 11/10/2026) : la marque d'abord, puis le prénom. Sept étapes depuis
  *            le 21/10/2026 (spec 2026-10-21-arrivee-sept-etapes) : la photo et la bannière avant
- *            la création, les exposants et les festivals après. Les écrans affichent ; ce qui se
+ *            la création, les festivals puis les exposants après. Les écrans affichent ; ce qui se
  *            décide se teste ici.
  */
 import { cleanSlug, slugProblem } from './vitrine-edit'
@@ -15,9 +15,9 @@ export type WelcomeStep =
 export type WelcomeKind = 'new' | 'nameOnly' | 'newEntity'
 
 const STEPS: Record<WelcomeKind, WelcomeStep[]> = {
-  new: ['brand', 'firstName', 'craft', 'place', 'address', 'design', 'people', 'festivals'],
+  new: ['brand', 'firstName', 'craft', 'place', 'address', 'design', 'festivals', 'people'],
   nameOnly: ['firstName'],
-  newEntity: ['brand', 'craft', 'place', 'address', 'design', 'people', 'festivals'],
+  newEntity: ['brand', 'craft', 'place', 'address', 'design', 'festivals', 'people'],
 }
 
 /** L'enseigne se crée en quittant cette étape ; les suivantes travaillent sur l'enseigne créée. */
@@ -94,6 +94,21 @@ export function stepProblem(step: WelcomeStep, draft: WelcomeDraft): string | nu
     case 'festivals':
       return null
   }
+}
+
+export type ExhibitorReason = 'festivals' | 'craft' | 'nearby' | 'recent'
+
+const REASONS: Record<Exclude<ExhibitorReason, 'festivals'>, string> = {
+  craft: 'Même métier',
+  nearby: 'Près de chez toi',
+  recent: 'Nouveau sur Fellowship',
+}
+
+/** Pourquoi un exposant est proposé : les festivals en commun d'abord (Uriel, 21/10/2026 : « un
+ *  fest sert à croiser les gens »), puis le métier, la région, et à défaut les nouveaux venus. */
+export function exhibitorReason(reason: ExhibitorReason, shared: number): string {
+  if (reason !== 'festivals') return REASONS[reason]
+  return `${String(shared)} festival${shared > 1 ? 's' : ''} en commun`
 }
 
 /** La note du code de parrainage : `owner` vaut `undefined` tant que rien n'est vérifié, `null`
