@@ -88,3 +88,11 @@ export async function locateCity(
   const match = found.find((place) => place.department === typedDepartment(department))
   return match ? { latitude: match.latitude, longitude: match.longitude } : null
 }
+
+/** La position d'une commune tapée librement (« Lyon ») : la première que propose la BAN. */
+export async function locatePlace(
+  query: string,
+): Promise<{ latitude: number; longitude: number } | null> {
+  const [first] = await ask(banUrl(query, { type: 'municipality', limit: 1 }))
+  return first ? { latitude: first.latitude, longitude: first.longitude } : null
+}

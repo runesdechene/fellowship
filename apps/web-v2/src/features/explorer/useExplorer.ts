@@ -17,6 +17,7 @@ import {
   type SearchEvent,
   type SearchQuery,
 } from '@/lib/event-search'
+import { locatePlace } from '@/lib/geocode'
 import { FREE_MONTHS, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
@@ -42,7 +43,10 @@ export interface Exhibitor {
   following: boolean
 }
 
-export type ExplorerQuery = SearchQuery
+export interface ExplorerQuery extends SearchQuery {
+  /** Les km autour du lieu (?rayon), `null` : le lieu sur le texte seul. */
+  rayon: number | null
+}
 
 export interface ExplorerData {
   friends: ExploreEvent[]
@@ -182,7 +186,7 @@ export function useExplorer(
 ) {
   const [state, setState] = useState<ExplorerData>(EMPTY)
   const searching = query.q.trim() !== '' || query.ou.trim() !== ''
-  const { q, ou, quand } = query
+  const { q, ou, quand, rayon } = query
   // Une valeur simple en dépendance : la liste `tags` est recréée à chaque rendu de la page.
   const tagKey = query.tags.join('|')
 
@@ -190,13 +194,15 @@ export function useExplorer(
     if (!viewerId) return
     let cancelled = false
     const tags = tagKey ? tagKey.split('|') : []
-    const current: ExplorerQuery = { q, ou, quand, tags }
-
     async function run(viewer: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
       let next: ExplorerData
       try {
         const today = new Date()
+        // Un lieu que la BAN ne trouve pas garde la recherche sur le texte : jamais un écran vide.
+        const center = rayon && ou.trim() ? await locatePlace(ou) : null
+        const zone = center && rayon ? { ...center, km: rayon } : null
+        const current: ExplorerQuery = { q, ou, quand, tags, rayon, zone }
         const [found, hiddenCount] = await Promise.all([
           searching
             ? loadSearch(current, viewer, today, pro)
@@ -215,7 +221,7 @@ export function useExplorer(
     return () => {
       cancelled = true
     }
-  }, [viewerId, pro, searching, q, ou, quand, tagKey])
+  }, [viewerId, pro, searching, q, ou, quand, rayon, tagKey])
 
   /** Repérer une date (« Intéressé ») ou la retirer. Une date déjà engagée ne se touche pas ici. */
   const toggleMark = useCallback(

@@ -2552,6 +2552,46 @@ export type Database = {
         Args: { p_city: string; p_name: string }
         Returns: string
       }
+      events_within: {
+        Args: { p_km: number; p_lat: number; p_lng: number }
+        Returns: {
+          acted_by_user_id: string | null
+          address: string | null
+          city: string
+          contact_email: string | null
+          created_at: string
+          created_by_actor: string | null
+          department: string
+          description: string | null
+          edition: number | null
+          end_date: string
+          expected_attendance: string | null
+          external_url: string | null
+          geo_precision: string | null
+          id: string
+          image_url: string | null
+          is_private: boolean
+          latitude: number | null
+          longitude: number | null
+          name: string
+          opening_hours: string | null
+          previous_edition_id: string | null
+          registration_deadline: string | null
+          registration_note: string | null
+          registration_url: string | null
+          slug: string | null
+          stand_price: string | null
+          stand_size: string | null
+          start_date: string
+          tags: string[] | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "events"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       friend_requests: {
         Args: { p_actor: string }
         Returns: {

@@ -19,6 +19,15 @@ export interface SearchQuery {
   /** Les écritures des catégories retenues dans `events.tags` (nom et slug de chacune) ; une
    *  date en porte au moins une. Vide : toutes les catégories. */
   tags: string[]
+  /** Le cercle autour du lieu quand la recherche porte un rayon (?rayon) ; il remplace alors la
+   *  correspondance du lieu sur le texte de la ville et du département. */
+  zone?: Zone | null
+}
+
+export interface Zone {
+  latitude: number
+  longitude: number
+  km: number
 }
 
 export interface EventRow {
@@ -59,13 +68,21 @@ export function toSearchEvent(row: EventRow, today: Date): SearchEvent {
   }
 }
 
+/** Les arguments de `events_within` : les fiches à moins de `km` du centre, à vol d'oiseau. */
+const zoneArgs = (zone: Zone) => ({ p_lat: zone.latitude, p_lng: zone.longitude, p_km: zone.km })
+
+/** Le lieu sur le texte (ville, département), sauf quand un cercle l'a déjà pris en charge. */
+const placeOf = (query: SearchQuery) => (query.zone ? null : searchPattern(query.ou))
+
 /** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. Le
  *  total (`count`) sert à la recherche publique ; l'Explorer l'ignore. */
 export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon) {
   const { from, to } = searchWindow(query.quand, horizon, today)
-  let request = supabase
-    .from('events')
-    .select(EVENT_COLUMNS, { count: 'exact' })
+  let request = (
+    query.zone
+      ? supabase.rpc('events_within', zoneArgs(query.zone), { count: 'exact' }).select(EVENT_COLUMNS)
+      : supabase.from('events').select(EVENT_COLUMNS, { count: 'exact' })
+  )
     .eq('is_private', false)
     .gte('end_date', todayIso(from))
     .lt('start_date', todayIso(to))
@@ -73,10 +90,10 @@ export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon
   return request
 }
 
-/** La fenêtre, plus les mots (nom, ville, département) et le lieu (ville, département). */
+/** La fenêtre, plus les mots (nom, ville, département) et le lieu (ville, département, ou cercle). */
 export function searchEvents(query: SearchQuery, today: Date, horizon: Horizon) {
   const words = searchPattern(query.q)
-  const place = searchPattern(query.ou)
+  const place = placeOf(query)
   let request = eventsInWindow(query, today, horizon)
   if (words)
     request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
@@ -93,10 +110,14 @@ export async function countBeyond(
   const beyond = beyondWindow(query.quand, today, horizon)
   if (!beyond) return 0
   const words = searchPattern(query.q)
-  const place = searchPattern(query.ou)
-  let request = supabase
-    .from('events')
-    .select('id', { count: 'exact', head: true })
+  const place = placeOf(query)
+  let request = (
+    query.zone
+      ? supabase
+          .rpc('events_within', zoneArgs(query.zone), { count: 'exact', head: true })
+          .select('id')
+      : supabase.from('events').select('id', { count: 'exact', head: true })
+  )
     .eq('is_private', false)
     .gte('start_date', todayIso(beyond.from))
     .lt('start_date', todayIso(beyond.to))

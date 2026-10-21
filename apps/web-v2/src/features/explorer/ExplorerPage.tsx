@@ -3,13 +3,13 @@
  *            trois rangées de l'accueil, soit les résultats d'une recherche.
  * POURQUOI — trouver où poser son stand : par ses amis, par la nouveauté, près de chez soi, ou en
  *            cherchant un mot (maquette 2027).
- * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?quand, ?categorie=a,b, ?voir) : le retour
+ * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?rayon, ?quand, ?categorie=a,b, ?voir) : le retour
  *            du navigateur ramène la recherche d'avant. La barre se remonte quand l'adresse change.
  */
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { FREE_MONTHS } from '@/lib/explorer'
+import { FREE_MONTHS, readRayon } from '@/lib/explorer'
 import { nameLine } from '@/lib/name-line'
 import { fetchTags, type TagRow } from '@/lib/tags'
 import { CategoryChips } from './CategoryChips'
@@ -44,6 +44,7 @@ export function ExplorerPage() {
 
   const q = params.get('q') ?? ''
   const ou = params.get('ou') ?? ''
+  const rayon = readRayon(params.get('rayon'))
   const quand = params.get('quand')
   const selected = (params.get('categorie') ?? '').split(',').filter(Boolean)
   const tab = readTab(params.get('voir'))
@@ -51,7 +52,7 @@ export function ExplorerPage() {
 
   const { pro } = usePlan()
   const data = useExplorer(
-    { q, ou, quand, tags: chosen.flatMap((tag) => [tag.name, tag.slug]) },
+    { q, ou, quand, rayon, tags: chosen.flatMap((tag) => [tag.name, tag.slug]) },
     actor?.id,
     pro,
   )
@@ -84,14 +85,16 @@ export function ExplorerPage() {
 
       <SearchBar
         horizon={pro ? null : FREE_MONTHS}
-        key={`${q}|${ou}|${quand ?? ''}`}
+        key={`${q}|${ou}|${rayon ?? ''}|${quand ?? ''}`}
         q={q}
         ou={ou}
+        rayon={rayon ? String(rayon) : ''}
         quand={quand}
         onSearch={(next) => {
           update({
             q: next.q,
             ou: next.ou,
+            rayon: next.rayon,
             quand: next.quand === '12' ? null : next.quand,
             voir: null,
           })

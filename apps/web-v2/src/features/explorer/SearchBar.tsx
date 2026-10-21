@@ -1,34 +1,36 @@
 /**
  * QUOI     — la barre de recherche de l'Explorer : Rechercher (un festival, une ville, un
- *            exposant) · Où · Quand, et le bouton rond.
- * POURQUOI — la recherche vit dans l'adresse (?q, ?ou, ?quand) : le retour du navigateur ramène
+ *            exposant) · Où · Rayon · Quand, et le bouton rond.
+ * POURQUOI — la recherche vit dans l'adresse (?q, ?ou, ?rayon, ?quand) : le retour du navigateur ramène
  *            la recherche d'avant, un lien se partage.
  * ATTENTION — un formulaire natif : Entrée lance la recherche, sans code maison.
  */
 import { ChevronDown, Search, X } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { quandChoices, type Horizon } from '@/lib/explorer'
+import { RAYON_OPTIONS, quandChoices, type Horizon } from '@/lib/explorer'
 
 interface SearchBarProps {
   q: string
   ou: string
+  rayon: string
   quand: string | null
-  onSearch: (next: { q: string; ou: string; quand: string }) => void
+  onSearch: (next: { q: string; ou: string; rayon: string; quand: string }) => void
   /** Le choix le plus large suit l'horizon : 3 mois sans compte, 6 en gratuit (lib/explorer.ts). */
   horizon: Horizon
 }
 
-export function SearchBar({ q, ou, quand, onSearch, horizon }: SearchBarProps) {
+export function SearchBar({ q, ou, rayon, quand, onSearch, horizon }: SearchBarProps) {
   const choices = quandChoices(horizon, quand)
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
+  const [around, setAround] = useState(rayon)
   const [when, setWhen] = useState(
     choices.some((option) => option.value === quand) ? (quand ?? '') : (choices[0]?.value ?? ''),
   )
 
   function submit(event: FormEvent) {
     event.preventDefault()
-    onSearch({ q: words.trim(), ou: place.trim(), quand: when })
+    onSearch({ q: words.trim(), ou: place.trim(), rayon: around, quand: when })
   }
 
   return (
@@ -53,7 +55,7 @@ export function SearchBar({ q, ou, quand, onSearch, horizon }: SearchBarProps) {
             aria-label="Effacer la recherche"
             onClick={() => {
               setWords('')
-              onSearch({ q: '', ou: place.trim(), quand: when })
+              onSearch({ q: '', ou: place.trim(), rayon: around, quand: when })
             }}
           >
             <X size={12} strokeWidth={2.2} />
@@ -71,6 +73,25 @@ export function SearchBar({ q, ou, quand, onSearch, horizon }: SearchBarProps) {
               setPlace(change.target.value)
             }}
           />
+        </span>
+      </label>
+      <label className="search-bar__field search-bar__field--when">
+        <span className="search-bar__body">
+          <span className="search-bar__label">Rayon</span>
+          <select
+            className="search-bar__input search-bar__select"
+            value={around}
+            onChange={(change) => {
+              setAround(change.target.value)
+            }}
+          >
+            {RAYON_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="search-bar__chevron" size={14} strokeWidth={2} aria-hidden />
         </span>
       </label>
       <label className="search-bar__field search-bar__field--when">

@@ -14,6 +14,7 @@ import {
   lastOpenMonth,
   quandChoices,
   quandMonths,
+  readRayon,
   beyondWindow,
   resultsTitle,
   searchPattern,
@@ -194,5 +195,14 @@ describe('beyondTitle', () => {
     expect(beyondTitle(1, new Date(2026, 11, 1))).toBe(
       '1 festival de plus t’attend après décembre.',
     )
+  })
+})
+
+describe('readRayon', () => {
+  it('lit un rayon proposé, refuse le reste', () => {
+    expect(readRayon('50')).toBe(50)
+    expect(readRayon(null)).toBeNull()
+    expect(readRayon('')).toBeNull()
+    expect(readRayon('7')).toBeNull()
   })
 })
