@@ -37,8 +37,8 @@ Un nom de colonne ou une signature de RPC ne se devine jamais : graph, `docs/db/
 ## Règles
 
 - **Le code est un chef-d'œuvre de simplicité** : simple, compréhensible, propre, épuré. L'outil
-  standard avant le code maison. Si c'est compliqué à lire, c'est à réécrire. Détail :
-  `.claude/rules/v2.md`.
+  standard avant le code maison. Si c'est compliqué à lire, c'est à réécrire. Détail : la section
+  « Coder » de `_Socle/Méthode.md` du vault.
 - **Le périmètre de la V2 est la maquette Figma.** Ce qui n'y est pas n'existe pas. **Le design
   appartient à Uriel** : on intègre, on n'améliore pas d'office — toute proposition graphique se
   discute avant.
