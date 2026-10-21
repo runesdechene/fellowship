@@ -10,7 +10,13 @@
  *            `addressProblem`, jamais en échec silencieux.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { imageProblem, resizeImage } from '@/lib/image-resize'
+import {
+  GALLERY,
+  prepareImage,
+  uploadEntityImage,
+  type ImageKind,
+  type PendingImage,
+} from '@/lib/entity-images'
 import { supabase } from '@/lib/supabase'
 import {
   changedColumns,
@@ -21,19 +27,6 @@ import {
   type VitrineDraft,
 } from '@/lib/vitrine-edit'
 import type { Vitrine } from './useVitrine'
-
-export interface PendingImage {
-  /** Déjà réduite : c'est elle qui partira. */
-  blob: Blob
-  /** Une adresse locale : l'aperçu s'affiche sans rien envoyer. */
-  preview: string
-}
-
-const UNREADABLE = 'Cette image ne peut pas être utilisée.'
-
-type ImageKind = 'cover' | 'avatar'
-
-const MAX_WIDTH: Record<ImageKind, number> = { cover: 2000, avatar: 512 }
 
 function draftOf(vitrine: Vitrine): VitrineDraft {
   return {
@@ -63,19 +56,6 @@ function published(vitrine: Vitrine, draft: VitrineDraft, images: Partial<Vitrin
     bannerPosition: draft.bannerPosition,
     ...images,
   }
-}
-
-const GALLERY = 'entity-gallery'
-
-/** Envoie une image ; rend son chemin (pour la retirer si l'enregistrement échoue) et son adresse. */
-async function upload(actorId: string, kind: ImageKind, image: PendingImage) {
-  const extension = image.blob.type === 'image/webp' ? 'webp' : 'jpg'
-  const path = `${actorId}/${kind}/${String(Date.now())}.${extension}`
-  const { error } = await supabase.storage
-    .from(GALLERY)
-    .upload(path, image.blob, { contentType: image.blob.type })
-  if (error) throw new Error(error.message)
-  return { path, url: supabase.storage.from(GALLERY).getPublicUrl(path).data.publicUrl }
 }
 
 export function useVitrineEdit(vitrine: Vitrine, onSaved: (next: Vitrine) => void) {
@@ -113,17 +93,12 @@ export function useVitrineEdit(vitrine: Vitrine, onSaved: (next: Vitrine) => voi
   }, [])
 
   const pick = useCallback(async (kind: ImageKind, file: File) => {
-    const refused = imageProblem(file)
-    setImageError(refused)
-    if (refused) return
-    let blob: Blob
-    try {
-      blob = await resizeImage(file, MAX_WIDTH[kind])
-    } catch {
-      setImageError(UNREADABLE) // un SVG, une photo HEIC, un PDF renommé en .jpg
+    const image = await prepareImage(kind, file)
+    if (typeof image === 'string') {
+      setImageError(image)
       return
     }
-    const image = { blob, preview: URL.createObjectURL(blob) }
+    setImageError(null)
     if (kind === 'cover') setBanner(image)
     else setLogo(image)
     setFailed(false)
@@ -153,12 +128,12 @@ export function useVitrineEdit(vitrine: Vitrine, onSaved: (next: Vitrine) => voi
       const columns = changedColumns(initial, draft)
       const images: Partial<Vitrine> = {}
       if (banner) {
-        const { path, url } = await upload(vitrine.actorId, 'cover', banner)
+        const { path, url } = await uploadEntityImage(vitrine.actorId, 'cover', banner)
         sent.push(path)
         columns.banner_url = images.bannerUrl = url
       }
       if (logo) {
-        const { path, url } = await upload(vitrine.actorId, 'avatar', logo)
+        const { path, url } = await uploadEntityImage(vitrine.actorId, 'avatar', logo)
         sent.push(path)
         columns.avatar_url = images.avatarUrl = url
       }

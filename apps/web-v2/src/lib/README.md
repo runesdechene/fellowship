@@ -25,6 +25,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `useDragScroll.ts` — tirer une zone à défilement horizontal à la souris (frise du calendrier, rangées de l'Explorer).
 - `useTagStyles.ts` — les couleurs des catégories, lues une fois et partagées.
 - `who-goes.ts` — la liste « Qui y va » : statut de chaque ami (Inscrit en vert, Dossier envoyé), ordre.
+- `entity-images.ts` — la photo et la bannière d’une enseigne : préparation et envoi (vitrine, arrivée).
 - `image-resize.ts` — réduire une image au navigateur avant envoi (WebP, repli JPEG).
 - `vitrine-edit.ts` — les règles de l'éditeur de vitrine : adresse, liens, limites, ce qui a changé.
 - `community.ts` — le fil de la communauté : lire, trier par onglet, dire les lignes et les raisons de suivre.
