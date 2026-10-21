@@ -9,7 +9,8 @@
 import { useEffect, useState } from 'react'
 import { PersonCard } from '@/components/ui/PersonCard'
 import { must, supabase } from '@/lib/supabase'
-import { exhibitorReason, type ExhibitorReason } from '@/lib/welcome'
+import { exhibitorReason } from '@/lib/welcome'
+import { useToggles } from './useToggles'
 
 interface Suggested {
   id: string
@@ -26,14 +27,25 @@ async function loadPeople(actorId: string): Promise<Suggested[]> {
     name: row.name,
     avatarUrl: row.avatar,
     city: row.city,
-    reason: exhibitorReason(row.reason as ExhibitorReason, row.shared),
+    reason: exhibitorReason(row.reason, row.shared),
   }))
+}
+
+async function follow(actorId: string, id: string, following: boolean): Promise<boolean> {
+  const { error } = following
+    ? await supabase.from('follows').insert({ follower_actor: actorId, following_actor: id })
+    : await supabase
+        .from('follows')
+        .delete()
+        .eq('follower_actor', actorId)
+        .eq('following_actor', id)
+  return error === null
 }
 
 export function WelcomePeople({ actorId }: { actorId: string }) {
   const [people, setPeople] = useState<Suggested[] | null>(null)
   const [failed, setFailed] = useState(false)
-  const [followed, setFollowed] = useState<ReadonlySet<string>>(new Set())
+  const { on, pending, toggle } = useToggles((id, value) => follow(actorId, id, value))
 
   useEffect(() => {
     let cancelled = false
@@ -54,33 +66,18 @@ export function WelcomePeople({ actorId }: { actorId: string }) {
     }
   }, [actorId])
 
-  async function toggle(id: string) {
-    const following = !followed.has(id)
-    const apply = (on: boolean) => {
-      setFollowed((current) => {
-        const next = new Set(current)
-        if (on) next.add(id)
-        else next.delete(id)
-        return next
-      })
-    }
-    apply(following)
-    const { error } = following
-      ? await supabase.from('follows').insert({ follower_actor: actorId, following_actor: id })
-      : await supabase
-          .from('follows')
-          .delete()
-          .eq('follower_actor', actorId)
-          .eq('following_actor', id)
-    if (error) apply(!following)
+  if (failed) {
+    return (
+      <p className="welcome__note" role="alert">
+        Les propositions n’ont pas pu se charger.
+      </p>
+    )
   }
-
-  if (failed) return <p className="welcome__note">Les propositions n’ont pas pu se charger.</p>
   if (!people || people.length === 0) return null
   return (
     <div className="welcome__grid">
       {people.map((person) => {
-        const on = followed.has(person.id)
+        const followed = on.has(person.id)
         return (
           <PersonCard
             key={person.id}
@@ -91,11 +88,12 @@ export function WelcomePeople({ actorId }: { actorId: string }) {
             action={
               <button
                 type="button"
-                className={on ? 'pill-toggle' : 'pill-toggle pill-toggle--filled'}
-                aria-pressed={on}
+                className={followed ? 'pill-toggle' : 'pill-toggle pill-toggle--filled'}
+                aria-pressed={followed}
+                disabled={pending.has(person.id)}
                 onClick={() => void toggle(person.id)}
               >
-                {on ? 'Suivi ✓' : 'Suivre'}
+                {followed ? 'Suivi ✓' : 'Suivre'}
               </button>
             }
           />

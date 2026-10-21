@@ -45,6 +45,8 @@ export function ImageDrop({ label, round, preview, fileName, problem, onPick }: 
         onDrop={drop}
         onKeyDown={key}
         tabIndex={0}
+        role="button"
+        aria-label={preview ? `${label} : changer l’image` : label}
       >
         <input
           ref={input}
@@ -75,7 +77,11 @@ export function ImageDrop({ label, round, preview, fileName, problem, onPick }: 
           </>
         )}
       </label>
-      {problem && <p className="image-drop__problem">{problem}</p>}
+      {problem && (
+        <p className="image-drop__problem" role="alert">
+          {problem}
+        </p>
+      )}
     </div>
   )
 }

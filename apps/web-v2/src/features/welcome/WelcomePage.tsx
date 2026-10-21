@@ -67,6 +67,8 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
   const [failed, setFailed] = useState<string | null>(null)
   // L'adresse refusée par la base à la création : « Déjà prise » tant qu'on ne l'a pas changée.
   const [refused, setRefused] = useState<string | null>(null)
+  // Les festivals proposés : sans aucun, « Aucun ne m'intéresse » n'a pas de sens.
+  const [festivalCount, setFestivalCount] = useState(0)
 
   function set(patch: Partial<WelcomeDraft>) {
     setFailed(null)
@@ -274,7 +276,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               )}
               {step === 'people' && draft.createdId && <WelcomePeople actorId={draft.createdId} />}
               {step === 'festivals' && draft.createdId && (
-                <WelcomeFestivals actorId={draft.createdId} />
+                <WelcomeFestivals actorId={draft.createdId} onLoaded={setFestivalCount} />
               )}
             </WelcomeStepFields>
           </div>
@@ -283,7 +285,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               {label}
               {!busy && <ArrowRight size={16} strokeWidth={2} />}
             </button>
-            {step === 'festivals' && (
+            {step === 'festivals' && festivalCount > 0 && (
               <button type="button" className="welcome__skip" disabled={busy} onClick={next}>
                 Aucun de ces festivals ne m’intéresse, passer cette étape
               </button>

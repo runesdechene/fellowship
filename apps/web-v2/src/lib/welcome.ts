@@ -110,19 +110,18 @@ export function draftFate(
   return knownIds.includes(createdId) ? 'reset' : 'resume'
 }
 
-export type ExhibitorReason = 'festivals' | 'craft' | 'nearby' | 'recent'
-
-const REASONS: Record<Exclude<ExhibitorReason, 'festivals'>, string> = {
+const REASONS: Record<string, string> = {
   craft: 'Même métier',
   nearby: 'Près de chez toi',
   recent: 'Nouveau sur Fellowship',
 }
 
-/** Pourquoi un exposant est proposé : les festivals en commun d'abord (Uriel, 21/10/2026 : « un
- *  fest sert à croiser les gens »), puis le métier, la région, et à défaut les nouveaux venus. */
-export function exhibitorReason(reason: ExhibitorReason, shared: number): string {
-  if (reason !== 'festivals') return REASONS[reason]
-  return `${String(shared)} festival${shared > 1 ? 's' : ''} en commun`
+/** Pourquoi un exposant est proposé (la raison vient de `welcome_exhibitors`) : les festivals en
+ *  commun d'abord (Uriel, 21/10/2026 : « un fest sert à croiser les gens »), puis le métier, la
+ *  région, et à défaut les nouveaux venus. Une raison inconnue ne s'affiche pas. */
+export function exhibitorReason(reason: string, shared: number): string {
+  if (reason === 'festivals') return `${String(shared)} festival${shared > 1 ? 's' : ''} en commun`
+  return REASONS[reason] ?? ''
 }
 
 /** La note du code de parrainage : `owner` vaut `undefined` tant que rien n'est vérifié, `null`

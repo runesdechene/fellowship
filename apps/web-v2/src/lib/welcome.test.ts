@@ -90,6 +90,9 @@ describe('exhibitorReason', () => {
     expect(exhibitorReason('nearby', 0)).toBe('Près de chez toi')
     expect(exhibitorReason('recent', 0)).toBe('Nouveau sur Fellowship')
   })
+  test('une raison inconnue de la base ne s’affiche pas', () => {
+    expect(exhibitorReason('autre', 0)).toBe('')
+  })
 })
 
 describe('referralNote', () => {

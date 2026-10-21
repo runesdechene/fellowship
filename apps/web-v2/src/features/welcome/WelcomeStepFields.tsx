@@ -238,6 +238,7 @@ export function WelcomeStepFields({
                 className={
                   referral.tone ? `welcome__note welcome__note--${referral.tone}` : 'welcome__note'
                 }
+                aria-live="polite"
               >
                 {referral.text}
               </span>

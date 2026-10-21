@@ -320,6 +320,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, var(--person-card-width));
   gap: var(--space-24);
+  transition: opacity var(--duration-medium) var(--ease-out);
+}
+
+/* Les propositions arrivent après une lecture : elles se posent en fondu, sans surgir. */
+@starting-style {
+  .welcome__grid {
+    opacity: 0;
+  }
 }
 
 .welcome__grid > * {
@@ -362,6 +370,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .welcome__grid,
   .welcome__dash,
   .welcome-preview__name {
     transition: none;
