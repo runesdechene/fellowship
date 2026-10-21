@@ -50,9 +50,7 @@ export function DeleteEntityDialog({ entityId, brandName, subscribed, onClose }:
       }}
       loading={false}
       problem={
-        failed
-          ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à appfellowship@pm.me.'
-          : null
+        failed ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à contact@flw.sh.' : null
       }
       deleting={deleting}
       confirmPrompt={`Retape « ${expected} » pour confirmer`}

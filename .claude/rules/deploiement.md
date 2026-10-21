@@ -105,7 +105,7 @@ la bloque. Cf. [[reference_netlify_header_order]], [[project_progress]] (embed c
 
 Email de contact officiel pour les users de Fellowship :
 
-**appfellowship@pm.me** (ProtonMail)
+**contact@flw.sh** (ProtonMail, domaine flw.sh — remplace appfellowship@pm.me le 21/10/2026)
 
 Exposé dans la page Réglages depuis v0.7.196 (mailto direct, pas de form ni chatbot — filet de sécurité post-lancement décidé 2026-05-28).
 

@@ -13,7 +13,7 @@ export function ContactSection() {
       </div>
       <SettingCard>
         <SettingRow title="Une question, une idée, un souci ?" note="On lit tout et on répond vite">
-          <a className="button" href="mailto:appfellowship@pm.me">
+          <a className="button" href="mailto:contact@flw.sh">
             <Mail size={14} strokeWidth={2} />
             Écrire à l’équipe
           </a>

@@ -22,7 +22,7 @@ export function OrganizersBox() {
         <h2 id="landing-orga-title" className="landing-orga__title">
           Tu organises un festival ? On construit aussi ton outil.
         </h2>
-        <a className="landing-button landing-button--glass" href="mailto:appfellowship@pm.me">
+        <a className="landing-button landing-button--glass" href="mailto:contact@flw.sh">
           Écris-nous
         </a>
       </div>

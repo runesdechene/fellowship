@@ -2,7 +2,7 @@
 
 > pnpm workspaces · TypeScript strict · Supabase · Netlify
 > L'état du projet, les décisions et la façon de travailler avec Uriel vivent dans le vault
-> **Mon Cerveau** : lire le `CLAUDE.md` du vault, `1. LE MÉTIER/2. Fellowship/_État.md`, `Dev.md`
+> **Mon Cerveau** : lire le `CLAUDE.md` du vault, `1. LE MÉTIER/2. Fellowship/_État.md`, `_Dev décisions tranchées.md`
 > et `_Socle/`. Ici, le code seulement.
 
 ## Où sont les choses

@@ -20,7 +20,7 @@ function DeleteDialog({ onClose }: { onClose: () => void }) {
 
   const problem = failed
     ? preview
-      ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à appfellowship@pm.me.'
+      ? 'La suppression n’a pas abouti. Réessaie, ou écris-nous à contact@flw.sh.'
       : 'L’aperçu n’a pas pu être chargé.'
     : null
 

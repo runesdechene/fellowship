@@ -37,7 +37,7 @@ export function LandingFoot({ children, away = false }: { children?: ReactNode; 
             <p className="landing-foot__head">Fellowship</p>
             <a href={`${home}#assistant`}>Pourquoi Fellowship</a>
             <a href={`${home}#organisateurs`}>Organisateurs</a>
-            <a href="mailto:appfellowship@pm.me">Contact</a>
+            <a href="mailto:contact@flw.sh">Contact</a>
           </div>
           <div>
             <p className="landing-foot__head">Informations</p>
