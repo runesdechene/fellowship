@@ -811,6 +811,14 @@
   --toggle-knob: var(--sand-0);
   --required-ink: var(--ink-600);
   --dropzone-border: var(--sand-400);
+  /* Le dépôt d'une photo ou d'une bannière (maquettes 2391:187 et 2391:260). */
+  --image-drop-height: 64px;
+  --image-drop-radius: var(--round-10);
+  --image-drop-thumb: 44px;
+  --image-drop-cover-width: 96px;
+  --image-drop-cover-radius: var(--round-6);
+  --type-image-drop-name: var(--weight-medium) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
 
   --type-field-label: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
   --type-control: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);

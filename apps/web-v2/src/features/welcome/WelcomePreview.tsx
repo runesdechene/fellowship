@@ -2,7 +2,8 @@
  * QUOI     — « Ta vitrine, en direct » : la carte qui se construit pendant l'arrivée — initiales,
  *            marque, métier et ville, adresse `flw.sh/…`.
  * POURQUOI — maquettes 2102:72, 2244:2, 2244:53 (lot 10a) : chaque lettre tapée se voit à droite.
- *            Pour le prénom seul, la carte montre l'enseigne qui existe déjà.
+ *            Pour le prénom seul, la carte montre l'enseigne qui existe déjà. La photo et la
+ *            bannière choisies s'y posent avant la création (maquette 2391:260).
  */
 import { Scissors } from 'lucide-react'
 import { initialsOf } from '@/lib/welcome'
@@ -13,16 +14,28 @@ interface WelcomePreviewProps {
   place: string
   slug: string
   avatarUrl?: string | null
+  bannerUrl?: string | null
 }
 
-export function WelcomePreview({ brand, craft, place, slug, avatarUrl }: WelcomePreviewProps) {
+export function WelcomePreview({
+  brand,
+  craft,
+  place,
+  slug,
+  avatarUrl,
+  bannerUrl,
+}: WelcomePreviewProps) {
   const meta = [craft.trim(), place].filter(Boolean).join(' · ')
   return (
     <div className="door__panel welcome-preview">
       <p className="welcome-preview__label">Ta vitrine, en direct</p>
       <div className="welcome-preview__card">
         <div className="welcome-preview__banner">
-          <Scissors className="welcome-preview__decor" strokeWidth={1} aria-hidden="true" />
+          {bannerUrl ? (
+            <img className="welcome-preview__cover" src={bannerUrl} alt="" />
+          ) : (
+            <Scissors className="welcome-preview__decor" strokeWidth={1} aria-hidden="true" />
+          )}
         </div>
         <span className="welcome-preview__logo">
           {avatarUrl ? <img src={avatarUrl} alt="" /> : initialsOf(brand)}

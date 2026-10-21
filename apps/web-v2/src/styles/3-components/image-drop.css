@@ -1,0 +1,96 @@
+/**
+ * QUOI     — le dépôt d'une image (components/ui/ImageDrop) : le cadre en pointillés, puis la ligne
+ *            de l'image choisie avec sa vignette et « Changer ».
+ * POURQUOI — maquettes 2391:187 et 2391:260 (arrivée, étape photo et bannière). La ligne remplie
+ *            est blanche et bordée d'un filet : elle prend l'ombre des champs (Uriel, 19/10/2026).
+ */
+
+.image-drop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.image-drop__label {
+  font: var(--type-door-label);
+  color: var(--ink-title);
+}
+
+.image-drop__zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  min-height: var(--image-drop-height);
+  border: 1px dashed var(--dropzone-border);
+  border-radius: var(--image-drop-radius);
+  font: var(--type-door-note);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.image-drop__zone:hover,
+.image-drop__zone:focus-within {
+  border-color: var(--ink-soft);
+}
+
+.image-drop__chosen {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-16) var(--space-10) var(--space-10);
+  border: var(--door-field-line) solid var(--line-card);
+  border-radius: var(--radius-door-field);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  cursor: pointer;
+  transition: opacity var(--duration-medium) var(--ease-out);
+}
+
+/* L'image choisie se pose en fondu à la place du cadre. */
+@starting-style {
+  .image-drop__chosen {
+    opacity: 0;
+  }
+}
+
+.image-drop__thumb {
+  flex-shrink: 0;
+  inline-size: var(--image-drop-thumb);
+  block-size: var(--image-drop-thumb);
+  border-radius: var(--radius-round);
+  object-fit: cover;
+}
+
+.image-drop__thumb--cover {
+  inline-size: var(--image-drop-cover-width);
+  border-radius: var(--image-drop-cover-radius);
+}
+
+.image-drop__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: var(--type-image-drop-name);
+  color: var(--ink-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-drop__change {
+  font: var(--type-door-label);
+  color: var(--ink-soft);
+}
+
+.image-drop__problem {
+  font: var(--type-door-note);
+  color: var(--danger-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-drop__zone,
+  .image-drop__chosen {
+    transition: none;
+  }
+}

@@ -181,6 +181,12 @@
   color: var(--welcome-decor-ink);
 }
 
+.welcome-preview__cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .welcome-preview__logo {
   position: relative; /* au-dessus de la bannière, qu'il chevauche */
   display: grid;
