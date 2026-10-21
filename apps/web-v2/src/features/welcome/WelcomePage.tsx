@@ -38,6 +38,8 @@ import { clearWelcome, useWelcomeDraft } from './useWelcomeDraft'
 import { useReferralOwner } from './useReferralOwner'
 import { useSlugFree } from './useSlugFree'
 import { useWelcomeImages, type ChosenImage } from './useWelcomeImages'
+import { WelcomeFestivals } from './WelcomeFestivals'
+import { WelcomePeople } from './WelcomePeople'
 import { WelcomePreview } from './WelcomePreview'
 import { WelcomeStepFields } from './WelcomeStepFields'
 
@@ -252,12 +254,28 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
                   />
                 </>
               )}
+              {step === 'people' && draft.createdId && <WelcomePeople actorId={draft.createdId} />}
+              {step === 'festivals' && draft.createdId && (
+                <WelcomeFestivals actorId={draft.createdId} />
+              )}
             </WelcomeStepFields>
           </div>
-          <button type="submit" className="door__submit" disabled={blocked || busy}>
-            {label}
-            {!busy && <ArrowRight size={16} strokeWidth={2} />}
-          </button>
+          <div className="welcome__actions">
+            <button type="submit" className="door__submit" disabled={blocked || busy}>
+              {label}
+              {!busy && <ArrowRight size={16} strokeWidth={2} />}
+            </button>
+            {step === 'festivals' && (
+              <button
+                type="button"
+                className="welcome__skip"
+                disabled={busy}
+                onClick={() => void run(enter)}
+              >
+                Aucun de ces festivals ne m’intéresse, commencer quand même
+              </button>
+            )}
+          </div>
           {failed && <p className="door__error">{failed}</p>}
         </form>
       </div>

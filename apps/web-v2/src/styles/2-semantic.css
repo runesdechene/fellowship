@@ -1158,6 +1158,8 @@
   --welcome-bar-width: 150px;
   --welcome-block-height: 110px;
   --welcome-check-size: 22px;
+  /* Les étapes après la création (maquettes 2392:65, 2392:271) : les cartes prennent la largeur. */
+  --welcome-wide-width: 1080px;
   --welcome-check-line: var(--sand-400);
   --welcome-check-radius: var(--round-6);
   --type-welcome-check: var(--weight-medium) var(--size-15) / var(--leading-snug) var(--family-sans);
