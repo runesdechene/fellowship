@@ -57,28 +57,69 @@
   gap: var(--space-12);
 }
 
-/* « Je suis nomade » : la case native, à l'encre des titres. */
+/* « Je suis nomade » : la vraie case, redessinée ; la coche se pose par-dessus. */
 .welcome__check {
   display: flex;
   align-items: flex-start;
   gap: var(--space-12);
-  font: var(--type-door-input);
+  font: var(--type-welcome-check);
   color: var(--ink-title);
   cursor: pointer;
 }
 
-.welcome__check input {
-  inline-size: 22px;
-  block-size: 22px;
+.welcome__box {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.welcome__box > * {
+  grid-area: 1 / 1;
+}
+
+.welcome__box input {
+  appearance: none;
+  inline-size: var(--welcome-check-size);
+  block-size: var(--welcome-check-size);
   margin: 0;
-  accent-color: var(--ink-title);
+  border: var(--door-field-line) solid var(--welcome-check-line);
+  border-radius: var(--welcome-check-radius);
+  background: var(--surface-card);
   cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.welcome__box input:checked {
+  border-color: var(--action-surface);
+  background: var(--action-surface);
+}
+
+.welcome__box input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.welcome__box svg {
+  color: var(--action-ink);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.welcome__box input:checked + svg {
+  opacity: 1;
 }
 
 .welcome__check-text {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.welcome__check .welcome__note {
+  font: var(--type-door-label);
 }
 
 .welcome__prefix {

@@ -1123,7 +1123,7 @@
   --login-wall-poster-opacity: 0.92;
   --login-wall-title-width: 620px;
   --login-wall-count-opacity: 0.7;
-  /* L'arrivée (features/welcome, maquettes 2102:72, 2244:2, 2244:53). */
+  /* L'arrivée (features/welcome, maquettes 2102:72, 2244:2, 2383:124, 2383:201, 2244:53). */
   --welcome-dash: 16px;
   --welcome-dash-current: 28px;
   --welcome-dash-height: 4px;
@@ -1137,6 +1137,10 @@
   --welcome-logo-ring: 4px;
   --welcome-bar-width: 150px;
   --welcome-block-height: 110px;
+  --welcome-check-size: 22px;
+  --welcome-check-line: var(--sand-400);
+  --welcome-check-radius: var(--round-6);
+  --type-welcome-check: var(--weight-medium) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-welcome-name: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
   --type-welcome-initials: var(--weight-regular) var(--size-38) / 1 var(--family-display);
   --code-box-width: 64px;
@@ -1765,6 +1769,7 @@
   --welcome-panel-surface: var(--night-50);
   --welcome-banner: linear-gradient(to right, var(--night-200), var(--night-100));
   --welcome-decor-ink: var(--night-300);
+  --welcome-check-line: var(--night-400);
   --required-ink: var(--cream-500);
   --dropzone-border: var(--night-400);
   --report-gauge-track: var(--night-400);

@@ -4,6 +4,7 @@
  *            2244:53 (adresse) ; le métier suit le même gabarit (lot 10a, textes validés dans la spec).
  */
 import type { ReactNode } from 'react'
+import { Check } from 'lucide-react'
 import { cleanSlug } from '@/lib/vitrine-edit'
 import { NOMAD_CITY, type WelcomeDraft, type WelcomeStep } from '@/lib/welcome'
 import type { SlugState } from './useSlugFree'
@@ -169,11 +170,14 @@ export function WelcomeStepFields({
             </div>
           )}
           <label className="welcome__check">
-            <input
-              type="checkbox"
-              checked={draft.nomad}
-              onChange={(event) => set({ nomad: event.target.checked })}
-            />
+            <span className="welcome__box">
+              <input
+                type="checkbox"
+                checked={draft.nomad}
+                onChange={(event) => set({ nomad: event.target.checked })}
+              />
+              <Check size={14} strokeWidth={3} aria-hidden />
+            </span>
             <span className="welcome__check-text">
               Je suis nomade
               <span className="welcome__note">
