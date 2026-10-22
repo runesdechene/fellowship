@@ -73,6 +73,7 @@
   --ink-950: #1f1d1b; /* titres, texte, chiffres, bouton principal */
   --ink-850: #2c2926; /* une affiche absente sur le mur de connexion */
   --ink-800: #3a3633; /* survol du bouton principal */
+  --ink-700: #4b453f; /* le texte de la carte du dessus des tâches (maquette 2432:306) */
   --ink-600: #6f6b66; /* texte secondaire, métadonnées */
   --ink-450: #8a857f; /* les signes de statut (cercle vide, à moitié) */
   --ink-350: #a6a19b; /* tertiaire : libellés discrets */

@@ -1040,7 +1040,8 @@
     var(--family-sans);
   --type-board-zone: var(--weight-semibold) var(--size-17) / var(--leading-snug) var(--family-sans);
   --type-board-count: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-board-card: var(--weight-semibold) var(--size-30) / var(--leading-tight) var(--family-sans);
+  --board-card-ink: var(--ink-700);
+  --type-board-card: var(--weight-semibold) var(--size-32) / var(--leading-tight) var(--family-sans);
   --type-board-team-card: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
   --type-board-note: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
@@ -1851,6 +1852,7 @@
   --tone-sauge-ink: var(--menthe-300);
   /* Le bouton « Fait » du tableau prend le voile sauge de la nuit, comme les statuts validés. */
   --board-finish-surface: var(--tone-sauge-surface);
+  --board-card-ink: var(--ink-title);
   --board-finish-ink: var(--tone-sauge-ink);
   --tone-sauge-surface: color-mix(in srgb, var(--menthe-300) 14%, transparent);
   --tone-ocre-ink: var(--ocre-300);
