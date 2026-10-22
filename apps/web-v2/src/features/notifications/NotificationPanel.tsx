@@ -27,7 +27,12 @@ import { Avatar } from '@/components/ui/Avatar'
 import { timeAgo } from '@/lib/dates'
 import { posterThumb } from '@/lib/poster-thumb'
 import { useTransitionNavigate } from '@/lib/navigation'
-import { groupByDay, type NotificationIcon, type NotificationView } from '@/lib/notifications'
+import {
+  groupByDay,
+  withAccount,
+  type NotificationIcon,
+  type NotificationView,
+} from '@/lib/notifications'
 import { PanelFoot } from './PanelFoot'
 
 const ICONS: Record<NotificationIcon, LucideIcon> = {
@@ -131,7 +136,7 @@ export function NotificationPanel({
             const open = () => {
               if (!view.read) onRead(view.id)
               onClose()
-              go(view.href)
+              go(withAccount(view.href, view.ownerId))
             }
             return (
               // Une ligne, pas un bouton : elle peut contenir le bouton « Repérer ».

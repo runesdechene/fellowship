@@ -5,13 +5,16 @@
  *            mémorisé sur l'appareil.
  *            Elle lit les demandes d'ami et la pastille des Nouveautés une fois pour la barre
  *            latérale et la barre d'onglets.
+ *            Une notification ouvre sa page au nom de son destinataire (`?compte=`) : la coquille
+ *            active cette casquette, puis efface le paramètre (Uriel, 22/10/2026).
  * ATTENTION — `bare` retire la barre du haut : la création d'une date pose la sienne (lot 10b).
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useNetwork } from '@/features/community/useNetwork'
 import { useUpdatesUnread } from '@/features/updates/useUpdatesUnread'
 import { useAuth } from '@/lib/auth'
+import { ACCOUNT_PARAM } from '@/lib/notifications'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
@@ -42,9 +45,22 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
   // Les demandes d'ami, pour la pastille de Communauté : relues à chaque changement d'adresse.
-  const { pathname } = useLocation()
+  const { pathname, search, hash } = useLocation()
+  const { person, actors, switchActor } = useAuth()
+  const navigate = useNavigate()
   const friendRequests = useNetwork(pathname).network?.requests.length ?? 0
-  const updatesUnread = useUpdatesUnread(pathname, useAuth().person?.actor_id)
+  const updatesUnread = useUpdatesUnread(pathname, person?.actor_id)
+
+  // Attend que les casquettes soient connues ; une casquette qui n'est pas la sienne est ignorée.
+  useEffect(() => {
+    const params = new URLSearchParams(search)
+    const account = params.get(ACCOUNT_PARAM)
+    if (!account || actors.length === 0) return
+    if (actors.some((candidate) => candidate.id === account)) switchActor(account)
+    params.delete(ACCOUNT_PARAM)
+    const rest = params.toString()
+    void navigate({ pathname, search: rest ? `?${rest}` : '', hash }, { replace: true })
+  }, [search, actors, switchActor, navigate, pathname, hash])
 
   // Le fournisseur enveloppe TOUT : la page qui déclare son décor est un
   // enfant, la barre du haut et le mur qui le rendent sont ses frères.

@@ -9,6 +9,7 @@ import {
   notificationPhrase,
   notificationView,
   pictureOf,
+  withAccount,
   type NotificationRow,
   type NotificationView,
 } from './notifications'
@@ -310,5 +311,14 @@ describe('les Nouveautés', () => {
   })
   it('sans titre, rien n’est affiché', () => {
     expect(notificationPhrase('app_update', {})).toBeNull()
+  })
+})
+
+describe('withAccount', () => {
+  it('pose la casquette avant l’ancre, sans perdre les paramètres', () => {
+    expect(withAccount('/evenement/e1#discussions', 'a1')).toBe(
+      '/evenement/e1?compte=a1#discussions',
+    )
+    expect(withAccount('/explorer?vue=grille', 'a1')).toBe('/explorer?vue=grille&compte=a1')
   })
 })

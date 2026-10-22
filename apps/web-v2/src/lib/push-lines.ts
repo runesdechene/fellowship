@@ -8,7 +8,7 @@
  *            scripts/sync-push-phrases.mjs : le relancer après chaque changement (un test le
  *            vérifie). Il ne dépend que de notifications.ts et dates.ts.
  */
-import { notificationPhrase } from './notifications'
+import { notificationPhrase, withAccount } from './notifications'
 
 export type PushLine =
   | 'deadline'
@@ -104,12 +104,22 @@ export interface PushMessage {
   tag: string
 }
 
-export function pushMessage(type: string, data: Record<string, unknown>): PushMessage | null {
+/** `ownerId` : le destinataire de la notification ; le lien ouvre l'app sur sa casquette. */
+export function pushMessage(
+  type: string,
+  data: Record<string, unknown>,
+  ownerId: string,
+): PushMessage | null {
   if (!lineOf(type)) return null
   const said = notificationPhrase(type, data)
   if (!said) return null
   const body = said.text.map((part) => (typeof part === 'string' ? part : part.strong)).join('')
-  return { title: 'Fellowship', body, url: said.href, tag: `${type}:${said.href}` }
+  return {
+    title: 'Fellowship',
+    body,
+    url: withAccount(said.href, ownerId),
+    tag: `${type}:${said.href}`,
+  }
 }
 
 // Les services de notification des navigateurs : Chrome et Android, Safari, Firefox, Edge. Une

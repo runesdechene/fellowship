@@ -286,6 +286,17 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
   }
 }
 
+/** Le paramètre qui dit pour quelle casquette une page s'ouvre ; AppShell l'active puis l'efface. */
+export const ACCOUNT_PARAM = 'compte'
+
+/** Le lien d'une notification, ouvert au nom de son destinataire : sans lui, la fiche montrerait
+ *  le dossier de l'enseigne active, pas celui de l'enseigne prévenue (Uriel, 22/10/2026). */
+export function withAccount(href: string, actorId: string): string {
+  const url = new URL(href, 'https://flw.sh')
+  url.searchParams.set(ACCOUNT_PARAM, actorId)
+  return url.pathname + url.search + url.hash
+}
+
 export function notificationView(row: NotificationRow): NotificationView | null {
   const said = notificationPhrase(row.type, row.data)
   if (!said) return null

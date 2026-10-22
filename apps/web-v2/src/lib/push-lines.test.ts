@@ -53,42 +53,50 @@ test('les huit lignes, dans l’ordre de la maquette puis les Nouveautés, les t
 
 describe('pushMessage', () => {
   test('la phrase de la cloche, sans le gras, et le lien comme étiquette', () => {
-    expect(pushMessage('weekly_new_events', { count: 3 })).toEqual({
+    expect(pushMessage('weekly_new_events', { count: 3 }, 'a1')).toEqual({
       title: 'Fellowship',
       body: '3 nouveaux événements sur Fellowship cette semaine.',
-      url: '/explorer',
+      url: '/explorer?compte=a1',
       tag: 'weekly_new_events:/explorer',
     })
   })
 
   test('deux notifications différentes sur un même festival ne s’écrasent pas', () => {
     const data = { event_id: 'e1', event_name: 'X', actor_name: 'Gautier', city: 'Lyon' }
-    const going = pushMessage('friend_going', { ...data, start_date: '2027-07-03' })
-    const added = pushMessage('friend_added_event', {
-      ...data,
-      start_date: '2027-07-03',
-      end_date: '2027-07-05',
-    })
+    const going = pushMessage('friend_going', { ...data, start_date: '2027-07-03' }, 'a1')
+    const added = pushMessage(
+      'friend_added_event',
+      {
+        ...data,
+        start_date: '2027-07-03',
+        end_date: '2027-07-05',
+      },
+      'a1',
+    )
     expect(going?.tag).not.toBe(added?.tag)
   })
 
   test('une notification de festival mène à sa fiche', () => {
-    const message = pushMessage('deadline_reminder', {
-      event_id: 'e1',
-      event_name: 'Plane’R Fest',
-      deadline: '2026-10-14',
-      days_left: 0,
-    })
+    const message = pushMessage(
+      'deadline_reminder',
+      {
+        event_id: 'e1',
+        event_name: 'Plane’R Fest',
+        deadline: '2026-10-14',
+        days_left: 0,
+      },
+      'a1',
+    )
     expect(message?.body).toBe('Dernier jour pour candidater à Plane’R Fest.')
-    expect(message?.url).toBe('/evenement/e1')
+    expect(message?.url).toBe('/evenement/e1?compte=a1')
   })
 
   test('une donnée manquante n’envoie rien', () => {
-    expect(pushMessage('deadline_reminder', { event_name: 'X', days_left: 3 })).toBeNull()
+    expect(pushMessage('deadline_reminder', { event_name: 'X', days_left: 3 }, 'a1')).toBeNull()
   })
 
   test('un type sans ligne n’envoie rien, même s’il se dit dans la cloche', () => {
-    expect(pushMessage('event_updated', { event_id: 'e1', event_name: 'X' })).toBeNull()
+    expect(pushMessage('event_updated', { event_id: 'e1', event_name: 'X' }, 'a1')).toBeNull()
   })
 })
 

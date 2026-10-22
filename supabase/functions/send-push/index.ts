@@ -64,6 +64,7 @@ Deno.serve(async (req) => {
   const message = pushMessage(
     notification.type,
     (notification.data ?? {}) as Record<string, unknown>,
+    notification.actor_id as string,
   )
   if (!line || !message) return done()
 
