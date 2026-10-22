@@ -16,6 +16,7 @@ import { useUpdatesUnread } from '@/features/updates/useUpdatesUnread'
 import { useAuth } from '@/lib/auth'
 import { ACCOUNT_PARAM } from '@/lib/notifications'
 import { PageChromeProvider } from '@/lib/page-chrome'
+import { supabase } from '@/lib/supabase'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
@@ -50,6 +51,19 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
   const navigate = useNavigate()
   const friendRequests = useNetwork(pathname).network?.requests.length ?? 0
   const updatesUnread = useUpdatesUnread(pathname, person?.actor_id)
+
+  // Une visite pour l'administration : à l'ouverture et à chaque retour sur l'onglet. La base ne
+  // compte une nouvelle visite qu'après 30 minutes d'absence (noter_visite).
+  useEffect(() => {
+    // La requête ne part qu'attendue : un `void supabase.rpc(…)` seul n'envoie rien.
+    const note = async () => {
+      if (document.visibilityState === 'visible') await supabase.rpc('noter_visite')
+    }
+    const onVisible = () => void note()
+    onVisible()
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
 
   // Attend que les casquettes soient connues ; une casquette qui n'est pas la sienne est ignorée.
   useEffect(() => {

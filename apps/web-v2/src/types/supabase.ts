@@ -1936,6 +1936,7 @@ export type Database = {
           email: string
           email_token: string
           handle: string | null
+          last_seen_at: string | null
           notifications_seen_at: string
           phone: string | null
           postal_code: string | null
@@ -1945,6 +1946,7 @@ export type Database = {
           suspended_at: string | null
           updates_email_off: boolean
           updates_seen_at: string
+          visits: number
         }
         Insert: {
           actor_id: string
@@ -1957,6 +1959,7 @@ export type Database = {
           email: string
           email_token?: string
           handle?: string | null
+          last_seen_at?: string | null
           notifications_seen_at?: string
           phone?: string | null
           postal_code?: string | null
@@ -1966,6 +1969,7 @@ export type Database = {
           suspended_at?: string | null
           updates_email_off?: boolean
           updates_seen_at?: string
+          visits?: number
         }
         Update: {
           actor_id?: string
@@ -1978,6 +1982,7 @@ export type Database = {
           email?: string
           email_token?: string
           handle?: string | null
+          last_seen_at?: string | null
           notifications_seen_at?: string
           phone?: string | null
           postal_code?: string | null
@@ -1987,6 +1992,7 @@ export type Database = {
           suspended_at?: string | null
           updates_email_off?: boolean
           updates_seen_at?: string
+          visits?: number
         }
         Relationships: [
           {
@@ -2284,13 +2290,14 @@ export type Database = {
           email: string
           fiches: number
           handle: string
-          last_sign_in_at: string
+          last_seen_at: string
           phone: string
           postal_code: string
           push_muted: string[]
           questions: number
           role: string
           suspended_at: string
+          visits: number
         }[]
       }
       admin_personnes: {
@@ -2309,13 +2316,14 @@ export type Database = {
           email: string
           entity_id: string
           entity_type: string
-          last_sign_in_at: string
+          last_seen_at: string
           plan: string
           role: string
           subscription_status: string
           suspended_at: string
           total: number
           trial_end: string
+          visits: number
         }[]
       }
       admin_prospect: {
@@ -2844,6 +2852,7 @@ export type Database = {
           total: number
         }[]
       }
+      noter_visite: { Args: never; Returns: undefined }
       phone_key: { Args: { p_tel: string }; Returns: string }
       prospect_attend_reponse: {
         Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }

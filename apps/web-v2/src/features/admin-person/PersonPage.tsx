@@ -32,8 +32,8 @@ function PersonSheet({ id }: { id: string }) {
   if (!data) return null
 
   const { person, entities, gestures } = data
-  const lastSeen = person.last_sign_in_at
-    ? `dernière visite ${timeAgo(new Date(person.last_sign_in_at), new Date())}`
+  const lastSeen = person.last_seen_at
+    ? `dernière visite ${timeAgo(new Date(person.last_seen_at), new Date())}`
     : 'aucune connexion'
   const meta = [
     person.email,
@@ -73,6 +73,7 @@ function PersonSheet({ id }: { id: string }) {
           <PersonEntitiesCard personId={person.actor_id} entities={entities} />
           <ActivityCard
             tiles={[
+              { label: 'Visites', value: person.visits },
               { label: 'Dates suivies', value: person.dates },
               { label: 'Avis écrits', value: person.avis },
               { label: 'Questions et réponses', value: person.questions },

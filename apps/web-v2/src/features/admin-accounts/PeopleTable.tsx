@@ -24,6 +24,7 @@ export function PeopleTable({ rows }: { rows: PersonRow[] }) {
           <th scope="col">Offre</th>
           <th scope="col">Inscription</th>
           <th scope="col">Dernière visite</th>
+          <th scope="col">Visites</th>
           <th scope="col">Activité</th>
           <th scope="col">
             <span className="admin-table__sr">Ouvrir</span>
@@ -64,10 +65,9 @@ export function PeopleTable({ rows }: { rows: PersonRow[] }) {
               <SignupDate createdAt={row.created_at} now={now} />
             </td>
             <td className="admin-table__text">
-              {row.last_sign_in_at
-                ? timeAgo(new Date(row.last_sign_in_at), now)
-                : 'aucune connexion'}
+              {row.last_seen_at ? timeAgo(new Date(row.last_seen_at), now) : 'aucune visite'}
             </td>
+            <td className="admin-table__text">{row.visits}</td>
             <td className="admin-table__text">{activityLabel(row.dates, row.avis)}</td>
             <td className="admin-table__end">
               <ChevronRight size={16} strokeWidth={2} aria-hidden="true" />
