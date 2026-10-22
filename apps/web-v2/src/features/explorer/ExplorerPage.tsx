@@ -8,14 +8,13 @@
  */
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { FREE_MONTHS, readRayon } from '@/lib/explorer'
-import { useTransitionNavigate } from '@/lib/navigation'
 import { nameLine } from '@/lib/name-line'
 import { fetchTags, type TagRow } from '@/lib/tags'
 import { CategoryChips } from './CategoryChips'
 import { EventRail } from './EventRail'
+import { FriendsInviteCard } from './FriendsInviteCard'
 import { SearchBar } from './SearchBar'
 import { usePlan } from '@/lib/usePlan'
 import { SearchResults } from './SearchResults'
@@ -29,7 +28,6 @@ function readTab(value: string | null): Tab {
 
 export function ExplorerPage() {
   const { actor } = useAuth()
-  const go = useTransitionNavigate()
   const [params, setParams] = useSearchParams()
   const [tags, setTags] = useState<TagRow[]>([])
 
@@ -133,26 +131,22 @@ export function ExplorerPage() {
         ) : (
           <>
             <EventRail
+              title="Ajoutés récemment"
+              subtitle="Les dernières dates entrées par la communauté"
+              events={data.recent}
+              onMark={(event) => void data.toggleMark(event)}
+              hiddenCount={data.hiddenCount}
+            />
+            <EventRail
               title="Où vont tes amis"
               subtitle={friendsLine ? `${friendsLine.first}${friendsLine.rest}` : null}
               events={data.friends}
               onMark={(event) => void data.toggleMark(event)}
               hiddenCount={data.hiddenCount}
               ghost={{
-                note: 'Suis des exposants : les festivals où ils vont s’afficheront ici.',
-                action: (
-                  <Button variant="action" onClick={() => go('/communaute')}>
-                    Trouver des exposants
-                  </Button>
-                ),
+                note: 'Les festivals où vont les exposants que tu suis',
+                card: <FriendsInviteCard />,
               }}
-            />
-            <EventRail
-              title="Ajoutés récemment"
-              subtitle="Les dernières dates entrées par la communauté"
-              events={data.recent}
-              onMark={(event) => void data.toggleMark(event)}
-              hiddenCount={data.hiddenCount}
             />
             <EventRail
               title="Près de chez toi"

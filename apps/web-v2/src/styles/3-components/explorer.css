@@ -336,6 +336,64 @@
   gap: var(--space-8);
 }
 
+/* La carte qui invite à suivre : la taille d'une affiche, cliquable en entier. */
+.friends-invite {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-10);
+  width: var(--explore-card-width);
+  height: var(--explore-poster-height);
+  padding: var(--space-24);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+  text-align: left;
+  cursor: pointer;
+  transition: translate var(--menu-motion);
+}
+
+.friends-invite:hover {
+  translate: 0 calc(-1 * var(--space-4));
+}
+
+.friends-invite__icon {
+  display: grid;
+  place-items: center;
+  width: var(--space-48);
+  height: var(--space-48);
+  margin-bottom: var(--space-6);
+  border-radius: var(--radius-round);
+  background: var(--action-surface);
+  color: var(--action-ink);
+}
+
+.friends-invite__title {
+  font: var(--type-suggestion-invite);
+  color: var(--ink-title);
+}
+
+.friends-invite__text {
+  font: var(--type-pro-text);
+  color: var(--ink-soft);
+}
+
+.friends-invite__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .friends-invite {
+    transition: none;
+  }
+}
+
 .explore-card__ghost-faces {
   display: flex;
   gap: var(--space-4);

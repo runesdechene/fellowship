@@ -3,8 +3,8 @@
  *            glissent de gauche à droite, au doigt comme à la souris.
  * POURQUOI — l'accueil se parcourt par thèmes (où vont tes amis, ajoutés récemment, près de chez
  *            toi), chacun sur une ligne (maquette 2027).
- *            Une rangée vide qui a un `ghost` garde sa place en squelettes, avec ce qui la remplira
- *            et comment (maquette 2402:233, même langage que le tableau de bord vide).
+ *            Une rangée vide qui a un `ghost` garde sa place : trois cartes devinées, puis la carte
+ *            qui dit comment la remplir (même langage que le tableau de bord vide).
  * ATTENTION — comme la frise du calendrier, une rangée est une zone à défilement horizontal :
  *            exception assumée au « jamais de scroll interne », et seulement à l'horizontale.
  */
@@ -23,16 +23,16 @@ interface EventRailProps {
   onMark: (event: ExploreEvent) => void
   /** En gratuit : les festivals au-delà des 6 mois, annoncés au bout de la rangée. */
   hiddenCount: number
-  /** Vide : la phrase qui dit ce qui viendra, et le geste pour le faire venir. Sans lui, la rangée se tait. */
-  ghost?: { note: string; action: ReactNode }
+  /** Vide : la phrase qui dit ce qui viendra, et la carte qui invite à la remplir. Sans lui, la rangée se tait. */
+  ghost?: { note: string; card: ReactNode }
 }
 
-const GHOSTS = ['a', 'b', 'c', 'd', 'e', 'f']
+const GHOSTS = ['a', 'b', 'c']
 
 /** Une carte devinée : affiche, nom, dates, visages. */
 function GhostCard() {
   return (
-    <span className="explore-card explore-card--ghost">
+    <span className="explore-card explore-card--ghost" aria-hidden="true">
       <SkeletonPoster className="explore-card__ghost-poster" />
       <span className="explore-card__ghost-lines">
         <SkeletonLine width="70%" tone="strong" />
@@ -66,12 +66,12 @@ export function EventRail({ title, subtitle, events, onMark, hiddenCount, ghost 
             <h2 className="rail__title">{title}</h2>
             <p className="rail__subtitle">{ghost.note}</p>
           </div>
-          {ghost.action}
         </header>
-        <div className="rail__track rail__track--ghost" aria-hidden="true">
+        <div className="rail__track rail__track--ghost">
           {GHOSTS.map((key) => (
             <GhostCard key={key} />
           ))}
+          {ghost.card}
         </div>
       </section>
     )
