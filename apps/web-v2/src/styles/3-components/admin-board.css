@@ -1,0 +1,302 @@
+/**
+ * QUOI     — les styles du tableau de l'équipe (features/admin-board) : les quatre colonnes
+ *            teintées, les cartes, la carte « Maintenant » en grand, la carte qui se réchauffe,
+ *            celle qui s'allume en arrivant dans « Fait ».
+ * POURQUOI — maquette 2417:233 : chaque colonne prend un ton de l'administration (--tone-*), posé
+ *            une fois sur la colonne en variables locales que tout son contenu relit.
+ */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(var(--board-column-min-width), 1fr));
+  align-items: start;
+  gap: var(--space-16);
+}
+
+.board-column {
+  --board-line: color-mix(in srgb, var(--board-ink) 18%, transparent);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-16);
+  border: 1px solid var(--board-line);
+  border-radius: var(--radius-card);
+  background: var(--board-surface);
+  color: var(--board-ink);
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.board-column--bleu {
+  --board-ink: var(--tone-bleu-ink);
+  --board-surface: var(--tone-bleu-surface);
+}
+
+.board-column--ocre {
+  --board-ink: var(--tone-ocre-ink);
+  --board-surface: var(--tone-ocre-surface);
+}
+
+.board-column--terre {
+  --board-ink: var(--tone-terre-ink);
+  --board-surface: var(--tone-terre-surface);
+}
+
+.board-column--sauge {
+  --board-ink: var(--tone-sauge-ink);
+  --board-surface: var(--tone-sauge-surface);
+}
+
+/* Une carte glissée au-dessus : la colonne se cerne de sa couleur. */
+.board-column--over {
+  box-shadow: 0 0 0 2px var(--board-ink);
+}
+
+.board-column__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding-bottom: var(--space-4);
+}
+
+.board-column__dot {
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-round);
+  background: var(--board-ink);
+}
+
+.board-column__title {
+  font: var(--type-board-title);
+}
+
+.board-column__count {
+  padding: var(--space-2) var(--space-7);
+  border-radius: var(--radius-chip);
+  background: var(--board-ink);
+  font: var(--type-board-count);
+  color: var(--surface-card);
+}
+
+.board-column__hint,
+.board-column__footer {
+  font: var(--type-board-meta);
+}
+
+.board-column__add {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-14);
+  border: 1.5px solid var(--board-ink);
+  border-radius: var(--radius-nav);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  color: var(--ink-soft);
+}
+
+.board-column__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  font: var(--type-board-card);
+  color: var(--ink-title);
+  outline: none;
+}
+
+.board-column__more {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-4);
+  font: var(--type-chip);
+  color: var(--board-ink);
+}
+
+.board-column__more:hover {
+  text-decoration: underline;
+}
+
+/* --- Les cartes -------------------------------------------------------- */
+
+.board-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-12) var(--space-14);
+  border: 1px solid var(--board-line);
+  border-radius: var(--radius-nav);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  cursor: grab;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-medium) var(--ease-out);
+}
+
+@starting-style {
+  .board-card {
+    opacity: 0;
+    translate: 0 var(--space-6);
+  }
+}
+
+.board-card:hover,
+.board-card:focus-within {
+  border-color: var(--board-ink);
+}
+
+.board-card__text {
+  text-align: left;
+  font: var(--type-board-card);
+  color: var(--ink-title);
+  overflow-wrap: anywhere;
+  cursor: text;
+}
+
+.board-card__input {
+  width: 100%;
+  resize: vertical;
+  border: 0;
+  background: none;
+  font: var(--type-board-card);
+  color: var(--ink-title);
+  outline: none;
+}
+
+.board-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-board-meta);
+  color: var(--board-ink);
+}
+
+.board-card__owner {
+  --avatar-size: var(--board-avatar-size);
+
+  display: inline-flex;
+}
+
+.board-card__owner .avatar--fallback {
+  background: var(--board-ink);
+  color: var(--surface-card);
+}
+
+/* Les actions n'apparaissent qu'au survol ou au clavier ; toujours là sur écran tactile. */
+.board-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    max-height var(--duration-fast) var(--ease-out);
+}
+
+.board-card:hover .board-card__actions,
+.board-card:focus-within .board-card__actions {
+  max-height: var(--space-40);
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .board-card__actions {
+    max-height: none;
+    opacity: 1;
+  }
+}
+
+.board-card__move,
+.board-card__icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  font: var(--type-chip);
+  color: var(--ink-title);
+}
+
+.board-card__icon {
+  padding: var(--space-4) var(--space-6);
+  color: var(--ink-soft);
+}
+
+.board-card__icon:last-child {
+  margin-left: auto;
+}
+
+.board-card__move:hover,
+.board-card__icon:hover {
+  background: var(--surface-row-hover);
+}
+
+/* « Maintenant » : la seule chose à faire, en grand. */
+.board-card--now {
+  gap: var(--space-14);
+  padding: var(--space-18);
+  border: 1.5px solid var(--board-ink);
+}
+
+.board-card--now .board-card__text {
+  font: var(--type-board-now);
+}
+
+/* Une carte qui attend depuis 5 jours se réchauffe. */
+.board-card--stale {
+  border-color: var(--board-stale-line);
+  background: var(--board-stale-surface);
+}
+
+.board-card--stale .board-card__meta {
+  color: var(--board-stale-ink);
+}
+
+.board-card--done .board-card__text {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+}
+
+/* La carte qu'on vient de finir s'allume d'un coup de vert, puis se pose. */
+.board-card--landed {
+  animation: board-card-landed var(--duration-slow) var(--ease-arrive);
+}
+
+@keyframes board-card-landed {
+  from {
+    background: var(--tone-sauge-surface);
+    scale: 1.04;
+  }
+}
+
+@media (width <= 1100px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width <= 760px) {
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-card,
+  .board-card__actions,
+  .board-column {
+    transition: none;
+  }
+
+  .board-card--landed {
+    animation: none;
+  }
+}

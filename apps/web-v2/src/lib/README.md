@@ -13,6 +13,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `threads.ts` — la logique des fils de discussion (tri, canaux, meilleure réponse).
 - `useAdminSheet.ts` — charge la fiche d'une enseigne ou d'une personne de l'administration (id, rechargement).
 - `useAdminNotes.ts` — les notes internes et les étiquettes d'un acteur (admins seuls).
+- `admin-board.ts` — les règles du tableau de l'équipe : colonnes, âge d'une carte, réchauffement, semaine.
 - `tags.ts` — les catégories réglées dans l'administration.
 - `moderation.ts` — les signalements : statuts dans l'adresse, motifs, libellé de la cible.
 - `admin-events.ts` — la liste des événements de l'administration : recherche et page dans l'adresse.

@@ -97,6 +97,41 @@ export type Database = {
           },
         ]
       }
+      admin_tasks: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          moved_at: string
+          owner_user_id: string | null
+          status: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          moved_at?: string
+          owner_user_id?: string | null
+          status?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          moved_at?: string
+          owner_user_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_tasks_owner_user_id_fkey"
+            columns: ["owner_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       app_update_comments: {
         Row: {
           actor_id: string

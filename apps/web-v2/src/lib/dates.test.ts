@@ -25,6 +25,7 @@ import {
   monthName,
   formatDateSpan,
   formatTime,
+  startOfWeek,
 } from './dates'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
@@ -243,5 +244,13 @@ describe('giftEnd', () => {
   })
   it('s’arrête au dernier jour d’un mois plus court, comme la base', () => {
     expect(giftEnd(null, 2, new Date(2026, 11, 31))).toEqual(new Date(2027, 1, 28))
+  })
+})
+
+describe('startOfWeek', () => {
+  it('ramène au lundi minuit, dimanche compris', () => {
+    expect(startOfWeek(new Date('2026-10-22T15:00:00'))).toEqual(d('2026-10-19'))
+    expect(startOfWeek(new Date('2026-10-25T23:00:00'))).toEqual(d('2026-10-19'))
+    expect(startOfWeek(new Date('2026-10-19T00:30:00'))).toEqual(d('2026-10-19'))
   })
 })

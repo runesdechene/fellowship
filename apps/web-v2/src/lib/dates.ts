@@ -29,6 +29,13 @@ function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
 
+/** Le lundi de la semaine en cours, à minuit (la semaine française commence le lundi). */
+export function startOfWeek(date: Date): Date {
+  const day = startOfDay(date)
+  day.setDate(day.getDate() - ((day.getDay() + 6) % 7))
+  return day
+}
+
 /** Nombre de jours entiers entre aujourd'hui et une date (négatif si passée). */
 export function daysUntil(target: Date, today: Date = new Date()): number {
   const MS_PER_DAY = 86_400_000

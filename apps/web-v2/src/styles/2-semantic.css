@@ -996,6 +996,19 @@
   --type-updates-summary: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 
+  /* Le tableau de l'équipe (features/admin-board, maquette 2417:233) : chaque colonne prend un
+     ton de l'administration ; ce qui attend se réchauffe dans la terre du logo. */
+  --board-column-min-width: 220px;
+  --board-avatar-size: 22px;
+  --board-stale-surface: var(--tone-terre-surface);
+  --board-stale-line: var(--status-ok-mark);
+  --board-stale-ink: var(--tone-terre-ink);
+  --type-board-title: var(--type-list-name);
+  --type-board-count: var(--type-chip-strong);
+  --type-board-meta: var(--type-list-meta);
+  --type-board-card: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-board-now: var(--weight-semibold) var(--size-18) / var(--leading-tight) var(--family-sans);
+
   /* L'administration des mises à jour (maquette 2373:65). */
   --admin-updates-list-width: 520px;
   --admin-updates-version-width: 160px;

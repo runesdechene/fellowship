@@ -19,6 +19,7 @@ import {
   PanelRightClose,
   PanelRightOpen,
   Settings,
+  SquareKanban,
   Store,
   Tag,
   Target,
@@ -62,6 +63,7 @@ function navFor(vitrine: string | null | undefined): NavItem[] {
 
 /** Les sections de l'administration ; « Comptes » reste allumé sur les fiches qui en descendent. */
 const ADMIN_ITEMS = [
+  { to: '/admin/tableau', label: 'Tableau', Icon: SquareKanban, prefixes: ['/admin/tableau'] },
   {
     to: '/admin/comptes',
     label: 'Comptes',

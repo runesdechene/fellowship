@@ -12,6 +12,8 @@ import { IdentityError } from '@/components/layout/IdentityError'
 import { UpdateBanner } from '@/components/layout/UpdateBanner'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
+import { BoardPage } from '@/features/admin-board/BoardPage'
+import { ADMIN_HOME } from '@/lib/admin-mode'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
 import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
 import { TemplatesPage } from '@/features/admin-prospects/TemplatesPage'
@@ -127,6 +129,7 @@ function AdminPage({ children }: { children: ReactNode }) {
 
 /** L'administration : chaque section derrière la même garde (AdminPage). */
 const ADMIN_ROUTES: [string, ReactNode][] = [
+  ['/admin/tableau', <BoardPage />],
   ['/admin/comptes', <AccountsPage />],
   ['/admin/prospects', <ProspectsPage />],
   ['/admin/prospects/modeles', <TemplatesPage />],
@@ -347,7 +350,7 @@ export function App() {
             </AppPage>
           }
         />
-        <Route path="/admin" element={<Navigate to="/admin/comptes" replace />} />
+        <Route path="/admin" element={<Navigate to={ADMIN_HOME} replace />} />
         {ADMIN_ROUTES.map(([path, element]) => (
           <Route key={path} path={path} element={<AdminPage>{element}</AdminPage>} />
         ))}
