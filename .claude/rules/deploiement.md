@@ -46,6 +46,8 @@ rebâtit pas : il publie exactement ce qui a été vérifié).
 ```bash
 pnpm deploy:v2        # build + brouillon sur fellowship-app : vérifier l'URL unique
 pnpm deploy:v2:prod   # publie le même dist/ sur flw.sh
+# deploy:v2:prod refuse un dist/ plus vieux que le dernier commit (scripts/check-dist-fresh.mjs) :
+# il a remis trois fois un ancien build en ligne le 22/10/2026.
 ```
 
 **Vérifier, sur le brouillon puis sur `flw.sh`** (`curl -sI`) : la CSP sur `/` ;
