@@ -10,6 +10,10 @@
   padding: 0 var(--admin-cell-padding-x);
 }
 
+.admin-pager--centered {
+  justify-content: center;
+}
+
 .admin-pager__range {
   font: var(--type-list-meta);
   color: var(--ink-soft);

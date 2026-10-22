@@ -182,6 +182,7 @@ export function ProspectsPage() {
           total={data.total}
           onPage={(page) => go({ page })}
           empty="Aucun prospect ne correspond."
+          centered
         />
       )}
 

@@ -11,12 +11,15 @@ interface Props {
   onPage: (page: number) => void
   /** Le texte d'une liste vide : « Aucun compte ne correspond. » */
   empty: string
+  /** Centré sous la liste (les Prospects) ; calé à gauche sinon. */
+  centered?: boolean
 }
 
-export function AdminPager({ page, shown, total, onPage, empty }: Props) {
+export function AdminPager({ page, shown, total, onPage, empty, centered = false }: Props) {
+  const className = centered ? 'admin-pager admin-pager--centered' : 'admin-pager'
   if (total === 0) {
     return (
-      <footer className="admin-pager">
+      <footer className={className}>
         <span className="admin-pager__range">{empty}</span>
         {page > 0 && (
           <button type="button" className="admin-pager__button" onClick={() => onPage(0)}>
@@ -28,7 +31,7 @@ export function AdminPager({ page, shown, total, onPage, empty }: Props) {
   }
   const first = page * PAGE_SIZE + 1
   return (
-    <footer className="admin-pager">
+    <footer className={className}>
       <span className="admin-pager__range">
         {first}–{first + shown - 1} sur {total}
       </span>
