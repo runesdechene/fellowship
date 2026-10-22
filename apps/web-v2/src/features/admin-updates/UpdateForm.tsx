@@ -33,7 +33,7 @@ const WEIGHTS: { key: UpdateWeight; title: string; detail: string }[] = [
   {
     key: 'small',
     title: 'Petite',
-    detail: 'Notification sur le téléphone et pastille sur la ligne de version.',
+    detail: 'Notification sur les appareils et pastille sur la ligne de version.',
   },
   { key: 'big', title: 'Grosse', detail: 'La même chose, plus un e-mail à tous les exposants.' },
 ]

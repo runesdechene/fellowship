@@ -5,7 +5,8 @@
  *            (lot 8e). La ligne du téléphone n'apparaît que si ce téléphone peut recevoir et n'est
  *            pas encore activé ; « Activer » active directement.
  */
-import { Settings, Smartphone } from 'lucide-react'
+import { Settings } from 'lucide-react'
+import { DeviceIcon } from '@/components/ui/DeviceIcon'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { usePhonePush } from '@/lib/usePhonePush'
 
@@ -27,11 +28,11 @@ export function PanelFoot({ onClose }: { onClose: () => void }) {
       </button>
       {phone.state === 'possible' && (
         <div className="notif-panel__phone">
-          <Smartphone size={16} strokeWidth={1.8} />
+          <DeviceIcon size={16} strokeWidth={1.8} />
           <span className="notif-panel__phone-text">
             {phone.failed
               ? 'Ça n’a pas abouti. Réessaie dans un instant.'
-              : 'Recevoir ces notifications sur ton téléphone'}
+              : 'Recevoir ces notifications sur cet appareil'}
           </span>
           <button
             type="button"

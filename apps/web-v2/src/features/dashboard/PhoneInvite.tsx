@@ -6,9 +6,9 @@
  * ATTENTION — « Plus tard » la cache 30 jours, retenu sur CET appareil (stockage local, simple
  *            commodité : vide ou bloqué, la carte revient, rien ne casse).
  */
-import { Monitor, Smartphone } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { DeviceIcon } from '@/components/ui/DeviceIcon'
 import { inviteHidden } from '@/lib/push-device'
 import { usePhonePush } from '@/lib/usePhonePush'
 
@@ -34,8 +34,6 @@ export function PhoneInvite() {
   const phone = usePhonePush()
   const [later, setLater] = useState(readLater)
   if (phone.state !== 'possible' || inviteHidden(later, new Date())) return null
-  // Un doigt plutôt qu'une souris : téléphone ou tablette.
-  const DeviceIcon = window.matchMedia('(pointer: coarse)').matches ? Smartphone : Monitor
 
   return (
     <section className="dashboard__section phone-invite">

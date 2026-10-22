@@ -32,7 +32,7 @@ export function NotificationSettings() {
       <div className="settings-section__head">
         <h2 className="settings-section__title">Notifications</h2>
         <p className="settings-section__note">
-          Ce qui sonne aussi sur ton téléphone. La cloche, elle, reçoit tout.
+          Ce qui sonne aussi sur tes appareils. La cloche, elle, reçoit tout.
         </p>
       </div>
       <PhoneCard phone={phone} />
