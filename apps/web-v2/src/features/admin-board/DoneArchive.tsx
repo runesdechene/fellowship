@@ -35,6 +35,7 @@ export function DoneArchive({ done, admins, weekCount, landed, now }: DoneArchiv
             <div
               key={day.daysAgo}
               className="board-done__day"
+              data-board-today={day.daysAgo === 0 ? '' : undefined}
               style={{ '--board-fade': String(fadeFor(day.daysAgo)) } as CSSProperties}
             >
               <h3 className="board-done__label">{dayLabel(day.date, now)}</h3>

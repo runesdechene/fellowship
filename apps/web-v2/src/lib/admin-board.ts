@@ -90,3 +90,15 @@ export function groupByDay<T extends { movedAt: string }>(
   }
   return [...days.values()].sort((a, b) => a.daysAgo - b.daysAgo)
 }
+
+const CHEERS = ['Une de moins.', 'Carte gagnée.', 'Bien joué.', 'Rangée.']
+
+/** La phrase qui salue la `n`-ième carte faite de la journée ; vider son paquet a la sienne. */
+export function victoryPhrase(n: number, emptied: boolean): string {
+  if (emptied) return 'Paquet vide. Tout est fait.'
+  if (n === 1) return 'Première carte. C’est parti.'
+  if (n === 2) return 'Et de deux.'
+  if (n === 3) return 'Trois aujourd’hui. Ça roule.'
+  if (n === 5) return 'Cinq. Belle journée.'
+  return CHEERS[n % CHEERS.length] ?? 'Bien joué.'
+}

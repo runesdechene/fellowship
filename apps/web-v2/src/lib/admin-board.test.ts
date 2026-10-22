@@ -13,6 +13,7 @@ import {
   isStale,
   laterPosition,
   sinceLabel,
+  victoryPhrase,
 } from './admin-board'
 
 // Un jeudi après-midi.
@@ -85,5 +86,14 @@ describe('groupByDay', () => {
     const days = groupByDay(tasks, now)
     expect(days.map((d) => d.daysAgo)).toEqual([0, 3])
     expect(days[0]?.tasks.map((t) => t.id)).toEqual(['c', 'b'])
+  })
+})
+
+describe('victoryPhrase', () => {
+  it('suit la journée, et salue le paquet vidé', () => {
+    expect(victoryPhrase(1, false)).toBe('Première carte. C’est parti.')
+    expect(victoryPhrase(3, false)).toBe('Trois aujourd’hui. Ça roule.')
+    expect(victoryPhrase(4, false)).toBe('Une de moins.')
+    expect(victoryPhrase(2, true)).toBe('Paquet vide. Tout est fait.')
   })
 })

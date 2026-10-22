@@ -147,6 +147,7 @@
 /* --- Mon paquet, sur sa table ---------------------------------------------------------- */
 
 .deck-table {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,16 +232,21 @@
   box-shadow: var(--board-card-shadow);
   cursor: grab;
   transition:
-    opacity var(--duration-medium) var(--ease-drawer),
-    translate var(--duration-medium) var(--ease-drawer),
+    opacity var(--duration-medium) var(--ease-arrive),
+    translate var(--duration-medium) var(--ease-arrive),
+    rotate var(--duration-medium) var(--ease-arrive),
+    scale var(--duration-medium) var(--ease-arrive),
+    box-shadow var(--duration-fast) var(--ease-out),
     background var(--duration-medium) var(--ease-out);
 }
 
-/* Chaque nouvelle carte du dessus se pose. */
+/* La carte suivante monte du paquet : elle part de la place de la carte de dessous. */
 @starting-style {
   .deck-card {
-    opacity: 0;
-    translate: 0 calc(var(--space-12) * -1);
+    opacity: 0.6;
+    translate: 0 var(--space-10);
+    rotate: -4deg;
+    scale: 0.98;
   }
 }
 
@@ -531,10 +537,187 @@
 }
 
 @keyframes done-card-landed {
-  from {
+  0% {
     background: var(--board-finish-surface);
-    scale: 1.06;
+    scale: 0.6;
   }
+
+  60% {
+    scale: 1.08;
+  }
+}
+
+/* --- La victoire d'une carte faite (features/admin-board/victory.ts) ------------------ */
+
+.deck-card--lifted {
+  box-shadow: var(--board-card-shadow-lift);
+}
+
+.deck-card__wash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--board-finish-surface);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.deck-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--board-seal-size);
+  height: var(--board-seal-size);
+  border-radius: var(--radius-round);
+  background: var(--board-seal-surface);
+  box-shadow: var(--board-seal-shadow);
+  translate: -50% -50%;
+  scale: 0;
+  pointer-events: none;
+}
+
+.deck-seal svg {
+  width: var(--board-seal-icon);
+  height: var(--board-seal-icon);
+}
+
+.deck-seal path {
+  fill: none;
+  stroke: var(--board-seal-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+/* La phrase qui salue la carte : elle monte, reste un instant, repart. */
+.deck-cheer {
+  position: absolute;
+  top: var(--space-64);
+  left: 50%;
+  z-index: 3;
+  padding: var(--space-10) var(--space-18);
+  border-radius: var(--radius-chip);
+  background: var(--board-cheer-surface);
+  font: var(--type-board-cheer);
+  color: var(--board-cheer-ink);
+  white-space: nowrap;
+  translate: -50% 0;
+  opacity: 0;
+  pointer-events: none;
+  animation: deck-cheer 2100ms var(--ease-out) forwards;
+}
+
+.deck-cheer--long {
+  animation-duration: 3200ms;
+}
+
+@keyframes deck-cheer {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+
+  12%,
+  85% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+/* Le compteur de la semaine roule d'un cran, et un « +1 » s'envole. */
+.board-page__week-wrap {
+  position: relative;
+  display: inline-flex;
+  overflow: visible;
+}
+
+.board-page__week-count--bump {
+  animation: board-week-bump var(--duration-medium) var(--ease-arrive);
+}
+
+@keyframes board-week-bump {
+  from {
+    opacity: 0;
+    translate: 0 60%;
+  }
+}
+
+.board-page__plus {
+  position: absolute;
+  top: 0;
+  right: calc(var(--space-16) * -1);
+  font: var(--type-board-plus);
+  opacity: 0;
+  animation: board-week-plus 900ms var(--ease-out);
+}
+
+@keyframes board-week-plus {
+  0% {
+    opacity: 0;
+    translate: 0 var(--space-10);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    translate: 0 calc(var(--space-22) * -1);
+  }
+}
+
+/* Les éclats, posés par-dessus toute la page le temps de retomber. */
+.board-bits {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.board-bit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--space-14);
+  height: var(--space-6);
+  border-radius: var(--radius-xs);
+}
+
+.board-bit--dot {
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-round);
+}
+
+.board-bit--1 {
+  background: var(--board-burst-1);
+}
+
+.board-bit--2 {
+  background: var(--board-burst-2);
+}
+
+.board-bit--3 {
+  background: var(--board-burst-3);
+}
+
+.board-bit--4 {
+  background: var(--board-burst-4);
+}
+
+.board-bit--5 {
+  background: var(--board-burst-5);
 }
 
 /* --- Écrans plus étroits --------------------------------------------------------------- */
@@ -578,7 +761,14 @@
     transition: none;
   }
 
-  .done-card--landed {
+  .done-card--landed,
+  .deck-cheer,
+  .board-page__week-count--bump,
+  .board-page__plus {
     animation: none;
+  }
+
+  .deck-cheer {
+    opacity: 1;
   }
 }

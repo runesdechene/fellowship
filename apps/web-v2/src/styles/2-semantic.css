@@ -1018,6 +1018,22 @@
   --board-finish-surface: var(--feuille-200);
   --board-finish-ink: var(--feuille-700);
   --board-card-shadow: 0 14px 32px -4px rgb(89 56 26 / 14%);
+  --board-card-shadow-lift: 0 26px 48px -8px rgb(89 56 26 / 24%);
+  /* La victoire d'une carte faite (prototype validé le 22/10/2026) */
+  --board-seal-size: 84px;
+  --board-seal-icon: 44px;
+  --board-seal-surface: var(--feuille-700);
+  --board-seal-ink: var(--sand-0);
+  --board-seal-shadow: 0 10px 24px -6px rgb(57 120 57 / 45%);
+  --board-cheer-surface: var(--ink-title);
+  --board-cheer-ink: var(--surface-card);
+  --board-burst-1: var(--sauge-500);
+  --board-burst-2: var(--feuille-200);
+  --board-burst-3: var(--terre-400);
+  --board-burst-4: var(--terre-700);
+  --board-burst-5: var(--bleu-700);
+  --type-board-cheer: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
+  --type-board-plus: var(--weight-semibold) var(--size-14) / 1 var(--family-sans);
   --type-board-date: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
   --type-board-title: var(--weight-regular) var(--size-56) / 1 var(--family-display);
   --type-board-week-label: var(--weight-medium) var(--size-12) / var(--leading-snug)

@@ -129,7 +129,7 @@ function AdminPage({ children }: { children: ReactNode }) {
 
 /** L'administration : chaque section derrière la même garde (AdminPage). */
 const ADMIN_ROUTES: [string, ReactNode][] = [
-  ['/admin/tableau', <BoardPage />],
+  ['/admin/taches', <BoardPage />],
   ['/admin/comptes', <AccountsPage />],
   ['/admin/prospects', <ProspectsPage />],
   ['/admin/prospects/modeles', <TemplatesPage />],
