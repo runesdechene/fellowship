@@ -2096,7 +2096,6 @@ export type Database = {
         Args: { p_q: string; p_valeur: string }
         Returns: boolean
       }
-      admin_shuffle_deck: { Args: never; Returns: undefined }
       admin_chiffres: {
         Args: never
         Returns: {
@@ -2481,6 +2480,7 @@ export type Database = {
         Args: { p_par: string; p_prospect: string; p_user: string }
         Returns: undefined
       }
+      admin_shuffle_deck: { Args: never; Returns: undefined }
       admin_signalements: {
         Args: { p_statut?: string }
         Returns: {
