@@ -61,52 +61,54 @@ export function ProspectsTable({
   onAskUnlink,
 }: Props) {
   return (
-    <table className="admin-table prospect-table">
-      <thead>
-        <tr>
-          {COLUMNS.map((column) => (
-            <th key={column} scope="col">
-              {column}
-            </th>
-          ))}
-          <th scope="col">
-            <span className="admin-table__sr">Supprimer</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {adding && (
-          <tr className="admin-table__row prospect-row--draft">
-            <td>
-              <TextCell
-                value={null}
-                label="Nom"
-                autoOpen
-                onSave={onAdd}
-                onClose={(sent) => {
-                  if (sent === null) onCancelAdd()
-                }}
-              />
-            </td>
-            {COLUMNS.slice(1).map((column) => (
-              <td key={column} className="admin-table__text prospect-cell__empty">
-                —
-              </td>
+    <div className="prospect-scroll">
+      <table className="admin-table prospect-table">
+        <thead>
+          <tr>
+            {COLUMNS.map((column) => (
+              <th key={column} scope="col">
+                {column}
+              </th>
             ))}
-            <td />
+            <th scope="col">
+              <span className="admin-table__sr">Supprimer</span>
+            </th>
           </tr>
-        )}
-        {rows.map((row) => (
-          <ProspectLine
-            key={row.id}
-            row={row}
-            onChanged={onChanged}
-            onAskDelete={onAskDelete}
-            onAskUnlink={onAskUnlink}
-          />
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {adding && (
+            <tr className="admin-table__row prospect-row--draft">
+              <td>
+                <TextCell
+                  value={null}
+                  label="Nom"
+                  autoOpen
+                  onSave={onAdd}
+                  onClose={(sent) => {
+                    if (sent === null) onCancelAdd()
+                  }}
+                />
+              </td>
+              {COLUMNS.slice(1).map((column) => (
+                <td key={column} className="admin-table__text prospect-cell__empty">
+                  —
+                </td>
+              ))}
+              <td />
+            </tr>
+          )}
+          {rows.map((row) => (
+            <ProspectLine
+              key={row.id}
+              row={row}
+              onChanged={onChanged}
+              onAskDelete={onAskDelete}
+              onAskUnlink={onAskUnlink}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

@@ -315,3 +315,20 @@
 .prospect-status--a-repondre {
   color: var(--tone-brique-ink);
 }
+
+/* Le tableau est plus large qu'un petit écran : il défile dans son cadre, la page ne bouge pas.
+   Le cadre porte la carte, sinon le défilement rognerait l'ombre. */
+.prospect-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.prospect-scroll > .admin-table {
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+  background: none;
+}
