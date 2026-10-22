@@ -77,6 +77,12 @@
   height: 100%;
 }
 
+/* Titre, phrase et bouton plus serrés que sur une vraie date (Uriel, 22/10/2026). */
+.first-date .next-date__meta,
+.first-date .next-date__chips {
+  margin-top: var(--space-12);
+}
+
 @media (width <= 760px) {
   .empty-invite {
     flex-direction: column;
