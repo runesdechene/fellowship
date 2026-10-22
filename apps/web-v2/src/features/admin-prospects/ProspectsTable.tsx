@@ -25,7 +25,7 @@ const COLUMNS = [
   'Relance',
 ] as const
 
-type TextField = 'brand' | 'activity' | 'city' | 'source' | 'note'
+type TextField = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'source' | 'note'
 
 interface Props {
   rows: ProspectRow[]
@@ -134,16 +134,23 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
           <Link to={`/admin/prospects/${row.id}`} className="admin-table__name prospect-name">
             {row.name ?? row.email ?? 'Sans nom'}
           </Link>
-          <span className="admin-table__meta">
+          <span className="admin-table__meta prospect-place">
             <TextCell value={row.brand} label="Marque" onSave={text('brand')} />
+            <span className="prospect-place__comma" aria-hidden="true">
+              ,
+            </span>
+            <TextCell value={row.city} label="Ville" onSave={text('city')} />
           </span>
         </span>
       </td>
       <td className="admin-table__text">
-        <span className="prospect-pair">
-          <TextCell value={row.activity} label="Activité" onSave={text('activity')} />
-          <span aria-hidden="true">·</span>
-          <TextCell value={row.city} label="Ville" onSave={text('city')} />
+        <span className="prospect-stack">
+          <TextCell value={row.activity} label="Activité principale" onSave={text('activity')} />
+          <TextCell
+            value={row.activity_secondary}
+            label="Activité secondaire"
+            onSave={text('activity_secondary')}
+          />
         </span>
       </td>
       <td className="admin-table__text">

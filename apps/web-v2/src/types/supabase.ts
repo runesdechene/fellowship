@@ -2471,6 +2471,7 @@ export type Database = {
           a_relancer: boolean
           a_repondre: boolean
           activity: string
+          activity_secondary: string
           brand: string
           city: string
           contact_channel: string

@@ -114,6 +114,26 @@
   gap: var(--space-4);
 }
 
+/* Sous le nom : la marque, puis la ville après une virgule collée à la marque. */
+/* Deux classes : la méta du tableau (admin-table.css, chargée après) pose son propre écart. */
+.admin-table__meta.prospect-place {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+}
+
+.prospect-place__comma {
+  margin-right: var(--space-4);
+}
+
+/* La colonne « Activité » : la principale, puis la secondaire en dessous. */
+.prospect-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 /* La note de la page d'un prospect : elle passe à la ligne, et le champ grandit avec elle. */
 .prospect-cell__button--multiline {
   white-space: pre-wrap;
