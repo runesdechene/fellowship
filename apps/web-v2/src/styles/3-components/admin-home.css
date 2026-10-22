@@ -1,0 +1,190 @@
+/**
+ * QUOI     — les styles de l'accueil de l'administration (features/admin-home) : titre, visiteurs
+ *            par jour, ce que font les gens, à traiter, vus récemment.
+ * POURQUOI — maquette 2448:233 ; tout vient des jetons `--admin-home-*` de la couche 2.
+ */
+
+.admin-home__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.admin-home__title {
+  font: var(--type-admin-home-title);
+  color: var(--ink-title);
+}
+
+.admin-home__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--admin-home-side-width);
+  gap: var(--space-20);
+  align-items: start;
+}
+
+.admin-home__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+/* Les blocs */
+.home-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+}
+
+.home-card__title {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.home-card__hint {
+  font: var(--type-admin-home-hint);
+  color: var(--ink-soft);
+}
+
+/* Visiteurs par jour */
+.home-pulse {
+  --bar-strip-height: var(--admin-home-pulse-height);
+}
+
+.home-pulse__axis {
+  display: flex;
+  justify-content: space-between;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.home-pulse__today {
+  font-weight: var(--weight-medium);
+  color: var(--ink-title);
+}
+
+/* Ce que font les gens */
+.home-activity {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-24) var(--space-40);
+  --bar-strip-height: var(--admin-home-mini-height);
+}
+
+.home-activity__item {
+  display: flex;
+  gap: var(--space-20);
+  align-items: flex-end;
+}
+
+.home-activity__figure {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.home-activity__label {
+  font: var(--type-admin-head);
+  color: var(--ink-soft);
+}
+
+.home-activity__value {
+  font: var(--type-admin-home-figure);
+  color: var(--ink-title);
+}
+
+.home-activity__unit {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+/* À traiter */
+.home-todo__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) 0;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.home-todo__label {
+  flex: 1 1 auto;
+  font: var(--type-admin-home-row);
+  color: var(--ink-title);
+}
+
+a.home-todo__row:hover .home-todo__label {
+  text-decoration: underline;
+}
+
+.home-todo__row--done,
+.home-todo__row--done .home-todo__label {
+  color: var(--ink-soft);
+}
+
+.home-todo__count {
+  min-width: var(--admin-home-count-size);
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-chip);
+  background: var(--action-surface);
+  font: var(--type-admin-home-count);
+  text-align: center;
+  color: var(--action-ink);
+}
+
+/* Vus récemment */
+.home-visitors .avatar {
+  --avatar-size: var(--admin-home-avatar);
+}
+
+.home-visitors__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-6) 0;
+}
+
+.home-visitors__who {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.home-visitors__name {
+  font: var(--type-admin-home-row);
+  color: var(--ink-title);
+}
+
+.home-visitors__row:hover .home-visitors__name {
+  text-decoration: underline;
+}
+
+.home-visitors__when,
+.home-visitors__empty {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.home-visitors__visits {
+  font: var(--type-admin-head);
+  color: var(--ink-soft);
+}
+
+.home-visitors__all {
+  width: fit-content;
+  font: var(--type-admin-head);
+  color: var(--ink-soft);
+}
+
+.home-visitors__all:hover {
+  color: var(--ink-title);
+}
+
+@media (width <= 1100px) {
+  .admin-home__columns,
+  .home-activity {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

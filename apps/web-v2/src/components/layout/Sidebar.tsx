@@ -20,6 +20,7 @@ import {
   PanelRightOpen,
   Settings,
   SquareKanban,
+  House,
   Store,
   Tag,
   Target,
@@ -63,6 +64,7 @@ function navFor(vitrine: string | null | undefined): NavItem[] {
 
 /** Les sections de l'administration ; « Comptes » reste allumé sur les fiches qui en descendent. */
 const ADMIN_ITEMS = [
+  { to: '/admin/accueil', label: 'Accueil', Icon: House, prefixes: ['/admin/accueil'] },
   { to: '/admin/taches', label: 'Tâches', Icon: SquareKanban, prefixes: ['/admin/taches'] },
   {
     to: '/admin/comptes',

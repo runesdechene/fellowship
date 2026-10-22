@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import {
+  addDays,
   daysUntil,
   durationLabel,
   formatDateRange,
@@ -254,6 +255,12 @@ describe('startOfWeek', () => {
     expect(startOfWeek(new Date('2026-10-22T15:00:00'))).toEqual(d('2026-10-19'))
     expect(startOfWeek(new Date('2026-10-25T23:00:00'))).toEqual(d('2026-10-19'))
     expect(startOfWeek(new Date('2026-10-19T00:30:00'))).toEqual(d('2026-10-19'))
+  })
+})
+
+describe('addDays', () => {
+  it('recule de 29 jours en traversant un mois', () => {
+    expect(addDays(new Date('2026-10-22T15:00:00'), -29)).toEqual(d('2026-09-23'))
   })
 })
 

@@ -6,7 +6,8 @@
 - `event-create/` — la création d’un événement (`/evenement/nouveau`).
 - `community/` — la Communauté (`/communaute`).
 - `settings/` — les Réglages (`/reglages`).
-- `admin-board/` — l’accueil de l’administration : le tableau de l’équipe (`/admin/taches`).
+- `admin-home/` — l’accueil de l’administration : la santé de l’application (`/admin/accueil`).
+- `admin-board/` — le tableau de l’équipe (`/admin/taches`).
 - `admin-accounts/`, `admin-entity/`, `admin-person/` — l’administration : comptes, fiche enseigne, fiche personne (`/admin/…`).
 - `admin-moderation/`, `admin-events/`, `admin-categories/`, `admin-testimonials/` — l’administration, lot 4 : signalements, événements, catégories, témoignages.
 

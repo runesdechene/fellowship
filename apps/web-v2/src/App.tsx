@@ -13,6 +13,7 @@ import { UpdateBanner } from '@/components/layout/UpdateBanner'
 import { GuestShell } from '@/components/layout/GuestShell'
 import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { BoardPage } from '@/features/admin-board/BoardPage'
+import { HomePage } from '@/features/admin-home/HomePage'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
 import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
@@ -129,6 +130,7 @@ function AdminPage({ children }: { children: ReactNode }) {
 
 /** L'administration : chaque section derrière la même garde (AdminPage). */
 const ADMIN_ROUTES: [string, ReactNode][] = [
+  ['/admin/accueil', <HomePage />],
   ['/admin/taches', <BoardPage />],
   ['/admin/comptes', <AccountsPage />],
   ['/admin/prospects', <ProspectsPage />],

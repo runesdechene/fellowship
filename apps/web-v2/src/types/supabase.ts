@@ -2004,6 +2004,29 @@ export type Database = {
           },
         ]
       }
+      visites_jour: {
+        Row: {
+          actor_id: string
+          jour: string
+        }
+        Insert: {
+          actor_id: string
+          jour: string
+        }
+        Update: {
+          actor_id?: string
+          jour?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visites_jour_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
     }
     Views: {
       actor_public: {
@@ -2070,6 +2093,28 @@ export type Database = {
           name: string
           reason: Json
           slug: string
+        }[]
+      }
+      admin_accueil: {
+        Args: never
+        Returns: {
+          abonnements: number[]
+          avis: number[]
+          comptes: number
+          comptes_semaine: number
+          dates_a_venir: number
+          dates_suivies: number[]
+          echecs: number
+          essais: number
+          essais_bientot: number
+          fiches: number[]
+          messages_a_classer: number
+          pro: number
+          signalements: number
+          venus_aujourdhui: number
+          venus_mois: number
+          venus_semaine: number
+          visiteurs_par_jour: number[]
         }[]
       }
       admin_activite: {

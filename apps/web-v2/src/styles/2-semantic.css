@@ -63,6 +63,7 @@
   --surface-chip-neutral: var(--sand-200); /* pastille sans couleur */
   --surface-bar: var(--sand-200); /* mois qui portent au moins une date */
   --surface-bar-empty: var(--sand-300); /* mois à zéro — moins marqué */
+  --surface-bar-full: var(--sand-500); /* les barres d'une tendance, hors période en cours */
 
   /* =========================================================================
      ENCRE — les couleurs de texte, de la plus forte à la plus effacée
@@ -1315,6 +1316,25 @@
   --admin-face-size: 26px;
   --admin-face-overlap: -8px;
   --type-admin-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  /* L'accueil (features/admin-home, maquette 2448:233) et sa rangée de barres (BarStrip) */
+  --type-admin-home-title: var(--weight-regular) var(--size-44) / var(--leading-tight)
+    var(--family-display);
+  --type-admin-home-figure: var(--weight-regular) var(--size-32) / 1 var(--family-display);
+  --type-admin-home-hint: var(--weight-regular) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-admin-home-row: var(--weight-medium) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-admin-home-count: var(--weight-semibold) var(--size-11) / var(--leading-snug)
+    var(--family-sans);
+  --admin-home-side-width: 430px;
+  --admin-home-pulse-height: 120px;
+  --admin-home-mini-height: 64px;
+  --admin-home-avatar: 28px;
+  --admin-home-count-size: 22px;
+  --bar-strip-gap: var(--space-6);
+  --bar-strip-height: 64px;
+  --bar-strip-min: 6px;
+  --bar-strip-radius: var(--round-6);
   /* Les prospects (features/admin-prospects) */
   --prospect-note-width: 180px;
   --prospect-dot-size: 7px;
@@ -1792,6 +1812,7 @@
   --poster-badge-ink: var(--ink-title);
   --surface-bar: var(--night-200);
   --surface-bar-empty: var(--night-300);
+  --surface-bar-full: var(--night-400);
   --skeleton-surface: var(--night-100);
   --skeleton-shadow: var(--shadow-block);
   --skeleton-strong: var(--night-400);

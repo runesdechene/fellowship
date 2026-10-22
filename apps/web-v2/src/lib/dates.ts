@@ -36,6 +36,13 @@ export function startOfWeek(date: Date): Date {
   return day
 }
 
+/** Le même jour, `days` jours plus tard (ou plus tôt), à minuit. */
+export function addDays(date: Date, days: number): Date {
+  const day = startOfDay(date)
+  day.setDate(day.getDate() + days)
+  return day
+}
+
 /** Nombre de jours entiers entre aujourd'hui et une date (négatif si passée). */
 export function daysUntil(target: Date, today: Date = new Date()): number {
   const MS_PER_DAY = 86_400_000

@@ -2,21 +2,12 @@
  * QUOI     — les quatre chiffres du haut de la liste : comptes, enseignes Pro, essais, paiements en échec.
  * POURQUOI — un coup d'œil dit si quelque chose demande l'attention de l'administrateur (maquette 2338:2).
  */
-import { CircleAlert, Hourglass, Sparkles, Users, type LucideIcon } from 'lucide-react'
-import { IconTile, type Tone } from '@/components/ui/IconTile'
+import { CircleAlert, Hourglass, Sparkles, Users } from 'lucide-react'
+import { AdminStats, type AdminFigure } from '@/components/ui/AdminStats'
 import type { Stats } from './useAccounts'
 
-interface Figure {
-  label: string
-  Icon: LucideIcon
-  tone: Tone
-  value: number
-  detail: string
-  alert?: boolean
-}
-
 export function AccountsStats({ stats }: { stats: Stats }) {
-  const figures: Figure[] = [
+  const figures: AdminFigure[] = [
     {
       label: 'Comptes',
       Icon: Users,
@@ -47,24 +38,5 @@ export function AccountsStats({ stats }: { stats: Stats }) {
       alert: stats.echecs > 0,
     },
   ]
-  return (
-    <section className="admin-stats" aria-label="Chiffres">
-      {figures.map(({ label, Icon, tone, value, detail, alert }) => (
-        <div key={label} className="admin-stat">
-          <div className="admin-stat__head">
-            <IconTile Icon={Icon} tone={tone} />
-            <span className="admin-stat__label">{label}</span>
-          </div>
-          <span className="admin-stat__value">{value}</span>
-          <span
-            className={
-              alert ? 'admin-stat__detail admin-stat__detail--alert' : 'admin-stat__detail'
-            }
-          >
-            {detail}
-          </span>
-        </div>
-      ))}
-    </section>
-  )
+  return <AdminStats figures={figures} />
 }
