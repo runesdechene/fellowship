@@ -1489,10 +1489,13 @@ export type Database = {
           owner_id: string | null
           phone: string | null
           relance_vue_pour: string | null
+          social_primary: string | null
+          social_secondary: string | null
           source: string | null
           unsubscribe_token: string
           unsubscribed_at: string | null
           user_id: string | null
+          website: string | null
         }
         Insert: {
           a_relancer?: boolean
@@ -1514,10 +1517,13 @@ export type Database = {
           owner_id?: string | null
           phone?: string | null
           relance_vue_pour?: string | null
+          social_primary?: string | null
+          social_secondary?: string | null
           source?: string | null
           unsubscribe_token?: string
           unsubscribed_at?: string | null
           user_id?: string | null
+          website?: string | null
         }
         Update: {
           a_relancer?: boolean
@@ -1539,10 +1545,13 @@ export type Database = {
           owner_id?: string | null
           phone?: string | null
           relance_vue_pour?: string | null
+          social_primary?: string | null
+          social_secondary?: string | null
           source?: string | null
           unsubscribe_token?: string
           unsubscribed_at?: string | null
           user_id?: string | null
+          website?: string | null
         }
         Relationships: [
           {
@@ -2328,10 +2337,13 @@ export type Database = {
           owner_id: string
           owner_name: string
           phone: string
+          social_primary: string
+          social_secondary: string
           source: string
           unsubscribed_at: string
           user_id: string
           user_name: string
+          website: string
         }[]
       }
       admin_prospect_de: {

@@ -17,6 +17,9 @@ export interface ProspectDetail {
   city: string | null
   email: string | null
   phone: string | null
+  website: string | null
+  social_primary: string | null
+  social_secondary: string | null
   source: string | null
   note: string | null
   contact_channel: string | null

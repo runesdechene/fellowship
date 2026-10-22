@@ -15,7 +15,16 @@ import { TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
 import type { ProspectDetail } from './useProspect'
 
-type Field = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'phone' | 'source'
+type Field =
+  | 'brand'
+  | 'activity'
+  | 'activity_secondary'
+  | 'city'
+  | 'phone'
+  | 'website'
+  | 'social_primary'
+  | 'social_secondary'
+  | 'source'
 
 const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'brand', label: 'Marque' },
@@ -23,6 +32,9 @@ const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'activity_secondary', label: 'Activité secondaire' },
   { field: 'city', label: 'Ville' },
   { field: 'phone', label: 'Téléphone' },
+  { field: 'website', label: 'Site web' },
+  { field: 'social_primary', label: 'Réseau social 1' },
+  { field: 'social_secondary', label: 'Réseau social 2' },
   { field: 'source', label: 'Source' },
 ]
 
