@@ -11,6 +11,8 @@ import { must, supabase } from '@/lib/supabase'
 export interface ProspectDetail {
   id: string
   name: string | null
+  /** Comment lui écrire : `femme`, `homme`, ou null tant qu'on ne sait pas. */
+  gender: string | null
   brand: string | null
   activity: string | null
   activity_secondary: string | null

@@ -9,6 +9,7 @@
 import { Info, NotebookPen } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AdminCard } from '@/components/ui/AdminCard'
+import { Select } from '@/components/ui/Select'
 import { SheetRow } from '@/components/ui/SheetRow'
 import { contactLabel, normalizeEmail } from '@/lib/prospect'
 import { TextCell } from './ProspectCells'
@@ -25,6 +26,13 @@ type Field =
   | 'social_primary'
   | 'social_secondary'
   | 'source'
+
+// Comment écrire au prospect ; les modèles masculin et féminin viendront ensuite.
+const GENDERS = [
+  { value: null, label: 'Non renseigné' },
+  { value: 'femme', label: 'Féminin' },
+  { value: 'homme', label: 'Masculin' },
+]
 
 const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'brand', label: 'Marque' },
@@ -55,6 +63,14 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
         <dl className="sheet-rows">
           <SheetRow label="Nom">
             <TextCell value={prospect.name} label="Nom" onSave={(name) => save({ name })} />
+          </SheetRow>
+          <SheetRow label="Genre">
+            <Select
+              label="Genre"
+              value={prospect.gender}
+              options={GENDERS}
+              onChange={(gender) => void save({ gender })}
+            />
           </SheetRow>
           <SheetRow label="E-mail">
             <TextCell
