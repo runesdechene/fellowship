@@ -1,65 +1,92 @@
 /**
- * QUOI     — les règles du tableau de l'équipe : l'ordre des colonnes, l'âge d'une carte, quand
- *            elle se réchauffe, ce que « Fait » montre et compte.
- * POURQUOI — maquette 2417:233 (Uriel, 22/10/2026) : un tableau pensé pour des cerveaux TDAH,
- *            où le temps qui passe se voit au lieu de se lire.
- * ATTENTION — la règle « une seule carte Maintenant par personne » vit en base (déclencheur de
- *            admin_tasks) : l'écran ne fait que recharger.
+ * QUOI     — les règles du tableau de l'équipe : où tombe une carte dans un paquet, depuis quand
+ *            elle y est, quand elle se réchauffe, ce que « Terminé » montre, compte et efface.
+ * POURQUOI — maquette 2432:306 (Uriel, 22/10/2026) : chacun a son paquet et n'en voit que la carte
+ *            du dessus ; le temps qui passe se voit au lieu de se lire.
+ * ATTENTION — une position plus petite est plus haut dans le paquet.
  */
 import { daysUntil, startOfWeek } from './dates'
 
-export const TASK_STATUSES = ['think', 'todo', 'now', 'done'] as const
+export const TASK_STATUSES = ['idea', 'deck', 'done'] as const
 export type TaskStatus = (typeof TASK_STATUSES)[number]
-
-export const STATUS_LABELS: Record<TaskStatus, string> = {
-  think: 'À réfléchir',
-  todo: 'À faire',
-  now: 'Maintenant',
-  done: 'Fait',
-}
 
 /** Une carte immobile depuis tant de jours se réchauffe. */
 const STALE_DAYS = 5
-/** « Fait » ne montre que les cartes arrivées depuis tant de jours. */
+/** « Terminé » garde les cartes tant de jours, de plus en plus pâles. */
 export const DONE_KEPT_DAYS = 7
-/** « À faire » montre ses premières cartes et replie le reste. */
-export const TODO_VISIBLE = 5
 
 export function isTaskStatus(value: string): value is TaskStatus {
   return (TASK_STATUSES as readonly string[]).includes(value)
 }
 
-/** La colonne d'avant et celle d'après, pour les flèches d'une carte. */
-export function neighbours(status: TaskStatus): { back?: TaskStatus; next?: TaskStatus } {
-  const index = TASK_STATUSES.indexOf(status)
-  return { back: TASK_STATUSES[index - 1], next: TASK_STATUSES[index + 1] }
+/**
+ * La place d'une carte qu'on ajoute : au hasard dans le paquet, ou dessus si elle est urgente.
+ * `random` est passé pour que le hasard se teste.
+ */
+export function insertPosition(
+  positions: readonly number[],
+  urgent: boolean,
+  random: () => number = Math.random,
+): number {
+  if (positions.length === 0) return 0
+  const top = Math.min(...positions)
+  if (urgent) return top - 1
+  const bottom = Math.max(...positions)
+  return top + random() * (bottom - top)
 }
 
-/** Jours passés dans sa colonne. */
+/** « Plus tard » : sous toutes les autres. */
+export function laterPosition(positions: readonly number[]): number {
+  return positions.length === 0 ? 0 : Math.max(...positions) + 1
+}
+
+/** Jours passés là où la carte est. */
 function daysIn(movedAt: string, now: Date): number {
   return daysUntil(now, new Date(movedAt))
 }
 
-/** « depuis 3 j » ; rien le jour même. */
-export function ageLabel(movedAt: string, now: Date): string | null {
+/** « depuis 3 jours » ; « depuis aujourd'hui » le jour même. */
+export function sinceLabel(movedAt: string, now: Date): string {
   const days = daysIn(movedAt, now)
-  return days > 0 ? `depuis ${days} j` : null
+  if (days <= 0) return 'depuis aujourd’hui'
+  return days === 1 ? 'depuis hier' : `depuis ${days} jours`
 }
 
-/** Une carte qui attend trop se réchauffe ; ce qui est fait ne presse plus. */
-export function isStale(status: TaskStatus, movedAt: string, now: Date): boolean {
-  return status !== 'done' && daysIn(movedAt, now) >= STALE_DAYS
+/** Une carte qui attend trop dans un paquet se réchauffe. */
+export function isStale(movedAt: string, now: Date): boolean {
+  return daysIn(movedAt, now) >= STALE_DAYS
 }
 
-/** L'instant à partir duquel une carte « Fait » est encore montrée. */
+/** L'instant à partir duquel une carte terminée est encore montrée. */
 export function doneSince(now: Date): Date {
   const since = new Date(now)
   since.setDate(since.getDate() - DONE_KEPT_DAYS)
   return since
 }
 
-/** Les cartes passées dans « Fait » depuis lundi. */
+/** Les cartes terminées depuis lundi. */
 export function doneThisWeek(doneMovedAt: readonly string[], now: Date): number {
   const monday = startOfWeek(now).getTime()
   return doneMovedAt.filter((movedAt) => new Date(movedAt).getTime() >= monday).length
+}
+
+/** Combien un jour de « Terminé » est encore visible : plein aujourd'hui, presque effacé au 7e. */
+export function fadeFor(daysAgo: number): number {
+  return Math.max(0.1, 1 - daysAgo * 0.15)
+}
+
+/** Les cartes terminées, rangées par jour, le plus récent d'abord. */
+export function groupByDay<T extends { movedAt: string }>(
+  tasks: readonly T[],
+  now: Date,
+): { daysAgo: number; date: Date; tasks: T[] }[] {
+  const days = new Map<number, { daysAgo: number; date: Date; tasks: T[] }>()
+  for (const task of [...tasks].sort((a, b) => b.movedAt.localeCompare(a.movedAt))) {
+    const date = new Date(task.movedAt)
+    const daysAgo = daysIn(task.movedAt, now)
+    const day = days.get(daysAgo) ?? { daysAgo, date, tasks: [] }
+    day.tasks.push(task)
+    days.set(daysAgo, day)
+  }
+  return [...days.values()].sort((a, b) => a.daysAgo - b.daysAgo)
 }

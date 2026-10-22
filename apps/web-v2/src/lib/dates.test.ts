@@ -26,6 +26,8 @@ import {
   formatDateSpan,
   formatTime,
   startOfWeek,
+  dayLabel,
+  formatWeekdayDayMonth,
 } from './dates'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
@@ -252,5 +254,20 @@ describe('startOfWeek', () => {
     expect(startOfWeek(new Date('2026-10-22T15:00:00'))).toEqual(d('2026-10-19'))
     expect(startOfWeek(new Date('2026-10-25T23:00:00'))).toEqual(d('2026-10-19'))
     expect(startOfWeek(new Date('2026-10-19T00:30:00'))).toEqual(d('2026-10-19'))
+  })
+})
+
+describe('dayLabel', () => {
+  const now = new Date('2026-10-22T15:00:00')
+  it('aujourd’hui, hier, puis le jour de la semaine', () => {
+    expect(dayLabel(new Date('2026-10-22T08:00:00'), now)).toBe("Aujourd'hui")
+    expect(dayLabel(new Date('2026-10-21T23:30:00'), now)).toBe('Hier')
+    expect(dayLabel(new Date('2026-10-19T10:00:00'), now)).toBe('Lundi')
+  })
+})
+
+describe('formatWeekdayDayMonth', () => {
+  it('écrit le jour, la date et le mois', () => {
+    expect(formatWeekdayDayMonth(d('2026-10-22'))).toBe('jeudi 22 octobre')
   })
 })

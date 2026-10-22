@@ -133,6 +133,8 @@
   --sauge-700: #3f6e47; /* encre d'une mention validée, le jour */
   --sauge-500: #5e9468; /* point d'un statut validé */
   --sauge-50: #e8f0e6; /* fond d'une mention validée, le jour */
+  --feuille-200: #b9e8c1; /* le bouton « Fait » du tableau de l'équipe (maquette 2432:306) */
+  --feuille-700: #397839;
   /* Le bleu doux : un dossier envoyé, qui attend sa réponse (Uriel, 11/10/2026). */
   --bleu-700: #3e6590; /* encre d'un dossier envoyé, le jour */
   /* La nuit, d'autres teintes (planche « 2027 sombre — pastilles de statut », Uriel, 11/10/2026) :

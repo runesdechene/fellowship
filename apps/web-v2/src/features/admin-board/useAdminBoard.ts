@@ -1,70 +1,87 @@
 /**
- * QUOI     — les cartes du tableau de l'équipe : les lire, en ajouter, les déplacer, les corriger,
- *            les prendre ou les lâcher, les supprimer.
- * POURQUOI — la table admin_tasks (admins seuls, RLS) ; chaque écriture recharge le tableau, pour
- *            voir aussi ce que le déclencheur a fait (l'ancienne carte « Maintenant » renvoyée).
- * ATTENTION — « Fait » ne remonte que les 7 derniers jours : les lignes restent en base. Le nom
- *             d'un porteur se lit dans actor_public (users ne se lit que sur sa propre ligne).
+ * QUOI     — le tableau de l'équipe : les idées, le paquet de chaque admin, ce qui est terminé ;
+ *            et les gestes (ajouter, terminer, repousser, mélanger, donner, supprimer).
+ * POURQUOI — la table admin_tasks (admins seuls, RLS). Chaque geste recharge le tableau : l'équipe
+ *            est petite, la lecture est courte, et l'écran montre toujours ce que dit la base.
+ * ATTENTION — « Terminé » ne remonte que les 7 derniers jours : les lignes restent en base. Un
+ *             admin lit toute la table users (politique users_select_self_or_admin).
  */
 import { useCallback, useEffect, useState } from 'react'
-import { doneSince, isTaskStatus, type TaskStatus } from '@/lib/admin-board'
+import {
+  doneSince,
+  insertPosition,
+  isTaskStatus,
+  laterPosition,
+  type TaskStatus,
+} from '@/lib/admin-board'
 import { useAuth } from '@/lib/auth'
 import { must, supabase } from '@/lib/supabase'
+
+export interface Admin {
+  id: string
+  name: string
+  avatarUrl: string | null
+}
 
 export interface Task {
   id: string
   body: string
   status: TaskStatus
-  movedAt: string
   ownerId: string | null
-  owner: { name: string | null; avatarUrl: string | null } | null
+  position: number
+  movedAt: string
 }
 
-async function loadTasks(): Promise<Task[]> {
+interface Board {
+  admins: Admin[]
+  tasks: Task[]
+}
+
+async function loadBoard(): Promise<Board> {
   const since = doneSince(new Date()).toISOString()
-  const rows = must(
-    await supabase
+  const [admins, tasks] = await Promise.all([
+    supabase
+      .from('users')
+      .select('actor_id, display_name, avatar_url')
+      .eq('role', 'admin')
+      .order('display_name')
+      .order('actor_id'),
+    supabase
       .from('admin_tasks')
-      .select('id, body, status, moved_at, owner_user_id')
+      .select('id, body, status, owner_user_id, position, moved_at')
       .or(`status.neq.done,moved_at.gte.${since}`)
-      .order('moved_at')
+      .order('position')
+      .order('created_at')
       .order('id'),
-  )
-  const ownerIds = [...new Set(rows.flatMap((r) => (r.owner_user_id ? [r.owner_user_id] : [])))]
-  const owners = ownerIds.length
-    ? must(
-        await supabase
-          .from('actor_public')
-          .select('actor_id, label, avatar_url')
-          .in('actor_id', ownerIds),
-      )
-    : []
-  const people = new Map(
-    owners.flatMap((o) =>
-      o.actor_id ? [[o.actor_id, { name: o.label, avatarUrl: o.avatar_url }]] : [],
+  ])
+  return {
+    admins: must(admins).map((a) => ({
+      id: a.actor_id,
+      name: a.display_name ?? 'Admin',
+      avatarUrl: a.avatar_url,
+    })),
+    tasks: must(tasks).flatMap((t) =>
+      isTaskStatus(t.status)
+        ? [
+            {
+              id: t.id,
+              body: t.body,
+              status: t.status,
+              ownerId: t.owner_user_id,
+              position: t.position,
+              movedAt: t.moved_at,
+            },
+          ]
+        : [],
     ),
-  )
-  return rows.flatMap((r) =>
-    isTaskStatus(r.status)
-      ? [
-          {
-            id: r.id,
-            body: r.body,
-            status: r.status,
-            movedAt: r.moved_at,
-            ownerId: r.owner_user_id,
-            owner: r.owner_user_id ? (people.get(r.owner_user_id) ?? null) : null,
-          },
-        ]
-      : [],
-  )
+  }
 }
 
 export function useAdminBoard() {
   const { person } = useAuth()
   const me = person?.actor_id ?? null
-  const [state, setState] = useState<{ tasks: Task[] | null; error: string | null }>({
-    tasks: null,
+  const [state, setState] = useState<{ board: Board | null; error: string | null }>({
+    board: null,
     error: null,
   })
   const [round, setRound] = useState(0)
@@ -73,9 +90,9 @@ export function useAdminBoard() {
     let cancelled = false
     async function run() {
       try {
-        const tasks = await loadTasks()
+        const board = await loadBoard()
         if (cancelled) return
-        setState({ tasks, error: null })
+        setState({ board, error: null })
       } catch (error) {
         if (cancelled) return
         setState((s) => ({
@@ -90,35 +107,52 @@ export function useAdminBoard() {
     }
   }, [round])
 
+  const tasks = state.board?.tasks ?? []
+  const deckOf = (ownerId: string | null) =>
+    tasks.filter((t) => t.status === 'deck' && t.ownerId === ownerId)
+  const positionsOf = (ownerId: string | null) => deckOf(ownerId).map((t) => t.position)
+
   const write = useCallback(async (job: PromiseLike<{ error: { message: string } | null }>) => {
     const { error } = await job
     if (error) throw new Error(error.message)
     setRound((r) => r + 1)
   }, [])
 
+  const update = (
+    task: Task,
+    changes: { status?: TaskStatus; owner_user_id?: string; position?: number },
+  ) => write(supabase.from('admin_tasks').update(changes).eq('id', task.id))
+
   return {
     ...state,
     me,
-    add: (body: string, status: TaskStatus) =>
-      write(supabase.from('admin_tasks').insert({ body: body.trim(), status })),
-    // « Maintenant » a toujours un porteur : celui qui y pose une carte orpheline la prend.
-    move: (task: Task, status: TaskStatus) =>
-      write(
-        supabase
-          .from('admin_tasks')
-          .update({ status, owner_user_id: status === 'now' ? (task.ownerId ?? me) : task.ownerId })
-          .eq('id', task.id),
-      ),
-    rename: (task: Task, body: string) =>
-      write(supabase.from('admin_tasks').update({ body: body.trim() }).eq('id', task.id)),
-    // Prendre une carte, ou la lâcher si elle est déjà à soi.
-    take: (task: Task) =>
-      write(
-        supabase
-          .from('admin_tasks')
-          .update({ owner_user_id: task.ownerId === me ? null : me })
-          .eq('id', task.id),
-      ),
+    deckOf,
+    addIdea: (body: string) =>
+      write(supabase.from('admin_tasks').insert({ body: body.trim(), status: 'idea' })),
+    addToDeck: (body: string, urgent: boolean) =>
+      me
+        ? write(
+            supabase.from('admin_tasks').insert({
+              body: body.trim(),
+              status: 'deck',
+              owner_user_id: me,
+              position: insertPosition(positionsOf(me), urgent),
+            }),
+          )
+        : Promise.reject(new Error('Session introuvable')),
+    // Terminée par celui qui la tient.
+    finish: (task: Task) => update(task, { status: 'done' }),
+    later: (task: Task) => update(task, { position: laterPosition(positionsOf(task.ownerId)) }),
+    toTop: (task: Task) =>
+      update(task, { position: insertPosition(positionsOf(task.ownerId), true) }),
+    // Une carte ou une idée posée sur un paquet tombe au hasard dedans.
+    give: (task: Task, ownerId: string) =>
+      update(task, {
+        status: 'deck',
+        owner_user_id: ownerId,
+        position: insertPosition(positionsOf(ownerId), false),
+      }),
+    shuffle: () => write(supabase.rpc('admin_shuffle_deck')),
     remove: (task: Task) => write(supabase.from('admin_tasks').delete().eq('id', task.id)),
   }
 }

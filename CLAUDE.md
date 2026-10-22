@@ -41,7 +41,8 @@ Un nom de colonne ou une signature de RPC ne se devine jamais : graph, `docs/db/
   « Coder » de `_Socle/Méthode.md` du vault.
 - **Le périmètre de la V2 est la maquette Figma.** Ce qui n'y est pas n'existe pas. **Le design
   appartient à Uriel** : on intègre, on n'améliore pas d'office — toute proposition graphique se
-  discute avant.
+  discute avant. **Toute maquette ou proposition graphique commence par le skill
+  `frontend-design`**, chargé d'office, sans attendre qu'on le demande (Uriel, 22/10/2026).
 - **pnpm** uniquement. **TS strict** : pas de `any`, `@ts-ignore`, `as unknown as`.
 - **Conventional Commits**, en français.
 - **Migrations** horodatées (`supabase/migrations/<horodatage>_<nom>.sql`), canal unique

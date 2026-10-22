@@ -104,6 +104,7 @@ export type Database = {
           id: string
           moved_at: string
           owner_user_id: string | null
+          position: number
           status: string
         }
         Insert: {
@@ -112,6 +113,7 @@ export type Database = {
           id?: string
           moved_at?: string
           owner_user_id?: string | null
+          position?: number
           status?: string
         }
         Update: {
@@ -120,6 +122,7 @@ export type Database = {
           id?: string
           moved_at?: string
           owner_user_id?: string | null
+          position?: number
           status?: string
         }
         Relationships: [
@@ -2093,6 +2096,7 @@ export type Database = {
         Args: { p_q: string; p_valeur: string }
         Returns: boolean
       }
+      admin_shuffle_deck: { Args: never; Returns: undefined }
       admin_chiffres: {
         Args: never
         Returns: {

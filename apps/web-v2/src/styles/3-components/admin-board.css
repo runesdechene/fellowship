@@ -1,302 +1,584 @@
 /**
- * QUOI     — les styles du tableau de l'équipe (features/admin-board) : les quatre colonnes
- *            teintées, les cartes, la carte « Maintenant » en grand, la carte qui se réchauffe,
- *            celle qui s'allume en arrivant dans « Fait ».
- * POURQUOI — maquette 2417:233 : chaque colonne prend un ton de l'administration (--tone-*), posé
- *            une fois sur la colonne en variables locales que tout son contenu relit.
+ * QUOI     — les styles du tableau de l'équipe (features/admin-board) : l'en-tête, les idées en
+ *            notes de travers, le paquet sur sa table, les paquets de l'équipe, l'archive qui pâlit.
+ * POURQUOI — maquette 2432:306 : un vrai jeu de cartes posé sur la table, et tout le reste calme.
+ * ATTENTION — la pile porte les deux cartes du dessous en ::before et ::after.
  */
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(var(--board-column-min-width), 1fr));
-  align-items: start;
-  gap: var(--space-16);
+/* --- En-tête --------------------------------------------------------------------------- */
+
+.board-page {
+  gap: var(--space-40);
 }
 
-.board-column {
-  --board-line: color-mix(in srgb, var(--board-ink) 18%, transparent);
+.board-page__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-24);
+}
 
+.board-page__date {
+  margin-bottom: var(--space-6);
+  font: var(--type-board-date);
+  color: var(--ink-waiting);
+  text-transform: uppercase;
+}
+
+.board-page__title {
+  font: var(--type-board-title);
+  color: var(--ink-title);
+}
+
+.board-page__week {
   display: flex;
   flex-direction: column;
-  gap: var(--space-10);
-  padding: var(--space-16);
-  border: 1px solid var(--board-line);
-  border-radius: var(--radius-card);
-  background: var(--board-surface);
-  color: var(--board-ink);
-  transition: box-shadow var(--duration-fast) var(--ease-out);
+  align-items: flex-end;
+  font: var(--type-board-week-label);
+  color: var(--board-done-ink);
 }
 
-.board-column--bleu {
-  --board-ink: var(--tone-bleu-ink);
-  --board-surface: var(--tone-bleu-surface);
-}
-
-.board-column--ocre {
-  --board-ink: var(--tone-ocre-ink);
-  --board-surface: var(--tone-ocre-surface);
-}
-
-.board-column--terre {
-  --board-ink: var(--tone-terre-ink);
-  --board-surface: var(--tone-terre-surface);
-}
-
-.board-column--sauge {
-  --board-ink: var(--tone-sauge-ink);
-  --board-surface: var(--tone-sauge-surface);
-}
-
-/* Une carte glissée au-dessus : la colonne se cerne de sa couleur. */
-.board-column--over {
-  box-shadow: 0 0 0 2px var(--board-ink);
-}
-
-.board-column__head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  padding-bottom: var(--space-4);
-}
-
-.board-column__dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border-radius: var(--radius-round);
-  background: var(--board-ink);
-}
-
-.board-column__title {
+.board-page__week-count {
   font: var(--type-board-title);
 }
 
-.board-column__count {
-  padding: var(--space-2) var(--space-7);
-  border-radius: var(--radius-chip);
-  background: var(--board-ink);
-  font: var(--type-board-count);
-  color: var(--surface-card);
+/* --- Les trois zones ------------------------------------------------------------------- */
+
+.board-stage {
+  display: grid;
+  grid-template-columns: var(--board-ideas-width) minmax(0, 1fr) var(--board-team-width);
+  align-items: start;
+  gap: var(--space-28);
 }
 
-.board-column__hint,
-.board-column__footer {
-  font: var(--type-board-meta);
-}
-
-.board-column__add {
+.board-zone__head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-8);
-  padding: var(--space-10) var(--space-14);
-  border: 1.5px solid var(--board-ink);
-  border-radius: var(--radius-nav);
-  background: var(--surface-card);
-  box-shadow: var(--shadow-block);
+}
+
+.board-zone__title {
+  font: var(--type-board-zone);
+  color: var(--ink-title);
+}
+
+.board-zone__count {
+  font: var(--type-board-count);
   color: var(--ink-soft);
 }
 
-.board-column__input {
+/* --- Idées ----------------------------------------------------------------------------- */
+
+.board-ideas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.board-ideas__notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-28);
+  padding: var(--space-8) var(--space-6);
+}
+
+.board-idea {
+  position: relative;
+  padding: var(--space-16);
+  border: 1px solid var(--board-idea-line);
+  border-radius: var(--radius-xs);
+  background: var(--board-idea-surface);
+  box-shadow: var(--shadow-block);
+  font: var(--type-board-note);
+  color: var(--board-idea-ink);
+  cursor: grab;
+  rotate: -2.5deg;
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.board-idea:nth-child(3n + 2) {
+  rotate: 1.8deg;
+}
+
+.board-idea:nth-child(3n) {
+  rotate: -1.2deg;
+}
+
+.board-idea:hover {
+  rotate: 0deg;
+}
+
+.board-idea__remove {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  place-items: center;
+  padding: var(--space-2);
+  color: inherit;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.board-idea:hover .board-idea__remove,
+.board-idea__remove:focus-visible {
+  opacity: 1;
+}
+
+.board-ideas__add {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-6);
+  font: var(--type-board-small);
+  color: var(--board-idea-ink);
+}
+
+.board-ideas__input {
+  width: 100%;
+  padding: var(--space-10) var(--space-12);
+  border: 1px solid var(--board-idea-line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-card);
+  font: var(--type-board-note);
+  color: var(--ink-title);
+}
+
+/* --- Mon paquet, sur sa table ---------------------------------------------------------- */
+
+.deck-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-22);
+  padding: var(--space-28) var(--space-32);
+  border-radius: var(--board-table-radius);
+  background: var(--board-table-surface);
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.deck-table--over {
+  box-shadow: 0 0 0 2px var(--board-table-mark);
+}
+
+.deck-table__head {
+  display: flex;
+  align-items: baseline;
+  align-self: stretch;
+  gap: var(--space-8);
+}
+
+.deck-table__see {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-left: auto;
+  font: var(--type-board-small);
+  color: var(--board-table-ink);
+}
+
+.deck-table__empty {
+  padding: var(--space-48) 0;
+  font: var(--type-board-count);
+  color: var(--board-table-ink);
+  text-align: center;
+}
+
+.deck-pile {
+  position: relative;
+  width: 100%;
+  max-width: var(--board-card-max-width);
+  margin-block: var(--space-6) var(--space-20);
+}
+
+/* Les deux cartes du dessous, de travers ; elles disparaissent quand il n'en reste qu'une. */
+.deck-pile::before,
+.deck-pile::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--board-table-line);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  content: '';
+}
+
+.deck-pile::before {
+  translate: 0 var(--space-18);
+  rotate: 2.5deg;
+}
+
+.deck-pile::after {
+  translate: 0 var(--space-10);
+  rotate: -4deg;
+}
+
+.deck-pile--last::before,
+.deck-pile--last::after {
+  display: none;
+}
+
+.deck-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-16);
+  min-height: var(--board-card-height);
+  padding: var(--space-28) var(--space-32);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--board-card-shadow);
+  cursor: grab;
+  transition:
+    opacity var(--duration-medium) var(--ease-drawer),
+    translate var(--duration-medium) var(--ease-drawer),
+    background var(--duration-medium) var(--ease-out);
+}
+
+/* Chaque nouvelle carte du dessus se pose. */
+@starting-style {
+  .deck-card {
+    opacity: 0;
+    translate: 0 calc(var(--space-12) * -1);
+  }
+}
+
+.deck-card--stale {
+  background: var(--board-stale-surface);
+}
+
+.deck-card__text {
+  font: var(--type-board-card);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+  overflow-wrap: anywhere;
+}
+
+.deck-card__since {
+  font: var(--type-board-small);
+  color: var(--board-table-ink);
+}
+
+.deck-table__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-10);
+}
+
+.deck-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-18);
+  border: 1px solid var(--board-table-line);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  font: var(--type-board-action);
+  color: var(--ink-title);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.deck-action:hover:not(:disabled) {
+  background: var(--surface-row-hover);
+}
+
+.deck-action:disabled {
+  opacity: 0.5;
+}
+
+.deck-action--done {
+  padding-inline: var(--space-26);
+  border-color: transparent;
+  background: var(--board-finish-surface);
+  color: var(--board-finish-ink);
+}
+
+.deck-action--done:hover:not(:disabled) {
+  background: var(--board-finish-surface);
+  filter: brightness(0.96);
+}
+
+.deck-table__add {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--space-10);
+  padding: var(--space-12) var(--space-18);
+  border: 1.5px solid var(--board-table-mark);
+  border-radius: var(--radius-chip);
+  background: var(--surface-card);
+  color: var(--ink-waiting);
+}
+
+.deck-table__input {
   flex: 1;
   min-width: 0;
   border: 0;
   background: none;
-  font: var(--type-board-card);
+  font: var(--type-board-count);
   color: var(--ink-title);
   outline: none;
 }
 
-.board-column__more {
+.deck-table__urgent {
   display: inline-flex;
-  align-self: flex-start;
   align-items: center;
   gap: var(--space-6);
-  padding: var(--space-6) var(--space-4);
-  font: var(--type-chip);
-  color: var(--board-ink);
+  padding: var(--space-2) var(--space-8);
+  border: 1px solid var(--board-table-line);
+  border-radius: var(--radius-chip);
+  font: var(--type-board-meta);
+  color: var(--board-table-ink);
+  cursor: pointer;
 }
 
-.board-column__more:hover {
-  text-decoration: underline;
+.deck-table__urgent input {
+  accent-color: var(--board-table-ink);
 }
 
-/* --- Les cartes -------------------------------------------------------- */
-
-.board-card {
+.deck-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-10);
-  padding: var(--space-12) var(--space-14);
-  border: 1px solid var(--board-line);
-  border-radius: var(--radius-nav);
-  background: var(--surface-card);
-  box-shadow: var(--shadow-block);
-  cursor: grab;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    background var(--duration-medium) var(--ease-out);
+  align-self: stretch;
 }
 
-@starting-style {
-  .board-card {
-    opacity: 0;
-    translate: 0 var(--space-6);
-  }
-}
-
-.board-card:hover,
-.board-card:focus-within {
-  border-color: var(--board-ink);
-}
-
-.board-card__text {
-  text-align: left;
-  font: var(--type-board-card);
-  color: var(--ink-title);
-  overflow-wrap: anywhere;
-  cursor: text;
-}
-
-.board-card__input {
-  width: 100%;
-  resize: vertical;
-  border: 0;
-  background: none;
-  font: var(--type-board-card);
-  color: var(--ink-title);
-  outline: none;
-}
-
-.board-card__meta {
+.deck-list__item {
   display: flex;
   align-items: center;
   gap: var(--space-8);
-  font: var(--type-board-meta);
-  color: var(--board-ink);
+  padding: var(--space-10) 0;
+  border-top: 1px solid var(--board-table-line);
+  cursor: grab;
 }
 
-.board-card__owner {
-  --avatar-size: var(--board-avatar-size);
-
-  display: inline-flex;
-}
-
-.board-card__owner .avatar--fallback {
-  background: var(--board-ink);
-  color: var(--surface-card);
-}
-
-/* Les actions n'apparaissent qu'au survol ou au clavier ; toujours là sur écran tactile. */
-.board-card__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    max-height var(--duration-fast) var(--ease-out);
-}
-
-.board-card:hover .board-card__actions,
-.board-card:focus-within .board-card__actions {
-  max-height: var(--space-40);
-  opacity: 1;
-}
-
-@media (hover: none) {
-  .board-card__actions {
-    max-height: none;
-    opacity: 1;
-  }
-}
-
-.board-card__move,
-.board-card__icon {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-8);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-sm);
-  background: var(--surface-card);
-  font: var(--type-chip);
+.deck-list__text {
+  flex: 1;
+  font: var(--type-board-count);
   color: var(--ink-title);
 }
 
-.board-card__icon {
-  padding: var(--space-4) var(--space-6);
+.deck-list__icon {
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  color: var(--board-table-ink);
+}
+
+.deck-list__icon:hover {
+  background: var(--surface-card);
+}
+
+/* --- L'équipe -------------------------------------------------------------------------- */
+
+.board-team {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.board-team__decks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.team-deck {
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-14) var(--space-16);
+  border: 1px solid var(--board-table-line);
+  border-radius: var(--radius-nav);
+  background: var(--surface-card);
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* La carte du dessous, de travers. */
+.team-deck::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 1px solid var(--board-table-line);
+  border-radius: inherit;
+  background: var(--surface-card);
+  translate: 0 var(--space-6);
+  rotate: 3deg;
+  content: '';
+}
+
+.team-deck--over {
+  box-shadow: 0 0 0 2px var(--board-table-mark);
+}
+
+.team-deck__who {
+  --avatar-size: var(--board-avatar-size);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+  font: var(--type-chip-strong);
+  color: var(--board-table-ink);
+}
+
+.team-deck__face.avatar--fallback {
+  background: var(--board-table-mark);
+  color: var(--surface-card);
+}
+
+.team-deck__top {
+  font: var(--type-board-team-card);
+  color: var(--ink-title);
+}
+
+.board-team__hint {
+  padding: var(--space-18) var(--space-14);
+  border: 1px dashed var(--board-table-mark);
+  border-radius: var(--radius-bar);
+  font: var(--type-board-meta);
+  color: var(--board-table-ink);
+  text-align: center;
+}
+
+/* --- Terminé : l'archive qui pâlit ----------------------------------------------------- */
+
+.board-done {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.board-done__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.board-done__week {
+  font: var(--type-board-count);
+  color: var(--board-done-ink);
+}
+
+.board-done__note {
+  font: var(--type-board-meta);
+  color: var(--board-done-ink);
+}
+
+.board-done__rule {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--board-done-ink) 30%, transparent);
+}
+
+.board-done__empty {
+  font: var(--type-board-count);
   color: var(--ink-soft);
 }
 
-.board-card__icon:last-child {
-  margin-left: auto;
+.board-done__days {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--space-20);
 }
 
-.board-card__move:hover,
-.board-card__icon:hover {
-  background: var(--surface-row-hover);
+.board-done__day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  opacity: var(--board-fade);
 }
 
-/* « Maintenant » : la seule chose à faire, en grand. */
-.board-card--now {
-  gap: var(--space-14);
-  padding: var(--space-18);
-  border: 1.5px solid var(--board-ink);
+.board-done__label {
+  font: var(--type-board-small);
+  color: var(--board-done-ink);
 }
 
-.board-card--now .board-card__text {
-  font: var(--type-board-now);
+.done-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-poster-inset);
+  background: var(--board-done-surface);
 }
 
-/* Une carte qui attend depuis 5 jours se réchauffe. */
-.board-card--stale {
-  border-color: var(--board-stale-line);
-  background: var(--board-stale-surface);
+.done-card__text {
+  font: var(--type-board-small);
+  color: var(--board-done-ink);
 }
 
-.board-card--stale .board-card__meta {
-  color: var(--board-stale-ink);
+.done-card__who {
+  --avatar-size: var(--board-done-avatar-size);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-board-meta);
+  color: var(--board-done-ink);
 }
 
-.board-card--done .board-card__text {
-  color: var(--ink-soft);
-  text-decoration: line-through;
+.done-card__face.avatar--fallback {
+  background: var(--board-done-ink);
+  color: var(--surface-card);
 }
 
-/* La carte qu'on vient de finir s'allume d'un coup de vert, puis se pose. */
-.board-card--landed {
-  animation: board-card-landed var(--duration-slow) var(--ease-arrive);
+/* La carte qu'on vient de terminer s'allume, puis se pose. */
+.done-card--landed {
+  animation: done-card-landed var(--duration-slow) var(--ease-arrive);
 }
 
-@keyframes board-card-landed {
+@keyframes done-card-landed {
   from {
-    background: var(--tone-sauge-surface);
-    scale: 1.04;
+    background: var(--board-finish-surface);
+    scale: 1.06;
   }
 }
 
+/* --- Écrans plus étroits --------------------------------------------------------------- */
+
 @media (width <= 1100px) {
-  .board {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .board-stage {
+    grid-template-columns: minmax(0, 1fr) var(--board-team-width);
+  }
+
+  .deck-table {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .board-done__days {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (width <= 760px) {
-  .board {
+  .board-stage,
+  .board-done__days {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .board-page__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .board-page__week {
+    align-items: flex-start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .board-card,
-  .board-card__actions,
-  .board-column {
+  .board-idea,
+  .deck-card,
+  .deck-table,
+  .team-deck {
     transition: none;
   }
 
-  .board-card--landed {
+  .done-card--landed {
     animation: none;
   }
 }

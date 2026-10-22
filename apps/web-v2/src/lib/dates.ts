@@ -74,6 +74,26 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
+const WEEKDAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { weekday: 'long' })
+const WEEKDAY_DAY_MONTH_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+})
+
+/** « Aujourd'hui », « Hier », puis le jour de la semaine : « Lundi ». */
+export function dayLabel(date: Date, now: Date): string {
+  const days = daysUntil(now, date)
+  if (days === 0) return "Aujourd'hui"
+  if (days === 1) return 'Hier'
+  return capitalize(WEEKDAY_FORMATTER.format(date))
+}
+
+/** « mercredi 22 octobre ». */
+export function formatWeekdayDayMonth(date: Date): string {
+  return WEEKDAY_DAY_MONTH_FORMATTER.format(date)
+}
+
 /** « mars » — le nom du mois dans une phrase (« 42 festivals t'attendent après mars »). */
 export function monthName(date: Date): string {
   return MONTH_FORMATTER.format(date)

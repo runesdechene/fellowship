@@ -996,18 +996,42 @@
   --type-updates-summary: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
 
-  /* Le tableau de l'équipe (features/admin-board, maquette 2417:233) : chaque colonne prend un
-     ton de l'administration ; ce qui attend se réchauffe dans la terre du logo. */
-  --board-column-min-width: 220px;
+  /* Le tableau de l'équipe (features/admin-board, maquette 2432:306) : les idées en bleu, le
+     paquet sur une table ocre, « Terminé » en sauge ; ce qui attend se réchauffe dans la terre. */
+  --board-ideas-width: 260px;
+  --board-team-width: 220px;
+  --board-card-max-width: 470px;
+  --board-card-height: 270px;
   --board-avatar-size: 22px;
+  --board-done-avatar-size: 18px;
+  --board-table-radius: var(--round-28);
+  --board-table-surface: var(--tone-ocre-surface);
+  --board-table-ink: var(--tone-ocre-ink);
+  --board-table-line: color-mix(in srgb, var(--tone-ocre-ink) 18%, transparent);
+  --board-table-mark: var(--status-ok-mark);
   --board-stale-surface: var(--tone-terre-surface);
-  --board-stale-line: var(--status-ok-mark);
-  --board-stale-ink: var(--tone-terre-ink);
-  --type-board-title: var(--type-list-name);
-  --type-board-count: var(--type-chip-strong);
-  --type-board-meta: var(--type-list-meta);
-  --type-board-card: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-board-now: var(--weight-semibold) var(--size-18) / var(--leading-tight) var(--family-sans);
+  --board-idea-surface: var(--tone-bleu-surface);
+  --board-idea-ink: var(--tone-bleu-ink);
+  --board-idea-line: color-mix(in srgb, var(--tone-bleu-ink) 16%, transparent);
+  --board-done-surface: var(--tone-sauge-surface);
+  --board-done-ink: var(--tone-sauge-ink);
+  --board-finish-surface: var(--feuille-200);
+  --board-finish-ink: var(--feuille-700);
+  --board-card-shadow: 0 14px 32px -4px rgb(89 56 26 / 14%);
+  --type-board-date: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
+  --type-board-title: var(--weight-regular) var(--size-56) / 1 var(--family-display);
+  --type-board-week-label: var(--weight-medium) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-board-zone: var(--weight-semibold) var(--size-17) / var(--leading-snug) var(--family-sans);
+  --type-board-count: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-board-card: var(--weight-semibold) var(--size-30) / var(--leading-tight) var(--family-sans);
+  --type-board-team-card: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-board-note: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-board-small: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-board-meta: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-board-action: var(--weight-semibold) var(--size-14) / var(--leading-snug)
+    var(--family-sans);
 
   /* L'administration des mises à jour (maquette 2373:65). */
   --admin-updates-list-width: 520px;
@@ -1809,6 +1833,9 @@
   --tone-bleu-ink: var(--pervenche-300);
   --tone-bleu-surface: color-mix(in srgb, var(--pervenche-300) 14%, transparent);
   --tone-sauge-ink: var(--menthe-300);
+  /* Le bouton « Fait » du tableau prend le voile sauge de la nuit, comme les statuts validés. */
+  --board-finish-surface: var(--tone-sauge-surface);
+  --board-finish-ink: var(--tone-sauge-ink);
   --tone-sauge-surface: color-mix(in srgb, var(--menthe-300) 14%, transparent);
   --tone-ocre-ink: var(--ocre-300);
   --tone-ocre-surface: color-mix(in srgb, var(--ocre-300) 14%, transparent);
