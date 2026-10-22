@@ -80,6 +80,7 @@ export interface TemplateInput {
   name: string
   subject: string
   body: string
+  body_feminine: string | null
 }
 
 export async function saveTemplate({ id, ...fields }: TemplateInput) {

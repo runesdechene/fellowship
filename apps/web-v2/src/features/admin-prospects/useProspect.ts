@@ -58,6 +58,8 @@ export interface Template {
   name: string
   subject: string
   body: string
+  /** La version féminine ; sans elle, `body` est neutre. */
+  body_feminine: string | null
   archived_at: string | null
   envois: number
   reponses: number

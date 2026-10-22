@@ -32,6 +32,24 @@ export function fillTemplate(text: string, values: Record<string, string>): stri
     .replace(/ +,/g, ',')
 }
 
+interface Bodies {
+  body: string
+  body_feminine: string | null
+}
+
+/**
+ * Le texte d'un modèle pour ce prospect. Un seul texte est neutre : il sert pour tous. Avec un
+ * second, le premier est le masculin et le second le féminin ; sans genre connu, le masculin.
+ */
+export function templateBody(template: Bodies, gender: string | null): string {
+  return gender === 'femme' && template.body_feminine ? template.body_feminine : template.body
+}
+
+/** Le modèle s'accorde, mais on ne sait pas comment écrire à ce prospect. */
+export function genderMissing(template: Bodies, gender: string | null): boolean {
+  return Boolean(template.body_feminine) && !gender
+}
+
 /** « Je prends le relais de Mathéo. » quand le dernier e-mail venait d'un autre prospectant. */
 export function relayIntro(previous: string | null): string {
   return previous ? `Je prends le relais de ${previous}. ` : ''

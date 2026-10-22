@@ -16,9 +16,11 @@ import { formatFullDate } from '@/lib/dates'
 import { percent } from '@/lib/prospect'
 import {
   fillTemplate,
+  genderMissing,
   pickTemplate,
   previousWriter,
   relayIntro,
+  templateBody,
   templateValues,
 } from '@/lib/prospect-template'
 import type { ProspectSheet, Template } from './useProspect'
@@ -54,7 +56,7 @@ export function ComposeCard({ sheet, me, onSent, onTakeOver }: Props) {
     if (!template) return { subject: firstSubject ? `Re : ${firstSubject}` : '', body: intro }
     return {
       subject: fillTemplate(template.subject, values),
-      body: intro + fillTemplate(template.body, values),
+      body: intro + fillTemplate(templateBody(template, prospect.gender), values),
     }
   }
 
@@ -115,6 +117,7 @@ export function ComposeCard({ sheet, me, onSent, onTakeOver }: Props) {
   }
 
   const stop = blocked()
+  const chosen = live.find((t) => t.id === templateId)
   const lastOut = outgoing[outgoing.length - 1]
 
   return (
@@ -176,6 +179,12 @@ export function ComposeCard({ sheet, me, onSent, onTakeOver }: Props) {
             value={draft.body}
             onChange={(event) => setDraft({ ...draft, body: event.target.value })}
           />
+          {chosen && genderMissing(chosen, prospect.gender) && (
+            <p className="prospect-compose__problem">
+              Genre non renseigné : c’est le texte masculin. Choisis le genre dans les informations,
+              ou retouche le texte.
+            </p>
+          )}
           {lastOut?.delivery === 'rebond' && (
             <p className="prospect-compose__problem">
               Le dernier e-mail a rebondi : l’adresse est peut-être fausse.

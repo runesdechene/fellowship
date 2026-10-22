@@ -1,6 +1,8 @@
 /**
- * QUOI     — l'éditeur d'un modèle : nom, usage, objet, texte, et les emplacements à insérer au
- *            curseur ({prénom}, {marque}…).
+ * QUOI     — l'éditeur d'un modèle : nom, usage, objet, texte, sa version féminine facultative, et
+ *            les emplacements à insérer au curseur ({prénom}, {marque}…).
+ *            Un seul texte est neutre ; avec la version féminine, le premier devient le masculin
+ *            (Uriel, 22/10/2026).
  * POURQUOI — les admins écrivent leurs modèles (maquette 2356:2) ; la signature et le lien de
  *            désinscription s'ajoutent à l'envoi, pas ici.
  * ATTENTION — la page remonte l'éditeur (clé) quand on change de modèle.
@@ -34,16 +36,22 @@ export function TemplateEditor({ template, onDone }: Props) {
     kind: kindOf(template?.kind),
     subject: template?.subject ?? '',
     body: template?.body ?? '',
+    body_feminine: template?.body_feminine ?? '',
   })
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
   const [archiving, setArchiving] = useState(false)
-  const text = useRef<HTMLTextAreaElement>(null)
+  // L'emplacement s'insère dans le dernier texte touché.
+  const [target, setTarget] = useState<'body' | 'body_feminine'>('body')
+  const bodyArea = useRef<HTMLTextAreaElement>(null)
+  const feminineArea = useRef<HTMLTextAreaElement>(null)
+  const gendered = form.body_feminine.trim() !== ''
 
   function insert(place: string) {
-    const area = text.current
-    const at = area?.selectionStart ?? form.body.length
-    setForm({ ...form, body: form.body.slice(0, at) + place + form.body.slice(at) })
+    const area = (target === 'body' ? bodyArea : feminineArea).current
+    const current = form[target]
+    const at = area?.selectionStart ?? current.length
+    setForm({ ...form, [target]: current.slice(0, at) + place + current.slice(at) })
     area?.focus()
   }
 
@@ -88,13 +96,27 @@ export function TemplateEditor({ template, onDone }: Props) {
           />
         </label>
         <label className="template-editor__field">
-          <span className="template-editor__label">Texte</span>
+          <span className="template-editor__label">{gendered ? 'Texte masculin' : 'Texte'}</span>
           <textarea
-            ref={text}
+            ref={bodyArea}
             className="prospect-compose__text"
             rows={10}
             value={form.body}
+            onFocus={() => setTarget('body')}
             onChange={(event) => setForm({ ...form, body: event.target.value })}
+          />
+        </label>
+        <label className="template-editor__field">
+          <span className="template-editor__label">
+            {gendered ? 'Texte féminin' : 'Texte féminin, s’il faut accorder (facultatif)'}
+          </span>
+          <textarea
+            ref={feminineArea}
+            className="prospect-compose__text"
+            rows={gendered ? 10 : 3}
+            value={form.body_feminine}
+            onFocus={() => setTarget('body_feminine')}
+            onChange={(event) => setForm({ ...form, body_feminine: event.target.value })}
           />
         </label>
         <div className="template-editor__places">
@@ -126,7 +148,15 @@ export function TemplateEditor({ template, onDone }: Props) {
           <Button
             variant="action"
             disabled={busy || !form.name.trim()}
-            onClick={() => void run(() => saveTemplate({ id: template?.id, ...form }))}
+            onClick={() =>
+              void run(() =>
+                saveTemplate({
+                  id: template?.id,
+                  ...form,
+                  body_feminine: gendered ? form.body_feminine : null,
+                }),
+              )
+            }
           >
             Enregistrer
           </Button>

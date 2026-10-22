@@ -5,9 +5,11 @@
 import { describe, expect, it } from 'vitest'
 import {
   fillTemplate,
+  genderMissing,
   pickTemplate,
   previousWriter,
   relayIntro,
+  templateBody,
   templateValues,
 } from './prospect-template'
 
@@ -81,5 +83,27 @@ describe('previousWriter', () => {
     expect(
       previousWriter([{ direction: 'in', sender_user_id: null, sender_name: null }], 'me'),
     ).toBeNull()
+  })
+})
+
+describe('templateBody', () => {
+  const neutral = { body: 'Bonjour', body_feminine: null }
+  const both = { body: 'Cher Arthur', body_feminine: 'Chère Manon' }
+
+  it('un seul texte sert pour tous', () => {
+    expect(templateBody(neutral, 'femme')).toBe('Bonjour')
+    expect(templateBody(neutral, null)).toBe('Bonjour')
+  })
+
+  it('avec deux textes, le second pour une femme, le premier sinon', () => {
+    expect(templateBody(both, 'femme')).toBe('Chère Manon')
+    expect(templateBody(both, 'homme')).toBe('Cher Arthur')
+    expect(templateBody(both, null)).toBe('Cher Arthur')
+  })
+
+  it('signale le genre manquant seulement quand le modèle s’accorde', () => {
+    expect(genderMissing(both, null)).toBe(true)
+    expect(genderMissing(both, 'homme')).toBe(false)
+    expect(genderMissing(neutral, null)).toBe(false)
   })
 })
