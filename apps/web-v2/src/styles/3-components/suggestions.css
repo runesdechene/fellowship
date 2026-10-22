@@ -117,38 +117,6 @@
   color: var(--ink-title);
 }
 
-.suggestion--placeholder {
-  height: var(--suggestion-placeholder-height);
-  background: var(--surface-chip-neutral);
-}
-
-/* --- Le gratuit : le nombre trouvé sur le voile --------------------------------------------- */
-.suggestions__invite {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-24);
-  width: 100%;
-  padding: 0 var(--space-32);
-}
-
-.suggestions__invite-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-6);
-}
-
-.suggestions__invite-title {
-  font: var(--type-suggestion-invite);
-  color: var(--ink-title);
-}
-
-.suggestions__invite-note {
-  font: var(--type-pro-text);
-  color: var(--ink-soft);
-}
-
 /* Téléphone : trois cartes côte à côte n'y tiennent pas ; elles glissent en rangée, comme celles
    de l'Explorer, et la suivante dépasse pour dire qu'il y en a d'autres. */
 @media (width <= 760px) {
@@ -167,12 +135,6 @@
     flex: none;
     width: var(--suggestion-mobile-width);
     scroll-snap-align: start;
-  }
-
-  .suggestions__invite {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 var(--space-20);
   }
 }
 

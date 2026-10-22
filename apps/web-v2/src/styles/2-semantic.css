@@ -1005,7 +1005,6 @@
   --suggestion-poster-height: var(--report-thumb-height);
   /* Sur téléphone, une carte de « Pour toi » laisse dépasser la suivante. */
   --suggestion-mobile-width: 85%;
-  --suggestion-placeholder-height: 102px;
   --suggestion-dismiss-ink: var(--ink-waiting);
   --suggestion-dismiss-size: 26px;
   --suggestion-leaving-opacity: 0;

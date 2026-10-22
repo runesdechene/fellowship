@@ -1,16 +1,13 @@
 /**
  * QUOI     — le bloc « Pour toi » : 3 festivals proches de ceux que l'exposant fait, chacun avec
- *            sa raison et une icône « Pas pour moi » ; en gratuit, le nombre trouvé sous le voile du Pro.
+ *            sa raison et une icône « Pas pour moi » ; en gratuit, le nombre trouvé et l'appel au Pro.
  * POURQUOI — lot 8d, maquettes 2206:2 (Pro) et 2206:340 (gratuit). Rien à proposer : le bloc
  *            dit qu'il cherche, en squelettes (maquette 2402:233). Une lecture ratée : il se tait.
  */
-import { ArrowRight, Ban } from 'lucide-react'
+import { Ban } from 'lucide-react'
 import { useState } from 'react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
-import { Button } from '@/components/ui/Button'
 import { Poster } from '@/components/ui/Poster'
-import { ProBadge } from '@/components/ui/ProBadge'
-import { ProVeil } from '@/components/ui/ProVeil'
 import { useAuth } from '@/lib/auth'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -19,8 +16,6 @@ import { usePlan } from '@/lib/usePlan'
 import { EmptyInvite } from './EmptyInvite'
 import { useSuggestions, type ShownSuggestion } from './useSuggestions'
 
-/** Les cartes sous le voile gratuit : de fausses, le gratuit n'a pas les vraies. */
-const PLACEHOLDERS = ['a', 'b', 'c']
 const MAX_FACES = 3
 
 interface CardProps {
@@ -76,7 +71,6 @@ export function SuggestionsSection() {
   const { actor } = useAuth()
   const { pro } = usePlan()
   const { suggestions, dismiss } = useSuggestions(actor?.id)
-  const go = useTransitionNavigate()
   // Une carte écartée s'efface aussitôt et le reste jusqu'à la relecture, qui ne la rend plus
   // et la remplace par la suivante. Si l'écriture échoue, elle revient.
   const [gone, setGone] = useState<string[]>([])
@@ -117,30 +111,11 @@ export function SuggestionsSection() {
           ))}
         </div>
       ) : (
-        <ProVeil
-          invitation={
-            <div className="suggestions__invite">
-              <div className="suggestions__invite-text">
-                <ProBadge />
-                <p className="suggestions__invite-title">{foundLabel(suggestions.count)}</p>
-                <p className="suggestions__invite-note">
-                  Proches de ceux que tu fais, dans ta zone. Le Pro te les montre, et te prévient
-                  quand il en trouve un nouveau.
-                </p>
-              </div>
-              <Button variant="pro" onClick={() => go('/pro')}>
-                Découvrir le Pro
-                <ArrowRight size={14} strokeWidth={2} />
-              </Button>
-            </div>
-          }
-        >
-          <div className="suggestions">
-            {PLACEHOLDERS.map((key) => (
-              <span key={key} className="suggestion suggestion--placeholder" />
-            ))}
-          </div>
-        </ProVeil>
+        <EmptyInvite
+          title={foundLabel(suggestions.count)}
+          note="Proches de ceux que tu fais, dans ta zone. Le Pro te les montre, et te prévient quand il en trouve un nouveau."
+          pro={false}
+        />
       )}
     </section>
   )
