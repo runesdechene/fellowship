@@ -7,6 +7,7 @@
 import { ArrowRight } from 'lucide-react'
 import { useEffect } from 'react'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { Button } from './Button'
 import { ProBadge } from './ProBadge'
 
 interface ProBubbleProps {
@@ -38,10 +39,10 @@ export function ProBubble({ title, text, onClose, className }: ProBubbleProps) {
       <ProBadge />
       <p className="pro-bubble__title">{title}</p>
       <p className="pro-bubble__text">{text}</p>
-      <button type="button" className="pro-bubble__link" onClick={() => go('/pro')}>
+      <Button variant="pro" onClick={() => go('/pro')}>
         Découvrir le Pro
-        <ArrowRight size={13} strokeWidth={2} />
-      </button>
+        <ArrowRight size={14} strokeWidth={2} />
+      </Button>
     </div>
   )
 }

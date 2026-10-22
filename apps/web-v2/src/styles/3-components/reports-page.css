@@ -462,18 +462,6 @@
   padding-top: var(--space-10);
 }
 
-.reports-invitation__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-12) var(--space-18) var(--space-12) var(--space-20);
-  border-radius: var(--radius-control);
-  background: var(--action-surface);
-  font: var(--type-button);
-  color: var(--action-ink);
-  cursor: pointer;
-}
-
 .reports-invitation__later {
   font: var(--type-card-link);
   color: var(--ink-soft);

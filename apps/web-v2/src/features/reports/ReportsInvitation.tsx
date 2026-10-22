@@ -5,6 +5,7 @@
  *            vrais avantages du Pro, sans cacher la page dessous.
  */
 import { ArrowRight, Check } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { useTransitionNavigate } from '@/lib/navigation'
 
@@ -39,10 +40,10 @@ export function ReportsInvitation() {
         ))}
       </ul>
       <div className="reports-invitation__actions">
-        <button type="button" className="reports-invitation__cta" onClick={() => go('/pro')}>
+        <Button variant="pro" onClick={() => go('/pro')}>
           Découvrir le Pro
           <ArrowRight size={15} strokeWidth={2} />
-        </button>
+        </Button>
         <button type="button" className="reports-invitation__later" onClick={() => go('/')}>
           Pas maintenant
         </button>

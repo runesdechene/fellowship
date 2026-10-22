@@ -10,7 +10,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `Avatar.tsx` — l'avatar rond et la pile d'avatars.
 - `Tag.tsx` — la pastille d'une catégorie (couleurs venues de la base).
 - `RichText.tsx` — un texte d'organisateur mis en forme, nettoyé avant d'être affiché.
-- `ProBadge.tsx` — la pastille noire « Pro ».
+- `ProBadge.tsx` — la pastille « Pro », dans le dégradé du logo.
 - `ProBubble.tsx` — l'invitation Pro en bulle, là où un geste est refusé en gratuit.
 - `ProVeil.tsx` — un contenu flouté et inerte, avec l'invitation par-dessus.
 - `DeviceIcon.tsx` — l'icône de l'appareil qu'on tient : téléphone ou écran.

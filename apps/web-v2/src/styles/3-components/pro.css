@@ -10,9 +10,9 @@
   width: fit-content;
   padding: var(--space-2) var(--pro-badge-padding-x);
   border-radius: var(--radius-xs);
-  background: var(--action-surface);
+  background: var(--brand-gradient);
   font: var(--type-pro-badge);
-  color: var(--action-ink);
+  color: var(--pro-button-ink);
 }
 
 /* --- La bulle ------------------------------------------------------------ */
@@ -48,15 +48,6 @@
 .pro-bubble__text {
   font: var(--type-pro-text);
   color: var(--ink-soft);
-}
-
-.pro-bubble__link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  font: var(--type-card-link);
-  color: var(--ink-title);
-  cursor: pointer;
 }
 
 /* --- Le voile ------------------------------------------------------------ */

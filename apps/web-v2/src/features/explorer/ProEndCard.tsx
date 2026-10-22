@@ -5,6 +5,7 @@
  *            nombre réel des festivals cachés dit mieux qu'une phrase ce que le Pro ouvre.
  */
 import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { monthName } from '@/lib/dates'
 import { FREE_MONTHS, lastOpenMonth } from '@/lib/explorer'
@@ -23,10 +24,10 @@ export function ProEndCard({ count }: { count: number }) {
         {count} {count === 1 ? 'festival t’attend' : 'festivals t’attendent'} après {lastMonth}
       </p>
       <p className="pro-month__text">Le Pro te les ouvre, pour candidater avant les autres.</p>
-      <button type="button" className="pro-bubble__link" onClick={() => go('/pro')}>
+      <Button variant="pro" onClick={() => go('/pro')}>
         Découvrir le Pro
-        <ArrowRight size={13} strokeWidth={2} />
-      </button>
+        <ArrowRight size={14} strokeWidth={2} />
+      </Button>
     </article>
   )
 }

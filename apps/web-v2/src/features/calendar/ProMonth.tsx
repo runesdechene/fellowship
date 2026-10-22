@@ -5,6 +5,7 @@
  *            s'arrêter net (maquette « Points de contact du Pro », calendrier).
  */
 import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
 import type { MonthSlot } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -27,10 +28,10 @@ export function ProMonth({ slot, today }: { slot: MonthSlot; today: Date }) {
         <p className="pro-month__text">
           Pose tes dates sur toute l’année et ne rate plus une candidature.
         </p>
-        <button type="button" className="pro-bubble__link" onClick={() => go('/pro')}>
+        <Button variant="pro" onClick={() => go('/pro')}>
           Découvrir le Pro
-          <ArrowRight size={13} strokeWidth={2} />
-        </button>
+          <ArrowRight size={14} strokeWidth={2} />
+        </Button>
       </div>
     </section>
   )
