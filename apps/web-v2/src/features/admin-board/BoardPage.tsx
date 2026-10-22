@@ -67,7 +67,7 @@ export function BoardPage() {
       <header className="board-page__head">
         <div>
           <p className="board-page__date">Tâches · {formatWeekdayDayMonth(now)}</p>
-          <h1 className="board-page__title">Une carte à la fois.</h1>
+          <h1 className="admin-page__title">Une carte à la fois.</h1>
         </div>
         <p className="board-page__week">
           <span className="board-page__week-wrap">

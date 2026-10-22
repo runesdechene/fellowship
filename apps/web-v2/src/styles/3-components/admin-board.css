@@ -25,12 +25,6 @@
   text-transform: uppercase;
 }
 
-.board-page__title {
-  letter-spacing: var(--tracking-tight);
-  font: var(--type-board-title);
-  color: var(--ink-title);
-}
-
 .board-page__week {
   display: flex;
   flex-direction: column;
@@ -40,7 +34,8 @@
 }
 
 .board-page__week-count {
-  font: var(--type-board-title);
+  letter-spacing: var(--tracking-tight);
+  font: var(--type-board-week-count);
 }
 
 /* --- Les trois zones ------------------------------------------------------------------- */
