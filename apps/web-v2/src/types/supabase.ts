@@ -1886,6 +1886,7 @@ export type Database = {
           email: string
           email_token: string
           handle: string | null
+          notifications_seen_at: string
           phone: string | null
           postal_code: string | null
           push_muted: string[]
@@ -1906,6 +1907,7 @@ export type Database = {
           email: string
           email_token?: string
           handle?: string | null
+          notifications_seen_at?: string
           phone?: string | null
           postal_code?: string | null
           push_muted?: string[]
@@ -1926,6 +1928,7 @@ export type Database = {
           email?: string
           email_token?: string
           handle?: string | null
+          notifications_seen_at?: string
           phone?: string | null
           postal_code?: string | null
           push_muted?: string[]

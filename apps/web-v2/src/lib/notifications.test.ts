@@ -10,6 +10,8 @@ import {
   notificationView,
   pictureOf,
   withAccount,
+  countLabel,
+  unseenCount,
   type NotificationRow,
   type NotificationView,
 } from './notifications'
@@ -320,5 +322,15 @@ describe('withAccount', () => {
       '/evenement/e1?compte=a1#discussions',
     )
     expect(withAccount('/explorer?vue=grille', 'a1')).toBe('/explorer?vue=grille&compte=a1')
+  })
+})
+
+describe('unseenCount', () => {
+  it('compte seulement ce qui est arrivé après la dernière ouverture', () => {
+    const seen = new Date('2026-10-22T10:00:00Z')
+    const dates = [new Date('2026-10-22T09:00:00Z'), new Date('2026-10-22T11:00:00Z')]
+    expect(unseenCount(dates, seen)).toBe(1)
+    expect(countLabel(12)).toBe('9+')
+    expect(countLabel(3)).toBe('3')
   })
 })

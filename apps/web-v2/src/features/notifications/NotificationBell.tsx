@@ -1,7 +1,9 @@
 /**
- * QUOI     — la cloche de la barre du haut : un point quand il y a du non-lu ou une demande d'ami,
- *            le panneau au clic.
- * POURQUOI — la seule entrée des notifications, au même coin sur tous les écrans.
+ * QUOI     — la cloche de la barre du haut : le nombre de nouveautés depuis sa dernière ouverture
+ *            (notifications, demandes d'ami, nouveaux abonnés), le panneau au clic.
+ * POURQUOI — la seule entrée des notifications, au même coin sur tous les écrans. Le chiffre
+ *            s'éteint à l'ouverture ; chaque ligne garde son fond tant qu'elle n'est pas lue
+ *            (Uriel, 22/10/2026 : le point restait allumé après avoir ouvert le panneau).
  * ATTENTION — Échap et un clic dehors referment ; ouvrir relit les notifications.
  */
 import { Bell } from 'lucide-react'
@@ -10,12 +12,13 @@ import { Button } from '@/components/ui/Button'
 import { useNetwork } from '@/features/community/useNetwork'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { newFollowers } from '@/lib/network'
+import { countLabel, unseenCount } from '@/lib/notifications'
 import { NetworkBlock } from './NetworkBlock'
 import { NotificationPanel } from './NotificationPanel'
 import { useNotifications } from './useNotifications'
 
 export function NotificationBell() {
-  const { views, failed, unread, refresh, markRead, markAllRead, markInterested } =
+  const { views, failed, seenAt, markSeen, refresh, markRead, markAllRead, markInterested } =
     useNotifications()
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -24,7 +27,15 @@ export function NotificationBell() {
   const { network, answered, followBack, decline } = useNetwork(String(open))
   const requests = network?.requests ?? []
   const newcomers = network ? newFollowers(network.followers, new Date()) : []
-  const waiting = unread || requests.length > 0
+  // Une demande d'ami est un abonné : elle date de son abonnement. Qui est l'un et l'autre compte une fois.
+  const shown = new Set([...requests, ...newcomers].map((member) => member.id))
+  const people = (network?.followers ?? []).filter((member) => shown.has(member.id))
+  const count = seenAt
+    ? unseenCount(
+        [...views.map((view) => view.at), ...people.map((member) => new Date(member.since))],
+        seenAt,
+      )
+    : 0
 
   useEffect(() => {
     if (!open) return
@@ -46,15 +57,18 @@ export function NotificationBell() {
     <div className="notif-bell" ref={root}>
       <Button
         variant="icon"
-        aria-label={waiting ? 'Notifications, du nouveau' : 'Notifications'}
+        aria-label={count > 0 ? `Notifications, ${String(count)} nouvelles` : 'Notifications'}
         aria-expanded={open}
         onClick={() => {
-          if (!open) refresh()
+          if (!open) {
+            refresh()
+            markSeen()
+          }
           setOpen(!open)
         }}
       >
         <Bell size={20} strokeWidth={1.75} />
-        {waiting && <span className="notif-bell__dot" />}
+        {count > 0 && <span className="notif-bell__count">{countLabel(count)}</span>}
       </Button>
       {open && (
         <NotificationPanel

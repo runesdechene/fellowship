@@ -5,6 +5,8 @@
  * ATTENTION — pas de temps réel : relu à l'ouverture de l'app et à chaque ouverture du panneau
  *            (refresh). Les écritures sont optimistes ; un échec relit la base.
  *            Les images (avatars, affiches) sont relues à part : si elles manquent, l'icône reste.
+ *            `seenAt` : la dernière ouverture de la cloche, sur la personne (users.notifications_seen_at),
+ *            pour que le chiffre s'éteigne sur tous ses appareils.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/lib/auth'
@@ -51,6 +53,9 @@ export function useNotifications() {
   const [views, setViews] = useState<NotificationView[]>([])
   const [failed, setFailed] = useState(false)
   const [version, setVersion] = useState(0)
+  const [openedAt, setOpenedAt] = useState<Date | null>(null)
+  const stored = person?.notifications_seen_at
+  const seenAt = openedAt ?? (stored ? new Date(stored) : null)
 
   useEffect(() => {
     const ids = key === '' ? [] : key.split(',')
@@ -119,6 +124,18 @@ export function useNotifications() {
       })
   }, [key, refresh])
 
+  /** La cloche s'ouvre : son chiffre s'éteint. Un échec d'écriture le rallumera au prochain
+   *  chargement, sans rien perdre : les notifications, elles, restent non lues. */
+  const markSeen = useCallback(() => {
+    const now = new Date()
+    setOpenedAt(now)
+    if (!person) return
+    void supabase
+      .from('users')
+      .update({ notifications_seen_at: now.toISOString() })
+      .eq('actor_id', person.actor_id)
+  }, [person])
+
   /** « Repérer » une nouvelle édition, pour l'acteur à qui la notification a été écrite. */
   const markInterested = useCallback(
     async (ownerId: string, eventId: string) => {
@@ -140,7 +157,8 @@ export function useNotifications() {
     views,
     markInterested,
     failed,
-    unread: views.some((view) => !view.read),
+    seenAt,
+    markSeen,
     refresh,
     markRead,
     markAllRead,

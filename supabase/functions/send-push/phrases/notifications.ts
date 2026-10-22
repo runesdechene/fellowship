@@ -311,6 +311,16 @@ export function notificationView(row: NotificationRow): NotificationView | null 
   }
 }
 
+/** Ce que la cloche compte : ce qui est arrivé depuis sa dernière ouverture (Uriel, 22/10/2026). */
+export function unseenCount(dates: Date[], seenAt: Date): number {
+  return dates.filter((at) => at > seenAt).length
+}
+
+/** Le chiffre posé sur la cloche : au-delà de 9, « 9+ ». */
+export function countLabel(count: number): string {
+  return count > 9 ? '9+' : String(count)
+}
+
 type DayLabel = 'Aujourd’hui' | 'Cette semaine' | 'Plus tôt'
 
 /** Aujourd'hui · Cette semaine · Plus tôt — pour la cloche et pour le fil de la communauté. */

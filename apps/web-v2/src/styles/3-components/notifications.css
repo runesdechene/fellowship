@@ -1,22 +1,26 @@
 /**
  * QUOI     — les styles de la cloche et de son panneau (features/notifications).
  * POURQUOI — maquette « Notifications » : un panneau blanc bordé sous la cloche ; le non-lu se
- *            lit par un fond et un point. Pas d'ombre : un liseré, comme les autres menus flottants.
+ *            lit par un fond et un point sur la ligne, le neuf par un chiffre sur la cloche. Pas d'ombre : un liseré, comme les autres menus flottants.
  */
 
 .notif-bell {
   position: relative;
 }
 
-.notif-bell__dot {
+/* Le chiffre des nouveautés, couleur d'alerte de la navigation (pastille de Communauté). */
+.notif-bell__count {
   position: absolute;
-  top: var(--space-8);
-  right: var(--space-8);
-  width: var(--dot-size);
-  height: var(--dot-size);
+  top: var(--space-2);
+  right: var(--space-2);
+  min-width: var(--space-18);
+  padding: 0 var(--space-4);
   border: 2px solid var(--surface-control);
   border-radius: var(--round-full);
-  background: var(--status-ok-ink);
+  background: var(--nav-alert-surface);
+  font: var(--type-sidebar-count);
+  color: var(--nav-alert-ink);
+  text-align: center;
 }
 
 .notif-panel {
