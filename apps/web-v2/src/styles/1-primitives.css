@@ -25,13 +25,15 @@
   --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
   --sand-400: #dedad4; /* pointillés, « à remplir » */
   --sand-500: #d3cec8; /* valeurs éteintes */
-  /* Le gris-beige des blocs vides, en squelettes (maquette 2402:233, 22/10/2026). */
-  --greige-100: #ece7df; /* le cadre */
-  --greige-200: #dad3c8; /* une ligne discrète */
-  --greige-250: #d3cabd; /* l'affiche, en haut */
-  --greige-300: #ccc4b8; /* une ligne moyenne */
-  --greige-400: #b9afa2; /* une ligne de titre */
-  --greige-450: #b4aa9d; /* l'affiche, en bas */
+  /* Le gris-beige des blocs vides, en squelettes (maquette 2402:233, 22/10/2026), éclairci de 45 %
+     le même jour. */
+  --greige-100: #f5f2ed; /* le cadre */
+  --greige-200: #ebe7e1; /* une ligne discrète */
+  --greige-250: #e7e2db; /* l'affiche, en haut */
+  --greige-300: #e3dfd8; /* une ligne moyenne */
+  --greige-400: #d8d3cc; /* une ligne de titre */
+  --greige-450: #d6d0c9; /* l'affiche, en bas */
+  --greige-600: #cac4be; /* la courbe des statistiques */
 
   /* ---------------------------------------------------------------------
      PALETTE — FÊTE : la landing publique seule (maquette 2290:2, 14/10/2026).

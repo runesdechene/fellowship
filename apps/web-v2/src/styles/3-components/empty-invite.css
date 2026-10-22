@@ -49,6 +49,11 @@
   height: var(--empty-invite-poster-height);
 }
 
+.empty-invite__chart {
+  flex: none;
+  width: var(--empty-invite-chart-width);
+}
+
 .empty-invite__lines {
   display: flex;
   flex-direction: column;
@@ -79,7 +84,8 @@
     padding: var(--space-20);
   }
 
-  .empty-invite__cards {
+  .empty-invite__cards,
+  .empty-invite__chart {
     display: none;
   }
 

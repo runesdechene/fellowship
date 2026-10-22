@@ -904,6 +904,7 @@
   --skeleton-strong: var(--greige-400);
   --skeleton-mid: var(--greige-300);
   --skeleton-soft: var(--greige-200);
+  --skeleton-line-ink: var(--greige-600);
   --skeleton-poster: linear-gradient(145deg, var(--greige-250), var(--greige-450));
   --skeleton-poster-mark: color-mix(in srgb, var(--sand-0) 60%, transparent);
   --skeleton-line-height: var(--space-8);
@@ -911,6 +912,7 @@
   --skeleton-dot-size: var(--space-10);
   --empty-invite-poster-width: 52px;
   --empty-invite-poster-height: 76px;
+  --empty-invite-chart-width: 242px;
   --pro-button-ink: var(--sand-0);
   --community-side-width: 360px;
   --network-list-width: 640px;
@@ -1737,6 +1739,7 @@
   --skeleton-strong: var(--night-400);
   --skeleton-mid: var(--night-350);
   --skeleton-soft: var(--night-300);
+  --skeleton-line-ink: var(--night-400);
   --skeleton-poster: linear-gradient(145deg, var(--night-400), var(--night-200));
   --skeleton-poster-mark: color-mix(in srgb, var(--cream-50) 22%, transparent);
 

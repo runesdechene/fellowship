@@ -118,6 +118,7 @@ export function Dashboard() {
             title="Ton bénéfice, festival par festival"
             note={`Après chaque date, note tes ventes et tes frais : ${pro ? 'Fellowship' : 'le Pro'} calcule ce que chaque festival t’a vraiment rapporté.`}
             pro={pro}
+            preview="chart"
           />
         </section>
       )}

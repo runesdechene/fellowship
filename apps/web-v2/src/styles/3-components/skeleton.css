@@ -97,3 +97,59 @@
   height: 3.5%;
   opacity: 0.6;
 }
+
+/* --- Les statistiques : courbe et barres, ton sur ton ----------------------------------------- */
+.skeleton-chart {
+  display: block;
+}
+
+.skeleton-chart__axis,
+.skeleton-chart__guide {
+  stroke: var(--skeleton-soft);
+}
+
+.skeleton-chart__axis {
+  stroke-width: 1.5;
+}
+
+.skeleton-chart__guide {
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.skeleton-chart__fade-top {
+  stop-color: var(--skeleton-strong);
+  stop-opacity: 0.55;
+}
+
+.skeleton-chart__fade-bottom {
+  stop-color: var(--skeleton-strong);
+  stop-opacity: 0;
+}
+
+.skeleton-chart__curve,
+.skeleton-chart__point {
+  stroke: var(--skeleton-line-ink);
+  stroke-width: 2.5;
+}
+
+.skeleton-chart__curve {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.skeleton-chart__point {
+  fill: var(--skeleton-surface);
+}
+
+.skeleton-chart__bar {
+  fill: var(--skeleton-soft);
+}
+
+.skeleton-chart__bar--mid {
+  fill: var(--skeleton-mid);
+}
+
+.skeleton-chart__bar--strong {
+  fill: var(--skeleton-strong);
+}

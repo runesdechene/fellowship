@@ -98,6 +98,7 @@ export function SuggestionsSection() {
           title="Je cherche des festivals faits pour toi"
           note="Fellowship repère les festivals proches de ceux que tu fais, dans ta zone, et te les propose ici."
           pro={pro}
+          preview="cards"
         />
       ) : pro ? (
         <div className="suggestions">
@@ -115,6 +116,7 @@ export function SuggestionsSection() {
           title={foundLabel(suggestions.count)}
           note="Proches de ceux que tu fais, dans ta zone. Le Pro te les montre, et te prévient quand il en trouve un nouveau."
           pro={false}
+          preview="cards"
         />
       )}
     </section>
