@@ -1472,6 +1472,7 @@ export type Database = {
         Row: {
           a_relancer: boolean
           activity: string | null
+          activity_secondary: string | null
           brand: string | null
           city: string | null
           contact_channel: string | null
@@ -1496,6 +1497,7 @@ export type Database = {
         Insert: {
           a_relancer?: boolean
           activity?: string | null
+          activity_secondary?: string | null
           brand?: string | null
           city?: string | null
           contact_channel?: string | null
@@ -1520,6 +1522,7 @@ export type Database = {
         Update: {
           a_relancer?: boolean
           activity?: string | null
+          activity_secondary?: string | null
           brand?: string | null
           city?: string | null
           contact_channel?: string | null
@@ -2311,6 +2314,7 @@ export type Database = {
         Returns: {
           a_relancer: boolean
           activity: string
+          activity_secondary: string
           brand: string
           city: string
           contact_channel: string

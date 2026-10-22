@@ -13,6 +13,7 @@ export interface ProspectDetail {
   name: string | null
   brand: string | null
   activity: string | null
+  activity_secondary: string | null
   city: string | null
   email: string | null
   phone: string | null

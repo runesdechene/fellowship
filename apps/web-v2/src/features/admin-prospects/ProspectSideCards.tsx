@@ -15,11 +15,12 @@ import { TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
 import type { ProspectDetail } from './useProspect'
 
-type Field = 'brand' | 'activity' | 'city' | 'phone' | 'source'
+type Field = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'phone' | 'source'
 
 const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'brand', label: 'Marque' },
-  { field: 'activity', label: 'Activité' },
+  { field: 'activity', label: 'Activité principale' },
+  { field: 'activity_secondary', label: 'Activité secondaire' },
   { field: 'city', label: 'Ville' },
   { field: 'phone', label: 'Téléphone' },
   { field: 'source', label: 'Source' },
