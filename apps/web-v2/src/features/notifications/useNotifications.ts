@@ -124,8 +124,8 @@ export function useNotifications() {
       })
   }, [key, refresh])
 
-  /** La cloche s'ouvre : son chiffre s'éteint. Un échec d'écriture le rallumera au prochain
-   *  chargement, sans rien perdre : les notifications, elles, restent non lues. */
+  /** La cloche s'ouvre : son chiffre s'éteint. Un échec d'écriture le rallume aussitôt ; les
+   *  notifications, elles, restent non lues. */
   const markSeen = useCallback(() => {
     const now = new Date()
     setOpenedAt(now)
@@ -134,6 +134,9 @@ export function useNotifications() {
       .from('users')
       .update({ notifications_seen_at: now.toISOString() })
       .eq('actor_id', person.actor_id)
+      .then(({ error }) => {
+        if (error) setOpenedAt(null)
+      })
   }, [person])
 
   /** « Repérer » une nouvelle édition, pour l'acteur à qui la notification a été écrite. */
