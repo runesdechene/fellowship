@@ -114,6 +114,18 @@
   gap: var(--space-4);
 }
 
+/* La note de la page d'un prospect : elle passe à la ligne, et le champ grandit avec elle. */
+.prospect-cell__button--multiline {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.prospect-cell__input--multiline {
+  field-sizing: content;
+  resize: none;
+  overflow-wrap: anywhere;
+}
+
 .prospect-note .prospect-cell__button {
   max-width: var(--prospect-note-width);
   overflow: hidden;

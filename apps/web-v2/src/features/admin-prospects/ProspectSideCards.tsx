@@ -73,7 +73,7 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
         </dl>
       </AdminCard>
       <AdminCard title="Note" Icon={NotebookPen} tone="ocre">
-        <TextCell value={prospect.note} label="Note" onSave={(note) => save({ note })} />
+        <TextCell value={prospect.note} label="Note" multiline onSave={(note) => save({ note })} />
       </AdminCard>
     </>
   )

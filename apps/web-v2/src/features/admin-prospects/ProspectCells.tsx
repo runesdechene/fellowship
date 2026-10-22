@@ -5,7 +5,7 @@
  * ATTENTION — pendant l'écriture et le rechargement, la cellule montre déjà la nouvelle valeur ;
  *            un échec rend l'ancienne et affiche le message.
  */
-import { useRef, useState } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import { CHANNELS, contactLabel, validContactDate } from '@/lib/prospect'
 
 type Save<T> = (next: T) => Promise<void>
@@ -44,11 +44,14 @@ export function TextCell({
   autoOpen = false,
   normalize = (text: string) => text.trim() || null,
   onClose,
+  multiline = false,
 }: {
   value: string | null
   label: string
   onSave: Save<string | null>
   autoOpen?: boolean
+  /** Un texte long (la note) : il passe à la ligne et le champ grandit ; Maj+Entrée va à la ligne. */
+  multiline?: boolean
   /** La forme enregistrée de ce qui est tapé (l'e-mail se range en minuscules). */
   normalize?: (text: string) => string | null
   /** À la fermeture du champ : ce qui part en écriture, null si rien (vide ou Échap). */
@@ -65,27 +68,44 @@ export function TextCell({
     setEditing(true)
   }
 
+  function onKey(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    if (event.key === 'Enter' && !(multiline && event.shiftKey)) {
+      event.preventDefault()
+      event.currentTarget.blur()
+    }
+    if (event.key === 'Escape') {
+      cancelled.current = true
+      event.currentTarget.blur()
+    }
+  }
+
+  function close() {
+    setEditing(false)
+    const next = cancelled.current ? null : normalize(draft)
+    if (!cancelled.current) void save(next, onSave)
+    onClose?.(next)
+  }
+
   if (editing) {
-    return (
-      <input
-        className="prospect-cell__input"
-        aria-label={label}
-        autoFocus
-        value={draft}
+    const field = {
+      'aria-label': label,
+      autoFocus: true,
+      value: draft,
+      onKeyDown: onKey,
+      onBlur: close,
+    }
+    return multiline ? (
+      <textarea
+        {...field}
+        className="prospect-cell__input prospect-cell__input--multiline"
+        rows={1}
         onChange={(event) => setDraft(event.target.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') event.currentTarget.blur()
-          if (event.key === 'Escape') {
-            cancelled.current = true
-            event.currentTarget.blur()
-          }
-        }}
-        onBlur={() => {
-          setEditing(false)
-          const next = cancelled.current ? null : normalize(draft)
-          if (!cancelled.current) void save(next, onSave)
-          onClose?.(next)
-        }}
+      />
+    ) : (
+      <input
+        {...field}
+        className="prospect-cell__input"
+        onChange={(event) => setDraft(event.target.value)}
       />
     )
   }
@@ -93,7 +113,11 @@ export function TextCell({
     <span className="prospect-cell">
       <button
         type="button"
-        className="prospect-cell__button"
+        className={
+          multiline
+            ? 'prospect-cell__button prospect-cell__button--multiline'
+            : 'prospect-cell__button'
+        }
         onClick={open}
         aria-label={shown ? `${label} : ${shown}` : label}
       >
