@@ -1,8 +1,8 @@
 /**
  * QUOI     — charge l'accueil de l'administration : ses chiffres (admin_accueil) et les six
- *            dernières personnes passées.
- * POURQUOI — un seul appel rend tout ce qui se compte ; les personnes se lisent dans `users`, que la
- *            politique ouvre aux admins.
+ *            dernières personnes passées, avec leur enseigne (admin_visiteurs_recents).
+ * POURQUOI — deux fonctions gardées en base : l'une compte, l'autre rejoint les enseignes, dont les
+ *            colonnes sont fermées au client.
  */
 import { useEffect, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
@@ -15,13 +15,7 @@ const RECENT_VISITORS = 6
 async function loadHome() {
   const [figures, visitors] = await Promise.all([
     supabase.rpc('admin_accueil'),
-    supabase
-      .from('users')
-      .select('actor_id, display_name, avatar_url, last_seen_at, visits')
-      .not('last_seen_at', 'is', null)
-      .order('last_seen_at', { ascending: false })
-      .order('actor_id')
-      .limit(RECENT_VISITORS),
+    supabase.rpc('admin_visiteurs_recents', { p_limite: RECENT_VISITORS }),
   ])
   const row = must(figures)[0]
   if (!row) throw new Error('Chiffres indisponibles')

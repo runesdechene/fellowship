@@ -2568,6 +2568,20 @@ export type Database = {
         }[]
       }
       admin_tel: { Args: { p_q: string; p_tel: string }; Returns: boolean }
+      admin_visiteurs_recents: {
+        Args: { p_limite?: number }
+        Returns: {
+          actor_id: string
+          avatar_url: string
+          brand_name: string
+          display_name: string
+          entity_avatar_url: string
+          entity_id: string
+          entity_type: string
+          last_seen_at: string
+          visits: number
+        }[]
+      }
       app_update_audience: { Args: never; Returns: number }
       app_update_email_recipients: {
         Args: never
