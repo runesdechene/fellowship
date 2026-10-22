@@ -1,8 +1,8 @@
 /**
  * QUOI     — le bloc « Pour toi » : 3 festivals proches de ceux que l'exposant fait, chacun avec
  *            sa raison et une icône « Pas pour moi » ; en gratuit, le nombre trouvé sous le voile du Pro.
- * POURQUOI — lot 8d, maquettes 2206:2 (Pro) et 2206:340 (gratuit). Rien à proposer, ou une
- *            lecture ratée : le bloc ne s'affiche pas.
+ * POURQUOI — lot 8d, maquettes 2206:2 (Pro) et 2206:340 (gratuit). Rien à proposer : le bloc
+ *            dit qu'il cherche, en squelettes (maquette 2402:233). Une lecture ratée : il se tait.
  */
 import { ArrowRight, Ban } from 'lucide-react'
 import { useState } from 'react'
@@ -16,6 +16,7 @@ import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { foundLabel, reasonText } from '@/lib/suggestions'
 import { usePlan } from '@/lib/usePlan'
+import { EmptyInvite } from './EmptyInvite'
 import { useSuggestions, type ShownSuggestion } from './useSuggestions'
 
 /** Les cartes sous le voile gratuit : de fausses, le gratuit n'a pas les vraies. */
@@ -80,8 +81,8 @@ export function SuggestionsSection() {
   // et la remplace par la suivante. Si l'écriture échoue, elle revient.
   const [gone, setGone] = useState<string[]>([])
 
-  if (!suggestions || suggestions.count === 0) return null
-  if (pro && suggestions.items.length === 0) return null
+  if (!suggestions) return null
+  const empty = suggestions.count === 0 || (pro && suggestions.items.length === 0)
 
   async function refuse(eventId: string) {
     setGone((ids) => [...ids, eventId])
@@ -98,7 +99,13 @@ export function SuggestionsSection() {
       <p className="dashboard__section-note">
         Des festivals proches de ceux que tu fais, trouvés par Fellowship
       </p>
-      {pro ? (
+      {empty ? (
+        <EmptyInvite
+          title="Je cherche des festivals faits pour toi"
+          note="Fellowship repère les festivals proches de ceux que tu fais, dans ta zone, et te les propose ici."
+          pro={pro}
+        />
+      ) : pro ? (
         <div className="suggestions">
           {suggestions.items.map((item) => (
             <SuggestionCard
@@ -121,7 +128,7 @@ export function SuggestionsSection() {
                   quand il en trouve un nouveau.
                 </p>
               </div>
-              <Button variant="action" onClick={() => go('/pro')}>
+              <Button variant="pro" onClick={() => go('/pro')}>
                 Découvrir le Pro
                 <ArrowRight size={14} strokeWidth={2} />
               </Button>

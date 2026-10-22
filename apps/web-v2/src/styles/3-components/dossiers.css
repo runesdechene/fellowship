@@ -45,6 +45,20 @@
   background: var(--surface-control-hover);
 }
 
+/* Un tableau vide : des lignes en squelettes, inertes (maquette 2402:233). */
+.dossiers__row--skeleton {
+  cursor: default;
+}
+
+.dossiers__row--skeleton:hover {
+  background: none;
+}
+
+.dossiers__identity--skeleton,
+.dossiers__payment--skeleton {
+  gap: var(--space-8);
+}
+
 .dossiers__date {
   display: flex;
   align-items: center;

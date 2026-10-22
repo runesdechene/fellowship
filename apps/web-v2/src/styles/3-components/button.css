@@ -8,6 +8,8 @@
 
 .button {
   display: inline-flex;
+  /* Son libellé ne passe pas à la ligne : serré par son parent, il écrasait son icône en un point. */
+  flex: none;
   align-items: center;
   gap: var(--space-12);
   height: var(--topbar-control-height);
@@ -34,6 +36,13 @@
 .button--action {
   background: var(--action-surface);
   color: var(--action-ink);
+}
+
+/* Le dégradé du logo : l'appel au Pro, la seule couleur vive d'un écran (maquette 2402:233). */
+.button--pro {
+  background: var(--brand-gradient);
+  color: var(--pro-button-ink);
+  transition: filter var(--menu-motion);
 }
 
 /* Sans fond du tout : la croix qui ferme une bande */
@@ -68,6 +77,11 @@
    crème sans se retourner complètement. */
 .button--action:hover:not(:disabled) {
   background: var(--action-surface-hover);
+}
+
+.button--pro:hover:not(:disabled) {
+  background: var(--brand-gradient);
+  filter: brightness(var(--hover-brightness));
 }
 
 /* Les boutons-icônes ont leur propre survol (voir --icon-button-surface) ; il reprend le

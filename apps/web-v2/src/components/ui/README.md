@@ -13,6 +13,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `ProBadge.tsx` — la pastille noire « Pro ».
 - `ProBubble.tsx` — l'invitation Pro en bulle, là où un geste est refusé en gratuit.
 - `ProVeil.tsx` — un contenu flouté et inerte, avec l'invitation par-dessus.
+- `Skeleton.tsx` — les formes grises d'un bloc vide : ligne, point, affiche illustrée.
 - `Poster.tsx` — **la seule affiche** de l'application ; absente, la couleur et l'icône de sa
   catégorie. Sa taille vient de la classe passée.
 - `PosterArt.tsx` — la grande affiche (calendrier, Explorer, vitrine) : compose `Poster`, y écrit

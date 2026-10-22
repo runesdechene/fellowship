@@ -65,6 +65,21 @@
   color: var(--ink-section-pale);
 }
 
+/* Une saison en squelettes, ton sur ton (maquette 2402:233). */
+.season-chart--demo .season-chart__column:not(.season-chart__column--empty) .season-chart__bar {
+  background: var(--skeleton-mid);
+}
+
+.season-chart--demo
+  .season-chart__column:nth-child(even):not(.season-chart__column--empty)
+  .season-chart__bar {
+  background: var(--skeleton-soft);
+}
+
+.season-chart--demo .season-chart__month {
+  color: var(--ink-section-pale);
+}
+
 @media (width <= 760px) {
   .season-chart {
     --chart-bar-min: var(--chart-bar-min-mobile);

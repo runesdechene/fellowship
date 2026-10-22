@@ -1,20 +1,43 @@
 /**
  * QUOI     — la liste des dates suivantes, avec la ville et les amis présents.
- * POURQUOI — « X utilisateurs de Fellowship y vont » : on ne voit que son réseau.
+ * POURQUOI — « X utilisateurs de Fellowship y vont » : on ne voit que son réseau. Sans date,
+ *            trois lignes en squelettes montrent la place qu'elles prendront (maquette 2402:233).
  */
 import { ArrowRight, Check, FolderInput } from 'lucide-react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
+import { SkeletonDot, SkeletonLine } from '@/components/ui/Skeleton'
 import { formatDaysShort } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardDate } from './useDashboard'
 
+/** Les lignes d'une liste vide : largeur du nom, puis de la ville. */
+const SKETCH = [
+  ['150px', '52px'],
+  ['120px', '70px'],
+  ['170px', '44px'],
+] as const
+
 export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
   const go = useTransitionNavigate()
+  const empty = dates.length === 0
 
   return (
-    <section className="upcoming">
-      {dates.length === 0 ? (
-        <p className="upcoming__empty">Aucune autre date programmée.</p>
+    <section className={empty ? 'upcoming skeleton-card' : 'upcoming'}>
+      {empty ? (
+        <ul className="upcoming__list" aria-hidden="true">
+          {SKETCH.map(([name, place]) => (
+            <li key={name} className="upcoming__row upcoming__row--skeleton">
+              <SkeletonDot />
+              <span className="upcoming__identity upcoming__identity--skeleton">
+                <span className="upcoming__line">
+                  <SkeletonLine width={name} tone="strong" />
+                  <SkeletonLine width="34px" />
+                </span>
+                <SkeletonLine width={place} />
+              </span>
+            </li>
+          ))}
+        </ul>
       ) : (
         <ul className="upcoming__list">
           {dates.map((date) => (
@@ -69,7 +92,7 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
           go('/calendrier')
         }}
       >
-        Voir tout le calendrier
+        {empty ? 'Tes prochaines dates s’alignent ici' : 'Voir tout le calendrier'}
         <ArrowRight size={14} strokeWidth={2} />
       </button>
     </section>

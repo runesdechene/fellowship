@@ -1,0 +1,99 @@
+/**
+ * QUOI     — les styles des squelettes (components/ui/Skeleton.tsx) et du cadre d'un bloc vide.
+ * POURQUOI — maquette 2402:233 : un bloc vide passe en gris-beige, sans filet, et ses lignes se
+ *            devinent ton sur ton.
+ * ATTENTION — importé après les blocs du tableau de bord : `.skeleton-card` repeint leur cadre.
+ */
+
+.skeleton-card {
+  background: var(--skeleton-surface);
+  border-color: transparent;
+  box-shadow: var(--skeleton-shadow);
+}
+
+.skeleton-line {
+  display: block;
+  flex: none;
+  width: var(--skeleton-width);
+  max-width: 100%;
+  height: var(--skeleton-line-height);
+  border-radius: var(--radius-chip);
+}
+
+.skeleton-line--strong {
+  height: var(--skeleton-title-height);
+  background: var(--skeleton-strong);
+}
+
+.skeleton-line--mid {
+  background: var(--skeleton-mid);
+}
+
+.skeleton-line--soft {
+  background: var(--skeleton-soft);
+}
+
+.skeleton-dot {
+  flex: none;
+  width: var(--skeleton-dot-size);
+  height: var(--skeleton-dot-size);
+  border-radius: var(--radius-round);
+  background: var(--skeleton-strong);
+}
+
+/* --- L'affiche : soleil et colline en pseudo-éléments, deux lignes de titre ----------------- */
+.skeleton-poster {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-poster-inset);
+  background: var(--skeleton-poster);
+}
+
+.skeleton-poster::before,
+.skeleton-poster::after,
+.skeleton-poster__title,
+.skeleton-poster__subtitle {
+  position: absolute;
+  content: '';
+  background: var(--skeleton-poster-mark);
+}
+
+.skeleton-poster::before {
+  top: 16%;
+  left: 27%;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  opacity: 0.45;
+}
+
+.skeleton-poster::after {
+  top: 52%;
+  left: -30%;
+  width: 160%;
+  height: 50%;
+  border-radius: var(--radius-round);
+  opacity: 0.25;
+}
+
+.skeleton-poster__title,
+.skeleton-poster__subtitle {
+  z-index: 1;
+  border-radius: var(--radius-chip);
+}
+
+.skeleton-poster__title {
+  top: 72%;
+  right: 18%;
+  left: 18%;
+  height: 4.5%;
+}
+
+.skeleton-poster__subtitle {
+  top: 81%;
+  right: 30%;
+  left: 30%;
+  height: 3.5%;
+  opacity: 0.6;
+}

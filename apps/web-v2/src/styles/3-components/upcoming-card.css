@@ -127,9 +127,21 @@
   cursor: pointer;
 }
 
-.upcoming__empty {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
+/* Une liste vide : des lignes en squelettes, inertes. */
+.upcoming__row--skeleton {
+  cursor: default;
+}
+
+.upcoming__row--skeleton:hover {
+  background: none;
+}
+
+.upcoming__identity--skeleton {
+  gap: var(--space-8);
+}
+
+.upcoming__line .skeleton-line {
+  align-self: center;
 }
 
 @media (width <= 760px) {

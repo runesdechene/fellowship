@@ -45,6 +45,8 @@
 @import './3-components/dossiers.css';
 @import './3-components/reports.css';
 @import './3-components/suggestions.css';
+@import './3-components/empty-invite.css';
+@import './3-components/skeleton.css';
 @import './3-components/poster-empty.css';
 @import './3-components/who-goes.css';
 @import './3-components/community.css';

@@ -1,18 +1,19 @@
 /**
- * QUOI     — le bouton de l'app, en quatre variantes : solid, icon, action, bare.
+ * QUOI     — le bouton de l'app, en cinq variantes : solid, icon, action, pro, bare.
  * POURQUOI — un seul bouton pour toute l'app : le survol et le focus vivent sur `.button`, donc
  *            tout bouton réagit pareil (le survol n'existait nulle part avant le 20/08/2026).
  * ATTENTION — `action` est réservé à l'action que l'interface réclame ; pas une couleur d'humeur.
  */
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
-type Variant = 'solid' | 'icon' | 'action' | 'bare'
+type Variant = 'solid' | 'icon' | 'action' | 'pro' | 'bare'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * `solid`  fond crème, le cas courant
    * `icon`   carré, icône seule, sur fond crème (la cloche)
    * `action` fond plein coloré — réservé à l'action réclamée par l'interface
+   * `pro`    le dégradé terre du logo — « Découvrir le Pro », pour attirer l'œil
    * `bare`   sans fond ni surface (la croix de fermeture)
    */
   variant?: Variant
