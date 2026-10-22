@@ -1223,6 +1223,9 @@
   --notif-panel-width: 420px;
   --notif-picture-size: 32px; /* la taille de la pastille d’icône */
   --notif-poster-height: 44px;
+  --notif-account-avatar: var(--size-16);
+  --type-notif-account: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
+  --type-notif-account-initial: var(--weight-semibold) var(--size-10) / 1 var(--family-sans);
   --notif-panel-max-height: min(652px, 75vh);
 
   /* =========================================================================

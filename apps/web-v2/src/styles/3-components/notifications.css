@@ -182,6 +182,26 @@
   color: var(--reports-pale-ink);
 }
 
+/* Le compte prévenu, après l'heure et son point (maquette 2414:233, option A). */
+.notif__account {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-notif-account);
+  color: var(--ink-soft);
+}
+
+.notif__account::before {
+  content: '·';
+  color: var(--reports-pale-ink);
+}
+
+.notif__account-avatar {
+  --avatar-size: var(--notif-account-avatar);
+
+  font: var(--type-notif-account-initial);
+}
+
 .notif__dot {
   flex: none;
   width: var(--dot-size);

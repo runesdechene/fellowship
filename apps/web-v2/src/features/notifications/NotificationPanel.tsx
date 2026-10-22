@@ -5,7 +5,8 @@
  *            clic la marque lue et mène où elle parle.
  *            En tête, le bloc « Demandes d'ami · Nouveaux abonnés » (NetworkBlock), quand il a à dire.
  *            Une personne montre son visage, une date son affiche ; sans image, l'icône (Uriel,
- *            19/10/2026). Sur téléphone, il prend toute la page et se ferme par sa croix (Uriel, 19/10/2026).
+ *            19/10/2026). Avec plusieurs comptes, chaque ligne nomme celui qu'elle prévient, à côté
+ *            de l'heure (Uriel, 22/10/2026, maquette 2414:233, option A). Sur téléphone, il prend toute la page et se ferme par sa croix (Uriel, 19/10/2026).
  * ATTENTION — le pied (PanelFoot) mène aux Réglages et propose d'activer le téléphone (lot 8e).
  */
 import {
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { Avatar } from '@/components/ui/Avatar'
+import { useAuth } from '@/lib/auth'
 import { timeAgo } from '@/lib/dates'
 import { posterThumb } from '@/lib/poster-thumb'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -100,6 +102,7 @@ export function NotificationPanel({
   network,
 }: NotificationPanelProps) {
   const go = useTransitionNavigate()
+  const { actors } = useAuth()
   const now = new Date()
   const groups = groupByDay(views, now)
 
@@ -133,6 +136,8 @@ export function NotificationPanel({
           <h3 className="notif-panel__day">{group.label}</h3>
           {group.items.map((view) => {
             const Icon = ICONS[view.icon]
+            const account =
+              actors.length > 1 ? actors.find((actor) => actor.id === view.ownerId) : undefined
             const open = () => {
               if (!view.read) onRead(view.id)
               onClose()
@@ -168,6 +173,16 @@ export function NotificationPanel({
                   </button>
                   <span className="notif__meta">
                     <span className="notif__time">{timeAgo(view.at, now)}</span>
+                    {account && (
+                      <span className="notif__account">
+                        <Avatar
+                          className="notif__account-avatar"
+                          src={account.avatarUrl}
+                          name={account.label}
+                        />
+                        {account.label}
+                      </span>
+                    )}
                     {view.action && (
                       <MarkButton
                         ownerId={view.ownerId}
