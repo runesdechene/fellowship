@@ -316,6 +316,32 @@
   display: none;
 }
 
+/* Une rangée vide : des cartes devinées, inertes (maquette 2402:233). */
+.rail__track--ghost {
+  cursor: default;
+}
+
+.explore-card--ghost {
+  gap: var(--space-12);
+}
+
+.explore-card__ghost-poster {
+  width: 100%;
+  height: var(--explore-poster-height);
+}
+
+.explore-card__ghost-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.explore-card__ghost-faces {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
 /* --- La carte -------------------------------------------------------------- */
 .explore-card {
   --poster-art-height: var(--explore-poster-height);
