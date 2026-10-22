@@ -1,0 +1,150 @@
+/**
+ * QUOI     — la courbe de tendance (components/ui/TrendLine.tsx) : teinte, trait, voile, point,
+ *            graduations et survol.
+ * POURQUOI — la teinte vient de la classe `trend-line--<ton>` (dégradé du logo ou ton de
+ *            l'administration) ; la hauteur se règle par celui qui la pose, avec
+ *            --trend-line-height.
+ */
+
+.trend-line {
+  display: flex;
+  gap: var(--space-12);
+  width: 100%;
+  height: var(--trend-line-height);
+}
+
+.trend-line--logo {
+  --trend-start: var(--trend-logo-start);
+  --trend-end: var(--trend-logo-end);
+}
+
+.trend-line--prune {
+  --trend-start: var(--tone-prune-ink);
+  --trend-end: var(--tone-prune-ink);
+}
+
+.trend-line--bleu {
+  --trend-start: var(--tone-bleu-ink);
+  --trend-end: var(--tone-bleu-ink);
+}
+
+.trend-line--sauge {
+  --trend-start: var(--tone-sauge-ink);
+  --trend-end: var(--tone-sauge-ink);
+}
+
+.trend-line--ocre {
+  --trend-start: var(--tone-ocre-ink);
+  --trend-end: var(--tone-ocre-ink);
+}
+
+.trend-line__start {
+  stop-color: var(--trend-start);
+}
+
+.trend-line__end {
+  stop-color: var(--trend-end);
+}
+
+.trend-line__ticks {
+  position: relative;
+  flex: none;
+  width: var(--trend-line-ticks-width);
+}
+
+.trend-line__tick {
+  position: absolute;
+  top: var(--y);
+  right: 0;
+  translate: 0 -50%;
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.trend-line__plot {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.trend-line__plot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.trend-line__grid {
+  stroke: var(--line-card);
+  stroke-width: 1;
+}
+
+.trend-line__area {
+  opacity: var(--trend-line-wash);
+}
+
+.trend-line__line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trend-line__dot {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: var(--trend-line-dot);
+  height: var(--trend-line-dot);
+  border: 2px solid var(--surface-card);
+  border-radius: var(--radius-round);
+  background: var(--trend-end);
+  translate: -50% -50%;
+}
+
+/* Survol : une bande par point, un filet vertical et la valeur au-dessus de la courbe. */
+.trend-line__slot {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--x);
+  width: var(--trend-line-slot);
+  translate: -50% 0;
+}
+
+.trend-line__slot::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px solid var(--line-card);
+  content: '';
+  opacity: 0;
+}
+
+.trend-line__tip {
+  position: absolute;
+  bottom: calc(100% - var(--y) + var(--space-10));
+  left: 50%;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+  background: var(--action-surface);
+  font: var(--type-list-meta);
+  white-space: nowrap;
+  color: var(--action-ink);
+  opacity: 0;
+  translate: -50% 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.trend-line__slot:hover::before,
+.trend-line__slot:hover .trend-line__tip {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trend-line__tip {
+    transition: none;
+  }
+}

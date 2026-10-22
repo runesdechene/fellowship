@@ -27,7 +27,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `PersonCard.tsx` — la carte d’une personne : visage, nom, raison, action (arrivée).
 - `DateCard.tsx` — la carte d’une date : affiche, nom, période, action (arrivée).
 - `AdminStats.tsx` — la rangée de chiffres d'une page d'administration (Comptes, accueil).
-- `BarStrip.tsx` — une rangée de barres sans chiffres, la période en cours pleine (accueil de l'administration).
+- `TrendLine.tsx` — une courbe de tendance lissée et colorée, son échelle et ses valeurs au survol (accueil de l'administration).
 - `IconTile.tsx` — la pastille carrée teintée qui porte une icône (sept tons de l'administration).
 - `TypeChip.tsx` — la pastille du type d'enseigne (exposant, festival, entreprise, sans enseigne).
 - `OfferBadge.tsx` — l'offre d'une enseigne : Pro / Essai / Gratuit, puis le détail.

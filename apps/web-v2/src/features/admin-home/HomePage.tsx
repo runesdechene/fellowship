@@ -7,7 +7,7 @@
  */
 import { CalendarDays, CircleAlert, Sparkles, Users } from 'lucide-react'
 import { AdminStats } from '@/components/ui/AdminStats'
-import { BarStrip } from '@/components/ui/BarStrip'
+import { TrendLine } from '@/components/ui/TrendLine'
 import { counted, visitorsHeadline, visitorsLine } from '@/lib/admin-home'
 import { addDays, formatDayMonthShort } from '@/lib/dates'
 import { HomeActivity } from './HomeActivity'
@@ -36,7 +36,13 @@ export function HomePage() {
       </header>
 
       <HomeCard title="Visiteurs par jour" hint="les 30 derniers jours" className="home-pulse">
-        <BarStrip values={days} label="Visiteurs par jour, sur 30 jours" />
+        <TrendLine
+          values={days}
+          label="Visiteurs par jour, sur 30 jours"
+          tone="logo"
+          scale
+          names={days.map((_, index) => formatDayMonthShort(addDays(now, index + 1 - days.length)))}
+        />
         <div className="home-pulse__axis">
           <span>{formatDayMonthShort(addDays(now, 1 - days.length))}</span>
           <span className="home-pulse__today">aujourd’hui, {days.at(-1) ?? 0}</span>
