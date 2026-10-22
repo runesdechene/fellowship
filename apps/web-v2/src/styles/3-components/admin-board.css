@@ -252,7 +252,6 @@
 
 .deck-card__text {
   font: var(--type-board-card);
-  letter-spacing: var(--tracking-tight);
   color: var(--board-card-ink);
   overflow-wrap: anywhere;
 }
@@ -508,7 +507,7 @@
 }
 
 .done-card__text {
-  font: var(--type-board-small);
+  font: var(--type-board-done-card);
   color: var(--board-done-ink);
 }
 

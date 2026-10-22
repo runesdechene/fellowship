@@ -167,6 +167,8 @@
   --family-display: 'Instrument Serif', georgia, 'Times New Roman', serif;
   /* Le nom Fellowship : la police de Runes de Chêne (Uriel, 14/10/2026 ; décision 0007). */
   --family-brand: 'Cabin', system-ui, sans-serif;
+  /* L'écriture à la main des cartes du tableau des tâches (Uriel, 22/10/2026). */
+  --family-hand: 'Kalam', 'Comic Sans MS', cursive;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)
@@ -187,6 +189,7 @@
   --size-28: 28px;
   --size-30: 30px;
   --size-32: 32px;
+  --size-34: 34px;
   --size-36: 36px;
   --size-40: 40px;
   --size-38: 38px;

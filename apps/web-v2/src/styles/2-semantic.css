@@ -1041,10 +1041,11 @@
   --type-board-zone: var(--weight-semibold) var(--size-17) / var(--leading-snug) var(--family-sans);
   --type-board-count: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
   --board-card-ink: var(--ink-700);
-  --type-board-card: var(--weight-semibold) var(--size-32) / var(--leading-tight) var(--family-sans);
-  --type-board-team-card: var(--weight-semibold) var(--size-15) / var(--leading-snug)
-    var(--family-sans);
-  --type-board-note: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-board-card: var(--weight-bold) var(--size-34) / var(--leading-tight) var(--family-hand);
+  --type-board-team-card: var(--weight-bold) var(--size-16) / var(--leading-snug) var(--family-hand);
+  --type-board-note: var(--weight-regular) var(--size-15) / var(--leading-snug) var(--family-hand);
+  --type-board-done-card: var(--weight-regular) var(--size-14) / var(--leading-snug)
+    var(--family-hand);
   --type-board-small: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-board-meta: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-board-action: var(--weight-semibold) var(--size-14) / var(--leading-snug)
