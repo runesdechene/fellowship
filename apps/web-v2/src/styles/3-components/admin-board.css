@@ -26,6 +26,7 @@
 }
 
 .board-page__title {
+  letter-spacing: var(--tracking-tight);
   font: var(--type-board-title);
   color: var(--ink-title);
 }

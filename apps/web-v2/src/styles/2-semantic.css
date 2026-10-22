@@ -1035,7 +1035,7 @@
   --type-board-cheer: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-board-plus: var(--weight-semibold) var(--size-14) / 1 var(--family-sans);
   --type-board-date: var(--weight-semibold) var(--size-11) / var(--leading-snug) var(--family-sans);
-  --type-board-title: var(--weight-regular) var(--size-56) / 1 var(--family-display);
+  --type-board-title: var(--weight-semibold) var(--size-56) / 1 var(--family-sans);
   --type-board-week-label: var(--weight-medium) var(--size-12) / var(--leading-snug)
     var(--family-sans);
   --type-board-zone: var(--weight-semibold) var(--size-17) / var(--leading-snug) var(--family-sans);
