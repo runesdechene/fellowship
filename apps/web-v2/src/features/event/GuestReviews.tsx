@@ -8,6 +8,7 @@
 import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { Stars } from '@/components/ui/Stars'
+import { moreReviewsLink } from '@/lib/apercu'
 import { formatScore } from '@/lib/reviews'
 import { loginReturning } from '@/lib/welcome'
 import type { FicheApercu } from './useFicheApercu'
@@ -16,7 +17,7 @@ export function GuestReviews({ apercu }: { apercu: FicheApercu }) {
   const { pathname } = useLocation()
   const { reviews, score, excerpt, excerptYear } = apercu
   if (reviews === 0 || score === null) return null
-  const others = reviews - 1
+  const more = moreReviewsLink(reviews, Boolean(excerpt))
 
   return (
     <section className="event-page__block">
@@ -40,10 +41,10 @@ export function GuestReviews({ apercu }: { apercu: FicheApercu }) {
           </figure>
         )}
       </div>
-      {others > 0 && (
+      {more && (
         <div className="reviews__actions">
           <Link className="reviews__link" to={loginReturning(pathname)}>
-            Lire les {others} autres avis, avec ton compte gratuit
+            {more}
             <ArrowRight size={13} strokeWidth={2} />
           </Link>
         </div>

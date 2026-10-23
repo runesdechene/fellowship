@@ -44,3 +44,14 @@ export function goingLine(exposants: number, metiers: Metier[]): GoingLine | nul
   const more = named < exposants ? '…' : ''
   return { count, crafts: metiers.map((metier) => lowerFirst(metier.metier)).join(', ') + more }
 }
+
+/** Le lien vers les avis qu'un visiteur ne lit pas encore : sans extrait affiché, aucun n'est
+ *  « autre ». Null quand tout est déjà montré. */
+export function moreReviewsLink(reviews: number, excerptShown: boolean): string | null {
+  const hidden = excerptShown ? reviews - 1 : reviews
+  if (hidden <= 0) return null
+  if (hidden === 1)
+    return `Lire ${excerptShown ? 'l’autre avis' : 'l’avis'}, avec ton compte gratuit`
+  const others = excerptShown ? 'autres ' : ''
+  return `Lire les ${String(hidden)} ${others}avis, avec ton compte gratuit`
+}

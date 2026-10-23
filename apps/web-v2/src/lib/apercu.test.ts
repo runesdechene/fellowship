@@ -3,7 +3,7 @@
  * POURQUOI — la ligne s'écrit avec des métiers saisis en texte libre ; la logique se teste ici,
  *            sans navigateur (.claude/rules/dev.md).
  */
-import { goingLine, metiersFrom } from './apercu'
+import { goingLine, metiersFrom, moreReviewsLink } from './apercu'
 
 describe('goingLine', () => {
   it('nomme le nombre, puis les métiers', () => {
@@ -43,5 +43,22 @@ describe('metiersFrom', () => {
     expect(metiersFrom([{ metier: 'Auteur' }, 'x', { metier: 'Potier', n: 2 }])).toEqual([
       { metier: 'Potier', n: 2 },
     ])
+  })
+})
+
+describe('moreReviewsLink', () => {
+  it('compte les avis qu’on ne montre pas, au singulier comme au pluriel', () => {
+    expect(moreReviewsLink(3, true)).toBe('Lire les 2 autres avis, avec ton compte gratuit')
+    expect(moreReviewsLink(2, true)).toBe('Lire l’autre avis, avec ton compte gratuit')
+  })
+
+  it('sans extrait affiché, aucun avis n’est « autre »', () => {
+    expect(moreReviewsLink(3, false)).toBe('Lire les 3 avis, avec ton compte gratuit')
+    expect(moreReviewsLink(1, false)).toBe('Lire l’avis, avec ton compte gratuit')
+  })
+
+  it('se tait quand tout est déjà montré', () => {
+    expect(moreReviewsLink(1, true)).toBeNull()
+    expect(moreReviewsLink(0, false)).toBeNull()
   })
 })
