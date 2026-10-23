@@ -31,7 +31,7 @@ interface Props {
   rows: ProspectRow[]
   /** Un prospect en cours d'ajout : la ligne de tête n'a que son nom. */
   adding: boolean
-  onAdd: (name: string | null) => Promise<void>
+  onAdd: (brand: string | null) => Promise<void>
   /** La ligne d'ajout quittée sans rien taper (ou par Échap) disparaît. */
   onCancelAdd: () => void
   onChanged: () => void
@@ -81,7 +81,7 @@ export function ProspectsTable({
               <td>
                 <TextCell
                   value={null}
-                  label="Nom"
+                  label="Marque"
                   autoOpen
                   onSave={onAdd}
                   onClose={(sent) => {
@@ -132,7 +132,7 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
       <td>
         <span className="admin-table__identity">
           <Link to={`/admin/prospects/${row.id}`} className="admin-table__name prospect-name">
-            {row.name ?? row.email ?? 'Sans nom'}
+            {row.name ?? row.brand ?? row.email ?? 'Sans nom'}
           </Link>
           <span className="admin-table__meta prospect-place">
             <TextCell value={row.brand} label="Marque" onSave={text('brand')} />

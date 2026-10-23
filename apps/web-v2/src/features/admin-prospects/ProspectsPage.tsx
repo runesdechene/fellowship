@@ -59,10 +59,10 @@ export function ProspectsPage() {
   }
 
   // Un échec laisse la ligne ouverte : la cellule affiche le message.
-  async function add(name: string | null) {
-    if (name !== null) await insertProspect({ name })
+  async function add(brand: string | null) {
+    if (brand !== null) await insertProspect({ brand })
     setAdding(false)
-    if (name !== null) reload()
+    if (brand !== null) reload()
   }
 
   async function confirm() {
