@@ -15,7 +15,7 @@ import type { ProspectRow } from './useProspects'
 const COLUMNS = [
   'Personne',
   'Activité',
-  'E-mail',
+  'Contact',
   'Suivi par',
   'Source',
   'Dernier échange',
@@ -25,7 +25,7 @@ const COLUMNS = [
   'Relance',
 ] as const
 
-type TextField = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'source' | 'note'
+type TextField = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'phone' | 'source' | 'note'
 
 interface Props {
   rows: ProspectRow[]
@@ -154,12 +154,15 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
         </span>
       </td>
       <td className="admin-table__text">
-        <TextCell
-          value={row.email}
-          label="E-mail"
-          normalize={normalizeEmail}
-          onSave={(next) => save({ email: next })}
-        />
+        <span className="prospect-stack">
+          <TextCell
+            value={row.email}
+            label="E-mail"
+            normalize={normalizeEmail}
+            onSave={(next) => save({ email: next })}
+          />
+          <TextCell value={row.phone} label="Téléphone" onSave={text('phone')} />
+        </span>
       </td>
       <td className="admin-table__text">{row.owner_name ?? '—'}</td>
       <td className="admin-table__text">
