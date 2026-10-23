@@ -3,8 +3,6 @@
  *            recherche, la preuve, et le mur d'affiches.
  * POURQUOI — maquette 2290:2 (nœud 2290:3) ; positionnement du 19/10/2026 : ne plus rien rater,
  *            grâce au calendrier connecté aux amis. Le nombre d'exposants et les visages (de vrais avatars) sont lus en base.
- *            La ligne « Conçu par Runes de Chêne » vient du Concile (maquette 2458:2329) : le
- *            fondateur est exposant, c'est ce qu'aucun annuaire ne peut acheter.
  * ATTENTION — la recherche mène aux résultats publics, /festivals (lot 11b).
  */
 import { posterThumb } from '@/lib/poster-thumb'
@@ -50,9 +48,6 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
             {showcase.exhibitors.toLocaleString('fr-FR')} exposants y tiennent déjà leur saison
           </p>
         ) : null}
-        <p className="landing-opening__maker">
-          Conçu par Runes de Chêne, exposants sur les marchés chaque saison.
-        </p>
       </div>
     </div>
   )

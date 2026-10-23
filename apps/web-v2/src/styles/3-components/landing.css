@@ -255,12 +255,6 @@ select.landing-search__value {
 }
 
 /* --- La preuve : de vrais avatars, et le vrai nombre d'exposants ----------------------- */
-/* Le fondateur est exposant : la preuve qu'aucun annuaire ne peut acheter. */
-.landing-opening__maker {
-  font: var(--type-landing-proof);
-  color: var(--landing-cream-soft);
-}
-
 .landing-proof {
   display: flex;
   align-items: center;
