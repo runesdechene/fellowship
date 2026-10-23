@@ -28,6 +28,12 @@
   gap: var(--space-20);
 }
 
+/* Le fil de la barre latérale, posé en carte : sa marge de pied n'a plus lieu d'être. */
+.admin-home .network-activity {
+  gap: 0;
+  margin-bottom: 0;
+}
+
 /* Les blocs */
 .home-card__head {
   display: flex;

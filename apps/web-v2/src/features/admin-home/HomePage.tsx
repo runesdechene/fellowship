@@ -1,7 +1,7 @@
 /**
  * QUOI     — l'accueil de l'administration (`/admin/accueil`) : le titre qui dit qui est venu, les
  *            visiteurs jour par jour, quatre chiffres, ce que font les gens, ce qu'il reste à
- *            traiter et les dernières personnes passées.
+ *            traiter, les dernières personnes passées et le fil « Activité du réseau ».
  * POURQUOI — une vision globale de la santé de l'application en arrivant (Uriel, 22/10/2026,
  *            maquette 2448:233).
  */
@@ -10,6 +10,7 @@ import { AdminStats } from '@/components/ui/AdminStats'
 import { TrendLine } from '@/components/ui/TrendLine'
 import { counted, visitorsHeadline, visitorsLine } from '@/lib/admin-home'
 import { addDays, formatDayMonthShort } from '@/lib/dates'
+import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { HomeActivity } from './HomeActivity'
 import { HomeCard } from './HomeCard'
 import { HomeTodo } from './HomeTodo'
@@ -91,7 +92,10 @@ export function HomePage() {
           <HomeActivity figures={figures} />
           <HomeTodo figures={figures} />
         </div>
-        <RecentVisitors visitors={visitors} now={now} />
+        <div className="admin-home__column">
+          <RecentVisitors visitors={visitors} now={now} />
+          <NetworkActivity className="admin-card" />
+        </div>
       </div>
     </div>
   )

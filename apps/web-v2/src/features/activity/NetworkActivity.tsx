@@ -1,6 +1,6 @@
 /**
- * QUOI     — le fil « Activité du réseau » en bas de la barre latérale : quatre nouvelles du
- *            réseau, la plus récente en haut, avec leur âge.
+ * QUOI     — le fil « Activité du réseau » en bas de la barre latérale (sur l'accueil en mode
+ *            admin) : quatre nouvelles du réseau, la plus récente en haut, avec leur âge.
  * POURQUOI — voir le réseau bouger donne envie de revenir ; c'est le seul vert de l'interface,
  *            le point « en direct ». « Tout voir » mène à la page Communauté.
  */
@@ -32,7 +32,7 @@ function Mention({
   )
 }
 
-export function NetworkActivity() {
+export function NetworkActivity({ className }: { className?: string }) {
   const { actor } = useAuth()
   const { items, error } = useNetworkActivity(actor?.id)
   const go = useTransitionNavigate()
@@ -41,7 +41,10 @@ export function NetworkActivity() {
   const now = new Date()
 
   return (
-    <section className="network-activity" aria-label="Activité du réseau">
+    <section
+      className={className ? `network-activity ${className}` : 'network-activity'}
+      aria-label="Activité du réseau"
+    >
       <h2 className="network-activity__title">
         <span className="network-activity__live" aria-hidden="true" />
         Activité du réseau

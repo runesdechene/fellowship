@@ -187,7 +187,8 @@ export function Sidebar({ collapsed, onToggle, friendRequests, updatesUnread }: 
       )}
 
       <div className="sidebar__foot">
-        {!collapsed && <NetworkActivity />}
+        {/* En admin, le fil vit sur l'accueil : ici il débordait sur la navigation des petits écrans. */}
+        {!collapsed && !adminMode && <NetworkActivity />}
         <VersionLine unread={updatesUnread} />
         <ThemeSwitch compact={collapsed} />
       </div>
