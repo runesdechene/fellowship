@@ -6,7 +6,9 @@
  * ATTENTION — « Commencer » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
  *            `away` : la barre posée sur une page publique (résultats, fiche, lot 11b) — ses liens
- *            ramènent à la landing, et elle est compacte d'emblée (rien de sombre derrière elle).
+ *            ramènent à la landing, et elle est compacte d'emblée. `paper` : claire, posée sur le
+ *            papier de la fiche vue sans compte (maquette 2482:878) ; la recherche publique garde
+ *            la barre brune, posée sur son en-tête sombre.
  */
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -23,7 +25,13 @@ const CHAPTERS = [
 
 const IDS = CHAPTERS.map((c) => c.id)
 
-export function LandingTopBar({ away = false }: { away?: boolean }) {
+export function LandingTopBar({
+  away = false,
+  paper = false,
+}: {
+  away?: boolean
+  paper?: boolean
+}) {
   const { compact, active } = useLandingNav(IDS)
   const nav = useRef<HTMLElement>(null)
   // Hors de la landing, une ancre seule ne mène nulle part : elle passe par la landing.
@@ -37,7 +45,7 @@ export function LandingTopBar({ away = false }: { away?: boolean }) {
   }, [active])
 
   return (
-    <header className={`landing-bar${compact || away ? ' is-compact' : ''}`}>
+    <header className={`landing-bar${paper ? ' is-paper' : compact || away ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
         <a
           className="landing-bar__brand"

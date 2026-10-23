@@ -1,0 +1,26 @@
+/**
+ * QUOI     — le bas de la fiche vue sans compte (features/event/GuestPitch.tsx) : la séquence
+ *            de la landing, puis l'appel à créer un compte, centré.
+ * POURQUOI — maquette 2482:878 ; la séquence garde ses propres styles (landing-compare.css).
+ */
+.guest-pitch {
+  margin-top: var(--space-80);
+}
+
+.guest-pitch__call {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: center;
+  margin-top: var(--space-40);
+}
+
+.guest-pitch__button {
+  background: var(--ink-title);
+  color: var(--surface-app);
+}
+
+.guest-pitch__note {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}

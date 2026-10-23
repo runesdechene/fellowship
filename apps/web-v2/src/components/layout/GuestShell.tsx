@@ -13,7 +13,7 @@ import { PosterWall } from './PosterWall'
 export function GuestShell({ children }: { children: ReactNode }) {
   return (
     <PageChromeProvider>
-      <LandingTopBar away />
+      <LandingTopBar away paper />
       <div className="guest-shell">
         <main className="guest-shell__main">{children}</main>
         <PosterWall />

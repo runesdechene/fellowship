@@ -27,6 +27,7 @@ import { eventPoint } from '@/lib/distance'
 import { AddMissing, KeptUpToDate } from './KeptUpToDate'
 import { DiscussionBlock } from './DiscussionBlock'
 import { Breadcrumb } from './Breadcrumb'
+import { GuestPitch } from './GuestPitch'
 import { GuestReviews } from './GuestReviews'
 import { useFicheApercu } from './useFicheApercu'
 import { goingLine } from '@/lib/apercu'
@@ -432,6 +433,7 @@ export function EventPage() {
         {past && member && (
           <MyReportBlock eventId={event.id} ledger={ledger} net={net} revenue={revenue} pro={pro} />
         )}
+        {!member && <GuestPitch />}
       </div>
     </div>
   )
