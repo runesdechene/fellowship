@@ -12,7 +12,7 @@ import { AdminCard } from '@/components/ui/AdminCard'
 import { Select } from '@/components/ui/Select'
 import { SheetRow } from '@/components/ui/SheetRow'
 import { contactLabel, normalizeEmail } from '@/lib/prospect'
-import { TextCell } from './ProspectCells'
+import { CheckCell, TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
 import type { ProspectDetail } from './useProspect'
 
@@ -89,6 +89,14 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
               />
             </SheetRow>
           ))}
+          <SheetRow label="Festival en commun">
+            <CheckCell
+              checked={prospect.festival_commun}
+              label="Festival en commun"
+              title="Il a déjà fait un festival avec Mathéo ou Uriel"
+              onSave={(festival_commun) => save({ festival_commun })}
+            />
+          </SheetRow>
           <SheetRow label="Dernier échange">
             {contactLabel(prospect.contact_channel, prospect.contacted_on) ?? '—'}
           </SheetRow>

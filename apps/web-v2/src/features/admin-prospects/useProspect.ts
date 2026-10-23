@@ -28,6 +28,8 @@ export interface ProspectDetail {
   contacted_on: string | null
   email_status: string
   a_relancer: boolean
+  /** Il a déjà fait un festival avec nous : le premier contact n'est pas à froid. */
+  festival_commun: boolean
   user_id: string | null
   user_name: string | null
   owner_id: string | null
