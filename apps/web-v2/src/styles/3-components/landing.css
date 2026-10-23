@@ -255,6 +255,12 @@ select.landing-search__value {
 }
 
 /* --- La preuve : de vrais avatars, et le vrai nombre d'exposants ----------------------- */
+/* Le fondateur est exposant : la preuve qu'aucun annuaire ne peut acheter. */
+.landing-opening__maker {
+  font: var(--type-landing-proof);
+  color: var(--landing-cream-soft);
+}
+
 .landing-proof {
   display: flex;
   align-items: center;
@@ -525,7 +531,9 @@ select.landing-search__value {
 }
 
 /* --- La bande Assistant ------------------------------------------------------------ */
-.landing-assistant .landing-band__inner {
+/* Les écrans se placent dans le corps de la bande, sous la comparaison qui l'ouvre. */
+.landing-assistant__body {
+  position: relative;
   min-height: var(--landing-assistant-height);
 }
 
@@ -623,7 +631,7 @@ select.landing-search__value {
   padding-bottom: calc(var(--landing-slant) + var(--space-64));
 }
 
-.landing-pro .landing-band__inner {
+.landing-pro__main {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -855,7 +863,7 @@ select.landing-search__value {
    La maquette place ses éléments au pixel pour 1728 px : en dessous de 1600, chaque bande
    empile son texte puis ses écrans, et une fenêtre trop large se laisse rogner à droite. */
 @media (width <= 1600px) {
-  .landing-assistant .landing-band__inner,
+  .landing-assistant__body,
   .landing-community .landing-band__inner {
     min-height: 0;
   }
@@ -899,12 +907,12 @@ select.landing-search__value {
   }
 
   .landing-soon__hunt,
-  .landing-pro .landing-band__inner {
+  .landing-pro__main {
     flex-direction: column-reverse;
     align-items: flex-start;
   }
 
-  .landing-pro .landing-band__inner {
+  .landing-pro__main {
     flex-direction: column;
   }
 }
@@ -977,7 +985,7 @@ select.landing-search__value {
   }
 
   /* Les écrans passent sous leur texte, à la largeur de l'écran. */
-  .landing-assistant .landing-band__inner {
+  .landing-assistant__body {
     min-height: 0;
   }
 
@@ -1046,7 +1054,7 @@ select.landing-search__value {
     width: 100%;
   }
 
-  .landing-pro .landing-band__inner {
+  .landing-pro__main {
     flex-direction: column;
     align-items: stretch;
   }

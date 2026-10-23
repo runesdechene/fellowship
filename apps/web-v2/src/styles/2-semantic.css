@@ -1723,6 +1723,41 @@
   --landing-hunt-thumb-width: 48px;
   --landing-hunt-thumb-height: 66px;
 
+  /* La comparaison qui ouvre la bande Copilote (2458:2329, 23/10/2026) */
+  --landing-compare-title-width: 960px;
+  --landing-compare-after: var(--space-150); /* l'air avant « Ton copilote de festivals » */
+  --landing-tool-bg: color-mix(in srgb, var(--sand-0) 75%, transparent);
+  --landing-tool-line: var(--sand-300);
+  --landing-tool-ink: var(--fete-ink-soft);
+  --landing-tool-logo: 26px;
+  --landing-tool-nudge: 24px; /* un cran de décalage des tuiles en vrac */
+  --landing-tool-row-gap: 52px;
+  --landing-tool-col-gap: 40px;
+  --radius-landing-tool: var(--round-14);
+  --landing-arrow-width: 230px;
+  --landing-app-icon: 176px;
+  --landing-app-icon-mobile: 120px;
+  --landing-compare-after-width: 500px;
+  --landing-app-icon-logo: 104px;
+  --radius-landing-app-icon: 42px;
+  --landing-app-icon-shadow:
+    0 1px 2px color-mix(in srgb, var(--fete-ink) 6%, transparent),
+    0 8px 16px color-mix(in srgb, var(--fete-ink) 8%, transparent),
+    0 28px 56px color-mix(in srgb, var(--fete-ink) 14%, transparent);
+  --landing-punch-end: var(--brand-gradient);
+  --tracking-landing-punch: -0.015em;
+  --type-landing-punch: var(--weight-regular) var(--size-68) / 0.94 var(--family-display);
+  --type-landing-tool-name: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
+  --type-landing-tool-pain: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
+  --type-landing-compare-label: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
+
+  /* Les encadrés « Bientôt · Pro », sous les prix (2458:2329) */
+  --landing-pro-soon-bg: color-mix(in srgb, var(--fete-cream) 7%, transparent);
+  --landing-pro-soon-line: color-mix(in srgb, var(--fete-cream) 18%, transparent);
+  --radius-landing-pro-soon: var(--round-16);
+  --type-landing-pro-soon-title: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
+  --type-landing-pro-soon-text: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
+
   /* La bande Pro (2302:2) */
   --landing-pro-text: 633px;
   --landing-pro-rule: color-mix(in srgb, var(--fete-gold-soft) 35%, transparent);

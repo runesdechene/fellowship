@@ -1,6 +1,7 @@
 /**
  * QUOI     — la bande Pro, sur la terre : le grand paragraphe, « Gratuit » et le prix du Pro côte
- *            à côte, chacun avec ses avantages, deux appels, et l'écran « Pour toi ».
+ *            à côte, chacun avec ses avantages, deux appels, et l'écran « Pour toi » ; dessous, les
+ *            encadrés de ce qui arrive dans le Pro (ProSoon).
  * POURQUOI — maquette 2290:2 (bande 2302:2, texte 2290:1322) ; le gratuit se lit d'abord, pour que
  *            personne ne croie l'application payante (Uriel, 14/10/2026).
  * ATTENTION — le prix vient de lib/pricing.ts : toujours celui que Stripe facture.
@@ -11,6 +12,7 @@ import type { Showcase } from '@/lib/landing'
 import { formatPrice } from '@/lib/money'
 import { PRICES } from '@/lib/pricing'
 import { LandingBand } from './LandingBand'
+import { ProSoon } from './ProSoon'
 import { ForYouScreen } from './screens/ForYouScreen'
 
 /** Ce que donne le gratuit, puis ce que le Pro ajoute : résumés de la page /pro (PlanCard.tsx). */
@@ -56,43 +58,46 @@ export function ProBand({ showcase }: { showcase: Showcase | null }) {
       posters={showcase?.wall}
       className="landing-pro"
     >
-      <div className="landing-pro__text">
-        <p className="landing-statement">
-          <strong>Ne rate plus les bons festivals.</strong> Le Pro te les montre à temps et te dit
-          lesquels rapportent.
-        </p>
-        <div className="landing-pro__offers">
-          <div>
-            <p className="landing-pro__big">Gratuit</p>
-            <p className="landing-pro__label">La base pour tenir ta saison</p>
-            <p className="landing-pro__note">Sans carte bancaire, sans limite de durée.</p>
-            <Advantages items={FREE} />
+      <div className="landing-pro__main">
+        <div className="landing-pro__text">
+          <p className="landing-statement">
+            <strong>Ne rate plus les bons festivals.</strong> Le Pro te dit lesquels rapportent, te
+            prévient avant chaque clôture et tient le bilan de ta saison.
+          </p>
+          <div className="landing-pro__offers">
+            <div>
+              <p className="landing-pro__big">Gratuit</p>
+              <p className="landing-pro__label">La base pour tenir ta saison</p>
+              <p className="landing-pro__note">Sans carte bancaire, sans limite de durée.</p>
+              <Advantages items={FREE} />
+            </div>
+            <div>
+              <p className="landing-pro__big">{formatPrice(PRICES.monthly)}</p>
+              <p className="landing-pro__label">Le Pro, HT par mois</p>
+              <p className="landing-pro__note">
+                Ou {formatPrice(PRICES.yearly)} par an. 14 jours d’essai, annulable en un clic. Et
+                tout ce qui arrive en Pro, inclus.
+              </p>
+              <Advantages items={PRO_ADDS} />
+            </div>
           </div>
-          <div>
-            <p className="landing-pro__big">{formatPrice(PRICES.monthly)}</p>
-            <p className="landing-pro__label">Le Pro, HT par mois</p>
-            <p className="landing-pro__note">
-              Ou {formatPrice(PRICES.yearly)} par an. 14 jours d’essai, annulable en un clic. Et
-              tout ce qui arrive en Pro, inclus.
-            </p>
-            <Advantages items={PRO_ADDS} />
+          <div className="landing-pro__ctas">
+            <Link
+              className="landing-button landing-button--pill landing-button--cream"
+              to="/connexion"
+            >
+              Commencer gratuitement
+              <ArrowRight size={17} strokeWidth={2} aria-hidden />
+            </Link>
+            <Link className="landing-pro__more" to="/pro">
+              Essayer le Pro 14 jours
+              <ArrowRight size={17} strokeWidth={2} aria-hidden />
+            </Link>
           </div>
         </div>
-        <div className="landing-pro__ctas">
-          <Link
-            className="landing-button landing-button--pill landing-button--cream"
-            to="/connexion"
-          >
-            Commencer gratuitement
-            <ArrowRight size={17} strokeWidth={2} aria-hidden />
-          </Link>
-          <Link className="landing-pro__more" to="/pro">
-            Essayer le Pro 14 jours
-            <ArrowRight size={17} strokeWidth={2} aria-hidden />
-          </Link>
-        </div>
+        {showcase && showcase.dossiers.length > 0 && <ForYouScreen showcase={showcase} />}
       </div>
-      {showcase && showcase.dossiers.length > 0 && <ForYouScreen showcase={showcase} />}
+      <ProSoon />
     </LandingBand>
   )
 }
