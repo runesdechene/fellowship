@@ -1,6 +1,7 @@
 /**
  * QUOI     — l'ouverture de la bande Copilote : « Ta saison de festival est éparpillée », les
- *            huit outils d'aujourd'hui en vrac, serrés et qui s'agitent, une flèche dessinée, puis l'icône Fellowship seule.
+ *            huit outils d'aujourd'hui en vrac, serrés et qui s'agitent, une flèche dessinée, puis l'icône Fellowship et où
+ *            elle tourne (desktop, PWA ; Android et Apple à venir).
  * POURQUOI — maquette 2458:2329 (validée le 23/10/2026, après le Concile) : la douleur avant
  *            l'outil. Les logos sont les vrais (public/landing/), pour que l'exposant s'y reconnaisse.
  * ATTENTION — le désordre vient des données : `--tilt` penche chaque tuile, `--nudge` la décale
@@ -120,6 +121,17 @@ export function ToolsCompare() {
           <span className="landing-compare__icon">
             <img src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
           </span>
+          {/* Où l'app tourne déjà, et ce qui vient (Uriel, 23/10/2026). */}
+          <ul className="landing-platforms">
+            <li className="landing-platforms__item">Version desktop</li>
+            <li className="landing-platforms__item">Version mobile PWA</li>
+            <li className="landing-platforms__item landing-platforms__item--soon">
+              Bientôt : version Android
+            </li>
+            <li className="landing-platforms__item landing-platforms__item--soon">
+              Bientôt : version Apple
+            </li>
+          </ul>
           <p className="landing-compare__punch">
             Une seule app.
             <br />

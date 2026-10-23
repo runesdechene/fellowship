@@ -135,6 +135,30 @@
   width: var(--landing-app-icon-logo);
 }
 
+/* Où l'app tourne : des pastilles sobres ; celles à venir, plus pâles et en pointillé. */
+.landing-platforms {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: var(--space-8);
+  margin-top: calc(-1 * var(--space-16));
+}
+
+.landing-platforms__item {
+  padding: var(--space-6) var(--space-12);
+  border: 1px solid var(--landing-tool-line);
+  border-radius: var(--radius-landing-pill);
+  background: var(--landing-cream-paper);
+  font: var(--type-landing-tool-pain);
+  color: var(--landing-tool-ink);
+}
+
+.landing-platforms__item--soon {
+  border-style: dashed;
+  background: transparent;
+  color: var(--landing-ink-mute);
+}
+
 .landing-compare__punch {
   font: var(--type-landing-punch);
   letter-spacing: var(--tracking-landing-punch);
@@ -239,6 +263,10 @@
 
   .landing-compare__after {
     width: auto;
+  }
+
+  .landing-platforms {
+    grid-template-columns: auto;
   }
 
   .landing-compare__icon {
