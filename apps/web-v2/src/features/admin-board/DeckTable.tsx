@@ -57,6 +57,8 @@ export function DeckTable({
   const [sound, setSound] = useState(isSoundOn)
   // Une carte à la fois : un geste ne part pas pendant qu'un autre se joue.
   const [playing, setPlaying] = useState(false)
+  // Un appui sur le texte d'une tâche le sélectionne : la carte ne se glisse plus le temps du geste.
+  const [onText, setOnText] = useState(false)
   const card = useRef<HTMLElement>(null)
   const pile = useRef<HTMLDivElement>(null)
   const drop = useDropZone(onDropTask)
@@ -118,6 +120,12 @@ export function DeckTable({
       className={`deck-table${drop.over ? ' deck-table--over' : ''}`}
       aria-label="Maintenant"
       {...drop.handlers}
+      onPointerDownCapture={(event) =>
+        setOnText(
+          event.target instanceof Element &&
+            event.target.closest('.deck-card__text, .deck-list__text') !== null,
+        )
+      }
     >
       <header className="deck-table__head">
         <h2 className="board-zone__title">Maintenant</h2>
@@ -165,7 +173,7 @@ export function DeckTable({
             key={top.id}
             ref={card}
             className={`deck-card${isStale(top.movedAt, now) ? ' deck-card--stale' : ''}`}
-            draggable
+            draggable={!onText}
             onDragStart={(event) => event.dataTransfer.setData('text/plain', top.id)}
           >
             <p className="deck-card__text">{top.body}</p>
@@ -241,7 +249,7 @@ export function DeckTable({
             <li
               key={task.id}
               className="deck-list__item"
-              draggable
+              draggable={!onText}
               onDragStart={(event) => event.dataTransfer.setData('text/plain', task.id)}
             >
               <span className="deck-list__text">{task.body}</span>

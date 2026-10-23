@@ -254,6 +254,7 @@
   font: var(--type-board-card);
   color: var(--board-card-ink);
   overflow-wrap: anywhere;
+  cursor: text;
 }
 
 .deck-card__since {
@@ -358,6 +359,7 @@
   flex: 1;
   font: var(--type-board-count);
   color: var(--ink-title);
+  cursor: text;
 }
 
 .deck-list__icon {
