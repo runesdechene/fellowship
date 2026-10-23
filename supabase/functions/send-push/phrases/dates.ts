@@ -30,6 +30,20 @@ function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
 
+/** Le lundi de la semaine en cours, à minuit (la semaine française commence le lundi). */
+export function startOfWeek(date: Date): Date {
+  const day = startOfDay(date)
+  day.setDate(day.getDate() - ((day.getDay() + 6) % 7))
+  return day
+}
+
+/** Le même jour, `days` jours plus tard (ou plus tôt), à minuit. */
+export function addDays(date: Date, days: number): Date {
+  const day = startOfDay(date)
+  day.setDate(day.getDate() + days)
+  return day
+}
+
 /** Nombre de jours entiers entre aujourd'hui et une date (négatif si passée). */
 export function daysUntil(target: Date, today: Date = new Date()): number {
   const MS_PER_DAY = 86_400_000
@@ -66,6 +80,26 @@ const FULL_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
 
 function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
+const WEEKDAY_FORMATTER = new Intl.DateTimeFormat('fr-FR', { weekday: 'long' })
+const WEEKDAY_DAY_MONTH_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+})
+
+/** « Aujourd'hui », « Hier », puis le jour de la semaine : « Lundi ». */
+export function dayLabel(date: Date, now: Date): string {
+  const days = daysUntil(now, date)
+  if (days === 0) return "Aujourd'hui"
+  if (days === 1) return 'Hier'
+  return capitalize(WEEKDAY_FORMATTER.format(date))
+}
+
+/** « mercredi 22 octobre ». */
+export function formatWeekdayDayMonth(date: Date): string {
+  return WEEKDAY_DAY_MONTH_FORMATTER.format(date)
 }
 
 /** « mars » — le nom du mois dans une phrase (« 42 festivals t'attendent après mars »). */
