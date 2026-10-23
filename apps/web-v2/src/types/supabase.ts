@@ -1486,6 +1486,7 @@ export type Database = {
           email_status: string
           festival_commun: boolean
           gender: string | null
+          joignable: boolean
           id: string
           linked_at: string | null
           linked_by: string | null
@@ -1516,6 +1517,7 @@ export type Database = {
           email_status?: string
           festival_commun?: boolean
           gender?: string | null
+          joignable?: boolean
           id?: string
           linked_at?: string | null
           linked_by?: string | null
@@ -1546,6 +1548,7 @@ export type Database = {
           email_status?: string
           festival_commun?: boolean
           gender?: string | null
+          joignable?: boolean
           id?: string
           linked_at?: string | null
           linked_by?: string | null
@@ -2395,6 +2398,7 @@ export type Database = {
           email_status: string
           festival_commun: boolean
           gender: string
+          joignable: boolean
           id: string
           name: string
           note: string

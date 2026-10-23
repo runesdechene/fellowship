@@ -21,7 +21,6 @@ type Field =
   | 'activity'
   | 'activity_secondary'
   | 'city'
-  | 'phone'
   | 'website'
   | 'social_primary'
   | 'social_secondary'
@@ -39,7 +38,6 @@ const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'activity', label: 'Activité principale' },
   { field: 'activity_secondary', label: 'Activité secondaire' },
   { field: 'city', label: 'Ville' },
-  { field: 'phone', label: 'Téléphone' },
   { field: 'website', label: 'Site web' },
   { field: 'social_primary', label: 'Réseau social 1' },
   { field: 'social_secondary', label: 'Réseau social 2' },
@@ -72,14 +70,33 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
               onChange={(gender) => void save({ gender })}
             />
           </SheetRow>
-          <SheetRow label="E-mail">
-            <TextCell
-              value={prospect.email}
-              label="E-mail"
-              normalize={normalizeEmail}
-              onSave={(email) => save({ email })}
+          <SheetRow label="Contact">
+            <CheckCell
+              checked={prospect.joignable}
+              label="Contact"
+              title="Il a un e-mail ou un téléphone"
+              onSave={(joignable) => save({ joignable })}
             />
           </SheetRow>
+          {prospect.joignable && (
+            <>
+              <SheetRow label="E-mail">
+                <TextCell
+                  value={prospect.email}
+                  label="E-mail"
+                  normalize={normalizeEmail}
+                  onSave={(email) => save({ email })}
+                />
+              </SheetRow>
+              <SheetRow label="Téléphone">
+                <TextCell
+                  value={prospect.phone}
+                  label="Téléphone"
+                  onSave={(phone) => save({ phone })}
+                />
+              </SheetRow>
+            </>
+          )}
           {FIELDS.map(({ field, label }) => (
             <SheetRow key={field} label={label}>
               <TextCell
