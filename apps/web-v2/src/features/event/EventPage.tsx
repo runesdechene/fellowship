@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { CalendarDays, Clock, MapPin, Store, Users } from 'lucide-react'
+import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -247,7 +247,6 @@ export function EventPage() {
       ),
     },
     { Icon: Users, label: 'Fréquentation', value: event.expected_attendance },
-    { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
   ].filter((fait) => Boolean(fait.value))
 
   const going = apercu ? goingLine(apercu.going, apercu.crafts) : null
