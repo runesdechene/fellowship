@@ -106,10 +106,10 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
               />
             </SheetRow>
           ))}
-          <SheetRow label="Festival en commun">
+          <SheetRow label="Fut croisé en festival">
             <CheckCell
               checked={prospect.festival_commun}
-              label="Festival en commun"
+              label="Fut croisé en festival"
               title="Il a déjà fait un festival avec Mathéo ou Uriel"
               onSave={(festival_commun) => save({ festival_commun })}
             />
