@@ -1487,8 +1487,8 @@ export type Database = {
           festival_commun: boolean
           festivals_croises: string | null
           gender: string | null
-          joignable: boolean
           id: string
+          joignable: boolean
           linked_at: string | null
           linked_by: string | null
           name: string | null
@@ -1519,8 +1519,8 @@ export type Database = {
           festival_commun?: boolean
           festivals_croises?: string | null
           gender?: string | null
-          joignable?: boolean
           id?: string
+          joignable?: boolean
           linked_at?: string | null
           linked_by?: string | null
           name?: string | null
@@ -1551,8 +1551,8 @@ export type Database = {
           festival_commun?: boolean
           festivals_croises?: string | null
           gender?: string | null
-          joignable?: boolean
           id?: string
+          joignable?: boolean
           linked_at?: string | null
           linked_by?: string | null
           name?: string | null
@@ -2402,8 +2402,8 @@ export type Database = {
           festival_commun: boolean
           festivals_croises: string
           gender: string
-          joignable: boolean
           id: string
+          joignable: boolean
           name: string
           note: string
           owner_id: string
@@ -2601,6 +2601,18 @@ export type Database = {
           entity_type: string
           last_seen_at: string
           visits: number
+        }[]
+      }
+      apercu_fiche: {
+        Args: { p_event: string }
+        Returns: {
+          avis: number
+          exposants: number
+          extrait: string
+          extrait_annee: number
+          metiers: Json
+          note: number
+          questions: number
         }[]
       }
       app_update_audience: { Args: never; Returns: number }
