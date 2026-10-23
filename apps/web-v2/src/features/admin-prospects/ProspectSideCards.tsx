@@ -114,6 +114,15 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
               onSave={(festival_commun) => save({ festival_commun })}
             />
           </SheetRow>
+          {prospect.festival_commun && (
+            <SheetRow label="Festivals">
+              <TextCell
+                value={prospect.festivals_croises}
+                label="Festivals"
+                onSave={(festivals_croises) => save({ festivals_croises })}
+              />
+            </SheetRow>
+          )}
           <SheetRow label="Dernier échange">
             {contactLabel(prospect.contact_channel, prospect.contacted_on) ?? '—'}
           </SheetRow>

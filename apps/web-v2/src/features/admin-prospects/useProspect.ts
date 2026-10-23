@@ -30,6 +30,8 @@ export interface ProspectDetail {
   a_relancer: boolean
   /** Il a déjà fait un festival avec nous : le premier contact n'est pas à froid. */
   festival_commun: boolean
+  /** Les festivals où on l'a croisé, en texte libre. */
+  festivals_croises: string | null
   /** Il a un e-mail ou un téléphone ; sinon on le garde sous le coude (réseaux, plus tard). */
   joignable: boolean
   user_id: string | null
