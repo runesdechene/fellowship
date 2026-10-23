@@ -26,7 +26,8 @@ const COLUMNS = [
   'Relance',
 ] as const
 
-type TextField = 'brand' | 'activity' | 'activity_secondary' | 'city' | 'phone' | 'source' | 'note'
+type TextField =
+  'name' | 'brand' | 'activity' | 'activity_secondary' | 'city' | 'phone' | 'source' | 'note'
 
 interface Props {
   rows: ProspectRow[]
@@ -138,11 +139,11 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
       <td>
         <span className="admin-table__identity">
           <Link to={`/admin/prospects/${row.id}`} className="admin-table__name prospect-name">
-            {/* La marque a sa place juste dessous : la répéter ici la ferait passer pour un prénom. */}
-            {row.name ?? 'Sans prénom'}
+            {/* La marque d'abord : c'est elle qu'on prospecte ; le prénom suit, avec la ville. */}
+            {row.brand ?? 'Sans marque'}
           </Link>
           <span className="admin-table__meta prospect-place">
-            <TextCell value={row.brand} label="Marque" onSave={text('brand')} />
+            <TextCell value={row.name} label="Prénom" onSave={text('name')} />
             <span className="prospect-place__comma" aria-hidden="true">
               ,
             </span>
