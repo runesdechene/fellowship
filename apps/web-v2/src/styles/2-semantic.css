@@ -1753,6 +1753,7 @@
   --tracking-landing-punch: -0.015em;
   --type-landing-punch: var(--weight-regular) var(--size-68) / 0.94 var(--family-display);
   --type-landing-tool-name: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
+  --type-landing-store-status: var(--weight-regular) var(--size-12) / 1.2 var(--family-sans);
   --type-landing-tool-pain: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
   --type-landing-compare-label: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
 

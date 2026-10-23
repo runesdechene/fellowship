@@ -135,30 +135,6 @@
   width: var(--landing-app-icon-logo);
 }
 
-/* Où l'app tourne : des pastilles sobres ; celles à venir, plus pâles et en pointillé. */
-.landing-platforms {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  justify-content: center;
-  gap: var(--space-8);
-  margin-top: calc(-1 * var(--space-16));
-}
-
-.landing-platforms__item {
-  padding: var(--space-6) var(--space-12);
-  border: 1px solid var(--landing-tool-line);
-  border-radius: var(--radius-landing-pill);
-  background: var(--landing-cream-paper);
-  font: var(--type-landing-tool-pain);
-  color: var(--landing-tool-ink);
-}
-
-.landing-platforms__item--soon {
-  border-style: dashed;
-  background: transparent;
-  color: var(--landing-ink-mute);
-}
-
 .landing-compare__punch {
   font: var(--type-landing-punch);
   letter-spacing: var(--tracking-landing-punch);
@@ -169,6 +145,48 @@
   background: var(--landing-punch-end);
   background-clip: text;
   color: transparent;
+}
+
+/* Où l'app tourne : des badges sombres comme ceux des stores, le logo peint dans leur encre. */
+.landing-stores {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: var(--space-10);
+}
+
+.landing-store {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-18) var(--space-10) var(--space-14);
+  border-radius: var(--radius-landing-tool);
+  background: var(--landing-ink);
+  color: var(--landing-cream);
+  text-align: left;
+}
+
+.landing-store__logo {
+  flex-shrink: 0;
+  width: var(--landing-tool-logo);
+  height: var(--landing-tool-logo);
+}
+
+/* Un logo de marque en masque : il prend la couleur du badge, comme les icônes. */
+.landing-store__brand {
+  background: currentcolor;
+  mask: var(--logo) center / contain no-repeat;
+}
+
+.landing-store__status {
+  display: block;
+  font: var(--type-landing-store-status);
+  color: var(--landing-gold-soft);
+}
+
+.landing-store__name {
+  display: block;
+  font: var(--type-landing-tool-name);
 }
 
 /* --- Les encadrés « Bientôt · Pro » ------------------------------------------------------ */
@@ -265,7 +283,7 @@
     width: auto;
   }
 
-  .landing-platforms {
+  .landing-stores {
     grid-template-columns: auto;
   }
 

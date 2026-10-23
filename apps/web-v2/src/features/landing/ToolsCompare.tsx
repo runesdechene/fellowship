@@ -1,7 +1,7 @@
 /**
  * QUOI     — l'ouverture de la bande Copilote : « Ta saison de festival est éparpillée », les
- *            huit outils d'aujourd'hui en vrac, serrés et qui s'agitent, une flèche dessinée, puis l'icône Fellowship et où
- *            elle tourne (desktop, PWA ; Android et Apple à venir).
+ *            huit outils d'aujourd'hui en vrac, serrés et qui s'agitent, une flèche dessinée, puis l'icône Fellowship, et sous
+ *            son titre, où elle tourne (desktop, PWA ; Android et Apple à venir).
  * POURQUOI — maquette 2458:2329 (validée le 23/10/2026, après le Concile) : la douleur avant
  *            l'outil. Les logos sont les vrais (public/landing/), pour que l'exposant s'y reconnaisse.
  * ATTENTION — le désordre vient des données : `--tilt` penche chaque tuile, `--nudge` la décale
@@ -9,6 +9,7 @@
  *            agitation de celle des voisines (Uriel, 23/10/2026 : le bazar, la charge mentale).
  */
 import type { CSSProperties } from 'react'
+import { Monitor, Smartphone, type LucideIcon } from 'lucide-react'
 
 interface Tool {
   logos: string[]
@@ -77,6 +78,20 @@ const TOOLS: Tool[] = [
   },
 ]
 
+/** Où l'app tourne, à la manière des badges des stores (Uriel, 23/10/2026) : les vrais logos
+ *  d'Android et d'Apple (Simple Icons, public/landing/), peints dans la couleur du badge. */
+const PLATFORMS: {
+  name: string
+  status: 'Disponible' | 'Bientôt'
+  Icon?: LucideIcon
+  logo?: string
+}[] = [
+  { name: 'Version desktop', status: 'Disponible', Icon: Monitor },
+  { name: 'Version mobile PWA', status: 'Disponible', Icon: Smartphone },
+  { name: 'Version Android', status: 'Bientôt', logo: 'android' },
+  { name: 'Version Apple', status: 'Bientôt', logo: 'apple' },
+]
+
 const asset = (file: string) => `${import.meta.env.BASE_URL}landing/${file}`
 
 export function ToolsCompare() {
@@ -121,22 +136,35 @@ export function ToolsCompare() {
           <span className="landing-compare__icon">
             <img src={`${import.meta.env.BASE_URL}icon.png`} alt="Fellowship" />
           </span>
-          {/* Où l'app tourne déjà, et ce qui vient (Uriel, 23/10/2026). */}
-          <ul className="landing-platforms">
-            <li className="landing-platforms__item">Version desktop</li>
-            <li className="landing-platforms__item">Version mobile PWA</li>
-            <li className="landing-platforms__item landing-platforms__item--soon">
-              Bientôt : version Android
-            </li>
-            <li className="landing-platforms__item landing-platforms__item--soon">
-              Bientôt : version Apple
-            </li>
-          </ul>
           <p className="landing-compare__punch">
             Une seule app.
             <br />
             <span className="landing-compare__punch-end">Toute ta saison.</span>
           </p>
+          <ul className="landing-stores">
+            {PLATFORMS.map(({ name, status, Icon, logo }) => (
+              <li
+                key={name}
+                className={
+                  status === 'Bientôt' ? 'landing-store landing-store--soon' : 'landing-store'
+                }
+              >
+                {Icon ? (
+                  <Icon className="landing-store__logo" strokeWidth={1.75} aria-hidden />
+                ) : (
+                  <span
+                    className="landing-store__logo landing-store__brand"
+                    style={{ '--logo': `url(${asset(`${logo}.svg`)})` } as CSSProperties}
+                    aria-hidden
+                  />
+                )}
+                <span>
+                  <span className="landing-store__status">{status}</span>
+                  <span className="landing-store__name">{name}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
