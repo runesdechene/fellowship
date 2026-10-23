@@ -108,3 +108,11 @@
   color: var(--ink-title);
   cursor: pointer;
 }
+
+/* Sans compte, l'avis se pose dans la carte de la note, à côté d'elle (maquette 2482:878). */
+.reviews__quote--inline {
+  flex: 1;
+  margin-top: 0;
+  padding: 0;
+  background: none;
+}

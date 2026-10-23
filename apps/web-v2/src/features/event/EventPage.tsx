@@ -26,7 +26,10 @@ import { useOrigin } from './useOrigin'
 import { eventPoint } from '@/lib/distance'
 import { AddMissing, KeptUpToDate } from './KeptUpToDate'
 import { DiscussionBlock } from './DiscussionBlock'
-import { GuestTeaser } from './GuestTeaser'
+import { Breadcrumb } from './Breadcrumb'
+import { GuestReviews } from './GuestReviews'
+import { useFicheApercu } from './useFicheApercu'
+import { goingLine } from '@/lib/apercu'
 import { MyReportBlock } from './MyReportBlock'
 import { LastEditionReport } from './LastEditionReport'
 import { useLastEditionReport } from './useLastEditionReport'
@@ -143,6 +146,7 @@ export function EventPage() {
   } = useEvent(id, actor?.id, person?.actor_id)
   const lastEdition = useLastEditionReport(event?.previous_edition_id, actor?.id)
   const dossier = useDossier(id, actor?.id)
+  const apercu = useFicheApercu(member ? null : (event?.id ?? null))
 
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
   // remplit le mur de droite, la flèche de retour et le compte à rebours
@@ -246,6 +250,9 @@ export function EventPage() {
     { Icon: Store, label: 'Emplacement', value: event.stand_price, sub: event.stand_size },
   ].filter((fait) => Boolean(fait.value))
 
+  const going = apercu ? goingLine(apercu.going, apercu.crafts) : null
+  const universe = event.tags?.[0] ?? null
+
   const edit = (field?: MissingField) => {
     go(`/evenement/${event.id}/modifier${field ? `?champ=${field}` : ''}`)
   }
@@ -277,6 +284,13 @@ export function EventPage() {
             />
           )}
           <div className="event-page__identity">
+            {!member && (
+              <Breadcrumb
+                name={event.name}
+                universe={universe ? (tagStyleFor(tagStyles, universe)?.label ?? universe) : null}
+                department={event.department}
+              />
+            )}
             <h1 className="event-page__title">{event.name}</h1>
 
             {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
@@ -299,6 +313,13 @@ export function EventPage() {
             {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
                   de l'identité de la date, au même titre que son lieu — ça ne
                   méritait ni un titre de section ni une carte. */}
+            {going && (
+              <p className="event-page__going">
+                <b>{going.count}</b>
+                {going.crafts && ` : ${going.crafts}`}
+              </p>
+            )}
+
             {member && (
               <>
                 <Companions
@@ -392,6 +413,7 @@ export function EventPage() {
           save={dossier.save}
           canEdit={canEdit}
           onAdd={edit}
+          guest={!member}
         />
 
         {member ? (
@@ -405,7 +427,7 @@ export function EventPage() {
             <DiscussionBlock eventId={event.id} status={status} />
           </>
         ) : (
-          <GuestTeaser eventId={event.id} />
+          apercu && <GuestReviews apercu={apercu} />
         )}
 
         {past && member && (

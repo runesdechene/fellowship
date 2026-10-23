@@ -528,3 +528,16 @@
   flex-wrap: wrap;
   gap: var(--space-8);
 }
+
+/* Sans compte : « 12 exposants y vont : forgeron, auteur… », le nombre en gras, sans visage
+   (décision du 23/10/2026). Même voix que la ligne des compagnons d'un membre. */
+.event-page__going {
+  margin-top: var(--space-18);
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.event-page__going b {
+  font: var(--type-event-meta-accent);
+  color: var(--ink-title);
+}

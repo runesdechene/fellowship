@@ -1,0 +1,32 @@
+/**
+ * QUOI     — le fil d'Ariane d'une fiche vue sans compte (features/event/Breadcrumb.tsx).
+ * POURQUOI — maquette 2482:878 : Festivals › univers › région › le festival, au-dessus du titre ;
+ *            les maillons en encre, la page elle-même en gris.
+ */
+.breadcrumb {
+  margin-bottom: var(--space-12);
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  align-items: center;
+  font: var(--type-dossier-link);
+  color: var(--ink-title);
+}
+
+.breadcrumb li {
+  display: inline-flex;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.breadcrumb svg {
+  color: var(--ink-section-pale);
+}
+
+.breadcrumb [aria-current='page'] {
+  font: var(--type-event-meta);
+  color: var(--ink-hero-meta);
+}

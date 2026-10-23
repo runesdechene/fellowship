@@ -6,13 +6,16 @@
  * ATTENTION — ce qui n'est pas renseigné apparaît en gris avec « + Ajouter » pour qui peut modifier
  *            la fiche (lot 10c), et n'apparaît pas pour les autres. « Ce que j'ai envoyé » est privé
  *            (participation_dossiers) et n'existe que si l'exposant suit cette date. Le rappel de
- *            clôture (Pro) ne s'affiche que si la date limite est à venir.
+ *            clôture (Pro) ne s'affiche que si la date limite est à venir. Sans compte (décision du
+ *            23/10/2026), la date limite seule : le reste attend le compte gratuit.
  */
-import { Check, Clock, FileText, Globe, Link as LinkIcon, Mail } from 'lucide-react'
+import { ArrowRight, Check, Clock, FileText, Globe, Link as LinkIcon, Mail } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { DraftInput } from '@/components/ui/DraftInput'
 import { InfoRow, InfoRows } from '@/components/ui/InfoRows'
 import { daysUntil, formatCountdown, formatFullDate, parseSqlDate } from '@/lib/dates'
 import { MISSING_LABELS, type MissingField } from '@/lib/event-edit'
+import { loginReturning } from '@/lib/welcome'
 import { websiteLink } from '@/lib/vitrine'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 import { DeadlineReminder } from './DeadlineReminder'
@@ -30,6 +33,8 @@ interface ApplyingProps {
   /** Qui peut modifier la fiche voit ce qui manque, avec « + Ajouter ». */
   canEdit: boolean
   onAdd: (field: MissingField) => void
+  /** Sans compte : la date limite seule, et la porte vers le compte gratuit. */
+  guest: boolean
 }
 
 /** Une info absente de la fiche, pour qui peut la compléter. */
@@ -60,14 +65,56 @@ function deadlineNote(deadline: Date, status: ParticipationStatus | null): strin
   return status === 'inscrit' || status === 'confirme' ? 'clôturé — tu y es inscrit' : 'clôturé'
 }
 
+/** Sans compte : la date limite en clair, puis ce que le compte gratuit ouvre ici. */
+function GuestApplying({
+  deadline,
+  more,
+  pathname,
+}: {
+  deadline: Date | null
+  more: boolean
+  pathname: string
+}) {
+  return (
+    <section className="event-page__block">
+      <h2 className="event-page__block-title">
+        Pour candidater <span className="event-page__block-hint">tout au même endroit</span>
+      </h2>
+      {deadline && (
+        <div className="dossier-card">
+          <InfoRows>
+            <InfoRow Icon={Clock} label="Date limite" sub={deadlineNote(deadline, null)}>
+              {formatFullDate(deadline)}
+            </InfoRow>
+          </InfoRows>
+        </div>
+      )}
+      {more && (
+        <div className="reviews__actions">
+          <Link className="reviews__link" to={loginReturning(pathname)}>
+            Le dossier en ligne et le contact de l’organisateur, avec ton compte gratuit
+            <ArrowRight size={13} strokeWidth={2} />
+          </Link>
+        </div>
+      )}
+    </section>
+  )
+}
+
 export function Applying(props: ApplyingProps) {
-  const { event, status, setStatus, statusSaving, actorId, fields, save, canEdit, onAdd } = props
+  const { event, status, setStatus, statusSaving, actorId, fields, save, canEdit, onAdd, guest } =
+    props
+  const { pathname } = useLocation()
   const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
   const site = event.registration_url ? websiteLink(event.registration_url) : null
   const following = status !== null
   const hasInfo = [deadline, event.registration_note, site, event.contact_email].some(Boolean)
 
   if (!hasInfo && !following && !canEdit) return null
+  if (guest) {
+    const more = [event.registration_note, site, event.contact_email].some(Boolean)
+    return <GuestApplying deadline={deadline} more={more} pathname={pathname} />
+  }
 
   return (
     <section className="event-page__block">

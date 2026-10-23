@@ -16,6 +16,7 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `Companions.tsx` — la ligne des amis (« A, B, C et 5 autres y vont aussi ») et sa popup.
 - `WhoGoesDialog.tsx` — la popup « Qui y va » : tous les amis programmés, leur métier, leur statut.
 - `useWhoGoes.ts` — la liste de la popup, chargée à l'ouverture.
-- `GuestTeaser.tsx` — sans compte, l'aperçu flouté des avis et des questions ; `useEventTeaser.ts`
-  en lit les nombres (lot 11b).
+- `GuestReviews.tsx` — sans compte, la note et un avis entier dans une carte, puis la porte vers le
+  compte gratuit ; `useFicheApercu.ts` lit `apercu_fiche` (décision du 23/10/2026, maquette 2482:878).
+- `Breadcrumb.tsx` — sans compte, le fil d'Ariane au-dessus du titre : Festivals › univers › région.
 - `MyReportBlock.tsx` — « Mon bilan » d'une date passée.
