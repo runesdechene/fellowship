@@ -108,7 +108,8 @@
 
 .prospect-compose__row {
   display: grid;
-  grid-template-columns: var(--prospect-compose-label-width) 1fr;
+  /* minmax(0, …) : un modèle au long nom débordait de la carte au lieu d'être coupé. */
+  grid-template-columns: var(--prospect-compose-label-width) minmax(0, 1fr);
   align-items: center;
   gap: var(--space-12);
 }
@@ -131,6 +132,8 @@
 }
 
 .prospect-compose__field--choice {
+  min-width: 0;
+  text-overflow: ellipsis;
   background: var(--surface-chip-neutral);
   cursor: pointer;
 }

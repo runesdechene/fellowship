@@ -1339,6 +1339,7 @@
   --trend-logo-end: var(--terre-400);
   /* Les prospects (features/admin-prospects) */
   --prospect-note-width: 180px;
+  --prospect-activity-width: 220px;
   --prospect-dot-size: 7px;
   --confirm-dialog-wide-width: 680px;
   --type-prospect-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);

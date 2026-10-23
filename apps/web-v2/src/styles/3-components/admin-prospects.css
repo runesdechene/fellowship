@@ -146,6 +146,17 @@
   overflow-wrap: anywhere;
 }
 
+/* L'activité et la note, coupées d'un « … » : le tableau garde ses colonnes à l'écran. */
+.prospect-activity .prospect-stack {
+  max-width: var(--prospect-activity-width);
+}
+
+.prospect-activity .prospect-cell__button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .prospect-note .prospect-cell__button {
   max-width: var(--prospect-note-width);
   overflow: hidden;
@@ -337,13 +348,21 @@
 }
 
 /* Le tableau est plus large qu'un petit écran : il défile dans son cadre, la page ne bouge pas.
-   Le cadre porte la carte, sinon le défilement rognerait l'ombre. */
+   Le cadre porte la carte, sinon le défilement rognerait l'ombre. Sans barre : il se tire à la
+   souris, comme la frise du calendrier (useDragScroll). */
 .prospect-scroll {
   overflow-x: auto;
+  scrollbar-width: none;
+  cursor: grab;
   border: 1px solid var(--line-card);
   box-shadow: var(--shadow-block);
   border-radius: var(--radius-card);
   background: var(--surface-card);
+}
+
+.prospect-scroll--dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .prospect-scroll > .admin-table {

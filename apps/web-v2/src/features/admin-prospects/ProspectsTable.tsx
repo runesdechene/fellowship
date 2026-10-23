@@ -7,6 +7,7 @@
  */
 import { Link2, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useDragScroll } from '@/lib/useDragScroll'
 import { EMAIL_STATUSES, normalizeEmail } from '@/lib/prospect'
 import { CheckCell, ContactCell, TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
@@ -60,8 +61,12 @@ export function ProspectsTable({
   onAskDelete,
   onAskUnlink,
 }: Props) {
+  const { dragging, handlers } = useDragScroll()
   return (
-    <div className="prospect-scroll">
+    <div
+      className={dragging ? 'prospect-scroll prospect-scroll--dragging' : 'prospect-scroll'}
+      {...handlers}
+    >
       <table className="admin-table prospect-table">
         <thead>
           <tr>
@@ -143,7 +148,7 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
           </span>
         </span>
       </td>
-      <td className="admin-table__text">
+      <td className="admin-table__text prospect-activity">
         <span className="prospect-stack">
           <TextCell value={row.activity} label="Activité principale" onSave={text('activity')} />
           <TextCell
