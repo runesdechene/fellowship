@@ -23,7 +23,7 @@ import {
 import { ImportDialog } from './ImportDialog'
 import { MatchBanner } from './MatchBanner'
 import { MatchDialog } from './MatchDialog'
-import { deleteProspect, insertProspect, unlinkProspect } from './prospect-writes'
+import { deleteProspect, findBrand, insertProspect, unlinkProspect } from './prospect-writes'
 import { ProspectsStats } from './ProspectsStats'
 import { ProspectsTable } from './ProspectsTable'
 import { useProspects, type ProspectRow } from './useProspects'
@@ -40,6 +40,8 @@ export function ProspectsPage() {
   const query = readProspectsQuery(search)
   const { data, error, reload } = useProspects(query)
   const [adding, setAdding] = useState(false)
+  // La marque déjà signalée en doublon : la valider une seconde fois l'ajoute quand même.
+  const [warned, setWarned] = useState<string | null>(null)
   const [importing, setImporting] = useState(false)
   const [matching, setMatching] = useState(false)
   const [pending, setPending] = useState<Pending | null>(null)
@@ -60,7 +62,18 @@ export function ProspectsPage() {
 
   // Un échec laisse la ligne ouverte : la cellule affiche le message.
   async function add(brand: string | null) {
+    if (brand !== null && brand.toLowerCase() !== warned) {
+      const twin = await findBrand(brand)
+      if (twin) {
+        setWarned(brand.toLowerCase())
+        const where = twin.city ? `, ${twin.city}` : ''
+        throw new Error(
+          `Déjà dans la liste : ${twin.brand ?? brand}${where}. Valide encore pour l’ajouter quand même.`,
+        )
+      }
+    }
     if (brand !== null) await insertProspect({ brand })
+    setWarned(null)
     setAdding(false)
     if (brand !== null) reload()
   }

@@ -21,6 +21,18 @@ export async function updateProspect(id: string, patch: ProspectPatch) {
   check(error)
 }
 
+/** Le plus ancien prospect de cette marque, casse ignorée : l'ajout prévient avant un doublon. */
+export async function findBrand(brand: string) {
+  const { data, error } = await supabase
+    .from('prospects')
+    .select('brand, city')
+    .ilike('brand', brand)
+    .order('created_at')
+    .limit(1)
+  check(error)
+  return data?.[0] ?? null
+}
+
 export async function insertProspect(fields: ProspectPatch) {
   const { error } = await supabase.from('prospects').insert(fields)
   check(error)
