@@ -147,11 +147,8 @@
 }
 
 /* L'activité et la note, coupées d'un « … » : le tableau garde ses colonnes à l'écran. */
-.prospect-activity .prospect-stack {
-  max-width: var(--prospect-activity-width);
-}
-
 .prospect-activity .prospect-cell__button {
+  max-width: var(--prospect-activity-width);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
