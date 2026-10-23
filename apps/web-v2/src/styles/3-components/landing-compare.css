@@ -147,29 +147,37 @@
   color: transparent;
 }
 
-/* Où l'app tourne : des badges sombres comme ceux des stores, le logo peint dans leur encre. */
+/* Où l'app tourne, à la manière des badges des stores. Disponible : le badge plein, un point vert
+   devant le mot ; bientôt : le badge creux, plus pâle. Le plein et le creux se lisent d'un coup. */
 .landing-stores {
   display: grid;
   grid-template-columns: repeat(2, auto);
   justify-content: center;
-  gap: var(--space-10);
+  gap: var(--space-8);
 }
 
 .landing-store {
   display: flex;
   align-items: center;
-  gap: var(--space-12);
-  padding: var(--space-10) var(--space-18) var(--space-10) var(--space-14);
+  gap: var(--space-10);
+  padding: var(--space-7) var(--space-14) var(--space-7) var(--space-12);
+  border: 1px solid var(--landing-ink);
   border-radius: var(--radius-landing-tool);
   background: var(--landing-ink);
   color: var(--landing-cream);
   text-align: left;
 }
 
+.landing-store--soon {
+  border-color: var(--landing-tool-line);
+  background: transparent;
+  color: var(--landing-ink-mute);
+}
+
 .landing-store__logo {
   flex-shrink: 0;
-  width: var(--landing-tool-logo);
-  height: var(--landing-tool-logo);
+  width: var(--landing-store-logo);
+  height: var(--landing-store-logo);
 }
 
 /* Un logo de marque en masque : il prend la couleur du badge, comme les icônes. */
@@ -179,14 +187,28 @@
 }
 
 .landing-store__status {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
   font: var(--type-landing-store-status);
   color: var(--landing-gold-soft);
 }
 
+.landing-store:not(.landing-store--soon) .landing-store__status::before {
+  content: '';
+  width: var(--landing-store-dot);
+  height: var(--landing-store-dot);
+  border-radius: var(--radius-round);
+  background: var(--landing-store-live);
+}
+
+.landing-store--soon .landing-store__status {
+  color: inherit;
+}
+
 .landing-store__name {
   display: block;
-  font: var(--type-landing-tool-name);
+  font: var(--type-landing-store-name);
 }
 
 /* --- Les encadrés « Bientôt · Pro » ------------------------------------------------------ */
