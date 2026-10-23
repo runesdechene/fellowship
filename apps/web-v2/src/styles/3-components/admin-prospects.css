@@ -245,6 +245,12 @@
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
+/* Le `max-width: 100%` du reset tassait l'icône à zéro dans la dernière colonne, serrée par un
+   tableau plus large que l'écran : plus rien à cliquer (23/10/2026). */
+.prospect-row__delete svg {
+  max-width: none;
+}
+
 .admin-table__row:hover .prospect-row__delete,
 .prospect-row__delete:focus-visible {
   opacity: 1;
