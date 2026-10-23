@@ -1,10 +1,11 @@
 /**
- * QUOI     — l'ouverture de la bande Copilote : « Ta saison est éparpillée à huit endroits », les
- *            huit outils d'aujourd'hui en vrac, une flèche dessinée, puis l'icône Fellowship seule.
+ * QUOI     — l'ouverture de la bande Copilote : « Ta saison de festival est éparpillée », les
+ *            huit outils d'aujourd'hui en vrac, serrés et qui s'agitent, une flèche dessinée, puis l'icône Fellowship seule.
  * POURQUOI — maquette 2458:2329 (validée le 23/10/2026, après le Concile) : la douleur avant
  *            l'outil. Les logos sont les vrais (public/landing/), pour que l'exposant s'y reconnaisse.
  * ATTENTION — le désordre vient des données : `--tilt` penche chaque tuile, `--nudge` la décale
- *            d'un nombre de crans (le cran est un jeton de 2-semantic.css).
+ *            d'un nombre de crans (le cran est un jeton de 2-semantic.css), `--i` désaccorde son
+ *            agitation de celle des voisines (Uriel, 23/10/2026 : le bazar, la charge mentale).
  */
 import type { CSSProperties } from 'react'
 
@@ -81,19 +82,25 @@ export function ToolsCompare() {
   return (
     <div className="landing-compare">
       <p className="landing-statement landing-compare__title">
-        <strong>Ta saison est éparpillée à huit endroits.</strong>
+        <strong>Ta saison de festival est éparpillée.</strong>
         <br />
-        Et on va changer ça.
+        Fellowship est là pour changer ça.
       </p>
       <div className="landing-compare__row">
         <div className="landing-compare__before">
           <p className="landing-compare__label">Aujourd’hui</p>
           <ul className="landing-compare__tools">
-            {TOOLS.map((tool) => (
+            {TOOLS.map((tool, index) => (
               <li
                 key={tool.name}
                 className="landing-tool"
-                style={{ '--tilt': tool.tilt, '--nudge': String(tool.nudge) } as CSSProperties}
+                style={
+                  {
+                    '--tilt': tool.tilt,
+                    '--nudge': String(tool.nudge),
+                    '--i': String(index),
+                  } as CSSProperties
+                }
               >
                 <span className="landing-tool__logos" aria-hidden>
                   {tool.logos.map((logo) => (

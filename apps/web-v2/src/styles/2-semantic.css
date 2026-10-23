@@ -1732,8 +1732,12 @@
   --landing-tool-ink: var(--fete-ink-soft);
   --landing-tool-logo: 26px;
   --landing-tool-nudge: 24px; /* un cran de décalage des tuiles en vrac */
-  --landing-tool-row-gap: 52px;
-  --landing-tool-col-gap: 40px;
+  --landing-tool-row-gap: 10px; /* serrées : le bazar, pas une grille rangée */
+  --landing-tool-col-gap: 6px;
+  --landing-tool-jitter: 2.6s; /* l'agitation d'une tuile ; chacune la sienne, décalée */
+  --landing-tool-jitter-step: 0.37s;
+  --landing-tool-jitter-from: translate(-2px, 2px) rotate(-1.2deg);
+  --landing-tool-jitter-to: translate(3px, -3px) rotate(1.4deg);
   --radius-landing-tool: var(--round-14);
   --landing-arrow-width: 230px;
   --landing-app-icon: 176px;

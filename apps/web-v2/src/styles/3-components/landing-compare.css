@@ -55,6 +55,26 @@
   rotate: var(--tilt);
 }
 
+/* Les tuiles s'agitent chacune à son rythme : rien ne tient en place. `transform` se compose avec
+   `translate` et `rotate`, qui portent le décalage et la pente de chaque tuile. */
+@media (prefers-reduced-motion: no-preference) {
+  .landing-tool {
+    animation: landing-tool-jitter
+      calc(var(--landing-tool-jitter) + var(--i) * var(--landing-tool-jitter-step)) var(--ease-soft)
+      calc(var(--i) * -1 * var(--landing-tool-jitter-step) * 3) infinite alternate;
+  }
+}
+
+@keyframes landing-tool-jitter {
+  from {
+    transform: var(--landing-tool-jitter-from);
+  }
+
+  to {
+    transform: var(--landing-tool-jitter-to);
+  }
+}
+
 .landing-tool__logos {
   display: flex;
   flex-shrink: 0;
