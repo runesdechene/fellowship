@@ -87,6 +87,7 @@ export function ProspectsTable({
                 <TextCell
                   value={null}
                   label="Marque"
+                  placeholder="Nom de la marque"
                   autoOpen
                   onSave={onAdd}
                   onClose={(sent) => {
@@ -137,7 +138,8 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
       <td>
         <span className="admin-table__identity">
           <Link to={`/admin/prospects/${row.id}`} className="admin-table__name prospect-name">
-            {row.name ?? row.brand ?? row.email ?? 'Sans nom'}
+            {/* La marque a sa place juste dessous : la répéter ici la ferait passer pour un prénom. */}
+            {row.name ?? 'Sans prénom'}
           </Link>
           <span className="admin-table__meta prospect-place">
             <TextCell value={row.brand} label="Marque" onSave={text('brand')} />

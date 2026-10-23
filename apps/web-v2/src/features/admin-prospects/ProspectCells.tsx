@@ -45,9 +45,12 @@ export function TextCell({
   normalize = (text: string) => text.trim() || null,
   onClose,
   multiline = false,
+  placeholder,
 }: {
   value: string | null
   label: string
+  /** Ce qu'on attend dans le champ vide (la ligne d'ajout : « Nom de la marque »). */
+  placeholder?: string
   onSave: Save<string | null>
   autoOpen?: boolean
   /** Un texte long (la note) : il passe à la ligne et le champ grandit ; Maj+Entrée va à la ligne. */
@@ -90,6 +93,7 @@ export function TextCell({
     const field = {
       'aria-label': label,
       autoFocus: true,
+      placeholder,
       value: draft,
       onKeyDown: onKey,
       onBlur: close,
