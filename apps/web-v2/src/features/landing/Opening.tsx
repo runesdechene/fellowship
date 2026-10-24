@@ -27,8 +27,9 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
           <span className="landing-opening__accent">.</span>
         </h1>
         <p className="landing-opening__lead">
-          Fellowship te montre où vont les exposants que tu connais et ce qu’ils pensent de chaque
-          festival. Il tient aussi ta saison à ta place : dossiers, paiements, calendrier.
+          Fellowship t’aide à choisir tes festivals et s’occupe du reste. Tu vois où vont les
+          exposants que tu connais et ce qu’ils en pensent ; il tient tes dossiers, tes paiements
+          et ton calendrier.
         </p>
         <LandingSearch />
         {showcase?.exhibitors ? (
