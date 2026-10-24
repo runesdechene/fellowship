@@ -1,5 +1,5 @@
 /**
- * QUOI     — « Vus récemment » : les dernières personnes passées, par leur enseigne d'abord, quand,
+ * QUOI     — « Vus récemment » : les dernières personnes passées, par leur enseigne seule, quand,
  *            et combien de visites en tout ; chaque ligne ouvre la fiche de l'enseigne (ou de la
  *            personne, sans enseigne).
  * POURQUOI — on voit d'un coup d'œil quelles enseignes reviennent, et souvent : c'est l'enseigne
@@ -47,7 +47,7 @@ export function RecentVisitors({ visitors, now }: { visitors: Visitor[]; now: Da
                       {visitor.entity_id ? visitor.brand_name : person}
                     </span>
                     <span className="home-visitors__when">
-                      {visitor.entity_id ? `${person}, ${when}` : `sans enseigne, ${when}`}
+                      {visitor.entity_id ? when : `sans enseigne, ${when}`}
                     </span>
                   </span>
                   <span className="home-visitors__visits">
