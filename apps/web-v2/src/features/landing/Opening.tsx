@@ -28,7 +28,7 @@ export function Opening({ showcase }: { showcase: Showcase | null }) {
         </h1>
         <p className="landing-opening__lead">
           Fellowship t’aide à choisir tes festivals et s’occupe du reste. Tu vois où vont les
-          exposants que tu connais et ce qu’ils en pensent ; il tient tes dossiers, tes paiements
+          exposants que tu connais et ce qu’ils en pensent ; il suit tes dossiers, tes paiements
           et ton calendrier.
         </p>
         <LandingSearch />
