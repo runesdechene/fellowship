@@ -6,9 +6,10 @@
  * ATTENTION — « Commencer » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
  *            `away` : la barre posée sur une page publique (résultats, fiche, lot 11b) — ses liens
- *            ramènent à la landing, et elle est compacte d'emblée. `paper` : claire, posée sur le
- *            papier de la fiche vue sans compte (maquette 2482:878) ; la recherche publique garde
- *            la barre brune, posée sur son en-tête sombre.
+ *            ramènent à la landing, et elle est compacte d'emblée. `paper` : la barre de la fiche
+ *            vue sans compte, claire, réduite au logo et aux deux boutons, dans la colonne de gauche
+ *            pour que l'affiche monte jusqu'en haut (Uriel, 25/10/2026) ; la recherche publique
+ *            garde la barre brune, posée sur son en-tête sombre.
  */
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -54,21 +55,23 @@ export function LandingTopBar({
         >
           <Wordmark />
         </a>
-        <nav
-          ref={nav}
-          className={`landing-bar__anchors${active ? ' has-active' : ''}`}
-          aria-label="Chapitres"
-        >
-          {CHAPTERS.map((chapter) => (
-            <a
-              key={chapter.id}
-              href={`${home}#${chapter.id}`}
-              aria-current={chapter.id === active ? 'location' : undefined}
-            >
-              {chapter.label}
-            </a>
-          ))}
-        </nav>
+        {!paper && (
+          <nav
+            ref={nav}
+            className={`landing-bar__anchors${active ? ' has-active' : ''}`}
+            aria-label="Chapitres"
+          >
+            {CHAPTERS.map((chapter) => (
+              <a
+                key={chapter.id}
+                href={`${home}#${chapter.id}`}
+                aria-current={chapter.id === active ? 'location' : undefined}
+              >
+                {chapter.label}
+              </a>
+            ))}
+          </nav>
+        )}
         <div className="landing-bar__actions">
           <Link className="landing-button landing-button--glass" to="/connexion">
             Se connecter

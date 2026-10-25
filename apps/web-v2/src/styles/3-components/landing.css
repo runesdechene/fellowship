@@ -332,22 +332,17 @@ select.landing-search__value {
 }
 
 /* Sur la fiche vue sans compte, la barre est claire : le papier de la page, un filet
-   dessous, la marque et les liens à l'encre (maquette 2482:878). Elle suit le thème de l'app. */
+   dessous, la marque à l'encre. Elle vit dans la colonne de gauche, collée en haut, et laisse
+   l'affiche monter jusqu'au bord de l'écran. Elle suit le thème de l'app. */
 .landing-bar.is-paper {
+  position: sticky;
+  top: 0;
   border-bottom: 1px solid var(--line-card);
   background: var(--surface-app);
 }
 
 .landing-bar.is-paper .landing-bar__brand {
   --wordmark-ink: var(--ink-title);
-}
-
-.landing-bar.is-paper .landing-bar__anchors {
-  color: var(--ink-soft);
-}
-
-.landing-bar.is-paper .landing-bar__anchors a:hover {
-  color: var(--ink-title);
 }
 
 .landing-bar.is-paper .landing-button--glass {
