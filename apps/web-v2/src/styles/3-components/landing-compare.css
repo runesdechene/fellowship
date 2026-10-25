@@ -9,6 +9,9 @@
 
 /* --- La comparaison -------------------------------------------------------------------- */
 .landing-compare {
+  /* La disposition suit la largeur du bloc, pas celle de l'écran : il vit aussi dans la colonne
+     étroite de la fiche vue sans compte (GuestPitch). */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -270,10 +273,10 @@
   color: var(--landing-cream);
 }
 
-/* --- Écrans plus étroits ---------------------------------------------------------------- */
-/* Sous 1600 px, la comparaison ne tient plus sur une ligne : l'app passe sous les outils, et la
-   flèche plonge vers elle. */
-@media (width <= 1600px) {
+/* --- Blocs plus étroits ----------------------------------------------------------------- */
+/* La ligne (outils, flèche, app) demande 1 493 px ; elle peut mordre de 53 px sur la marge de la
+   bande. En dessous, l'app passe sous les outils, et la flèche plonge vers elle. */
+@container (width < 1440px) {
   .landing-compare__row {
     flex-direction: column;
     gap: var(--space-24);
@@ -284,13 +287,16 @@
     margin-block: var(--space-56);
     rotate: 90deg;
   }
+}
 
+@media (width <= 1600px) {
   .landing-pro-soon__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (width <= 760px) {
+/* Sous 723 px, les deux colonnes de tuiles ne tiennent plus. */
+@container (width < 723px) {
   .landing-compare__tools {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-16);
@@ -326,7 +332,9 @@
   .landing-compare__punch {
     font: var(--type-landing-statement-mobile);
   }
+}
 
+@media (width <= 760px) {
   .landing-pro-soon__list {
     grid-template-columns: minmax(0, 1fr);
   }
