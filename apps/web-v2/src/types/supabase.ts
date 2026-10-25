@@ -673,6 +673,32 @@ export type Database = {
           },
         ]
       }
+      event_slug_history: {
+        Row: {
+          event_id: string
+          replaced_at: string
+          slug: string
+        }
+        Insert: {
+          event_id: string
+          replaced_at?: string
+          slug: string
+        }
+        Update: {
+          event_id?: string
+          replaced_at?: string
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_slug_history_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_thread_replies: {
         Row: {
           acted_by_user_id: string | null
@@ -2700,7 +2726,11 @@ export type Database = {
         Returns: string
       }
       events_base_slug: {
-        Args: { p_city: string; p_name: string }
+        Args: { p_name: string; p_year: number }
+        Returns: string
+      }
+      events_free_slug: {
+        Args: { p_city: string; p_id: string; p_name: string; p_year: number }
         Returns: string
       }
       events_within: {
@@ -3009,6 +3039,7 @@ export type Database = {
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      slug_actuel: { Args: { p_slug: string }; Returns: string }
       suggestion_candidates: {
         Args: { p_actor: string }
         Returns: {
