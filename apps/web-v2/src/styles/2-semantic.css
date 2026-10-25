@@ -765,6 +765,10 @@
   --type-canal-compte: var(--weight-semibold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
 
+  /* Les avatars d'une liste serrée et ceux d'un groupe en pile (calendrier, explorer, réglages,
+     accueil) : ils vivaient ici avec l'ancienne discussion, ils servent ailleurs. */
+  --avatar-size-discussion: var(--width-avatar-discussion);
+  --avatar-size-pile: var(--width-avatar-pile);
   --thread-photo: var(--width-avatar-thread);
   --thread-reply-photo: var(--width-avatar-reply);
   --thread-separator: var(--sand-275);

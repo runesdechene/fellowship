@@ -69,6 +69,16 @@
   background: var(--surface-panel);
 }
 
+/* L'affiche se pose en retrait (poster-wall.css) : le panneau continue sous sa marge, sinon le
+   fond de la barre latérale apparaît autour d'elle (maquette 2518:233). */
+.app-shell:has(> .poster-wall) {
+  background: linear-gradient(
+    to left,
+    var(--surface-panel) calc(var(--wall-width) + var(--wall-inset)),
+    var(--surface-app) 0
+  );
+}
+
 /* Téléphone : la barre latérale s'efface, la barre d'onglets prend le bas de l'écran. */
 @media (width <= 760px) {
   .app-shell .sidebar {
