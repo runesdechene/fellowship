@@ -12,7 +12,7 @@
 .code-input__box {
   width: var(--code-box-width);
   height: var(--code-box-height);
-  border: 1px solid var(--line-card);
+  border: 1px solid var(--control-line);
   box-shadow: var(--shadow-block);
   border-radius: var(--radius-door-field);
   background: var(--surface-card);

@@ -803,6 +803,8 @@
      ====================================================================== */
   --control-height: 46px;
   --control-surface: var(--surface-card);
+  /* Le filet d'un champ, plus marqué que celui des cartes : un champ blanc doit se voir dans une carte blanche. */
+  --control-line: var(--sand-500);
   --control-ink: var(--ink-title);
   --control-placeholder: var(--ink-soft);
   --control-padding-x: var(--space-16);
@@ -1931,6 +1933,7 @@
   --accent-interactive-surface: var(--night-200);
   --line-card: var(--night-300);
   --line-dashed: var(--night-400);
+  --control-line: var(--night-400);
   --border-menu: var(--night-300);
 
   /* La terre 700 est trop sombre pour se lire sur la nuit : l'encre de l'acquis passe en 400. */

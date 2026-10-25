@@ -42,7 +42,7 @@
   width: 100%;
   height: var(--control-height);
   padding: 0 var(--control-padding-x);
-  border: 1px solid var(--line-card);
+  border: 1px solid var(--control-line);
   box-shadow: var(--shadow-block);
   background: var(--control-surface);
   border-radius: var(--radius-control);

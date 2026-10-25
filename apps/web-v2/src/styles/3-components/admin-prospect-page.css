@@ -123,7 +123,7 @@
 .prospect-compose__field,
 .prospect-compose__text {
   padding: var(--space-8) var(--space-12);
-  border: 1px solid var(--line-card);
+  border: 1px solid var(--control-line);
   box-shadow: var(--shadow-block);
   border-radius: var(--radius-sm);
   background: var(--surface-card);

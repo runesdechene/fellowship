@@ -58,7 +58,7 @@
 .notes__label-input {
   width: var(--admin-note-label-width);
   padding: var(--space-2) var(--space-8);
-  border: 1px solid var(--line-card);
+  border: 1px solid var(--control-line);
   border-radius: var(--radius-chip);
   background: var(--control-surface);
   font: var(--type-chip);
@@ -110,6 +110,7 @@
   min-height: var(--admin-note-input-height);
   max-height: var(--admin-note-input-max-height);
   padding: var(--space-8) var(--control-padding-x);
+  border: 1px solid var(--control-line);
   border-radius: var(--radius-control);
   background: var(--control-surface);
   field-sizing: content;
