@@ -28,7 +28,7 @@ export function NotificationSettings() {
   const anyPro = entities.some((entity) => isPro(entity, now))
 
   return (
-    <section id="notifications" className="settings-section">
+    <section className="settings-section">
       <div className="settings-section__head">
         <h2 className="settings-section__title">Notifications</h2>
         <p className="settings-section__note">

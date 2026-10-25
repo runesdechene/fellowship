@@ -1,12 +1,15 @@
 /**
- * QUOI     — la page Réglages : le titre et ce qui vient de s'enregistrer, la colonne des sections,
- *            puis les sections.
- * POURQUOI — maquette 2206:691 (lot 9b) : Profil, Compte, Notifications, Enseignes et abonnement,
- *            Contact, et la suppression du compte en bas. Pas de bouton Enregistrer : chaque
- *            changement s'écrit aussitôt, et l'en-tête le dit.
+ * QUOI     — la page Réglages : le titre et ce qui vient de s'enregistrer, la colonne des rubriques,
+ *            puis la rubrique ouverte, seule (`/reglages/:rubrique`).
+ * POURQUOI — maquettes `2027 — Réglages · Profil`… `· Contact` (2533:233, 25/10/2026) : une page par
+ *            rubrique, la colonne reste. Pas de bouton Enregistrer : chaque changement s'écrit
+ *            aussitôt, et l'en-tête le dit.
+ * ATTENTION — `/reglages` seul montre le Profil ; sur téléphone, il montre la liste des rubriques
+ *            (settings.css), puisque la colonne n'y tient pas à côté.
  */
-import { Check } from 'lucide-react'
+import { Bell, Check, KeyRound, Mail, Store, UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { AccountSection } from './AccountSection'
 import { ContactSection } from './ContactSection'
 import { DeleteAccount } from './DeleteAccount'
@@ -16,12 +19,14 @@ import { ProfileSection } from './ProfileSection'
 import type { SaveState } from './useProfileSave'
 
 const SECTIONS = [
-  { id: 'profil', label: 'Profil' },
-  { id: 'compte', label: 'Compte' },
-  { id: 'notifications', label: 'Notifications' },
-  { id: 'enseignes', label: 'Enseignes et abonnement' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'profil', label: 'Profil', Icon: UserRound },
+  { id: 'compte', label: 'Compte', Icon: KeyRound },
+  { id: 'notifications', label: 'Notifications', Icon: Bell },
+  { id: 'enseignes', label: 'Enseignes et abonnement', Icon: Store },
+  { id: 'contact', label: 'Contact', Icon: Mail },
 ] as const
+
+type SectionId = (typeof SECTIONS)[number]['id']
 
 const SAVED_FOR_MS = 2000
 
@@ -31,38 +36,30 @@ const SAYS: Record<SaveState, string> = {
   failed: 'Pas enregistré — réessaie',
 }
 
-/** La section qui occupe le haut de l'écran : celle que la colonne allume. */
-function useVisibleSection(): string {
-  const [visible, setVisible] = useState<string>(SECTIONS[0].id)
-  useEffect(() => {
-    // L'observateur ne rapporte que ce qui change : on garde l'ensemble des sections présentes
-    // dans le haut de l'écran, et la première dans l'ordre de la page l'emporte.
-    const present = new Set<string>()
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) present.add(entry.target.id)
-          else present.delete(entry.target.id)
-        }
-        const first = SECTIONS.find((section) => present.has(section.id))
-        if (first) setVisible(first.id)
-      },
-      { rootMargin: '-10% 0px -55% 0px' }, // la bande sous la barre du haut
-    )
-    for (const { id } of SECTIONS) {
-      const section = document.getElementById(id)
-      if (section) observer.observe(section)
-    }
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-  return visible
+function Section({ id, onSave }: { id: SectionId; onSave: (state: SaveState) => void }) {
+  switch (id) {
+    case 'profil':
+      return <ProfileSection onSave={onSave} />
+    case 'compte':
+      return (
+        <>
+          <AccountSection />
+          <DeleteAccount />
+        </>
+      )
+    case 'notifications':
+      return <NotificationSettings />
+    case 'enseignes':
+      return <EntitiesSection />
+    case 'contact':
+      return <ContactSection />
+  }
 }
 
 export function SettingsPage() {
+  const { rubrique } = useParams()
   const [saveState, setSaveState] = useState<SaveState>('idle')
-  const visible = useVisibleSection()
+  const open = SECTIONS.find((section) => section.id === (rubrique ?? 'profil'))
 
   // « Enregistré » ne reste qu'un instant ; un échec reste jusqu'au prochain essai.
   useEffect(() => {
@@ -75,8 +72,10 @@ export function SettingsPage() {
     }
   }, [saveState])
 
+  if (!open) return <Navigate to="/reglages" replace />
+
   return (
-    <div className="settings">
+    <div className={rubrique ? 'settings' : 'settings settings--index'}>
       <header className="settings__header">
         <h1 className="settings__title">Réglages</h1>
         <p
@@ -90,28 +89,23 @@ export function SettingsPage() {
         </p>
       </header>
       <div className="settings__body">
-        <nav className="settings__nav" aria-label="Sections des Réglages">
-          {SECTIONS.map((section) => (
-            <a
-              key={section.id}
+        <nav className="settings__nav" aria-label="Rubriques des Réglages">
+          {SECTIONS.map(({ id, label, Icon }) => (
+            <Link
+              key={id}
               className={
-                section.id === visible
-                  ? 'settings__nav-item settings__nav-item--on'
-                  : 'settings__nav-item'
+                id === open.id ? 'settings__nav-item settings__nav-item--on' : 'settings__nav-item'
               }
-              href={`#${section.id}`}
+              to={`/reglages/${id}`}
+              aria-current={id === open.id ? 'page' : undefined}
             >
-              {section.label}
-            </a>
+              <Icon size={15} strokeWidth={2} />
+              {label}
+            </Link>
           ))}
         </nav>
         <div className="settings__sections">
-          <ProfileSection onSave={setSaveState} />
-          <AccountSection />
-          <NotificationSettings />
-          <EntitiesSection />
-          <ContactSection />
-          <DeleteAccount />
+          <Section id={open.id} onSave={setSaveState} />
         </div>
       </div>
     </div>

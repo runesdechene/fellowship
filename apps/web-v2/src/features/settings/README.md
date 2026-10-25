@@ -1,9 +1,10 @@
 # features/settings — les Réglages
 
-`/reglages` (lot 8e, puis lot 9b, maquette 2206:691). Chaque changement s'enregistre aussitôt.
+`/reglages/:rubrique` (lot 8e, lot 9b, puis une page par rubrique : maquettes 2533:233 et voisines,
+25/10/2026). Chaque changement s'enregistre aussitôt.
 
-- `SettingsPage.tsx` — la page : l'en-tête (« Enregistré »), la colonne qui suit le défilement, les
-  sections.
+- `SettingsPage.tsx` — la page : l'en-tête (« Enregistré »), la colonne des rubriques, la rubrique
+  ouverte (Compte porte aussi « Supprimer mon compte »).
 - `SettingRow.tsx` — la carte et sa ligne (libellé, aide, contrôle) : toutes les sections en sont
   faites.
 - `ProfileSection.tsx` — photo, nom, ville, code postal, genre, lien vers la vitrine.

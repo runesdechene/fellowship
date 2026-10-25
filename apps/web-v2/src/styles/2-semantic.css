@@ -1188,9 +1188,9 @@
     var(--family-sans);
 
   /* --- Les Réglages (features/settings, lot 8e) --- */
-  --settings-nav-width: 196px;
+  --settings-nav-width: 214px; /* une icône devant chaque rubrique (2533:233) */
   --settings-column-width: 760px;
-  --settings-columns-gap: 36px;
+  --settings-columns-gap: 18px;
   --settings-sections-gap: var(--space-48);
   --settings-off-opacity: 0.45;
   --setting-row-height: 56px; /* une ligne de la maquette 2206:691 */

@@ -37,7 +37,7 @@ export function EntitiesSection() {
   const now = new Date()
 
   return (
-    <section id="enseignes" className="settings-section">
+    <section className="settings-section">
       <div className="settings-section__head">
         <h2 className="settings-section__title">Enseignes et abonnement</h2>
         <p className="settings-section__note">

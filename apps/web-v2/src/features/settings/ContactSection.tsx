@@ -7,7 +7,7 @@ import { SettingCard, SettingRow } from './SettingRow'
 
 export function ContactSection() {
   return (
-    <section id="contact" className="settings-section">
+    <section className="settings-section">
       <div className="settings-section__head">
         <h2 className="settings-section__title">Contact</h2>
       </div>

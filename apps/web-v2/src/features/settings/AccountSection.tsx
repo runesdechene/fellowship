@@ -15,7 +15,7 @@ export function AccountSection() {
   const go = useTransitionNavigate()
 
   return (
-    <section id="compte" className="settings-section">
+    <section className="settings-section">
       <div className="settings-section__head">
         <h2 className="settings-section__title">Compte</h2>
       </div>

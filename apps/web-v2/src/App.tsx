@@ -350,7 +350,7 @@ export function App() {
           }
         />
         <Route
-          path="/reglages"
+          path="/reglages/:rubrique?"
           element={
             <AppPage>
               <SettingsPage />

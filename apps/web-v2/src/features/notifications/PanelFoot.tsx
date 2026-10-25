@@ -20,7 +20,7 @@ export function PanelFoot({ onClose }: { onClose: () => void }) {
         className="notif-panel__settings"
         onClick={() => {
           onClose()
-          go('/reglages')
+          go('/reglages/notifications')
         }}
       >
         <Settings size={14} strokeWidth={1.8} />

@@ -1,5 +1,5 @@
 /**
- * QUOI     — la page Réglages (features/settings) : le titre, la colonne des sections, la section
+ * QUOI     — la page Réglages (features/settings) : le titre, la colonne des rubriques, la section
  *            Notifications, la carte du téléphone et les six lignes.
  * POURQUOI — maquettes `2027 — Réglages · notifications sur le téléphone` et `… avant activation`
  *            (lot 8e) : des cartes blanches bordées d'un filet, une colonne de 760 px.
@@ -55,6 +55,9 @@
 }
 
 .settings__nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
   padding: var(--space-8) var(--space-12);
   border-radius: var(--radius-settings-nav);
   font: var(--type-settings-nav);
@@ -78,7 +81,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-14);
-  scroll-margin-top: var(--space-24);
 }
 
 .settings-section__head {
@@ -332,13 +334,20 @@
     margin-bottom: var(--space-24);
   }
 
-  /* Sur téléphone, les sections s'empilent : la colonne qui y mène ne sert à rien. */
+  /* Sur téléphone, la colonne ne tient pas à côté : `/reglages` est la liste des rubriques, et
+     une rubrique s'ouvre seule. */
   .settings__body {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .settings__nav {
+  .settings:not(.settings--index) .settings__nav,
+  .settings--index .settings__sections {
     display: none;
+  }
+
+  .settings--index .settings__nav-item--on {
+    background: none;
+    color: var(--ink-soft);
   }
 
   .phone-card {

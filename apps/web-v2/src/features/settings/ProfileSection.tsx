@@ -86,7 +86,7 @@ export function ProfileSection({ onSave }: { onSave: (state: SaveState) => void 
   }
 
   return (
-    <section id="profil" className="settings-section">
+    <section className="settings-section">
       <div className="settings-section__head">
         <h2 className="settings-section__title">Profil</h2>
         <p className="settings-section__note">
