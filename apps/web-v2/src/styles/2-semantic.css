@@ -521,26 +521,16 @@
      du haut au bas de l'écran.
      ====================================================================== */
   --wall-width: 34vw;
-  /* La fiche vue sans compte : l'affiche posée comme le panneau de la connexion, sous la ligne
-     de la barre (les boutons se posent au-dessus d'elle), avec l'ombre adoucie de l'icône de la
-     landing. */
-  --guest-wall-inset: var(--space-24);
+  /* L'affiche posée comme le panneau de la connexion : une marge tout autour, quatre coins arrondis,
+     l'ombre adoucie de l'icône de la landing (maquettes 2506:233 et 2518:233). Sans compte, elle
+     commence sous la ligne de la barre : les boutons se posent au-dessus d'elle. */
+  --wall-inset: var(--space-24);
   --guest-wall-top: calc(2 * var(--landing-bar-compact-pad) + var(--topbar-control-height));
-  --radius-guest-wall: var(--round-24);
-  --guest-wall-shadow:
+  --radius-wall: var(--round-24);
+  --wall-shadow:
     0 1px 2px color-mix(in srgb, var(--ink-950) 3%, transparent),
     0 8px 16px color-mix(in srgb, var(--ink-950) 4%, transparent),
     0 28px 56px color-mix(in srgb, var(--ink-950) 7%, transparent);
-  /* L'affiche porte les rayons du panneau, TOURNÉS VERS LE CONTENU : elle se
-     lit comme une dalle posée sur le crème. On a essayé l'inverse — le
-     panneau s'arrondissant par-dessus l'image — et Uriel a tranché pour
-     celui-ci. Son propre jeton : c'est le même rayon que le panneau, mais
-     rien ne dit qu'il doive le rester.
-
-     Ils sont sur l'IMAGE et non sur son cadre, ce qui les fait voyager avec
-     elle pendant la glissade : deux coins arrondis qui traversent l'écran,
-     plutôt qu'un masque fixe derrière lequel une image défile. */
-  --wall-radius: var(--radius-panel);
 
   /* LE VOILE EST BRUN, ET C'EST CE QUI LE REND UTILE.
      Il a longtemps repris les couleurs relevées DANS l'affiche — donc il la
@@ -624,7 +614,7 @@
   --type-segmented-on: var(--weight-semibold) var(--size-13) / var(--leading-snug)
     var(--family-sans);
   --dossier-card-padding: var(--space-18);
-  --dossier-card-radius: var(--round-15);
+  --dossier-card-radius: var(--round-16);
   --dossier-gauge-height: var(--space-6);
   --dossier-goal-width: 120px;
   --dossier-note-min: 160px;
@@ -730,30 +720,44 @@
   --type-review-quote-guest: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
   --review-quote-guest-ink: var(--ink-790);
 
+  /* La fiche connectée (maquette 2518:233) : la terre en petites touches. La note des avis prend
+     le brun du titre, ses étoiles l'orange, ses barres le dégradé de la marque ; l'avis cité et le
+     bilan de l'an passé se posent sur la terre claire. */
+  --warm-surface: var(--terre-50);
+  --warm-line: var(--terre-150);
+  --warm-soft: var(--terre-450);
+  --warm-ink: var(--event-title-ink);
+  --review-star-ink: var(--terre-600);
+  --review-bar-track: var(--terre-50);
+  --type-review-quote-warm: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
+
+  /* « L'année dernière, tu as fait +2 870 € » : en haut à droite de la fiche. */
+  --last-year-badge: var(--size-36);
+  --radius-last-year: var(--round-14);
+  --radius-last-year-badge: var(--round-10);
+  --last-year-text-gap: 1px;
+  --last-year-veil: blur(6px);
+  --type-last-year-lead: var(--weight-regular) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+  --type-last-year-amount: var(--weight-regular) var(--size-26) / 1 var(--family-display);
+  --tracking-last-year-amount: -0.01em;
+  --type-last-year-button: var(--weight-semibold) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
+
+  /* La fenêtre « Candidater » : le titre en serif brun, comme celui de la fiche. */
+  --apply-dialog-width: 600px;
+  --radius-apply-dialog: var(--round-24);
+  --type-apply-dialog-title: var(--weight-regular) var(--size-44) / 1 var(--family-display);
+
   /* =========================================================================
      DISCUSSION DU FESTIVAL — les questions et leurs réponses
      ========================================================================
-     La section a été refondue le 19 août 2026. Elle était « moche au
-     possible » : une liste de texte gris sur du crème, où la question
-     tenait en 16 px entre son auteur et son corps.
-
-     L'AUDACE EST DANS L'ÉCHELLE, parce que c'est le seul geste fort
-     disponible sur une page sans ombre et sans image. La question monte à
-     26 px et tout le reste redescend : la section cesse d’être une liste
-     pour devenir un sommaire. On balaie les questions, on s’arrête sur la
-     sienne.
-
-     LA RÉPONSE ÉLUE est le SEUL aplat de toute la section, et elle sort de
-     la chronologie. Dans une question-réponse on vient chercher LA
-     réponse ; une fois qu'elle fait autorité, l'ordre d'arrivée ne porte
-     plus rien. Son texte est plus gros que le corps de la question.
+     Un mini-fil dans une seule carte (maquette 2518:233, 25/10/2026) : on écrit en tête, les
+     questions suivent, séparées par un filet à peine plus clair que celui de la carte. La photo de
+     chacun tient un trait qui la relie aux réponses : c'est le trait qui dit l'appartenance.
      ====================================================================== */
-  --discussion-gap: var(--space-42); /* entre deux questions */
-
-  /* Les canaux reprennent la grammaire de la bascule du paiement : le
-     retenu prend l'aplat clair, l'autre reste nu. Une seule façon de dire
-     « choisis-en un » dans toute l'app. Ils portaient l'olive, donc la
-     couleur de « c'est acquis » — un filtre n'est pas un état. */
+  /* Les canaux reprennent la grammaire de la bascule du paiement : le retenu prend l'aplat clair,
+     l'autre reste nu. */
   --canal-height: var(--height-option);
   --canal-gap: var(--space-6);
   --type-canal: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
@@ -761,49 +765,35 @@
   --type-canal-compte: var(--weight-semibold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
 
-  /* La question porte le corps d’un titre de page, et une mesure courte :
-     au-delà de vingt-deux caractères par ligne elle cesse de se lire comme
-     une question et redevient un paragraphe. */
-  --question-measure: none;
-  --type-question: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
-  --tracking-question: normal;
-  --type-question-body: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
+  --thread-photo: var(--width-avatar-thread);
+  --thread-reply-photo: var(--width-avatar-reply);
+  --thread-separator: var(--sand-275);
+  --thread-rail: var(--line-card);
+  --thread-rail-width: 2px;
+  --thread-text-ink: var(--ink-790);
+  --thread-resolved-ink: var(--sauge-700);
+  --thread-resolved-surface: color-mix(in srgb, var(--thread-resolved-ink) 10%, transparent);
+  --thread-publish-surface: var(--essentials-apply-surface);
+  --thread-publish-ink: var(--essentials-apply-ink);
+  --type-thread-name: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-thread-time: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  --type-thread-question: var(--weight-medium) var(--size-16) / 1.5 var(--family-sans);
+  --tracking-thread-question: -0.003em;
+  --type-thread-text: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
+  --type-thread-prompt: var(--weight-regular) var(--size-15) / var(--leading-snug)
+    var(--family-sans);
+  --type-thread-reply: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
+  --type-thread-badge: var(--weight-semibold) var(--size-12) / var(--leading-snug)
     var(--family-sans);
 
-  --signature-gap: var(--space-10);
-  --avatar-size-discussion: var(--width-avatar-discussion);
-  --avatar-size-pile: var(--width-avatar-pile);
-  --pile-overlap: -8px;
-  --type-signature: var(--weight-semibold) var(--size-12) / var(--leading-snug) var(--family-sans);
-  --type-signature-time: var(--weight-medium) var(--size-11) / var(--leading-snug)
+  /* Les champs d'écriture : le titre d'une question se tape gros, ce qu'on écrit ressemble déjà à
+     ce qu'on lira. */
+  --type-composer-field: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
     var(--family-sans);
-
-  --reponse-elue-padding-y: var(--space-23);
-  --reponse-elue-padding-x: var(--space-24);
-  --radius-reponse-elue: var(--round-15);
-  --type-reponse-elue: var(--weight-medium) var(--size-16) / var(--leading-relaxed)
-    var(--family-sans);
-  --type-sceau: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
-
-  --reponse-inset: var(--space-23);
-  --type-reponse: var(--weight-regular) var(--size-14) / var(--leading-relaxed) var(--family-sans);
-
-  --poser-padding-y: var(--space-16);
-  --poser-padding-x: var(--space-18);
-  --type-poser: var(--weight-semibold) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-poser-sous: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
-
-  --composer-padding: var(--space-14);
-  --composer-gap: var(--space-8);
   --type-composer-titre: var(--weight-semibold) var(--size-16) / var(--leading-snug)
     var(--family-sans);
-
-  /* L INVITATION porte l absence quand il y en a une : sa sous-ligne dit
-     « personne n a encore rien demande » au lieu qu un paragraphe le
-     constate en dessous. Ce qui reste ici ne sert donc qu aux cas ou il n y
-     a rien A FAIRE — un filtre qui masque tout, ou un acteur qui ne peut pas
-     poser de question. Ca se dit petit. */
-  --type-vide: var(--weight-medium) var(--size-13) / var(--leading-normal) var(--family-sans);
+  --type-composer-note: var(--weight-medium) var(--size-11) / var(--leading-normal)
+    var(--family-sans);
 
   /* =========================================================================
      FORMULAIRES — champs, bascules, dépôt de fichier
@@ -1903,6 +1893,14 @@
   --event-block-title-ink: var(--cream-50);
   --event-about-ink: var(--cream-200);
   --review-quote-guest-ink: var(--cream-200);
+  --warm-surface: var(--terre-900);
+  --warm-line: color-mix(in srgb, var(--terre-400) 30%, transparent);
+  --warm-soft: var(--cream-500);
+  --review-star-ink: var(--terre-400);
+  --review-bar-track: var(--night-300);
+  --thread-separator: var(--night-200);
+  --thread-text-ink: var(--cream-200);
+  --thread-resolved-ink: var(--menthe-300);
   --ink-strong: var(--cream-50);
   /* Gris clair : en crème plein, les grands titres éblouissaient (19/10/2026). */
   --ink-section: var(--cream-200);

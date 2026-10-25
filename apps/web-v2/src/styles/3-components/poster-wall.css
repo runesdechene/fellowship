@@ -9,15 +9,17 @@
 
 .poster-wall {
   position: sticky;
-  top: 0;
+  top: var(--wall-inset);
   align-self: flex-start;
   flex: none;
   width: var(--wall-width);
-  height: 100vh;
+  height: calc(100vh - 2 * var(--wall-inset));
+  margin: var(--wall-inset) var(--wall-inset) var(--wall-inset) 0;
   overflow: hidden;
-  /* CARRÉ, et donc invisible : il a la couleur du panneau qu'il prolonge. Les
-     rayons sont passés sur l'image (plus bas) pour qu'ils VOYAGENT AVEC ELLE
-     au lieu de rester un masque fixe. */
+  /* Posée avec une marge et quatre coins (Uriel, 25/10/2026) : le cadre arrondit et rogne, l'image
+     glisse dedans sans avoir à porter ses propres rayons. */
+  border-radius: var(--radius-wall);
+  box-shadow: var(--wall-shadow);
   /* LA COULEUR DU CONTENU, et non un brun d'attente. Le cadre est en place
      avant l'affiche ; le voir clair fait lire l'image comme quelque chose qui
      ARRIVE SUR la page, là où un fond sombre donnait une fente qui se
@@ -79,10 +81,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* LES RAYONS SONT ICI, pas sur le cadre : ils traversent donc l'écran avec
-     l'affiche. Tournés vers le contenu — le bord droit est celui de la
-     fenêtre, il n'a rien à arrondir. */
-  border-radius: var(--wall-radius) 0 0 var(--wall-radius);
   /* Hors champ tant qu'elle n'est pas prête — voir la glissade plus haut. */
   transform: translateX(100%);
 }
@@ -96,9 +94,6 @@
   inset: 0;
   opacity: var(--wall-veil-opacity);
   background: var(--wall-veil);
-  /* Mêmes rayons que l'affiche qu'il couvre, sinon il lui repeindrait des
-     coins carrés par-dessus. */
-  border-radius: var(--wall-radius) 0 0 var(--wall-radius);
   /* Il voyage AVEC l'affiche : voilé le cadre vide, il donnerait la fente
      sombre qu'on vient justement de retirer. */
   transform: translateX(100%);
@@ -125,7 +120,6 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: var(--wall-radius) 0 0 var(--wall-radius);
 }
 
 .poster-wall__empty .poster-empty__icon {

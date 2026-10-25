@@ -20,20 +20,11 @@
   min-width: 0;
 }
 
-/* L'affiche posée comme le panneau de la connexion : une marge tout autour, quatre coins
-   arrondis (Uriel, 25/10/2026). Le cadre arrondit et rogne ; l'image n'a plus à le faire. */
+/* Sans compte, l'affiche commence sous la ligne de la barre : les boutons se posent au-dessus. */
 .guest-shell .poster-wall {
   top: var(--guest-wall-top);
-  height: calc(100vh - var(--guest-wall-top) - var(--guest-wall-inset));
-  margin: var(--guest-wall-top) var(--guest-wall-inset) var(--guest-wall-inset) 0;
-  border-radius: var(--radius-guest-wall);
-  box-shadow: var(--guest-wall-shadow);
-}
-
-.guest-shell .poster-wall__image,
-.guest-shell .poster-wall__veil,
-.guest-shell .poster-wall__empty {
-  border-radius: 0;
+  height: calc(100vh - var(--guest-wall-top) - var(--wall-inset));
+  margin-top: var(--guest-wall-top);
 }
 
 /* La barre : le retour et le logo, dans la colonne, collés en haut au défilement. */
@@ -45,7 +36,7 @@
   align-items: center;
   gap: var(--space-12);
   /* Même marge que « Commencer » en face. */
-  padding: var(--landing-bar-compact-pad) var(--guest-wall-inset);
+  padding: var(--landing-bar-compact-pad) var(--wall-inset);
   background: var(--surface-app);
 }
 
@@ -60,7 +51,7 @@
 .guest-shell__actions {
   position: fixed;
   top: var(--landing-bar-compact-pad);
-  right: var(--guest-wall-inset);
+  right: var(--wall-inset);
   z-index: 20;
   display: flex;
   gap: var(--space-8);
@@ -96,13 +87,11 @@
   }
 }
 
-/* La carte s'ouvre DANS le cadre de l'affiche, pas par-dessus la page : mêmes marges, mêmes coins
-   (le panneau vit dans document.body, d'où le :has). */
+/* Sans compte, la carte commence elle aussi sous la ligne de la barre (le panneau vit dans
+   document.body, d'où le :has). */
 @media (width > 1100px) {
   body:has(.guest-shell) .map-panel--wall {
-    inset: var(--guest-wall-top) var(--guest-wall-inset) var(--guest-wall-inset) auto;
-    overflow: hidden;
-    border-radius: var(--radius-guest-wall);
+    top: var(--guest-wall-top);
   }
 }
 

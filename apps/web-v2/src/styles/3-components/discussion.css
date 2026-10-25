@@ -1,32 +1,29 @@
 /**
- * QUOI     — les styles de la discussion du festival : questions et réponses
- *            (features/event/EventDiscussion.tsx).
- * POURQUOI — l'audace est dans l'échelle — sur une page sans ombre et sans image, la question
- *            monte et tout le reste redescend.
- *
- * Refondue le 19 août 2026. Elle était « moche au possible » : une liste de
- * texte gris sur du crème, où la question tenait en 16 px coincée entre son
- * auteur et son corps.
- *
- * AUCUNE CARTE. Les questions se séparent par un FILET, les réponses par un
- * RETRAIT. C'était déjà la doctrine : « c'est le retrait qui dit
- * l'appartenance, pas un cadre de plus ».
+ * QUOI     — les styles de la discussion du festival (features/event/EventDiscussion.tsx,
+ *            DiscussionThread.tsx, DiscussionBlock.tsx).
+ * POURQUOI — maquette 2518:233 (25/10/2026), un mini-fil : une seule carte, la question à poser en
+ *            tête, puis chaque question avec sa photo, reliée à ses réponses par un trait.
+ * ATTENTION — le trait part de la photo et descend jusqu'au message suivant : c'est
+ *            `.message--linked` qui le pose, le composant décide qui suit qui.
  */
 
 .discussion {
   display: flex;
   flex-direction: column;
+  gap: var(--event-section-title-gap);
 }
 
-/* --- Les canaux ------------------------------------------------------------
-   Même grammaire que la bascule du paiement : le retenu prend l'aplat clair,
-   l'autre reste nu. Une seule façon de dire « choisis-en un » dans toute
-   l'app. Ils portaient l'olive, donc la couleur de « c'est acquis » — un
-   filtre n'est pas un état. */
+.discussion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+/* --- Les canaux ------------------------------------------------------------ */
 .discussion__canaux {
   display: flex;
   gap: var(--canal-gap);
-  margin-bottom: var(--space-24);
 }
 
 .discussion__canal {
@@ -55,104 +52,130 @@
   color: var(--ink-title);
 }
 
-/* Le compte dit où il se passe quelque chose avant qu'on ait cliqué. */
 .discussion__canal small {
   font: var(--type-canal-compte);
   color: var(--ink-soft);
 }
 
-.discussion__canal[aria-pressed='true'] small {
-  color: var(--ink-soft);
-}
-
-/* --- Poser une question ---------------------------------------------------- */
-.discussion__poser:last-child {
-  margin-bottom: 0;
-}
-
-.discussion__poser {
+/* --- Le fil : une seule carte, un filet entre deux parties ---------------- */
+.discussion__fil {
   display: flex;
-  align-items: center;
-  gap: var(--space-12);
-  width: 100%;
-  margin-bottom: var(--space-40);
-  padding: var(--poser-padding-y) var(--poser-padding-x);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   background: var(--surface-card);
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
-  text-align: left;
+  box-shadow: var(--essentials-shadow);
+}
+
+.discussion__fil > * + * {
+  border-top: 1px solid var(--thread-separator);
+}
+
+.discussion__vide {
+  padding: var(--space-18) var(--space-20);
+  font: var(--type-thread-reply);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.discussion__erreur {
+  font: var(--type-thread-reply);
+  color: var(--status-pending-ink);
+}
+
+.discussion__earlier {
+  padding: var(--space-14);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  text-align: center;
   cursor: pointer;
   transition: background-color var(--menu-motion);
 }
 
-.discussion__poser:hover {
+.discussion__earlier:hover {
   background: var(--surface-row-hover);
 }
 
-.discussion__poser-mot {
-  display: block;
-  font: var(--type-poser);
+/* --- Poser une question, en tête du fil ------------------------------------ */
+.composer {
+  --avatar-size: var(--thread-photo);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  padding: var(--space-16) var(--space-16) var(--space-16) var(--space-20);
+  text-align: left;
+}
+
+button.composer {
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+button.composer:hover {
+  background: var(--surface-row-hover);
+}
+
+.composer--open {
+  align-items: flex-start;
+}
+
+.composer__text,
+.composer__form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.composer__form {
+  gap: var(--space-8);
+}
+
+.composer__name {
+  font: var(--type-thread-name);
   color: var(--ink-title);
 }
 
-.discussion__poser-sous {
-  display: block;
-  max-width: 52ch;
-  margin-top: var(--space-4);
-  font: var(--type-poser-sous);
-  line-height: var(--leading-normal);
-  color: var(--ink-soft);
+.composer__prompt {
+  font: var(--type-thread-prompt);
+  color: var(--ink-section-pale);
 }
 
-.discussion__poser-fleche {
+.composer__publish {
   flex: none;
-  margin-left: auto;
-  color: var(--ink-soft);
+  padding: var(--space-9) var(--space-16);
+  border-radius: var(--radius-round);
+  background: var(--thread-publish-surface);
+  font: var(--type-card-link-strong);
+  color: var(--thread-publish-ink);
+  cursor: pointer;
 }
 
-/* --- Écrire ---------------------------------------------------------------- */
-/* Le bouton d envoi prend le rayon des CHAMPS qu il accompagne, pas celui
-   des controles de la page : dans une boite, ce qui se touche s aligne. */
-.discussion__composer {
-  --button-radius: var(--radius-sm);
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--composer-gap);
-  margin-top: var(--space-20);
-  padding: var(--composer-padding);
-  border-radius: var(--radius-card);
-  background: var(--surface-card);
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
+.composer__publish:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
-.discussion__composer--question {
-  margin-top: 0;
-  margin-bottom: var(--space-40);
-}
-
+/* --- Les champs ------------------------------------------------------------- */
 .discussion__champ {
   width: 100%;
   padding: var(--space-12) var(--space-15);
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--surface-panel);
-  font: var(--type-question-body);
+  font: var(--type-composer-field);
   color: var(--ink-title);
   resize: none;
 }
 
-/* Le titre d'une question se tape gros : ce qu'on écrit ressemble déjà à ce
-   qu'on lira. */
 .discussion__champ--titre {
   font: var(--type-composer-titre);
 }
 
-/* --ink-ghost donnait 1,21:1 sur le panneau : du blanc casse sur du blanc
-   casse. Il est fait pour une VALEUR NULLE, pas pour un texte qu'on doit
-   lire — un placeholder dit ce qu'on attend de vous, il se lit. 5,40:1. */
 .discussion__champ::placeholder {
   color: var(--ink-soft);
 }
@@ -164,13 +187,15 @@
 
 .discussion__composer-pied {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-14);
 }
 
 .discussion__note {
-  font: var(--type-signature-time);
-  line-height: var(--leading-normal);
+  flex: 1;
+  font: var(--type-composer-note);
   color: var(--ink-soft);
 }
 
@@ -180,309 +205,214 @@
 
 /* La raison du blocage, jamais un bouton gris sans explication. */
 .discussion__blocage {
-  font: var(--type-signature-time);
+  font: var(--type-composer-note);
   color: var(--status-pending-ink);
 }
 
-.discussion__composer-pied .button {
-  margin-left: auto;
-}
-
-.discussion__composer-pied .button + .button {
-  margin-left: 0;
-}
-
-.discussion__erreur {
-  margin-bottom: var(--space-20);
-  font: var(--type-signature);
-  color: var(--status-pending-ink);
-}
-
-/* --- Le fil ---------------------------------------------------------------- */
-.discussion__fil {
+/* --- Une question et ses réponses ----------------------------------------- */
+.thread {
   display: flex;
   flex-direction: column;
-  padding: 0 var(--dossier-card-padding);
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
-  border-radius: var(--dossier-card-radius);
-  background: var(--surface-card);
+  padding: var(--space-18) var(--space-20);
 }
 
-/* Langage 2027 : le fil est une carte, chaque question une ligne de la carte. */
-.question {
-  padding: var(--space-16) 0;
-}
+.message {
+  --avatar-size: var(--thread-photo);
 
-.question + .question {
-  border-top: 1px solid var(--line-card);
-}
-
-/* La question se lit comme un message (langage 2027) : texte courant, pleine
-   largeur de la carte. Elle portait le corps d'un titre de page avant le 07/10/2026. */
-.question__titre {
-  max-width: var(--question-measure);
-  font: var(--type-question);
-  letter-spacing: var(--tracking-question);
-  color: var(--ink-title);
-  text-wrap: balance;
-}
-
-.question__corps {
-  margin-top: var(--space-14);
-  max-width: var(--width-card);
-  font: var(--type-question-body);
-  color: var(--ink-soft);
-}
-
-/* --- Qui parle, et quand --------------------------------------------------- */
-.discussion__signature {
   display: flex;
-  align-items: center;
-  gap: var(--signature-gap);
-  margin-top: var(--space-18);
-  font: var(--type-signature);
-  color: var(--ink-soft);
-}
-
-.discussion__signature time {
-  font: var(--type-signature-time);
-  color: var(--ink-soft);
-}
-
-.discussion__avatar {
-  --avatar-size: var(--avatar-size-discussion);
-
-  display: inline-flex;
-  flex: none;
-}
-
-/* Les visages de ceux qui ont répondu, AVANT d'ouvrir. L'app fait déjà ça
-   pour les compagnons d'une date : c'est sa grammaire, pas une trouvaille. */
-.question__pile {
-  display: flex;
-  margin-left: auto;
-}
-
-.question__pile .discussion__avatar {
-  --avatar-size: var(--avatar-size-pile);
-
-  border-radius: var(--radius-round);
-  box-shadow: 0 0 0 2px var(--surface-panel);
-}
-
-.question__pile .discussion__avatar + .discussion__avatar {
-  margin-left: var(--pile-overlap);
-}
-
-.question__retirer {
-  display: grid;
-  place-items: center;
-  flex: none;
-  background: none;
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: color var(--menu-motion);
-}
-
-.question__pile + .question__retirer {
-  margin-left: var(--space-12);
-}
-
-.question__retirer:not(.question__pile + .question__retirer) {
-  margin-left: auto;
-}
-
-.question__retirer:hover:not(:disabled) {
-  color: var(--status-pending-ink);
-}
-
-/* =============================================================================
-   LA RÉPONSE ÉLUE — le seul aplat de toute la section
-   =============================================================================
-   Elle était une pastille posée dans la marge. C'est pourtant la SEULE chose
-   qu'on vient chercher : elle prend toute la largeur, un vrai rembourrage, et
-   son texte remonte plus haut que le corps de la question.
-
-   Elle sort aussi de la CHRONOLOGIE — voir EventDiscussion.tsx. Une fois
-   qu'une réponse fait autorité, l'ordre d'arrivée ne porte plus rien.
-   ========================================================================== */
-.reponse-elue {
-  margin-top: var(--space-24);
-  padding: var(--reponse-elue-padding-y) var(--reponse-elue-padding-x);
-  border-radius: var(--radius-reponse-elue);
-  background: var(--status-ok-surface);
-}
-
-.reponse-elue__sceau {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font: var(--type-sceau);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--status-ok-ink);
-}
-
-.reponse-elue__sceau svg {
-  flex: none;
-  color: var(--status-ok-icon);
-}
-
-.reponse-elue__texte {
-  margin-top: var(--space-12);
-  max-width: var(--width-card);
-  font: var(--type-reponse-elue);
-  color: var(--status-ok-ink);
-}
-
-.reponse-elue .discussion__signature,
-.reponse-elue .discussion__signature time {
-  color: var(--status-ok-ink);
-}
-
-.reponse-elue .discussion__geste {
-  color: var(--status-ok-ink);
-}
-
-/* --- Une question sans réponse ---------------------------------------------
-   Ce n'est pas un vide, c'est un ÉTAT : la terre dit « ça attend chez
-   quelqu'un d'autre », la même teinte que « Dossier envoyé » sur la fiche. */
-.question__attente {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  margin-top: var(--space-20);
-  padding: var(--space-8) var(--space-14);
-  border-radius: var(--radius-sm);
-  background: var(--status-pending-surface);
-  font: var(--type-canal-on);
-  color: var(--status-pending-ink);
-}
-
-.question__attente svg {
-  flex: none;
-  color: var(--status-pending-icon);
-}
-
-/* --- Les autres réponses ---------------------------------------------------
-   Neuf questions ouvertes font un mur : elles se replient sous un compte.
-   Le RETRAIT dit l'appartenance, un filet à gauche la souligne — c'est le
-   seul trait vertical de la page, et il porte un sens. */
-.question__deplier {
-  align-self: flex-start;
-  margin-top: var(--space-18);
-  background: none;
-  font: var(--type-canal-on);
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-
-.question__deplier:hover {
-  text-decoration: underline;
-}
-
-.question__autres {
-  display: flex;
-  flex-direction: column;
-}
-
-.reponse {
-  margin-top: var(--space-24);
-  padding-left: var(--reponse-inset);
-  box-shadow: inset 2px 0 0 var(--border-menu);
-}
-
-.reponse .discussion__signature {
-  margin-top: 0;
-}
-
-.reponse__texte {
-  margin-top: var(--space-8);
-  max-width: var(--width-card);
-  font: var(--type-reponse);
-  color: var(--ink-body);
-}
-
-/* --- Les gestes -------------------------------------------------------------
-   Répondre, élire, supprimer sont des ACTIONS et non des destinations : elles
-   ne prennent pas le lavande, qui est réservé à ce qui mène ailleurs. */
-.discussion__gestes {
-  display: flex;
-  gap: var(--space-20);
-  margin-top: var(--space-16);
-}
-
-.discussion__gestes:empty {
-  display: none;
-}
-
-.discussion__geste {
-  background: none;
-  font: var(--type-canal-on);
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-
-.discussion__geste:hover:not(:disabled) {
-  text-decoration: underline;
-}
-
-.discussion__geste--seul {
-  align-self: flex-start;
-  margin-top: var(--space-20);
-}
-
-/* --- Rien encore ------------------------------------------------------------
-   Un écran vide est une invitation, pas un constat. */
-/* Un ecran vide est une INVITATION, pas un constat — encore faut-il pouvoir
-   le lire. Il portait --ink-ghost, soit 1,21:1 sur le panneau : la page
-   avait l air abandonnee, litteralement effacee. Meme cause que les
-   placeholders : --ink-ghost est fait pour une VALEUR NULLE, jamais pour une
-   phrase qu on adresse a quelqu un. */
-.discussion__vide {
-  max-width: 46ch;
-  font: var(--type-vide);
-  color: var(--ink-soft);
-  text-wrap: balance;
-}
-
-/* --- La sourdine (features/event/DiscussionBlock.tsx) --------------------- */
-.discussion-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: var(--space-12);
 }
 
+/* La photo, puis le trait qui descend jusqu'au message suivant. */
+.message__rail {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.message--linked .message__rail::after {
+  content: '';
+  flex: 1;
+  width: var(--thread-rail-width);
+  border-radius: var(--radius-round);
+  background: var(--thread-rail);
+}
+
+.message__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.message--linked .message__body {
+  padding-bottom: var(--space-18);
+}
+
+.message__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.message__name {
+  font: var(--type-thread-name);
+  color: var(--ink-title);
+}
+
+.message__time {
+  flex: 1;
+  font: var(--type-thread-time);
+  color: var(--ink-section-pale);
+}
+
+.message__question {
+  font: var(--type-thread-question);
+  letter-spacing: var(--tracking-thread-question);
+  color: var(--ink-title);
+}
+
+.message__text {
+  font: var(--type-thread-text);
+  color: var(--thread-text-ink);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-18);
+  padding-top: var(--space-6);
+}
+
+.message__actions:empty {
+  display: none;
+}
+
+.message__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.message__action:hover:not(:disabled, .message__action--count) {
+  color: var(--ink-title);
+}
+
+.message__action--count {
+  cursor: default;
+}
+
+.thread__resolved {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-10) var(--space-3) var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--thread-resolved-surface);
+  font: var(--type-thread-badge);
+  color: var(--thread-resolved-ink);
+}
+
+/* La réponse retenue : la coche de « Résolu », sans le mot, au bout de la ligne du nom. */
+.thread__elected {
+  display: inline-flex;
+  color: var(--thread-resolved-ink);
+}
+
+.thread__remove {
+  display: inline-flex;
+  color: var(--ink-section-pale);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.thread__remove:hover:not(:disabled) {
+  color: var(--status-pending-ink);
+}
+
+.thread__unfold {
+  width: fit-content;
+  margin: 0 0 var(--space-18) calc(var(--thread-photo) + var(--space-12));
+  font: var(--type-card-link);
+  color: var(--ink-title);
+  cursor: pointer;
+}
+
+/* --- Répondre, au bas du fil ------------------------------------------------ */
+.thread__reply {
+  --avatar-size: var(--thread-reply-photo);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  font: var(--type-thread-reply);
+  color: var(--ink-section-pale);
+  text-align: left;
+}
+
+button.thread__reply {
+  cursor: pointer;
+}
+
+button.thread__reply:hover {
+  color: var(--ink-soft);
+}
+
+.thread__reply--open {
+  align-items: flex-start;
+}
+
+/* La petite photo se centre sous les grandes : le trait y aboutit. */
+.thread__reply-slot {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  width: var(--thread-photo);
+}
+
+.thread__reply-form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* --- La sourdine (features/event/DiscussionBlock.tsx) --------------------- */
 .discussion-mute {
   display: inline-flex;
   align-items: center;
   gap: var(--space-6);
-  padding: var(--space-4) var(--space-10);
-  border: 1px solid var(--line-card);
-  border-radius: var(--radius-sm);
-  font: var(--type-reports-label);
+  font: var(--type-card-link);
   color: var(--ink-soft);
   cursor: pointer;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
+.discussion-mute:hover:not(:disabled),
 .discussion-mute--on {
-  border-color: transparent;
-  background: var(--surface-chip-neutral);
   color: var(--ink-title);
 }
 
 .discussion-mute__note {
   margin-top: var(--space-10);
-  font: var(--type-report-small);
+  font: var(--type-thread-reply);
   color: var(--ink-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .discussion__canal,
+  .discussion__earlier,
+  button.composer,
+  .thread__remove,
   .discussion-mute {
     transition: none;
   }

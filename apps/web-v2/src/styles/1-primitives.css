@@ -22,6 +22,7 @@
   --sand-225: #ede7de; /* la bannière en attente d'une vitrine (début du dégradé) */
   --sand-250: #f3f0e9; /* le fond de la barre latérale d'Uriel */
   --sand-300: #ebe9e5; /* les filets */
+  --sand-275: #f0eee9; /* le filet entre deux messages d'un fil */
   --sand-350: #e3dfd6; /* l'entrée active de la barre latérale */
   --sand-400: #dedad4; /* pointillés, « à remplir » */
   --sand-500: #d3cec8; /* valeurs éteintes */
@@ -112,6 +113,11 @@
   --terre-500: #f0824a; /* départ du dégradé des bénéfices, la nuit */
   --terre-200: #ffd391; /* arrivée du dégradé des bénéfices, la nuit */
   --terre-50: #f6ece3; /* fond d'une mention acquise sur aplat */
+  /* La fiche connectée (maquette 2518:233) : la terre en petites touches, le bilan de l'an passé,
+     les étoiles et l'avis cité. */
+  --terre-600: #c4692f; /* les étoiles d'une note */
+  --terre-450: #a0785a; /* une précision posée sur la terre claire */
+  --terre-150: #e9d6c2; /* le filet d'une carte en terre claire */
   --brique-600: #b4432f; /* ce qui détruit ou refuse (maquette 2206:691, « Supprimer… ») */
   --brique-400: #e0806a; /* la même encre, lisible la nuit */
   /* Le fond de carte (lot 13) : terres gris chaud désaturées, eau bleu-gris, routes neutres. Jour
@@ -240,6 +246,7 @@
      ESPACEMENT — échelle libre, calquée sur la maquette
      --------------------------------------------------------------------- */
   --space-2: 2px;
+  --space-3: 3px;
   --space-4: 4px;
   --space-6: 6px;
   --space-7: 7px;
@@ -333,8 +340,10 @@
 
   /* La fiche d'un événement. */
   --width-companion-avatar: 32px;
-  --width-avatar-discussion: 30px; /* qui parle, dans un fil */
-  --width-avatar-pile: 26px; /* les visages empilés de ceux qui ont répondu */
+  --width-avatar-discussion: 30px; /* une personne dans une liste serrée */
+  --width-avatar-pile: 26px; /* les visages empilés d'un groupe */
+  --width-avatar-thread: 40px; /* qui parle, dans le fil d'une fiche */
+  --width-avatar-reply: 24px; /* qui répond, au bas d'un fil */
 
   /* Les contrôles de choix : le suivi, les sélecteurs et leurs menus. */
   --height-control: 46px;

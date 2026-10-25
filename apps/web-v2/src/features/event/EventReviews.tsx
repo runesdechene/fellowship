@@ -2,7 +2,7 @@
  * QUOI     — le bloc « Avis des exposants » de la fiche : la note globale en serif et ses étoiles,
  *            le détail (affluence, organisation, rentabilité), un extrait, puis tous les avis.
  * POURQUOI — les exposants choisissent leurs dates sur l'avis des autres ; la note se lit d'un
- *            coup, l'extrait donne le ton (maquette 2027).
+ *            coup, l'extrait donne le ton (maquette 2518:233 : la terre en petites touches).
  * ATTENTION — l'auteur d'un avis ne se nomme que si la base l'autorise (reviewSignature). Le
  *            détail porte le badge Pro : en gratuit, il passe sous un voile ; la note globale et
  *            la lecture des avis restent ouvertes (Dev.md, 07/10/2026).
@@ -23,7 +23,7 @@ import { useEventKey } from './useEventKey'
 
 function Quote({ review }: { review: EventReview }) {
   return (
-    <figure className="reviews__quote">
+    <figure className="reviews__quote reviews__quote--warm">
       <blockquote>« {review.comment} »</blockquote>
       <figcaption>
         <ShieldCheck size={12} strokeWidth={1.8} />
@@ -87,7 +87,7 @@ export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps
       {error && <p className="event-page__state">{error}</p>}
 
       {scores ? (
-        <div className="reviews__scores">
+        <div className="reviews__scores reviews__scores--warm">
           <div className="reviews__overall">
             <span className="reviews__score">{formatScore(scores.overall)}</span>
             <Stars score={scores.overall} />

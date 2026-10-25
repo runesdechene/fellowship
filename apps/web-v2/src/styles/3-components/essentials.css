@@ -108,3 +108,18 @@
     margin-top: var(--space-10);
   }
 }
+
+/* Dans la fenêtre « Candidater » : le dossier en ligne et le contact sont des liens, ce qui manque
+   attend « + Ajouter ». */
+.essentials__link {
+  color: inherit;
+}
+
+.essentials__link:hover {
+  text-decoration: underline;
+}
+
+.essentials__missing {
+  font-weight: var(--weight-regular);
+  color: var(--ink-waiting);
+}

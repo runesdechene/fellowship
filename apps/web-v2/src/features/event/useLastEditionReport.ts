@@ -11,21 +11,14 @@ import { parseSqlDate } from '@/lib/dates'
 import { isFilled, reportFigures, type ReportDate } from '@/lib/reports'
 import { must, supabase } from '@/lib/supabase'
 
+/** Ce que la fiche en dit : le résultat net, et de quoi ouvrir le bilan (maquette 2518:233). */
 export interface LastEditionReport {
   eventId: string
-  name: string
-  startDate: Date
-  endDate: Date
-  revenue: number
-  costs: number
   net: number
-  revenueGoal: number | null
-  wins: string[]
-  improvements: string[]
 }
 
 async function load(previousId: string, actorId: string): Promise<LastEditionReport | null> {
-  const [eventResponse, ledgerResponse, reportResponse, dossierResponse] = await Promise.all([
+  const [eventResponse, ledgerResponse] = await Promise.all([
     supabase
       .from('events')
       .select('id, name, start_date, end_date')
@@ -36,24 +29,10 @@ async function load(previousId: string, actorId: string): Promise<LastEditionRep
       .select('amount, direction, source')
       .eq('actor_id', actorId)
       .eq('event_id', previousId),
-    supabase
-      .from('event_reports')
-      .select('wins, improvements')
-      .eq('actor_id', actorId)
-      .eq('event_id', previousId)
-      .maybeSingle(),
-    supabase
-      .from('participation_dossiers')
-      .select('revenue_goal')
-      .eq('actor_id', actorId)
-      .eq('event_id', previousId)
-      .maybeSingle(),
   ])
   const event = must(eventResponse)
   const lines = must(ledgerResponse)
   if (!event || !isFilled(lines)) return null
-  const report = must(reportResponse)
-  const dossier = must(dossierResponse)
   const date: ReportDate = {
     eventId: event.id,
     name: event.name,
@@ -64,19 +43,7 @@ async function load(previousId: string, actorId: string): Promise<LastEditionRep
     endDate: parseSqlDate(event.end_date),
     lines,
   }
-  const { revenue, costs, net } = reportFigures(date)
-  return {
-    eventId: event.id,
-    name: event.name,
-    startDate: date.startDate,
-    endDate: date.endDate,
-    revenue,
-    costs,
-    net,
-    revenueGoal: dossier?.revenue_goal ?? null,
-    wins: report?.wins ?? [],
-    improvements: report?.improvements ?? [],
-  }
+  return { eventId: event.id, net: reportFigures(date).net }
 }
 
 export function useLastEditionReport(

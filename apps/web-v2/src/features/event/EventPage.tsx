@@ -7,7 +7,7 @@
  */
 import { ArrowRight, CalendarDays, Clock, Globe, Map as MapIcon, MapPin, Users } from 'lucide-react'
 import { useEffect } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
@@ -17,7 +17,7 @@ import { canEditEvent, type MissingField } from '@/lib/event-edit'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
-import { Applying, GuestApplyFooter } from './Applying'
+import { ApplyDialog, ApplyFooter } from './Applying'
 import { EventEssentials, type Essential } from './EventEssentials'
 import { GuestGoing } from './GuestGoing'
 import { websiteLink } from '@/lib/vitrine'
@@ -46,6 +46,7 @@ import { usePlan } from '@/lib/usePlan'
 import { posterThumb } from '@/lib/poster-thumb'
 import { eventPath } from '@/lib/event-path'
 import { useEventKey } from './useEventKey'
+import { useUrlFlag } from './useUrlFlag'
 
 /**
  * Un grand titre posé AU-DESSUS de son bloc, jamais dedans. Il pâlit quand le
@@ -80,10 +81,9 @@ export function EventPage() {
   // Sans compte (lot 11b) : la fiche se lit, elle ne se pilote pas.
   const member = Boolean(user)
   const { pro } = usePlan()
-  const location = useLocation()
-  const { hash } = location
-  const navigate = useNavigate()
-  const [search, setSearch] = useSearchParams()
+  const { hash } = useLocation()
+  const map = useUrlFlag('carte')
+  const apply = useUrlFlag('candidater')
   const { origin, askPosition, positionError, asking } = useOrigin()
   const go = useTransitionNavigate()
   const today = new Date()
@@ -165,30 +165,7 @@ export function EventPage() {
 
   // Les faits se construisent d'abord, se filtrent ensuite : seul ce que
   // l'organisateur a renseigné prend une carte.
-  // La carte s'ouvre dans l'adresse (`?carte`) : le retour du navigateur la referme.
   const point = eventPoint(event)
-  const closeMap = () => {
-    if ((location.state as { carteOuverte?: boolean } | null)?.carteOuverte) void navigate(-1)
-    else
-      setSearch(
-        (current) => {
-          current.delete('carte')
-          return current
-        },
-        { replace: true },
-      )
-  }
-
-  const openMap = () => {
-    if (search.has('carte')) return
-    setSearch(
-      (current) => {
-        current.set('carte', '')
-        return current
-      },
-      { state: { carteOuverte: true } },
-    )
-  }
   const site = event.external_url ? websiteLink(event.external_url) : null
   // Chaque fait une seule fois (maquette 2506:233) : ce que l'organisateur n'a pas renseigné n'a
   // pas de ligne.
@@ -206,7 +183,7 @@ export function EventPage() {
       value: [event.address, `${event.city} (${event.department})`].filter(Boolean).join(', '),
       sub: regionOf(event.department),
       action: point && (
-        <button type="button" className="essentials__action" onClick={openMap}>
+        <button type="button" className="essentials__action" onClick={map.open}>
           Voir sur la carte
           <MapIcon size={13} strokeWidth={1.8} />
         </button>
@@ -228,13 +205,41 @@ export function EventPage() {
 
   const universe = event.tags?.[0] ?? null
 
+  const facts = (
+    <EventEssentials
+      rows={essentials}
+      footer={
+        member ? (
+          <ApplyFooter event={event} status={status} onApply={apply.open} canEdit={canEdit} />
+        ) : (
+          <ApplyFooter event={event} status={null} />
+        )
+      }
+    />
+  )
+
   const edit = (field?: MissingField) => {
     go(`${eventPath(slug, 'modifier')}${field ? `?champ=${field}` : ''}`)
   }
 
+  // Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu. Les cartes restent pour les
+  // FAITS — dates, lieu, échéance — qui eux se scannent.
+  const about = (
+    <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
+      {isRichTextEmpty(event.description) ? (
+        <p className="event-page__state">
+          L’organisateur n’a pas encore décrit cet événement.
+          {canEdit && <AddMissing onClick={() => edit('description')} />}
+        </p>
+      ) : (
+        <RichText className="event-page__description" html={event.description ?? ''} />
+      )}
+    </Block>
+  )
+
   return (
     <div className="event-page">
-      {search.has('carte') && point && (
+      {map.isOpen && point && (
         <EventMapPanel
           name={event.name}
           point={point}
@@ -244,7 +249,7 @@ export function EventPage() {
           askPosition={askPosition}
           positionError={positionError}
           asking={asking}
-          close={closeMap}
+          close={map.close}
           personal={actor?.kind !== 'entity'}
         />
       )}
@@ -257,6 +262,12 @@ export function EventPage() {
               src={posterThumb(event.image_url, 800, 80)}
               alt=""
             />
+          )}
+          {/* Le bilan de l'an passé, en haut à droite (maquette 2518:233). */}
+          {lastEdition && (
+            <div className="event-page__top">
+              <LastEditionReport report={lastEdition} />
+            </div>
           )}
           <div className="event-page__identity">
             {!member && (
@@ -289,63 +300,63 @@ export function EventPage() {
           </div>
         </header>
 
+        {/* Le statut et le dossier se suivent de près : c'est le même suivi (maquette 2518:233). */}
         {member && (
-          <EventStatus
+          <div className="event-page__follow">
+            <EventStatus
+              status={status}
+              setStatus={setStatus}
+              saving={saving}
+              writeError={writeError}
+              locked={!canChangeStatus(startDate, status !== null, pro, today)}
+              monthsAway={monthsBeyond(startDate, today)}
+            />
+            {(status === 'inscrit' || status === 'confirme') && (
+              <MyDossier
+                paymentStatus={paymentStatus}
+                orientation={paymentOrientation}
+                standAmount={standAmount}
+                saving={saving}
+                setPayment={setPayment}
+                setOrientation={setOrientation}
+                setStandAmount={setStandAmount}
+                fields={dossier.fields}
+                save={dossier.save}
+                error={dossier.error}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Connecté, l'à propos passe avant l'essentiel (maquette 2518:233) ; sans compte,
+            l'essentiel d'abord (maquette 2506:233). */}
+        {member ? (
+          <>
+            {about}
+            {facts}
+          </>
+        ) : (
+          <>
+            {facts}
+            {about}
+          </>
+        )}
+
+        {member && (
+          <ApplyDialog
+            open={apply.isOpen}
+            onClose={apply.close}
+            event={event}
             status={status}
             setStatus={setStatus}
-            saving={saving}
-            writeError={writeError}
-            locked={!canChangeStatus(startDate, status !== null, pro, today)}
-            monthsAway={monthsBeyond(startDate, today)}
-          />
-        )}
-
-        {lastEdition && <LastEditionReport report={lastEdition} />}
-
-        {(status === 'inscrit' || status === 'confirme') && (
-          <MyDossier
-            paymentStatus={paymentStatus}
-            orientation={paymentOrientation}
-            standAmount={standAmount}
-            saving={saving}
-            setPayment={setPayment}
-            setOrientation={setOrientation}
-            setStandAmount={setStandAmount}
+            statusSaving={saving}
+            actorId={actor?.id}
             fields={dossier.fields}
             save={dossier.save}
-            error={dossier.error}
+            canEdit={canEdit}
+            onAdd={edit}
           />
         )}
-
-        <EventEssentials rows={essentials} footer={!member && <GuestApplyFooter event={event} />} />
-
-        {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
-              Le cadre disait « ceci est un bloc » alors que la description est
-              simplement la voix de l'organisateur. Les cartes restent pour les
-              FAITS — dates, lieu, échéance — qui eux se scannent. */}
-        <Block title="À propos" bare empty={isRichTextEmpty(event.description)}>
-          {isRichTextEmpty(event.description) ? (
-            <p className="event-page__state">
-              L’organisateur n’a pas encore décrit cet événement.
-              {canEdit && <AddMissing onClick={() => edit('description')} />}
-            </p>
-          ) : (
-            <RichText className="event-page__description" html={event.description ?? ''} />
-          )}
-        </Block>
-
-        <Applying
-          event={event}
-          status={status}
-          setStatus={setStatus}
-          statusSaving={saving}
-          actorId={actor?.id}
-          fields={dossier.fields}
-          save={dossier.save}
-          canEdit={canEdit}
-          onAdd={edit}
-          guest={!member}
-        />
 
         {member ? (
           <>

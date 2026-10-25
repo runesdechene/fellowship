@@ -128,3 +128,32 @@
   font: var(--type-review-quote-guest);
   color: var(--review-quote-guest-ink);
 }
+
+/* Les avis de l'exposant connecté (maquette 2518:233) : la note en brun, les étoiles en orange,
+   les barres dans le dégradé de la marque, l'avis cité sur la terre claire. */
+.reviews__scores--warm .reviews__score {
+  color: var(--warm-ink);
+}
+
+.reviews__scores--warm .stars__star,
+.reviews__scores--warm .stars__star--on {
+  color: var(--review-star-ink);
+}
+
+.reviews__scores--warm .reviews__bar {
+  background: var(--review-bar-track);
+}
+
+.reviews__scores--warm .reviews__bar::after {
+  background: var(--brand-gradient);
+}
+
+.reviews__quote--warm {
+  background: var(--warm-surface);
+  font: var(--type-review-quote-warm);
+  color: var(--warm-ink);
+}
+
+.reviews__quote--warm figcaption {
+  color: var(--warm-soft);
+}

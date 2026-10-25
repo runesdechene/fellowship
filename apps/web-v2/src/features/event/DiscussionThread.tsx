@@ -1,14 +1,22 @@
 /**
- * QUOI     — le rendu d'UN fil de la discussion : la question, ses réponses, qui parle et quand.
- * POURQUOI — EventDiscussion orchestre (canaux, formulaire, écritures) ; ici on ne fait
- *            qu'afficher une question et ce qu'on peut en faire.
+ * QUOI     — le rendu d'UN fil de la discussion : la question, ses réponses, et de quoi répondre.
+ * POURQUOI — maquette 2518:233 (25/10/2026), un mini-fil : la photo à gauche, reliée par un trait
+ *            aux réponses qui suivent ; « Résolu » quand l'auteur a retenu une réponse.
+ * ATTENTION — la réponse retenue remonte en tête des réponses, hors chronologie : c'est elle qu'on
+ *            vient chercher. Les autres se replient dessous tant qu'elle existe.
  */
-import { useState } from 'react'
-import { CheckCheck, Hourglass, Trash2 } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
+import { Check, MessageCircle, Trash2 } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { canDelete, canMarkBest, type ThreadActor } from '@/lib/threads'
 import type { Thread, ThreadReply } from './useEventThreads'
+
+/** Qui écrit dans le fil : le nom et la photo de l'acteur connecté. */
+export interface Me {
+  name: string
+  avatarUrl: string | null
+}
 
 /** « il y a 3 jours » — assez précis pour un fil, sans donner l'heure. */
 function timeAgo(iso: string): string {
@@ -20,89 +28,152 @@ function timeAgo(iso: string): string {
   return months === 1 ? 'il y a un mois' : `il y a ${months} mois`
 }
 
-/** Qui parle, et quand. La même ligne sert à la question et aux réponses. */
-function Signature({
-  name,
-  avatarUrl,
+/** Un message du fil : la photo et son trait à gauche, le nom, l'heure, puis le contenu. */
+function Message({
+  author,
   createdAt,
+  linked,
+  badge,
   children,
 }: {
-  name: string
-  avatarUrl: string | null
+  author: { name: string; avatarUrl: string | null }
   createdAt: string
-  children?: React.ReactNode
+  /** Un message suit : le trait part de la photo et le rejoint. */
+  linked: boolean
+  /** Ce qui se pose au bout de la ligne du nom : « Résolu », la corbeille. */
+  badge?: ReactNode
+  children: ReactNode
 }) {
   return (
-    <p className="discussion__signature">
-      <span className="discussion__avatar">
-        <Avatar src={avatarUrl} name={name} />
+    <div className={linked ? 'message message--linked' : 'message'}>
+      <span className="message__rail">
+        <Avatar className="message__photo" src={author.avatarUrl} name={author.name} />
       </span>
-      {name}
-      <time>{timeAgo(createdAt)}</time>
-      {children}
-    </p>
-  )
-}
-
-/** Une réponse ordinaire : celles qui n'ont pas été élues. */
-function Reponse({
-  item,
-  actor,
-  isAdmin,
-  saving,
-  canElect,
-  onMarkBest,
-  onRemoveReply,
-}: {
-  item: ThreadReply
-  actor: ThreadActor | null
-  isAdmin: boolean
-  saving: boolean
-  canElect: boolean
-  onMarkBest: (replyId: string | null) => void
-  onRemoveReply: (replyId: string) => void
-}) {
-  return (
-    <div className="reponse">
-      <Signature name={item.name} avatarUrl={item.avatarUrl} createdAt={item.createdAt} />
-      <p className="reponse__texte">{item.body}</p>
-      <div className="discussion__gestes">
-        {canElect && (
-          <button
-            type="button"
-            className="discussion__geste"
-            onClick={() => onMarkBest(item.id)}
-            disabled={saving}
-          >
-            Élire cette réponse
-          </button>
-        )}
-        {canDelete(actor, { actorId: item.actorId }, isAdmin) && (
-          <button
-            type="button"
-            className="discussion__geste"
-            onClick={() => onRemoveReply(item.id)}
-            disabled={saving}
-          >
-            Supprimer
-          </button>
-        )}
+      <div className="message__body">
+        <p className="message__head">
+          <span className="message__name">{author.name}</span>
+          <time className="message__time">{timeAgo(createdAt)}</time>
+          {badge}
+        </p>
+        {children}
       </div>
     </div>
   )
 }
 
-/**
- * Une question et ce qu'on lui a répondu.
- *
- * LA RÉPONSE ÉLUE REMONTE EN TÊTE, hors chronologie, et porte le seul aplat
- * de la section. Dans une question-réponse on vient chercher LA réponse ;
- * une fois qu'elle fait autorité, l'ordre d'arrivée ne porte plus rien. Les
- * autres se replient dessous — neuf questions ouvertes font un mur.
- */
+/** Les gestes d'une réponse : l'élire, se dédire, la supprimer. */
+function ReplyGestures({
+  reply,
+  elected,
+  canElect,
+  canRemove,
+  saving,
+  onMarkBest,
+  onRemoveReply,
+}: {
+  reply: ThreadReply
+  elected: boolean
+  canElect: boolean
+  canRemove: boolean
+  saving: boolean
+  onMarkBest: (replyId: string | null) => void
+  onRemoveReply: (replyId: string) => void
+}) {
+  if (!canElect && !canRemove) return null
+  return (
+    <div className="message__actions">
+      {canElect && (
+        <button
+          type="button"
+          className="message__action"
+          disabled={saving}
+          onClick={() => onMarkBest(elected ? null : reply.id)}
+        >
+          {elected ? 'Ce n’est plus la réponse' : 'Élire cette réponse'}
+        </button>
+      )}
+      {canRemove && (
+        <button
+          type="button"
+          className="message__action"
+          disabled={saving}
+          onClick={() => onRemoveReply(reply.id)}
+        >
+          Supprimer
+        </button>
+      )}
+    </div>
+  )
+}
+
+/** Le bas du fil : une ligne « Répondre à Lina… » qui s'ouvre en champ. */
+function ReplyBox({
+  me,
+  to,
+  open,
+  setOpen,
+  saving,
+  onReply,
+}: {
+  me: Me
+  to: string
+  open: boolean
+  setOpen: (open: boolean) => void
+  saving: boolean
+  onReply: (body: string) => void
+}) {
+  const [draft, setDraft] = useState('')
+
+  if (!open) {
+    return (
+      <button type="button" className="thread__reply" onClick={() => setOpen(true)}>
+        <span className="thread__reply-slot">
+          <Avatar className="thread__reply-photo" src={me.avatarUrl} name={me.name} />
+        </span>
+        Répondre à {to}…
+      </button>
+    )
+  }
+
+  return (
+    <div className="thread__reply thread__reply--open">
+      <span className="thread__reply-slot">
+        <Avatar className="thread__reply-photo" src={me.avatarUrl} name={me.name} />
+      </span>
+      <div className="thread__reply-form">
+        <textarea
+          className="discussion__champ"
+          rows={3}
+          autoFocus
+          placeholder={`Répondre à ${to}…`}
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+        />
+        <div className="discussion__composer-pied">
+          <button type="button" className="message__action" onClick={() => setOpen(false)}>
+            Annuler
+          </button>
+          <Button
+            variant="action"
+            disabled={saving || !draft.trim()}
+            onClick={() => {
+              onReply(draft)
+              setDraft('')
+              setOpen(false)
+            }}
+          >
+            Répondre
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function Question({
   thread,
   actor,
+  me,
   isAdmin,
   saving,
   onReply,
@@ -112,6 +183,8 @@ export function Question({
 }: {
   thread: Thread
   actor: ThreadActor | null
+  /** Sans acteur, le fil se lit sans pouvoir y répondre. */
+  me: Me | null
   isAdmin: boolean
   saving: boolean
   onReply: (body: string) => void
@@ -119,152 +192,111 @@ export function Question({
   onRemove: () => void
   onRemoveReply: (replyId: string) => void
 }) {
-  const [draft, setDraft] = useState('')
-  const [open, setOpen] = useState(false)
-  const [deplie, setDeplie] = useState(false)
+  const [replying, setReplying] = useState(false)
+  const [unfolded, setUnfolded] = useState(false)
 
   const canElect = canMarkBest(actor, { actorId: thread.actorId })
-  const elue = thread.replies.find((r) => r.id === thread.bestReplyId) ?? null
-  const autres = thread.replies.filter((r) => r.id !== thread.bestReplyId)
-
-  // Sans réponse élue, il n'y a rien à mettre en avant : les autres se lisent
-  // toutes, à plat. Le repli n'a de sens que quand une réponse fait autorité.
-  const montrerLesAutres = deplie || !elue
+  const elected = thread.replies.find((reply) => reply.id === thread.bestReplyId) ?? null
+  const others = thread.replies.filter((reply) => reply.id !== thread.bestReplyId)
+  // Sans réponse retenue, rien ne fait autorité : toutes se lisent, à plat.
+  const folded = elected !== null && !unfolded && others.length > 0
+  const shown = [...(elected ? [elected] : []), ...(folded ? [] : others)]
+  const hasReplyBox = me !== null && (thread.replies.length > 0 || replying)
+  const count = thread.replies.length
 
   return (
-    <article className="question">
-      <h3 className="question__titre">{thread.title}</h3>
-      {thread.body && <p className="question__corps">{thread.body}</p>}
-
-      <Signature name={thread.name} avatarUrl={thread.avatarUrl} createdAt={thread.createdAt}>
-        {/* Les visages de ceux qui ont répondu, avant même d'ouvrir. */}
-        {thread.replies.length > 0 && (
-          <span className="question__pile">
-            {thread.replies.slice(0, 4).map((r) => (
-              <span key={r.id} className="discussion__avatar">
-                <Avatar src={r.avatarUrl} name={r.name} />
+    <article className="thread">
+      <Message
+        author={thread}
+        createdAt={thread.createdAt}
+        linked={shown.length > 0 || hasReplyBox}
+        badge={
+          <>
+            {elected && (
+              <span className="thread__resolved">
+                <Check size={12} strokeWidth={2.4} />
+                Résolu
               </span>
-            ))}
-          </span>
-        )}
-        {canDelete(actor, { actorId: thread.actorId }, isAdmin) && (
-          <button
-            type="button"
-            className="question__retirer"
-            onClick={onRemove}
-            disabled={saving}
-            aria-label="Retirer cette question"
-          >
-            <Trash2 size={14} strokeWidth={1.9} />
-          </button>
-        )}
-      </Signature>
-
-      {elue ? (
-        <div className="reponse-elue">
-          <p className="reponse-elue__sceau">
-            <CheckCheck size={15} strokeWidth={2.4} />
-            La réponse
-          </p>
-          <p className="reponse-elue__texte">{elue.body}</p>
-          <Signature name={elue.name} avatarUrl={elue.avatarUrl} createdAt={elue.createdAt} />
-          <div className="discussion__gestes">
-            {/* Élire, c'est aussi pouvoir se dédire. */}
-            {canElect && (
+            )}
+            {canDelete(actor, { actorId: thread.actorId }, isAdmin) && (
               <button
                 type="button"
-                className="discussion__geste"
-                onClick={() => onMarkBest(null)}
+                className="thread__remove"
                 disabled={saving}
+                onClick={onRemove}
+                aria-label="Retirer cette question"
               >
-                Ce n’est plus la réponse
+                <Trash2 size={14} strokeWidth={1.9} />
               </button>
             )}
-            {canDelete(actor, { actorId: elue.actorId }, isAdmin) && (
-              <button
-                type="button"
-                className="discussion__geste"
-                onClick={() => onRemoveReply(elue.id)}
-                disabled={saving}
-              >
-                Supprimer
+          </>
+        }
+      >
+        <h3 className="message__question">{thread.title}</h3>
+        {thread.body && <p className="message__text">{thread.body}</p>}
+        <div className="message__actions">
+          {count > 0 ? (
+            <span className="message__action message__action--count">
+              <MessageCircle size={15} strokeWidth={1.9} />
+              {count === 1 ? '1 réponse' : `${count} réponses`}
+            </span>
+          ) : (
+            me && (
+              <button type="button" className="message__action" onClick={() => setReplying(true)}>
+                <MessageCircle size={15} strokeWidth={1.9} />
+                Répondre
               </button>
-            )}
-          </div>
+            )
+          )}
         </div>
-      ) : (
-        thread.replies.length === 0 && (
-          /* Ce n'est pas un vide, c'est un ÉTAT : la terre dit « ça attend
-             chez quelqu'un d'autre », comme « Dossier envoyé » sur la fiche. */
-          <span className="question__attente">
-            <Hourglass size={14} strokeWidth={2} />
-            En attente de réponse
-          </span>
+      </Message>
+
+      {shown.map((reply, index) => {
+        const isElected = reply.id === thread.bestReplyId
+        return (
+          <Message
+            key={reply.id}
+            author={reply}
+            createdAt={reply.createdAt}
+            linked={index < shown.length - 1 || folded || hasReplyBox}
+            badge={
+              isElected && (
+                <span className="thread__elected" aria-label="La réponse retenue">
+                  <Check size={13} strokeWidth={2.4} />
+                </span>
+              )
+            }
+          >
+            <p className="message__text">{reply.body}</p>
+            <ReplyGestures
+              reply={reply}
+              elected={isElected}
+              canElect={canElect}
+              canRemove={canDelete(actor, { actorId: reply.actorId }, isAdmin)}
+              saving={saving}
+              onMarkBest={onMarkBest}
+              onRemoveReply={onRemoveReply}
+            />
+          </Message>
         )
+      })}
+
+      {folded && (
+        <button type="button" className="thread__unfold" onClick={() => setUnfolded(true)}>
+          {others.length === 1 ? '1 autre réponse' : `${others.length} autres réponses`}
+        </button>
       )}
 
-      {autres.length > 0 &&
-        (montrerLesAutres ? (
-          <div className="question__autres">
-            {autres.map((item) => (
-              <Reponse
-                key={item.id}
-                item={item}
-                actor={actor}
-                isAdmin={isAdmin}
-                saving={saving}
-                canElect={canElect}
-                onMarkBest={onMarkBest}
-                onRemoveReply={onRemoveReply}
-              />
-            ))}
-          </div>
-        ) : (
-          <button type="button" className="question__deplier" onClick={() => setDeplie(true)}>
-            {autres.length === 1 ? '1 autre réponse' : `${autres.length} autres réponses`}
-          </button>
-        ))}
-
-      {actor &&
-        (open ? (
-          <div className="discussion__composer">
-            <textarea
-              className="discussion__champ"
-              rows={3}
-              autoFocus
-              placeholder="Ta réponse…"
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-            />
-            <div className="discussion__composer-pied">
-              <Button
-                variant="action"
-                onClick={() => {
-                  onReply(draft)
-                  setDraft('')
-                  setOpen(false)
-                }}
-                disabled={saving || !draft.trim()}
-              >
-                Répondre
-              </Button>
-              {/* Pas `variant="bare"` : il est dessiné pour UNE ICÔNE dans
-                  un carré de 42 px, le mot y débordait. C'est une action en
-                  texte, comme « Répondre » — même classe qu'elle. */}
-              <button type="button" className="discussion__geste" onClick={() => setOpen(false)}>
-                Annuler
-              </button>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            className="discussion__geste discussion__geste--seul"
-            onClick={() => setOpen(true)}
-          >
-            Répondre
-          </button>
-        ))}
+      {me && hasReplyBox && (
+        <ReplyBox
+          me={me}
+          to={thread.name}
+          open={replying}
+          setOpen={setReplying}
+          saving={saving}
+          onReply={onReply}
+        />
+      )}
     </article>
   )
 }

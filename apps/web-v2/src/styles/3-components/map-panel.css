@@ -97,9 +97,13 @@
 
 /* --- Le mur (grand écran, fiche avec affiche) ------------------------------------ */
 @media (width > 1100px) {
+  /* La carte s'ouvre DANS le cadre de l'affiche, pas par-dessus la page : mêmes marges, mêmes
+     coins (poster-wall.css). */
   .map-panel--wall {
-    inset: 0 0 0 auto;
+    inset: var(--wall-inset) var(--wall-inset) var(--wall-inset) auto;
     width: var(--wall-width);
+    overflow: hidden;
+    border-radius: var(--radius-wall);
   }
 
   /* Sur le mur, un pas seulement : la carte se pose sur l'affiche, elle ne traverse pas l'écran. */

@@ -44,17 +44,6 @@
   color: var(--ink-soft);
 }
 
-.info-row__link:hover {
-  text-decoration: underline;
-}
-
-/* Une info absente, pour qui peut compléter la fiche (lot 10c, maquette 2256:2). */
-.info-row__missing {
-  font: var(--type-dossier-value);
-  font-weight: var(--weight-regular);
-  color: var(--ink-waiting);
-}
-
 /* --- Le champ sur place ----------------------------------------------------- */
 .draft-input {
   width: calc(100% + 2 * var(--space-6));

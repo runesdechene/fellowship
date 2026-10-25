@@ -1,0 +1,133 @@
+/**
+ * QUOI     — la fenêtre « Candidater » de la fiche connectée (features/event/Applying.tsx) : le
+ *            titre en serif, les lignes de « L'essentiel », le bouton vers le dossier en ligne.
+ * POURQUOI — maquette 2518:233 (25/10/2026) : la candidature s'ouvre depuis le pied noir de
+ *            « L'essentiel » au lieu d'occuper la fiche.
+ * ATTENTION — même mécanique que « Qui y va » (who-goes.css) : le <dialog> du navigateur fait le
+ *            voile, Échap et le piège du focus.
+ */
+
+.apply-dialog {
+  width: min(var(--apply-dialog-width), calc(100vw - 2 * var(--space-16)));
+  max-height: calc(100dvh - 2 * var(--space-40));
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-apply-dialog);
+  background: transparent;
+  color: var(--ink-title);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out),
+    overlay var(--duration-fast) var(--ease-out) allow-discrete,
+    display var(--duration-fast) var(--ease-out) allow-discrete;
+}
+
+.apply-dialog[open] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  .apply-dialog[open] {
+    opacity: 0;
+    translate: 0 var(--space-8);
+  }
+}
+
+.apply-dialog:not([open]) {
+  opacity: 0;
+  translate: 0 var(--space-8);
+}
+
+.apply-dialog::backdrop {
+  background: var(--who-goes-veil);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    overlay var(--duration-fast) var(--ease-out) allow-discrete,
+    display var(--duration-fast) var(--ease-out) allow-discrete;
+}
+
+@starting-style {
+  .apply-dialog[open]::backdrop {
+    background: transparent;
+  }
+}
+
+.apply-dialog__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  max-height: inherit;
+  padding: var(--space-28);
+  overflow-y: auto;
+  border-radius: var(--radius-apply-dialog);
+  background: var(--surface-card);
+  box-shadow: var(--essentials-shadow);
+}
+
+.apply-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.apply-dialog__title {
+  font: var(--type-apply-dialog-title);
+  letter-spacing: var(--tracking-event-title);
+  color: var(--event-title-ink);
+}
+
+.apply-dialog__subtitle {
+  margin-top: var(--space-6);
+  font: var(--type-essentials-sub);
+  color: var(--ink-soft);
+}
+
+.apply-dialog__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--who-goes-close);
+  height: var(--who-goes-close);
+  border-radius: var(--button-radius);
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.apply-dialog__close:hover {
+  color: var(--ink-title);
+}
+
+/* Les lignes sont celles de « L'essentiel », posées dans la fenêtre : sans ombre. */
+.apply-dialog .essentials {
+  box-shadow: none;
+}
+
+.apply-dialog__empty {
+  font: var(--type-essentials-sub);
+  color: var(--ink-soft);
+}
+
+.apply-dialog__go {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  padding: var(--space-9) var(--space-12) var(--space-9) var(--space-14);
+  border-radius: var(--radius-round);
+  background: var(--essentials-apply-surface);
+  font: var(--type-card-link-strong);
+  color: var(--essentials-apply-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apply-dialog,
+  .apply-dialog::backdrop,
+  .apply-dialog__close {
+    transition: none;
+  }
+}
