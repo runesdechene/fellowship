@@ -1,13 +1,15 @@
 /**
- * QUOI     — sous les prix du Pro, six encadrés « Bientôt · Pro » : ce qui arrive dans
+ * QUOI     — sous les prix du Pro, quatre encadrés « Bientôt · Pro » : ce qui arrive dans
  *            l'abonnement, sans supplément.
  * POURQUOI — Uriel, 23/10/2026 (maquette 2458:2329) : des encadrés à part plutôt que de mêler les
  *            fonctions à venir à la liste de ce que le Pro fait déjà.
  * ATTENTION — rien de tout ça n'existe encore : le sceau le dit ; « En création » marque ce qui
  *            est déjà en chantier (Uriel, 23/10/2026 : les annonces sur les réseaux). Ne retirer
  *            un encadré que quand la fonction est livrée : elle rejoint alors la liste du Pro.
+ *            Seulement ce qui sort dans les prochains mois (Uriel, 25/10/2026) : l'agent IA et le
+ *            calendrier personnalisé sont retirés, trop lointains.
  */
-import { FileText, Megaphone, MousePointerClick, Palette, Plug, Radar } from 'lucide-react'
+import { FileText, Megaphone, MousePointerClick, Radar } from 'lucide-react'
 
 const SOON = [
   {
@@ -30,16 +32,6 @@ const SOON = [
     title: 'Tes annonces sur les réseaux',
     text: 'Une story et un post prêts pour chaque festival où tu vas.',
     building: true,
-  },
-  {
-    icon: Palette,
-    title: 'Ton calendrier, à ton image',
-    text: 'Couleurs, polices, mise en page : le calendrier de ton site, entièrement personnalisé.',
-  },
-  {
-    icon: Plug,
-    title: 'Connecte ton agent IA',
-    text: 'Une API pour que ton assistant IA lise et tienne ta saison avec toi.',
   },
 ] as const
 

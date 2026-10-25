@@ -226,7 +226,7 @@
 
 .landing-pro-soon__list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* quatre encadrés : deux rangées de deux */
   gap: var(--space-20);
 }
 
@@ -280,12 +280,6 @@
   .landing-compare__arrow {
     margin-block: var(--space-56);
     rotate: 90deg;
-  }
-}
-
-@media (width <= 1600px) {
-  .landing-pro-soon__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
