@@ -1571,6 +1571,15 @@
   --landing-band-pad: var(--space-150);
   --landing-glass: color-mix(in srgb, var(--sand-0) 14%, transparent);
   --landing-glass-line: color-mix(in srgb, var(--sand-0) 30%, transparent);
+  /* La FAQ sous l'appel final (maquette 2550:233) : un verre plus léger que celui de la barre. */
+  --landing-faq-width: 680px;
+  --landing-faq-glass: color-mix(in srgb, var(--sand-0) 7%, transparent);
+  --landing-faq-edge: color-mix(in srgb, var(--sand-0) 14%, transparent);
+  --landing-faq-line: color-mix(in srgb, var(--sand-0) 12%, transparent);
+  --landing-faq-blur: 24px;
+  --radius-landing-faq: var(--round-20);
+  --type-landing-faq-question: var(--weight-semibold) var(--size-16) / 1.4 var(--family-sans);
+  --type-landing-faq-answer: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
   --landing-blur-night: 0.22;
   --landing-blur-earth: 0.45;
   --radius-landing-button: var(--round-10);

@@ -1,0 +1,86 @@
+/**
+ * QUOI     — la FAQ de la landing (features/landing/LandingFaq.tsx), sous « Commencer
+ *            gratuitement » : une colonne étroite, un verre blanc translucide sur la nuit.
+ * POURQUOI — maquette 2550:233 (Uriel, 25/10/2026). Chaque question s'ouvre comme un tiroir de la
+ *            boutique : glisser et fondre (.claude/rules/v2.md).
+ */
+.landing-faq {
+  width: min(100%, var(--landing-faq-width));
+  margin-top: var(--space-70);
+  padding: var(--space-8) var(--space-28);
+  border: 1px solid var(--landing-faq-edge);
+  border-radius: var(--radius-landing-faq);
+  background: var(--landing-faq-glass);
+  backdrop-filter: blur(var(--landing-faq-blur));
+  text-align: left;
+  interpolate-size: allow-keywords;
+}
+
+.landing-faq__item:not(:last-child) {
+  border-bottom: 1px solid var(--landing-faq-line);
+}
+
+.landing-faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-20);
+  padding-block: var(--space-18);
+  font: var(--type-landing-faq-question);
+  color: var(--landing-cream);
+  cursor: pointer;
+  list-style: none;
+}
+
+.landing-faq__question::-webkit-details-marker {
+  display: none;
+}
+
+/* Le + devient − : sa barre verticale (le second trait de l'icône) s'aplatit. */
+.landing-faq__sign {
+  flex: none;
+}
+
+.landing-faq__sign path:last-child {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: scale var(--duration-medium) var(--ease-drawer);
+}
+
+.landing-faq__item[open] .landing-faq__sign path:last-child {
+  scale: 1 0;
+}
+
+.landing-faq__item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    block-size var(--duration-medium) var(--ease-drawer),
+    opacity var(--duration-medium) var(--ease-drawer),
+    content-visibility var(--duration-medium) allow-discrete;
+}
+
+.landing-faq__item[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+.landing-faq__answer {
+  padding-bottom: var(--space-18);
+  font: var(--type-landing-faq-answer);
+  color: var(--landing-cream-soft);
+}
+
+@media (width <= 760px) {
+  .landing-faq {
+    padding-inline: var(--space-20);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-faq__sign path:last-child,
+  .landing-faq__item::details-content {
+    transition: none;
+  }
+}
