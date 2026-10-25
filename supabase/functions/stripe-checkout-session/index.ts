@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
     const admin = getSupabaseAdmin()
     const { data: entity, error: entityErr } = await admin
       .from('entities')
-      .select('actor_id, stripe_customer_id, brand_name, subscription_status, legal_name, siren, billing_no_siren')
+      .select('actor_id, stripe_customer_id, stripe_subscription_id, brand_name, subscription_status, legal_name, siren, billing_no_siren')
       .eq('actor_id', body.entityId)
       .maybeSingle()
     if (entityErr || !entity) {
@@ -91,6 +91,13 @@ Deno.serve(async (req) => {
     }
 
     const stripe = getStripe()
+
+    // Un abonnement resté en plan (impayé au bout des relances, premier paiement jamais abouti,
+    // essai fini sans carte) ne donne plus le Pro mais vit encore chez Stripe : on le ferme avant
+    // d'en ouvrir un neuf, sinon l'enseigne en aurait deux.
+    if (entity.stripe_subscription_id && ['unpaid', 'incomplete', 'paused'].includes(entity.subscription_status ?? '')) {
+      await stripe.subscriptions.cancel(entity.stripe_subscription_id)
+    }
 
     // Persistance : UNIQUEMENT les champs réellement fournis par le body. La raison sociale
     // n'est PAS persistée ici (Stripe la collecte au checkout → recopiée via le webhook).

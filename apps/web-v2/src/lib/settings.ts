@@ -6,7 +6,7 @@
  *            code promo qui couvre la facture passent avant « renouvelé le », qui serait faux.
  */
 import { formatFullDate } from './dates'
-import { isPro } from './plan'
+import { isPro, SUBSCRIBED, SUSPENDED } from './plan'
 
 export type ProfileField = 'display_name' | 'city' | 'postal_code'
 
@@ -44,8 +44,6 @@ export interface EntityBilling {
   discount_label: string | null
   cancel_at: string | null
 }
-
-const SUBSCRIBED = ['active', 'trialing', 'past_due']
 
 function datesLabel(count: number): string {
   if (count === 0) return 'aucune date'
@@ -85,6 +83,8 @@ export function entityLine(
       : 'Pro'
     return { text, action: 'none', pro: true }
   }
+  if (entity.subscription_status !== null && SUSPENDED.includes(entity.subscription_status))
+    return { text: 'Pro suspendu · paiement non réglé', action: 'upgrade', pro: false }
   return {
     text:
       upcomingDates === null

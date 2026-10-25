@@ -131,6 +131,15 @@ describe('entityLine', () => {
   test('un compte de dates illisible ne passe pas pour « aucune date »', () => {
     expect(entityLine(free, now, null).text).toBe('Gratuit')
   })
+  test('un abonnement resté impayé le dit, au lieu de passer pour du gratuit', () => {
+    for (const status of ['unpaid', 'incomplete', 'paused']) {
+      expect(entityLine({ ...free, subscription_status: status }, now, 2)).toEqual({
+        text: 'Pro suspendu · paiement non réglé',
+        action: 'upgrade',
+        pro: false,
+      })
+    }
+  })
   test('un abonnement résilié retombe en gratuit', () => {
     const canceled = { ...free, subscription_status: 'canceled' }
     expect(entityLine(canceled, now, 1).action).toBe('upgrade')

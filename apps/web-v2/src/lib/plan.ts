@@ -56,7 +56,12 @@ export function devOverride(search: string, isDev: boolean): 'free' | null {
 }
 
 /** Les états Stripe d'un abonnement en cours — ceux qui se gèrent dans l'espace Stripe. */
-const SUBSCRIBED = ['active', 'trialing', 'past_due']
+export const SUBSCRIBED = ['active', 'trialing', 'past_due']
+
+/** Les états d'un abonnement resté en plan : plus de Pro, mais encore ouvert chez Stripe (impayé
+ *  au bout des relances, premier paiement jamais abouti, essai fini sans carte). S'abonner de
+ *  nouveau le ferme (stripe-checkout-session). */
+export const SUSPENDED = ['unpaid', 'incomplete', 'paused']
 
 /**
  * Le geste de facturation de la page de l'offre : s'abonner, gérer son abonnement, ou rien
