@@ -32,12 +32,6 @@
   width: 100%;
 }
 
-.landing-compare__label {
-  margin-bottom: var(--space-20);
-  font: var(--type-landing-compare-label);
-  color: var(--landing-tool-ink);
-}
-
 .landing-compare__tools {
   display: grid;
   grid-template-columns: repeat(2, max-content);

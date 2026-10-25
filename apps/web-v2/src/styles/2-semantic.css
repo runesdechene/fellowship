@@ -527,10 +527,16 @@
      du haut au bas de l'écran.
      ====================================================================== */
   --wall-width: 34vw;
-  --guest-wall-inset: var(
-    --space-24
-  ); /* la fiche vue sans compte : l'affiche posée comme à la connexion */
+  /* La fiche vue sans compte : l'affiche posée comme le panneau de la connexion, sous la ligne
+     de la barre (les boutons se posent au-dessus d'elle), avec l'ombre adoucie de l'icône de la
+     landing. */
+  --guest-wall-inset: var(--space-24);
+  --guest-wall-top: calc(2 * var(--landing-bar-compact-pad) + var(--topbar-control-height));
   --radius-guest-wall: var(--round-24);
+  --guest-wall-shadow:
+    0 1px 2px color-mix(in srgb, var(--ink-950) 3%, transparent),
+    0 8px 16px color-mix(in srgb, var(--ink-950) 4%, transparent),
+    0 28px 56px color-mix(in srgb, var(--ink-950) 7%, transparent);
   /* L'affiche porte les rayons du panneau, TOURNÉS VERS LE CONTENU : elle se
      lit comme une dalle posée sur le crème. On a essayé l'inverse — le
      panneau s'arrondissant par-dessus l'image — et Uriel a tranché pour

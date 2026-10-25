@@ -105,7 +105,6 @@ export function ToolsCompare({ lead, rest }: { lead: string; rest: string }) {
       </p>
       <div className="landing-compare__row">
         <div className="landing-compare__before">
-          <p className="landing-compare__label">Aujourd’hui</p>
           <ul className="landing-compare__tools">
             {TOOLS.map((tool, index) => (
               <li

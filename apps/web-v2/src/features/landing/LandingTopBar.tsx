@@ -6,10 +6,8 @@
  * ATTENTION — « Commencer » mène à la connexion, qui crée aussi les comptes (lot 10a). Le
  *            trait glisse sous le lien actif : sa place et sa largeur passent par deux variables CSS.
  *            `away` : la barre posée sur une page publique (résultats, fiche, lot 11b) — ses liens
- *            ramènent à la landing, et elle est compacte d'emblée. `paper` : la barre de la fiche
- *            vue sans compte, claire, réduite au logo et aux deux boutons, dans la colonne de gauche
- *            pour que l'affiche monte jusqu'en haut (Uriel, 25/10/2026) ; la recherche publique
- *            garde la barre brune, posée sur son en-tête sombre.
+ *            ramènent à la landing, et elle est compacte d'emblée. La fiche vue sans compte a sa
+ *            propre barre (components/layout/GuestShell.tsx).
  */
 import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -26,13 +24,7 @@ const CHAPTERS = [
 
 const IDS = CHAPTERS.map((c) => c.id)
 
-export function LandingTopBar({
-  away = false,
-  paper = false,
-}: {
-  away?: boolean
-  paper?: boolean
-}) {
+export function LandingTopBar({ away = false }: { away?: boolean }) {
   const { compact, active } = useLandingNav(IDS)
   const nav = useRef<HTMLElement>(null)
   // Hors de la landing, une ancre seule ne mène nulle part : elle passe par la landing.
@@ -46,7 +38,7 @@ export function LandingTopBar({
   }, [active])
 
   return (
-    <header className={`landing-bar${paper ? ' is-paper' : compact || away ? ' is-compact' : ''}`}>
+    <header className={`landing-bar${compact || away ? ' is-compact' : ''}`}>
       <div className="landing-bar__inner">
         <a
           className="landing-bar__brand"
@@ -55,23 +47,21 @@ export function LandingTopBar({
         >
           <Wordmark />
         </a>
-        {!paper && (
-          <nav
-            ref={nav}
-            className={`landing-bar__anchors${active ? ' has-active' : ''}`}
-            aria-label="Chapitres"
-          >
-            {CHAPTERS.map((chapter) => (
-              <a
-                key={chapter.id}
-                href={`${home}#${chapter.id}`}
-                aria-current={chapter.id === active ? 'location' : undefined}
-              >
-                {chapter.label}
-              </a>
-            ))}
-          </nav>
-        )}
+        <nav
+          ref={nav}
+          className={`landing-bar__anchors${active ? ' has-active' : ''}`}
+          aria-label="Chapitres"
+        >
+          {CHAPTERS.map((chapter) => (
+            <a
+              key={chapter.id}
+              href={`${home}#${chapter.id}`}
+              aria-current={chapter.id === active ? 'location' : undefined}
+            >
+              {chapter.label}
+            </a>
+          ))}
+        </nav>
         <div className="landing-bar__actions">
           <Link className="landing-button landing-button--glass" to="/connexion">
             Se connecter

@@ -23,14 +23,74 @@
 /* L'affiche posée comme le panneau de la connexion : une marge tout autour, quatre coins
    arrondis (Uriel, 25/10/2026). Le cadre arrondit et rogne ; l'image n'a plus à le faire. */
 .guest-shell .poster-wall {
-  top: var(--guest-wall-inset);
-  height: calc(100vh - 2 * var(--guest-wall-inset));
-  margin: var(--guest-wall-inset) var(--guest-wall-inset) var(--guest-wall-inset) 0;
+  top: var(--guest-wall-top);
+  height: calc(100vh - var(--guest-wall-top) - var(--guest-wall-inset));
+  margin: var(--guest-wall-top) var(--guest-wall-inset) var(--guest-wall-inset) 0;
   border-radius: var(--radius-guest-wall);
+  box-shadow: var(--guest-wall-shadow);
 }
 
 .guest-shell .poster-wall__image,
 .guest-shell .poster-wall__veil,
 .guest-shell .poster-wall__empty {
   border-radius: 0;
+}
+
+/* La barre : le retour et le logo, dans la colonne, collés en haut au défilement. */
+.guest-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--landing-bar-compact-pad) var(--landing-gutter);
+  background: var(--surface-app);
+}
+
+.guest-bar__brand {
+  --wordmark-ink: var(--ink-title);
+
+  display: flex;
+}
+
+/* « Se connecter » et « Commencer », en haut à droite, sur la ligne de la barre, au-dessus de
+   l'affiche et alignés sur son bord. */
+.guest-shell__actions {
+  position: fixed;
+  top: var(--landing-bar-compact-pad);
+  right: var(--guest-wall-inset);
+  z-index: 20;
+  display: flex;
+  gap: var(--space-8);
+}
+
+.guest-shell__actions .landing-button--glass {
+  border-color: var(--line-card);
+  background: none;
+  color: var(--ink-title);
+}
+
+.guest-shell__actions .landing-button--cream {
+  background: var(--ink-title);
+  color: var(--surface-app);
+}
+
+@media (width <= 760px) {
+  .guest-bar {
+    padding-inline: var(--mobile-gutter);
+  }
+
+  .guest-shell__actions {
+    right: var(--mobile-gutter);
+  }
+
+  /* Avec la flèche, le nom ne tient plus à côté de « Commencer » : l'icône seule suffit. */
+  .guest-bar__brand .wordmark > span {
+    display: none;
+  }
+
+  .guest-shell__actions .landing-button--glass {
+    display: none;
+  }
 }
