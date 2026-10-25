@@ -47,12 +47,14 @@
   list-style: decimal;
 }
 
+/* Le gras des organisateurs ne s'affiche pas : Instrument Serif n'a pas de gras, le navigateur en
+   fabriquait un, épais et plus foncé, qui écrasait l'à propos de la maquette 2506:233 (25/10/2026). */
 .rich-text strong,
 .rich-text b,
 .event-page__description strong,
 .event-page__description b {
-  color: var(--ink-title);
-  font-weight: var(--weight-bold);
+  color: inherit;
+  font-weight: inherit;
 }
 
 .rich-text a,
