@@ -29,3 +29,19 @@
   font: var(--type-list-meta);
   color: var(--ink-soft);
 }
+
+/* La séquence est dessinée pour le papier de la landing ; dans la fiche, elle suit le thème. La
+   nuit, les encres et les tuiles reprennent celles de l'app (Uriel, 25/10/2026). */
+:root[data-theme='dark'] .guest-pitch {
+  --landing-ink: var(--ink-title);
+  --landing-ink-soft: var(--ink-soft);
+  --landing-tool-bg: var(--surface-card);
+  --landing-tool-line: var(--line-card);
+  --landing-tool-ink: var(--ink-body);
+}
+
+/* Les badges des stores gardent leur encre sombre et leur texte crème, même la nuit. */
+:root[data-theme='dark'] .guest-pitch .landing-store:not(.landing-store--soon) {
+  border-color: var(--line-card);
+  background: var(--surface-raised);
+}
