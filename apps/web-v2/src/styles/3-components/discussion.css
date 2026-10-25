@@ -97,7 +97,7 @@
   background: var(--surface-row-hover);
 }
 
-/* --- Poser une question, en tête du fil ------------------------------------ */
+/* --- Poser une question, en tête du fil (DiscussionComposer.tsx, maquette 2529:233) -- */
 .composer {
   --avatar-size: var(--thread-photo);
 
@@ -118,8 +118,18 @@ button.composer:hover {
   background: var(--surface-row-hover);
 }
 
+/* Ouvert : le champ, puis le pied avec « Annuler » et « Publier », sous un filet. */
 .composer--open {
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.composer__body {
+  display: flex;
+  gap: var(--space-12);
+  padding: var(--space-18) var(--space-20) var(--space-16);
 }
 
 .composer__text,
@@ -132,6 +142,13 @@ button.composer:hover {
 }
 
 .composer__form {
+  gap: var(--space-12);
+}
+
+.composer__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-8);
 }
 
@@ -145,22 +162,154 @@ button.composer:hover {
   color: var(--ink-section-pale);
 }
 
+/* « Les exposants te répondront » : à qui l'on parle, en une pastille. */
+.composer__audience {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-9) var(--space-3) var(--space-8);
+  border-radius: var(--radius-round);
+  background: var(--surface-chip-neutral);
+  font: var(--type-composer-small);
+  color: var(--ink-soft);
+}
+
+/* La question s'écrit sans cadre, en grand : on voit tout de suite où écrire. Le champ grandit
+   avec ce qu'on tape. */
+.composer__question {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--type-composer-question);
+  letter-spacing: var(--tracking-thread-question);
+  color: var(--ink-title);
+  caret-color: var(--review-star-ink);
+  field-sizing: content;
+  resize: none;
+}
+
+.composer__question::placeholder {
+  color: var(--ink-section-pale);
+}
+
+.composer__question:focus-visible {
+  outline: none;
+}
+
+.composer__error {
+  font: var(--type-composer-small);
+  color: var(--status-pending-ink);
+}
+
+.composer__ideas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.composer__ideas-label {
+  font: var(--type-composer-small);
+  color: var(--ink-section-pale);
+}
+
+.composer__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.composer__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-12) var(--space-6) var(--space-10);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-card-link);
+  color: var(--thread-text-ink);
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.composer__chip svg {
+  color: var(--ink-soft);
+}
+
+.composer__chip:hover {
+  background: var(--surface-row-hover);
+}
+
+.composer__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.composer__more:hover {
+  color: var(--ink-title);
+}
+
+.composer__detail {
+  width: 100%;
+  padding: var(--space-12) var(--space-14);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--composer-detail-surface);
+  font: var(--type-thread-text);
+  color: var(--thread-text-ink);
+  caret-color: var(--review-star-ink);
+  field-sizing: content;
+  resize: none;
+}
+
+.composer__detail::placeholder {
+  color: var(--ink-section-pale);
+}
+
+/* Comme la question : l'aplat dit où écrire, le curseur dit qu'on y est. */
+.composer__detail:focus-visible {
+  outline: none;
+}
+
+.composer__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-16);
+  padding: var(--space-12) var(--space-16) var(--space-12) var(--space-20);
+  border-top: 1px solid var(--thread-separator);
+}
+
 .composer__publish {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  gap: var(--space-6);
   padding: var(--space-9) var(--space-16);
   border-radius: var(--radius-round);
   background: var(--thread-publish-surface);
   font: var(--type-card-link-strong);
   color: var(--thread-publish-ink);
   cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.composer--open .composer__publish {
+  padding-right: var(--space-14);
 }
 
 .composer__publish:disabled {
-  opacity: 0.4;
+  opacity: 0.25;
   cursor: default;
 }
 
-/* --- Les champs ------------------------------------------------------------- */
+/* --- Le champ d'une réponse ------------------------------------------------- */
 .discussion__champ {
   width: 100%;
   padding: var(--space-12) var(--space-15);
@@ -170,10 +319,6 @@ button.composer:hover {
   font: var(--type-composer-field);
   color: var(--ink-title);
   resize: none;
-}
-
-.discussion__champ--titre {
-  font: var(--type-composer-titre);
 }
 
 .discussion__champ::placeholder {
@@ -191,22 +336,6 @@ button.composer:hover {
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-14);
-}
-
-.discussion__note {
-  flex: 1;
-  font: var(--type-composer-note);
-  color: var(--ink-soft);
-}
-
-.discussion__note b {
-  color: var(--ink-title);
-}
-
-/* La raison du blocage, jamais un bouton gris sans explication. */
-.discussion__blocage {
-  font: var(--type-composer-note);
-  color: var(--status-pending-ink);
 }
 
 /* --- Une question et ses réponses ----------------------------------------- */
@@ -412,6 +541,8 @@ button.thread__reply:hover {
   .discussion__canal,
   .discussion__earlier,
   button.composer,
+  .composer__chip,
+  .composer__publish,
   .thread__remove,
   .discussion-mute {
     transition: none;

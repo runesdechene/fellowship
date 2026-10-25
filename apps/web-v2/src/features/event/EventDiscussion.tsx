@@ -6,10 +6,8 @@
  *            casquettes de l'utilisateur.
  */
 import { useMemo, useState, type ReactNode } from 'react'
-import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import {
-  askBlocker,
   canAsk,
   channelLabel,
   deriveAudience,
@@ -18,97 +16,12 @@ import {
   type ThreadActor,
   type ThreadAudience,
 } from '@/lib/threads'
+import { DiscussionComposer } from './DiscussionComposer'
 import { Question, type Me } from './DiscussionThread'
 import { useEventThreads } from './useEventThreads'
 
 /** Les plus récentes s'affichent d'abord ; les autres attendent « Voir les questions précédentes ». */
 const FIRST_SHOWN = 2
-
-/** La question à poser, en tête du fil : une ligne qui s'ouvre en formulaire. */
-function Composer({
-  me,
-  audience,
-  saving,
-  onAsk,
-}: {
-  me: Me
-  audience: ThreadAudience | null
-  saving: boolean
-  onAsk: (title: string, body: string) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
-  const blocker = askBlocker(title, body)
-  const prompt =
-    audience === 'organisateur'
-      ? 'Pose ta question aux autres organisateurs…'
-      : 'Pose ta question aux exposants qui y sont allés…'
-
-  if (!open) {
-    return (
-      <button type="button" className="composer" onClick={() => setOpen(true)}>
-        <Avatar className="composer__photo" src={me.avatarUrl} name={me.name} />
-        <span className="composer__text">
-          <span className="composer__name">{me.name}</span>
-          <span className="composer__prompt">{prompt}</span>
-        </span>
-        <span className="composer__publish">Publier</span>
-      </button>
-    )
-  }
-
-  return (
-    <div className="composer composer--open">
-      <Avatar className="composer__photo" src={me.avatarUrl} name={me.name} />
-      <div className="composer__form">
-        <span className="composer__name">{me.name}</span>
-        <input
-          className="discussion__champ discussion__champ--titre"
-          autoFocus
-          aria-label="Ta question"
-          placeholder={prompt}
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <textarea
-          className="discussion__champ"
-          rows={3}
-          aria-label="Le détail de ta question"
-          placeholder="Ajoute ce qui aidera à te répondre — d’où tu viens, ce que tu montes, ce qui te bloque."
-          value={body}
-          onChange={(event) => setBody(event.target.value)}
-        />
-        <div className="discussion__composer-pied">
-          {audience && (
-            <span className="discussion__note">
-              Posée dans le canal <b>{channelLabel(audience)}</b> — c’est celui de la casquette avec
-              laquelle tu es connecté.
-            </span>
-          )}
-          {/* La raison du blocage, jamais un bouton gris sans explication. */}
-          {blocker && title.trim() !== '' && <span className="discussion__blocage">{blocker}</span>}
-          <button type="button" className="message__action" onClick={() => setOpen(false)}>
-            Annuler
-          </button>
-          <button
-            type="button"
-            className="composer__publish"
-            disabled={saving || blocker !== null || !audience}
-            onClick={() => {
-              onAsk(title, body)
-              setTitle('')
-              setBody('')
-              setOpen(false)
-            }}
-          >
-            Publier
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export function EventDiscussion({ eventId, action }: { eventId: string; action?: ReactNode }) {
   const { actor, person, entities } = useAuth()
@@ -129,6 +42,7 @@ export function EventDiscussion({ eventId, action }: { eventId: string; action?:
   // Tant que rien n'a été décoché, on montre tous les canaux disponibles.
   const shownChannels = active ?? channels
   const [everything, setEverything] = useState(false)
+  const [composing, setComposing] = useState(false)
 
   const audience = deriveAudience(threadActor)
   const nothingAtAll = threads.length === 0
@@ -182,9 +96,11 @@ export function EventDiscussion({ eventId, action }: { eventId: string; action?:
 
       <div className="discussion__fil">
         {me && asking && (
-          <Composer
+          <DiscussionComposer
             me={me}
             audience={audience}
+            open={composing}
+            setOpen={setComposing}
             saving={saving}
             onAsk={(title, body) => {
               if (audience) void ask({ audience, title, body })
@@ -194,13 +110,16 @@ export function EventDiscussion({ eventId, action }: { eventId: string; action?:
         {loading ? (
           <p className="discussion__vide">Chargement de la discussion…</p>
         ) : visible.length === 0 ? (
-          <p className="discussion__vide">
-            {!nothingAtAll
-              ? 'Aucune question dans les canaux affichés.'
-              : asking
-                ? 'Personne n’a encore rien demandé. Si tu hésites sur l’électricité, le montage ou l’accès, quelqu’un d’autre hésite aussi.'
-                : 'Personne n’a encore rien demandé sur cette date.'}
-          </p>
+          // Le champ ouvert dit déjà quoi faire : le vide ne se répète pas dessous.
+          !composing && (
+            <p className="discussion__vide">
+              {!nothingAtAll
+                ? 'Aucune question dans les canaux affichés.'
+                : asking
+                  ? 'Personne n’a encore rien demandé : sois le premier.'
+                  : 'Personne n’a encore rien demandé sur cette date.'}
+            </p>
+          )
         ) : (
           listed.map((thread) => (
             <Question

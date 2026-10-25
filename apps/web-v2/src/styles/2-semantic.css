@@ -789,14 +789,14 @@
   --type-thread-badge: var(--weight-semibold) var(--size-12) / var(--leading-snug)
     var(--family-sans);
 
-  /* Les champs d'écriture : le titre d'une question se tape gros, ce qu'on écrit ressemble déjà à
-     ce qu'on lira. */
+  /* La question à poser (maquette 2529:233) : le champ sans cadre, en grand ; les petites
+     mentions (à qui l'on parle, les idées, l'erreur) en 12. */
+  --type-composer-question: var(--weight-medium) var(--size-18) / 1.4 var(--family-sans);
+  --type-composer-small: var(--weight-medium) var(--size-12) / var(--leading-snug)
+    var(--family-sans);
   --type-composer-field: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
     var(--family-sans);
-  --type-composer-titre: var(--weight-semibold) var(--size-16) / var(--leading-snug)
-    var(--family-sans);
-  --type-composer-note: var(--weight-medium) var(--size-11) / var(--leading-normal)
-    var(--family-sans);
+  --composer-detail-surface: var(--surface-row-hover);
 
   /* =========================================================================
      FORMULAIRES — champs, bascules, dépôt de fichier

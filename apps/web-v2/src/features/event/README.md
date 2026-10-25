@@ -11,6 +11,7 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `EventDiscussion.tsx` — la discussion du festival en mini-fil : titre et compte, canaux, la question à poser en tête, les deux plus récentes puis « Voir les questions précédentes ».
 - `DiscussionThread.tsx` — un fil : la question, ses réponses reliées par le trait des photos, « Répondre à … ».
 - `DiscussionBlock.tsx` — le bloc et sa sourdine.
+- `DiscussionComposer.tsx` — la question à poser, en tête du fil : le champ sans cadre, les idées pour démarrer, les précisions à la demande (maquette 2529:233).
 - `EventRoute.tsx` — `/evenements/:slug/…` : trouve la fiche (slug actuel, ancien slug ou identifiant), remplace l'adresse par l'actuelle et donne `useEventKey()` aux pages ; `LegacyEventRedirect` passe `/evenement/…` et `/e/…` sous `/evenements/`.
 - `useEventKey.ts` — l'identifiant et le slug actuel de la fiche, posés par `EventRoute`.
 - `useEvent.ts` — l'événement, la participation, et leurs écritures.
