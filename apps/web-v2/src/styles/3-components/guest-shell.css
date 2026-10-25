@@ -44,7 +44,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-12);
-  padding: var(--landing-bar-compact-pad) var(--landing-gutter);
+  /* Même marge que « Commencer » en face. */
+  padding: var(--landing-bar-compact-pad) var(--guest-wall-inset);
   background: var(--surface-app);
 }
 
