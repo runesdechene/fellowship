@@ -13,6 +13,7 @@
 import {
   CalendarDays,
   CircleGauge,
+  CircleHelp,
   Flag,
   Megaphone,
   MessageSquare,
@@ -98,6 +99,7 @@ const ADMIN_ITEMS = [
     Icon: Megaphone,
     prefixes: ['/admin/mises-a-jour'],
   },
+  { to: '/admin/faq', label: 'FAQ', Icon: CircleHelp, prefixes: ['/admin/faq'] },
 ] as const
 
 interface SidebarProps {

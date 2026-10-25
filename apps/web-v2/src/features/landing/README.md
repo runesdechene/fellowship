@@ -11,7 +11,8 @@ sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `li
   (le chapitre lu est souligné), « Se connecter », « Commencer gratuitement ».
 - `OrganizersBox.tsx` — l'encadré des organisateurs, en tête du pied de page (« Bientôt »).
 - `FinalCall.tsx` — « Ton prochain stand commence ici. », la FAQ et le pied de page.
-- `LandingFaq.tsx` — la FAQ sous l'appel final : neuf questions qui s'ouvrent une à une.
+- `LandingFaq.tsx` — la FAQ sous l'appel final : les questions s'ouvrent une à une.
+- `useFaq.ts` — les questions affichées, éditées depuis `/admin/faq`.
 - `LandingSearch.tsx` — la recherche, qui mène à `/festivals` (lot 11b).
 - `LandingFoot.tsx` — le pied de page, partagé avec la recherche publique (`away` hors de la landing).
 - `Opening.tsx`, `PosterWall.tsx` — l'ouverture et son mur de vraies affiches qui défile.

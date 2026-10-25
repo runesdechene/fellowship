@@ -27,6 +27,7 @@ import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
 import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
 import { UpdatesPage } from '@/features/updates/UpdatesPage'
 import { UpdatesAdminPage } from '@/features/admin-updates/UpdatesAdminPage'
+import { FaqAdminPage } from '@/features/admin-faq/FaqAdminPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { NetworkPage } from '@/features/community/NetworkPage'
@@ -142,6 +143,7 @@ const ADMIN_ROUTES: [string, ReactNode][] = [
   ['/admin/categories', <CategoriesPage />],
   ['/admin/mises-a-jour', <UpdatesAdminPage />],
   ['/admin/temoignages', <TestimonialsPage />],
+  ['/admin/faq', <FaqAdminPage />],
   ['/admin/enseignes/:id', <EntityPage />],
   ['/admin/personnes/:id', <PersonPage />],
 ]
