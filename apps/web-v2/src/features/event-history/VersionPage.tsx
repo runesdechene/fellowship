@@ -1,5 +1,5 @@
 /**
- * QUOI     — une version de la fiche (`/evenement/:id/historique/:version`) : qui, quand, son mot, et
+ * QUOI     — une version de la fiche (`/evenements/:slug/historique/:version`) : qui, quand, son mot, et
  *            ce qu'elle a changé — un champ court en « avant → après », un texte mot à mot.
  * POURQUOI — maquette 2253:299 (lot 10c) : souligné, ce qui a été ajouté ; barré, ce qui a été
  *            retiré. Un admin peut revenir à cette version, ce qui en crée une nouvelle.
@@ -13,6 +13,8 @@ import { changeBlocks, versionTitle, versionWhen, type ChangeBlock } from '@/lib
 import { useTransitionNavigate } from '@/lib/navigation'
 import { must, supabase } from '@/lib/supabase'
 import { useEventHistory } from './useEventHistory'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from '@/features/event/useEventKey'
 
 function useVersionBlocks(version: number) {
   const [blocks, setBlocks] = useState<ChangeBlock[] | null>(null)
@@ -73,7 +75,8 @@ function Block({ block }: { block: ChangeBlock }) {
 }
 
 export function VersionPage() {
-  const { id = '', version = '' } = useParams<{ id: string; version: string }>()
+  const { id, slug } = useEventKey()
+  const { version = '' } = useParams<{ version: string }>()
   const versionId = Number(version)
   const go = useTransitionNavigate()
   const { person } = useAuth()
@@ -92,7 +95,7 @@ export function VersionPage() {
     })
     setReverting(false)
     if (failure) setRevertError(failure.message)
-    else go(`/evenement/${id}/historique`)
+    else go(eventPath(slug, 'historique'))
   }
 
   return (
@@ -101,7 +104,7 @@ export function VersionPage() {
         <button
           type="button"
           className="history__back"
-          onClick={() => go(`/evenement/${id}/historique`)}
+          onClick={() => go(eventPath(slug, 'historique'))}
         >
           <ChevronLeft size={14} strokeWidth={2} />
           L’histoire de la fiche

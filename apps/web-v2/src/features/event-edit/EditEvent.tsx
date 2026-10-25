@@ -1,5 +1,5 @@
 /**
- * QUOI     — la page « Modifier l'événement » (`/evenement/:id/modifier`) : « Annuler » et
+ * QUOI     — la page « Modifier l'événement » (`/evenements/:slug/modifier`) : « Annuler » et
  *            « Enregistrer les modifications » en haut, les sections du formulaire, l'aperçu à droite.
  * POURQUOI — maquette 2117:2 (lot 10c) : une fiche publique se modifie par tout compte connecté, une
  *            privée par son créateur ; chaque enregistrement entre dans l'histoire de la fiche.
@@ -7,7 +7,7 @@
  */
 import { ChevronLeft } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useTags } from '@/features/event-create/useTags'
 import { MISSING_LABELS, type MissingField } from '@/lib/event-edit'
@@ -16,12 +16,14 @@ import { KeptUpToDate } from '@/features/event/KeptUpToDate'
 import { EditPreview } from './EditPreview'
 import { EditSections } from './EditSections'
 import { useEditEvent } from './useEditEvent'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from '@/features/event/useEventKey'
 
 const isMissingField = (value: string | null): value is MissingField =>
   value !== null && value in MISSING_LABELS
 
 export function EditEvent() {
-  const { id = '' } = useParams<{ id: string }>()
+  const { id, slug } = useEventKey()
   const [search] = useSearchParams()
   const champ = search.get('champ')
   const highlight = isMissingField(champ) ? champ : null
@@ -48,7 +50,7 @@ export function EditEvent() {
   const back = () => {
     const fromApp = (window.history.state as { idx?: number } | null)?.idx
     if (fromApp && fromApp > 0) void navigate(-1)
-    else go(`/evenement/${id}`)
+    else go(eventPath(slug))
   }
 
   if (edit.loading) return <div className="edit-event" />
@@ -63,7 +65,7 @@ export function EditEvent() {
     return (
       <div className="edit-event">
         <p className="edit-event__state">Seul son créateur modifie une fiche privée.</p>
-        <button type="button" className="edit-event__back" onClick={() => go(`/evenement/${id}`)}>
+        <button type="button" className="edit-event__back" onClick={() => go(eventPath(slug))}>
           <ChevronLeft size={14} strokeWidth={2} />
           {event.name}
         </button>
@@ -81,7 +83,7 @@ export function EditEvent() {
           disabled={edit.saving}
           onClick={() => {
             void edit.save().then((saved) => {
-              if (saved) go(`/evenement/${id}`)
+              if (saved) go(eventPath(slug))
             })
           }}
         >
@@ -92,11 +94,7 @@ export function EditEvent() {
       <div className="edit-event__body">
         <div className="edit-event__form">
           <header className="edit-event__head">
-            <button
-              type="button"
-              className="edit-event__back"
-              onClick={() => go(`/evenement/${id}`)}
-            >
+            <button type="button" className="edit-event__back" onClick={() => go(eventPath(slug))}>
               <ChevronLeft size={14} strokeWidth={2} />
               {event.name}
             </button>

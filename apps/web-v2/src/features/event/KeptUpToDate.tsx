@@ -8,18 +8,17 @@ import { History, Plus } from 'lucide-react'
 import { useEventHistory } from '@/features/event-history/useEventHistory'
 import { versionWhen } from '@/lib/event-history'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from './useEventKey'
 
 export function KeptUpToDate({ eventId }: { eventId: string }) {
   const go = useTransitionNavigate()
+  const { slug } = useEventKey()
   const { entries } = useEventHistory(eventId)
   const latest = entries[0]
   if (!latest) return null
   return (
-    <button
-      type="button"
-      className="kept-up"
-      onClick={() => go(`/evenement/${eventId}/historique`)}
-    >
+    <button type="button" className="kept-up" onClick={() => go(eventPath(slug, 'historique'))}>
       <History size={14} strokeWidth={1.8} />
       <span>
         Tenu à jour par les exposants · {latest.isOrigin ? 'ajouté' : 'modifié'} par{' '}

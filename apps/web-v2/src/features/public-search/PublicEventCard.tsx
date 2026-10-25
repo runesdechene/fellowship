@@ -10,10 +10,11 @@ import { Link } from 'react-router-dom'
 import { Poster } from '@/components/ui/Poster'
 import { formatDateRange } from '@/lib/dates'
 import type { PublicEvent } from './usePublicSearch'
+import { eventPath } from '@/lib/event-path'
 
 export function PublicEventCard({ event }: { event: PublicEvent }) {
   return (
-    <Link to={`/evenement/${event.id}`} className="public-card">
+    <Link to={eventPath(event.slug)} className="public-card">
       <Poster imageUrl={event.imageUrl} tags={event.tags} className="public-card__poster" />
       <span className="public-card__place">
         <MapPin size={14} strokeWidth={2.2} aria-hidden />

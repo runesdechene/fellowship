@@ -15,6 +15,7 @@ import { foundLabel, reasonText } from '@/lib/suggestions'
 import { usePlan } from '@/lib/usePlan'
 import { EmptyInvite } from './EmptyInvite'
 import { useSuggestions, type ShownSuggestion } from './useSuggestions'
+import { eventPath } from '@/lib/event-path'
 
 const MAX_FACES = 3
 
@@ -33,7 +34,7 @@ function SuggestionCard({ item, leaving, onDismiss }: CardProps) {
       <button
         type="button"
         className="suggestion__open"
-        onClick={() => go(`/evenement/${item.eventId}`)}
+        onClick={() => go(eventPath(item.eventId))}
       >
         <Poster imageUrl={item.imageUrl} tags={item.tags} className="suggestion__poster" />
         <span className="suggestion__body">

@@ -88,7 +88,7 @@ describe('pushMessage', () => {
       'a1',
     )
     expect(message?.body).toBe('Dernier jour pour candidater à Plane’R Fest.')
-    expect(message?.url).toBe('/evenement/e1?compte=a1')
+    expect(message?.url).toBe('/evenements/e1?compte=a1')
   })
 
   test('une donnée manquante n’envoie rien', () => {

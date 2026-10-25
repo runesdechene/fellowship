@@ -11,6 +11,7 @@ import { duplicateLine } from '@/lib/create-event'
 import { parseSqlDate } from '@/lib/dates'
 import { canBePreviousEdition } from '@/lib/editions'
 import type { SimilarEvent } from './useSimilarEvents'
+import { eventPath } from '@/lib/event-path'
 
 interface DuplicateListProps {
   similar: SimilarEvent[]
@@ -53,7 +54,7 @@ export function DuplicateList({ similar, previousEditionId, onPickEdition }: Dup
                   {picked ? `✓ Nouvelle édition de ${String(year)}` : 'C’est sa nouvelle édition'}
                 </button>
               )}
-              <Link className="dupe__open" to={`/evenement/${event.id}`}>
+              <Link className="dupe__open" to={eventPath(event.id)}>
                 Ouvrir <ArrowRight size={13} strokeWidth={2} />
               </Link>
             </span>

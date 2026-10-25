@@ -18,6 +18,8 @@ import { Stars } from '@/components/ui/Stars'
 import { formatScore, reviewSignature } from '@/lib/reviews'
 import type { EventReview } from './useEventReviews'
 import { useEventReviews } from './useEventReviews'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from './useEventKey'
 
 function Quote({ review }: { review: EventReview }) {
   return (
@@ -64,6 +66,7 @@ function ScoreBars({
 }
 
 export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps) {
+  const { slug } = useEventKey()
   const { scores, reviews, error } = useEventReviews(eventId, viewerId)
   const { pro } = usePlan()
   const go = useTransitionNavigate()
@@ -132,7 +135,7 @@ export function EventReviews({ eventId, viewerId, canReview }: EventReviewsProps
           </button>
         )}
         {canReview && (
-          <Link className="reviews__link" to={`/evenement/${eventId}/avis`}>
+          <Link className="reviews__link" to={eventPath(slug, 'avis')}>
             <Pencil size={13} strokeWidth={2} />
             {mine ? 'Modifier mon avis' : 'Donner mon avis'}
           </Link>

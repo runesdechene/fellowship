@@ -9,6 +9,7 @@ import { SkeletonDot, SkeletonLine } from '@/components/ui/Skeleton'
 import { formatDaysShort } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardDate } from './useDashboard'
+import { eventPath } from '@/lib/event-path'
 
 /** Les lignes d'une liste vide : largeur du nom, puis de la ville. */
 const SKETCH = [
@@ -47,7 +48,7 @@ export function UpcomingCard({ dates }: { dates: DashboardDate[] }) {
               <button
                 type="button"
                 className="upcoming__row"
-                onClick={() => go(`/evenement/${date.event.id}`)}
+                onClick={() => go(eventPath(date.event.id))}
               >
                 {date.confirmed ? (
                   <span

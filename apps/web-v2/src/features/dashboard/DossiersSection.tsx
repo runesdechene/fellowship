@@ -17,6 +17,7 @@ import { formatDateRange } from '@/lib/dates'
 import { settledLast, type PaymentTone } from '@/lib/dossiers'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { Dossier } from './useDashboard'
+import { eventPath } from '@/lib/event-path'
 
 function PaymentIcon({ tone }: { tone: PaymentTone }) {
   if (tone === 'done') return <span className="dossiers__dot dossiers__dot--acquired" />
@@ -108,7 +109,7 @@ export function DossiersSection({ dossiers }: { dossiers: Dossier[] }) {
                   className={
                     dossier.view.settled ? 'dossiers__row dossiers__row--settled' : 'dossiers__row'
                   }
-                  onClick={() => go(`/evenement/${dossier.eventId}`)}
+                  onClick={() => go(eventPath(dossier.eventId))}
                 >
                   <span className="dossiers__date">
                     <span className="dossiers__thumb">

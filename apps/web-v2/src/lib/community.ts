@@ -7,6 +7,7 @@
  *            testée seule (community.test.ts).
  */
 import type { TextPart } from './notifications'
+import { eventPath } from './event-path'
 
 export type FeedKind = 'arrival' | 'going' | 'added' | 'review' | 'follow' | 'gathering'
 
@@ -194,7 +195,7 @@ export interface ActivityText {
 /** Ce qui suit le nom dans « Activité du réseau » ; null : la ligne n'y va pas. */
 export function activityText(line: FeedLine): ActivityText | null {
   if (!line.who) return null
-  const event = line.event && { name: line.event.name, to: `/evenement/${line.event.id}` }
+  const event = line.event && { name: line.event.name, to: eventPath(line.event.id) }
   switch (line.kind) {
     case 'arrival':
       return { verb: 'vient de rejoindre Fellowship', object: null }

@@ -123,6 +123,20 @@
   status = 301
   force = true
 
+# Les fiches vivent sous /evenements/<slug> depuis le 25/10/2026 ; l'app remplace ensuite un
+# identifiant ou un ancien slug par le slug actuel.
+[[redirects]]
+  from = "/evenement/*"
+  to = "/evenements/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/e/*"
+  to = "/evenements/:splat"
+  status = 301
+  force = true
+
 # Un fichier de build introuvable (onglet resté sur une ancienne version) répond 404, et non
 # index.html : sinon le navigateur reçoit du HTML à la place d'un script, mis en cache pour un an.
 [[redirects]]

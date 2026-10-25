@@ -38,14 +38,14 @@ describe('notificationView', () => {
     expect(said(view)).toBe(
       '**Marion** pose une question sur Arbor Pagan Fest : « L’électricité est fournie ? »',
     )
-    expect(view?.href).toBe('/evenement/e1#discussions')
+    expect(view?.href).toBe('/evenements/e1#discussions')
     expect(view?.icon).toBe('question')
   })
 
   it('une réponse à ta question', () => {
     const view = notificationView(row('thread_reply', { ...event, actor_name: 'Lucas' }))
     expect(said(view)).toBe('**Lucas** a répondu à ta question sur Arbor Pagan Fest')
-    expect(view?.href).toBe('/evenement/e1#discussions')
+    expect(view?.href).toBe('/evenements/e1#discussions')
   })
 
   it('ta réponse choisie', () => {
@@ -144,7 +144,7 @@ describe('new_edition', () => {
     expect(said(view)).toBe(
       '**Les Aventuriales** revient du 24 au 26 septembre 2027. Tu y étais en 2026.',
     )
-    expect(view?.href).toBe('/evenement/e2')
+    expect(view?.href).toBe('/evenements/e2')
     expect(view?.action).toEqual({ kind: 'mark', eventId: 'e2' })
     expect(view?.ownerId).toBe('a1')
   })
@@ -186,7 +186,7 @@ describe('les alertes planifiées', () => {
     expect(said(view)).toBe(
       'Plus que **7 jours** pour candidater à **Arbor Pagan Fest** — clôture le 14 octobre.',
     )
-    expect(view?.href).toBe('/evenement/e1')
+    expect(view?.href).toBe('/evenements/e1')
     expect(view?.icon).toBe('deadline')
   })
 
@@ -223,7 +223,7 @@ describe('les alertes planifiées', () => {
     expect(said(view)).toBe(
       '**Gautier** a ajouté **Arbor Pagan Fest**, à Lyon du 3 au 5 juillet 2027.',
     )
-    expect(view?.href).toBe('/evenement/e1')
+    expect(view?.href).toBe('/evenements/e1')
     expect(view?.icon).toBe('friend')
   })
 
@@ -269,7 +269,7 @@ describe('suggestion', () => {
   it('dit le festival, la ville, les dates et la raison', () => {
     const said = notificationPhrase('suggestion', data)
     expect(said?.icon).toBe('suggestion')
-    expect(said?.href).toBe('/evenement/e1')
+    expect(said?.href).toBe('/evenements/e1')
     expect(said?.text).toEqual([
       { strong: 'Fête des Remparts' },
       ' à Dinan du 12 au 13 juillet pourrait t’intéresser : proche des Médiévales de Provins.',
@@ -318,8 +318,8 @@ describe('les Nouveautés', () => {
 
 describe('withAccount', () => {
   it('pose la casquette avant l’ancre, sans perdre les paramètres', () => {
-    expect(withAccount('/evenement/e1#discussions', 'a1')).toBe(
-      '/evenement/e1?compte=a1#discussions',
+    expect(withAccount('/evenements/e1#discussions', 'a1')).toBe(
+      '/evenements/e1?compte=a1#discussions',
     )
     expect(withAccount('/explorer?vue=grille', 'a1')).toBe('/explorer?vue=grille&compte=a1')
   })

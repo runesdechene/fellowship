@@ -18,6 +18,7 @@ import { tagStyleFor } from '@/lib/tags'
 import { useTagStyles } from '@/lib/useTagStyles'
 import { SignupDate } from '@/features/admin-accounts/SignupDate'
 import { deleteEvent, useAdminEvents, type AdminEvent } from './useAdminEvents'
+import { eventPath } from '@/lib/event-path'
 
 export function AdminEventsPage() {
   const [search, setSearch] = useSearchParams()
@@ -80,7 +81,7 @@ export function AdminEventsPage() {
             {events.map((event) => (
               <tr key={event.id} className="admin-table__row">
                 <td>
-                  <Link to={`/evenement/${event.id}`} className="admin-table__row-link">
+                  <Link to={eventPath(event.id)} className="admin-table__row-link">
                     <span className="admin-table__identity">
                       <span className="admin-table__name">{event.name}</span>
                       <span className="admin-table__meta">

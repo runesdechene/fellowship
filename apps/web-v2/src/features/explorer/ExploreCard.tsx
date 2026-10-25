@@ -19,6 +19,7 @@ import { nameLine } from '@/lib/name-line'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import type { ExploreEvent } from './useExplorer'
+import { eventPath } from '@/lib/event-path'
 
 const MAX_FACES = 3
 
@@ -53,7 +54,7 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
 
   return (
     <article className="explore-card" ref={card}>
-      <Link to={`/evenement/${event.id}`} className="explore-card__link">
+      <Link to={eventPath(event.slug)} className="explore-card__link">
         <PosterArt
           eventId={event.id}
           imageUrl={event.imageUrl}
@@ -87,7 +88,7 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
           }}
         />
       )}
-      <Link to={`/evenement/${event.id}`} className="explore-card__info">
+      <Link to={eventPath(event.slug)} className="explore-card__info">
         <span className="explore-card__row">
           <span className="explore-card__name">{event.name}</span>
           {registered && (

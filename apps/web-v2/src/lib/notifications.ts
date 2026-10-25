@@ -9,6 +9,7 @@
 
 import { formatDateSpan, formatDayMonth, parseSqlDate } from './dates'
 import { readReason, reasonInSentence } from './suggestions'
+import { eventPath } from './event-path'
 
 /** Les types que la cloche sait dire. La lecture ne demande QU'EUX : une limite de 50 lignes
  *  remplie de types illisibles viderait la cloche (piège vu en relecture, 09/10/2026). */
@@ -128,7 +129,7 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
   const who = text(data, 'actor_name')
   const event = text(data, 'event_name')
   const eventId = text(data, 'event_id')
-  const fiche = eventId ? `/evenement/${eventId}` : null
+  const fiche = eventId ? eventPath(eventId) : null
   const discussion = fiche ? `${fiche}#discussions` : null
 
   switch (type) {

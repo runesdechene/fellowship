@@ -8,6 +8,7 @@ import { Poster } from '@/components/ui/Poster'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import type { Crossing } from './useCommunity'
+import { eventPath } from '@/lib/event-path'
 
 export function CrossingCard({ crossing }: { crossing: Crossing[] }) {
   if (crossing.length === 0) return null
@@ -19,7 +20,7 @@ export function CrossingCard({ crossing }: { crossing: Crossing[] }) {
       <ul className="side-card__list">
         {crossing.map((date) => (
           <li key={date.eventId}>
-            <Link className="side-card__row" to={`/evenement/${date.eventId}`}>
+            <Link className="side-card__row" to={eventPath(date.eventId)}>
               <Poster imageUrl={date.imageUrl} tags={date.tags} className="side-card__poster" />
               <span className="side-card__body">
                 <span className="side-card__name">{date.name}</span>

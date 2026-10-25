@@ -14,6 +14,7 @@ import { formatDateRange } from '@/lib/dates'
 import { nameLine } from '@/lib/name-line'
 import type { ParticipationStatus } from '@/types/database'
 import type { CalendarDate } from './useCalendar'
+import { eventPath } from '@/lib/event-path'
 
 const STATUS: Record<ParticipationStatus, { label: string; tone: ChipTone; icon: typeof Check }> = {
   interesse: { label: 'Intéressé', tone: 'todo', icon: CircleDashed },
@@ -36,7 +37,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
 
   return (
     <Link
-      to={`/evenement/${date.eventId}`}
+      to={eventPath(date.eventId)}
       className={muted ? 'poster-card poster-card--muted' : 'poster-card'}
     >
       <PosterArt

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { stampYear } from '@/lib/dates'
 import { stampName } from '@/lib/vitrine'
 import type { VitrineDate } from './useVitrine'
+import { eventPath } from '@/lib/event-path'
 
 const MAX_STAMPS = 8
 
@@ -27,7 +28,7 @@ export function Stamps({ past }: { past: VitrineDate[] }) {
       </h2>
       <div className="stamps">
         {shown.map((date) => (
-          <Link key={date.eventId} to={`/evenement/${date.eventId}`} className="stamp">
+          <Link key={date.eventId} to={eventPath(date.eventId)} className="stamp">
             <span className="stamp__circle">
               <Poster imageUrl={date.imageUrl} tags={date.tags} className="stamp__image" />
               <span className="stamp__year">{stampYear(date.startDate)}</span>

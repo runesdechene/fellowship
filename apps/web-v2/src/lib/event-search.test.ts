@@ -9,6 +9,7 @@ import { toSearchEvent } from './event-search'
 describe('toSearchEvent', () => {
   const row = {
     id: 'e1',
+    slug: 'fenrir-2027',
     name: 'Salon du tatouage',
     image_url: null,
     tags: ['salon'],

@@ -11,6 +11,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Stars } from '@/components/ui/Stars'
 import { feedPhrase, type FeedLine, type FeedPerson } from '@/lib/community'
 import { formatDateRange, parseSqlDate, timeAgo } from '@/lib/dates'
+import { eventPath } from '@/lib/event-path'
 
 interface FeedItemProps {
   line: FeedLine
@@ -28,7 +29,7 @@ function EventCard({ line }: { line: FeedLine }) {
     ? ` · ${event.city}${event.department ? ` (${event.department})` : ''}`
     : ''
   return (
-    <Link className="feed-event" to={`/evenement/${event.id}`}>
+    <Link className="feed-event" to={eventPath(event.id)}>
       <Poster imageUrl={event.imageUrl} tags={event.tags} className="feed-event__poster" />
       <span className="feed-event__body">
         <span className="feed-event__name">{event.name}</span>
@@ -43,7 +44,7 @@ function EventCard({ line }: { line: FeedLine }) {
 
 function Review({ line }: { line: FeedLine }) {
   return (
-    <Link className="feed-review" to={`/evenement/${line.event?.id ?? ''}`}>
+    <Link className="feed-review" to={eventPath(line.event?.id ?? '')}>
       {line.stars !== null && <Stars score={line.stars} />}
       {line.comment && <span className="feed-review__comment">« {line.comment} »</span>}
       {!line.who && (

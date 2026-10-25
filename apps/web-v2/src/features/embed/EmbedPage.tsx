@@ -17,6 +17,7 @@ import { tagStyleFor } from '@/lib/tags'
 import { posterThumb } from '@/lib/poster-thumb'
 import { useEmbed } from './useEmbed'
 import { useHostTheme, useReportHeight } from './useHostFrame'
+import { eventPath } from '@/lib/event-path'
 
 interface EmbedFrameProps {
   theme: 'light' | 'dark'
@@ -102,7 +103,7 @@ export function EmbedPage() {
             return (
               <a
                 key={date.id}
-                href={`${window.location.origin}/evenement/${date.id}`}
+                href={`${window.location.origin}${eventPath(date.id)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="embed-date"

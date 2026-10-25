@@ -8,13 +8,14 @@ import { Chip } from '@/components/ui/Chip'
 import { formatCountdown, formatDateRange, parseSqlDate } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardDate } from './useDashboard'
+import { eventPath } from '@/lib/event-path'
 
 export function NextDateCard({ date }: { date: DashboardDate }) {
   const { event } = date
   const go = useTransitionNavigate()
 
   return (
-    <button type="button" className="next-date" onClick={() => go(`/evenement/${event.id}`)}>
+    <button type="button" className="next-date" onClick={() => go(eventPath(event.id))}>
       <Poster imageUrl={event.image_url} tags={event.tags} className="next-date__poster" />
 
       {/* Des `span` et non des `div` : un bouton ne peut contenir que du

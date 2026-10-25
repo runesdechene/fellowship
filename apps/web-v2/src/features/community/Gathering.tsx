@@ -10,6 +10,7 @@ import { Poster } from '@/components/ui/Poster'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import type { FeedLine } from '@/lib/community'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
+import { eventPath } from '@/lib/event-path'
 
 interface GatheringProps {
   line: FeedLine
@@ -37,12 +38,12 @@ export function Gathering({ line, onMark }: GatheringProps) {
 
   return (
     <section className="gathering" aria-label="Ça se rassemble">
-      <Link className="gathering__poster-link" to={`/evenement/${event.id}`}>
+      <Link className="gathering__poster-link" to={eventPath(event.id)}>
         <Poster imageUrl={event.imageUrl} tags={event.tags} className="gathering__poster" />
       </Link>
       <div className="gathering__body">
         <span className="gathering__eyebrow">Ça se rassemble</span>
-        <Link className="gathering__name" to={`/evenement/${event.id}`}>
+        <Link className="gathering__name" to={eventPath(event.id)}>
           {event.name}
         </Link>
         <span className="gathering__meta">

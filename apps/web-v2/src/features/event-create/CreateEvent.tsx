@@ -1,5 +1,5 @@
 /**
- * QUOI     — le parcours de création d'un événement (/evenement/nouveau), en quatre étapes, avec
+ * QUOI     — le parcours de création d'un événement (/evenements/nouveau), en quatre étapes, avec
  *            l'aperçu de la fiche à côté.
  * POURQUOI — créer une date sans quitter l'app : l'affiche part dans le stockage, l'événement est
  *            créé, et le créateur y est inscrit en « intéressé » (décision d'août 2026).
@@ -26,6 +26,7 @@ import { useTags } from './useTags'
 import { blockingReason, firstBlockedStep, STEPS, useEventDraft } from './useEventDraft'
 import { DuplicateList } from './DuplicateList'
 import { StepDetails, StepIdentity, StepPlace, StepTags } from './Steps'
+import { eventPath } from '@/lib/event-path'
 
 /** Le dépôt public des affiches. */
 
@@ -192,7 +193,7 @@ export function CreateEvent() {
     // signalé. L'exposant pourra se marquer depuis la fiche.
 
     clear()
-    go(`/evenement/${created.id}`)
+    go(eventPath(created.id))
   }
 
   const isLast = step === STEPS.length - 1

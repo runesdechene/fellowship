@@ -36,7 +36,7 @@ import { EditEvent } from '@/features/event-edit/EditEvent'
 import { HistoryPage } from '@/features/event-history/HistoryPage'
 import { VersionPage } from '@/features/event-history/VersionPage'
 import { EventPage } from '@/features/event/EventPage'
-import { EventSlugRedirect } from '@/features/event/EventSlugRedirect'
+import { EventRoute, LegacyEventRedirect } from '@/features/event/EventRoute'
 import { EmbedPage } from '@/features/embed/EmbedPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { LandingPage } from '@/features/landing/LandingPage'
@@ -199,15 +199,10 @@ export function App() {
         <Route path="/legal/:doc" element={<LegalRoute />} />
         {/* Le calendrier intégré chez un artiste : ni coque, ni session (lot 12). */}
         <Route path="/:slug/embed" element={<EmbedPage />} />
-        {/* L'ancien lien partagé d'un événement (V1) : il cherche la fiche par son slug (lot 12). */}
-        <Route
-          path="/e/:slug"
-          element={
-            <OpenRoute>
-              <EventSlugRedirect />
-            </OpenRoute>
-          }
-        />
+        {/* Les adresses d'avant le 25/10/2026 : Netlify les redirige en 301, mais le service
+          worker sert la page sans passer par lui. */}
+        <Route path="/e/*" element={<LegacyEventRedirect />} />
+        <Route path="/evenement/*" element={<LegacyEventRedirect />} />
         <Route
           path="/bienvenue"
           element={
@@ -227,7 +222,7 @@ export function App() {
           }
         />
         <Route
-          path="/evenement/nouveau"
+          path="/evenements/nouveau"
           element={
             <ProtectedRoute>
               <AppShell bare>
@@ -237,46 +232,56 @@ export function App() {
           }
         />
         <Route
-          path="/evenement/:id/modifier"
+          path="/evenements/:slug/modifier"
           element={
             <ProtectedRoute>
               <AppShell bare>
-                <EditEvent />
+                <EventRoute>
+                  <EditEvent />
+                </EventRoute>
               </AppShell>
             </ProtectedRoute>
           }
         />
         <Route
-          path="/evenement/:id/historique"
+          path="/evenements/:slug/historique"
           element={
             <AppPage>
-              <HistoryPage />
+              <EventRoute>
+                <HistoryPage />
+              </EventRoute>
             </AppPage>
           }
         />
         <Route
-          path="/evenement/:id/historique/:version"
+          path="/evenements/:slug/historique/:version"
           element={
             <AppPage>
-              <VersionPage />
+              <EventRoute>
+                <VersionPage />
+              </EventRoute>
             </AppPage>
           }
         />
-        {/* « /evenement/nouveau » l'emporte sur ce motif : le routeur classe les
+        {/* « /evenements/nouveau » l'emporte sur ce motif : le routeur classe les
           segments fixes avant les variables, quel que soit l'ordre écrit ici. */}
         <Route
-          path="/evenement/:id"
+          path="/evenements/:slug"
           element={
             <OpenRoute>
-              <EventPage />
+              <EventRoute>
+                <EventPage />
+              </EventRoute>
             </OpenRoute>
           }
         />
         <Route
-          path="/evenement/:id/avis"
+          path="/evenements/:slug/avis"
           element={
             <AppPage>
-              <WriteReviewPage />
+              <EventRoute>
+                <WriteReviewPage />
+              </EventRoute>
             </AppPage>
           }
         />

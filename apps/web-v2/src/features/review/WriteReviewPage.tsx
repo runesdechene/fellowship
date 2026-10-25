@@ -1,5 +1,5 @@
 /**
- * QUOI     — l'écran « Écrire un avis » (/evenement/:id/avis) : trois notes en étoiles, un retour
+ * QUOI     — l'écran « Écrire un avis » (/evenements/:slug/avis) : trois notes en étoiles, un retour
  *            pour les autres exposants, qui voit ton nom ; à droite, l'avis tel que les autres le
  *            verront.
  * POURQUOI — les avis font choisir les dates ; un exposant ose noter quand il sait exactement ce
@@ -10,7 +10,6 @@
 import { Poster } from '@/components/ui/Poster'
 import { EyeOff, ShieldCheck, Star, Users } from 'lucide-react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Stars } from '@/components/ui/Stars'
 import { useAuth } from '@/lib/auth'
@@ -20,6 +19,8 @@ import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { formatScore } from '@/lib/reviews'
 import { useEvent } from '@/features/event/useEvent'
 import { EMPTY_REVIEW, useMyReview, type ReviewDraft } from './useMyReview'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from '@/features/event/useEventKey'
 
 const CRITERIA = [
   { key: 'affluence', label: 'Affluence', hint: 'Y avait-il du monde, et le bon public ?' },
@@ -68,7 +69,7 @@ function StarPicker({
 }
 
 export function WriteReviewPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id, slug } = useEventKey()
   const { actor, person } = useAuth()
   const { event, startDate, endDate, status, loading } = useEvent(id, actor?.id, person?.actor_id)
   const { existing, error, publish } = useMyReview(id, actor?.id, person?.actor_id)
@@ -76,7 +77,7 @@ export function WriteReviewPage() {
   const [sending, setSending] = useState(false)
   const go = useTransitionNavigate()
 
-  useDeclarePageChrome({ poster: null, lead: event?.name ?? null, back: `/evenement/${id ?? ''}` })
+  useDeclarePageChrome({ poster: null, lead: event?.name ?? null, back: eventPath(slug) })
 
   if (loading || !event || !startDate || !endDate) return null
 
@@ -102,7 +103,7 @@ export function WriteReviewPage() {
     setSending(true)
     const done = await publish(review)
     setSending(false)
-    if (done) go(`/evenement/${id ?? ''}`)
+    if (done) go(eventPath(slug))
   }
 
   return (
@@ -196,7 +197,7 @@ export function WriteReviewPage() {
             type="button"
             className="review-form__cancel"
             onClick={() => {
-              go(`/evenement/${id ?? ''}`)
+              go(eventPath(slug))
             }}
           >
             Annuler

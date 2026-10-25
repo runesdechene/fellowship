@@ -1,5 +1,5 @@
 /**
- * QUOI     — la fiche d'un événement (/evenement/:id) : titre, accroche, suivi, infos, discussion.
+ * QUOI     — la fiche d'un événement (/evenements/:slug) : titre, accroche, suivi, infos, discussion.
  * POURQUOI — l'écran où l'exposant décide et suit une date. Il déclare son décor au châssis
  *            (l'affiche pour le mur, le retour vers le tableau de bord, le compte à rebours) et
  *            délègue les données à useEvent.
@@ -8,7 +8,7 @@
 import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
@@ -42,6 +42,8 @@ import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { posterThumb } from '@/lib/poster-thumb'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from './useEventKey'
 
 /** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
 function formatRange(start: Date, end: Date): string {
@@ -110,7 +112,7 @@ function Fact({ Icon, label, value, sub, extra }: FactData) {
 }
 
 export function EventPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id, slug } = useEventKey()
   const { user, actor, person, entities } = useAuth()
   // Sans compte (lot 11b) : la fiche se lit, elle ne se pilote pas.
   const member = Boolean(user)
@@ -167,7 +169,7 @@ export function EventPage() {
     posterTags: event?.tags ?? null,
     lead: startDate ? (past ? 'Date passée' : formatCountdown(daysAway)) : null,
     back: '/',
-    edit: event && canEdit ? `/evenement/${event.id}/modifier` : null,
+    edit: event && canEdit ? eventPath(slug, 'modifier') : null,
   })
 
   // Une notification mène à « #discussions » : le bloc n'existe qu'une fois la fiche chargée, et le
@@ -254,7 +256,7 @@ export function EventPage() {
   const universe = event.tags?.[0] ?? null
 
   const edit = (field?: MissingField) => {
-    go(`/evenement/${event.id}/modifier${field ? `?champ=${field}` : ''}`)
+    go(`${eventPath(slug, 'modifier')}${field ? `?champ=${field}` : ''}`)
   }
 
   return (

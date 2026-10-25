@@ -10,7 +10,7 @@ import { beyondWindow, searchPattern, searchWindow, type Horizon } from './explo
 import { supabase } from './supabase'
 
 export const EVENT_COLUMNS =
-  'id, name, image_url, tags, start_date, end_date, city, department, created_at'
+  'id, slug, name, image_url, tags, start_date, end_date, city, department, created_at'
 
 export interface SearchQuery {
   q: string
@@ -32,6 +32,7 @@ export interface Zone {
 
 export interface EventRow {
   id: string
+  slug: string
   name: string
   image_url: string | null
   tags: string[] | null
@@ -44,6 +45,7 @@ export interface EventRow {
 
 export interface SearchEvent {
   id: string
+  slug: string
   name: string
   imageUrl: string | null
   tags: string[] | null
@@ -57,6 +59,7 @@ export interface SearchEvent {
 export function toSearchEvent(row: EventRow, today: Date): SearchEvent {
   return {
     id: row.id,
+    slug: row.slug,
     name: row.name,
     imageUrl: row.image_url,
     tags: row.tags,

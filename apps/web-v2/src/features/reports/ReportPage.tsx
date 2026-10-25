@@ -23,6 +23,7 @@ import { useDossier } from '@/features/event/useDossier'
 import { ReportSummary } from './ReportSummary'
 import { TagList } from './TagList'
 import { useReport } from './useReport'
+import { eventPath } from '@/lib/event-path'
 
 export function ReportPage() {
   const { eventId } = useParams<{ eventId: string }>()
@@ -129,7 +130,7 @@ export function ReportPage() {
           <button
             type="button"
             className="report-review__link"
-            onClick={() => go(`/evenement/${date.eventId}/avis`)}
+            onClick={() => go(eventPath(date.eventId, 'avis'))}
           >
             Écrire un avis
             <ArrowRight size={13} strokeWidth={2} />

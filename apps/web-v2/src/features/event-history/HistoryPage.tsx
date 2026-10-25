@@ -1,18 +1,19 @@
 /**
- * QUOI     — « L'histoire de la fiche » (`/evenement/:id/historique`) : une ligne par version, avec
+ * QUOI     — « L'histoire de la fiche » (`/evenements/:slug/historique`) : une ligne par version, avec
  *            l'auteur, ce qu'il a changé, la date et son mot ; « Actuelle » sur la plus récente.
  * POURQUOI — maquette 2253:2 (lot 10c) : la fiche est partagée ; on voit qui l'a tenue à jour, et
  *            rien ne se perd.
  */
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { versionWhen } from '@/lib/event-history'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { useEventHistory } from './useEventHistory'
+import { eventPath } from '@/lib/event-path'
+import { useEventKey } from '@/features/event/useEventKey'
 
 export function HistoryPage() {
-  const { id = '' } = useParams<{ id: string }>()
+  const { id, slug } = useEventKey()
   const go = useTransitionNavigate()
   const { entries, eventName, loading, error } = useEventHistory(id)
   const now = new Date()
@@ -20,7 +21,7 @@ export function HistoryPage() {
   return (
     <div className="history">
       <header className="history__head">
-        <button type="button" className="history__back" onClick={() => go(`/evenement/${id}`)}>
+        <button type="button" className="history__back" onClick={() => go(eventPath(slug))}>
           <ChevronLeft size={14} strokeWidth={2} />
           {eventName}
         </button>
@@ -63,7 +64,7 @@ export function HistoryPage() {
                     <button
                       type="button"
                       className="history__row"
-                      onClick={() => go(`/evenement/${id}/historique/${String(versionId)}`)}
+                      onClick={() => go(eventPath(slug, `historique/${String(versionId)}`))}
                     >
                       {content}
                     </button>

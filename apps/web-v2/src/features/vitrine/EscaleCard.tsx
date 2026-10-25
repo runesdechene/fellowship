@@ -8,6 +8,7 @@ import { PosterArt } from '@/components/ui/PosterArt'
 import { durationLabel, formatDateRange } from '@/lib/dates'
 import { nameLine } from '@/lib/name-line'
 import type { VitrineDate } from './useVitrine'
+import { eventPath } from '@/lib/event-path'
 
 export function EscaleCard({ date }: { date: VitrineDate }) {
   const meet = nameLine(
@@ -16,7 +17,7 @@ export function EscaleCard({ date }: { date: VitrineDate }) {
   )
 
   return (
-    <Link to={`/evenement/${date.eventId}`} className="escale-card">
+    <Link to={eventPath(date.eventId)} className="escale-card">
       <PosterArt
         eventId={date.eventId}
         imageUrl={date.imageUrl}

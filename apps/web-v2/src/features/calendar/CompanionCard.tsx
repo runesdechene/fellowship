@@ -9,6 +9,7 @@ import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Poster } from '@/components/ui/Poster'
 import { formatDateRange } from '@/lib/dates'
 import type { CalendarCompanion } from './useCalendar'
+import { eventPath } from '@/lib/event-path'
 
 const MAX_FACES = 3
 
@@ -18,7 +19,7 @@ export function CompanionCard({ companion }: { companion: CalendarCompanion }) {
   const others = companion.friends.length - 1
 
   return (
-    <Link to={`/evenement/${companion.eventId}`} className="companion-card">
+    <Link to={eventPath(companion.eventId)} className="companion-card">
       <Poster
         imageUrl={companion.imageUrl}
         tags={companion.tags}

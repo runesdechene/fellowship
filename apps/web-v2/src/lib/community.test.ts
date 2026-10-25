@@ -189,7 +189,7 @@ describe('feedPhrase', () => {
 
 describe('activityText (barre latérale)', () => {
   test('les lignes du réseau', () => {
-    const aventuriales = { name: 'Les Aventuriales', to: '/evenement/e1' }
+    const aventuriales = { name: 'Les Aventuriales', to: '/evenements/e1' }
     expect(activityText(line('arrival'))).toEqual({
       verb: 'vient de rejoindre Fellowship',
       object: null,

@@ -98,7 +98,7 @@ export function lineOf(type: string): PushLine | null {
 export interface PushMessage {
   title: string
   body: string
-  /** Un chemin de la V2 (« /evenement/… ») : le service worker le pose sous sa portée. */
+  /** Un chemin de la V2 (« /evenements/… ») : le service worker le pose sous sa portée. */
   url: string
   /** Deux nouvelles identiques (à la personne et à son enseigne) n'en font qu'une ; deux nouvelles
    *  différentes sur un même festival restent deux (relecture du 10/10/2026). */
