@@ -6,15 +6,25 @@
  *            dit qu'on revient à l'accueil, les boutons restent où ils étaient au début.
  * ATTENTION — le PageChromeProvider enveloppe tout : la fiche déclare son affiche, le mur la rend.
  *            Les boutons vivent hors de la colonne, sans quoi le mur passerait par-dessus.
+ *            Toujours en clair, comme la landing dont elle reprend la séquence (Uriel, 25/10/2026) :
+ *            le thème de l'appareil revient en quittant la page.
  */
-import type { ReactNode } from 'react'
+import { useLayoutEffect, type ReactNode } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { PageChromeProvider } from '@/lib/page-chrome'
+import { applyTheme, currentTheme } from '@/lib/theme'
 import { PosterWall } from './PosterWall'
 
 export function GuestShell({ children }: { children: ReactNode }) {
+  useLayoutEffect(() => {
+    applyTheme('light')
+    return () => {
+      applyTheme(currentTheme())
+    }
+  }, [])
+
   return (
     <PageChromeProvider>
       <div className="guest-shell">
