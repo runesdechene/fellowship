@@ -231,7 +231,6 @@
 }
 
 .landing-pro-soon__list li {
-  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--space-16);
@@ -241,18 +240,6 @@
   background: var(--landing-pro-soon-bg);
   font: var(--type-landing-pro-soon-text);
   color: var(--landing-gold-soft);
-}
-
-/* Ce qui est déjà en chantier : une petite pastille crème, en haut à droite. */
-.landing-pro-soon__badge {
-  position: absolute;
-  top: var(--space-14);
-  right: var(--space-14);
-  padding: var(--space-2) var(--space-8);
-  border-radius: var(--radius-landing-pill);
-  background: var(--landing-cream);
-  font: var(--type-landing-button);
-  color: var(--landing-ink);
 }
 
 .landing-pro-soon__list svg {
