@@ -945,7 +945,7 @@ export type Database = {
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
-          slug: string | null
+          slug: string
           stand_price: string | null
           stand_size: string | null
           start_date: string
@@ -976,7 +976,7 @@ export type Database = {
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
-          slug?: string | null
+          slug?: string
           stand_price?: string | null
           stand_size?: string | null
           start_date: string
@@ -1007,7 +1007,7 @@ export type Database = {
           registration_deadline?: string | null
           registration_note?: string | null
           registration_url?: string | null
-          slug?: string | null
+          slug?: string
           stand_price?: string | null
           stand_size?: string | null
           start_date?: string
@@ -2733,6 +2733,10 @@ export type Database = {
         Args: { p_city: string; p_id: string; p_name: string; p_year: number }
         Returns: string
       }
+      events_slug_taken: {
+        Args: { p_id: string; p_slug: string }
+        Returns: boolean
+      }
       events_within: {
         Args: { p_km: number; p_lat: number; p_lng: number }
         Returns: {
@@ -2760,7 +2764,7 @@ export type Database = {
           registration_deadline: string | null
           registration_note: string | null
           registration_url: string | null
-          slug: string | null
+          slug: string
           stand_price: string | null
           stand_size: string | null
           start_date: string
