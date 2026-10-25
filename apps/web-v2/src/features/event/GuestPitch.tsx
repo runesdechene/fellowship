@@ -1,5 +1,5 @@
 /**
- * QUOI     — en bas de la fiche vue sans compte : « Ta saison est éparpillée à huit endroits »,
+ * QUOI     — en bas de la fiche vue sans compte : « Fini les événements dispersés », le nuage d'outils,
  *            puis « Créer mon compte gratuit ».
  * POURQUOI — décision du 23/10/2026 (maquette 2482:878) : on convainc par le concept, pas par les
  *            avis qu'on retient ; la séquence est celle de la landing, reprise telle quelle.
@@ -13,7 +13,10 @@ export function GuestPitch() {
 
   return (
     <section className="guest-pitch">
-      <ToolsCompare />
+      <ToolsCompare
+        lead="Fini les événements dispersés."
+        rest="Fellowship aide les exposants à organiser leur saison."
+      />
       <div className="guest-pitch__call">
         <Link
           className="landing-button landing-button--pill guest-pitch__button"

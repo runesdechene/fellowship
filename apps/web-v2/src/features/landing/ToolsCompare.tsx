@@ -94,13 +94,14 @@ const PLATFORMS: {
 
 const asset = (file: string) => `${import.meta.env.BASE_URL}landing/${file}`
 
-export function ToolsCompare() {
+/** Le titre change selon la page : la première phrase en couleur pleine, la seconde en retrait. */
+export function ToolsCompare({ lead, rest }: { lead: string; rest: string }) {
   return (
     <div className="landing-compare">
       <p className="landing-statement landing-compare__title">
-        <strong>Ta saison de festival est éparpillée.</strong>
+        <strong>{lead}</strong>
         <br />
-        Fellowship est là pour changer ça.
+        {rest}
       </p>
       <div className="landing-compare__row">
         <div className="landing-compare__before">

@@ -295,24 +295,42 @@
   }
 }
 
-/* Sous 723 px, les deux colonnes de tuiles ne tiennent plus. */
+/* Sous 723 px, les deux colonnes de tuiles ne tiennent plus : elles deviennent un nuage de petites
+   tuiles, deux par ligne, chacune à sa largeur, sa pente et sa hauteur. */
 @container (width < 723px) {
   .landing-compare__tools {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-16);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--landing-tool-cloud-gap);
   }
 
   .landing-tool {
-    translate: none;
-    rotate: calc(var(--tilt) / 2);
+    gap: var(--space-10);
+    padding: var(--space-10) var(--space-12);
+    translate: 0 calc(var(--nudge) * var(--landing-tool-cloud-nudge));
+  }
+
+  .landing-tool__logos img {
+    width: var(--landing-tool-logo-compact);
+    height: var(--landing-tool-logo-compact);
+  }
+
+  .landing-tool__name,
+  .landing-tool__pain {
+    max-width: var(--landing-tool-cloud-text);
+  }
+
+  .landing-tool__name {
+    font: var(--type-landing-tool-name-compact);
+  }
+
+  .landing-tool__pain {
+    font: var(--type-landing-tool-pain-compact);
   }
 
   .landing-compare__after {
     width: auto;
-  }
-
-  .landing-stores {
-    grid-template-columns: auto;
   }
 
   .landing-compare__icon {
@@ -329,7 +347,8 @@
     margin-block: var(--space-28);
   }
 
-  .landing-compare__punch {
+  .landing-compare__punch,
+  .landing-statement.landing-compare__title {
     font: var(--type-landing-statement-mobile);
   }
 }

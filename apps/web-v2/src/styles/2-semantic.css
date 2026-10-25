@@ -1734,6 +1734,11 @@
   --landing-tool-nudge: 24px; /* un cran de décalage des tuiles en vrac */
   --landing-tool-row-gap: 10px; /* serrées : le bazar, pas une grille rangée */
   --landing-tool-col-gap: 6px;
+  /* La variante étroite (fiche sans compte, téléphone) : un nuage de petites tuiles, deux par ligne. */
+  --landing-tool-cloud-text: 13ch; /* nom et phrase passent à la ligne : des tuiles étroites, chacune sa largeur */
+  --landing-tool-cloud-gap: var(--space-10) var(--space-6);
+  --landing-tool-cloud-nudge: 6px; /* un cran de décalage vertical : les lignes ne s'alignent pas */
+  --landing-tool-logo-compact: 20px;
   --landing-tool-jitter: 2.6s; /* l'agitation d'une tuile ; chacune la sienne, décalée */
   --landing-tool-jitter-step: 0.37s;
   --landing-tool-jitter-from: translate(-2px, 2px) rotate(-1.2deg);
@@ -1759,6 +1764,8 @@
   --landing-store-live: var(--live-500); /* disponible : le vert du « en direct » */
   --landing-store-dot: 6px;
   --type-landing-tool-pain: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
+  --type-landing-tool-name-compact: var(--weight-semibold) var(--size-13) / 1.25 var(--family-sans);
+  --type-landing-tool-pain-compact: var(--weight-regular) var(--size-12) / 1.35 var(--family-sans);
   --type-landing-compare-label: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
 
   /* Les encadrés « Bientôt · Pro », sous les prix (2458:2329) */

@@ -15,7 +15,10 @@ export function AssistantBand({ showcase }: { showcase: Showcase | null }) {
   const hasDates = showcase?.months.some((m) => m.events.length > 0) ?? false
   return (
     <LandingBand tone="paper" slant="rise" id="assistant" className="landing-assistant">
-      <ToolsCompare />
+      <ToolsCompare
+        lead="Ta saison de festival est éparpillée."
+        rest="Fellowship est là pour changer ça."
+      />
       <div className="landing-assistant__body">
         <p className="landing-statement landing-assistant__text">
           <strong>Ton copilote de festivals.</strong> Ta saison annuelle sur une frise, tes dossiers
