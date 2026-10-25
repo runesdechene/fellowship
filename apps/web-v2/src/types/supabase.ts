@@ -1037,6 +1037,33 @@ export type Database = {
           },
         ]
       }
+      faq_questions: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          position: number
+          question: string
+          visible: boolean
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          position?: number
+          question: string
+          visible?: boolean
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          position?: number
+          question?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
