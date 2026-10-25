@@ -695,7 +695,6 @@
     var(--family-sans);
   --type-essentials-sub: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
-  --essentials-shadow: 0 4px 6.7px 1px rgb(0 0 0 / 8%);
   --essentials-apply-surface: var(--ink-title);
   --essentials-apply-ink: var(--surface-app);
   --essentials-apply-soft: color-mix(in srgb, var(--surface-app) 62%, transparent);

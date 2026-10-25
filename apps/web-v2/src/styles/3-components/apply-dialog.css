@@ -63,7 +63,7 @@
   overflow-y: auto;
   border-radius: var(--radius-apply-dialog);
   background: var(--surface-card);
-  box-shadow: var(--essentials-shadow);
+  box-shadow: var(--shadow-block);
 }
 
 .apply-dialog__head {

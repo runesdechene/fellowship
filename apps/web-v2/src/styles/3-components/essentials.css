@@ -9,7 +9,7 @@
   border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   background: var(--surface-card);
-  box-shadow: var(--essentials-shadow);
+  box-shadow: var(--shadow-block);
 }
 
 .essentials__row,
