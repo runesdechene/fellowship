@@ -2639,6 +2639,7 @@ export type Database = {
           metiers: Json
           note: number
           questions: number
+          visages: string[]
         }[]
       }
       app_update_audience: { Args: never; Returns: number }
