@@ -59,29 +59,6 @@
   color: var(--ink-title);
 }
 
-/* Chaque information sur sa ligne, précédée de son icône : on balaie la
-   colonne du regard au lieu de lire une phrase. */
-/* UNE SEULE PHRASE, sans pictogramme. La fiche portait trois lignes a
-   icone, heritees de la V1 : une date, un lieu, une edition, chacune
-   precedee de son dessin. C'est la grammaire d'une LISTE de faits — or ces
-   trois-la ne se scannent pas, ils se lisent d'un trait. Les faits qui se
-   scannent ont leur propre bloc plus bas, en cartes.
-
-   Seules les DATES portent le gras : « Le » et « Du » ne sont pas des
-   informations, c'est de la grammaire. */
-.event-page__meta {
-  margin-top: var(--space-6);
-  font: var(--type-event-hero-meta);
-  color: var(--ink-hero-meta);
-}
-
-/* Les dates ne changent pas d ENCRE, seulement de graisse : sur la maquette
-   d Uriel toute la ligne est de la meme teinte, et c est le gras seul qui
-   detache le moment du reste de la phrase. */
-.event-page__meta b {
-  font: var(--type-event-hero-meta-accent);
-}
-
 .event-page__tags {
   display: flex;
   flex-wrap: wrap;
@@ -140,77 +117,6 @@
   background: var(--surface-card);
   border: 1px solid var(--line-card);
   box-shadow: var(--shadow-block);
-}
-
-/* --- Infos pratiques ------------------------------------------------------
-   Chaque fait est une CARTE : l'icône à gauche, puis le libellé en
-   micro-capitales, la valeur en gras, et ce qui la précise en dessous.
-
-   Trois par ligne sur la largeur de lecture, et ça repasse à la ligne plutôt
-   que de se serrer. C'est la carte qui porte le fait — d'où une valeur en
-   14 px et non en 18 : à 18 une plage de dates débordait de son tiers. */
-/* Une GRILLE et non un flex : `grid-auto-rows: 1fr` donne la meme hauteur a
-   toutes les cartes, y compris d une ligne a l autre. En flex, une valeur qui
-   passe sur deux lignes gonflait sa rangee et cassait le rythme. */
-.event-page__facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--event-fact-min-width), 1fr));
-  grid-auto-rows: 1fr;
-  gap: var(--event-fact-gap);
-}
-
-.event-page__fact {
-  display: flex;
-  align-items: center;
-  gap: var(--event-fact-icon-gap);
-  min-width: 0;
-  padding: var(--event-fact-padding-y) var(--event-fact-padding-x);
-  border-radius: var(--radius-fact);
-  background: var(--surface-card);
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
-}
-
-.event-page__fact-icon {
-  flex: none;
-  color: var(--ink-soft);
-}
-
-.event-page__fact-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--event-fact-label-gap);
-  min-width: 0;
-}
-
-/* Le libellé dit CE QUE C'EST : c'est lui qu'on cherche en balayant la fiche.
-   Il a longtemps été plus pâle que sa valeur — l'inverse du besoin. */
-.event-page__fact-label {
-  font: var(--type-event-fact-label);
-  color: var(--ink-section-pale);
-}
-
-/* La valeur porte le regard : c'est elle qu'on est venu chercher. */
-.event-page__fact-value {
-  font: var(--type-event-fact-value);
-  color: var(--ink-title);
-}
-
-/* Ce qui précise la valeur sans être elle : la durée sous les dates, la salle
-   sous la ville, le mode de candidature sous l'échéance. */
-.event-page__fact-sub {
-  font: var(--type-event-fact-sub);
-  color: var(--ink-soft);
-}
-
-/* Colles aux infos pratiques : ce sont les MEMES informations, poursuivies —
-   ou candidater, ou aller voir. Vingt pixels les detachaient en un bloc a
-   part, alors qu ils appartiennent a celui du dessus. */
-.event-page__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-24);
-  margin-top: var(--space-10);
 }
 
 /* Aller ailleurs est une commande : c'est l'accent de l'app. */
@@ -420,10 +326,6 @@
   .event-page__title {
     font: var(--type-display-l);
   }
-
-  .event-page__facts {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* « Ouvrir le bilan » sous le bilan d'une date passée : le bilan a son écran (/bilans/:id). */
@@ -527,17 +429,4 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-8);
-}
-
-/* Sans compte : « 12 exposants y vont : forgeron, auteur… », le nombre en gras, sans visage
-   (décision du 23/10/2026). Même voix que la ligne des compagnons d'un membre. */
-.event-page__going {
-  margin-top: var(--space-18);
-  font: var(--type-event-meta);
-  color: var(--ink-soft);
-}
-
-.event-page__going b {
-  font: var(--type-event-meta-accent);
-  color: var(--ink-title);
 }

@@ -65,56 +65,58 @@ function deadlineNote(deadline: Date, status: ParticipationStatus | null): strin
   return status === 'inscrit' || status === 'confirme' ? 'clôturé — tu y es inscrit' : 'clôturé'
 }
 
-/** Sans compte : la date limite en clair, puis ce que le compte gratuit ouvre ici. */
-function GuestApplying({
-  deadline,
-  more,
-  pathname,
-}: {
-  deadline: Date | null
-  more: boolean
-  pathname: string
-}) {
+/** « Clôture dans 7 jours », « Clôture demain », « Clôturé » : sous la date limite du visiteur. */
+function closingNote(deadline: Date): string {
+  const days = daysUntil(deadline)
+  if (days < 0) return 'Clôturé'
+  return `Clôture ${formatCountdown(days).toLowerCase()}`
+}
+
+/** Sans compte : la candidature en pied de « L'essentiel », en inversé (maquette 2506:233) ; le
+ *  dossier en ligne et le contact attendent le compte gratuit. Rien quand l'organisateur n'a rien
+ *  dit de la candidature. */
+export function GuestApplyFooter({ event }: { event: EventRow }) {
+  const { pathname } = useLocation()
+  const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
+  const hasInfo = [
+    deadline,
+    event.registration_note,
+    event.registration_url,
+    event.contact_email,
+  ].some(Boolean)
+  if (!hasInfo) return null
+
   return (
-    <section className="event-page__block">
-      <h2 className="event-page__block-title">
-        Pour candidater <span className="event-page__block-hint">tout au même endroit</span>
-      </h2>
-      {deadline && (
-        <div className="dossier-card">
-          <InfoRows>
-            <InfoRow Icon={Clock} label="Date limite" sub={deadlineNote(deadline, null)}>
-              {formatFullDate(deadline)}
-            </InfoRow>
-          </InfoRows>
-        </div>
-      )}
-      {more && (
-        <div className="reviews__actions">
-          <Link className="reviews__link" to={loginReturning(pathname)}>
-            Le dossier en ligne et le contact de l’organisateur, avec ton compte gratuit
-            <ArrowRight size={13} strokeWidth={2} />
-          </Link>
-        </div>
-      )}
-    </section>
+    <div className="essentials__apply">
+      <span className="essentials__label">
+        <FileText size={18} strokeWidth={1.8} aria-hidden="true" />
+        Candidatures
+      </span>
+      <span className="essentials__body">
+        <span className="essentials__value">
+          {deadline ? `Jusqu’au ${formatFullDate(deadline)}` : 'Date limite pas encore connue'}
+        </span>
+        {deadline && <span className="essentials__sub">{closingNote(deadline)}</span>}
+      </span>
+      <Link className="essentials__apply-button" to={loginReturning(pathname)}>
+        Voir le dossier
+        <ArrowRight size={13} strokeWidth={2} />
+      </Link>
+    </div>
   )
 }
 
 export function Applying(props: ApplyingProps) {
   const { event, status, setStatus, statusSaving, actorId, fields, save, canEdit, onAdd, guest } =
     props
-  const { pathname } = useLocation()
   const deadline = event.registration_deadline ? parseSqlDate(event.registration_deadline) : null
   const site = event.registration_url ? websiteLink(event.registration_url) : null
   const following = status !== null
   const hasInfo = [deadline, event.registration_note, site, event.contact_email].some(Boolean)
 
   if (!hasInfo && !following && !canEdit) return null
-  if (guest) {
-    const more = [event.registration_note, site, event.contact_email].some(Boolean)
-    return <GuestApplying deadline={deadline} more={more} pathname={pathname} />
-  }
+  // Sans compte, la candidature vit en pied de « L'essentiel » (GuestApplyFooter).
+  if (guest) return null
 
   return (
     <section className="event-page__block">

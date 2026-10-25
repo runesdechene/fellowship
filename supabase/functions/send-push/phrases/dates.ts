@@ -177,6 +177,23 @@ export function durationLabel(start: Date, end: Date): string {
   return days <= 1 ? '1 jour' : `${days} jours`
 }
 
+/** « Du vendredi 25 au dimanche 27 septembre 2026 », « Le samedi 24 juillet 2027 » : la plage en
+ *  toutes lettres, jours de la semaine compris (la carte « L'essentiel » de la fiche). Le mois et
+ *  l'année ne se répètent que lorsqu'ils changent. */
+export function formatLongRange(start: Date, end: Date): string {
+  const weekday = (date: Date) => WEEKDAY_FORMATTER.format(date)
+  const year = end.getFullYear()
+  if (start.toDateString() === end.toDateString())
+    return `Le ${weekday(start)} ${formatDayMonth(start)} ${String(year)}`
+  const sameYear = start.getFullYear() === year
+  const from = !sameYear
+    ? `${formatDayMonth(start)} ${String(start.getFullYear())}`
+    : start.getMonth() === end.getMonth()
+      ? DAY_FORMATTER.format(start)
+      : formatDayMonth(start)
+  return `Du ${weekday(start)} ${from} au ${weekday(end)} ${formatDayMonth(end)} ${String(year)}`
+}
+
 /** « 28 août 2026 » — la date affichée sur une carte de bilan. */
 export function formatFullDate(date: Date): string {
   return FULL_DATE_FORMATTER.format(date)

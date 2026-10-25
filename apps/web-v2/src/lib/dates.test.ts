@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import {
+  formatLongRange,
   addDays,
   daysUntil,
   durationLabel,
@@ -276,5 +277,28 @@ describe('dayLabel', () => {
 describe('formatWeekdayDayMonth', () => {
   it('écrit le jour, la date et le mois', () => {
     expect(formatWeekdayDayMonth(d('2026-10-22'))).toBe('jeudi 22 octobre')
+  })
+})
+
+describe('formatLongRange', () => {
+  it('« Du vendredi 25 au dimanche 27 septembre 2026 » dans le même mois', () => {
+    expect(formatLongRange(new Date(2026, 8, 25), new Date(2026, 8, 27))).toBe(
+      'Du vendredi 25 au dimanche 27 septembre 2026',
+    )
+  })
+  it('à cheval sur deux mois', () => {
+    expect(formatLongRange(new Date(2026, 9, 30), new Date(2026, 10, 1))).toBe(
+      'Du vendredi 30 octobre au dimanche 1 novembre 2026',
+    )
+  })
+  it('à cheval sur deux années', () => {
+    expect(formatLongRange(new Date(2026, 11, 31), new Date(2027, 0, 2))).toBe(
+      'Du jeudi 31 décembre 2026 au samedi 2 janvier 2027',
+    )
+  })
+  it('un seul jour', () => {
+    expect(formatLongRange(new Date(2027, 6, 24), new Date(2027, 6, 24))).toBe(
+      'Le samedi 24 juillet 2027',
+    )
   })
 })

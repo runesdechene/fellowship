@@ -329,7 +329,6 @@
   --width-companion-avatar: 32px;
   --width-avatar-discussion: 30px; /* qui parle, dans un fil */
   --width-avatar-pile: 26px; /* les visages empilés de ceux qui ont répondu */
-  --width-fact-min: 160px; /* trois cartes de faits par ligne de lecture */
 
   /* Les contrôles de choix : le suivi, les sélecteurs et leurs menus. */
   --height-control: 46px;

@@ -1,0 +1,66 @@
+/**
+ * QUOI     — « 12 exposants y vont » sur la fiche vue sans compte (features/event/GuestGoing.tsx).
+ * POURQUOI — maquette 2506:233 : une carte, les visages en pile cerclés de blanc, le nombre en serif.
+ */
+.guest-going {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-22) var(--space-24);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+}
+
+.guest-going__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.guest-going__faces {
+  display: flex;
+}
+
+/* Chaque visage chevauche le précédent ; le « +N » passe par-dessus le dernier. */
+.guest-going__face,
+.guest-going__more {
+  width: var(--guest-going-face);
+  height: var(--guest-going-face);
+  border: 3px solid var(--surface-card);
+  border-radius: var(--radius-round);
+}
+
+.guest-going__face + .guest-going__face,
+.guest-going__more {
+  margin-left: var(--guest-going-overlap);
+}
+
+.guest-going__face {
+  object-fit: cover;
+}
+
+.guest-going__more {
+  display: grid;
+  place-items: center;
+  background: var(--surface-app);
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.guest-going__count {
+  font: var(--type-guest-going-count);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-title);
+}
+
+.guest-going__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  width: fit-content;
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}

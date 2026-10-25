@@ -5,20 +5,22 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { CalendarDays, Clock, MapPin, Users } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-import { useEffect, type ReactNode } from 'react'
+import { ArrowRight, CalendarDays, Clock, Globe, MapPin, Users } from 'lucide-react'
+import { useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
-import { durationLabel, formatCountdown, formatDateRange, formatDayMonth } from '@/lib/dates'
+import { durationLabel, formatCountdown, formatDateRange, formatLongRange } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { canEditEvent, type MissingField } from '@/lib/event-edit'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { isRichTextEmpty } from '@/lib/rich-text'
 import { tagStyleFor } from '@/lib/tags'
-import { Applying } from './Applying'
+import { Applying, GuestApplyFooter } from './Applying'
+import { EventEssentials, type Essential } from './EventEssentials'
+import { GuestGoing } from './GuestGoing'
+import { websiteLink } from '@/lib/vitrine'
 import { Companions } from './Companions'
 import { EventMapPanel } from './EventMapPanel'
 import { PlaceDistance } from './PlaceDistance'
@@ -31,7 +33,6 @@ import { ClaimBanner } from './ClaimBanner'
 import { GuestPitch } from './GuestPitch'
 import { GuestReviews } from './GuestReviews'
 import { useFicheApercu } from './useFicheApercu'
-import { goingLine } from '@/lib/apercu'
 import { MyReportBlock } from './MyReportBlock'
 import { LastEditionReport } from './LastEditionReport'
 import { useLastEditionReport } from './useLastEditionReport'
@@ -45,12 +46,6 @@ import { usePlan } from '@/lib/usePlan'
 import { posterThumb } from '@/lib/poster-thumb'
 import { eventPath } from '@/lib/event-path'
 import { useEventKey } from './useEventKey'
-
-/** « Du 13 au 14 juin » — ou « Le 13 juin » quand la date tient sur un jour. */
-function formatRange(start: Date, end: Date): string {
-  if (start.getTime() === end.getTime()) return `Le ${formatDayMonth(start)}`
-  return `Du ${formatDayMonth(start)} au ${formatDayMonth(end)}`
-}
 
 /**
  * Un grand titre posé AU-DESSUS de son bloc, jamais dedans. Il pâlit quand le
@@ -76,39 +71,6 @@ function Block({
       </h2>
       {bare ? children : <div className="event-page__card">{children}</div>}
     </section>
-  )
-}
-
-/**
- * Une information pratique, en CARTE : l'icône à gauche, puis le libellé en
- * micro-capitales, la valeur en gras, et ce qui la précise en dessous.
- *
- * CE QUI N'EST PAS RENSEIGNÉ N'APPARAÎT PAS. La fiche a longtemps gardé la
- * place des absents, en éteint — ça se tenait tant que c'était une liste,
- * mais en cartes, quatre « Non renseigné » sur six font une grille de vide
- * qui pèse plus lourd que l'information. Le tri se fait à l'appel.
- */
-type FactData = {
-  Icon: LucideIcon
-  label: string
-  value: string | null | undefined
-  /** Ce qui précise la valeur sans être elle : la durée, la salle, le mode. */
-  sub?: string | null
-  /** Ce qui se pose sous la carte : la distance et « Voir sur la carte » pour le lieu. */
-  extra?: ReactNode
-}
-
-function Fact({ Icon, label, value, sub, extra }: FactData) {
-  return (
-    <div className="event-page__fact">
-      <Icon className="event-page__fact-icon" size={20} strokeWidth={1.8} />
-      <span className="event-page__fact-body">
-        <span className="event-page__fact-label">{label}</span>
-        <span className="event-page__fact-value">{value}</span>
-        {sub && <span className="event-page__fact-sub">{sub}</span>}
-        {extra}
-      </span>
-    </div>
   )
 }
 
@@ -217,20 +179,22 @@ export function EventPage() {
       )
   }
 
-  const facts: FactData[] = [
+  const site = event.external_url ? websiteLink(event.external_url) : null
+  // Chaque fait une seule fois (maquette 2506:233) : ce que l'organisateur n'a pas renseigné n'a
+  // pas de ligne.
+  const essentials: Essential[] = [
     {
       Icon: CalendarDays,
-      label: 'Dates',
-      value: formatRange(startDate, endDate),
-      sub: durationLabel(startDate, endDate),
+      label: 'Quand',
+      value: formatLongRange(startDate, endDate),
+      sub: `${durationLabel(startDate, endDate)}, ${past ? 'date passée' : formatCountdown(daysAway).toLowerCase()}`,
     },
-    { Icon: Clock, label: 'Horaires', value: event.opening_hours },
+    { Icon: Clock, label: 'Horaires', value: event.opening_hours ?? '' },
     {
       Icon: MapPin,
-      label: 'Lieu',
-      value: `${event.city} (${event.department})`,
-      sub: event.address,
-      extra: (
+      label: 'Où',
+      value: [event.address, `${event.city} (${event.department})`].filter(Boolean).join(', '),
+      sub: (
         <PlaceDistance
           point={point}
           origin={origin}
@@ -250,10 +214,20 @@ export function EventPage() {
         />
       ),
     },
-    { Icon: Users, label: 'Fréquentation', value: event.expected_attendance },
+    { Icon: Users, label: 'Fréquentation', value: event.expected_attendance ?? '' },
+    {
+      Icon: Globe,
+      label: 'Site',
+      value: site?.label ?? '',
+      action: site && (
+        <a className="essentials__action" href={site.href} target="_blank" rel="noreferrer">
+          Ouvrir
+          <ArrowRight size={13} strokeWidth={2} />
+        </a>
+      ),
+    },
   ].filter((fait) => Boolean(fait.value))
 
-  const going = apercu ? goingLine(apercu.going, apercu.crafts) : null
   const universe = event.tags?.[0] ?? null
 
   const edit = (field?: MissingField) => {
@@ -296,31 +270,12 @@ export function EventPage() {
             )}
             <h1 className="event-page__title">{event.name}</h1>
 
-            {/* Une seule phrase : ces trois faits se lisent d'un trait, ils
-                  ne se scannent pas. Ceux qui se scannent sont plus bas, en
-                  cartes. */}
-            <p className="event-page__meta">
-              {formatDateRange(startDate, endDate, 'long')} {endDate.getFullYear()} · {event.city} (
-              {event.department}) · {past ? 'date passée' : formatCountdown(daysAway).toLowerCase()}
-              {event.edition ? ` · ${event.edition}ᵉ édition` : ''}
-            </p>
-
             {event.tags && event.tags.length > 0 && (
               <div className="event-page__tags">
                 {event.tags.map((tag) => (
                   <Tag key={tag} name={tag} style={tagStyleFor(tagStyles, tag)} />
                 ))}
               </div>
-            )}
-
-            {/* Une LIGNE, pas un bloc. Savoir qui d'autre y sera fait partie
-                  de l'identité de la date, au même titre que son lieu — ça ne
-                  méritait ni un titre de section ni une carte. */}
-            {going && (
-              <p className="event-page__going">
-                <b>{going.count}</b>
-                {going.crafts && ` : ${going.crafts}`}
-              </p>
             )}
 
             {member && (
@@ -364,6 +319,8 @@ export function EventPage() {
           />
         )}
 
+        <EventEssentials rows={essentials} footer={!member && <GuestApplyFooter event={event} />} />
+
         {/* Sans cadre : un texte qu'on LIT n'a pas besoin d'être contenu.
               Le cadre disait « ceci est un bloc » alors que la description est
               simplement la voix de l'organisateur. Les cartes restent pour les
@@ -376,33 +333,6 @@ export function EventPage() {
             </p>
           ) : (
             <RichText className="event-page__description" html={event.description ?? ''} />
-          )}
-        </Block>
-
-        <Block title="Informations" bare empty={facts.length === 0}>
-          {facts.length > 0 ? (
-            <div className="event-page__facts">
-              {facts.map((fait) => (
-                <Fact key={fait.label} {...fait} />
-              ))}
-            </div>
-          ) : (
-            <p className="event-page__state">
-              L’organisateur n’a encore donné aucune information pratique.
-            </p>
-          )}
-
-          {event.external_url && (
-            <div className="event-page__links">
-              <a
-                className="event-page__link"
-                href={event.external_url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Site du festival
-              </a>
-            </div>
           )}
         </Block>
 
@@ -436,6 +366,7 @@ export function EventPage() {
         {past && member && (
           <MyReportBlock eventId={event.id} ledger={ledger} net={net} revenue={revenue} pro={pro} />
         )}
+        {!member && apercu && <GuestGoing going={apercu.going} faces={apercu.faces} />}
         {!canEdit && <ClaimBanner eventName={event.name} />}
         {!member && <GuestPitch />}
       </div>

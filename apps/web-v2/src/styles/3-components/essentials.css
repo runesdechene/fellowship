@@ -1,0 +1,111 @@
+/**
+ * QUOI     — « L'essentiel » de la fiche (features/event/EventEssentials.tsx) et son pied inversé,
+ *            la candidature du visiteur (features/event/Applying.tsx).
+ * POURQUOI — maquette 2506:233 : une carte blanche, une ligne par fait, le libellé à gauche ; la
+ *            candidature en noir, la date limite en clair, le dossier à droite.
+ */
+.essentials {
+  overflow: hidden;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+}
+
+.essentials__row,
+.essentials__apply {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-18) var(--space-22);
+}
+
+.essentials__row + .essentials__row {
+  border-top: 1px solid var(--line-card);
+}
+
+.essentials__label {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-10);
+  width: var(--essentials-label-width);
+  font: var(--type-essentials-label);
+  color: var(--ink-soft);
+}
+
+.essentials__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.essentials__value {
+  overflow-wrap: anywhere;
+  font: var(--type-essentials-value);
+  color: var(--ink-title);
+}
+
+.essentials__sub {
+  font: var(--type-essentials-sub);
+  color: var(--ink-soft);
+}
+
+/* L'action au bout d'une ligne (« Ouvrir »). */
+.essentials__action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-card-link);
+  color: var(--ink-title);
+}
+
+/* --- Le pied inversé : la candidature du visiteur ---------------------------------- */
+.essentials__apply {
+  padding-block: var(--space-20);
+  background: var(--essentials-apply-surface);
+}
+
+.essentials__apply .essentials__label,
+.essentials__apply .essentials__sub {
+  color: var(--essentials-apply-soft);
+}
+
+.essentials__apply .essentials__value {
+  font: var(--type-essentials-apply-value);
+  color: var(--essentials-apply-ink);
+}
+
+.essentials__apply-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-14) var(--space-10) var(--space-16);
+  border-radius: var(--radius-round);
+  background: var(--essentials-apply-ink);
+  font: var(--type-list-name);
+  color: var(--essentials-apply-surface);
+}
+
+/* Sur téléphone, le libellé passe au-dessus de sa valeur ; le bouton prend toute la largeur. */
+@media (width <= 760px) {
+  .essentials__row,
+  .essentials__apply {
+    flex-wrap: wrap;
+    gap: var(--space-6) var(--space-16);
+  }
+
+  .essentials__label {
+    width: 100%;
+  }
+
+  .essentials__apply-button {
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--space-10);
+  }
+}

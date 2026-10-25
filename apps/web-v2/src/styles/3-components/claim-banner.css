@@ -1,52 +1,75 @@
 /**
  * QUOI     — le bandeau « Tu organises ce festival ? » en bas de la fiche
  *            (features/event/ClaimBanner.tsx).
- * POURQUOI — une carte de la fiche comme les autres, cliquable d'un bout à l'autre.
+ * POURQUOI — maquette 2506:233 : le dégradé de la marque, le badge certifié crème, le titre en serif,
+ *            « Nous écrire » en bouton crème ; cliquable d'un bout à l'autre.
  */
 .claim-banner {
   display: flex;
   align-items: center;
-  gap: var(--space-14);
-  margin-top: var(--space-40);
-  padding: var(--event-card-padding);
-  border: 1px solid var(--line-card);
+  gap: var(--space-18);
+  padding: var(--space-22) var(--space-16) var(--space-22) var(--space-24);
   border-radius: var(--radius-card);
-  background: var(--surface-card);
-  box-shadow: var(--shadow-block);
-  color: var(--ink-title);
+  background: var(--brand-gradient);
+  color: var(--claim-ink);
   text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease-soft);
 }
 
-.claim-banner:hover {
-  border-color: var(--ink-soft);
+/* La rosette pleine crème, sa coche dans la couleur de la marque. */
+.claim-banner__badge {
+  flex: none;
+  fill: var(--claim-ink);
+  color: var(--claim-badge-check);
 }
 
 .claim-banner__text {
+  display: flex;
   flex: 1;
-}
-
-.claim-banner__title,
-.claim-banner__line {
-  display: block;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
 }
 
 .claim-banner__title {
-  font: var(--type-list-name);
+  font: var(--type-claim-title);
+  letter-spacing: var(--tracking-tight);
 }
 
 .claim-banner__line {
   font: var(--type-event-meta);
-  color: var(--ink-soft);
+  color: var(--claim-soft);
 }
 
-.claim-banner__go {
-  flex-shrink: 0;
-  color: var(--ink-soft);
+.claim-banner__button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--space-14) var(--space-10) var(--space-16);
+  border-radius: var(--radius-round);
+  background: var(--claim-ink);
+  font: var(--type-list-name);
+  color: var(--claim-button-ink);
+  transition: translate var(--duration-fast) var(--ease-soft);
+}
+
+.claim-banner:hover .claim-banner__button {
+  translate: var(--space-2) 0;
+}
+
+@media (width <= 760px) {
+  .claim-banner {
+    flex-wrap: wrap;
+  }
+
+  .claim-banner__button {
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .claim-banner {
+  .claim-banner__button {
     transition: none;
   }
 }

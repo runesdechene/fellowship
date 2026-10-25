@@ -1,13 +1,12 @@
 /**
  * QUOI     — ce qu'une fiche montre sans compte : la note, le nombre d'avis, un avis, le nombre
- *            de questions, qui y va (nombre et métiers).
+ *            de questions, qui y va (nombre et visages).
  * POURQUOI — décision du 23/10/2026 : la fonction apercu_fiche ne rend que ces agrégats et un
  *            seul texte d'avis, jamais un auteur.
  * ATTENTION — `eventId` null (un membre) : rien n'est chargé. En cas d'échec, null plutôt que des
  *            zéros : l'aperçu est une invitation, son absence ne ment pas.
  */
 import { useEffect, useState } from 'react'
-import { metiersFrom, type Metier } from '@/lib/apercu'
 import { must, supabase } from '@/lib/supabase'
 
 export interface FicheApercu {
@@ -17,7 +16,8 @@ export interface FicheApercu {
   excerptYear: number | null
   questions: number
   going: number
-  crafts: Metier[]
+  /** Les avatars de ceux qui y vont, six au plus, inscrits en public seulement. */
+  faces: string[]
 }
 
 async function loadApercu(eventId: string): Promise<FicheApercu | null> {
@@ -31,7 +31,7 @@ async function loadApercu(eventId: string): Promise<FicheApercu | null> {
     excerptYear: row.extrait_annee,
     questions: row.questions,
     going: row.exposants,
-    crafts: metiersFrom(row.metiers),
+    faces: row.visages,
   }
 }
 
