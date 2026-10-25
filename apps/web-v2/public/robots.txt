@@ -1,0 +1,10 @@
+# Les pages publiques s'indexent ; l'administration, la connexion et le calendrier intégré
+# (copie de la vitrine, faite pour vivre chez un artiste) non.
+User-agent: *
+Disallow: /admin
+Disallow: /connexion
+Disallow: /bienvenue
+Disallow: /desinscription
+Disallow: /*/embed
+
+Sitemap: https://flw.sh/sitemap.xml

@@ -451,3 +451,7 @@ verify_jwt = false
 [functions.prospect-inbound]
 # Auth = la signature Svix du webhook de réception de Resend (pas de JWT Supabase).
 verify_jwt = false
+
+[functions.sitemap]
+# Public : le plan du site, lu par les moteurs de recherche. Lit avec la clé anonyme (la RLS décide).
+verify_jwt = false
