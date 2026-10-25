@@ -59,10 +59,11 @@ export function FaqAdminPage() {
           key={editing ? editing.id : `nouvelle-${String(formKey)}-${String(nextPosition)}`}
           editing={editing}
           nextPosition={nextPosition}
-          onDone={() => {
+          onAdded={() => {
             startNew()
             reload()
           }}
+          onSaved={reload}
         />
         <section className="admin-updates__list">
           <h2 className="admin-update-form__title">Sur la landing</h2>

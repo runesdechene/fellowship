@@ -390,8 +390,5 @@
 
 .entity-base .control {
   height: var(--setting-input-height);
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
   border-radius: var(--radius-setting-input);
-  background: var(--surface-card);
 }

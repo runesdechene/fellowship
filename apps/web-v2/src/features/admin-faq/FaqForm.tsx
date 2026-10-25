@@ -3,7 +3,9 @@
  *            masquée sur la landing.
  * POURQUOI — maquette 2552:233 : le formulaire des Mises à jour, ses styles compris
  *            (admin-updates.css). Rien à déployer : la landing relit la table.
- * ATTENTION — le bouton se fige pendant l'envoi : jamais deux questions d'un clic.
+ * ATTENTION — le bouton se fige pendant l'envoi : jamais deux questions d'un clic. Une correction
+ *            reste affichée, « Enregistré » le dit ; seul un ajout vide le formulaire (Uriel,
+ *            25/10/2026 : vidé après Enregistrer, le contenu semblait perdu).
  */
 import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/Button'
@@ -23,17 +25,23 @@ interface Props {
   editing: FaqQuestion | null
   /** L'ordre proposé pour une nouvelle question : à la suite des autres. */
   nextPosition: number
-  onDone: () => void
+  onAdded: () => void
+  onSaved: () => void
 }
 
-export function FaqForm({ editing, nextPosition, onDone }: Props) {
+export function FaqForm({ editing, nextPosition, onAdded, onSaved }: Props) {
   const [draft, setDraft] = useState<FaqDraft>(
     editing ?? { question: '', answer: '', position: nextPosition, visible: true },
   )
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+  // Vrai juste après une correction enregistrée, jusqu'à la prochaine frappe.
+  const [saved, setSaved] = useState(false)
   const ready = draft.question.trim() && draft.answer.trim()
-  const set = (fields: Partial<FaqDraft>) => setDraft((current) => ({ ...current, ...fields }))
+  const set = (fields: Partial<FaqDraft>) => {
+    setSaved(false)
+    setDraft((current) => ({ ...current, ...fields }))
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -41,9 +49,14 @@ export function FaqForm({ editing, nextPosition, onDone }: Props) {
     setBusy(true)
     setProblem(null)
     try {
-      if (editing) await saveQuestion(editing.id, draft)
-      else await addQuestion(draft)
-      onDone()
+      if (editing) {
+        await saveQuestion(editing.id, draft)
+        setSaved(true)
+        onSaved()
+      } else {
+        await addQuestion(draft)
+        onAdded()
+      }
     } catch (failure) {
       setProblem(failure instanceof Error ? failure.message : 'L’enregistrement n’a pas abouti.')
     }
@@ -98,7 +111,9 @@ export function FaqForm({ editing, nextPosition, onDone }: Props) {
       {problem && <p className="admin-page__error">{problem}</p>}
       <div className="admin-update-form__foot">
         <p className="admin-update-form__warning">
-          Elle paraît sur la landing dès l’enregistrement, sans déploiement.
+          {saved
+            ? 'Enregistré : c’est en ligne sur la landing.'
+            : 'Elle paraît sur la landing dès l’enregistrement, sans déploiement.'}
         </p>
         <Button type="submit" variant="action" disabled={!ready || busy}>
           {busy ? 'Un instant…' : editing ? 'Enregistrer' : 'Ajouter'}

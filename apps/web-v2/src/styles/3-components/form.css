@@ -36,10 +36,14 @@
 }
 
 /* --- Champs de saisie ----------------------------------------------------- */
+/* Blanc bordé d'un filet, posé de l'ombre commune : il se voit sur le panneau sable comme dans
+   une carte blanche (.claude/rules/v2.md, « une seule ombre »). */
 .control {
   width: 100%;
   height: var(--control-height);
   padding: 0 var(--control-padding-x);
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
   background: var(--control-surface);
   border-radius: var(--radius-control);
   font: var(--type-control);
