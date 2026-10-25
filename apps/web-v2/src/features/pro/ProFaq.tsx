@@ -1,9 +1,10 @@
 /**
- * QUOI     — « Le coût de la route · Bientôt » et les questions fréquentes de l'offre.
- * POURQUOI — maquette « Offre Pro ». La FAQ ne promet rien que l'app ne fasse : pas de rappel
+ * QUOI     — ce qui arrive dans le Pro (lib/pro-soon.ts) et les questions fréquentes de l'offre.
+ * POURQUOI — maquettes « Offre Pro » et 2544:233 (le coût de la route sur toute la largeur, puis
+ *            deux par rangée). La FAQ ne promet rien que l'app ne fasse : pas de rappel
  *            avant la fin de l'essai, puisque rien ne l'envoie (décision du 08/10/2026).
  */
-import { Car } from 'lucide-react'
+import { PRO_SOON } from '@/lib/pro-soon'
 
 const QUESTIONS = [
   {
@@ -22,20 +23,21 @@ const QUESTIONS = [
 
 export function ProSoon() {
   return (
-    <aside className="pro-soon">
-      <span className="pro-soon__icon">
-        <Car size={18} strokeWidth={1.8} />
-      </span>
-      <span className="pro-soon__text">
-        <span className="pro-soon__title">
-          Le coût de la route <span className="pro-soon__badge">Bientôt</span>
-        </span>
-        <span className="pro-soon__body">
-          Avant d’y aller, sache ce que te coûte un festival selon ton véhicule : carburant, péages,
-          nuits.
-        </span>
-      </span>
-    </aside>
+    <ul className="pro-soon-list">
+      {PRO_SOON.map((item) => (
+        <li key={item.title} className="pro-soon">
+          <span className="pro-soon__icon">
+            <item.icon size={18} strokeWidth={1.8} />
+          </span>
+          <span className="pro-soon__text">
+            <span className="pro-soon__title">
+              {item.title} <span className="pro-soon__badge">Bientôt</span>
+            </span>
+            <span className="pro-soon__body">{item.text}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
   )
 }
 

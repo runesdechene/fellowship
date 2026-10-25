@@ -214,6 +214,17 @@
 }
 
 /* --- Bientôt, et la FAQ -------------------------------------------------- */
+.pro-soon-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16);
+  width: 100%;
+}
+
+.pro-soon-list > :first-child {
+  grid-column: 1 / -1;
+}
+
 .pro-soon {
   display: flex;
   align-items: center;
@@ -226,6 +237,7 @@
 
 .pro-soon__icon {
   display: flex;
+  flex: none;
   padding: var(--space-10);
   border-radius: var(--round-full);
   background: var(--surface-card);
@@ -306,6 +318,10 @@
 }
 
 @media (width <= 760px) {
+  .pro-soon-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .pro-page {
     gap: var(--space-32);
     padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);

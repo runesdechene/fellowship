@@ -1,6 +1,6 @@
 /**
  * QUOI     — /pro, la page de l'offre : l'accroche, la formule (mensuel / annuel), les cartes
- *            Gratuit et Pro, le parrainage, « Le coût de la route », la FAQ ; et le bandeau du retour
+ *            Gratuit et Pro, le parrainage, ce qui arrive dans le Pro, la FAQ ; et le bandeau du retour
  *            de Stripe.
  * POURQUOI — toutes les invitations du gratuit mènent ici (maquette « Offre Pro »). La formule vit
  *            dans l'adresse, le retour arrière la suit.
