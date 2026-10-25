@@ -527,6 +527,10 @@
      du haut au bas de l'écran.
      ====================================================================== */
   --wall-width: 34vw;
+  --guest-wall-inset: var(
+    --space-24
+  ); /* la fiche vue sans compte : l'affiche posée comme à la connexion */
+  --radius-guest-wall: var(--round-24);
   /* L'affiche porte les rayons du panneau, TOURNÉS VERS LE CONTENU : elle se
      lit comme une dalle posée sur le crème. On a essayé l'inverse — le
      panneau s'arrondissant par-dessus l'image — et Uriel a tranché pour
