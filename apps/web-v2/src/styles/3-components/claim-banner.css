@@ -1,0 +1,52 @@
+/**
+ * QUOI     — le bandeau « Tu organises ce festival ? » en bas de la fiche
+ *            (features/event/ClaimBanner.tsx).
+ * POURQUOI — une carte de la fiche comme les autres, cliquable d'un bout à l'autre.
+ */
+.claim-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  margin-top: var(--space-40);
+  padding: var(--event-card-padding);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  color: var(--ink-title);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-soft);
+}
+
+.claim-banner:hover {
+  border-color: var(--ink-soft);
+}
+
+.claim-banner__text {
+  flex: 1;
+}
+
+.claim-banner__title,
+.claim-banner__line {
+  display: block;
+}
+
+.claim-banner__title {
+  font: var(--type-list-name);
+}
+
+.claim-banner__line {
+  font: var(--type-event-meta);
+  color: var(--ink-soft);
+}
+
+.claim-banner__go {
+  flex-shrink: 0;
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claim-banner {
+    transition: none;
+  }
+}

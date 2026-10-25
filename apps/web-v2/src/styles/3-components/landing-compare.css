@@ -353,6 +353,14 @@
   }
 }
 
+/* Sur téléphone, les tuiles s'étroitisent encore pour rester deux par ligne. */
+@container (width < 420px) {
+  .landing-tool__name,
+  .landing-tool__pain {
+    max-width: var(--landing-tool-cloud-text-phone);
+  }
+}
+
 @media (width <= 760px) {
   .landing-pro-soon__list {
     grid-template-columns: minmax(0, 1fr);

@@ -1735,7 +1735,8 @@
   --landing-tool-row-gap: 10px; /* serrées : le bazar, pas une grille rangée */
   --landing-tool-col-gap: 6px;
   /* La variante étroite (fiche sans compte, téléphone) : un nuage de petites tuiles, deux par ligne. */
-  --landing-tool-cloud-text: 13ch; /* nom et phrase passent à la ligne : des tuiles étroites, chacune sa largeur */
+  --landing-tool-cloud-text: 16ch; /* nom et phrase passent à la ligne : des tuiles étroites, chacune sa largeur */
+  --landing-tool-cloud-text-phone: 13ch; /* deux tuiles par ligne même sur 350 px */
   --landing-tool-cloud-gap: var(--space-10) var(--space-6);
   --landing-tool-cloud-nudge: 6px; /* un cran de décalage vertical : les lignes ne s'alignent pas */
   --landing-tool-logo-compact: 20px;

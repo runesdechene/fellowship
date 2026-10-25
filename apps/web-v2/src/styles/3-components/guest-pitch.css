@@ -7,6 +7,11 @@
   margin-top: var(--space-80);
 }
 
+/* La comparaison garde, sur la landing, l'air avant la bande suivante ; ici, le bouton suit. */
+.guest-pitch .landing-compare {
+  padding-bottom: 0;
+}
+
 .guest-pitch__call {
   display: flex;
   flex-direction: column;

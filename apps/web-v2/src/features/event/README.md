@@ -21,3 +21,4 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
   compte gratuit ; `useFicheApercu.ts` lit `apercu_fiche` (décision du 23/10/2026, maquette 2482:878).
 - `Breadcrumb.tsx` — sans compte, le fil d'Ariane au-dessus du titre : Festivals › univers › région.
 - `MyReportBlock.tsx` — « Mon bilan » d'une date passée.
+- `ClaimBanner.tsx` — en bas de la fiche, « Tu organises ce festival ? » : un e-mail à contact@flw.sh pour revendiquer la fiche (caché à qui peut déjà la modifier).
