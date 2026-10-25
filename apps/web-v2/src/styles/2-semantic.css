@@ -289,7 +289,9 @@
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
-  --type-event-title: var(--weight-regular) var(--size-64) / 1 var(--family-display);
+  --type-event-title: var(--weight-regular) var(--size-72) / 1 var(--family-display);
+  --tracking-event-title: -0.02em;
+  --event-title-ink: var(--terre-850);
 
   --type-event-meta: var(--weight-regular) var(--size-14) / var(--leading-snug) var(--family-sans);
   --type-event-meta-accent: var(--weight-semibold) var(--size-14) / var(--leading-snug)
@@ -628,10 +630,17 @@
   --dossier-note-min: 160px;
   --type-dossier-value: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
   --type-dossier-link: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
-  --type-event-block-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
+  /* Les titres de bloc de la fiche, en petites capitales tenues (maquette 2506:233). */
+  --type-event-block-title: var(--weight-semibold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
-  --type-event-block-hint: var(--weight-regular) var(--size-13) / var(--leading-snug)
+  --tracking-event-block-title: -0.01em;
+  --event-block-title-ink: var(--ink-1000);
+  --type-event-block-hint: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
+  /* Le rythme de la fiche : 40 entre les blocs, 12 sous un titre, 32 avant l'appel final. */
+  --event-section-gap: var(--space-40);
+  --event-section-title-gap: var(--space-12);
+  --event-closing-gap: var(--space-32);
 
   /* =========================================================================
      FICHE D'UN ÉVÉNEMENT — l'écran où mènent toutes les dates
@@ -683,8 +692,9 @@
   --rich-list-inset: var(--space-20);
   --legal-reading-width: 680px; /* une page légale : une colonne de lecture (lot 12) */
 
-  /* La voix de l'organisateur : un texte qu'on lit, en 16 (maquette 2506:233, 25/10/2026). */
-  --type-event-description: var(--weight-regular) var(--size-16) / 1.65 var(--family-sans);
+  /* La voix de l'organisateur, en serif 24 (maquette 2506:233). */
+  --type-event-description: var(--weight-regular) var(--size-24) / 1.33 var(--family-display);
+  --event-about-ink: var(--ink-750);
 
   /* « L'essentiel » de la fiche (maquette 2506:233) : une ligne par fait, le libellé à gauche ;
      la candidature du visiteur en pied, en inversé. */
@@ -695,8 +705,7 @@
     var(--family-sans);
   --type-essentials-sub: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
-  --type-essentials-apply-value: var(--weight-semibold) var(--size-18) / var(--leading-snug)
-    var(--family-sans);
+  --essentials-shadow: 0 4px 6.7px 1px rgb(0 0 0 / 8%);
   --essentials-apply-surface: var(--ink-title);
   --essentials-apply-ink: var(--surface-app);
   --essentials-apply-soft: color-mix(in srgb, var(--surface-app) 62%, transparent);
@@ -705,6 +714,10 @@
   --guest-going-face: 42px;
   --guest-going-overlap: -12px;
   --type-guest-going-count: var(--weight-regular) var(--size-28) / 1 var(--family-display);
+  --tracking-guest-going-count: -0.01em;
+  --type-card-link-strong: var(--weight-semibold) var(--size-13) / var(--leading-snug)
+    var(--family-sans);
+  --type-claim-line: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
 
   /* « Tu organises ce festival ? » : crème sur le dégradé de la marque, dans les deux thèmes. */
   --claim-ink: var(--cream-50);
@@ -712,6 +725,10 @@
   --claim-badge-check: var(--terre-700);
   --claim-button-ink: var(--ink-950);
   --type-claim-title: var(--weight-regular) var(--size-28) / 1 var(--family-display);
+  --radius-claim: var(--round-20);
+  /* L'avis cité au visiteur (maquette 2506:233). */
+  --type-review-quote-guest: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
+  --review-quote-guest-ink: var(--ink-790);
 
   /* =========================================================================
      DISCUSSION DU FESTIVAL — les questions et leurs réponses
@@ -1882,6 +1899,10 @@
   --skeleton-poster-mark: color-mix(in srgb, var(--cream-50) 22%, transparent);
 
   --ink-title: var(--cream-50);
+  --event-title-ink: var(--cream-50);
+  --event-block-title-ink: var(--cream-50);
+  --event-about-ink: var(--cream-200);
+  --review-quote-guest-ink: var(--cream-200);
   --ink-strong: var(--cream-50);
   /* Gris clair : en crème plein, les grands titres éblouissaient (19/10/2026). */
   --ink-section: var(--cream-200);

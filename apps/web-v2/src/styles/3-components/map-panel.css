@@ -1,43 +1,8 @@
 /**
- * QUOI     — la carte ouverte depuis la fiche (features/event/EventMapPanel.tsx) et la ligne de
- *            distance sous le lieu (PlaceDistance.tsx).
+ * QUOI     — la carte ouverte depuis la fiche (features/event/EventMapPanel.tsx).
  * POURQUOI — lot 13 (maquettes 2263:2, 2263:375, 2263:400) : sur grand écran, la carte prend la place
  *            de l'affiche dans le mur ; sinon, un écran glisse depuis la droite.
  */
-
-/* --- La ligne sous le lieu ----------------------------------------------------- */
-.place-distance {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-4);
-  margin-top: var(--space-6);
-}
-
-.place-distance__line {
-  font: var(--type-list-meta);
-  color: var(--ink-soft);
-}
-
-.place-distance__ask,
-.place-distance__open {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-4);
-  font: var(--type-card-link);
-  color: var(--ink-title);
-  cursor: pointer;
-}
-
-.place-distance__ask {
-  font-weight: var(--weight-medium);
-  color: var(--ink-soft);
-}
-
-.place-distance__ask:hover,
-.place-distance__open:hover {
-  text-decoration: underline;
-}
 
 /* --- L'écran glissant (téléphone, fenêtre étroite, fiche sans affiche) -------- */
 .map-panel {

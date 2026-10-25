@@ -70,9 +70,12 @@
      Deux encres et un tertiaire. La hiérarchie se fait par la taille et la
      graisse ; le gris n'est jamais une donnée importante.
      --------------------------------------------------------------------- */
+  --ink-1000: #050505; /* les titres de bloc de la fiche (maquette 2506:233) */
   --ink-950: #1f1d1b; /* titres, texte, chiffres, bouton principal */
   --ink-850: #2c2926; /* une affiche absente sur le mur de connexion */
   --ink-800: #3a3633; /* survol du bouton principal */
+  --ink-790: #3d3935; /* l'avis cité sur la fiche (maquette 2506:233) */
+  --ink-750: #43403d; /* l'à propos de la fiche (maquette 2506:233) */
   --ink-700: #4b453f; /* le texte de la carte du dessus des tâches (maquette 2432:306) */
   --ink-600: #6f6b66; /* texte secondaire, métadonnées */
   --ink-450: #8a857f; /* les signes de statut (cercle vide, à moitié) */
@@ -101,6 +104,7 @@
   --cream-650: #857f78; /* signes de statut la nuit */
   --cream-750: #6f6962; /* libellés discrets la nuit */
   --terre-900: #33241b; /* fond d'une mention acquise, la nuit */
+  --terre-850: #513921; /* le nom d'un événement sur sa fiche (maquette 2506:233) */
   --shade-900: #14120f; /* le voile au pied des affiches */
   --live-500: #3fa35c; /* le point « en direct », seul vert de l'interface */
   --terre-700: #964623; /* départ du dégradé ; encre lisible sur fond clair */
@@ -185,6 +189,7 @@
   --size-19: 19px;
   --size-20: 20px;
   --size-22: 22px;
+  --size-24: 24px;
   --size-26: 26px;
   --size-28: 28px;
   --size-30: 30px;
@@ -239,6 +244,7 @@
   --space-6: 6px;
   --space-7: 7px;
   --space-8: 8px;
+  --space-9: 9px;
   --space-10: 10px;
   --space-12: 12px;
   --space-14: 14px;

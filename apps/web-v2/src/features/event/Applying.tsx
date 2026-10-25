@@ -99,7 +99,7 @@ export function GuestApplyFooter({ event }: { event: EventRow }) {
         {deadline && <span className="essentials__sub">{closingNote(deadline)}</span>}
       </span>
       <Link className="essentials__apply-button" to={loginReturning(pathname)}>
-        Voir le dossier
+        Candidater
         <ArrowRight size={13} strokeWidth={2} />
       </Link>
     </div>

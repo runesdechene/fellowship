@@ -8,7 +8,7 @@
 .rich-text,
 .event-page__description {
   font: var(--type-event-description);
-  color: var(--ink-body);
+  color: var(--event-about-ink);
 }
 
 .rich-text > * + *,

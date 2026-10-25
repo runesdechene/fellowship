@@ -9,7 +9,7 @@
   border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   background: var(--surface-card);
-  box-shadow: var(--shadow-block);
+  box-shadow: var(--essentials-shadow);
 }
 
 .essentials__row,
@@ -75,7 +75,6 @@
 }
 
 .essentials__apply .essentials__value {
-  font: var(--type-essentials-apply-value);
   color: var(--essentials-apply-ink);
 }
 
@@ -84,10 +83,10 @@
   flex: none;
   align-items: center;
   gap: var(--space-6);
-  padding: var(--space-10) var(--space-14) var(--space-10) var(--space-16);
+  padding: var(--space-9) var(--space-12) var(--space-9) var(--space-14);
   border-radius: var(--radius-round);
   background: var(--essentials-apply-ink);
-  font: var(--type-list-name);
+  font: var(--type-card-link-strong);
   color: var(--essentials-apply-surface);
 }
 

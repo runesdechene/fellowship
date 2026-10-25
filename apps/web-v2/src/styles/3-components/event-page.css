@@ -36,7 +36,7 @@
 .event-page__main {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-section);
+  gap: var(--event-section-gap);
   min-width: 0;
 }
 
@@ -56,26 +56,37 @@
 
 .event-page__title {
   font: var(--type-event-title);
-  color: var(--ink-title);
+  letter-spacing: var(--tracking-event-title);
+  color: var(--event-title-ink);
 }
 
 .event-page__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-8);
-  margin-top: var(--space-18);
+  gap: var(--space-6);
+  margin-top: var(--space-14);
 }
 
 /* --- Les blocs ------------------------------------------------------------ */
 .event-page__block {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-section-title);
+  gap: var(--event-section-title-gap);
 }
 
+/* « À PROPOS », « AVIS DES EXPOSANTS » : petites capitales tenues (maquette 2506:233). */
 .event-page__block-title {
   font: var(--type-event-block-title);
-  color: var(--ink-section);
+  letter-spacing: var(--tracking-event-block-title);
+  text-transform: uppercase;
+  color: var(--event-block-title-ink);
+}
+
+/* « Qui y va » et l'appel final se suivent de plus près que les blocs. */
+.event-page__closing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--event-closing-gap);
 }
 
 /* Un bloc encore vide garde sa place et son titre, en pâle : la page ne
@@ -207,7 +218,7 @@
    lieu de trois mots, elle disparaît sur cinq lignes. */
 .event-page__description {
   font: var(--type-event-description);
-  color: var(--ink-body);
+  color: var(--event-about-ink);
   white-space: pre-line;
 }
 

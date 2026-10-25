@@ -5,7 +5,7 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { ArrowRight, CalendarDays, Clock, Globe, MapPin, Users } from 'lucide-react'
+import { ArrowRight, CalendarDays, Clock, Globe, Map as MapIcon, MapPin, Users } from 'lucide-react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { RichText } from '@/components/ui/RichText'
@@ -23,7 +23,7 @@ import { GuestGoing } from './GuestGoing'
 import { websiteLink } from '@/lib/vitrine'
 import { Companions } from './Companions'
 import { EventMapPanel } from './EventMapPanel'
-import { PlaceDistance } from './PlaceDistance'
+import { regionOf } from '@/lib/regions'
 import { useOrigin } from './useOrigin'
 import { eventPoint } from '@/lib/distance'
 import { AddMissing, KeptUpToDate } from './KeptUpToDate'
@@ -179,6 +179,16 @@ export function EventPage() {
       )
   }
 
+  const openMap = () => {
+    if (search.has('carte')) return
+    setSearch(
+      (current) => {
+        current.set('carte', '')
+        return current
+      },
+      { state: { carteOuverte: true } },
+    )
+  }
   const site = event.external_url ? websiteLink(event.external_url) : null
   // Chaque fait une seule fois (maquette 2506:233) : ce que l'organisateur n'a pas renseigné n'a
   // pas de ligne.
@@ -194,24 +204,12 @@ export function EventPage() {
       Icon: MapPin,
       label: 'Où',
       value: [event.address, `${event.city} (${event.department})`].filter(Boolean).join(', '),
-      sub: (
-        <PlaceDistance
-          point={point}
-          origin={origin}
-          askPosition={askPosition}
-          positionError={positionError}
-          asking={asking}
-          openMap={() => {
-            if (search.has('carte')) return
-            setSearch(
-              (current) => {
-                current.set('carte', '')
-                return current
-              },
-              { state: { carteOuverte: true } },
-            )
-          }}
-        />
+      sub: regionOf(event.department),
+      action: point && (
+        <button type="button" className="essentials__action" onClick={openMap}>
+          Voir sur la carte
+          <MapIcon size={13} strokeWidth={1.8} />
+        </button>
       ),
     },
     { Icon: Users, label: 'Fréquentation', value: event.expected_attendance ?? '' },
@@ -366,8 +364,10 @@ export function EventPage() {
         {past && member && (
           <MyReportBlock eventId={event.id} ledger={ledger} net={net} revenue={revenue} pro={pro} />
         )}
-        {!member && apercu && <GuestGoing going={apercu.going} faces={apercu.faces} />}
-        {!canEdit && <ClaimBanner eventName={event.name} />}
+        <div className="event-page__closing">
+          {!member && apercu && <GuestGoing going={apercu.going} faces={apercu.faces} />}
+          {!canEdit && <ClaimBanner eventName={event.name} />}
+        </div>
         {!member && <GuestPitch />}
       </div>
     </div>

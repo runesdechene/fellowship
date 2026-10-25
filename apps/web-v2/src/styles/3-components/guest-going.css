@@ -10,7 +10,6 @@
   border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   background: var(--surface-card);
-  box-shadow: var(--shadow-block);
 }
 
 .guest-going__top {
@@ -52,7 +51,7 @@
 
 .guest-going__count {
   font: var(--type-guest-going-count);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-guest-going-count);
   color: var(--ink-title);
 }
 

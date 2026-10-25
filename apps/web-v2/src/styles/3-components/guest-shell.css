@@ -95,3 +95,19 @@
     display: none;
   }
 }
+
+/* La carte s'ouvre DANS le cadre de l'affiche, pas par-dessus la page : mêmes marges, mêmes coins
+   (le panneau vit dans document.body, d'où le :has). */
+@media (width > 1100px) {
+  body:has(.guest-shell) .map-panel--wall {
+    inset: var(--guest-wall-top) var(--guest-wall-inset) var(--guest-wall-inset) auto;
+    overflow: hidden;
+    border-radius: var(--radius-guest-wall);
+  }
+}
+
+/* Sans la barre de l'app au-dessus, la fiche commence sous la nôtre : le fil d'Ariane à 120 px du
+   haut, comme sur la maquette 2506:233. */
+.guest-shell .event-page {
+  padding-top: var(--space-36);
+}

@@ -9,7 +9,7 @@
   align-items: center;
   gap: var(--space-18);
   padding: var(--space-22) var(--space-16) var(--space-22) var(--space-24);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-claim);
   background: var(--brand-gradient);
   color: var(--claim-ink);
   text-decoration: none;
@@ -32,11 +32,11 @@
 
 .claim-banner__title {
   font: var(--type-claim-title);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-guest-going-count);
 }
 
 .claim-banner__line {
-  font: var(--type-event-meta);
+  font: var(--type-claim-line);
   color: var(--claim-soft);
 }
 
@@ -48,7 +48,7 @@
   padding: var(--space-10) var(--space-14) var(--space-10) var(--space-16);
   border-radius: var(--radius-round);
   background: var(--claim-ink);
-  font: var(--type-list-name);
+  font: var(--type-card-link-strong);
   color: var(--claim-button-ink);
   transition: translate var(--duration-fast) var(--ease-soft);
 }

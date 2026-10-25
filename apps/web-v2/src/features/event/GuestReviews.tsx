@@ -25,7 +25,7 @@ export function GuestReviews({ apercu }: { apercu: FicheApercu }) {
         Avis des exposants
         <span className="event-page__block-hint">{reviews} avis</span>
       </h2>
-      <div className="reviews__scores">
+      <div className="reviews__scores reviews__scores--guest">
         <div className="reviews__overall">
           <span className="reviews__score">{formatScore(score)}</span>
           <Stars score={score} />
