@@ -929,6 +929,7 @@
   --empty-invite-poster-height: 76px;
   --empty-invite-chart-width: 242px;
   --pro-button-ink: var(--sand-0);
+  --pro-badge-inverse-ink: var(--terre-700); /* la pastille blanche, sur le dégradé */
   --community-side-width: 360px;
   --network-list-width: 640px;
   --notif-network-avatar: var(--size-32);

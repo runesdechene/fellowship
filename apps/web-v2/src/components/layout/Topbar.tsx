@@ -1,6 +1,7 @@
 /**
  * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite
- *            « Modifier la fiche » (si la page le déclare), la cloche et « Ajouter une date ».
+ *            « Modifier la fiche » (si la page le déclare), la cloche, « Passer Pro » pour un compte
+ *            gratuit (maquette 2540:233) et « Ajouter une date ».
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
  */
@@ -8,9 +9,11 @@ import { Wordmark } from '@/components/ui/Wordmark'
 import { ArrowLeft, CirclePlus, Pencil } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
+import { ProBadge } from '@/components/ui/ProBadge'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { usePageChrome } from '@/lib/page-chrome'
+import { usePlan } from '@/lib/usePlan'
 
 /**
  * Barre du haut : cloche + « Ajouter une date » à droite, et à gauche les
@@ -32,9 +35,11 @@ export function Topbar() {
   const go = useTransitionNavigate()
   const { lead, back, edit } = usePageChrome()
   const navigate = useNavigate()
+  const { pro } = usePlan()
+  const { key, pathname } = useLocation()
   const transition = useViewTransition()
   // « default » : la première entrée de l'onglet — aucune page de l'application avant elle.
-  const firstPage = useLocation().key === 'default'
+  const firstPage = key === 'default'
 
   function leave(fallback: string) {
     if (firstPage) {
@@ -78,6 +83,12 @@ export function Topbar() {
         </Button>
       )}
       <NotificationBell />
+      {!pro && pathname !== '/pro' && (
+        <Button variant="pro" className="topbar__pro" onClick={() => go('/pro')}>
+          Passer
+          <ProBadge />
+        </Button>
+      )}
       <Button
         variant="action"
         icon={<CirclePlus size={22} strokeWidth={1.75} />}

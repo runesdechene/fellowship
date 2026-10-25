@@ -57,6 +57,12 @@
   display: none;
 }
 
+/* « Passer Pro » (maquette 2540:233) : posée sur le dégradé, la pastille s'inverse en blanc. */
+.topbar__pro .pro-badge {
+  background: var(--pro-button-ink);
+  color: var(--pro-badge-inverse-ink);
+}
+
 /* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
 @media (width <= 760px) {
   .topbar {
@@ -75,7 +81,8 @@
     font: var(--type-wordmark-small);
   }
 
-  .topbar__add-label {
+  .topbar__add-label,
+  .topbar__pro {
     display: none;
   }
 
