@@ -723,7 +723,7 @@ select.landing-search__value {
   flex-direction: column;
   align-items: center;
   gap: var(--space-26);
-  padding-block: var(--space-80) var(--space-150);
+  padding-block: var(--space-80);
   text-align: center;
 }
 
