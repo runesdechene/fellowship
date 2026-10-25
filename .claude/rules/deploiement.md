@@ -35,6 +35,12 @@ Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirect
   le vieux `dist/` de la racine. Après un déploiement, comparer le hash du JS servi à celui du
   build local.
 - **`--no-build`** : le build est fait en local, le `.env` racine fournit les variables.
+- **`--functions` en chemin absolu aussi** (25/10/2026) : sans lui, la CLI cherche les fonctions
+  depuis la racine du dépôt et publie le site sans `netlify/functions/` (« No cached functions »,
+  `/sitemap.xml` répondait la page de l'app). Les deux scripts `deploy:*` le passent.
+- **Une fonction Supabase ne sert pas un fichier public** : relayée par Netlify, elle arrive en
+  `text/plain` (protection anti-hameçonnage de Supabase), et Netlify n'applique pas ses `[[headers]]`
+  à une réponse relayée. D'où `netlify/functions/sitemap.mjs`.
 
 **Monter la version de `apps/web-v2/package.json` avant chaque déploiement** : elle part dans
 `/version.json`, et c'est elle qui fait paraître « Recharger » dans les onglets ouverts. Même

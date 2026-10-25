@@ -14,8 +14,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint:headers": "node scripts/check-headers.mjs",
-    "deploy:draft": "pnpm build && netlify deploy --no-build --dir \"%CD%\\dist\" --site 8c479753-ecff-4c88-8069-2b25e7514925",
-    "deploy:prod": "node scripts/check-dist-fresh.mjs && netlify deploy --prod --no-build --dir \"%CD%\\dist\" --site 8c479753-ecff-4c88-8069-2b25e7514925"
+    "deploy:draft": "pnpm build && netlify deploy --no-build --dir \"%CD%\\dist\" --functions \"%CD%\\netlify\\functions\" --site 8c479753-ecff-4c88-8069-2b25e7514925",
+    "deploy:prod": "node scripts/check-dist-fresh.mjs && netlify deploy --prod --no-build --dir \"%CD%\\dist\" --functions \"%CD%\\netlify\\functions\" --site 8c479753-ecff-4c88-8069-2b25e7514925"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.86.0",
