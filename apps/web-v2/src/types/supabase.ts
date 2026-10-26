@@ -1541,7 +1541,6 @@ export type Database = {
           festivals_croises: string | null
           gender: string | null
           id: string
-          joignable: boolean
           linked_at: string | null
           linked_by: string | null
           name: string | null
@@ -1573,7 +1572,6 @@ export type Database = {
           festivals_croises?: string | null
           gender?: string | null
           id?: string
-          joignable?: boolean
           linked_at?: string | null
           linked_by?: string | null
           name?: string | null
@@ -1605,7 +1603,6 @@ export type Database = {
           festivals_croises?: string | null
           gender?: string | null
           id?: string
-          joignable?: boolean
           linked_at?: string | null
           linked_by?: string | null
           name?: string | null
@@ -2456,7 +2453,6 @@ export type Database = {
           festivals_croises: string
           gender: string
           id: string
-          joignable: boolean
           name: string
           note: string
           owner_id: string
