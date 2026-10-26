@@ -6,7 +6,7 @@
  * ATTENTION — l'ordre de la phrase compte : un paiement échoué, puis un arrêt programmé, puis un
  *            code promo qui couvre la facture passent avant « renouvelé le », qui serait faux.
  */
-import { formatDayMonthShort, formatFullDate } from './dates'
+import { daysUntil, formatDayMonthShort, formatFullDate } from './dates'
 import { isPro, SUBSCRIBED, SUSPENDED } from './plan'
 
 export type ProfileField = 'display_name' | 'city' | 'postal_code'
@@ -51,6 +51,12 @@ function datesLabel(count: number): string {
   return count === 1 ? '1 date' : `${String(count)} dates`
 }
 
+/** Ce qu'il reste de l'essai gratuit, en jours. */
+function trialLabel(daysLeft: number): string {
+  if (daysLeft <= 0) return 'Dernier jour d’essai'
+  return daysLeft === 1 ? 'Encore 1 jour d’essai' : `Encore ${String(daysLeft)} jours d’essai`
+}
+
 /** L'état du paiement d'une enseigne, dit par sa pastille (maquette 2558:233). */
 export type PaymentState = 'paid' | 'refused' | 'trial' | 'ending' | 'suspended'
 
@@ -88,12 +94,11 @@ export function entityLine(
         `offert jusqu’au ${formatFullDate(new Date(entity.discount_end))}` +
           (entity.discount_label ? ` (${entity.discount_label})` : ''),
       )
-    else if (entity.subscription_status === 'trialing' && entity.trial_end)
-      status = {
-        state: 'trial',
-        label: `Essai jusqu’au ${formatDayMonthShort(new Date(entity.trial_end))}`,
-      }
-    else if (entity.current_period_end)
+    else if (entity.subscription_status === 'trialing' && entity.trial_end) {
+      const trialEnd = new Date(entity.trial_end)
+      status = { state: 'trial', label: trialLabel(daysUntil(trialEnd, now)) }
+      parts.push(`essai jusqu’au ${formatFullDate(trialEnd)}`)
+    } else if (entity.current_period_end)
       parts.push(`renouvelé le ${formatFullDate(new Date(entity.current_period_end))}`)
     if (entity.legal_name) parts.push(`facture au nom de ${entity.legal_name}`)
     return { text: parts.join(' · '), action: 'portal', pro: true, status }

@@ -94,9 +94,13 @@ describe('entityLine', () => {
       trial_end: '2026-10-25T10:00:00Z',
     }
     expect(entityLine(trial, now, 0)).toMatchObject({
-      text: 'Pro mensuel',
-      status: { state: 'trial', label: 'Essai jusqu’au 25 oct.' },
+      text: 'Pro mensuel · essai jusqu’au 25 octobre 2026',
+      status: { state: 'trial', label: 'Encore 14 jours d’essai' },
     })
+    const lastDays = (trial_end: string) =>
+      entityLine({ ...trial, trial_end }, now, 0).status?.label
+    expect(lastDays('2026-10-12T10:00:00Z')).toBe('Encore 1 jour d’essai')
+    expect(lastDays('2026-10-11T18:00:00Z')).toBe('Dernier jour d’essai')
     const late = { ...trial, subscription_status: 'past_due', trial_end: null }
     expect(entityLine(late, now, 0)).toMatchObject({
       text: 'Pro mensuel · mets ta carte à jour',
