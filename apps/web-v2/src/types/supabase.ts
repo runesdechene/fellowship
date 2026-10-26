@@ -2534,6 +2534,7 @@ export type Database = {
           p_filtre?: string
           p_page?: number
           p_q?: string
+          p_reseau?: string
           p_source?: string
           p_suivi?: string
         }
@@ -2597,6 +2598,7 @@ export type Database = {
         Args: {
           p_balise?: string
           p_q?: string
+          p_reseau?: string
           p_source?: string
           p_suivi?: string
         }
@@ -3033,6 +3035,13 @@ export type Database = {
         Args: {
           p: Database["public"]["Tables"]["prospects"]["Row"]
           p_filtre: string
+        }
+        Returns: boolean
+      }
+      prospect_reseau: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_reseau: string
         }
         Returns: boolean
       }

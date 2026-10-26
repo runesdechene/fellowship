@@ -164,9 +164,11 @@
   color: var(--ink-soft);
 }
 
-/* Dans la colonne de côté, une valeur longue (un e-mail) passe à la ligne au lieu de déborder. */
+/* Dans la colonne de côté, une valeur longue (un e-mail, une adresse) passe à la ligne au lieu
+   de déborder. `anywhere` et non `break-word` : lui seul réduit la largeur minimale, sans quoi
+   un mot sans espace pousse la valeur hors de la carte. */
 .sheet-row__value .prospect-cell__button {
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   white-space: normal;
 }
 

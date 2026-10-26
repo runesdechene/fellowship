@@ -209,11 +209,13 @@
   gap: var(--space-6);
 }
 
-.prospect-account__link {
+.prospect-account__link,
+.prospect-link__open {
   color: var(--ink-soft);
 }
 
-.prospect-account__link:hover {
+.prospect-account__link:hover,
+.prospect-link__open:hover {
   color: var(--ink-title);
 }
 

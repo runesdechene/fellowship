@@ -1,6 +1,6 @@
 /**
  * QUOI     — la liste des prospects de l'administration : en-tête et boutons, quatre chiffres, le
- *            bandeau des correspondances, recherche, filtres, source et balise, tableau modifiable, pages.
+ *            bandeau des correspondances, recherche, filtres, source, balise et réseau, tableau modifiable, pages.
  * POURQUOI — les commerciaux démarchent, notent et voient qui s'inscrit sans quitter le tableau
  *            (spec du lot 3, maquette 2343:2).
  * ATTENTION — chaque écriture recharge tout (chiffres, filtres, correspondances) : une cellule
@@ -20,6 +20,7 @@ import {
   writeProspectsQuery,
   type ProspectsQuery,
 } from '@/lib/prospect-list'
+import { SOCIAL_NETWORKS } from '@/lib/social'
 import { ImportDialog } from './ImportDialog'
 import { MatchBanner } from './MatchBanner'
 import { MatchDialog } from './MatchDialog'
@@ -185,6 +186,21 @@ export function ProspectsPage() {
             {data?.tags.map((tag) => (
               <option key={tag} value={tag}>
                 #{tag}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="prospect-source prospect-source--next">
+          <span className="admin-table__sr">Réseau</span>
+          <select
+            className="prospect-source__select"
+            value={query.reseau}
+            onChange={(event) => go({ reseau: event.target.value })}
+          >
+            <option value="">Réseau : tous</option>
+            {SOCIAL_NETWORKS.map(({ label, host }) => (
+              <option key={host} value={host}>
+                {label}
               </option>
             ))}
           </select>

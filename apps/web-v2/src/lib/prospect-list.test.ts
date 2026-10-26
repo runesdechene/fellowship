@@ -13,6 +13,7 @@ describe('readProspectsQuery', () => {
       source: '',
       suivi: '',
       balise: '',
+      reseau: '',
       page: 0,
     })
   })
@@ -27,6 +28,7 @@ describe('readProspectsQuery', () => {
       source: 'Salon de Rennes',
       suivi: '',
       balise: '',
+      reseau: '',
       page: 2,
     })
   })
@@ -46,6 +48,7 @@ describe('writeProspectsQuery', () => {
         source: '',
         suivi: '',
         balise: '',
+        reseau: '',
         page: 0,
       }).toString(),
     ).toBe('')
@@ -56,6 +59,7 @@ describe('writeProspectsQuery', () => {
         source: 'Instagram',
         suivi: '',
         balise: '',
+        reseau: '',
         page: 1,
       }).toString(),
     ).toBe('q=l%C3%A9a&filtre=repondu&source=Instagram&page=1')
@@ -72,6 +76,7 @@ describe('suivi', () => {
         source: '',
         suivi: 'moi',
         balise: '',
+        reseau: '',
         page: 0,
       }).toString(),
     ).toBe('suivi=moi')
@@ -94,8 +99,17 @@ describe('balise', () => {
         source: '',
         suivi: '',
         balise: 'Orga',
+        reseau: '',
         page: 0,
       }).toString(),
     ).toBe('balise=Orga')
+  })
+})
+
+describe('réseau', () => {
+  it('lit et écrit le réseau', () => {
+    expect(readProspectsQuery(new URLSearchParams('reseau=instagram.com')).reseau).toBe(
+      'instagram.com',
+    )
   })
 })

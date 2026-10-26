@@ -6,12 +6,13 @@
  * ATTENTION — la note est le champ `note` du prospect, pas les notes datées des comptes
  *            (admin_notes vise un acteur ; un prospect n'en est pas un).
  */
-import { Info, NotebookPen } from 'lucide-react'
+import { ExternalLink, Info, NotebookPen } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AdminCard } from '@/components/ui/AdminCard'
 import { Select } from '@/components/ui/Select'
 import { SheetRow } from '@/components/ui/SheetRow'
 import { contactLabel, normalizeEmail } from '@/lib/prospect'
+import { linkOf, networkOf } from '@/lib/social'
 import { CheckCell, TextCell } from './ProspectCells'
 import { updateProspect, type ProspectPatch } from './prospect-writes'
 import type { ProspectDetail } from './useProspect'
@@ -32,6 +33,10 @@ const GENDERS = [
   { value: 'femme', label: 'Féminin' },
   { value: 'homme', label: 'Masculin' },
 ]
+
+// Un réseau reconnu prend son nom (« Instagram ») à la place de son numéro.
+const SOCIAL: readonly Field[] = ['social_primary', 'social_secondary']
+const LINKED: readonly Field[] = ['website', ...SOCIAL]
 
 const FIELDS: readonly { field: Field; label: string }[] = [
   { field: 'brand', label: 'Marque' },
@@ -87,15 +92,31 @@ export function ProspectSideCards({ prospect, tags, onChanged }: Props) {
               onSave={(phone) => save({ phone })}
             />
           </SheetRow>
-          {FIELDS.map(({ field, label }) => (
-            <SheetRow key={field} label={label}>
-              <TextCell
-                value={prospect[field]}
-                label={label}
-                onSave={(next) => save({ [field]: next })}
-              />
-            </SheetRow>
-          ))}
+          {FIELDS.map(({ field, label }) => {
+            const value = prospect[field]
+            const href = LINKED.includes(field) ? linkOf(value) : null
+            const name = (SOCIAL.includes(field) && networkOf(value)) || label
+            return (
+              <SheetRow key={field} label={name}>
+                <TextCell
+                  value={value}
+                  label={label}
+                  onSave={(next) => save({ [field]: next })}
+                />
+                {href && (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="prospect-link__open"
+                    aria-label={`Ouvrir : ${name}`}
+                  >
+                    <ExternalLink size={14} strokeWidth={2} />
+                  </a>
+                )}
+              </SheetRow>
+            )
+          })}
           <SheetRow label="Fut croisé en festival">
             <CheckCell
               checked={prospect.festival_commun}

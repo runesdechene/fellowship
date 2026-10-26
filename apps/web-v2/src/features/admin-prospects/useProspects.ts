@@ -74,6 +74,7 @@ async function loadProspects({
   source,
   suivi,
   balise,
+  reseau,
   page,
 }: ProspectsQuery): Promise<ProspectsData> {
   const [list, stats, filters, sources, tags, matches, senders, unclassified] = await Promise.all([
@@ -83,6 +84,7 @@ async function loadProspects({
       p_source: source,
       p_suivi: suivi,
       p_balise: balise,
+      p_reseau: reseau,
       p_page: page,
     }),
     supabase.rpc('admin_prospects_chiffres'),
@@ -91,6 +93,7 @@ async function loadProspects({
       p_source: source,
       p_suivi: suivi,
       p_balise: balise,
+      p_reseau: reseau,
     }),
     supabase.rpc('admin_prospects_sources'),
     supabase.rpc('admin_prospects_balises'),
@@ -114,7 +117,7 @@ async function loadProspects({
   }
 }
 
-export function useProspects({ q, filter, source, suivi, balise, page }: ProspectsQuery) {
+export function useProspects({ q, filter, source, suivi, balise, reseau, page }: ProspectsQuery) {
   const [version, setVersion] = useState(0)
   const [state, setState] = useState<{ data: ProspectsData | null; error: string | null }>({
     data: null,
@@ -124,7 +127,7 @@ export function useProspects({ q, filter, source, suivi, balise, page }: Prospec
     let cancelled = false
     async function run() {
       try {
-        const data = await loadProspects({ q, filter, source, suivi, balise, page })
+        const data = await loadProspects({ q, filter, source, suivi, balise, reseau, page })
         if (cancelled) return
         setState({ data, error: null })
       } catch (error) {
@@ -139,7 +142,7 @@ export function useProspects({ q, filter, source, suivi, balise, page }: Prospec
     return () => {
       cancelled = true
     }
-  }, [q, filter, source, suivi, balise, page, version])
+  }, [q, filter, source, suivi, balise, reseau, page, version])
   const reload = useCallback(() => setVersion((value) => value + 1), [])
   return { ...state, reload }
 }
