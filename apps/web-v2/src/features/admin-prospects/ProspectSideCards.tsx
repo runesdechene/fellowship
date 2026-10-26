@@ -46,10 +46,12 @@ const FIELDS: readonly { field: Field; label: string }[] = [
 
 interface Props {
   prospect: ProspectDetail
+  /** Les balises existantes, proposées dans la note. */
+  tags: readonly string[]
   onChanged: () => void
 }
 
-export function ProspectSideCards({ prospect, onChanged }: Props) {
+export function ProspectSideCards({ prospect, tags, onChanged }: Props) {
   async function save(patch: ProspectPatch) {
     await updateProspect(prospect.id, patch)
     onChanged()
@@ -124,7 +126,13 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
         </dl>
       </AdminCard>
       <AdminCard title="Note" Icon={NotebookPen} tone="ocre">
-        <TextCell value={prospect.note} label="Note" multiline onSave={(note) => save({ note })} />
+        <TextCell
+          value={prospect.note}
+          label="Note"
+          multiline
+          tags={tags}
+          onSave={(note) => save({ note })}
+        />
       </AdminCard>
     </>
   )

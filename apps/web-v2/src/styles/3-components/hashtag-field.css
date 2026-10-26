@@ -1,0 +1,55 @@
+/**
+ * QUOI     — la note d'un prospect et les balises qu'elle propose à la frappe d'un #
+ *            (features/admin-prospects/HashtagField.tsx).
+ * POURQUOI — le même flottant que l'adresse suggérée (create-event.css) : un liseré le détache,
+ *            pas d'ombre.
+ */
+.hashtag-field {
+  position: relative;
+  display: block;
+}
+
+.hashtag-field__tags {
+  position: absolute;
+  top: calc(100% + var(--select-menu-gap));
+  left: 0;
+  z-index: var(--layer-menu);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 100%;
+  padding: var(--space-4);
+  border: 1px solid var(--border-menu);
+  border-radius: var(--radius-select);
+  background: var(--surface-panel);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+
+.hashtag-field__tag {
+  padding: var(--space-6) var(--space-10);
+  border-radius: var(--radius-sm);
+  font: var(--type-select-option);
+  color: var(--ink-title);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.hashtag-field__tag:hover,
+.hashtag-field__tag[aria-selected='true'] {
+  background: var(--surface-row-hover);
+}
+
+@starting-style {
+  .hashtag-field__tags {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--space-4));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hashtag-field__tags {
+    transition: none;
+  }
+}

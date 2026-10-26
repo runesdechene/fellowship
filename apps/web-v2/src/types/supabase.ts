@@ -2530,6 +2530,7 @@ export type Database = {
       }
       admin_prospects: {
         Args: {
+          p_balise?: string
           p_filtre?: string
           p_page?: number
           p_q?: string
@@ -2575,6 +2576,12 @@ export type Database = {
           user_name: string
         }[]
       }
+      admin_prospects_balises: {
+        Args: never
+        Returns: {
+          balise: string
+        }[]
+      }
       admin_prospects_chiffres: {
         Args: never
         Returns: {
@@ -2587,7 +2594,12 @@ export type Database = {
         }[]
       }
       admin_prospects_filtres: {
-        Args: { p_q?: string; p_source?: string; p_suivi?: string }
+        Args: {
+          p_balise?: string
+          p_q?: string
+          p_source?: string
+          p_suivi?: string
+        }
         Returns: {
           filtre: string
           nombre: number
@@ -3001,6 +3013,14 @@ export type Database = {
         Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }
         Returns: boolean
       }
+      prospect_balise: {
+        Args: {
+          p: Database["public"]["Tables"]["prospects"]["Row"]
+          p_balise: string
+        }
+        Returns: boolean
+      }
+      prospect_balises: { Args: { p_note: string }; Returns: string[] }
       prospect_cherche: {
         Args: {
           p: Database["public"]["Tables"]["prospects"]["Row"]

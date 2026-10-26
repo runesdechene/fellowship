@@ -86,14 +86,17 @@ export interface ProspectSheet {
   messages: ThreadMessage[]
   templates: Template[]
   senders: Sender[]
+  /** Les balises écrites dans les notes : la note les propose à la frappe d'un #. */
+  tags: string[]
 }
 
 async function loadProspect(id: string): Promise<ProspectSheet> {
-  const [prospect, messages, templates, senders] = await Promise.all([
+  const [prospect, messages, templates, senders, tags] = await Promise.all([
     supabase.rpc('admin_prospect', { p_id: id }),
     supabase.rpc('admin_prospect_messages', { p_id: id }),
     supabase.rpc('admin_prospect_modeles'),
     supabase.rpc('admin_prospect_expediteurs'),
+    supabase.rpc('admin_prospects_balises'),
   ])
   const found: ProspectDetail | undefined = must(prospect)[0]
   if (!found) throw new Error('Ce prospect n’existe plus.')
@@ -102,6 +105,7 @@ async function loadProspect(id: string): Promise<ProspectSheet> {
     messages: must(messages),
     templates: must(templates),
     senders: must(senders),
+    tags: must(tags).map((row) => row.balise),
   }
 }
 

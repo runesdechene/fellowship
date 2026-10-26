@@ -93,7 +93,7 @@ export function ProspectPage() {
           />
         </div>
         <div className="sheet__column sheet__column--side">
-          <ProspectSideCards prospect={prospect} onChanged={reload} />
+          <ProspectSideCards prospect={prospect} tags={data.tags} onChanged={reload} />
         </div>
       </div>
     </div>

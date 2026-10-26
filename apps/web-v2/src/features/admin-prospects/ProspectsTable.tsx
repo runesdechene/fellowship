@@ -39,6 +39,8 @@ interface Props {
   onChanged: () => void
   onAskDelete: (row: ProspectRow) => void
   onAskUnlink: (row: ProspectRow) => void
+  /** Les balises existantes, proposées dans la note. */
+  tags: readonly string[]
 }
 
 /** Le statut se lit (le fil le tient) ; « Désinscrit » puis « À répondre » passent devant. */
@@ -61,6 +63,7 @@ export function ProspectsTable({
   onChanged,
   onAskDelete,
   onAskUnlink,
+  tags,
 }: Props) {
   const { dragging, handlers } = useDragScroll()
   return (
@@ -111,6 +114,7 @@ export function ProspectsTable({
               onChanged={onChanged}
               onAskDelete={onAskDelete}
               onAskUnlink={onAskUnlink}
+              tags={tags}
             />
           ))}
         </tbody>
@@ -124,9 +128,10 @@ interface LineProps {
   onChanged: () => void
   onAskDelete: (row: ProspectRow) => void
   onAskUnlink: (row: ProspectRow) => void
+  tags: readonly string[]
 }
 
-function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
+function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink, tags }: LineProps) {
   async function save(patch: ProspectPatch) {
     await updateProspect(row.id, patch)
     onChanged()
@@ -209,7 +214,7 @@ function ProspectLine({ row, onChanged, onAskDelete, onAskUnlink }: LineProps) {
         </span>
       </td>
       <td className="admin-table__text prospect-note">
-        <TextCell value={row.note} label="Note" onSave={text('note')} />
+        <TextCell value={row.note} label="Note" tags={tags} onSave={text('note')} />
       </td>
       <td>
         <span className="prospect-relance">

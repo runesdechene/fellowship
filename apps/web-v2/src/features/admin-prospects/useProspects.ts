@@ -1,6 +1,6 @@
 /**
  * QUOI     — charge une page de prospects, les quatre chiffres, le nombre de chaque filtre, les
- *            sources et les correspondances à rapprocher.
+ *            sources, les balises et les correspondances à rapprocher.
  * POURQUOI — l'adresse décide (lib/prospect-list.ts) ; la base filtre, cherche et pagine.
  *            `reload` relance tout après une écriture.
  * ATTENTION — une erreur de la base s'affiche telle quelle : jamais une liste vide qui ment.
@@ -59,6 +59,8 @@ export interface ProspectsData {
   stats: ProspectStats | null
   counts: Map<string, number>
   sources: string[]
+  /** Les balises écrites dans les notes, pour le menu « Balise » et la frappe d'un #. */
+  tags: string[]
   matches: Match[]
   /** Les suiveurs possibles (comptes qui ont une adresse d'envoi active), pour le menu « Suivi par ». */
   followers: { id: string; name: string }[]
@@ -71,19 +73,27 @@ async function loadProspects({
   filter,
   source,
   suivi,
+  balise,
   page,
 }: ProspectsQuery): Promise<ProspectsData> {
-  const [list, stats, filters, sources, matches, senders, unclassified] = await Promise.all([
+  const [list, stats, filters, sources, tags, matches, senders, unclassified] = await Promise.all([
     supabase.rpc('admin_prospects', {
       p_q: q,
       p_filtre: filter,
       p_source: source,
       p_suivi: suivi,
+      p_balise: balise,
       p_page: page,
     }),
     supabase.rpc('admin_prospects_chiffres'),
-    supabase.rpc('admin_prospects_filtres', { p_q: q, p_source: source, p_suivi: suivi }),
+    supabase.rpc('admin_prospects_filtres', {
+      p_q: q,
+      p_source: source,
+      p_suivi: suivi,
+      p_balise: balise,
+    }),
     supabase.rpc('admin_prospects_sources'),
+    supabase.rpc('admin_prospects_balises'),
     supabase.rpc('admin_prospects_a_rapprocher'),
     supabase.rpc('admin_prospect_expediteurs'),
     supabase.rpc('admin_prospects_non_classes'),
@@ -95,6 +105,7 @@ async function loadProspects({
     stats: must(stats)[0] ?? null,
     counts: new Map(must(filters).map((row) => [row.filtre, row.nombre])),
     sources: must(sources).map((row) => row.source),
+    tags: must(tags).map((row) => row.balise),
     matches: must(matches),
     unclassified: must(unclassified).length,
     followers: must(senders)
@@ -103,7 +114,7 @@ async function loadProspects({
   }
 }
 
-export function useProspects({ q, filter, source, suivi, page }: ProspectsQuery) {
+export function useProspects({ q, filter, source, suivi, balise, page }: ProspectsQuery) {
   const [version, setVersion] = useState(0)
   const [state, setState] = useState<{ data: ProspectsData | null; error: string | null }>({
     data: null,
@@ -113,7 +124,7 @@ export function useProspects({ q, filter, source, suivi, page }: ProspectsQuery)
     let cancelled = false
     async function run() {
       try {
-        const data = await loadProspects({ q, filter, source, suivi, page })
+        const data = await loadProspects({ q, filter, source, suivi, balise, page })
         if (cancelled) return
         setState({ data, error: null })
       } catch (error) {
@@ -128,7 +139,7 @@ export function useProspects({ q, filter, source, suivi, page }: ProspectsQuery)
     return () => {
       cancelled = true
     }
-  }, [q, filter, source, suivi, page, version])
+  }, [q, filter, source, suivi, balise, page, version])
   const reload = useCallback(() => setVersion((value) => value + 1), [])
   return { ...state, reload }
 }

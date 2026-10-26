@@ -12,6 +12,7 @@ describe('readProspectsQuery', () => {
       filter: 'tous',
       source: '',
       suivi: '',
+      balise: '',
       page: 0,
     })
   })
@@ -25,6 +26,7 @@ describe('readProspectsQuery', () => {
       filter: 'a_relancer',
       source: 'Salon de Rennes',
       suivi: '',
+      balise: '',
       page: 2,
     })
   })
@@ -38,7 +40,14 @@ describe('readProspectsQuery', () => {
 describe('writeProspectsQuery', () => {
   it('n’écrit que ce qui s’écarte du défaut', () => {
     expect(
-      writeProspectsQuery({ q: '', filter: 'tous', source: '', suivi: '', page: 0 }).toString(),
+      writeProspectsQuery({
+        q: '',
+        filter: 'tous',
+        source: '',
+        suivi: '',
+        balise: '',
+        page: 0,
+      }).toString(),
     ).toBe('')
     expect(
       writeProspectsQuery({
@@ -46,6 +55,7 @@ describe('writeProspectsQuery', () => {
         filter: 'repondu',
         source: 'Instagram',
         suivi: '',
+        balise: '',
         page: 1,
       }).toString(),
     ).toBe('q=l%C3%A9a&filtre=repondu&source=Instagram&page=1')
@@ -56,7 +66,14 @@ describe('suivi', () => {
   it('lit et écrit le suivi', () => {
     expect(readProspectsQuery(new URLSearchParams('suivi=moi')).suivi).toBe('moi')
     expect(
-      writeProspectsQuery({ q: '', filter: 'tous', source: '', suivi: 'moi', page: 0 }).toString(),
+      writeProspectsQuery({
+        q: '',
+        filter: 'tous',
+        source: '',
+        suivi: 'moi',
+        balise: '',
+        page: 0,
+      }).toString(),
     ).toBe('suivi=moi')
   })
 })
@@ -64,5 +81,21 @@ describe('suivi', () => {
 describe('filtre À répondre', () => {
   it('se lit dans l’adresse', () => {
     expect(readProspectsQuery(new URLSearchParams('filtre=a_repondre')).filter).toBe('a_repondre')
+  })
+})
+
+describe('balise', () => {
+  it('lit et écrit la balise', () => {
+    expect(readProspectsQuery(new URLSearchParams('balise=Orga')).balise).toBe('Orga')
+    expect(
+      writeProspectsQuery({
+        q: '',
+        filter: 'tous',
+        source: '',
+        suivi: '',
+        balise: 'Orga',
+        page: 0,
+      }).toString(),
+    ).toBe('balise=Orga')
   })
 })

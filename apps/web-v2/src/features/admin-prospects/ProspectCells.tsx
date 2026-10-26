@@ -7,6 +7,7 @@
  */
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { CHANNELS, contactLabel, validContactDate } from '@/lib/prospect'
+import { HashtagField } from './HashtagField'
 
 type Save<T> = (next: T) => Promise<void>
 
@@ -46,6 +47,7 @@ export function TextCell({
   onClose,
   multiline = false,
   placeholder,
+  tags,
 }: {
   value: string | null
   label: string
@@ -55,6 +57,8 @@ export function TextCell({
   autoOpen?: boolean
   /** Un texte long (la note) : il passe à la ligne et le champ grandit ; Maj+Entrée va à la ligne. */
   multiline?: boolean
+  /** Les balises existantes (la note) : le champ les propose à la frappe d'un #. */
+  tags?: readonly string[]
   /** La forme enregistrée de ce qui est tapé (l'e-mail se range en minuscules). */
   normalize?: (text: string) => string | null
   /** À la fermeture du champ : ce qui part en écriture, null si rien (vide ou Échap). */
@@ -97,6 +101,20 @@ export function TextCell({
       value: draft,
       onKeyDown: onKey,
       onBlur: close,
+    }
+    if (tags) {
+      return (
+        <HashtagField
+          label={label}
+          multiline={multiline}
+          value={draft}
+          tags={tags}
+          placeholder={placeholder}
+          onChange={setDraft}
+          onKeyDown={onKey}
+          onBlur={close}
+        />
+      )
     }
     return multiline ? (
       <textarea

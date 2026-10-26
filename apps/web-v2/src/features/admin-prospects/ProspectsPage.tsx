@@ -1,6 +1,6 @@
 /**
  * QUOI     — la liste des prospects de l'administration : en-tête et boutons, quatre chiffres, le
- *            bandeau des correspondances, recherche, filtres et source, tableau modifiable, pages.
+ *            bandeau des correspondances, recherche, filtres, source et balise, tableau modifiable, pages.
  * POURQUOI — les commerciaux démarchent, notent et voient qui s'inscrit sans quitter le tableau
  *            (spec du lot 3, maquette 2343:2).
  * ATTENTION — chaque écriture recharge tout (chiffres, filtres, correspondances) : une cellule
@@ -174,6 +174,21 @@ export function ProspectsPage() {
             ))}
           </select>
         </label>
+        <label className="prospect-source prospect-source--next">
+          <span className="admin-table__sr">Balise</span>
+          <select
+            className="prospect-source__select"
+            value={query.balise}
+            onChange={(event) => go({ balise: event.target.value })}
+          >
+            <option value="">Balise : toutes</option>
+            {data?.tags.map((tag) => (
+              <option key={tag} value={tag}>
+                #{tag}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
       {error && <p className="admin-page__error">{error}</p>}
@@ -186,6 +201,7 @@ export function ProspectsPage() {
           onChanged={reload}
           onAskDelete={(row) => setPending({ kind: 'supprimer', row })}
           onAskUnlink={(row) => setPending({ kind: 'defaire', row })}
+          tags={data.tags}
         />
       )}
       {data && (
