@@ -70,33 +70,21 @@ export function ProspectSideCards({ prospect, onChanged }: Props) {
               onChange={(gender) => void save({ gender })}
             />
           </SheetRow>
-          <SheetRow label="Contact">
-            <CheckCell
-              checked={prospect.joignable}
-              label="Contact"
-              title="Il a un e-mail ou un téléphone"
-              onSave={(joignable) => save({ joignable })}
+          <SheetRow label="E-mail">
+            <TextCell
+              value={prospect.email}
+              label="E-mail"
+              normalize={normalizeEmail}
+              onSave={(email) => save({ email })}
             />
           </SheetRow>
-          {prospect.joignable && (
-            <>
-              <SheetRow label="E-mail">
-                <TextCell
-                  value={prospect.email}
-                  label="E-mail"
-                  normalize={normalizeEmail}
-                  onSave={(email) => save({ email })}
-                />
-              </SheetRow>
-              <SheetRow label="Téléphone">
-                <TextCell
-                  value={prospect.phone}
-                  label="Téléphone"
-                  onSave={(phone) => save({ phone })}
-                />
-              </SheetRow>
-            </>
-          )}
+          <SheetRow label="Téléphone">
+            <TextCell
+              value={prospect.phone}
+              label="Téléphone"
+              onSave={(phone) => save({ phone })}
+            />
+          </SheetRow>
           {FIELDS.map(({ field, label }) => (
             <SheetRow key={field} label={label}>
               <TextCell

@@ -32,8 +32,6 @@ export interface ProspectDetail {
   festival_commun: boolean
   /** Les festivals où on l'a croisé, en texte libre. */
   festivals_croises: string | null
-  /** Il a un e-mail ou un téléphone ; sinon on le garde sous le coude (réseaux, plus tard). */
-  joignable: boolean
   user_id: string | null
   user_name: string | null
   owner_id: string | null
