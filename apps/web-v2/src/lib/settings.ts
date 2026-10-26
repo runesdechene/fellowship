@@ -1,11 +1,12 @@
 /**
  * QUOI     — les règles des Réglages : les champs du profil (validation, valeur à écrire), la
- *            phrase d'une enseigne et son geste de facturation, le mot qui confirme la suppression.
+ *            phrase d'une enseigne, sa pastille de paiement et son geste de facturation, le mot qui
+ *            confirme la suppression.
  * POURQUOI — lot 9b, maquette 2206:691. Les écrans affichent ; ce qui se décide se teste ici.
  * ATTENTION — l'ordre de la phrase compte : un paiement échoué, puis un arrêt programmé, puis un
  *            code promo qui couvre la facture passent avant « renouvelé le », qui serait faux.
  */
-import { formatFullDate } from './dates'
+import { formatDayMonthShort, formatFullDate } from './dates'
 import { isPro, SUBSCRIBED, SUSPENDED } from './plan'
 
 export type ProfileField = 'display_name' | 'city' | 'postal_code'
@@ -50,41 +51,67 @@ function datesLabel(count: number): string {
   return count === 1 ? '1 date' : `${String(count)} dates`
 }
 
-/** La phrase d'une enseigne dans « Enseignes et abonnement », et son bouton. */
+/** L'état du paiement d'une enseigne, dit par sa pastille (maquette 2558:233). */
+export type PaymentState = 'paid' | 'refused' | 'trial' | 'ending' | 'suspended'
+
+export interface EntityLine {
+  text: string
+  action: 'portal' | 'upgrade' | 'none'
+  pro: boolean
+  /** null : rien à payer (gratuit, ou Pro offert). */
+  status: { state: PaymentState; label: string } | null
+}
+
+/** La phrase d'une enseigne dans « Enseignes et abonnement », sa pastille et son bouton. */
 export function entityLine(
   entity: EntityBilling,
   now: Date,
   /** null : le compte n'a pas pu être lu — la phrase ne dit alors rien du nombre. */
   upcomingDates: number | null,
-): { text: string; action: 'portal' | 'upgrade' | 'none'; pro: boolean } {
+): EntityLine {
   const subscribed =
     entity.subscription_status !== null && SUBSCRIBED.includes(entity.subscription_status)
   if (subscribed) {
     const parts = [entity.billing_interval === 'year' ? 'Pro annuel' : 'Pro mensuel']
-    if (entity.subscription_status === 'past_due') parts.push('paiement échoué')
-    else if (entity.cancel_at)
-      parts.push(`s’arrête le ${formatFullDate(new Date(entity.cancel_at))}`)
-    else if (entity.discount_end && new Date(entity.discount_end) > now)
+    let status: EntityLine['status'] = { state: 'paid', label: 'À jour' }
+    if (entity.subscription_status === 'past_due') {
+      status = { state: 'refused', label: 'Paiement refusé' }
+      parts.push('mets ta carte à jour')
+    } else if (entity.cancel_at) {
+      status = {
+        state: 'ending',
+        label: `S’arrête le ${formatDayMonthShort(new Date(entity.cancel_at))}`,
+      }
+      parts.push('tu as résilié, la vitrine reste Pro jusque-là')
+    } else if (entity.discount_end && new Date(entity.discount_end) > now)
       parts.push(
         `offert jusqu’au ${formatFullDate(new Date(entity.discount_end))}` +
           (entity.discount_label ? ` (${entity.discount_label})` : ''),
       )
     else if (entity.subscription_status === 'trialing' && entity.trial_end)
-      parts.push(`essai jusqu’au ${formatFullDate(new Date(entity.trial_end))}`)
+      status = {
+        state: 'trial',
+        label: `Essai jusqu’au ${formatDayMonthShort(new Date(entity.trial_end))}`,
+      }
     else if (entity.current_period_end)
       parts.push(`renouvelé le ${formatFullDate(new Date(entity.current_period_end))}`)
     if (entity.legal_name) parts.push(`facture au nom de ${entity.legal_name}`)
-    return { text: parts.join(' · '), action: 'portal', pro: true }
+    return { text: parts.join(' · '), action: 'portal', pro: true, status }
   }
   if (isPro(entity, now)) {
     // Pro sans abonnement en cours : offert jusqu'à une date, ou accordé par Fellowship.
     const text = entity.comped_pro_until
       ? `Pro offert jusqu’au ${formatFullDate(new Date(entity.comped_pro_until))}`
       : 'Pro'
-    return { text, action: 'none', pro: true }
+    return { text, action: 'none', pro: true, status: null }
   }
   if (entity.subscription_status !== null && SUSPENDED.includes(entity.subscription_status))
-    return { text: 'Pro suspendu · paiement non réglé', action: 'upgrade', pro: false }
+    return {
+      text: 'Le paiement n’a pas abouti : la vitrine est repassée en gratuit',
+      action: 'upgrade',
+      pro: false,
+      status: { state: 'suspended', label: 'Pro suspendu' },
+    }
   return {
     text:
       upcomingDates === null
@@ -92,6 +119,7 @@ export function entityLine(
         : `Gratuit · ${datesLabel(upcomingDates)} sur tes 6 prochains mois`,
     action: 'upgrade',
     pro: false,
+    status: null,
   }
 }
 

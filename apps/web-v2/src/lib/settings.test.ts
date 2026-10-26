@@ -61,6 +61,7 @@ describe('entityLine', () => {
       text: 'Gratuit · 2 dates sur tes 6 prochains mois',
       action: 'upgrade',
       pro: false,
+      status: null,
     })
     expect(entityLine(free, now, 1).text).toBe('Gratuit · 1 date sur tes 6 prochains mois')
     expect(entityLine(free, now, 0).text).toBe('Gratuit · aucune date sur tes 6 prochains mois')
@@ -78,6 +79,7 @@ describe('entityLine', () => {
       text: 'Pro annuel · renouvelé le 12 mars 2027 · facture au nom de SARL Runes de Chêne',
       action: 'portal',
       pro: true,
+      status: { state: 'paid', label: 'À jour' },
     })
     expect(entityLine({ ...pro, billing_interval: 'month', legal_name: null }, now, 5).text).toBe(
       'Pro mensuel · renouvelé le 12 mars 2027',
@@ -91,10 +93,16 @@ describe('entityLine', () => {
       billing_interval: 'month',
       trial_end: '2026-10-25T10:00:00Z',
     }
-    expect(entityLine(trial, now, 0).text).toBe('Pro mensuel · essai jusqu’au 25 octobre 2026')
+    expect(entityLine(trial, now, 0)).toMatchObject({
+      text: 'Pro mensuel',
+      status: { state: 'trial', label: 'Essai jusqu’au 25 oct.' },
+    })
     const late = { ...trial, subscription_status: 'past_due', trial_end: null }
-    expect(entityLine(late, now, 0).text).toBe('Pro mensuel · paiement échoué')
-    expect(entityLine(late, now, 0).action).toBe('portal')
+    expect(entityLine(late, now, 0)).toMatchObject({
+      text: 'Pro mensuel · mets ta carte à jour',
+      action: 'portal',
+      status: { state: 'refused', label: 'Paiement refusé' },
+    })
   })
   test('résiliation programmée et code promo passent avant le renouvellement', () => {
     const pro = {
@@ -104,9 +112,10 @@ describe('entityLine', () => {
       billing_interval: 'month',
       current_period_end: '2026-11-12T10:00:00Z',
     }
-    expect(entityLine({ ...pro, cancel_at: '2026-11-12T10:00:00Z' }, now, 0).text).toBe(
-      'Pro mensuel · s’arrête le 12 novembre 2026',
-    )
+    expect(entityLine({ ...pro, cancel_at: '2026-11-12T10:00:00Z' }, now, 0)).toMatchObject({
+      text: 'Pro mensuel · tu as résilié, la vitrine reste Pro jusque-là',
+      status: { state: 'ending', label: 'S’arrête le 12 nov.' },
+    })
     const promo = { ...pro, discount_end: '2026-12-01T00:00:00Z', discount_label: 'RUNE-2026' }
     expect(entityLine(promo, now, 0).text).toBe(
       'Pro mensuel · offert jusqu’au 1 décembre 2026 (RUNE-2026)',
@@ -122,11 +131,17 @@ describe('entityLine', () => {
       text: 'Pro offert jusqu’au 31 janvier 2027',
       action: 'none',
       pro: true,
+      status: null,
     })
   })
   test('Pro accordé sans abonnement ni date de fin : « Pro », aucun bouton', () => {
     const granted = { ...free, plan: 'pro', subscription_status: 'canceled' }
-    expect(entityLine(granted, now, 4)).toEqual({ text: 'Pro', action: 'none', pro: true })
+    expect(entityLine(granted, now, 4)).toEqual({
+      text: 'Pro',
+      action: 'none',
+      pro: true,
+      status: null,
+    })
   })
   test('un compte de dates illisible ne passe pas pour « aucune date »', () => {
     expect(entityLine(free, now, null).text).toBe('Gratuit')
@@ -134,9 +149,10 @@ describe('entityLine', () => {
   test('un abonnement resté impayé le dit, au lieu de passer pour du gratuit', () => {
     for (const status of ['unpaid', 'incomplete', 'paused']) {
       expect(entityLine({ ...free, subscription_status: status }, now, 2)).toEqual({
-        text: 'Pro suspendu · paiement non réglé',
+        text: 'Le paiement n’a pas abouti : la vitrine est repassée en gratuit',
         action: 'upgrade',
         pro: false,
+        status: { state: 'suspended', label: 'Pro suspendu' },
       })
     }
   })
