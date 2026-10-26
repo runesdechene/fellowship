@@ -98,11 +98,7 @@ export function ProspectSideCards({ prospect, tags, onChanged }: Props) {
             const name = (SOCIAL.includes(field) && networkOf(value)) || label
             return (
               <SheetRow key={field} label={name}>
-                <TextCell
-                  value={value}
-                  label={label}
-                  onSave={(next) => save({ [field]: next })}
-                />
+                <TextCell value={value} label={label} onSave={(next) => save({ [field]: next })} />
                 {href && (
                   <a
                     href={href}
