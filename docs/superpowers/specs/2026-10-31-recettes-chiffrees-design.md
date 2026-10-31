@@ -28,9 +28,13 @@ jamais comme une protection contre le fisc.
   personne d'autre ne peut les lire » (l'ancienne, « aucun administrateur n'y a accès », est fausse).
 - Mes bilans, le tableau de bord et « ton bilan de l'an passé » sur la fiche : déchiffrés si la
   phrase a été tapée dans la session, sinon masqués comme le résumé.
-- Réglages · Compte : **« Réinitialiser ma phrase de passe »** (« Pour une phrase oubliée : tes
-  recettes chiffrées repartent à zéro, dans tous tes bilans. »), confirmé par la fenêtre de
-  confirmation existante. Efface la phrase et toutes les recettes chiffrées de l'enseigne.
+- Réglages · Enseignes et abonnement (31/10/2026, maquettes `2587:233`, `2587:396`, `2587:589`) :
+  sous chaque enseigne Pro, quelle que soit l'enseigne active, une ligne « Recettes chiffrées »
+  (« Changer la phrase », sans perte : tout est rechiffré dans le navigateur ; « Réinitialiser… »,
+  qui efface la phrase et toutes les recettes chiffrées de l'enseigne) ou « Recettes en clair »
+  (« Chiffrer mes recettes »). Plus rien dans Réglages · Compte.
+- Verrouillage : 15 minutes sans activité dans l'onglet, la clé quitte la mémoire et les recettes
+  se remasquent.
 
 ## Les règles
 
