@@ -27,8 +27,8 @@ interface RevenueKeyValue {
   key: CryptoKey | null
   /** Faux tant que l'existence d'une phrase pour cette enseigne n'est pas connue. */
   ready: boolean
-  /** Définit la phrase de l'enseigne et ouvre la clé. Lève si la phrase est trop faible. */
-  create: (phrase: string) => Promise<void>
+  /** Définit la phrase de l'enseigne, ouvre la clé et la rend. Lève si la phrase est trop faible. */
+  create: (phrase: string) => Promise<CryptoKey>
   /** Vrai et clé ouverte si la phrase est la bonne, faux sinon. */
   unlock: (phrase: string) => Promise<boolean>
   /** Efface la phrase ET les recettes chiffrées (reset_revenue_key). */
@@ -81,6 +81,7 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
       const { key, record } = await createKey(phrase)
       must(await supabase.from('revenue_keys').insert({ actor_id: actorId, ...record }))
       setSession((s) => (s.actorId === actorId ? { ...s, hasRecord: true, key } : s))
+      return key
     },
     [actorId],
   )

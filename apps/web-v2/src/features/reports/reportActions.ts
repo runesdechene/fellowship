@@ -1,17 +1,20 @@
 /**
- * QUOI     — les écritures d'un bilan : lignes de montant, étiquettes, note, photos, effacement.
+ * QUOI     — les écritures d'un bilan : lignes de montant, recettes chiffrées, étiquettes, note,
+ *            photos, effacement.
  * POURQUOI — chacune lève l'erreur de la base ; useReport l'attrape, l'affiche et recharge.
  * ATTENTION — le prix de la place (ligne « stepper ») ne s'écrit QUE par set_stand_amount : une
  *            seule source pour ce montant, partagée avec Mon dossier. Et « Supprimer ce bilan »
- *            ne supprime jamais la ligne event_reports (lib/report-writes.ts).
+ *            ne supprime jamais la ligne event_reports (lib/report-writes.ts). Chiffrer une date
+ *            remplace ses recettes saisies (`in`, `manual`) : le cachet de la fiche reste en clair.
  */
+import { openRevenue, sealRevenue, type SecretRevenue } from '@/lib/cipher'
 import { must, supabase } from '@/lib/supabase'
 import { removeReportPhotos, uploadReportPhoto } from '@/lib/report-media'
 import { clearReportPlan, directionOf } from '@/lib/report-writes'
 import type { LedgerCategory } from '@/types/database'
 import type { ReportDetail, ReportEntry } from './loadReport'
 
-interface Target {
+export interface Target {
   actorId: string
   eventId: string
   detail: ReportDetail
@@ -86,6 +89,53 @@ export async function removeLine(target: Target, entry: ReportEntry) {
       .eq('id', entry.id)
       .eq('actor_id', target.actorId),
   )
+}
+
+/** Scelle Carte et Espèces, puis retire les recettes en clair qu'elles remplacent. */
+export async function sealRevenueLines(target: Target, key: CryptoKey, revenue: SecretRevenue) {
+  await ensureReport(target)
+  const payload = await sealRevenue(key, revenue)
+  // report_secrets n'a pas de déclencheur : la date de mise à jour s'écrit ici.
+  must(
+    await supabase.from('report_secrets').upsert({
+      actor_id: target.actorId,
+      event_id: target.eventId,
+      payload,
+      updated_at: new Date().toISOString(),
+    }),
+  )
+  // Après le scellement seulement : un échec ici laisse les deux, jamais aucune.
+  must(
+    await supabase
+      .from('event_ledger_entries')
+      .delete()
+      .eq('actor_id', target.actorId)
+      .eq('event_id', target.eventId)
+      .eq('direction', 'in')
+      .eq('source', 'manual'),
+  )
+}
+
+/**
+ * Change Carte OU Espèces à partir de ce que la base garde : deux modifications enchaînées avant
+ * la relecture ne s'écrasent pas.
+ */
+export async function resealPart(
+  target: Target,
+  key: CryptoKey,
+  part: keyof SecretRevenue,
+  amount: number,
+) {
+  const response = await supabase
+    .from('report_secrets')
+    .select('payload')
+    .eq('actor_id', target.actorId)
+    .eq('event_id', target.eventId)
+    .maybeSingle()
+  const row = must(response)
+  if (!row) throw new Error('Ces recettes ne sont plus chiffrées.')
+  const current = await openRevenue(key, row.payload)
+  await sealRevenueLines(target, key, { ...current, [part]: amount })
 }
 
 /** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */
@@ -177,6 +227,13 @@ export async function clearReport(target: Target) {
       .delete()
       .match(plan.deleteLines)
       .eq('actor_id', target.actorId),
+  )
+  must(
+    await supabase
+      .from('report_secrets')
+      .delete()
+      .eq('actor_id', target.actorId)
+      .eq('event_id', target.eventId),
   )
   must(
     await supabase

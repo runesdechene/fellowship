@@ -16,6 +16,7 @@ import { signedReportUrls } from '@/lib/report-media'
 import { CATEGORIES } from '@/lib/report-writes'
 import { loadSecrets, withSecret } from './secretRevenue'
 import type { ReportDate } from '@/lib/reports'
+import type { SecretRevenue } from '@/lib/cipher'
 import type { LedgerCategory } from '@/types/database'
 
 export interface ReportEntry {
@@ -32,6 +33,8 @@ export interface ReportDetail {
   /** null tant que rien n'a été saisi pour cette date. */
   reportId: string | null
   entries: ReportEntry[]
+  /** Carte et Espèces déchiffrées ; null si la date n'est pas chiffrée ou reste verrouillée. */
+  revenue: SecretRevenue | null
   wins: string[]
   improvements: string[]
   note: string
@@ -78,6 +81,7 @@ export async function loadReport(
   const report = must(reportResponse)
   const ledger = must(ledgerResponse)
 
+  const secret = secrets.get(eventId)
   const paths = report?.media_paths ?? []
   const urls = await signedReportUrls(paths)
 
@@ -98,10 +102,11 @@ export async function loadReport(
       place: `${event.city} (${event.department})`,
       startDate: parseSqlDate(event.start_date),
       endDate: parseSqlDate(event.end_date),
-      ...withSecret(entries, secrets.get(eventId)),
+      ...withSecret(entries, secret),
     },
     reportId: report?.id ?? null,
     entries,
+    revenue: secret && secret !== 'masked' ? secret : null,
     wins: report?.wins ?? [],
     improvements: report?.improvements ?? [],
     note: report?.note ?? '',

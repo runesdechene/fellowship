@@ -14,6 +14,8 @@
 - `secretRevenue.ts` — lit et déchiffre les recettes chiffrées (report_secrets) pour les quatre chargeurs.
 - `reportActions.ts` — les écritures ; le prix de la place passe par set_stand_amount.
 - `Ledger.tsx` — recettes et dépenses, modifiables sur place, et la ligne d'ajout.
+- `EncryptDialog.tsx` — la fenêtre « Chiffrer tes recettes » (Carte, Espèces, phrase de passe).
+- `UnlockRow.tsx` — « Phrase de passe » + « Afficher » : ouvre les recettes chiffrées.
 - `TagList.tsx` — « Ce qui a marché » et « À améliorer la prochaine fois ».
 - `ReportNote.tsx` — la note libre.
 - `ReportPhotos.tsx` — les photos souvenir, privées.

@@ -1138,6 +1138,7 @@
   --report-add-category-width: 260px;
   --report-add-amount-width: 160px;
   --report-amount-input-width: 96px;
+  --report-unlock-width: 380px; /* le champ « Phrase de passe » du registre (maquette 2566:524) */
   --type-report-title-mobile: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
   --type-report-title: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
   --type-report-page-meta: var(--weight-regular) var(--size-15) / var(--leading-snug)

@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useRevenueKey } from '@/lib/revenue-key'
 import { createWriteQueue } from '@/lib/write-queue'
 import { addTag, removeTag } from '@/lib/report-writes'
+import type { SecretRevenue } from '@/lib/cipher'
 import type { LedgerCategory } from '@/types/database'
 import { loadReport, type ReportDetail, type ReportEntry } from './loadReport'
 import * as write from './reportActions'
@@ -22,6 +23,10 @@ export interface ReportActions {
   addLine: (category: LedgerCategory, amount: number) => void
   setAmount: (entry: ReportEntry, amount: number) => void
   removeLine: (entry: ReportEntry) => void
+  /** Chiffre Carte et Espèces à la place des recettes saisies ; `key` vient de useRevenueKey. */
+  sealRevenue: (key: CryptoKey, revenue: SecretRevenue) => void
+  /** Change Carte ou Espèces d'une date déjà chiffrée, l'autre restant tel que la base le garde. */
+  resealPart: (key: CryptoKey, part: keyof SecretRevenue, amount: number) => void
   addTag: (field: 'wins' | 'improvements', raw: string) => void
   removeTag: (field: 'wins' | 'improvements', tag: string) => void
   setNote: (note: string) => void
@@ -76,10 +81,7 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
   }, [eventId, actorId, version, key, status])
 
   /** Met une écriture dans la file, puis relit le bilan, qu'elle ait réussi ou non. */
-  function perform(
-    failure: string,
-    action: (target: Parameters<typeof write.addLine>[0]) => Promise<void>,
-  ) {
+  function perform(failure: string, action: (target: write.Target) => Promise<void>) {
     const detail = state.detail
     if (!eventId || !actorId || !detail) return
     if (state.owner !== `${actorId}/${eventId}`) return
@@ -106,6 +108,16 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     },
     removeLine: (entry) => {
       perform('La ligne n’a pas pu être retirée.', (t) => write.removeLine(t, entry))
+    },
+    sealRevenue: (key, revenue) => {
+      perform('Les recettes n’ont pas pu être chiffrées.', (t) =>
+        write.sealRevenueLines(t, key, revenue),
+      )
+    },
+    resealPart: (key, part, amount) => {
+      perform('Les recettes n’ont pas pu être chiffrées.', (t) =>
+        write.resealPart(t, key, part, amount),
+      )
     },
     addTag: (field, raw) => {
       perform('L’étiquette n’a pas pu être ajoutée.', (t) =>

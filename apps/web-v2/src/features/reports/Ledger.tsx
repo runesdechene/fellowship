@@ -1,14 +1,19 @@
 /**
  * QUOI     — les recettes et dépenses d'un bilan : deux groupes avec leur total, chaque ligne
- *            modifiable sur place, et la ligne d'ajout (catégorie, montant, « Ajouter »).
+ *            modifiable sur place, et la ligne d'ajout (catégorie, montant, « Ajouter »). Une
+ *            date chiffrée montre Carte et Espèces (« chiffré »), masquées tant que la phrase
+ *            n'est pas tapée (UnlockRow) ; la catégorie « Recettes chiffrées » ouvre EncryptDialog.
  * POURQUOI — chaque ligne s'enregistre aussitôt, comme le dossier d'une date : on tape, on passe.
  * ATTENTION — la ligne « depuis la fiche » est le prix de la place de Mon dossier : useReport
  *            l'écrit par set_stand_amount. Vider un montant retire la ligne ; un montant qui ne
- *            veut rien dire ne touche à rien et le dit.
+ *            veut rien dire ne touche à rien et le dit. Carte et Espèces se rescellent ensemble à
+ *            chaque changement, 0 compris : elles restent masquées même à zéro.
  */
 import {
+  Banknote,
   BedDouble,
   Circle,
+  CreditCard,
   Fuel,
   HandCoins,
   Plus,
@@ -19,14 +24,20 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react'
-import { useState, type CSSProperties } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import { DraftInput } from '@/components/ui/DraftInput'
 import { Select } from '@/components/ui/Select'
+import { formatDateRange } from '@/lib/dates'
 import { formatEuros, parseAmount } from '@/lib/money'
-import { CATEGORIES, categoryLabel } from '@/lib/report-writes'
+import { CATEGORIES, SECRET_CATEGORY, categoryLabel } from '@/lib/report-writes'
+import { useRevenueKey } from '@/lib/revenue-key'
 import type { LedgerCategory } from '@/types/database'
 import peageIcon from '@/assets/peage.svg'
-import type { ReportActions, ReportEntry } from './useReport'
+import { EncryptDialog } from './EncryptDialog'
+import { UnlockRow } from './UnlockRow'
+import type { ReportActions, ReportDetail, ReportEntry } from './useReport'
+
+type Choice = LedgerCategory | typeof SECRET_CATEGORY.value
 
 const ICONS: Partial<Record<LedgerCategory, LucideIcon>> = {
   ventes: ShoppingBag,
@@ -39,8 +50,7 @@ const ICONS: Partial<Record<LedgerCategory, LucideIcon>> = {
   autre: Circle,
 }
 
-function CategoryIcon({ category }: { category: LedgerCategory }) {
-  const Icon = ICONS[category]
+function LineIcon({ Icon }: { Icon: LucideIcon | undefined }) {
   return (
     <span className="ledger__icon">
       {Icon ? (
@@ -53,7 +63,61 @@ function CategoryIcon({ category }: { category: LedgerCategory }) {
   )
 }
 
-function LedgerLine({
+interface LedgerLineProps {
+  icon: ReactNode
+  label: string
+  badge?: string
+  direction: 'in' | 'out'
+  /** 'masked' : chiffré et verrouillé, montré « •••• € » sans champ. */
+  amount: number | 'masked'
+  /** Le montant saisi ; null quand le champ est vidé. */
+  onSave: (amount: number | null) => void
+  onRemove?: () => void
+  onInvalid: (invalid: boolean) => void
+}
+
+function LedgerLine(props: LedgerLineProps) {
+  const { icon, label, badge, direction, amount, onSave, onRemove, onInvalid } = props
+  return (
+    <div className="ledger__line">
+      {icon}
+      <span className="ledger__label">
+        {label}
+        {badge && <span className="ledger__badge">{badge}</span>}
+      </span>
+      {amount === 'masked' ? (
+        <span className="ledger__amount report-secret__masked">•••• €</span>
+      ) : (
+        <span className="ledger__amount">
+          <span aria-hidden="true">{direction === 'in' ? '+' : '−'}</span>
+          <DraftInput
+            className="ledger__input"
+            label={`Montant — ${label}`}
+            inputMode="decimal"
+            value={formatEuros(amount)}
+            onSave={(draft) => {
+              const parsed = parseAmount(draft)
+              onInvalid(parsed === 'invalide')
+              if (parsed !== 'invalide') onSave(parsed)
+            }}
+          />
+        </span>
+      )}
+      {onRemove && (
+        <button
+          type="button"
+          className="ledger__remove"
+          aria-label={`Retirer la ligne ${label}`}
+          onClick={onRemove}
+        >
+          <X size={14} strokeWidth={2} />
+        </button>
+      )}
+    </div>
+  )
+}
+
+function EntryLine({
   entry,
   actions,
   onInvalid,
@@ -63,59 +127,56 @@ function LedgerLine({
   onInvalid: (invalid: boolean) => void
 }) {
   return (
-    <div className="ledger__line">
-      <CategoryIcon category={entry.category} />
-      <span className="ledger__label">
-        {categoryLabel(entry.category)}
-        {entry.source === 'stepper' && <span className="ledger__badge">depuis la fiche</span>}
-      </span>
-      <span className="ledger__amount">
-        <span aria-hidden="true">{entry.direction === 'in' ? '+' : '−'}</span>
-        <DraftInput
-          className="ledger__input"
-          label={`Montant — ${categoryLabel(entry.category)}`}
-          inputMode="decimal"
-          value={formatEuros(entry.amount)}
-          onSave={(draft) => {
-            const amount = parseAmount(draft)
-            onInvalid(amount === 'invalide')
-            if (amount === 'invalide') return
-            if (amount === null || amount === 0) actions.removeLine(entry)
-            else actions.setAmount(entry, amount)
-          }}
-        />
-      </span>
-      <button
-        type="button"
-        className="ledger__remove"
-        aria-label={`Retirer la ligne ${categoryLabel(entry.category)}`}
-        onClick={() => {
-          actions.removeLine(entry)
-        }}
-      >
-        <X size={14} strokeWidth={2} />
-      </button>
-    </div>
+    <LedgerLine
+      icon={<LineIcon Icon={ICONS[entry.category]} />}
+      label={categoryLabel(entry.category)}
+      badge={entry.source === 'stepper' ? 'depuis la fiche' : undefined}
+      direction={entry.direction}
+      amount={entry.amount}
+      onSave={(amount) => {
+        if (amount === null || amount === 0) actions.removeLine(entry)
+        else actions.setAmount(entry, amount)
+      }}
+      onRemove={() => {
+        actions.removeLine(entry)
+      }}
+      onInvalid={onInvalid}
+    />
   )
 }
 
 function AddLine({
   actions,
+  offerSecret,
+  onSecret,
   onInvalid,
 }: {
   actions: ReportActions
+  /** La date n'est pas encore chiffrée : la catégorie « Recettes chiffrées » est proposée. */
+  offerSecret: boolean
+  onSecret: () => void
   onInvalid: (invalid: boolean) => void
 }) {
-  const [category, setCategory] = useState<LedgerCategory>('autre')
+  const [chosen, setChosen] = useState<Choice>('autre')
   const [draft, setDraft] = useState('')
+  // Une fois la date chiffrée, la catégorie disparaît : le choix retombe sur « Autre ».
+  const category = chosen === SECRET_CATEGORY.value && !offerSecret ? 'autre' : chosen
   const amount = parseAmount(draft)
   const ready = typeof amount === 'number' && amount > 0
+  const options = [...(offerSecret ? [SECRET_CATEGORY] : []), ...CATEGORIES].map<{
+    value: Choice
+    label: string
+  }>((entry) => ({ value: entry.value, label: entry.label }))
 
   return (
     <form
       className="ledger__add"
       onSubmit={(event) => {
         event.preventDefault()
+        if (category === SECRET_CATEGORY.value) {
+          onSecret()
+          return
+        }
         onInvalid(amount === 'invalide')
         if (!ready) return
         actions.addLine(category, amount)
@@ -126,8 +187,11 @@ function AddLine({
         className="ledger__category"
         label="Catégorie"
         value={category}
-        options={CATEGORIES.map((entry) => ({ value: entry.value, label: entry.label }))}
-        onChange={setCategory}
+        options={options}
+        onChange={(choice) => {
+          setChosen(choice)
+          if (choice === SECRET_CATEGORY.value) onSecret()
+        }}
       />
       <label className="ledger__field">
         <span className="ledger__field-label">Montant</span>
@@ -141,7 +205,11 @@ function AddLine({
           }}
         />
       </label>
-      <button type="submit" className="ledger__submit" disabled={draft.trim() === ''}>
+      <button
+        type="submit"
+        className="ledger__submit"
+        disabled={category !== SECRET_CATEGORY.value && draft.trim() === ''}
+      >
         <Plus size={14} strokeWidth={2} />
         Ajouter
       </button>
@@ -149,35 +217,96 @@ function AddLine({
   )
 }
 
-export function Ledger({ entries, actions }: { entries: ReportEntry[]; actions: ReportActions }) {
+const sum = (lines: ReportEntry[]) => lines.reduce((total, line) => total + line.amount, 0)
+
+export function Ledger({ detail, actions }: { detail: ReportDetail; actions: ReportActions }) {
+  const { date, entries, revenue } = detail
+  const revenueKey = useRevenueKey()
   const [invalid, setInvalid] = useState(false)
-  const groups = [
-    { title: 'Recettes', lines: entries.filter((entry) => entry.direction === 'in') },
-    { title: 'Dépenses', lines: entries.filter((entry) => entry.direction === 'out') },
-  ]
+  const [asking, setAsking] = useState<'unlock' | 'dialog' | null>(null)
+  const encrypted = date.secret !== 'none'
+  const clearIn = entries.filter((entry) => entry.direction === 'in')
+  const outLines = entries.filter((entry) => entry.direction === 'out')
+  const secretTotal = revenue ? revenue.carte + revenue.especes : 0
+  const revenueTotal = date.secret === 'masked' ? '•••• €' : formatEuros(sum(clearIn) + secretTotal)
+
+  /** Carte ou Espèces modifiée sur place : les deux se rescellent ensemble. */
+  function reseal(part: 'carte' | 'especes', amount: number | null) {
+    if (revenueKey.key) actions.resealPart(revenueKey.key, part, amount ?? 0)
+  }
+
+  const secretLine = (part: 'carte' | 'especes') => (
+    <LedgerLine
+      key={part}
+      icon={<LineIcon Icon={part === 'carte' ? CreditCard : Banknote} />}
+      label={part === 'carte' ? 'Carte' : 'Espèces'}
+      badge="chiffré"
+      direction="in"
+      amount={revenue ? revenue[part] : 'masked'}
+      onSave={(amount) => {
+        reseal(part, amount)
+      }}
+      onInvalid={setInvalid}
+    />
+  )
 
   return (
     <div className="ledger">
-      {groups.map(
-        ({ title, lines }) =>
-          lines.length > 0 && (
-            <div key={title} className="ledger__group">
-              <div className="ledger__group-head">
-                <span>{title}</span>
-                <span>{formatEuros(lines.reduce((sum, line) => sum + line.amount, 0))}</span>
-              </div>
-              {lines.map((entry) => (
-                <LedgerLine key={entry.id} entry={entry} actions={actions} onInvalid={setInvalid} />
-              ))}
-            </div>
-          ),
+      {(encrypted || clearIn.length > 0) && (
+        <div className="ledger__group">
+          <div className="ledger__group-head">
+            <span>Recettes</span>
+            <span>{revenueTotal}</span>
+          </div>
+          {encrypted && [secretLine('carte'), secretLine('especes')]}
+          {date.secret === 'masked' && <UnlockRow />}
+          {clearIn.map((entry) => (
+            <EntryLine key={entry.id} entry={entry} actions={actions} onInvalid={setInvalid} />
+          ))}
+        </div>
+      )}
+      {outLines.length > 0 && (
+        <div className="ledger__group">
+          <div className="ledger__group-head">
+            <span>Dépenses</span>
+            <span>{formatEuros(sum(outLines))}</span>
+          </div>
+          {outLines.map((entry) => (
+            <EntryLine key={entry.id} entry={entry} actions={actions} onInvalid={setInvalid} />
+          ))}
+        </div>
       )}
       {invalid && (
         <p className="ledger__invalid" role="status">
           Ce montant n’est pas valide.
         </p>
       )}
-      <AddLine actions={actions} onInvalid={setInvalid} />
+      <AddLine
+        actions={actions}
+        offerSecret={revenueKey.ready && !encrypted}
+        onSecret={() => {
+          setAsking(revenueKey.status === 'locked' ? 'unlock' : 'dialog')
+        }}
+        onInvalid={setInvalid}
+      />
+      {asking === 'unlock' && revenueKey.status === 'locked' && !encrypted && (
+        <UnlockRow
+          onOpen={() => {
+            setAsking('dialog')
+          }}
+        />
+      )}
+      {asking === 'dialog' && !encrypted && (
+        <EncryptDialog
+          subtitle={`${date.name}, ${formatDateRange(date.startDate, date.endDate, 'long')} ${date.startDate.getFullYear()}`}
+          // La maquette ne répartit pas les recettes saisies : tout part sur Carte, Espèces à 0.
+          initial={{ carte: sum(clearIn.filter((entry) => entry.source === 'manual')), especes: 0 }}
+          onSeal={actions.sealRevenue}
+          onClose={() => {
+            setAsking(null)
+          }}
+        />
+      )}
     </div>
   )
 }

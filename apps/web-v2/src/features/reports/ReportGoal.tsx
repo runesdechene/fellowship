@@ -4,7 +4,8 @@
  * POURQUOI — Uriel, 11/10/2026 : l'objectif se fixe APRÈS le festival, dans son bilan —
  *            contre-intuitif, mais c'est ainsi que travaillent les artisans. Il a quitté la fiche.
  * ATTENTION — il vit dans le dossier de la date (participation_dossiers.revenue_goal), lu et écrit
- *            par useDossier : la fiche et le bilan parlent du même chiffre.
+ *            par useDossier : la fiche et le bilan parlent du même chiffre. Recettes chiffrées et
+ *            verrouillées (`masked`) : ni jauge ni pourcentage, seulement l'invitation à les afficher.
  */
 import { ArrowRight, Target } from 'lucide-react'
 import { useState, type CSSProperties } from 'react'
@@ -14,10 +15,11 @@ import { formatEuros, goalShare, parseAmount } from '@/lib/money'
 interface ReportGoalProps {
   goal: number | null
   revenue: number
+  masked: boolean
   onSave: (goal: number | null) => void
 }
 
-export function ReportGoal({ goal, revenue, onSave }: ReportGoalProps) {
+export function ReportGoal({ goal, revenue, masked, onSave }: ReportGoalProps) {
   const [editing, setEditing] = useState(false)
 
   if (editing) {
@@ -61,20 +63,33 @@ export function ReportGoal({ goal, revenue, onSave }: ReportGoalProps) {
     )
   }
 
+  const title = (
+    <button
+      type="button"
+      className="report-summary__goal-title report-summary__goal-edit"
+      onClick={() => {
+        setEditing(true)
+      }}
+      aria-label={`Modifier l’objectif de ${formatEuros(goal)}`}
+    >
+      <Target size={13} strokeWidth={2} />
+      Objectif {formatEuros(goal)}
+    </button>
+  )
+
+  if (masked) {
+    return (
+      <div className="report-summary__goal">
+        <span className="report-summary__goal-head">{title}</span>
+        <span className="report-summary__goal-note">Affiche tes recettes pour le comparer</span>
+      </div>
+    )
+  }
+
   return (
     <div className="report-summary__goal">
       <span className="report-summary__goal-head">
-        <button
-          type="button"
-          className="report-summary__goal-title report-summary__goal-edit"
-          onClick={() => {
-            setEditing(true)
-          }}
-          aria-label={`Modifier l’objectif de ${formatEuros(goal)}`}
-        >
-          <Target size={13} strokeWidth={2} />
-          Objectif {formatEuros(goal)}
-        </button>
+        {title}
         <span>{share.percent >= 100 ? `+${share.percent - 100} %` : `${share.percent} %`}</span>
       </span>
       <span

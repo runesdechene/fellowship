@@ -3,7 +3,8 @@
  *            chiffre d'affaires, frais, bénéfice par jour, « Enregistré automatiquement ».
  * POURQUOI — ce qu'on vient regarder en premier : sur téléphone, il passe en tête de l'écran.
  * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
- *            se fixe ici (ReportGoal), après le festival.
+ *            se fixe ici (ReportGoal), après le festival. Recettes chiffrées verrouillées : tout
+ *            ce qui en dépend s'affiche « •••• € » ; les frais, eux, restent.
  */
 import { Poster } from '@/components/ui/Poster'
 import { Check } from 'lucide-react'
@@ -22,7 +23,8 @@ interface ReportSummaryProps {
 
 export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummaryProps) {
   const { date } = detail
-  const { revenue, costs, net, days } = reportFigures(date)
+  const { revenue, costs, net, days, masked } = reportFigures(date)
+  const hidden = (text: string) => (masked ? '•••• €' : text)
 
   return (
     <div className="report-summary">
@@ -38,15 +40,15 @@ export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummar
 
       <div className="report-summary__net-block">
         <span className="report-summary__label">Bénéfice</span>
-        <span className="report-summary__net">{formatSignedEuros(net)}</span>
+        <span className="report-summary__net">{hidden(formatSignedEuros(net))}</span>
       </div>
 
-      <ReportGoal goal={goal} revenue={revenue} onSave={onSaveGoal} />
+      <ReportGoal goal={goal} revenue={revenue} masked={masked} onSave={onSaveGoal} />
 
       <dl className="report-summary__rows">
         <div className="report-summary__row">
           <dt>Chiffre d’affaires</dt>
-          <dd>{formatEuros(revenue)}</dd>
+          <dd>{hidden(formatEuros(revenue))}</dd>
         </div>
         <div className="report-summary__row">
           <dt>Frais</dt>
@@ -54,7 +56,7 @@ export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummar
         </div>
         <div className="report-summary__row">
           <dt>Bénéfice par jour</dt>
-          <dd>{formatEuros(net / days)}</dd>
+          <dd>{hidden(formatEuros(net / days))}</dd>
         </div>
       </dl>
 

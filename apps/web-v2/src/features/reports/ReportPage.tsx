@@ -65,8 +65,19 @@ export function ReportPage() {
         </p>
         <p className="reports-page__private">
           <Lock size={13} strokeWidth={2} />
-          Visible par toi seul
-          <span className="reports-page__private-more"> — aucun administrateur n’y a accès</span>
+          {/* Un seul bloc de texte : l'écart du flex ne doit pas couper la phrase avant la virgule. */}
+          <span>
+            Visible par toi seul
+            {date.secret !== 'none' && (
+              <>
+                <span className="reports-page__private-more">
+                  {' '}
+                  — tes recettes sont chiffrées, personne d’autre ne peut les lire
+                </span>
+                <span className="report-secret__private-phone">, recettes chiffrées</span>
+              </>
+            )}
+          </span>
         </p>
       </header>
 
@@ -85,7 +96,7 @@ export function ReportPage() {
             Recettes et dépenses{' '}
             <span className="report-block__hint">chaque ligne s’enregistre aussitôt</span>
           </h2>
-          <Ledger key={failures} entries={detail.entries} actions={actions} />
+          <Ledger key={failures} detail={detail} actions={actions} />
         </section>
         {writeError && (
           <p className="report-page__error" role="status">

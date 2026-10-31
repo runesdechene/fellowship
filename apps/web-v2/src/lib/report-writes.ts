@@ -1,6 +1,6 @@
 /**
- * QUOI     — les règles d'écriture d'un bilan : sens de chaque catégorie, ajout d'une étiquette,
- *            ce que « Supprimer ce bilan » efface.
+ * QUOI     — les règles d'écriture d'un bilan : sens de chaque catégorie, la catégorie « Recettes
+ *            chiffrées », ajout d'une étiquette, ce que « Supprimer ce bilan » efface.
  * POURQUOI — logique pure, testée seule ; le hook useReport ne fait qu'appliquer.
  * ATTENTION — « Supprimer ce bilan » ne supprime JAMAIS la ligne event_reports : la cascade
  *            emporterait la ligne « stepper », le prix de la place saisi dans Mon dossier.
@@ -18,6 +18,9 @@ export const CATEGORIES = [
   { value: 'repas', label: 'Repas', direction: 'out' },
   { value: 'autre', label: 'Autre', direction: 'out' },
 ] as const satisfies readonly { value: LedgerCategory; label: string; direction: 'in' | 'out' }[]
+
+/** Pas une ligne du registre : elle ouvre le chiffrement de Carte et Espèces (Ledger). */
+export const SECRET_CATEGORY = { value: 'chiffrees', label: 'Recettes chiffrées' } as const
 
 export function directionOf(category: LedgerCategory): 'in' | 'out' {
   return CATEGORIES.find((entry) => entry.value === category)?.direction ?? 'out'
