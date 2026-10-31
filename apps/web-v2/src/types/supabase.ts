@@ -143,6 +143,7 @@ export type Database = {
           id: string
           label: string
           last_used_at: string | null
+          portee: string
           prefix: string
           revoked_at: string | null
         }
@@ -153,6 +154,7 @@ export type Database = {
           id?: string
           label: string
           last_used_at?: string | null
+          portee?: string
           prefix: string
           revoked_at?: string | null
         }
@@ -163,6 +165,7 @@ export type Database = {
           id?: string
           label?: string
           last_used_at?: string | null
+          portee?: string
           prefix?: string
           revoked_at?: string | null
         }
@@ -2935,6 +2938,10 @@ export type Database = {
         }
       }
       exposeur_chiffres: {
+        Args: { p_debut: string; p_fin: string; p_hash: string }
+        Returns: Json
+      }
+      exposeur_plateforme: {
         Args: { p_debut: string; p_fin: string; p_hash: string }
         Returns: Json
       }
