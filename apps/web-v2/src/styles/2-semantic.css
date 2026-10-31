@@ -393,6 +393,10 @@
   --topbar-gap: var(--space-12);
   --topbar-right: var(--space-32);
   --topbar-control-height: 42px;
+  /* La recherche partout (maquette 2584:842) : un champ à la hauteur des autres contrôles. */
+  --topbar-search-width: 320px;
+  --topbar-search-icon-gap: var(--space-8);
+  --topbar-search-pad: var(--space-14);
   /* Pas de réglage pour le coin gauche : depuis que la flèche de retour est
      la variante icône du bouton — comme la cloche — elle a la taille des
      autres contrôles, et son écart à l'accroche est celui de la barre. */

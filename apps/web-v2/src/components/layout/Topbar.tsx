@@ -1,6 +1,7 @@
 /**
  * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite
- *            « Modifier la fiche » (si la page le déclare), la cloche, « Passer Pro » pour un compte
+ *            « Modifier la fiche » (si la page le déclare), la recherche partout (maquettes
+ *            2584:842 et 2584:1056), la cloche, « Passer Pro » pour un compte
  *            gratuit (maquette 2540:233) et « Ajouter une date ».
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
@@ -14,6 +15,7 @@ import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { usePageChrome } from '@/lib/page-chrome'
 import { usePlan } from '@/lib/usePlan'
+import { TopbarSearch } from './TopbarSearch'
 
 /**
  * Barre du haut : cloche + « Ajouter une date » à droite, et à gauche les
@@ -82,6 +84,7 @@ export function Topbar() {
           <span className="topbar__add-label">Modifier la fiche</span>
         </Button>
       )}
+      <TopbarSearch />
       <NotificationBell />
       {!pro && pathname !== '/pro' && (
         <Button variant="pro" className="topbar__pro" onClick={() => go('/pro')}>

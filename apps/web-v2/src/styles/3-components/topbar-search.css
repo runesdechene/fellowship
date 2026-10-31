@@ -1,0 +1,73 @@
+/**
+ * QUOI     — la recherche partout de la barre du haut (components/layout/TopbarSearch.tsx) :
+ *            un champ blanc bordé sur ordinateur, une loupe ronde sur téléphone.
+ * POURQUOI — maquettes 2584:842 (ordinateur) et 2584:1056 (téléphone). Le champ prend la hauteur
+ *            des contrôles voisins, comme la cloche ; la loupe est la variante icône du bouton.
+ */
+
+.topbar-search {
+  display: flex;
+  flex: 0 1 var(--topbar-search-width);
+  align-items: center;
+  gap: var(--topbar-search-icon-gap);
+  min-width: 0;
+  height: var(--topbar-control-height);
+  padding: 0 var(--topbar-search-pad);
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  color: var(--ink-soft);
+  cursor: text;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.topbar-search:focus-within {
+  border-color: var(--control-line);
+}
+
+.topbar-search__icon {
+  flex: none;
+}
+
+.topbar-search__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  font: var(--type-search-input);
+  color: var(--ink-title);
+}
+
+.topbar-search__input::placeholder {
+  color: var(--ink-soft);
+}
+
+/* La croix native du champ de recherche : le champ se vide au clavier. */
+.topbar-search__input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+/* La double classe l'emporte sur `.button`, importé après. */
+.topbar .topbar-search__loupe {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar-search {
+    transition: none;
+  }
+}
+
+/* Téléphone : la place manque, le champ devient une loupe qui ouvre Explorer. */
+@media (width <= 760px) {
+  .topbar-search {
+    display: none;
+  }
+
+  .topbar .topbar-search__loupe {
+    display: inline-flex;
+  }
+}

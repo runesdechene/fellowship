@@ -9,6 +9,8 @@ le châssis le rend.
 - `AccountSwitcher.tsx` — la carte de compte, le choix d'enseigne et, pour un admin, l'entrée en administration.
 - `Topbar.tsx` — la barre du haut : retour, repère, cloche, « Passer Pro » (compte gratuit, sur
   ordinateur), « Ajouter une date ».
+- `TopbarSearch.tsx` — la recherche partout de la barre du haut : un champ sur ordinateur, une
+  loupe sur téléphone ; elle mène à Explorer (`/explorer?q=…`). Absente d'Explorer.
 - `PosterWall.tsx` — le mur d'affiche sur le bord droit.
 - `IdentityError.tsx` — « Ton compte n'a pas pu se charger » et « Réessayer », à la place de l'app.
 - `GuestShell.tsx` — le cadre d'une page vue sans compte : barre de la landing, page, mur d'affiche (lot 11b).

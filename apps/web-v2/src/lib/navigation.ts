@@ -7,7 +7,7 @@
  */
 import { useCallback } from 'react'
 import { flushSync } from 'react-dom'
-import { useNavigate, type To } from 'react-router-dom'
+import { useNavigate, type NavigateOptions, type To } from 'react-router-dom'
 
 type DocumentWithViewTransition = Document & {
   startViewTransition?: (callback: () => void) => { finished: Promise<void> }
@@ -53,9 +53,9 @@ export function useTransitionNavigate() {
   const transition = useViewTransition()
 
   return useCallback(
-    (to: To) => {
+    (to: To, options?: NavigateOptions) => {
       transition('page', () => {
-        void navigate(to)
+        void navigate(to, options)
       })
     },
     [navigate, transition],
