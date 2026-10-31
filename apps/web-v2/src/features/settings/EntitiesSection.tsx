@@ -1,7 +1,8 @@
 /**
  * QUOI     — la section Enseignes et abonnement des Réglages : une ligne par enseigne, son
  *            abonnement en une phrase, la pastille de son paiement (maquette 2558:233), le bon
- *            geste (gérer, passer Pro, rien), et Supprimer… ; sous une enseigne abonnée, sa
+ *            geste (gérer, passer Pro, rien), et Supprimer… ; sous une enseigne Pro, ses recettes
+ *            chiffrées ou en clair (maquettes 2587:233, 2587:396) ; sous une enseigne abonnée, sa
  *            facturation (raison sociale, SIREN).
  * POURQUOI — lot 9b, maquette 2206:691 : chaque enseigne a sa vitrine et son propre abonnement.
  *            « Gérer » ouvre l'espace Stripe ; « Passer Pro » fait de l'enseigne le compte actif,
@@ -23,7 +24,9 @@ import { openPortal } from '@/lib/stripe'
 import { BillingRow } from './BillingRow'
 import { DeleteEntityDialog } from './DeleteEntityDialog'
 import { EntityBase } from './EntityBase'
+import { RevenueKeyRow } from './RevenueKeyRow'
 import { SettingCard, SettingRow } from './SettingRow'
+import { useRevenueKeys } from './useRevenueKeys'
 import { useUpcomingCounts } from './useUpcomingCounts'
 
 /** La pastille de chaque état : blé quand c'est à toi de jouer, olive quand c'est réglé. */
@@ -46,6 +49,9 @@ export function EntitiesSection() {
     subscribed: boolean
   } | null>(null)
   const now = new Date()
+  const revenueKeys = useRevenueKeys(
+    entities.filter((entity) => entityLine(entity, now, null).pro).map((entity) => entity.actor_id),
+  )
 
   return (
     <section className="settings-section">
@@ -110,6 +116,16 @@ export function EntitiesSection() {
                   Supprimer…
                 </button>
               </SettingRow>
+              {line.pro && revenueKeys.chosenAt && (
+                <RevenueKeyRow
+                  // Une phrase créée ou effacée remonte la ligne : elle réapparaît en fondu.
+                  key={revenueKeys.chosenAt.get(entity.actor_id) ?? 'en-clair'}
+                  entityId={entity.actor_id}
+                  brandName={entity.brand_name}
+                  chosenAt={revenueKeys.chosenAt.get(entity.actor_id) ?? null}
+                  onChange={revenueKeys.reload}
+                />
+              )}
               {line.action === 'portal' && (
                 <BillingRow
                   entityId={entity.actor_id}
@@ -128,6 +144,11 @@ export function EntitiesSection() {
       </SettingCard>
       {failed && (
         <p className="settings-section__error">L’espace Stripe ne s’est pas ouvert. Réessaie.</p>
+      )}
+      {revenueKeys.failed && (
+        <p className="settings-section__error">
+          Tes phrases de passe n’ont pas pu être lues. Recharge la page.
+        </p>
       )}
       {deleting && (
         <DeleteEntityDialog

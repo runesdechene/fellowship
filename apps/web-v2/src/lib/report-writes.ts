@@ -44,16 +44,16 @@ export function encryptsByDefault(
 }
 
 /**
- * Où inviter à chiffrer : le bandeau de Mes bilans tant que l'enseigne n'a ni phrase ni refus, la
- * carte des Réglages après « Garder en clair ». Rien tant que l'existence d'une phrase n'est pas lue.
+ * Le bandeau « Chiffre tes recettes » de Mes bilans : tant que l'enseigne n'a ni phrase ni refus.
+ * Rien tant que l'existence d'une phrase n'est pas lue. Après un refus, c'est la ligne de
+ * l'enseigne dans Réglages · Enseignes qui propose de chiffrer.
  */
-export function revenueInvitation(
+export function showsRevenueBanner(
   ready: boolean,
   keyStatus: 'none' | 'locked' | 'open',
   clearChosen: boolean,
-): 'banner' | 'settings' | null {
-  if (!ready || keyStatus !== 'none') return null
-  return clearChosen ? 'settings' : 'banner'
+): boolean {
+  return ready && keyStatus === 'none' && !clearChosen
 }
 
 /**

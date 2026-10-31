@@ -3199,6 +3199,16 @@ export type Database = {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
       }
+      rekey_revenue: {
+        Args: {
+          p_actor: string
+          p_check: string
+          p_iterations: number
+          p_payloads: Json
+          p_salt: string
+        }
+        Returns: undefined
+      }
       reset_revenue_key: { Args: { p_actor: string }; Returns: undefined }
       revenir_a_version_evenement: {
         Args: { p_version: number }

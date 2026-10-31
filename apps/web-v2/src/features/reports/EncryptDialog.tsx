@@ -5,6 +5,7 @@
  * POURQUOI — maquette 2566:815 / 2574:803 : chiffrer une date remplace ses recettes saisies par
  *            deux montants que seule l'enseigne peut lire. Maquette 2580:463 : le bandeau de Mes
  *            bilans et les Réglages font choisir la phrase seule, rien n'est chiffré à ce moment-là.
+ *            `SecretField` sert aussi à « Changer ta phrase de passe » (features/settings).
  * ATTENTION — la phrase ne se demande que si l'enseigne n'en a pas (status 'none') ; sinon la clé
  *            est déjà ouverte et seuls les montants restent. Pendant l'enregistrement de la phrase,
  *            rien ne ferme la fenêtre. Habillée par apply-dialog.css (même fenêtre que
@@ -28,6 +29,8 @@ interface EncryptDialogProps {
   subtitle: string
   /** Absent : la fenêtre ne fait que choisir la phrase. */
   seal?: Seal
+  /** L'enseigne dont on choisit la phrase (Réglages) ; l'active par défaut. */
+  actorId?: string
   onClose: () => void
 }
 
@@ -45,7 +48,7 @@ function readAmount(draft: string): number | null {
   return amount ?? 0
 }
 
-export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
+export function EncryptDialog({ subtitle, seal, actorId, onClose }: EncryptDialogProps) {
   const { status, key, create } = useRevenueKey()
   // Figée à l'ouverture : la phrase créée ici ouvre la clé, la fenêtre ne doit pas changer de forme.
   const [withPhrase] = useState(status === 'none' || !seal)
@@ -88,7 +91,7 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
     setBusy(true)
     setProblem(null)
     try {
-      const created = await create(phrase)
+      const created = await create(phrase, actorId)
       seal?.onSeal(created, amounts)
       onClose()
     } catch (reason) {
@@ -198,7 +201,7 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
   )
 }
 
-function SecretField({
+export function SecretField({
   label,
   value,
   onChange,

@@ -118,8 +118,9 @@
   padding: var(--space-12) var(--space-20);
 }
 
-/* Un filet entre deux lignes ; le message sous un champ reste collé à sa ligne. */
-.setting-card > :not(:first-child, .setting-row__problem) {
+/* Un filet entre deux lignes ; le message sous un champ, et les recettes d'une enseigne, restent
+   collés à leur ligne. */
+.setting-card > :not(:first-child, .setting-row__problem, .setting-row--sub) {
   border-top: 1px solid var(--line-card);
 }
 
@@ -183,6 +184,32 @@
 
 .setting-row__avatar {
   --avatar-size: var(--avatar-size-discussion);
+}
+
+/* Les recettes d'une enseigne Pro (maquettes 2587:233, 2587:396) : sous son nom, sans filet. */
+.setting-row--sub {
+  gap: var(--space-10);
+  min-height: 0;
+  padding: 0 var(--space-20) var(--space-16) var(--setting-sub-row-inset);
+  transition:
+    opacity var(--duration-medium) var(--ease-drawer),
+    translate var(--duration-medium) var(--ease-drawer);
+}
+
+@starting-style {
+  .setting-row--sub {
+    opacity: 0;
+    translate: 0 var(--space-4);
+  }
+}
+
+.setting-row--sub .setting-row__control {
+  gap: var(--space-10);
+}
+
+.setting-row__icon {
+  flex: none;
+  color: var(--ink-soft);
 }
 
 .setting-input {
@@ -375,6 +402,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .setting-row--sub,
   .push-lines,
   .push-line__switch,
   .push-line__switch::after {

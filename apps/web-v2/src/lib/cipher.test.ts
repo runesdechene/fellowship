@@ -10,6 +10,7 @@ import {
   isStrongPassphrase,
   keyMatches,
   openRevenue,
+  resealAll,
   sealRevenue,
   unlockKey,
   type KeyRecord,
@@ -92,5 +93,35 @@ describe('cipher', () => {
   it('pose un sel de 16 octets et 600 000 itérations', () => {
     expect(record.iterations).toBe(600000)
     expect(atob(record.salt).length).toBe(16)
+  })
+
+  it('rescelle toutes les recettes sous la nouvelle phrase, et rien sous l’ancienne', async () => {
+    const amounts = [
+      { carte: 2830, especes: 1380 },
+      { carte: 0, especes: 0.5 },
+    ]
+    const rows = await Promise.all(
+      amounts.map(async (revenue, index) => ({
+        event_id: `date-${String(index)}`,
+        payload: await sealRevenue(key, revenue),
+      })),
+    )
+    const next = await createKey('une toute nouvelle phrase de passe')
+    const resealed = await resealAll(key, rows, next.key)
+    expect(resealed.map((row) => row.event_id)).toEqual(['date-0', 'date-1'])
+    for (const [index, row] of resealed.entries()) {
+      expect(await openRevenue(next.key, row.payload)).toEqual(amounts[index])
+      await expect(openRevenue(key, row.payload)).rejects.toThrow()
+    }
+    expect(await resealAll(key, [], next.key)).toEqual([])
+  })
+
+  it('refuse de rechiffrer si une recette ne s’ouvre pas avec l’ancienne clé', async () => {
+    const stranger = await createKey('la phrase d’une autre enseigne')
+    const rows = [
+      { event_id: 'a', payload: await sealRevenue(key, { carte: 1, especes: 2 }) },
+      { event_id: 'b', payload: await sealRevenue(stranger.key, { carte: 3, especes: 4 }) },
+    ]
+    await expect(resealAll(key, rows, stranger.key)).rejects.toThrow()
   })
 })

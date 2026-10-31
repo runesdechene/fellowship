@@ -11,7 +11,7 @@ import {
   encryptsByDefault,
   mergeRevenue,
   removeTag,
-  revenueInvitation,
+  showsRevenueBanner,
 } from './report-writes'
 import { reportPhotoPath } from './report-media'
 
@@ -97,17 +97,17 @@ describe('encryptsByDefault', () => {
   })
 })
 
-describe('revenueInvitation', () => {
+describe('showsRevenueBanner', () => {
   it('le bandeau tant qu’il n’y a ni phrase ni refus', () => {
-    expect(revenueInvitation(true, 'none', false)).toBe('banner')
+    expect(showsRevenueBanner(true, 'none', false)).toBe(true)
   })
-  it('la carte des Réglages après « Garder en clair »', () => {
-    expect(revenueInvitation(true, 'none', true)).toBe('settings')
+  it('plus de bandeau après « Garder en clair »', () => {
+    expect(showsRevenueBanner(true, 'none', true)).toBe(false)
   })
   it('rien avec une phrase, même refusée avant, ni avant de savoir', () => {
-    expect(revenueInvitation(true, 'locked', true)).toBeNull()
-    expect(revenueInvitation(true, 'open', false)).toBeNull()
-    expect(revenueInvitation(false, 'none', false)).toBeNull()
+    expect(showsRevenueBanner(true, 'locked', true)).toBe(false)
+    expect(showsRevenueBanner(true, 'open', false)).toBe(false)
+    expect(showsRevenueBanner(false, 'none', false)).toBe(false)
   })
 })
 

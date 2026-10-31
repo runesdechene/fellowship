@@ -135,3 +135,20 @@ export async function openRevenue(key: CryptoKey, payload: string): Promise<Secr
   const { carte, especes } = JSON.parse(await open(key, payload)) as Record<string, string>
   return { carte: toEuros(String(carte)), especes: toEuros(String(especes)) }
 }
+
+/**
+ * Les recettes d'une enseigne, ouvertes avec l'ancienne clé et rescellées avec la nouvelle (« Changer
+ * la phrase »). Lève si une seule ne s'ouvre pas : on ne rechiffre jamais une partie seulement.
+ */
+export async function resealAll(
+  oldKey: CryptoKey,
+  rows: readonly { event_id: string; payload: string }[],
+  newKey: CryptoKey,
+): Promise<{ event_id: string; payload: string }[]> {
+  return Promise.all(
+    rows.map(async (row) => ({
+      event_id: row.event_id,
+      payload: await sealRevenue(newKey, await openRevenue(oldKey, row.payload)),
+    })),
+  )
+}

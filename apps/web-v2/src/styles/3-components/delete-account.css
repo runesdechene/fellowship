@@ -50,11 +50,6 @@
   transition: background var(--duration-fast) var(--ease-out);
 }
 
-/* « Chiffrer mes recettes » (ChooseRevenueKey, maquette 2580:917) : la même carte, au ton neutre. */
-.delete-account__open--neutral {
-  color: var(--ink-title);
-}
-
 .delete-account__open:hover,
 .delete-dialog__delete:hover:not(:disabled) {
   background: var(--surface-control-hover);

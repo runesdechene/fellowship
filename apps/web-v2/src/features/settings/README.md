@@ -13,13 +13,14 @@
 - `NotificationSettings.tsx` — la carte du téléphone, puis les lignes et leur interrupteur.
 - `PhoneCard.tsx` — activer, couper, ou dire pourquoi c'est impossible.
 - `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro, supprimer.
+- `RevenueKeyRow.tsx`, `useRevenueKeys.ts` — sous chaque enseigne Pro, ses recettes chiffrées (changer
+  la phrase, réinitialiser) ou en clair (chiffrer), quelle que soit l'enseigne active.
+- `ChangePhraseDialog.tsx` — « Changer ta phrase de passe » : tout est rechiffré sur l'appareil, sans perte.
 - `BillingRow.tsx`, `BillingDialog.tsx` — « Facturation » sous une enseigne abonnée : raison sociale
   et SIREN, enregistrés en base et chez Stripe (chantier 3, sans maquette).
 - `DeleteEntityDialog.tsx` — supprimer une enseigne (retaper son nom), par `delete-account`.
 - `useUpcomingCounts.ts` — les dates de chaque enseigne sur les 6 prochains mois.
 - `ContactSection.tsx` — écrire à l'équipe.
-- `ChooseRevenueKey.tsx` — « Chiffrer mes recettes », pour l'enseigne qui a gardé ses recettes en clair.
-- `ResetRevenueKey.tsx` — « Réinitialiser ma phrase de passe ».
 - `DeleteAccount.tsx` — la carte « Supprimer mon compte » et sa fenêtre de confirmation.
 - `useAccountDeletion.ts` — l'aperçu puis la suppression, par la fonction serveur `delete-account`.
 - `EntityBase.tsx`, `useEntityBase.ts` — « Siège social ou atelier » sous chaque enseigne (lot 13) :

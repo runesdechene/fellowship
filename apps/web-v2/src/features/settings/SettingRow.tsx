@@ -16,12 +16,14 @@ interface SettingRowProps {
   badge?: ReactNode
   /** Ce qui précède le libellé : le logo d'une enseigne. */
   leading?: ReactNode
+  /** `setting-row--sub` : une ligne rattachée à celle du dessus, sans filet (recettes d'une enseigne). */
+  className?: string
   children?: ReactNode
 }
 
-export function SettingRow({ title, note, badge, leading, children }: SettingRowProps) {
+export function SettingRow({ title, note, badge, leading, className, children }: SettingRowProps) {
   return (
-    <div className="setting-row">
+    <div className={className ? `setting-row ${className}` : 'setting-row'}>
       {leading}
       <span className="setting-row__text">
         <span className="setting-row__title">
