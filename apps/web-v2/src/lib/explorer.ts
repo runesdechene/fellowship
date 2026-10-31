@@ -5,7 +5,8 @@
  *            L'horizon dit combien de mois on fouille : 3 sans compte, 6 en gratuit, sans borne
  *            en Pro (règles du 08/10 et du 14/10/2026).
  * ATTENTION — « Quand » vaut soit un nombre de mois (« 3 »), soit un mois précis (« 2026-12 »,
- *            venu du « Mois libre » du calendrier).
+ *            venu du « Mois libre » du calendrier), soit « passes » : les festivals passés, sans
+ *            borne, même en gratuit (l'horizon ne vaut que pour l'avenir).
  *            Le motif retire les caractères qui casseraient un filtre PostgREST (virgule,
  *            parenthèses, %, _) : une recherche ne doit jamais faire échouer la requête.
  */
@@ -16,6 +17,10 @@ export const QUAND_OPTIONS = [
   { value: '3', label: 'Les 3 prochains mois', months: 3 },
   { value: '1', label: 'Ce mois-ci', months: 1 },
 ] as const
+
+/** « Quand » → Passés (?quand=passes) : seulement les festivals passés, comme la V1. */
+export const PAST = 'passes'
+export const PAST_CHOICE: QuandChoice = { value: PAST, label: 'Passés', months: 0 }
 
 /** Le rayon autour du lieu (?rayon), en km, réglé sur une frise de 0 à 500 ; 0 : le lieu seul. */
 export const RAYON_MAX = 500
@@ -88,6 +93,7 @@ export function beyondWindow(
   today: Date,
   horizon: number,
 ): DateWindow | null {
+  if (quand === PAST) return null
   const limit = monthsAhead(today, horizon)
   const month = monthStart(quand)
   if (!month) return { from: limit, to: monthsAhead(today, 12) }

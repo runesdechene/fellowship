@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest'
 import {
   FREE_MONTHS,
   GUEST_MONTHS,
+  PAST,
   QUAND_OPTIONS,
   beyondTitle,
   publicTitle,
@@ -156,6 +157,11 @@ describe('beyondWindow', () => {
 
   it('un mois avant l’horizon : rien de caché', () => {
     expect(beyondWindow('2026-12', today, FREE_MONTHS)).toBeNull()
+  })
+
+  it('les festivals passés : rien de caché, le passé n’a pas de borne', () => {
+    expect(beyondWindow(PAST, today, FREE_MONTHS)).toBeNull()
+    expect(beyondWindow(PAST, today, GUEST_MONTHS)).toBeNull()
   })
 })
 

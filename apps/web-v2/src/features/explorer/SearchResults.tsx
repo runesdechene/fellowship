@@ -1,9 +1,10 @@
 /**
- * QUOI     — les résultats d'une recherche : le titre (« 22 résultats pour « Lyon » »), les onglets
- *            Tout · Festivals · Exposants, la grille des festivals et les cartes d'exposants.
- * POURQUOI — on cherche une ville, un festival ou un artisan au même endroit (maquette 2027).
- * ATTENTION — l'onglet vit dans l'adresse (?voir=festivals|exposants) ; « Tout » montre les cinq
- *            premiers festivals, « Voir les N festivals » déplie le reste.
+ * QUOI     — les résultats d'une recherche : le titre (« 31 résultats pour « Lyon » »), les onglets
+ *            Tout · Festivals · Exposants · Passés, les festivals à venir, les exposants, puis les
+ *            festivals passés, du plus récent au plus ancien (maquette 2584:504).
+ * POURQUOI — on cherche une ville, un festival, un artisan ou une date passée au même endroit.
+ * ATTENTION — l'onglet vit dans l'adresse (?voir=festivals|exposants|passes) ; « Tout » montre les
+ *            cinq premiers festivals de chaque section, « Voir les N festivals » déplie le reste.
  */
 import { ArrowRight, Check, Plus } from 'lucide-react'
 import { useState } from 'react'
@@ -16,11 +17,12 @@ import type { Exhibitor, ExploreEvent } from './useExplorer'
 
 const FIRST_EVENTS = 5
 
-type Tab = 'tout' | 'festivals' | 'exposants'
+export type Tab = 'tout' | 'festivals' | 'exposants' | 'passes'
 
 interface SearchResultsProps {
   label: string
   events: ExploreEvent[]
+  past: ExploreEvent[]
   exhibitors: Exhibitor[]
   tab: Tab
   onTab: (tab: Tab) => void
@@ -71,9 +73,59 @@ function ExhibitorCard({
   )
 }
 
+/** Une section de festivals : son titre, son compte, et « Voir les N … » dans « Tout ». */
+function EventSection({
+  title,
+  more,
+  events,
+  folded,
+  onMark,
+  past = false,
+  hiddenCount = 0,
+}: {
+  title: string
+  more: string
+  events: ExploreEvent[]
+  folded: boolean
+  onMark: (event: ExploreEvent) => void
+  past?: boolean
+  hiddenCount?: number
+}) {
+  const [open, setOpen] = useState(false)
+  const visible = folded && !open ? events.slice(0, FIRST_EVENTS) : events
+  return (
+    <section className="results__section">
+      <header className="results__head">
+        <h3 className="results__section-title">
+          {title} <span>{events.length}</span>
+        </h3>
+        {folded && events.length > FIRST_EVENTS && (
+          <button
+            type="button"
+            className="results__more"
+            onClick={() => {
+              setOpen((value) => !value)
+            }}
+          >
+            {open ? 'Replier' : `Voir les ${String(events.length)} ${more}`}
+            <ArrowRight size={13} strokeWidth={2} />
+          </button>
+        )}
+      </header>
+      <div className="results__grid">
+        {visible.map((event) => (
+          <ExploreCard key={event.id} event={event} onMark={onMark} past={past} />
+        ))}
+        <ProEndCard count={hiddenCount} />
+      </div>
+    </section>
+  )
+}
+
 export function SearchResults({
   label,
   events,
+  past,
   exhibitors,
   tab,
   onTab,
@@ -81,16 +133,14 @@ export function SearchResults({
   onFollow,
   hiddenCount,
 }: SearchResultsProps) {
-  const [allEvents, setAllEvents] = useState(false)
-  const total = events.length + exhibitors.length
-  const showEvents = tab !== 'exposants'
-  const showExhibitors = tab !== 'festivals'
-  const visibleEvents = tab === 'tout' && !allEvents ? events.slice(0, FIRST_EVENTS) : events
+  const total = events.length + exhibitors.length + past.length
+  const show = (section: Tab) => tab === 'tout' || tab === section
 
   const tabs: { value: Tab; label: string; count: number }[] = [
     { value: 'tout', label: 'Tout', count: total },
     { value: 'festivals', label: 'Festivals', count: events.length },
     { value: 'exposants', label: 'Exposants', count: exhibitors.length },
+    { value: 'passes', label: 'Passés', count: past.length },
   ]
 
   return (
@@ -112,35 +162,18 @@ export function SearchResults({
         ))}
       </div>
 
-      {showEvents && events.length > 0 && (
-        <section className="results__section">
-          <header className="results__head">
-            <h3 className="results__section-title">
-              Festivals <span>{events.length}</span>
-            </h3>
-            {tab === 'tout' && events.length > FIRST_EVENTS && (
-              <button
-                type="button"
-                className="results__more"
-                onClick={() => {
-                  setAllEvents((value) => !value)
-                }}
-              >
-                {allEvents ? 'Replier' : `Voir les ${events.length} festivals`}
-                <ArrowRight size={13} strokeWidth={2} />
-              </button>
-            )}
-          </header>
-          <div className="results__grid">
-            {visibleEvents.map((event) => (
-              <ExploreCard key={event.id} event={event} onMark={onMark} />
-            ))}
-            <ProEndCard count={hiddenCount} />
-          </div>
-        </section>
+      {show('festivals') && events.length > 0 && (
+        <EventSection
+          title="Festivals"
+          more="festivals"
+          events={events}
+          folded={tab === 'tout'}
+          onMark={onMark}
+          hiddenCount={hiddenCount}
+        />
       )}
 
-      {showExhibitors && exhibitors.length > 0 && (
+      {show('exposants') && exhibitors.length > 0 && (
         <section className="results__section">
           <header className="results__head">
             <h3 className="results__section-title">
@@ -153,6 +186,17 @@ export function SearchResults({
             ))}
           </div>
         </section>
+      )}
+
+      {show('passes') && past.length > 0 && (
+        <EventSection
+          title="Festivals passés"
+          more="festivals passés"
+          events={past}
+          folded={tab === 'tout'}
+          onMark={onMark}
+          past
+        />
       )}
     </div>
   )

@@ -10,7 +10,8 @@ L'écran Explorer (`/explorer`), maquettes `2027 — Explorer` et `2027 — Expl
 - `EventRail.tsx` — une rangée de cartes qui glisse à l'horizontale, avec ses flèches.
 - `FriendsInviteCard.tsx` — au bout de « Où vont tes amis » vide : « Trouve tes compagnons de route ».
 - `ExploreCard.tsx` — une carte : affiche, « Nouveau », étoile « Repérer », amis qui y vont.
-- `SearchResults.tsx` — titre, onglets, grille des festivals, cartes d'exposants (Suivre).
+- `SearchResults.tsx` — titre, onglets, grille des festivals, cartes d'exposants (Suivre), festivals
+  passés (plus récent d'abord ; « Quand » → Passés ne montre qu'eux).
 - `useExplorer.ts` — le chargement de l'accueil et de la recherche, Repérer et Suivre.
 
 La logique pure vit dans `lib/explorer.ts` (titre, motif de recherche, fenêtre « Quand »).

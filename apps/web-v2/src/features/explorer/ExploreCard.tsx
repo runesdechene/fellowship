@@ -4,6 +4,8 @@
  *            vont — leurs visages sur la même ligne que leurs noms (Uriel, 19/10/2026).
  * POURQUOI — on parcourt l'Explorer à l'affiche, comme le calendrier ; l'étoile pose la date en
  *            « Intéressé » sans quitter l'écran.
+ *            Une date passée dit son année et ni sa ville ni ses amis (maquette 2584:504) ; son
+ *            étoile reste, comme le statut sur la fiche d'une date passée.
  * ATTENTION — une date déjà engagée (dossier envoyé, inscrit) garde son étoile pleine et ne se
  *            retire pas d'ici : ça se fait sur la fiche. En gratuit, une date au-delà des 6 mois
  *            ne se repère pas : l'étoile ouvre l'invitation Pro (lib/plan.ts).
@@ -14,7 +16,7 @@ import { Link } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { PosterArt } from '@/components/ui/PosterArt'
 import { ProBubble } from '@/components/ui/ProBubble'
-import { formatDateRange } from '@/lib/dates'
+import { formatDateRange, formatPastRange } from '@/lib/dates'
 import { nameLine } from '@/lib/name-line'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
@@ -26,9 +28,10 @@ const MAX_FACES = 3
 interface ExploreCardProps {
   event: ExploreEvent
   onMark: (event: ExploreEvent) => void
+  past?: boolean
 }
 
-export function ExploreCard({ event, onMark }: ExploreCardProps) {
+export function ExploreCard({ event, onMark, past = false }: ExploreCardProps) {
   const engaged = event.myStatus !== null && event.myStatus !== 'interesse'
   const marked = event.myStatus !== null
   const registered = event.myStatus === 'inscrit' || event.myStatus === 'confirme'
@@ -99,9 +102,11 @@ export function ExploreCard({ event, onMark }: ExploreCardProps) {
           )}
         </span>
         <span className="explore-card__meta">
-          {formatDateRange(event.startDate, event.endDate)} · {event.city} ({event.department})
+          {past
+            ? formatPastRange(event.startDate, event.endDate)
+            : `${formatDateRange(event.startDate, event.endDate)} · ${event.city} (${event.department})`}
         </span>
-        {goers && (
+        {goers && !past && (
           <span className="explore-card__goers">
             <AvatarStack>
               {event.friends.slice(0, MAX_FACES).map((friend) => (

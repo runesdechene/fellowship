@@ -3,7 +3,8 @@
  *            comprises), ses mots et son lieu, le compte de ce qui attend au-delà de l'horizon.
  * POURQUOI — l'Explorer connecté et la recherche publique (lot 11b) cherchent pareil ; seuls
  *            l'horizon et ce qu'on ajoute autour (amis, statut) changent.
- * ATTENTION — seules les fiches publiques : `is_private = false` dans chaque requête.
+ * ATTENTION — seules les fiches publiques : `is_private = false` dans chaque requête. Le compte
+ *            de ce qui attend au-delà de l'horizon ne regarde que l'avenir : le passé n'y entre pas.
  */
 import { isRecent, parseSqlDate, todayIso } from './dates'
 import { beyondWindow, searchPattern, searchWindow, type Horizon } from './explorer'
@@ -77,33 +78,45 @@ const zoneArgs = (zone: Zone) => ({ p_lat: zone.latitude, p_lng: zone.longitude,
 /** Le lieu sur le texte (ville, département), sauf quand un cercle l'a déjà pris en charge. */
 const placeOf = (query: SearchQuery) => (query.zone ? null : searchPattern(query.ou))
 
-/** Le socle de toutes les requêtes d'événements : publics, dans la fenêtre, de la catégorie. Le
- *  total (`count`) sert à la recherche publique ; l'Explorer l'ignore. */
-export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon) {
-  const { from, to } = searchWindow(query.quand, horizon, today)
-  let request = (
+/** Le socle de toutes les requêtes d'événements : publics, de la catégorie. Le total (`count`)
+ *  sert à la recherche publique ; l'Explorer l'ignore. */
+function publicEvents(query: SearchQuery) {
+  const request = (
     query.zone
       ? supabase
           .rpc('events_within', zoneArgs(query.zone), { count: 'exact' })
           .select(EVENT_COLUMNS)
       : supabase.from('events').select(EVENT_COLUMNS, { count: 'exact' })
-  )
-    .eq('is_private', false)
-    .gte('end_date', todayIso(from))
-    .lt('start_date', todayIso(to))
-  if (query.tags.length > 0) request = request.overlaps('tags', query.tags)
-  return request
+  ).eq('is_private', false)
+  return query.tags.length > 0 ? request.overlaps('tags', query.tags) : request
 }
 
-/** La fenêtre, plus les mots (nom, ville, département) et le lieu (ville, département, ou cercle). */
-export function searchEvents(query: SearchQuery, today: Date, horizon: Horizon) {
+/** Les festivals publics de la fenêtre « Quand ». */
+export function eventsInWindow(query: SearchQuery, today: Date, horizon: Horizon) {
+  const { from, to } = searchWindow(query.quand, horizon, today)
+  return publicEvents(query).gte('end_date', todayIso(from)).lt('start_date', todayIso(to))
+}
+
+/** Les mots (nom, ville, département) et le lieu (ville, département, ou cercle). */
+function matching(request: ReturnType<typeof publicEvents>, query: SearchQuery) {
   const words = searchPattern(query.q)
   const place = placeOf(query)
-  let request = eventsInWindow(query, today, horizon)
+  let matched = request
   if (words)
-    request = request.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
-  if (place) request = request.or(`city.ilike.${place},department.ilike.${place}`)
-  return request
+    matched = matched.or(`name.ilike.${words},city.ilike.${words},department.ilike.${words}`)
+  if (place) matched = matched.or(`city.ilike.${place},department.ilike.${place}`)
+  return matched
+}
+
+/** La recherche dans la fenêtre « Quand ». */
+export function searchEvents(query: SearchQuery, today: Date, horizon: Horizon) {
+  return matching(eventsInWindow(query, today, horizon), query)
+}
+
+/** La même recherche dans les festivals passés — finis avant aujourd'hui, comme la fiche
+ *  (`useEvent`) et la route d'une vitrine — sans borne, même en gratuit. */
+export function searchPastEvents(query: SearchQuery, today: Date) {
+  return matching(publicEvents(query).lt('end_date', todayIso(today)), query)
 }
 
 /** Combien de festivals de la même recherche attendent au-delà de l'horizon. */

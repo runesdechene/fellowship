@@ -1,6 +1,7 @@
 /**
  * QUOI     — charge l'Explorer : à l'accueil, trois rangées (où vont tes amis, ajoutés récemment,
- *            près de chez toi) ; avec une recherche, les festivals et les exposants trouvés.
+ *            près de chez toi) ; avec une recherche, les festivals, les exposants et les festivals
+ *            passés trouvés (« Quand » → Passés : les passés seuls).
  * POURQUOI — un seul chargement par état de l'adresse (?q, ?ou, ?quand, ?categorie), selon le
  *            patron des hooks de données : la fonction rend l'état, l'effet l'applique une fois.
  * ATTENTION — « Près de chez toi » compare le DÉPARTEMENT de l'enseigne : la V2 n'a pas encore de
@@ -12,13 +13,14 @@ import {
   countBeyond,
   eventsInWindow,
   searchEvents,
+  searchPastEvents,
   toSearchEvent,
   type EventRow,
   type SearchEvent,
   type SearchQuery,
 } from '@/lib/event-search'
 import { locatePlace } from '@/lib/geocode'
-import { FREE_MONTHS, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
+import { FREE_MONTHS, PAST, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
@@ -55,6 +57,8 @@ export interface ExplorerData {
   near: ExploreEvent[]
   nearLabel: string | null
   results: ExploreEvent[]
+  /** Les festivals passés de la recherche, du plus récent au plus ancien. */
+  past: ExploreEvent[]
   /** En gratuit : les festivals au-delà des 6 mois que la recherche ne montre pas. */
   hiddenCount: number
   exhibitors: Exhibitor[]
@@ -69,6 +73,7 @@ const EMPTY: ExplorerData = {
   near: [],
   nearLabel: null,
   results: [],
+  past: [],
   hiddenCount: 0,
   exhibitors: [],
   loading: true,
@@ -139,7 +144,7 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
   const words = searchPattern(query.q)
   const place = searchPattern(query.ou)
 
-  const events = searchEvents(query, today, horizonOf(pro))
+  const onlyPast = query.quand === PAST
 
   let entities = supabase
     .from('entities')
@@ -152,8 +157,13 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
     )
   if (place) entities = entities.or(`city.ilike.${place},department.ilike.${place}`)
 
-  const [eventRows, entityRows, follows] = await Promise.all([
-    events.order('start_date', { ascending: true }).limit(SEARCH_LIMIT),
+  const [eventRows, pastRows, entityRows, follows] = await Promise.all([
+    onlyPast
+      ? Promise.resolve({ data: [], error: null })
+      : searchEvents(query, today, horizonOf(pro))
+          .order('start_date', { ascending: true })
+          .limit(SEARCH_LIMIT),
+    searchPastEvents(query, today).order('start_date', { ascending: false }).limit(SEARCH_LIMIT),
     words || place
       ? entities.order('brand_name', { ascending: true }).limit(SEARCH_LIMIT)
       : Promise.resolve({ data: [], error: null }),
@@ -176,7 +186,11 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
         ]
       : [],
   )
-  return { results: await enrich(must(eventRows), viewerId, today), exhibitors }
+  const [results, past] = await Promise.all([
+    enrich(must(eventRows), viewerId, today),
+    enrich(must(pastRows), viewerId, today),
+  ])
+  return { results, past, exhibitors }
 }
 
 export function useExplorer(
@@ -185,7 +199,7 @@ export function useExplorer(
   pro: boolean,
 ) {
   const [state, setState] = useState<ExplorerData>(EMPTY)
-  const searching = query.q.trim() !== '' || query.ou.trim() !== ''
+  const searching = query.q.trim() !== '' || query.ou.trim() !== '' || query.quand === PAST
   const { q, ou, quand, rayon } = query
   // Une valeur simple en dépendance : la liste `tags` est recréée à chaque rendu de la page.
   const tagKey = query.tags.join('|')
@@ -237,6 +251,7 @@ export function useExplorer(
           recent: swap(s.recent),
           near: swap(s.near),
           results: swap(s.results),
+          past: swap(s.past),
         }))
       }
       apply(marking ? 'interesse' : null)

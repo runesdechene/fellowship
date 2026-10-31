@@ -9,6 +9,7 @@ import {
   daysUntil,
   durationLabel,
   formatDateRange,
+  formatPastRange,
   formatMonthAbbr,
   formatMonthShort,
   isRecent,
@@ -120,6 +121,13 @@ describe('formatDateRange', () => {
   it('en toutes lettres pour la carte de prochaine date', () => {
     expect(formatDateRange(d('2026-09-25'), d('2026-09-27'), 'long')).toBe('25–27 septembre')
     expect(formatDateRange(d('2026-09-30'), d('2026-10-01'), 'long')).toBe('30 septembre–1 octobre')
+  })
+})
+
+describe('formatPastRange', () => {
+  it('ajoute l’année de la fin', () => {
+    expect(formatPastRange(d('2025-10-31'), d('2025-10-31'))).toBe('31 oct. 2025')
+    expect(formatPastRange(d('2025-11-08'), d('2025-11-09'))).toBe('8–9 nov. 2025')
   })
 })
 

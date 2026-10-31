@@ -146,6 +146,11 @@ export function formatDateRange(start: Date, end: Date, month: 'short' | 'long' 
   return `${dayMonth(start)}–${dayMonth(end)}`
 }
 
+/** « 31 oct. 2025 », « 8–9 nov. 2025 » : la plage d'une date passée, qui dit son année. */
+export function formatPastRange(start: Date, end: Date): string {
+  return `${formatDateRange(start, end)} ${String(end.getFullYear())}`
+}
+
 /** « du 24 au 26 septembre », « du 30 octobre au 2 novembre », « le 4 juillet » : une plage dans
  *  une phrase (« Les Aventuriales reviennent du 24 au 26 septembre »). */
 export function formatDateSpan(start: Date, end: Date): string {

@@ -5,9 +5,11 @@
  *            cherchant un mot (maquette 2027).
  * ATTENTION — tout l'état vit dans l'adresse (?q, ?ou, ?rayon, ?quand, ?categorie=a,b, ?voir) : le retour
  *            du navigateur ramène la recherche d'avant. La barre se remonte quand l'adresse change.
+ *            La loupe de la barre du haut (téléphone) arrive avec `state.focus` : le champ
+ *            « Rechercher » prend le clavier.
  */
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { FREE_MONTHS, readRayon } from '@/lib/explorer'
 import { nameLine } from '@/lib/name-line'
@@ -17,18 +19,18 @@ import { EventRail } from './EventRail'
 import { FriendsInviteCard } from './FriendsInviteCard'
 import { SearchBar } from './SearchBar'
 import { usePlan } from '@/lib/usePlan'
-import { SearchResults } from './SearchResults'
+import { SearchResults, type Tab } from './SearchResults'
 import { useExplorer } from './useExplorer'
 
-type Tab = 'tout' | 'festivals' | 'exposants'
-
 function readTab(value: string | null): Tab {
-  return value === 'festivals' || value === 'exposants' ? value : 'tout'
+  return value === 'festivals' || value === 'exposants' || value === 'passes' ? value : 'tout'
 }
 
 export function ExplorerPage() {
   const { actor } = useAuth()
   const [params, setParams] = useSearchParams()
+  const arrival: unknown = useLocation().state
+  const focus = typeof arrival === 'object' && arrival !== null && 'focus' in arrival
   const [tags, setTags] = useState<TagRow[]>([])
 
   useEffect(() => {
@@ -91,6 +93,7 @@ export function ExplorerPage() {
         ou={ou}
         rayon={rayon ?? 0}
         quand={quand}
+        focus={focus}
         onSearch={(next) => {
           update({
             q: next.q,
@@ -117,8 +120,9 @@ export function ExplorerPage() {
         !data.error &&
         (data.searching ? (
           <SearchResults
-            label={q || ou}
+            label={q || ou || 'Passés'}
             events={data.results}
+            past={data.past}
             exhibitors={data.exhibitors}
             hiddenCount={data.hiddenCount}
             tab={tab}

@@ -9,7 +9,7 @@
  */
 import { ChevronDown, Search, X } from 'lucide-react'
 import { useEffect, useRef, useState, type FocusEvent, type FormEvent } from 'react'
-import { RAYON_MAX, RAYON_STEP, quandChoices, type Horizon } from '@/lib/explorer'
+import { PAST_CHOICE, RAYON_MAX, RAYON_STEP, quandChoices, type Horizon } from '@/lib/explorer'
 
 interface SearchBarProps {
   q: string
@@ -20,10 +20,13 @@ interface SearchBarProps {
   onSearch: (next: { q: string; ou: string; rayon: number; quand: string }) => void
   /** Le choix le plus large suit l'horizon : 3 mois sans compte, 6 en gratuit (lib/explorer.ts). */
   horizon: Horizon
+  /** Arrivé par la loupe de la barre du haut : « Rechercher » prend le clavier. */
+  focus?: boolean
 }
 
-export function SearchBar({ q, ou, rayon, quand, onSearch, horizon }: SearchBarProps) {
-  const choices = quandChoices(horizon, quand)
+export function SearchBar({ q, ou, rayon, quand, onSearch, horizon, focus }: SearchBarProps) {
+  // « Passés » au bout : le passé n'a pas d'horizon, même en gratuit.
+  const choices = [...quandChoices(horizon, quand), PAST_CHOICE]
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
   const [around, setAround] = useState(rayon)
@@ -66,6 +69,7 @@ export function SearchBar({ q, ou, rayon, quand, onSearch, horizon }: SearchBarP
           <input
             className="search-bar__input"
             value={words}
+            autoFocus={focus}
             placeholder="Un festival, une ville, un exposant…"
             onChange={(change) => {
               setWords(change.target.value)
