@@ -101,6 +101,7 @@ export function EventPage() {
     ledger,
     revenue,
     net,
+    revenueMasked,
     loading,
     error,
     setStatus,
@@ -373,7 +374,14 @@ export function EventPage() {
         )}
 
         {past && member && (
-          <MyReportBlock eventId={event.id} ledger={ledger} net={net} revenue={revenue} pro={pro} />
+          <MyReportBlock
+            eventId={event.id}
+            ledger={ledger}
+            net={net}
+            revenue={revenue}
+            masked={revenueMasked}
+            pro={pro}
+          />
         )}
         <div className="event-page__closing">
           {!member && apercu && <GuestGoing going={apercu.going} faces={apercu.faces} />}

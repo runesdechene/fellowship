@@ -3,18 +3,23 @@
  *            du suivi (participation, paiement, lignes du registre de bilan).
  * POURQUOI — un seul hook pour la fiche : lecture et écriture au même endroit, pour que l'état
  *            affiché reste celui de la base.
- * ATTENTION — les montants vivent dans event_ledger_entries. « acompte_verse » est un reliquat de
- *            la V1 : affiché s'il existe, jamais proposé.
+ * ATTENTION — les montants vivent dans event_ledger_entries, sauf les recettes chiffrées
+ *            (report_secrets) : déchiffrées, Carte et Espèces s'ajoutent au registre ; verrouillées,
+ *            `revenueMasked` est vrai et `revenue`/`net` sont incomplets, la fiche ne doit pas les
+ *            montrer. « acompte_verse » est un reliquat de la V1 : affiché s'il existe, jamais proposé.
  */
 import { useCallback, useEffect, useState } from 'react'
 import { hiddenFromVisitor } from '@/lib/access'
 import { useAuth } from '@/lib/auth'
+import type { SecretRevenue } from '@/lib/cipher'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
+import { useRevenueKey } from '@/lib/revenue-key'
 import { must, supabase } from '@/lib/supabase'
 import { fetchTags, tagStylesByName, type TagStyle } from '@/lib/tags'
 import type { EventRow, ParticipationStatus } from '@/types/database'
+import { loadSecrets, withSecret } from '@/features/reports/secretRevenue'
 
 /** Une ligne du registre, telle qu'elle s'affiche dans le bilan de la fiche. */
 export interface EventLedgerLine extends LedgerLine {
@@ -55,6 +60,8 @@ interface EventData {
   ledger: EventLedgerLine[]
   revenue: number | null
   net: number | null
+  /** Des recettes chiffrées, sans la clé : `revenue` et `net` sont incomplets. */
+  revenueMasked: boolean
 
   loading: boolean
   /** Message d'erreur, ou « introuvable » si l'événement n'existe pas. */
@@ -112,8 +119,42 @@ const EMPTY: EventData = {
   ledger: [],
   revenue: null,
   net: null,
+  revenueMasked: false,
   loading: true,
   error: null,
+}
+
+/** Le registre de la fiche : les lignes saisies, plus Carte et Espèces quand elles sont ouvertes. */
+export function ledgerState(rows: EventLedgerLine[], secret: SecretRevenue | 'masked' | undefined) {
+  const { lines, secret: state } = withSecret(rows, secret)
+  const opened: EventLedgerLine[] =
+    secret && secret !== 'masked'
+      ? [
+          {
+            id: 'carte',
+            category: 'carte',
+            label: 'Carte',
+            amount: secret.carte,
+            direction: 'in',
+            source: 'manual',
+          },
+          {
+            id: 'especes',
+            category: 'especes',
+            label: 'Espèces',
+            amount: secret.especes,
+            direction: 'in',
+            source: 'manual',
+          },
+        ]
+      : []
+  const filled = rows.length > 0 || state !== 'none'
+  return {
+    ledger: [...rows, ...opened],
+    revenue: filled ? ledgerRevenue(lines) : null,
+    net: filled ? ledgerProfit(lines) : null,
+    revenueMasked: state === 'masked',
+  }
 }
 
 /**
@@ -124,6 +165,7 @@ async function loadEvent(
   eventId: string,
   actorId: string | null | undefined,
   signedIn: boolean,
+  key: CryptoKey | null,
 ): Promise<EventData> {
   // Les couleurs des catégories ne dépendent pas de l'événement : elles partent en même temps
   // que lui plutôt qu'après.
@@ -155,7 +197,7 @@ async function loadEvent(
   // d'amis à compter, pas de registre.
   if (!actorId) return base
 
-  const [participationResponse, ledgerResponse, friendsByEvent] = await Promise.all([
+  const [participationResponse, ledgerResponse, friendsByEvent, secrets] = await Promise.all([
     supabase
       .from('participations')
       .select('status, payment_status, payment_orientation')
@@ -168,10 +210,9 @@ async function loadEvent(
       .eq('actor_id', actorId)
       .eq('event_id', eventId),
     fetchFriendsByEvent(actorId, [eventId]),
+    loadSecrets(actorId, [eventId], key),
   ])
   const participation = must(participationResponse)
-  const ledger = must(ledgerResponse) as EventLedgerLine[]
-  const filled = ledger.length > 0
 
   return {
     ...base,
@@ -180,9 +221,7 @@ async function loadEvent(
     paymentOrientation: (participation?.payment_orientation ?? 'payeur') as PaymentOrientation,
     confirmed: participation ? CONFIRMED_STATUSES.includes(participation.status) : false,
     friends: friendsByEvent.get(eventId) ?? [],
-    ledger,
-    revenue: filled ? ledgerRevenue(ledger) : null,
-    net: filled ? ledgerProfit(ledger) : null,
+    ...ledgerState(must(ledgerResponse) as EventLedgerLine[], secrets.get(eventId)),
   }
 }
 
@@ -201,6 +240,7 @@ export function useEvent(
 ): EventData & EventActions {
   // La session, pas l'acteur : c'est elle qui fait d'une personne un visiteur (lot 11b).
   const signedIn = Boolean(useAuth().user)
+  const { key, status: keyStatus } = useRevenueKey()
   const [state, setState] = useState<EventData>(EMPTY)
   const [saving, setSaving] = useState(false)
   const [writeError, setWriteError] = useState<string | null>(null)
@@ -219,7 +259,7 @@ export function useEvent(
     async function run(currentEventId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
       try {
-        const next = await loadEvent(currentEventId, actorId, signedIn)
+        const next = await loadEvent(currentEventId, actorId, signedIn, key)
         if (cancelled) return
         setState(next)
       } catch (reason) {
@@ -236,7 +276,7 @@ export function useEvent(
     return () => {
       cancelled = true
     }
-  }, [eventId, actorId, signedIn])
+  }, [eventId, actorId, signedIn, key, keyStatus])
 
   // L'affichage bouge AVANT la base : cocher un cran doit répondre tout de
   // suite. Si l'écriture échoue, on remet l'état d'avant et on le dit — un
@@ -318,25 +358,25 @@ export function useEvent(
   // mentiraient jusqu'au prochain chargement.
   const reloadLedger = useCallback(async () => {
     if (!eventId || !actorId) return
-    const { data: rows, error } = await supabase
-      .from('event_ledger_entries')
-      .select('id, amount, direction, category, label, source')
-      .eq('actor_id', actorId)
-      .eq('event_id', eventId)
-
-    // L'écriture a réussi mais la relecture non : on le dit plutôt que d'afficher un bilan vide.
-    if (error) {
+    try {
+      const [rows, secrets] = await Promise.all([
+        supabase
+          .from('event_ledger_entries')
+          .select('id, amount, direction, category, label, source')
+          .eq('actor_id', actorId)
+          .eq('event_id', eventId)
+          .then(must),
+        loadSecrets(actorId, [eventId], key),
+      ])
+      setState((s) => ({
+        ...s,
+        ...ledgerState(rows as EventLedgerLine[], secrets.get(eventId)),
+      }))
+    } catch {
+      // L'écriture a réussi mais la relecture non : on le dit plutôt que d'afficher un bilan vide.
       setWriteError("Le bilan n'a pas pu être relu : recharge la page.")
-      return
     }
-    const ledger = rows as EventLedgerLine[]
-    setState((s) => ({
-      ...s,
-      ledger,
-      revenue: ledger.length > 0 ? ledgerRevenue(ledger) : null,
-      net: ledger.length > 0 ? ledgerProfit(ledger) : null,
-    }))
-  }, [eventId, actorId])
+  }, [eventId, actorId, key])
 
   const setOrientation = useCallback(
     async (next: PaymentOrientation) => {
