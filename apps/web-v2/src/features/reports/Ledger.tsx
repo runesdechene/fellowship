@@ -29,7 +29,7 @@ import { DraftInput } from '@/components/ui/DraftInput'
 import { Select } from '@/components/ui/Select'
 import { formatDateRange } from '@/lib/dates'
 import { formatEuros, parseAmount } from '@/lib/money'
-import { CATEGORIES, SECRET_CATEGORY, categoryLabel } from '@/lib/report-writes'
+import { SECRET_CATEGORY, addableCategories, categoryLabel } from '@/lib/report-writes'
 import { useRevenueKey } from '@/lib/revenue-key'
 import type { LedgerCategory } from '@/types/database'
 import peageIcon from '@/assets/peage.svg'
@@ -148,25 +148,28 @@ function EntryLine({
 function AddLine({
   actions,
   offerSecret,
+  encrypted,
   onSecret,
   onInvalid,
 }: {
   actions: ReportActions
   /** La date n'est pas encore chiffrée : la catégorie « Recettes chiffrées » est proposée. */
   offerSecret: boolean
+  /** Date chiffrée : seules les dépenses s'ajoutent ici, une recette en clair contournerait le secret. */
+  encrypted: boolean
   onSecret: () => void
   onInvalid: (invalid: boolean) => void
 }) {
   const [chosen, setChosen] = useState<Choice>('autre')
   const [draft, setDraft] = useState('')
-  // Une fois la date chiffrée, la catégorie disparaît : le choix retombe sur « Autre ».
-  const category = chosen === SECRET_CATEGORY.value && !offerSecret ? 'autre' : chosen
   const amount = parseAmount(draft)
   const ready = typeof amount === 'number' && amount > 0
-  const options = [...(offerSecret ? [SECRET_CATEGORY] : []), ...CATEGORIES].map<{
+  const options = [...(offerSecret ? [SECRET_CATEGORY] : []), ...addableCategories(encrypted)].map<{
     value: Choice
     label: string
   }>((entry) => ({ value: entry.value, label: entry.label }))
+  // Une catégorie qui n'est plus proposée (la date vient d'être chiffrée) retombe sur « Autre ».
+  const category = options.some((option) => option.value === chosen) ? chosen : 'autre'
 
   return (
     <form
@@ -226,6 +229,7 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
   const [asking, setAsking] = useState<'unlock' | 'dialog' | null>(null)
   const encrypted = date.secret !== 'none'
   const clearIn = entries.filter((entry) => entry.direction === 'in')
+  const manualIn = clearIn.filter((entry) => entry.source === 'manual')
   const outLines = entries.filter((entry) => entry.direction === 'out')
   const secretTotal = revenue ? revenue.carte + revenue.especes : 0
   const revenueTotal = date.secret === 'masked' ? '•••• €' : formatEuros(sum(clearIn) + secretTotal)
@@ -284,6 +288,7 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
       <AddLine
         actions={actions}
         offerSecret={revenueKey.ready && !encrypted}
+        encrypted={encrypted}
         onSecret={() => {
           setAsking(revenueKey.status === 'locked' ? 'unlock' : 'dialog')
         }}
@@ -300,7 +305,8 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
         <EncryptDialog
           subtitle={`${date.name}, ${formatDateRange(date.startDate, date.endDate, 'long')} ${date.startDate.getFullYear()}`}
           // La maquette ne répartit pas les recettes saisies : tout part sur Carte, Espèces à 0.
-          initial={{ carte: sum(clearIn.filter((entry) => entry.source === 'manual')), especes: 0 }}
+          initial={{ carte: sum(manualIn), especes: 0 }}
+          replaces={manualIn.length > 0}
           onSeal={actions.sealRevenue}
           onClose={() => {
             setAsking(null)

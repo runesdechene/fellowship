@@ -3,7 +3,7 @@
  * POURQUOI — l'effacement d'un bilan ne doit jamais toucher au prix de Mon dossier.
  */
 import { describe, expect, it } from 'vitest'
-import { addTag, clearReportPlan, directionOf, removeTag } from './report-writes'
+import { addTag, addableCategories, clearReportPlan, directionOf, removeTag } from './report-writes'
 import { reportPhotoPath } from './report-media'
 
 describe('directionOf', () => {
@@ -15,6 +15,19 @@ describe('directionOf', () => {
   it('le reste sort', () => {
     expect(directionOf('essence')).toBe('out')
     expect(directionOf('autre')).toBe('out')
+  })
+})
+
+describe('addableCategories', () => {
+  it('ne propose aucune recette en clair sur une date chiffrée', () => {
+    const values = addableCategories(true).map((entry) => entry.value)
+    expect(values).not.toContain('ventes')
+    expect(values).toContain('autre')
+    expect(addableCategories(true).every((entry) => entry.direction === 'out')).toBe(true)
+  })
+
+  it('propose tout sur une date en clair', () => {
+    expect(addableCategories(false).map((entry) => entry.value)).toContain('ventes')
   })
 })
 

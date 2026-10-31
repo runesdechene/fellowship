@@ -18,6 +18,8 @@ interface EncryptDialogProps {
   /** « Les Aventuriales, 25–27 juin 2026 ». */
   subtitle: string
   initial: SecretRevenue
+  /** La date a des recettes saisies : la fenêtre prévient qu'elles seront remplacées. */
+  replaces: boolean
   onSeal: (key: CryptoKey, revenue: SecretRevenue) => void
   onClose: () => void
 }
@@ -31,7 +33,13 @@ function readAmount(draft: string): number | null {
   return amount ?? 0
 }
 
-export function EncryptDialog({ subtitle, initial, onSeal, onClose }: EncryptDialogProps) {
+export function EncryptDialog({
+  subtitle,
+  initial,
+  replaces,
+  onSeal,
+  onClose,
+}: EncryptDialogProps) {
   const { status, key, create } = useRevenueKey()
   // Figée à l'ouverture : la phrase créée ici ouvre la clé, la fenêtre ne doit pas changer de forme.
   const [withPhrase] = useState(status === 'none')
@@ -113,8 +121,8 @@ export function EncryptDialog({ subtitle, initial, onSeal, onClose }: EncryptDia
           <p className="report-secret__text">
             Tes recettes, carte et espèces, sont chiffrées sur ton appareil avant d’être
             enregistrées. Personne d’autre ne peut les lire, pas même l’équipe Fellowship. Elles
-            restent masquées, même à zéro. Tes deux recettes actuelles seront remplacées par ces
-            deux lignes.
+            restent masquées, même à zéro.
+            {replaces && ' Tes recettes actuelles seront remplacées par ces deux lignes.'}
           </p>
           <SecretField label="Carte" value={carte} onChange={setCarte} inputMode="decimal" />
           <SecretField label="Espèces" value={especes} onChange={setEspeces} inputMode="decimal" />

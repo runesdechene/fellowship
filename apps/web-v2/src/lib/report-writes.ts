@@ -22,6 +22,11 @@ export const CATEGORIES = [
 /** Pas une ligne du registre : elle ouvre le chiffrement de Carte et Espèces (Ledger). */
 export const SECRET_CATEGORY = { value: 'chiffrees', label: 'Recettes chiffrées' } as const
 
+/** Les catégories de la ligne d'ajout : sur une date chiffrée, une recette passe par Carte et Espèces. */
+export function addableCategories(encrypted: boolean) {
+  return encrypted ? CATEGORIES.filter((entry) => entry.direction === 'out') : CATEGORIES
+}
+
 export function directionOf(category: LedgerCategory): 'in' | 'out' {
   return CATEGORIES.find((entry) => entry.value === category)?.direction ?? 'out'
 }
