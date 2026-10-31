@@ -146,6 +146,11 @@ export function formatDateRange(start: Date, end: Date, month: 'short' | 'long' 
   return `${dayMonth(start)}–${dayMonth(end)}`
 }
 
+/** « 31 oct. 2026 » : une date seule, mois abrégé (« Choisie le … » des Réglages). */
+export function formatShortDate(date: Date): string {
+  return `${formatDayMonthShort(date)} ${String(date.getFullYear())}`
+}
+
 /** « 31 oct. 2025 », « 8–9 nov. 2025 » : la plage d'une date passée, qui dit son année. */
 export function formatPastRange(start: Date, end: Date): string {
   return `${formatDateRange(start, end)} ${String(end.getFullYear())}`

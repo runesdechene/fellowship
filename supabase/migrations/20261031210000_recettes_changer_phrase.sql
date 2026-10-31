@@ -5,7 +5,16 @@
 -- exactement celles de report_secrets pour l'enseigne : une ligne oubliée resterait sous l'ancienne
 -- clé, illisible pour toujours.
 -- created_at prend la date du changement : Réglages dit « Choisie le … », c'est la phrase en place.
--- Purement additif : une fonction neuve, que le code déployé n'appelle pas.
+--
+-- Un onglet resté ouvert avec l'ancienne clé ne doit plus rien sceller après le changement : il
+-- écrirait une date que plus personne n'ouvre, et tout changement suivant échouerait. La clé
+-- étrangère ne protège que les insertions, pas la mise à jour d'une date déjà chiffrée. D'où
+-- seal_revenue à quatre arguments : il reçoit le "check" de la phrase contre laquelle le client a
+-- vérifié sa clé, verrouille la ligne revenue_keys en partage et refuse ('phrase_changee') si la
+-- phrase n'est plus celle-là. rekey_revenue la verrouille en exclusif : les deux s'attendent, et un
+-- scellement qui passe après un changement voit le nouveau "check".
+-- La version à trois arguments reste pour le front déjà déployé (docs/v2/purge-back.md).
+-- Purement additif : deux fonctions neuves, que le code déployé n'appelle pas.
 
 -- Security invoker : la RLS de revenue_keys et report_secrets s'applique ; le contrôle explicite donne
 -- une erreur claire.
@@ -34,8 +43,9 @@ begin
     raise exception 'rekey_revenue: p_payloads doit être un tableau';
   end if;
 
-  -- FOR UPDATE bloque les scellements concurrents (leur clé étrangère prend KEY SHARE sur cette ligne) :
-  -- aucune date ne peut s'ajouter entre la vérification ci-dessous et l'écriture.
+  -- FOR UPDATE attend les scellements en cours et bloque les suivants jusqu'à la fin : seal_revenue à
+  -- quatre arguments prend FOR SHARE sur cette ligne, la clé étrangère de l'ancien prend KEY SHARE (il
+  -- ne bloque donc que les dates nouvelles, pas la réécriture d'une date existante).
   perform 1 from revenue_keys where actor_id = p_actor for update;
   if not found then
     raise exception 'rekey_revenue: aucune phrase pour cette enseigne';
@@ -68,3 +78,42 @@ $$;
 
 revoke execute on function public.rekey_revenue(uuid, text, int, text, jsonb) from public, anon;
 grant execute on function public.rekey_revenue(uuid, text, int, text, jsonb) to authenticated;
+
+-- seal_revenue (uuid, uuid, text) : définition live copiée entière, plus le contrôle de la phrase.
+create function public.seal_revenue(p_actor uuid, p_event uuid, p_payload text, p_check text)
+returns void
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  v_check text;
+begin
+  if not can_act_as(p_actor) then
+    raise exception 'seal_revenue: accès refusé' using errcode = '42501';
+  end if;
+
+  -- La phrase contre laquelle le client a vérifié sa clé doit être encore celle en place. FOR SHARE :
+  -- un changement de phrase en cours (rekey_revenue, FOR UPDATE) finit avant, et on relit son "check".
+  select "check" into v_check from revenue_keys where actor_id = p_actor for share;
+  if v_check is distinct from p_check then
+    raise exception 'phrase_changee';
+  end if;
+
+  -- Le bilan existe dès la première saisie, même règle que set_stand_amount et ensureReport.
+  insert into event_reports (actor_id, event_id)
+  values (p_actor, p_event)
+  on conflict (actor_id, event_id) do nothing;
+
+  insert into report_secrets (actor_id, event_id, payload, updated_at)
+  values (p_actor, p_event, p_payload, now())
+  on conflict (actor_id, event_id) do update set payload = excluded.payload, updated_at = now();
+
+  -- Les recettes saisies en clair que le chiffré remplace ; le cachet (stepper) reste en clair.
+  delete from event_ledger_entries
+   where actor_id = p_actor and event_id = p_event and direction = 'in' and source = 'manual';
+end
+$$;
+
+revoke execute on function public.seal_revenue(uuid, uuid, text, text) from public, anon;
+grant execute on function public.seal_revenue(uuid, uuid, text, text) to authenticated;

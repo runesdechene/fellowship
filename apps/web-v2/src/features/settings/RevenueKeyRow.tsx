@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EncryptDialog } from '@/features/reports/EncryptDialog'
-import { formatPastRange } from '@/lib/dates'
+import { formatShortDate } from '@/lib/dates'
 import { useRevenueKey } from '@/lib/revenue-key'
 import { ChangePhraseDialog } from './ChangePhraseDialog'
 import { SettingRow } from './SettingRow'
@@ -77,13 +77,12 @@ export function RevenueKeyRow({ entityId, brandName, chosenAt, onChange }: Props
     )
   }
 
-  const chosen = new Date(chosenAt)
   return (
     <SettingRow
       className="setting-row--sub"
       leading={<Lock className="setting-row__icon" size={15} strokeWidth={2} />}
       title="Recettes chiffrées"
-      note={`Choisie le ${formatPastRange(chosen, chosen)}. Verrouillées après 15 minutes sans activité.`}
+      note={`Choisie le ${formatShortDate(new Date(chosenAt))}. Verrouillées après 15 minutes sans activité.`}
     >
       <Button
         onClick={() => {

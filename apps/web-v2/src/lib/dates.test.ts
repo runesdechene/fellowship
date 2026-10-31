@@ -10,6 +10,7 @@ import {
   durationLabel,
   formatDateRange,
   formatPastRange,
+  formatShortDate,
   formatMonthAbbr,
   formatMonthShort,
   isRecent,
@@ -121,6 +122,13 @@ describe('formatDateRange', () => {
   it('en toutes lettres pour la carte de prochaine date', () => {
     expect(formatDateRange(d('2026-09-25'), d('2026-09-27'), 'long')).toBe('25–27 septembre')
     expect(formatDateRange(d('2026-09-30'), d('2026-10-01'), 'long')).toBe('30 septembre–1 octobre')
+  })
+})
+
+describe('formatShortDate', () => {
+  it('écrit le jour, le mois abrégé et l’année', () => {
+    expect(formatShortDate(d('2026-10-31'))).toBe('31 oct. 2026')
+    expect(formatShortDate(d('2027-05-02'))).toBe('2 mai 2027')
   })
 })
 

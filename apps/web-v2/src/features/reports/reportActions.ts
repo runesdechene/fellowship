@@ -8,6 +8,7 @@
  *            remplace ses recettes saisies (`in`, `manual`) : le cachet de la fiche reste en clair.
  */
 import { openRevenue, sealRevenue, type SecretRevenue } from '@/lib/cipher'
+import { PhraseChangedError } from '@/lib/revenue-key'
 import { must, supabase } from '@/lib/supabase'
 import { removeReportPhotos, uploadReportPhoto } from '@/lib/report-media'
 import { clearReportPlan, directionOf, mergeRevenue } from '@/lib/report-writes'
@@ -93,17 +94,24 @@ export async function removeLine(target: Target, entry: ReportEntry) {
 
 /**
  * Scelle Carte et Espèces et retire les recettes en clair qu'elles remplacent, en une transaction
- * (seal_revenue, qui crée aussi le bilan au besoin). La clé se vérifie avant (useRevenueKey().verify).
+ * (seal_revenue, qui crée aussi le bilan au besoin). `check` est celui de la phrase contre laquelle
+ * la clé a été vérifiée (useRevenueKey().verify) : la base refuse si la phrase a changé depuis.
  */
-export async function sealRevenueLines(target: Target, key: CryptoKey, revenue: SecretRevenue) {
+export async function sealRevenueLines(
+  target: Target,
+  key: CryptoKey,
+  revenue: SecretRevenue,
+  check: string,
+) {
   const payload = await sealRevenue(key, revenue)
-  must(
-    await supabase.rpc('seal_revenue', {
-      p_actor: target.actorId,
-      p_event: target.eventId,
-      p_payload: payload,
-    }),
-  )
+  const { error } = await supabase.rpc('seal_revenue', {
+    p_actor: target.actorId,
+    p_event: target.eventId,
+    p_payload: payload,
+    p_check: check,
+  })
+  if (error?.message === 'phrase_changee') throw new PhraseChangedError()
+  if (error) throw new Error(error.message)
 }
 
 /**
@@ -116,6 +124,7 @@ export async function resealPart(
   key: CryptoKey,
   part: keyof SecretRevenue,
   amount: number,
+  check: string,
 ) {
   const response = await supabase
     .from('report_secrets')
@@ -125,7 +134,7 @@ export async function resealPart(
     .maybeSingle()
   const row = must(response)
   const current = row ? await openRevenue(key, row.payload) : null
-  await sealRevenueLines(target, key, mergeRevenue(current, part, amount))
+  await sealRevenueLines(target, key, mergeRevenue(current, part, amount), check)
 }
 
 /** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */

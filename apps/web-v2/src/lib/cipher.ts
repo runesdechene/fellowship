@@ -137,6 +137,22 @@ export async function openRevenue(key: CryptoKey, payload: string): Promise<Secr
 }
 
 /**
+ * Après un changement de phrase dont la réponse s'est perdue : 'new' si la nouvelle clé ouvre la
+ * phrase en place (le changement a eu lieu), 'old' si c'est l'ancienne (rien n'a bougé), null si
+ * aucune, ou si la phrase n'a pas pu être relue.
+ */
+export async function whichKeyOpens(
+  record: Pick<KeyRecord, 'check'> | null,
+  oldKey: CryptoKey,
+  newKey: CryptoKey,
+): Promise<'new' | 'old' | null> {
+  if (!record) return null
+  if (await keyMatches(newKey, record)) return 'new'
+  if (await keyMatches(oldKey, record)) return 'old'
+  return null
+}
+
+/**
  * Les recettes d'une enseigne, ouvertes avec l'ancienne clé et rescellées avec la nouvelle (« Changer
  * la phrase »). Lève si une seule ne s'ouvre pas : on ne rechiffre jamais une partie seulement.
  */

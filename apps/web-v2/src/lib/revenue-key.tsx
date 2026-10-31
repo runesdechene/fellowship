@@ -25,7 +25,14 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { createKey, isStrongPassphrase, keyMatches, resealAll, unlockKey } from './cipher'
+import {
+  createKey,
+  isStrongPassphrase,
+  keyMatches,
+  resealAll,
+  unlockKey,
+  whichKeyOpens,
+} from './cipher'
 import { useAuth } from './auth'
 import { isIdle } from './idle'
 import { useViewTransition } from './navigation'
@@ -46,8 +53,13 @@ interface RevenueKeyValue {
    * réinitialisée ailleurs entre-temps. Lève si la base ne répond pas.
    */
   unlock: (phrase: string) => Promise<'ok' | 'wrong' | 'reset'>
-  /** Lève une RevenueKeyError si `key` n'ouvre plus la phrase de l'enseigne (changée ailleurs). */
-  verify: (key: CryptoKey) => Promise<void>
+  /**
+   * Rend le "check" de la phrase en place, à passer au scellement (seal_revenue le compare). Lève
+   * une RevenueKeyError si `key` n'ouvre plus la phrase de l'enseigne (changée ailleurs).
+   */
+  verify: (key: CryptoKey) => Promise<string>
+  /** Abandonne la clé : la phrase a changé ailleurs, il faut taper la nouvelle. */
+  lock: () => void
   /**
    * Remplace la phrase de l'enseigne sans rien perdre : 'wrong' si l'ancienne n'est pas la bonne.
    * Lève une RevenueKeyError (message à montrer) si rien n'a pu être changé, une autre erreur si la
@@ -73,6 +85,13 @@ interface Session {
 
 /** Une erreur dont le message est fait pour être montré tel quel à l'exposant. */
 export class RevenueKeyError extends Error {}
+
+/** seal_revenue a refusé : la phrase a changé ailleurs depuis la vérification de la clé. */
+export class PhraseChangedError extends RevenueKeyError {
+  constructor() {
+    super('Ta phrase a changé sur un autre appareil : tape la nouvelle.')
+  }
+}
 
 /** Ce qui compte comme activité. Les minuteries d'un onglet caché ralentissent : d'où le retour visible. */
 const ACTIVITY_EVENTS = ['pointerdown', 'keydown', 'touchstart'] as const
@@ -169,7 +188,7 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
         .eq('actor_id', actorId)
         .maybeSingle()
       const record = must(response)
-      if (record && (await keyMatches(key, record))) return
+      if (record && (await keyMatches(key, record))) return record.check
       // Plus de phrase : 'none'. Une autre phrase : 'locked', il faut taper la nouvelle.
       setSession((s) =>
         s.actorId === actorId ? { ...s, hasRecord: record !== null, key: null } : s,
@@ -210,13 +229,31 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
       p_check: next.record.check,
       p_payloads: payloads,
     })
+    // La réponse a pu se perdre après l'écriture : on relit la phrase en place avant de conclure.
     if (error) {
-      throw new RevenueKeyError(
-        'La phrase n’a pas été changée : rien n’a bougé, ton ancienne phrase reste la bonne. Réessaie.',
-      )
+      const reread = await supabase
+        .from('revenue_keys')
+        .select('check')
+        .eq('actor_id', target)
+        .maybeSingle()
+      const opens = reread.error ? null : await whichKeyOpens(reread.data, oldKey, next.key)
+      if (opens === 'old') {
+        throw new RevenueKeyError(
+          'La phrase n’a pas été changée : rien n’a bougé, ton ancienne phrase reste la bonne. Réessaie.',
+        )
+      }
+      if (opens !== 'new') {
+        throw new RevenueKeyError(
+          'On ne sait pas si la phrase a changé : recharge la page et essaie la nouvelle, puis l’ancienne.',
+        )
+      }
     }
     setSession((s) => (s.actorId === target ? { ...s, hasRecord: true, key: next.key } : s))
     return 'ok' as const
+  }, [])
+
+  const lock = useCallback(() => {
+    setSession((s) => (s.key ? { ...s, hasRecord: true, key: null } : s))
   }, [])
 
   const reset = useCallback(async (target: string) => {
@@ -271,12 +308,13 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
       create,
       unlock,
       verify,
+      lock,
       rekey,
       reset,
       clearChosen: session.clearChosen || Boolean(entity?.revenue_clear_chosen_at),
       keepClear,
     }),
-    [session, entity, create, unlock, verify, rekey, reset, keepClear],
+    [session, entity, create, unlock, verify, lock, rekey, reset, keepClear],
   )
 
   return <RevenueKeyContext.Provider value={value}>{children}</RevenueKeyContext.Provider>

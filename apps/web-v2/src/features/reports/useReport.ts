@@ -9,7 +9,7 @@
  *            (writeError), et `failures` change pour que les champs reprennent la valeur gardée.
  */
 import { useEffect, useState } from 'react'
-import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
+import { PhraseChangedError, RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 import { createWriteQueue } from '@/lib/write-queue'
 import { addTag, removeTag } from '@/lib/report-writes'
 import type { SecretRevenue } from '@/lib/cipher'
@@ -45,7 +45,7 @@ interface ReportState {
 const LOADING: ReportState = { status: 'loading', detail: null, owner: null }
 
 export function useReport(eventId: string | undefined, actorId: string | null | undefined) {
-  const { key, status, verify } = useRevenueKey()
+  const { key, status, verify, lock } = useRevenueKey()
   const [state, setState] = useState<ReportState>(LOADING)
   const [version, setVersion] = useState(0)
   const [enqueue] = useState(createWriteQueue)
@@ -90,6 +90,7 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     setWriteError(null)
     enqueue(() => action(target))
       .catch((reason: unknown) => {
+        if (reason instanceof PhraseChangedError) lock()
         setWriteError(reason instanceof RevenueKeyError ? reason.message : failure)
         setFailures((n) => n + 1)
       })
@@ -111,12 +112,12 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     },
     sealRevenue: (key, revenue) => {
       perform('Les recettes n’ont pas pu être chiffrées.', (t) =>
-        verify(key).then(() => write.sealRevenueLines(t, key, revenue)),
+        verify(key).then((check) => write.sealRevenueLines(t, key, revenue, check)),
       )
     },
     resealPart: (key, part, amount) => {
       perform('Les recettes n’ont pas pu être chiffrées.', (t) =>
-        verify(key).then(() => write.resealPart(t, key, part, amount)),
+        verify(key).then((check) => write.resealPart(t, key, part, amount, check)),
       )
     },
     addTag: (field, raw) => {

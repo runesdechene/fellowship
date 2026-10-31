@@ -11,6 +11,7 @@ import {
   keyMatches,
   openRevenue,
   resealAll,
+  whichKeyOpens,
   sealRevenue,
   unlockKey,
   type KeyRecord,
@@ -114,6 +115,15 @@ describe('cipher', () => {
       await expect(openRevenue(key, row.payload)).rejects.toThrow()
     }
     expect(await resealAll(key, [], next.key)).toEqual([])
+  })
+
+  it('dit si la phrase en place est la nouvelle, l’ancienne, ou ni l’une ni l’autre', async () => {
+    const next = await createKey('une toute nouvelle phrase de passe')
+    const other = await createKey('la phrase d’un autre appareil')
+    expect(await whichKeyOpens(next.record, key, next.key)).toBe('new')
+    expect(await whichKeyOpens(record, key, next.key)).toBe('old')
+    expect(await whichKeyOpens(other.record, key, next.key)).toBeNull()
+    expect(await whichKeyOpens(null, key, next.key)).toBeNull()
   })
 
   it('refuse de rechiffrer si une recette ne s’ouvre pas avec l’ancienne clé', async () => {
