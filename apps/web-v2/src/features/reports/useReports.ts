@@ -7,9 +7,10 @@
  *            appliqué une fois. Se recharge quand la clé des recettes change. Une date aux recettes
  *            chiffrées est remplie même verrouillée : son chiffre d'affaires est alors incomplet
  *            (ReportDate.secret 'masked').
+ *            Rechargée par la clé seule, elle garde ses données à l'écran (pas de retour à « Chargement »).
  *            Une requête qui échoue est une erreur, jamais « aucun bilan ».
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
 import { parseSqlDate, todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
@@ -92,6 +93,7 @@ async function loadReports(
 export function useReports(actorId: string | null | undefined, year: number): ReportsState {
   const { key, status } = useRevenueKey()
   const [state, setState] = useState<ReportsState>(EMPTY)
+  const scope = useRef('')
 
   useEffect(() => {
     if (!actorId) return
@@ -99,7 +101,11 @@ export function useReports(actorId: string | null | undefined, year: number): Re
 
     // Le résultat s'applique UNE fois, si ni l'acteur ni l'année n'ont changé entre-temps.
     async function run(currentActorId: string) {
-      setState((s) => ({ ...s, status: 'loading' }))
+      // Même acteur, même année (la clé vient d'être tapée) : les données restent affichées le
+      // temps du rechargement, sans repasser par « Chargement… ».
+      const current = `${currentActorId}/${year}`
+      if (scope.current !== current) setState((s) => ({ ...s, status: 'loading' }))
+      scope.current = current
       try {
         const result = await loadReports(currentActorId, year, key)
         if (cancelled) return

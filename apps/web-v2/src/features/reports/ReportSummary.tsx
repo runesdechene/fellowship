@@ -9,7 +9,7 @@
 import { Poster } from '@/components/ui/Poster'
 import { Check } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
-import { formatEuros, formatSignedEuros } from '@/lib/money'
+import { formatEuros, formatSignedEuros, MASKED_EUROS } from '@/lib/money'
 import { reportFigures } from '@/lib/reports'
 import { ReportGoal } from './ReportGoal'
 import type { ReportDetail } from './useReport'
@@ -24,7 +24,7 @@ interface ReportSummaryProps {
 export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummaryProps) {
   const { date } = detail
   const { revenue, costs, net, days, masked } = reportFigures(date)
-  const hidden = (text: string) => (masked ? '•••• €' : text)
+  const hidden = (text: string) => (masked ? MASKED_EUROS : text)
 
   return (
     <div className="report-summary">

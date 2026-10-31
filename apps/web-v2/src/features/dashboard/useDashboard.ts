@@ -6,7 +6,7 @@
  *            lib/revenue-key.tsx, de report_secrets), jamais des colonnes mortes de
  *            event_reports ; une date aux recettes verrouillées est `masked` (montants incomplets) ; les dates passent par lib/dates.ts, les sommes par lib/money.ts.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
 import {
   daysUntil,
@@ -347,6 +347,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
   const { key, status } = useRevenueKey()
   const [state, setState] = useState<Omit<DashboardData, 'months'>>(EMPTY)
   const [dates, setDates] = useState<DashboardDate[]>([])
+  const loadedFor = useRef<string | null>(null)
 
   useEffect(() => {
     // Sans acteur, il n'y a rien à charger : l'état vide est dérivé plus bas,
@@ -360,7 +361,10 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
     // seule interception : quelle que soit la requête qui échoue, l'écran dit « erreur » plutôt
     // que d'afficher un tableau de bord vide présenté pour vrai.
     async function run(currentActorId: string) {
-      setState((s) => ({ ...s, loading: true, error: null }))
+      // Même acteur, clé seule changée : on garde l'écran affiché pendant le rechargement.
+      if (loadedFor.current !== currentActorId)
+        setState((s) => ({ ...s, loading: true, error: null }))
+      loadedFor.current = currentActorId
       try {
         const result = await loadDashboard(currentActorId, new Date(), key)
         if (cancelled) return

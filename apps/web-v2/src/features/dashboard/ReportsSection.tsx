@@ -5,6 +5,9 @@
  *            et bénéfice. « Tout voir » mène à Mes bilans (/bilans) ; un bilan mène à son écran
  *            (/bilans/:eventId). En gratuit (`locked`), le bloc passe sous un voile et une pastille
  *            mène à Mes bilans, qui présente le Pro.
+ * ATTENTION — recettes chiffrées et verrouillées (`masked`) : leurs montants passent en « •••• € » ;
+ *            dès qu'une date de l'année l'est, le total de la saison aussi, et la jauge d'objectif
+ *            (qui se lit sur le CA) disparaît.
  */
 import { Poster } from '@/components/ui/Poster'
 import { ArrowRight } from 'lucide-react'
@@ -12,7 +15,7 @@ import type { CSSProperties } from 'react'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProVeil } from '@/components/ui/ProVeil'
 import { formatFullDate } from '@/lib/dates'
-import { formatEuros, formatSignedEuros, goalShare } from '@/lib/money'
+import { formatEuros, formatSignedEuros, goalShare, MASKED_EUROS } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
 
@@ -29,10 +32,12 @@ function ReportItem({ report }: { report: DashboardReport }) {
         <span className="report__name">{report.name}</span>
         <span className="report__date">
           {formatFullDate(report.date)}
-          {filled && ` · ${formatEuros(report.revenue ?? 0)}`}
+          {filled && ` · ${report.masked ? MASKED_EUROS : formatEuros(report.revenue ?? 0)}`}
         </span>
         {filled ? (
-          <span className="report__net">{formatSignedEuros(report.net ?? 0)}</span>
+          <span className="report__net">
+            {report.masked ? MASKED_EUROS : formatSignedEuros(report.net ?? 0)}
+          </span>
         ) : (
           <span className="report__todo">
             <span className="report__todo-dot" />
@@ -110,6 +115,7 @@ function ReportsCard({
   seasonRevenue,
   seasonGoal,
 }: Omit<ReportsSectionProps, 'locked'>) {
+  const masked = reports.some((report) => report.masked)
   return (
     <div className="reports">
       {/* `typeof` et non `!== null` : une valeur absente vaut undefined,
@@ -117,11 +123,13 @@ function ReportsCard({
       {typeof seasonNet === 'number' && typeof seasonRevenue === 'number' && (
         <div className="reports__season">
           <span className="reports__label">Bénéfice {new Date().getFullYear()}</span>
-          <span className="reports__net">{formatSignedEuros(seasonNet)}</span>
-          <span className="reports__revenue">
-            sur <b>{formatEuros(seasonRevenue)}</b> de chiffre d’affaires
+          <span className="reports__net">
+            {masked ? MASKED_EUROS : formatSignedEuros(seasonNet)}
           </span>
-          {seasonGoal !== null && (
+          <span className="reports__revenue">
+            sur <b>{masked ? MASKED_EUROS : formatEuros(seasonRevenue)}</b> de chiffre d’affaires
+          </span>
+          {seasonGoal !== null && !masked && (
             <>
               <span
                 className="reports__gauge"

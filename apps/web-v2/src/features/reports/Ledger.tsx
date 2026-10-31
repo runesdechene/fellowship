@@ -28,7 +28,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react'
 import { DraftInput } from '@/components/ui/DraftInput'
 import { Select } from '@/components/ui/Select'
 import { formatDateRange } from '@/lib/dates'
-import { formatEuros, parseAmount } from '@/lib/money'
+import { formatEuros, MASKED_EUROS, parseAmount } from '@/lib/money'
 import { SECRET_CATEGORY, addableCategories, categoryLabel } from '@/lib/report-writes'
 import { useRevenueKey } from '@/lib/revenue-key'
 import type { LedgerCategory } from '@/types/database'
@@ -86,7 +86,7 @@ function LedgerLine(props: LedgerLineProps) {
         {badge && <span className="ledger__badge">{badge}</span>}
       </span>
       {amount === 'masked' ? (
-        <span className="ledger__amount report-secret__masked">•••• €</span>
+        <span className="ledger__amount report-secret__masked">{MASKED_EUROS}</span>
       ) : (
         <span className="ledger__amount">
           <span aria-hidden="true">{direction === 'in' ? '+' : '−'}</span>
@@ -232,7 +232,8 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
   const manualIn = clearIn.filter((entry) => entry.source === 'manual')
   const outLines = entries.filter((entry) => entry.direction === 'out')
   const secretTotal = revenue ? revenue.carte + revenue.especes : 0
-  const revenueTotal = date.secret === 'masked' ? '•••• €' : formatEuros(sum(clearIn) + secretTotal)
+  const revenueTotal =
+    date.secret === 'masked' ? MASKED_EUROS : formatEuros(sum(clearIn) + secretTotal)
 
   /** Carte ou Espèces modifiée sur place : les deux se rescellent ensemble. */
   function reseal(part: 'carte' | 'especes', amount: number | null) {

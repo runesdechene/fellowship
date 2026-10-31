@@ -10,6 +10,9 @@
  *   'out' = ce qui sort  (emplacement, essence, péage, hébergement, repas)
  */
 
+/** Un montant qui dépend de recettes chiffrées encore verrouillées : on ne l'affiche pas. */
+export const MASKED_EUROS = '•••• €'
+
 export interface LedgerLine {
   amount: number
   direction: string

@@ -13,6 +13,7 @@ import { ProVeil } from '@/components/ui/ProVeil'
 import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
+import { useRevenueKey } from '@/lib/revenue-key'
 import { yearSummary } from '@/lib/reports'
 import { usePlan } from '@/lib/usePlan'
 import { ReportsInvitation } from './ReportsInvitation'
@@ -34,6 +35,7 @@ export function ReportsPage() {
   const year = yearFrom(params.get('annee'))
   const { status, years, dates, previousYearRevenue } = useReports(actor?.id, year)
   const { pro } = usePlan()
+  const { status: keyStatus } = useRevenueKey()
   useDeclarePageChrome({ poster: null, lead: null, back: '/' })
 
   // L'année affichée reste proposée même sans date, pour qu'on voie où l'on est.
@@ -46,8 +48,13 @@ export function ReportsPage() {
           <h1 className="reports-page__title">Mes bilans</h1>
           <p className="reports-page__private">
             <Lock size={13} strokeWidth={2} />
-            Visibles par toi seul
-            <span className="reports-page__private-more"> — aucun administrateur n’y a accès</span>
+            Visible par toi seul
+            {keyStatus !== 'none' && (
+              <span className="reports-page__private-more">
+                {' '}
+                — tes recettes sont chiffrées, personne d’autre ne peut les lire
+              </span>
+            )}
           </p>
         </div>
         {choices.length > 1 && (
@@ -106,11 +113,14 @@ function ReportsContent({
       <YearCard summary={summary} year={year} />
       <section className="reports-page__section">
         <h2 className="reports-page__section-title">Bénéfice par mois</h2>
-        <MonthlyChart months={summary.months} year={year} />
+        <MonthlyChart months={summary.months} year={year} masked={summary.masked} />
       </section>
       <section className="reports-page__section">
         <h2 className="reports-page__section-title">Les dates</h2>
-        <ReportsTable dates={dates} bestId={summary.best?.eventId ?? null} />
+        <ReportsTable
+          dates={dates}
+          bestId={summary.masked ? null : (summary.best?.eventId ?? null)}
+        />
       </section>
     </>
   )
