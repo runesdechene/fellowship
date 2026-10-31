@@ -57,6 +57,27 @@ describe('cipher', () => {
     expect(await openRevenue(again, await sealRevenue(key, revenue))).toEqual(revenue)
   })
 
+  it('refuse un montant hors plage et accepte le maximum', async () => {
+    for (const bad of [-1, NaN, Infinity, 1_000_000]) {
+      await expect(sealRevenue(key, { carte: bad, especes: 0 })).rejects.toThrow()
+      await expect(sealRevenue(key, { carte: 0, especes: bad })).rejects.toThrow()
+    }
+    const max = { carte: 999999.99, especes: 999999.99 }
+    expect(await openRevenue(key, await sealRevenue(key, max))).toEqual(max)
+  })
+
+  it('rouvre avec la phrase en NFD ou avec une espace en fin', async () => {
+    const revenue = { carte: 10, especes: 5 }
+    const payload = await sealRevenue(key, revenue)
+    for (const typed of [PHRASE.normalize('NFD'), `${PHRASE} `]) {
+      const unlocked = await unlockKey(typed, record)
+      expect(unlocked).not.toBeNull()
+      if (!unlocked) return
+      expect(await openRevenue(unlocked, payload)).toEqual(revenue)
+    }
+    expect(isStrongPassphrase(PHRASE.normalize('NFD'))).toBe(true)
+  })
+
   it('pose un sel de 16 octets et 600 000 itérations', () => {
     expect(record.iterations).toBe(600000)
     expect(atob(record.salt).length).toBe(16)

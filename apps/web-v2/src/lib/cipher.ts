@@ -5,6 +5,9 @@
  *            navigateur, avec une clé dérivée d'une phrase que le serveur ne voit pas.
  * ATTENTION — oubliée, la phrase ne se récupère pas. Les montants sont écrits en centimes sur
  *            12 chiffres pour que la longueur du message ne trahisse pas leur ordre de grandeur.
+ *            La phrase est normalisée (`trim().normalize('NFC')`) avant toute dérivation : un accent
+ *            tapé en NFD sur un autre appareil donnerait sinon une autre clé. Le plugin Obsidian
+ *            doit faire exactement la même chose.
  */
 
 export interface KeyRecord {
@@ -24,9 +27,11 @@ const SALT_BYTES = 16
 const IV_BYTES = 12
 const CHECK_WORD = 'fellowship'
 
+const normalize = (phrase: string) => phrase.trim().normalize('NFC')
+
 export function isStrongPassphrase(phrase: string): boolean {
-  const words = phrase.trim().split(/\s+/)
-  return words.length >= 4 && phrase.trim().length >= 20
+  const clean = normalize(phrase)
+  return clean.split(/\s+/).length >= 4 && clean.length >= 20
 }
 
 function toBase64(bytes: Uint8Array): string {
@@ -40,7 +45,7 @@ function fromBase64(text: string): Uint8Array<ArrayBuffer> {
 async function deriveKey(phrase: string, salt: Uint8Array<ArrayBuffer>, iterations: number) {
   const material = await crypto.subtle.importKey(
     'raw',
-    new TextEncoder().encode(phrase),
+    new TextEncoder().encode(normalize(phrase)),
     'PBKDF2',
     false,
     ['deriveKey'],
@@ -101,7 +106,15 @@ export async function unlockKey(phrase: string, record: KeyRecord): Promise<Cryp
 const toCents = (euros: number) => String(Math.round(euros * 100)).padStart(12, '0')
 const toEuros = (cents: string) => Number(cents) / 100
 
-export function sealRevenue(key: CryptoKey, revenue: SecretRevenue): Promise<string> {
+const MAX_AMOUNT = 999_999.99
+
+export async function sealRevenue(key: CryptoKey, revenue: SecretRevenue): Promise<string> {
+  // Hors de cette plage, les 12 chiffres ne tiennent plus (signe, NaN, 13 chiffres).
+  for (const amount of [revenue.carte, revenue.especes]) {
+    if (!Number.isFinite(amount) || amount < 0 || amount > MAX_AMOUNT) {
+      throw new Error(`Montant impossible à chiffrer : ${amount}`)
+    }
+  }
   return seal(
     key,
     JSON.stringify({ carte: toCents(revenue.carte), especes: toCents(revenue.especes) }),
