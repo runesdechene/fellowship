@@ -27,8 +27,11 @@ describe('cipher', () => {
 
   it('juge la force de la phrase de passe', () => {
     expect(isStrongPassphrase(PHRASE)).toBe(true)
-    expect(isStrongPassphrase('chêne lune forge')).toBe(false)
-    expect(isStrongPassphrase('a b c d')).toBe(false)
+    expect(isStrongPassphrase('lune2festival-rdc')).toBe(true)
+    expect(isStrongPassphrase('runesdechene2026')).toBe(true) // 16 tout juste
+    expect(isStrongPassphrase('runesdechene202')).toBe(false) // 15
+    // Les espaces autour ne comptent pas.
+    expect(isStrongPassphrase('   runesdechene202  ')).toBe(false)
   })
 
   it('rend les montants tels qu’ils ont été scellés', async () => {

@@ -12,7 +12,7 @@
  */
 import { Lock, TriangleAlert } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { isStrongPassphrase, type SecretRevenue } from '@/lib/cipher'
+import { isStrongPassphrase, MIN_PASSPHRASE_LENGTH, type SecretRevenue } from '@/lib/cipher'
 import { parseAmount } from '@/lib/money'
 import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 
@@ -78,7 +78,7 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
       return
     }
     if (!isStrongPassphrase(phrase)) {
-      setProblem('Choisis une phrase d’au moins quatre mots et vingt caractères.')
+      setProblem(`Choisis une phrase d’au moins ${MIN_PASSPHRASE_LENGTH} caractères.`)
       return
     }
     if (phrase !== again) {
@@ -163,7 +163,7 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
             <>
               <SecretField
                 label="Phrase de passe"
-                placeholder="quatre mots, par exemple"
+                placeholder={`${MIN_PASSPHRASE_LENGTH} caractères au moins`}
                 value={phrase}
                 onChange={setPhrase}
                 secret

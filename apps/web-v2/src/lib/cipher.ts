@@ -29,9 +29,11 @@ const CHECK_WORD = 'fellowship'
 
 const normalize = (phrase: string) => phrase.trim().normalize('NFC')
 
+/** Assez longue pour résister à des essais hors ligne : 16 caractères (Uriel, 31/10/2026). */
+export const MIN_PASSPHRASE_LENGTH = 16
+
 export function isStrongPassphrase(phrase: string): boolean {
-  const clean = normalize(phrase)
-  return clean.split(/\s+/).length >= 4 && clean.length >= 20
+  return normalize(phrase).length >= MIN_PASSPHRASE_LENGTH
 }
 
 function toBase64(bytes: Uint8Array): string {

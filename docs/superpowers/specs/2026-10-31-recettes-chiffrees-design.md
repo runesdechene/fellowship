@@ -36,7 +36,7 @@ jamais comme une protection contre le fisc.
 
 1. **Une phrase par enseigne** (l'acteur qui possède les bilans), pour tous ses bilans et tous ses
    appareils. Une enseigne partagée a une phrase partagée.
-2. **Phrase forte** : au moins quatre mots et vingt caractères.
+2. **Phrase forte** : au moins 16 caractères (Uriel, 31/10/2026 ; quatre mots et vingt caractères jugés trop contraignants).
 3. **Chiffrer une date remplace ses recettes saisies** (lignes `in` de source `manual`) par Carte et
    Espèces. Le cachet de la fiche (ligne `stepper`) reste en clair : c'est l'organisateur qui le paie.
 4. **Un bilan chiffré est rempli**, même sans autre ligne manuelle.
