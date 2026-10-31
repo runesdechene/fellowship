@@ -8,6 +8,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   createKey,
   isStrongPassphrase,
+  keyMatches,
   openRevenue,
   sealRevenue,
   unlockKey,
@@ -55,6 +56,13 @@ describe('cipher', () => {
     if (!again) return
     const revenue = { carte: 412, especes: 138 }
     expect(await openRevenue(again, await sealRevenue(key, revenue))).toEqual(revenue)
+  })
+
+  it('reconnaît sa clé et refuse celle d’une phrase recréée', async () => {
+    expect(await keyMatches(key, record)).toBe(true)
+    const other = await createKey(PHRASE)
+    expect(await keyMatches(key, other.record)).toBe(false)
+    expect(await keyMatches(key, { check: 'pas du base64 chiffré' })).toBe(false)
   })
 
   it('refuse un montant hors plage et accepte le maximum', async () => {

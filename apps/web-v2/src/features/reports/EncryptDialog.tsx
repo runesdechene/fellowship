@@ -12,7 +12,7 @@ import { Lock, TriangleAlert } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { isStrongPassphrase, type SecretRevenue } from '@/lib/cipher'
 import { formatEuros, parseAmount } from '@/lib/money'
-import { useRevenueKey } from '@/lib/revenue-key'
+import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 
 interface EncryptDialogProps {
   /** « Les Aventuriales, 25–27 juin 2026 ». */
@@ -84,8 +84,12 @@ export function EncryptDialog({
     try {
       onSeal(await create(phrase), amounts)
       onClose()
-    } catch {
-      setProblem('La phrase n’a pas pu être enregistrée.')
+    } catch (reason) {
+      setProblem(
+        reason instanceof RevenueKeyError
+          ? reason.message
+          : 'La phrase n’a pas pu être enregistrée.',
+      )
       setBusy(false)
     }
   }

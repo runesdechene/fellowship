@@ -3186,6 +3186,10 @@ export type Database = {
         Args: { p_version: number }
         Returns: number
       }
+      seal_revenue: {
+        Args: { p_actor: string; p_event: string; p_payload: string }
+        Returns: undefined
+      }
       search_similar_events: {
         Args: { search_name: string; search_year?: number; threshold?: number }
         Returns: {

@@ -91,28 +91,18 @@ export async function removeLine(target: Target, entry: ReportEntry) {
   )
 }
 
-/** Scelle Carte et Espèces, puis retire les recettes en clair qu'elles remplacent. */
+/**
+ * Scelle Carte et Espèces et retire les recettes en clair qu'elles remplacent, en une transaction
+ * (seal_revenue, qui crée aussi le bilan au besoin). La clé se vérifie avant (useRevenueKey().verify).
+ */
 export async function sealRevenueLines(target: Target, key: CryptoKey, revenue: SecretRevenue) {
-  await ensureReport(target)
   const payload = await sealRevenue(key, revenue)
-  // report_secrets n'a pas de déclencheur : la date de mise à jour s'écrit ici.
   must(
-    await supabase.from('report_secrets').upsert({
-      actor_id: target.actorId,
-      event_id: target.eventId,
-      payload,
-      updated_at: new Date().toISOString(),
+    await supabase.rpc('seal_revenue', {
+      p_actor: target.actorId,
+      p_event: target.eventId,
+      p_payload: payload,
     }),
-  )
-  // Après le scellement seulement : un échec ici laisse les deux, jamais aucune.
-  must(
-    await supabase
-      .from('event_ledger_entries')
-      .delete()
-      .eq('actor_id', target.actorId)
-      .eq('event_id', target.eventId)
-      .eq('direction', 'in')
-      .eq('source', 'manual'),
   )
 }
 

@@ -93,14 +93,22 @@ export async function createKey(phrase: string): Promise<{ key: CryptoKey; recor
   }
 }
 
+/** Vrai si `key` ouvre ce `check` : une phrase changée ailleurs donne une clé qui ne l'ouvre plus. */
+export async function keyMatches(
+  key: CryptoKey,
+  record: Pick<KeyRecord, 'check'>,
+): Promise<boolean> {
+  try {
+    return (await open(key, record.check)) === CHECK_WORD
+  } catch {
+    return false
+  }
+}
+
 /** La clé si la phrase est la bonne, sinon null. */
 export async function unlockKey(phrase: string, record: KeyRecord): Promise<CryptoKey | null> {
   const key = await deriveKey(phrase, fromBase64(record.salt), record.iterations)
-  try {
-    return (await open(key, record.check)) === CHECK_WORD ? key : null
-  } catch {
-    return null
-  }
+  return (await keyMatches(key, record)) ? key : null
 }
 
 const toCents = (euros: number) => String(Math.round(euros * 100)).padStart(12, '0')
