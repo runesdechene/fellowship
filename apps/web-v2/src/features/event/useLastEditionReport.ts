@@ -42,6 +42,7 @@ async function load(previousId: string, actorId: string): Promise<LastEditionRep
     startDate: parseSqlDate(event.start_date),
     endDate: parseSqlDate(event.end_date),
     lines,
+    secret: 'none',
   }
   return { eventId: event.id, net: reportFigures(date).net }
 }

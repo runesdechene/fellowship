@@ -91,6 +91,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       startDate: parseSqlDate(event.start_date),
       endDate: parseSqlDate(event.end_date),
       lines: entries,
+      secret: 'none',
     },
     reportId: report?.id ?? null,
     entries,

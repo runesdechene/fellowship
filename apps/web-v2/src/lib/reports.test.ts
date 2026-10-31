@@ -3,7 +3,14 @@
  * POURQUOI — toute la logique des bilans se vérifie ici, sans navigateur.
  */
 import { describe, expect, it } from 'vitest'
-import { bestMonth, isFilled, reportFigures, yearSummary, type ReportDate } from './reports'
+import {
+  bestMonth,
+  isFilled,
+  reportFigures,
+  secretLines,
+  yearSummary,
+  type ReportDate,
+} from './reports'
 
 function date(overrides: Partial<ReportDate> = {}): ReportDate {
   return {
@@ -15,6 +22,7 @@ function date(overrides: Partial<ReportDate> = {}): ReportDate {
     startDate: new Date(2026, 5, 25),
     endDate: new Date(2026, 5, 27),
     lines: [],
+    secret: 'none',
     ...overrides,
   }
 }
@@ -43,7 +51,15 @@ describe('reportFigures', () => {
       costs: 636,
       net: 3344,
       days: 3,
+      masked: false,
     })
+  })
+  it('une date chiffrée sans ligne saisie compte comme remplie', () => {
+    expect(reportFigures(date({ secret: 'masked' })).filled).toBe(true)
+  })
+  it('une date chiffrée verrouillée est masquée, une ouverte ne l’est pas', () => {
+    expect(reportFigures(date({ secret: 'masked' })).masked).toBe(true)
+    expect(reportFigures(date({ secret: 'open' })).masked).toBe(false)
   })
   it('une date d’un jour dure un jour', () => {
     const day = new Date(2026, 6, 4)
@@ -111,6 +127,39 @@ describe('yearSummary', () => {
 
   it('sans chiffre l’année précédente, pas de comparaison', () => {
     expect(yearSummary([date({ lines: [sales] })], 0).revenueChange).toBeNull()
+  })
+
+  it('une date chiffrée masquée rend l’année masquée', () => {
+    const clear = date({
+      eventId: 'a',
+      lines: [{ amount: 1000, direction: 'in', source: 'manual' }],
+    })
+    const masked = date({ eventId: 'b', secret: 'masked' })
+    expect(yearSummary([clear, masked], null).masked).toBe(true)
+    expect(yearSummary([clear], null).masked).toBe(false)
+  })
+
+  it('une date chiffrée ouverte s’additionne comme une date claire', () => {
+    const open = date({
+      secret: 'open',
+      lines: [
+        ...secretLines({ carte: 2830, especes: 1380 }),
+        { amount: 1340, direction: 'out', source: 'stepper' },
+      ],
+    })
+    const summary = yearSummary([open], null)
+    expect(summary.revenue).toBe(4210)
+    expect(summary.net).toBe(2870)
+    expect(summary.masked).toBe(false)
+  })
+})
+
+describe('secretLines', () => {
+  it('rend la carte et les espèces en deux entrées saisies', () => {
+    expect(secretLines({ carte: 10, especes: 5 })).toEqual([
+      { amount: 10, direction: 'in', source: 'manual' },
+      { amount: 5, direction: 'in', source: 'manual' },
+    ])
   })
 })
 

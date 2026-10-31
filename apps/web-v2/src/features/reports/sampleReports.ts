@@ -17,7 +17,7 @@ export function sampleReports(year: number): ReportDate[] {
     day: number,
     days: number,
     lines: ReturnType<typeof line>[],
-  ) => ({
+  ): ReportDate => ({
     eventId: `exemple-${name}`,
     name,
     imageUrl: null,
@@ -26,6 +26,7 @@ export function sampleReports(year: number): ReportDate[] {
     startDate: new Date(year, month, day),
     endDate: new Date(year, month, day + days - 1),
     lines,
+    secret: 'none',
   })
   return [
     sample('Plane’R Fest', 6, 3, 3, [line(5802, 'in'), line(596, 'out')]),

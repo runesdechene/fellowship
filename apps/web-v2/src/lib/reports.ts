@@ -6,8 +6,13 @@
  *            la ligne de Mon dossier (source 'stepper') existe souvent avant la date, et la
  *            ligne event_reports aussi (set_stand_amount la crée). Ni l'une ni l'autre ne disent
  *            que l'exposant a fait son bilan.
+ *            Une date aux recettes CHIFFRÉES (secret 'masked' ou 'open') est remplie d'office : le
+ *            chiffre existe, même verrouillé. Verrouillée ('masked'), ses chiffres clairs sont
+ *            incomplets : l'interface affiche •••• (masked) au lieu des montants. Déverrouillée
+ *            ('open'), secretLines() rend Carte et Espèces comme deux lignes saisies.
  */
 import { daysUntil } from './dates'
+import type { SecretRevenue } from './cipher'
 import { ledgerProfit, ledgerRevenue, type LedgerLine } from './money'
 
 export interface ReportLine extends LedgerLine {
@@ -25,10 +30,14 @@ export interface ReportDate {
   startDate: Date
   endDate: Date
   lines: ReportLine[]
+  /** Recettes chiffrées : aucune, verrouillées (illisibles) ou déverrouillées (dans `lines`). */
+  secret: 'none' | 'masked' | 'open'
 }
 
 export interface ReportFigures {
   filled: boolean
+  /** Les recettes sont chiffrées et verrouillées : les montants ci-dessous sont incomplets. */
+  masked: boolean
   revenue: number
   costs: number
   net: number
@@ -47,17 +56,28 @@ export interface YearSummary {
   revenueChange: number | null
   /** Bénéfice de chaque mois, de janvier (0) à décembre (11), au mois de DÉBUT de la date. */
   months: number[]
+  /** Au moins une date remplie de l'année est verrouillée : les totaux sont incomplets. */
+  masked: boolean
 }
 
 export function isFilled(lines: ReportLine[]): boolean {
   return lines.some((line) => line.source === 'manual')
 }
 
+/** Les recettes déchiffrées d'une date, comme deux lignes saisies dans le bilan. */
+export function secretLines(revenue: SecretRevenue): ReportLine[] {
+  return [
+    { amount: revenue.carte, direction: 'in', source: 'manual' },
+    { amount: revenue.especes, direction: 'in', source: 'manual' },
+  ]
+}
+
 export function reportFigures(date: ReportDate): ReportFigures {
   const revenue = ledgerRevenue(date.lines)
   const net = ledgerProfit(date.lines)
   return {
-    filled: isFilled(date.lines),
+    filled: isFilled(date.lines) || date.secret !== 'none',
+    masked: date.secret === 'masked',
     revenue,
     costs: revenue - net,
     net,
@@ -73,6 +93,7 @@ export function yearSummary(dates: ReportDate[], previousYearRevenue: number | n
   let best: ReportDate | null = null
   let bestNet = 0
   let bestDays = 0
+  let masked = false
 
   // Du plus récent au plus ancien : à égalité, la première trouvée — la plus récente — reste.
   const newestFirst = [...dates].sort((a, b) => b.startDate.getTime() - a.startDate.getTime())
@@ -80,6 +101,7 @@ export function yearSummary(dates: ReportDate[], previousYearRevenue: number | n
     const figures = reportFigures(date)
     if (!figures.filled) continue
     filledCount += 1
+    masked ||= figures.masked
     net += figures.net
     revenue += figures.revenue
     const month = date.startDate.getMonth()
@@ -106,6 +128,7 @@ export function yearSummary(dates: ReportDate[], previousYearRevenue: number | n
     bestDays,
     revenueChange,
     months,
+    masked,
   }
 }
 

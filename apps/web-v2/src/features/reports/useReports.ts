@@ -67,6 +67,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
     startDate: parseSqlDate(event.start_date),
     endDate: parseSqlDate(event.end_date),
     lines: linesByEvent.get(event.id) ?? [],
+    secret: 'none',
   })
 
   const dates = wanted
