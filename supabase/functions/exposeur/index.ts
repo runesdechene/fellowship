@@ -4,6 +4,8 @@
 // Le calcul vit dans exposeur_chiffres (migration 20261031130000), réservée au service role.
 // Migration 20261031150000 : la réponse porte aussi `cle` (sel, itérations) et `secrets` (recettes chiffrées de
 // chaque date), rendus tels quels — le serveur ne peut pas les lire, c'est le plugin Accueil qui les déchiffre.
+// Migration 20261031190000 : avec `&vue=plateforme` et une clé de portée plateforme, les chiffres de toute
+// l'application (comptes, enseignes, festivals, pro…) au lieu de ceux de l'enseigne.
 // Spec : docs/superpowers/specs/2026-10-31-exposeur-design.md.
 
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
@@ -21,12 +23,14 @@ Deno.serve(async (req) => {
   if (!DATE.test(debut) || !DATE.test(fin)) return json({ error: 'dates_attendues_AAAA-MM-JJ' }, 400)
 
   const empreinte = await sha256(cle)
-  const { data, error } = await getSupabaseAdmin().rpc('exposeur_chiffres', { p_hash: empreinte, p_debut: debut, p_fin: fin })
+  const plateforme = url.searchParams.get('vue') === 'plateforme'
+  const fonction = plateforme ? 'exposeur_plateforme' : 'exposeur_chiffres'
+  const { data, error } = await getSupabaseAdmin().rpc(fonction, { p_hash: empreinte, p_debut: debut, p_fin: fin })
   if (error) {
     console.error('[exposeur]', error)
     return json({ error: 'failed' }, 500)
   }
-  // Clé inconnue ou révoquée : un 401 qui ne dit pas laquelle des deux.
+  // Clé inconnue, révoquée ou sans la portée demandée : un 401 qui ne dit pas laquelle.
   if (data === null) return json({ error: 'unauthorized' }, 401)
   if (data.error === 'pro') return json({ error: 'pro_requis' }, 403)
   return json({ debut, fin, ...data })

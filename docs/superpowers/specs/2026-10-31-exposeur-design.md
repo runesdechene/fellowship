@@ -81,3 +81,14 @@ fonction : l'écran viendra par-dessus sans rien changer.
 Migration horodatée (table, RLS, deux RPC) appliquée en production par `db push`, fonction
 `exposeur` déployée, tests de la fonction (clé fausse, révoquée, sans Pro, autre enseigne,
 somme correcte), vérification en ligne. Puis la clé de Runes de Chêne, puis le connecteur.
+
+## Portée plateforme (31/10/2026)
+
+Le plan de Fellowship mesure l'application entière (nouveaux comptes, festivals ajoutés, abonnés Pro).
+Une clé porte une `portee` : `enseigne` (défaut) ou `plateforme`. Avec `&vue=plateforme`, `exposeur`
+appelle `exposeur_plateforme` (SECURITY DEFINER, service role seul), qui ne répond qu'à une clé de
+portée plateforme et rend, sur la fenêtre (jours de Paris, bornes incluses) :
+`comptes` (users créés), `enseignes` (entities créées), `festivals` (events créés) ; et l'état du jour :
+`pro` (même règle qu'`admin_offre`, mois offerts compris), `pro_payants` (abonnement `active`),
+`essais` (`trialing`). Mêmes définitions que /admin. Clés plateforme données à la main, équipe seulement.
+Migration `20261031190000_exposeur_plateforme.sql`.
