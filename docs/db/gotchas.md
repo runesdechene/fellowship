@@ -62,6 +62,14 @@ Deux pièges, tous deux déjà payés :
    transaction qui garantit le bilan et lit l'orientation de la participation. Zéro efface la
    ligne. Ne pas la réécrire à la main en plusieurs requêtes.
 
+### Tables `revenue_keys` et `report_secrets` — les recettes chiffrées (31/10/2026)
+Les recettes Carte et Espèces d'une date sont chiffrées dans le navigateur : **elles ne sont pas
+dans `event_ledger_entries`**, et aucune somme SQL ne les voit. `revenue_keys` (une par enseigne :
+`salt`, `iterations`, `"check"`) et `report_secrets` (`actor_id`, `event_id`, `payload` chiffré),
+toutes deux en RLS `can_act_as(actor_id)`. Une date chiffrée compte comme un bilan rempli ;
+`exposeur_chiffres` rend les `payload` dans `secrets` et le client les déchiffre. Phrase oubliée :
+`reset_revenue_key(p_actor)` efface les deux tables pour l'enseigne.
+
 ### Table `event_reports`
 - ✅ `wins`, `improvements` (`TEXT[]`), `note`, `media_paths` (bucket privé `bilan-media`), `UNIQUE(actor_id, event_id)` (`uniq_event_report_actor`)
 - ❌ `booth_cost`, `charges`, `revenue` — **colonnes mortes**, voir ci-dessus
