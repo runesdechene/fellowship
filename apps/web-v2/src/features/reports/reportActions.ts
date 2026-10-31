@@ -10,7 +10,7 @@
 import { openRevenue, sealRevenue, type SecretRevenue } from '@/lib/cipher'
 import { must, supabase } from '@/lib/supabase'
 import { removeReportPhotos, uploadReportPhoto } from '@/lib/report-media'
-import { clearReportPlan, directionOf } from '@/lib/report-writes'
+import { clearReportPlan, directionOf, mergeRevenue } from '@/lib/report-writes'
 import type { LedgerCategory } from '@/types/database'
 import type { ReportDetail, ReportEntry } from './loadReport'
 
@@ -108,7 +108,8 @@ export async function sealRevenueLines(target: Target, key: CryptoKey, revenue: 
 
 /**
  * Change Carte OU Espèces à partir de ce que la base garde : deux modifications enchaînées avant
- * la relecture ne s'écrasent pas.
+ * la relecture ne s'écrasent pas. Sans ligne (bilan chiffré d'office, pas encore scellé), on part
+ * de zéro : la clé a été vérifiée juste avant (useReport), une phrase réinitialisée ne passe pas.
  */
 export async function resealPart(
   target: Target,
@@ -123,9 +124,8 @@ export async function resealPart(
     .eq('event_id', target.eventId)
     .maybeSingle()
   const row = must(response)
-  if (!row) throw new Error('Ces recettes ne sont plus chiffrées.')
-  const current = await openRevenue(key, row.payload)
-  await sealRevenueLines(target, key, { ...current, [part]: amount })
+  const current = row ? await openRevenue(key, row.payload) : null
+  await sealRevenueLines(target, key, mergeRevenue(current, part, amount))
 }
 
 /** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */

@@ -249,14 +249,7 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
     const key = revenueKey.key
     if (!key) return
     // Rien de scellé pour un zéro : la date resterait « remplie » sans que rien n'y soit saisi.
-    if (byDefault) {
-      if (!amount) return
-      actions.sealRevenue(
-        key,
-        part === 'carte' ? { carte: amount, especes: 0 } : { carte: 0, especes: amount },
-      )
-      return
-    }
+    if (byDefault && !amount) return
     actions.resealPart(key, part, amount ?? 0)
   }
 

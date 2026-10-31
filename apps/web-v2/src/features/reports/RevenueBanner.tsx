@@ -4,21 +4,28 @@
  * POURQUOI — maquettes 2580:233 / 2580:720 : une enseigne sans phrase apprend qu'elle peut rendre
  *            ses recettes illisibles pour tous sauf elle. Le refus est gardé en base (keepClear) :
  *            le bandeau ne revient plus, sur aucun appareil.
- * ATTENTION — ReportsPage ne le monte que si revenueInvitation() rend 'banner'. Choisir la phrase
- *            ne chiffre rien : les nouveaux bilans le seront d'office (encryptsByDefault).
+ * ATTENTION — il ne s'affiche que si revenueInvitation() rend 'banner', mais reste monté tant que
+ *            sa fenêtre est ouverte : elle doit pouvoir dire « Une phrase existe déjà… », et ne
+ *            partir qu'en se fermant, le bandeau avec elle (View Transitions). Choisir la phrase ne
+ *            chiffre rien : les nouveaux bilans le seront d'office (encryptsByDefault).
  */
 import { Lock } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/lib/auth'
+import { useViewTransition } from '@/lib/navigation'
+import { revenueInvitation } from '@/lib/report-writes'
 import { useRevenueKey } from '@/lib/revenue-key'
 import { EncryptDialog } from './EncryptDialog'
 
 export function RevenueBanner() {
   const { actor } = useAuth()
-  const { keepClear } = useRevenueKey()
+  const { ready, status, clearChosen, keepClear } = useRevenueKey()
+  const transition = useViewTransition()
   const [choosing, setChoosing] = useState(false)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+
+  if (revenueInvitation(ready, status, clearChosen) !== 'banner' && !choosing) return null
 
   async function keep() {
     setBusy(true)
@@ -76,7 +83,9 @@ export function RevenueBanner() {
         <EncryptDialog
           subtitle={actor?.label ?? ''}
           onClose={() => {
-            setChoosing(false)
+            transition('banner', () => {
+              setChoosing(false)
+            })
           }}
         />
       )}

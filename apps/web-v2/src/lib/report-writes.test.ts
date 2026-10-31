@@ -9,6 +9,7 @@ import {
   clearReportPlan,
   directionOf,
   encryptsByDefault,
+  mergeRevenue,
   removeTag,
   revenueInvitation,
 } from './report-writes'
@@ -107,5 +108,15 @@ describe('revenueInvitation', () => {
     expect(revenueInvitation(true, 'locked', true)).toBeNull()
     expect(revenueInvitation(true, 'open', false)).toBeNull()
     expect(revenueInvitation(false, 'none', false)).toBeNull()
+  })
+})
+
+describe('mergeRevenue', () => {
+  it('rien de scellé : la part saisie, l’autre à zéro', () => {
+    expect(mergeRevenue(null, 'carte', 412)).toEqual({ carte: 412, especes: 0 })
+  })
+  it('Carte puis Espèces : la Carte déjà scellée est gardée', () => {
+    const afterCarte = mergeRevenue(null, 'carte', 412)
+    expect(mergeRevenue(afterCarte, 'especes', 50)).toEqual({ carte: 412, especes: 50 })
   })
 })

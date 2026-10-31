@@ -7,6 +7,7 @@
  *            emporterait la ligne « stepper », le prix de la place saisi dans Mon dossier.
  */
 import type { LedgerCategory } from '@/types/database'
+import type { SecretRevenue } from './cipher'
 
 export const CATEGORIES = [
   { value: 'ventes', label: 'Ventes', direction: 'in' },
@@ -53,6 +54,18 @@ export function revenueInvitation(
 ): 'banner' | 'settings' | null {
   if (!ready || keyStatus !== 'none') return null
   return clearChosen ? 'settings' : 'banner'
+}
+
+/**
+ * Carte ou Espèces changée : l'autre part vient de ce que la base garde à l'instant de l'écriture
+ * (null : rien n'est encore scellé, on part de zéro), jamais de l'écran.
+ */
+export function mergeRevenue(
+  current: SecretRevenue | null,
+  part: keyof SecretRevenue,
+  amount: number,
+): SecretRevenue {
+  return { ...(current ?? { carte: 0, especes: 0 }), [part]: amount }
 }
 
 export function directionOf(category: LedgerCategory): 'in' | 'out' {

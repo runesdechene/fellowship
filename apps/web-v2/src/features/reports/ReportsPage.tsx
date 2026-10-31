@@ -16,7 +16,6 @@ import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { useRevenueKey } from '@/lib/revenue-key'
-import { revenueInvitation } from '@/lib/report-writes'
 import { yearSummary } from '@/lib/reports'
 import { usePlan } from '@/lib/usePlan'
 import { ReportsInvitation } from './ReportsInvitation'
@@ -39,7 +38,7 @@ export function ReportsPage() {
   const year = yearFrom(params.get('annee'))
   const { status, years, dates, previousYearRevenue } = useReports(actor?.id, year)
   const { pro } = usePlan()
-  const { status: keyStatus, ready, clearChosen } = useRevenueKey()
+  const { status: keyStatus } = useRevenueKey()
   useDeclarePageChrome({ poster: null, lead: null, back: '/' })
 
   // L'année affichée reste proposée même sans date, pour qu'on voie où l'on est.
@@ -61,7 +60,7 @@ export function ReportsPage() {
             )}
           </p>
         </div>
-        {pro && revenueInvitation(ready, keyStatus, clearChosen) === 'banner' && <RevenueBanner />}
+        {pro && <RevenueBanner />}
         {choices.length > 1 && (
           <Segmented
             label="Année"
