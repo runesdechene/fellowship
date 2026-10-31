@@ -13,7 +13,7 @@
 import { Lock, TriangleAlert } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { isStrongPassphrase, type SecretRevenue } from '@/lib/cipher'
-import { formatEuros, parseAmount } from '@/lib/money'
+import { parseAmount } from '@/lib/money'
 import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 
 interface Seal {
@@ -34,6 +34,11 @@ interface EncryptDialogProps {
 /** Au-delà, le montant ne tient plus dans le message chiffré (lib/cipher.ts). */
 const MAX_AMOUNT = 999_999.99
 
+/** Le nombre seul : le « € » est posé à côté du champ, jamais dans ce qu'on tape. */
+function draftOf(amount: number): string {
+  return amount === 0 ? '' : String(amount).replace('.', ',')
+}
+
 function readAmount(draft: string): number | null {
   const amount = parseAmount(draft)
   if (amount === 'invalide' || (amount ?? 0) > MAX_AMOUNT) return null
@@ -44,8 +49,8 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
   const { status, key, create } = useRevenueKey()
   // Figée à l'ouverture : la phrase créée ici ouvre la clé, la fenêtre ne doit pas changer de forme.
   const [withPhrase] = useState(status === 'none' || !seal)
-  const [carte, setCarte] = useState(formatEuros(seal?.initial.carte ?? 0))
-  const [especes, setEspeces] = useState(formatEuros(seal?.initial.especes ?? 0))
+  const [carte, setCarte] = useState(draftOf(seal?.initial.carte ?? 0))
+  const [especes, setEspeces] = useState(draftOf(seal?.initial.especes ?? 0))
   const [phrase, setPhrase] = useState('')
   const [again, setAgain] = useState('')
   const [problem, setProblem] = useState<string | null>(null)
@@ -132,9 +137,16 @@ export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
                 restent masquées, même à zéro.
                 {seal.replaces && ' Tes recettes actuelles seront remplacées par ces deux lignes.'}
               </p>
-              <SecretField label="Carte" value={carte} onChange={setCarte} inputMode="decimal" />
+              <SecretField
+                label="Carte"
+                placeholder="0"
+                value={carte}
+                onChange={setCarte}
+                inputMode="decimal"
+              />
               <SecretField
                 label="Espèces"
+                placeholder="0"
                 value={especes}
                 onChange={setEspeces}
                 inputMode="decimal"
@@ -215,6 +227,7 @@ function SecretField({
           onChange(event.target.value)
         }}
       />
+      {inputMode === 'decimal' && <span className="ledger__field-label">€</span>}
     </label>
   )
 }
