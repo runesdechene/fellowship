@@ -22,6 +22,13 @@ avec l'en-tête `Authorization: Bearer <clé>`.
 - **`ca_reel`** : le CA réel des bilans remplis seuls ; **`ca_projete`** : la somme des CA espérés.
 - **`bilans`** : le nombre de dates dont le bilan est rempli (une ligne `manual`, comme `isFilled()`).
 - **`dates`** : leur nombre.
+- **`cle`** et **`secrets`** (recettes chiffrées, migration `20261031150000`) : `cle` = `{ "salt", "iterations" }`
+  de l'enseigne (`null` sans phrase), `secrets` = `[{ "payload", "dans_ca" }]`, un par date comptée qui a des
+  recettes chiffrées. Le serveur ne peut pas les sommer : `ca` et `ca_reel` n'y comptent donc **pas** ces
+  recettes. `dans_ca` vaut vrai quand la date n'a pas de CA espéré (le réel y compte dans `ca`).
+  Le client les déchiffre avec la phrase et ajoute Carte + Espèces à `ca_reel`, et à `ca` si `dans_ca`
+  (algorithme : `apps/web-v2/src/lib/cipher.ts`). `cle` ne porte pas `check` : une mauvaise phrase se
+  reconnaît à l'échec d'AES-GCM.
 
 Lecture seule. Aucune donnée d'une autre enseigne, aucun nom de festival dans cette première
 version (les chiffres suffisent au tableau de bord ; un détail par date pourra venir).
@@ -52,7 +59,9 @@ utilisation), « Révoquer ». **Rien n'est intégré sans maquette Figma valid�
 
 Un connecteur « Requête JSON » `fellowship` : adresse
 `…/functions/v1/exposeur?debut={debut}&fin={fin}`, la clé dans le coffre d'Obsidian, mesures
-`ca = ca`, `ca_reel = ca_reel` et `ca_projete = ca_projete`. L'objectif devient
+`ca = ca`, `ca_reel = ca_reel` et `ca_projete = ca_projete`. Le champ « Phrase des recettes » nomme le secret
+du coffre qui garde la phrase de l'enseigne : le plugin déchiffre alors `secrets` et les ajoute (sans phrase,
+une erreur « phrase des recettes absente du coffre » ne tombe que si la réponse porte des secrets). L'objectif devient
 `[mesure:: boutique.ca + fellowship.ca]`, la carte montre la part de chacun.
 
 ## En attendant l'écran

@@ -2,6 +2,8 @@
 // GET ?debut=AAAA-MM-JJ&fin=AAAA-MM-JJ, en-tête « Authorization: Bearer <clé> ». Lecture seule.
 // Public (verify_jwt = false) : la clé fait foi ; seul son hash est en base (table api_keys).
 // Le calcul vit dans exposeur_chiffres (migration 20261031130000), réservée au service role.
+// Migration 20261031150000 : la réponse porte aussi `cle` (sel, itérations) et `secrets` (recettes chiffrées de
+// chaque date), rendus tels quels — le serveur ne peut pas les lire, c'est le plugin Accueil qui les déchiffre.
 // Spec : docs/superpowers/specs/2026-10-31-exposeur-design.md.
 
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
