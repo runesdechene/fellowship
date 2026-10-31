@@ -135,6 +135,47 @@ export type Database = {
           },
         ]
       }
+      api_keys: {
+        Row: {
+          actor_id: string
+          created_at: string
+          hash: string
+          id: string
+          label: string
+          last_used_at: string | null
+          prefix: string
+          revoked_at: string | null
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          hash: string
+          id?: string
+          label: string
+          last_used_at?: string | null
+          prefix: string
+          revoked_at?: string | null
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          hash?: string
+          id?: string
+          label?: string
+          last_used_at?: string | null
+          prefix?: string
+          revoked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       app_update_comments: {
         Row: {
           actor_id: string
@@ -1748,6 +1789,74 @@ export type Database = {
           },
         ]
       }
+      report_secrets: {
+        Row: {
+          actor_id: string
+          event_id: string
+          payload: string
+          updated_at: string
+        }
+        Insert: {
+          actor_id: string
+          event_id: string
+          payload: string
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string
+          event_id?: string
+          payload?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_secrets_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_secrets_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      revenue_keys: {
+        Row: {
+          actor_id: string
+          check: string
+          created_at: string
+          iterations: number
+          salt: string
+        }
+        Insert: {
+          actor_id: string
+          check: string
+          created_at?: string
+          iterations: number
+          salt: string
+        }
+        Update: {
+          actor_id?: string
+          check?: string
+          created_at?: string
+          iterations?: number
+          salt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revenue_keys_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: true
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       review_replies: {
         Row: {
           acted_by_user_id: string | null
@@ -2815,6 +2924,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      exposeur_chiffres: {
+        Args: { p_debut: string; p_fin: string; p_hash: string }
+        Returns: Json
+      }
       friend_requests: {
         Args: { p_actor: string }
         Returns: {
@@ -3068,6 +3181,7 @@ export type Database = {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
         Returns: undefined
       }
+      reset_revenue_key: { Args: { p_actor: string }; Returns: undefined }
       revenir_a_version_evenement: {
         Args: { p_version: number }
         Returns: number
