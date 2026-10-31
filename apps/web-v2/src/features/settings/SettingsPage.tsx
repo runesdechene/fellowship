@@ -16,6 +16,7 @@ import { DeleteAccount } from './DeleteAccount'
 import { EntitiesSection } from './EntitiesSection'
 import { NotificationSettings } from './NotificationSettings'
 import { ProfileSection } from './ProfileSection'
+import { ResetRevenueKey } from './ResetRevenueKey'
 import type { SaveState } from './useProfileSave'
 
 const SECTIONS = [
@@ -44,6 +45,7 @@ function Section({ id, onSave }: { id: SectionId; onSave: (state: SaveState) => 
       return (
         <>
           <AccountSection />
+          <ResetRevenueKey />
           <DeleteAccount />
         </>
       )
