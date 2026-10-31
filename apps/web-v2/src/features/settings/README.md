@@ -18,6 +18,8 @@
 - `DeleteEntityDialog.tsx` — supprimer une enseigne (retaper son nom), par `delete-account`.
 - `useUpcomingCounts.ts` — les dates de chaque enseigne sur les 6 prochains mois.
 - `ContactSection.tsx` — écrire à l'équipe.
+- `ChooseRevenueKey.tsx` — « Chiffrer mes recettes », pour l'enseigne qui a gardé ses recettes en clair.
+- `ResetRevenueKey.tsx` — « Réinitialiser ma phrase de passe ».
 - `DeleteAccount.tsx` — la carte « Supprimer mon compte » et sa fenêtre de confirmation.
 - `useAccountDeletion.ts` — l'aperçu puis la suppression, par la fonction serveur `delete-account`.
 - `EntityBase.tsx`, `useEntityBase.ts` — « Siège social ou atelier » sous chaque enseigne (lot 13) :

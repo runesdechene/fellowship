@@ -458,6 +458,7 @@ export type Database = {
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
+          revenue_clear_chosen_at: string | null
           siren: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
@@ -493,6 +494,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          revenue_clear_chosen_at?: string | null
           siren?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -528,6 +530,7 @@ export type Database = {
           plan?: Database["public"]["Enums"]["user_plan"]
           postal_code?: string | null
           public_slug?: string | null
+          revenue_clear_chosen_at?: string | null
           siren?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -3095,6 +3098,7 @@ export type Database = {
           plan: Database["public"]["Enums"]["user_plan"]
           postal_code: string | null
           public_slug: string | null
+          revenue_clear_chosen_at: string | null
           siren: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null

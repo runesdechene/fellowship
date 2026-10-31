@@ -18,6 +18,8 @@
   --segmented-option-height: var(--reports-year-height);
 
   display: flex;
+  /* Le bandeau « Chiffre tes recettes » passe à la ligne sous le titre et les années. */
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-24);

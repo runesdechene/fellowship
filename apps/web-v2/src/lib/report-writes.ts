@@ -1,6 +1,7 @@
 /**
  * QUOI     — les règles d'écriture d'un bilan : sens de chaque catégorie, la catégorie « Recettes
- *            chiffrées », ajout d'une étiquette, ce que « Supprimer ce bilan » efface.
+ *            chiffrées », le chiffrement d'office d'un nouveau bilan, l'invitation à choisir une
+ *            phrase, ajout d'une étiquette, ce que « Supprimer ce bilan » efface.
  * POURQUOI — logique pure, testée seule ; le hook useReport ne fait qu'appliquer.
  * ATTENTION — « Supprimer ce bilan » ne supprime JAMAIS la ligne event_reports : la cascade
  *            emporterait la ligne « stepper », le prix de la place saisi dans Mon dossier.
@@ -25,6 +26,33 @@ export const SECRET_CATEGORY = { value: 'chiffrees', label: 'Recettes chiffrées
 /** Les catégories de la ligne d'ajout : sur une date chiffrée, une recette passe par Carte et Espèces. */
 export function addableCategories(encrypted: boolean) {
   return encrypted ? CATEGORIES.filter((entry) => entry.direction === 'out') : CATEGORIES
+}
+
+/**
+ * Une date sans recette saisie en clair et pas encore chiffrée, d'une enseigne qui a sa phrase : elle
+ * se présente avec Carte et Espèces, et le premier montant la scelle. Les dates qui ont des recettes
+ * en clair restent telles quelles, et se chiffrent une par une.
+ */
+export function encryptsByDefault(
+  secret: 'none' | 'masked' | 'open',
+  lines: readonly { direction: 'in' | 'out'; source: string }[],
+  keyStatus: 'none' | 'locked' | 'open',
+): boolean {
+  if (secret !== 'none' || keyStatus === 'none') return false
+  return !lines.some((line) => line.direction === 'in' && line.source === 'manual')
+}
+
+/**
+ * Où inviter à chiffrer : le bandeau de Mes bilans tant que l'enseigne n'a ni phrase ni refus, la
+ * carte des Réglages après « Garder en clair ». Rien tant que l'existence d'une phrase n'est pas lue.
+ */
+export function revenueInvitation(
+  ready: boolean,
+  keyStatus: 'none' | 'locked' | 'open',
+  clearChosen: boolean,
+): 'banner' | 'settings' | null {
+  if (!ready || keyStatus !== 'none') return null
+  return clearChosen ? 'settings' : 'banner'
 }
 
 export function directionOf(category: LedgerCategory): 'in' | 'out' {

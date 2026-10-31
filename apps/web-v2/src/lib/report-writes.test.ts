@@ -3,7 +3,15 @@
  * POURQUOI — l'effacement d'un bilan ne doit jamais toucher au prix de Mon dossier.
  */
 import { describe, expect, it } from 'vitest'
-import { addTag, addableCategories, clearReportPlan, directionOf, removeTag } from './report-writes'
+import {
+  addTag,
+  addableCategories,
+  clearReportPlan,
+  directionOf,
+  encryptsByDefault,
+  removeTag,
+  revenueInvitation,
+} from './report-writes'
 import { reportPhotoPath } from './report-media'
 
 describe('directionOf', () => {
@@ -66,5 +74,38 @@ describe('removeTag', () => {
 describe('reportPhotoPath', () => {
   it('range la photo sous l’acteur puis l’événement — la policy du bucket lit le premier dossier', () => {
     expect(reportPhotoPath('a1', 'e1', 'u1', 'webp')).toBe('a1/e1/u1.webp')
+  })
+})
+
+describe('encryptsByDefault', () => {
+  const sale = { direction: 'in' as const, source: 'manual' }
+  const fee = { direction: 'in' as const, source: 'stepper' }
+  const fuel = { direction: 'out' as const, source: 'manual' }
+
+  it('un bilan neuf d’une enseigne qui a sa phrase se chiffre d’office, ouverte ou non', () => {
+    expect(encryptsByDefault('none', [], 'open')).toBe(true)
+    expect(encryptsByDefault('none', [fuel, fee], 'locked')).toBe(true)
+  })
+  it('des recettes saisies en clair gardent le bilan tel quel', () => {
+    expect(encryptsByDefault('none', [sale, fuel], 'open')).toBe(false)
+  })
+  it('sans phrase, ou déjà chiffré, rien d’office', () => {
+    expect(encryptsByDefault('none', [], 'none')).toBe(false)
+    expect(encryptsByDefault('open', [], 'open')).toBe(false)
+    expect(encryptsByDefault('masked', [], 'locked')).toBe(false)
+  })
+})
+
+describe('revenueInvitation', () => {
+  it('le bandeau tant qu’il n’y a ni phrase ni refus', () => {
+    expect(revenueInvitation(true, 'none', false)).toBe('banner')
+  })
+  it('la carte des Réglages après « Garder en clair »', () => {
+    expect(revenueInvitation(true, 'none', true)).toBe('settings')
+  })
+  it('rien avec une phrase, même refusée avant, ni avant de savoir', () => {
+    expect(revenueInvitation(true, 'locked', true)).toBeNull()
+    expect(revenueInvitation(true, 'open', false)).toBeNull()
+    expect(revenueInvitation(false, 'none', false)).toBeNull()
   })
 })

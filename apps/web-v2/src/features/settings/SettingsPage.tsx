@@ -11,6 +11,7 @@ import { Bell, Check, KeyRound, Mail, Store, UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { AccountSection } from './AccountSection'
+import { ChooseRevenueKey } from './ChooseRevenueKey'
 import { ContactSection } from './ContactSection'
 import { DeleteAccount } from './DeleteAccount'
 import { EntitiesSection } from './EntitiesSection'
@@ -45,6 +46,7 @@ function Section({ id, onSave }: { id: SectionId; onSave: (state: SaveState) => 
       return (
         <>
           <AccountSection />
+          <ChooseRevenueKey />
           <ResetRevenueKey />
           <DeleteAccount />
         </>

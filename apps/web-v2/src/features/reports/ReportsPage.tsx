@@ -5,7 +5,9 @@
  *            retour arrière du navigateur ramène à l'année d'avant.
  * ATTENTION — l'écran n'affiche que ce que useReports charge et lib/reports.ts calcule. En
  *            gratuit, tout passe sous un voile avec l'invitation Pro : les vraies données s'il y
- *            en a (saisies pendant une période Pro), sinon un exemple (sampleReports).
+ *            en a (saisies pendant une période Pro), sinon un exemple (sampleReports). En Pro, le
+ *            bandeau « Chiffre tes recettes » (RevenueBanner) se glisse dans l'en-tête : entre le
+ *            titre et les années sur téléphone, sous les deux sur ordinateur (reports-page.css).
  */
 import { Lock } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
@@ -14,9 +16,11 @@ import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
 import { useDeclarePageChrome } from '@/lib/page-chrome'
 import { useRevenueKey } from '@/lib/revenue-key'
+import { revenueInvitation } from '@/lib/report-writes'
 import { yearSummary } from '@/lib/reports'
 import { usePlan } from '@/lib/usePlan'
 import { ReportsInvitation } from './ReportsInvitation'
+import { RevenueBanner } from './RevenueBanner'
 import { sampleReports } from './sampleReports'
 import { MonthlyChart } from './MonthlyChart'
 import { ReportsTable } from './ReportsTable'
@@ -35,7 +39,7 @@ export function ReportsPage() {
   const year = yearFrom(params.get('annee'))
   const { status, years, dates, previousYearRevenue } = useReports(actor?.id, year)
   const { pro } = usePlan()
-  const { status: keyStatus } = useRevenueKey()
+  const { status: keyStatus, ready, clearChosen } = useRevenueKey()
   useDeclarePageChrome({ poster: null, lead: null, back: '/' })
 
   // L'année affichée reste proposée même sans date, pour qu'on voie où l'on est.
@@ -57,6 +61,7 @@ export function ReportsPage() {
             )}
           </p>
         </div>
+        {pro && revenueInvitation(ready, keyStatus, clearChosen) === 'banner' && <RevenueBanner />}
         {choices.length > 1 && (
           <Segmented
             label="Année"

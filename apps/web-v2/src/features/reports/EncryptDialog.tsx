@@ -1,8 +1,10 @@
 /**
  * QUOI     — la fenêtre « Chiffrer tes recettes » : Carte et Espèces, et la première fois la phrase
- *            de passe (deux fois) avec l'avertissement « Phrase oubliée, recettes perdues ».
+ *            de passe (deux fois) avec l'avertissement « Phrase oubliée, recettes perdues ». Sans
+ *            `seal`, la même fenêtre sans montants : « Choisir ta phrase de passe ».
  * POURQUOI — maquette 2566:815 / 2574:803 : chiffrer une date remplace ses recettes saisies par
- *            deux montants que seule l'enseigne peut lire.
+ *            deux montants que seule l'enseigne peut lire. Maquette 2580:463 : le bandeau de Mes
+ *            bilans et les Réglages font choisir la phrase seule, rien n'est chiffré à ce moment-là.
  * ATTENTION — la phrase ne se demande que si l'enseigne n'en a pas (status 'none') ; sinon la clé
  *            est déjà ouverte et seuls les montants restent. Pendant l'enregistrement de la phrase,
  *            rien ne ferme la fenêtre. Habillée par apply-dialog.css (même fenêtre que
@@ -14,13 +16,18 @@ import { isStrongPassphrase, type SecretRevenue } from '@/lib/cipher'
 import { formatEuros, parseAmount } from '@/lib/money'
 import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 
-interface EncryptDialogProps {
-  /** « Les Aventuriales, 25–27 juin 2026 ». */
-  subtitle: string
+interface Seal {
   initial: SecretRevenue
   /** La date a des recettes saisies : la fenêtre prévient qu'elles seront remplacées. */
   replaces: boolean
   onSeal: (key: CryptoKey, revenue: SecretRevenue) => void
+}
+
+interface EncryptDialogProps {
+  /** « Les Aventuriales, 25–27 juin 2026 », ou le nom de l'enseigne sans `seal`. */
+  subtitle: string
+  /** Absent : la fenêtre ne fait que choisir la phrase. */
+  seal?: Seal
   onClose: () => void
 }
 
@@ -33,18 +40,12 @@ function readAmount(draft: string): number | null {
   return amount ?? 0
 }
 
-export function EncryptDialog({
-  subtitle,
-  initial,
-  replaces,
-  onSeal,
-  onClose,
-}: EncryptDialogProps) {
+export function EncryptDialog({ subtitle, seal, onClose }: EncryptDialogProps) {
   const { status, key, create } = useRevenueKey()
   // Figée à l'ouverture : la phrase créée ici ouvre la clé, la fenêtre ne doit pas changer de forme.
-  const [withPhrase] = useState(status === 'none')
-  const [carte, setCarte] = useState(formatEuros(initial.carte))
-  const [especes, setEspeces] = useState(formatEuros(initial.especes))
+  const [withPhrase] = useState(status === 'none' || !seal)
+  const [carte, setCarte] = useState(formatEuros(seal?.initial.carte ?? 0))
+  const [especes, setEspeces] = useState(formatEuros(seal?.initial.especes ?? 0))
   const [phrase, setPhrase] = useState('')
   const [again, setAgain] = useState('')
   const [problem, setProblem] = useState<string | null>(null)
@@ -67,7 +68,7 @@ export function EncryptDialog({
     }
     const amounts = { carte: revenue.carte, especes: revenue.especes }
     if (!withPhrase) {
-      if (key) onSeal(key, amounts)
+      if (key) seal?.onSeal(key, amounts)
       onClose()
       return
     }
@@ -82,7 +83,8 @@ export function EncryptDialog({
     setBusy(true)
     setProblem(null)
     try {
-      onSeal(await create(phrase), amounts)
+      const created = await create(phrase)
+      seal?.onSeal(created, amounts)
       onClose()
     } catch (reason) {
       setProblem(
@@ -116,20 +118,35 @@ export function EncryptDialog({
       >
         <header>
           <h2 id="encrypt-dialog-title" className="apply-dialog__title">
-            Chiffrer tes recettes
+            {seal ? 'Chiffrer tes recettes' : 'Choisir ta phrase de passe'}
           </h2>
           <p className="apply-dialog__subtitle">{subtitle}</p>
         </header>
 
         <div className="report-secret__content">
-          <p className="report-secret__text">
-            Tes recettes, carte et espèces, sont chiffrées sur ton appareil avant d’être
-            enregistrées. Personne d’autre ne peut les lire, pas même l’équipe Fellowship. Elles
-            restent masquées, même à zéro.
-            {replaces && ' Tes recettes actuelles seront remplacées par ces deux lignes.'}
-          </p>
-          <SecretField label="Carte" value={carte} onChange={setCarte} inputMode="decimal" />
-          <SecretField label="Espèces" value={especes} onChange={setEspeces} inputMode="decimal" />
+          {seal ? (
+            <>
+              <p className="report-secret__text">
+                Tes recettes, carte et espèces, sont chiffrées sur ton appareil avant d’être
+                enregistrées. Personne d’autre ne peut les lire, pas même l’équipe Fellowship. Elles
+                restent masquées, même à zéro.
+                {seal.replaces && ' Tes recettes actuelles seront remplacées par ces deux lignes.'}
+              </p>
+              <SecretField label="Carte" value={carte} onChange={setCarte} inputMode="decimal" />
+              <SecretField
+                label="Espèces"
+                value={especes}
+                onChange={setEspeces}
+                inputMode="decimal"
+              />
+            </>
+          ) : (
+            <p className="report-secret__text">
+              Tes recettes seront chiffrées sur ton appareil avant d’être enregistrées, dans tous
+              tes nouveaux bilans. Personne d’autre ne pourra les lire, pas même l’équipe
+              Fellowship. Tes bilans passés restent comme ils sont : tu peux les chiffrer un par un.
+            </p>
+          )}
           {withPhrase && (
             <>
               <SecretField
@@ -162,7 +179,7 @@ export function EncryptDialog({
 
         <button type="submit" className="apply-dialog__go" disabled={busy}>
           <Lock size={13} strokeWidth={2} />
-          {busy ? 'Un instant…' : 'Chiffrer mes recettes'}
+          {busy ? 'Un instant…' : seal ? 'Chiffrer mes recettes' : 'Choisir cette phrase'}
         </button>
       </form>
     </dialog>
