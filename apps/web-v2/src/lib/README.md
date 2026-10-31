@@ -6,6 +6,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 
 - `supabase.ts` — le client unique.
 - `auth.tsx` — session, casquettes, acteur actif, connexion par code (`useAuth`).
+- `revenue-key.tsx` — la clé de chiffrement des recettes de l'enseigne active, en mémoire seulement (`useRevenueKey`).
 - `access.ts` — ce qu'un visiteur sans compte ne voit pas (fiche privée).
 - `dates.ts` — **toute** la logique de dates ; non négociable (fuseau surveillé).
 - `money.ts` — **tous** les montants et le registre de bilan ; non négociable.

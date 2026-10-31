@@ -2,8 +2,9 @@
  * QUOI     — charge et prépare toutes les données du tableau de bord pour l'acteur actif.
  * POURQUOI — un seul hook pour l'écran : participations, amis présents, registre des bilans
  *            (event_ledger_entries), découpés en blocs prêts à afficher (DashboardData).
- * ATTENTION — les montants viennent de event_ledger_entries, jamais des colonnes mortes de
- *            event_reports ; les dates passent par lib/dates.ts, les sommes par lib/money.ts.
+ * ATTENTION — les montants viennent de event_ledger_entries (et, déchiffrés avec la clé de
+ *            lib/revenue-key.tsx, de report_secrets), jamais des colonnes mortes de
+ *            event_reports ; une date aux recettes verrouillées est `masked` (montants incomplets) ; les dates passent par lib/dates.ts, les sommes par lib/money.ts.
  */
 import { useEffect, useMemo, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
@@ -23,7 +24,9 @@ import {
 } from '@/lib/friends'
 import { dossierView, type DossierView } from '@/lib/dossiers'
 import { ledgerProfit, ledgerRevenue } from '@/lib/money'
+import { useRevenueKey } from '@/lib/revenue-key'
 import { isFilled, type ReportLine } from '@/lib/reports'
+import { loadSecrets, withSecret } from '@/features/reports/secretRevenue'
 import type { EventRow, ParticipationStatus } from '@/types/database'
 
 export type { Friend }
@@ -68,6 +71,8 @@ export interface DashboardReport {
   revenue: number | null
   /** Entrants − sortants. null tant qu'aucune ligne de registre n'existe. */
   net: number | null
+  /** Recettes chiffrées et verrouillées : revenue et net sont incomplets, à ne pas afficher. */
+  masked: boolean
 }
 
 interface DashboardData {
@@ -174,6 +179,7 @@ async function fetchDossiers(
 async function fetchReports(
   actorId: string,
   todaySql: string,
+  key: CryptoKey | null,
 ): Promise<{
   reports: DashboardReport[]
   seasonNet: number | null
@@ -199,6 +205,11 @@ async function fetchReports(
   if (past.length === 0)
     return { reports: [], seasonNet: null, seasonRevenue: null, pendingReport: null }
 
+  const secrets = await loadSecrets(
+    actorId,
+    past.map((event) => event.id),
+    key,
+  )
   const ledgerRows = must(
     await supabase
       .from('event_ledger_entries')
@@ -217,27 +228,27 @@ async function fetchReports(
     return map
   }, new Map<string, ReportLine[]>())
 
-  const reports = past.map((event) => {
-    const lines = linesByEvent.get(event.id) ?? []
-    // La ligne de Mon dossier seule ne fait pas un bilan (lib/reports.ts).
-    const filled = isFilled(lines)
-    return {
-      eventId: event.id,
-      name: event.name,
-      imageUrl: event.image_url,
-      tags: event.tags,
-      date: parseSqlDate(event.start_date),
-      revenue: filled ? ledgerRevenue(lines) : null,
-      net: filled ? ledgerProfit(lines) : null,
-    }
-  })
+  // Les lignes d'une date, recettes déchiffrées comprises, et si elle est remplie (même règle que
+  // reportFigures : la ligne de Mon dossier seule ne fait pas un bilan).
+  const merge = (eventId: string) => {
+    const { lines, secret } = withSecret(linesByEvent.get(eventId) ?? [], secrets.get(eventId))
+    return { lines, secret, filled: isFilled(lines) || secret !== 'none' }
+  }
+  const merged = past.map((event) => ({ event, ...merge(event.id) }))
+  const reports = merged.map(({ event, lines, secret, filled }) => ({
+    eventId: event.id,
+    name: event.name,
+    imageUrl: event.image_url,
+    tags: event.tags,
+    date: parseSqlDate(event.start_date),
+    revenue: filled ? ledgerRevenue(lines) : null,
+    net: filled ? ledgerProfit(lines) : null,
+    masked: secret === 'masked',
+  }))
 
   // La saison ne compte que les bilans remplis : la place d'une date pas encore faite n'est pas
   // une perte de l'année.
-  const filledLines = past.flatMap((event) => {
-    const lines = linesByEvent.get(event.id) ?? []
-    return isFilled(lines) ? lines : []
-  })
+  const filledLines = merged.flatMap(({ lines, filled }) => (filled ? lines : []))
   const seasonNet = filledLines.length > 0 ? ledgerProfit(filledLines) : null
   const seasonRevenue = filledLines.length > 0 ? ledgerRevenue(filledLines) : null
 
@@ -256,6 +267,7 @@ async function fetchReports(
 async function loadDashboard(
   actorId: string,
   today: Date,
+  key: CryptoKey | null,
 ): Promise<{ dates: DashboardDate[]; state: Omit<DashboardData, 'months'> }> {
   const todaySql = todayIso(today)
   const rows = must(
@@ -297,7 +309,7 @@ async function loadDashboard(
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
 
   const [{ reports, seasonNet, seasonRevenue, pendingReport }, dossiers] = await Promise.all([
-    fetchReports(actorId, todaySql),
+    fetchReports(actorId, todaySql, key),
     fetchDossiers(actorId, dates, privateByEvent),
   ])
 
@@ -332,6 +344,7 @@ async function loadDashboard(
 
 /** Toutes les données du tableau de bord, pour l'acteur actif. */
 export function useDashboard(actorId: string | null | undefined): DashboardData {
+  const { key, status } = useRevenueKey()
   const [state, setState] = useState<Omit<DashboardData, 'months'>>(EMPTY)
   const [dates, setDates] = useState<DashboardDate[]>([])
 
@@ -349,7 +362,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
     async function run(currentActorId: string) {
       setState((s) => ({ ...s, loading: true, error: null }))
       try {
-        const result = await loadDashboard(currentActorId, new Date())
+        const result = await loadDashboard(currentActorId, new Date(), key)
         if (cancelled) return
         setDates(result.dates)
         setState(result.state)
@@ -368,7 +381,7 @@ export function useDashboard(actorId: string | null | undefined): DashboardData 
     return () => {
       cancelled = true
     }
-  }, [actorId])
+  }, [actorId, key, status])
 
   const months = useMemo<MonthBucket[]>(() => {
     const counts = actorId

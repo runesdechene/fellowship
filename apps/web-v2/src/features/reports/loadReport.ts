@@ -3,7 +3,9 @@
  *            elle existe, les lignes de registre, les photos. L'objectif de chiffre d'affaires,
  *            lui, vient du dossier (useDossier) : le bilan le fixe.
  * POURQUOI — l'écran du bilan lit tout d'un coup ; useReport le recharge après chaque écriture.
- * ATTENTION — rend null quand la date n'est pas un bilan possible (pas inscrit, ou date pas
+ * ATTENTION — `key` (lib/revenue-key.tsx) déchiffre les recettes Carte et Espèces : sans elle, la date
+ *            est 'masked'. `entries` reste le registre en clair, jamais les recettes chiffrées.
+ *            Rend null quand la date n'est pas un bilan possible (pas inscrit, ou date pas
  *            encore passée) : l'écran renvoie alors vers Mes bilans. Une erreur de la base, elle,
  *            LÈVE — jamais confondue avec « pas de bilan ».
  */
@@ -12,6 +14,7 @@ import { parseSqlDate, todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
 import { signedReportUrls } from '@/lib/report-media'
 import { CATEGORIES } from '@/lib/report-writes'
+import { loadSecrets, withSecret } from './secretRevenue'
 import type { ReportDate } from '@/lib/reports'
 import type { LedgerCategory } from '@/types/database'
 
@@ -39,7 +42,11 @@ function toCategory(value: string): LedgerCategory {
   return CATEGORIES.find((entry) => entry.value === value)?.value ?? 'autre'
 }
 
-export async function loadReport(eventId: string, actorId: string): Promise<ReportDetail | null> {
+export async function loadReport(
+  eventId: string,
+  actorId: string,
+  key: CryptoKey | null,
+): Promise<ReportDetail | null> {
   const participation = await supabase
     .from('participations')
     .select(
@@ -53,7 +60,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
   if (!row || row.events.end_date >= todayIso()) return null
   const event = row.events
 
-  const [reportResponse, ledgerResponse] = await Promise.all([
+  const [reportResponse, ledgerResponse, secrets] = await Promise.all([
     supabase
       .from('event_reports')
       .select('id, wins, improvements, note, media_paths')
@@ -66,6 +73,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       .eq('actor_id', actorId)
       .eq('event_id', eventId)
       .order('created_at'),
+    loadSecrets(actorId, [eventId], key),
   ])
   const report = must(reportResponse)
   const ledger = must(ledgerResponse)
@@ -90,8 +98,7 @@ export async function loadReport(eventId: string, actorId: string): Promise<Repo
       place: `${event.city} (${event.department})`,
       startDate: parseSqlDate(event.start_date),
       endDate: parseSqlDate(event.end_date),
-      lines: entries,
-      secret: 'none',
+      ...withSecret(entries, secrets.get(eventId)),
     },
     reportId: report?.id ?? null,
     entries,

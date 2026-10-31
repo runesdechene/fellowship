@@ -4,13 +4,18 @@
  *            de l'année précédente.
  * POURQUOI — l'écran Mes bilans lit tout d'un coup, puis lib/reports.ts calcule.
  * ATTENTION — patron de chargement de .claude/rules/v2.md : une fonction async qui rend l'état,
- *            appliqué une fois. Une requête qui échoue est une erreur, jamais « aucun bilan ».
+ *            appliqué une fois. Se recharge quand la clé des recettes change. Une date aux recettes
+ *            chiffrées est remplie même verrouillée : son chiffre d'affaires est alors incomplet
+ *            (ReportDate.secret 'masked').
+ *            Une requête qui échoue est une erreur, jamais « aucun bilan ».
  */
 import { useEffect, useState } from 'react'
 import { must, supabase } from '@/lib/supabase'
 import { parseSqlDate, todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
-import { isFilled, reportFigures, type ReportDate, type ReportLine } from '@/lib/reports'
+import { useRevenueKey } from '@/lib/revenue-key'
+import { reportFigures, type ReportDate, type ReportLine } from '@/lib/reports'
+import { loadSecrets, withSecret } from './secretRevenue'
 
 export interface ReportsState {
   status: 'loading' | 'ready' | 'error'
@@ -22,7 +27,11 @@ export interface ReportsState {
 
 const EMPTY: ReportsState = { status: 'loading', years: [], dates: [], previousYearRevenue: null }
 
-async function loadReports(actorId: string, year: number): Promise<Omit<ReportsState, 'status'>> {
+async function loadReports(
+  actorId: string,
+  year: number,
+  key: CryptoKey | null,
+): Promise<Omit<ReportsState, 'status'>> {
   const rows = must(
     await supabase
       .from('participations')
@@ -38,6 +47,8 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
   const years = [...new Set(events.map(yearOf))].sort((a, b) => b - a)
   const wanted = events.filter((event) => yearOf(event) === year || yearOf(event) === year - 1)
 
+  const wantedIds = wanted.map((event) => event.id)
+  const secrets = await loadSecrets(actorId, wantedIds, key)
   const ledger =
     wanted.length === 0
       ? []
@@ -46,10 +57,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
             .from('event_ledger_entries')
             .select('event_id, amount, direction, source')
             .eq('actor_id', actorId)
-            .in(
-              'event_id',
-              wanted.map((event) => event.id),
-            ),
+            .in('event_id', wantedIds),
         )
   const linesByEvent = new Map<string, ReportLine[]>()
   for (const line of ledger) {
@@ -66,8 +74,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
     place: `${event.city} (${event.department})`,
     startDate: parseSqlDate(event.start_date),
     endDate: parseSqlDate(event.end_date),
-    lines: linesByEvent.get(event.id) ?? [],
-    secret: 'none',
+    ...withSecret(linesByEvent.get(event.id) ?? [], secrets.get(event.id)),
   })
 
   const dates = wanted
@@ -77,7 +84,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
   const previous = wanted
     .filter((event) => yearOf(event) === year - 1)
     .map(toDate)
-    .filter((date) => isFilled(date.lines))
+    .filter((date) => reportFigures(date).filled)
   const previousYearRevenue =
     previous.length > 0
       ? previous.reduce((sum, date) => sum + reportFigures(date).revenue, 0)
@@ -88,6 +95,7 @@ async function loadReports(actorId: string, year: number): Promise<Omit<ReportsS
 
 /** Les bilans de l'année choisie, pour l'acteur actif. */
 export function useReports(actorId: string | null | undefined, year: number): ReportsState {
+  const { key, status } = useRevenueKey()
   const [state, setState] = useState<ReportsState>(EMPTY)
 
   useEffect(() => {
@@ -98,7 +106,7 @@ export function useReports(actorId: string | null | undefined, year: number): Re
     async function run(currentActorId: string) {
       setState((s) => ({ ...s, status: 'loading' }))
       try {
-        const result = await loadReports(currentActorId, year)
+        const result = await loadReports(currentActorId, year, key)
         if (cancelled) return
         setState({ status: 'ready', ...result })
       } catch {
@@ -111,7 +119,7 @@ export function useReports(actorId: string | null | undefined, year: number): Re
     return () => {
       cancelled = true
     }
-  }, [actorId, year])
+  }, [actorId, year, key, status])
 
   return state
 }

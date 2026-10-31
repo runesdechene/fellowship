@@ -1,5 +1,5 @@
 /**
- * QUOI     — le point d'entrée : monte l'app dans #root, avec le routeur et la session.
+ * QUOI     — le point d'entrée : monte l'app dans #root, avec le routeur, la session et la clé des recettes chiffrées.
  * POURQUOI — la V2 vit à la racine de flw.sh depuis la bascule (lot 12).
  */
 import { StrictMode } from 'react'
@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { App } from './App'
 import { AuthProvider } from './lib/auth'
+import { RevenueKeyProvider } from './lib/revenue-key'
 import { captureReferral } from './lib/referral'
 import { applyTheme, currentTheme } from './lib/theme'
 import './styles/index.css'
@@ -45,7 +46,9 @@ createRoot(root).render(
   <StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
-        <App />
+        <RevenueKeyProvider>
+          <App />
+        </RevenueKeyProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

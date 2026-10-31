@@ -11,6 +11,7 @@
 - `ReportPage.tsx` — l'écran du bilan d'une date : en-tête, blocs, résumé.
 - `useReport.ts` — l'état du bilan et ses écritures ; relit tout après chaque écriture.
 - `loadReport.ts` — la lecture d'un bilan (date, registre, étiquettes, note, photos, objectif).
+- `secretRevenue.ts` — lit et déchiffre les recettes chiffrées (report_secrets) pour les quatre chargeurs.
 - `reportActions.ts` — les écritures ; le prix de la place passe par set_stand_amount.
 - `Ledger.tsx` — recettes et dépenses, modifiables sur place, et la ligne d'ajout.
 - `TagList.tsx` — « Ce qui a marché » et « À améliorer la prochaine fois ».

@@ -2,12 +2,14 @@
  * QUOI     — le bilan d'une date pour l'acteur actif : son chargement et ses écritures.
  * POURQUOI — chaque changement s'enregistre aussitôt ; après chaque écriture, le bilan est relu
  *            en entier, pour que l'écran montre toujours ce que la base contient.
- * ATTENTION — patron de chargement de .claude/rules/v2.md. Les écritures passent une par une
+ * ATTENTION — se recharge quand la clé des recettes change (déverrouillage, réinitialisation).
+ *            Patron de chargement de .claude/rules/v2.md. Les écritures passent une par une
  *            (lib/write-queue.ts) : un clic pendant un enregistrement attend son tour au lieu de se
  *            perdre. Une écriture qui échoue laisse le bilan tel que la base le garde, le dit
  *            (writeError), et `failures` change pour que les champs reprennent la valeur gardée.
  */
 import { useEffect, useState } from 'react'
+import { useRevenueKey } from '@/lib/revenue-key'
 import { createWriteQueue } from '@/lib/write-queue'
 import { addTag, removeTag } from '@/lib/report-writes'
 import type { LedgerCategory } from '@/types/database'
@@ -38,6 +40,7 @@ interface ReportState {
 const LOADING: ReportState = { status: 'loading', detail: null, owner: null }
 
 export function useReport(eventId: string | undefined, actorId: string | null | undefined) {
+  const { key, status } = useRevenueKey()
   const [state, setState] = useState<ReportState>(LOADING)
   const [version, setVersion] = useState(0)
   const [enqueue] = useState(createWriteQueue)
@@ -55,7 +58,7 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
       // Après une écriture, en revanche, le bilan reste affiché le temps d'être relu.
       setState((s) => (s.owner === owner ? s : LOADING))
       try {
-        const detail = await loadReport(currentEvent, currentActor)
+        const detail = await loadReport(currentEvent, currentActor, key)
         if (cancelled) return
         setState(
           detail ? { status: 'ready', detail, owner } : { status: 'missing', detail: null, owner },
@@ -70,7 +73,7 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     return () => {
       cancelled = true
     }
-  }, [eventId, actorId, version])
+  }, [eventId, actorId, version, key, status])
 
   /** Met une écriture dans la file, puis relit le bilan, qu'elle ait réussi ou non. */
   function perform(
