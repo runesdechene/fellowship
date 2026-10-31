@@ -451,3 +451,7 @@ verify_jwt = false
 [functions.prospect-inbound]
 # Auth = la signature Svix du webhook de réception de Resend (pas de JWT Supabase).
 verify_jwt = false
+
+[functions.exposeur]
+# Auth = la clé personnelle de l'enseigne (hash comparé dans exposeur_chiffres), pas de JWT Supabase.
+verify_jwt = false
