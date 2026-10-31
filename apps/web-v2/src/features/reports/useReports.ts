@@ -14,7 +14,7 @@ import { must, supabase } from '@/lib/supabase'
 import { parseSqlDate, todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
 import { useRevenueKey } from '@/lib/revenue-key'
-import { reportFigures, type ReportDate, type ReportLine } from '@/lib/reports'
+import { previousRevenue, type ReportDate, type ReportLine } from '@/lib/reports'
 import { loadSecrets, withSecret } from './secretRevenue'
 
 export interface ReportsState {
@@ -81,14 +81,9 @@ async function loadReports(
     .filter((event) => yearOf(event) === year)
     .map(toDate)
     .sort((a, b) => b.startDate.getTime() - a.startDate.getTime())
-  const previous = wanted
-    .filter((event) => yearOf(event) === year - 1)
-    .map(toDate)
-    .filter((date) => reportFigures(date).filled)
-  const previousYearRevenue =
-    previous.length > 0
-      ? previous.reduce((sum, date) => sum + reportFigures(date).revenue, 0)
-      : null
+  const previousYearRevenue = previousRevenue(
+    wanted.filter((event) => yearOf(event) === year - 1).map(toDate),
+  )
 
   return { years, dates, previousYearRevenue }
 }

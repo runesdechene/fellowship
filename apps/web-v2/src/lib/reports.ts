@@ -2,7 +2,8 @@
  * QUOI     — la logique des bilans : quand un bilan est rempli, les chiffres d'une date, le
  *            résumé d'une année (bénéfice, chiffre d'affaires, frais, meilleure date, mois).
  * POURQUOI — Mes bilans, le bilan d'une date et le tableau de bord lisent la même règle.
- * ATTENTION — un bilan est REMPLI quand il a une ligne saisie dans le bilan (source 'manual') :
+ * ATTENTION — previousRevenue() rend null dès qu'une date remplie de l'an passé est verrouillée.
+ *            Un bilan est REMPLI quand il a une ligne saisie dans le bilan (source 'manual') :
  *            la ligne de Mon dossier (source 'stepper') existe souvent avant la date, et la
  *            ligne event_reports aussi (set_stand_amount la crée). Ni l'une ni l'autre ne disent
  *            que l'exposant a fait son bilan.
@@ -83,6 +84,17 @@ export function reportFigures(date: ReportDate): ReportFigures {
     net,
     days: daysUntil(date.endDate, date.startDate) + 1,
   }
+}
+
+/**
+ * Le chiffre d'affaires des dates remplies de l'année précédente, ou null sans point de comparaison.
+ * Une date remplie aux recettes verrouillées a un chiffre incomplet : mieux vaut aucune variation
+ * qu'une fausse.
+ */
+export function previousRevenue(dates: ReportDate[]): number | null {
+  const filled = dates.map(reportFigures).filter((figures) => figures.filled)
+  if (filled.length === 0 || filled.some((figures) => figures.masked)) return null
+  return filled.reduce((sum, figures) => sum + figures.revenue, 0)
 }
 
 export function yearSummary(dates: ReportDate[], previousYearRevenue: number | null): YearSummary {

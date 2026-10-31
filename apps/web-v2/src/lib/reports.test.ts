@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import {
   bestMonth,
   isFilled,
+  previousRevenue,
   reportFigures,
   secretLines,
   yearSummary,
@@ -160,6 +161,23 @@ describe('secretLines', () => {
       { amount: 10, direction: 'in', source: 'manual' },
       { amount: 5, direction: 'in', source: 'manual' },
     ])
+  })
+})
+
+describe('previousRevenue', () => {
+  const clear = date({ lines: [sales, fuel] })
+  it('somme le chiffre d’affaires des dates remplies, sans compter la place seule', () => {
+    expect(previousRevenue([clear, date({ lines: [stand] })])).toBe(3980)
+  })
+  it('sans date remplie, aucun point de comparaison', () => {
+    expect(previousRevenue([date({ lines: [stand] })])).toBeNull()
+  })
+  it('une date remplie verrouillée rend null : son chiffre est incomplet', () => {
+    expect(previousRevenue([clear, date({ secret: 'masked', lines: [stand] })])).toBeNull()
+  })
+  it('une date déchiffrée compte Carte et Espèces', () => {
+    const open = date({ secret: 'open', lines: secretLines({ carte: 2830, especes: 1380 }) })
+    expect(previousRevenue([clear, open])).toBe(3980 + 4210)
   })
 })
 
