@@ -48,7 +48,7 @@ export function ReportsPage() {
           <h1 className="reports-page__title">Mes bilans</h1>
           <p className="reports-page__private">
             <Lock size={13} strokeWidth={2} />
-            Visible par toi seul
+            Visibles par toi seul
             {keyStatus !== 'none' && (
               <span className="reports-page__private-more">
                 {' '}
