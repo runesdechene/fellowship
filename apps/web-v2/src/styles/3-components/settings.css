@@ -189,9 +189,9 @@
 
 /* Les recettes d'une enseigne Pro (maquettes 2587:233, 2587:396) : sous son nom, sans filet. */
 .setting-row--sub {
-  gap: var(--space-10);
+  gap: var(--space-24);
   min-height: 0;
-  padding: 0 var(--space-20) var(--space-16) var(--setting-sub-row-inset);
+  padding: 0 var(--space-20) var(--space-16);
   transition:
     opacity var(--duration-medium) var(--ease-drawer),
     translate var(--duration-medium) var(--ease-drawer);
@@ -211,6 +211,12 @@
 .setting-row__icon {
   flex: none;
   color: var(--ink-soft);
+}
+
+/* Sous une enseigne, l'icône prend la largeur du logo pour s'y centrer. */
+.setting-row--sub > .setting-row__icon {
+  box-sizing: content-box;
+  padding-inline: calc((var(--avatar-size-discussion) - var(--setting-row-icon-size)) / 2);
 }
 
 /* Les lignes d'une enseigne (maquette 2589:233) : un groupe sous son nom, sans filet entre elles ;
