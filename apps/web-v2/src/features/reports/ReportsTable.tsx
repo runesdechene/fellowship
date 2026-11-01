@@ -3,16 +3,17 @@
  *            d'affaires, frais et bénéfice ; « Remplir le bilan » pour une date pas encore faite.
  * POURQUOI — chaque ligne ouvre le bilan de sa date (/bilans/:eventId). Cinq dates, puis on
  *            déplie la suite sur place.
- * ATTENTION — une date aux recettes verrouillées montre « •••• € » à la place du CA et du bénéfice ; les frais restent.
+ * ATTENTION — une date aux recettes verrouillées montre un faux montant flouté (MaskedAmount) à la place du CA et du bénéfice ; les frais restent.
  *            Sur téléphone, seul le bénéfice reste (la colonne CA et frais se cache en CSS).
  */
 import { Poster } from '@/components/ui/Poster'
 import { ArrowRight, ChevronDown, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { formatDayMonthShort } from '@/lib/dates'
-import { formatEuros, formatSignedEuros, MASKED_EUROS } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { reportFigures, type ReportDate } from '@/lib/reports'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 const SHOWN = 5
 
@@ -38,7 +39,7 @@ function ReportRow({ date, best }: { date: ReportDate; best: boolean }) {
       {filled ? (
         <>
           <span className="reports-table__amount reports-table__amount--wide">
-            {masked ? MASKED_EUROS : formatEuros(revenue)}
+            {masked ? <MaskedAmount /> : formatEuros(revenue)}
           </span>
           <span className="reports-table__amount reports-table__amount--wide reports-table__amount--soft">
             {formatEuros(costs)}
@@ -46,7 +47,7 @@ function ReportRow({ date, best }: { date: ReportDate; best: boolean }) {
           <span
             className={best ? 'reports-table__net reports-table__net--best' : 'reports-table__net'}
           >
-            {masked ? MASKED_EUROS : formatSignedEuros(net)}
+            {masked ? <MaskedAmount /> : formatSignedEuros(net)}
           </span>
           <span className="reports-table__end">
             <ChevronRight size={16} strokeWidth={2} />

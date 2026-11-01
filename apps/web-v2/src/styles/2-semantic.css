@@ -1204,6 +1204,7 @@
   /* Les lignes d'une enseigne : l'icône centrée sous le logo, le texte aligné sur le nom (Uriel,
      01/11/2026). */
   --setting-row-icon-size: 15px;
+  --masked-amount-blur: 5px; /* le faux montant des recettes verrouillées (MaskedAmount) */
   --setting-sub-row-inset: calc(var(--space-20) + var(--avatar-size-discussion) + var(--space-24));
   /* Les champs et les petits boutons bordés de la maquette 2206:691. */
   --danger-ink: var(--brique-600); /* supprimer, un champ refusé */

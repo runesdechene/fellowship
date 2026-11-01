@@ -3,15 +3,16 @@
  *            édition, avec de quoi ouvrir le bilan.
  * POURQUOI — maquette 2518:233 (25/10/2026) : le bilan de l'an passé se dit en une ligne, discrète,
  *            au lieu d'une carte qui poussait toute la fiche vers le bas.
- * ATTENTION — recettes verrouillées (`report.masked`) : « •••• € » à la place du net, incomplet.
+ * ATTENTION — recettes verrouillées (`report.masked`) : un faux montant flouté (MaskedAmount) à la place du net, incomplet.
  *            Bilans = Pro : en gratuit, le montant reste flouté et le bouton mène à l'offre des
  *            bilans, comme le voile de l'écran des bilans.
  */
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { formatSignedEuros, MASKED_EUROS } from '@/lib/money'
+import { formatSignedEuros } from '@/lib/money'
 import { usePlan } from '@/lib/usePlan'
 import type { LastEditionReport as Report } from './useLastEditionReport'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 export function LastEditionReport({ report }: { report: Report }) {
   const { pro } = usePlan()
@@ -27,7 +28,7 @@ export function LastEditionReport({ report }: { report: Report }) {
           className={pro ? 'last-year__amount' : 'last-year__amount last-year__amount--veiled'}
           aria-hidden={!pro}
         >
-          {report.masked ? MASKED_EUROS : formatSignedEuros(report.net)}
+          {report.masked ? <MaskedAmount /> : formatSignedEuros(report.net)}
         </span>
       </span>
       <Link className="last-year__open" to={pro ? `/bilans/${report.eventId}` : '/bilans'}>

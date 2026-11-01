@@ -1,0 +1,11 @@
+/**
+ * QUOI     — le montant masqué (components/ui/MaskedAmount.tsx) : un faux chiffre flouté.
+ * POURQUOI — Uriel, 01/11/2026 : un flou plutôt que « •••• € ». Un texte court : le flou ne coûte
+ *            presque rien à redessiner (interface.md, le flou se paie à la taille affichée).
+ */
+
+.masked-amount {
+  display: inline-block;
+  filter: blur(var(--masked-amount-blur));
+  user-select: none;
+}

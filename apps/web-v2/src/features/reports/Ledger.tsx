@@ -30,7 +30,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react'
 import { DraftInput } from '@/components/ui/DraftInput'
 import { Select } from '@/components/ui/Select'
 import { formatDateRange } from '@/lib/dates'
-import { formatEuros, MASKED_EUROS, parseAmount } from '@/lib/money'
+import { formatEuros, parseAmount } from '@/lib/money'
 import {
   SECRET_CATEGORY,
   addableCategories,
@@ -44,6 +44,7 @@ import { EncryptDialog } from './EncryptDialog'
 import { UnlockDialog } from './UnlockDialog'
 import { UnlockRow } from './UnlockRow'
 import type { ReportActions, ReportDetail, ReportEntry } from './useReport'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 type Choice = LedgerCategory | typeof SECRET_CATEGORY.value
 
@@ -76,7 +77,7 @@ interface LedgerLineProps {
   label: string
   badge?: string
   direction: 'in' | 'out'
-  /** 'masked' : chiffré et verrouillé, montré « •••• € » sans champ. */
+  /** 'masked' : chiffré et verrouillé, montré un faux montant flouté (MaskedAmount) sans champ. */
   amount: number | 'masked'
   /** Le montant saisi ; null quand le champ est vidé. */
   onSave: (amount: number | null) => void
@@ -94,7 +95,9 @@ function LedgerLine(props: LedgerLineProps) {
         {badge && <span className="ledger__badge">{badge}</span>}
       </span>
       {amount === 'masked' ? (
-        <span className="ledger__amount report-secret__masked">{MASKED_EUROS}</span>
+        <span className="ledger__amount">
+          <MaskedAmount />
+        </span>
       ) : (
         <span className="ledger__amount">
           <span aria-hidden="true">{direction === 'in' ? '+' : '−'}</span>
@@ -244,7 +247,7 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
   const manualIn = clearIn.filter((entry) => entry.source === 'manual')
   const outLines = entries.filter((entry) => entry.direction === 'out')
   const secretTotal = revenue ? revenue.carte + revenue.especes : 0
-  const revenueTotal = masked ? MASKED_EUROS : formatEuros(sum(clearIn) + secretTotal)
+  const revenueTotal = masked ? <MaskedAmount /> : formatEuros(sum(clearIn) + secretTotal)
 
   /** Carte ou Espèces modifiée sur place : les deux se rescellent ensemble. */
   function reseal(part: 'carte' | 'especes', amount: number | null) {

@@ -4,8 +4,9 @@
  * ATTENTION — `masked` : Carte et Espèces sont chiffrées et verrouillées, elles s'affichent masquées
  *            comme dans le registre du bilan.
  */
-import { formatEuros, MASKED_EUROS } from '@/lib/money'
+import { formatEuros } from '@/lib/money'
 import type { EventLedgerLine } from './useEvent'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 /** Une ligne du registre : son intitulé, puis son montant signé par le sens. */
 function LedgerRow({ line }: { line: EventLedgerLine }) {
@@ -35,7 +36,9 @@ export function MyReportCard({ ledger, masked }: { ledger: EventLedgerLine[]; ma
             ['Carte', 'Espèces'].map((label) => (
               <li key={label} className="event-page__ledger-row">
                 <span className="event-page__ledger-label">{label}</span>
-                <span className="event-page__ledger-amount--in">{MASKED_EUROS}</span>
+                <span className="event-page__ledger-amount--in">
+                  <MaskedAmount />
+                </span>
               </li>
             ))}
         </ul>

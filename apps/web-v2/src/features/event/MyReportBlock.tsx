@@ -8,10 +8,11 @@
 import { ArrowRight } from 'lucide-react'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProVeil } from '@/components/ui/ProVeil'
-import { formatEuros, formatSignedEuros, MASKED_EUROS } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { MyReportCard } from './MyReportCard'
 import type { EventLedgerLine } from './useEvent'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 interface MyReportBlockProps {
   eventId: string
@@ -31,8 +32,8 @@ export function MyReportBlock({ eventId, ledger, net, revenue, masked, pro }: My
         <h2 className="event-page__block-title">Mon bilan</h2>
         {pro && net !== null && revenue !== null && (
           <p className="event-page__block-total">
-            <b>{masked ? MASKED_EUROS : formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
-            <b>{masked ? MASKED_EUROS : formatEuros(revenue)}</b>
+            <b>{masked ? <MaskedAmount /> : formatSignedEuros(net)}</b> de bénéfice sur un CA de{' '}
+            <b>{masked ? <MaskedAmount /> : formatEuros(revenue)}</b>
           </p>
         )}
       </div>

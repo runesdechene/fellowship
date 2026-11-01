@@ -4,15 +4,16 @@
  * POURQUOI — ce qu'on vient regarder en premier : sur téléphone, il passe en tête de l'écran.
  * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
  *            se fixe ici (ReportGoal), après le festival. Recettes chiffrées verrouillées : tout
- *            ce qui en dépend s'affiche « •••• € » ; les frais, eux, restent.
+ *            ce qui en dépend s'affiche un faux montant flouté (MaskedAmount) ; les frais, eux, restent.
  */
 import { Poster } from '@/components/ui/Poster'
 import { Check } from 'lucide-react'
 import { formatDateRange } from '@/lib/dates'
-import { formatEuros, formatSignedEuros, MASKED_EUROS } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { reportFigures } from '@/lib/reports'
 import { ReportGoal } from './ReportGoal'
 import type { ReportDetail } from './useReport'
+import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 interface ReportSummaryProps {
   detail: ReportDetail
@@ -24,7 +25,7 @@ interface ReportSummaryProps {
 export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummaryProps) {
   const { date } = detail
   const { revenue, costs, net, days, masked } = reportFigures(date)
-  const hidden = (text: string) => (masked ? MASKED_EUROS : text)
+  const hidden = (text: string) => (masked ? <MaskedAmount /> : text)
 
   return (
     <div className="report-summary">
