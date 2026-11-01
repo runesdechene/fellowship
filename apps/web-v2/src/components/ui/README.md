@@ -15,7 +15,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `ProVeil.tsx` — un contenu flouté et inerte, avec l'invitation par-dessus.
 - `DeviceIcon.tsx` — l'icône de l'appareil qu'on tient : téléphone ou écran.
 - `Skeleton.tsx` — les formes grises d'un bloc vide : ligne, point, affiche illustrée.
-- `MaskedAmount.tsx` — un montant masqué : un faux chiffre flouté, pour les recettes verrouillées.
+- `MaskedAmount.tsx` — un montant masqué : une mosaïque pixelisée, pour les recettes verrouillées.
 - `Poster.tsx` — **la seule affiche** de l'application ; absente, la couleur et l'icône de sa
   catégorie. Sa taille vient de la classe passée.
 - `PosterArt.tsx` — la grande affiche (calendrier, Explorer, vitrine) : compose `Poster`, y écrit

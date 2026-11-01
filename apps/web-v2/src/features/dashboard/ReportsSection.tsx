@@ -5,7 +5,7 @@
  *            et bénéfice. « Tout voir » mène à Mes bilans (/bilans) ; un bilan mène à son écran
  *            (/bilans/:eventId). En gratuit (`locked`), le bloc passe sous un voile et une pastille
  *            mène à Mes bilans, qui présente le Pro.
- * ATTENTION — recettes chiffrées et verrouillées (`masked`) : leurs montants passent en un faux montant flouté (MaskedAmount) ;
+ * ATTENTION — recettes chiffrées et verrouillées (`masked`) : leurs montants passent en une mosaïque pixelisée (MaskedAmount) ;
  *            dès qu'une date de l'année l'est, le total de la saison aussi, et la jauge d'objectif
  *            (qui se lit sur le CA) disparaît.
  */

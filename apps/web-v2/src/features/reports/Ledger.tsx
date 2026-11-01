@@ -77,7 +77,7 @@ interface LedgerLineProps {
   label: string
   badge?: string
   direction: 'in' | 'out'
-  /** 'masked' : chiffré et verrouillé, montré un faux montant flouté (MaskedAmount) sans champ. */
+  /** 'masked' : chiffré et verrouillé, montré une mosaïque pixelisée (MaskedAmount) sans champ. */
   amount: number | 'masked'
   /** Le montant saisi ; null quand le champ est vidé. */
   onSave: (amount: number | null) => void

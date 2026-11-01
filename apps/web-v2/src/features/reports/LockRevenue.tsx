@@ -2,7 +2,7 @@
  * QUOI     — la bascule des recettes chiffrées, près de « Mes bilans » : « Verrouiller » quand elles
  *            sont ouvertes, la gélule « Déverrouiller » quand elles sont masquées (elle ouvre
  *            UnlockDialog sur place). Rien sans phrase de passe.
- * POURQUOI — Uriel, 01/11/2026 : cacher son chiffre d'un geste, et le rouvrir d'où on le voit flouté.
+ * POURQUOI — Uriel, 01/11/2026 : cacher son chiffre d'un geste, et le rouvrir d'où on le voit masqué.
  */
 import { Lock, LockOpen } from 'lucide-react'
 import { useState } from 'react'

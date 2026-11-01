@@ -3,7 +3,7 @@
  *            d'affaires, frais et bénéfice ; « Remplir le bilan » pour une date pas encore faite.
  * POURQUOI — chaque ligne ouvre le bilan de sa date (/bilans/:eventId). Cinq dates, puis on
  *            déplie la suite sur place.
- * ATTENTION — une date aux recettes verrouillées montre un faux montant flouté (MaskedAmount) à la place du CA et du bénéfice ; les frais restent.
+ * ATTENTION — une date aux recettes verrouillées montre une mosaïque pixelisée (MaskedAmount) à la place du CA et du bénéfice ; les frais restent.
  *            Sur téléphone, seul le bénéfice reste (la colonne CA et frais se cache en CSS).
  */
 import { Poster } from '@/components/ui/Poster'

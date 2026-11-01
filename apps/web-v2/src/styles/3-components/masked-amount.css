@@ -1,17 +1,48 @@
 /**
- * QUOI     — le montant masqué (components/ui/MaskedAmount.tsx) : un faux chiffre flouté.
- * POURQUOI — Uriel, 01/11/2026 : un flou plutôt que « •••• € ». Un texte court : le flou ne coûte
- *            presque rien à redessiner (interface.md, le flou se paie à la taille affichée).
+ * QUOI     — le montant masqué (components/ui/MaskedAmount.tsx) : une mosaïque pixelisée.
+ * POURQUOI — Uriel, 01/11/2026 : pixelisé plutôt que flouté. Deux rangées de huit carrés, nuancés
+ *            de la couleur du texte (currentColor) : la mosaïque suit la taille et la teinte de
+ *            chaque montant, sans image ni filtre.
  */
 
 .masked-amount {
+  --px-a: color-mix(in srgb, currentcolor 22%, transparent);
+  --px-b: color-mix(in srgb, currentcolor 42%, transparent);
+  --px-c: color-mix(in srgb, currentcolor 62%, transparent);
+
   display: inline-block;
-  filter: blur(var(--masked-amount-blur));
-  user-select: none;
+  width: var(--masked-amount-width);
+  height: var(--masked-amount-height);
+  vertical-align: -0.05em;
+  background:
+    linear-gradient(
+        90deg,
+        var(--px-b) 0 12.5%,
+        var(--px-c) 0 25%,
+        var(--px-a) 0 37.5%,
+        var(--px-c) 0 50%,
+        var(--px-b) 0 62.5%,
+        var(--px-a) 0 75%,
+        var(--px-c) 0 87.5%,
+        var(--px-b) 0
+      )
+      top / 100% 50% no-repeat,
+    linear-gradient(
+        90deg,
+        var(--px-c) 0 12.5%,
+        var(--px-a) 0 25%,
+        var(--px-b) 0 37.5%,
+        var(--px-a) 0 50%,
+        var(--px-c) 0 62.5%,
+        var(--px-b) 0 75%,
+        var(--px-a) 0 87.5%,
+        var(--px-c) 0
+      )
+      bottom / 100% 50% no-repeat;
 }
 
 /* Un bénéfice en dégradé est peint par son conteneur, découpé dans les lettres (background-clip:
-   text) : ce découpage repeignait le faux chiffre net par-dessus le flou. Masqué, il passe en uni. */
+   text) : masqué, il passe en uni pour que la mosaïque prenne sa teinte. */
 .reports__net:has(> .masked-amount),
 .year-card__net:has(> .masked-amount),
 .reports-table__net--best:has(> .masked-amount),

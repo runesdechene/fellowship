@@ -3,7 +3,7 @@
  *            édition, avec de quoi ouvrir le bilan.
  * POURQUOI — maquette 2518:233 (25/10/2026) : le bilan de l'an passé se dit en une ligne, discrète,
  *            au lieu d'une carte qui poussait toute la fiche vers le bas.
- * ATTENTION — recettes verrouillées (`report.masked`) : un faux montant flouté (MaskedAmount) à la place du net, incomplet.
+ * ATTENTION — recettes verrouillées (`report.masked`) : une mosaïque pixelisée (MaskedAmount) à la place du net, incomplet.
  *            Bilans = Pro : en gratuit, le montant reste flouté et le bouton mène à l'offre des
  *            bilans, comme le voile de l'écran des bilans.
  */

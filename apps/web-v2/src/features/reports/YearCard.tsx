@@ -2,7 +2,7 @@
  * QUOI     — la carte de l'année de « Mes bilans » : le bénéfice, le chiffre d'affaires et sa
  *            variation sur l'année d'avant, les frais, la meilleure date.
  * ATTENTION — `summary.masked` : bénéfice, chiffre d'affaires, variation et meilleure date (qui
- *            peut sortir de chiffres partiels) passent en un faux montant flouté (MaskedAmount) ; les frais restent.
+ *            peut sortir de chiffres partiels) passent en une mosaïque pixelisée (MaskedAmount) ; les frais restent.
  * POURQUOI — le bénéfice se lit en premier, en serif et dans la terre du logo : c'est de l'acquis.
  *            Sur téléphone, les trois autres chiffres passent en lignes libellé / valeur.
  */

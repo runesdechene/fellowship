@@ -4,7 +4,7 @@
  * POURQUOI — ce qu'on vient regarder en premier : sur téléphone, il passe en tête de l'écran.
  * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
  *            se fixe ici (ReportGoal), après le festival. Recettes chiffrées verrouillées : tout
- *            ce qui en dépend s'affiche un faux montant flouté (MaskedAmount) ; les frais, eux, restent.
+ *            ce qui en dépend s'affiche une mosaïque pixelisée (MaskedAmount) ; les frais, eux, restent.
  */
 import { Poster } from '@/components/ui/Poster'
 import { Check } from 'lucide-react'
