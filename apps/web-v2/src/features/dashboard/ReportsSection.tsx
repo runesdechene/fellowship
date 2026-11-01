@@ -18,6 +18,7 @@ import { formatFullDate } from '@/lib/dates'
 import { formatEuros, formatSignedEuros, goalShare, MASKED_EUROS } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
+import { LockRevenue } from '@/features/reports/LockRevenue'
 
 const SHOWN = 3
 
@@ -72,6 +73,7 @@ export function ReportsSection({
     <section className="dashboard__section">
       <div className="dashboard__section-head">
         <h2 className="dashboard__section-title">Mes bilans</h2>
+        {!locked && <LockRevenue />}
         {reports.length > 0 && !locked && (
           <button type="button" className="reports__more" onClick={() => go('/bilans')}>
             Tout voir

@@ -18,6 +18,7 @@
   « Choisir ta phrase de passe » sans montants.
 - `RevenueBanner.tsx` — le bandeau « Chiffre tes recettes » de Mes bilans (choisir une phrase ou garder en clair).
 - `UnlockRow.tsx` — « Afficher mes recettes » sous des recettes verrouillées : ouvre UnlockDialog.
+- `LockRevenue.tsx` — « Verrouiller » : remasque les recettes chiffrées ouvertes, d'un geste.
 - `UnlockDialog.tsx` — la fenêtre qui rouvre les recettes : code de l'appareil, sinon phrase, puis « Un code pour cet appareil ».
 - `PinUnlock.tsx` — « Code de cet appareil » : quatre cases, les recettes au 4ᵉ chiffre.
 - `PinOffer.tsx` — « Un code pour cet appareil », proposé juste après la phrase.

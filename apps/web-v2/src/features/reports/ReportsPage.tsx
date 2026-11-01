@@ -25,6 +25,7 @@ import { MonthlyChart } from './MonthlyChart'
 import { ReportsTable } from './ReportsTable'
 import { YearCard } from './YearCard'
 import { useReports } from './useReports'
+import { LockRevenue } from './LockRevenue'
 
 /** L'année de l'adresse, ou l'année en cours si elle manque ou ne veut rien dire. */
 function yearFrom(raw: string | null): number {
@@ -58,6 +59,7 @@ export function ReportsPage() {
                 — tes recettes sont chiffrées, personne d’autre ne peut les lire
               </span>
             )}
+            <LockRevenue />
           </p>
         </div>
         {pro && <RevenueBanner />}

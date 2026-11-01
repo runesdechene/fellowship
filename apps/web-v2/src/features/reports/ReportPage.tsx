@@ -24,6 +24,7 @@ import { ReportSummary } from './ReportSummary'
 import { TagList } from './TagList'
 import { useReport } from './useReport'
 import { eventPath } from '@/lib/event-path'
+import { LockRevenue } from './LockRevenue'
 
 export function ReportPage() {
   const { eventId } = useParams<{ eventId: string }>()
@@ -78,6 +79,7 @@ export function ReportPage() {
               </>
             )}
           </span>
+          <LockRevenue />
         </p>
       </header>
 
