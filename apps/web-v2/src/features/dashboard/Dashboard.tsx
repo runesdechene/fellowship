@@ -38,7 +38,6 @@ export function Dashboard() {
     reports,
     seasonNet,
     seasonRevenue,
-    seasonGoal,
     pendingReport,
     loading,
     error,
@@ -128,7 +127,6 @@ export function Dashboard() {
           reports={reports}
           seasonNet={seasonNet}
           seasonRevenue={seasonRevenue}
-          seasonGoal={seasonGoal}
           locked={!pro}
         />
       )}

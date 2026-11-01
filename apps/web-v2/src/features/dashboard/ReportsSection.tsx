@@ -6,16 +6,15 @@
  *            (/bilans/:eventId). En gratuit (`locked`), le bloc passe sous un voile et une pastille
  *            mène à Mes bilans, qui présente le Pro.
  * ATTENTION — recettes chiffrées et verrouillées (`masked`) : leurs montants passent en une mosaïque pixelisée (MaskedAmount) ;
- *            dès qu'une date de l'année l'est, le total de la saison aussi, et la jauge d'objectif
- *            (qui se lit sur le CA) disparaît.
+ *            dès qu'une date de l'année l'est, le total de la saison aussi. Pas d'objectif ici :
+ *            un objectif ne vaut que pour un festival (Uriel, 01/11/2026), il vit sur son bilan.
  */
 import { Poster } from '@/components/ui/Poster'
 import { ArrowRight } from 'lucide-react'
-import type { CSSProperties } from 'react'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProVeil } from '@/components/ui/ProVeil'
 import { formatFullDate } from '@/lib/dates'
-import { formatEuros, formatSignedEuros, goalShare } from '@/lib/money'
+import { formatEuros, formatSignedEuros } from '@/lib/money'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { DashboardReport } from './useDashboard'
 import { LockRevenue } from '@/features/reports/LockRevenue'
@@ -61,18 +60,11 @@ interface ReportsSectionProps {
   reports: DashboardReport[]
   seasonNet: number | null
   seasonRevenue: number | null
-  seasonGoal: number | null
   /** En gratuit : flouté, avec l'invitation vers Mes bilans. */
   locked: boolean
 }
 
-export function ReportsSection({
-  reports,
-  seasonNet,
-  seasonRevenue,
-  seasonGoal,
-  locked,
-}: ReportsSectionProps) {
+export function ReportsSection({ reports, seasonNet, seasonRevenue, locked }: ReportsSectionProps) {
   const go = useTransitionNavigate()
 
   return (
@@ -98,31 +90,16 @@ export function ReportsSection({
             </button>
           }
         >
-          <ReportsCard
-            reports={reports}
-            seasonNet={seasonNet}
-            seasonRevenue={seasonRevenue}
-            seasonGoal={seasonGoal}
-          />
+          <ReportsCard reports={reports} seasonNet={seasonNet} seasonRevenue={seasonRevenue} />
         </ProVeil>
       ) : (
-        <ReportsCard
-          reports={reports}
-          seasonNet={seasonNet}
-          seasonRevenue={seasonRevenue}
-          seasonGoal={seasonGoal}
-        />
+        <ReportsCard reports={reports} seasonNet={seasonNet} seasonRevenue={seasonRevenue} />
       )}
     </section>
   )
 }
 
-function ReportsCard({
-  reports,
-  seasonNet,
-  seasonRevenue,
-  seasonGoal,
-}: Omit<ReportsSectionProps, 'locked'>) {
+function ReportsCard({ reports, seasonNet, seasonRevenue }: Omit<ReportsSectionProps, 'locked'>) {
   const masked = reports.some((report) => report.masked)
   return (
     <div className="reports">
@@ -138,22 +115,6 @@ function ReportsCard({
             sur <b>{masked ? <MaskedAmount /> : formatEuros(seasonRevenue)}</b> de chiffre
             d’affaires
           </span>
-          {seasonGoal !== null && !masked && (
-            <>
-              <span
-                className="reports__gauge"
-                style={
-                  {
-                    '--gauge': String(goalShare(seasonRevenue, seasonGoal).ratio),
-                  } as CSSProperties
-                }
-              />
-              <span className="reports__goal">
-                {goalShare(seasonRevenue, seasonGoal).percent} % de l’objectif ·{' '}
-                {formatEuros(seasonGoal)}
-              </span>
-            </>
-          )}
         </div>
       )}
       <div className="reports__latest">
