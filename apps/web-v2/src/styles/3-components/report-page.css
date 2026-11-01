@@ -267,19 +267,14 @@
   gap: var(--space-8);
 }
 
-.tag-list__tag,
-.tag-list__add,
-.tag-list__input {
+.tag-list__tag {
   display: inline-flex;
   align-items: center;
   gap: var(--space-6);
   padding: var(--space-6) var(--space-8) var(--space-6) var(--space-12);
   border-radius: var(--round-full);
-  font: var(--type-report-line);
-}
-
-.tag-list__tag {
   background: var(--surface-chip-neutral);
+  font: var(--type-report-line);
   color: var(--ink-title);
   transition: opacity var(--duration-medium) var(--ease-soft);
 }
@@ -296,29 +291,13 @@
   cursor: pointer;
 }
 
-.tag-list__add {
-  padding-inline: var(--space-10) var(--space-12);
-  border: 1px dashed var(--dropzone-border);
-  font: var(--type-reports-note);
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-
-.tag-list__input {
-  border: 1px solid var(--line-card);
-  box-shadow: var(--shadow-block);
-  background: var(--surface-card);
-  color: var(--ink-title);
-}
-
-.tag-list__input:focus {
-  outline: none;
-}
-
-/* --- Note libre ---------------------------------------------------------- */
-/* La note : la carte des blocs (comme le registre), et dedans un champ simple, bordé, sans ombre. */
-.report-note {
+/* --- Les cartes saisies : note, ce qui a marché, à améliorer ------------- */
+/* La carte d'un bloc saisi (note, ce qui a marché, à améliorer) : celle du registre, avec du large.
+   Dedans, un champ simple, bordé, sans ombre (Uriel, 01/11/2026). */
+.report-card {
   display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
   padding: var(--space-16);
   border: 1px solid var(--line-card);
   box-shadow: var(--shadow-block);
@@ -326,22 +305,25 @@
   background: var(--surface-card);
 }
 
-.report-note__field {
-  flex: 1;
-  min-height: var(--space-96);
-  padding: var(--space-12) var(--space-14);
+.report-field {
+  padding: var(--space-10) var(--space-14);
   border: 1px solid var(--line-card);
   border-radius: var(--round-10);
   background: var(--surface-card);
   font: var(--type-report-note);
   color: var(--ink-title);
-  resize: vertical;
   transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.report-note__field:focus {
+.report-field:focus {
   outline: none;
   border-color: var(--dropzone-border);
+}
+
+.report-field--note {
+  min-height: var(--space-96);
+  padding-block: var(--space-12);
+  resize: vertical;
 }
 
 /* --- Photos -------------------------------------------------------------- */

@@ -18,9 +18,9 @@ export function ReportNote({ note, onSave }: { note: string; onSave: (note: stri
     <section className="report-block">
       <h2 className="report-block__title">Note libre</h2>
       {/* La carte du bloc, et dedans un champ simple, sans ombre (Uriel, 01/11/2026). */}
-      <div className="report-note">
+      <div className="report-card">
         <textarea
-          className="report-note__field"
+          className="report-field report-field--note"
           aria-label="Note libre"
           placeholder="Ce que tu veux te rappeler l’an prochain…"
           value={draft}
