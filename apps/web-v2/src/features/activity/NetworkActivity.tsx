@@ -1,8 +1,9 @@
 /**
- * QUOI     — le fil « Activité du réseau » en bas de la barre latérale (sur l'accueil en mode
- *            admin) : quatre nouvelles du réseau, la plus récente en haut, avec leur âge.
+ * QUOI     — le fil « Activité de la plateforme » en bas de la barre latérale (sur l'accueil en
+ *            mode admin) : quatre nouvelles de toute la plateforme, la plus récente en haut, avec leur âge.
  * POURQUOI — voir le réseau bouger donne envie de revenir ; c'est le seul vert de l'interface,
- *            le point « en direct ». « Tout voir » mène à la page Communauté.
+ *            le point « en direct ». Tout le monde, pas seulement le réseau, pour croiser des
+ *            inconnus (Uriel, 01/11/2026). « Tout voir » ouvre l'onglet « Toute la plateforme ».
  */
 import { ArrowRight } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
@@ -43,11 +44,11 @@ export function NetworkActivity({ className }: { className?: string }) {
   return (
     <section
       className={className ? `network-activity ${className}` : 'network-activity'}
-      aria-label="Activité du réseau"
+      aria-label="Activité de la plateforme"
     >
       <h2 className="network-activity__title">
         <span className="network-activity__live" aria-hidden="true" />
-        Activité du réseau
+        Activité de la plateforme
       </h2>
       {error ? (
         <p className="network-activity__text">Le fil n’a pas pu être chargé.</p>
@@ -84,7 +85,11 @@ export function NetworkActivity({ className }: { className?: string }) {
           })}
         </ul>
       )}
-      <button type="button" className="network-activity__more" onClick={() => go('/communaute')}>
+      <button
+        type="button"
+        className="network-activity__more"
+        onClick={() => go('/communaute?voir=plateforme')}
+      >
         Tout voir
         <ArrowRight size={12} strokeWidth={2} />
       </button>

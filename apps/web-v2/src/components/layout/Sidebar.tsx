@@ -1,6 +1,6 @@
 /**
  * QUOI     — la barre latérale : repli, marque, carte de compte, les entrées de la maquette, et le
- *            fil « Activité du réseau », la ligne de version (les Nouveautés) l'interrupteur
+ *            fil « Activité de la plateforme », la ligne de version (les Nouveautés) l'interrupteur
  *            Clair / Sombre et le lien vers les pages légales en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
@@ -53,7 +53,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { to: '/', label: 'Tableau de bord', Icon: CircleGauge },
   { to: '/explorer', label: 'Explorer', Icon: Telescope },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
-  { to: '/communaute', label: 'Communauté', Icon: Users },
+  { to: '/communaute', label: 'Ma communauté', Icon: Users },
   { to: '/reglages', label: 'Réglages', Icon: Settings },
 ]
 

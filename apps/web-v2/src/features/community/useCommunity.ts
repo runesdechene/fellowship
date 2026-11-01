@@ -3,7 +3,8 @@
  *            « À suivre », et qui il suit déjà ; Suivre et Repérer.
  * POURQUOI — lot 9a. La base rend des lignes prêtes à afficher (community_feed, crossing_dates,
  *            accounts_to_follow), l'identité protégée déjà appliquée ; ce hook les lit et relit.
- *            Tout Suivre (événement `reseau-change`) relit la page.
+ *            Tout Suivre (événement `reseau-change`) relit la page. Deux fils : le réseau, ou toute
+ *            la plateforme (onglet « Toute la plateforme »).
  * ATTENTION — une lecture ratée est une erreur affichée, jamais un fil vide (.claude/rules/v2.md).
  */
 import { useCallback, useEffect, useState } from 'react'
@@ -16,6 +17,7 @@ import {
   readPeople,
   readTags,
   type FeedLine,
+  type FeedScope,
   type FeedPerson,
   type FollowReason,
 } from '@/lib/community'
@@ -49,6 +51,8 @@ export interface ToFollow {
 const PAGE_SIZE = 40
 
 interface CommunityData {
+  /** Le fil lu : un changement d'onglet vers l'autre fil ne montre jamais l'ancien. */
+  scope: FeedScope
   lines: FeedLine[]
   /** Une page pleine : il en reste peut-être d'autres, plus anciennes. */
   hasMore: boolean
@@ -57,15 +61,16 @@ interface CommunityData {
   followed: Set<string>
 }
 
-async function loadCommunity(actorId: string): Promise<CommunityData> {
+async function loadCommunity(actorId: string, scope: FeedScope): Promise<CommunityData> {
   const [feed, crossing, toFollow, follows] = await Promise.all([
-    supabase.rpc('community_feed', { p_actor: actorId, p_limit: PAGE_SIZE }),
+    supabase.rpc('community_feed', { p_actor: actorId, p_limit: PAGE_SIZE, p_scope: scope }),
     supabase.rpc('crossing_dates', { p_actor: actorId }),
     supabase.rpc('accounts_to_follow', { p_actor: actorId }),
     supabase.from('follows').select('following_actor').eq('follower_actor', actorId),
   ])
   const lines = readFeed(must(feed))
   return {
+    scope,
     lines,
     hasMore: lines.filter((line) => line.kind !== 'gathering').length >= PAGE_SIZE,
     crossing: must(crossing).map((row) => ({
@@ -115,6 +120,7 @@ async function withMutual(
 }
 
 const EMPTY: CommunityData = {
+  scope: 'reseau',
   lines: [],
   hasMore: false,
   crossing: [],
@@ -122,7 +128,7 @@ const EMPTY: CommunityData = {
   followed: new Set(),
 }
 
-export function useCommunity(actorId: string | undefined) {
+export function useCommunity(actorId: string | undefined, scope: FeedScope) {
   const { person } = useAuth()
   const [data, setData] = useState<CommunityData>(EMPTY)
   const [loading, setLoading] = useState(true)
@@ -144,7 +150,7 @@ export function useCommunity(actorId: string | undefined) {
     async function load(id: string) {
       let result: CommunityData | null
       try {
-        result = await loadCommunity(id)
+        result = await loadCommunity(id, scope)
       } catch {
         result = null
       }
@@ -157,7 +163,7 @@ export function useCommunity(actorId: string | undefined) {
     return () => {
       cancelled = true
     }
-  }, [actorId, version])
+  }, [actorId, scope, version])
 
   /** « Afficher plus » : la page d'avant la plus ancienne nouvelle, ajoutée au bout. */
   const loadMore = useCallback(async () => {
@@ -172,6 +178,7 @@ export function useCommunity(actorId: string | undefined) {
             p_actor: actorId,
             p_before: before,
             p_limit: PAGE_SIZE,
+            p_scope: data.scope,
           }),
         ),
       )
@@ -181,7 +188,7 @@ export function useCommunity(actorId: string | undefined) {
     } finally {
       setLoadingMore(false)
     }
-  }, [actorId, data.lines])
+  }, [actorId, data.lines, data.scope])
 
   /** Suivre : le bouton disparaît aussitôt ; si l'écriture échoue, il revient. */
   const follow = useCallback(
@@ -224,5 +231,17 @@ export function useCommunity(actorId: string | undefined) {
     [actorId, person],
   )
 
-  return { ...data, loading, error, loadingMore, moreFailed, loadMore, follow, mark }
+  const current = data.scope === scope
+  return {
+    ...data,
+    lines: current ? data.lines : [],
+    hasMore: current && data.hasMore,
+    loading: loading || !current,
+    error,
+    loadingMore,
+    moreFailed,
+    loadMore,
+    follow,
+    mark,
+  }
 }

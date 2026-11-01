@@ -1,8 +1,8 @@
 /**
- * QUOI     — charge « Activité du réseau » de l'acteur actif : les quatre dernières nouvelles du
- *            fil de la communauté — arrivées, dates prises, abonnements, festivals ajoutés.
- * POURQUOI — une seule définition du réseau (lot 9a) : la barre latérale lit la même source que
- *            la page Communauté (community_feed), sans les avis, dont l'identité est protégée.
+ * QUOI     — charge « Activité de la plateforme » : les quatre dernières nouvelles de tout le
+ *            monde — arrivées, dates publiques, festivals ajoutés.
+ * POURQUOI — la même source que l'onglet « Toute la plateforme » de la Communauté
+ *            (community_feed, portée « plateforme »), sans les avis, dont l'identité est protégée.
  */
 import { useEffect, useState } from 'react'
 import { activityText, readFeed, type ActivityText, type FeedPerson } from '@/lib/community'
@@ -19,7 +19,9 @@ export interface ActivityItem {
 }
 
 async function loadActivity(me: string): Promise<ActivityItem[]> {
-  const lines = readFeed(must(await supabase.rpc('community_feed', { p_actor: me })))
+  const lines = readFeed(
+    must(await supabase.rpc('community_feed', { p_actor: me, p_scope: 'plateforme' })),
+  )
   return lines
     .flatMap((line) => {
       const text = activityText(line)

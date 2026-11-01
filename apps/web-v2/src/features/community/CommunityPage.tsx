@@ -3,6 +3,8 @@
  *            groupé par jour, et à droite « Ta communauté », « Où vous vous croiserez » et
  *            « Tu connais peut-être ».
  * POURQUOI — lot 9a, maquette 2212:2 : d'abord ce que vit la tribu, ensuite agrandir son réseau.
+ *            « Toute la plateforme » ouvre le fil de tout le monde, ce qui est public seulement
+ *            (Uriel, 01/11/2026).
  *            L'écran n'invente rien : useCommunity lit, lib/community.ts dit.
  */
 import { useMemo } from 'react'
@@ -13,6 +15,7 @@ import {
   feedFor,
   gatheringOf,
   readTab,
+  scopeOf,
   type CommunityTab,
   type FeedLine,
   type FeedPerson,
@@ -31,6 +34,7 @@ const TABS: { key: CommunityTab; label: string }[] = [
   { key: 'ou', label: 'Où ils vont' },
   { key: 'avis', label: 'Avis' },
   { key: 'reseau', label: 'Réseau' },
+  { key: 'plateforme', label: 'Toute la plateforme' },
 ]
 
 /** Le compte que Suivre ajouterait sur cette ligne : l'arrivant, ou le compte suivi. */
@@ -63,7 +67,7 @@ function CommunityScreen() {
     loadMore,
     follow,
     mark,
-  } = useCommunity(actor?.id)
+  } = useCommunity(actor?.id, scopeOf(tab))
   const { network, answered, followBack, decline } = useNetwork()
   const own = useMemo(
     () =>
@@ -88,10 +92,8 @@ function CommunityScreen() {
   return (
     <div className="community">
       <header className="community__header">
-        <h1 className="community__title">Communauté</h1>
-        <p className="community__lead">
-          Ce que vit ta tribu, et les nouveaux festivals sur Fellowship.
-        </p>
+        <h1 className="community__title">Ma communauté</h1>
+        <p className="community__lead">Ce que vit ta tribu, et ce qui bouge sur Fellowship.</p>
         <div className="community__tabs" role="group" aria-label="Filtrer le fil">
           {TABS.map(({ key, label }) => (
             <button

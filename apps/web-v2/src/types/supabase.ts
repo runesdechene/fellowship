@@ -2825,7 +2825,12 @@ export type Database = {
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
       can_use_v2: { Args: never; Returns: boolean }
       community_feed: {
-        Args: { p_actor: string; p_before?: string; p_limit?: number }
+        Args: {
+          p_actor: string
+          p_before?: string
+          p_limit?: number
+          p_scope?: string
+        }
         Returns: {
           comment: string
           companions: Json

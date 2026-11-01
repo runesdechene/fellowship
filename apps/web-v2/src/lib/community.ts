@@ -141,17 +141,27 @@ export function readFeed(rows: unknown): FeedLine[] {
   return rows.map(readLine).filter((line): line is FeedLine => line !== null)
 }
 
-export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau'
+export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau' | 'plateforme'
 
 const TAB_KINDS: Record<CommunityTab, readonly FeedKind[]> = {
   tout: ['arrival', 'going', 'added', 'review', 'follow'],
   ou: ['going', 'added'],
   avis: ['review'],
   reseau: ['arrival', 'follow'],
+  plateforme: ['arrival', 'going', 'added', 'review'],
 }
 
 export function readTab(value: string | null): CommunityTab {
-  return value === 'ou' || value === 'avis' || value === 'reseau' ? value : 'tout'
+  return value === 'ou' || value === 'avis' || value === 'reseau' || value === 'plateforme'
+    ? value
+    : 'tout'
+}
+
+/** Le fil que la base sert (community_feed) : tout le monde sur un seul onglet, le réseau ailleurs. */
+export type FeedScope = 'reseau' | 'plateforme'
+
+export function scopeOf(tab: CommunityTab): FeedScope {
+  return tab === 'plateforme' ? 'plateforme' : 'reseau'
 }
 
 export function feedFor(lines: FeedLine[], tab: CommunityTab): FeedLine[] {
@@ -192,7 +202,7 @@ export interface ActivityText {
   object: { name: string; to: string | null } | null
 }
 
-/** Ce qui suit le nom dans « Activité du réseau » ; null : la ligne n'y va pas. */
+/** Ce qui suit le nom dans « Activité de la plateforme » ; null : la ligne n'y va pas. */
 export function activityText(line: FeedLine): ActivityText | null {
   if (!line.who) return null
   const event = line.event && { name: line.event.name, to: eventPath(line.event.id) }

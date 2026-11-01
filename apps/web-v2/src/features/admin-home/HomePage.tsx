@@ -1,7 +1,7 @@
 /**
  * QUOI     — l'accueil de l'administration (`/admin/accueil`) : le titre qui dit qui est venu, les
  *            visiteurs jour par jour, quatre chiffres, ce que font les gens, ce qu'il reste à
- *            traiter, les dernières personnes passées et le fil « Activité du réseau ».
+ *            traiter, les dernières personnes passées et le fil « Activité de la plateforme ».
  * POURQUOI — une vision globale de la santé de l'application en arrivant (Uriel, 22/10/2026,
  *            maquette 2448:233).
  */
