@@ -1,21 +1,19 @@
 /**
  * QUOI     — la loupe de la barre du haut : elle ouvre la recherche plein écran
- *            (features/search/SearchOverlay). Absente d'Explorer, qui a sa grande barre.
+ *            (features/search/SearchOverlay), sur tous les écrans, Explorer compris (Uriel, 01/11/2026).
  * POURQUOI — maquette 2606:233 (Uriel, 01/11/2026) : une loupe du même dessin que la cloche, plutôt
  *            qu'un champ toujours là.
  * ATTENTION — l'ouverture est une entrée d'historique (`?recherche`, `state.search`) : le retour du
  *            navigateur referme la recherche.
  */
 import { Search } from 'lucide-react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { SEARCH_PARAM } from '@/features/search/SearchOverlay'
 
 export function TopbarSearch() {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
   const [params] = useSearchParams()
-  if (pathname.startsWith('/explorer')) return null
 
   return (
     <Button
