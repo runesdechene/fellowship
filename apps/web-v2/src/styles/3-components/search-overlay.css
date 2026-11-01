@@ -1,0 +1,256 @@
+/**
+ * QUOI     — la recherche plein écran (features/search/SearchOverlay.tsx) : le grand champ, les
+ *            puces de « Récemment » et « Par catégorie », les résultats en direct.
+ * POURQUOI — maquette 2606:379. Elle s'ouvre et se ferme en fondu et en légère échelle, 0,24 s,
+ *            comme les tiroirs de Runes de Chêne : le `<dialog>` anime son entrée (@starting-style)
+ *            et sa sortie (display et overlay en allow-discrete).
+ * ATTENTION — le fond est peint sur le `<dialog>` lui-même, jamais sur ::backdrop (v2.md).
+ */
+
+.search-overlay {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: var(--search-overlay-top) var(--page-gutter) var(--space-40);
+  overflow-y: auto;
+  border: 0;
+  background: var(--surface-panel);
+  opacity: 0;
+  scale: var(--search-overlay-scale);
+  transform-origin: top right;
+  transition:
+    opacity var(--duration-medium) var(--ease-drawer),
+    scale var(--duration-medium) var(--ease-drawer),
+    display var(--duration-medium) allow-discrete,
+    overlay var(--duration-medium) allow-discrete;
+}
+
+.search-overlay[open] {
+  opacity: 1;
+  scale: 1;
+}
+
+@starting-style {
+  .search-overlay[open] {
+    opacity: 0;
+    scale: var(--search-overlay-scale);
+  }
+}
+
+.search-overlay::backdrop {
+  background: transparent;
+}
+
+.search-overlay__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  max-width: var(--search-overlay-width);
+  margin-inline: auto;
+}
+
+/* Le champ : la loupe, les mots en grand, Échap et la croix ; un filet dessous. */
+.search-overlay__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  padding-bottom: var(--space-18);
+  border-bottom: 1px solid var(--line-card);
+}
+
+.search-overlay__icon {
+  flex: none;
+  color: var(--ink-title);
+}
+
+.search-overlay__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  font: var(--type-search-overlay-input);
+  color: var(--ink-title);
+  caret-color: var(--status-ok-ink);
+}
+
+.search-overlay__input::placeholder {
+  color: var(--reports-pale-ink);
+}
+
+.search-overlay__key {
+  flex: none;
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-chip);
+  background: var(--surface-chip-neutral);
+  font: var(--type-chip);
+  color: var(--ink-soft);
+}
+
+/* Les résultats se remplacent en fondu, sans cascade. */
+.search-overlay__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  transition: opacity var(--duration-medium) var(--ease-soft);
+}
+
+@starting-style {
+  .search-overlay__body {
+    opacity: 0;
+  }
+}
+
+.search-overlay__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+.search-overlay__group-title {
+  font: var(--type-report-block);
+  color: var(--ink-title);
+}
+
+.search-overlay__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.search-overlay__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-round);
+  background: var(--surface-card);
+  font: var(--type-button);
+  color: var(--ink-title);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.search-overlay__chip:hover {
+  background: var(--surface-control-hover);
+}
+
+.search-overlay__posters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-24);
+}
+
+.search-overlay__event,
+.search-overlay__row {
+  display: flex;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-overlay__event {
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.search-overlay__poster {
+  width: 100%;
+  aspect-ratio: var(--search-poster-ratio);
+  margin-bottom: var(--space-4);
+  border-radius: var(--round-10);
+  object-fit: cover;
+  transition: translate var(--duration-fast) var(--ease-out);
+}
+
+.search-overlay__event:hover .search-overlay__poster {
+  translate: 0 calc(var(--space-2) * -1);
+}
+
+.search-overlay__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-48);
+}
+
+.search-overlay__row {
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-6) 0;
+}
+
+.search-overlay__avatar {
+  --avatar-size: var(--avatar-size-discussion);
+
+  flex: none;
+}
+
+.search-overlay__thumb {
+  flex: none;
+  width: var(--search-thumb-width);
+  aspect-ratio: var(--search-poster-ratio);
+  border-radius: var(--round-6);
+  object-fit: cover;
+}
+
+.search-overlay__row-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.search-overlay__name {
+  font: var(--type-reminder-title);
+  color: var(--ink-title);
+  overflow-wrap: anywhere;
+}
+
+.search-overlay__meta,
+.search-overlay__empty,
+.search-overlay__hint {
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.search-overlay__hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+@media (width <= 760px) {
+  .search-overlay {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-32);
+  }
+
+  .search-overlay__input {
+    font: var(--type-search-overlay-input-mobile);
+  }
+
+  .search-overlay__key,
+  .search-overlay__hint {
+    display: none;
+  }
+
+  .search-overlay__posters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .search-overlay__columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-32);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-overlay,
+  .search-overlay__body,
+  .search-overlay__chip,
+  .search-overlay__poster {
+    transition: none;
+  }
+}

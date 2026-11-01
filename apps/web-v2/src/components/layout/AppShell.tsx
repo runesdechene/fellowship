@@ -21,6 +21,7 @@ import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
 import { Topbar } from './Topbar'
+import { SearchOverlay } from '@/features/search/SearchOverlay'
 
 const COLLAPSED_KEY = 'flwsh-sidebar-collapsed'
 
@@ -93,6 +94,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         </main>
         <PosterWall />
         <TabBar friendRequests={friendRequests} updatesUnread={updatesUnread} />
+        <SearchOverlay />
       </div>
     </PageChromeProvider>
   )

@@ -19,6 +19,7 @@ import {
   type SearchEvent,
   type SearchQuery,
 } from '@/lib/event-search'
+import { exhibitorsQuery } from '@/lib/exhibitor-search'
 import { locatePlace } from '@/lib/geocode'
 import { FREE_MONTHS, PAST, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
 import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
@@ -146,16 +147,7 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
 
   const onlyPast = query.quand === PAST
 
-  let entities = supabase
-    .from('entities')
-    .select('actor_id, public_slug, brand_name, avatar_url, craft_type, city, department')
-    .not('public_slug', 'is', null)
-    .neq('actor_id', viewerId)
-  if (words)
-    entities = entities.or(
-      `brand_name.ilike.${words},city.ilike.${words},craft_type.ilike.${words}`,
-    )
-  if (place) entities = entities.or(`city.ilike.${place},department.ilike.${place}`)
+  const entities = exhibitorsQuery(words, place, viewerId)
 
   const [eventRows, pastRows, entityRows, follows] = await Promise.all([
     onlyPast
