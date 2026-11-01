@@ -9,3 +9,13 @@
   filter: blur(var(--masked-amount-blur));
   user-select: none;
 }
+
+/* Un bénéfice en dégradé est peint par son conteneur, découpé dans les lettres (background-clip:
+   text) : ce découpage repeignait le faux chiffre net par-dessus le flou. Masqué, il passe en uni. */
+.reports__net:has(> .masked-amount),
+.year-card__net:has(> .masked-amount),
+.reports-table__net--best:has(> .masked-amount),
+.report-summary__net:has(> .masked-amount) {
+  background: none;
+  color: var(--net-masked-ink);
+}
