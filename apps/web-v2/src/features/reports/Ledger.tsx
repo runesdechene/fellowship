@@ -41,7 +41,7 @@ import { useRevenueKey } from '@/lib/revenue-key'
 import type { LedgerCategory } from '@/types/database'
 import peageIcon from '@/assets/peage.svg'
 import { EncryptDialog } from './EncryptDialog'
-import { PinOffer } from './PinOffer'
+import { UnlockDialog } from './UnlockDialog'
 import { UnlockRow } from './UnlockRow'
 import type { ReportActions, ReportDetail, ReportEntry } from './useReport'
 
@@ -235,8 +235,7 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
   const revenueKey = useRevenueKey()
   const [invalid, setInvalid] = useState(false)
   const [asking, setAsking] = useState<'unlock' | 'dialog' | null>(null)
-  // Les recettes viennent d'être ouvertes par la phrase : on propose un code pour cet appareil.
-  const [pinOffer, setPinOffer] = useState(false)
+  const [unlocking, setUnlocking] = useState(false)
   // Pas encore scellée : Carte et Espèces valent 0 tant que la clé est ouverte, masquées sinon.
   const byDefault = encryptsByDefault(date.secret, entries, revenueKey.status)
   const masked = date.secret === 'masked' || (byDefault && revenueKey.status === 'locked')
@@ -280,11 +279,10 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
             <span>{revenueTotal}</span>
           </div>
           {encrypted && [secretLine('carte'), secretLine('especes')]}
-          {masked && <UnlockRow onOpen={setPinOffer} />}
-          {pinOffer && revenueKey.status === 'open' && (
-            <PinOffer
-              onDone={() => {
-                setPinOffer(false)
+          {masked && (
+            <UnlockRow
+              onAsk={() => {
+                setUnlocking(true)
               }}
             />
           )}
@@ -318,10 +316,17 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
         }}
         onInvalid={setInvalid}
       />
-      {asking === 'unlock' && revenueKey.status === 'locked' && !encrypted && (
-        <UnlockRow
-          onOpen={() => {
-            setAsking('dialog')
+      {unlocking && (
+        <UnlockDialog
+          onDone={() => {
+            setUnlocking(false)
+          }}
+        />
+      )}
+      {asking === 'unlock' && !encrypted && (
+        <UnlockDialog
+          onDone={(opened) => {
+            setAsking(opened ? 'dialog' : null)
           }}
         />
       )}

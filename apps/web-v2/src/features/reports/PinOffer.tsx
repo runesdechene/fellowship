@@ -33,7 +33,6 @@ export function PinOffer({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="report-secret__pin">
-      <p className="report-secret__pin-title">Un code pour cet appareil</p>
       <p className="report-secret__hint">
         4 chiffres pour rouvrir tes recettes sur cet appareil seulement, sans retaper ta phrase de
         passe. Chaque appareil a son propre code.

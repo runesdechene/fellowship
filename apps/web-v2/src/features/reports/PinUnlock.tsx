@@ -63,7 +63,6 @@ export function PinUnlock({ actorId, onOpen, onPhrase }: Props) {
 
   return (
     <div className="report-secret__pin">
-      <p className="report-secret__pin-title">Code de cet appareil</p>
       <CodeInput
         length={PIN_LENGTH}
         secret
