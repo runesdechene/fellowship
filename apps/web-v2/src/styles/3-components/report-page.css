@@ -316,19 +316,30 @@
 }
 
 /* --- Note libre ---------------------------------------------------------- */
+/* La note : la carte des blocs (comme le registre), et dedans un champ simple, bordé, sans ombre. */
 .report-note {
-  min-height: var(--space-96);
-  padding: var(--space-14) var(--space-16);
+  display: flex;
+  padding: var(--space-16);
   border: 1px solid var(--line-card);
   box-shadow: var(--shadow-block);
-  border-radius: var(--round-12);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+
+.report-note__field {
+  flex: 1;
+  min-height: var(--space-96);
+  padding: var(--space-12) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-10);
   background: var(--surface-card);
   font: var(--type-report-note);
   color: var(--ink-title);
   resize: vertical;
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.report-note:focus {
+.report-note__field:focus {
   outline: none;
   border-color: var(--dropzone-border);
 }

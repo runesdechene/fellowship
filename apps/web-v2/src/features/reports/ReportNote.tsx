@@ -17,18 +17,21 @@ export function ReportNote({ note, onSave }: { note: string; onSave: (note: stri
   return (
     <section className="report-block">
       <h2 className="report-block__title">Note libre</h2>
-      <textarea
-        className="report-note"
-        aria-label="Note libre"
-        placeholder="Ce que tu veux te rappeler l’an prochain…"
-        value={draft}
-        onChange={(event) => {
-          setDraft(event.target.value)
-        }}
-        onBlur={() => {
-          if (draft !== note) onSave(draft)
-        }}
-      />
+      {/* La carte du bloc, et dedans un champ simple, sans ombre (Uriel, 01/11/2026). */}
+      <div className="report-note">
+        <textarea
+          className="report-note__field"
+          aria-label="Note libre"
+          placeholder="Ce que tu veux te rappeler l’an prochain…"
+          value={draft}
+          onChange={(event) => {
+            setDraft(event.target.value)
+          }}
+          onBlur={() => {
+            if (draft !== note) onSave(draft)
+          }}
+        />
+      </div>
     </section>
   )
 }
