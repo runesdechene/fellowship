@@ -141,27 +141,24 @@ export function readFeed(rows: unknown): FeedLine[] {
   return rows.map(readLine).filter((line): line is FeedLine => line !== null)
 }
 
-export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau' | 'plateforme'
+export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau'
 
 const TAB_KINDS: Record<CommunityTab, readonly FeedKind[]> = {
   tout: ['arrival', 'going', 'added', 'review', 'follow'],
   ou: ['going', 'added'],
   avis: ['review'],
   reseau: ['arrival', 'follow'],
-  plateforme: ['arrival', 'going', 'added', 'review'],
 }
 
 export function readTab(value: string | null): CommunityTab {
-  return value === 'ou' || value === 'avis' || value === 'reseau' || value === 'plateforme'
-    ? value
-    : 'tout'
+  return value === 'ou' || value === 'avis' || value === 'reseau' ? value : 'tout'
 }
 
-/** Le fil que la base sert (community_feed) : tout le monde sur un seul onglet, le réseau ailleurs. */
+/** Le fil que la base sert (community_feed) : les comptes suivis, ou toute la plateforme. */
 export type FeedScope = 'reseau' | 'plateforme'
 
-export function scopeOf(tab: CommunityTab): FeedScope {
-  return tab === 'plateforme' ? 'plateforme' : 'reseau'
+export function readScope(value: string | null): FeedScope {
+  return value === 'plateforme' ? 'plateforme' : 'reseau'
 }
 
 export function feedFor(lines: FeedLine[], tab: CommunityTab): FeedLine[] {

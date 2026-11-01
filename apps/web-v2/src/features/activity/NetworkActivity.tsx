@@ -3,7 +3,7 @@
  *            mode admin) : quatre nouvelles de toute la plateforme, la plus récente en haut, avec leur âge.
  * POURQUOI — voir le réseau bouger donne envie de revenir ; c'est le seul vert de l'interface,
  *            le point « en direct ». Tout le monde, pas seulement le réseau, pour croiser des
- *            inconnus (Uriel, 01/11/2026). « Tout voir » ouvre l'onglet « Toute la plateforme ».
+ *            inconnus (Uriel, 01/11/2026). « Tout voir » ouvre « Toute la plateforme » de Ma communauté.
  */
 import { ArrowRight } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
@@ -88,7 +88,7 @@ export function NetworkActivity({ className }: { className?: string }) {
       <button
         type="button"
         className="network-activity__more"
-        onClick={() => go('/communaute?voir=plateforme')}
+        onClick={() => go('/communaute?fil=plateforme')}
       >
         Tout voir
         <ArrowRight size={12} strokeWidth={2} />

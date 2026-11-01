@@ -1,7 +1,7 @@
 /**
  * QUOI     — charge « Activité de la plateforme » : les quatre dernières nouvelles de tout le
  *            monde — arrivées, dates publiques, festivals ajoutés.
- * POURQUOI — la même source que l'onglet « Toute la plateforme » de la Communauté
+ * POURQUOI — la même source que « Toute la plateforme » dans Ma communauté
  *            (community_feed, portée « plateforme »), sans les avis, dont l'identité est protégée.
  */
 import { useEffect, useState } from 'react'

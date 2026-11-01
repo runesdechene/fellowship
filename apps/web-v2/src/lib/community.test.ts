@@ -16,7 +16,7 @@ import {
   readFollowReason,
   readPeople,
   readTab,
-  scopeOf,
+  readScope,
   appendPage,
   pageCursor,
   type FeedLine,
@@ -119,13 +119,12 @@ describe('les onglets', () => {
     expect(kinds('ou')).toEqual(['going', 'added'])
     expect(kinds('avis')).toEqual(['review'])
     expect(kinds('reseau')).toEqual(['arrival', 'follow'])
-    expect(kinds('plateforme')).toEqual(['arrival', 'going', 'added', 'review'])
   })
 
-  test('seul « Toute la plateforme » lit le fil de tout le monde', () => {
-    expect(scopeOf('plateforme')).toBe('plateforme')
-    expect(scopeOf('tout')).toBe('reseau')
-    expect(scopeOf('reseau')).toBe('reseau')
+  test('le fil se lit dans l’adresse : les abonnements, sauf « plateforme »', () => {
+    expect(readScope('plateforme')).toBe('plateforme')
+    expect(readScope('x')).toBe('reseau')
+    expect(readScope(null)).toBe('reseau')
   })
 
   test('« Ça se rassemble » à part', () => {
@@ -137,7 +136,6 @@ describe('les onglets', () => {
     expect(readTab('avis')).toBe('avis')
     expect(readTab('ou')).toBe('ou')
     expect(readTab('reseau')).toBe('reseau')
-    expect(readTab('plateforme')).toBe('plateforme')
     expect(readTab('x')).toBe('tout')
     expect(readTab(null)).toBe('tout')
   })

@@ -1,22 +1,25 @@
 /**
- * QUOI     — l'écran Communauté : titre, filtres (dans l'adresse), « Ça se rassemble », le fil
+ * QUOI     — l'écran Ma communauté : titre, le fil choisi (« Mes abonnements » ou « Toute la
+ *            plateforme ») puis ses filtres, dans l'adresse, « Ça se rassemble », le fil
  *            groupé par jour, et à droite « Ta communauté », « Où vous vous croiserez » et
  *            « Tu connais peut-être ».
  * POURQUOI — lot 9a, maquette 2212:2 : d'abord ce que vit la tribu, ensuite agrandir son réseau.
- *            « Toute la plateforme » ouvre le fil de tout le monde, ce qui est public seulement
- *            (Uriel, 01/11/2026).
+ *            « Toute la plateforme » montre tout le monde, ce qui est public seulement ; les
+ *            filtres par type viennent dessous, au second rang (Uriel, 01/11/2026).
  *            L'écran n'invente rien : useCommunity lit, lib/community.ts dit.
  */
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
 import {
   canFollow,
   feedFor,
   gatheringOf,
+  readScope,
   readTab,
-  scopeOf,
   type CommunityTab,
+  type FeedScope,
   type FeedLine,
   type FeedPerson,
 } from '@/lib/community'
@@ -34,7 +37,11 @@ const TABS: { key: CommunityTab; label: string }[] = [
   { key: 'ou', label: 'Où ils vont' },
   { key: 'avis', label: 'Avis' },
   { key: 'reseau', label: 'Réseau' },
-  { key: 'plateforme', label: 'Toute la plateforme' },
+]
+
+const SCOPES: { value: FeedScope; label: string }[] = [
+  { value: 'reseau', label: 'Mes abonnements' },
+  { value: 'plateforme', label: 'Toute la plateforme' },
 ]
 
 /** Le compte que Suivre ajouterait sur cette ligne : l'arrivant, ou le compte suivi. */
@@ -53,6 +60,7 @@ export function CommunityPage() {
 function CommunityScreen() {
   const { actor, person, entities } = useAuth()
   const [params, setParams] = useSearchParams()
+  const scope = readScope(params.get('fil'))
   const tab = readTab(params.get('voir'))
   const {
     lines,
@@ -67,7 +75,7 @@ function CommunityScreen() {
     loadMore,
     follow,
     mark,
-  } = useCommunity(actor?.id, scopeOf(tab))
+  } = useCommunity(actor?.id, scope)
   const { network, answered, followBack, decline } = useNetwork()
   const own = useMemo(
     () =>
@@ -80,8 +88,17 @@ function CommunityScreen() {
   const gathering = !error && (tab === 'tout' || tab === 'ou') ? gatheringOf(lines) : null
   const groups = groupByDay(feedFor(lines, tab), now)
 
-  function choose(next: CommunityTab) {
-    setParams(next === 'tout' ? {} : { voir: next }, { replace: true })
+  /** Le fil et le filtre vivent chacun dans l'adresse ; changer l'un garde l'autre. */
+  function choose(key: 'fil' | 'voir', value: string | null) {
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current)
+        if (value) next.set(key, value)
+        else next.delete(key)
+        return next
+      },
+      { replace: true },
+    )
   }
 
   function followable(line: FeedLine): FeedPerson | null {
@@ -94,6 +111,14 @@ function CommunityScreen() {
       <header className="community__header">
         <h1 className="community__title">Ma communauté</h1>
         <p className="community__lead">Ce que vit ta tribu, et ce qui bouge sur Fellowship.</p>
+        <div className="community__scope">
+          <Segmented
+            label="Fil"
+            options={SCOPES}
+            value={scope}
+            onChange={(next) => choose('fil', next === 'reseau' ? null : next)}
+          />
+        </div>
         <div className="community__tabs" role="group" aria-label="Filtrer le fil">
           {TABS.map(({ key, label }) => (
             <button
@@ -101,9 +126,10 @@ function CommunityScreen() {
               type="button"
               className={key === tab ? 'community__tab community__tab--on' : 'community__tab'}
               aria-pressed={key === tab}
-              onClick={() => choose(key)}
+              onClick={() => choose('voir', key === 'tout' ? null : key)}
             >
-              {label}
+              {/* Sur la plateforme, pas d'abonnements entre inconnus : ce filtre n'a que les arrivées. */}
+              {key === 'reseau' && scope === 'plateforme' ? 'Arrivées' : label}
             </button>
           ))}
         </div>

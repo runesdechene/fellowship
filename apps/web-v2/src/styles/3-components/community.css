@@ -38,6 +38,22 @@
   margin-top: var(--space-20);
 }
 
+/* Le fil choisi, au-dessus des filtres : la bascule prend la largeur de ses deux mots. */
+.community__scope {
+  align-self: flex-start;
+  margin-top: var(--space-20);
+}
+
+.community__scope .segmented__option {
+  flex: none;
+  padding: 0 var(--space-14);
+  white-space: nowrap;
+}
+
+.community__scope + .community__tabs {
+  margin-top: var(--space-12);
+}
+
 .community__tab {
   padding: var(--space-8) var(--space-14);
   border: 1px solid var(--line-card);
@@ -752,6 +768,7 @@ a.side-card__row:hover {
     border-radius: var(--radius-card);
   }
 
+  .community__scope,
   .community__tabs {
     order: 2;
     margin-top: var(--space-24);
