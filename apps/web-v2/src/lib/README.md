@@ -7,6 +7,7 @@ helper, regarder ici — et étendre l'existant plutôt que doubler.
 - `supabase.ts` — le client unique.
 - `auth.tsx` — session, casquettes, acteur actif, connexion par code (`useAuth`).
 - `revenue-key.tsx` — la clé de chiffrement des recettes de l'enseigne active, en mémoire seulement (`useRevenueKey`), verrouillée après 15 minutes sans activité (`idle.ts`).
+- `device-key.ts` — la clé des recettes gardée sur l'appareil derrière un code de 4 chiffres (IndexedDB) ; 5 codes faux et elle est oubliée.
 - `access.ts` — ce qu'un visiteur sans compte ne voit pas (fiche privée).
 - `dates.ts` — **toute** la logique de dates ; non négociable (fuseau surveillé).
 - `money.ts` — **tous** les montants et le registre de bilan ; non négociable.

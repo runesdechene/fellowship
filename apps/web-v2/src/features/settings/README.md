@@ -15,6 +15,7 @@
 - `EntitiesSection.tsx` — une ligne par enseigne : son abonnement en une phrase, gérer ou passer Pro, supprimer.
 - `RevenueKeyRow.tsx`, `useRevenueKeys.ts` — sous chaque enseigne Pro, ses recettes chiffrées (changer
   la phrase, réinitialiser) ou en clair (chiffrer), quelle que soit l'enseigne active.
+- `DevicePinRow.tsx` — « Code de cet appareil » sous les recettes chiffrées : « Oublier sur cet appareil ».
 - `ChangePhraseDialog.tsx` — « Changer ta phrase de passe » : tout est rechiffré sur l'appareil, sans perte.
 - `BillingRow.tsx`, `BillingDialog.tsx` — « Facturation » sous une enseigne abonnée : raison sociale
   et SIREN, enregistrés en base et chez Stripe (chantier 3, sans maquette).

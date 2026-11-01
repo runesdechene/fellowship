@@ -2,7 +2,8 @@
  * QUOI     — la section Enseignes et abonnement des Réglages : une carte par enseigne (maquette
  *            2589:233). En tête, son nom, son abonnement en une phrase, la pastille de son paiement
  *            (maquette 2558:233) et « Passer Pro » ; dessous, une ligne par sujet, chacune avec son
- *            icône : abonnement et paiement (si abonnée), facturation, siège, recettes (si Pro) ;
+ *            icône : abonnement et paiement (si abonnée), facturation, siège, recettes et code de
+ *            l'appareil (si Pro) ;
  *            en pied, Supprimer l'enseigne….
  * POURQUOI — lot 9b, maquette 2206:691 : chaque enseigne a sa vitrine et son propre abonnement.
  *            « Changer ma formule » et « Gérer » ouvrent l'espace Stripe, qui fait les deux ; « Passer
@@ -35,6 +36,7 @@ import { subscriptionPrice } from '@/lib/pricing'
 import { openPortal } from '@/lib/stripe'
 import { BillingRow } from './BillingRow'
 import { DeleteEntityDialog } from './DeleteEntityDialog'
+import { DevicePinRow } from './DevicePinRow'
 import { EntityBase } from './EntityBase'
 import { RevenueKeyRow } from './RevenueKeyRow'
 import { SettingCard, SettingRow } from './SettingRow'
@@ -144,6 +146,9 @@ export function EntitiesSection() {
                   chosenAt={revenueKeys.chosenAt.get(entity.actor_id) ?? null}
                   onChange={revenueKeys.reload}
                 />
+              )}
+              {line.pro && revenueKeys.chosenAt?.get(entity.actor_id) && (
+                <DevicePinRow entityId={entity.actor_id} />
               )}
             </div>
             <div className="setting-card__foot">

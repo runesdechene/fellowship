@@ -166,8 +166,8 @@ export function initialsOf(name: string): string {
     .join('')
 }
 
-export function codeDigits(text: string): string {
-  return text.replace(/\D/g, '').slice(0, 6)
+export function codeDigits(text: string, length = 6): string {
+  return text.replace(/\D/g, '').slice(0, length)
 }
 
 /** La première étape encore invalide (un lien vers l'étape 5 ouvert dans un nouvel onglet arrive
@@ -179,9 +179,9 @@ export function firstProblemStep(steps: WelcomeStep[], draft: WelcomeDraft): num
 
 /** Le code après une frappe dans la case `index` : un chiffre s'y écrit, à la place de celui qui y
  *  était ; plusieurs chiffres d'un coup (le code proposé par iOS ou le clavier) remplissent tout. */
-export function typedCode(value: string, index: number, raw: string): string {
+export function typedCode(value: string, index: number, raw: string, length = 6): string {
   // `raw` contient encore le chiffre déjà présent dans la case : on ne garde que le nouveau.
-  const digits = codeDigits(raw.replace(value[index] ?? '', ''))
+  const digits = codeDigits(raw.replace(value[index] ?? '', ''), length)
   if (digits === '') return value
   if (digits.length > 1) return digits
   return value.slice(0, index) + digits + value.slice(index + 1)

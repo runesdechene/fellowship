@@ -27,6 +27,10 @@
   border: var(--door-field-line) solid var(--ink-title);
 }
 
+.code-input__box[aria-invalid='true'] {
+  border-color: var(--danger-ink);
+}
+
 .code-input__box:disabled {
   opacity: var(--settings-off-opacity);
 }

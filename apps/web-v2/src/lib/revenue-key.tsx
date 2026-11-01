@@ -1,7 +1,8 @@
 /**
  * QUOI     — la clé de chiffrement des recettes de l'enseigne active, gardée le temps de la
  *            session : `status` ('none' aucune phrase définie, 'locked' phrase définie mais clé
- *            absente, 'open' clé en mémoire), `create`, `unlock`, `verify`, `rekey`, `reset`, et le
+ *            absente, 'open' clé en mémoire), `create`, `unlock`, `adopt` (clé rouverte par le code de
+ *            l'appareil), `verify`, `rekey`, `reset`, et le
  *            refus « Garder en clair » (`clearChosen`, `keepClear`). Exposé par useRevenueKey().
  * POURQUOI — le déchiffrement se fait dans le navigateur (lib/cipher.ts) ; les chargeurs de
  *            bilans lisent la clé d'ici et se rechargent quand elle change.
@@ -34,6 +35,7 @@ import {
   whichKeyOpens,
 } from './cipher'
 import { useAuth } from './auth'
+import { forgetDeviceKey, replaceDeviceKey } from './device-key'
 import { isIdle } from './idle'
 import { useViewTransition } from './navigation'
 import { must, supabase } from './supabase'
@@ -58,6 +60,12 @@ interface RevenueKeyValue {
    * une RevenueKeyError si `key` n'ouvre plus la phrase de l'enseigne (changée ailleurs).
    */
   verify: (key: CryptoKey) => Promise<string>
+  /**
+   * Ouvre la session avec une clé rouverte par le code de l'appareil (lib/device-key.ts) : 'changed'
+   * si la phrase a changé ailleurs depuis, 'reset' si elle a été réinitialisée. Lève si la base ne
+   * répond pas.
+   */
+  adopt: (key: CryptoKey) => Promise<'ok' | 'changed' | 'reset'>
   /** Abandonne la clé : la phrase a changé ailleurs, il faut taper la nouvelle. */
   lock: () => void
   /**
@@ -179,6 +187,26 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
     [actorId],
   )
 
+  const adopt = useCallback(
+    async (key: CryptoKey) => {
+      if (!actorId) return 'reset'
+      const response = await supabase
+        .from('revenue_keys')
+        .select('check')
+        .eq('actor_id', actorId)
+        .maybeSingle()
+      const record = must(response)
+      if (!record) {
+        setSession((s) => (s.actorId === actorId ? { ...s, hasRecord: false, key: null } : s))
+        return 'reset'
+      }
+      if (!(await keyMatches(key, record))) return 'changed'
+      setSession((s) => (s.actorId === actorId ? { ...s, hasRecord: true, key } : s))
+      return 'ok'
+    },
+    [actorId],
+  )
+
   const verify = useCallback(
     async (key: CryptoKey) => {
       if (!actorId) throw new Error('Aucune enseigne active')
@@ -248,6 +276,8 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
         )
       }
     }
+    // Le code de cet appareil suit la nouvelle phrase ; raté, il sera refusé (adopt) puis oublié.
+    await replaceDeviceKey(target, next.key).catch(() => undefined)
     setSession((s) => (s.actorId === target ? { ...s, hasRecord: true, key: next.key } : s))
     return 'ok' as const
   }, [])
@@ -258,6 +288,7 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(async (target: string) => {
     must(await supabase.rpc('reset_revenue_key', { p_actor: target }))
+    await forgetDeviceKey(target).catch(() => undefined)
     setSession((s) => (s.actorId === target ? { ...s, hasRecord: false, key: null } : s))
   }, [])
 
@@ -308,13 +339,14 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
       create,
       unlock,
       verify,
+      adopt,
       lock,
       rekey,
       reset,
       clearChosen: session.clearChosen || Boolean(entity?.revenue_clear_chosen_at),
       keepClear,
     }),
-    [session, entity, create, unlock, verify, lock, rekey, reset, keepClear],
+    [session, entity, create, unlock, verify, adopt, lock, rekey, reset, keepClear],
   )
 
   return <RevenueKeyContext.Provider value={value}>{children}</RevenueKeyContext.Provider>
