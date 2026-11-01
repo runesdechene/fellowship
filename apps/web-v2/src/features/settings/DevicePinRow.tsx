@@ -36,8 +36,8 @@ export function DevicePinRow({ entityId }: { entityId: string }) {
       title="Code de cet appareil"
       note={
         has
-          ? 'Tes recettes se rouvrent ici avec 4 chiffres. Oublié, il se rechoisit après ta phrase.'
-          : 'Ouvre tes recettes avec ta phrase dans un bilan : un code de 4 chiffres te sera proposé.'
+          ? 'Tes recettes se rouvrent ici avec 4 chiffres. Ce code ne vaut que pour cet appareil.'
+          : 'Ouvre tes recettes avec ta phrase dans un bilan : un code propre à cet appareil te sera proposé.'
       }
     >
       {has && (
