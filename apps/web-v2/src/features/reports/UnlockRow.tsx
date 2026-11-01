@@ -24,13 +24,15 @@ const PROBLEMS = {
   offline: 'Connexion impossible, réessaie.',
 }
 
-/** `onOpen(byPhrase)` : vrai si la clé vient d'être ouverte par la phrase (on propose alors un code). */
-export function UnlockRow({ onOpen }: { onOpen?: (byPhrase: boolean) => void }) {
+/** `onOpen(offerPin)` : vrai si la phrase vient d'ouvrir la clé sur un appareil sans code. */
+export function UnlockRow({ onOpen }: { onOpen?: (offerPin: boolean) => void }) {
   const { actor } = useAuth()
   const actorId = actor?.id ?? null
   // null tant qu'on ne sait pas si cet appareil garde la clé.
   const [mode, setMode] = useState<'pin' | 'phrase' | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  // L'appareil a un code, mais l'exposant a préféré sa phrase.
+  const [pinChosenAway, setPinChosenAway] = useState(false)
 
   useEffect(() => {
     if (!actorId) return
@@ -56,12 +58,15 @@ export function UnlockRow({ onOpen }: { onOpen?: (byPhrase: boolean) => void }) 
         onOpen={() => onOpen?.(false)}
         onPhrase={(why) => {
           setNotice(why)
+          setPinChosenAway(why === null)
           setMode('phrase')
         }}
       />
     )
   }
-  return <PhraseUnlock notice={notice} onOpen={() => onOpen?.(true)} />
+  // Une raison affichée veut dire que la clé vient d'être oubliée ; sans raison, l'exposant a choisi
+  // la phrase alors que l'appareil garde son code : on ne le lui redemande pas.
+  return <PhraseUnlock notice={notice} onOpen={() => onOpen?.(!pinChosenAway)} />
 }
 
 function PhraseUnlock({ notice, onOpen }: { notice: string | null; onOpen: () => void }) {
