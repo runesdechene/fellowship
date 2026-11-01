@@ -76,7 +76,7 @@ describe('entityLine', () => {
       legal_name: 'SARL Runes de Chêne',
     }
     expect(entityLine(pro, now, 5)).toEqual({
-      text: 'Pro annuel · renouvelé le 12 mars 2027 · facture au nom de SARL Runes de Chêne',
+      text: 'Pro annuel · renouvelé le 12 mars 2027',
       action: 'portal',
       pro: true,
       status: { state: 'paid', label: 'À jour' },

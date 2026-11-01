@@ -38,6 +38,13 @@ export function proPriceLines(formula: Formula): { big: string; unit: string; no
   }
 }
 
+/** Le prix d'un abonnement en cours, selon son intervalle Stripe (`year` ou `month`). */
+export function subscriptionPrice(interval: string | null): string {
+  return interval === 'year'
+    ? `${formatPrice(PRICES.yearly)} HT par an`
+    : `${formatPrice(PRICES.monthly)} HT par mois`
+}
+
 export function billingInterval(formula: Formula): 'month' | 'year' {
   return formula === 'annuel' ? 'year' : 'month'
 }

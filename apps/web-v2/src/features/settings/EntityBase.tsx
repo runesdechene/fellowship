@@ -4,6 +4,7 @@
  * POURQUOI — maquette 2263:425 (lot 13) : « à 142 km de ton atelier » sur la fiche. Le siège sert au
  *            calcul des distances et n'est jamais affiché ; l'emplacement public reste sur la vitrine.
  */
+import { MapPin } from 'lucide-react'
 import { useState } from 'react'
 import { AddressField } from '@/features/event-create/AddressField'
 import { SettingRow } from './SettingRow'
@@ -18,6 +19,8 @@ export function EntityBase({ entityId }: { entityId: string }) {
 
   return (
     <SettingRow
+      className="setting-row--sub"
+      leading={<MapPin className="setting-row__icon" size={15} strokeWidth={2} />}
       title="Siège social ou atelier"
       note={
         base.error ??

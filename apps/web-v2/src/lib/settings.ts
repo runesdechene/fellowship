@@ -100,7 +100,6 @@ export function entityLine(
       parts.push(`essai jusqu’au ${formatFullDate(trialEnd)}`)
     } else if (entity.current_period_end)
       parts.push(`renouvelé le ${formatFullDate(new Date(entity.current_period_end))}`)
-    if (entity.legal_name) parts.push(`facture au nom de ${entity.legal_name}`)
     return { text: parts.join(' · '), action: 'portal', pro: true, status }
   }
   if (isPro(entity, now)) {

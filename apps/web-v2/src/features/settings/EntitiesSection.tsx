@@ -1,17 +1,28 @@
 /**
- * QUOI     — la section Enseignes et abonnement des Réglages : une ligne par enseigne, son
- *            abonnement en une phrase, la pastille de son paiement (maquette 2558:233), le bon
- *            geste (gérer, passer Pro, rien), et Supprimer… ; sous une enseigne Pro, ses recettes
- *            chiffrées ou en clair (maquettes 2587:233, 2587:396) ; sous une enseigne abonnée, sa
- *            facturation (raison sociale, SIREN).
+ * QUOI     — la section Enseignes et abonnement des Réglages : une carte par enseigne (maquette
+ *            2589:233). En tête, son nom, son abonnement en une phrase, la pastille de son paiement
+ *            (maquette 2558:233) et « Passer Pro » ; dessous, une ligne par sujet, chacune avec son
+ *            icône : abonnement et paiement (si abonnée), facturation, siège, recettes (si Pro) ;
+ *            en pied, Supprimer l'enseigne….
  * POURQUOI — lot 9b, maquette 2206:691 : chaque enseigne a sa vitrine et son propre abonnement.
- *            « Gérer » ouvre l'espace Stripe ; « Passer Pro » fait de l'enseigne le compte actif,
- *            puis ouvre l'offre.
+ *            « Changer ma formule » et « Gérer » ouvrent l'espace Stripe, qui fait les deux ; « Passer
+ *            Pro » fait de l'enseigne le compte actif, puis ouvre l'offre. Une ligne par sujet, au
+ *            plus un bouton par ligne : les boutons s'empilaient sur la ligne de l'enseigne (Uriel,
+ *            01/11/2026).
  * ATTENTION — « Créer un compte exposant » ouvre l'arrivée sans le prénom (lot 10a) : un seul
  *            formulaire pour les deux. La section s'affiche donc aussi sans enseigne.
  */
-import { Check, CircleAlert, CirclePause, Clock, Plus, type LucideIcon } from 'lucide-react'
-import { Fragment, useState } from 'react'
+import {
+  Check,
+  CircleAlert,
+  CirclePause,
+  Clock,
+  CreditCard,
+  Plus,
+  RefreshCw,
+  type LucideIcon,
+} from 'lucide-react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
@@ -20,6 +31,7 @@ import { ProBadge } from '@/components/ui/ProBadge'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { entityLine, type PaymentState } from '@/lib/settings'
+import { subscriptionPrice } from '@/lib/pricing'
 import { openPortal } from '@/lib/stripe'
 import { BillingRow } from './BillingRow'
 import { DeleteEntityDialog } from './DeleteEntityDialog'
@@ -61,61 +73,68 @@ export function EntitiesSection() {
           Chaque enseigne a sa vitrine et son propre abonnement.
         </p>
       </div>
-      <SettingCard>
-        {entities.map((entity) => {
-          const line = entityLine(entity, now, counts ? (counts.get(entity.actor_id) ?? 0) : null)
-          return (
-            <Fragment key={entity.actor_id}>
-              <SettingRow
-                title={entity.brand_name}
-                note={line.text}
-                badge={line.pro ? <ProBadge /> : undefined}
-                leading={
-                  <Avatar
-                    className="setting-row__logo"
-                    src={entity.avatar_url}
-                    name={entity.brand_name}
-                  />
-                }
-              >
-                {line.status && <PaymentChip {...line.status} />}
-                {line.action === 'portal' && (
-                  <Button
-                    onClick={() => {
-                      setFailed(false)
-                      openPortal(entity.actor_id).catch(() => {
-                        setFailed(true)
-                      })
-                    }}
-                  >
-                    Gérer
-                  </Button>
-                )}
-                {line.action === 'upgrade' && (
-                  <Button
-                    variant="action"
-                    onClick={() => {
-                      switchActor(entity.actor_id)
-                      go('/pro')
-                    }}
-                  >
-                    Passer Pro
-                  </Button>
-                )}
-                <button
-                  type="button"
-                  className="delete-account__open"
+      {entities.map((entity) => {
+        const line = entityLine(entity, now, counts ? (counts.get(entity.actor_id) ?? 0) : null)
+        const portal = () => {
+          setFailed(false)
+          openPortal(entity.actor_id).catch(() => {
+            setFailed(true)
+          })
+        }
+        return (
+          <SettingCard key={entity.actor_id}>
+            <SettingRow
+              title={entity.brand_name}
+              note={line.text}
+              badge={line.pro ? <ProBadge /> : undefined}
+              leading={
+                <Avatar
+                  className="setting-row__logo"
+                  src={entity.avatar_url}
+                  name={entity.brand_name}
+                />
+              }
+            >
+              {line.status && <PaymentChip {...line.status} />}
+              {line.action === 'upgrade' && (
+                <Button
+                  variant="action"
                   onClick={() => {
-                    setDeleting({
-                      id: entity.actor_id,
-                      name: entity.brand_name,
-                      subscribed: line.action === 'portal',
-                    })
+                    switchActor(entity.actor_id)
+                    go('/pro')
                   }}
                 >
-                  Supprimer…
-                </button>
-              </SettingRow>
+                  Passer Pro
+                </Button>
+              )}
+            </SettingRow>
+            <div className="setting-card__group">
+              {line.action === 'portal' && (
+                <>
+                  <SettingRow
+                    className="setting-row--sub"
+                    leading={<RefreshCw className="setting-row__icon" size={15} strokeWidth={2} />}
+                    title="Abonnement"
+                    note={subscriptionPrice(entity.billing_interval)}
+                  >
+                    <Button onClick={portal}>Changer ma formule</Button>
+                  </SettingRow>
+                  <SettingRow
+                    className="setting-row--sub"
+                    leading={<CreditCard className="setting-row__icon" size={15} strokeWidth={2} />}
+                    title="Paiement et factures"
+                    note="Ta carte et tes factures, dans l’espace sécurisé de Stripe."
+                  >
+                    <Button onClick={portal}>Gérer</Button>
+                  </SettingRow>
+                  <BillingRow
+                    entityId={entity.actor_id}
+                    brandName={entity.brand_name}
+                    billing={entity}
+                  />
+                </>
+              )}
+              <EntityBase entityId={entity.actor_id} />
               {line.pro && revenueKeys.chosenAt && (
                 <RevenueKeyRow
                   // Une phrase créée ou effacée remonte la ligne : elle réapparaît en fondu.
@@ -126,22 +145,29 @@ export function EntitiesSection() {
                   onChange={revenueKeys.reload}
                 />
               )}
-              {line.action === 'portal' && (
-                <BillingRow
-                  entityId={entity.actor_id}
-                  brandName={entity.brand_name}
-                  billing={entity}
-                />
-              )}
-              <EntityBase entityId={entity.actor_id} />
-            </Fragment>
-          )
-        })}
-        <Link className="setting-create" to="/bienvenue?nouvelle-enseigne">
-          <Plus size={14} strokeWidth={2} />
-          Créer un compte exposant
-        </Link>
-      </SettingCard>
+            </div>
+            <div className="setting-card__foot">
+              <button
+                type="button"
+                className="setting-card__delete"
+                onClick={() => {
+                  setDeleting({
+                    id: entity.actor_id,
+                    name: entity.brand_name,
+                    subscribed: line.action === 'portal',
+                  })
+                }}
+              >
+                Supprimer l’enseigne…
+              </button>
+            </div>
+          </SettingCard>
+        )
+      })}
+      <Link className="setting-create" to="/bienvenue?nouvelle-enseigne">
+        <Plus size={14} strokeWidth={2} />
+        Créer un compte exposant
+      </Link>
       {failed && (
         <p className="settings-section__error">L’espace Stripe ne s’est pas ouvert. Réessaie.</p>
       )}

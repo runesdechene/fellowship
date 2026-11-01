@@ -163,6 +163,7 @@
 
 .setting-create {
   display: flex;
+  align-self: flex-start;
   align-items: center;
   gap: var(--space-8);
   padding: var(--space-14) var(--space-20);
@@ -210,6 +211,30 @@
 .setting-row__icon {
   flex: none;
   color: var(--ink-soft);
+}
+
+/* Les lignes d'une enseigne (maquette 2589:233) : un groupe sous son nom, sans filet entre elles ;
+   le pied porte « Supprimer l'enseigne… » en simple lien rouge. */
+.setting-card__group {
+  padding-top: var(--space-16);
+}
+
+.setting-card__foot {
+  padding: var(--space-14) var(--space-20) var(--space-16);
+  padding-left: var(--setting-sub-row-inset);
+}
+
+.setting-card__delete {
+  font: var(--type-button);
+  color: var(--danger-ink);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.setting-card__delete:hover {
+  text-decoration: underline;
 }
 
 .setting-input {

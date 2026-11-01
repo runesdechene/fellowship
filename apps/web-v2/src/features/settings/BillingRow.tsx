@@ -4,6 +4,7 @@
  * POURQUOI — chantier 3 (19/10/2026) : la V2 se suffit pour l'abonnement. Composée comme « Siège
  *            social ou atelier », sans maquette (choix d'Uriel : des briques existantes).
  */
+import { ReceiptText } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { billingNote } from '@/lib/billing'
@@ -20,7 +21,12 @@ export function BillingRow({ entityId, brandName, billing }: Props) {
   const [editing, setEditing] = useState(false)
 
   return (
-    <SettingRow title="Facturation" note={billingNote(billing)}>
+    <SettingRow
+      className="setting-row--sub"
+      leading={<ReceiptText className="setting-row__icon" size={15} strokeWidth={2} />}
+      title="Facturation"
+      note={billingNote(billing)}
+    >
       <Button
         onClick={() => {
           setEditing(true)
