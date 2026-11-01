@@ -23,7 +23,15 @@
   grid-area: header;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-14);
+}
+
+/* Les puces sous le titre (maquette 2603:249) : elles passent à la ligne sur téléphone. */
+.report-page__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
 }
 
 .report-page__summary {
@@ -46,21 +54,10 @@
   gap: var(--space-16);
 }
 
-.report-page__eyebrow {
-  font: var(--type-report-eyebrow);
-  color: var(--reports-pale-ink);
-}
-
 .report-page__title {
   font: var(--type-report-title);
   letter-spacing: var(--tracking-tight);
   color: var(--ink-title);
-}
-
-.report-page__meta {
-  font: var(--type-report-page-meta);
-  color: var(--ink-soft);
-  white-space: pre-wrap;
 }
 
 .report-page__error {

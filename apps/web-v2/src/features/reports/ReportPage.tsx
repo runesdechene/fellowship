@@ -8,8 +8,9 @@
  *            vers Mes bilans. La grille (report-page.css) place le résumé à droite sur ordinateur,
  *            en tête sous le titre sur téléphone.
  */
-import { ArrowRight, Lock, UserRound } from 'lucide-react'
+import { ArrowRight, CalendarDays, Clock, Lock, MapPin, UserRound } from 'lucide-react'
 import { Navigate, useParams } from 'react-router-dom'
+import { Chip } from '@/components/ui/Chip'
 import { useAuth } from '@/lib/auth'
 import { durationLabel, formatDateRange } from '@/lib/dates'
 import { useTransitionNavigate } from '@/lib/navigation'
@@ -54,38 +55,25 @@ export function ReportPage() {
 
   return (
     <div className="report-page">
+      {/* Le titre, puis une rangée de puces : dates, lieu, durée, confidentialité (maquette 2603:249). */}
       <header className="report-page__header">
-        <span className="report-page__eyebrow">Bilan</span>
         <h1 className="report-page__title">{date.name}</h1>
-        <p className="report-page__meta">
-          {formatDateRange(date.startDate, date.endDate, 'long')} {date.startDate.getFullYear()}
-          {'  ·  '}
-          {date.place}
-          {'  ·  '}
-          {durationLabel(date.startDate, date.endDate)}
-        </p>
-        <p className="reports-page__private">
+        <div className="report-page__facts">
+          <Chip icon={<CalendarDays size={14} strokeWidth={2} />}>
+            {formatDateRange(date.startDate, date.endDate, 'long')} {date.startDate.getFullYear()}
+          </Chip>
+          <Chip icon={<MapPin size={14} strokeWidth={2} />}>{date.place}</Chip>
+          <Chip icon={<Clock size={14} strokeWidth={2} />}>
+            {durationLabel(date.startDate, date.endDate)}
+          </Chip>
           {/* Le cadenas ne dit que « chiffré » ; en clair, c'est seulement privé. */}
           {date.secret === 'none' ? (
-            <UserRound size={13} strokeWidth={2} />
+            <Chip icon={<UserRound size={14} strokeWidth={2} />}>Visible par toi seul</Chip>
           ) : (
-            <Lock size={13} strokeWidth={2} />
+            <Chip icon={<Lock size={14} strokeWidth={2} />}>Recettes chiffrées</Chip>
           )}
-          {/* Un seul bloc de texte : l'écart du flex ne doit pas couper la phrase avant la virgule. */}
-          <span>
-            Visible par toi seul
-            {date.secret !== 'none' && (
-              <>
-                <span className="reports-page__private-more">
-                  {' '}
-                  — tes recettes sont chiffrées, personne d’autre ne peut les lire
-                </span>
-                <span className="report-secret__private-phone">, recettes chiffrées</span>
-              </>
-            )}
-          </span>
           <LockRevenue />
-        </p>
+        </div>
       </header>
 
       <div className="report-page__summary">
