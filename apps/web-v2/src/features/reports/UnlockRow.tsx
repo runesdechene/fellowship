@@ -11,6 +11,7 @@
 import { Eye } from 'lucide-react'
 import { useState } from 'react'
 import { useRevenueKey } from '@/lib/revenue-key'
+import { PhraseInput } from './PhraseInput'
 
 const PROBLEMS = {
   wrong: 'Phrase incorrecte',
@@ -48,15 +49,11 @@ export function UnlockRow({ onOpen }: { onOpen?: () => void }) {
     >
       <label className="ledger__field report-secret__phrase">
         <span className="ledger__field-label">Phrase de passe</span>
-        <input
-          className="ledger__field-input"
-          type="password"
-          autoComplete="current-password"
-          placeholder={phone ? 'ta phrase' : 'tape ta phrase pour afficher tes recettes'}
+        <PhraseInput
           value={phrase}
-          onChange={(event) => {
-            setPhrase(event.target.value)
-          }}
+          onChange={setPhrase}
+          placeholder={phone ? 'ta phrase' : 'tape ta phrase pour afficher tes recettes'}
+          autoComplete="current-password"
         />
       </label>
       <button type="submit" className="ledger__submit" disabled={busy || phrase.trim() === ''}>

@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from 'react'
 import { isStrongPassphrase, MIN_PASSPHRASE_LENGTH, type SecretRevenue } from '@/lib/cipher'
 import { parseAmount } from '@/lib/money'
 import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
+import { PhraseInput } from './PhraseInput'
 
 interface Seal {
   initial: SecretRevenue
@@ -219,17 +220,26 @@ export function SecretField({
   return (
     <label className="ledger__field report-secret__field">
       <span className="ledger__field-label">{label}</span>
-      <input
-        className="ledger__field-input"
-        type={secret ? 'password' : 'text'}
-        autoComplete={secret ? 'new-password' : 'off'}
-        inputMode={inputMode}
-        placeholder={placeholder}
-        value={value}
-        onChange={(event) => {
-          onChange(event.target.value)
-        }}
-      />
+      {secret ? (
+        <PhraseInput
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          autoComplete="new-password"
+        />
+      ) : (
+        <input
+          className="ledger__field-input"
+          type="text"
+          autoComplete="off"
+          inputMode={inputMode}
+          placeholder={placeholder}
+          value={value}
+          onChange={(event) => {
+            onChange(event.target.value)
+          }}
+        />
+      )}
       {inputMode === 'decimal' && <span className="ledger__field-label">€</span>}
     </label>
   )
