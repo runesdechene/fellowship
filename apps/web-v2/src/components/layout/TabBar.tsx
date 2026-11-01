@@ -26,6 +26,7 @@ import {
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
@@ -178,6 +179,7 @@ export function TabBar({
           </button>
           <div className="tab-sheet__theme">
             <ThemeSwitch />
+            <LegalLink onClick={close} />
           </div>
         </div>
       </dialog>

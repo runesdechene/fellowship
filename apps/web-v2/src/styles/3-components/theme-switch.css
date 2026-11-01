@@ -58,3 +58,17 @@
     transition: none;
   }
 }
+
+/* Le lien vers les pages légales, sous l'interrupteur (components/ui/LegalLink.tsx). */
+.legal-link {
+  display: block;
+  margin-top: var(--space-8);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+  text-align: center;
+  text-decoration: none;
+}
+
+.legal-link:hover {
+  color: var(--ink-title);
+}

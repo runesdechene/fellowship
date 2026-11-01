@@ -1,7 +1,7 @@
 /**
  * QUOI     — la barre latérale : repli, marque, carte de compte, les entrées de la maquette, et le
- *            fil « Activité du réseau », la ligne de version (les Nouveautés) et l'interrupteur
- *            Clair / Sombre en bas.
+ *            fil « Activité du réseau », la ligne de version (les Nouveautés) l'interrupteur
+ *            Clair / Sombre et le lien vers les pages légales en bas.
  * POURQUOI — la navigation est une liste figée (NAV_ITEMS), dans l'ordre de la maquette ; « Ma
  *            vitrine » s'y glisse avant Réglages quand l'acteur actif en a une (Uriel, 11/10/2026 :
  *            on ne pouvait pas accéder à sa propre vitrine).
@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
+import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { useAuth } from '@/lib/auth'
@@ -193,6 +194,7 @@ export function Sidebar({ collapsed, onToggle, friendRequests, updatesUnread }: 
         {!collapsed && !adminMode && <NetworkActivity />}
         <VersionLine unread={updatesUnread} />
         <ThemeSwitch compact={collapsed} />
+        {!collapsed && <LegalLink />}
       </div>
     </aside>
   )
