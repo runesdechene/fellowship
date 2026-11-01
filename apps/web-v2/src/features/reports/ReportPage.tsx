@@ -8,7 +8,7 @@
  *            vers Mes bilans. La grille (report-page.css) place le résumé à droite sur ordinateur,
  *            en tête sous le titre sur téléphone.
  */
-import { ArrowRight, Lock } from 'lucide-react'
+import { ArrowRight, Lock, UserRound } from 'lucide-react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import { durationLabel, formatDateRange } from '@/lib/dates'
@@ -65,7 +65,12 @@ export function ReportPage() {
           {durationLabel(date.startDate, date.endDate)}
         </p>
         <p className="reports-page__private">
-          <Lock size={13} strokeWidth={2} />
+          {/* Le cadenas ne dit que « chiffré » ; en clair, c'est seulement privé. */}
+          {date.secret === 'none' ? (
+            <UserRound size={13} strokeWidth={2} />
+          ) : (
+            <Lock size={13} strokeWidth={2} />
+          )}
           {/* Un seul bloc de texte : l'écart du flex ne doit pas couper la phrase avant la virgule. */}
           <span>
             Visible par toi seul

@@ -9,7 +9,7 @@
  *            bandeau « Chiffre tes recettes » (RevenueBanner) se glisse dans l'en-tête : entre le
  *            titre et les années sur téléphone, sous les deux sur ordinateur (reports-page.css).
  */
-import { Lock } from 'lucide-react'
+import { Lock, UserRound } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { ProVeil } from '@/components/ui/ProVeil'
 import { Segmented } from '@/components/ui/Segmented'
@@ -51,7 +51,12 @@ export function ReportsPage() {
         <div>
           <h1 className="reports-page__title">Mes bilans</h1>
           <p className="reports-page__private">
-            <Lock size={13} strokeWidth={2} />
+            {/* Le cadenas ne dit que « chiffré » ; en clair, c'est seulement privé. */}
+            {keyStatus === 'none' ? (
+              <UserRound size={13} strokeWidth={2} />
+            ) : (
+              <Lock size={13} strokeWidth={2} />
+            )}
             Visibles par toi seul
             {keyStatus !== 'none' && (
               <span className="reports-page__private-more">
