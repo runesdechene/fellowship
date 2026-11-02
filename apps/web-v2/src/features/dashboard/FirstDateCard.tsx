@@ -1,6 +1,6 @@
 /**
  * QUOI     — la carte « Ma prochaine date » quand il n'y en a aucune : une affiche en squelette et
- *            « Explorer les festivals ».
+ *            « Explorer ».
  * POURQUOI — maquette 2402:233 : la première chose à faire d'un compte neuf, à la place de la
  *            prochaine date. L'Explorer et non l'ajout d'une date (Uriel, 22/10/2026) : on trouve son
  *            festival plus qu'on ne le crée, et « Ajouter une date » vit déjà en haut à droite.
@@ -27,7 +27,7 @@ export function FirstDateCard() {
             icon={<Telescope size={18} strokeWidth={1.75} />}
             onClick={() => go('/explorer')}
           >
-            Explorer les festivals
+            Explorer
           </Button>
         </div>
       </div>
