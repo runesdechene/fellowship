@@ -368,3 +368,14 @@ en privé. En prod une heure, fermé par `20261021160000`.
 **How to apply :** toute fonction SECURITY DEFINER qui lit les participations d'un AUTRE acteur
 garde `visibility = 'public'` (comme `get_coevent_suggestions`), ou réutilise une fonction qui le
 fait déjà au lieu de recopier la jointure.
+
+## Un e-mail Resend part de `equipe.flw.sh`, jamais de `flw.sh`
+
+**Le piège** (02/11/2026, Nouveautés 3.19.0) : `app-update-email` envoyait depuis
+`nouveautes@flw.sh`. La clé Resend (`RESEND_API_KEY`, la même dans `.env` et dans les secrets des
+fonctions) n'a le droit d'envoyer que depuis `equipe.flw.sh` : chaque lot répondait 403
+(« not authorized to send emails from flw.sh »), la note était relâchée, et l'admin affichait
+seulement « l'e-mail n'est pas parti ».
+
+**How to apply :** tout expéditeur s'écrit `…@equipe.flw.sh`. Pour sonder un envoi sans écrire à
+personne : `POST https://api.resend.com/emails/batch` vers `delivered@resend.dev` avec la clé du `.env`.
