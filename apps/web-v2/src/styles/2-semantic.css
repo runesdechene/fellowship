@@ -136,6 +136,7 @@
   --type-display-xl: var(--weight-medium) var(--size-64) / 1 var(--family-sans);
   --type-display-l: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
   --type-display-date: var(--weight-medium) var(--size-150) / 0.9 var(--family-sans);
+  --type-next-date-name: var(--weight-regular) var(--size-30) / 1.05 var(--family-display);
   --type-display-m: var(--weight-medium) var(--size-36) / 1.05 var(--family-sans);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
@@ -290,7 +291,7 @@
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
-  --type-event-title: var(--weight-medium) var(--size-72) / 1 var(--family-sans);
+  --type-event-title: var(--weight-regular) var(--size-60) / 1 var(--family-display);
   --tracking-event-title: -0.02em;
   --event-title-ink: var(--terre-850);
 
@@ -499,7 +500,7 @@
   --edit-dot-size: 7px;
   --type-edit-section: var(--weight-semibold) var(--size-17) / var(--leading-tight)
     var(--family-sans);
-  --type-edit-preview-name: var(--weight-medium) var(--size-32) / 1 var(--family-sans);
+  --type-edit-preview-name: var(--weight-regular) var(--size-28) / 1 var(--family-display);
   --type-edit-preview-small: var(--weight-regular) var(--size-11) / var(--leading-snug)
     var(--family-sans);
   --type-edit-preview-value: var(--weight-semibold) var(--size-12) / var(--leading-snug)
@@ -985,8 +986,8 @@
     var(--family-sans);
   --type-community-side-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
-  --type-gathering-name: var(--weight-medium) var(--size-40) / 1.05 var(--family-sans);
-  --type-gathering-name-mobile: var(--weight-medium) var(--size-26) / 1.05 var(--family-sans);
+  --type-gathering-name: var(--weight-regular) var(--size-34) / 1.05 var(--family-display);
+  --type-gathering-name-mobile: var(--weight-regular) var(--size-22) / 1.05 var(--family-display);
   --type-gathering-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
@@ -1716,7 +1717,7 @@
   --landing-com-crowd-height: 190px;
   --landing-com-face: 30px;
   --landing-who-width: 378px;
-  --type-landing-app-event: var(--weight-medium) var(--size-36) / 1.1 var(--family-sans);
+  --type-landing-app-event: var(--weight-regular) var(--size-30) / 1.1 var(--family-display);
   --type-landing-who-title: var(--weight-semibold) var(--size-17) / 1.3 var(--family-sans);
 
   /* La bande Communauté (2290:97) */
