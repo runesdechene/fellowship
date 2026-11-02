@@ -5,9 +5,19 @@
  *            délègue les données à useEvent.
  * ATTENTION — la description rich-text passe par RichText, donc par cleanRichText.
  */
-import { ArrowRight, CalendarDays, Clock, Globe, Map as MapIcon, MapPin, Users } from 'lucide-react'
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock,
+  Globe,
+  Map as MapIcon,
+  MapPin,
+  Pencil,
+  Users,
+} from 'lucide-react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Button } from '@/components/ui/Button'
 import { Poster } from '@/components/ui/Poster'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
@@ -307,6 +317,19 @@ export function EventPage() {
             )}
           </div>
         </header>
+
+        {/* Sur téléphone, « Modifier » quitte la barre du haut, où un crayon seul ne se lisait pas
+            (Uriel, 02/11/2026). */}
+        {canEdit && (
+          <Button
+            block
+            className="event-page__mobile-edit"
+            icon={<Pencil size={18} strokeWidth={1.75} />}
+            onClick={() => edit()}
+          >
+            Modifier ce festival
+          </Button>
+        )}
 
         {/* Le statut et le dossier se suivent de près : c'est le même suivi (maquette 2518:233). */}
         {member && (

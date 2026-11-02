@@ -83,15 +83,14 @@
 
   /* La double classe l'emporte sur `.button`, importé après : sans elle, « Passer Pro » restait
      affiché et poussait la marque hors de l'écran (02/11/2026). */
+  /* « Modifier la fiche » descend dans la fiche, en grand (EventPage.tsx). */
   .topbar .topbar__add-label,
-  .topbar .topbar__pro {
+  .topbar .topbar__pro,
+  .topbar .topbar__edit {
     display: none;
   }
 
-  /* Double classe ici aussi : sans elle, le crayon de « Modifier la fiche » gardait le padding de
-     `.button` et sortait de sa pastille, qui paraissait vide. */
-  .topbar .button--action,
-  .topbar .topbar__edit {
+  .topbar .button--action {
     width: var(--topbar-control-height);
     padding: 0;
     justify-content: center;
