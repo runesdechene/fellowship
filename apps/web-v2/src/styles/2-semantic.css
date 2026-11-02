@@ -1103,7 +1103,8 @@
   /* =========================================================================
      MES BILANS, L'ÉCRAN — l'année, les mois, les dates (features/reports)
      ====================================================================== */
-  --type-reports-year-net: var(--weight-medium) var(--size-52) / 1.1 var(--family-sans);
+  --type-dashboard-net: var(--weight-medium) var(--size-40) / 1 var(--family-sans);
+  --type-reports-year-net: var(--weight-medium) var(--size-44) / 1.1 var(--family-sans);
   --type-reports-year-value: var(--weight-medium) var(--size-30) / 1.2 var(--family-sans);
   --type-reports-label: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-reports-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
@@ -1155,7 +1156,7 @@
   --type-report-block: var(--weight-semibold) var(--size-17) / var(--leading-snug)
     var(--family-sans);
   --type-report-line: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-report-summary-net: var(--weight-medium) var(--size-48) / 1.1 var(--family-sans);
+  --type-report-summary-net: var(--weight-medium) var(--size-40) / 1.1 var(--family-sans);
   --type-report-small: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-report-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
   --type-report-note: var(--weight-regular) var(--size-14) / 1.6 var(--family-sans);
