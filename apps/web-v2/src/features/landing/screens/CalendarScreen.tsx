@@ -95,7 +95,7 @@ export function CalendarScreen({ months }: { months: Showcase['months'] }) {
                     <PosterArt
                       imageUrl={event.imageUrl}
                       tags={event.tags}
-                      startDate={event.startDate}
+                      name={event.name}
                       daysAway={daysUntil(event.startDate, today)}
                       friends={[]}
                     />

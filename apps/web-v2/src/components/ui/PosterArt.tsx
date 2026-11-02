@@ -1,6 +1,6 @@
 /**
- * QUOI     — la grande affiche d'une date : l'affiche (Poster.tsx ; absente, la grande date en
- *            serif s'y écrit), le compte à rebours en haut, les amis présents en bas.
+ * QUOI     — la grande affiche d'une date : l'affiche (Poster.tsx ; absente, la fausse affiche de
+ *            sa catégorie, au nom du festival), le compte à rebours en haut, les amis en bas.
  * POURQUOI — la même affiche vit dans le calendrier, la vitrine et l'Explorer ; sa hauteur vient du
  *            parent (`--poster-art-height`).
  * ATTENTION — `badge` remplace le compte à rebours (« Nouveau » dans l'Explorer) ; `action` se pose
@@ -14,13 +14,13 @@ import { AddPoster } from '@/components/ui/AddPoster'
 import { Poster } from '@/components/ui/Poster'
 import type { Friend } from '@/lib/friends'
 
-const MONTH_LONG = new Intl.DateTimeFormat('fr-FR', { month: 'long' })
 const MAX_FACES = 3
 
 interface PosterArtProps {
   imageUrl: string | null
   tags: readonly string[] | null
-  startDate: Date
+  /** Le nom du festival, écrit sur la fausse affiche quand la vraie manque. */
+  name: string
   daysAway: number
   /** Les amis présents, en bas de l'affiche ; l'Explorer les pose sous le nom, d'où l'option. */
   friends?: Friend[]
@@ -34,7 +34,7 @@ interface PosterArtProps {
 export function PosterArt({
   imageUrl,
   tags,
-  startDate,
+  name,
   daysAway,
   friends = [],
   badge,
@@ -49,10 +49,7 @@ export function PosterArt({
 
   return (
     <div className="poster-art">
-      <Poster imageUrl={poster} tags={tags} className="poster-art__poster">
-        <span className="poster-art__day">{startDate.getDate()}</span>
-        <span className="poster-art__month">{MONTH_LONG.format(startDate)}</span>
-      </Poster>
+      <Poster imageUrl={poster} tags={tags} title={name} className="poster-art__poster" />
       {corner && (
         <span
           className={

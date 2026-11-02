@@ -15,8 +15,6 @@
   --surface-card: var(--landing-app-card);
   --surface-chip-neutral: var(--landing-app-chip);
   --ink-title: var(--landing-app-ink);
-  --poster-empty-surface: var(--landing-app-line);
-  --poster-empty-ink: var(--landing-app-soft);
 
   width: var(--window-width);
   overflow: hidden;

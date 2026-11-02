@@ -80,7 +80,7 @@ export function ForYouScreen({ showcase }: { showcase: Showcase }) {
                 <PosterArt
                   imageUrl={next.imageUrl}
                   tags={next.tags}
-                  startDate={next.startDate}
+                  name={next.name}
                   daysAway={daysUntil(next.startDate, today)}
                   friends={[]}
                   badge={null}

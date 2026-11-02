@@ -135,7 +135,6 @@
   /* Les grands moments en serif : nom d'un festival, d'une enseigne, d'un mois. */
   --type-display-xl: var(--weight-regular) var(--size-64) / 1 var(--family-display);
   --type-display-l: var(--weight-regular) var(--size-48) / 1 var(--family-display);
-  --type-display-date: var(--weight-regular) var(--size-150) / 0.9 var(--family-display);
   --type-display-m: var(--weight-regular) var(--size-36) / 1.05 var(--family-display);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
@@ -897,27 +896,48 @@
   --type-who-goes-title: var(--weight-semibold) var(--size-17) / var(--leading-snug)
     var(--family-sans);
 
-  /* L'affiche absente (Poster.tsx, planche 2215:2) : la couleur de la catégorie quand on la
-     connaît, la teinte des affiches vides sinon ; l'icône à moitié de la vignette, étouffée. */
-  --poster-empty-surface: var(--sand-300);
-  --poster-empty-ink: var(--ink-soft);
-  --poster-empty-icon: 45%;
-  --poster-empty-icon-opacity: 0.55;
-  /* Les couleurs de catégorie, mêlées au fond des cartes : en aplat sur toute une affiche, elles
-     criaient (retour des exposants, 19/10/2026). La part qui reste de la couleur. */
-  --poster-empty-tint: 55%;
-  --poster-empty-ink-tint: 75%;
+  /* L'affiche absente (Poster.tsx, planche 2704:287) : une fausse affiche par catégorie. Le titre
+     vaut une part de la largeur de l'affiche ; chaque police a sa capacité, le nombre de lettres
+     que tient une ligne à pleine taille (au-delà, le titre rétrécit : poster-cover.css). */
+  --poster-title-size: 17cqw;
+  --poster-title-size-wide: 10.3cqw;
+  --poster-title-leading: 0.92;
+  --poster-frame-opacity: 45%;
+  --poster-vignette-motif: 70%;
+  /* La grande affiche reprend les cotes de la planche (74 × 100) : cadre, dessin, titre. */
+  --poster-frame-inset-block: 4.1%;
+  --poster-frame-inset-inline: 5.55%;
+  --poster-frame-width: 1px;
+  --poster-frame-radius: var(--round-8);
+  --poster-motif-top: 10%;
+  --poster-motif-inset-inline: 16.9%;
+  --poster-title-top: 62%;
+  --poster-title-inset-inline: 9.7%;
+  --poster-title-lines: 3;
+  --poster-type-cormorant: var(--weight-bold) 1em / var(--poster-title-leading)
+    var(--family-poster-cormorant);
+  --poster-type-cormorant-light: var(--weight-semibold) 1em / var(--poster-title-leading)
+    var(--family-poster-cormorant);
+  --poster-type-syne: var(--weight-extrabold) 1em / var(--poster-title-leading)
+    var(--family-poster-syne);
+  --poster-type-unbounded: var(--weight-bold) 1em / var(--poster-title-leading)
+    var(--family-poster-unbounded);
+  --poster-type-caprasimo: var(--weight-regular) 1em / var(--poster-title-leading)
+    var(--family-poster-caprasimo);
+  --poster-type-bagel: var(--weight-regular) 1em / var(--poster-title-leading)
+    var(--family-poster-bagel);
+  --poster-type-gothic: var(--weight-black) 1em / var(--poster-title-leading)
+    var(--family-poster-gothic);
+  --poster-chars-cormorant: 11;
+  --poster-chars-syne: 10;
+  --poster-chars-unbounded: 6;
+  --poster-chars-caprasimo: 8;
+  --poster-chars-bagel: 8;
+  --poster-chars-gothic: 10;
   /* « Nouveau » sur l'affiche : en noir sur blanc le jour, pour trancher sur n'importe quelle
      affiche (Uriel, 19/10/2026) ; la nuit garde la pastille claire du compte à rebours. */
   --poster-badge-surface: var(--action-surface);
   --poster-badge-ink: var(--action-ink);
-  /* La grande affiche sans image (PosterArt.tsx) : la même couleur de catégorie, l'icône en fond,
-     grande et rognée par le coin, et la date adoucie dans l'encre de la catégorie (Uriel, 11/10 :
-     « la date est trop forte »). */
-  --poster-art-icon: 70%;
-  --poster-art-icon-shift: -6%;
-  --poster-art-icon-opacity: 0.16;
-  --poster-art-date-opacity: 0.72;
 
   /* La Communauté (lot 9a, maquette 2212:2) : le fil à gauche, deux cartes à droite ; les petites
      surfaces (festival, avis, bouclier) en blé discret, les boutons en filet. */
@@ -1901,11 +1921,6 @@
   --wall-veil-opacity: 0.45; /* la nuit, le voile brun calme l'affiche (voir --wall-veil) */
   --surface-chip-neutral: var(--night-200);
   --community-inset: var(--night-200);
-  --poster-empty-surface: var(--night-300);
-  /* La nuit, la couleur vient du texte de la catégorie, pas de son voile à 10 % : mêlé au fond
-     sombre, le voile donnait des affiches presque noires (Uriel, 19/10/2026). */
-  --poster-empty-night-tint: 40%;
-  --poster-empty-night-ink-tint: 55%;
   --poster-badge-surface: var(--surface-card);
   --poster-badge-ink: var(--ink-title);
   --surface-bar: var(--night-200);
@@ -2069,4 +2084,150 @@
   --type-embed-button: var(--weight-semibold) var(--size-14) / var(--leading-snug)
     var(--family-sans);
   --type-embed-brand: var(--weight-bold) var(--size-17) / var(--leading-tight) var(--family-sans);
+}
+
+/* ---------------------------------------------------------------------
+   AFFICHES PAR DÉFAUT — chaque catégorie, sa palette et sa police
+   (planche Figma 2704:287, Uriel, 02/11/2026). Lues par poster-cover.css.
+   --------------------------------------------------------------------- */
+[data-category='fete-medievale'] {
+  --cover-bg: var(--affiche-bordeaux);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='fantastique'] {
+  --cover-bg: var(--affiche-nuit-violette);
+  --cover-ink: var(--affiche-lune);
+  --cover-type: var(--poster-type-cormorant-light);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='geek'] {
+  --cover-bg: var(--affiche-bleu-roi);
+  --cover-ink: var(--affiche-blanc);
+  --cover-type: var(--poster-type-unbounded);
+  --cover-chars: var(--poster-chars-unbounded);
+}
+
+[data-category='festival-musique'] {
+  --cover-bg: var(--affiche-sarcelle);
+  --cover-ink: var(--affiche-ivoire);
+  --cover-type: var(--poster-type-bagel);
+  --cover-chars: var(--poster-chars-bagel);
+}
+
+[data-category='festival-metal'] {
+  --cover-bg: var(--affiche-noir);
+  --cover-ink: var(--affiche-os);
+  --cover-type: var(--poster-type-gothic);
+  --cover-chars: var(--poster-chars-gothic);
+}
+
+[data-category='foire'] {
+  --cover-bg: var(--affiche-rouge);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-caprasimo);
+  --cover-chars: var(--poster-chars-caprasimo);
+}
+
+[data-category='marche'] {
+  --cover-bg: var(--affiche-creme-chaude);
+  --cover-ink: var(--affiche-foret);
+  --cover-type: var(--poster-type-syne);
+  --cover-chars: var(--poster-chars-syne);
+  --cover-size: var(--poster-title-size-wide);
+}
+
+[data-category='salon'] {
+  --cover-bg: var(--affiche-prune);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-unbounded);
+  --cover-chars: var(--poster-chars-unbounded);
+}
+
+[data-category='litteraire'] {
+  --cover-bg: var(--affiche-brun);
+  --cover-ink: var(--affiche-papier);
+  --cover-type: var(--poster-type-cormorant-light);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='historique'] {
+  --cover-bg: var(--affiche-ardoise);
+  --cover-ink: var(--affiche-lin);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='exposition'] {
+  --cover-bg: var(--affiche-sauge);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='tatouage'] {
+  --cover-bg: var(--affiche-papier);
+  --cover-ink: var(--affiche-encre);
+  --cover-type: var(--poster-type-syne);
+  --cover-chars: var(--poster-chars-syne);
+  --cover-size: var(--poster-title-size-wide);
+}
+
+[data-category='marche-noel'] {
+  --cover-bg: var(--affiche-sapin);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-caprasimo);
+  --cover-chars: var(--poster-chars-caprasimo);
+}
+
+[data-category='marche-createurs'] {
+  --cover-bg: var(--affiche-rose);
+  --cover-ink: var(--affiche-brique);
+  --cover-type: var(--poster-type-bagel);
+  --cover-chars: var(--poster-chars-bagel);
+}
+
+[data-category='brocante'] {
+  --cover-bg: var(--affiche-canard);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='culturel'] {
+  --cover-bg: var(--affiche-lie-de-vin);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='terroir'] {
+  --cover-bg: var(--affiche-olive);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-caprasimo);
+  --cover-chars: var(--poster-chars-caprasimo);
+}
+
+[data-category='outdoor'] {
+  --cover-bg: var(--affiche-bleu-lac);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-unbounded);
+  --cover-chars: var(--poster-chars-unbounded);
+}
+
+[data-category='gastronomique'] {
+  --cover-bg: var(--affiche-moutarde);
+  --cover-ink: var(--affiche-brun);
+  --cover-type: var(--poster-type-cormorant);
+  --cover-chars: var(--poster-chars-cormorant);
+}
+
+[data-category='autre'] {
+  --cover-bg: var(--affiche-terre);
+  --cover-ink: var(--affiche-creme);
+  --cover-type: var(--poster-type-bagel);
+  --cover-chars: var(--poster-chars-bagel);
 }

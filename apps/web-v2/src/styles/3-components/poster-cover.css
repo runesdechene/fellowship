@@ -1,0 +1,62 @@
+/**
+ * QUOI     — l'affiche absente (components/ui/Poster.tsx) : une fausse affiche de festival,
+ *            dessinée pour sa catégorie ; en grand, avec son cadre et le nom du festival.
+ * POURQUOI — planche Figma 2704:287 (Uriel, 02/11/2026). La palette et la police de chaque
+ *            catégorie viennent de 2-semantic.css (`[data-category]`).
+ * ATTENTION — le titre rétrécit quand son plus long mot dépasse la capacité de la police
+ *            (`--cover-chars`), pour ne jamais couper un mot en deux.
+ */
+
+.poster-cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--cover-bg);
+  color: var(--cover-ink);
+}
+
+.poster-cover__motif {
+  width: var(--poster-vignette-motif);
+  aspect-ratio: 1;
+}
+
+.poster-cover--titled {
+  display: block;
+  container-type: size;
+}
+
+.poster-cover--titled::before {
+  content: '';
+  position: absolute;
+  inset: var(--poster-frame-inset-block) var(--poster-frame-inset-inline);
+  border: var(--poster-frame-width) solid
+    color-mix(in srgb, var(--cover-ink) var(--poster-frame-opacity), transparent);
+  border-radius: var(--poster-frame-radius);
+  pointer-events: none;
+}
+
+.poster-cover--titled .poster-cover__motif {
+  position: absolute;
+  top: var(--poster-motif-top);
+  inset-inline: var(--poster-motif-inset-inline);
+  width: auto;
+}
+
+.poster-cover__title {
+  --cover-title-size: calc(
+    var(--cover-size, var(--poster-title-size)) * min(1, var(--cover-chars) / var(--cover-longest))
+  );
+
+  position: absolute;
+  top: var(--poster-title-top);
+  inset-inline: var(--poster-title-inset-inline);
+  display: -webkit-box;
+  overflow: hidden;
+  font: var(--cover-type);
+  font-size: var(--cover-title-size);
+  text-align: center;
+  text-wrap: balance;
+  -webkit-line-clamp: var(--poster-title-lines);
+  -webkit-box-orient: vertical;
+}

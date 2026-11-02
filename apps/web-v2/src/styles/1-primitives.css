@@ -169,6 +169,40 @@
   --brique-50: #f8e6e1; /* fond de ce qui détruit ou alerte */
 
   /* ---------------------------------------------------------------------
+     AFFICHES PAR DÉFAUT — la palette des fausses affiches, une teinte par
+     fond ou par encre (planche Figma 2704:287, Uriel, 02/11/2026).
+     --------------------------------------------------------------------- */
+  --affiche-bordeaux: #6e2417;
+  --affiche-nuit-violette: #241c3d;
+  --affiche-bleu-roi: #1f3b6b;
+  --affiche-sarcelle: #2f6f63;
+  --affiche-noir: #1a1918;
+  --affiche-brun: #3b2a22;
+  --affiche-ardoise: #23313d;
+  --affiche-papier: #e9dcc6;
+  --affiche-sapin: #163f33;
+  --affiche-rouge: #b8322a;
+  --affiche-creme-chaude: #f3e4cc;
+  --affiche-prune: #3b1f4a;
+  --affiche-sauge: #5e7461;
+  --affiche-rose: #f2c9be;
+  --affiche-canard: #1e4d52;
+  --affiche-lie-de-vin: #2a1a1f;
+  --affiche-olive: #4a5a2a;
+  --affiche-bleu-lac: #2f5d73;
+  --affiche-moutarde: #e3a85f;
+  --affiche-terre: #964623;
+  --affiche-creme: #f6e7cf;
+  --affiche-lune: #e9d39a;
+  --affiche-blanc: #fff;
+  --affiche-ivoire: #fff4dc;
+  --affiche-os: #e9e4da;
+  --affiche-lin: #efe3cc;
+  --affiche-encre: #1d1412;
+  --affiche-foret: #1f3d2b;
+  --affiche-brique: #8a2e1e;
+
+  /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLES
      Inter pour toute l'interface ; Instrument Serif pour les grands moments
      seulement (nom d'un festival, d'une enseigne, d'un mois, chiffre phare).
@@ -179,6 +213,13 @@
   --family-brand: 'Cabin', system-ui, sans-serif;
   /* L'écriture à la main des cartes du tableau des tâches (Uriel, 22/10/2026). */
   --family-hand: 'Kalam', 'Comic Sans MS', cursive;
+  /* Les polices des affiches par défaut (planche 2704:287, 02/11/2026) : réservées aux affiches. */
+  --family-poster-cormorant: 'Cormorant', georgia, serif;
+  --family-poster-syne: 'Syne', system-ui, sans-serif;
+  --family-poster-unbounded: 'Unbounded', system-ui, sans-serif;
+  --family-poster-caprasimo: 'Caprasimo', georgia, serif;
+  --family-poster-bagel: 'Bagel Fat One', system-ui, sans-serif;
+  --family-poster-gothic: 'Grenze Gotisch', georgia, serif;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — TAILLES (celles réellement utilisées par la maquette)
@@ -218,7 +259,6 @@
   --size-76: 76px;
   --size-80: 80px;
   --size-140: 140px; /* le guillemet d'une story */
-  --size-150: 150px; /* la grande date d'une carte sans affiche */
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — GRAISSES
@@ -227,6 +267,8 @@
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
+  --weight-extrabold: 800;
+  --weight-black: 900;
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — INTERLIGNES

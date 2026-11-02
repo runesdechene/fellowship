@@ -44,7 +44,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
         eventId={date.eventId}
         imageUrl={date.imageUrl}
         tags={date.tags}
-        startDate={date.startDate}
+        name={date.name}
         daysAway={date.daysAway}
       />
       <div className="poster-card__info">
