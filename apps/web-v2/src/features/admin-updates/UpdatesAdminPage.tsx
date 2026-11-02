@@ -63,7 +63,7 @@ export function UpdatesAdminPage() {
         <div>
           <h1 className="admin-page__title">Mises à jour</h1>
           <p className="admin-page__lede">
-            Ce qu’on annonce aux exposants, et ce qu’ils en disent.
+            Ce qu’on annonce à tous les comptes, et ce qu’ils en disent.
           </p>
         </div>
         <Button variant="action" onClick={startNew}>

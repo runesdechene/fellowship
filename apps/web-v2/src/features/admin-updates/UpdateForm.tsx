@@ -2,7 +2,7 @@
  * QUOI     — écrire ou corriger une mise à jour : version (préremplie avec la version servie),
  *            titre, texte, image, poids ; Aperçu et Publier.
  * POURQUOI — maquette 2373:65. Le poids décide de ce qui part : petite = notification et pastille ;
- *            grosse = en plus un e-mail à tous les exposants, annoncé avec leur nombre réel.
+ *            grosse = en plus un e-mail à tous les comptes, annoncé avec leur nombre réel.
  * ATTENTION — en correction, le poids est figé et rien ne repart. Une grosse se confirme avant de
  *            partir, et le bouton se fige pendant l'envoi : jamais deux publications d'un clic.
  */
@@ -35,7 +35,7 @@ const WEIGHTS: { key: UpdateWeight; title: string; detail: string }[] = [
     title: 'Petite',
     detail: 'Notification sur les appareils et pastille sur la ligne de version.',
   },
-  { key: 'big', title: 'Grosse', detail: 'La même chose, plus un e-mail à tous les exposants.' },
+  { key: 'big', title: 'Grosse', detail: 'La même chose, plus un e-mail à tous les comptes.' },
 ]
 
 interface Props {
@@ -94,8 +94,8 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
 
   const mailLine =
     audience === null
-      ? 'Un e-mail partira à tous les exposants.'
-      : `Un e-mail partira à ${String(audience)} exposants.`
+      ? 'Un e-mail partira à tous les comptes.'
+      : `Un e-mail partira à ${String(audience)} comptes.`
 
   return (
     <form className="admin-update-form" onSubmit={submit}>
