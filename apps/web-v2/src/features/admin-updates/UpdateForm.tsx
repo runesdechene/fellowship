@@ -17,6 +17,8 @@ import {
   mailLine,
   publishUpdate,
   saveUpdate,
+  sendTestEmail,
+  sendUpdateEmail,
   uploadUpdateImage,
   type MailNotice,
   type PublishedUpdate,
@@ -45,16 +47,28 @@ interface Props {
   audience: number | null
   /** `notice` : ce qu'il faut savoir une fois la note publiée (un e-mail raté). */
   onDone: (notice?: MailNotice) => void
+  /** Ce que dit un e-mail de test : le formulaire reste ouvert. */
+  onNotice: (notice: MailNotice) => void
 }
 
-export function UpdateForm({ editing, audience, onDone }: Props) {
+export function UpdateForm({ editing, audience, onDone, onNotice }: Props) {
   const [draft, setDraft] = useState<UpdateDraft>(editing ?? EMPTY)
   const [preview, setPreview] = useState(false)
   const [confirming, setConfirming] = useState(false)
+  const [mailing, setMailing] = useState(false)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
   const ready = draft.version.trim() && draft.title.trim() && draft.body.trim()
   const set = (fields: Partial<UpdateDraft>) => setDraft((current) => ({ ...current, ...fields }))
+
+  const mailable = editing?.weight === 'big' && editing.emailCount === null ? editing : null
+
+  /** Le test part de la note enregistrée, à l'admin seul. */
+  async function test(id: string) {
+    setBusy(true)
+    onNotice(await sendTestEmail(id))
+    setBusy(false)
+  }
 
   /** `action` rend ce qu'il faudra savoir une fois la note partie (ou null). */
   async function run(action: () => Promise<MailNotice | null>) {
@@ -63,6 +77,7 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
     try {
       const result = await action()
       setConfirming(false)
+      setMailing(false)
       onDone(result ?? undefined)
     } catch (failure) {
       setProblem(failure instanceof Error ? failure.message : 'L’enregistrement n’a pas abouti.')
@@ -160,10 +175,21 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
           ) : draft.weight === 'big' ? (
             <>
               <Mail size={15} strokeWidth={1.8} />
-              {mailLine} Corriger la note ensuite ne le renvoie pas.
+              {mailLine(audience)} Corriger la note ensuite ne le renvoie pas.
             </>
           ) : null}
         </p>
+        {/* Une grosse note publiée dont l'e-mail n'est pas parti : le relire, puis l'envoyer. */}
+        {mailable && (
+          <>
+            <Button type="button" disabled={busy} onClick={() => void test(mailable.id)}>
+              Envoyer un e-mail de test
+            </Button>
+            <Button type="button" disabled={busy} onClick={() => setMailing(true)}>
+              Envoyer l’e-mail
+            </Button>
+          </>
+        )}
         <Button type="button" onClick={() => setPreview((shown) => !shown)}>
           {preview ? 'Fermer l’aperçu' : 'Aperçu'}
         </Button>
@@ -177,6 +203,17 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
             note={{ ...draft, publishedAt: editing?.publishedAt ?? new Date().toISOString() }}
           />
         </div>
+      )}
+      {mailing && mailable && (
+        <ConfirmDialog
+          title={`Envoyer l’e-mail de « ${mailable.title} » ?`}
+          text={`${mailLine(audience)} Il ne pourra pas être renvoyé.`}
+          confirmLabel="Envoyer"
+          busy={busy}
+          problem={problem}
+          onConfirm={() => void run(() => sendUpdateEmail(mailable.id))}
+          onClose={() => setMailing(false)}
+        />
       )}
       {confirming && (
         <ConfirmDialog

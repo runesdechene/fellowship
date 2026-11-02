@@ -12,9 +12,6 @@ import { formatDayMonthShort } from '@/lib/dates'
 import { UpdateForm } from './UpdateForm'
 import {
   deleteUpdate,
-  mailLine,
-  sendTestEmail,
-  sendUpdateEmail,
   useAdminUpdates,
   type MailNotice,
   type PublishedUpdate,
@@ -30,26 +27,10 @@ export function UpdatesAdminPage() {
   const [problem, setProblem] = useState<string | null>(null)
   // Ce qui reste à savoir après un envoi : le nombre d'e-mails partis, ou l'échec.
   const [notice, setNotice] = useState<MailNotice | null>(null)
-  // La note dont on confirme l'envoi de l'e-mail.
-  const [mailing, setMailing] = useState<PublishedUpdate | null>(null)
 
   function startNew() {
     setEditing(null)
     setFormKey((k) => k + 1)
-  }
-
-  async function mail(update: PublishedUpdate) {
-    setBusy(true)
-    setNotice(await sendUpdateEmail(update.id))
-    setBusy(false)
-    setMailing(null)
-    reload()
-  }
-
-  async function test(update: PublishedUpdate) {
-    setBusy(true)
-    setNotice(await sendTestEmail(update.id))
-    setBusy(false)
   }
 
   async function remove(update: PublishedUpdate) {
@@ -88,6 +69,7 @@ export function UpdatesAdminPage() {
           key={editing ? editing.id : `nouvelle-${String(formKey)}`}
           editing={editing}
           audience={audience}
+          onNotice={setNotice}
           onDone={(next) => {
             setNotice(next ?? null)
             startNew()
@@ -131,16 +113,6 @@ export function UpdatesAdminPage() {
                     E-mail envoyé à {update.emailCount}
                   </span>
                 )}
-                {update.weight === 'big' && update.emailCount === null && (
-                  <button type="button" onClick={() => setMailing(update)}>
-                    Envoyer l’e-mail
-                  </button>
-                )}
-                {update.weight === 'big' && update.emailCount === null && (
-                  <button type="button" disabled={busy} onClick={() => void test(update)}>
-                    Envoyer un e-mail de test
-                  </button>
-                )}
                 <button type="button" onClick={() => setEditing(update)}>
                   Modifier
                 </button>
@@ -158,17 +130,6 @@ export function UpdatesAdminPage() {
           ))}
         </section>
       </div>
-      {mailing && (
-        <ConfirmDialog
-          title={`Envoyer l’e-mail de « ${mailing.title} » ?`}
-          text={`${mailLine(audience)} Il ne pourra pas être renvoyé.`}
-          confirmLabel="Envoyer"
-          busy={busy}
-          problem={null}
-          onConfirm={() => void mail(mailing)}
-          onClose={() => setMailing(null)}
-        />
-      )}
       {doomed && (
         <ConfirmDialog
           title={`Supprimer « ${doomed.title} » ?`}
