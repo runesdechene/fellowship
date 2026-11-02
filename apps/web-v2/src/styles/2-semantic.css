@@ -1103,8 +1103,7 @@
   /* =========================================================================
      MES BILANS, L'ÉCRAN — l'année, les mois, les dates (features/reports)
      ====================================================================== */
-  --type-dashboard-net: var(--weight-regular) var(--size-40) / 1 var(--family-display);
-  --type-reports-year-net: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
+  --type-reports-year-net: var(--weight-medium) var(--size-52) / 1.1 var(--family-sans);
   --type-reports-year-value: var(--weight-medium) var(--size-30) / 1.2 var(--family-sans);
   --type-reports-label: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-reports-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
@@ -1156,7 +1155,7 @@
   --type-report-block: var(--weight-semibold) var(--size-17) / var(--leading-snug)
     var(--family-sans);
   --type-report-line: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-report-summary-net: var(--weight-regular) var(--size-40) / 1.1 var(--family-display);
+  --type-report-summary-net: var(--weight-medium) var(--size-48) / 1.1 var(--family-sans);
   --type-report-small: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-report-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
   --type-report-note: var(--weight-regular) var(--size-14) / 1.6 var(--family-sans);
@@ -1698,7 +1697,7 @@
   --type-landing-app-title: var(--weight-semibold) var(--size-30) / 1.2 var(--family-sans);
   --type-landing-app-section: var(--weight-semibold) var(--size-20) / 1.3 var(--family-sans);
   --type-landing-app-month: var(--weight-regular) var(--size-38) / 1.1 var(--family-display);
-  --type-landing-app-figure: var(--weight-regular) var(--size-40) / 1 var(--family-display);
+  --type-landing-app-figure: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
   --type-landing-app-text: var(--weight-regular) var(--size-16) / 1.4 var(--family-sans);
   --type-landing-app-nav: var(--weight-medium) var(--size-16) / 1.3 var(--family-sans);
   --type-landing-app-strong-s: var(--weight-semibold) var(--size-15) / 1.3 var(--family-sans);
@@ -1828,7 +1827,7 @@
   --landing-you-bar: 52px;
   --landing-you-thumb-s-width: 26px;
   --landing-you-thumb-s-height: 36px;
-  --type-landing-you-net: var(--weight-regular) var(--size-30) / 1 var(--family-display);
+  --type-landing-you-net: var(--weight-medium) var(--size-36) / 1 var(--family-sans);
   --landing-cal-nav-height: 64px;
   --landing-you-next-poster: 170px;
   --type-landing-you-title: var(--weight-medium) var(--size-36) / 1.2 var(--family-sans);
