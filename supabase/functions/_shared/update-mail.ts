@@ -7,9 +7,6 @@ import { toHtml } from './prospect-mail.ts'
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }
 const escape = (text: string) => text.replace(/[&<>"]/g, (c) => ESCAPES[c] ?? c)
 
-// L'e-mail donne envie et renvoie vers la page : les deux premiers paragraphes suffisent.
-const PARAGRAPHS = 2
-
 export function composeUpdateEmail(o: {
   title: string
   body: string
@@ -18,9 +15,10 @@ export function composeUpdateEmail(o: {
   unsubscribeUrl: string
 }) {
   const subject = o.title.trim().replace(/[\r\n]+/g, ' ')
-  const lead = o.body.trim().split(/\n{2,}/).slice(0, PARAGRAPHS).join('\n\n')
+  // Le texte entier de la note (Uriel, 02/11/2026) : couper aux deux premiers paragraphes perdait l'essentiel.
+  const body = o.body.trim()
   const text =
-    `${subject}\n\n${lead}\n\nVoir la nouveauté : ${o.url}\n\n—\n` +
+    `${subject}\n\n${body}\n\nVoir la nouveauté : ${o.url}\n\n—\n` +
     `Tu ne veux plus recevoir ces e-mails ? Se désinscrire : ${o.unsubscribeUrl}`
   const image = o.imageUrl
     ? `<img src="${escape(o.imageUrl)}" alt="" width="560" style="width:100%;max-width:560px;border-radius:12px">`
@@ -28,7 +26,7 @@ export function composeUpdateEmail(o: {
   const html =
     image +
     `<h1 style="font-family:Georgia,serif;font-weight:400;font-size:30px">${escape(subject)}</h1>` +
-    toHtml(lead) +
+    toHtml(body) +
     `<p><a href="${escape(o.url)}" style="display:inline-block;padding:10px 16px;border-radius:10px;` +
     `background:#1f1d1b;color:#ffffff;text-decoration:none">Voir la nouveauté</a></p>` +
     `<p style="color:#8a857f;font-size:12px">— <br>Tu ne veux plus recevoir ces e-mails ? ` +

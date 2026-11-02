@@ -12,7 +12,7 @@ import {
 
 const base = {
   title: 'La nouvelle\nFellowship est là',
-  body: 'Premier paragraphe.\n\nDeuxième, https://flw.sh.\n\nTroisième, coupé.',
+  body: 'Premier paragraphe.\n\nDeuxième, https://flw.sh.\n\nTroisième, gardé.',
   imageUrl: null,
   url: 'https://flw.sh/nouveautes',
   unsubscribeUrl: 'https://x.supabase.co/functions/v1/prospect-unsubscribe?t=abc',
@@ -22,10 +22,11 @@ describe('composeUpdateEmail', () => {
   it('prend le titre pour objet, sur une ligne', () => {
     expect(composeUpdateEmail(base).subject).toBe('La nouvelle Fellowship est là')
   })
-  it('garde les deux premiers paragraphes et mène à la page', () => {
+  it('garde tout le texte et mène à la page', () => {
     const mail = composeUpdateEmail(base)
     expect(mail.text).toContain('Deuxième')
-    expect(mail.text).not.toContain('Troisième')
+    expect(mail.text).toContain('Troisième')
+    expect(mail.html).toContain('Troisième')
     expect(mail.text).toContain('Voir la nouveauté : https://flw.sh/nouveautes')
     expect(mail.html).toContain('href="https://flw.sh/nouveautes"')
   })
