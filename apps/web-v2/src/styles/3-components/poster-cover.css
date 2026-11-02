@@ -50,14 +50,13 @@
     color-mix(in srgb, var(--cover-ink) var(--poster-rule-opacity), transparent);
 }
 
-/* Une image en position absolue garde sa taille d'origine : la largeur est donnée, le centrage
-   vient des marges. */
+/* Une image en position absolue garde sa taille d'origine : la largeur est donnée, et les marges
+   la centrent dans la bande entre la ville et le nom. */
 .poster-cover__sheet--text .poster-cover__motif {
   position: absolute;
-  top: var(--poster-motif-top);
-  inset-inline: 0;
+  inset: var(--poster-motif-top) 0 var(--poster-motif-bottom);
   width: var(--poster-motif-width);
-  margin-inline: auto;
+  margin: auto;
 }
 
 .poster-cover__city,
@@ -89,7 +88,7 @@
   bottom: var(--poster-title-bottom);
   inset-inline: var(--poster-title-inset-inline);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 

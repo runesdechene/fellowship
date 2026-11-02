@@ -911,7 +911,9 @@
   --poster-frame-inset-inline: 5.55%;
   --poster-frame-width: 1px;
   --poster-frame-radius: var(--round-8);
-  --poster-motif-top: 10%;
+  /* Le dessin se centre entre la ville (jusqu'à 9,5 %) et le nom (dès 61 %). */
+  --poster-motif-top: 9.5%;
+  --poster-motif-bottom: 39%;
   --poster-motif-width: min(66.2cqw, 49cqh);
   --poster-title-top: 61%;
   --poster-title-inset-inline: 9.7%;
