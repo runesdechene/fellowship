@@ -26,6 +26,7 @@ const MONTH_COUNT = 12
 export interface CalendarDate {
   eventId: string
   name: string
+  city: string
   place: string
   imageUrl: string | null
   tags: string[] | null
@@ -94,6 +95,7 @@ async function loadCalendar(actorId: string, today: Date): Promise<CalendarData>
     return {
       eventId: row.event_id,
       name: row.events.name,
+      city: row.events.city,
       place: `${row.events.city} (${row.events.department})`,
       imageUrl: row.events.image_url,
       tags: row.events.tags,

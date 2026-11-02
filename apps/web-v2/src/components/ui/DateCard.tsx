@@ -17,7 +17,12 @@ interface DateCardProps {
 export function DateCard({ name, when, imageUrl, tags, action }: DateCardProps) {
   return (
     <article className="date-card">
-      <Poster className="date-card__poster" imageUrl={imageUrl} tags={tags} />
+      <Poster
+        className="date-card__poster"
+        imageUrl={imageUrl}
+        tags={tags}
+        cover={{ name, city: null, dates: when }}
+      />
       <p className="date-card__name">{name}</p>
       <p className="date-card__when">{when}</p>
       {action}

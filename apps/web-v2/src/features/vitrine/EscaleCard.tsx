@@ -22,7 +22,11 @@ export function EscaleCard({ date }: { date: VitrineDate }) {
         eventId={date.eventId}
         imageUrl={date.imageUrl}
         tags={date.tags}
-        name={date.name}
+        cover={{
+          name: date.name,
+          city: date.city,
+          dates: formatDateRange(date.startDate, date.endDate),
+        }}
         daysAway={date.daysAway}
         friends={date.friends}
       />

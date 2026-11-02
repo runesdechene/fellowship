@@ -107,6 +107,11 @@ export function SearchResults({
                   imageUrl={event.imageUrl}
                   tags={event.tags}
                   className="search-overlay__poster"
+                  cover={{
+                    name: event.name,
+                    city: event.city,
+                    dates: formatDateRange(event.startDate, event.endDate),
+                  }}
                 />
                 <span className="search-overlay__name">{event.name}</span>
                 <span className="search-overlay__meta">{dateLine(event)}</span>

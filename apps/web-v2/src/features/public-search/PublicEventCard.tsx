@@ -15,7 +15,16 @@ import { eventPath } from '@/lib/event-path'
 export function PublicEventCard({ event }: { event: PublicEvent }) {
   return (
     <Link to={eventPath(event.slug)} className="public-card">
-      <Poster imageUrl={event.imageUrl} tags={event.tags} className="public-card__poster" />
+      <Poster
+        imageUrl={event.imageUrl}
+        tags={event.tags}
+        className="public-card__poster"
+        cover={{
+          name: event.name,
+          city: event.city,
+          dates: formatDateRange(event.startDate, event.endDate),
+        }}
+      />
       <span className="public-card__place">
         <MapPin size={14} strokeWidth={2.2} aria-hidden />
         {event.city} ({event.department})

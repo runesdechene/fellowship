@@ -16,7 +16,16 @@ export function NextDateCard({ date }: { date: DashboardDate }) {
 
   return (
     <button type="button" className="next-date" onClick={() => go(eventPath(event.id))}>
-      <Poster imageUrl={event.image_url} tags={event.tags} className="next-date__poster" />
+      <Poster
+        imageUrl={event.image_url}
+        tags={event.tags}
+        className="next-date__poster"
+        cover={{
+          name: event.name,
+          city: event.city,
+          dates: formatDateRange(date.startDate, parseSqlDate(event.end_date)),
+        }}
+      />
 
       {/* Des `span` et non des `div` : un bouton ne peut contenir que du
           contenu de phrase. Le CSS leur rend leur mise en bloc. */}

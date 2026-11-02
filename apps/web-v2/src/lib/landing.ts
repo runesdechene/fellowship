@@ -47,6 +47,7 @@ export interface ShowEvent {
   tags: string[] | null
   startDate: Date
   endDate: Date
+  city: string
   place: string
 }
 
@@ -95,6 +96,7 @@ function toEvent(r: ShowcaseRow): ShowEvent {
     tags: r.tags,
     startDate: parseSqlDate(r.start_date),
     endDate: parseSqlDate(r.end_date),
+    city: r.city.trim(),
     place: placeOf(r.city.trim(), r.department),
   }
 }

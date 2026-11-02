@@ -1,6 +1,6 @@
 /**
  * QUOI     — la grande affiche d'une date : l'affiche (Poster.tsx ; absente, la fausse affiche de
- *            sa catégorie, au nom du festival), le compte à rebours en haut, les amis en bas.
+ *            sa catégorie, à son nom), le compte à rebours en haut, les amis en bas.
  * POURQUOI — la même affiche vit dans le calendrier, la vitrine et l'Explorer ; sa hauteur vient du
  *            parent (`--poster-art-height`).
  * ATTENTION — `badge` remplace le compte à rebours (« Nouveau » dans l'Explorer) ; `action` se pose
@@ -11,7 +11,7 @@ import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { formatCountdown } from '@/lib/dates'
 import { useState, type ReactNode } from 'react'
 import { AddPoster } from '@/components/ui/AddPoster'
-import { Poster } from '@/components/ui/Poster'
+import { Poster, type PosterText } from '@/components/ui/Poster'
 import type { Friend } from '@/lib/friends'
 
 const MAX_FACES = 3
@@ -19,8 +19,8 @@ const MAX_FACES = 3
 interface PosterArtProps {
   imageUrl: string | null
   tags: readonly string[] | null
-  /** Le nom du festival, écrit sur la fausse affiche quand la vraie manque. */
-  name: string
+  /** Ce qui s'écrit sur la fausse affiche quand la vraie manque. */
+  cover: PosterText
   daysAway: number
   /** Les amis présents, en bas de l'affiche ; l'Explorer les pose sous le nom, d'où l'option. */
   friends?: Friend[]
@@ -34,7 +34,7 @@ interface PosterArtProps {
 export function PosterArt({
   imageUrl,
   tags,
-  name,
+  cover,
   daysAway,
   friends = [],
   badge,
@@ -49,7 +49,7 @@ export function PosterArt({
 
   return (
     <div className="poster-art">
-      <Poster imageUrl={poster} tags={tags} title={name} className="poster-art__poster" />
+      <Poster imageUrl={poster} tags={tags} cover={cover} className="poster-art__poster" />
       {corner && (
         <span
           className={

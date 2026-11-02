@@ -1,19 +1,31 @@
 /**
  * QUOI     — l'affiche absente (components/ui/Poster.tsx) : une fausse affiche de festival,
- *            dessinée pour sa catégorie ; en grand, avec son cadre et le nom du festival.
+ *            dessinée pour sa catégorie ; avec son texte, le cadre, la ville, le nom et les dates.
  * POURQUOI — planche Figma 2704:287 (Uriel, 02/11/2026). La palette et la police de chaque
  *            catégorie viennent de 2-semantic.css (`[data-category]`).
- * ATTENTION — le titre rétrécit quand son plus long mot dépasse la capacité de la police
- *            (`--cover-chars`), pour ne jamais couper un mot en deux.
+ * ATTENTION — tout se pose dans une feuille au format de la planche, centrée dans l'emplacement :
+ *            le dessin n'est jamais rogné. Le titre rétrécit quand son plus long mot dépasse la
+ *            capacité de la police (`--cover-chars`) ou qu'il passerait trois lignes.
  */
 
 .poster-cover {
   position: relative;
-  display: grid;
-  place-items: center;
   overflow: hidden;
+  container-type: size;
   background: var(--cover-bg);
   color: var(--cover-ink);
+}
+
+/* Centrée par la position, quel que soit le `display` que l'emplacement donne à l'affiche. */
+.poster-cover__sheet {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: var(--poster-sheet-width);
+  margin: auto;
+  aspect-ratio: var(--poster-sheet-ratio);
+  container-type: size;
 }
 
 .poster-cover__motif {
@@ -21,36 +33,79 @@
   aspect-ratio: 1;
 }
 
-.poster-cover--titled {
-  display: block;
-  container-type: size;
-}
+/* --- L'affiche complète ------------------------------------------------------------------- */
 
-.poster-cover--titled::before {
+.poster-cover__sheet--text::before {
   content: '';
   position: absolute;
   inset: var(--poster-frame-inset-block) var(--poster-frame-inset-inline);
   border: var(--poster-frame-width) solid
     color-mix(in srgb, var(--cover-ink) var(--poster-frame-opacity), transparent);
   border-radius: var(--poster-frame-radius);
-  pointer-events: none;
 }
 
-.poster-cover--titled .poster-cover__motif {
+.poster-cover__sheet--text::after {
+  content: '';
+  position: absolute;
+  top: var(--poster-rule-top);
+  inset-inline: var(--poster-rule-inset-inline);
+  border-top: var(--poster-frame-width) solid
+    color-mix(in srgb, var(--cover-ink) var(--poster-rule-opacity), transparent);
+}
+
+.poster-cover__sheet--text .poster-cover__motif {
   position: absolute;
   top: var(--poster-motif-top);
   inset-inline: var(--poster-motif-inset-inline);
   width: auto;
 }
 
-.poster-cover__title {
-  --cover-title-size: calc(
-    var(--cover-size, var(--poster-title-size)) * min(1, var(--cover-chars) / var(--cover-longest))
-  );
+.poster-cover__city,
+.poster-cover__dates {
+  position: absolute;
+  inset-inline: var(--poster-title-inset-inline);
+  overflow: hidden;
+  font: var(--type-poster-label);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+.poster-cover__city {
+  top: var(--poster-city-top);
+  letter-spacing: var(--poster-label-tracking);
+  text-transform: uppercase;
+  opacity: var(--poster-city-opacity);
+}
+
+.poster-cover__dates {
+  top: var(--poster-dates-top);
+  opacity: var(--poster-dates-opacity);
+}
+
+.poster-cover__title {
   position: absolute;
   top: var(--poster-title-top);
+  bottom: var(--poster-title-bottom);
   inset-inline: var(--poster-title-inset-inline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poster-cover__name {
+  --cover-title-size: calc(
+    var(--cover-size, var(--poster-title-size)) *
+      min(
+        1,
+        var(--cover-chars) / var(--cover-longest),
+        max(
+          var(--poster-title-min-fit),
+          var(--poster-title-lines-fit) * var(--cover-chars) / var(--cover-length)
+        )
+      )
+  );
+
   display: -webkit-box;
   overflow: hidden;
   font: var(--cover-type);
@@ -59,4 +114,27 @@
   text-wrap: balance;
   -webkit-line-clamp: var(--poster-title-lines);
   -webkit-box-orient: vertical;
+}
+
+/* Une affiche moyenne garde son nom et son cadre, sans la ville ni les dates, illisibles. Les
+   seuils sont des largeurs d'affiche : une requête de conteneur ne lit pas de variable. */
+@container (width < 150px) {
+  .poster-cover__city,
+  .poster-cover__dates,
+  .poster-cover__sheet--text::after {
+    display: none;
+  }
+}
+
+/* Une vignette n'a plus que le dessin, centré et en grand. */
+@container (width < 100px) {
+  .poster-cover__title,
+  .poster-cover__sheet--text::before {
+    display: none;
+  }
+
+  .poster-cover__sheet--text .poster-cover__motif {
+    position: static;
+    width: var(--poster-vignette-motif);
+  }
 }

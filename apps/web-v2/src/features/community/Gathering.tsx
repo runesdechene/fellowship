@@ -39,7 +39,12 @@ export function Gathering({ line, onMark }: GatheringProps) {
   return (
     <section className="gathering" aria-label="Ça se rassemble">
       <Link className="gathering__poster-link" to={eventPath(event.id)}>
-        <Poster imageUrl={event.imageUrl} tags={event.tags} className="gathering__poster" />
+        <Poster
+          imageUrl={event.imageUrl}
+          tags={event.tags}
+          className="gathering__poster"
+          cover={{ name: event.name, city: event.city, dates }}
+        />
       </Link>
       <div className="gathering__body">
         <span className="gathering__eyebrow">Ça se rassemble</span>

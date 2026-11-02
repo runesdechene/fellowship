@@ -62,7 +62,11 @@ export function ExploreCard({ event, onMark, past = false }: ExploreCardProps) {
           eventId={event.id}
           imageUrl={event.imageUrl}
           tags={event.tags}
-          name={event.name}
+          cover={{
+            name: event.name,
+            city: event.city,
+            dates: formatDateRange(event.startDate, event.endDate),
+          }}
           daysAway={0}
           badge={event.isNew ? 'Nouveau' : null}
         />

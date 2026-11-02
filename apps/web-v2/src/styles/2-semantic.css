@@ -903,7 +903,10 @@
   --poster-title-size-wide: 10.3cqw;
   --poster-title-leading: 0.92;
   --poster-frame-opacity: 45%;
-  --poster-vignette-motif: 70%;
+  --poster-vignette-motif: 80%;
+  /* La feuille : le format de la planche (74 × 100), la plus grande qui tienne dans l'emplacement. */
+  --poster-sheet-ratio: 74 / 100;
+  --poster-sheet-width: min(100cqw, 74cqh);
   /* La grande affiche reprend les cotes de la planche (74 × 100) : cadre, dessin, titre. */
   --poster-frame-inset-block: 4.1%;
   --poster-frame-inset-inline: 5.55%;
@@ -911,9 +914,23 @@
   --poster-frame-radius: var(--round-8);
   --poster-motif-top: 10%;
   --poster-motif-inset-inline: 16.9%;
-  --poster-title-top: 62%;
+  --poster-title-top: 61%;
   --poster-title-inset-inline: 9.7%;
   --poster-title-lines: 3;
+  /* La ville et les dates, comme « 14e édition » et « 11 · 12 oct. » sur la planche. */
+  --type-poster-label: var(--weight-semibold) 6.5cqw / 1 var(--family-sans);
+  --poster-label-tracking: 0.12em;
+  --poster-city-top: 4.5%;
+  --poster-city-opacity: 0.85;
+  --poster-title-bottom: 14%;
+  --poster-rule-top: 87.2%;
+  --poster-rule-inset-inline: 25%;
+  --poster-rule-opacity: 50%;
+  --poster-dates-top: 89.7%;
+  --poster-dates-opacity: 0.9;
+  /* Le titre tient sur deux lignes : au-delà, il rétrécit, jusqu'à tenir sur trois. */
+  --poster-title-lines-fit: 1.8;
+  --poster-title-min-fit: 0.7; /* trois lignes tiennent encore à 70 % */
   --poster-type-cormorant: var(--weight-bold) 1em / var(--poster-title-leading)
     var(--family-poster-cormorant);
   --poster-type-cormorant-light: var(--weight-semibold) 1em / var(--poster-title-leading)
