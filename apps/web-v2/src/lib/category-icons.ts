@@ -5,11 +5,11 @@
  *            couleurs, elles, restent des données du back-office (lib/tags.ts).
  * ATTENTION — `events.tags` mêle des noms (V2) et des slugs (V1) : la table connaît les deux.
  *            Biker n'est plus utilisé (Uriel) : il retombe sur l'étiquette, comme tout inconnu.
+ *            Cinéma est retiré (02/11/2026) : un festival de cinéma ne prend pas d'exposants.
  */
 import {
   BookOpen,
   Castle,
-  Clapperboard,
   Drama,
   FerrisWheel,
   Frame,
@@ -48,7 +48,6 @@ const CATEGORIES: [string, string, LucideIcon][] = [
   ['brocante', 'Brocante', Lamp],
   ['culturel', 'Culturel', Drama],
   ['terroir', 'Terroir', Wheat],
-  ['cinema', 'Cinéma', Clapperboard],
   ['outdoor', 'Outdoor', Tent],
   ['gastronomique', 'Gastronomique', UtensilsCrossed],
   ['autre', 'Autre', Tag],
