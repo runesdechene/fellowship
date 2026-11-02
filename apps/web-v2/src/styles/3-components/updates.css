@@ -338,6 +338,11 @@
 }
 
 @media (width <= 760px) {
+  /* Les marges du téléphone, alignées sur la barre du haut, comme les autres pages. */
+  .updates {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
   .update-card__image {
     height: var(--updates-image-height-mobile);
   }

@@ -229,6 +229,13 @@ button.history__row:hover {
   color: var(--ink-waiting);
 }
 
+/* Téléphone : sans le retrait de l'ordinateur, comme « Modifier la fiche ». */
+@media (width <= 760px) {
+  .history {
+    padding: var(--space-16) var(--mobile-gutter) var(--space-40);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .history__back,
   button.history__row,
