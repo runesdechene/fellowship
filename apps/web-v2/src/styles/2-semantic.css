@@ -913,10 +913,11 @@
   --poster-frame-width: 1px;
   --poster-frame-radius: var(--round-8);
   --poster-motif-top: 10%;
-  --poster-motif-inset-inline: 16.9%;
+  --poster-motif-width: 66.2%;
   --poster-title-top: 61%;
   --poster-title-inset-inline: 9.7%;
   --poster-title-lines: 3;
+  --poster-title-room: 0.12em; /* l'interligne serré rognait jambages et accents */
   /* La ville et les dates, comme « 14e édition » et « 11 · 12 oct. » sur la planche. */
   --type-poster-label: var(--weight-semibold) 6.5cqw / 1 var(--family-sans);
   --poster-label-tracking: 0.12em;

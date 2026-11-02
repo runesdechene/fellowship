@@ -53,11 +53,14 @@
     color-mix(in srgb, var(--cover-ink) var(--poster-rule-opacity), transparent);
 }
 
+/* Une image en position absolue garde sa taille d'origine : la largeur est donnée, le centrage
+   vient des marges. */
 .poster-cover__sheet--text .poster-cover__motif {
   position: absolute;
   top: var(--poster-motif-top);
-  inset-inline: var(--poster-motif-inset-inline);
-  width: auto;
+  inset-inline: 0;
+  width: var(--poster-motif-width);
+  margin-inline: auto;
 }
 
 .poster-cover__city,
@@ -107,6 +110,7 @@
   );
 
   display: -webkit-box;
+  padding-block: var(--poster-title-room);
   overflow: hidden;
   font: var(--cover-type);
   font-size: var(--cover-title-size);
