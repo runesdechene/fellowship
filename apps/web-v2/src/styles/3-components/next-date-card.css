@@ -57,7 +57,7 @@
 
 .next-date__title {
   display: block;
-  font: var(--type-next-date-name);
+  font: var(--type-display-m);
   color: var(--ink-title);
   overflow: hidden;
   text-overflow: ellipsis;

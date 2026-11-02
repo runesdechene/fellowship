@@ -37,7 +37,7 @@
   width: fit-content;
   background: var(--net-gradient);
   background-clip: text;
-  font: var(--type-dashboard-net);
+  font: var(--type-display-l);
   color: transparent;
 }
 

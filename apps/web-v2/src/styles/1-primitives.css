@@ -170,12 +170,11 @@
 
   /* ---------------------------------------------------------------------
      TYPOGRAPHIE — FAMILLES
-     Bricolage Grotesque partout ; Gloock pour les mois du Calendrier, le nom
-     d'un festival en grand et les titres de l'ouverture et de l'appel final de la landing
-     (Uriel, 02/11/2026).
+     Inter pour toute l'interface ; Instrument Serif pour les grands moments
+     seulement (nom d'un festival, d'une enseigne, d'un mois, chiffre phare).
      --------------------------------------------------------------------- */
-  --family-sans: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --family-display: 'Gloock', georgia, 'Times New Roman', serif;
+  --family-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --family-display: 'Instrument Serif', georgia, 'Times New Roman', serif;
   /* Le nom Fellowship : la police de Runes de Chêne (Uriel, 14/10/2026 ; décision 0007). */
   --family-brand: 'Cabin', system-ui, sans-serif;
   /* L'écriture à la main des cartes du tableau des tâches (Uriel, 22/10/2026). */

@@ -133,11 +133,10 @@
   --line-card: var(--sand-300);
   --line-dashed: var(--sand-400);
   /* Les grands moments en serif : nom d'un festival, d'une enseigne, d'un mois. */
-  --type-display-xl: var(--weight-medium) var(--size-64) / 1 var(--family-sans);
-  --type-display-l: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
-  --type-display-date: var(--weight-medium) var(--size-150) / 0.9 var(--family-sans);
-  --type-next-date-name: var(--weight-regular) var(--size-30) / 1.05 var(--family-display);
-  --type-display-m: var(--weight-medium) var(--size-36) / 1.05 var(--family-sans);
+  --type-display-xl: var(--weight-regular) var(--size-64) / 1 var(--family-display);
+  --type-display-l: var(--weight-regular) var(--size-48) / 1 var(--family-display);
+  --type-display-date: var(--weight-regular) var(--size-150) / 0.9 var(--family-display);
+  --type-display-m: var(--weight-regular) var(--size-36) / 1.05 var(--family-display);
 
   /* Aucune ombre dans cette interface : les plans se distinguent par le
      fond, jamais par du relief. Ne pas réintroduire de box-shadow. */
@@ -291,7 +290,7 @@
   /* Le nom du festival est ce qu on vient lire en premier : il porte donc le
      corps d un titre de PAGE et non d un bloc. Il etait a 26, comme les
      « A propos » qui le suivent — rien ne le detachait d eux. */
-  --type-event-title: var(--weight-regular) var(--size-60) / 1 var(--family-display);
+  --type-event-title: var(--weight-regular) var(--size-72) / 1 var(--family-display);
   --tracking-event-title: -0.02em;
   --event-title-ink: var(--terre-850);
 
@@ -500,7 +499,7 @@
   --edit-dot-size: 7px;
   --type-edit-section: var(--weight-semibold) var(--size-17) / var(--leading-tight)
     var(--family-sans);
-  --type-edit-preview-name: var(--weight-regular) var(--size-28) / 1 var(--family-display);
+  --type-edit-preview-name: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --type-edit-preview-small: var(--weight-regular) var(--size-11) / var(--leading-snug)
     var(--family-sans);
   --type-edit-preview-value: var(--weight-semibold) var(--size-12) / var(--leading-snug)
@@ -523,9 +522,9 @@
 
   /* L'atelier n'a qu'une question à l'écran : elle peut porter plus haut que
      les titres des pages qui, elles, en empilent plusieurs. */
-  --type-create-ask: var(--weight-medium) var(--size-48) / 1.05 var(--family-sans);
+  --type-create-ask: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
   /* Sur téléphone, la question tient en deux ou trois lignes. */
-  --type-create-ask-mobile: var(--weight-medium) var(--size-32) / 1.05 var(--family-sans);
+  --type-create-ask-mobile: var(--weight-regular) var(--size-32) / 1.05 var(--family-display);
 
   /* =========================================================================
      LE MUR D'AFFICHE — le bord droit de la fiche d'un événement
@@ -696,7 +695,7 @@
   --legal-reading-width: 680px; /* une page légale : une colonne de lecture (lot 12) */
 
   /* La voix de l'organisateur, en serif 24 (maquette 2506:233). */
-  --type-event-description: var(--weight-regular) var(--size-24) / 1.33 var(--family-sans);
+  --type-event-description: var(--weight-regular) var(--size-24) / 1.33 var(--family-display);
   --event-about-ink: var(--ink-750);
 
   /* « L'essentiel » de la fiche (maquette 2506:233) : une ligne par fait, le libellé à gauche ;
@@ -715,7 +714,7 @@
   /* « 12 exposants y vont » du visiteur : les visages en pile, le nombre en serif. */
   --guest-going-face: 42px;
   --guest-going-overlap: -12px;
-  --type-guest-going-count: var(--weight-medium) var(--size-28) / 1 var(--family-sans);
+  --type-guest-going-count: var(--weight-regular) var(--size-28) / 1 var(--family-display);
   --tracking-guest-going-count: -0.01em;
   --type-card-link-strong: var(--weight-semibold) var(--size-13) / var(--leading-snug)
     var(--family-sans);
@@ -726,7 +725,7 @@
   --claim-soft: color-mix(in srgb, var(--cream-50) 85%, transparent);
   --claim-badge-check: var(--terre-700);
   --claim-button-ink: var(--ink-950);
-  --type-claim-title: var(--weight-medium) var(--size-28) / 1 var(--family-sans);
+  --type-claim-title: var(--weight-regular) var(--size-28) / 1 var(--family-display);
   --radius-claim: var(--round-20);
   /* L'avis cité au visiteur (maquette 2506:233). */
   --type-review-quote-guest: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
@@ -751,7 +750,7 @@
   --last-year-veil: blur(6px);
   --type-last-year-lead: var(--weight-regular) var(--size-12) / var(--leading-snug)
     var(--family-sans);
-  --type-last-year-amount: var(--weight-medium) var(--size-26) / 1 var(--family-sans);
+  --type-last-year-amount: var(--weight-regular) var(--size-26) / 1 var(--family-display);
   --tracking-last-year-amount: -0.01em;
   --type-last-year-button: var(--weight-semibold) var(--size-12) / var(--leading-snug)
     var(--family-sans);
@@ -759,7 +758,7 @@
   /* La fenêtre « Candidater » : le titre en serif brun, comme celui de la fiche. */
   --apply-dialog-width: 600px;
   --radius-apply-dialog: var(--round-24);
-  --type-apply-dialog-title: var(--weight-medium) var(--size-44) / 1 var(--family-sans);
+  --type-apply-dialog-title: var(--weight-regular) var(--size-44) / 1 var(--family-display);
 
   /* =========================================================================
      DISCUSSION DU FESTIVAL — les questions et leurs réponses
@@ -986,8 +985,8 @@
     var(--family-sans);
   --type-community-side-title: var(--weight-semibold) var(--size-15) / var(--leading-snug)
     var(--family-sans);
-  --type-gathering-name: var(--weight-regular) var(--size-34) / 1.05 var(--family-display);
-  --type-gathering-name-mobile: var(--weight-regular) var(--size-22) / 1.05 var(--family-display);
+  --type-gathering-name: var(--weight-regular) var(--size-40) / 1.05 var(--family-display);
+  --type-gathering-name-mobile: var(--weight-regular) var(--size-26) / 1.05 var(--family-display);
   --type-gathering-meta: var(--weight-regular) var(--size-14) / var(--leading-snug)
     var(--family-sans);
 
@@ -1009,10 +1008,10 @@
   --type-updates-weight: var(--weight-semibold) var(--size-11) / var(--leading-snug)
     var(--family-sans);
   --type-updates-meta: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
-  --type-updates-title-big: var(--weight-medium) var(--size-40) / var(--leading-tight)
-    var(--family-sans);
-  --type-updates-title-big-mobile: var(--weight-medium) var(--size-32) / var(--leading-tight)
-    var(--family-sans);
+  --type-updates-title-big: var(--weight-regular) var(--size-40) / var(--leading-tight)
+    var(--family-display);
+  --type-updates-title-big-mobile: var(--weight-regular) var(--size-32) / var(--leading-tight)
+    var(--family-display);
   --type-updates-title: var(--weight-semibold) var(--size-19) / var(--leading-snug)
     var(--family-sans);
   --type-updates-text: var(--weight-regular) var(--size-15) / var(--leading-relaxed)
@@ -1098,15 +1097,14 @@
   --suggestion-leaving-opacity: 0;
   --type-suggestion-reason: var(--weight-medium) var(--size-12) / var(--leading-snug)
     var(--family-sans);
-  --type-suggestion-invite: var(--weight-medium) var(--size-26) / var(--leading-tight)
-    var(--family-sans);
+  --type-suggestion-invite: var(--weight-regular) var(--size-26) / var(--leading-tight)
+    var(--family-display);
 
   /* =========================================================================
      MES BILANS, L'ÉCRAN — l'année, les mois, les dates (features/reports)
      ====================================================================== */
-  --type-dashboard-net: var(--weight-medium) var(--size-40) / 1 var(--family-sans);
-  --type-reports-year-net: var(--weight-medium) var(--size-44) / 1.1 var(--family-sans);
-  --type-reports-year-value: var(--weight-medium) var(--size-30) / 1.2 var(--family-sans);
+  --type-reports-year-net: var(--weight-regular) var(--size-52) / 1.1 var(--family-display);
+  --type-reports-year-value: var(--weight-regular) var(--size-30) / 1.2 var(--family-display);
   --type-reports-label: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-reports-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-reports-section: var(--weight-semibold) var(--size-15) / var(--leading-snug)
@@ -1152,12 +1150,12 @@
   --report-add-category-width: 260px;
   --report-add-amount-width: 160px;
   --report-amount-input-width: 96px;
-  --type-report-title-mobile: var(--weight-medium) var(--size-48) / 1.05 var(--family-sans);
-  --type-report-title: var(--weight-medium) var(--size-56) / 1.05 var(--family-sans);
+  --type-report-title-mobile: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  --type-report-title: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
   --type-report-block: var(--weight-semibold) var(--size-17) / var(--leading-snug)
     var(--family-sans);
   --type-report-line: var(--weight-medium) var(--size-14) / var(--leading-snug) var(--family-sans);
-  --type-report-summary-net: var(--weight-medium) var(--size-40) / 1.1 var(--family-sans);
+  --type-report-summary-net: var(--weight-regular) var(--size-48) / 1.1 var(--family-display);
   --type-report-small: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-report-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
   --type-report-note: var(--weight-regular) var(--size-14) / 1.6 var(--family-sans);
@@ -1174,16 +1172,16 @@
   --pro-invitation-width: 563px;
   --pro-page-width: calc(960px + 2 * var(--page-gutter));
   --pro-card-border: 1.5px;
-  --type-pro-page-title: var(--weight-medium) var(--size-64) / 1.05 var(--family-sans);
-  --type-pro-page-title-mobile: var(--weight-medium) var(--size-48) / 1.05 var(--family-sans);
+  --type-pro-page-title: var(--weight-regular) var(--size-64) / 1.05 var(--family-display);
+  --type-pro-page-title-mobile: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
   --type-pro-page-text: var(--weight-regular) var(--size-17) / 1.45 var(--family-sans);
-  --type-pro-price: var(--weight-medium) var(--size-56) / 1 var(--family-sans);
+  --type-pro-price: var(--weight-regular) var(--size-56) / 1 var(--family-display);
   --type-pro-list: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
   --type-pro-faq: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
   --type-pro-badge: var(--weight-semibold) var(--size-10) / var(--leading-snug) var(--family-sans);
   --type-pro-title: var(--weight-semibold) var(--size-16) / var(--leading-snug) var(--family-sans);
   --type-pro-text: var(--weight-regular) var(--size-13) / 1.5 var(--family-sans);
-  --type-pro-invitation-title: var(--weight-medium) var(--size-36) / 1.1 var(--family-sans);
+  --type-pro-invitation-title: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-pro-invitation-text: var(--weight-regular) var(--size-15) / 1.55 var(--family-sans);
   --pro-check-ink: var(--status-ok-ink);
   --radius-invitation: var(--round-20);
@@ -1273,19 +1271,19 @@
   --welcome-check-line: var(--sand-400);
   --welcome-check-radius: var(--round-6);
   --type-welcome-check: var(--weight-medium) var(--size-15) / var(--leading-snug) var(--family-sans);
-  --type-welcome-name: var(--weight-medium) var(--size-44) / 1.1 var(--family-sans);
-  --type-welcome-initials: var(--weight-medium) var(--size-38) / 1 var(--family-sans);
+  --type-welcome-name: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
+  --type-welcome-initials: var(--weight-regular) var(--size-38) / 1 var(--family-display);
   --code-box-width: 64px;
   --code-box-height: 72px;
-  --type-door-title: var(--weight-medium) var(--size-52) / 1 var(--family-sans);
+  --type-door-title: var(--weight-regular) var(--size-52) / 1 var(--family-display);
   --type-door-lead: var(--weight-regular) var(--size-16) / 1.5 var(--family-sans);
   --type-door-label: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-door-input: var(--weight-medium) var(--size-16) / var(--leading-snug) var(--family-sans);
   --type-door-submit: var(--weight-semibold) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-door-note: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-door-legal: var(--weight-regular) var(--size-12) / var(--leading-snug) var(--family-sans);
-  --type-login-wall-title: var(--weight-medium) var(--size-48) / 1.05 var(--family-sans);
-  --type-code-digit: var(--weight-medium) var(--size-32) / 1 var(--family-sans);
+  --type-login-wall-title: var(--weight-regular) var(--size-48) / 1.05 var(--family-display);
+  --type-code-digit: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --setting-input-width: 300px;
   --setting-input-height: 36px;
   --setting-button-height: 34px;
@@ -1341,7 +1339,7 @@
      ====================================================================== */
   --admin-stat-gap: var(--space-12);
   --admin-stat-padding: var(--space-20);
-  --type-admin-stat: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
+  --type-admin-stat: var(--weight-regular) var(--size-48) / 1 var(--family-display);
   --admin-search-width: 460px;
   --admin-search-height: 38px;
   --admin-table-padding: var(--space-10);
@@ -1352,9 +1350,9 @@
   --admin-face-overlap: -8px;
   --type-admin-head: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   /* L'accueil (features/admin-home, maquette 2448:233) et sa courbe (TrendLine) */
-  --type-admin-home-title: var(--weight-medium) var(--size-44) / var(--leading-tight)
-    var(--family-sans);
-  --type-admin-home-figure: var(--weight-medium) var(--size-32) / 1 var(--family-sans);
+  --type-admin-home-title: var(--weight-regular) var(--size-44) / var(--leading-tight)
+    var(--family-display);
+  --type-admin-home-figure: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --type-admin-home-hint: var(--weight-regular) var(--size-13) / var(--leading-snug)
     var(--family-sans);
   --type-admin-home-row: var(--weight-medium) var(--size-13) / var(--leading-snug)
@@ -1392,8 +1390,9 @@
   --admin-note-label-width: 120px;
   --admin-note-input-height: 40px;
   --admin-note-input-max-height: 200px;
-  --type-admin-tile: var(--weight-medium) var(--size-28) / 1 var(--family-sans);
-  --type-admin-summary: var(--weight-medium) var(--size-20) / var(--leading-snug) var(--family-sans);
+  --type-admin-tile: var(--weight-regular) var(--size-28) / 1 var(--family-display);
+  --type-admin-summary: var(--weight-regular) var(--size-20) / var(--leading-snug)
+    var(--family-display);
   /* Le lot 4 : la pastille de Signalements (maquette 2338:23), les lignes à actions, la citation */
   --sidebar-count-surface: var(--action-surface);
   --sidebar-count-ink: var(--action-ink);
@@ -1418,7 +1417,7 @@
   );
   --poster-shade-height: var(--space-96);
   --type-calendar-nav: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
-  --type-calendar-month: var(--weight-regular) var(--size-52) / 1 var(--family-display);
+  --type-calendar-month: var(--weight-regular) var(--size-60) / 1 var(--family-display);
   --calendar-padding-top: var(--space-80);
   --calendar-month-ink: var(--ink-350); /* les mois à venir, en serif clair */
   --calendar-muted-opacity: 0.5; /* une date « Intéressé », affichée sur option */
@@ -1438,8 +1437,8 @@
   --vitrine-escale-width: var(--width-escale);
   --vitrine-poster-height: var(--height-escale-poster);
   --vitrine-stamp-size: var(--width-stamp);
-  --type-vitrine-name: var(--weight-medium) var(--size-56) / 1.05 var(--family-sans);
-  --type-vitrine-initials: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
+  --type-vitrine-name: var(--weight-regular) var(--size-56) / 1.05 var(--family-display);
+  --type-vitrine-initials: var(--weight-regular) var(--size-48) / 1 var(--family-display);
   --type-vitrine-meta: var(--weight-regular) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-vitrine-craft: var(--weight-medium) var(--size-15) / var(--leading-snug) var(--family-sans);
   --type-vitrine-bio: var(--weight-regular) var(--size-15) / 1.45 var(--family-sans);
@@ -1488,7 +1487,7 @@
   /* =========================================================================
      AVIS — le bloc de la fiche et l'écran « Écrire un avis » (features/event, features/review)
      ====================================================================== */
-  --type-review-score: var(--weight-medium) var(--size-52) / 1 var(--family-sans);
+  --type-review-score: var(--weight-regular) var(--size-52) / 1 var(--family-display);
   --type-review-row: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-review-quote: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
   --review-label-width: 96px;
@@ -1608,17 +1607,17 @@
   --type-landing-nav: var(--weight-medium) var(--size-14) / normal var(--family-sans);
   --type-landing-button: var(--weight-semibold) var(--size-13) / normal var(--family-sans);
   --type-landing-button-l: var(--weight-semibold) var(--size-16) / normal var(--family-sans);
-  --type-landing-statement: var(--weight-medium) var(--size-54) / 1.08 var(--family-sans);
-  --type-landing-statement-s: var(--weight-medium) var(--size-46) / 1.1 var(--family-sans);
-  --type-landing-final: var(--weight-regular) var(--size-80) / 1 var(--family-display);
+  --type-landing-statement: var(--weight-regular) var(--size-54) / 1.08 var(--family-display);
+  --type-landing-statement-s: var(--weight-regular) var(--size-46) / 1.1 var(--family-display);
+  --type-landing-final: var(--weight-regular) var(--size-96) / 1 var(--family-display);
   --type-landing-final-lead: var(--weight-regular) var(--size-20) / 1.5 var(--family-sans);
   --type-landing-foot-brand: var(--weight-semibold) var(--size-32) / 1 var(--family-brand);
   --type-landing-foot: var(--weight-regular) var(--size-15) / 1.5 var(--family-sans);
-  --type-landing-orga: var(--weight-medium) var(--size-36) / 1.1 var(--family-sans);
+  --type-landing-orga: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-landing-foot-head: var(--weight-medium) var(--size-13) / normal var(--family-sans);
   --type-landing-small: var(--weight-regular) var(--size-13) / normal var(--family-sans);
-  --type-landing-statement-mobile: var(--weight-medium) var(--size-36) / 1.1 var(--family-sans);
-  --type-landing-final-mobile: var(--weight-regular) var(--size-44) / 1 var(--family-display);
+  --type-landing-statement-mobile: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
+  --type-landing-final-mobile: var(--weight-regular) var(--size-52) / 1 var(--family-display);
 
   /* L'ouverture (2290:3) */
   --landing-opening-height: 1000px;
@@ -1626,8 +1625,8 @@
   --landing-opening-title-width: 780px;
   --landing-foot-word-width: 520px; /* l'histoire de la marque, une colonne lisible */
   --landing-opening-lead-width: 560px;
-  --type-landing-hero: var(--weight-regular) var(--size-68) / 0.98 var(--family-display);
-  --type-landing-hero-mobile: var(--weight-regular) var(--size-38) / 1 var(--family-display);
+  --type-landing-hero: var(--weight-regular) var(--size-80) / 0.98 var(--family-display);
+  --type-landing-hero-mobile: var(--weight-regular) var(--size-44) / 1 var(--family-display);
   --type-landing-lead: var(--weight-regular) var(--size-19) / 1.5 var(--family-sans);
   --landing-wall-top: 260px;
   --landing-wall-left: 52%;
@@ -1698,8 +1697,8 @@
   --type-landing-window-bar: var(--weight-regular) var(--size-12) / normal var(--family-sans);
   --type-landing-app-title: var(--weight-semibold) var(--size-30) / 1.2 var(--family-sans);
   --type-landing-app-section: var(--weight-semibold) var(--size-20) / 1.3 var(--family-sans);
-  --type-landing-app-month: var(--weight-regular) var(--size-38) / 1.1 var(--family-display);
-  --type-landing-app-figure: var(--weight-medium) var(--size-48) / 1 var(--family-sans);
+  --type-landing-app-month: var(--weight-regular) var(--size-44) / 1.1 var(--family-display);
+  --type-landing-app-figure: var(--weight-regular) var(--size-48) / 1 var(--family-display);
   --type-landing-app-text: var(--weight-regular) var(--size-16) / 1.4 var(--family-sans);
   --type-landing-app-nav: var(--weight-medium) var(--size-16) / 1.3 var(--family-sans);
   --type-landing-app-strong-s: var(--weight-semibold) var(--size-15) / 1.3 var(--family-sans);
@@ -1717,7 +1716,7 @@
   --landing-com-crowd-height: 190px;
   --landing-com-face: 30px;
   --landing-who-width: 378px;
-  --type-landing-app-event: var(--weight-regular) var(--size-30) / 1.1 var(--family-display);
+  --type-landing-app-event: var(--weight-regular) var(--size-36) / 1.1 var(--family-display);
   --type-landing-who-title: var(--weight-semibold) var(--size-17) / 1.3 var(--family-sans);
 
   /* La bande Communauté (2290:97) */
@@ -1747,7 +1746,7 @@
   --type-landing-card-text: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
   --type-landing-card-label: var(--weight-medium) var(--size-12) / 1.4 var(--family-sans);
   /* La recherche publique (maquette 2314:2, lot 11b). */
-  --type-landing-results-title: var(--weight-medium) var(--size-76) / 1.05 var(--family-sans);
+  --type-landing-results-title: var(--weight-regular) var(--size-76) / 1.05 var(--family-display);
   --type-landing-results-lead: var(--weight-regular) var(--size-17) / 1.5 var(--family-sans);
   --type-landing-result-name: var(--weight-semibold) var(--size-18) / normal var(--family-sans);
   --type-landing-result-meta: var(--weight-regular) var(--size-14) / normal var(--family-sans);
@@ -1761,9 +1760,9 @@
   --landing-results-beyond-width: 760px;
   --landing-result-shadow: 0 16px 36px color-mix(in srgb, var(--fete-ink) 10%, transparent);
   --type-landing-pdf-kicker: var(--weight-semibold) var(--size-10) / normal var(--family-sans);
-  --type-landing-pdf-title: var(--weight-medium) var(--size-26) / 1.2 var(--family-sans);
+  --type-landing-pdf-title: var(--weight-regular) var(--size-26) / 1.2 var(--family-display);
   --type-landing-pdf-value: var(--weight-medium) var(--size-13) / 1.3 var(--family-sans);
-  --type-landing-hunt-title: var(--weight-medium) var(--size-28) / 1.2 var(--family-sans);
+  --type-landing-hunt-title: var(--weight-regular) var(--size-28) / 1.2 var(--family-display);
   --tracking-landing-kicker: 0.14em;
   --landing-hunt-thumb-width: 48px;
   --landing-hunt-thumb-height: 66px;
@@ -1801,7 +1800,7 @@
     0 28px 56px color-mix(in srgb, var(--fete-ink) 14%, transparent);
   --landing-punch-end: var(--brand-gradient);
   --tracking-landing-punch: -0.015em;
-  --type-landing-punch: var(--weight-medium) var(--size-68) / 0.94 var(--family-sans);
+  --type-landing-punch: var(--weight-regular) var(--size-68) / 0.94 var(--family-display);
   --type-landing-tool-name: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
   --type-landing-store-status: var(--weight-regular) var(--size-12) / 1.2 var(--family-sans);
   --type-landing-store-name: var(--weight-semibold) var(--size-14) / 1.25 var(--family-sans);
@@ -1823,16 +1822,16 @@
   /* La bande Pro (2302:2) */
   --landing-pro-text: 633px;
   --landing-pro-rule: color-mix(in srgb, var(--fete-gold-soft) 35%, transparent);
-  --type-landing-price: var(--weight-medium) var(--size-80) / 1 var(--family-sans);
+  --type-landing-price: var(--weight-regular) var(--size-80) / 1 var(--family-display);
   --landing-pro-check: var(--landing-gold);
   --type-landing-pro-add: var(--weight-regular) var(--size-15) / 1.4 var(--family-sans);
   --landing-you-bar: 52px;
   --landing-you-thumb-s-width: 26px;
   --landing-you-thumb-s-height: 36px;
-  --type-landing-you-net: var(--weight-medium) var(--size-36) / 1 var(--family-sans);
+  --type-landing-you-net: var(--weight-regular) var(--size-36) / 1 var(--family-display);
   --landing-cal-nav-height: 64px;
   --landing-you-next-poster: 170px;
-  --type-landing-you-title: var(--weight-medium) var(--size-36) / 1.2 var(--family-sans);
+  --type-landing-you-title: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
 
   /* Les stories des témoignages (2332:2) */
   --landing-stories-face: 36px;
@@ -1857,10 +1856,10 @@
   --landing-story-side-dim: color-mix(in srgb, var(--fete-950) 45%, transparent);
   --landing-story-track: color-mix(in srgb, var(--fete-cream) 30%, transparent);
   --duration-landing-story: var(--duration-story);
-  --type-landing-story: var(--weight-medium) var(--size-44) / 1.08 var(--family-sans);
-  --type-landing-story-long: var(--weight-regular) var(--size-32) / 1.15 var(--family-sans);
-  --type-landing-story-mark: var(--weight-medium) var(--size-140) / 0.8 var(--family-sans);
-  --type-landing-story-title: var(--weight-medium) var(--size-32) / 1 var(--family-sans);
+  --type-landing-story: var(--weight-regular) var(--size-44) / 1.08 var(--family-display);
+  --type-landing-story-long: var(--weight-regular) var(--size-32) / 1.15 var(--family-display);
+  --type-landing-story-mark: var(--weight-regular) var(--size-140) / 0.8 var(--family-display);
+  --type-landing-story-title: var(--weight-regular) var(--size-32) / 1 var(--family-display);
   --type-landing-story-name: var(--weight-semibold) var(--size-14) / 1.3 var(--family-sans);
   --type-landing-story-craft: var(--weight-regular) var(--size-12) / 1.3 var(--family-sans);
   --type-landing-stories-button: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
