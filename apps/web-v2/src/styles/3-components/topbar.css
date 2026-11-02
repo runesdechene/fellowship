@@ -81,8 +81,10 @@
     font: var(--type-wordmark-small);
   }
 
-  .topbar__add-label,
-  .topbar__pro {
+  /* La double classe l'emporte sur `.button`, importé après : sans elle, « Passer Pro » restait
+     affiché et poussait la marque hors de l'écran (02/11/2026). */
+  .topbar .topbar__add-label,
+  .topbar .topbar__pro {
     display: none;
   }
 
