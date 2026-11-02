@@ -899,27 +899,26 @@
   /* L'affiche absente (Poster.tsx, planche 2704:287) : une fausse affiche par catégorie. Le titre
      vaut une part de la largeur de l'affiche ; chaque police a sa capacité, le nombre de lettres
      que tient une ligne à pleine taille (au-delà, le titre rétrécit : poster-cover.css). */
-  --poster-title-size: 17cqw;
-  --poster-title-size-wide: 10.3cqw;
+  /* Les tailles suivent la largeur, sans dépasser ce que la hauteur permet (cotes de la planche,
+     74 × 100) : l'affiche remplit tout son emplacement, même plus haut ou plus large qu'elle. */
+  --poster-title-size: min(17cqw, 12.6cqh);
+  --poster-title-size-wide: min(10.3cqw, 7.6cqh);
   --poster-title-leading: 0.92;
   --poster-frame-opacity: 45%;
-  --poster-vignette-motif: 80%;
-  /* La feuille : le format de la planche (74 × 100), la plus grande qui tienne dans l'emplacement. */
-  --poster-sheet-ratio: 74 / 100;
-  --poster-sheet-width: min(100cqw, 74cqh);
+  --poster-vignette-motif: min(80cqw, 80cqh);
   /* La grande affiche reprend les cotes de la planche (74 × 100) : cadre, dessin, titre. */
   --poster-frame-inset-block: 4.1%;
   --poster-frame-inset-inline: 5.55%;
   --poster-frame-width: 1px;
   --poster-frame-radius: var(--round-8);
   --poster-motif-top: 10%;
-  --poster-motif-width: 66.2%;
+  --poster-motif-width: min(66.2cqw, 49cqh);
   --poster-title-top: 61%;
   --poster-title-inset-inline: 9.7%;
   --poster-title-lines: 3;
   --poster-title-room: 0.12em; /* l'interligne serré rognait jambages et accents */
   /* La ville et les dates, comme « 14e édition » et « 11 · 12 oct. » sur la planche. */
-  --type-poster-label: var(--weight-semibold) 6.5cqw / 1 var(--family-sans);
+  --type-poster-label: var(--weight-semibold) min(6.5cqw, 4.8cqh) / 1 var(--family-sans);
   --poster-label-tracking: 0.12em;
   --poster-city-top: 4.5%;
   --poster-city-opacity: 0.85;

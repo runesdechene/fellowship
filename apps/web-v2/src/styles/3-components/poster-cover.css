@@ -3,8 +3,8 @@
  *            dessinée pour sa catégorie ; avec son texte, le cadre, la ville, le nom et les dates.
  * POURQUOI — planche Figma 2704:287 (Uriel, 02/11/2026). La palette et la police de chaque
  *            catégorie viennent de 2-semantic.css (`[data-category]`).
- * ATTENTION — tout se pose dans une feuille au format de la planche, centrée dans l'emplacement :
- *            le dessin n'est jamais rogné. Le titre rétrécit quand son plus long mot dépasse la
+ * ATTENTION — tout se pose dans une feuille qui remplit l'emplacement, cadre de haut en bas ; le
+ *            dessin et les textes se règlent sur la plus petite dimension, jamais rognés. Le titre rétrécit quand son plus long mot dépasse la
  *            capacité de la police (`--cover-chars`) ou qu'il passerait trois lignes.
  */
 
@@ -16,15 +16,12 @@
   color: var(--cover-ink);
 }
 
-/* Centrée par la position, quel que soit le `display` que l'emplacement donne à l'affiche. */
+/* Posée par la position, quel que soit le `display` que l'emplacement donne à l'affiche. */
 .poster-cover__sheet {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  width: var(--poster-sheet-width);
-  margin: auto;
-  aspect-ratio: var(--poster-sheet-ratio);
   container-type: size;
 }
 
