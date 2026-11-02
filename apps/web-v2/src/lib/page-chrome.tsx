@@ -112,7 +112,17 @@ export function useDeclarePageChrome({
   const declarer = useContext(EcritureContext)
 
   useEffect(() => {
-    declarer({ poster, posterEvent, posterTags, posterName, posterCity, posterDates, lead, back, edit })
+    declarer({
+      poster,
+      posterEvent,
+      posterTags,
+      posterName,
+      posterCity,
+      posterDates,
+      lead,
+      back,
+      edit,
+    })
     return () => declarer(NU)
   }, [
     declarer,
