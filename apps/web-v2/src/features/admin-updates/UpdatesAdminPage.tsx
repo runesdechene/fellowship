@@ -12,8 +12,10 @@ import { formatDayMonthShort } from '@/lib/dates'
 import { UpdateForm } from './UpdateForm'
 import {
   deleteUpdate,
+  mailLine,
   sendUpdateEmail,
   useAdminUpdates,
+  type MailNotice,
   type PublishedUpdate,
 } from './useAdminUpdates'
 
@@ -25,8 +27,10 @@ export function UpdatesAdminPage() {
   const [doomed, setDoomed] = useState<PublishedUpdate | null>(null)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
-  // Ce qui reste à savoir après une publication : un e-mail qui n'est pas parti.
-  const [notice, setNotice] = useState<string | null>(null)
+  // Ce qui reste à savoir après un envoi : le nombre d'e-mails partis, ou l'échec.
+  const [notice, setNotice] = useState<MailNotice | null>(null)
+  // La note dont on confirme l'envoi de l'e-mail.
+  const [mailing, setMailing] = useState<PublishedUpdate | null>(null)
 
   function startNew() {
     setEditing(null)
@@ -34,12 +38,10 @@ export function UpdatesAdminPage() {
   }
 
   async function mail(update: PublishedUpdate) {
-    setNotice(null)
-    try {
-      await sendUpdateEmail(update.id)
-    } catch (failure) {
-      setNotice(failure instanceof Error ? failure.message : 'L’e-mail n’est pas parti.')
-    }
+    setBusy(true)
+    setNotice(await sendUpdateEmail(update.id))
+    setBusy(false)
+    setMailing(null)
     reload()
   }
 
@@ -71,7 +73,9 @@ export function UpdatesAdminPage() {
         </Button>
       </header>
       {error && <p className="admin-page__error">{error}</p>}
-      {notice && <p className="admin-page__error">{notice}</p>}
+      {notice && (
+        <p className={notice.ok ? 'admin-page__success' : 'admin-page__error'}>{notice.text}</p>
+      )}
       <div className="admin-updates">
         <UpdateForm
           key={editing ? editing.id : `nouvelle-${String(formKey)}`}
@@ -121,7 +125,7 @@ export function UpdatesAdminPage() {
                   </span>
                 )}
                 {update.weight === 'big' && update.emailCount === null && (
-                  <button type="button" onClick={() => void mail(update)}>
+                  <button type="button" onClick={() => setMailing(update)}>
                     Envoyer l’e-mail
                   </button>
                 )}
@@ -142,6 +146,17 @@ export function UpdatesAdminPage() {
           ))}
         </section>
       </div>
+      {mailing && (
+        <ConfirmDialog
+          title={`Envoyer l’e-mail de « ${mailing.title} » ?`}
+          text={`${mailLine(audience)} Il ne pourra pas être renvoyé.`}
+          confirmLabel="Envoyer"
+          busy={busy}
+          problem={null}
+          onConfirm={() => void mail(mailing)}
+          onClose={() => setMailing(null)}
+        />
+      )}
       {doomed && (
         <ConfirmDialog
           title={`Supprimer « ${doomed.title} » ?`}

@@ -9,7 +9,8 @@ import { corsHeaders } from '../_shared/cors.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { chunks, composeUpdateEmail, releaseClaim } from '../_shared/update-mail.ts'
 
-const FROM = '"Fellowship" <nouveautes@flw.sh>'
+// equipe.flw.sh : le seul domaine que la clé Resend a le droit d'envoyer (flw.sh renvoie 403, 02/11/2026).
+const FROM = '"Fellowship" <nouveautes@equipe.flw.sh>'
 // La limite de l'envoi groupé de Resend.
 const LOT = 100
 

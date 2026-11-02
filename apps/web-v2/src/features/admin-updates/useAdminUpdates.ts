@@ -41,19 +41,35 @@ export async function uploadUpdateImage(file: File): Promise<string> {
   return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
 }
 
+/** Ce qu'on dit après un envoi : le nombre d'e-mails partis, ou l'échec. */
+export interface MailNotice {
+  ok: boolean
+  text: string
+}
+
+/** L'annonce avant l'envoi, avec le nombre réel de comptes quand on le connaît. */
+export function mailLine(audience: number | null): string {
+  return audience === null
+    ? 'Un e-mail partira à tous les comptes.'
+    : `Un e-mail partira à ${String(audience)} comptes.`
+}
+
 /** L'e-mail d'une grosse note. La fonction refuse un second envoi ; un échec total la laisse
  *  envoyable, d'où « Envoyer l'e-mail » dans la liste. */
-export async function sendUpdateEmail(id: string): Promise<void> {
+export async function sendUpdateEmail(id: string): Promise<MailNotice> {
   const response = await supabase.functions.invoke<{ sent?: number }>('app-update-email', {
     body: { updateId: id },
   })
-  if (response.error) throw new Error('La note est publiée, mais l’e-mail n’est pas parti.')
+  const sent = response.data?.sent
+  if (response.error || sent === undefined)
+    return { ok: false, text: 'La note est publiée, mais l’e-mail n’est pas parti.' }
+  return { ok: true, text: `E-mail envoyé à ${String(sent)} comptes.` }
 }
 
 /** Publie la note (et ses notifications) ; une grosse part ensuite par e-mail. Une fois la note
  *  publiée, plus rien ne se rejoue d'ici : un e-mail raté se relance depuis la liste, jamais en
  *  republiant (ce serait une seconde note et une seconde vague de notifications). */
-export async function publishUpdate(draft: UpdateDraft): Promise<{ mailProblem: string | null }> {
+export async function publishUpdate(draft: UpdateDraft): Promise<MailNotice | null> {
   const id = must(
     await supabase.rpc('publish_app_update', {
       p_version: draft.version,
@@ -63,13 +79,8 @@ export async function publishUpdate(draft: UpdateDraft): Promise<{ mailProblem: 
       p_weight: draft.weight,
     }),
   )
-  if (draft.weight !== 'big') return { mailProblem: null }
-  try {
-    await sendUpdateEmail(id)
-    return { mailProblem: null }
-  } catch (failure) {
-    return { mailProblem: failure instanceof Error ? failure.message : 'L’e-mail n’est pas parti.' }
-  }
+  if (draft.weight !== 'big') return null
+  return sendUpdateEmail(id)
 }
 
 export async function saveUpdate(id: string, draft: Omit<UpdateDraft, 'weight'>): Promise<void> {

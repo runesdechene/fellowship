@@ -14,9 +14,11 @@ import { Field, Input, Textarea } from '@/components/ui/Field'
 import type { UpdateWeight } from '@/lib/app-updates'
 import { UpdateCard } from '@/features/updates/UpdateCard'
 import {
+  mailLine,
   publishUpdate,
   saveUpdate,
   uploadUpdateImage,
+  type MailNotice,
   type PublishedUpdate,
   type UpdateDraft,
 } from './useAdminUpdates'
@@ -42,7 +44,7 @@ interface Props {
   editing: PublishedUpdate | null
   audience: number | null
   /** `notice` : ce qu'il faut savoir une fois la note publiée (un e-mail raté). */
-  onDone: (notice?: string) => void
+  onDone: (notice?: MailNotice) => void
 }
 
 export function UpdateForm({ editing, audience, onDone }: Props) {
@@ -55,7 +57,7 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
   const set = (fields: Partial<UpdateDraft>) => setDraft((current) => ({ ...current, ...fields }))
 
   /** `action` rend ce qu'il faudra savoir une fois la note partie (ou null). */
-  async function run(action: () => Promise<string | null>) {
+  async function run(action: () => Promise<MailNotice | null>) {
     setBusy(true)
     setProblem(null)
     try {
@@ -77,7 +79,7 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
         return null
       })
     else if (draft.weight === 'big') setConfirming(true)
-    else void run(async () => (await publishUpdate(draft)).mailProblem)
+    else void run(() => publishUpdate(draft))
   }
 
   async function addImage(file: File | undefined) {
@@ -91,11 +93,6 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
     }
     setBusy(false)
   }
-
-  const mailLine =
-    audience === null
-      ? 'Un e-mail partira à tous les comptes.'
-      : `Un e-mail partira à ${String(audience)} comptes.`
 
   return (
     <form className="admin-update-form" onSubmit={submit}>
@@ -184,11 +181,11 @@ export function UpdateForm({ editing, audience, onDone }: Props) {
       {confirming && (
         <ConfirmDialog
           title="Publier cette grosse mise à jour ?"
-          text={`${mailLine} Il ne pourra pas être renvoyé.`}
+          text={`${mailLine(audience)} Il ne pourra pas être renvoyé.`}
           confirmLabel="Publier et envoyer"
           busy={busy}
           problem={problem}
-          onConfirm={() => void run(async () => (await publishUpdate(draft)).mailProblem)}
+          onConfirm={() => void run(() => publishUpdate(draft))}
           onClose={() => setConfirming(false)}
         />
       )}
