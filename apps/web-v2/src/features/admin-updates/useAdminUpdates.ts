@@ -66,6 +66,17 @@ export async function sendUpdateEmail(id: string): Promise<MailNotice> {
   return { ok: true, text: `E-mail envoyé à ${String(sent)} comptes.` }
 }
 
+/** Le même e-mail, à l'admin seul, pour le relire avant l'envoi : rien n'est compté. */
+export async function sendTestEmail(id: string): Promise<MailNotice> {
+  const response = await supabase.functions.invoke<{ test?: string }>('app-update-email', {
+    body: { updateId: id, test: true },
+  })
+  const to = response.data?.test
+  if (response.error || to === undefined)
+    return { ok: false, text: 'L’e-mail de test n’est pas parti.' }
+  return { ok: true, text: `E-mail de test envoyé à ${to}.` }
+}
+
 /** Publie la note (et ses notifications) ; une grosse part ensuite par e-mail. Une fois la note
  *  publiée, plus rien ne se rejoue d'ici : un e-mail raté se relance depuis la liste, jamais en
  *  republiant (ce serait une seconde note et une seconde vague de notifications). */

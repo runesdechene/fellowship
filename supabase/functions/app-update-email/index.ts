@@ -31,6 +31,8 @@ Deno.serve(async (req) => {
   if (!updateId) return json({ error: 'invalid_body' }, 400)
 
   const admin = getSupabaseAdmin()
+  // Le test : la même note, à l'admin qui le demande seulement ; rien n'est réclamé ni compté.
+  if (raw?.test === true) return await sendTest(admin, updateId, user.id)
   try {
     const { data: note, error: cErr } = await admin.from('app_updates')
       .update({ email_sent_at: new Date().toISOString() })
@@ -89,6 +91,30 @@ Deno.serve(async (req) => {
     return json({ error: 'failed' }, 500)
   }
 })
+
+async function sendTest(admin: ReturnType<typeof getSupabaseAdmin>, updateId: string, actorId: string) {
+  const [{ data: note }, { data: me }] = await Promise.all([
+    admin.from('app_updates').select('title, body, image_url').eq('id', updateId).maybeSingle(),
+    admin.from('users').select('email, email_token').eq('actor_id', actorId).maybeSingle(),
+  ])
+  if (!note) return json({ error: 'not_found' }, 404)
+  if (!me?.email) return json({ error: 'no_email' }, 400)
+  const mail = composeUpdateEmail({
+    title: note.title, body: note.body, imageUrl: note.image_url,
+    url: `${APP_URL}/nouveautes`,
+    unsubscribeUrl: `${Deno.env.get('SUPABASE_URL')}/functions/v1/prospect-unsubscribe?t=${me.email_token}`,
+  })
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: FROM, to: [me.email], subject: `[Test] ${mail.subject}`, text: mail.text, html: mail.html }),
+  })
+  if (!response.ok) {
+    console.error('[app-update-email] test', response.status, await response.text())
+    return json({ error: 'send_failed' }, 502)
+  }
+  return json({ test: me.email })
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })

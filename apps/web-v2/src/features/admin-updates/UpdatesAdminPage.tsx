@@ -13,6 +13,7 @@ import { UpdateForm } from './UpdateForm'
 import {
   deleteUpdate,
   mailLine,
+  sendTestEmail,
   sendUpdateEmail,
   useAdminUpdates,
   type MailNotice,
@@ -43,6 +44,12 @@ export function UpdatesAdminPage() {
     setBusy(false)
     setMailing(null)
     reload()
+  }
+
+  async function test(update: PublishedUpdate) {
+    setBusy(true)
+    setNotice(await sendTestEmail(update.id))
+    setBusy(false)
   }
 
   async function remove(update: PublishedUpdate) {
@@ -127,6 +134,11 @@ export function UpdatesAdminPage() {
                 {update.weight === 'big' && update.emailCount === null && (
                   <button type="button" onClick={() => setMailing(update)}>
                     Envoyer l’e-mail
+                  </button>
+                )}
+                {update.weight === 'big' && update.emailCount === null && (
+                  <button type="button" disabled={busy} onClick={() => void test(update)}>
+                    Envoyer un e-mail de test
                   </button>
                 )}
                 <button type="button" onClick={() => setEditing(update)}>
