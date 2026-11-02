@@ -88,8 +88,10 @@
     display: none;
   }
 
+  /* Double classe ici aussi : sans elle, le crayon de « Modifier la fiche » gardait le padding de
+     `.button` et sortait de sa pastille, qui paraissait vide. */
   .topbar .button--action,
-  .topbar__edit {
+  .topbar .topbar__edit {
     width: var(--topbar-control-height);
     padding: 0;
     justify-content: center;
