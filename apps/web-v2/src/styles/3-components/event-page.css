@@ -334,6 +334,11 @@
     object-fit: cover;
   }
 
+  /* La fausse affiche n'a pas de taille propre : elle prend toute la hauteur permise. */
+  .event-page__mobile-poster.poster-cover {
+    height: var(--mobile-poster-height);
+  }
+
   .event-page__title {
     font: var(--type-display-l);
   }

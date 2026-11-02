@@ -8,6 +8,7 @@
 import { ArrowRight, CalendarDays, Clock, Globe, Map as MapIcon, MapPin, Users } from 'lucide-react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Poster } from '@/components/ui/Poster'
 import { RichText } from '@/components/ui/RichText'
 import { Tag } from '@/components/ui/Tag'
 import { useAuth } from '@/lib/auth'
@@ -43,7 +44,6 @@ import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
-import { posterThumb } from '@/lib/poster-thumb'
 import { eventPath } from '@/lib/event-path'
 import { useEventKey } from './useEventKey'
 import { useUrlFlag } from './useUrlFlag'
@@ -259,14 +259,18 @@ export function EventPage() {
       )}
       <div className="event-page__main">
         <header className="event-page__hero">
-          {/* Sur téléphone, le mur d'affiche disparaît : l'affiche ouvre la fiche. */}
-          {event.image_url && (
-            <img
-              className="event-page__mobile-poster"
-              src={posterThumb(event.image_url, 800, 80)}
-              alt=""
-            />
-          )}
+          {/* Sur téléphone, le mur d'affiche disparaît : l'affiche ouvre la fiche, la fausse
+              affiche de sa catégorie quand l'organisateur n'en a pas posé. */}
+          <Poster
+            imageUrl={event.image_url}
+            tags={event.tags}
+            className="event-page__mobile-poster"
+            cover={{
+              name: event.name,
+              city: event.city,
+              dates: formatDateRange(startDate, endDate),
+            }}
+          />
           {/* Le bilan de l'an passé, en haut à droite (maquette 2518:233). */}
           {lastEdition && (
             <div className="event-page__top">

@@ -98,4 +98,18 @@
   .first-date {
     width: 100%;
   }
+
+  /* Sur un téléphone, l'affiche pleine laissait trop peu de place : le bouton sortait de la carte. */
+  .first-date__poster {
+    width: var(--first-date-mobile-poster);
+  }
+
+  .first-date .next-date__body {
+    padding-left: var(--space-16);
+  }
+
+  .first-date .next-date__title,
+  .first-date .button {
+    white-space: normal;
+  }
 }
