@@ -35,7 +35,7 @@ import { posterThumb } from '@/lib/poster-thumb'
  * que personne ne regarde est pire que pas de canevas du tout.
  */
 export function PosterWall() {
-  const { poster, posterEvent, posterTags } = usePageChrome()
+  const { poster, posterEvent, posterTags, posterName, posterCity, posterDates } = usePageChrome()
   // L'affiche ajoutée depuis le mur, rangée avec sa fiche : la coquille survit au changement de fiche.
   const [added, setAdded] = useState<{ event: string; url: string } | null>(null)
   // L'affiche dont l'image est arrivée. C'est ELLE qui déclenche la glissade,
@@ -62,7 +62,16 @@ export function PosterWall() {
     if (!posterEvent) return null
     return (
       <aside className="poster-wall">
-        <Poster imageUrl={null} tags={posterTags ?? null} className="poster-wall__empty" />
+        <Poster
+          imageUrl={null}
+          tags={posterTags ?? null}
+          className="poster-wall__empty"
+          cover={
+            posterName && posterDates
+              ? { name: posterName, city: posterCity ?? null, dates: posterDates }
+              : undefined
+          }
+        />
         <AddPoster
           labeled
           eventId={posterEvent}

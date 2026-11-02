@@ -28,6 +28,10 @@ type PageChrome = {
    */
   posterEvent?: string | null
   posterTags?: readonly string[] | null
+  /** Ce qui s'écrit sur l'affiche absente du mur : trois chaînes, comparables en dépendances. */
+  posterName?: string | null
+  posterCity?: string | null
+  posterDates?: string | null
   /** Le mot posé à gauche de la barre du haut (« Dans 32 jours »). */
   lead: string | null
   /**
@@ -50,6 +54,9 @@ const NU: PageChrome = {
   poster: null,
   posterEvent: null,
   posterTags: null,
+  posterName: null,
+  posterCity: null,
+  posterDates: null,
   lead: null,
   back: null,
   edit: null,
@@ -93,6 +100,9 @@ export function useDeclarePageChrome({
   poster,
   posterEvent = null,
   posterTags = null,
+  posterName = null,
+  posterCity = null,
+  posterDates = null,
   lead,
   back,
   edit = null,
@@ -102,7 +112,18 @@ export function useDeclarePageChrome({
   const declarer = useContext(EcritureContext)
 
   useEffect(() => {
-    declarer({ poster, posterEvent, posterTags, lead, back, edit })
+    declarer({ poster, posterEvent, posterTags, posterName, posterCity, posterDates, lead, back, edit })
     return () => declarer(NU)
-  }, [declarer, poster, posterEvent, posterTags, lead, back, edit])
+  }, [
+    declarer,
+    poster,
+    posterEvent,
+    posterTags,
+    posterName,
+    posterCity,
+    posterDates,
+    lead,
+    back,
+    edit,
+  ])
 }
