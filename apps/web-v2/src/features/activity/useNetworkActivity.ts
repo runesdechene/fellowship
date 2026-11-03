@@ -22,19 +22,14 @@ async function loadActivity(me: string): Promise<ActivityItem[]> {
   const lines = readFeed(
     must(await supabase.rpc('community_feed', { p_actor: me, p_scope: 'plateforme' })),
   )
+  // Le fil arrive du plus récent au plus ancien : on garde la première ligne de chacun.
+  const seen = new Set<string>()
   return lines
     .flatMap((line) => {
       const text = activityText(line)
-      return text && line.who
-        ? [
-            {
-              id: line.id,
-              occurredAt: line.at,
-              actor: line.who,
-              text,
-            },
-          ]
-        : []
+      if (!text || !line.who || seen.has(line.who.id)) return []
+      seen.add(line.who.id)
+      return [{ id: line.id, occurredAt: line.at, actor: line.who, text }]
     })
     .slice(0, LIMIT)
 }
