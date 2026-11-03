@@ -202,7 +202,7 @@ describe('activityText (barre latérale)', () => {
       verb: 'vient de rejoindre Fellowship',
       object: null,
     })
-    expect(activityText(line('visit'))).toEqual({ verb: 's’est connecté', object: null })
+    expect(activityText(line('visit'))).toEqual({ verb: 'a ouvert Fellowship', object: null })
     expect(activityText(line('going', event))).toEqual({ verb: 'va à', object: aventuriales })
     expect(activityText(line('added', event))).toEqual({ verb: 'a ajouté', object: aventuriales })
     expect(

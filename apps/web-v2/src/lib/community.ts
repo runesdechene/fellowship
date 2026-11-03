@@ -199,7 +199,7 @@ export function feedPhrase(line: FeedLine): TextPart[] {
     case 'gathering':
       return [{ strong: event }]
     case 'visit':
-      return [{ strong: who ?? '' }, ' s’est connecté.']
+      return [{ strong: who ?? '' }, ' a ouvert Fellowship.']
   }
 }
 
@@ -231,7 +231,7 @@ export function activityText(line: FeedLine): ActivityText | null {
           }
         : null
     case 'visit':
-      return { verb: 's’est connecté', object: null }
+      return { verb: 'a ouvert Fellowship', object: null }
     case 'review':
     case 'gathering':
       return null
