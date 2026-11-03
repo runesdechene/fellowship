@@ -1,6 +1,6 @@
 /**
  * QUOI     — charge « Activité de la plateforme » : les quatre dernières nouvelles de tout le
- *            monde — arrivées, dates publiques, festivals ajoutés.
+ *            monde — arrivées, dates publiques, festivals ajoutés — et les visites des amis.
  * POURQUOI — la même source que « Toute la plateforme » dans Ma communauté
  *            (community_feed, portée « plateforme »), sans les avis, dont l'identité est protégée.
  */

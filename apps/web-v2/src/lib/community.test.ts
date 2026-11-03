@@ -111,11 +111,12 @@ describe('les onglets', () => {
     line('review', event),
     line('follow', { target_id: 't1', target_name: 'Forge Lugdunum' }),
     line('gathering', { ...event, detail: '3' }),
+    line('visit'),
   ]
   const kinds = (tab: Parameters<typeof feedFor>[1]) => feedFor(lines, tab).map((l) => l.kind)
 
   test('chaque onglet garde ses lignes, jamais « Ça se rassemble »', () => {
-    expect(kinds('tout')).toEqual(['arrival', 'going', 'added', 'review', 'follow'])
+    expect(kinds('tout')).toEqual(['arrival', 'going', 'added', 'review', 'follow', 'visit'])
     expect(kinds('ou')).toEqual(['going', 'added'])
     expect(kinds('avis')).toEqual(['review'])
     expect(kinds('reseau')).toEqual(['arrival', 'follow'])
@@ -201,6 +202,7 @@ describe('activityText (barre latérale)', () => {
       verb: 'vient de rejoindre Fellowship',
       object: null,
     })
+    expect(activityText(line('visit'))).toEqual({ verb: 'a ouvert Fellowship', object: null })
     expect(activityText(line('going', event))).toEqual({ verb: 'va à', object: aventuriales })
     expect(activityText(line('added', event))).toEqual({ verb: 'a ajouté', object: aventuriales })
     expect(

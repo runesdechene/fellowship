@@ -9,7 +9,7 @@
 import type { TextPart } from './notifications'
 import { eventPath } from './event-path'
 
-export type FeedKind = 'arrival' | 'going' | 'added' | 'review' | 'follow' | 'gathering'
+export type FeedKind = 'arrival' | 'going' | 'added' | 'review' | 'follow' | 'gathering' | 'visit'
 
 export interface FeedPerson {
   id: string
@@ -59,7 +59,15 @@ function word(value: unknown): string | null {
   return trimmed === '' ? null : trimmed
 }
 
-const KINDS: readonly FeedKind[] = ['arrival', 'going', 'added', 'review', 'follow', 'gathering']
+const KINDS: readonly FeedKind[] = [
+  'arrival',
+  'going',
+  'added',
+  'review',
+  'follow',
+  'gathering',
+  'visit',
+]
 
 function isKind(value: unknown): value is FeedKind {
   return KINDS.some((kind) => kind === value)
@@ -107,7 +115,7 @@ export function readPeople(raw: unknown): FeedPerson[] {
 
 /** Les lignes qui ont besoin d'un festival, et celles qui ont besoin d'un nom. */
 const NEEDS_EVENT: readonly FeedKind[] = ['going', 'added', 'review', 'gathering']
-const NEEDS_WHO: readonly FeedKind[] = ['arrival', 'going', 'follow']
+const NEEDS_WHO: readonly FeedKind[] = ['arrival', 'going', 'follow', 'visit']
 
 function readLine(raw: unknown): FeedLine | null {
   const row = record(raw)
@@ -144,7 +152,7 @@ export function readFeed(rows: unknown): FeedLine[] {
 export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau'
 
 const TAB_KINDS: Record<CommunityTab, readonly FeedKind[]> = {
-  tout: ['arrival', 'going', 'added', 'review', 'follow'],
+  tout: ['arrival', 'going', 'added', 'review', 'follow', 'visit'],
   ou: ['going', 'added'],
   avis: ['review'],
   reseau: ['arrival', 'follow'],
@@ -190,6 +198,8 @@ export function feedPhrase(line: FeedLine): TextPart[] {
       return [{ strong: who ?? '' }, ' suit maintenant ', { strong: line.target?.name ?? '' }, '.']
     case 'gathering':
       return [{ strong: event }]
+    case 'visit':
+      return [{ strong: who ?? '' }, ' a ouvert Fellowship.']
   }
 }
 
@@ -220,6 +230,8 @@ export function activityText(line: FeedLine): ActivityText | null {
             },
           }
         : null
+    case 'visit':
+      return { verb: 'a ouvert Fellowship', object: null }
     case 'review':
     case 'gathering':
       return null
