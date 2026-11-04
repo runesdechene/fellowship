@@ -1,6 +1,7 @@
 /**
  * QUOI     — le haut de la vitrine : la bannière, le logo à cheval, le nom en serif, les badges,
- *            le métier et la ville, la présentation, le site, le réseau, et les actions.
+ *            le métier et la ville, la présentation, le site, le réseau, et les actions (dont
+ *            « Écrire », qui ouvre la conversation à deux).
  * POURQUOI — c'est la carte de visite de l'artisan : ce qu'un organisateur ou un exposant voit en
  *            premier.
  * ATTENTION — le propriétaire ne se suit pas lui-même : il voit « Modifier la vitrine », qui fait
@@ -21,6 +22,7 @@ import { useState, type ComponentType, type CSSProperties } from 'react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { InstagramIcon } from '@/components/ui/InstagramIcon'
+import { WriteButton } from '@/features/discussions/WriteButton'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { initials, networkCounts } from '@/lib/vitrine'
 import { linkLabel, type LinkType } from '@/lib/vitrine-edit'
@@ -133,6 +135,7 @@ export function VitrineHead({
               </Button>
             )
           )}
+          {!isOwner && signedIn && <WriteButton actorId={vitrine.actorId} />}
           <Button
             variant="icon"
             aria-label="Partager la vitrine"
