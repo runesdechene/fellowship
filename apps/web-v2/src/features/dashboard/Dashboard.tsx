@@ -5,7 +5,6 @@
  *            il assemble ce que useDashboard prépare. Un bloc sans contenu garde sa place en
  *            squelettes (maquette 2402:233) ; pendant le chargement ou après une erreur, il se tait.
  */
-import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { usePlan } from '@/lib/usePlan'
 import { ActionBanner } from './ActionBanner'
@@ -47,29 +46,27 @@ export function Dashboard() {
 
   return (
     <div className="dashboard">
+      {/* Sans avatar : la story « Toi », juste au-dessus, le montre déjà (Uriel, 05/11/2026). */}
       <header className="dashboard__header">
-        <Avatar className="dashboard__avatar" src={actor?.avatarUrl} name={actor?.label} />
-        <div>
-          <h1 className="dashboard__greeting">
-            Bonjour, <b>{actor?.label ?? ''}</b>
-          </h1>
-          <p className="dashboard__subtitle">
-            {loading ? (
-              'Chargement de tes dates…'
-            ) : error ? (
-              'Tes dates n’ont pas pu être chargées.'
-            ) : programmedCount === 0 ? (
-              'Aucune date prévue pour l’instant'
-            ) : (
-              <>
-                <b>
-                  {programmedCount} {programmedCount === 1 ? 'date' : 'dates'}
-                </b>{' '}
-                {programmedCount === 1 ? 'prévue' : 'prévues'} à ce jour
-              </>
-            )}
-          </p>
-        </div>
+        <h1 className="dashboard__greeting">
+          Bonjour, <b>{actor?.label ?? ''}</b>
+        </h1>
+        <p className="dashboard__subtitle">
+          {loading ? (
+            'Chargement de tes dates…'
+          ) : error ? (
+            'Tes dates n’ont pas pu être chargées.'
+          ) : programmedCount === 0 ? (
+            'Aucune date prévue pour l’instant'
+          ) : (
+            <>
+              <b>
+                {programmedCount} {programmedCount === 1 ? 'date' : 'dates'}
+              </b>{' '}
+              {programmedCount === 1 ? 'prévue' : 'prévues'} à ce jour
+            </>
+          )}
+        </p>
       </header>
 
       {unpaid && actor && (

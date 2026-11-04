@@ -266,6 +266,11 @@
      ====================================================================== */
   --type-page-title: var(--weight-semibold) var(--size-32) / var(--leading-tight) var(--family-sans);
   --type-greeting: var(--weight-regular) var(--size-32) / var(--leading-tight) var(--family-sans);
+  /* Sur téléphone, « Bonjour, <nom> » tient sur une ligne : la même phrase, en 24. */
+  --type-greeting-phone: var(--weight-regular) var(--size-24) / var(--leading-tight)
+    var(--family-sans);
+  --type-greeting-accent-phone: var(--weight-semibold) var(--size-24) / var(--leading-tight)
+    var(--family-sans);
   --type-page-title-accent: var(--weight-semibold) var(--size-32) / var(--leading-tight)
     var(--family-sans);
   --type-page-subtitle: var(--weight-regular) var(--size-14) / var(--leading-normal)
@@ -1371,7 +1376,6 @@
      l'ordre des imports décide du gagnant.
      ====================================================================== */
   --avatar-size: var(--width-avatar-list); /* valeur par défaut */
-  --avatar-size-hero: var(--width-avatar-hero);
   --avatar-size-account: var(--width-avatar-account);
   /* =========================================================================
      ADMINISTRATION — la liste des comptes (features/admin-accounts)

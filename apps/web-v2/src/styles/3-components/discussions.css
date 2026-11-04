@@ -16,6 +16,9 @@
 }
 
 .story-bar__list {
+  /* L'anneau est centré dans une story plus large que lui (pour le nom) : on recule la rangée
+     de cette demi-différence, et le premier anneau tombe sur la marge, sous le logo. */
+  margin-inline-start: calc((var(--story-ring-size) - var(--story-width)) / 2);
   display: flex;
   gap: var(--space-8);
   list-style: none;
