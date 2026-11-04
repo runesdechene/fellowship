@@ -7,7 +7,7 @@
  * ATTENTION — la sélection est la nôtre : jamais « selon les exposants » (trop peu d'avis). Le
  *            même calcul sert la page servie aux machines et la page de l'application.
  */
-import { addDays, formatDayMonth, parseSqlDate } from './dates'
+import { addDays, formatDayMonth, parseSqlDate, todayIso } from './dates'
 import { zoneOf } from './regions'
 
 export type SelectionEvent = {
@@ -141,13 +141,15 @@ export function buildSelection(
 ): Selection | null {
   const typeTitle = TYPE_TITLES[type]
   if (!typeTitle) return null
-  const horizon = addDays(today, 365)
+  // Comparé en jours : une fête finit ce soir, pas à l'heure où la page est demandée.
+  const day = todayIso(today)
+  const horizon = todayIso(addDays(today, 365))
   const upcoming = events.filter(
     (event) =>
       event.tags.includes(type) &&
       zoneOf(event) === zone &&
-      parseSqlDate(event.end_date) >= today &&
-      parseSqlDate(event.start_date) < horizon,
+      event.end_date >= day &&
+      event.start_date < horizon,
   )
   if (upcoming.length < MIN_EVENTS) return null
 

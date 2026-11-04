@@ -42,10 +42,24 @@ function escapeHtml(text: string): string {
     .replace(/'/g, '&#39;')
 }
 
-/** Le texte d'une description riche, sans ses balises. */
+const ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: ' ',
+}
+
+/** Le texte d'une description riche, sans ses balises ni ses entités (« &amp; » → « & »). */
 function plainText(rich: string | null): string {
   return (rich ?? '')
     .replace(/<[^>]*>/g, ' ')
+    .replace(/&(#\d+|[a-z]+);/gi, (entity, name: string) =>
+      name.startsWith('#')
+        ? String.fromCodePoint(Number(name.slice(1)))
+        : (ENTITIES[name.toLowerCase()] ?? entity),
+    )
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -108,7 +122,8 @@ function eventLd(event: MachineEvent | SelectionEvent): Record<string, unknown> 
         '@type': 'PostalAddress',
         ...(machine?.address && { streetAddress: machine.address }),
         addressLocality: event.city,
-        addressCountry: event.country,
+        // Pays seulement s'il se lit : une fiche suisse saisie par le formulaire arrive en « FR ».
+        ...(zoneOf(event) && { addressCountry: event.country }),
       },
       ...(machine?.latitude != null &&
         machine.longitude != null && {

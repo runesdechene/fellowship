@@ -94,6 +94,25 @@ describe('eventPage', () => {
     expect(body).not.toContain('<strong>')
   })
 
+  it('ne dit pas un pays qu’elle ne connaît pas', () => {
+    // Une fiche suisse saisie par le formulaire arrive en « FR » avec un canton : ni l'un ni l'autre
+    // ne se lit, on se tait plutôt que d'affirmer la France.
+    const unknown = eventPage({ ...VAULRUZ, country: 'FR', department: 'Fribourg' })
+    expect(JSON.stringify(unknown.jsonLd)).not.toContain('addressCountry')
+    const french = eventPage({ ...VAULRUZ, country: 'FR', department: '81' })
+    expect(JSON.stringify(french.jsonLd)).toContain('"addressCountry":"FR"')
+  })
+
+  it('décode les entités d’une description riche', () => {
+    const { body, description } = eventPage({
+      ...VAULRUZ,
+      description: '<p>Arts &amp; métiers&nbsp;: «&#160;lutins&#39;&nbsp;»</p>',
+    })
+    expect(description).toContain("Arts & métiers : « lutins' »")
+    expect(body).toContain('Arts &amp; métiers : « lutins&#39; »')
+    expect(body).not.toContain('&amp;amp;')
+  })
+
   it('tient une fiche à moitié remplie sans trou', () => {
     const bare: MachineEvent = {
       ...VAULRUZ,

@@ -57,6 +57,12 @@ describe('buildSelection', () => {
     expect(ids).toHaveLength(3)
   })
 
+  it('garde une fête le jour même où elle finit, quelle que soit l’heure', () => {
+    const lastDay = occitanie(3, { start_date: '2026-11-03', end_date: '2026-11-04' })
+    const afternoon = new Date(2026, 10, 4, 15, 30)
+    expect(buildSelection(lastDay, 'fete-medievale', 'Occitanie', afternoon)).not.toBeNull()
+  })
+
   it('range une fête sur deux types dans les deux sélections', () => {
     const events = occitanie(3, { tags: ['fete-medievale', 'marche-noel'] })
     expect(buildSelection(events, 'fete-medievale', 'Occitanie', TODAY)).not.toBeNull()

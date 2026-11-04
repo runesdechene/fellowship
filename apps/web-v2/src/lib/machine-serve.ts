@@ -41,16 +41,23 @@ const NO_STATS: Stats = { interested: 0, registered: 0, rating: null, rating_cou
 
 // Netlify ne pose pas les [[headers]] de netlify.toml sur la réponse d'une fonction : on reprend
 // ceux de la coque, qui les a reçus.
-const SHELL_HEADERS = ['Content-Security-Policy', 'Permissions-Policy', 'Referrer-Policy']
+const SHELL_HEADERS = [
+  'Content-Security-Policy',
+  'Permissions-Policy',
+  'Referrer-Policy',
+  'X-Content-Type-Options',
+]
 
-function html(body: string, shell: Headers): Response {
+/** `rendered` : la fiche est dans la page. Sinon (fiche absente, base en panne) rien ne se garde. */
+function html(body: string, shell: Headers, rendered: boolean): Response {
   const headers = new Headers({
     'Content-Type': 'text/html; charset=utf-8',
     // Le navigateur revalide : il garderait sinon un HTML qui pointe vers un ancien index-*.js,
-    // disparu au déploiement suivant. Le CDN, lui, est vidé à chaque déploiement.
+    // disparu au déploiement suivant. Le CDN, vidé à chaque déploiement, garde la fiche cinq
+    // minutes : une fiche passée en privée n'y reste pas plus longtemps.
     'Cache-Control': 'public, max-age=0, must-revalidate',
-    'Netlify-CDN-Cache-Control': 'public, max-age=3600',
   })
+  if (rendered) headers.set('Netlify-CDN-Cache-Control', 'public, max-age=300')
   for (const name of SHELL_HEADERS) {
     const value = shell.get(name)
     if (value) headers.set(name, value)
@@ -74,6 +81,12 @@ export async function serveEventPage(
 ): Promise<Response> {
   // La coque publiée du site, pas la fonction elle-même : `/index.html` est un fichier statique.
   const shell = await fetcher(new URL('/index.html', request.url))
+  // Sans coque, rien à servir : une 502 qui ne se garde pas, plutôt qu'une page d'erreur en cache.
+  if (!shell.ok)
+    return new Response('Fellowship est indisponible', {
+      status: 502,
+      headers: { 'Cache-Control': 'no-store' },
+    })
   const index = await shell.text()
   try {
     const slugFilter = `slug=eq.${encodeURIComponent(slug)}`
@@ -82,16 +95,20 @@ export async function serveEventPage(
       env,
       `events?select=${EVENT_COLUMNS}&${slugFilter}&order=id&limit=1`,
     )
-    if (!row) return html(index, shell.headers)
+    if (!row) return html(index, shell.headers, false)
     const [stats] = await readRows<Stats>(
       fetcher,
       env,
       `rpc/event_public_stats?event_id=eq.${row.id}&select=interested,registered,rating,rating_count`,
     )
-    return html(injectPage(index, eventPage({ ...row, ...(stats ?? NO_STATS) })), shell.headers)
+    return html(
+      injectPage(index, eventPage({ ...row, ...(stats ?? NO_STATS) })),
+      shell.headers,
+      true,
+    )
   } catch (error) {
     // eslint-disable-next-line no-console -- journal de la fonction Netlify, seule trace d'une panne
     console.error('[event-page]', error)
-    return html(index, shell.headers)
+    return html(index, shell.headers, false)
   }
 }
