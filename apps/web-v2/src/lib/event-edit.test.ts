@@ -28,6 +28,7 @@ const row: EventRow = {
   external_url: null,
   description: '<p>Un <strong>village</strong> pirate.</p><ul><li>Viking</li></ul>',
   is_private: false,
+  country: 'FR',
   created_by_actor: 'u1',
   acted_by_user_id: 'u1',
   created_at: '2026-06-18T10:00:00Z',

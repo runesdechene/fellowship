@@ -13,6 +13,8 @@ import { zoneOf } from './regions'
 import { reasonOf, type Selection, type SelectionEvent } from './selection'
 
 const SITE = 'https://flw.sh'
+// Le titre de la coque, gardé pour le lui rendre quand l'application change de page.
+const SHELL_TITLE = 'fellowship:shell-title'
 
 export type MachineEvent = SelectionEvent & {
   description: string | null
@@ -50,6 +52,23 @@ function plainText(rich: string | null): string {
 
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+/** Un lien saisi n'est gardé que s'il mène au web : jamais `javascript:` ni `data:`. */
+function httpUrl(url: string | null): string | null {
+  try {
+    return url && ['http:', 'https:'].includes(new URL(url).protocol) ? url : null
+  } catch {
+    return null
+  }
+}
+
+function withSafeLinks<T extends SelectionEvent>(event: T): T {
+  return {
+    ...event,
+    registration_url: httpUrl(event.registration_url),
+    image_url: httpUrl(event.image_url),
+  }
 }
 
 function yearOf(event: SelectionEvent): number {
@@ -106,7 +125,8 @@ function eventLd(event: MachineEvent | SelectionEvent): Record<string, unknown> 
   }
 }
 
-export function eventPage(event: MachineEvent): MachinePage {
+export function eventPage(input: MachineEvent): MachinePage {
+  const event = withSafeLinks(input)
   const heading = `${event.name} ${String(yearOf(event))}`
   const facts = factsOf(event)
   const text = plainText(event.description)
@@ -150,7 +170,7 @@ function lineOf(event: SelectionEvent): string {
 }
 
 export function selectionPage(selection: Selection, path: string): MachinePage {
-  const all = [...selection.top, ...selection.others]
+  const all = [...selection.top, ...selection.others].map(withSafeLinks)
   const description = `Les ${String(selection.top.length)} dates à ne pas rater, puis toutes les autres : prix du stand, date limite et lien de candidature, choisis par Fellowship.`
   const body = [
     `<main><h1>${escapeHtml(selection.title)}</h1>`,
@@ -166,7 +186,7 @@ export function selectionPage(selection: Selection, path: string): MachinePage {
     title: selection.title,
     description,
     canonical: `${SITE}${path}`,
-    image: selection.top[0]?.image_url ?? null,
+    image: all[0]?.image_url ?? null,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
@@ -185,7 +205,9 @@ export function selectionPage(selection: Selection, path: string): MachinePage {
 export function injectPage(indexHtml: string, page: MachinePage): string {
   // `<` échappé : un texte « </script> » ne peut pas fermer le bloc avant la fin.
   const json = JSON.stringify(page.jsonLd).replace(/</g, '\\u003c')
+  const shellTitle = /<title>([\s\S]*?)<\/title>/.exec(indexHtml)?.[1] ?? ''
   const head = [
+    `<meta name="${SHELL_TITLE}" content="${shellTitle}" />`,
     `<meta property="og:title" content="${escapeHtml(page.title)}" />`,
     `<meta property="og:description" content="${escapeHtml(page.description)}" />`,
     page.image && `<meta property="og:image" content="${escapeHtml(page.image)}" />`,
@@ -203,4 +225,21 @@ export function injectPage(indexHtml: string, page: MachinePage): string {
     )
     .replace('</head>', () => `${head}</head>`)
     .replace('<div id="root"></div>', () => `<div id="root">${page.body}</div>`)
+}
+
+/**
+ * Au premier changement d'adresse dans l'application, la tête de page de la fiche servie ne vaut
+ * plus : on rend à la coque son titre et on retire ce que `injectPage` avait ajouté.
+ */
+export function restoreShell(doc: Document): void {
+  const shellTitle = doc.querySelector(`meta[name="${SHELL_TITLE}"]`)
+  if (!shellTitle) return
+  doc.title = shellTitle.getAttribute('content') ?? doc.title
+  doc
+    .querySelectorAll(
+      `meta[name="${SHELL_TITLE}"], meta[property^="og:"], link[rel="canonical"], script[type="application/ld+json"]`,
+    )
+    .forEach((node) => {
+      node.remove()
+    })
 }

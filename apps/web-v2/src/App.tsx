@@ -55,7 +55,8 @@ import { Unsubscribe } from '@/pages/Unsubscribe'
 import { useAuth } from '@/lib/auth'
 import { loginReturning, safeReturn } from '@/lib/welcome'
 import { welcomeKind } from '@/lib/welcome-guard'
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
+import { restoreShell } from '@/lib/machine-page'
 
 /** La garde d'accès seule : une session ouverte entre. `guest` remplace la connexion pour un
  *  visiteur sans compte (la landing, sur `/`). */
@@ -188,6 +189,11 @@ function PublicSearchRoute() {
 
 export function App() {
   const { pathname } = useLocation()
+  // Une fiche servie aux IA arrive avec sa propre tête de page : elle ne vaut plus ailleurs.
+  const arrival = useRef(pathname)
+  useEffect(() => {
+    if (pathname !== arrival.current) restoreShell(document)
+  }, [pathname])
   return (
     <>
       {/* Partout sauf dans le calendrier intégré, qui vit chez un artiste (lot 12). */}

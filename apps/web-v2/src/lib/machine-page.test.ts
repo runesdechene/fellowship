@@ -3,7 +3,13 @@
  * POURQUOI — ce HTML part tel quel aux machines : une balise mal échappée y serait une faille, un
  *            fait manquant une ligne fausse citée par une IA.
  */
-import { eventPage, injectPage, selectionPage, type MachineEvent } from './machine-page'
+import {
+  eventPage,
+  injectPage,
+  restoreShell,
+  selectionPage,
+  type MachineEvent,
+} from './machine-page'
 import type { Selection } from './selection'
 
 const INDEX = `<!doctype html><html lang="fr"><head><meta charset="UTF-8" /><meta
@@ -150,7 +156,7 @@ describe('injectPage', () => {
   it('pose la tête, le JSON-LD et le corps dans la coque de l’application', () => {
     const html = injectPage(INDEX, eventPage(VAULRUZ))
     expect(html).toContain('<title>Fête médiévale de Vaulruz 2026 · Vaulruz · Fellowship</title>')
-    expect(html).not.toContain('Festivals · Fellowship')
+    expect(html).not.toContain('<title>Festivals · Fellowship</title>')
     expect(html).not.toContain('L&#39;annuaire pro') // l'ancienne description est remplacée
     expect(html).not.toContain("L'annuaire pro")
     expect(html).toContain('<meta property="og:title"')
@@ -170,6 +176,18 @@ describe('injectPage', () => {
     expect(html).toContain('Stand 3×3 à 50 $&amp; $&#39; $$')
   })
 
+  it('ne garde que les liens http(s) saisis dans une fiche', () => {
+    const page = eventPage({
+      ...VAULRUZ,
+      registration_url: 'javascript:alert(1)',
+      image_url: 'data:text/html,<b>x</b>',
+    })
+    const all = page.body + JSON.stringify(page.jsonLd) + String(page.image)
+    expect(all).not.toContain('javascript:')
+    expect(all).not.toContain('data:')
+    expect(page.jsonLd).not.toHaveProperty('offers')
+  })
+
   it('échappe un texte hostile partout', () => {
     const hostile = { ...VAULRUZ, name: '</script><img src=x onerror=alert(1)>', city: '"><b>x' }
     const html = injectPage(INDEX, eventPage(hostile))
@@ -177,5 +195,23 @@ describe('injectPage', () => {
     expect(html).not.toContain('"><b>')
     expect(html.match(/<\/script>/g)).toHaveLength(2) // le JSON-LD et le module, rien d'autre
     expect(ldOf(html)).toMatchObject({ name: '</script><img src=x onerror=alert(1)>' })
+  })
+})
+
+describe('restoreShell', () => {
+  it('rend à l’application le titre de la coque et retire la tête de la fiche', () => {
+    const html = injectPage(INDEX, eventPage(VAULRUZ))
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    restoreShell(doc)
+    expect(doc.title).toBe('Festivals · Fellowship')
+    expect(doc.querySelector('link[rel="canonical"]')).toBeNull()
+    expect(doc.querySelector('script[type="application/ld+json"]')).toBeNull()
+    expect(doc.querySelector('meta[property="og:title"]')).toBeNull()
+  })
+
+  it('ne touche pas une page servie sans fiche', () => {
+    const doc = new DOMParser().parseFromString(INDEX, 'text/html')
+    restoreShell(doc)
+    expect(doc.title).toBe('Festivals · Fellowship')
   })
 })
