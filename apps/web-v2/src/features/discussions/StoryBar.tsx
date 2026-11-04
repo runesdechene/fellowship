@@ -4,13 +4,13 @@
  *            l'anneau à la couleur du festival, le nombre de participants.
  * POURQUOI — les exposants ne savaient pas à qui écrire pour parler d'un festival (Uriel,
  *            04/11/2026) : le sujet se lance et se lit au premier coup d'œil.
- * ATTENTION — elle se cache sur les pages qui déclarent un retour (une fiche) : la barre du haut y
- *            porte la sortie. Ouvrir un sujet ou en lancer un passe par l'adresse
+ * ATTENTION — elle se cache sur les pages qui déclarent un retour (une fiche), où la barre du haut
+ *            porte la sortie, et dans Messages, qui est déjà la boîte des conversations. Ouvrir un sujet ou en lancer un passe par l'adresse
  *            (`?discussion=`, `?sujet=nouveau`) : le retour du navigateur les referme.
  */
 import type { CSSProperties } from 'react'
 import { Play, Plus, User } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { conversationTone } from '@/lib/discussions'
@@ -25,6 +25,7 @@ export const NEW_SUJET_PARAM = 'sujet'
 export function StoryBar() {
   const { actor } = useAuth()
   const { back } = usePageChrome()
+  const { pathname } = useLocation()
   const bar = useStoryBar()
   const styles = useTagStyles()
   const [params, setParams] = useSearchParams()
@@ -34,7 +35,8 @@ export function StoryBar() {
   )
 
   // Une barre qui n'a pas pu se charger se tait plutôt que de prétendre qu'il n'y a aucun sujet.
-  if (!actor || back || bar.status === 'failed') return null
+  // Ni sur une fiche (la barre du haut y porte la sortie), ni dans Messages, qui est déjà la boîte.
+  if (!actor || back || pathname.startsWith('/messages') || bar.status === 'failed') return null
 
   const open = (key: string, value: string) => {
     const next = new URLSearchParams(params)

@@ -418,7 +418,7 @@
   --width-story-note: 92px; /* le mot en bulle */
   --width-drawer: 540px; /* le tiroir d'un sujet */
   --width-inbox: 400px; /* la liste de Messages */
-  --width-messages-offset: 200px; /* la barre des sujets au-dessus de la page Messages */
+  --width-messages-offset: 100px; /* la barre du haut au-dessus de la page Messages */
   --width-chat-bubble: 420px;
   --width-chat-media: 260px;
   --width-composer: 420px;

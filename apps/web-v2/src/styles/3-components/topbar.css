@@ -65,7 +65,10 @@
 
 /* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
 @media (width <= 760px) {
+  /* Quatre boutons à côté de la marque depuis Messages (04/11/2026) : l'écart se resserre. */
   .topbar {
+    --topbar-gap: var(--space-6);
+
     right: var(--mobile-gutter);
     left: var(--mobile-gutter);
   }
