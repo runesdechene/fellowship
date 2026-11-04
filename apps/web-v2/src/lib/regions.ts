@@ -1,5 +1,6 @@
 /**
- * QUOI     — la région d'un département, par son numéro (« 63 » → « Auvergne-Rhône-Alpes »).
+ * QUOI     — la région d’un département, par son numéro (« 63 » → « Auvergne-Rhône-Alpes »), et la
+ *            zone d’une fiche pour les sélections (sa région, ou son pays hors de France).
  * POURQUOI — le fil d'Ariane d'une fiche nomme la région, pas le département : c'est ce que les
  *            exposants tapent dans Google (décision du 23/10/2026).
  * ATTENTION — un numéro inconnu rend null : le fil s'arrête alors à l'univers.
@@ -46,4 +47,23 @@ function departmentCode(raw: string): string {
 
 export function regionOf(department: string | null): string | null {
   return BY_DEPARTMENT.get(departmentCode(department ?? '')) ?? null
+}
+
+// Hors de France, une fiche se range par pays : trop peu de fêtes pour un découpage plus fin.
+const COUNTRIES: Record<string, string> = { CH: 'Suisse', BE: 'Belgique', LU: 'Luxembourg' }
+
+/** La zone d'une sélection : la région d'une fiche française, le pays d'une autre. */
+export function zoneOf(event: { country: string; department: string | null }): string | null {
+  if (event.country !== 'FR') return COUNTRIES[event.country] ?? null
+  return regionOf(event.department)
+}
+
+/** Une zone en adresse : « Provence-Alpes-Côte d’Azur » → « provence-alpes-cote-d-azur ». */
+export function zoneSlug(zone: string): string {
+  return zone
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }

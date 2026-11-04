@@ -972,6 +972,7 @@ export type Database = {
           address: string | null
           city: string
           contact_email: string | null
+          country: string
           created_at: string
           created_by_actor: string | null
           department: string
@@ -1003,6 +1004,7 @@ export type Database = {
           address?: string | null
           city: string
           contact_email?: string | null
+          country?: string
           created_at?: string
           created_by_actor?: string | null
           department: string
@@ -1034,6 +1036,7 @@ export type Database = {
           address?: string | null
           city?: string
           contact_email?: string | null
+          country?: string
           created_at?: string
           created_by_actor?: string | null
           department?: string
@@ -2909,6 +2912,7 @@ export type Database = {
           address: string | null
           city: string
           contact_email: string | null
+          country: string
           created_at: string
           created_by_actor: string | null
           department: string
@@ -3145,6 +3149,7 @@ export type Database = {
           total: number
         }[]
       }
+      normalized_department: { Args: { raw: string }; Returns: string }
       noter_visite: { Args: never; Returns: undefined }
       phone_key: { Args: { p_tel: string }; Returns: string }
       prospect_attend_reponse: {

@@ -2,7 +2,7 @@
  * QUOI     — tests de lib/regions.ts : la région d'un département.
  * POURQUOI — le fil d'Ariane d'une fiche nomme la région (décision du 23/10/2026).
  */
-import { regionOf } from './regions'
+import { regionOf, zoneOf, zoneSlug } from './regions'
 
 describe('regionOf', () => {
   it('donne la région d’un département de métropole', () => {
@@ -30,5 +30,29 @@ describe('regionOf', () => {
     expect(regionOf('')).toBeNull()
     expect(regionOf(null)).toBeNull()
     expect(regionOf('99')).toBeNull()
+  })
+})
+
+describe('zoneOf', () => {
+  it('donne la région d’une fiche française', () => {
+    expect(zoneOf({ country: 'FR', department: '83' })).toBe('Provence-Alpes-Côte d’Azur')
+  })
+
+  it('donne le pays d’une fiche hors de France, quel que soit son canton', () => {
+    expect(zoneOf({ country: 'CH', department: 'Fribourg' })).toBe('Suisse')
+    expect(zoneOf({ country: 'BE', department: null })).toBe('Belgique')
+  })
+
+  it('ne devine rien sans département ni pays connu', () => {
+    expect(zoneOf({ country: 'FR', department: null })).toBeNull()
+    expect(zoneOf({ country: 'XX', department: 'Ailleurs' })).toBeNull()
+  })
+})
+
+describe('zoneSlug', () => {
+  it('écrit une zone en adresse', () => {
+    expect(zoneSlug('Île-de-France')).toBe('ile-de-france')
+    expect(zoneSlug('Provence-Alpes-Côte d’Azur')).toBe('provence-alpes-cote-d-azur')
+    expect(zoneSlug('Suisse')).toBe('suisse')
   })
 })
