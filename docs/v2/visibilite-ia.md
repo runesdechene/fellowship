@@ -24,26 +24,35 @@
 compte connecté à Fellowship. Dans la cellule : « cité (page) », « absent », ou la source citée à
 notre place.
 
-## Relevé de départ — à faire avant la mise en ligne des fiches lisibles
+## Relevé de départ — 04/11/2026, avant la mise en ligne des fiches lisibles
+
+Fellowship n'est cité **nulle part** (0 sur 40). Dans chaque cellule, les sources citées à notre
+place (noms de domaine). Relevé par Claude au navigateur : Perplexity sans compte, ChatGPT en chat
+éphémère, Claude en navigation privée, Gemini en discussion temporaire ; recherche web active.
 
 | # | ChatGPT | Perplexity | Gemini | Claude |
 | - | ------- | ---------- | ------ | ------ |
-| 1 |         |            |        |        |
-| 2 |         |            |        |        |
-| 3 |         |            |        |        |
-| 4 |         |            |        |        |
-| 5 |         |            |        |        |
-| 6 |         |            |        |        |
-| 7 |         |            |        |        |
-| 8 |         |            |        |        |
-| 9 |         |            |        |        |
-| 10 |        |            |        |        |
+| 1 | absent — medievale-briancon, tourisme-alpes-haute-provence, ville-lagarde, medievales-aiguesmortes | absent — frequence-sud | absent — provence-alpes-cotedazur, trets, helloasso | absent — frequence-sud, biot, trets |
+| 2 | absent — medievale-cordes, monesties-medieval | absent — (sources non relevées) | absent — (aucune source affichée) | absent — tourisme-occitanie, festivalenfrance, tarbes7, france-voyage |
+| 3 | absent — normandie, festyggdrasil, novembre-editions, actusf | absent — france3-regions, festivalenfrance, jds, rouen | absent — (aucune source affichée) | absent — livreshebdo, sortiraparis, bdfi, unidivers |
+| 4 | absent — glanumrock, fertoismetalfest, vindhellfest | absent — mennecy-metal-fest, graspop, ouest-france | absent — mennecy-metal-fest | absent — (aucune source) |
+| 5 | absent — turnei, noel-gruyeres, marchés-de-noël, morgesnoel | absent — myswitzerland | absent — Touring Club Schweiz | absent — (aucune source) |
+| 6 | absent — geekexpoavignon, geeknpop-festival, angersgeekfest, lagendageek | absent — exposant.gl-events, lagendageek, compiegne-geek-convention | absent — (aucune source affichée) | absent — unidivers, helloasso |
+| 7 | absent — dinan-capfrehel, festival-bretagne, reconstitution-historique, tourismebretagne | absent — tourismebretagne | absent — (aucune source affichée) | absent — breizh-info, festivalenfrance, tourismebretagne, brittanytourism |
+| 8 | absent — ousortir, evenements-createurs, place-gui, creasavoie | absent — arty-app, evenements-createurs | absent — evenements-createurs, Auvergne-Rhône-Alpes Tourisme | absent — festivalenfrance, grenoble, montarnaud |
+| 9 | absent — epinal-tattoo-show, lilletattoomarket, event-labs, inkher | absent — keyqo | absent — (aucune source affichée) | absent — inkppl, worldtattooevents, festivalenfrance |
+| 10 | absent — mandon, openagenda, sortiraparis, provins, **les-echoppes** | absent — (sources non relevées) | absent — provins, Médiévales & Compagnie | absent — provins, loreedelabrie, sortiraparis, openagenda |
+
+**Ce qu'on en tire** : les IA citent surtout les sites des fêtes elles-mêmes, les offices de
+tourisme, et quelques annuaires (festivalenfrance, evenements-createurs, lagendageek, openagenda).
+Les Échoppes n'apparaît qu'une fois (ChatGPT, n° 10). Personne ne tient la place d'annuaire des
+exposants : elle est libre.
 
 ## Visites venues des IA
 
 Référents à suivre : `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `claude.ai` — et les
 inscriptions qui suivent.
 
-- Mise en ligne des fiches lisibles : —
+- Mise en ligne des fiches lisibles : 04/11/2026 (3.20.0)
 - Mise en ligne des sélections : —
 - Date du jugement (sélections + 3 mois) : —
