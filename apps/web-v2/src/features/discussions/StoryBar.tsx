@@ -1,7 +1,8 @@
 /**
  * QUOI     — la barre des sujets, en haut du tableau de bord (maquette Story, 2727:291) :
- *            « Toi » pour lancer un sujet, puis un avatar par sujet ouvert, son mot en bulle,
- *            l'anneau à la couleur du festival, le nombre de participants.
+ *            « Toi » pour lancer un sujet, puis un avatar par sujet ouvert, l'anneau à la
+ *            couleur du festival, le nombre de participants. Le mot ne s'affiche pas : on
+ *            touche pour découvrir, comme une story (Uriel, 04/11/2026).
  * POURQUOI — les exposants ne savaient pas à qui écrire pour parler d'un festival (Uriel,
  *            04/11/2026) : le sujet se lance et se lit au premier coup d'œil.
  * ATTENTION — elle ne vit que sur le tableau de bord (Uriel, 04/11/2026). Ouvrir un sujet ou en lancer un passe par l'adresse
@@ -98,7 +99,6 @@ function SujetButton({ sujet, mine, ring, photo, onOpen }: SujetButtonProps) {
       onClick={onOpen}
       aria-label={`${name} : ${sujet.mot}`}
     >
-      <span className="story__note">{sujet.mot}</span>
       <span className="story__ring">
         <Avatar
           className="story__face"

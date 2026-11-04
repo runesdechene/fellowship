@@ -414,8 +414,7 @@
   --height-escale-poster: 336px;
   --width-stamp: 112px; /* la navigation des douze mois */
   /* ── LES SUJETS ET LE TCHAT (maquette Story, 04/11/2026) ── */
-  --width-story: 112px; /* un sujet dans la barre */
-  --width-story-note: 92px; /* le mot en bulle */
+  --width-story: 72px; /* un sujet dans la barre : l'anneau et le nom, comme sur Instagram */
   --width-story-mot: 330px; /* le mot d'un sujet en plein écran, sur trois lignes environ */
   --width-reaction-field: 140px; /* le champ « un autre emoji » */
   --width-drawer: 540px; /* le tiroir d'un sujet */

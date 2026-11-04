@@ -1913,19 +1913,16 @@
   ); /* laisse la place à la recherche, Messages, la cloche et « Ajouter » */
   --chat-motif-size: var(--size-64);
   --messages-page-offset: var(--width-messages-offset);
-  --story-note-width: var(--width-story-note);
   --story-ring-size: var(--size-64);
   --story-face-size: var(--size-52);
   --story-ring-unread: var(--terre-450);
   --story-ring-seen: var(--sand-500);
-  --story-note-surface: var(--surface-card);
   --story-note-line: var(--line-card);
   --story-note-ink: var(--ink-title);
   --story-name-ink: var(--ink-soft);
   --story-badge-surface: var(--surface-card);
   --story-plus-surface: var(--action-surface);
   --story-plus-ink: var(--action-ink);
-  --type-story-note: var(--weight-medium) var(--size-11) / 1.27 var(--family-sans);
   --type-story-name: var(--weight-medium) var(--size-11) / 1.27 var(--family-sans);
   --type-story-count: var(--weight-semibold) var(--size-10) / 1 var(--family-sans);
 
