@@ -1294,6 +1294,52 @@ export type Database = {
           },
         ]
       }
+      message_reactions: {
+        Row: {
+          actor_id: string
+          conversation_id: string
+          emoji: string | null
+          message_id: string
+          updated_at: string
+        }
+        Insert: {
+          actor_id: string
+          conversation_id: string
+          emoji?: string | null
+          message_id: string
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string
+          conversation_id?: string
+          emoji?: string | null
+          message_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_reactions_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           author_actor: string
@@ -3475,6 +3521,10 @@ export type Database = {
       }
       quitter_conversation: {
         Args: { p_actor: string; p_conversation: string }
+        Returns: undefined
+      }
+      reagir_message: {
+        Args: { p_actor: string; p_emoji?: string; p_message: string }
         Returns: undefined
       }
       referral_owner: { Args: { p_code: string }; Returns: string }

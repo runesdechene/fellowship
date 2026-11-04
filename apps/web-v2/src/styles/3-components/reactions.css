@@ -1,0 +1,186 @@
+/**
+ * QUOI     — les réactions du tchat (features/discussions/ChatFeed, ReactionPicker) : la pastille
+ *            à cheval sur le bas d'une bulle, la rangée d'emojis, le voile de l'appui long.
+ * POURQUOI — maquette Story, « Le tchat, réactions » et « Réagir (appui long) », validée le
+ *            04/11/2026.
+ * ATTENTION — le voile et la bulle choisie vivent dans l'empilement de .conversation
+ *            (isolation) : la bulle passe au-dessus du voile, le reste s'assombrit.
+ */
+
+/* La bulle et ce qui s'y accroche (la pastille, la rangée d'emojis). */
+.chat-row__bubble {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: min(var(--chat-bubble-width), 78%);
+}
+
+.chat-row--mine .chat-row__bubble {
+  align-items: flex-end;
+}
+
+.chat-row__bubble > .chat-bubble {
+  max-width: none;
+}
+
+/* Sur un écran tactile, l'appui long réagit : il ne sélectionne pas le texte. */
+@media (hover: none) {
+  .chat-row__bubble {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+}
+
+.chat-row--reacted {
+  margin-bottom: var(--space-14);
+}
+
+.chat-reactions {
+  position: absolute;
+  right: var(--space-10);
+  bottom: calc(-1 * var(--space-16));
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-8) var(--space-2) var(--space-6);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  color: var(--chat-meta-ink);
+  font: var(--type-chat-reaction);
+  cursor: pointer;
+  animation: chat-arrive var(--duration-medium) var(--ease-drawer);
+}
+
+/* Sa propre réaction : la pastille prend le liseré de la conversation. */
+.chat-reactions.is-mine {
+  border-color: var(--chat-mine);
+}
+
+/* Sur ordinateur, « Réagir » apparaît au survol de la bulle. */
+.chat-row__react {
+  display: grid;
+  flex: none;
+  align-self: center;
+  place-items: center;
+  width: var(--size-28);
+  height: var(--size-28);
+  border: 0;
+  border-radius: var(--round-full);
+  background: none;
+  color: var(--chat-meta-ink);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-drawer);
+}
+
+.chat-row:hover .chat-row__react,
+.chat-row__react:focus-visible {
+  opacity: 1;
+}
+
+.chat-row--mine .chat-row__react {
+  order: -1;
+}
+
+@media (hover: none) {
+  .chat-row__react {
+    display: none;
+  }
+}
+
+/* L'appui long : tout s'assombrit, sauf la bulle choisie. */
+.chat-feed__veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: var(--chat-veil);
+  cursor: default;
+  animation: reaction-fade var(--duration-fast) var(--ease-drawer);
+}
+
+.chat-row--picked {
+  position: relative;
+  z-index: 2;
+}
+
+.reaction-picker {
+  position: absolute;
+  bottom: calc(100% + var(--space-6));
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  box-shadow: var(--reaction-picker-shadow);
+  animation: reaction-pop var(--duration-medium) var(--ease-drawer);
+}
+
+.chat-row--mine .reaction-picker {
+  right: 0;
+  left: auto;
+}
+
+.reaction-picker__emoji,
+.reaction-picker__more {
+  display: grid;
+  place-items: center;
+  width: var(--size-40);
+  height: var(--size-40);
+  border: 0;
+  border-radius: var(--round-full);
+  background: none;
+  font: var(--type-reaction-pick);
+  cursor: pointer;
+  transition: scale var(--duration-fast) var(--ease-drawer);
+}
+
+.reaction-picker__emoji:hover {
+  scale: 1.15;
+}
+
+.reaction-picker__emoji.is-mine,
+.reaction-picker__more {
+  background: var(--reaction-chosen);
+}
+
+.reaction-picker__more {
+  color: var(--chat-meta-ink);
+}
+
+.reaction-picker__other {
+  width: var(--width-reaction-field);
+  height: var(--size-40);
+  padding: 0 var(--space-10);
+  border: 0;
+  background: none;
+  color: var(--ink-title);
+  font: var(--type-chat-text);
+  outline: none;
+}
+
+@keyframes reaction-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes reaction-pop {
+  from {
+    opacity: 0;
+    scale: 0.9;
+    translate: 0 var(--space-6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-reactions,
+  .chat-feed__veil,
+  .reaction-picker {
+    animation: none;
+  }
+}

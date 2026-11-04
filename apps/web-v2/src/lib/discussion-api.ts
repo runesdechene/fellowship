@@ -54,6 +54,9 @@ export interface ConversationDetail {
   title: string | null
   createdBy: string
   mot: string | null
+  /** La photo ou la vidéo d'un sujet, montrée en grand sur sa story. */
+  mediaPath: string | null
+  mediaKind: MediaKind | null
   audience: Audience | null
   eventId: string | null
   expiresAt: string | null
@@ -65,7 +68,9 @@ export async function fetchConversation(id: string): Promise<ConversationDetail 
   const [conversationResponse, membersResponse] = await Promise.all([
     supabase
       .from('conversations')
-      .select('id, kind, title, created_by, mot, audience, event_id, expires_at, closed_at')
+      .select(
+        'id, kind, title, created_by, mot, media_path, media_kind, audience, event_id, expires_at, closed_at',
+      )
       .eq('id', id)
       .maybeSingle(),
     supabase
@@ -84,6 +89,8 @@ export async function fetchConversation(id: string): Promise<ConversationDetail 
     title: conversation.title,
     createdBy: conversation.created_by,
     mot: conversation.mot,
+    mediaPath: conversation.media_path,
+    mediaKind: conversation.media_kind,
     audience: conversation.audience,
     eventId: conversation.event_id,
     expiresAt: conversation.expires_at,

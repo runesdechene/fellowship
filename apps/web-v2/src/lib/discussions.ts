@@ -132,3 +132,63 @@ export function previewLine(
   if (kind === 'direct' || !authorLabel) return text
   return `${authorLabel} : ${text}`
 }
+
+/** Les réactions d'un appui long ; « + » ouvre le clavier du téléphone pour un autre emoji. */
+export const REACTIONS = ['❤️', '😂', '😮', '👍', '🙏', '🔥']
+
+/** Une réaction par personne et par message ; `emoji` nul : elle a été retirée. */
+export interface Reaction {
+  messageId: string
+  actorId: string
+  emoji: string | null
+}
+
+/** La pastille d'une bulle : les emojis donnés (le plus donné d'abord), leur total, le sien. */
+export interface ReactionSummary {
+  emojis: string[]
+  total: number
+  mine: string | null
+}
+
+export function summarizeReactions(
+  reactions: Reaction[],
+  me: string,
+): Map<string, ReactionSummary> {
+  const counts = new Map<string, Map<string, number>>()
+  const mine = new Map<string, string>()
+  for (const { messageId, actorId, emoji } of reactions) {
+    if (!emoji) continue
+    const forMessage = counts.get(messageId) ?? new Map<string, number>()
+    forMessage.set(emoji, (forMessage.get(emoji) ?? 0) + 1)
+    counts.set(messageId, forMessage)
+    if (actorId === me) mine.set(messageId, emoji)
+  }
+  const summaries = new Map<string, ReactionSummary>()
+  for (const [messageId, forMessage] of counts) {
+    const ranked = [...forMessage].sort((a, b) => b[1] - a[1])
+    summaries.set(messageId, {
+      emojis: ranked.map(([emoji]) => emoji),
+      total: ranked.reduce((sum, [, count]) => sum + count, 0),
+      mine: mine.get(messageId) ?? null,
+    })
+  }
+  return summaries
+}
+
+/** La liste après une réaction : celle de cette personne sur ce message est remplacée. */
+export function withReaction(reactions: Reaction[], next: Reaction): Reaction[] {
+  const others = reactions.filter(
+    (reaction) => reaction.messageId !== next.messageId || reaction.actorId !== next.actorId,
+  )
+  return [...others, next]
+}
+
+/** Un drapeau est fait de deux lettres régionales, pas d'un pictogramme. */
+const EMOJI = /\p{Extended_Pictographic}|\p{Regional_Indicator}/u
+
+/** Le premier emoji tapé au clavier (un drapeau ou une famille compte pour un seul). */
+export function firstEmoji(text: string): string | null {
+  const segments = new Intl.Segmenter('fr', { granularity: 'grapheme' }).segment(text.trim())
+  for (const { segment } of segments) return EMOJI.test(segment) ? segment : null
+  return null
+}

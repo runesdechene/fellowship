@@ -1,0 +1,167 @@
+/**
+ * QUOI     — la story d'un sujet en plein écran (features/discussions/SujetStory) et le
+ *            défilement aimanté du tiroir : la story, puis le tchat.
+ * POURQUOI — maquette Story, « Un sujet ouvert, la story » (validée le 04/11/2026) : le mot en
+ *            grand sur le papier, la discussion qui dépasse en bas et se glisse vers le haut.
+ * ATTENTION — le glisser est le défilement natif du tiroir (scroll-snap) : rien n'est codé.
+ */
+
+.discussion-drawer__panel > .sujet-story,
+.discussion-drawer__panel > .conversation {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.sujet-story {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: linear-gradient(var(--chat-paper-top), var(--chat-paper-bottom));
+}
+
+.sujet-story::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--chat-motif) 0 0 / var(--chat-motif-size) auto repeat;
+  opacity: var(--chat-motif-opacity);
+  pointer-events: none;
+}
+
+.sujet-story__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: calc(var(--space-16) + env(safe-area-inset-top)) var(--space-16) 0;
+}
+
+.sujet-story__avatar {
+  --avatar-size: var(--size-40);
+}
+
+.sujet-story__who {
+  flex: 1;
+  min-width: 0;
+}
+
+.sujet-story__name {
+  color: var(--ink-title);
+  font: var(--type-conversation-name);
+}
+
+.sujet-story__meta {
+  color: var(--chat-meta-ink);
+  font: var(--type-conversation-meta);
+}
+
+.sujet-story__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-24);
+  padding: var(--space-32) var(--space-24);
+  text-align: center;
+}
+
+.sujet-story__mot {
+  max-width: var(--sujet-story-mot-width);
+  color: var(--ink-title);
+  font: var(--type-sujet-story-mot);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* La photo posée comme une affiche, légèrement de biais (maquette). */
+.sujet-story__media {
+  width: min(var(--sujet-story-media-width), 70%);
+  max-height: 45dvh;
+  object-fit: cover;
+  border: var(--space-4) solid var(--surface-card);
+  border-radius: var(--round-20);
+  box-shadow: var(--shadow-block);
+  rotate: -2deg;
+}
+
+.sujet-story__event {
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
+  color: var(--ink-title);
+  font: var(--type-sujet-story-event);
+}
+
+/* La discussion qui dépasse en bas : on la glisse vers le haut, ou on la touche. */
+.sujet-story__peek {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-12) var(--space-16) calc(var(--space-24) + env(safe-area-inset-bottom));
+  border-radius: var(--round-24) var(--round-24) 0 0;
+  background: var(--surface-card);
+  box-shadow: var(--sujet-story-peek-shadow);
+}
+
+.sujet-story__grip {
+  width: var(--size-40);
+  height: var(--space-5);
+  border-radius: var(--round-full);
+  background: var(--chat-meta-ink);
+  opacity: 0.45;
+}
+
+.sujet-story__invite {
+  color: var(--ink-title);
+  font: var(--type-inbox-name);
+}
+
+.sujet-story__reply {
+  width: 100%;
+  height: var(--size-44);
+  padding: 0 var(--space-16);
+  border: 0;
+  border-radius: var(--round-full);
+  background: var(--sujet-story-field);
+  color: var(--chat-meta-ink);
+  font: var(--type-chat-text);
+  text-align: left;
+  cursor: text;
+}
+
+.sujet-story__last {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  width: 100%;
+}
+
+.sujet-story__last-avatar {
+  --avatar-size: var(--size-28);
+}
+
+.sujet-story__last-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sujet-story__count {
+  color: var(--chat-meta-ink);
+  font: var(--type-inbox-sub);
+}
+
+.sujet-story__preview {
+  overflow: hidden;
+  color: var(--ink-title);
+  font: var(--type-inbox-preview);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

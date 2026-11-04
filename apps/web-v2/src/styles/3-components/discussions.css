@@ -526,7 +526,10 @@
   right: var(--space-12);
   bottom: var(--space-12);
   width: min(var(--drawer-width), calc(100% - 2 * var(--space-12)));
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory; /* la story d'un sujet, puis son tchat (sujet-story.css) */
+  scrollbar-width: none;
   border: 1px solid var(--line-card);
   border-radius: var(--round-20);
   box-shadow: var(--shadow-block);

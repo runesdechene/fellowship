@@ -7,9 +7,12 @@ import { describe, expect, it } from 'vitest'
 import {
   conversationName,
   conversationTone,
+  firstEmoji,
   previewLine,
   remainingLabel,
+  summarizeReactions,
   toBubbles,
+  withReaction,
   type ChatMessage,
 } from './discussions'
 
@@ -86,5 +89,42 @@ describe('conversationName et previewLine', () => {
     expect(previewLine('Salut', null, 'Lia', false, 'groupe')).toBe('Lia : Salut')
     expect(previewLine('Salut', null, 'Lia', false, 'direct')).toBe('Salut')
     expect(previewLine(null, 'image', null, true, 'direct')).toBe('Toi : Photo')
+  })
+})
+
+describe('summarizeReactions', () => {
+  it('compte par message, le plus donné d’abord, et retient le sien', () => {
+    const summary = summarizeReactions(
+      [
+        { messageId: 'm1', actorId: 'a', emoji: '👍' },
+        { messageId: 'm1', actorId: 'b', emoji: '😂' },
+        { messageId: 'm1', actorId: 'moi', emoji: '😂' },
+        { messageId: 'm2', actorId: 'a', emoji: null },
+      ],
+      'moi',
+    )
+    expect(summary.get('m1')).toEqual({ emojis: ['😂', '👍'], total: 3, mine: '😂' })
+    expect(summary.has('m2')).toBe(false)
+  })
+})
+
+describe('withReaction', () => {
+  it('remplace la réaction de la même personne sur le même message', () => {
+    const list = [
+      { messageId: 'm1', actorId: 'a', emoji: '👍' },
+      { messageId: 'm1', actorId: 'b', emoji: '👍' },
+    ]
+    expect(withReaction(list, { messageId: 'm1', actorId: 'a', emoji: null })).toEqual([
+      { messageId: 'm1', actorId: 'b', emoji: '👍' },
+      { messageId: 'm1', actorId: 'a', emoji: null },
+    ])
+  })
+})
+
+describe('firstEmoji', () => {
+  it('garde le premier emoji, entier', () => {
+    expect(firstEmoji('🇫🇷 bravo')).toBe('🇫🇷')
+    expect(firstEmoji('👨‍👩‍👧')).toBe('👨‍👩‍👧')
+    expect(firstEmoji('salut')).toBeNull()
   })
 })

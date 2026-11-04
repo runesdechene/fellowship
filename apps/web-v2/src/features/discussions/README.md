@@ -5,10 +5,12 @@ Les sujets et Messages (maquette Figma, page Story `2727:291` ; conception
 
 - `StoryBar` — la barre des sujets en haut du tableau de bord.
 - `SujetComposer` — « Lancer un sujet » (`?sujet=nouveau`).
-- `DiscussionDrawer` — un sujet ouvert dans un tiroir (`?discussion=<id>`).
-- `Conversation` — un tchat : en-tête, `ChatFeed` (les bulles), `ChatInput` (la saisie).
+- `DiscussionDrawer` — un sujet ouvert dans un tiroir (`?discussion=<id>`) : sa story d'abord
+  (`SujetStory`), le tchat en défilant.
+- `Conversation` — un tchat : en-tête, `ChatFeed` (les bulles et leurs réactions,
+  `ReactionPicker`), `ChatInput` (la saisie).
 - `MembersSheet`, `PeoplePicker` — gérer un groupe, choisir à qui écrire.
 - `MessagesPage` (`/messages`, `/messages/:id`), `NewMessagePage` (`/messages/nouveau`).
 - `MessagesButton` — l’icône de la barre du haut ; `WriteButton` — « Écrire » sur une vitrine.
 - `useDiscussions` — l'état React ; la logique pure vit dans `lib/discussions.ts`, la base dans
-  `lib/discussion-api.ts`.
+  `lib/discussion-api.ts` et `lib/reaction-api.ts`.

@@ -21,7 +21,8 @@ import {
   type InboxRow,
   type StorySujet,
 } from '@/lib/discussion-api'
-import type { ChatMessage } from '@/lib/discussions'
+import { withReaction, type ChatMessage, type Reaction } from '@/lib/discussions'
+import { fetchReactions, reactToMessage, watchReactions } from '@/lib/reaction-api'
 
 type Loaded<T> = { status: 'loading' } | { status: 'failed' } | { status: 'ready'; value: T }
 
@@ -87,11 +88,13 @@ interface OpenConversation {
   detail: ConversationDetail
   event: EventBrief | null
   messages: ChatMessage[]
+  reactions: Reaction[]
 }
 
 /**
  * Une conversation ouverte : son détail, ses messages, et chaque nouveau message en direct.
  * L'ouvrir la marque lue au nom de l'acteur actif (l'anneau du sujet passe au gris).
+ * Les réactions suivent le même chemin : chargées avec le fil, puis en direct.
  */
 export function useConversation(conversationId: string) {
   const { actor } = useAuth()
@@ -104,14 +107,15 @@ export function useConversation(conversationId: string) {
     let cancelled = false
     const run = async () => {
       try {
-        const [detail, messages] = await Promise.all([
+        const [detail, messages, reactions] = await Promise.all([
           fetchConversation(conversationId),
           fetchMessages(conversationId),
+          fetchReactions(conversationId),
         ])
         if (!detail) throw new Error('introuvable')
         const event = detail.eventId ? await fetchEventBrief(detail.eventId) : null
         await markRead(actor.id, conversationId)
-        if (!cancelled) setState({ status: 'ready', value: { detail, event, messages } })
+        if (!cancelled) setState({ status: 'ready', value: { detail, event, messages, reactions } })
       } catch {
         if (!cancelled) setState({ status: 'failed' })
       }
@@ -138,11 +142,38 @@ export function useConversation(conversationId: string) {
     })
   }, [actor, conversationId])
 
+  const applyReaction = useCallback((reaction: Reaction) => {
+    setState((previous) =>
+      previous.status === 'ready'
+        ? {
+            ...previous,
+            value: {
+              ...previous.value,
+              reactions: withReaction(previous.value.reactions, reaction),
+            },
+          }
+        : previous,
+    )
+  }, [])
+
+  useEffect(() => watchReactions(conversationId, applyReaction), [conversationId, applyReaction])
+
+  /** La pastille change tout de suite ; si la base refuse, on relit la conversation. */
+  const react = useCallback(
+    (messageId: string, emoji: string | null) => {
+      if (!actor) return
+      applyReaction({ messageId, actorId: actor.id, emoji })
+      reactToMessage(actor.id, messageId, emoji).catch(reload)
+    },
+    [actor, applyReaction, reload],
+  )
+
   const value = state.status === 'ready' ? state.value : null
   const mediaPaths = useMemo(
-    () => value?.messages.map((message) => message.mediaPath) ?? [],
+    () =>
+      value ? [value.detail.mediaPath, ...value.messages.map((message) => message.mediaPath)] : [],
     [value],
   )
   const urls = useMediaUrls(mediaPaths)
-  return { state, urls, reload }
+  return { state, urls, reload, react }
 }

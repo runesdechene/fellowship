@@ -1969,6 +1969,19 @@
   --type-composer-mot: var(--weight-semibold) var(--size-22) / 1.3 var(--family-sans);
   --type-composer-mot-phone: var(--weight-semibold) var(--size-30) / 1.2 var(--family-sans);
   --leave-ink: var(--terre-700);
+
+  /* La story d'un sujet et les réactions (maquette Story, 04/11/2026). */
+  --type-sujet-story-mot: var(--weight-regular) var(--size-40) / 1.1 var(--family-display);
+  --type-sujet-story-event: var(--weight-medium) var(--size-13) / 1.3 var(--family-sans);
+  --sujet-story-mot-width: var(--width-story-mot);
+  --sujet-story-media-width: var(--width-chat-media);
+  --sujet-story-peek-shadow: 0 -6px 24px rgb(51 36 26 / 10%);
+  --sujet-story-field: var(--sand-200);
+  --type-chat-reaction: var(--weight-semibold) var(--size-12) / 1 var(--family-sans);
+  --type-reaction-pick: var(--weight-regular) var(--size-26) / 1 var(--family-sans);
+  --chat-veil: rgb(26 20 18 / 40%);
+  --reaction-picker-shadow: 0 8px 24px rgb(26 18 13 / 22%);
+  --reaction-chosen: var(--sand-200);
 }
 
 /* =========================================================================
@@ -2155,6 +2168,11 @@
   --chat-head-surface: color-mix(in srgb, var(--night-0) 92%, transparent);
   --drawer-veil: rgb(0 0 0 / 40%);
   --leave-ink: var(--terre-400);
+  --sujet-story-peek-shadow: 0 -6px 24px rgb(0 0 0 / 35%);
+  --sujet-story-field: var(--night-200);
+  --chat-veil: rgb(0 0 0 / 55%);
+  --reaction-picker-shadow: 0 8px 24px rgb(0 0 0 / 45%);
+  --reaction-chosen: var(--night-200);
 }
 
 /* ===================================================================== 

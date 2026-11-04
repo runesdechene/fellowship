@@ -1,6 +1,6 @@
 /**
  * QUOI     — le tiroir d'un sujet : il glisse depuis la droite sur ordinateur, couvre l'écran sur
- *            téléphone (maquette Story).
+ *            téléphone (maquette Story). La story du sujet d'abord, le tchat en défilant.
  * POURQUOI — ouvrir un sujet ne fait pas quitter la page : on y répond, on referme, on reste où
  *            l'on était.
  * ATTENTION — rendu dans `document.body` : la coquille crée son propre empilement, rien de ce
@@ -45,7 +45,7 @@ function Drawer({ id, onClose }: { id: string; onClose: () => void }) {
       }}
     >
       <div className="discussion-drawer__panel">
-        <Conversation conversationId={id} onClose={onClose} closeWith="cross" />
+        <Conversation conversationId={id} onClose={onClose} closeWith="cross" story />
       </div>
     </dialog>
   )
