@@ -378,6 +378,111 @@ export type Database = {
           },
         ]
       }
+      conversation_members: {
+        Row: {
+          actor_id: string
+          conversation_id: string
+          joined_at: string
+          last_read_at: string
+          muted: boolean
+        }
+        Insert: {
+          actor_id: string
+          conversation_id: string
+          joined_at?: string
+          last_read_at?: string
+          muted?: boolean
+        }
+        Update: {
+          actor_id?: string
+          conversation_id?: string
+          joined_at?: string
+          last_read_at?: string
+          muted?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_members_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_members_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          audience: Database["public"]["Enums"]["sujet_audience"] | null
+          closed_at: string | null
+          created_at: string
+          created_by: string
+          event_id: string | null
+          expires_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at: string
+          media_kind: Database["public"]["Enums"]["message_media"] | null
+          media_path: string | null
+          mot: string | null
+          pair_key: string | null
+          title: string | null
+        }
+        Insert: {
+          audience?: Database["public"]["Enums"]["sujet_audience"] | null
+          closed_at?: string | null
+          created_at?: string
+          created_by: string
+          event_id?: string | null
+          expires_at?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at?: string
+          media_kind?: Database["public"]["Enums"]["message_media"] | null
+          media_path?: string | null
+          mot?: string | null
+          pair_key?: string | null
+          title?: string | null
+        }
+        Update: {
+          audience?: Database["public"]["Enums"]["sujet_audience"] | null
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string
+          event_id?: string | null
+          expires_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at?: string
+          media_kind?: Database["public"]["Enums"]["message_media"] | null
+          media_path?: string | null
+          mot?: string | null
+          pair_key?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       declined_follows: {
         Row: {
           declined_at: string
@@ -1186,6 +1291,51 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          author_actor: string
+          body: string | null
+          conversation_id: string
+          created_at: string
+          id: string
+          media_kind: Database["public"]["Enums"]["message_media"] | null
+          media_path: string | null
+        }
+        Insert: {
+          author_actor: string
+          body?: string | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          media_kind?: Database["public"]["Enums"]["message_media"] | null
+          media_path?: string | null
+        }
+        Update: {
+          author_actor?: string
+          body?: string | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          media_kind?: Database["public"]["Enums"]["message_media"] | null
+          media_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_author_actor_fkey"
+            columns: ["author_actor"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2037,6 +2187,39 @@ export type Database = {
           },
         ]
       }
+      sujet_views: {
+        Row: {
+          actor_id: string
+          conversation_id: string
+          seen_at: string
+        }
+        Insert: {
+          actor_id: string
+          conversation_id: string
+          seen_at?: string
+        }
+        Update: {
+          actor_id?: string
+          conversation_id?: string
+          seen_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sujet_views_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "actors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sujet_views_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tags: {
         Row: {
           bg_color: string
@@ -2284,6 +2467,10 @@ export type Database = {
           reason: Json
           slug: string
         }[]
+      }
+      actor_sees_sujet: {
+        Args: { p_actor: string; p_conversation: string }
+        Returns: boolean
       }
       admin_accueil: {
         Args: never
@@ -2791,6 +2978,10 @@ export type Database = {
           visits: number
         }[]
       }
+      ajouter_membres: {
+        Args: { p_actor: string; p_conversation: string; p_others: string[] }
+        Returns: undefined
+      }
       apercu_fiche: {
         Args: { p_event: string }
         Returns: {
@@ -2826,7 +3017,16 @@ export type Database = {
         Returns: string
       }
       can_act_as: { Args: { target_actor: string }; Returns: boolean }
+      can_see_conversation: {
+        Args: { p_conversation: string }
+        Returns: boolean
+      }
+      can_see_discussion_media: { Args: { p_path: string }; Returns: boolean }
       can_use_v2: { Args: never; Returns: boolean }
+      cloturer_sujet: {
+        Args: { p_actor: string; p_conversation: string }
+        Returns: undefined
+      }
       community_feed: {
         Args: {
           p_actor: string
@@ -2892,6 +3092,26 @@ export type Database = {
       ensure_referral_code: {
         Args: { p_base_code: string; p_entity_id: string }
         Returns: string
+      }
+      envoyer_message: {
+        Args: {
+          p_actor: string
+          p_body: string
+          p_conversation: string
+          p_media_kind: Database["public"]["Enums"]["message_media"]
+          p_media_path: string
+        }
+        Returns: string
+      }
+      event_public_stats: {
+        Args: never
+        Returns: {
+          event_id: string
+          interested: number
+          rating: number
+          rating_count: number
+          registered: number
+        }[]
       }
       events_base_slug: {
         Args: { p_name: string; p_year: number }
@@ -3086,6 +3306,39 @@ export type Database = {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
       }
+      marquer_lu: {
+        Args: { p_actor: string; p_conversation: string }
+        Returns: undefined
+      }
+      media_belongs_to: {
+        Args: { p_actor: string; p_path: string }
+        Returns: boolean
+      }
+      mes_conversations: {
+        Args: { p_actor: string }
+        Returns: {
+          closed_at: string
+          created_by: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_tags: string[]
+          expires_at: string
+          id: string
+          kind: Database["public"]["Enums"]["conversation_kind"]
+          last_author: string
+          last_author_label: string
+          last_body: string
+          last_media_kind: Database["public"]["Enums"]["message_media"]
+          last_message_at: string
+          member_count: number
+          mot: string
+          muted: boolean
+          others: Json
+          title: string
+          unread: number
+        }[]
+      }
       mes_enseignes: {
         Args: never
         Returns: {
@@ -3149,8 +3402,13 @@ export type Database = {
           total: number
         }[]
       }
+      my_actor_ids: { Args: never; Returns: string[] }
       normalized_department: { Args: { raw: string }; Returns: string }
       noter_visite: { Args: never; Returns: undefined }
+      ouvrir_conversation: {
+        Args: { p_actor: string; p_others: string[]; p_title: string }
+        Returns: string
+      }
       phone_key: { Args: { p_tel: string }; Returns: string }
       prospect_attend_reponse: {
         Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }
@@ -3194,6 +3452,17 @@ export type Database = {
         Returns: boolean
       }
       prospects_relancer: { Args: never; Returns: undefined }
+      publier_sujet: {
+        Args: {
+          p_actor: string
+          p_audience: Database["public"]["Enums"]["sujet_audience"]
+          p_event: string
+          p_media_kind: Database["public"]["Enums"]["message_media"]
+          p_media_path: string
+          p_mot: string
+        }
+        Returns: string
+      }
       publish_app_update: {
         Args: {
           p_body: string
@@ -3204,9 +3473,17 @@ export type Database = {
         }
         Returns: string
       }
+      quitter_conversation: {
+        Args: { p_actor: string; p_conversation: string }
+        Returns: undefined
+      }
       referral_owner: { Args: { p_code: string }; Returns: string }
       register_push_subscription: {
         Args: { p_auth: string; p_endpoint: string; p_p256dh: string }
+        Returns: undefined
+      }
+      regler_sourdine: {
+        Args: { p_actor: string; p_conversation: string; p_muted: boolean }
         Returns: undefined
       }
       rekey_revenue: {
@@ -3217,6 +3494,10 @@ export type Database = {
           p_payloads: Json
           p_salt: string
         }
+        Returns: undefined
+      }
+      renommer_groupe: {
+        Args: { p_actor: string; p_conversation: string; p_title: string }
         Returns: undefined
       }
       reset_revenue_key: { Args: { p_actor: string }; Returns: undefined }
@@ -3274,6 +3555,30 @@ export type Database = {
         }[]
       }
       suggestions_for: { Args: { p_actor: string }; Returns: Json }
+      sujet_is_open: { Args: { p_conversation: string }; Returns: boolean }
+      sujets_du_moment: {
+        Args: { p_actor: string }
+        Returns: {
+          audience: Database["public"]["Enums"]["sujet_audience"]
+          author_avatar: string
+          author_label: string
+          created_at: string
+          created_by: string
+          event_end: string
+          event_id: string
+          event_image: string
+          event_name: string
+          event_start: string
+          event_tags: string[]
+          expires_at: string
+          id: string
+          media_kind: Database["public"]["Enums"]["message_media"]
+          media_path: string
+          mot: string
+          participants: number
+          seen: boolean
+        }[]
+      }
       version_evenement: {
         Args: { p_version: number }
         Returns: {
@@ -3309,8 +3614,10 @@ export type Database = {
     }
     Enums: {
       actor_kind: "person" | "entity"
+      conversation_kind: "sujet" | "direct" | "groupe"
       entity_type: "exposant" | "festival" | "entreprise"
       membership_role: "owner" | "admin" | "member"
+      message_media: "image" | "video"
       note_visibility: "prive" | "amis"
       notification_type:
         | "deadline_reminder"
@@ -3340,6 +3647,7 @@ export type Database = {
         | "en_cours"
         | "refuse"
       participation_visibility: "prive" | "amis" | "public"
+      sujet_audience: "amis" | "abonnes" | "public"
       thread_audience: "festivalier" | "exposant" | "organisateur"
       user_plan: "free" | "pro"
       user_sex: "homme" | "femme" | "indefini"
@@ -3472,8 +3780,10 @@ export const Constants = {
   public: {
     Enums: {
       actor_kind: ["person", "entity"],
+      conversation_kind: ["sujet", "direct", "groupe"],
       entity_type: ["exposant", "festival", "entreprise"],
       membership_role: ["owner", "admin", "member"],
+      message_media: ["image", "video"],
       note_visibility: ["prive", "amis"],
       notification_type: [
         "deadline_reminder",
@@ -3505,6 +3815,7 @@ export const Constants = {
         "refuse",
       ],
       participation_visibility: ["prive", "amis", "public"],
+      sujet_audience: ["amis", "abonnes", "public"],
       thread_audience: ["festivalier", "exposant", "organisateur"],
       user_plan: ["free", "pro"],
       user_sex: ["homme", "femme", "indefini"],
