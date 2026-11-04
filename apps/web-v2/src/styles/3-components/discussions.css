@@ -76,6 +76,11 @@
   border-style: dashed;
 }
 
+/* « Toi » n'a pas de bulle : la puce prend la largeur de son anneau, pas celle d'une bulle. */
+.story--new {
+  width: auto;
+}
+
 .story__face {
   --avatar-size: var(--story-face-size);
 }
@@ -1102,10 +1107,28 @@
     z-index: var(--layer-map);
   }
 
+  /* Les marges de toutes les pages du téléphone, et l'air sous la barre du haut. */
   .messages-page__list {
     height: 100%;
-    padding-top: calc(var(--topbar-top) + var(--topbar-control-height));
+    padding-top: var(--mobile-padding-top);
     border: 0;
+  }
+
+  .messages-page__head {
+    padding: 0 var(--mobile-gutter) var(--space-14);
+  }
+
+  /* Une ligne a son propre retrait : la liste s'en déduit pour que le texte tombe sur la marge. */
+  .messages-page__rows {
+    padding: 0 calc(var(--mobile-gutter) - var(--space-12)) var(--space-10);
+  }
+
+  .new-message {
+    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+  }
+
+  .messages-page__status {
+    padding: var(--space-24) var(--mobile-gutter);
   }
 
   .chat-bubble__text {
