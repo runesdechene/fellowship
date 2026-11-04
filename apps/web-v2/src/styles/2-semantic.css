@@ -1911,7 +1911,7 @@
   --story-bar-clear: var(
     --width-inbox
   ); /* laisse la place à la recherche, Messages, la cloche et « Ajouter » */
-  --chat-motif-size: var(--size-46);
+  --chat-motif-size: var(--size-64);
   --messages-page-offset: var(--width-messages-offset);
   --story-note-width: var(--width-story-note);
   --story-ring-size: var(--size-64);
@@ -1932,7 +1932,7 @@
 
   --chat-paper-top: var(--sand-50);
   --chat-paper-bottom: var(--sand-250);
-  --chat-motif: url('/logo.png');
+  --chat-motif: url('/icon.png'); /* le pictogramme seul, celui de la marque écrite */
   --chat-motif-opacity: var(--opacity-motif);
   --chat-theirs: var(--sand-0);
   --chat-theirs-ink: var(--ink-950);
