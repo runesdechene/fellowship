@@ -9,7 +9,7 @@
  *            retour du navigateur ramène à la story. Depuis Messages, on arrive droit au tchat.
  */
 import type { CSSProperties } from 'react'
-import { X } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { formatDateRange, parseSqlDate, timeAgo } from '@/lib/dates'
@@ -62,6 +62,10 @@ export function SujetStory(props: Props) {
       aria-label="Le sujet"
     >
       <header className="sujet-story__head">
+        {/* La sortie, à gauche de l'avatar, comme dans la discussion (Uriel, 05/11/2026). */}
+        <Button variant="icon" aria-label="Retour" onClick={onClose}>
+          <ArrowLeft size={20} strokeWidth={1.75} />
+        </Button>
         <Avatar className="sujet-story__avatar" src={author?.avatar} name={author?.label} />
         <div className="sujet-story__who">
           <p className="sujet-story__name">{mine ? 'Ton sujet' : author?.label}</p>
@@ -71,9 +75,6 @@ export function SujetStory(props: Props) {
               : remaining}
           </p>
         </div>
-        <Button variant="icon" aria-label="Fermer" onClick={onClose}>
-          <X size={18} strokeWidth={1.75} />
-        </Button>
       </header>
 
       <div className="sujet-story__body">
