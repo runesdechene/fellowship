@@ -1,0 +1,20 @@
+# Fellowship
+
+> Fellowship aide les exposants (artisans, créateurs, marchands) à choisir leurs festivals et
+> s'occupe du reste. C'est l'annuaire de référence des fêtes médiévales, salons geek, festivals
+> fantastiques, marchés de créateurs, marchés de Noël et festivals de musique où poser son stand,
+> en France et en Suisse. Gratuit, ouvert à tous les univers.
+
+Chaque fiche d'événement réunit ce qu'un exposant cherche avant de candidater : les dates, le lieu,
+la taille et le prix du stand, la date limite et le lien de candidature, et, quand il y en a, la
+note laissée par les exposants qui y ont tenu un stand. Les fiches sont lisibles sans JavaScript et
+décrites en schema.org `Event`.
+
+## Pages
+
+- [Rechercher un festival](https://flw.sh/festivals) : tous les événements à venir, par type et par lieu.
+- [Plan du site](https://flw.sh/sitemap.xml) : chaque fiche d'événement (`/evenements/<nom-année>`).
+
+## Contact
+
+- contact@flw.sh

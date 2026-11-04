@@ -1,5 +1,6 @@
 # Les pages publiques s'indexent ; l'administration, la connexion et le calendrier intégré
-# (copie de la vitrine, faite pour vivre chez un artiste) non.
+# (copie de la vitrine, faite pour vivre chez un artiste) non. Les robots des IA passent comme les
+# autres : Fellowship veut être lu et cité par eux (/llms.txt les présente).
 User-agent: *
 Disallow: /admin
 Disallow: /connexion
