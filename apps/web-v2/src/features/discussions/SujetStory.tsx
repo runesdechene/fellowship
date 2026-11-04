@@ -3,10 +3,12 @@
  *            photo ou la vidéo, le festival ; en bas, « Voir les N messages » et le champ pour
  *            répondre (maquette Story, option C).
  * POURQUOI — ouvrir un sujet depuis la barre doit d'abord montrer le sujet, pas un fil vide
- *            (Uriel, 04/11/2026) ; on y répond comme sur Instagram (option C, 05/11/2026).
+ *            (Uriel, 04/11/2026) ; on y répond comme sur Instagram (option C, 05/11/2026). La
+ *            photo peut couvrir la story au lieu du papier, le mot centré dessus en blanc.
  * ATTENTION — la discussion complète est un autre état de l'adresse (`?fil`, Conversation) : le
  *            retour du navigateur ramène à la story. Depuis Messages, on arrive droit au tchat.
  */
+import type { CSSProperties } from 'react'
 import { X } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
@@ -45,6 +47,7 @@ export function SujetStory(props: Props) {
   const opening = messages[0]?.authorId === detail.createdBy ? messages[0] : undefined
   const replies = opening ? messages.length - 1 : messages.length
   const media = detail.mediaPath ? urls.get(detail.mediaPath) : undefined
+  const fond = detail.mediaFond && detail.mediaKind === 'image'
   const placeholder = mine
     ? 'Écrire dans ton sujet…'
     : replies === 0
@@ -52,7 +55,12 @@ export function SujetStory(props: Props) {
       : `Répondre à ${author?.label ?? 'ce sujet'}…`
 
   return (
-    <section className="sujet-story" aria-label="Le sujet">
+    <section
+      className={fond ? 'sujet-story sujet-story--fond' : 'sujet-story'}
+      // La photo en fond est une donnée : seule une variable CSS passe dans un .tsx.
+      style={fond && media ? ({ '--story-photo': `url("${media}")` } as CSSProperties) : undefined}
+      aria-label="Le sujet"
+    >
       <header className="sujet-story__head">
         <Avatar className="sujet-story__avatar" src={author?.avatar} name={author?.label} />
         <div className="sujet-story__who">
@@ -70,7 +78,7 @@ export function SujetStory(props: Props) {
 
       <div className="sujet-story__body">
         <p className="sujet-story__mot">{detail.mot}</p>
-        {detail.mediaKind === 'image' && media && (
+        {detail.mediaKind === 'image' && !fond && media && (
           <img className="sujet-story__media" src={media} alt="" />
         )}
         {detail.mediaKind === 'video' && media && (

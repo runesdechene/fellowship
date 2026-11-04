@@ -1,7 +1,9 @@
 /**
  * QUOI     — la story d'un sujet en plein écran (features/discussions/SujetStory, StoryReply) :
  *            le mot en grand sur le papier, « Voir les N messages » et le champ pour répondre.
+ *            Et la photo en fond, ici comme dans « Lancer un sujet » (SujetComposer).
  * POURQUOI — maquette Story, option C (Uriel, 05/11/2026) : on répond comme sur Instagram.
+ *            « La photo en fond » (05/11/2026) : la photo couvre l'écran, voilée, le mot en blanc.
  */
 
 .sujet-story {
@@ -165,4 +167,63 @@
   color: var(--ink-soft);
   font: var(--type-conversation-meta);
   text-align: center;
+}
+
+/* ── LA PHOTO EN FOND : elle remplace le papier, un voile garde le texte lisible ──
+   C'est le fond de l'élément qui défile : il reste en place sous le contenu et ne sort pas du
+   cadre (le tiroir et la fenêtre ne couvrent pas tout l'écran sur ordinateur). */
+.sujet-story--fond,
+.sujet-composer--fond {
+  background:
+    var(--story-fond-veil),
+    var(--story-photo) center / cover no-repeat,
+    var(--story-fond-base);
+}
+
+/* Le motif du papier s'efface sous la photo. */
+.sujet-story--fond::before,
+.sujet-composer--fond .sujet-composer__body::before {
+  display: none;
+}
+
+.sujet-story--fond .sujet-story__name,
+.sujet-story--fond .sujet-story__meta,
+.sujet-story--fond .sujet-story__mot {
+  color: var(--story-fond-ink);
+}
+
+.sujet-story--fond .sujet-story__more,
+.sujet-story--fond .story-reply__field {
+  border-color: var(--story-fond-line);
+  background: var(--story-fond-glass);
+  box-shadow: none;
+  color: var(--story-fond-ink);
+  backdrop-filter: blur(12px);
+}
+
+.sujet-story--fond .story-reply__input,
+.sujet-story--fond .story-reply__input::placeholder,
+.sujet-story--fond .story-reply__problem {
+  color: var(--story-fond-ink);
+}
+
+/* « Lancer un sujet » avec la photo en fond : le même voile, le mot en blanc. */
+.sujet-composer--fond .sujet-composer__mot {
+  border-color: var(--story-fond-line);
+}
+
+.sujet-composer--fond .sujet-composer__pick {
+  border-color: var(--story-fond-line);
+  background: var(--story-fond-glass);
+  color: var(--story-fond-ink);
+}
+
+.sujet-composer--fond .sujet-composer__mot,
+.sujet-composer--fond .sujet-composer__mot::placeholder,
+.sujet-composer--fond .sujet-composer__title,
+.sujet-composer--fond .sujet-composer__count,
+.sujet-composer--fond .sujet-composer__label,
+.sujet-composer--fond .sujet-composer__hint,
+.sujet-composer--fond .sujet-composer__problem {
+  color: var(--story-fond-ink);
 }

@@ -1981,6 +1981,18 @@
   --chat-veil: rgb(26 20 18 / 40%);
   --reaction-picker-shadow: 0 8px 24px rgb(26 18 13 / 22%);
   --reaction-chosen: var(--sand-200);
+
+  /* La photo en fond d'une story (05/11/2026) : la même la nuit, c'est la photo qui donne le ton. */
+  --story-fond-base: var(--night-0);
+  --story-fond-ink: var(--sand-0);
+  --story-fond-veil: linear-gradient(
+    rgb(15 12 10 / 65%),
+    rgb(15 12 10 / 25%) 30%,
+    rgb(15 12 10 / 40%) 60%,
+    rgb(15 12 10 / 90%)
+  );
+  --story-fond-glass: rgb(255 255 255 / 14%);
+  --story-fond-line: rgb(255 255 255 / 45%);
 }
 
 /* =========================================================================

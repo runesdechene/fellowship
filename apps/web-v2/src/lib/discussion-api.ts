@@ -57,6 +57,8 @@ export interface ConversationDetail {
   /** La photo ou la vidéo d'un sujet, montrée en grand sur sa story. */
   mediaPath: string | null
   mediaKind: MediaKind | null
+  /** La photo couvre la story, au lieu d'être posée en affiche sur le papier. */
+  mediaFond: boolean
   audience: Audience | null
   eventId: string | null
   expiresAt: string | null
@@ -69,7 +71,7 @@ export async function fetchConversation(id: string): Promise<ConversationDetail 
     supabase
       .from('conversations')
       .select(
-        'id, kind, title, created_by, mot, media_path, media_kind, audience, event_id, expires_at, closed_at',
+        'id, kind, title, created_by, mot, media_path, media_kind, media_fond, audience, event_id, expires_at, closed_at',
       )
       .eq('id', id)
       .maybeSingle(),
@@ -91,6 +93,7 @@ export async function fetchConversation(id: string): Promise<ConversationDetail 
     mot: conversation.mot,
     mediaPath: conversation.media_path,
     mediaKind: conversation.media_kind,
+    mediaFond: conversation.media_fond,
     audience: conversation.audience,
     eventId: conversation.event_id,
     expiresAt: conversation.expires_at,
@@ -206,6 +209,8 @@ export async function publishSujet(
   audience: Audience,
   eventId: string | null,
   media: Media | null,
+  /** La photo en fond plein écran plutôt qu'en affiche. */
+  fond: boolean,
 ): Promise<string> {
   return must(
     await supabase.rpc('publier_sujet', {
@@ -214,6 +219,7 @@ export async function publishSujet(
       p_audience: audience,
       ...(eventId ? { p_event: eventId } : {}),
       ...(media ? { p_media_path: media.path, p_media_kind: media.kind } : {}),
+      ...(fond ? { p_media_fond: true } : {}),
     }),
   )
 }

@@ -3,10 +3,11 @@
  *            à propos de quelle date. Une fenêtre sur ordinateur, le plein écran sur le papier
  *            décoré sur téléphone (validé par Uriel le 04/11/2026).
  * POURQUOI — on écrit d'abord, la photo vient en second : l'écran ne s'ouvre pas sur l'appareil.
+ *            La photo se pose en affiche ou en fond plein écran (Uriel, 05/11/2026).
  * ATTENTION — s'ouvre par `?sujet=nouveau` ; le fermer retire le paramètre (le retour du
  *            navigateur le referme aussi). Le premier élément reçoit le clavier : c'est le mot.
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Camera, Globe, ImagePlus, UserCheck, Users, X } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
@@ -45,6 +46,7 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
   const [eventId, setEventId] = useState<string | null>(null)
   const [events, setEvents] = useState<EventBrief[]>([])
   const [media, setMedia] = useState<{ file: File; preview: string } | null>(null)
+  const [fond, setFond] = useState(false)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
 
@@ -81,6 +83,10 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
     setMedia({ file, preview: URL.createObjectURL(file) })
   }
 
+  const video = media?.file.type.startsWith('video/') ?? false
+  // Seule une photo se pose en fond ; une vidéo reste en affiche (la base l'impose aussi).
+  const photoFond = fond && !!media && !video
+
   async function publish() {
     if (!actor || !mot.trim() || busy) return
     setBusy(true)
@@ -92,7 +98,7 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
         if (typeof uploaded === 'string') throw new Error(uploaded)
         sent = uploaded
       }
-      const id = await publishSujet(actor.id, mot.trim(), audience, eventId, sent)
+      const id = await publishSujet(actor.id, mot.trim(), audience, eventId, sent, photoFond)
       onClose(id)
     } catch (error) {
       setProblem(error instanceof Error ? error.message : 'La publication a échoué. Réessaie.')
@@ -100,12 +106,14 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
     }
   }
 
-  const video = media?.file.type.startsWith('video/') ?? false
-
   return (
     <dialog
       ref={dialog}
-      className="sujet-composer"
+      className={photoFond ? 'sujet-composer sujet-composer--fond' : 'sujet-composer'}
+      // La photo choisie devient le fond : seule une variable CSS passe dans un .tsx.
+      style={
+        photoFond ? ({ '--story-photo': `url("${media.preview}")` } as CSSProperties) : undefined
+      }
       aria-label="Lancer un sujet"
       onCancel={(event) => {
         event.preventDefault()
@@ -150,6 +158,17 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
                 <X size={12} strokeWidth={2.5} />
               </button>
             </figure>
+          )}
+          {media && !video && (
+            <Segmented
+              label="La photo"
+              options={[
+                { value: 'affiche', label: 'Affiche' },
+                { value: 'fond', label: 'Fond' },
+              ]}
+              value={fond ? 'fond' : 'affiche'}
+              onChange={(next) => setFond(next === 'fond')}
+            />
           )}
           <label className="sujet-composer__pick">
             <ImagePlus size={18} strokeWidth={1.75} aria-hidden="true" />

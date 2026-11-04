@@ -428,6 +428,7 @@ export type Database = {
           id: string
           kind: Database["public"]["Enums"]["conversation_kind"]
           last_message_at: string
+          media_fond: boolean
           media_kind: Database["public"]["Enums"]["message_media"] | null
           media_path: string | null
           mot: string | null
@@ -444,6 +445,7 @@ export type Database = {
           id?: string
           kind: Database["public"]["Enums"]["conversation_kind"]
           last_message_at?: string
+          media_fond?: boolean
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
           mot?: string | null
@@ -460,6 +462,7 @@ export type Database = {
           id?: string
           kind?: Database["public"]["Enums"]["conversation_kind"]
           last_message_at?: string
+          media_fond?: boolean
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
           mot?: string | null
@@ -3503,6 +3506,7 @@ export type Database = {
           p_actor: string
           p_audience: Database["public"]["Enums"]["sujet_audience"]
           p_event?: string
+          p_media_fond?: boolean
           p_media_kind?: Database["public"]["Enums"]["message_media"]
           p_media_path?: string
           p_mot: string
