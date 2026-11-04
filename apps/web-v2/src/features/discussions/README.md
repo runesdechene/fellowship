@@ -3,7 +3,7 @@
 Les sujets et Messages (maquette Figma, page Story `2727:291` ; conception
 `docs/superpowers/specs/2026-11-04-sujets-et-messages-design.md`).
 
-- `StoryBar` — la barre des sujets en haut des écrans connectés.
+- `StoryBar` — la barre des sujets en haut du tableau de bord.
 - `SujetComposer` — « Lancer un sujet » (`?sujet=nouveau`).
 - `DiscussionDrawer` — un sujet ouvert dans un tiroir (`?discussion=<id>`).
 - `Conversation` — un tchat : en-tête, `ChatFeed` (les bulles), `ChatInput` (la saisie).

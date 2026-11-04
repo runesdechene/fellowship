@@ -1921,7 +1921,6 @@
   --story-note-surface: var(--surface-card);
   --story-note-line: var(--line-card);
   --story-note-ink: var(--ink-title);
-  --story-note-empty-ink: var(--ink-350);
   --story-name-ink: var(--ink-soft);
   --story-badge-surface: var(--surface-card);
   --story-plus-surface: var(--action-surface);

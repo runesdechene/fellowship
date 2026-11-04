@@ -1,11 +1,10 @@
 /**
- * QUOI     — la barre des sujets, en haut de chaque écran connecté (maquette Story, 2727:291) :
+ * QUOI     — la barre des sujets, en haut du tableau de bord (maquette Story, 2727:291) :
  *            « Toi » pour lancer un sujet, puis un avatar par sujet ouvert, son mot en bulle,
  *            l'anneau à la couleur du festival, le nombre de participants.
  * POURQUOI — les exposants ne savaient pas à qui écrire pour parler d'un festival (Uriel,
  *            04/11/2026) : le sujet se lance et se lit au premier coup d'œil.
- * ATTENTION — elle se cache sur les pages qui déclarent un retour (une fiche), où la barre du haut
- *            porte la sortie, et dans Messages, qui est déjà la boîte des conversations. Ouvrir un sujet ou en lancer un passe par l'adresse
+ * ATTENTION — elle ne vit que sur le tableau de bord (Uriel, 04/11/2026). Ouvrir un sujet ou en lancer un passe par l'adresse
  *            (`?discussion=`, `?sujet=nouveau`) : le retour du navigateur les referme.
  */
 import type { CSSProperties } from 'react'
@@ -15,7 +14,6 @@ import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
 import { conversationTone } from '@/lib/discussions'
 import type { StorySujet } from '@/lib/discussion-api'
-import { usePageChrome } from '@/lib/page-chrome'
 import { useTagStyles } from '@/lib/useTagStyles'
 import { useMediaUrls, useStoryBar } from './useDiscussions'
 
@@ -24,7 +22,6 @@ export const NEW_SUJET_PARAM = 'sujet'
 
 export function StoryBar() {
   const { actor } = useAuth()
-  const { back } = usePageChrome()
   const { pathname } = useLocation()
   const bar = useStoryBar()
   const styles = useTagStyles()
@@ -35,8 +32,7 @@ export function StoryBar() {
   )
 
   // Une barre qui n'a pas pu se charger se tait plutôt que de prétendre qu'il n'y a aucun sujet.
-  // Ni sur une fiche (la barre du haut y porte la sortie), ni dans Messages, qui est déjà la boîte.
-  if (!actor || back || pathname.startsWith('/messages') || bar.status === 'failed') return null
+  if (!actor || pathname !== '/' || bar.status === 'failed') return null
 
   const open = (key: string, value: string) => {
     const next = new URLSearchParams(params)
@@ -52,8 +48,8 @@ export function StoryBar() {
             type="button"
             className="story story--new"
             onClick={() => open(NEW_SUJET_PARAM, 'nouveau')}
+            aria-label="Lancer un sujet"
           >
-            <span className="story__note story__note--empty">Lancer un sujet</span>
             <span className="story__ring">
               <Avatar className="story__face" src={actor.avatarUrl} name={actor.label} />
               <span className="story__plus" aria-hidden="true">
