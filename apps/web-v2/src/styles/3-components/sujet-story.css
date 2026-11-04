@@ -1,23 +1,16 @@
 /**
- * QUOI     — la story d'un sujet en plein écran (features/discussions/SujetStory) et le
- *            défilement aimanté du tiroir : la story, puis le tchat.
- * POURQUOI — maquette Story, « Un sujet ouvert, la story » (validée le 04/11/2026) : le mot en
- *            grand sur le papier, la discussion qui dépasse en bas et se glisse vers le haut.
- * ATTENTION — le glisser est le défilement natif du tiroir (scroll-snap) : rien n'est codé.
+ * QUOI     — la story d'un sujet en plein écran (features/discussions/SujetStory, StoryReply) :
+ *            le mot en grand sur le papier, « Voir les N messages » et le champ pour répondre.
+ * POURQUOI — maquette Story, option C (Uriel, 05/11/2026) : on répond comme sur Instagram.
  */
-
-.discussion-drawer__panel > .sujet-story,
-.discussion-drawer__panel > .conversation {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
 
 .sujet-story {
   position: relative;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
+  overflow-y: auto;
   background: linear-gradient(var(--chat-paper-top), var(--chat-paper-bottom));
 }
 
@@ -97,71 +90,79 @@
   font: var(--type-sujet-story-event);
 }
 
-/* La discussion qui dépasse en bas : on la glisse vers le haut, ou on la touche. */
-.sujet-story__peek {
-  position: sticky;
-  bottom: 0;
+/* En bas : la discussion à un appui, et le champ pour répondre sans quitter la story. */
+.sujet-story__foot {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-12);
-  padding: var(--space-12) var(--space-16) calc(var(--space-24) + env(safe-area-inset-bottom));
-  border-radius: var(--round-24) var(--round-24) 0 0;
+  padding: 0 var(--space-16) calc(var(--space-24) + env(safe-area-inset-bottom));
+}
+
+.sujet-story__more {
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
   background: var(--surface-card);
-  box-shadow: var(--sujet-story-peek-shadow);
-}
-
-.sujet-story__grip {
-  width: var(--size-40);
-  height: var(--space-5);
-  border-radius: var(--round-full);
-  background: var(--chat-meta-ink);
-  opacity: 0.45;
-}
-
-.sujet-story__invite {
+  box-shadow: var(--shadow-block);
   color: var(--ink-title);
-  font: var(--type-inbox-name);
+  font: var(--type-sujet-story-event);
+  cursor: pointer;
 }
 
-.sujet-story__reply {
+.story-reply {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
   width: 100%;
-  height: var(--size-44);
-  padding: 0 var(--space-16);
-  border: 0;
-  border-radius: var(--round-full);
-  background: var(--sujet-story-field);
-  color: var(--chat-meta-ink);
-  font: var(--type-chat-text);
-  text-align: left;
-  cursor: text;
 }
 
-.sujet-story__last {
+.story-reply__field {
   display: flex;
   align-items: center;
-  gap: var(--space-10);
-  width: 100%;
+  gap: var(--space-8);
+  height: var(--size-48);
+  padding: 0 var(--space-6) 0 var(--space-18);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-full);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-block);
 }
 
-.sujet-story__last-avatar {
-  --avatar-size: var(--size-28);
-}
-
-.sujet-story__last-text {
+.story-reply__input {
   flex: 1;
   min-width: 0;
-}
-
-.sujet-story__count {
-  color: var(--chat-meta-ink);
-  font: var(--type-inbox-sub);
-}
-
-.sujet-story__preview {
-  overflow: hidden;
+  border: 0;
+  background: none;
   color: var(--ink-title);
-  font: var(--type-inbox-preview);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font: var(--type-chat-text);
+  outline: none;
+}
+
+.story-reply__input::placeholder {
+  color: var(--chat-meta-ink);
+}
+
+.story-reply__send {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--size-36);
+  height: var(--size-36);
+  border: 0;
+  border-radius: var(--round-full);
+  background: var(--chat-tone, var(--action-surface));
+  color: var(--action-ink);
+  cursor: pointer;
+  animation: reaction-pop var(--duration-fast) var(--ease-drawer);
+}
+
+.story-reply__field:focus-within {
+  border-color: var(--ink-soft);
+}
+
+.story-reply__problem {
+  color: var(--ink-soft);
+  font: var(--type-conversation-meta);
+  text-align: center;
 }

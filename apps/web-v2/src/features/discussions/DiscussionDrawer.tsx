@@ -1,6 +1,6 @@
 /**
  * QUOI     — le tiroir d'un sujet : il glisse depuis la droite sur ordinateur, couvre l'écran sur
- *            téléphone (maquette Story). La story du sujet d'abord, le tchat en défilant.
+ *            téléphone (maquette Story). La story du sujet d'abord, la discussion ensuite.
  * POURQUOI — ouvrir un sujet ne fait pas quitter la page : on y répond, on referme, on reste où
  *            l'on était.
  * ATTENTION — rendu dans `document.body` : la coquille crée son propre empilement, rien de ce
@@ -10,7 +10,7 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
-import { Conversation } from './Conversation'
+import { CHAT_PARAM, Conversation } from './Conversation'
 import { DISCUSSION_PARAM } from './StoryBar'
 
 export function DiscussionDrawer() {
@@ -20,6 +20,7 @@ export function DiscussionDrawer() {
   const close = () => {
     const next = new URLSearchParams(params)
     next.delete(DISCUSSION_PARAM)
+    next.delete(CHAT_PARAM)
     setParams(next)
   }
   return createPortal(<Drawer key={id} id={id} onClose={close} />, document.body)
