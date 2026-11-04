@@ -3096,10 +3096,10 @@ export type Database = {
       envoyer_message: {
         Args: {
           p_actor: string
-          p_body: string
+          p_body?: string
           p_conversation: string
-          p_media_kind: Database["public"]["Enums"]["message_media"]
-          p_media_path: string
+          p_media_kind?: Database["public"]["Enums"]["message_media"]
+          p_media_path?: string
         }
         Returns: string
       }
@@ -3406,7 +3406,7 @@ export type Database = {
       normalized_department: { Args: { raw: string }; Returns: string }
       noter_visite: { Args: never; Returns: undefined }
       ouvrir_conversation: {
-        Args: { p_actor: string; p_others: string[]; p_title: string }
+        Args: { p_actor: string; p_others: string[]; p_title?: string }
         Returns: string
       }
       phone_key: { Args: { p_tel: string }; Returns: string }
@@ -3456,9 +3456,9 @@ export type Database = {
         Args: {
           p_actor: string
           p_audience: Database["public"]["Enums"]["sujet_audience"]
-          p_event: string
-          p_media_kind: Database["public"]["Enums"]["message_media"]
-          p_media_path: string
+          p_event?: string
+          p_media_kind?: Database["public"]["Enums"]["message_media"]
+          p_media_path?: string
           p_mot: string
         }
         Returns: string
