@@ -1,7 +1,7 @@
 /**
  * QUOI     — la barre du haut : à gauche le retour et le repère déclarés par la page, à droite
  *            « Modifier la fiche » (si la page le déclare), la recherche partout (maquettes
- *            2584:842 et 2584:1056), la cloche, « Passer Pro » pour un compte
+ *            2584:842 et 2584:1056), Messages (maquette Story), la cloche, « Passer Pro » pour un compte
  *            gratuit (maquette 2540:233) et « Ajouter une date ».
  * POURQUOI — sortir d'un écran est du châssis, pas du contenu : la main cherche le retour au même
  *            coin sur tous les écrans.
@@ -11,6 +11,7 @@ import { ArrowLeft, CirclePlus, Pencil } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
+import { MessagesButton } from '@/features/discussions/MessagesButton'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
 import { useTransitionNavigate, useViewTransition } from '@/lib/navigation'
 import { usePageChrome } from '@/lib/page-chrome'
@@ -85,6 +86,7 @@ export function Topbar() {
         </Button>
       )}
       <TopbarSearch />
+      <MessagesButton />
       <NotificationBell />
       {!pro && pathname !== '/pro' && (
         <Button variant="pro" className="topbar__pro" onClick={() => go('/pro')}>

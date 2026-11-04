@@ -1903,6 +1903,73 @@
   --type-landing-story-name: var(--weight-semibold) var(--size-14) / 1.3 var(--family-sans);
   --type-landing-story-craft: var(--weight-regular) var(--size-12) / 1.3 var(--family-sans);
   --type-landing-stories-button: var(--weight-semibold) var(--size-15) / 1 var(--family-sans);
+
+  /* ── LES SUJETS ET LE TCHAT (features/discussions, maquette Story) ──
+     L'anneau d'un sujet et les bulles prennent la couleur de la catégorie du festival lié, posée
+     par le composant (--story-ring-color, --chat-tone) ; sans festival, le brun chaud. */
+  --story-width: var(--width-story);
+  --story-bar-clear: var(
+    --width-inbox
+  ); /* laisse la place à la recherche, Messages, la cloche et « Ajouter » */
+  --chat-motif-size: var(--size-46);
+  --messages-page-offset: var(--width-messages-offset);
+  --story-note-width: var(--width-story-note);
+  --story-ring-size: var(--size-64);
+  --story-face-size: var(--size-52);
+  --story-ring-unread: var(--terre-450);
+  --story-ring-seen: var(--sand-500);
+  --story-note-surface: var(--surface-card);
+  --story-note-line: var(--line-card);
+  --story-note-ink: var(--ink-title);
+  --story-note-empty-ink: var(--ink-350);
+  --story-name-ink: var(--ink-soft);
+  --story-badge-surface: var(--surface-card);
+  --story-plus-surface: var(--action-surface);
+  --story-plus-ink: var(--action-ink);
+  --type-story-note: var(--weight-medium) var(--size-11) / 1.27 var(--family-sans);
+  --type-story-name: var(--weight-medium) var(--size-11) / 1.27 var(--family-sans);
+  --type-story-count: var(--weight-semibold) var(--size-10) / 1 var(--family-sans);
+
+  --chat-paper-top: var(--sand-50);
+  --chat-paper-bottom: var(--sand-250);
+  --chat-motif: url('/logo.png');
+  --chat-motif-opacity: var(--opacity-motif);
+  --chat-theirs: var(--sand-0);
+  --chat-theirs-ink: var(--ink-950);
+  --chat-theirs-shadow: 0 1px 3px rgb(51 36 26 / 8%);
+  --chat-mine-default: var(--terre-850);
+  --chat-mine-ink: var(--sand-0);
+  --chat-meta-ink: var(--ink-350);
+  --chat-day-surface: var(--surface-card);
+  --chat-read-ink: var(--sand-0);
+  --chat-bubble-width: var(--width-chat-bubble);
+  --chat-media-width: var(--width-chat-media);
+  --chat-name-1: var(--plume-1);
+  --chat-name-2: var(--plume-2);
+  --chat-name-3: var(--plume-3);
+  --chat-name-4: var(--plume-4);
+  --chat-name-5: var(--plume-5);
+  --chat-name-6: var(--plume-6);
+  --chat-name-7: var(--plume-7);
+  --chat-name-8: var(--plume-8);
+  --chat-head-surface: color-mix(in srgb, var(--sand-50) 92%, transparent);
+  --type-chat-text: var(--weight-regular) var(--size-14) / 1.43 var(--family-sans);
+  --type-chat-name: var(--weight-semibold) var(--size-12) / 1.3 var(--family-sans);
+  --type-chat-meta: var(--weight-regular) var(--size-10) / 1 var(--family-sans);
+  --type-chat-day: var(--weight-medium) var(--size-11) / 1 var(--family-sans);
+  --type-conversation-name: var(--weight-semibold) var(--size-15) / 1.3 var(--family-sans);
+  --type-conversation-meta: var(--weight-regular) var(--size-12) / 1.3 var(--family-sans);
+  --type-conversation-mot: var(--weight-semibold) var(--size-17) / 1.3 var(--family-sans);
+  --drawer-width: var(--width-drawer);
+  --drawer-veil: rgb(31 29 27 / 12%);
+  --inbox-width: var(--width-inbox);
+  --type-inbox-name: var(--weight-semibold) var(--size-14) / 1.3 var(--family-sans);
+  --type-inbox-preview: var(--weight-regular) var(--size-13) / 1.3 var(--family-sans);
+  --type-inbox-sub: var(--weight-medium) var(--size-11) / 1.3 var(--family-sans);
+  --composer-width: var(--width-composer);
+  --type-composer-mot: var(--weight-semibold) var(--size-22) / 1.3 var(--family-sans);
+  --type-composer-mot-phone: var(--weight-semibold) var(--size-30) / 1.2 var(--family-sans);
+  --leave-ink: var(--terre-700);
 }
 
 /* =========================================================================
@@ -2065,6 +2132,30 @@
   --net-gradient: linear-gradient(90deg, var(--terre-500), var(--terre-200));
   --net-masked-ink: var(--terre-500);
   --tag-first-ink: var(--night-0);
+
+  /* Les sujets et le tchat, la nuit. */
+  --story-ring-seen: var(--night-400);
+  --chat-paper-top: var(--night-50);
+  --chat-paper-bottom: var(--night-0);
+  --chat-motif-opacity: 0.035;
+  --chat-theirs: var(--night-100);
+  --chat-theirs-ink: var(--cream-50);
+  --chat-theirs-shadow: none;
+  --chat-mine-default: color-mix(in srgb, var(--terre-400) 24%, transparent);
+  --chat-mine-ink: var(--cream-50);
+  --chat-meta-ink: var(--cream-750);
+  --chat-read-ink: var(--cream-50);
+  --chat-name-1: var(--plume-night-1);
+  --chat-name-2: var(--plume-night-2);
+  --chat-name-3: var(--plume-night-3);
+  --chat-name-4: var(--plume-night-4);
+  --chat-name-5: var(--plume-night-5);
+  --chat-name-6: var(--plume-night-6);
+  --chat-name-7: var(--plume-night-7);
+  --chat-name-8: var(--plume-night-8);
+  --chat-head-surface: color-mix(in srgb, var(--night-0) 92%, transparent);
+  --drawer-veil: rgb(0 0 0 / 40%);
+  --leave-ink: var(--terre-400);
 }
 
 /* ===================================================================== 

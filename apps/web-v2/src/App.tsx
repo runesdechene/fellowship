@@ -30,6 +30,8 @@ import { UpdatesAdminPage } from '@/features/admin-updates/UpdatesAdminPage'
 import { FaqAdminPage } from '@/features/admin-faq/FaqAdminPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
+import { MessagesPage } from '@/features/discussions/MessagesPage'
+import { NewMessagePage } from '@/features/discussions/NewMessagePage'
 import { NetworkPage } from '@/features/community/NetworkPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
@@ -298,6 +300,22 @@ export function App() {
           element={
             <AppPage>
               <ExplorerPage />
+            </AppPage>
+          }
+        />
+        <Route
+          path="/messages/nouveau"
+          element={
+            <AppPage>
+              <NewMessagePage />
+            </AppPage>
+          }
+        />
+        <Route
+          path="/messages/:id?"
+          element={
+            <AppPage>
+              <MessagesPage />
             </AppPage>
           }
         />

@@ -28,7 +28,9 @@ describe('remainingLabel', () => {
 })
 
 describe('conversationTone', () => {
-  const styles = new Map([['fantastique', { label: 'Fantastique', bgColor: '#c4a0e0', textColor: '#7a638b' }]])
+  const styles = new Map([
+    ['fantastique', { label: 'Fantastique', bgColor: '#c4a0e0', textColor: '#7a638b' }],
+  ])
   it('prend la première catégorie connue du festival', () => {
     expect(conversationTone(styles, ['inconnue', 'fantastique'])?.textColor).toBe('#7a638b')
   })
@@ -50,7 +52,12 @@ describe('toBubbles', () => {
 
   it('regroupe les messages proches d’un même auteur', () => {
     const bubbles = toBubbles(
-      [message('a', 'lia', 0), message('b', 'lia', 1), message('c', 'moi', 2), message('d', 'lia', 30)],
+      [
+        message('a', 'lia', 0),
+        message('b', 'lia', 1),
+        message('c', 'moi', 2),
+        message('d', 'lia', 30),
+      ],
       'moi',
     )
     expect(bubbles.map((b) => [b.first, b.last])).toEqual([

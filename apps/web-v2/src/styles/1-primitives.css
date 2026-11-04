@@ -413,4 +413,32 @@
   --width-escale: 252px;
   --height-escale-poster: 336px;
   --width-stamp: 112px; /* la navigation des douze mois */
+  /* ── LES SUJETS ET LE TCHAT (maquette Story, 04/11/2026) ── */
+  --width-story: 112px; /* un sujet dans la barre */
+  --width-story-note: 92px; /* le mot en bulle */
+  --width-drawer: 540px; /* le tiroir d'un sujet */
+  --width-inbox: 400px; /* la liste de Messages */
+  --width-messages-offset: 200px; /* la barre des sujets au-dessus de la page Messages */
+  --width-chat-bubble: 420px;
+  --width-chat-media: 260px;
+  --width-composer: 420px;
+  --opacity-motif: 0.04; /* le logo en filigrane du papier */
+  --opacity-motif-wide: 0.03; /* sur une grande surface, il pèse plus */
+  /* Les noms d'un groupe : huit encres douces, de jour puis de nuit. */
+  --plume-1: #496c80;
+  --plume-2: #7a638b;
+  --plume-3: #956842;
+  --plume-4: #5f7a55;
+  --plume-5: #8a4f4f;
+  --plume-6: #5b6a8f;
+  --plume-7: #8a6d3b;
+  --plume-8: #6d5a7e;
+  --plume-night-1: #a9cbe0;
+  --plume-night-2: #d7c0ea;
+  --plume-night-3: #f2c49c;
+  --plume-night-4: #bcd3ae;
+  --plume-night-5: #e7b2b2;
+  --plume-night-6: #b9c4e6;
+  --plume-night-7: #e6cf9f;
+  --plume-night-8: #cdbbe0;
 }

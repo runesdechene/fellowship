@@ -7,7 +7,7 @@
  * ATTENTION — le bucket `discussions` est privé et se crée à la main : les médias se lisent par
  *            URL signée.
  */
-import { fetchActorProfiles } from './friends'
+import { fetchActorProfiles, PROGRAMMED_STATUSES } from './friends'
 import { imageProblem, resizeImage } from './image-resize'
 import { must, supabase } from './supabase'
 import type { Audience, ChatMessage, Person } from './discussions'
@@ -114,7 +114,8 @@ function toChatMessage(row: MessageRow): ChatMessage {
   }
 }
 
-const MESSAGE_COLUMNS = 'id, conversation_id, author_actor, body, media_path, media_kind, created_at'
+const MESSAGE_COLUMNS =
+  'id, conversation_id, author_actor, body, media_path, media_kind, created_at'
 
 /** Les 300 derniers messages, du plus ancien au plus récent. */
 export async function fetchMessages(conversationId: string): Promise<ChatMessage[]> {
@@ -169,9 +170,15 @@ export async function uploadMedia(actorId: string, file: File): Promise<Media | 
       return 'Cette image ne peut pas être utilisée.'
     }
   }
-  const extension = video ? (file.name.split('.').pop() ?? 'mp4').toLowerCase() : body.type === 'image/webp' ? 'webp' : 'jpg'
+  const extension = video
+    ? (file.name.split('.').pop() ?? 'mp4').toLowerCase()
+    : body.type === 'image/webp'
+      ? 'webp'
+      : 'jpg'
   const path = `${actorId}/${crypto.randomUUID()}.${extension}`
-  const { error } = await supabase.storage.from(BUCKET).upload(path, body, { contentType: body.type || file.type })
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, body, { contentType: body.type || file.type })
   if (error) return 'L’envoi du fichier a échoué. Réessaie.'
   return { path, kind: video ? 'video' : 'image' }
 }
@@ -220,7 +227,11 @@ export async function sendMessage(
   )
 }
 
-export async function openConversation(actorId: string, others: string[], title: string): Promise<string> {
+export async function openConversation(
+  actorId: string,
+  others: string[],
+  title: string,
+): Promise<string> {
   return must(
     await supabase.rpc('ouvrir_conversation', {
       p_actor: actorId,
@@ -238,20 +249,55 @@ export async function closeSujet(actorId: string, conversationId: string): Promi
   must(await supabase.rpc('cloturer_sujet', { p_actor: actorId, p_conversation: conversationId }))
 }
 
-export async function addMembers(actorId: string, conversationId: string, others: string[]): Promise<void> {
-  must(await supabase.rpc('ajouter_membres', { p_actor: actorId, p_conversation: conversationId, p_others: others }))
+export async function addMembers(
+  actorId: string,
+  conversationId: string,
+  others: string[],
+): Promise<void> {
+  must(
+    await supabase.rpc('ajouter_membres', {
+      p_actor: actorId,
+      p_conversation: conversationId,
+      p_others: others,
+    }),
+  )
 }
 
-export async function renameGroup(actorId: string, conversationId: string, title: string): Promise<void> {
-  must(await supabase.rpc('renommer_groupe', { p_actor: actorId, p_conversation: conversationId, p_title: title }))
+export async function renameGroup(
+  actorId: string,
+  conversationId: string,
+  title: string,
+): Promise<void> {
+  must(
+    await supabase.rpc('renommer_groupe', {
+      p_actor: actorId,
+      p_conversation: conversationId,
+      p_title: title,
+    }),
+  )
 }
 
 export async function leaveConversation(actorId: string, conversationId: string): Promise<void> {
-  must(await supabase.rpc('quitter_conversation', { p_actor: actorId, p_conversation: conversationId }))
+  must(
+    await supabase.rpc('quitter_conversation', {
+      p_actor: actorId,
+      p_conversation: conversationId,
+    }),
+  )
 }
 
-export async function setMuted(actorId: string, conversationId: string, muted: boolean): Promise<void> {
-  must(await supabase.rpc('regler_sourdine', { p_actor: actorId, p_conversation: conversationId, p_muted: muted }))
+export async function setMuted(
+  actorId: string,
+  conversationId: string,
+  muted: boolean,
+): Promise<void> {
+  must(
+    await supabase.rpc('regler_sourdine', {
+      p_actor: actorId,
+      p_conversation: conversationId,
+      p_muted: muted,
+    }),
+  )
 }
 
 /** Les personnes à qui écrire : les amis d'abord (lib/friends.ts), puis la recherche par nom. */
@@ -267,6 +313,65 @@ export async function searchPeople(words: string, viewerId: string): Promise<Per
       .limit(20),
   )
   return rows.flatMap((row) =>
-    row.actor_id ? [{ id: row.actor_id, label: row.label ?? 'Exposant', avatar: row.avatar_url }] : [],
+    row.actor_id
+      ? [{ id: row.actor_id, label: row.label ?? 'Exposant', avatar: row.avatar_url }]
+      : [],
   )
+}
+
+export interface EventBrief {
+  id: string
+  name: string
+  tags: string[] | null
+  imageUrl: string | null
+  startDate: string
+  endDate: string
+}
+
+/** Le festival dont parle un sujet ; `null` s'il n'est plus lisible (fiche privée, supprimée). */
+export async function fetchEventBrief(eventId: string): Promise<EventBrief | null> {
+  // En deux temps : `must(await … .maybeSingle())` d'une traite se type en `never` (.claude/rules/v2.md).
+  const response = await supabase
+    .from('events')
+    .select('id, name, tags, image_url, start_date, end_date')
+    .eq('id', eventId)
+    .maybeSingle()
+  const row = must(response)
+  if (!row) return null
+  return {
+    id: row.id,
+    name: row.name,
+    tags: row.tags,
+    imageUrl: row.image_url,
+    startDate: row.start_date,
+    endDate: row.end_date,
+  }
+}
+
+/** Mes prochaines dates programmées : ce dont un sujet peut parler. */
+export async function fetchMyUpcomingEvents(
+  actorId: string,
+  todaySql: string,
+): Promise<EventBrief[]> {
+  const rows = must(
+    await supabase
+      .from('participations')
+      .select('events!inner(id, name, tags, image_url, start_date, end_date)')
+      .eq('actor_id', actorId)
+      .in('status', PROGRAMMED_STATUSES)
+      .gte('events.end_date', todaySql),
+  )
+  // Le tri d'une table jointe ne range pas les lignes parentes : on trie ici.
+  const events = rows
+    .map(({ events }) => events)
+    .sort((a, b) => a.start_date.localeCompare(b.start_date))
+    .slice(0, 8)
+  return events.map((events) => ({
+    id: events.id,
+    name: events.name,
+    tags: events.tags,
+    imageUrl: events.image_url,
+    startDate: events.start_date,
+    endDate: events.end_date,
+  }))
 }

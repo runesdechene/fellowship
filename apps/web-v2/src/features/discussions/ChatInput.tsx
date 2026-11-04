@@ -1,0 +1,110 @@
+/**
+ * QUOI     — la saisie d'un tchat : joindre une photo ou une vidéo, écrire, envoyer.
+ * POURQUOI — comme sur WhatsApp : « Entrée » envoie, « Maj + Entrée » passe à la ligne ; l'envoi
+ *            se fait au nom de l'acteur actif.
+ */
+import { useState } from 'react'
+import { ArrowUp, ImagePlus, Plus, X } from 'lucide-react'
+import { useAuth } from '@/lib/auth'
+import { sendMessage, uploadMedia, type Media } from '@/lib/discussion-api'
+
+interface Props {
+  conversationId: string
+  placeholder: string
+}
+
+export function ChatInput({ conversationId, placeholder }: Props) {
+  const { actor } = useAuth()
+  const [text, setText] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [problem, setProblem] = useState<string | null>(null)
+
+  async function send() {
+    if (!actor || busy || (!text.trim() && !file)) return
+    setBusy(true)
+    setProblem(null)
+    try {
+      let media: Media | null = null
+      if (file) {
+        const uploaded = await uploadMedia(actor.id, file)
+        if (typeof uploaded === 'string') throw new Error(uploaded)
+        media = uploaded
+      }
+      await sendMessage(actor.id, conversationId, text, media)
+      setText('')
+      setFile(null)
+    } catch (error) {
+      setProblem(error instanceof Error ? error.message : 'Le message n’est pas parti. Réessaie.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <form
+      className="chat-input"
+      onSubmit={(event) => {
+        event.preventDefault()
+        void send()
+      }}
+    >
+      {problem && (
+        <p className="chat-input__problem" role="alert">
+          {problem}
+        </p>
+      )}
+      {file && (
+        <p className="chat-input__file">
+          {file.name}
+          <button type="button" aria-label="Retirer le fichier" onClick={() => setFile(null)}>
+            <X size={12} strokeWidth={2.5} />
+          </button>
+        </p>
+      )}
+      <div className="chat-input__row">
+        <label className="chat-input__attach" aria-label="Joindre une photo ou une vidéo">
+          <Plus size={20} strokeWidth={1.75} aria-hidden="true" />
+          <input
+            type="file"
+            accept="image/*,video/*"
+            hidden
+            onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+          />
+        </label>
+        <div className="chat-input__field">
+          <textarea
+            rows={1}
+            value={text}
+            placeholder={placeholder}
+            aria-label="Message"
+            onChange={(event) => setText(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
+                void send()
+              }
+            }}
+          />
+          <label className="chat-input__photo" aria-label="Ajouter une photo">
+            <ImagePlus size={18} strokeWidth={1.75} aria-hidden="true" />
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+            />
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="chat-input__send"
+          aria-label="Envoyer"
+          disabled={busy || (!text.trim() && !file)}
+        >
+          <ArrowUp size={18} strokeWidth={2.2} />
+        </button>
+      </div>
+    </form>
+  )
+}

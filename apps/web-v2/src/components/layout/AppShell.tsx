@@ -7,6 +7,7 @@
  *            latérale et la barre d'onglets.
  *            Une notification ouvre sa page au nom de son destinataire (`?compte=`) : la coquille
  *            active cette casquette, puis efface le paramètre (Uriel, 22/10/2026).
+ *            Elle porte aussi la barre des sujets et leurs fenêtres (features/discussions).
  * ATTENTION — `bare` retire la barre du haut : la création d'une date pose la sienne (lot 10b).
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
@@ -22,6 +23,9 @@ import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
 import { Topbar } from './Topbar'
 import { SearchOverlay } from '@/features/search/SearchOverlay'
+import { DiscussionDrawer } from '@/features/discussions/DiscussionDrawer'
+import { StoryBar } from '@/features/discussions/StoryBar'
+import { SujetComposer } from '@/features/discussions/SujetComposer'
 
 const COLLAPSED_KEY = 'flwsh-sidebar-collapsed'
 
@@ -90,11 +94,14 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         />
         <main className="app-shell__main">
           {!bare && <Topbar />}
+          {!bare && <StoryBar />}
           {children}
         </main>
         <PosterWall />
         <TabBar friendRequests={friendRequests} updatesUnread={updatesUnread} />
         <SearchOverlay />
+        <SujetComposer />
+        <DiscussionDrawer />
       </div>
     </PageChromeProvider>
   )
