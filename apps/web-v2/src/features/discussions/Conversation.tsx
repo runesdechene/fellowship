@@ -11,7 +11,7 @@
  */
 import { useState, type CSSProperties } from 'react'
 import { ArrowLeft, Users, X } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -53,14 +53,15 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
   const [membersOpen, setMembersOpen] = useState(false)
   const [closing, setClosing] = useState<'ask' | 'busy' | null>(null)
   const [problem, setProblem] = useState<string | null>(null)
+  const navigate = useNavigate()
 
+  // Ouverte depuis la story, la discussion y revient par une flèche, à gauche (Uriel, 05/11/2026).
+  const fromStory = story && params.has(CHAT_PARAM)
+  const exit = fromStory ? 'arrow' : closeWith
+  const leave = fromStory ? () => void navigate(-1) : onClose
   const closeButton = (
-    <Button
-      variant="icon"
-      aria-label={closeWith === 'cross' ? 'Fermer' : 'Retour'}
-      onClick={onClose}
-    >
-      {closeWith === 'cross' ? (
+    <Button variant="icon" aria-label={exit === 'cross' ? 'Fermer' : 'Retour'} onClick={leave}>
+      {exit === 'cross' ? (
         <X size={18} strokeWidth={1.75} />
       ) : (
         <ArrowLeft size={20} strokeWidth={1.75} />
@@ -142,7 +143,7 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
       }
     >
       <header className="conversation__head">
-        {closeWith === 'arrow' && closeButton}
+        {exit === 'arrow' && closeButton}
         {sujet ? (
           <Avatar className="conversation__avatar" src={author?.avatar} name={author?.label} />
         ) : others.length > 1 ? (
@@ -186,7 +187,7 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
             Membres
           </Button>
         )}
-        {closeWith === 'cross' && closeButton}
+        {exit === 'cross' && closeButton}
       </header>
 
       {sujet && (

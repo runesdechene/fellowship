@@ -29,7 +29,10 @@ export function DiscussionDrawer() {
 function Drawer({ id, onClose }: { id: string; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
   useEffect(() => {
+    // Le clavier du téléphone fait défiler la page sous le tiroir : on la rend où on l'a trouvée.
+    const top = window.scrollY
     dialog.current?.showModal()
+    return () => window.scrollTo({ top })
   }, [])
   return (
     <dialog
