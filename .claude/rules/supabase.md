@@ -379,3 +379,10 @@ seulement « l'e-mail n'est pas parti ».
 
 **How to apply :** tout expéditeur s'écrit `…@equipe.flw.sh`. Pour sonder un envoi sans écrire à
 personne : `POST https://api.resend.com/emails/batch` vers `delivered@resend.dev` avec la clé du `.env`.
+
+## Un horodatage de migration se choisit après le dernier fichier, pas sur l'heure
+
+**Le piège** (05/11/2026) : les migrations du jour portaient des heures « à venir » (19:00 à 21:00) ;
+la mienne, horodatée 19:00, en doublait une, et `db push` refusait (« inserted before the last
+migration »). **How to apply :** `ls supabase/migrations | tail -3`, et prendre un horodatage plus
+grand que le dernier.
