@@ -96,6 +96,7 @@ export function Topbar() {
       )}
       <Button
         variant="action"
+        className="topbar__add"
         icon={<CirclePlus size={22} strokeWidth={1.75} />}
         onClick={() => go('/evenements/nouveau')}
         aria-label="Ajouter une date"

@@ -65,7 +65,7 @@
 
 /* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
 @media (width <= 760px) {
-  /* Quatre boutons à côté de la marque depuis Messages (04/11/2026) : l'écart se resserre. */
+  /* Recherche, Messages et la cloche à côté de la marque : l'écart se resserre. */
   .topbar {
     --topbar-gap: var(--space-6);
 
@@ -86,7 +86,9 @@
 
   /* La double classe l'emporte sur `.button`, importé après : sans elle, « Passer Pro » restait
      affiché et poussait la marque hors de l'écran (02/11/2026). */
-  /* « Modifier la fiche » descend dans la fiche, en grand (EventPage.tsx). */
+  /* « Modifier la fiche » descend dans la fiche, en grand (EventPage.tsx). « Ajouter une date » et
+     « Passer Pro » passent dans la barre d'onglets et la feuille « Moi » (TabBar.tsx). */
+  .topbar .topbar__add,
   .topbar .topbar__add-label,
   .topbar .topbar__pro,
   .topbar .topbar__edit {

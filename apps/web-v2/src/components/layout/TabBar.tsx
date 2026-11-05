@@ -1,5 +1,5 @@
 /**
- * QUOI     — la barre d'onglets du téléphone : Tableau, Explorer, Calendrier, Communauté, et
+ * QUOI     — la barre d'onglets du téléphone : Tableau, Explorer, Ajouter, Calendrier, Communauté, et
  *            « Moi » à droite, qui ouvre le menu du compte en feuille : elle monte du bas, sur un
  *            voile, et se ferme d'un geste vers le bas (comme la V1, Uriel, 19/10/2026). Son contenu
  *            suit la maquette 2123:66 ; l'administration et le thème s'y ajoutent, comme sur ordinateur.
@@ -16,6 +16,7 @@ import {
   ChartColumn,
   Check,
   CircleGauge,
+  CirclePlus,
   LogOut,
   Plus,
   Settings,
@@ -28,15 +29,19 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { NavLink, useMatch } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { LegalLink } from '@/components/ui/LegalLink'
+import { ProBadge } from '@/components/ui/ProBadge'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { communityBadge } from '@/lib/network'
+import { usePlan } from '@/lib/usePlan'
 
 const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
   { to: '/explorer', label: 'Explorer', Icon: Telescope },
+  // « Ajouter une date » descend de la barre du haut, trop chargée sur téléphone (Uriel, 05/11/2026).
+  { to: '/evenements/nouveau', label: 'Ajouter', Icon: CirclePlus },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
   { to: '/communaute', label: 'Communauté', Icon: Users },
 ]
@@ -53,6 +58,7 @@ export function TabBar({
 }) {
   const conversation = useMatch('/messages/:id')
   const chatting = !!conversation && conversation.params.id !== 'nouveau'
+  const { pro } = usePlan()
   const { actor, actors, entities, person, switchActor, signOut } = useAuth()
   const go = useTransitionNavigate()
   // Les mêmes accès que la barre latérale : sa vitrine, et l'administration pour un admin.
@@ -135,6 +141,13 @@ export function TabBar({
             <NavLink to={`/${vitrine}`} className="tab-sheet__item tab-sheet__link" onClick={close}>
               <Store size={18} strokeWidth={1.8} />
               <span>Ma vitrine</span>
+            </NavLink>
+          )}
+          {/* « Passer Pro » quitte la barre du haut sur téléphone : il vit ici (Uriel, 05/11/2026). */}
+          {!pro && (
+            <NavLink to="/pro" className="tab-sheet__item tab-sheet__link" onClick={close}>
+              <ProBadge />
+              <span>Passer Pro</span>
             </NavLink>
           )}
           <NavLink to="/bilans" className="tab-sheet__item tab-sheet__link" onClick={close}>
