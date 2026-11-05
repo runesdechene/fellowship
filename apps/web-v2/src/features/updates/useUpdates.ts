@@ -117,12 +117,14 @@ export function useUpdates(personId: string | undefined) {
   }, [round])
 
   // Ouvrir la page, c'est avoir lu : la pastille s'éteint (une écriture ratée la laisse allumée).
+  // La requête ne part qu'attendue : sans `.then`, un `void supabase…update()` n'envoie rien.
   useEffect(() => {
     if (!personId) return
     void supabase
       .from('users')
       .update({ updates_seen_at: new Date().toISOString() })
       .eq('actor_id', personId)
+      .then(() => undefined)
   }, [personId])
 
   const write = useCallback(
