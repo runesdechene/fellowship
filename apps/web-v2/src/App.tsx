@@ -111,10 +111,10 @@ function AdminRoute({ children }: { children: ReactNode }) {
 }
 
 /** Un écran de l'app : connecté, dans la coque. */
-function AppPage({ children }: { children: ReactNode }) {
+function AppPage({ children, bare = false }: { children: ReactNode; bare?: boolean }) {
   return (
     <ProtectedRoute>
-      <AppShell>{children}</AppShell>
+      <AppShell bare={bare}>{children}</AppShell>
     </ProtectedRoute>
   )
 }
@@ -305,7 +305,7 @@ export function App() {
         <Route
           path="/messages/nouveau"
           element={
-            <AppPage>
+            <AppPage bare>
               <MessagesPage composing />
             </AppPage>
           }
@@ -313,7 +313,7 @@ export function App() {
         <Route
           path="/messages/:id?"
           element={
-            <AppPage>
+            <AppPage bare>
               <MessagesPage />
             </AppPage>
           }

@@ -662,17 +662,13 @@
 }
 
 /* ── LA PAGE MESSAGES ── */
+/* Toute la zone de contenu, sans barre du haut (Uriel, 05/11/2026). */
 .messages-page {
   display: grid;
   grid-template-columns: var(--inbox-width) 1fr;
-  height: calc(100dvh - var(--messages-page-offset));
-  margin: calc(var(--topbar-top) + var(--topbar-control-height) + var(--space-16))
-    var(--topbar-right) var(--space-24);
+  height: 100dvh;
   overflow: hidden;
-  border: 1px solid var(--line-card);
-  border-radius: var(--round-20);
   background: var(--surface-card);
-  box-shadow: var(--shadow-block);
 }
 
 .messages-page__list {
@@ -685,11 +681,12 @@
 .messages-page__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-10);
   padding: var(--space-22) var(--space-20) var(--space-14) var(--space-24);
 }
 
 .messages-page__title {
+  flex: 1;
   font: var(--type-section-title);
   color: var(--ink-title);
 }
@@ -1079,10 +1076,6 @@
 
   .messages-page {
     display: block;
-    height: 100dvh;
-    margin: 0;
-    border: 0;
-    border-radius: 0;
   }
 
   .messages-page__open,
@@ -1097,10 +1090,10 @@
     z-index: var(--layer-map);
   }
 
-  /* Les marges de toutes les pages du téléphone, et l'air sous la barre du haut. */
+  /* Pas de barre du haut sur Messages : la liste commence en haut de l'écran. */
   .messages-page__list {
     height: 100%;
-    padding-top: var(--mobile-padding-top);
+    padding-top: var(--space-24);
     border: 0;
   }
 

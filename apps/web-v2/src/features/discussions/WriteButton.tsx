@@ -3,6 +3,7 @@
  * POURQUOI — à deux, la conversation est unique (la base l'impose) : écrire rouvre l'existante.
  */
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
@@ -12,6 +13,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 export function WriteButton({ actorId }: { actorId: string }) {
   const { actor } = useAuth()
   const go = useTransitionNavigate()
+  const { pathname } = useLocation()
   const [busy, setBusy] = useState(false)
 
   async function write() {
@@ -19,7 +21,7 @@ export function WriteButton({ actorId }: { actorId: string }) {
     setBusy(true)
     try {
       const id = await openConversation(actor.id, [actorId], '')
-      go(`/messages/${id}`)
+      go(`/messages/${id}`, { state: { from: pathname } })
     } catch {
       setBusy(false)
     }

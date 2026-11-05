@@ -8,6 +8,7 @@ import {
   conversationName,
   conversationTone,
   firstEmoji,
+  messagesExit,
   previewLine,
   remainingLabel,
   summarizeReactions,
@@ -126,5 +127,13 @@ describe('firstEmoji', () => {
     expect(firstEmoji('🇫🇷 bravo')).toBe('🇫🇷')
     expect(firstEmoji('👨‍👩‍👧')).toBe('👨‍👩‍👧')
     expect(firstEmoji('salut')).toBeNull()
+  })
+})
+
+describe('messagesExit', () => {
+  it('revient à la page d’origine, sinon au tableau de bord', () => {
+    expect(messagesExit({ from: '/calendrier?mois=2026-11' })).toBe('/calendrier?mois=2026-11')
+    expect(messagesExit(null)).toBe('/')
+    expect(messagesExit({ from: 3 })).toBe('/')
   })
 })

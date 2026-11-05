@@ -7,7 +7,7 @@
  */
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { openConversation } from '@/lib/discussion-api'
@@ -17,6 +17,7 @@ import { PeoplePicker } from './PeoplePicker'
 export function NewMessage() {
   const { actor } = useAuth()
   const navigate = useNavigate()
+  const state: unknown = useLocation().state
   const [chosen, setChosen] = useState<Person[]>([])
   const [title, setTitle] = useState('')
   const [busy, setBusy] = useState(false)
@@ -33,7 +34,7 @@ export function NewMessage() {
         chosen.map((person) => person.id),
         group ? title : '',
       )
-      void navigate(`/messages/${id}`, { replace: true })
+      void navigate(`/messages/${id}`, { replace: true, state })
     } catch (error) {
       setProblem(
         error instanceof Error ? error.message : 'La conversation ne s’ouvre pas. Réessaie.',

@@ -1916,7 +1916,6 @@
     --width-inbox
   ); /* laisse la place à la recherche, Messages, la cloche et « Ajouter » */
   --chat-motif-size: var(--size-64);
-  --messages-page-offset: var(--width-messages-offset);
   --story-ring-size: var(--size-64);
   --story-face-size: var(--size-52);
   --story-ring-unread: var(--terre-450);

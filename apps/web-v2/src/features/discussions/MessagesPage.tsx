@@ -4,16 +4,18 @@
  *            téléphone, la liste ou la conversation, en plein écran.
  * POURQUOI — le tchat remplace WhatsApp : une seule boîte, la plus récente en haut. Un sujet
  *            clôturé y reste lisible.
- * ATTENTION — `/messages/:id` ouvre une conversation : elle a son adresse, le retour du navigateur
+ * ATTENTION — la page prend tout le contenu, sans barre du haut : sa flèche ramène à la page d'où
+ *            l'on vient (`state.from`, que chaque déplacement interne fait suivre).
+ *            `/messages/:id` ouvre une conversation : elle a son adresse, le retour du navigateur
  *            revient à la liste. `/messages/nouveau` met « Nouveau message » à la place de la liste.
  */
-import { PenSquare } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, PenSquare } from 'lucide-react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
 import { othersOf, type InboxRow } from '@/lib/discussion-api'
-import { conversationName, previewLine, remainingLabel } from '@/lib/discussions'
+import { conversationName, messagesExit, previewLine, remainingLabel } from '@/lib/discussions'
 import { formatTime, timeAgo } from '@/lib/dates'
 import { Conversation } from './Conversation'
 import { NewMessage } from './NewMessage'
@@ -22,6 +24,7 @@ import { useInbox } from './useDiscussions'
 export function MessagesPage({ composing = false }: { composing?: boolean }) {
   const { id } = useParams()
   const navigate = useNavigate()
+  const state: unknown = useLocation().state
 
   return (
     <div className={id ? 'messages-page messages-page--open' : 'messages-page'}>
@@ -36,7 +39,7 @@ export function MessagesPage({ composing = false }: { composing?: boolean }) {
           <Conversation
             key={id}
             conversationId={id}
-            onClose={() => void navigate('/messages')}
+            onClose={() => void navigate('/messages', { state })}
             closeWith="arrow"
           />
         ) : (
@@ -54,16 +57,24 @@ export function MessagesPage({ composing = false }: { composing?: boolean }) {
 /** La liste des conversations, la plus récente en haut. */
 function Inbox({ selected }: { selected: string | undefined }) {
   const navigate = useNavigate()
+  const state: unknown = useLocation().state
   const inbox = useInbox()
 
   return (
     <>
       <header className="messages-page__head">
+        <Button
+          variant="icon"
+          aria-label="Retour"
+          onClick={() => void navigate(messagesExit(state))}
+        >
+          <ArrowLeft size={18} strokeWidth={1.75} />
+        </Button>
         <h1 className="messages-page__title">Messages</h1>
         <Button
           variant="action"
           icon={<PenSquare size={16} strokeWidth={1.75} />}
-          onClick={() => void navigate('/messages/nouveau')}
+          onClick={() => void navigate('/messages/nouveau', { state })}
         >
           Nouveau
         </Button>
@@ -87,7 +98,7 @@ function Inbox({ selected }: { selected: string | undefined }) {
               <InboxItem
                 row={row}
                 selected={row.id === selected}
-                onOpen={() => void navigate(`/messages/${row.id}`)}
+                onOpen={() => void navigate(`/messages/${row.id}`, { state })}
               />
             </li>
           ))}

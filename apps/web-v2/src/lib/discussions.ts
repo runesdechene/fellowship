@@ -192,3 +192,13 @@ export function firstEmoji(text: string): string | null {
   for (const { segment } of segments) return EMOJI.test(segment) ? segment : null
   return null
 }
+
+/** Messages se quitte vers la page d'où l'on est venu, portée par l'adresse (`state.from`). */
+export function messagesExit(state: unknown): string {
+  return typeof state === 'object' &&
+    state !== null &&
+    'from' in state &&
+    typeof state.from === 'string'
+    ? state.from
+    : '/'
+}
