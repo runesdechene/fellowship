@@ -7,7 +7,8 @@ L'écran `/evenement/:id`. La page assemble ; les hooks parlent à la base ; la 
 - `EventStatus.tsx` — le statut en contrôle segmenté, et l’objectif de chiffre d’affaires.
 - `MyDossier.tsx` — « Mon dossier » : paiement, prix de la place, acompte, échéance du solde.
 - `Applying.tsx` — la candidature : le pied noir de « L'essentiel » (date limite, « Candidater ») et, connecté, la fenêtre `?candidater` : comment, dossier, contact, ce que j’ai envoyé (maquette 2518:233).
-- `useDossier.ts` — le dossier privé (participation_dossiers) : lecture et écriture.
+- `useDossier.ts` — le dossier privé (participation_dossiers) : lecture et écriture, note et raison d'un refus comprises.
+- `MyNote.tsx` — « Ma note », visible par soi seul, sous le statut quel qu'il soit (maquette 2789:233).
 - `EventDiscussion.tsx` — la discussion du festival en mini-fil : titre et compte, canaux, la question à poser en tête, les deux plus récentes puis « Voir les questions précédentes ».
 - `DiscussionThread.tsx` — un fil : la question, ses réponses reliées par le trait des photos, « Répondre à … ».
 - `DiscussionBlock.tsx` — le bloc et sa sourdine.
