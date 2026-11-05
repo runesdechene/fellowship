@@ -248,11 +248,7 @@ export function WelcomePage({ kind }: { kind: WelcomeKind }) {
               set={set}
             >
               {step === 'firstName' && (
-                <ActivityPreview
-                  firstName={draft.firstName}
-                  brand={brand}
-                  avatarUrl={person?.avatar_url}
-                />
+                <ActivityPreview brand={brand} avatarUrl={person?.avatar_url} />
               )}
               {step === 'design' && (
                 <>

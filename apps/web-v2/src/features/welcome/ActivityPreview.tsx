@@ -1,29 +1,23 @@
 /**
  * QUOI     — « C'est ainsi qu'on te verra dans le réseau » : une ligne d'activité au nom de la
- *            personne et de sa marque.
- * POURQUOI — Uriel, 11/10/2026 : demander le prénom sans dire à quoi il sert trouble, puisque les
- *            exposants parlent au nom de leur marque. La ligne montre « Uriel de Atelier Sauvage »,
- *            comme l'activité du réseau l'écrit déjà.
+ *            marque, telle que le fil l'écrit (« Atelier Sauvage a ajouté… »).
+ * POURQUOI — l'aperçu promettait « Uriel de Atelier Sauvage », que l'app n'écrit nulle part
+ *            (Uriel, 05/11/2026). Le prénom au fil de l'activité viendra quand il servira.
  */
 import { Avatar } from '@/components/ui/Avatar'
 
 interface ActivityPreviewProps {
-  firstName: string
   brand: string
   avatarUrl?: string | null
 }
 
-export function ActivityPreview({ firstName, brand, avatarUrl }: ActivityPreviewProps) {
-  const who = `${firstName.trim() || 'Ton prénom'} de ${brand.trim() || 'ta marque'}`
+export function ActivityPreview({ brand, avatarUrl }: ActivityPreviewProps) {
+  const who = brand.trim() || 'Ta marque'
   return (
     <div className="activity-preview">
       <p className="activity-preview__lead">C’est ainsi qu’on te verra dans le réseau :</p>
       <p className="activity-preview__line">
-        <Avatar
-          className="activity-preview__avatar"
-          src={avatarUrl}
-          name={firstName.trim() || '?'}
-        />
+        <Avatar className="activity-preview__avatar" src={avatarUrl} name={who} />
         <span>
           <b>{who}</b> a ajouté Les Aventuriales
         </span>
