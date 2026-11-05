@@ -22,12 +22,17 @@ async function loadActivity(me: string): Promise<ActivityItem[]> {
   const lines = readFeed(
     must(await supabase.rpc('community_feed', { p_actor: me, p_scope: 'plateforme' })),
   )
+  // Une visite ne dit rien de plus qu'un geste : qui a agi n'apparaît pas pour être passé.
+  const acted = new Set(
+    lines.flatMap((line) => (line.who && line.kind !== 'visit' ? [line.who.id] : [])),
+  )
   // Le fil arrive du plus récent au plus ancien : on garde la première ligne de chacun.
   const seen = new Set<string>()
   return lines
     .flatMap((line) => {
       const text = activityText(line)
       if (!text || !line.who || seen.has(line.who.id)) return []
+      if (line.kind === 'visit' && acted.has(line.who.id)) return []
       seen.add(line.who.id)
       return [{ id: line.id, occurredAt: line.at, actor: line.who, text }]
     })
