@@ -44,7 +44,10 @@ if (!root) throw new Error('index.html doit contenir #root')
 
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    {/* Sans `unstable_useTransitions={false}`, le routeur applique l'adresse dans un startTransition
+        que le flushSync de lib/navigation.ts ne force pas : la transition de vue photographiait deux
+        fois l'ancienne page, et aucun changement d'écran ne s'animait. */}
+    <BrowserRouter basename={import.meta.env.BASE_URL} unstable_useTransitions={false}>
       <AuthProvider>
         <RevenueKeyProvider>
           <App />
