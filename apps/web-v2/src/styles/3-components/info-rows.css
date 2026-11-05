@@ -77,6 +77,22 @@
   width: auto;
 }
 
+/* Une note, une raison : une zone posée dans son cadre, toujours visible (maquette 2789:233). */
+.draft-input.draft-input--box {
+  width: 100%;
+  margin: 0;
+  padding: var(--space-12) var(--space-16);
+  border-color: var(--line-card);
+  border-radius: var(--radius-control);
+  background: var(--surface-card);
+  font: var(--type-search-input);
+  /* La zone grandit avec son texte : jamais de défilement dans le cadre. Un navigateur qui ne le
+     sait pas encore garde trois lignes et défile. */
+  field-sizing: content;
+  min-height: calc(3lh + 2 * var(--space-12));
+  resize: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .draft-input {
     transition: none;

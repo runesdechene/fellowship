@@ -1,6 +1,7 @@
 /**
  * QUOI     — le dossier privé de l'acteur actif sur une date : objectif de chiffre d'affaires,
- *            acompte versé, échéance du solde, date d'envoi et contenu du dossier.
+ *            acompte versé, échéance du solde, date d'envoi et contenu du dossier, sa note libre et
+ *            la raison d'un refus (maquette 2789:233).
  * POURQUOI — « Mon dossier — visible par toi seul » sur la fiche. Il vit dans sa propre table
  *            (participation_dossiers), lisible par son seul propriétaire.
  * ATTENTION — l'affichage bouge avant la base ; une écriture refusée remet l'état d'avant et le
@@ -16,6 +17,8 @@ export interface DossierFields {
   balanceDueOn: string | null
   applicationSentOn: string | null
   applicationNote: string | null
+  note: string | null
+  refusalReason: string | null
 }
 
 const EMPTY_FIELDS: DossierFields = {
@@ -24,6 +27,8 @@ const EMPTY_FIELDS: DossierFields = {
   balanceDueOn: null,
   applicationSentOn: null,
   applicationNote: null,
+  note: null,
+  refusalReason: null,
 }
 
 /** Les champs touchés, sous leurs noms de colonnes ; un champ absent du patch n'est pas écrit. */
@@ -34,13 +39,17 @@ function toColumns(patch: Partial<DossierFields>): Partial<TablesInsert<'partici
   if ('balanceDueOn' in patch) row.balance_due_on = patch.balanceDueOn ?? null
   if ('applicationSentOn' in patch) row.application_sent_on = patch.applicationSentOn ?? null
   if ('applicationNote' in patch) row.application_note = patch.applicationNote ?? null
+  if ('note' in patch) row.note = patch.note ?? null
+  if ('refusalReason' in patch) row.refusal_reason = patch.refusalReason ?? null
   return row
 }
 
 async function loadDossier(eventId: string, actorId: string): Promise<DossierFields> {
   const response = await supabase
     .from('participation_dossiers')
-    .select('revenue_goal, deposit_amount, balance_due_on, application_sent_on, application_note')
+    .select(
+      'revenue_goal, deposit_amount, balance_due_on, application_sent_on, application_note, note, refusal_reason',
+    )
     .eq('actor_id', actorId)
     .eq('event_id', eventId)
     .maybeSingle()
@@ -52,6 +61,8 @@ async function loadDossier(eventId: string, actorId: string): Promise<DossierFie
     balanceDueOn: row.balance_due_on,
     applicationSentOn: row.application_sent_on,
     applicationNote: row.application_note,
+    note: row.note,
+    refusalReason: row.refusal_reason,
   }
 }
 

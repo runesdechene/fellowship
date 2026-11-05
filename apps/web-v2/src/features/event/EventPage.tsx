@@ -50,6 +50,7 @@ import { useLastEditionReport } from './useLastEditionReport'
 import { EventReviews } from './EventReviews'
 import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
+import { MyNote } from './MyNote'
 import { useDossier } from './useDossier'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
@@ -341,7 +342,10 @@ export function EventPage() {
               writeError={writeError}
               locked={!canChangeStatus(startDate, status !== null, pro, today)}
               monthsAway={monthsBeyond(startDate, today)}
+              refusalReason={dossier.fields.refusalReason}
+              saveReason={(reason) => void dossier.save({ refusalReason: reason })}
             />
+            <MyNote note={dossier.fields.note} save={dossier.save} />
             {(status === 'inscrit' || status === 'confirme') && (
               <MyDossier
                 paymentStatus={paymentStatus}

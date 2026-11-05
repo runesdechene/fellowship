@@ -3,6 +3,7 @@
  *            Inscrit), et un menu « … » en face du titre : dossier refusé, participation annulée,
  *            retirer la date (piste B, maquette 2776:233, Uriel, 05/11/2026). Une date refusée ou
  *            annulée remplace les étapes par une ligne qui le dit ; « Changer » les ramène.
+ *            Sous un refus, sa raison, privée (maquette 2789:233, retour bêta du 05/11/2026).
  * POURQUOI — toutes les étapes visibles d'un coup, celle qui vaut en relief ; « Inscrit » porte le
  *            vert de validation (Uriel, 11/10/2026). Refusé et annulé ne comptent nulle part : ni
  *            calendrier, ni bilan, ni compteurs (ils ne lisent que des statuts nommés).
@@ -14,6 +15,7 @@
 import { Check, Ellipsis, FolderInput, Star } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { DraftInput } from '@/components/ui/DraftInput'
 import { ProBubble } from '@/components/ui/ProBubble'
 import { Segmented, type SegmentedOption } from '@/components/ui/Segmented'
 import type { ParticipationStatus } from '@/types/database'
@@ -60,6 +62,9 @@ interface EventStatusProps {
   /** En gratuit, au-delà des 6 mois : on ne pose pas la date, on invite au Pro. */
   locked: boolean
   monthsAway: number
+  /** La raison d'un refus, privée (participation_dossiers), et son écriture. */
+  refusalReason: string | null
+  saveReason: (reason: string | null) => void
 }
 
 export function EventStatus({
@@ -69,7 +74,11 @@ export function EventStatus({
   writeError,
   locked,
   monthsAway,
+  refusalReason,
+  saveReason,
 }: EventStatusProps) {
+  // Juste choisi : le champ de la raison prend la main.
+  const [justRefused, setJustRefused] = useState(false)
   const [inviting, setInviting] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   // « Changer » sur une date refusée ou annulée : les étapes reviennent, sans rien écrire encore.
@@ -95,6 +104,7 @@ export function EventStatus({
   }, [menuOpen])
 
   function choose(next: ParticipationStatus | null) {
+    setJustRefused(next === 'refuse')
     setMenuOpen(false)
     setChanging(false)
     void setStatus(next)
@@ -154,7 +164,24 @@ export function EventStatus({
             Changer
           </button>
         </div>
-      ) : (
+      ) : null}
+      {outcome === 'refuse' && (
+        <label className="event-status__reason">
+          <span>Pourquoi ? Visible par toi seul</span>
+          <DraftInput
+            multiline
+            autoFocus={justRefused}
+            className="draft-input--box"
+            label="La raison du refus"
+            placeholder="Ce que l’orga t’a dit, ce que tu en retiens…"
+            value={refusalReason ?? ''}
+            onSave={(draft) => {
+              saveReason(draft.trim() || null)
+            }}
+          />
+        </label>
+      )}
+      {outcome ? null : (
         <Segmented
           label="Ma participation à cette date"
           options={STEPS}

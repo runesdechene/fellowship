@@ -1507,6 +1507,8 @@ export type Database = {
           balance_due_on: string | null
           deposit_amount: number | null
           event_id: string
+          note: string | null
+          refusal_reason: string | null
           revenue_goal: number | null
           updated_at: string
         }
@@ -1517,6 +1519,8 @@ export type Database = {
           balance_due_on?: string | null
           deposit_amount?: number | null
           event_id: string
+          note?: string | null
+          refusal_reason?: string | null
           revenue_goal?: number | null
           updated_at?: string
         }
@@ -1527,6 +1531,8 @@ export type Database = {
           balance_due_on?: string | null
           deposit_amount?: number | null
           event_id?: string
+          note?: string | null
+          refusal_reason?: string | null
           revenue_goal?: number | null
           updated_at?: string
         }
