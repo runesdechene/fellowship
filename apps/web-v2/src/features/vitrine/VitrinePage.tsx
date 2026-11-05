@@ -97,7 +97,7 @@ export function VitrinePage() {
         )}
       </section>
 
-      <Stamps past={vitrine.past} />
+      <Stamps past={vitrine.past} own={isOwner} />
 
       <footer className="vitrine__footer">
         Carnet de route Fellowship · {window.location.host}/{vitrine.slug}

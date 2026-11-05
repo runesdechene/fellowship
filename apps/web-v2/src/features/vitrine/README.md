@@ -6,7 +6,7 @@ La vitrine d'un artisan (`/:slug`), dans le langage « 2027 ». Maquette : cadre
 - `VitrinePage.tsx` — l'écran : en-tête, prochaines escales, tampons, pied de page.
 - `VitrineHead.tsx` — bannière, logo, identité, réseau, Suivre / Partager (ou Modifier pour le propriétaire).
 - `EscaleCard.tsx` — une prochaine escale, avec les amis du visiteur qui y vont.
-- `Stamps.tsx` — la route passée en tampons.
+- `Stamps.tsx` — la route passée en tampons ; sur sa propre vitrine, un tampon ouvre son bilan.
 - `useVitrine.ts` — le chargement, et Suivre / Ne plus suivre.
 - `ReportProfile.tsx` — « Signaler ce profil » au pied de page, et sa fenêtre (motif, commentaire).
 
