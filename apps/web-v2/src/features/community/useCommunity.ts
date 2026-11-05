@@ -4,7 +4,7 @@
  * POURQUOI — lot 9a. La base rend des lignes prêtes à afficher (community_feed, crossing_dates,
  *            accounts_to_follow), l'identité protégée déjà appliquée ; ce hook les lit et relit.
  *            Tout Suivre (événement `reseau-change`) relit la page. Deux fils : le réseau, ou toute
- *            la plateforme (`?fil=plateforme`).
+ *            la plateforme (par défaut ; le réseau sous `?fil=reseau`).
  * ATTENTION — une lecture ratée est une erreur affichée, jamais un fil vide (.claude/rules/v2.md).
  */
 import { useCallback, useEffect, useState } from 'react'

@@ -123,9 +123,9 @@ describe('les onglets', () => {
   })
 
   test('le fil se lit dans l’adresse : les abonnements, sauf « plateforme »', () => {
-    expect(readScope('plateforme')).toBe('plateforme')
-    expect(readScope('x')).toBe('reseau')
-    expect(readScope(null)).toBe('reseau')
+    expect(readScope('reseau')).toBe('reseau')
+    expect(readScope('x')).toBe('plateforme')
+    expect(readScope(null)).toBe('plateforme')
   })
 
   test('« Ça se rassemble » à part', () => {

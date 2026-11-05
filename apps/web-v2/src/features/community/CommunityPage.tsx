@@ -116,7 +116,7 @@ function CommunityScreen() {
             label="Fil"
             options={SCOPES}
             value={scope}
-            onChange={(next) => choose('fil', next === 'reseau' ? null : next)}
+            onChange={(next) => choose('fil', next === 'plateforme' ? null : next)}
           />
         </div>
         <div className="community__tabs" role="group" aria-label="Filtrer le fil">

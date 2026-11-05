@@ -85,11 +85,7 @@ export function NetworkActivity({ className }: { className?: string }) {
           })}
         </ul>
       )}
-      <button
-        type="button"
-        className="network-activity__more"
-        onClick={() => go('/communaute?fil=plateforme')}
-      >
+      <button type="button" className="network-activity__more" onClick={() => go('/communaute')}>
         Tout voir
         <ArrowRight size={12} strokeWidth={2} />
       </button>

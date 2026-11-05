@@ -8,4 +8,4 @@ Le fil « Activité de la plateforme », en bas de la barre latérale (maquette 
   Fellowship », abonnements mutuels seulement). Une visite au plus par personne, sa dernière (la base n'en rend qu'une).
 
 Les phrases vivent dans `lib/community.ts`, l'âge (« 12 min », « hier ») dans `lib/dates.ts`. « Tout
-voir » ouvre `/communaute?fil=plateforme`.
+voir » ouvre `/communaute`, toute la plateforme par défaut.

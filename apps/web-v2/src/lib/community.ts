@@ -165,8 +165,9 @@ export function readTab(value: string | null): CommunityTab {
 /** Le fil que la base sert (community_feed) : les comptes suivis, ou toute la plateforme. */
 export type FeedScope = 'reseau' | 'plateforme'
 
+/** Toute la plateforme par défaut : qui arrive ne suit encore personne (Uriel, 05/11/2026). */
 export function readScope(value: string | null): FeedScope {
-  return value === 'plateforme' ? 'plateforme' : 'reseau'
+  return value === 'reseau' ? 'reseau' : 'plateforme'
 }
 
 export function feedFor(lines: FeedLine[], tab: CommunityTab): FeedLine[] {
