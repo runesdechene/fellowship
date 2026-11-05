@@ -2352,6 +2352,7 @@ export type Database = {
           auth_id: string
           avatar_url: string | null
           city: string | null
+          community_seen_at: string
           created_at: string
           department: string | null
           display_name: string | null
@@ -2375,6 +2376,7 @@ export type Database = {
           auth_id: string
           avatar_url?: string | null
           city?: string | null
+          community_seen_at?: string
           created_at?: string
           department?: string | null
           display_name?: string | null
@@ -2398,6 +2400,7 @@ export type Database = {
           auth_id?: string
           avatar_url?: string | null
           city?: string | null
+          community_seen_at?: string
           created_at?: string
           department?: string | null
           display_name?: string | null

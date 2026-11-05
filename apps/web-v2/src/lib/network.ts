@@ -155,3 +155,20 @@ export function newcomersPhrase(names: string[]): string {
 export function requestsLabel(count: number): string {
   return count === 1 ? '1 demande d’ami en attente' : `${String(count)} demandes d’ami en attente`
 }
+
+/** La pastille de Communauté : demandes d’ami et festivals ajoutés ; null quand rien n’attend. */
+export function communityBadge(
+  requests: number,
+  news: number,
+): { text: string; label: string } | null {
+  const count = requests + news
+  if (count === 0) return null
+  const parts = [
+    requests > 0 && requestsLabel(requests),
+    news > 0 && `${String(news)} ${news === 1 ? 'nouveau festival' : 'nouveaux festivals'}`,
+  ]
+  return {
+    text: count > 9 ? '9+' : String(count),
+    label: parts.filter(Boolean).join(', '),
+  }
+}

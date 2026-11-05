@@ -31,7 +31,7 @@ import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
-import { requestsLabel } from '@/lib/network'
+import type { communityBadge } from '@/lib/network'
 
 const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
@@ -44,10 +44,10 @@ const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }>
 const SWIPE_TO_CLOSE = 80
 
 export function TabBar({
-  friendRequests,
+  community,
   updatesUnread,
 }: {
-  friendRequests: number
+  community: ReturnType<typeof communityBadge>
   updatesUnread: boolean
 }) {
   const { actor, actors, entities, person, switchActor, signOut } = useAuth()
@@ -189,8 +189,8 @@ export function TabBar({
             <>
               <Icon size={22} strokeWidth={1.75} />
               <span>{label}</span>
-              {to === '/communaute' && friendRequests > 0 && (
-                <span className="tab-bar__dot" aria-label={requestsLabel(friendRequests)} />
+              {to === '/communaute' && community && (
+                <span className="tab-bar__dot" aria-label={community.label} />
               )}
             </>
           )

@@ -34,7 +34,7 @@ import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { useAuth } from '@/lib/auth'
-import { requestsLabel } from '@/lib/network'
+import type { communityBadge } from '@/lib/network'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
@@ -106,11 +106,11 @@ const ADMIN_ITEMS = [
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
-  friendRequests: number
+  community: ReturnType<typeof communityBadge>
   updatesUnread: boolean
 }
 
-export function Sidebar({ collapsed, onToggle, friendRequests, updatesUnread }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, community, updatesUnread }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
   const { actor, entities } = useAuth()
   const { pathname, search } = useLocation()
@@ -162,12 +162,12 @@ export function Sidebar({ collapsed, onToggle, friendRequests, updatesUnread }: 
               <>
                 <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
                 <span className="sidebar__item-label">{label}</span>
-                {to === '/communaute' && friendRequests > 0 && (
+                {to === '/communaute' && community && (
                   <span
                     className="sidebar__count sidebar__count--alert"
-                    aria-label={requestsLabel(friendRequests)}
+                    aria-label={community.label}
                   >
-                    {friendRequests}
+                    {community.text}
                   </span>
                 )}
               </>

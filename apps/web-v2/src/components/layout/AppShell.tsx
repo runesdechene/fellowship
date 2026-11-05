@@ -12,9 +12,11 @@
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useCommunityNews } from '@/features/community/useCommunityNews'
 import { useNetwork } from '@/features/community/useNetwork'
 import { useUpdatesUnread } from '@/features/updates/useUpdatesUnread'
 import { useAuth } from '@/lib/auth'
+import { communityBadge } from '@/lib/network'
 import { ACCOUNT_PARAM } from '@/lib/notifications'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { supabase } from '@/lib/supabase'
@@ -50,11 +52,17 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
   }, [collapsed])
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
-  // Les demandes d'ami, pour la pastille de Communauté : relues à chaque changement d'adresse.
+  // La pastille de Communauté (demandes d'ami, festivals ajoutés) : relue à chaque changement d'adresse.
   const { pathname, search, hash } = useLocation()
   const { person, actors, switchActor } = useAuth()
   const navigate = useNavigate()
   const friendRequests = useNetwork(pathname).network?.requests.length ?? 0
+  const communityNews = useCommunityNews(
+    pathname,
+    person?.actor_id,
+    actors.map((a) => a.id),
+  )
+  const community = communityBadge(friendRequests, communityNews)
   const updatesUnread = useUpdatesUnread(pathname, person?.actor_id)
 
   // Une visite pour l'administration : à l'ouverture et à chaque retour sur l'onglet. La base ne
@@ -89,7 +97,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         <Sidebar
           collapsed={collapsed}
           onToggle={toggleSidebar}
-          friendRequests={friendRequests}
+          community={community}
           updatesUnread={updatesUnread}
         />
         <main className="app-shell__main">
@@ -98,7 +106,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           {children}
         </main>
         <PosterWall />
-        <TabBar friendRequests={friendRequests} updatesUnread={updatesUnread} />
+        <TabBar community={community} updatesUnread={updatesUnread} />
         <SearchOverlay />
         <SujetComposer />
         <DiscussionDrawer />

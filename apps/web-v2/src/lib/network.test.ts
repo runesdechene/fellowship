@@ -10,6 +10,7 @@ import {
   newcomersPhrase,
   newFollowers,
   peopleCount,
+  communityBadge,
   requestsLabel,
   type Member,
 } from './network'
@@ -64,6 +65,16 @@ describe('le réseau en mots', () => {
   test('compte les demandes en attente', () => {
     expect(requestsLabel(1)).toBe('1 demande d’ami en attente')
     expect(requestsLabel(3)).toBe('3 demandes d’ami en attente')
+  })
+
+  test('compose la pastille de Communauté', () => {
+    expect(communityBadge(0, 0)).toBeNull()
+    expect(communityBadge(1, 0)).toEqual({ text: '1', label: '1 demande d’ami en attente' })
+    expect(communityBadge(0, 3)).toEqual({ text: '3', label: '3 nouveaux festivals' })
+    expect(communityBadge(2, 12)).toEqual({
+      text: '9+',
+      label: '2 demandes d’ami en attente, 12 nouveaux festivals',
+    })
   })
 
   test('nomme le genre de compte', () => {
