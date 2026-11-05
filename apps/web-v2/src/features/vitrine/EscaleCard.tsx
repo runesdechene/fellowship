@@ -6,15 +6,12 @@
 import { Link } from 'react-router-dom'
 import { PosterArt } from '@/components/ui/PosterArt'
 import { durationLabel, formatDateRange } from '@/lib/dates'
-import { nameLine } from '@/lib/name-line'
+import { goersLine } from '@/lib/name-line'
 import type { VitrineDate } from './useVitrine'
 import { eventPath } from '@/lib/event-path'
 
 export function EscaleCard({ date }: { date: VitrineDate }) {
-  const meet = nameLine(
-    date.friends.map((friend) => friend.name),
-    { one: 't’y retrouve', many: 't’y retrouvent' },
-  )
+  const meet = goersLine(date.friends, { one: 't’y retrouve', many: 't’y retrouvent' })
 
   return (
     <Link to={eventPath(date.eventId)} className="escale-card">

@@ -9,15 +9,15 @@
  */
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
-import type { Friend } from '@/lib/friends'
-import { namesLine } from '@/lib/name-line'
+import type { GoingFriend } from '@/lib/friends'
+import { goersParts } from '@/lib/name-line'
 import { WhoGoesDialog } from './WhoGoesDialog'
 
 interface CompanionsProps {
   eventId: string
   /** « Les Aventuriales · 25–27 sept. », en tête de la popup. */
   subtitle: string
-  friends: Friend[]
+  friends: GoingFriend[]
 }
 
 const OPENED_HERE = 'who-goes'
@@ -29,10 +29,7 @@ export function Companions({ eventId, subtitle, friends }: CompanionsProps) {
   const open = params.get('voir') === 'amis'
 
   if (friends.length === 0) return null
-  const line = namesLine(
-    friends.map((friend) => friend.name),
-    { one: 'y va aussi', many: 'y vont aussi' },
-  )
+  const line = goersParts(friends, { one: 'y va aussi', many: 'y vont aussi' })
 
   function show() {
     const next = new URLSearchParams(params)

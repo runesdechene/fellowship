@@ -3,7 +3,7 @@
  * POURQUOI — une phrase lue partout (fiche, vitrine) ; un pluriel faux s'y voit tout de suite.
  */
 import { describe, expect, it, test } from 'vitest'
-import { nameLine, namesLine } from './name-line'
+import { goersLine, goersParts, nameLine, namesLine } from './name-line'
 
 const goes = { one: 'y va aussi', many: 'y vont aussi' }
 
@@ -63,5 +63,40 @@ describe('namesLine — la fiche nomme jusqu’à trois amis', () => {
   })
   test('personne', () => {
     expect(namesLine([], verb)).toEqual([])
+  })
+})
+
+describe('goersLine', () => {
+  const verb = { one: 'y va', many: 'y vont' }
+  const gautier = { name: 'Gautier', applied: false }
+  const lina = { name: 'Lina', applied: false }
+  const tom = { name: 'Tom', applied: true }
+
+  test('les inscrits, puis ceux qui ont candidaté', () => {
+    expect(goersLine([tom, gautier, lina], verb)).toEqual({
+      first: 'Gautier',
+      rest: ' et Lina y vont · Tom a candidaté',
+    })
+  })
+
+  test('seulement des candidats', () => {
+    expect(goersLine([tom, { name: 'Zoé', applied: true }], verb)).toEqual({
+      first: 'Tom',
+      rest: ' et Zoé ont candidaté',
+    })
+  })
+
+  test('personne', () => {
+    expect(goersLine([], verb)).toBeNull()
+  })
+
+  test('la fiche nomme chaque côté', () => {
+    expect(goersParts([gautier, tom], { one: 'y va aussi', many: 'y vont aussi' })).toEqual([
+      { strong: 'Gautier' },
+      ' y va aussi',
+      ' · ',
+      { strong: 'Tom' },
+      ' a candidaté',
+    ])
   })
 })

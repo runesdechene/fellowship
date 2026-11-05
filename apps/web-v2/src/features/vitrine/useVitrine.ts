@@ -14,6 +14,7 @@ import {
   fetchActorProfiles,
   fetchFriendsByEvent,
   type Friend,
+  type GoingFriend,
 } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import { isCertified } from '@/lib/plan'
@@ -37,7 +38,7 @@ export interface VitrineDate {
   endDate: Date
   daysAway: number
   /** Les amis du visiteur qui y vont — jamais l'artisan lui-même. */
-  friends: Friend[]
+  friends: GoingFriend[]
 }
 
 export interface Vitrine {
@@ -139,7 +140,7 @@ async function loadVitrine(
       startDate,
       endDate: parseSqlDate(row.events.end_date),
       daysAway: daysUntil(startDate, today),
-      friends: [] as Friend[],
+      friends: [] as GoingFriend[],
     }
   })
   const { upcoming, past } = splitRoad(dates, today)
@@ -153,7 +154,7 @@ async function loadVitrine(
           viewerId,
           upcoming.map((date) => date.eventId),
         )
-      : new Map<string, Friend[]>(),
+      : new Map<string, GoingFriend[]>(),
   ])
 
   return {

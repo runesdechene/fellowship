@@ -17,7 +17,7 @@ import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { PosterArt } from '@/components/ui/PosterArt'
 import { ProBubble } from '@/components/ui/ProBubble'
 import { formatDateRange, formatPastRange } from '@/lib/dates'
-import { nameLine } from '@/lib/name-line'
+import { goersLine } from '@/lib/name-line'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import type { ExploreEvent } from './useExplorer'
@@ -50,10 +50,7 @@ export function ExploreCard({ event, onMark, past = false }: ExploreCardProps) {
     document.addEventListener('mousedown', outside)
     return () => document.removeEventListener('mousedown', outside)
   }, [inviting])
-  const goers = nameLine(
-    event.friends.map((friend) => friend.name),
-    { one: 'y va', many: 'y vont' },
-  )
+  const goers = goersLine(event.friends, { one: 'y va', many: 'y vont' })
 
   return (
     <article className="explore-card" ref={card}>

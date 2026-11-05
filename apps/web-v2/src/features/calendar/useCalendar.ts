@@ -13,7 +13,7 @@ import {
   fetchCompanions,
   fetchFriendsByEvent,
   type CompanionEvent,
-  type Friend,
+  type GoingFriend,
 } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
@@ -34,7 +34,7 @@ export interface CalendarDate {
   endDate: Date
   status: ParticipationStatus
   daysAway: number
-  friends: Friend[]
+  friends: GoingFriend[]
 }
 
 export interface CalendarCompanion {
@@ -44,7 +44,7 @@ export interface CalendarCompanion {
   tags: string[] | null
   startDate: Date
   endDate: Date
-  friends: Friend[]
+  friends: GoingFriend[]
 }
 
 export interface CalendarMonth extends MonthSlot {

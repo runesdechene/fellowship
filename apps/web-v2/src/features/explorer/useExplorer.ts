@@ -22,7 +22,7 @@ import {
 import { exhibitorsQuery } from '@/lib/exhibitor-search'
 import { locatePlace } from '@/lib/geocode'
 import { FREE_MONTHS, PAST, searchPattern, searchWindow, type Horizon } from '@/lib/explorer'
-import { fetchCompanions, fetchFriendsByEvent, type Friend } from '@/lib/friends'
+import { fetchCompanions, fetchFriendsByEvent, type GoingFriend } from '@/lib/friends'
 import { must, supabase } from '@/lib/supabase'
 import type { ParticipationStatus } from '@/types/database'
 
@@ -32,7 +32,7 @@ const horizonOf = (pro: boolean): Horizon => (pro ? null : FREE_MONTHS)
 const ROW_LIMIT = 12
 const SEARCH_LIMIT = 60
 export interface ExploreEvent extends SearchEvent {
-  friends: Friend[]
+  friends: GoingFriend[]
   myStatus: ParticipationStatus | null
 }
 

@@ -16,6 +16,11 @@ export interface Friend {
   avatarUrl: string | null
 }
 
+/** Un ami sur une date ; `applied` : son dossier est envoyé, il n'est pas encore inscrit. */
+export interface GoingFriend extends Friend {
+  applied: boolean
+}
+
 /**
  * Statuts considérés comme « une date programmée » : l'exposant s'est engagé,
  * ou son dossier est en cours. « interesse » et « refuse » n'en font pas partie.
@@ -67,8 +72,8 @@ export async function fetchActorProfiles(ids: string[]): Promise<Map<string, Fri
 export async function fetchFriendsByEvent(
   actorId: string,
   eventIds: string[],
-): Promise<Map<string, Friend[]>> {
-  const byEvent = new Map<string, Friend[]>()
+): Promise<Map<string, GoingFriend[]>> {
+  const byEvent = new Map<string, GoingFriend[]>()
   if (eventIds.length === 0) return byEvent
 
   const friendIds = await fetchMutualFriendIds(actorId)
@@ -77,7 +82,7 @@ export async function fetchFriendsByEvent(
   const [participationsResponse, profiles] = await Promise.all([
     supabase
       .from('participations')
-      .select('actor_id, event_id')
+      .select('actor_id, event_id, status')
       .in('actor_id', friendIds)
       .in('status', PROGRAMMED_STATUSES)
       .in('event_id', eventIds),
@@ -88,7 +93,7 @@ export async function fetchFriendsByEvent(
     const friend = profiles.get(row.actor_id)
     if (!friend) continue
     const list = byEvent.get(row.event_id) ?? []
-    list.push(friend)
+    list.push({ ...friend, applied: row.status === 'en_cours' })
     byEvent.set(row.event_id, list)
   }
   return byEvent
@@ -102,7 +107,7 @@ export interface CompanionEvent {
   tags: string[] | null
   startDate: string
   endDate: string
-  friends: Friend[]
+  friends: GoingFriend[]
 }
 
 /**
@@ -121,7 +126,9 @@ export async function fetchCompanions(
   const [participationsResponse, profiles] = await Promise.all([
     supabase
       .from('participations')
-      .select('actor_id, event_id, events!inner(name, image_url, tags, start_date, end_date)')
+      .select(
+        'actor_id, event_id, status, events!inner(name, image_url, tags, start_date, end_date)',
+      )
       .in('actor_id', friendIds)
       .in('status', PROGRAMMED_STATUSES)
       .gte('events.end_date', fromSql)
@@ -133,7 +140,9 @@ export async function fetchCompanions(
   const grouped = groupCompanions(
     rows.flatMap((row) => {
       const friend = profiles.get(row.actor_id)
-      return friend ? [{ eventId: row.event_id, friend }] : []
+      return friend
+        ? [{ eventId: row.event_id, friend: { ...friend, applied: row.status === 'en_cours' } }]
+        : []
     }),
     myEventIds,
   )

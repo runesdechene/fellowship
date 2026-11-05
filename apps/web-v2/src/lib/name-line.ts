@@ -42,3 +42,43 @@ export function namesLine(names: string[], verb: { one: string; many: string }):
   )
   return parts
 }
+
+/** Un ami nommé sur une date ; `applied` : dossier envoyé, pas encore inscrit. */
+interface Goer {
+  name: string
+  applied: boolean
+}
+
+const APPLIED = { one: 'a candidaté', many: 'ont candidaté' }
+
+/** Les noms de ceux qui y vont, puis de ceux qui ont seulement candidaté. */
+function split(goers: Goer[]): [string[], string[]] {
+  return [
+    goers.filter((goer) => !goer.applied).map((goer) => goer.name),
+    goers.filter((goer) => goer.applied).map((goer) => goer.name),
+  ]
+}
+
+/**
+ * « Gautier et Lina y vont · Tom a candidaté » : une candidature n'est pas une place (retour bêta,
+ * Uriel, 05/11/2026). Seul le premier nom passe en gras, comme `nameLine`.
+ */
+export function goersLine(
+  goers: Goer[],
+  verb: { one: string; many: string },
+): { first: string; rest: string } | null {
+  const [going, applied] = split(goers)
+  const main = nameLine(going, verb)
+  const tried = nameLine(applied, APPLIED)
+  if (!main || !tried) return main ?? tried
+  return { first: main.first, rest: `${main.rest} · ${tried.first}${tried.rest}` }
+}
+
+/** La même phrase pour la fiche, qui nomme jusqu'à trois amis de chaque côté. */
+export function goersParts(goers: Goer[], verb: { one: string; many: string }): NamePart[] {
+  const [going, applied] = split(goers)
+  const main = namesLine(going, verb)
+  const tried = namesLine(applied, APPLIED)
+  if (main.length === 0 || tried.length === 0) return [...main, ...tried]
+  return [...main, ' · ', ...tried]
+}

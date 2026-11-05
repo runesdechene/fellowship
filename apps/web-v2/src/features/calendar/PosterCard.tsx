@@ -11,7 +11,7 @@ import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Chip, type ChipTone } from '@/components/ui/Chip'
 import { PosterArt } from '@/components/ui/PosterArt'
 import { formatDateRange } from '@/lib/dates'
-import { nameLine } from '@/lib/name-line'
+import { goersLine } from '@/lib/name-line'
 import type { ParticipationStatus } from '@/types/database'
 import type { CalendarDate } from './useCalendar'
 import { eventPath } from '@/lib/event-path'
@@ -31,10 +31,7 @@ export function PosterCard({ date }: { date: CalendarDate }) {
   const status = STATUS[date.status]
   const StatusIcon = status.icon
   const muted = date.status === 'interesse'
-  const goers = nameLine(
-    date.friends.map((friend) => friend.name),
-    { one: 'y va', many: 'y vont' },
-  )
+  const goers = goersLine(date.friends, { one: 'y va', many: 'y vont' })
 
   return (
     <Link

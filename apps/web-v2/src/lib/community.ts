@@ -10,14 +10,7 @@ import type { TextPart } from './notifications'
 import { eventPath } from './event-path'
 
 export type FeedKind =
-  | 'arrival'
-  | 'going'
-  | 'applied'
-  | 'added'
-  | 'review'
-  | 'follow'
-  | 'gathering'
-  | 'visit'
+  'arrival' | 'going' | 'applied' | 'added' | 'review' | 'follow' | 'gathering' | 'visit'
 
 export interface FeedPerson {
   id: string

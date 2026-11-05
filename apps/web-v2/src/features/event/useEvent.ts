@@ -13,7 +13,7 @@ import { hiddenFromVisitor } from '@/lib/access'
 import { useAuth } from '@/lib/auth'
 import type { SecretRevenue } from '@/lib/cipher'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
-import { CONFIRMED_STATUSES, fetchFriendsByEvent, type Friend } from '@/lib/friends'
+import { CONFIRMED_STATUSES, fetchFriendsByEvent, type GoingFriend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
 import { useRevenueKey } from '@/lib/revenue-key'
 import { must, supabase } from '@/lib/supabase'
@@ -47,7 +47,7 @@ interface EventData {
   paymentOrientation: PaymentOrientation
   confirmed: boolean
 
-  friends: Friend[]
+  friends: GoingFriend[]
 
   /**
    * Les couleurs de chaque categorie, telles qu'elles sont reglees dans
