@@ -3703,6 +3703,7 @@ export type Database = {
         | "confirme"
         | "en_cours"
         | "refuse"
+        | "annule"
       participation_visibility: "prive" | "amis" | "public"
       sujet_audience: "amis" | "abonnes" | "public"
       thread_audience: "festivalier" | "exposant" | "organisateur"
@@ -3870,6 +3871,7 @@ export const Constants = {
         "confirme",
         "en_cours",
         "refuse",
+        "annule",
       ],
       participation_visibility: ["prive", "amis", "public"],
       sujet_audience: ["amis", "abonnes", "public"],

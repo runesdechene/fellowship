@@ -22,6 +22,7 @@ const STATUS: Record<ParticipationStatus, { label: string; tone: ChipTone; icon:
   inscrit: { label: 'Inscrit', tone: 'ok', icon: Check },
   confirme: { label: 'Inscrit', tone: 'ok', icon: Check },
   refuse: { label: 'Refusé', tone: 'neutral', icon: CircleDashed },
+  annule: { label: 'Annulé', tone: 'neutral', icon: CircleDashed },
 }
 
 const MAX_FACES = 3
