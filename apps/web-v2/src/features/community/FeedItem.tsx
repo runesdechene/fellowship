@@ -82,7 +82,7 @@ export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
             ),
           )}
         </p>
-        {(line.kind === 'going' || line.kind === 'added') && <EventCard line={line} />}
+        {(line.kind === 'going' || line.kind === 'applied' || line.kind === 'added') && <EventCard line={line} />}
         {line.kind === 'review' && <Review line={line} />}
       </div>
       {/* L'âge flotte en haut à droite, Suivre dessous : la ligne gagne une hauteur de texte. */}

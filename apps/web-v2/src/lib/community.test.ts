@@ -163,6 +163,15 @@ describe('feedPhrase', () => {
     ])
   })
 
+  test('un dossier envoyé ne se dit pas « va à »', () => {
+    expect(feedPhrase(line('applied', event))).toEqual([
+      { strong: 'Gautier' },
+      ' a candidaté à ',
+      { strong: 'Les Aventuriales' },
+      '.',
+    ])
+  })
+
   test('un festival ajouté, par quelqu’un de connu ou non', () => {
     expect(feedPhrase(line('added', event))).toEqual([
       { strong: 'Gautier' },
@@ -204,6 +213,10 @@ describe('activityText (barre latérale)', () => {
     })
     expect(activityText(line('visit'))).toEqual({ verb: 'a ouvert Fellowship', object: null })
     expect(activityText(line('going', event))).toEqual({ verb: 'va à', object: aventuriales })
+    expect(activityText(line('applied', event))).toEqual({
+      verb: 'a candidaté à',
+      object: aventuriales,
+    })
     expect(activityText(line('added', event))).toEqual({ verb: 'a ajouté', object: aventuriales })
     expect(
       activityText(
