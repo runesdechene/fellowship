@@ -155,7 +155,10 @@ async function loadSearch(query: ExplorerQuery, viewerId: string, today: Date, p
       : searchEvents(query, today, horizonOf(pro))
           .order('start_date', { ascending: true })
           .limit(SEARCH_LIMIT),
-    searchPastEvents(query, today).order('start_date', { ascending: false }).limit(SEARCH_LIMIT),
+    // Les passés répondent à un mot ou un lieu ; « Quand » seul (un mois, une période) n'en veut pas.
+    onlyPast || words || place
+      ? searchPastEvents(query, today).order('start_date', { ascending: false }).limit(SEARCH_LIMIT)
+      : Promise.resolve({ data: [], error: null }),
     words || place
       ? entities.order('brand_name', { ascending: true }).limit(SEARCH_LIMIT)
       : Promise.resolve({ data: [], error: null }),
@@ -191,7 +194,9 @@ export function useExplorer(
   pro: boolean,
 ) {
   const [state, setState] = useState<ExplorerData>(EMPTY)
-  const searching = query.q.trim() !== '' || query.ou.trim() !== '' || query.quand === PAST
+  // « Quand » seul ouvre aussi la liste, par date (retour bêta, Uriel, 05/11/2026) ; sans choix,
+  // l'adresse n'a pas de `quand` et l'accueil garde ses rangées.
+  const searching = query.q.trim() !== '' || query.ou.trim() !== '' || query.quand !== null
   const { q, ou, quand, rayon } = query
   // Une valeur simple en dépendance : la liste `tags` est recréée à chaque rendu de la page.
   const tagKey = query.tags.join('|')

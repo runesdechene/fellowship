@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { FREE_MONTHS, readRayon } from '@/lib/explorer'
+import { FREE_MONTHS, quandLabel, readRayon } from '@/lib/explorer'
 import { nameLine } from '@/lib/name-line'
 import { fetchTags, type TagRow } from '@/lib/tags'
 import { CategoryChips } from './CategoryChips'
@@ -120,7 +120,7 @@ export function ExplorerPage() {
         !data.error &&
         (data.searching ? (
           <SearchResults
-            label={q || ou || 'Passés'}
+            label={q || ou || quandLabel(quand ?? '')}
             events={data.results}
             past={data.past}
             exhibitors={data.exhibitors}

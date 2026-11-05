@@ -26,7 +26,7 @@ interface SearchBarProps {
 
 export function SearchBar({ q, ou, rayon, quand, onSearch, horizon, focus }: SearchBarProps) {
   // « Passés » au bout : le passé n'a pas d'horizon, même en gratuit.
-  const choices = [...quandChoices(horizon, quand), PAST_CHOICE]
+  const choices = [...quandChoices(horizon, quand, new Date()), PAST_CHOICE]
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
   const [around, setAround] = useState(rayon)

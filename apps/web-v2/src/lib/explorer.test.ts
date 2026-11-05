@@ -14,6 +14,7 @@ import {
   publicTitle,
   lastOpenMonth,
   quandChoices,
+  quandLabel,
   quandMonths,
   readRayon,
   beyondWindow,
@@ -60,18 +61,48 @@ describe('quandMonths', () => {
 })
 
 describe('quandChoices', () => {
-  it('le Pro choisit jusqu’à 12 mois', () => {
-    expect(quandChoices(null).map((option) => option.months)).toEqual([12, 3, 1])
+  const nov = new Date(2026, 10, 5)
+  it('le Pro choisit jusqu’à 12 mois, puis chacun des onze mois suivants', () => {
+    const choices = quandChoices(null, null, nov)
+    expect(choices.slice(0, 3).map((option) => option.months)).toEqual([12, 3, 1])
+    expect(choices.slice(3).map((option) => option.value)).toEqual([
+      '2026-12',
+      '2027-01',
+      '2027-02',
+      '2027-03',
+      '2027-04',
+      '2027-05',
+      '2027-06',
+      '2027-07',
+      '2027-08',
+      '2027-09',
+      '2027-10',
+    ])
+    expect(choices[3]?.label).toBe('Décembre 2026')
   })
   it('le gratuit fouille ses 6 prochains mois au plus', () => {
-    expect(quandChoices(FREE_MONTHS).map((option) => option.months)).toEqual([6, 3, 1])
-    expect(quandChoices(FREE_MONTHS)[0]?.label).toBe('Les 6 prochains mois')
+    const choices = quandChoices(FREE_MONTHS, null, nov)
+    expect(choices.slice(0, 3).map((option) => option.months)).toEqual([6, 3, 1])
+    expect(choices[0]?.label).toBe('Les 6 prochains mois')
+    expect(choices.at(-1)?.value).toBe('2027-04')
   })
   it('sans compte, 3 mois au plus', () => {
-    expect(quandChoices(GUEST_MONTHS)).toEqual([
+    expect(quandChoices(GUEST_MONTHS, null, nov)).toEqual([
       { value: '3', label: 'Les 3 prochains mois', months: 3 },
       { value: '1', label: 'Ce mois-ci', months: 1 },
+      { value: '2026-12', label: 'Décembre 2026', months: 1 },
+      { value: '2027-01', label: 'Janvier 2027', months: 1 },
     ])
+  })
+})
+
+describe('quandLabel', () => {
+  it('nomme un mois, une période ou les passés', () => {
+    expect(quandLabel('2026-12')).toBe('Décembre 2026')
+    expect(quandLabel('3')).toBe('Les 3 prochains mois')
+    expect(quandLabel('6')).toBe('Les 6 prochains mois')
+    expect(quandLabel('passes')).toBe('Passés')
+    expect(quandLabel('n’importe quoi')).toBe('Les 12 prochains mois')
   })
 })
 
@@ -166,9 +197,13 @@ describe('beyondWindow', () => {
 })
 
 describe('quandChoices avec un mois précis', () => {
-  it('le mois demandé s’ajoute en tête, nommé', () => {
-    const [first] = quandChoices(null, '2026-12')
-    expect(first).toEqual({ value: '2026-12', label: 'Décembre 2026', months: 1 })
+  it('un mois hors de la liste s’ajoute en tête, nommé', () => {
+    const [first] = quandChoices(FREE_MONTHS, '2027-09', new Date(2026, 10, 5))
+    expect(first).toEqual({ value: '2027-09', label: 'Septembre 2027', months: 1 })
+  })
+  it('un mois déjà dans la liste n’est pas répété', () => {
+    const choices = quandChoices(null, '2026-12', new Date(2026, 10, 5))
+    expect(choices.filter((option) => option.value === '2026-12')).toHaveLength(1)
   })
 })
 

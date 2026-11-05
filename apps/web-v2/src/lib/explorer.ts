@@ -56,18 +56,37 @@ function widest(horizon: number): QuandChoice {
   return { value: String(horizon), label: `Les ${horizon} prochains mois`, months: horizon }
 }
 
-/** Les choix de « Quand » ; un mois précis demandé par l'adresse s'ajoute en tête, nommé. */
-export function quandChoices(horizon: Horizon, quand: string | null = null): QuandChoice[] {
-  const base: QuandChoice[] =
+/** Un mois précis : « 2026-12 », nommé « Décembre 2026 ». */
+function monthChoice(month: Date): QuandChoice {
+  const value = `${String(month.getFullYear())}-${String(month.getMonth() + 1).padStart(2, '0')}`
+  return { value, label: `${formatMonthLabel(month)} ${String(month.getFullYear())}`, months: 1 }
+}
+
+/**
+ * Les choix de « Quand » : les périodes, puis chaque mois après celui-ci jusqu'au bout de l'horizon
+ * (retour bêta, Uriel, 05/11/2026). Un mois demandé par l'adresse hors de la liste s'ajoute en tête.
+ */
+export function quandChoices(horizon: Horizon, quand: string | null, today: Date): QuandChoice[] {
+  const periods: QuandChoice[] =
     horizon === null
       ? [...QUAND_OPTIONS]
       : [widest(horizon), ...QUAND_OPTIONS.filter((option) => option.months < horizon)]
-  const month = monthStart(quand)
-  if (!month || quand === null) return base
-  return [
-    { value: quand, label: `${formatMonthLabel(month)} ${month.getFullYear()}`, months: 1 },
-    ...base,
-  ]
+  // « Ce mois-ci » est déjà une période : les mois commencent au suivant.
+  const months = Array.from({ length: (horizon ?? 12) - 1 }, (_, index) =>
+    monthChoice(monthsAhead(today, index + 1)),
+  )
+  const asked = monthStart(quand)
+  const extra = asked && !months.some((month) => month.value === quand) ? [monthChoice(asked)] : []
+  return [...extra, ...periods, ...months]
+}
+
+/** Le nom d'un choix de « Quand » lu dans l'adresse : le titre d'une recherche sans mot. */
+export function quandLabel(value: string): string {
+  if (value === PAST) return PAST_CHOICE.label
+  const month = monthStart(value)
+  if (month) return monthChoice(month).label
+  const months = Number(value)
+  return Number.isInteger(months) && months > 0 ? widest(months).label : QUAND_OPTIONS[0].label
 }
 
 export interface DateWindow {

@@ -17,7 +17,7 @@ interface LandingSearchProps {
 
 export function LandingSearch({ q = '', ou = '', quand = null }: LandingSearchProps) {
   const navigate = useNavigate()
-  const choices = quandChoices(GUEST_MONTHS, quand)
+  const choices = quandChoices(GUEST_MONTHS, quand, new Date())
   const [words, setWords] = useState(q)
   const [place, setPlace] = useState(ou)
   const [when, setWhen] = useState(
