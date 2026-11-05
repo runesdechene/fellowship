@@ -1,5 +1,6 @@
 /**
- * QUOI     — la barre d'onglets du téléphone : Tableau, Explorer, Ajouter, Calendrier, Communauté, et
+ * QUOI     — la barre d'onglets du téléphone : Tableau, Calendrier, Explorer (la loupe, au centre),
+ *            Communauté, et
  *            « Moi » à droite, qui ouvre le menu du compte en feuille : elle monte du bas, sur un
  *            voile, et se ferme d'un geste vers le bas (comme la V1, Uriel, 19/10/2026). Son contenu
  *            suit la maquette 2123:66 ; l'administration et le thème s'y ajoutent, comme sur ordinateur.
@@ -16,13 +17,12 @@ import {
   ChartColumn,
   Check,
   CircleGauge,
-  CirclePlus,
   LogOut,
   Plus,
+  Search,
   Settings,
   Shield,
   Store,
-  Telescope,
   Users,
 } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
@@ -37,12 +37,12 @@ import { useTransitionNavigate } from '@/lib/navigation'
 import type { communityBadge } from '@/lib/network'
 import { usePlan } from '@/lib/usePlan'
 
-const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Telescope }> = [
+// Explorer à la loupe, pile au centre, comme Instagram ; « + » reste en haut (maquette 2779:470,
+// Uriel, 05/11/2026).
+const TABS: ReadonlyArray<{ to: string; label: string; Icon: typeof Search }> = [
   { to: '/', label: 'Tableau', Icon: CircleGauge },
-  { to: '/explorer', label: 'Explorer', Icon: Telescope },
-  // « Ajouter une date » descend de la barre du haut, trop chargée sur téléphone (Uriel, 05/11/2026).
-  { to: '/evenements/nouveau', label: 'Ajouter', Icon: CirclePlus },
   { to: '/calendrier', label: 'Calendrier', Icon: CalendarDays },
+  { to: '/explorer', label: 'Explorer', Icon: Search },
   { to: '/communaute', label: 'Communauté', Icon: Users },
 ]
 

@@ -1,6 +1,7 @@
 /**
  * QUOI     — la loupe de la barre du haut : elle ouvre la recherche plein écran
- *            (features/search/SearchOverlay), sur tous les écrans, Explorer compris (Uriel, 01/11/2026).
+ *            (features/search/SearchOverlay), sur tous les écrans d'ordinateur, Explorer compris (Uriel,
+ *            01/11/2026). Sur téléphone, la loupe est l'onglet Explorer (TabBar.tsx).
  * POURQUOI — maquette 2606:233 (Uriel, 01/11/2026) : une loupe du même dessin que la cloche, plutôt
  *            qu'un champ toujours là.
  * ATTENTION — l'ouverture est une entrée d'historique (`?recherche`, `state.search`) : le retour du
@@ -18,6 +19,7 @@ export function TopbarSearch() {
   return (
     <Button
       variant="icon"
+      className="topbar__search"
       aria-label="Rechercher"
       title="Rechercher"
       onClick={() => {

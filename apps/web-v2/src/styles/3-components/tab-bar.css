@@ -15,7 +15,7 @@
     inset: auto 0 0;
     z-index: 10;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     padding: var(--space-16) var(--space-8) calc(var(--space-16) + env(safe-area-inset-bottom));
     border-top: 1px solid var(--line-card);
     border-radius: var(--radius-card) var(--radius-card) 0 0;

@@ -63,9 +63,10 @@
   color: var(--pro-badge-inverse-ink);
 }
 
-/* Téléphone : la marque en haut à gauche, la cloche et un « + » rond à droite. */
+/* Téléphone : la marque en haut à gauche ; Messages, la cloche et un « + » rond noir à droite
+   (maquette 2779:470). */
 @media (width <= 760px) {
-  /* Recherche, Messages et la cloche à côté de la marque : l'écart se resserre. */
+  /* Trois boutons à côté de la marque : l'écart se resserre. */
   .topbar {
     --topbar-gap: var(--space-6);
 
@@ -86,9 +87,9 @@
 
   /* La double classe l'emporte sur `.button`, importé après : sans elle, « Passer Pro » restait
      affiché et poussait la marque hors de l'écran (02/11/2026). */
-  /* « Modifier la fiche » descend dans la fiche, en grand (EventPage.tsx). « Ajouter une date » et
-     « Passer Pro » passent dans la barre d'onglets et la feuille « Moi » (TabBar.tsx). */
-  .topbar .topbar__add,
+  /* « Modifier la fiche » descend dans la fiche, en grand (EventPage.tsx). « Passer Pro » passe dans
+     la feuille « Moi », la loupe dans la barre d'onglets : c'est l'onglet Explorer (TabBar.tsx). */
+  .topbar .topbar__search,
   .topbar .topbar__add-label,
   .topbar .topbar__pro,
   .topbar .topbar__edit {

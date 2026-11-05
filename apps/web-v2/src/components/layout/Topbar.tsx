@@ -7,7 +7,7 @@
  *            coin sur tous les écrans.
  */
 import { Wordmark } from '@/components/ui/Wordmark'
-import { ArrowLeft, CirclePlus, Pencil } from 'lucide-react'
+import { ArrowLeft, Pencil, Plus } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { ProBadge } from '@/components/ui/ProBadge'
@@ -97,7 +97,7 @@ export function Topbar() {
       <Button
         variant="action"
         className="topbar__add"
-        icon={<CirclePlus size={22} strokeWidth={1.75} />}
+        icon={<Plus size={20} strokeWidth={2} />}
         onClick={() => go('/evenements/nouveau')}
         aria-label="Ajouter une date"
       >
