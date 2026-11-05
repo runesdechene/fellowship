@@ -91,16 +91,6 @@ function ProtectedRoute({ children, guest }: { children: ReactNode; guest?: Reac
   )
 }
 
-/** Une page ouverte sans compte (fiche, vitrine) : le cadre de la landing pour un visiteur, celui
- *  de l'app pour un compte. */
-function OpenRoute({ children }: { children: ReactNode }) {
-  return (
-    <ProtectedRoute guest={<GuestShell>{children}</GuestShell>}>
-      <AppShell>{children}</AppShell>
-    </ProtectedRoute>
-  )
-}
-
 /** L'administration : les admins seulement. Elle ne protège que l'affichage — chaque fonction
  *  admin_* refuse en base tout appel qui ne vient pas d'un admin. */
 function AdminRoute({ children }: { children: ReactNode }) {
@@ -110,28 +100,28 @@ function AdminRoute({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-/** Un écran de l'app : connecté, dans la coque. */
-function AppPage({ children, bare = false }: { children: ReactNode; bare?: boolean }) {
+/** Un écran de l'app, dans la coque. `guest` : ce que voit un visiteur sans compte (la landing,
+ *  ou le cadre de la landing pour une fiche ou une vitrine) ; sans lui, il passe par la connexion.
+ *  ATTENTION — toutes les pages connectées passent par lui : d'une page à l'autre, React garde
+ *  alors la même coque et ne remplace que le contenu. Un autre enveloppeur la démonte, et la barre
+ *  latérale se recharge (05/11/2026). */
+function AppPage({
+  children,
+  bare = false,
+  guest,
+}: {
+  children: ReactNode
+  bare?: boolean
+  guest?: ReactNode
+}) {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute guest={guest}>
       <AppShell bare={bare}>{children}</AppShell>
     </ProtectedRoute>
   )
 }
 
-function AdminPage({ children }: { children: ReactNode }) {
-  return (
-    <ProtectedRoute>
-      <AdminRoute>
-        <AppShell bare>
-          <div className="admin-content">{children}</div>
-        </AppShell>
-      </AdminRoute>
-    </ProtectedRoute>
-  )
-}
-
-/** L'administration : chaque section derrière la même garde (AdminPage). */
+/** L'administration : chaque section derrière la même garde (AdminRoute). */
 const ADMIN_ROUTES: [string, ReactNode][] = [
   ['/admin/accueil', <HomePage />],
   ['/admin/taches', <BoardPage />],
@@ -223,33 +213,27 @@ export function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute guest={<LandingPage />}>
-              <AppShell>
-                <Dashboard />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage guest={<LandingPage />}>
+              <Dashboard />
+            </AppPage>
           }
         />
         <Route
           path="/evenements/nouveau"
           element={
-            <ProtectedRoute>
-              <AppShell bare>
-                <CreateEvent />
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage bare>
+              <CreateEvent />
+            </AppPage>
           }
         />
         <Route
           path="/evenements/:slug/modifier"
           element={
-            <ProtectedRoute>
-              <AppShell bare>
-                <EventRoute>
-                  <EditEvent />
-                </EventRoute>
-              </AppShell>
-            </ProtectedRoute>
+            <AppPage bare>
+              <EventRoute>
+                <EditEvent />
+              </EventRoute>
+            </AppPage>
           }
         />
         <Route
@@ -277,11 +261,19 @@ export function App() {
         <Route
           path="/evenements/:slug"
           element={
-            <OpenRoute>
+            <AppPage
+              guest={
+                <GuestShell>
+                  <EventRoute>
+                    <EventPage />
+                  </EventRoute>
+                </GuestShell>
+              }
+            >
               <EventRoute>
                 <EventPage />
               </EventRoute>
-            </OpenRoute>
+            </AppPage>
           }
         />
         <Route
@@ -384,14 +376,30 @@ export function App() {
         />
         <Route path="/admin" element={<Navigate to={ADMIN_HOME} replace />} />
         {ADMIN_ROUTES.map(([path, element]) => (
-          <Route key={path} path={path} element={<AdminPage>{element}</AdminPage>} />
+          <Route
+            key={path}
+            path={path}
+            element={
+              <AppPage bare>
+                <AdminRoute>
+                  <div className="admin-content">{element}</div>
+                </AdminRoute>
+              </AppPage>
+            }
+          />
         ))}
         <Route
           path="/:slug"
           element={
-            <OpenRoute>
+            <AppPage
+              guest={
+                <GuestShell>
+                  <VitrineRoute />
+                </GuestShell>
+              }
+            >
               <VitrineRoute />
-            </OpenRoute>
+            </AppPage>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
