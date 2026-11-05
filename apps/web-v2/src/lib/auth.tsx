@@ -152,7 +152,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const actors = useMemo<Actor[]>(() => {
     const list: Actor[] = entities.map((e) => toActor(e, 'entity'))
-    if (person) list.push(toActor(person, 'person'))
+    // Le profil particulier ne sert qu'à nommer la personne : il n'est un compte que pour qui n'a
+    // pas d'enseigne (Uriel, 05/11/2026). La cloche lit ses notifications à part (useNotifications).
+    if (person && list.length === 0) list.push(toActor(person, 'person'))
     return list
   }, [entities, person])
 
