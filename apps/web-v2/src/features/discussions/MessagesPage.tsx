@@ -17,6 +17,7 @@ import { useAuth } from '@/lib/auth'
 import { othersOf, type InboxRow } from '@/lib/discussion-api'
 import { conversationName, messagesExit, previewLine, remainingLabel } from '@/lib/discussions'
 import { formatTime, timeAgo } from '@/lib/dates'
+import { useTransitionNavigate } from '@/lib/navigation'
 import { Conversation } from './Conversation'
 import { NewMessage } from './NewMessage'
 import { useInbox } from './useDiscussions'
@@ -57,17 +58,15 @@ export function MessagesPage({ composing = false }: { composing?: boolean }) {
 /** La liste des conversations, la plus récente en haut. */
 function Inbox({ selected }: { selected: string | undefined }) {
   const navigate = useNavigate()
+  // Quitter Messages s'anime comme on y est entré : le passage d'écran de la fiche d'un festival.
+  const go = useTransitionNavigate()
   const state: unknown = useLocation().state
   const inbox = useInbox()
 
   return (
     <>
       <header className="messages-page__head">
-        <Button
-          variant="icon"
-          aria-label="Retour"
-          onClick={() => void navigate(messagesExit(state))}
-        >
+        <Button variant="icon" aria-label="Retour" onClick={() => go(messagesExit(state))}>
           <ArrowLeft size={18} strokeWidth={1.75} />
         </Button>
         <h1 className="messages-page__title">Messages</h1>
