@@ -8,6 +8,7 @@
  */
 import { ArrowRight, ChevronLeft, Mail } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { CodeInput } from '@/components/ui/CodeInput'
 import { LoginWall } from '@/features/login/LoginWall'
@@ -75,7 +76,9 @@ export function Login() {
   return (
     <div className="door">
       <div className="door__side">
-        <Wordmark className="door__logo" />
+        <Link className="door__logo" to="/" aria-label="Fellowship, accueil">
+          <Wordmark />
+        </Link>
         {step === 'email' ? (
           <form
             className="door__form"
