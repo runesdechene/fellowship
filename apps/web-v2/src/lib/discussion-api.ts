@@ -121,11 +121,12 @@ function toChatMessage(row: MessageRow): ChatMessage {
     mediaPath: row.media_path,
     mediaKind: row.media_kind,
     createdAt: row.created_at,
+    editedAt: row.edited_at,
   }
 }
 
 const MESSAGE_COLUMNS =
-  'id, conversation_id, author_actor, body, media_path, media_kind, created_at'
+  'id, conversation_id, author_actor, body, media_path, media_kind, created_at, edited_at'
 
 /** Les 300 derniers messages, du plus ancien au plus récent. */
 export async function fetchMessages(conversationId: string): Promise<ChatMessage[]> {
@@ -140,20 +141,33 @@ export async function fetchMessages(conversationId: string): Promise<ChatMessage
   return rows.map(toChatMessage).reverse()
 }
 
-/** Chaque nouveau message de la conversation, dès qu'il est écrit ; rend de quoi se désabonner. */
-export function watchMessages(conversationId: string, onMessage: (message: ChatMessage) => void) {
+/**
+ * Chaque message écrit ou modifié dans la conversation, et chaque message supprimé ; rend de quoi
+ * se désabonner. Le temps réel ne sait pas filtrer un effacement par conversation : il n'envoie que
+ * l'identifiant, et celui d'une autre conversation ne correspond à rien ici.
+ */
+export function watchMessages(
+  conversationId: string,
+  onMessage: (message: ChatMessage) => void,
+  onDelete: (messageId: string) => void,
+) {
+  const changes = {
+    schema: 'public',
+    table: 'messages',
+    filter: `conversation_id=eq.${conversationId}`,
+  }
   const channel = supabase
     .channel(`messages:${conversationId}`)
-    .on(
-      'postgres_changes',
-      {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `conversation_id=eq.${conversationId}`,
-      },
-      (payload) => onMessage(toChatMessage(payload.new as MessageRow)),
+    .on('postgres_changes', { ...changes, event: 'INSERT' }, (payload) =>
+      onMessage(toChatMessage(payload.new as MessageRow)),
     )
+    .on('postgres_changes', { ...changes, event: 'UPDATE' }, (payload) =>
+      onMessage(toChatMessage(payload.new as MessageRow)),
+    )
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, (payload) => {
+      const { id } = payload.old as Partial<MessageRow>
+      if (id) onDelete(id)
+    })
     .subscribe()
   return () => {
     void supabase.removeChannel(channel)
@@ -238,6 +252,22 @@ export async function sendMessage(
       ...(media ? { p_media_path: media.path, p_media_kind: media.kind } : {}),
     }),
   )
+}
+
+/** Réécrit le texte d'un de ses messages ; vide, il ne reste que la photo. */
+export async function editMessage(actorId: string, messageId: string, body: string): Promise<void> {
+  must(
+    await supabase.rpc('modifier_message', {
+      p_actor: actorId,
+      p_message: messageId,
+      p_body: body,
+    }),
+  )
+}
+
+/** Efface un de ses messages pour tout le monde, réactions comprises. */
+export async function deleteMessage(actorId: string, messageId: string): Promise<void> {
+  must(await supabase.rpc('supprimer_message', { p_actor: actorId, p_message: messageId }))
 }
 
 export async function openConversation(

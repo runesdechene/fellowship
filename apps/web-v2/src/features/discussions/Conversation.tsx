@@ -25,6 +25,7 @@ import {
   remainingLabel,
   summarizeReactions,
   toBubbles,
+  type Bubble,
 } from '@/lib/discussions'
 import { useTagStyles } from '@/lib/useTagStyles'
 import { ChatFeed } from './ChatFeed'
@@ -48,7 +49,9 @@ interface Props {
 export function Conversation({ conversationId, onClose, closeWith, story = false }: Props) {
   const { actor } = useAuth()
   const styles = useTagStyles()
-  const { state, urls, reload, react } = useConversation(conversationId)
+  const { state, urls, reload, react, edit, remove } = useConversation(conversationId)
+  const [editing, setEditing] = useState<Bubble | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
   const [params, setParams] = useSearchParams()
   const [membersOpen, setMembersOpen] = useState(false)
   const [closing, setClosing] = useState<'ask' | 'busy' | null>(null)
@@ -218,6 +221,8 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         group={detail.kind !== 'direct'}
         reactions={summarizeReactions(reactions, actor.id)}
         onReact={closed ? undefined : react}
+        onEdit={closed ? undefined : setEditing}
+        onDelete={closed ? undefined : setDeleting}
       />
 
       {closed ? (
@@ -226,6 +231,10 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         </p>
       ) : (
         <ChatInput
+          key={editing?.id}
+          editing={editing}
+          onEdit={edit}
+          onEditDone={() => setEditing(null)}
           conversationId={conversationId}
           placeholder={sujet ? `Répondre à ${author?.label ?? 'ce sujet'}` : `Message à ${title}`}
         />
@@ -240,6 +249,20 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
           problem={problem}
           onConfirm={() => void confirmClose()}
           onClose={() => setClosing(null)}
+        />
+      )}
+      {deleting && (
+        <ConfirmDialog
+          title="Supprimer ce message ?"
+          text="Il disparaît pour tout le monde, avec sa photo et ses réactions."
+          confirmLabel="Supprimer"
+          busy={false}
+          problem={null}
+          onConfirm={() => {
+            remove(deleting)
+            setDeleting(null)
+          }}
+          onClose={() => setDeleting(null)}
         />
       )}
       {membersOpen && (

@@ -180,7 +180,67 @@
 @media (prefers-reduced-motion: reduce) {
   .chat-reactions,
   .chat-feed__veil,
-  .reaction-picker {
+  .reaction-picker,
+  .chat-row__menu {
     animation: none;
   }
+
+  .chat-row__option {
+    transition: none;
+  }
+}
+
+/* ── Ses propres messages : les emojis, puis « Modifier » et « Supprimer », au-dessus de la bulle ── */
+.chat-row__actions {
+  position: absolute;
+  bottom: calc(100% + var(--space-6));
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.chat-row--mine .chat-row__actions {
+  right: 0;
+  left: auto;
+  align-items: flex-end;
+}
+
+.chat-row__actions .reaction-picker {
+  position: static;
+}
+
+.chat-row__menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border-radius: var(--radius-nav);
+  background: var(--surface-card);
+  box-shadow: var(--reaction-picker-shadow);
+  animation: reaction-pop var(--duration-medium) var(--ease-drawer);
+}
+
+.chat-row__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-10) var(--space-12);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink-title);
+  font: var(--type-list-meta);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: background-color var(--menu-motion);
+}
+
+.chat-row__option:hover {
+  background-color: var(--surface-nav-hover);
+}
+
+.chat-row__option--remove {
+  color: var(--danger-ink);
 }

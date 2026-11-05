@@ -2,20 +2,27 @@
  * QUOI     — la saisie d'un tchat : joindre une photo ou une vidéo, écrire, envoyer.
  * POURQUOI — comme sur WhatsApp : « Entrée » envoie, « Maj + Entrée » passe à la ligne, une image
  *            collée dans le champ se joint au message ; l'envoi se fait au nom de l'acteur actif.
+ *            En modification, le champ reprend le texte du message : « Entrée » l'enregistre,
+ *            « Échap » ou la croix l'abandonne.
+ * ATTENTION — le parent change la `key` à chaque message modifié : le champ repart de son texte.
  */
 import { useState } from 'react'
 import { ArrowUp, ImagePlus, Plus, X } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { sendMessage, uploadMedia, type Media } from '@/lib/discussion-api'
+import type { Bubble } from '@/lib/discussions'
 
 interface Props {
   conversationId: string
   placeholder: string
+  editing: Bubble | null
+  onEdit: (messageId: string, body: string) => Promise<void>
+  onEditDone: () => void
 }
 
-export function ChatInput({ conversationId, placeholder }: Props) {
+export function ChatInput({ conversationId, placeholder, editing, onEdit, onEditDone }: Props) {
   const { actor } = useAuth()
-  const [text, setText] = useState('')
+  const [text, setText] = useState(editing?.body ?? '')
   const [file, setFile] = useState<File | null>(null)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
@@ -25,6 +32,11 @@ export function ChatInput({ conversationId, placeholder }: Props) {
     setBusy(true)
     setProblem(null)
     try {
+      if (editing) {
+        await onEdit(editing.id, text)
+        onEditDone()
+        return
+      }
       let media: Media | null = null
       if (file) {
         const uploaded = await uploadMedia(actor.id, file)
@@ -54,6 +66,14 @@ export function ChatInput({ conversationId, placeholder }: Props) {
           {problem}
         </p>
       )}
+      {editing && (
+        <p className="chat-input__file">
+          Modification du message
+          <button type="button" aria-label="Annuler la modification" onClick={onEditDone}>
+            <X size={12} strokeWidth={2.5} />
+          </button>
+        </p>
+      )}
       {file && (
         <p className="chat-input__file">
           {file.name}
@@ -63,15 +83,17 @@ export function ChatInput({ conversationId, placeholder }: Props) {
         </p>
       )}
       <div className="chat-input__row">
-        <label className="chat-input__attach" aria-label="Joindre une photo ou une vidéo">
-          <Plus size={20} strokeWidth={1.75} aria-hidden="true" />
-          <input
-            type="file"
-            accept="image/*,video/*"
-            hidden
-            onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-          />
-        </label>
+        {!editing && (
+          <label className="chat-input__attach" aria-label="Joindre une photo ou une vidéo">
+            <Plus size={20} strokeWidth={1.75} aria-hidden="true" />
+            <input
+              type="file"
+              accept="image/*,video/*"
+              hidden
+              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+            />
+          </label>
+        )}
         <div className="chat-input__field">
           <textarea
             rows={1}
@@ -83,26 +105,33 @@ export function ChatInput({ conversationId, placeholder }: Props) {
               const image = [...event.clipboardData.files].find((pasted) =>
                 pasted.type.startsWith('image/'),
               )
-              if (!image) return
+              if (!image || editing) return
               event.preventDefault()
               setFile(image)
             }}
+            autoFocus={!!editing}
             onKeyDown={(event) => {
+              if (event.key === 'Escape' && editing) {
+                event.preventDefault()
+                onEditDone()
+              }
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault()
                 void send()
               }
             }}
           />
-          <label className="chat-input__photo" aria-label="Ajouter une photo">
-            <ImagePlus size={18} strokeWidth={1.75} aria-hidden="true" />
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-            />
-          </label>
+          {!editing && (
+            <label className="chat-input__photo" aria-label="Ajouter une photo">
+              <ImagePlus size={18} strokeWidth={1.75} aria-hidden="true" />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+              />
+            </label>
+          )}
         </div>
         <button
           type="submit"

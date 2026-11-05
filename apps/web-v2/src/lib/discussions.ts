@@ -58,6 +58,8 @@ export interface ChatMessage {
   mediaPath: string | null
   mediaKind: 'image' | 'video' | null
   createdAt: string
+  /** Réécrit par son auteur : « modifié » s'affiche à côté de l'heure. */
+  editedAt: string | null
 }
 
 /** Une bulle, avec ce que son voisinage décide : le nom au début d'une suite, l'avatar à la fin. */

@@ -8,6 +8,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
 import {
+  deleteMessage,
+  editMessage,
   fetchConversation,
   fetchEventBrief,
   fetchInbox,
@@ -126,21 +128,31 @@ export function useConversation(conversationId: string) {
     }
   }, [actor, conversationId, version])
 
-  // Le temps réel ajoute les messages des autres ; les siens reviennent aussi par là.
+  const applyMessages = useCallback((change: (messages: ChatMessage[]) => ChatMessage[]) => {
+    setState((previous) =>
+      previous.status === 'ready'
+        ? { ...previous, value: { ...previous.value, messages: change(previous.value.messages) } }
+        : previous,
+    )
+  }, [])
+
+  // Le temps réel ajoute les messages des autres, et suit les modifications et les suppressions ;
+  // les siens reviennent aussi par là.
   useEffect(() => {
     if (!actor) return
-    return watchMessages(conversationId, (message) => {
-      setState((previous) => {
-        if (previous.status !== 'ready') return previous
-        if (previous.value.messages.some((known) => known.id === message.id)) return previous
-        return {
-          ...previous,
-          value: { ...previous.value, messages: [...previous.value.messages, message] },
-        }
-      })
-      void markRead(actor.id, conversationId)
-    })
-  }, [actor, conversationId])
+    return watchMessages(
+      conversationId,
+      (message) => {
+        applyMessages((messages) =>
+          messages.some((known) => known.id === message.id)
+            ? messages.map((known) => (known.id === message.id ? message : known))
+            : [...messages, message],
+        )
+        void markRead(actor.id, conversationId)
+      },
+      (messageId) => applyMessages((messages) => messages.filter(({ id }) => id !== messageId)),
+    )
+  }, [actor, conversationId, applyMessages])
 
   const applyReaction = useCallback((reaction: Reaction) => {
     setState((previous) =>
@@ -168,6 +180,22 @@ export function useConversation(conversationId: string) {
     [actor, applyReaction, reload],
   )
 
+  /** Modifier attend la base, qui renvoie le message par le temps réel ; supprimer est immédiat. */
+  const edit = useCallback(
+    async (messageId: string, body: string) => {
+      if (actor) await editMessage(actor.id, messageId, body)
+    },
+    [actor],
+  )
+  const remove = useCallback(
+    (messageId: string) => {
+      if (!actor) return
+      applyMessages((messages) => messages.filter(({ id }) => id !== messageId))
+      deleteMessage(actor.id, messageId).catch(reload)
+    },
+    [actor, applyMessages, reload],
+  )
+
   const value = state.status === 'ready' ? state.value : null
   const mediaPaths = useMemo(
     () =>
@@ -175,5 +203,5 @@ export function useConversation(conversationId: string) {
     [value],
   )
   const urls = useMediaUrls(mediaPaths)
-  return { state, urls, reload, react }
+  return { state, urls, reload, react, edit, remove }
 }

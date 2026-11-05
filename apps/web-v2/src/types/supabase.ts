@@ -1349,6 +1349,7 @@ export type Database = {
           body: string | null
           conversation_id: string
           created_at: string
+          edited_at: string | null
           id: string
           media_kind: Database["public"]["Enums"]["message_media"] | null
           media_path: string | null
@@ -1358,6 +1359,7 @@ export type Database = {
           body?: string | null
           conversation_id: string
           created_at?: string
+          edited_at?: string | null
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
@@ -1367,6 +1369,7 @@ export type Database = {
           body?: string | null
           conversation_id?: string
           created_at?: string
+          edited_at?: string | null
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
@@ -3436,6 +3439,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      message_modifiable: {
+        Args: { p_actor: string; p_message: string }
+        Returns: string
+      }
       modifier_evenement: {
         Args: {
           p_as_entity?: string
@@ -3445,6 +3452,10 @@ export type Database = {
           p_note?: string
         }
         Returns: number
+      }
+      modifier_message: {
+        Args: { p_actor: string; p_body: string; p_message: string }
+        Returns: undefined
       }
       mutual_friends: {
         Args: { p_actor: string; p_others: string[] }
@@ -3635,6 +3646,10 @@ export type Database = {
           participants: number
           seen: boolean
         }[]
+      }
+      supprimer_message: {
+        Args: { p_actor: string; p_message: string }
+        Returns: undefined
       }
       version_evenement: {
         Args: { p_version: number }

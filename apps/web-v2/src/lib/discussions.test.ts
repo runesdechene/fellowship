@@ -52,6 +52,7 @@ describe('toBubbles', () => {
     mediaPath: null,
     mediaKind: null,
     createdAt: at(minutes),
+    editedAt: null,
   })
 
   it('regroupe les messages proches d’un même auteur', () => {

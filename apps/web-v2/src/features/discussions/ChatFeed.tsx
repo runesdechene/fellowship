@@ -1,14 +1,15 @@
 /**
  * QUOI     — le fil d'un tchat : les bulles en suites, le nom au début d'une suite, l'avatar à la
  *            fin, le jour qui change, les photos et vidéos, la double coche une fois lu, et les
- *            réactions (appui long sur téléphone, survol sur ordinateur).
+ *            réactions (appui long sur téléphone, survol sur ordinateur). Sur ses propres messages,
+ *            le même geste propose aussi « Modifier » et « Supprimer », comme sur WhatsApp.
  * POURQUOI — « que les gens s'y sentent bien » (Uriel, 04/11/2026) : bulles des autres en blanc
  *            sur le papier, les siennes à la couleur de la conversation, noms colorés en groupe.
  * ATTENTION — le fil défile seul, collé en bas, comme tout tchat. Il se recolle en bas par son
  *            propre défilement, jamais par scrollIntoView, qui ferait aussi défiler la story au-dessus.
  */
 import { useEffect, useRef, useState } from 'react'
-import { CheckCheck, SmilePlus } from 'lucide-react'
+import { CheckCheck, Pencil, SmilePlus, Trash2 } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { dayLabel, formatTime } from '@/lib/dates'
 import type { Bubble, Person, ReactionSummary } from '@/lib/discussions'
@@ -18,8 +19,9 @@ import { ReactionPicker } from './ReactionPicker'
 const NAME_TONES = 8
 /** L'appui long qui ouvre les réactions, comme sur WhatsApp. */
 const LONG_PRESS = 450
-/** La place qu'il faut au-dessus d'une bulle pour poser la rangée d'emojis. */
+/** La place qu'il faut au-dessus d'une bulle pour poser la rangée d'emojis, et le menu des siennes. */
 const PICKER_ROOM = 72
+const MENU_ROOM = 176
 
 interface Props {
   bubbles: Bubble[]
@@ -31,6 +33,9 @@ interface Props {
   reactions: Map<string, ReactionSummary>
   /** Absent quand on ne peut plus réagir (un sujet clôturé). */
   onReact?: (messageId: string, emoji: string | null) => void
+  /** Absents eux aussi dans un sujet clôturé. */
+  onEdit?: (bubble: Bubble) => void
+  onDelete?: (messageId: string) => void
 }
 
 export function ChatFeed({
@@ -41,6 +46,8 @@ export function ChatFeed({
   group,
   reactions,
   onReact,
+  onEdit,
+  onDelete,
 }: Props) {
   const feed = useRef<HTMLDivElement>(null)
   const press = useRef<number | undefined>(undefined)
@@ -68,8 +75,9 @@ export function ChatFeed({
     const element = feed.current
     const row = from.closest('.chat-row')
     if (!onReact || !element || !row) return
+    const needed = row.classList.contains('chat-row--mine') ? MENU_ROOM : PICKER_ROOM
     const room = row.getBoundingClientRect().top - element.getBoundingClientRect().top
-    if (room < PICKER_ROOM) element.scrollBy({ top: room - PICKER_ROOM, behavior: 'smooth' })
+    if (room < needed) element.scrollBy({ top: room - needed, behavior: 'smooth' })
     setPicking(id)
   }
   const cancelPress = () => window.clearTimeout(press.current)
@@ -122,13 +130,43 @@ export function ChatFeed({
                 }}
               >
                 {picking === bubble.id && onReact && (
-                  <ReactionPicker
-                    mine={summary?.mine ?? null}
-                    onPick={(emoji) => {
-                      onReact(bubble.id, emoji === summary?.mine ? null : emoji)
-                      setPicking(null)
-                    }}
-                  />
+                  <div className="chat-row__actions">
+                    <ReactionPicker
+                      mine={summary?.mine ?? null}
+                      onPick={(emoji) => {
+                        onReact(bubble.id, emoji === summary?.mine ? null : emoji)
+                        setPicking(null)
+                      }}
+                    />
+                    {bubble.mine && onEdit && onDelete && (
+                      <div className="chat-row__menu">
+                        {bubble.body && (
+                          <button
+                            type="button"
+                            className="chat-row__option"
+                            onClick={() => {
+                              onEdit(bubble)
+                              setPicking(null)
+                            }}
+                          >
+                            <Pencil size={16} strokeWidth={1.75} aria-hidden="true" />
+                            Modifier
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className="chat-row__option chat-row__option--remove"
+                          onClick={() => {
+                            onDelete(bubble.id)
+                            setPicking(null)
+                          }}
+                        >
+                          <Trash2 size={16} strokeWidth={1.75} aria-hidden="true" />
+                          Supprimer
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
                 <div className={shape.join(' ')}>
                   {!bubble.mine && bubble.first && group && (
@@ -155,6 +193,7 @@ export function ChatFeed({
                   )}
                   {bubble.body && <p className="chat-bubble__text">{bubble.body}</p>}
                   <p className="chat-bubble__meta">
+                    {bubble.editedAt && <span>modifié</span>}
                     {formatTime(new Date(bubble.createdAt))}
                     {bubble.mine && (
                       <CheckCheck
