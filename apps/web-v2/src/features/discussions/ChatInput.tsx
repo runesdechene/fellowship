@@ -1,7 +1,7 @@
 /**
  * QUOI     — la saisie d'un tchat : joindre une photo ou une vidéo, écrire, envoyer.
- * POURQUOI — comme sur WhatsApp : « Entrée » envoie, « Maj + Entrée » passe à la ligne ; l'envoi
- *            se fait au nom de l'acteur actif.
+ * POURQUOI — comme sur WhatsApp : « Entrée » envoie, « Maj + Entrée » passe à la ligne, une image
+ *            collée dans le champ se joint au message ; l'envoi se fait au nom de l'acteur actif.
  */
 import { useState } from 'react'
 import { ArrowUp, ImagePlus, Plus, X } from 'lucide-react'
@@ -79,6 +79,14 @@ export function ChatInput({ conversationId, placeholder }: Props) {
             placeholder={placeholder}
             aria-label="Message"
             onChange={(event) => setText(event.target.value)}
+            onPaste={(event) => {
+              const image = [...event.clipboardData.files].find((pasted) =>
+                pasted.type.startsWith('image/'),
+              )
+              if (!image) return
+              event.preventDefault()
+              setFile(image)
+            }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault()
