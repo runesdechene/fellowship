@@ -14,3 +14,5 @@ appliquée ; `lib/community.ts` les lit et les dit.
 - `NetworkPage.tsx` — « Mes amis » / « Mes abonnés » (`/communaute/amis`, `/communaute/abonnes`).
 - `NetworkCard.tsx` — « Ta communauté » : amis, abonnés, demandes d'ami en attente.
 - `useNetwork.ts` — l'état du réseau, lu aussi par la pastille de la navigation et le tableau de bord.
+- `useCommunityNews.ts` — l'autre moitié de la pastille : les festivals ajoutés depuis la dernière
+  ouverture de la page (`users.community_seen_at`).
