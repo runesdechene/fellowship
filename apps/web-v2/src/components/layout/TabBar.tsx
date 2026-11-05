@@ -7,7 +7,8 @@
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
  *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026). Un
  *            autre sur « Moi » : une nouveauté attend, et le menu mène aux Nouveautés (maquette 2371:443).
- * ATTENTION — invisible sur ordinateur (tab-bar.css).
+ * ATTENTION — invisible sur ordinateur (tab-bar.css). Elle glisse hors de l'écran quand une
+ *            discussion est ouverte : le champ de saisie prend le bas de l'écran, comme sur WhatsApp.
  */
 import {
   Bell,
@@ -24,7 +25,7 @@ import {
   Users,
 } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useMatch } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
@@ -50,6 +51,8 @@ export function TabBar({
   community: ReturnType<typeof communityBadge>
   updatesUnread: boolean
 }) {
+  const conversation = useMatch('/messages/:id')
+  const chatting = !!conversation && conversation.params.id !== 'nouveau'
   const { actor, actors, entities, person, switchActor, signOut } = useAuth()
   const go = useTransitionNavigate()
   // Les mêmes accès que la barre latérale : sa vitrine, et l'administration pour un admin.
@@ -183,7 +186,11 @@ export function TabBar({
           </div>
         </div>
       </dialog>
-      <nav className="tab-bar" aria-label="Navigation">
+      <nav
+        className={chatting ? 'tab-bar tab-bar--away' : 'tab-bar'}
+        aria-label="Navigation"
+        inert={chatting}
+      >
         {TABS.map(({ to, label, Icon }) => {
           const content = (
             <>

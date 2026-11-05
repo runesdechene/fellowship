@@ -185,9 +185,10 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         {detail.kind === 'groupe' && (
           <Button
             icon={<Users size={16} strokeWidth={1.75} />}
+            aria-label="Membres"
             onClick={() => setMembersOpen(true)}
           >
-            Membres
+            <span className="conversation__members-label">Membres</span>
           </Button>
         )}
         {exit === 'cross' && closeButton}

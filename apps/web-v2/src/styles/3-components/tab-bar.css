@@ -21,6 +21,11 @@
     border-radius: var(--radius-card) var(--radius-card) 0 0;
     box-shadow: var(--tab-bar-shadow);
     background: var(--surface-card);
+    transition: translate var(--duration-medium) var(--ease-drawer);
+  }
+
+  .tab-bar--away {
+    translate: 0 100%;
   }
 
   .tab-bar__item {
@@ -175,6 +180,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .tab-bar,
   .tab-sheet,
   .tab-sheet__body {
     transition: none;

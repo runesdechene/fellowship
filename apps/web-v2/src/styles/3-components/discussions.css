@@ -1078,6 +1078,11 @@
     display: block;
   }
 
+  /* Le bouton « Membres » ne garde que son icône : l'en-tête d'un téléphone est étroit. */
+  .conversation__members-label {
+    display: none;
+  }
+
   .messages-page__open,
   .messages-page--open .messages-page__list {
     display: none;
