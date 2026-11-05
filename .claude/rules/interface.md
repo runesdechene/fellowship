@@ -256,3 +256,14 @@ Avatar = photo de profil réelle (avatar_url). Pas de cercle avec initiale.
 **Why:** L'initiale dans un cercle coloré n'est pas un avatar, c'est un fallback. Le user attend de voir les vraies photos.
 
 **How to apply:** Partout où on affiche un "avatar", fetcher et afficher `avatar_url` du profil. L'initiale ne sert que de fallback quand il n'y a pas de photo.
+
+## Une image de communication ne montre jamais de vrais exposants
+
+**Le piège** (05/11/2026, annonce des sujets) : j'ai composé le visuel avec les maquettes Figma, qui
+reprennent l'affiche des Aventuriales et l'avatar d'Atelier Fenrir. Uriel : « On a pas le droit de
+mettre des avatars ou des affiches de gens réels voyons !! »
+
+**How to apply :** une annonce part du modèle « Nouveauté » de la page Communication (illustration
+1360 × 765, carré 1080 × 1080), avec des pictogrammes, des formes ou les « Affiches inventées
+(sources) ». Jamais une capture ni une maquette qui contient une vraie affiche, un vrai avatar ou un
+vrai nom.
