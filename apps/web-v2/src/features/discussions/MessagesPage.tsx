@@ -58,8 +58,8 @@ export function MessagesPage({ composing = false }: { composing?: boolean }) {
 /** La liste des conversations, la plus récente en haut. */
 function Inbox({ selected }: { selected: string | undefined }) {
   const navigate = useNavigate()
-  // Quitter Messages s'anime comme on y est entré : le passage d'écran de la fiche d'un festival.
-  const go = useTransitionNavigate()
+  // Messages est venu de la droite : il y repart.
+  const go = useTransitionNavigate('messages-close')
   const state: unknown = useLocation().state
   const inbox = useInbox()
 

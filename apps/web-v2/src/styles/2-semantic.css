@@ -371,6 +371,7 @@
   --page-transition-out: var(--duration-fast) var(--ease-soft);
   --page-transition-in: var(--duration-medium) var(--ease-soft);
   --page-transition-rise: var(--space-12);
+  --page-transition-slide: var(--space-40);
 
   /* Colonne de gauche */
   --sidebar-padding-x: var(--space-23); /* aligne compte et navigation */

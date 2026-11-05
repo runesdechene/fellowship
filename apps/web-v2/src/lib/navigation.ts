@@ -27,6 +27,9 @@ type DocumentWithViewTransition = Document & {
  * Le `mode` est posé sur la racine du document le temps du passage, pour que
  * le CSS sache quelle animation jouer — aller, retour, ou changement d'écran.
  */
+// Le numéro de la dernière transition lancée : seule elle peut effacer le mode de la racine.
+let latest = 0
+
 export function useViewTransition() {
   return useCallback((mode: string, update: () => void) => {
     const doc = document as DocumentWithViewTransition
@@ -37,9 +40,12 @@ export function useViewTransition() {
 
     const root = document.documentElement
     root.dataset.transition = mode
+    const id = ++latest
 
+    // Une transition qui finit après le départ de la suivante ne doit pas effacer le mode de
+    // celle-ci : fermer Messages avant la fin de son ouverture perdait son animation.
     const forget = () => {
-      delete root.dataset.transition
+      if (id === latest) delete root.dataset.transition
     }
     // `finished` est rejetée si la transition est interrompue : on nettoie
     // dans les deux cas, sinon l'attribut resterait collé à la racine.
@@ -47,17 +53,17 @@ export function useViewTransition() {
   }, [])
 }
 
-/** Navigation animée entre deux écrans. */
-export function useTransitionNavigate() {
+/** Navigation animée entre deux écrans ; `mode` choisit l'animation (page-transition.css). */
+export function useTransitionNavigate(mode = 'page') {
   const navigate = useNavigate()
   const transition = useViewTransition()
 
   return useCallback(
     (to: To, options?: NavigateOptions) => {
-      transition('page', () => {
+      transition(mode, () => {
         void navigate(to, options)
       })
     },
-    [navigate, transition],
+    [mode, navigate, transition],
   )
 }

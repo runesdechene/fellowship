@@ -36,6 +36,42 @@
 }
 
 /* =============================================================================
+   MESSAGES
+   La messagerie arrive par la droite et y repart (Uriel, 05/11/2026) ; la
+   page qu'elle couvre, ou qu'elle découvre, ne fait que s'effacer ou paraître.
+   ========================================================================== */
+
+:root[data-transition='messages-open']::view-transition-old(main-panel) {
+  animation: page-leave var(--page-transition-out) both;
+}
+
+:root[data-transition='messages-open']::view-transition-new(main-panel) {
+  animation: messages-enter var(--page-transition-in) both;
+}
+
+:root[data-transition='messages-close']::view-transition-old(main-panel) {
+  animation: messages-leave var(--page-transition-out) both;
+}
+
+:root[data-transition='messages-close']::view-transition-new(main-panel) {
+  animation: page-enter var(--page-transition-in) both;
+}
+
+@keyframes messages-enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--page-transition-slide));
+  }
+}
+
+@keyframes messages-leave {
+  to {
+    opacity: 0;
+    transform: translateX(var(--page-transition-slide));
+  }
+}
+
+/* =============================================================================
    D'UNE ÉTAPE À L'AUTRE
    Le mouvement suit le sens de la marche : on avance, l'ancienne part vers la
    gauche et la nouvelle vient de la droite ; on revient, l'inverse.

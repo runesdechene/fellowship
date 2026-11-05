@@ -10,7 +10,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 import { useInbox } from './useDiscussions'
 
 export function MessagesButton() {
-  const go = useTransitionNavigate()
+  const go = useTransitionNavigate('messages-open')
   const { pathname, search } = useLocation()
   const inbox = useInbox()
   const unread =

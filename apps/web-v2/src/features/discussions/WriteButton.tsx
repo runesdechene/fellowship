@@ -12,7 +12,7 @@ import { useTransitionNavigate } from '@/lib/navigation'
 
 export function WriteButton({ actorId }: { actorId: string }) {
   const { actor } = useAuth()
-  const go = useTransitionNavigate()
+  const go = useTransitionNavigate('messages-open')
   const { pathname } = useLocation()
   const [busy, setBusy] = useState(false)
 
