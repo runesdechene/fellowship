@@ -5,7 +5,7 @@
  * POURQUOI — le tchat remplace WhatsApp : une seule boîte, la plus récente en haut. Un sujet
  *            clôturé y reste lisible.
  * ATTENTION — `/messages/:id` ouvre une conversation : elle a son adresse, le retour du navigateur
- *            revient à la liste.
+ *            revient à la liste. `/messages/nouveau` met « Nouveau message » à la place de la liste.
  */
 import { PenSquare } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -16,51 +16,20 @@ import { othersOf, type InboxRow } from '@/lib/discussion-api'
 import { conversationName, previewLine, remainingLabel } from '@/lib/discussions'
 import { formatTime, timeAgo } from '@/lib/dates'
 import { Conversation } from './Conversation'
+import { NewMessage } from './NewMessage'
 import { useInbox } from './useDiscussions'
 
-export function MessagesPage() {
+export function MessagesPage({ composing = false }: { composing?: boolean }) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const inbox = useInbox()
 
   return (
     <div className={id ? 'messages-page messages-page--open' : 'messages-page'}>
-      <section className="messages-page__list" aria-label="Conversations">
-        <header className="messages-page__head">
-          <h1 className="messages-page__title">Messages</h1>
-          <Button
-            variant="action"
-            icon={<PenSquare size={16} strokeWidth={1.75} />}
-            onClick={() => void navigate('/messages/nouveau')}
-          >
-            Nouveau
-          </Button>
-        </header>
-        {inbox.status === 'loading' && <p className="messages-page__status">Chargement…</p>}
-        {inbox.status === 'failed' && (
-          <p className="messages-page__status">
-            Tes conversations ne se chargent pas. Recharge la page.
-          </p>
-        )}
-        {inbox.status === 'ready' && inbox.value.length === 0 && (
-          <p className="messages-page__status">
-            Aucune conversation pour l’instant. Réponds à un sujet en haut de la page, ou écris à
-            quelqu’un.
-          </p>
-        )}
-        {inbox.status === 'ready' && (
-          <ul className="messages-page__rows">
-            {inbox.value.map((row) => (
-              <li key={row.id}>
-                <InboxItem
-                  row={row}
-                  selected={row.id === id}
-                  onOpen={() => void navigate(`/messages/${row.id}`)}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+      <section
+        className="messages-page__list"
+        aria-label={composing ? 'Nouveau message' : 'Conversations'}
+      >
+        {composing ? <NewMessage /> : <Inbox selected={id} />}
       </section>
       <div className="messages-page__open">
         {id ? (
@@ -72,11 +41,59 @@ export function MessagesPage() {
           />
         ) : (
           <p className="messages-page__placeholder">
-            Choisis une conversation, ou écris un nouveau message.
+            {composing
+              ? 'Choisis à qui écrire.'
+              : 'Choisis une conversation, ou écris un nouveau message.'}
           </p>
         )}
       </div>
     </div>
+  )
+}
+
+/** La liste des conversations, la plus récente en haut. */
+function Inbox({ selected }: { selected: string | undefined }) {
+  const navigate = useNavigate()
+  const inbox = useInbox()
+
+  return (
+    <>
+      <header className="messages-page__head">
+        <h1 className="messages-page__title">Messages</h1>
+        <Button
+          variant="action"
+          icon={<PenSquare size={16} strokeWidth={1.75} />}
+          onClick={() => void navigate('/messages/nouveau')}
+        >
+          Nouveau
+        </Button>
+      </header>
+      {inbox.status === 'loading' && <p className="messages-page__status">Chargement…</p>}
+      {inbox.status === 'failed' && (
+        <p className="messages-page__status">
+          Tes conversations ne se chargent pas. Recharge la page.
+        </p>
+      )}
+      {inbox.status === 'ready' && inbox.value.length === 0 && (
+        <p className="messages-page__status">
+          Aucune conversation pour l’instant. Réponds à un sujet en haut de la page, ou écris à
+          quelqu’un.
+        </p>
+      )}
+      {inbox.status === 'ready' && (
+        <ul className="messages-page__rows">
+          {inbox.value.map((row) => (
+            <li key={row.id}>
+              <InboxItem
+                row={row}
+                selected={row.id === selected}
+                onOpen={() => void navigate(`/messages/${row.id}`)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   )
 }
 

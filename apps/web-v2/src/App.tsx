@@ -31,7 +31,6 @@ import { FaqAdminPage } from '@/features/admin-faq/FaqAdminPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { MessagesPage } from '@/features/discussions/MessagesPage'
-import { NewMessagePage } from '@/features/discussions/NewMessagePage'
 import { NetworkPage } from '@/features/community/NetworkPage'
 import { Dashboard } from '@/features/dashboard/Dashboard'
 import { CreateEvent } from '@/features/event-create/CreateEvent'
@@ -307,7 +306,7 @@ export function App() {
           path="/messages/nouveau"
           element={
             <AppPage>
-              <NewMessagePage />
+              <MessagesPage composing />
             </AppPage>
           }
         />

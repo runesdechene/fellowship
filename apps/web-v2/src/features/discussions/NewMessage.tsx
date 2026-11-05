@@ -1,6 +1,7 @@
 /**
  * QUOI     — « Nouveau message » (maquette Story) : choisir une ou plusieurs personnes ; à deux et
- *            plus, c'est un groupe, son nom est facultatif.
+ *            plus, c'est un groupe, son nom est facultatif. Il prend la place de la liste, dans la
+ *            colonne de gauche de Messages (Uriel, 05/11/2026 : « pas sur une nouvelle page »).
  * POURQUOI — à deux, la conversation est unique : écrire à quelqu'un rouvre l'existante (la base
  *            l'impose).
  */
@@ -13,7 +14,7 @@ import { openConversation } from '@/lib/discussion-api'
 import type { Person } from '@/lib/discussions'
 import { PeoplePicker } from './PeoplePicker'
 
-export function NewMessagePage() {
+export function NewMessage() {
   const { actor } = useAuth()
   const navigate = useNavigate()
   const [chosen, setChosen] = useState<Person[]>([])

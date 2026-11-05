@@ -824,13 +824,27 @@
 }
 
 /* ── NOUVEAU MESSAGE, MEMBRES, CHOIX DES PERSONNES ── */
+/* Dans la colonne de la liste : l'en-tête et le bouton restent, seules les personnes défilent. */
 .new-message {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-14);
-  max-width: var(--width-composer);
-  margin: 0 auto;
-  padding: var(--page-padding-top) var(--page-gutter) var(--space-40);
+  min-height: 0;
+  padding: var(--space-22) var(--space-20) var(--space-20) var(--space-24);
+}
+
+.new-message .people-picker {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.new-message .people-picker__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .new-message__head {
@@ -1100,9 +1114,7 @@
   }
 
   .new-message {
-    width: 100%;
-    max-width: none;
-    padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);
+    padding: 0 var(--mobile-gutter) var(--space-24);
   }
 
   .messages-page__status {

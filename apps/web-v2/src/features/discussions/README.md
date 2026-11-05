@@ -10,7 +10,8 @@ Les sujets et Messages (maquette Figma, page Story `2727:291` ; conception
 - `Conversation` — un tchat : en-tête, `ChatFeed` (les bulles et leurs réactions,
   `ReactionPicker`), `ChatInput` (la saisie).
 - `MembersSheet`, `PeoplePicker` — gérer un groupe, choisir à qui écrire.
-- `MessagesPage` (`/messages`, `/messages/:id`), `NewMessagePage` (`/messages/nouveau`).
+- `MessagesPage` (`/messages`, `/messages/:id`) ; `NewMessage` prend la place de la liste sur
+  `/messages/nouveau`.
 - `MessagesButton` — l’icône de la barre du haut ; `WriteButton` — « Écrire » sur une vitrine.
 - `useDiscussions` — l'état React ; la logique pure vit dans `lib/discussions.ts`, la base dans
   `lib/discussion-api.ts` et `lib/reaction-api.ts`.
