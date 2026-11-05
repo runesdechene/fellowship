@@ -131,7 +131,7 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
       </button>
 
       {/* La marque écrite, comme sur la landing ; repliée, le pictogramme seul (sidebar.css). */}
-      <Wordmark className="sidebar__logo" />
+      <Wordmark className="sidebar__logo" beta />
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 

@@ -1277,6 +1277,8 @@
   --type-wordmark-small: var(--weight-semibold) var(--size-22) / 1 var(--family-brand);
   --wordmark-small-logo-width: 32px;
   --wordmark-small-logo-height: 28px;
+  /* La pastille « Bêta » à droite du nom, dans l'application. */
+  --type-wordmark-beta: var(--weight-medium) var(--size-11) / var(--leading-snug) var(--family-sans);
   --door-field-line: 1.5px;
   --radius-door-field: var(--round-12);
   --radius-door-panel: var(--round-24);

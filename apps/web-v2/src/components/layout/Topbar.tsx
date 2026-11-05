@@ -58,7 +58,7 @@ export function Topbar() {
     <div className="topbar">
       {/* Sur téléphone, la barre latérale disparaît : la marque monte en haut à gauche, écrite
           comme sur la landing (Uriel, 19/10/2026). */}
-      {!back && <Wordmark className="topbar__brand" />}
+      {!back && <Wordmark className="topbar__brand" beta />}
       {(back || lead) && (
         <div className="topbar__coin">
           {/* La MEME variante que la cloche, pas une imitation à côté. Le

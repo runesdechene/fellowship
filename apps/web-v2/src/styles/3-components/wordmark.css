@@ -23,3 +23,12 @@
 .wordmark__dot {
   color: var(--wordmark-dot);
 }
+
+/* La pastille « Bêta » (maquette 2776:361) : bordée, discrète, à droite du nom. */
+.wordmark__beta {
+  padding: var(--space-2) var(--space-7);
+  border: 1px solid var(--line-card);
+  border-radius: var(--round-6);
+  color: var(--ink-soft);
+  font: var(--type-wordmark-beta);
+}
