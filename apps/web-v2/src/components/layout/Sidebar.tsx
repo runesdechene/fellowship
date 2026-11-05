@@ -28,7 +28,7 @@ import {
   Telescope,
   Users,
 } from 'lucide-react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
 import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
@@ -130,8 +130,11 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
         <ToggleIcon size={17} strokeWidth={1.75} />
       </button>
 
-      {/* La marque écrite, comme sur la landing ; repliée, le pictogramme seul (sidebar.css). */}
-      <Wordmark className="sidebar__logo" beta />
+      {/* La marque écrite, comme sur la landing ; repliée, le pictogramme seul (sidebar.css).
+          Elle ramène au tableau de bord, comme le logo de tout site. */}
+      <Link to="/" className="sidebar__home" aria-label="Fellowship, tableau de bord">
+        <Wordmark className="sidebar__logo" beta />
+      </Link>
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 

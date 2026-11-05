@@ -44,6 +44,14 @@
   display: none;
 }
 
+/* Le lien qui porte la marque garde son centrage. */
+.sidebar__home {
+  display: flex;
+  justify-content: center;
+  color: inherit;
+  text-decoration: none;
+}
+
 /* --- Bouton de repli, calé en haut à droite ------------------------------- */
 .sidebar__collapse {
   position: absolute;
