@@ -1,14 +1,13 @@
 /**
- * QUOI     — choisir à qui écrire : les personnes choisies en pastilles, une recherche par nom,
- *            et tes amis proposés d'abord.
- * POURQUOI — sert à « Nouveau message » et à « Ajouter » dans un groupe ; un ami est un acteur
- *            suivi dans les deux sens (lib/friends.ts).
+ * QUOI     — choisir à qui écrire, parmi tes amis : les personnes choisies en pastilles, et une
+ *            recherche par nom dans la liste.
+ * POURQUOI — sert à « Nouveau message » et à « Ajouter » dans un groupe. Les messages sont réservés
+ *            aux amis, des acteurs suivis dans les deux sens (la base le refuse sinon).
  */
 import { useEffect, useState } from 'react'
 import { Check, Search, X } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { useAuth } from '@/lib/auth'
-import { searchPeople } from '@/lib/discussion-api'
 import type { Person } from '@/lib/discussions'
 import { fetchActorProfiles } from '@/lib/friends'
 import { readFollows } from '@/lib/network'
@@ -18,6 +17,11 @@ interface Props {
   onChange: (next: Person[]) => void
   /** Déjà dans la conversation : on ne les propose pas. */
   exclude?: string[]
+}
+
+/** Sans majuscules ni accents : « eleonore » trouve « Éléonore ». */
+function fold(text: string): string {
+  return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
 }
 
 async function fetchFriends(actorId: string): Promise<Person[]> {
@@ -33,19 +37,19 @@ async function fetchFriends(actorId: string): Promise<Person[]> {
 export function PeoplePicker({ chosen, onChange, exclude = [] }: Props) {
   const { actor } = useAuth()
   const [words, setWords] = useState('')
-  const [friends, setFriends] = useState<Person[]>([])
-  const [found, setFound] = useState<Person[] | null>(null)
+  const [friends, setFriends] = useState<Person[] | 'failed' | null>(null)
 
   useEffect(() => {
     if (!actor) return
     let cancelled = false
     const run = async () => {
+      let next: Person[] | 'failed'
       try {
-        const list = await fetchFriends(actor.id)
-        if (!cancelled) setFriends(list)
+        next = await fetchFriends(actor.id)
       } catch {
-        // Sans la liste d'amis, la recherche par nom reste possible.
+        next = 'failed'
       }
+      if (!cancelled) setFriends(next)
     }
     void run()
     return () => {
@@ -53,31 +57,13 @@ export function PeoplePicker({ chosen, onChange, exclude = [] }: Props) {
     }
   }, [actor])
 
-  // La recherche part un quart de seconde après la dernière lettre.
-  useEffect(() => {
-    if (!actor || words.trim().length < 2) return
-    let cancelled = false
-    const timer = window.setTimeout(() => {
-      const run = async () => {
-        try {
-          const list = await searchPeople(words, actor.id)
-          if (!cancelled) setFound(list)
-        } catch {
-          if (!cancelled) setFound([])
-        }
-      }
-      void run()
-    }, 250)
-    return () => {
-      cancelled = true
-      window.clearTimeout(timer)
-    }
-  }, [actor, words])
-
   const chosenIds = new Set(chosen.map((person) => person.id))
-  const searching = words.trim().length >= 2
-  const list = (searching ? (found ?? []) : friends).filter(
-    (person) => !exclude.includes(person.id) && person.id !== actor?.id,
+  const searched = fold(words.trim())
+  const list = (Array.isArray(friends) ? friends : []).filter(
+    (person) =>
+      !exclude.includes(person.id) &&
+      person.id !== actor?.id &&
+      fold(person.label).includes(searched),
   )
   const toggle = (person: Person) =>
     onChange(
@@ -110,16 +96,21 @@ export function PeoplePicker({ chosen, onChange, exclude = [] }: Props) {
           <Search size={15} strokeWidth={1.75} aria-hidden="true" />
           <input
             value={words}
-            placeholder="Rechercher une personne"
-            aria-label="Rechercher une personne"
+            placeholder="Rechercher un ami"
+            aria-label="Rechercher un ami"
             onChange={(event) => setWords(event.target.value)}
           />
         </label>
       </div>
-      <p className="people-picker__section">{searching ? 'Résultats' : 'Tes amis'}</p>
-      {list.length === 0 && (
+      <p className="people-picker__section">Tes amis</p>
+      {friends === 'failed' && (
+        <p className="people-picker__empty">Tes amis ne se chargent pas. Recharge la page.</p>
+      )}
+      {Array.isArray(friends) && list.length === 0 && (
         <p className="people-picker__empty">
-          {searching ? 'Personne à ce nom.' : 'Cherche un exposant ou un organisateur par son nom.'}
+          {searched
+            ? 'Aucun ami à ce nom.'
+            : 'Pas encore d’ami ici. Suis quelqu’un : s’il te suit en retour, vous pourrez vous écrire.'}
         </p>
       )}
       <ul className="people-picker__list">

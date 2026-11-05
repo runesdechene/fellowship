@@ -135,7 +135,10 @@ export function VitrineHead({
               </Button>
             )
           )}
-          {!isOwner && signedIn && <WriteButton actorId={vitrine.actorId} />}
+          {/* Les messages sont réservés aux amis : suivi dans les deux sens. */}
+          {!isOwner && vitrine.following && vitrine.followsMe && (
+            <WriteButton actorId={vitrine.actorId} />
+          )}
           <Button
             variant="icon"
             aria-label="Partager la vitrine"

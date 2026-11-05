@@ -60,6 +60,8 @@ export interface Vitrine {
   followerFaces: Friend[]
   companionCount: number
   following: boolean
+  /** Le compte suit le visiteur : suivi en retour, c'est un ami, à qui l'on peut écrire. */
+  followsMe: boolean
   upcoming: VitrineDate[]
   past: VitrineDate[]
 }
@@ -82,12 +84,12 @@ async function countEntities(ids: string[]): Promise<number> {
   return response.count ?? 0
 }
 
-/** Ce visiteur suit-il déjà la vitrine ? */
-async function isFollowing(viewerId: string, actorId: string): Promise<boolean> {
+/** `follower` suit-il `actorId` ? Dans les deux sens, visiteur et vitrine sont amis. */
+async function isFollowing(follower: string, actorId: string): Promise<boolean> {
   const response = await supabase
     .from('follows')
     .select('id')
-    .eq('follower_actor', viewerId)
+    .eq('follower_actor', follower)
     .eq('following_actor', actorId)
     .maybeSingle()
   return must(response) !== null
@@ -108,7 +110,7 @@ async function loadVitrine(
   if (!entity) return null
   const id = entity.actor_id
 
-  const [participations, followers, friendIds, following] = await Promise.all([
+  const [participations, followers, friendIds, following, followsMe] = await Promise.all([
     supabase
       .from('participations')
       .select(
@@ -120,6 +122,7 @@ async function loadVitrine(
     supabase.rpc('get_followers_with_dates', { p_actor_id: id }),
     supabase.rpc('get_friend_ids', { p_user_id: id }),
     viewerId ? isFollowing(viewerId, id) : false,
+    viewerId ? isFollowing(id, viewerId) : false,
   ])
 
   const followerRows = must(followers)
@@ -175,6 +178,7 @@ async function loadVitrine(
     followerFaces: [...faces.values()],
     companionCount: companionEntities,
     following,
+    followsMe,
     upcoming: upcoming.map((date) => ({
       ...date,
       friends: (friendsByEvent.get(date.eventId) ?? []).filter((f) => f.id !== id),

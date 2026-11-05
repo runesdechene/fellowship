@@ -313,25 +313,6 @@ export async function setMuted(
   )
 }
 
-/** Les personnes à qui écrire : les amis d'abord (lib/friends.ts), puis la recherche par nom. */
-export async function searchPeople(words: string, viewerId: string): Promise<Person[]> {
-  const pattern = `%${words.trim()}%`
-  const rows = must(
-    await supabase
-      .from('actor_public')
-      .select('actor_id, label, avatar_url')
-      .ilike('label', pattern)
-      .neq('actor_id', viewerId)
-      .order('label')
-      .limit(20),
-  )
-  return rows.flatMap((row) =>
-    row.actor_id
-      ? [{ id: row.actor_id, label: row.label ?? 'Exposant', avatar: row.avatar_url }]
-      : [],
-  )
-}
-
 export interface EventBrief {
   id: string
   name: string

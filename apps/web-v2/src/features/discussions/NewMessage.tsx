@@ -50,6 +50,9 @@ export function NewMessage() {
         </Button>
         <h1 className="new-message__title">Nouveau message</h1>
       </header>
+      <p className="new-message__hint">
+        Tu ne peux écrire qu’à tes amis : les personnes que tu suis et qui te suivent en retour.
+      </p>
       <PeoplePicker chosen={chosen} onChange={setChosen} />
       {group && (
         <label className="new-message__group">

@@ -1,5 +1,5 @@
 /**
- * QUOI     — « Écrire » sur la vitrine d'un exposant : ouvre la conversation à deux avec lui.
+ * QUOI     — « Écrire » sur la vitrine d'un ami : ouvre la conversation à deux avec lui.
  * POURQUOI — à deux, la conversation est unique (la base l'impose) : écrire rouvre l'existante.
  */
 import { useState } from 'react'
