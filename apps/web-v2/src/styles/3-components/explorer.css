@@ -60,8 +60,23 @@
   cursor: text;
 }
 
-.search-bar__field + .search-bar__field {
+.search-bar__field:not(.search-bar__field--words) {
   border-left: 1px solid var(--line-card);
+}
+
+/* Sur ordinateur, la feuille des filtres n'a pas de boîte : Où et Quand se rangent dans la barre.
+   La double classe passe devant `dialog:not([open])` du navigateur. */
+.search-bar .search-bar__filters,
+.search-bar__sheet {
+  display: contents;
+}
+
+.search-bar__grab,
+.search-bar__sheet-head,
+.search-bar__see,
+.search-bar__filters-button,
+.search-bar__summary {
+  display: none;
 }
 
 .search-bar__field--words {
@@ -694,8 +709,148 @@
     margin-right: var(--mobile-gutter);
   }
 
-  .search-bar__field:not(.search-bar__field--words) {
+  /* Une seule zone par mot ; Où et Quand passent dans la feuille « Filtres » (maquette 2786:233). */
+  .search-bar__submit {
     display: none;
+  }
+
+  .search-bar__filters-button {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--search-submit-size);
+    height: var(--search-submit-size);
+    border-radius: var(--radius-round);
+    color: var(--ink-title);
+    cursor: pointer;
+  }
+
+  .search-bar__count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: var(--space-16);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-round);
+    background: var(--action-surface);
+    font: var(--type-chip-strong);
+    color: var(--action-ink);
+  }
+
+  /* Le résumé des filtres prend la place de l'indication tant qu'aucun mot n'est tapé. */
+  .search-bar__field--words .search-bar__body {
+    position: relative;
+  }
+
+  .search-bar__input::placeholder {
+    color: transparent;
+  }
+
+  .search-bar__input:placeholder-shown + .search-bar__summary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    overflow: hidden;
+    max-width: 100%;
+    font: var(--type-search-input);
+    color: var(--ink-section-pale);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+
+  /* La feuille : fermée, rien ; ouverte, elle monte du bas sur un voile, comme « Moi ». */
+  .search-bar .search-bar__filters {
+    display: none;
+  }
+
+  .search-bar .search-bar__filters[open] {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: auto 0 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    transition: translate var(--tab-sheet-motion);
+  }
+
+  @starting-style {
+    .search-bar .search-bar__filters[open] {
+      translate: 0 100%;
+    }
+  }
+
+  .search-bar__filters::backdrop {
+    background: var(--tab-sheet-veil);
+  }
+
+  .search-bar__sheet {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+    padding: var(--space-8) var(--mobile-gutter) calc(var(--space-24) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-card);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    background: var(--surface-card);
+    color: var(--ink-title);
+    outline: none;
+  }
+
+  .search-bar__grab {
+    display: block;
+    align-self: center;
+    width: var(--tab-sheet-grab-width);
+    height: var(--space-4);
+    border-radius: var(--round-full);
+    background: var(--line-card);
+  }
+
+  .search-bar__sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-bar__sheet-head h2 {
+    font: var(--type-section-title);
+  }
+
+  .search-bar__sheet-head button {
+    font: var(--type-search-input);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  /* Dans la feuille, chaque champ est une pilule à part, le rayon toujours ouvert dessous. */
+  .search-bar__sheet .search-bar__field {
+    flex-wrap: wrap;
+    padding: var(--space-14) var(--space-18);
+    border: 1px solid var(--line-card);
+    box-shadow: var(--shadow-block);
+    border-radius: var(--radius-panel);
+  }
+
+  .search-bar__sheet .search-bar__around-panel {
+    position: static;
+    width: 100%;
+    margin-top: var(--space-12);
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .search-bar__see {
+    display: block;
+    width: 100%;
+    height: var(--search-bar-height);
+    border-radius: var(--radius-round);
+    background: var(--action-surface);
+    font: var(--type-button);
+    color: var(--action-ink);
+    cursor: pointer;
   }
 
   .explore-card,

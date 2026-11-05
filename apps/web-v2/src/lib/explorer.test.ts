@@ -15,6 +15,7 @@ import {
   lastOpenMonth,
   quandChoices,
   quandLabel,
+  filterSummary,
   quandMonths,
   readRayon,
   beyondWindow,
@@ -248,5 +249,15 @@ describe('readRayon', () => {
     expect(readRayon('0')).toBeNull()
     expect(readRayon('501')).toBeNull()
     expect(readRayon('12.5')).toBeNull()
+  })
+})
+
+describe('filterSummary', () => {
+  it('sans filtre, toute la France sur tout l’horizon', () => {
+    expect(filterSummary('', 0, null, null)).toBe('Toute la France · Les 12 prochains mois')
+    expect(filterSummary('', 0, null, FREE_MONTHS)).toBe('Toute la France · Les 6 prochains mois')
+  })
+  it('le lieu, son rayon et le mois', () => {
+    expect(filterSummary('Lyon', 50, '2026-12', null)).toBe('Lyon · 50 km · Décembre 2026')
   })
 })

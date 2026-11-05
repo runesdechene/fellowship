@@ -164,3 +164,15 @@ export function searchPattern(query: string): string | null {
   const cleaned = query.replace(/[%_,()]/g, '').trim()
   return cleaned === '' ? null : `%${cleaned}%`
 }
+
+/** Ce que cherchent Où et Quand, sous « Rechercher » sur téléphone : « Lyon · 50 km · Décembre 2026 ». */
+export function filterSummary(
+  ou: string,
+  rayon: number,
+  quand: string | null,
+  horizon: Horizon,
+): string {
+  const place = ou.trim() || 'Toute la France'
+  const around = ou.trim() && rayon > 0 ? ` · ${String(rayon)} km` : ''
+  return `${place}${around} · ${quandLabel(quand ?? String(horizon ?? 12))}`
+}
