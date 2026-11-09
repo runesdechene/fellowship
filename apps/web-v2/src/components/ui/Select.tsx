@@ -4,9 +4,16 @@
  *            (une étoile pour « intéressé », un sablier pour « à payer »).
  * ATTENTION — ce qu'on réécrit, on le réécrit entier : clavier, clic dehors, rôles ARIA.
  */
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ComponentType,
+  type CSSProperties,
+  type KeyboardEvent,
+} from 'react'
 import { ChevronDown } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 
 /**
  * UN SÉLECTEUR MAISON.
@@ -31,10 +38,17 @@ import type { LucideIcon } from 'lucide-react'
  */
 type SelectTone = 'muet' | 'todo' | 'pending' | 'ok'
 
+/** Une icône lucide, ou tout composant qui se dessine de la même façon. */
+export type SelectIcon = ComponentType<{
+  className?: string
+  size?: number
+  strokeWidth?: number
+}>
+
 export type SelectOption<T> = {
   value: T
   label: string
-  Icon?: LucideIcon
+  Icon?: SelectIcon
   /** Ce que l'état raconte : rien, un geste à faire, ou c'est acquis. */
   tone?: SelectTone
   /** Une couleur venue des données (une catégorie) : une pastille devant le mot. */

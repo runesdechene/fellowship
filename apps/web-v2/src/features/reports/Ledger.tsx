@@ -19,6 +19,7 @@ import {
   CreditCard,
   Fuel,
   HandCoins,
+  Lock,
   PackageCheck,
   PackageSearch,
   Plus,
@@ -28,11 +29,10 @@ import {
   Undo2,
   Utensils,
   X,
-  type LucideIcon,
 } from 'lucide-react'
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { DraftInput } from '@/components/ui/DraftInput'
-import { Select } from '@/components/ui/Select'
+import { Select, type SelectIcon, type SelectOption } from '@/components/ui/Select'
 import { formatDateRange } from '@/lib/dates'
 import { formatEuros, parseAmount } from '@/lib/money'
 import type { SecretRevenue } from '@/lib/cipher'
@@ -57,27 +57,35 @@ import { MaskedAmount } from '@/components/ui/MaskedAmount'
 
 type Choice = LedgerCategory | typeof SECRET_CATEGORY.value
 
-const ICONS: Partial<Record<LedgerCategory, LucideIcon>> = {
+/** Le péage n'a pas d'équivalent dans lucide : l'icône de la maquette, teinte par le CSS. */
+function PeageIcon({ className }: { className?: string }) {
+  return (
+    <span
+      className={className ? `ledger__mask ${className}` : 'ledger__mask'}
+      style={{ '--icon': `url(${peageIcon})` } as CSSProperties}
+    />
+  )
+}
+
+const ICONS: Record<Choice, SelectIcon> = {
+  chiffrees: Lock,
   ventes: ShoppingBag,
   remboursement: Undo2,
   cachet: HandCoins,
+  commande_sure: PackageCheck,
   emplacement: Tent,
   essence: Fuel,
+  peage: PeageIcon,
   hebergement: BedDouble,
   repas: Utensils,
   vol: ShieldAlert,
   autre: Circle,
 }
 
-function LineIcon({ Icon }: { Icon: LucideIcon | undefined }) {
+function LineIcon({ Icon }: { Icon: SelectIcon }) {
   return (
     <span className="ledger__icon">
-      {Icon ? (
-        <Icon size={15} strokeWidth={1.5} />
-      ) : (
-        // Le péage n'a pas d'équivalent dans lucide : l'icône de la maquette, teinte par le CSS.
-        <span className="ledger__mask" style={{ '--icon': `url(${peageIcon})` } as CSSProperties} />
-      )}
+      <Icon size={15} strokeWidth={1.5} />
     </span>
   )
 }
@@ -210,10 +218,13 @@ function AddLine({
   const [draft, setDraft] = useState('')
   const amount = parseAmount(draft)
   const ready = typeof amount === 'number' && amount > 0
-  const options = [...(offerSecret ? [SECRET_CATEGORY] : []), ...addableCategories(encrypted)].map<{
-    value: Choice
-    label: string
-  }>((entry) => ({ value: entry.value, label: entry.label }))
+  const options = [...(offerSecret ? [SECRET_CATEGORY] : []), ...addableCategories(encrypted)].map<
+    SelectOption<Choice>
+  >((entry) => ({
+    value: entry.value,
+    label: entry.label,
+    Icon: ICONS[entry.value],
+  }))
   // Une catégorie qui n'est plus proposée (la date vient d'être chiffrée) retombe sur « Autre ».
   const category = options.some((option) => option.value === chosen) ? chosen : 'autre'
 
