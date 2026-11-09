@@ -90,3 +90,8 @@ test('la TVA de Shopify ne se contrôle qu’une fois Shopify Tax actif', () => 
   assert.equal(journee('2026-11-08', sansTva).statut, 'prete')
   assert.equal(journee('2026-11-10', sansTva).statut, 'a_verifier')
 })
+
+test('sans pays, seule une commande à 0 € passe', () => {
+  assert.equal(verifierCommande(commande({ pays: null, ttc: 0, tva: 0 })).length, 0)
+  assert.equal(verifierCommande(commande({ pays: null })).length, 1)
+})

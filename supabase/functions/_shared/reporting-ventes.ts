@@ -71,7 +71,7 @@ export function verifierCommande(c: Commande, controlerTva = true): Anomalie[] {
   const anomalie = (message: string, detail: string | null = null) => ({ message, detail, lien: c.lien })
   const anomalies: Anomalie[] = []
   if (!c.payee) anomalies.push(anomalie(`${c.nom} n'est pas payée`))
-  if (!c.pays) return [...anomalies, anomalie(`${c.nom} n'a pas d'adresse de livraison`)]
+  if (!c.pays) return c.ttc === 0 ? anomalies : [...anomalies, anomalie(`${c.nom} n'a ni adresse de livraison ni de facturation`)]
 
   const zone = zoneDe(c.pays)
   if (zone === 'ue') {

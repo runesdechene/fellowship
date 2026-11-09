@@ -32,7 +32,8 @@ export async function lireShopify(
       if (o.test || (o.cancelledAt && o.refunds.length === 0)) continue
       const commune = {
         lien: `https://admin.shopify.com/store/${boutique}/orders/${o.legacyResourceId}`,
-        pays: o.shippingAddress?.countryCodeV2 ?? null,
+        // Rien à expédier (une prise en charge de retour) : le pays de facturation.
+        pays: o.shippingAddress?.countryCodeV2 ?? o.billingAddress?.countryCodeV2 ?? null,
         articles: o.lineItems.nodes.length + 1, // + la livraison
       }
       const date = selon === 'expedition' ? o.fulfillments[0]?.createdAt : o.createdAt
@@ -97,6 +98,7 @@ const REQUETE = `query ($apres: String, $filtre: String) {
       totalTaxSet { shopMoney { amount } }
       refunds(first: 20) { createdAt totalRefundedSet { shopMoney { amount } } }
       shippingAddress { countryCodeV2 }
+      billingAddress { countryCodeV2 }
       fulfillments(first: 1) { createdAt }
       lineItems(first: 100) { nodes { id } }
     }
