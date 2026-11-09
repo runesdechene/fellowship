@@ -126,5 +126,5 @@ test('un stand à l’étranger part en TNT1, sur son HT, et se confirme', () =>
   assert.equal(j.lignes[0]?.category_code, 'TLB1')
   assert.equal(j.lignes[0]?.tax_total, '2.00')
   assert.equal(j.lignes[1]?.category_code, 'TNT1')
-  assert.equal(j.lignes[1]?.tax_exclusive_amount, '100.00')
+  assert.equal(j.lignes[1]?.tax_exclusive_amount, '108.10') // Suisse : le montant encaissé
 })

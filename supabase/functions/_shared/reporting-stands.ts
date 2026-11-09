@@ -17,8 +17,9 @@ const CONTOURS: Record<string, Point[]> = {
   ],
 }
 
-/** Taux de TVA du pays du stand, pour n'en déclarer que le HT (spécifications DGFiP 3.2). */
-export const TAUX_STAND: Record<string, number> = { CH: 8.1, BE: 21 }
+/** Taux de TVA contenu dans le prix sur le stand, pour n'en déclarer que le HT (DGFiP 3.2). */
+// Suisse : 0, la TVA est payée à la douane, le prix encaissé n'en contient pas (Uriel, 09/11/2026).
+export const TAUX_STAND: Record<string, number> = { CH: 0, BE: 21 }
 export const NOM_PAYS_STAND: Record<string, string> = { CH: 'Suisse', BE: 'Belgique' }
 
 /** Le pays d'un stand étranger, ou null : on reste en France. */
