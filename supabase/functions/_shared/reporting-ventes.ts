@@ -1,8 +1,8 @@
 // reporting-ventes : de la liste des ventes d'un jour à la journée de reporting (lignes SuperPDP,
 // détail par source, anomalies, statut). Fonctions pures, sans réseau : reporting-ventes.test.ts.
 // Un remboursement est une vente négative, le jour où il a lieu : un jour envoyé ne bouge plus.
-// Règle : tout se vend à 20 %, prix TTC. On ne déclare que la France ; le reste bloque la journée,
-// qu'une personne vérifie avant tout envoi. Montants en centimes.
+// Règle : tout se vend à 20 %, prix TTC. La France se déclare à 20 %, les exports à 0 % (TNT1) ; une vente
+// dans l'UE bloque la journée, qu'une personne vérifie avant tout envoi. Montants en centimes.
 
 export interface Commande {
   nom: string // « #1997 »
@@ -68,8 +68,7 @@ export function verifierCommande(c: Commande): Anomalie[] {
   if (zone === 'ue') {
     anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, 'Vente dans l’UE : à traiter à part, hors de ce reporting.'))
   } else if (zone === 'hors_ue') {
-    const detail = c.tva > 0 ? `Shopify a compté ${euros(c.tva)} de TVA sur un export.` : 'Export exonéré, hors de ce reporting.'
-    anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, detail))
+    if (c.tva > 0) anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, `Shopify a compté ${euros(c.tva)} de TVA sur un export.`))
   } else if (Math.abs(c.tva - tvaDe(c.ttc)) > c.articles) {
     anomalies.push(anomalie(`${c.nom} : TVA de ${euros(c.tva)} au lieu de ${euros(tvaDe(c.ttc))}`,
       'Un produit a sans doute « Facturer la taxe » décoché dans Shopify.'))
@@ -84,14 +83,18 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
   const paiements = (ventes.sumup ?? []).filter((p) => !facturees.has(cleVente('sumup', p.code)))
   const anomalies = commandes.flatMap(verifierCommande)
 
-  // La France seulement, TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
+  // TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [
     ...commandes.filter((c) => c.pays && zoneDe(c.pays) === 'france').map((c) => c.ttc),
     ...paiements.map((p) => p.ttc),
   ]
   const ttc = enFrance.reduce((a, b) => a + b, 0)
   const tva = tvaDe(ttc)
-  const lignes = ttc === 0 ? [] : [ligneSuperPdp(jour, ttc - tva, tva)]
+  const exports = commandes.filter((c) => c.pays && zoneDe(c.pays) === 'hors_ue').reduce((a, c) => a + c.ttc, 0)
+  const lignes = [
+    ...(ttc === 0 ? [] : [ligneSuperPdp(jour, 'TLB1', '20.00', ttc - tva, tva)]),
+    ...(exports === 0 ? [] : [ligneSuperPdp(jour, 'TNT1', '0.00', exports, 0)]),
+  ]
 
   // Les ventes sont gardées : l'écran les liste, et un marquage recalcule sans relire les sources.
   const detail = Object.fromEntries(
@@ -104,7 +107,7 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
       : null]),
   )
   const muette = Object.values(ventes).some((liste) => liste === null)
-  const statut: Statut = muette ? 'en_attente' : anomalies.length ? 'a_verifier' : ttc === 0 ? 'vide' : 'prete'
+  const statut: Statut = muette ? 'en_attente' : anomalies.length ? 'a_verifier' : lignes.length === 0 ? 'vide' : 'prete'
   return { jour, statut, lignes, detail, anomalies }
 }
 
@@ -117,15 +120,15 @@ function referenceDe(vente: Commande | Paiement): string {
   return 'nom' in vente ? vente.nom : vente.code
 }
 
-function ligneSuperPdp(jour: string, ht: number, tva: number) {
+function ligneSuperPdp(jour: string, categorie: 'TLB1' | 'TNT1', taux: string, ht: number, tva: number) {
   return {
     date: jour,
     currency: 'EUR',
-    category_code: 'TLB1', // livraisons de biens
+    category_code: categorie, // TLB1 : biens soumis à la TVA ; TNT1 : non soumis en France
     role_code: 'SE', // on est le vendeur
     tax_exclusive_amount: decimal(ht),
     tax_total: decimal(tva),
-    tax_subtotals: [{ tax_percent: '20.00', taxable_amount: decimal(ht), tax_total: decimal(tva) }],
+    tax_subtotals: [{ tax_percent: taux, taxable_amount: decimal(ht), tax_total: decimal(tva) }],
   }
 }
 

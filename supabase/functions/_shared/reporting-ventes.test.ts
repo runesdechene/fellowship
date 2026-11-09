@@ -20,15 +20,18 @@ test('un centime d’arrondi par article est toléré', () => {
   assert.deepEqual(verifierCommande(commande({ ttc: 25173, tva: 4194, articles: 3 })), [])
 })
 
-test('export et UE bloquent, sans entrer dans le total', () => {
+test('l’UE bloque, l’export part en TNT1 à 0 %', () => {
   const j = journee('2026-11-07', {
     shopify: [commande({ pays: 'RE', ttc: 12369, tva: 0 }), commande({ pays: 'BE' }), commande({})],
     sumup: [{ code: 'T1', ttc: 1200 }],
   })
   assert.equal(j.statut, 'a_verifier')
-  assert.equal(j.anomalies.length, 2)
+  assert.equal(j.anomalies.length, 1)
   assert.equal(j.lignes[0]?.tax_exclusive_amount, '35.00') // 30 € + 12 € TTC
   assert.equal(j.lignes[0]?.tax_total, '7.00')
+  assert.equal(j.lignes[1]?.category_code, 'TNT1')
+  assert.equal(j.lignes[1]?.tax_exclusive_amount, '123.69')
+  assert.equal(j.lignes[1]?.tax_total, '0.00')
   assert.equal(j.detail.shopify?.ttc, 3000 + 3000 + 12369)
   assert.equal(j.detail.shopify?.ventes, 3)
 })
@@ -68,4 +71,9 @@ test('une journée se recalcule depuis les ventes qu’elle a gardées', () => {
   const ventes = ventesDuDetail(j.detail as Parameters<typeof ventesDuDetail>[0])
   assert.equal(ventes.sumup, null)
   assert.equal(journee('2026-11-07', ventes, new Set([cleVente('shopify', '#2')])).lignes.length, 0)
+})
+
+test('une TVA comptée sur un export bloque, pas son remboursement', () => {
+  assert.equal(journee('2026-11-07', { shopify: [commande({ pays: 'CH', ttc: 3000, tva: 500 })] }).statut, 'a_verifier')
+  assert.equal(journee('2026-11-07', { shopify: [commande({ pays: 'CH', ttc: -3000, tva: -500 })] }).statut, 'prete')
 })
