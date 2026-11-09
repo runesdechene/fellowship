@@ -19,6 +19,7 @@ export const CATEGORIES = [
   { value: 'peage', label: 'Péage', direction: 'out' },
   { value: 'hebergement', label: 'Hébergement', direction: 'out' },
   { value: 'repas', label: 'Repas', direction: 'out' },
+  { value: 'vol', label: 'Vol', direction: 'out' },
   { value: 'autre', label: 'Autre', direction: 'out' },
 ] as const satisfies readonly { value: LedgerCategory; label: string; direction: 'in' | 'out' }[]
 

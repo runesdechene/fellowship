@@ -22,6 +22,7 @@ import {
   PackageCheck,
   PackageSearch,
   Plus,
+  ShieldAlert,
   ShoppingBag,
   Tent,
   Undo2,
@@ -64,6 +65,7 @@ const ICONS: Partial<Record<LedgerCategory, LucideIcon>> = {
   essence: Fuel,
   hebergement: BedDouble,
   repas: Utensils,
+  vol: ShieldAlert,
   autre: Circle,
 }
 
