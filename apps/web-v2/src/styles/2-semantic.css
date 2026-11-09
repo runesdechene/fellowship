@@ -1409,6 +1409,15 @@
   --admin-home-pulse-height: 120px;
   --admin-home-mini-height: 64px;
   --admin-home-avatar: 28px;
+
+  /* --- ZONE REPORTING (maquettes 2795:233 et 2803:233) --- */
+  --type-reporting-month: var(--weight-regular) var(--size-30) / 1 var(--family-display);
+  --type-reporting-amount: var(--weight-regular) var(--size-32) / 1 var(--family-display);
+  --type-reporting-mark: var(--weight-semibold) var(--size-11) / 1 var(--family-sans);
+  --reporting-mark-s: 16px;
+  --reporting-mark-m: 18px;
+  --reporting-mark-l: 22px;
+  --reporting-mark-line: 1.5px;
   --admin-home-count-size: 22px;
   --trend-line-height: 64px;
   --trend-line-ticks-width: 14px;

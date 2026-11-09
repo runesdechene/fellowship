@@ -10,6 +10,7 @@
 import { useState } from 'react'
 import { ProBadge } from '@/components/ui/ProBadge'
 import { ProBubble } from '@/components/ui/ProBubble'
+import { Switch } from '@/components/ui/Switch'
 import { useAuth } from '@/lib/auth'
 import { isPro } from '@/lib/plan'
 import { PUSH_LINES } from '@/lib/push-lines'
@@ -42,9 +43,6 @@ export function NotificationSettings() {
           {PUSH_LINES.map((line) => {
             const locked = line.pro && !anyPro
             const on = !locked && !lines.muted.includes(line.key)
-            const classes = ['push-line']
-            if (on) classes.push('push-line--on')
-            if (locked) classes.push('push-line--locked')
             return (
               <SettingRow
                 key={line.key}
@@ -52,20 +50,16 @@ export function NotificationSettings() {
                 note={line.detail}
                 badge={line.pro ? <ProBadge /> : undefined}
               >
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={on}
-                  aria-label={line.title}
-                  className={classes.join(' ')}
+                <Switch
+                  on={on}
+                  label={line.title}
+                  className={locked ? 'push-line--locked' : undefined}
                   disabled={!active || lines.saving}
-                  onClick={() => {
+                  onToggle={() => {
                     if (locked) setInviting(true)
                     else void lines.toggle(line.key)
                   }}
-                >
-                  <span className="push-line__switch" />
-                </button>
+                />
               </SettingRow>
             )
           })}

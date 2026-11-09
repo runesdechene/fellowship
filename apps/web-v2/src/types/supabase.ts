@@ -2052,6 +2052,189 @@ export type Database = {
           },
         ]
       }
+      reporting_entreprises: {
+        Row: {
+          actif: boolean
+          alerte_email: string | null
+          created_at: string
+          date_de_vente: string
+          entity_actor_id: string
+          environnement: string
+          envoi_a_partir_du: string | null
+          rappel_echeance: boolean
+          recap_comptable: boolean
+          recap_comptable_email: string | null
+          regime_tva: string
+        }
+        Insert: {
+          actif?: boolean
+          alerte_email?: string | null
+          created_at?: string
+          date_de_vente?: string
+          entity_actor_id: string
+          environnement?: string
+          envoi_a_partir_du?: string | null
+          rappel_echeance?: boolean
+          recap_comptable?: boolean
+          recap_comptable_email?: string | null
+          regime_tva?: string
+        }
+        Update: {
+          actif?: boolean
+          alerte_email?: string | null
+          created_at?: string
+          date_de_vente?: string
+          entity_actor_id?: string
+          environnement?: string
+          envoi_a_partir_du?: string | null
+          rappel_echeance?: boolean
+          recap_comptable?: boolean
+          recap_comptable_email?: string | null
+          regime_tva?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_entreprises_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: true
+            referencedRelation: "entities"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      reporting_envois: {
+        Row: {
+          envoye_le: string
+          http_status: number | null
+          id: number
+          journee_id: string
+          reponse: Json | null
+          requete: Json
+          superpdp_ids: number[] | null
+        }
+        Insert: {
+          envoye_le?: string
+          http_status?: number | null
+          id?: never
+          journee_id: string
+          reponse?: Json | null
+          requete: Json
+          superpdp_ids?: number[] | null
+        }
+        Update: {
+          envoye_le?: string
+          http_status?: number | null
+          id?: never
+          journee_id?: string
+          reponse?: Json | null
+          requete?: Json
+          superpdp_ids?: number[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_envois_journee_id_fkey"
+            columns: ["journee_id"]
+            isOneToOne: false
+            referencedRelation: "reporting_journees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reporting_journees: {
+        Row: {
+          anomalies: Json
+          detail: Json
+          entity_actor_id: string
+          environnement: string
+          id: string
+          jour: string
+          lignes: Json
+          statut: string
+          updated_at: string
+          validee_le: string | null
+          validee_par: string | null
+        }
+        Insert: {
+          anomalies?: Json
+          detail?: Json
+          entity_actor_id: string
+          environnement: string
+          id?: string
+          jour: string
+          lignes?: Json
+          statut: string
+          updated_at?: string
+          validee_le?: string | null
+          validee_par?: string | null
+        }
+        Update: {
+          anomalies?: Json
+          detail?: Json
+          entity_actor_id?: string
+          environnement?: string
+          id?: string
+          jour?: string
+          lignes?: Json
+          statut?: string
+          updated_at?: string
+          validee_le?: string | null
+          validee_par?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_journees_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "reporting_entreprises"
+            referencedColumns: ["entity_actor_id"]
+          },
+          {
+            foreignKeyName: "reporting_journees_validee_par_fkey"
+            columns: ["validee_par"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      reporting_sources: {
+        Row: {
+          actif: boolean
+          derniere_erreur: string | null
+          derniere_lecture: string | null
+          entity_actor_id: string
+          id: string
+          identifiant: string
+          type: string
+        }
+        Insert: {
+          actif?: boolean
+          derniere_erreur?: string | null
+          derniere_lecture?: string | null
+          entity_actor_id: string
+          id?: string
+          identifiant: string
+          type: string
+        }
+        Update: {
+          actif?: boolean
+          derniere_erreur?: string | null
+          derniere_lecture?: string | null
+          entity_actor_id?: string
+          id?: string
+          identifiant?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_sources_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "reporting_entreprises"
+            referencedColumns: ["entity_actor_id"]
+          },
+        ]
+      }
       revenue_keys: {
         Row: {
           actor_id: string
@@ -3575,6 +3758,14 @@ export type Database = {
       }
       renommer_groupe: {
         Args: { p_actor: string; p_conversation: string; p_title: string }
+        Returns: undefined
+      }
+      reporting_secret: {
+        Args: { p_entity: string; p_environnement: string; p_nom: string }
+        Returns: string
+      }
+      reporting_valider_journee: {
+        Args: { p_journee: string }
         Returns: undefined
       }
       reset_revenue_key: { Args: { p_actor: string }; Returns: undefined }

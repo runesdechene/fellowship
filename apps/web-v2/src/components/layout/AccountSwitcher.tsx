@@ -3,7 +3,8 @@
  * POURQUOI — un exposant peut agir sous plusieurs enseignes (modèle acteur) : le choix vit dans
  *            useAuth().switchActor, ce composant ne fait que l'afficher. Un admin y trouve une identité
  *            de plus, « Administration » : la choisir ouvre l'administration, choisir une enseigne
- *            en sort (Uriel, 16/10/2026). En bas, « Ajouter un compte exposant » ouvre l'arrivée
+ *            en sort (Uriel, 16/10/2026). Une enseigne qui a le reporting y trouve aussi
+ *            « Reporting », sa zone à part (Uriel, 09/11/2026). En bas, « Ajouter un compte exposant » ouvre l'arrivée
  *            d'une nouvelle enseigne : le menu s'ouvre donc pour tous (Uriel, 21/10/2026).
  * ATTENTION — barre repliée : le clic rouvre la colonne au lieu d'ouvrir un menu que le rail
  *            rognerait.
@@ -14,7 +15,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
 import { ADMIN_HOME, isAdminPath } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
+import { isReportingPath, REPORTING_HOME } from '@/lib/reporting-zone'
+import { useReportingAccess } from '@/features/reporting/useReportingAccess'
 
+const REPORTING_LABEL = 'Reporting'
 const ADMIN_LABEL = 'Administration'
 const ADMIN_NOTE = 'Réservé aux admins'
 
@@ -27,8 +31,14 @@ interface AccountSwitcherProps {
 export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
   const { actor, actors, person, switchActor } = useAuth()
   const navigate = useNavigate()
-  const inAdmin = isAdminPath(useLocation().pathname)
+  const { pathname } = useLocation()
+  const inAdmin = isAdminPath(pathname)
+  const inReporting = isReportingPath(pathname)
+  const inZone = inAdmin || inReporting
   const isAdmin = person?.role === 'admin'
+  // La zone Reporting s'offre à l'enseigne active si elle a le reporting.
+  const reporting = useReportingAccess()
+  const hasReporting = actor ? (reporting?.has(actor.id) ?? false) : false
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
 
@@ -66,17 +76,24 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
     (id: string) => {
       switchActor(id)
       setOpen(false)
-      if (inAdmin) void navigate('/')
+      if (inZone) void navigate('/')
     },
-    [switchActor, inAdmin, navigate],
+    [switchActor, inZone, navigate],
   )
 
-  const chooseAdmin = useCallback(() => {
-    setOpen(false)
-    void navigate(ADMIN_HOME)
-  }, [navigate])
+  const chooseZone = useCallback(
+    (home: string) => {
+      setOpen(false)
+      void navigate(home)
+    },
+    [navigate],
+  )
 
-  const shown = inAdmin ? { avatarUrl: null, label: ADMIN_LABEL, roleLabel: ADMIN_NOTE } : actor
+  const shown = inAdmin
+    ? { avatarUrl: null, label: ADMIN_LABEL, roleLabel: ADMIN_NOTE }
+    : inReporting
+      ? { avatarUrl: null, label: REPORTING_LABEL, roleLabel: actor?.label ?? '' }
+      : actor
 
   return (
     <div className="account-switcher" ref={root}>
@@ -122,17 +139,34 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
                 <span className="account-switcher__name">{candidate.label}</span>
                 <span className="account-switcher__role">{candidate.roleLabel}</span>
               </span>
-              {!inAdmin && candidate.id === actor?.id && (
+              {!inZone && candidate.id === actor?.id && (
                 <Check className="account-switcher__check" size={16} strokeWidth={2.25} />
               )}
             </button>
           ))}
+          {hasReporting && (
+            <button
+              type="button"
+              role="menuitem"
+              className="account-switcher__option"
+              onClick={() => chooseZone(REPORTING_HOME)}
+            >
+              <Avatar className="account-switcher__avatar" name={REPORTING_LABEL} />
+              <span className="account-switcher__identity">
+                <span className="account-switcher__name">{REPORTING_LABEL}</span>
+                <span className="account-switcher__role">{actor?.label}</span>
+              </span>
+              {inReporting && (
+                <Check className="account-switcher__check" size={16} strokeWidth={2.25} />
+              )}
+            </button>
+          )}
           {isAdmin && (
             <button
               type="button"
               role="menuitem"
               className="account-switcher__option"
-              onClick={chooseAdmin}
+              onClick={() => chooseZone(ADMIN_HOME)}
             >
               <Avatar className="account-switcher__avatar" name={ADMIN_LABEL} />
               <span className="account-switcher__identity">

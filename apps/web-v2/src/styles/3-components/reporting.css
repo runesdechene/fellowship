@@ -1,0 +1,381 @@
+/**
+ * QUOI     — la zone Reporting : DecadesPage, DecadeCard, DaysTable, ReportingTodo, ReportingSources,
+ *            DayMark et ReportingSettingsPage (features/reporting).
+ * POURQUOI — maquettes 2795:233 (Décades) et 2803:233 (Réglages), validées le 09/11/2026. Les cartes
+ *            reprennent celles de l'administration (admin-card), les lignes celles des Réglages.
+ */
+
+/* --- La page ------------------------------------------------------------- */
+.reporting__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-24);
+}
+
+.reporting__month {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+  margin-top: var(--space-8);
+}
+
+.reporting__month-title {
+  flex: 1;
+  font: var(--type-reporting-month);
+  color: var(--ink-title);
+}
+
+.reporting__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.reporting__legend li,
+.reporting__month-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.reporting__month-link {
+  font: var(--type-card-link);
+  color: var(--ink-soft);
+}
+
+.reporting__month-link:hover {
+  color: var(--ink-title);
+}
+
+.reporting__decades {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-16);
+}
+
+/* --- Une pastille : l'état d'une décade, l'environnement ------------------ */
+.reporting-chip {
+  flex: none;
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-chip);
+  font: var(--type-chip);
+  white-space: nowrap;
+}
+
+.reporting-chip--neutral {
+  background: var(--surface-chip-neutral);
+  color: var(--ink-soft);
+}
+
+.reporting-chip--validated {
+  background: var(--status-validated-surface);
+  color: var(--status-validated-ink);
+}
+
+.reporting-chip--sent {
+  background: var(--status-sent-surface);
+  color: var(--status-sent-ink);
+}
+
+/* --- La forme d'un jour (DayMark.tsx) ------------------------------------ */
+.day-mark {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--reporting-mark-m);
+  height: var(--reporting-mark-m);
+  border-radius: var(--radius-round);
+}
+
+.day-mark--s {
+  width: var(--reporting-mark-s);
+  height: var(--reporting-mark-s);
+}
+
+.day-mark--l {
+  width: var(--reporting-mark-l);
+  height: var(--reporting-mark-l);
+}
+
+.day-mark svg {
+  width: 60%;
+  height: 60%;
+}
+
+.day-mark--envoyee {
+  background: var(--status-validated-surface);
+  color: var(--status-validated-mark);
+}
+
+.day-mark--verifier {
+  background: var(--tone-brique-surface);
+  font: var(--type-reporting-mark);
+  color: var(--tone-brique-ink);
+}
+/* En attente : un cercle à moitié plein, comme un dossier parti sans réponse. */
+.day-mark--attente {
+  border: var(--reporting-mark-line) solid var(--status-pending-icon);
+  background: linear-gradient(90deg, transparent 50%, var(--status-pending-icon) 50%);
+}
+
+.day-mark--venir {
+  border: var(--reporting-mark-line) solid var(--ink-section-pale);
+}
+
+.day-mark--vide::before {
+  content: '';
+  width: 45%;
+  height: var(--reporting-mark-line);
+  border-radius: var(--radius-round);
+  background: var(--ink-section-pale);
+}
+
+/* --- Une décade en carte (DecadeCard.tsx) -------------------------------- */
+.reporting-decade {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-24);
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.reporting-decade:hover {
+  border-color: var(--ink-section-pale);
+}
+
+.reporting-decade--selected,
+.reporting-decade--selected:hover {
+  border-color: var(--ink-title);
+}
+
+.reporting-decade__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.reporting-decade__titles {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  font: var(--type-report-meta);
+  color: var(--ink-soft);
+}
+
+.reporting-decade__titles strong {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.reporting-decade__days {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reporting-decade__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  font: var(--type-chip);
+  color: var(--ink-section-pale);
+}
+
+.reporting-decade__total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-8);
+  font: var(--type-report-meta);
+  color: var(--ink-soft);
+}
+
+.reporting-decade__amount {
+  font: var(--type-reporting-amount);
+  color: var(--ink-title);
+}
+
+.reporting-decade__amount.is-empty {
+  color: var(--ink-section-pale);
+}
+
+/* --- À traiter (ReportingTodo.tsx) --------------------------------------- */
+.reporting-todo {
+  display: flex;
+  flex-direction: column;
+}
+
+.reporting-todo__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  padding: var(--space-12) 0;
+}
+
+.reporting-todo__row + .reporting-todo__row {
+  border-top: 1px solid var(--line-card);
+}
+
+.reporting-todo__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  font: var(--type-report-meta);
+  color: var(--ink-soft);
+}
+
+.reporting-todo__text strong {
+  font: var(--type-list-name);
+  color: var(--ink-title);
+}
+
+.reporting-todo__actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-8);
+}
+
+/* --- Les journées (DaysTable.tsx) ---------------------------------------- */
+.reporting-days {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--type-event-meta);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-title);
+}
+
+.reporting-days th,
+.reporting-days td {
+  padding: var(--space-12) var(--space-8);
+  border-bottom: 1px solid var(--line-card);
+  text-align: right;
+}
+
+.reporting-days tr:last-child > * {
+  border-bottom: none;
+}
+
+.reporting-days thead th {
+  padding-block: var(--space-8);
+  font: var(--type-chip);
+  color: var(--ink-section-pale);
+}
+
+.reporting-days :is(th, td):first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.reporting-days :is(th, td):last-child {
+  padding-left: var(--space-48);
+  text-align: left;
+}
+
+.reporting-days tbody th {
+  font: var(--type-event-meta-accent);
+}
+
+.reporting-days__total {
+  font: var(--type-event-meta-accent);
+}
+
+.reporting-days .is-empty {
+  color: var(--ink-section-pale);
+}
+
+.reporting-days__state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-report-name);
+  white-space: nowrap;
+}
+
+.reporting-days__state--verifier {
+  color: var(--tone-brique-ink);
+}
+
+/* --- Les sources (ReportingSources.tsx) ---------------------------------- */
+.reporting-sources {
+  flex-flow: row wrap;
+  align-items: center;
+  gap: var(--space-40);
+}
+
+.reporting-sources__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.reporting-sources__item > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font: var(--type-list-meta);
+  color: var(--ink-soft);
+}
+
+.reporting-sources__item strong {
+  font: var(--type-report-name);
+  color: var(--ink-title);
+}
+
+/* --- Les Réglages (ReportingSettingsPage.tsx) ---------------------------- */
+.reporting-settings__saved {
+  font: var(--type-list-meta);
+  color: var(--ink-section-pale);
+  white-space: nowrap;
+}
+
+.reporting-settings__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-36);
+  max-width: var(--settings-column-width);
+}
+
+.reporting-settings__fixed {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.reporting-settings .setting-row__control {
+  font: var(--type-report-name);
+  color: var(--ink-title);
+}
+
+.reporting-settings__stop {
+  color: var(--tone-brique-ink);
+}
+
+/* --- Téléphone ----------------------------------------------------------- */
+@media (width <= 760px) {
+  .reporting__head,
+  .reporting-todo__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reporting__decades {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Le tableau garde ses colonnes : seul lui défile en largeur, la page reste fixe. */
+  .reporting-days {
+    display: block;
+    overflow-x: auto;
+  }
+}

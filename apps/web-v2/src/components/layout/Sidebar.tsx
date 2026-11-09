@@ -7,6 +7,7 @@
  *            on ne pouvait pas accéder à sa propre vitrine).
  *            En mode admin (une adresse `/admin…`, choisie dans le sélecteur d'identité), la barre
  *            garde son allure et ne liste que les sections de l'administration (Uriel, 16/10/2026).
+ *            Même chose dans la zone Reporting (`/reporting…`) : Décades et Réglages (09/11/2026).
  * ATTENTION — Signalements porte le nombre en attente (maquette 2338:23), relu à chaque changement
  *            d'adresse ; Communauté, en rouge, les demandes d'ami en attente (Uriel, 19/10/2026).
  */
@@ -19,6 +20,7 @@ import {
   MessageSquare,
   PanelRightClose,
   PanelRightOpen,
+  ReceiptText,
   Settings,
   SquareKanban,
   House,
@@ -30,6 +32,7 @@ import {
 } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
+import { isReportingPath, REPORTING_HOME, REPORTING_SETTINGS } from '@/lib/reporting-zone'
 import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { Wordmark } from '@/components/ui/Wordmark'
@@ -103,6 +106,12 @@ const ADMIN_ITEMS = [
   { to: '/admin/faq', label: 'FAQ', Icon: CircleHelp, prefixes: ['/admin/faq'] },
 ] as const
 
+/** La zone Reporting de l'enseigne active : ses deux pages (maquette 2795:233). */
+const REPORTING_ITEMS = [
+  { to: REPORTING_HOME, label: 'Décades', Icon: ReceiptText },
+  { to: REPORTING_SETTINGS, label: 'Réglages', Icon: Settings },
+] as const
+
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
@@ -116,6 +125,7 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
   const { pathname, search } = useLocation()
   const items = navFor(entities.find((entity) => entity.actor_id === actor?.id)?.public_slug)
   const adminMode = isAdminPath(pathname)
+  const reportingMode = isReportingPath(pathname)
   const pendingReports = usePendingReports(adminMode ? pathname + search : '')
 
   return (
@@ -138,7 +148,23 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
 
       <AccountSwitcher collapsed={collapsed} onExpand={onToggle} />
 
-      {adminMode ? (
+      {reportingMode ? (
+        <nav className="sidebar__nav">
+          {REPORTING_ITEMS.map(({ to, label, Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end
+              className={({ isActive }) =>
+                isActive ? 'sidebar__item sidebar__item--active' : 'sidebar__item'
+              }
+            >
+              <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
+              <span className="sidebar__item-label">{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      ) : adminMode ? (
         <nav className="sidebar__nav">
           {ADMIN_ITEMS.map(({ to, label, Icon, prefixes }) => {
             const active = prefixes.some((prefix) => pathname.startsWith(prefix))
@@ -194,7 +220,7 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
 
       <div className="sidebar__foot">
         {/* En admin, le fil vit sur l'accueil : ici il débordait sur la navigation des petits écrans. */}
-        {!collapsed && !adminMode && <NetworkActivity />}
+        {!collapsed && !adminMode && !reportingMode && <NetworkActivity />}
         <VersionLine unread={updatesUnread} />
         <ThemeSwitch compact={collapsed} />
         {!collapsed && <LegalLink />}
