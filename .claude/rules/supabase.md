@@ -82,6 +82,19 @@ Cf. [[reference_supabase_migration_repair]] si une migration est sautée.
 
 **Stack LOCALE (vérifié 2026-05-25) :** `supabase start` (besoin de **Docker Desktop lancé**) monte tout le stack (db `127.0.0.1:54322`, API `:54321`, Studio `:54323`, Mailpit `:54324`). `supabase db reset` réapplique TOUTES les migrations à froid — **fonctionne maintenant** (la migration `20260404110000_cleanup_old_schema.sql` a été corrigée pour être rejouable sur base vide). CLI v2.88.1 → clés `sb_publishable_*` (= clé anon pour supabase-js v2). `.env` du repo pointe le **distant** — pour tester l'app contre le local, poser un `.env.local` (Vite le prioritise) avec l'URL+clé locales. psql direct : `docker exec -i supabase_db_fellowship psql -U postgres -d postgres`.
 
+## La base locale ne se reconstruit plus depuis les migrations
+
+**Le piège** (09/11/2026) : `supabase db reset --local` échoue sur `20260528230000` (« relation
+public.content_reports does not exist ») : la table a été créée en prod hors migration. Le « fonctionne
+maintenant » du 25/05 plus haut n'est plus vrai.
+
+**How to apply :** pour essayer une migration, charger le schéma de la prod en local, puis la jouer
+dessus. Docker Desktop lancé, `supabase start`, puis :
+`supabase db dump --linked --schema public -f <scratchpad>/prod_public.sql` (lecture seule) ;
+dans `docker exec -i supabase_db_fellowship psql -U postgres -d postgres` : `drop schema public cascade;
+create schema public;`, les `grant usage` et `alter default privileges … to anon, authenticated,
+service_role`, le dump, puis la migration. Sonder les droits avec `set role` et `request.jwt.claims`.
+
 ## Re-applying an edited Supabase migration
 
 **Scenario:** You ran `supabase db push` and applied migration `20260509120000_foo.sql`. Then you edit the file (e.g. add `SET search_path = public` to a function). Re-running `db push` will SKIP it because the timestamp is already in `supabase_migrations` (history checks the recorded hash, not the current file).
