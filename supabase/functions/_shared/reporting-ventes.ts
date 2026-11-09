@@ -37,6 +37,9 @@ export interface Ventes {
 }
 
 // Monaco est dans le territoire fiscal français ; les DOM ont leur propre code pays chez Shopify.
+// Avant cette date, Shopify ne calculait pas la TVA : la sienne valait 0, celle déclarée est juste.
+// shortcut : la date de Runes de Chêne, à passer en colonne à la deuxième enseigne.
+const TVA_SHOPIFY_FIABLE_DEPUIS = '2026-11-10'
 const FRANCE = new Set(['FR', 'MC'])
 const UE = new Set(
   'AT BE BG HR CY CZ DK EE FI DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE'.split(' '),
@@ -64,7 +67,7 @@ export function tvaDe(ttc: number): number {
 }
 
 /** Ce qui empêche de déclarer une commande les yeux fermés. */
-export function verifierCommande(c: Commande): Anomalie[] {
+export function verifierCommande(c: Commande, controlerTva = true): Anomalie[] {
   const anomalie = (message: string, detail: string | null = null) => ({ message, detail, lien: c.lien })
   const anomalies: Anomalie[] = []
   if (!c.payee) anomalies.push(anomalie(`${c.nom} n'est pas payée`))
@@ -75,7 +78,7 @@ export function verifierCommande(c: Commande): Anomalie[] {
     anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, 'Vente dans l’UE : à traiter à part, hors de ce reporting.'))
   } else if (zone === 'hors_ue') {
     if (c.tva > 0) anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, `Shopify a compté ${euros(c.tva)} de TVA sur un export.`))
-  } else if (Math.abs(c.tva - tvaDe(c.ttc)) > c.articles) {
+  } else if (controlerTva && Math.abs(c.tva - tvaDe(c.ttc)) > c.articles) {
     anomalies.push(anomalie(`${c.nom} : TVA de ${euros(c.tva)} au lieu de ${euros(tvaDe(c.ttc))}`,
       'Un produit a sans doute « Facturer la taxe » décoché dans Shopify.'))
   }
@@ -87,7 +90,7 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
   // Une vente facturée à un pro relève de la facture électronique : ni total B2C, ni anomalie.
   const commandes = (ventes.shopify ?? []).filter((c) => !facturees.has(cleVente('shopify', c.nom)))
   const paiements = (ventes.sumup ?? []).filter((p) => !facturees.has(cleVente('sumup', p.code)))
-  const anomalies = commandes.flatMap(verifierCommande)
+  const anomalies = commandes.flatMap((c) => verifierCommande(c, jour >= TVA_SHOPIFY_FIABLE_DEPUIS))
 
   // TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [

@@ -84,3 +84,9 @@ test('une réponse perdue ne se renvoie pas', () => {
   assert.equal(statutApresEnvoi(500), 'inconnue')
   assert.equal(statutApresEnvoi(null), 'inconnue')
 })
+
+test('la TVA de Shopify ne se contrôle qu’une fois Shopify Tax actif', () => {
+  const sansTva = { shopify: [commande({ tva: 0 })], sumup: [] }
+  assert.equal(journee('2026-11-08', sansTva).statut, 'prete')
+  assert.equal(journee('2026-11-10', sansTva).statut, 'a_verifier')
+})
