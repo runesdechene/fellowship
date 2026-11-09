@@ -1,6 +1,7 @@
 /**
  * QUOI     — le résumé d'un bilan : bénéfice, objectif de chiffre d'affaires comparé au réalisé,
- *            chiffre d'affaires, frais, bénéfice par jour, « Enregistré automatiquement ».
+ *            chiffre d'affaires, frais, bénéfice par jour, potentiels perdus (les commandes
+ *            potentielles, hors de tout calcul), « Enregistré automatiquement ».
  * POURQUOI — ce qu'on vient regarder en premier : sur téléphone, il passe en tête de l'écran.
  * ATTENTION — l'objectif vient du dossier de la date (participation_dossiers.revenue_goal) et
  *            se fixe ici (ReportGoal), après le festival. Recettes chiffrées verrouillées : tout
@@ -58,6 +59,10 @@ export function ReportSummary({ detail, saving, goal, onSaveGoal }: ReportSummar
         <div className="report-summary__row">
           <dt>Bénéfice par jour</dt>
           <dd>{hidden(formatEuros(net / days))}</dd>
+        </div>
+        <div className="report-summary__row">
+          <dt>Potentiels perdus</dt>
+          <dd>{hidden(formatEuros(detail.orders.potentielles))}</dd>
         </div>
       </dl>
 
