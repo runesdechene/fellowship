@@ -24,6 +24,8 @@ export interface ReportEntry {
   amount: number
   direction: 'in' | 'out'
   category: LedgerCategory
+  /** Le nom choisi pour une ligne « Autre » ; null : elle s'appelle « Autre ». */
+  label: string | null
   /** 'stepper' = le prix de la place, saisi dans Mon dossier. */
   source: 'manual' | 'stepper'
 }
@@ -74,7 +76,7 @@ export async function loadReport(
       .maybeSingle(),
     supabase
       .from('event_ledger_entries')
-      .select('id, amount, direction, category, source')
+      .select('id, amount, direction, category, label, source')
       .eq('actor_id', actorId)
       .eq('event_id', eventId)
       .order('created_at'),
@@ -92,6 +94,7 @@ export async function loadReport(
     amount: line.amount,
     direction: line.direction === 'in' ? 'in' : 'out',
     category: toCategory(line.category),
+    label: line.label,
     source: line.source === 'stepper' ? 'stepper' : 'manual',
   }))
 

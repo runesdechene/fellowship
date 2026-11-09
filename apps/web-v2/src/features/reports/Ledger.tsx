@@ -86,6 +86,8 @@ interface LedgerLineProps {
   icon: ReactNode
   label: string
   badge?: string
+  /** Le nom se modifie sur place (ligne « Autre ») ; vidé, `onSave` reçoit null. */
+  rename?: { value: string; onSave: (label: string | null) => void }
   direction: 'in' | 'out'
   /** 'masked' : chiffré et verrouillé, montré une mosaïque pixelisée (MaskedAmount) sans champ. */
   amount: number | 'masked'
@@ -96,12 +98,24 @@ interface LedgerLineProps {
 }
 
 function LedgerLine(props: LedgerLineProps) {
-  const { icon, label, badge, direction, amount, onSave, onRemove, onInvalid } = props
+  const { icon, label, badge, rename, direction, amount, onSave, onRemove, onInvalid } = props
   return (
     <div className="ledger__line">
       {icon}
       <span className="ledger__label">
-        {label}
+        {rename ? (
+          <DraftInput
+            className="ledger__rename"
+            label="Nom de la ligne"
+            placeholder="Autre"
+            value={rename.value}
+            onSave={(draft) => {
+              rename.onSave(draft.trim() || null)
+            }}
+          />
+        ) : (
+          label
+        )}
         {badge && <span className="ledger__badge">{badge}</span>}
       </span>
       {amount === 'masked' ? (
@@ -147,10 +161,21 @@ function EntryLine({
   actions: ReportActions
   onInvalid: (invalid: boolean) => void
 }) {
+  const isOther = entry.category === 'autre'
   return (
     <LedgerLine
       icon={<LineIcon Icon={ICONS[entry.category]} />}
-      label={categoryLabel(entry.category)}
+      label={(isOther && entry.label) || categoryLabel(entry.category)}
+      rename={
+        isOther
+          ? {
+              value: entry.label ?? '',
+              onSave: (label) => {
+                actions.setLabel(entry, label)
+              },
+            }
+          : undefined
+      }
       badge={entry.source === 'stepper' ? 'depuis la fiche' : undefined}
       direction={entry.direction}
       amount={entry.amount}

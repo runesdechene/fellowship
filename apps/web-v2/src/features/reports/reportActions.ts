@@ -85,6 +85,16 @@ export async function setAmount(target: Target, entry: ReportEntry, amount: numb
   )
 }
 
+export async function setLabel(target: Target, entry: ReportEntry, label: string | null) {
+  must(
+    await supabase
+      .from('event_ledger_entries')
+      .update({ label })
+      .eq('id', entry.id)
+      .eq('actor_id', target.actorId),
+  )
+}
+
 export async function removeLine(target: Target, entry: ReportEntry) {
   if (entry.source === 'stepper') return setStand(target, 0)
   must(

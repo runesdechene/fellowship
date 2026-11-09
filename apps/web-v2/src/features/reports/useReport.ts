@@ -22,6 +22,8 @@ export type { ReportDetail, ReportEntry }
 export interface ReportActions {
   addLine: (category: LedgerCategory, amount: number) => void
   setAmount: (entry: ReportEntry, amount: number) => void
+  /** Renomme une ligne « Autre » ; null lui rend son nom. */
+  setLabel: (entry: ReportEntry, label: string | null) => void
   removeLine: (entry: ReportEntry) => void
   /** Chiffre Carte et Espèces à la place des recettes saisies ; `key` vient de useRevenueKey. */
   sealRevenue: (key: CryptoKey, revenue: SecretRevenue) => void
@@ -108,6 +110,9 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
     },
     setAmount: (entry, amount) => {
       perform('Le montant n’a pas pu être enregistré.', (t) => write.setAmount(t, entry, amount))
+    },
+    setLabel: (entry, label) => {
+      perform('Le nom n’a pas pu être enregistré.', (t) => write.setLabel(t, entry, label))
     },
     removeLine: (entry) => {
       perform('La ligne n’a pas pu être retirée.', (t) => write.removeLine(t, entry))
