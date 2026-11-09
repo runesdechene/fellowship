@@ -11,10 +11,12 @@ Maquettes Figma, page « Reporting » : Décades (2795:233), Réglages (2803:233
 - `useReporting.ts` — charge la page Décades ; valide une journée à vérifier.
 - `ReportingTodo.tsx` — les journées bloquées et celles qui attendent une source.
 - `DecadeCard.tsx` — une décade en carte. `DaysTable.tsx` — ses journées.
+- `DaySales.tsx` — les ventes d'un jour déplié, et « Facturée à un pro ».
 - `ReportingSources.tsx` — le dernier relevé de chaque source, et SuperPDP.
 - `DayMark.tsx` — la forme d'un jour (coche, point d'exclamation, demi-cercle, tiret, cercle).
 - `ReportingSettingsPage.tsx` — `/reporting/reglages`. `useReportingSettings.ts` — lit et écrit.
 
 Le calcul (décades, échéances, état d'un jour, montants) vit dans `lib/reporting.ts`, testé seul.
-Le serveur (lecture des sources, envoi quotidien) n'existe pas encore : la conception est dans
+Le serveur : `reporting-lecture` lit les sources et écrit les journées, `reporting-vente-pro` marque
+une vente facturée à un pro. L'envoi quotidien n'existe pas encore : la conception est dans
 `E-Repporting Imperial/conception.md`.

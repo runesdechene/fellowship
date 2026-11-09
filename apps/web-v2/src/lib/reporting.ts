@@ -162,6 +162,38 @@ export function silentSources(detail: Json): string[] {
     .map(([source]) => SOURCE_NAMES[source] ?? source)
 }
 
+export interface Sale {
+  source: 'shopify' | 'sumup'
+  reference: string
+  ttc: number
+  link: string | null
+  invoiced: boolean
+}
+
+/** Les ventes qu'un jour a gardées, source par source ; un marquage les retire du total. */
+export function salesOf(detail: Json): Sale[] {
+  if (!isObject(detail)) return []
+  return (['shopify', 'sumup'] as const).flatMap((source) => {
+    const entry = detail[source]
+    if (!isObject(entry) || !Array.isArray(entry.liste)) return []
+    return entry.liste.filter(isObject).map((sale) => ({
+      source,
+      reference:
+        typeof sale.nom === 'string' ? sale.nom : typeof sale.code === 'string' ? sale.code : '',
+      ttc: typeof sale.ttc === 'number' ? sale.ttc : 0,
+      link: typeof sale.lien === 'string' ? sale.lien : null,
+      invoiced: sale.facturee === true,
+    }))
+  })
+}
+
+/** Une journée partie, ou en cours d'envoi, ne se corrige plus. */
+export function isLocked(status: DayStatus | null): boolean {
+  return (
+    status === 'en_cours' || status === 'envoyee' || status === 'refusee' || status === 'inconnue'
+  )
+}
+
 export const SOURCE_NAMES: Record<string, string> = { shopify: 'Shopify', sumup: 'SumUp' }
 
 export interface Anomaly {

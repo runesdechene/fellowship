@@ -45,7 +45,7 @@ export function DecadesPage({ entityId }: { entityId: string }) {
   const today = new Date()
   const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1)
   const month = parseMonthKey(search.get('mois')) ?? thisMonth
-  const { data, error, validate } = useReporting(entityId, month)
+  const { data, error, validate, markSale } = useReporting(entityId, month)
   if (error) return <p className="admin-page__error">{error}</p>
   if (!data) return null
 
@@ -123,7 +123,9 @@ export function DecadesPage({ entityId }: { entityId: string }) {
         ))}
       </div>
 
-      {selected && <DaysTable decade={selected} byDay={byDay} today={today} />}
+      {selected && (
+        <DaysTable decade={selected} byDay={byDay} today={today} onMarkSale={markSale} />
+      )}
       <ReportingSources data={data} />
     </div>
   )

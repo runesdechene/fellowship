@@ -12,6 +12,7 @@ import {
   formatSiren,
   nextDeadline,
   reportingHeadline,
+  salesOf,
   sentAmounts,
   toDayStatus,
   silentSources,
@@ -103,5 +104,22 @@ describe('montants', () => {
     expect(anomaliesOf([{ message: 'une commande part en Belgique', lien: null }])).toEqual([
       { message: 'une commande part en Belgique', detail: null, lien: null },
     ])
+  })
+})
+
+describe('salesOf', () => {
+  test('les ventes gardées par le serveur, Shopify puis SumUp', () => {
+    const detail = {
+      sumup: { ttc: 100, liste: [{ code: 'T1', ttc: 100, facturee: true }] },
+      shopify: { ttc: 200, liste: [{ nom: '#1', ttc: 200, lien: 'l', facturee: false }] },
+    }
+    expect(salesOf(detail)).toEqual([
+      { source: 'shopify', reference: '#1', ttc: 200, link: 'l', invoiced: false },
+      { source: 'sumup', reference: 'T1', ttc: 100, link: null, invoiced: true },
+    ])
+  })
+
+  test('une source muette ne donne aucune vente', () => {
+    expect(salesOf({ shopify: null })).toEqual([])
   })
 })

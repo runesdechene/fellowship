@@ -1,7 +1,7 @@
 // Lancer : node --test supabase/functions/_shared/reporting-ventes.test.ts (Node retire les types seul).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { journee, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, journee, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, rembourse: 0, payee: true, ...c,
@@ -29,7 +29,8 @@ test('export et UE bloquent, sans entrer dans le total', () => {
   assert.equal(j.anomalies.length, 2)
   assert.equal(j.lignes[0]?.tax_exclusive_amount, '35.00') // 30 € + 12 € TTC
   assert.equal(j.lignes[0]?.tax_total, '7.00')
-  assert.deepEqual(j.detail.shopify, { ttc: 3000 + 3000 + 12369, ventes: 3 })
+  assert.equal(j.detail.shopify?.ttc, 3000 + 3000 + 12369)
+  assert.equal(j.detail.shopify?.ventes, 3)
 })
 
 test('une source muette laisse le jour en attente', () => {
@@ -43,4 +44,19 @@ test('un jour sans vente est vide, un jour propre est prêt', () => {
 
 test('un remboursement bloque', () => {
   assert.equal(journee('2026-11-02', { sumup: [{ code: 'T', ttc: 100, rembourse: 100 }] }).statut, 'a_verifier')
+})
+
+test('une vente facturée à un pro sort du total et n’alerte plus', () => {
+  const ventes = { shopify: [commande({ nom: '#2', pays: 'RE', ttc: 12369, tva: 0 }), commande({})], sumup: [] }
+  const j = journee('2026-11-07', ventes, new Set([cleVente('shopify', '#2')]))
+  assert.equal(j.statut, 'prete')
+  assert.equal(j.lignes[0]?.tax_total, '5.00')
+  assert.equal(j.detail.shopify?.liste[0]?.facturee, true)
+})
+
+test('une journée se recalcule depuis les ventes qu’elle a gardées', () => {
+  const j = journee('2026-11-07', { shopify: [commande({ nom: '#2' })], sumup: null })
+  const ventes = ventesDuDetail(j.detail as Parameters<typeof ventesDuDetail>[0])
+  assert.equal(ventes.sumup, null)
+  assert.equal(journee('2026-11-07', ventes, new Set([cleVente('shopify', '#2')])).lignes.length, 0)
 })

@@ -307,6 +307,71 @@
   color: var(--tone-brique-ink);
 }
 
+.reporting-days__day {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}
+
+.reporting-days__day svg {
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.reporting-days__day.is-open svg {
+  rotate: 180deg;
+}
+
+/* --- Les ventes d'un jour (DaySales.tsx) --------------------------------- */
+.reporting-sales {
+  transition: opacity var(--duration-fast) var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+.reporting-sales__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reporting-sales__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  text-align: left;
+}
+
+.reporting-sales__row a {
+  color: inherit;
+}
+
+.reporting-sales__row.is-invoiced {
+  color: var(--ink-section-pale);
+}
+
+.reporting-sales__source {
+  min-width: var(--space-48);
+  color: var(--ink-section-pale);
+}
+
+.reporting-sales__amount {
+  margin-left: auto;
+}
+
+.reporting-sales__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12);
+  white-space: nowrap;
+}
+
 /* --- Les sources (ReportingSources.tsx) ---------------------------------- */
 .reporting-sources {
   flex-flow: row wrap;

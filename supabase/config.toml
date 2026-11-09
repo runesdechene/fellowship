@@ -459,3 +459,7 @@ verify_jwt = false
 [functions.reporting-lecture]
 # Auth = l'en-tête X-Reporting-Secret envoyé par le cron (pas de JWT Supabase).
 verify_jwt = false
+
+[functions.reporting-vente-pro]
+# Auth = le jeton du propriétaire de l'enseigne (is_entity_owner vérifié dans la fonction).
+verify_jwt = true

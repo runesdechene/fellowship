@@ -1,12 +1,13 @@
 /**
  * QUOI     — charge la page Décades d'une enseigne : ses réglages, ses sources, les journées du mois
  *            affiché, ce qui reste à traiter (tous mois confondus) et le dernier jour envoyé ; et
- *            valide une journée à vérifier.
+ *            valide une journée à vérifier, marque une vente facturée à un pro.
  * POURQUOI — la page lit tout d'un coup ; une journée bloquée d'octobre doit rester visible quand on
  *            regarde novembre.
  */
 import { useCallback, useEffect, useState } from 'react'
 import { todayIso } from '@/lib/dates'
+import type { Sale } from '@/lib/reporting'
 import { must, supabase } from '@/lib/supabase'
 
 const DAY_COLUMNS = 'id, jour, statut, lignes, detail, anomalies'
@@ -84,5 +85,15 @@ export function useReporting(entityId: string, month: Date) {
     return null
   }, [])
 
-  return { ...state, validate }
+  /** Sort une vente du total B2C, ou l'y remet. Rend le message d'échec, ou null. */
+  const markSale = useCallback(async (dayId: string, sale: Sale, invoiced: boolean) => {
+    const response = await supabase.functions.invoke<{ ok?: boolean }>('reporting-vente-pro', {
+      body: { journee: dayId, source: sale.source, reference: sale.reference, facturee: invoiced },
+    })
+    if (response.error || !response.data?.ok) return 'Le changement n’a pas abouti. Réessaie.'
+    setVersion((previous) => previous + 1)
+    return null
+  }, [])
+
+  return { ...state, validate, markSale }
 }

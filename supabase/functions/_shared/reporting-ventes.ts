@@ -28,6 +28,9 @@ export interface Anomalie {
 
 export type Statut = 'en_attente' | 'a_verifier' | 'vide' | 'prete'
 
+/** Les statuts qu'on peut recalculer : au-delà, la journée part ou est partie. */
+export const REECRIVABLES: string[] = ['en_attente', 'a_verifier', 'vide', 'prete']
+
 /** Ce qu'une source a donné ce jour-là ; null si elle n'a pas répondu. */
 export interface Ventes {
   shopify?: Commande[] | null
@@ -39,6 +42,11 @@ const FRANCE = new Set(['FR', 'MC'])
 const UE = new Set(
   'AT BE BG HR CY CZ DK EE FI DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE'.split(' '),
 )
+
+/** Identifie une vente facturée à un pro : commande Shopify ou paiement SumUp. */
+export function cleVente(source: string, reference: string): string {
+  return `${source}:${reference}`
+}
 
 export function zoneDe(pays: string): 'france' | 'ue' | 'hors_ue' {
   if (FRANCE.has(pays)) return 'france'
@@ -77,9 +85,10 @@ export function verifierPaiement(p: Paiement): Anomalie[] {
 }
 
 /** La journée telle qu'elle s'écrit en base. */
-export function journee(jour: string, ventes: Ventes) {
-  const commandes = ventes.shopify ?? []
-  const paiements = ventes.sumup ?? []
+export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<string> = new Set()) {
+  // Une vente facturée à un pro relève de la facture électronique : ni total B2C, ni anomalie.
+  const commandes = (ventes.shopify ?? []).filter((c) => !facturees.has(cleVente('shopify', c.nom)))
+  const paiements = (ventes.sumup ?? []).filter((p) => !facturees.has(cleVente('sumup', p.code)))
   const anomalies = [...commandes.flatMap(verifierCommande), ...paiements.flatMap(verifierPaiement)]
 
   // La France seulement, TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
@@ -91,12 +100,28 @@ export function journee(jour: string, ventes: Ventes) {
   const tva = tvaDe(ttc)
   const lignes = ttc === 0 ? [] : [ligneSuperPdp(jour, ttc - tva, tva)]
 
+  // Les ventes sont gardées : l'écran les liste, et un marquage recalcule sans relire les sources.
   const detail = Object.fromEntries(
-    Object.entries(ventes).map(([source, liste]) => [source, liste ? { ttc: total(liste), ventes: liste.length } : null]),
+    Object.entries(ventes).map(([source, liste]) => [source, liste
+      ? {
+        ttc: total(liste),
+        ventes: liste.length,
+        liste: (liste as (Commande | Paiement)[]).map((v) => ({ ...v, facturee: facturees.has(cleVente(source, referenceDe(v))) })),
+      }
+      : null]),
   )
   const muette = Object.values(ventes).some((liste) => liste === null)
   const statut: Statut = muette ? 'en_attente' : anomalies.length ? 'a_verifier' : ttc === 0 ? 'vide' : 'prete'
   return { jour, statut, lignes, detail, anomalies }
+}
+
+/** Les ventes d'une journée déjà écrite, telles que `journee` les a gardées. */
+export function ventesDuDetail(detail: Record<string, { liste: (Commande & Paiement)[] } | null>): Ventes {
+  return Object.fromEntries(Object.entries(detail).map(([source, lue]) => [source, lue ? lue.liste : null]))
+}
+
+function referenceDe(vente: Commande | Paiement): string {
+  return 'nom' in vente ? vente.nom : vente.code
 }
 
 function ligneSuperPdp(jour: string, ht: number, tva: number) {

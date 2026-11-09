@@ -6,12 +6,12 @@
 // Secrets dans Vault, nommés reporting:<enseigne>:sources:<nom> — ils ne dépendent pas de l'environnement.
 // Conception : « E-Repporting Imperial/conception.md ».
 
-import { journee, type Ventes } from '../_shared/reporting-ventes.ts'
+import { lireFacturees } from '../_shared/reporting-facturees.ts'
+import { journee, REECRIVABLES, type Ventes } from '../_shared/reporting-ventes.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { jourDe, lireShopify, lireSumup } from './sources.ts'
 
 const SECRET = Deno.env.get('REPORTING_TRIGGER_SECRET') ?? ''
-const REECRIVABLES = ['en_attente', 'a_verifier', 'vide', 'prete']
 const JOUR = /^\d{4}-\d{2}-\d{2}$/
 
 Deno.serve(async (req) => {
@@ -77,12 +77,13 @@ async function lireEntreprise(e: Entreprise, du: string, au: string) {
     .filter((j) => !REECRIVABLES.includes(j.statut) || j.validee_le)
     .map((j) => j.jour))
 
+  const facturees = await lireFacturees(e.entity_actor_id)
   const lignes = joursEntre(du, au).filter((jour) => !figees.has(jour)).map((jour) => {
     const ventes = Object.fromEntries(Object.entries(lues).map(([type, parJour]) => [type, parJour ? parJour.get(jour) ?? [] : null]))
     return {
       entity_actor_id: e.entity_actor_id,
       environnement: e.environnement,
-      ...journee(jour, ventes as Ventes),
+      ...journee(jour, ventes as Ventes, facturees),
       updated_at: new Date().toISOString(),
     }
   })
