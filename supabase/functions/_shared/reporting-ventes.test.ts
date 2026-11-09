@@ -4,7 +4,7 @@ import assert from 'node:assert/strict'
 import { cleVente, journee, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
-  nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, rembourse: 0, payee: true, ...c,
+  nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
 })
 
 test('une commande française juste ne lève rien', () => {
@@ -23,7 +23,7 @@ test('un centime d’arrondi par article est toléré', () => {
 test('export et UE bloquent, sans entrer dans le total', () => {
   const j = journee('2026-11-07', {
     shopify: [commande({ pays: 'RE', ttc: 12369, tva: 0 }), commande({ pays: 'BE' }), commande({})],
-    sumup: [{ code: 'T1', ttc: 1200, rembourse: 0 }],
+    sumup: [{ code: 'T1', ttc: 1200 }],
   })
   assert.equal(j.statut, 'a_verifier')
   assert.equal(j.anomalies.length, 2)
@@ -42,8 +42,17 @@ test('un jour sans vente est vide, un jour propre est prêt', () => {
   assert.equal(journee('2026-11-02', { shopify: [commande({})], sumup: [] }).statut, 'prete')
 })
 
-test('un remboursement bloque', () => {
-  assert.equal(journee('2026-11-02', { sumup: [{ code: 'T', ttc: 100, rembourse: 100 }] }).statut, 'a_verifier')
+test('un remboursement se déduit du total du jour', () => {
+  const j = journee('2026-11-02', { sumup: [{ code: 'T1', ttc: 3000 }, { code: 'T2 remboursement', ttc: -1200 }] })
+  assert.equal(j.statut, 'prete')
+  assert.equal(j.lignes[0]?.tax_exclusive_amount, '15.00')
+  assert.equal(j.lignes[0]?.tax_total, '3.00')
+})
+
+test('un total du jour négatif bloque', () => {
+  const j = journee('2026-11-02', { sumup: [{ code: 'T remboursement', ttc: -1200 }] })
+  assert.equal(j.statut, 'a_verifier')
+  assert.equal(j.lignes[0]?.tax_total, '-2.00')
 })
 
 test('une vente facturée à un pro sort du total et n’alerte plus', () => {

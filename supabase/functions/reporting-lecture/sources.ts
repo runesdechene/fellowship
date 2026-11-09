@@ -1,6 +1,6 @@
 // sources : lire, sans rien modifier, les ventes d'une période chez Shopify et SumUp, rangées par
 // jour de Paris. Montants en centimes. Une erreur remonte : la source sera notée muette.
-import type { Commande, Paiement } from '../_shared/reporting-ventes.ts'
+import { type Commande, type Paiement, tvaDe } from '../_shared/reporting-ventes.ts'
 
 const JOUR_PARIS = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' })
 export const jourDe = (iso: string) => JOUR_PARIS.format(new Date(iso))
@@ -17,32 +17,39 @@ export async function lireShopify(
   domaine: string, clientId: string, secret: string, du: string, au: string, selon: 'commande' | 'expedition',
 ): Promise<ParJour<Commande>> {
   const jeton = await jetonShopify(domaine, clientId, secret)
-  // shortcut : en mode expédition, une commande passée plus de 60 jours avant son envoi est manquée.
+  // Filtre sur la mise à jour : une vieille commande remboursée ou expédiée sur la période y entre.
   const depuis = new Date(`${du}T00:00:00Z`)
-  depuis.setUTCDate(depuis.getUTCDate() - (selon === 'expedition' ? 60 : 1))
+  depuis.setUTCDate(depuis.getUTCDate() - 1)
   const boutique = domaine.replace('.myshopify.com', '')
   const parJour: ParJour<Commande> = new Map()
   let apres: string | null = null
 
   do {
     const reponse = await graphql(domaine, jeton, REQUETE, {
-      apres, filtre: `created_at:>=${depuis.toISOString().slice(0, 10)}`,
+      apres, filtre: `updated_at:>=${depuis.toISOString().slice(0, 10)}`,
     })
     for (const o of reponse.orders.nodes) {
-      if (o.test || o.cancelledAt) continue
-      const date = selon === 'expedition' ? o.fulfillments[0]?.createdAt : o.createdAt
-      if (!date) continue // pas encore expédiée
-      const jour = jourDe(date)
-      if (jour < du || jour > au) continue
-      ranger(parJour, jour, {
-        nom: o.name,
+      if (o.test || (o.cancelledAt && o.refunds.length === 0)) continue
+      const commune = {
         lien: `https://admin.shopify.com/store/${boutique}/orders/${o.legacyResourceId}`,
         pays: o.shippingAddress?.countryCodeV2 ?? null,
-        ttc: centimes(o.currentTotalPriceSet.shopMoney.amount),
-        tva: centimes(o.currentTotalTaxSet.shopMoney.amount),
         articles: o.lineItems.nodes.length + 1, // + la livraison
-        rembourse: centimes(o.totalRefundedSet.shopMoney.amount),
-        payee: ['PAID', 'PARTIALLY_REFUNDED', 'REFUNDED'].includes(o.displayFinancialStatus),
+      }
+      const date = selon === 'expedition' ? o.fulfillments[0]?.createdAt : o.createdAt
+      if (date && jourDe(date) >= du && jourDe(date) <= au) { // pas de date : pas encore expédiée
+        ranger(parJour, jourDe(date), {
+          ...commune,
+          nom: o.name,
+          ttc: centimes(o.totalPriceSet.shopMoney.amount),
+          tva: centimes(o.totalTaxSet.shopMoney.amount),
+          payee: ['PAID', 'PARTIALLY_REFUNDED', 'REFUNDED'].includes(o.displayFinancialStatus),
+        })
+      }
+      o.refunds.forEach((r: RemboursementShopify, i: number) => {
+        const ttc = -centimes(r.totalRefundedSet.shopMoney.amount)
+        const jour = jourDe(r.createdAt)
+        if (ttc === 0 || jour < du || jour > au) return // 0 € : une remise en stock
+        ranger(parJour, jour, { ...commune, nom: `${o.name} remboursement ${i + 1}`, ttc, tva: tvaDe(ttc), payee: true })
       })
     }
     apres = reponse.orders.pageInfo.hasNextPage ? reponse.orders.pageInfo.endCursor : null
@@ -66,10 +73,14 @@ export async function lireSumup(cle: string, du: string, au: string): Promise<Pa
     if (!reponse.ok) throw new Error(`SumUp ${reponse.status}`)
     const page: PageSumup = await reponse.json()
     for (const t of page.items) {
-      if (t.status !== 'SUCCESSFUL' || t.type !== 'PAYMENT') continue
+      const paye = t.type === 'PAYMENT' && t.status === 'SUCCESSFUL'
+      if (!paye && !(t.type === 'REFUND' && t.status === 'REFUNDED')) continue
       const jour = jourDe(t.timestamp)
       if (jour < du || jour > au) continue
-      ranger(parJour, jour, { code: t.transaction_code, ttc: centimes(t.amount), rembourse: centimes(t.refunded_amount ?? 0) })
+      // shortcut : deux remboursements partiels d'un même paiement portent le même nom ; à distinguer s'ils arrivent.
+      ranger(parJour, jour, paye
+        ? { code: t.transaction_code, ttc: centimes(t.amount) }
+        : { code: `${t.transaction_code} remboursement`, ttc: -centimes(t.amount) })
     }
     const suite = page.links?.find((l) => l.rel === 'next')
     url = suite ? `https://api.sumup.com/v0.1/me/transactions/history?${suite.href}` : null
@@ -78,13 +89,13 @@ export async function lireSumup(cle: string, du: string, au: string): Promise<Pa
 }
 
 const REQUETE = `query ($apres: String, $filtre: String) {
-  orders(first: 100, after: $apres, query: $filtre, sortKey: CREATED_AT) {
+  orders(first: 100, after: $apres, query: $filtre, sortKey: UPDATED_AT) {
     pageInfo { hasNextPage endCursor }
     nodes {
       name legacyResourceId createdAt test cancelledAt displayFinancialStatus
-      currentTotalPriceSet { shopMoney { amount } }
-      currentTotalTaxSet { shopMoney { amount } }
-      totalRefundedSet { shopMoney { amount } }
+      totalPriceSet { shopMoney { amount } }
+      totalTaxSet { shopMoney { amount } }
+      refunds(first: 20) { createdAt totalRefundedSet { shopMoney { amount } } }
       shippingAddress { countryCodeV2 }
       fulfillments(first: 1) { createdAt }
       lineItems(first: 100) { nodes { id } }
@@ -113,7 +124,9 @@ async function graphql(domaine: string, jeton: string, query: string, variables:
   return corps.data
 }
 
+interface RemboursementShopify { createdAt: string; totalRefundedSet: { shopMoney: { amount: string } } }
+
 interface PageSumup {
-  items: { status: string; type: string; timestamp: string; transaction_code: string; amount: number; refunded_amount?: number }[]
+  items: { status: string; type: string; timestamp: string; transaction_code: string; amount: number }[]
   links?: { rel: string; href: string }[]
 }

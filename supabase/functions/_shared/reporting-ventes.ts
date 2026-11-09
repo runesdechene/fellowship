@@ -1,5 +1,6 @@
 // reporting-ventes : de la liste des ventes d'un jour à la journée de reporting (lignes SuperPDP,
 // détail par source, anomalies, statut). Fonctions pures, sans réseau : reporting-ventes.test.ts.
+// Un remboursement est une vente négative, le jour où il a lieu : un jour envoyé ne bouge plus.
 // Règle : tout se vend à 20 %, prix TTC. On ne déclare que la France ; le reste bloque la journée,
 // qu'une personne vérifie avant tout envoi. Montants en centimes.
 
@@ -10,14 +11,12 @@ export interface Commande {
   ttc: number
   tva: number // la TVA que Shopify a calculée : vérifiée, jamais déclarée telle quelle
   articles: number // un centime d'arrondi possible par article
-  rembourse: number
   payee: boolean
 }
 
 export interface Paiement {
   code: string
   ttc: number
-  rembourse: number
 }
 
 export interface Anomalie {
@@ -63,7 +62,6 @@ export function verifierCommande(c: Commande): Anomalie[] {
   const anomalie = (message: string, detail: string | null = null) => ({ message, detail, lien: c.lien })
   const anomalies: Anomalie[] = []
   if (!c.payee) anomalies.push(anomalie(`${c.nom} n'est pas payée`))
-  if (c.rembourse > 0) anomalies.push(anomalie(`${c.nom} est remboursée de ${euros(c.rembourse)}`))
   if (!c.pays) return [...anomalies, anomalie(`${c.nom} n'a pas d'adresse de livraison`)]
 
   const zone = zoneDe(c.pays)
@@ -79,17 +77,12 @@ export function verifierCommande(c: Commande): Anomalie[] {
   return anomalies
 }
 
-export function verifierPaiement(p: Paiement): Anomalie[] {
-  if (p.rembourse === 0) return []
-  return [{ message: `Paiement SumUp ${p.code} remboursé de ${euros(p.rembourse)}`, detail: null, lien: null }]
-}
-
 /** La journée telle qu'elle s'écrit en base. */
 export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<string> = new Set()) {
   // Une vente facturée à un pro relève de la facture électronique : ni total B2C, ni anomalie.
   const commandes = (ventes.shopify ?? []).filter((c) => !facturees.has(cleVente('shopify', c.nom)))
   const paiements = (ventes.sumup ?? []).filter((p) => !facturees.has(cleVente('sumup', p.code)))
-  const anomalies = [...commandes.flatMap(verifierCommande), ...paiements.flatMap(verifierPaiement)]
+  const anomalies = commandes.flatMap(verifierCommande)
 
   // La France seulement, TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [
@@ -99,6 +92,9 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
   const ttc = enFrance.reduce((a, b) => a + b, 0)
   const tva = tvaDe(ttc)
   const lignes = ttc === 0 ? [] : [ligneSuperPdp(jour, ttc - tva, tva)]
+  if (ttc < 0) {
+    anomalies.push({ message: 'Le total du jour est négatif', detail: 'Plus de remboursements que de ventes.', lien: null })
+  }
 
   // Les ventes sont gardées : l'écran les liste, et un marquage recalcule sans relire les sources.
   const detail = Object.fromEntries(
