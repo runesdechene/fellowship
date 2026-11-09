@@ -43,6 +43,7 @@ Deno.serve(async (req) => {
     else facturees.delete(cle)
 
     // La journée d'abord, sous condition de statut : un envoi parti entre-temps gagne.
+    // shortcut : le seuil UE n'est pas relu ici ; le passage du matin le remet si besoin.
     const { jour: _jour, ...calcul } = journee(jour.jour, ventesDuDetail(jour.detail), facturees)
     const { data: ecrites, error: ecritureErreur } = await admin.from('reporting_journees')
       .update({ ...calcul, validee_par: null, validee_le: null, updated_at: new Date().toISOString() })

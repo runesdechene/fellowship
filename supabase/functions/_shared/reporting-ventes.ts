@@ -1,8 +1,8 @@
 // reporting-ventes : de la liste des ventes d'un jour à la journée de reporting (lignes SuperPDP,
 // détail par source, anomalies, statut). Fonctions pures, sans réseau : reporting-ventes.test.ts.
 // Un remboursement est une vente négative, le jour où il a lieu : un jour envoyé ne bouge plus.
-// Règle : tout se vend à 20 %, prix TTC. La France se déclare à 20 %, les exports à 0 % (TNT1) ; une vente
-// dans l'UE bloque la journée, qu'une personne vérifie avant tout envoi. Montants en centimes.
+// Règle : tout se vend à 20 %, prix TTC. La France et l'UE sous le seuil se déclarent à 20 % (TLB1), les exports
+// à 0 % (TNT1). Au-delà du seuil UE, la journée se bloque : le régime change (OSS). Montants en centimes.
 
 export interface Commande {
   nom: string // « #1997 »
@@ -56,6 +56,15 @@ export function cleVente(source: string, reference: string): string {
   return `${source}:${reference}`
 }
 
+/** Le pays fiscal d'une adresse : un code postal d'outre-mer saisi avec « France » n'est pas la France. */
+export function paysEffectif(pays: string | null, codePostal: string | null | undefined): string | null {
+  // 980 : Monaco, fiscalement en France.
+  return pays === 'FR' && /^(97|98[4-9])/.test(codePostal ?? '') ? 'FR-OUTRE-MER' : pays
+}
+
+/** Le seuil des ventes à distance dans l'UE, en centimes HT, sur l'année ou la précédente (art. 258 A du CGI). */
+export const SEUIL_UE = 1_000_000
+
 export function zoneDe(pays: string): 'france' | 'ue' | 'hors_ue' {
   if (FRANCE.has(pays)) return 'france'
   return UE.has(pays) ? 'ue' : 'hors_ue'
@@ -67,7 +76,7 @@ export function tvaDe(ttc: number): number {
 }
 
 /** Ce qui empêche de déclarer une commande les yeux fermés. */
-export function verifierCommande(c: Commande, controlerTva = true): Anomalie[] {
+export function verifierCommande(c: Commande, controlerTva = true, seuilUeDepasse = false): Anomalie[] {
   const anomalie = (message: string, detail: string | null = null) => ({ message, detail, lien: c.lien })
   const anomalies: Anomalie[] = []
   if (!c.payee) anomalies.push(anomalie(`${c.nom} n'est pas payée`))
@@ -75,7 +84,7 @@ export function verifierCommande(c: Commande, controlerTva = true): Anomalie[] {
 
   const zone = zoneDe(c.pays)
   if (zone === 'ue') {
-    anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, 'Vente dans l’UE : à traiter à part, hors de ce reporting.'))
+    if (seuilUeDepasse) anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, 'Seuil de 10 000 € dépassé : la TVA du pays du client s’applique (OSS).'))
   } else if (zone === 'hors_ue') {
     if (c.tva > 0) anomalies.push(anomalie(`${c.nom} part en ${c.pays}`, `Shopify a compté ${euros(c.tva)} de TVA sur un export.`))
   } else if (controlerTva && Math.abs(c.tva - tvaDe(c.ttc)) > c.articles) {
@@ -86,15 +95,15 @@ export function verifierCommande(c: Commande, controlerTva = true): Anomalie[] {
 }
 
 /** La journée telle qu'elle s'écrit en base. */
-export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<string> = new Set()) {
+export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<string> = new Set(), seuilUeDepasse = false) {
   // Une vente facturée à un pro relève de la facture électronique : ni total B2C, ni anomalie.
   const commandes = (ventes.shopify ?? []).filter((c) => !facturees.has(cleVente('shopify', c.nom)))
   const paiements = (ventes.sumup ?? []).filter((p) => !facturees.has(cleVente('sumup', p.code)))
-  const anomalies = commandes.flatMap((c) => verifierCommande(c, jour >= TVA_SHOPIFY_FIABLE_DEPUIS))
+  const anomalies = commandes.flatMap((c) => verifierCommande(c, jour >= TVA_SHOPIFY_FIABLE_DEPUIS, seuilUeDepasse))
 
   // TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [
-    ...commandes.filter((c) => c.pays && zoneDe(c.pays) === 'france').map((c) => c.ttc),
+    ...commandes.filter((c) => c.pays && zoneDe(c.pays) !== 'hors_ue').map((c) => c.ttc),
     ...paiements.map((p) => p.ttc),
   ]
   const ttc = enFrance.reduce((a, b) => a + b, 0)

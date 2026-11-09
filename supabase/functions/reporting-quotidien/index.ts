@@ -10,7 +10,7 @@ import { lireFacturees } from '../_shared/reporting-facturees.ts'
 import { journee, REECRIVABLES, type Ventes } from '../_shared/reporting-ventes.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { type Entreprise, envoyerPretes, lireSecret } from './envoi.ts'
-import { jourDe, lireShopify, lireSumup } from './sources.ts'
+import { jourDe, lireShopify, lireSumup, seuilUeDepasse } from './sources.ts'
 
 const SECRET = Deno.env.get('REPORTING_TRIGGER_SECRET') ?? ''
 const JOUR = /^\d{4}-\d{2}-\d{2}$/
@@ -75,11 +75,16 @@ async function lireEntreprise(e: Entreprise, du: string, au: string) {
 
   // Chaque source lue une fois pour toute la période ; une source en erreur est muette tous les jours.
   const lues: Record<string, Map<string, unknown[]> | null> = {}
+  let seuilUe = false
   for (const s of sources) {
     try {
-      lues[s.type] = s.type === 'shopify'
-        ? await lireShopify(s.identifiant, await secret('shopify_client_id'), await secret('shopify_client_secret'), du, au, e.date_de_vente)
-        : await lireSumup(await secret('sumup_api_key'), du, au)
+      if (s.type === 'shopify') {
+        const [id, cle] = [await secret('shopify_client_id'), await secret('shopify_client_secret')]
+        lues[s.type] = await lireShopify(s.identifiant, id, cle, du, au, e.date_de_vente)
+        seuilUe = await seuilUeDepasse(s.identifiant, id, cle)
+      } else {
+        lues[s.type] = await lireSumup(await secret('sumup_api_key'), du, au)
+      }
       await admin.from('reporting_sources').update({ derniere_lecture: new Date().toISOString(), derniere_erreur: null }).eq('id', s.id)
     } catch (err) {
       lues[s.type] = null
@@ -101,14 +106,14 @@ async function lireEntreprise(e: Entreprise, du: string, au: string) {
     return {
       entity_actor_id: e.entity_actor_id,
       environnement: e.environnement,
-      ...journee(jour, ventes as Ventes, facturees),
+      ...journee(jour, ventes as Ventes, facturees, seuilUe),
       updated_at: new Date().toISOString(),
     }
   })
   const { error: ecritureErreur } = await admin.from('reporting_journees')
     .upsert(lignes, { onConflict: 'entity_actor_id,environnement,jour' })
   if (ecritureErreur) throw ecritureErreur
-  return { ecrites: lignes.length, figees: figees.size, muettes: Object.keys(lues).filter((t) => !lues[t]) }
+  return { seuilUe, ecrites: lignes.length, figees: figees.size, muettes: Object.keys(lues).filter((t) => !lues[t]) }
 }
 
 function joursEntre(du: string, au: string): string[] {

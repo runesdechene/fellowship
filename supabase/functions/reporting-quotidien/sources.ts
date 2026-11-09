@@ -1,6 +1,6 @@
 // sources : lire, sans rien modifier, les ventes d'une période chez Shopify et SumUp, rangées par
 // jour de Paris. Montants en centimes. Une erreur remonte : la source sera notée muette.
-import { type Commande, type Paiement, tvaDe } from '../_shared/reporting-ventes.ts'
+import { type Commande, type Paiement, paysEffectif, SEUIL_UE, tvaDe, zoneDe } from '../_shared/reporting-ventes.ts'
 
 const JOUR_PARIS = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' })
 export const jourDe = (iso: string) => JOUR_PARIS.format(new Date(iso))
@@ -33,7 +33,7 @@ export async function lireShopify(
       const commune = {
         lien: `https://admin.shopify.com/store/${boutique}/orders/${o.legacyResourceId}`,
         // Rien à expédier (une prise en charge de retour) : le pays de facturation.
-        pays: o.shippingAddress?.countryCodeV2 ?? o.billingAddress?.countryCodeV2 ?? null,
+        pays: paysEffectif(o.shippingAddress?.countryCodeV2 ?? o.billingAddress?.countryCodeV2 ?? null, (o.shippingAddress ?? o.billingAddress)?.zip),
         articles: o.lineItems.nodes.length + 1, // + la livraison
       }
       const date = selon === 'expedition' ? o.fulfillments[0]?.createdAt : o.createdAt
@@ -56,6 +56,25 @@ export async function lireShopify(
     apres = reponse.orders.pageInfo.hasNextPage ? reponse.orders.pageInfo.endCursor : null
   } while (apres)
   return parJour
+}
+
+/** Le seuil UE est-il franchi ? Ventes Shopify livrées dans l'UE, en HT, cette année ou la précédente. */
+export async function seuilUeDepasse(domaine: string, clientId: string, secret: string): Promise<boolean> {
+  const jeton = await jetonShopify(domaine, clientId, secret)
+  const annee = new Date().getUTCFullYear()
+  const parAnnee: Record<string, number> = {}
+  let apres: string | null = null
+  do {
+    const reponse = await graphql(domaine, jeton, REQUETE_SEUIL, { apres, filtre: `created_at:>=${annee - 1}-01-01` })
+    for (const o of reponse.orders.nodes) {
+      const pays = o.shippingAddress?.countryCodeV2
+      if (o.test || o.cancelledAt || !pays || zoneDe(pays) !== 'ue') continue
+      const an = o.createdAt.slice(0, 4)
+      parAnnee[an] = (parAnnee[an] ?? 0) + Math.round(centimes(o.currentTotalPriceSet.shopMoney.amount) / 1.2)
+    }
+    apres = reponse.orders.pageInfo.hasNextPage ? reponse.orders.pageInfo.endCursor : null
+  } while (apres)
+  return Object.values(parAnnee).some((total) => total > SEUIL_UE)
 }
 
 /** Les paiements SumUp réussis : des ventes au comptoir, donc en France. */
@@ -97,11 +116,18 @@ const REQUETE = `query ($apres: String, $filtre: String) {
       totalPriceSet { shopMoney { amount } }
       totalTaxSet { shopMoney { amount } }
       refunds(first: 20) { createdAt totalRefundedSet { shopMoney { amount } } }
-      shippingAddress { countryCodeV2 }
-      billingAddress { countryCodeV2 }
+      shippingAddress { countryCodeV2 zip }
+      billingAddress { countryCodeV2 zip }
       fulfillments(first: 1) { createdAt }
       lineItems(first: 100) { nodes { id } }
     }
+  }
+}`
+
+const REQUETE_SEUIL = `query ($apres: String, $filtre: String) {
+  orders(first: 250, after: $apres, query: $filtre, sortKey: CREATED_AT) {
+    pageInfo { hasNextPage endCursor }
+    nodes { createdAt test cancelledAt currentTotalPriceSet { shopMoney { amount } } shippingAddress { countryCodeV2 } }
   }
 }`
 

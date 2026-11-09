@@ -1,7 +1,7 @@
 // Lancer : node --test supabase/functions/_shared/reporting-ventes.test.ts (Node retire les types seul).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { cleVente, journee, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, journee, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
@@ -20,15 +20,14 @@ test('un centime d’arrondi par article est toléré', () => {
   assert.deepEqual(verifierCommande(commande({ ttc: 25173, tva: 4194, articles: 3 })), [])
 })
 
-test('l’UE bloque, l’export part en TNT1 à 0 %', () => {
+test('l’UE sous le seuil part à 20 %, l’export en TNT1 à 0 %', () => {
   const j = journee('2026-11-07', {
     shopify: [commande({ pays: 'RE', ttc: 12369, tva: 0 }), commande({ pays: 'BE' }), commande({})],
     sumup: [{ code: 'T1', ttc: 1200 }],
   })
-  assert.equal(j.statut, 'a_verifier')
-  assert.equal(j.anomalies.length, 1)
-  assert.equal(j.lignes[0]?.tax_exclusive_amount, '35.00') // 30 € + 12 € TTC
-  assert.equal(j.lignes[0]?.tax_total, '7.00')
+  assert.equal(j.statut, 'prete')
+  assert.equal(j.lignes[0]?.tax_exclusive_amount, '60.00') // 30 € France + 30 € Belgique + 12 € SumUp, TTC
+  assert.equal(j.lignes[0]?.tax_total, '12.00')
   assert.equal(j.lignes[1]?.category_code, 'TNT1')
   assert.equal(j.lignes[1]?.tax_exclusive_amount, '123.69')
   assert.equal(j.lignes[1]?.tax_total, '0.00')
@@ -94,4 +93,19 @@ test('la TVA de Shopify ne se contrôle qu’une fois Shopify Tax actif', () => 
 test('sans pays, seule une commande à 0 € passe', () => {
   assert.equal(verifierCommande(commande({ pays: null, ttc: 0, tva: 0 })).length, 0)
   assert.equal(verifierCommande(commande({ pays: null })).length, 1)
+})
+
+test('au-delà du seuil UE, la journée se bloque', () => {
+  const ventes = { shopify: [commande({ pays: 'BE' })], sumup: [] }
+  assert.equal(journee('2026-11-07', ventes, new Set(), true).statut, 'a_verifier')
+})
+
+test('un code postal d’outre-mer saisi avec France part en export, pas Monaco', () => {
+  assert.equal(paysEffectif('FR', '97400'), 'FR-OUTRE-MER')
+  assert.equal(paysEffectif('FR', '98800'), 'FR-OUTRE-MER')
+  assert.equal(paysEffectif('FR', '98000'), 'FR')
+  assert.equal(paysEffectif('FR', '75001'), 'FR')
+  assert.equal(paysEffectif('BE', '97400'), 'BE')
+  const j = journee('2026-11-07', { shopify: [commande({ pays: paysEffectif('FR', '97400'), tva: 0 })] })
+  assert.equal(j.lignes[0]?.category_code, 'TNT1')
 })
