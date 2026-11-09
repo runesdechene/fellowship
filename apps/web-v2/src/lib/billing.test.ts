@@ -19,20 +19,23 @@ describe('validSiren', () => {
 
 describe('billingReady', () => {
   test('une raison sociale, et un SIREN juste ou « pas de SIREN »', () => {
-    expect(billingReady({ legalName: 'Atelier EI', siren: '552100554' })).toBe(true)
-    expect(billingReady({ legalName: 'Foreign Ltd', siren: '' })).toBe(false)
-    expect(billingReady({ legalName: ' ', siren: '552100554' })).toBe(false)
-    expect(billingReady({ legalName: 'Atelier EI', siren: '123456789' })).toBe(false)
+    expect(billingReady({ legalName: 'Atelier EI', siren: '552100554', abroad: false })).toBe(true)
+    expect(billingReady({ legalName: 'Foreign Ltd', siren: '', abroad: false })).toBe(false)
+    expect(billingReady({ legalName: 'Foreign Ltd', siren: '', abroad: true })).toBe(true)
+    expect(billingReady({ legalName: ' ', siren: '552100554', abroad: false })).toBe(false)
+    expect(billingReady({ legalName: 'Atelier EI', siren: '123456789', abroad: false })).toBe(false)
   })
 })
 
 describe('billingNote', () => {
   test('ce qui est enregistré, ou à quoi ça sert', () => {
-    const empty = { legal_name: null, siren: null }
+    const empty = { legal_name: null, siren: null, billing_no_siren: null }
     expect(billingNote(empty)).toBe('Ta raison sociale et ton SIREN, pour des factures à ton nom.')
     expect(billingNote({ ...empty, legal_name: 'SARL Runes', siren: '552100554' })).toBe(
       'SARL Runes · SIREN 552 100 554',
     )
-    expect(billingNote({ ...empty, legal_name: 'Atelier EI' })).toBe('Atelier EI')
+    expect(billingNote({ ...empty, legal_name: 'Foreign Ltd', billing_no_siren: true })).toBe(
+      'Foreign Ltd · entreprise étrangère',
+    )
   })
 })

@@ -168,7 +168,7 @@ export function ProCard({
       {askBilling && entityId && (
         <BillingDialog
           entityId={entityId}
-          initial={{ legalName: '', siren: '' }}
+          initial={{ legalName: '', siren: '', abroad: false }}
           onClose={() => {
             setAskBilling(false)
           }}

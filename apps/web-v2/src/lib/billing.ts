@@ -3,13 +3,15 @@
  *            enregistrer, et la phrase de la ligne « Facturation » des Réglages.
  * POURQUOI — chantier 3 (19/10/2026) : la V2 saisit la raison sociale et le SIREN comme la V1, pour
  *            des factures à son nom. Même règle que `apps/web/src/lib/siren.ts`.
- * ATTENTION — le SIREN est obligatoire pour s'abonner (Uriel, 09/11/2026) : la facture électronique
+ * ATTENTION — le SIREN est obligatoire pour s'abonner, sauf entreprise étrangère (Uriel, 09/11/2026) : la facture électronique
  *            de 2027 ne part pas sans lui. Le serveur le vérifie aussi (_shared/billing.ts).
  */
 
 export interface BillingDraft {
   legalName: string
   siren: string
+  /** Entreprise étrangère : pas de SIREN, son numéro de TVA est demandé au paiement. */
+  abroad: boolean
 }
 
 export function sirenDigits(input: string): string {
@@ -30,7 +32,7 @@ export function validSiren(input: string): boolean {
 }
 
 export function billingReady(draft: BillingDraft): boolean {
-  return draft.legalName.trim() !== '' && validSiren(draft.siren)
+  return draft.legalName.trim() !== '' && (draft.abroad || validSiren(draft.siren))
 }
 
 /** « 552 100 554 » : le SIREN se lit par groupes de trois. */
@@ -38,8 +40,12 @@ function spaced(siren: string): string {
   return siren.replace(/(\d{3})(?=\d)/g, '$1 ')
 }
 
-export function billingNote(entity: { legal_name: string | null; siren: string | null }): string {
+export function billingNote(entity: {
+  legal_name: string | null
+  siren: string | null
+  billing_no_siren: boolean | null
+}): string {
   if (!entity.legal_name) return 'Ta raison sociale et ton SIREN, pour des factures à ton nom.'
   if (entity.siren) return `${entity.legal_name} · SIREN ${spaced(entity.siren)}`
-  return entity.legal_name
+  return entity.billing_no_siren ? `${entity.legal_name} · entreprise étrangère` : entity.legal_name
 }

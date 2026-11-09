@@ -14,7 +14,7 @@ import { SettingRow } from './SettingRow'
 interface Props {
   entityId: string
   brandName: string
-  billing: { legal_name: string | null; siren: string | null }
+  billing: { legal_name: string | null; siren: string | null; billing_no_siren: boolean | null }
 }
 
 export function BillingRow({ entityId, brandName, billing }: Props) {
@@ -40,6 +40,7 @@ export function BillingRow({ entityId, brandName, billing }: Props) {
           initial={{
             legalName: billing.legal_name ?? brandName,
             siren: billing.siren ?? '',
+            abroad: billing.billing_no_siren === true,
           }}
           onClose={() => {
             setEditing(false)

@@ -50,7 +50,8 @@ export async function updateBilling(entityId: string, draft: BillingDraft): Prom
     body: {
       entityId,
       legalName: draft.legalName.trim(),
-      siren: sirenDigits(draft.siren),
+      siren: draft.abroad ? null : sirenDigits(draft.siren),
+      abroad: draft.abroad,
     },
   })
   if (response.error || !response.data?.ok) throw new Error('billing')

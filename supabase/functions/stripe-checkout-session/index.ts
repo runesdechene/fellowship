@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     const admin = getSupabaseAdmin()
     const { data: entity, error: entityErr } = await admin
       .from('entities')
-      .select('actor_id, stripe_customer_id, stripe_subscription_id, brand_name, subscription_status, legal_name, siren')
+      .select('actor_id, stripe_customer_id, stripe_subscription_id, brand_name, subscription_status, legal_name, siren, billing_no_siren')
       .eq('actor_id', body.entityId)
       .maybeSingle()
     if (entityErr || !entity) {
@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
     const bodySiren = (body.siren ?? '').replace(/\D/g, '') || null
 
     // Valeurs effectives pour Stripe : ce que le body fournit, sinon le déjà-stocké.
-    const e = entity as typeof entity & { legal_name?: string | null; siren?: string | null }
+    const e = entity as typeof entity & { legal_name?: string | null; siren?: string | null; billing_no_siren?: boolean | null }
     const effSiren = hasBodyBilling ? bodySiren : (e.siren ?? null)
     const effLegalName = (body.legalName ?? '').trim() || e.legal_name || entity.brand_name || ''
 
@@ -87,9 +87,10 @@ Deno.serve(async (req) => {
       return json({ portal: true, reason: 'already_subscribed' }, 200)
     }
 
-    // Pas d'abonnement sans SIREN : la facture électronique de 2027 ne partirait pas (Uriel, 09/11/2026).
+    // Pas d'abonnement sans SIREN, sauf entreprise étrangère (Uriel, 09/11/2026).
     // 200, comme ci-dessus : le client lit la réponse et ouvre la fenêtre de facturation.
-    if (!validSiren(effSiren ?? '')) return json({ billing_required: true }, 200)
+    const abroad = e.billing_no_siren === true
+    if (!abroad && !validSiren(effSiren ?? '')) return json({ billing_required: true }, 200)
 
     const stripe = getStripe()
 
@@ -156,7 +157,8 @@ Deno.serve(async (req) => {
       // (sinon Stripe renvoie 500). Le champ nom au Checkout est pré-rempli avec la raison
       // sociale déjà posée par syncCustomerBilling → elle est conservée si l'utilisateur confirme.
       customer_update: { name: 'auto', address: 'auto' },
-      tax_id_collection: { enabled: true },
+      // Un Français en franchise de TVA n'a pas de numéro : on ne l'exige que d'une entreprise étrangère.
+      tax_id_collection: { enabled: true, required: abroad ? 'if_supported' : 'never' },
       // Programme Founder Friends (v0.7.174) : autorise la saisie d'un code promo
       // au Checkout (ex: RUNE-2026 = 100% off pendant 2 mois). CB requise quand même.
       allow_promotion_codes: true,

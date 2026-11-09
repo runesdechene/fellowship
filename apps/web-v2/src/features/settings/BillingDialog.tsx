@@ -1,5 +1,5 @@
 /**
- * QUOI     — la fenêtre de la facturation d'une enseigne : raison sociale et SIREN ;
+ * QUOI     — la fenêtre de la facturation d'une enseigne : raison sociale et SIREN, ou entreprise étrangère ;
  *            l'enregistrement part en base et chez Stripe, puis l'identité se relit.
  * POURQUOI — chantier 3 (19/10/2026) : des factures conformes, au nom de l'entreprise. La fenêtre
  *            reprend celle des catégories (confirm-dialog).
@@ -7,7 +7,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Field, Input } from '@/components/ui/Field'
+import { Field, Input, Toggle } from '@/components/ui/Field'
 import { useAuth } from '@/lib/auth'
 import { billingReady, validSiren, type BillingDraft } from '@/lib/billing'
 import { updateBilling } from '@/lib/stripe'
@@ -26,7 +26,7 @@ export function BillingDialog({ entityId, initial, onClose, onSaved }: Props) {
   const [draft, setDraft] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  const wrongSiren = draft.siren.trim() !== '' && !validSiren(draft.siren)
+  const wrongSiren = !draft.abroad && draft.siren.trim() !== '' && !validSiren(draft.siren)
 
   useEffect(() => {
     dialog.current?.showModal()
@@ -76,18 +76,26 @@ export function BillingDialog({ entityId, initial, onClose, onSaved }: Props) {
             onChange={(event) => setDraft({ ...draft, legalName: event.target.value })}
           />
         </Field>
-        <Field label="SIREN" required>
-          <Input
-            value={draft.siren}
-            inputMode="numeric"
-            placeholder="552 100 554"
-            aria-invalid={wrongSiren}
-            onChange={(event) => setDraft({ ...draft, siren: event.target.value })}
-          />
-        </Field>
+        {!draft.abroad && (
+          <Field label="SIREN" required>
+            <Input
+              value={draft.siren}
+              inputMode="numeric"
+              placeholder="552 100 554"
+              aria-invalid={wrongSiren}
+              onChange={(event) => setDraft({ ...draft, siren: event.target.value })}
+            />
+          </Field>
+        )}
         {wrongSiren && (
           <p className="confirm-dialog__problem">Un SIREN a 9 chiffres ; celui-ci ne passe pas.</p>
         )}
+        <Toggle
+          checked={draft.abroad}
+          title="Mon entreprise est à l’étranger"
+          note="Pas de SIREN : ton numéro de TVA te sera demandé au paiement"
+          onChange={(abroad) => setDraft({ ...draft, abroad, siren: abroad ? '' : draft.siren })}
+        />
         {failed && (
           <p className="confirm-dialog__problem">L’enregistrement n’a pas abouti. Réessaie.</p>
         )}

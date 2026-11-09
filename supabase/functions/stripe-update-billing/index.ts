@@ -12,7 +12,7 @@ import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { syncCustomerBilling, validSiren } from '../_shared/billing.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 
-interface Body { entityId: string; legalName: string; siren?: string | null }
+interface Body { entityId: string; legalName: string; siren?: string | null; abroad?: boolean }
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
@@ -41,8 +41,9 @@ Deno.serve(async (req) => {
     }
     if (!isOwner) return json({ error: 'forbidden' }, 403)
 
-    const siren = (body.siren ?? '').replace(/\D/g, '')
-    if (!validSiren(siren)) return json({ error: 'invalid_siren' }, 400)
+    const abroad = body.abroad === true
+    const siren = abroad ? null : (body.siren ?? '').replace(/\D/g, '')
+    if (siren !== null && !validSiren(siren)) return json({ error: 'invalid_siren' }, 400)
     const legalName = body.legalName.trim()
 
     const admin = getSupabaseAdmin()
@@ -58,7 +59,7 @@ Deno.serve(async (req) => {
 
     const { error: updErr } = await admin
       .from('entities')
-      .update({ legal_name: legalName, siren })
+      .update({ legal_name: legalName, siren, billing_no_siren: abroad })
       .eq('actor_id', entity.actor_id)
     if (updErr) {
       console.error('[update-billing] entity update error', updErr)
