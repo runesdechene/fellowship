@@ -1,6 +1,7 @@
 // Lancer : node --test supabase/functions/_shared/reporting-ventes.test.ts (Node retire les types seul).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { paysDeStand } from './reporting-stands.ts'
 import { cleVente, journee, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
@@ -108,4 +109,22 @@ test('un code postal d’outre-mer saisi avec France part en export, pas Monaco'
   assert.equal(paysEffectif('BE', '97400'), 'BE')
   const j = journee('2026-11-07', { shopify: [commande({ pays: paysEffectif('FR', '97400'), tva: 0 })] })
   assert.equal(j.lignes[0]?.category_code, 'TNT1')
+})
+
+test('un stand se place d’après son GPS', () => {
+  assert.equal(paysDeStand(46.8, 7.2), 'CH') // Fribourg
+  assert.equal(paysDeStand(46.5, 6.4), 'CH') // Vaud
+  assert.equal(paysDeStand(50.85, 4.35), 'BE') // Bruxelles
+  assert.equal(paysDeStand(50.63, 3.06), null) // Lille
+  assert.equal(paysDeStand(46.19, 6.24), null) // Annemasse
+  assert.equal(paysDeStand(43.7, 7.3), null) // Nice
+})
+
+test('un stand à l’étranger part en TNT1, sur son HT, et se confirme', () => {
+  const j = journee('2026-08-28', { sumup: [{ code: 'T1', ttc: 10810, pays: 'CH' }, { code: 'T2', ttc: 1200 }] })
+  assert.equal(j.statut, 'a_verifier')
+  assert.equal(j.lignes[0]?.category_code, 'TLB1')
+  assert.equal(j.lignes[0]?.tax_total, '2.00')
+  assert.equal(j.lignes[1]?.category_code, 'TNT1')
+  assert.equal(j.lignes[1]?.tax_exclusive_amount, '100.00')
 })

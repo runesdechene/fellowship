@@ -4,6 +4,8 @@
 // Règle : tout se vend à 20 %, prix TTC. La France et l'UE sous le seuil se déclarent à 20 % (TLB1), les exports
 // à 0 % (TNT1). Au-delà du seuil UE, la journée se bloque : le régime change (OSS). Montants en centimes.
 
+import { NOM_PAYS_STAND, TAUX_STAND } from './reporting-stands.ts'
+
 export interface Commande {
   nom: string // « #1997 »
   lien: string // la commande dans l'admin Shopify
@@ -17,6 +19,7 @@ export interface Commande {
 export interface Paiement {
   code: string
   ttc: number
+  pays?: string // un stand à l'étranger ; absent : en France
 }
 
 export interface Anomalie {
@@ -104,14 +107,19 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
   // TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [
     ...commandes.filter((c) => c.pays && zoneDe(c.pays) !== 'hors_ue').map((c) => c.ttc),
-    ...paiements.map((p) => p.ttc),
+    ...paiements.filter((p) => !p.pays).map((p) => p.ttc),
   ]
   const ttc = enFrance.reduce((a, b) => a + b, 0)
   const tva = tvaDe(ttc)
   const exports = commandes.filter((c) => c.pays && zoneDe(c.pays) === 'hors_ue').reduce((a, c) => a + c.ttc, 0)
+  // Un stand à l'étranger relève de la TVA du pays : on n'en déclare que le HT, à 0 % (DGFiP 3.2).
+  const stands = paiements.filter((p) => p.pays).reduce((a, p) => a + Math.round(p.ttc / (1 + TAUX_STAND[p.pays!] / 100)), 0)
+  for (const pays of new Set(paiements.flatMap((p) => p.pays ?? []))) {
+    anomalies.push({ message: `Stand en ${NOM_PAYS_STAND[pays]}`, detail: 'Ces ventes SumUp sortent de la TVA française : confirme le lieu.', lien: null })
+  }
   const lignes = [
     ...(ttc === 0 ? [] : [ligneSuperPdp(jour, 'TLB1', '20.00', ttc - tva, tva)]),
-    ...(exports === 0 ? [] : [ligneSuperPdp(jour, 'TNT1', '0.00', exports, 0)]),
+    ...(exports + stands === 0 ? [] : [ligneSuperPdp(jour, 'TNT1', '0.00', exports + stands, 0)]),
   ]
 
   // Les ventes sont gardées : l'écran les liste, et un marquage recalcule sans relire les sources.

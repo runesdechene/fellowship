@@ -1,5 +1,6 @@
 // sources : lire, sans rien modifier, les ventes d'une période chez Shopify et SumUp, rangées par
 // jour de Paris. Montants en centimes. Une erreur remonte : la source sera notée muette.
+import { paysDeStand } from '../_shared/reporting-stands.ts'
 import { type Commande, type Paiement, paysEffectif, SEUIL_UE, tvaDe, zoneDe } from '../_shared/reporting-ventes.ts'
 
 const JOUR_PARIS = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' })
@@ -104,6 +105,17 @@ export async function lireSumup(cle: string, du: string, au: string): Promise<Pa
     }
     const suite = page.links?.find((l) => l.rel === 'next')
     url = suite ? `https://api.sumup.com/v0.1/me/transactions/history?${suite.href}` : null
+  }
+
+  // L'historique ne porte pas la position : un paiement par jour suffit, un stand ne bouge pas.
+  for (const paiements of parJour.values()) {
+    const premier = paiements.find((p) => p.ttc > 0)
+    if (!premier) continue
+    const reponse: Response = await fetch(`https://api.sumup.com/v0.1/me/transactions?transaction_code=${premier.code}`, { headers: { Authorization: `Bearer ${cle}` } })
+    if (!reponse.ok) throw new Error(`SumUp position ${reponse.status}`)
+    const { lat, lon } = await reponse.json()
+    const pays = lat != null && lon != null ? paysDeStand(lat, lon) : null
+    if (pays) paiements.forEach((p) => { p.pays = pays })
   }
   return parJour
 }
