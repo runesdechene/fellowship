@@ -92,9 +92,6 @@ export function journee(jour: string, ventes: Ventes, facturees: ReadonlySet<str
   const ttc = enFrance.reduce((a, b) => a + b, 0)
   const tva = tvaDe(ttc)
   const lignes = ttc === 0 ? [] : [ligneSuperPdp(jour, ttc - tva, tva)]
-  if (ttc < 0) {
-    anomalies.push({ message: 'Le total du jour est négatif', detail: 'Plus de remboursements que de ventes.', lien: null })
-  }
 
   // Les ventes sont gardées : l'écran les liste, et un marquage recalcule sans relire les sources.
   const detail = Object.fromEntries(

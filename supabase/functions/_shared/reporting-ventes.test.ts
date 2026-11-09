@@ -49,9 +49,9 @@ test('un remboursement se déduit du total du jour', () => {
   assert.equal(j.lignes[0]?.tax_total, '3.00')
 })
 
-test('un total du jour négatif bloque', () => {
+test('un total du jour négatif part tel quel : SuperPDP l’accepte (bac à sable, 09/11/2026)', () => {
   const j = journee('2026-11-02', { sumup: [{ code: 'T remboursement', ttc: -1200 }] })
-  assert.equal(j.statut, 'a_verifier')
+  assert.equal(j.statut, 'prete')
   assert.equal(j.lignes[0]?.tax_total, '-2.00')
 })
 
