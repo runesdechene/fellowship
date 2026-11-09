@@ -1,0 +1,46 @@
+// Lancer : node --test supabase/functions/_shared/reporting-ventes.test.ts (Node retire les types seul).
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { journee, verifierCommande, type Commande } from './reporting-ventes.ts'
+
+const commande = (c: Partial<Commande>): Commande => ({
+  nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, rembourse: 0, payee: true, ...c,
+})
+
+test('une commande française juste ne lève rien', () => {
+  assert.deepEqual(verifierCommande(commande({})), [])
+})
+
+test('un produit sans TVA dans Shopify est signalé (le sweatshirt du 09/11)', () => {
+  const [a] = verifierCommande(commande({ ttc: 25173, tva: 899, articles: 3 }))
+  assert.match(a?.message ?? '', /TVA de 8,99 € au lieu de 41,96 €/)
+})
+
+test('un centime d’arrondi par article est toléré', () => {
+  assert.deepEqual(verifierCommande(commande({ ttc: 25173, tva: 4194, articles: 3 })), [])
+})
+
+test('export et UE bloquent, sans entrer dans le total', () => {
+  const j = journee('2026-11-07', {
+    shopify: [commande({ pays: 'RE', ttc: 12369, tva: 0 }), commande({ pays: 'BE' }), commande({})],
+    sumup: [{ code: 'T1', ttc: 1200, rembourse: 0 }],
+  })
+  assert.equal(j.statut, 'a_verifier')
+  assert.equal(j.anomalies.length, 2)
+  assert.equal(j.lignes[0]?.tax_exclusive_amount, '35.00') // 30 € + 12 € TTC
+  assert.equal(j.lignes[0]?.tax_total, '7.00')
+  assert.deepEqual(j.detail.shopify, { ttc: 3000 + 3000 + 12369, ventes: 3 })
+})
+
+test('une source muette laisse le jour en attente', () => {
+  assert.equal(journee('2026-11-07', { shopify: [commande({})], sumup: null }).statut, 'en_attente')
+})
+
+test('un jour sans vente est vide, un jour propre est prêt', () => {
+  assert.equal(journee('2026-11-02', { shopify: [], sumup: [] }).statut, 'vide')
+  assert.equal(journee('2026-11-02', { shopify: [commande({})], sumup: [] }).statut, 'prete')
+})
+
+test('un remboursement bloque', () => {
+  assert.equal(journee('2026-11-02', { sumup: [{ code: 'T', ttc: 100, rembourse: 100 }] }).statut, 'a_verifier')
+})

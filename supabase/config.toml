@@ -455,3 +455,7 @@ verify_jwt = false
 [functions.exposeur]
 # Auth = la clé personnelle de l'enseigne (hash comparé dans exposeur_chiffres), pas de JWT Supabase.
 verify_jwt = false
+
+[functions.reporting-lecture]
+# Auth = l'en-tête X-Reporting-Secret envoyé par le cron (pas de JWT Supabase).
+verify_jwt = false
