@@ -82,13 +82,13 @@ export function journee(jour: string, ventes: Ventes) {
   const paiements = ventes.sumup ?? []
   const anomalies = [...commandes.flatMap(verifierCommande), ...paiements.flatMap(verifierPaiement)]
 
-  // La France seulement, TVA recalculée vente par vente : c'est ce qui part à SuperPDP.
+  // La France seulement, TVA calculée sur le total du jour (conception) : c'est ce qui part à SuperPDP.
   const enFrance = [
     ...commandes.filter((c) => c.pays && zoneDe(c.pays) === 'france').map((c) => c.ttc),
     ...paiements.map((p) => p.ttc),
   ]
   const ttc = enFrance.reduce((a, b) => a + b, 0)
-  const tva = enFrance.reduce((a, b) => a + tvaDe(b), 0)
+  const tva = tvaDe(ttc)
   const lignes = ttc === 0 ? [] : [ligneSuperPdp(jour, ttc - tva, tva)]
 
   const detail = Object.fromEntries(
