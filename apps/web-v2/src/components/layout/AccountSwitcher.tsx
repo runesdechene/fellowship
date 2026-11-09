@@ -18,7 +18,7 @@ import { useAuth } from '@/lib/auth'
 import { isReportingPath, REPORTING_HOME } from '@/lib/reporting-zone'
 import { useReportingAccess } from '@/features/reporting/useReportingAccess'
 
-const REPORTING_LABEL = 'Fellowship Étatique'
+const REPORTING_LABEL = 'Fellowship Gabelle'
 const ADMIN_LABEL = 'Administration'
 const ADMIN_NOTE = 'Réservé aux admins'
 

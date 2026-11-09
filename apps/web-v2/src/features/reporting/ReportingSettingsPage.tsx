@@ -238,7 +238,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
 
         <Section title="L’abonnement">
           <SettingRow
-            title="Fellowship Étatique"
+            title="Fellowship Gabelle"
             note="4 € HT par mois, en plus de ton forfait, sur la même facture."
           >
             4 € HT / mois
