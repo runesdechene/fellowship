@@ -11,7 +11,7 @@ import { getStripe } from '../_shared/stripe.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { APP_URL } from '../_shared/app-url.ts'
 import { corsHeaders } from '../_shared/cors.ts'
-import { syncCustomerBilling } from '../_shared/billing.ts'
+import { syncCustomerBilling, validSiren } from '../_shared/billing.ts'
 
 const STRIPE_PRICE_MONTHLY = Deno.env.get('STRIPE_PRICE_MONTHLY')!
 const STRIPE_PRICE_YEARLY = Deno.env.get('STRIPE_PRICE_YEARLY')!
@@ -21,7 +21,6 @@ interface Body {
   billingInterval: 'month' | 'year'
   legalName?: string
   siren?: string | null
-  noSiren?: boolean
 }
 
 Deno.serve(async (req) => {
@@ -62,7 +61,7 @@ Deno.serve(async (req) => {
     const admin = getSupabaseAdmin()
     const { data: entity, error: entityErr } = await admin
       .from('entities')
-      .select('actor_id, stripe_customer_id, stripe_subscription_id, brand_name, subscription_status, legal_name, siren, billing_no_siren')
+      .select('actor_id, stripe_customer_id, stripe_subscription_id, brand_name, subscription_status, legal_name, siren')
       .eq('actor_id', body.entityId)
       .maybeSingle()
     if (entityErr || !entity) {
@@ -73,14 +72,12 @@ Deno.serve(async (req) => {
     // Le body apporte-t-il des infos de facturation ? (modale checkout = SIREN seul).
     // Si NON (clic direct « déjà renseigné »), on ne touche À RIEN de stocké — sinon on
     // écraserait le SIREN avec du vide (bug : la modale rouvrait à chaque clic).
-    const hasBodyBilling = body.siren !== undefined || body.noSiren !== undefined || body.legalName !== undefined
-    const bodyNoSiren = body.noSiren === true
-    const bodySiren = bodyNoSiren ? null : ((body.siren ?? '').replace(/\D/g, '') || null)
+    const hasBodyBilling = body.siren !== undefined || body.legalName !== undefined
+    const bodySiren = (body.siren ?? '').replace(/\D/g, '') || null
 
     // Valeurs effectives pour Stripe : ce que le body fournit, sinon le déjà-stocké.
-    const e = entity as typeof entity & { legal_name?: string | null; siren?: string | null; billing_no_siren?: boolean | null }
+    const e = entity as typeof entity & { legal_name?: string | null; siren?: string | null }
     const effSiren = hasBodyBilling ? bodySiren : (e.siren ?? null)
-    const effNoSiren = hasBodyBilling ? bodyNoSiren : (e.billing_no_siren === true)
     const effLegalName = (body.legalName ?? '').trim() || e.legal_name || entity.brand_name || ''
 
     // Si déjà un sub actif/trialing/past_due, on signale au client de rediriger
@@ -89,6 +86,10 @@ Deno.serve(async (req) => {
     if (entity.subscription_status && ['active', 'trialing', 'past_due'].includes(entity.subscription_status)) {
       return json({ portal: true, reason: 'already_subscribed' }, 200)
     }
+
+    // Pas d'abonnement sans SIREN : la facture électronique de 2027 ne partirait pas (Uriel, 09/11/2026).
+    // 200, comme ci-dessus : le client lit la réponse et ouvre la fenêtre de facturation.
+    if (!validSiren(effSiren ?? '')) return json({ billing_required: true }, 200)
 
     const stripe = getStripe()
 
@@ -102,7 +103,7 @@ Deno.serve(async (req) => {
     // Persistance : UNIQUEMENT les champs réellement fournis par le body. La raison sociale
     // n'est PAS persistée ici (Stripe la collecte au checkout → recopiée via le webhook).
     if (hasBodyBilling) {
-      const update: Record<string, unknown> = { siren: bodySiren, billing_no_siren: bodyNoSiren }
+      const update: Record<string, unknown> = { siren: bodySiren }
       if (body.legalName !== undefined) update.legal_name = (body.legalName ?? '').trim() || null
       await admin.from('entities').update(update).eq('actor_id', entity.actor_id)
     }
@@ -124,7 +125,7 @@ Deno.serve(async (req) => {
 
     // Synchronise le SIREN (custom field) + un nom de base sur le Customer Stripe.
     // Le nom définitif sera celui collecté au Checkout (customer_update[name]=auto).
-    await syncCustomerBilling(stripe, customerId, { legalName: effLegalName || entity.brand_name || '', siren: effSiren, noSiren: effNoSiren })
+    await syncCustomerBilling(stripe, customerId, { legalName: effLegalName || entity.brand_name || '', siren: effSiren })
 
     // Parrainage : le filleul parrainé (rattachement en attente, cadeau non encore consommé)
     // bénéficie d'un essai de 30 jours au lieu de 14. Pas de coupon (qui buggerait sur l'annuel).

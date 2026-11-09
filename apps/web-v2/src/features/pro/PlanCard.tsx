@@ -2,13 +2,15 @@
  * QUOI     — les deux cartes de l'offre : Gratuit et Pro, leur prix, leur bouton, leurs avantages.
  * POURQUOI — maquette « Offre Pro » : on compare d'un coup d'œil, le Pro porte le liseré terre.
  * ATTENTION — le prix vient de lib/pricing.ts (celui que Stripe facture). Le bouton ne se reclique
- *            pas pendant l'ouverture du paiement : un seul appel part.
+ *            pas pendant l'ouverture du paiement : un seul appel part. Sans SIREN, le serveur
+ *            refuse le paiement : la fenêtre de facturation s'ouvre, puis le paiement repart.
  */
 import { ArrowRight, Check } from 'lucide-react'
 import { useState } from 'react'
 import { formatFullDate } from '@/lib/dates'
 import { billingInterval, proPriceLines, type Formula } from '@/lib/pricing'
 import { openPortal, startCheckout } from '@/lib/stripe'
+import { BillingDialog } from '../settings/BillingDialog'
 
 const FREE = [
   'L’Explorer sur tes 6 prochains mois',
@@ -102,19 +104,29 @@ export function ProCard({
 }: ProCardProps) {
   const [opening, setOpening] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [askBilling, setAskBilling] = useState(false)
   const { big, unit, note } = proPriceLines(formula)
+
+  async function launch(id: string) {
+    setOpening(true)
+    setFailed(false)
+    try {
+      if (action === 'portal') {
+        await openPortal(id)
+      } else if ((await startCheckout(id, billingInterval(formula))) === 'missing-billing') {
+        setOpening(false)
+        setAskBilling(true)
+      }
+      // Sinon le navigateur part vers Stripe : le bouton reste inactif.
+    } catch {
+      setOpening(false)
+      setFailed(true)
+    }
+  }
 
   function open() {
     if (!entityId || opening || settling || action === 'none') return
-    setOpening(true)
-    setFailed(false)
-    const go =
-      action === 'portal' ? openPortal(entityId) : startCheckout(entityId, billingInterval(formula))
-    // En cas de succès, le navigateur part vers Stripe : on ne réactive le bouton qu'en cas d'échec.
-    go.catch(() => {
-      setOpening(false)
-      setFailed(true)
-    })
+    void launch(entityId)
   }
 
   return (
@@ -152,6 +164,18 @@ export function ProCard({
         <p className="plan-card__hint" role="status">
           Le paiement n’a pas pu s’ouvrir. Réessaie dans un instant.
         </p>
+      )}
+      {askBilling && entityId && (
+        <BillingDialog
+          entityId={entityId}
+          initial={{ legalName: '', siren: '' }}
+          onClose={() => {
+            setAskBilling(false)
+          }}
+          onSaved={() => {
+            void launch(entityId)
+          }}
+        />
       )}
       <hr className="plan-card__rule" />
       <span className="plan-card__group">Tout le gratuit, et :</span>

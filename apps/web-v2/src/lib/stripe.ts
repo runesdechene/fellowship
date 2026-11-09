@@ -9,17 +9,19 @@ import { sirenDigits, type BillingDraft } from './billing'
 import { supabase } from './supabase'
 
 export type CheckoutOutcome =
-  { kind: 'redirect'; url: string } | { kind: 'portal' } | { kind: 'error' }
+  { kind: 'redirect'; url: string } | { kind: 'portal' } | { kind: 'billing' } | { kind: 'error' }
 
 interface FunctionReply {
   url?: string
   portal?: boolean
+  billing_required?: boolean
   error?: string
 }
 
 /** La réponse de stripe-checkout-session : partir vers Stripe, ouvrir l'espace, ou échouer. */
 export function checkoutOutcome(data: FunctionReply | null): CheckoutOutcome {
   if (data?.portal) return { kind: 'portal' }
+  if (data?.billing_required) return { kind: 'billing' }
   if (data?.url) return { kind: 'redirect', url: data.url }
   return { kind: 'error' }
 }
@@ -48,20 +50,25 @@ export async function updateBilling(entityId: string, draft: BillingDraft): Prom
     body: {
       entityId,
       legalName: draft.legalName.trim(),
-      siren: draft.noSiren ? null : sirenDigits(draft.siren),
-      noSiren: draft.noSiren,
+      siren: sirenDigits(draft.siren),
     },
   })
   if (response.error || !response.data?.ok) throw new Error('billing')
 }
 
-export async function startCheckout(entityId: string, interval: 'month' | 'year'): Promise<void> {
+/** Part vers Stripe, ou rend 'missing-billing' : pas d'abonnement sans SIREN. */
+export async function startCheckout(
+  entityId: string,
+  interval: 'month' | 'year',
+): Promise<'left' | 'missing-billing'> {
   const response = await supabase.functions.invoke<FunctionReply>('stripe-checkout-session', {
     body: { entityId, billingInterval: interval },
   })
   if (response.error) throw new Error('checkout')
   const outcome = checkoutOutcome(response.data)
-  if (outcome.kind === 'portal') return openPortal(entityId)
+  if (outcome.kind === 'billing') return 'missing-billing'
   if (outcome.kind === 'error') throw new Error('checkout')
-  window.location.assign(outcome.url)
+  if (outcome.kind === 'portal') await openPortal(entityId)
+  else window.location.assign(outcome.url)
+  return 'left'
 }

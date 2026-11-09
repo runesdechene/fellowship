@@ -7,6 +7,10 @@ import { describe, expect, it } from 'vitest'
 import { checkoutOutcome, nextPoll } from './stripe'
 
 describe('checkoutOutcome', () => {
+  test('sans SIREN, le serveur renvoie vers la facturation', () => {
+    expect(checkoutOutcome({ billing_required: true })).toEqual({ kind: 'billing' })
+  })
+
   it('une adresse : on part vers Stripe', () => {
     expect(checkoutOutcome({ url: 'https://checkout.stripe.com/x' })).toEqual({
       kind: 'redirect',

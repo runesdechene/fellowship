@@ -1,13 +1,13 @@
 /**
- * QUOI     — la fenêtre de la facturation d'une enseigne : raison sociale, SIREN, ou « pas de
- *            SIREN » ; l'enregistrement part en base et chez Stripe, puis l'identité se relit.
+ * QUOI     — la fenêtre de la facturation d'une enseigne : raison sociale et SIREN ;
+ *            l'enregistrement part en base et chez Stripe, puis l'identité se relit.
  * POURQUOI — chantier 3 (19/10/2026) : des factures conformes, au nom de l'entreprise. La fenêtre
  *            reprend celle des catégories (confirm-dialog).
  * ATTENTION — seul le propriétaire de l'enseigne peut l'enregistrer (stripe-update-billing).
  */
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Field, Input, Toggle } from '@/components/ui/Field'
+import { Field, Input } from '@/components/ui/Field'
 import { useAuth } from '@/lib/auth'
 import { billingReady, validSiren, type BillingDraft } from '@/lib/billing'
 import { updateBilling } from '@/lib/stripe'
@@ -16,15 +16,17 @@ interface Props {
   entityId: string
   initial: BillingDraft
   onClose: () => void
+  /** Après l'enregistrement : la page d'offre relance le paiement. */
+  onSaved?: () => void
 }
 
-export function BillingDialog({ entityId, initial, onClose }: Props) {
+export function BillingDialog({ entityId, initial, onClose, onSaved }: Props) {
   const dialog = useRef<HTMLDialogElement>(null)
   const { reloadIdentity } = useAuth()
   const [draft, setDraft] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  const wrongSiren = !draft.noSiren && draft.siren.trim() !== '' && !validSiren(draft.siren)
+  const wrongSiren = draft.siren.trim() !== '' && !validSiren(draft.siren)
 
   useEffect(() => {
     dialog.current?.showModal()
@@ -41,6 +43,7 @@ export function BillingDialog({ entityId, initial, onClose }: Props) {
       await updateBilling(entityId, draft)
       await reloadIdentity()
       onClose()
+      onSaved?.()
     } catch {
       setFailed(true)
       setBusy(false)
@@ -73,26 +76,18 @@ export function BillingDialog({ entityId, initial, onClose }: Props) {
             onChange={(event) => setDraft({ ...draft, legalName: event.target.value })}
           />
         </Field>
-        {!draft.noSiren && (
-          <Field label="SIREN" required>
-            <Input
-              value={draft.siren}
-              inputMode="numeric"
-              placeholder="552 100 554"
-              aria-invalid={wrongSiren}
-              onChange={(event) => setDraft({ ...draft, siren: event.target.value })}
-            />
-          </Field>
-        )}
+        <Field label="SIREN" required>
+          <Input
+            value={draft.siren}
+            inputMode="numeric"
+            placeholder="552 100 554"
+            aria-invalid={wrongSiren}
+            onChange={(event) => setDraft({ ...draft, siren: event.target.value })}
+          />
+        </Field>
         {wrongSiren && (
           <p className="confirm-dialog__problem">Un SIREN a 9 chiffres ; celui-ci ne passe pas.</p>
         )}
-        <Toggle
-          checked={draft.noSiren}
-          title="Je n’ai pas de SIREN"
-          note="Entreprise étrangère ou particulier"
-          onChange={(noSiren) => setDraft({ ...draft, noSiren, siren: noSiren ? '' : draft.siren })}
-        />
         {failed && (
           <p className="confirm-dialog__problem">L’enregistrement n’a pas abouti. Réessaie.</p>
         )}
