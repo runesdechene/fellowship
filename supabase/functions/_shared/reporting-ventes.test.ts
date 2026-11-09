@@ -1,7 +1,7 @@
 // Lancer : node --test supabase/functions/_shared/reporting-ventes.test.ts (Node retire les types seul).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { cleVente, journee, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, journee, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
@@ -76,4 +76,11 @@ test('une journée se recalcule depuis les ventes qu’elle a gardées', () => {
 test('une TVA comptée sur un export bloque, pas son remboursement', () => {
   assert.equal(journee('2026-11-07', { shopify: [commande({ pays: 'CH', ttc: 3000, tva: 500 })] }).statut, 'a_verifier')
   assert.equal(journee('2026-11-07', { shopify: [commande({ pays: 'CH', ttc: -3000, tva: -500 })] }).statut, 'prete')
+})
+
+test('une réponse perdue ne se renvoie pas', () => {
+  assert.equal(statutApresEnvoi(200), 'envoyee')
+  assert.equal(statutApresEnvoi(422), 'refusee')
+  assert.equal(statutApresEnvoi(500), 'inconnue')
+  assert.equal(statutApresEnvoi(null), 'inconnue')
 })

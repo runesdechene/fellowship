@@ -42,6 +42,12 @@ const UE = new Set(
   'AT BE BG HR CY CZ DK EE FI DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE'.split(' '),
 )
 
+/** Ce que devient une journée selon la réponse de SuperPDP : une réponse perdue la bloque (renvoyer doublerait). */
+export function statutApresEnvoi(http: number | null): 'envoyee' | 'refusee' | 'inconnue' {
+  if (http !== null && http >= 200 && http < 300) return 'envoyee'
+  return http !== null && http >= 400 && http < 500 ? 'refusee' : 'inconnue'
+}
+
 /** Identifie une vente facturée à un pro : commande Shopify ou paiement SumUp. */
 export function cleVente(source: string, reference: string): string {
   return `${source}:${reference}`

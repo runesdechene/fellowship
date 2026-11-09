@@ -17,6 +17,6 @@ Maquettes Figma, page « Reporting » : Décades (2795:233), Réglages (2803:233
 - `ReportingSettingsPage.tsx` — `/reporting/reglages`. `useReportingSettings.ts` — lit et écrit.
 
 Le calcul (décades, échéances, état d'un jour, montants) vit dans `lib/reporting.ts`, testé seul.
-Le serveur : `reporting-lecture` lit les sources et écrit les journées, `reporting-vente-pro` marque
-une vente facturée à un pro. L'envoi quotidien n'existe pas encore : la conception est dans
+Le serveur : `reporting-quotidien` lit les sources, écrit les journées et envoie à SuperPDP (bac à
+sable seulement), `reporting-vente-pro` marque une vente facturée à un pro. La conception est dans
 `E-Repporting Imperial/conception.md`.

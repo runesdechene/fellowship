@@ -1,7 +1,7 @@
-// reporting-lecture : lire les ventes de chaque enseigne activée (Shopify, SumUp) et écrire ses
-// journées de reporting, vérifiées. N'envoie rien à SuperPDP : l'envoi viendra à part.
-// Auth : verify_jwt = false (config.toml) ; l'en-tête X-Reporting-Secret remplace le JWT, il sera
-// envoyé par le cron. Corps facultatif { du, au } (AAAA-MM-JJ) ; sinon les sept derniers jours.
+// reporting-quotidien : chaque matin, lire les ventes de chaque enseigne activée (Shopify, SumUp),
+// écrire ses journées vérifiées, puis envoyer à SuperPDP celles qui sont prêtes (envoi.ts).
+// Auth : verify_jwt = false (config.toml) ; l'en-tête X-Reporting-Secret remplace le JWT, il est
+// envoyé par le cron. Corps facultatif { du, au } (AAAA-MM-JJ) : relit la période, sans rien envoyer.
 // Une journée déjà validée, en cours d'envoi ou envoyée ne se réécrit jamais.
 // Secrets dans Vault, nommés reporting:<enseigne>:sources:<nom> — ils ne dépendent pas de l'environnement.
 // Conception : « E-Repporting Imperial/conception.md ».
@@ -9,51 +9,69 @@
 import { lireFacturees } from '../_shared/reporting-facturees.ts'
 import { journee, REECRIVABLES, type Ventes } from '../_shared/reporting-ventes.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
+import { type Entreprise, envoyerPretes, lireSecret } from './envoi.ts'
 import { jourDe, lireShopify, lireSumup } from './sources.ts'
 
 const SECRET = Deno.env.get('REPORTING_TRIGGER_SECRET') ?? ''
 const JOUR = /^\d{4}-\d{2}-\d{2}$/
+const UN_JOUR = 86_400_000
+// Laisse aux ventes SumUp hors ligne le temps d'arriver. Provisoire : la décade se dépose jusqu'à J+10.
+const DELAI_ENVOI = 3
+const PREMIERE_LECTURE = 45 // jours relus quand rien n'est encore parti
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405)
   if (!SECRET || req.headers.get('x-reporting-secret') !== SECRET) return json({ error: 'unauthorized' }, 401)
 
   const corps = (await req.json().catch(() => ({}))) as { du?: string; au?: string }
-  const hier = jourDe(new Date(Date.now() - 86_400_000).toISOString())
+  const hier = ilYa(1)
   const au = corps.au ?? hier
-  const du = corps.du ?? jourDe(new Date(Date.now() - 7 * 86_400_000).toISOString())
+  const relecture = corps.du !== undefined
   // Un jour qui n'est pas fini n'a pas toutes ses ventes.
-  if (!JOUR.test(du) || !JOUR.test(au) || du > au || au > hier) return json({ error: 'invalid_range' }, 400)
+  if (relecture && (!JOUR.test(corps.du!) || !JOUR.test(au) || corps.du! > au || au > hier)) {
+    return json({ error: 'invalid_range' }, 400)
+  }
 
   const admin = getSupabaseAdmin()
   const { data: entreprises, error } = await admin.from('reporting_entreprises')
-    .select('entity_actor_id, environnement, date_de_vente').eq('actif', true)
+    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du').eq('actif', true)
   if (error) return json({ error: 'failed' }, 500)
 
   const bilan = []
   for (const e of entreprises) {
     try {
-      bilan.push({ entreprise: e.entity_actor_id, ...(await lireEntreprise(e, du, au)) })
+      const du = corps.du ?? await premierJourALire(e)
+      const lecture = du <= au ? await lireEntreprise(e, du, au) : null
+      const envoi = relecture ? null : await envoyerPretes(e, ilYa(DELAI_ENVOI))
+      bilan.push({ entreprise: e.entity_actor_id, du, au, lecture, envoi })
     } catch (err) {
-      console.error('[reporting-lecture]', e.entity_actor_id, err)
+      console.error('[reporting-quotidien]', e.entity_actor_id, err)
       bilan.push({ entreprise: e.entity_actor_id, erreur: String(err) })
     }
   }
-  return json({ du, au, bilan })
+  return json({ bilan })
 })
 
-interface Entreprise { entity_actor_id: string; environnement: string; date_de_vente: 'commande' | 'expedition' }
+function ilYa(jours: number): string {
+  return jourDe(new Date(Date.now() - jours * UN_JOUR).toISOString())
+}
+
+/** Le lendemain du dernier jour parti : un passage manqué se rattrape seul. */
+async function premierJourALire(e: Entreprise): Promise<string> {
+  const { data, error } = await getSupabaseAdmin().from('reporting_journees').select('jour')
+    .eq('entity_actor_id', e.entity_actor_id).eq('environnement', e.environnement).eq('statut', 'envoyee')
+    .order('jour', { ascending: false }).limit(1).maybeSingle()
+  if (error) throw error
+  if (!data) return ilYa(PREMIERE_LECTURE)
+  return new Date(Date.parse(`${data.jour}T12:00:00Z`) + UN_JOUR).toISOString().slice(0, 10)
+}
 
 async function lireEntreprise(e: Entreprise, du: string, au: string) {
   const admin = getSupabaseAdmin()
   const { data: sources, error } = await admin.from('reporting_sources')
     .select('id, type, identifiant').eq('entity_actor_id', e.entity_actor_id).eq('actif', true)
   if (error) throw error
-  const secret = async (nom: string) => {
-    const { data } = await admin.rpc('reporting_secret', { p_entity: e.entity_actor_id, p_environnement: 'sources', p_nom: nom })
-    if (!data) throw new Error(`secret ${nom} absent de Vault`)
-    return data as string
-  }
+  const secret = (nom: string) => lireSecret(e.entity_actor_id, 'sources', nom)
 
   // Chaque source lue une fois pour toute la période ; une source en erreur est muette tous les jours.
   const lues: Record<string, Map<string, unknown[]> | null> = {}
