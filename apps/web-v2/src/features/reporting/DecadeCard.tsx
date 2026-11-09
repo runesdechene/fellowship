@@ -1,6 +1,7 @@
 /**
- * QUOI     — une décade en carte : son titre, son échéance, son état, ses jours en formes, et ce qui
- *            est déjà parti (TTC, dont TVA). Un clic l'ouvre dans le tableau du dessous.
+ * QUOI     — une décade en carte : son titre, son échéance, son état, ses jours en formes, et son
+ *            montant (TTC, dont TVA) : ce qui reste à déclarer, sinon ce qui est parti. Un clic
+ *            l'ouvre dans le tableau du dessous.
  * POURQUOI — le mois se lit d'un coup d'œil, trois cartes côte à côte (maquette 2795:233, validée).
  */
 import { Link } from 'react-router-dom'
@@ -21,13 +22,18 @@ export function DecadeCard({ decade, byDay, today, selected }: Props) {
   const states = decade.days.map((day) => {
     const row = byDay.get(todayIso(day))
     const status = row ? toDayStatus(row.statut) : null
-    return { day, status, amounts: status === 'envoyee' && row ? sentAmounts(row.lignes) : null }
+    return { day, status, amounts: row ? sentAmounts(row.lignes) : null }
   })
-  const sent = states.reduce(
-    (total, { amounts }) =>
-      amounts ? { ttc: total.ttc + amounts.ht + amounts.tva, tva: total.tva + amounts.tva } : total,
-    { ttc: 0, tva: 0 },
-  )
+  const sumOf = (sent: boolean) =>
+    states.reduce(
+      (total, { status, amounts }) =>
+        amounts && (status === 'envoyee') === sent
+          ? { ttc: total.ttc + amounts.ht + amounts.tva, tva: total.tva + amounts.tva }
+          : total,
+      { ttc: 0, tva: 0 },
+    )
+  const pending = sumOf(false)
+  const shown = pending.ttc > 0 ? pending : sumOf(true)
   const open = states.some(({ status }) => status !== 'envoyee' && status !== 'vide')
   const chip =
     decade.start > today
@@ -60,15 +66,15 @@ export function DecadeCard({ decade, byDay, today, selected }: Props) {
       <span className="reporting-decade__total">
         <span
           className={
-            sent.ttc > 0 ? 'reporting-decade__amount' : 'reporting-decade__amount is-empty'
+            shown.ttc > 0 ? 'reporting-decade__amount' : 'reporting-decade__amount is-empty'
           }
         >
-          {formatPrice(sent.ttc)}
+          {formatPrice(shown.ttc)}
         </span>
         <span>
-          {sent.ttc > 0
-            ? `envoyés, dont ${formatPrice(sent.tva)} de TVA`
-            : 'rien d’envoyé pour l’instant'}
+          {shown.ttc === 0
+            ? 'rien à déclarer pour l’instant'
+            : `${shown === pending ? 'à déclarer' : 'envoyés'}, dont ${formatPrice(shown.tva)} de TVA`}
         </span>
       </span>
     </Link>
