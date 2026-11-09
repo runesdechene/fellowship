@@ -4,22 +4,17 @@
 // retirer la garde, et vérifier que companies/me.number est le SIREN de l'enseigne.
 
 import { statutApresEnvoi } from '../_shared/reporting-ventes.ts'
+import { obtenirJeton, SUPERPDP } from '../_shared/reporting-superpdp.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
-
-const ORIGINE = 'https://api.superpdp.tech'
 
 export interface Entreprise {
   entity_actor_id: string
   environnement: string
   date_de_vente: 'commande' | 'expedition'
   regime_tva: string
+  alerte_email: string | null
+  rappel_echeance: boolean
   envoi_a_partir_du: string | null
-}
-
-export async function lireSecret(entite: string, espace: string, nom: string): Promise<string> {
-  const { data } = await getSupabaseAdmin().rpc('reporting_secret', { p_entity: entite, p_environnement: espace, p_nom: nom })
-  if (!data) throw new Error(`secret ${nom} absent de Vault`)
-  return data as string
 }
 
 /** Envoie les journées prêtes jusqu'à `limite`, par date croissante. */
@@ -39,7 +34,7 @@ export async function envoyerPretes(e: Entreprise, limite: string) {
   if (error) throw error
   if (pretes.length === 0) return bilan
 
-  const jeton = await obtenirJeton(e)
+  const jeton = await obtenirJeton(e.entity_actor_id, e.environnement)
   await verifierCompte(jeton, e)
 
   for (const journee of pretes) {
@@ -75,7 +70,7 @@ export async function envoyerPretes(e: Entreprise, limite: string) {
 
 async function poster(jeton: string, requete: unknown) {
   try {
-    const reponse = await fetch(`${ORIGINE}/v1.beta/b2c_transactions`, {
+    const reponse = await fetch(`${SUPERPDP}/v1.beta/b2c_transactions`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${jeton}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(requete),
@@ -93,28 +88,15 @@ async function poster(jeton: string, requete: unknown) {
   }
 }
 
-async function obtenirJeton(e: Entreprise): Promise<string> {
-  const reponse = await fetch(`${ORIGINE}/oauth2/token`, {
-    method: 'POST',
-    body: new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: await lireSecret(e.entity_actor_id, e.environnement, 'superpdp_client_id'),
-      client_secret: await lireSecret(e.entity_actor_id, e.environnement, 'superpdp_client_secret'),
-    }),
-  })
-  if (!reponse.ok) throw new Error(`SuperPDP jeton ${reponse.status}`)
-  return (await reponse.json()).access_token
-}
-
 // Bac à sable et production partagent la même adresse : seul ce champ les distingue.
 async function verifierCompte(jeton: string, e: Entreprise) {
   const headers = { Authorization: `Bearer ${jeton}`, 'Content-Type': 'application/json' }
-  const reponse = await fetch(`${ORIGINE}/v1.beta/companies/me`, { headers })
+  const reponse = await fetch(`${SUPERPDP}/v1.beta/companies/me`, { headers })
   if (!reponse.ok) throw new Error(`SuperPDP compte ${reponse.status}`)
   const societe = await reponse.json()
   if (societe.env !== e.environnement) throw new Error(`compte SuperPDP en ${societe.env}, attendu ${e.environnement}`)
   if (societe.vat_regime === e.regime_tva) return
-  const alignement = await fetch(`${ORIGINE}/v1.beta/companies`, {
+  const alignement = await fetch(`${SUPERPDP}/v1.beta/companies`, {
     method: 'PATCH', headers, body: JSON.stringify({ vat_regime: e.regime_tva }),
   })
   if (!alignement.ok) throw new Error(`SuperPDP régime ${alignement.status}`)

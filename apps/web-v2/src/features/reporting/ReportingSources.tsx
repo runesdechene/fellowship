@@ -15,7 +15,7 @@ function readLine(lastRead: string | null, failed: boolean): string {
 }
 
 export function ReportingSources({ data }: { data: ReportingData }) {
-  const { company, sources } = data
+  const { company, declarations, sources } = data
   return (
     <section className="admin-card reporting-sources" aria-label="Sources">
       <h2 className="home-card__title">Sources</h2>
@@ -32,12 +32,13 @@ export function ReportingSources({ data }: { data: ReportingData }) {
         )
       })}
       <span className="reporting-sources__item">
-        <DayMark mark="envoyee" size="s" />
+        <DayMark mark={declarations ? 'envoyee' : 'attente'} size="s" />
         <span>
           <strong>SuperPDP</strong>
           <span>
             {company.environnement === 'sandbox' ? 'bac à sable' : 'production'}, régime{' '}
             {(REGIMES[company.regime_tva] ?? company.regime_tva).toLowerCase()}
+            {!declarations && ', suivi indisponible'}
           </span>
         </span>
       </span>

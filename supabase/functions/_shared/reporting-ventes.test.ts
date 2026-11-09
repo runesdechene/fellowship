@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { paysDeStand } from './reporting-stands.ts'
-import { cleVente, journee, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, echeanceDe, journee, messageAlerte, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
@@ -127,4 +127,22 @@ test('un stand à l’étranger part en TNT1, sur son HT, et se confirme', () =>
   assert.equal(j.lignes[0]?.tax_total, '2.00')
   assert.equal(j.lignes[1]?.category_code, 'TNT1')
   assert.equal(j.lignes[1]?.tax_exclusive_amount, '108.10') // Suisse : le montant encaissé
+})
+
+test('l’échéance d’une décade (tableau 13 de la DGFiP)', () => {
+  assert.equal(echeanceDe('2026-11-04'), '2026-11-20')
+  assert.equal(echeanceDe('2026-02-15'), '2026-02-28')
+  assert.equal(echeanceDe('2026-12-25'), '2027-01-10')
+})
+
+test('le dernier événement d’une déclaration fait foi', () => {
+  const d = statutDeclaration({ start_period: '2026-11-01', end_period: '2026-11-10', events: [{ status_code: 'ppf:ereporting' }, { status_code: 'ppf:ereporting-rejected' }] })
+  assert.deepEqual(d, { debut: '20261101', fin: '20261110', statut: 'ppf:ereporting-rejected' })
+})
+
+test('l’e-mail : rien à dire, rien d’envoyé', () => {
+  assert.equal(messageAlerte([], [], [], true), null)
+  const m = messageAlerte([{ jour: '2026-11-04', statut: 'a_verifier' }], ['SumUp'], [], true)
+  assert.equal(m?.sujet, 'Fellowship E-Reporting : 2 choses à regarder')
+  assert.match(m?.texte ?? '', /04\/11\/2026 : à vérifier \(à déposer avant le 20\/11\/2026\)/)
 })

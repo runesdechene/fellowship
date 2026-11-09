@@ -1,5 +1,6 @@
 // reporting-quotidien : chaque matin, lire les ventes de chaque enseigne activée (Shopify, SumUp),
-// écrire ses journées vérifiées, puis envoyer à SuperPDP celles qui sont prêtes (envoi.ts).
+// écrire ses journées vérifiées, envoyer à SuperPDP celles qui sont prêtes (envoi.ts), puis prévenir
+// par un e-mail s'il y a quelque chose à voir (alerte.ts).
 // Auth : verify_jwt = false (config.toml) ; l'en-tête X-Reporting-Secret remplace le JWT, il est
 // envoyé par le cron. Corps facultatif { du, au } (AAAA-MM-JJ) : relit la période, sans rien envoyer.
 // Une journée déjà validée, en cours d'envoi ou envoyée ne se réécrit jamais.
@@ -9,7 +10,9 @@
 import { lireFacturees } from '../_shared/reporting-facturees.ts'
 import { journee, REECRIVABLES, type Ventes } from '../_shared/reporting-ventes.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
-import { type Entreprise, envoyerPretes, lireSecret } from './envoi.ts'
+import { lireSecret } from '../_shared/reporting-superpdp.ts'
+import { alerter } from './alerte.ts'
+import { type Entreprise, envoyerPretes } from './envoi.ts'
 import { jourDe, lireShopify, lireSumup, seuilUeDepasse } from './sources.ts'
 
 const SECRET = Deno.env.get('REPORTING_TRIGGER_SECRET') ?? ''
@@ -34,7 +37,7 @@ Deno.serve(async (req) => {
 
   const admin = getSupabaseAdmin()
   const { data: entreprises, error } = await admin.from('reporting_entreprises')
-    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du').eq('actif', true)
+    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du, alerte_email, rappel_echeance').eq('actif', true)
   if (error) return json({ error: 'failed' }, 500)
 
   const bilan = []
@@ -43,7 +46,8 @@ Deno.serve(async (req) => {
       const du = corps.du ?? await premierJourALire(e)
       const lecture = du <= au ? await lireEntreprise(e, du, au) : null
       const envoi = relecture ? null : await envoyerPretes(e, ilYa(DELAI_ENVOI))
-      bilan.push({ entreprise: e.entity_actor_id, du, au, lecture, envoi })
+      const alerte = relecture ? false : await alerter(e, lecture?.muettes ?? [])
+      bilan.push({ entreprise: e.entity_actor_id, du, au, lecture, envoi, alerte })
     } catch (err) {
       console.error('[reporting-quotidien]', e.entity_actor_id, err)
       bilan.push({ entreprise: e.entity_actor_id, erreur: String(err) })

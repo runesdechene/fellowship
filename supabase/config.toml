@@ -463,3 +463,7 @@ verify_jwt = false
 [functions.reporting-vente-pro]
 # Auth = le jeton du propriétaire de l'enseigne (is_entity_owner vérifié dans la fonction).
 verify_jwt = true
+
+[functions.reporting-suivi]
+# Auth = le jeton d'un membre de l'enseigne (can_act_as vérifié dans la fonction).
+verify_jwt = true

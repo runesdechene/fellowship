@@ -81,6 +81,11 @@
   color: var(--status-sent-ink);
 }
 
+.reporting-chip--rejected {
+  background: var(--tone-brique-surface);
+  color: var(--tone-brique-ink);
+}
+
 /* --- La forme d'un jour (DayMark.tsx) ------------------------------------ */
 .day-mark {
   position: relative;

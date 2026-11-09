@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import {
   anomaliesOf,
   dayState,
+  declarationState,
   decadeOf,
   decadeTitle,
   decadesOf,
@@ -121,5 +122,20 @@ describe('salesOf', () => {
 
   test('une source muette ne donne aucune vente', () => {
     expect(salesOf({ shopify: null })).toEqual([])
+  })
+})
+
+describe('declarationState', () => {
+  const decade = decadeOf(new Date(2026, 10, 4))
+  const entry = (statut: string | null) => [{ debut: '20261101', fin: '20261110', statut }]
+
+  test('la réponse de l’administration', () => {
+    expect(declarationState(entry('ppf:ereporting-rejected'), decade)?.label).toBe('Rejetée')
+    expect(declarationState(entry('ppf:ereporting-response-ok'), decade)?.label).toBe('Acceptée')
+  })
+
+  test('pas encore partie, ou suivi indisponible', () => {
+    expect(declarationState([], decade)).toBeNull()
+    expect(declarationState(null, decade)).toBeNull()
   })
 })

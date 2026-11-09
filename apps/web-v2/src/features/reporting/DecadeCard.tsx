@@ -7,7 +7,15 @@
 import { Link } from 'react-router-dom'
 import { formatDayMonth, monthKey, todayIso } from '@/lib/dates'
 import { formatPrice } from '@/lib/money'
-import { type Decade, dayState, decadeTitle, sentAmounts, toDayStatus } from '@/lib/reporting'
+import {
+  type Declaration,
+  type Decade,
+  dayState,
+  decadeTitle,
+  declarationState,
+  sentAmounts,
+  toDayStatus,
+} from '@/lib/reporting'
 import { DayMark } from './DayMark'
 import type { ReportingDay } from './useReporting'
 
@@ -16,9 +24,10 @@ interface Props {
   byDay: ReadonlyMap<string, ReportingDay>
   today: Date
   selected: boolean
+  declarations: Declaration[] | null
 }
 
-export function DecadeCard({ decade, byDay, today, selected }: Props) {
+export function DecadeCard({ decade, byDay, today, selected, declarations }: Props) {
   const states = decade.days.map((day) => {
     const row = byDay.get(todayIso(day))
     const status = row ? toDayStatus(row.statut) : null
@@ -36,11 +45,12 @@ export function DecadeCard({ decade, byDay, today, selected }: Props) {
   const shown = pending.ttc > 0 ? pending : sumOf(true)
   const open = states.some(({ status }) => status !== 'envoyee' && status !== 'vide')
   const chip =
-    decade.start > today
+    declarationState(declarations, decade) ??
+    (decade.start > today
       ? { label: 'À venir', tone: 'neutral' }
       : open || decade.end >= today
         ? { label: 'En cours', tone: 'neutral' }
-        : { label: 'Envoyée', tone: 'validated' }
+        : { label: 'Envoyée', tone: 'validated' })
 
   return (
     <Link

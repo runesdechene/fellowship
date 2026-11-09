@@ -7,7 +7,7 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { todayIso } from '@/lib/dates'
-import type { Sale } from '@/lib/reporting'
+import type { Declaration, Sale } from '@/lib/reporting'
 import { must, supabase } from '@/lib/supabase'
 
 const DAY_COLUMNS = 'id, jour, statut, lignes, detail, anomalies'
@@ -36,8 +36,14 @@ async function loadReporting(entityId: string, month: Date) {
     days().in('statut', TODO_STATUSES).order('jour'),
     days().eq('statut', 'envoyee').order('jour', { ascending: false }).limit(1),
   ])
+  // Le suivi vient de SuperPDP : sa panne ne doit pas priver la page du reste.
+  const suivi = await supabase.functions.invoke<{ declarations?: Declaration[] }>(
+    'reporting-suivi',
+    { body: { entite: entityId } },
+  )
   return {
     company,
+    declarations: suivi.error ? null : (suivi.data?.declarations ?? null),
     sources: must(sources),
     days: must(monthDays),
     todo: must(todo),

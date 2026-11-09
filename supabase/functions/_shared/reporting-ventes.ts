@@ -54,6 +54,57 @@ export function statutApresEnvoi(http: number | null): 'envoyee' | 'refusee' | '
   return http !== null && http >= 400 && http < 500 ? 'refusee' : 'inconnue'
 }
 
+export interface Declaration {
+  debut: string // AAAAMMJJ
+  fin: string
+  statut: string | null // le dernier événement : ppf:ereporting-ack, ppf:ereporting-rejected…
+}
+
+/** Une déclaration SuperPDP réduite à sa période et à son dernier événement. */
+export function statutDeclaration(d: { start_period: string; end_period: string; events?: { status_code: string }[] }): Declaration {
+  const chiffres = (date: string) => String(date).replace(/\D/g, '').slice(0, 8)
+  return { debut: chiffres(d.start_period), fin: chiffres(d.end_period), statut: d.events?.at(-1)?.status_code ?? null }
+}
+
+/** Le dernier jour pour déposer la décade d'un jour, en réel normal mensuel (DGFiP, tableau 13). */
+export function echeanceDe(jour: string): string {
+  const [annee, mois, quantieme] = jour.split('-').map(Number)
+  const date = quantieme <= 10
+    ? new Date(Date.UTC(annee, mois - 1, 20))
+    : quantieme <= 20 ? new Date(Date.UTC(annee, mois, 0)) : new Date(Date.UTC(annee, mois, 10))
+  return date.toISOString().slice(0, 10)
+}
+
+const A_TRAITER: Record<string, string> = {
+  a_verifier: 'à vérifier',
+  refusee: 'refusée par SuperPDP',
+  inconnue: 'réponse de SuperPDP perdue',
+  en_attente: 'une source n’a pas répondu',
+}
+
+/** L'e-mail du matin, ou null s'il n'y a rien à voir. */
+export function messageAlerte(
+  jours: { jour: string; statut: string }[],
+  muettes: string[],
+  rejetees: Declaration[],
+  rappelEcheance: boolean,
+) {
+  if (jours.length === 0 && muettes.length === 0 && rejetees.length === 0) return null
+  const lignes = [
+    ...rejetees.map((d) => `- Déclaration du ${dateFr(d.debut)} au ${dateFr(d.fin)} : rejetée par l'administration.`),
+    ...muettes.map((source) => `- ${source} n'a pas répondu ce matin.`),
+    ...jours.map(({ jour, statut }) =>
+      `- ${dateFr(jour)} : ${A_TRAITER[statut] ?? statut}${rappelEcheance ? ` (à déposer avant le ${dateFr(echeanceDe(jour))})` : ''}.`),
+  ]
+  const sujet = lignes.length === 1 ? 'Une chose à regarder' : `${lignes.length} choses à regarder`
+  return { sujet: `Fellowship E-Reporting : ${sujet}`, texte: `${lignes.join('\n')}\n\nhttps://flw.sh/reporting` }
+}
+
+function dateFr(date: string): string {
+  const c = date.replace(/\D/g, '')
+  return `${c.slice(6, 8)}/${c.slice(4, 6)}/${c.slice(0, 4)}`
+}
+
 /** Identifie une vente facturée à un pro : commande Shopify ou paiement SumUp. */
 export function cleVente(source: string, reference: string): string {
   return `${source}:${reference}`

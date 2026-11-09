@@ -119,6 +119,7 @@ export function DecadesPage({ entityId }: { entityId: string }) {
             byDay={byDay}
             today={today}
             selected={decade.index === selected?.index}
+            declarations={data.declarations}
           />
         ))}
       </div>

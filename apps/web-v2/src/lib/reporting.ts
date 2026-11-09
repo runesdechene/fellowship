@@ -8,7 +8,7 @@
  *            enseigne en aura besoin.
  */
 import type { Json } from '@/types/supabase'
-import { addDays, dayOfMonth, monthName } from './dates'
+import { addDays, dayOfMonth, monthName, todayIso } from './dates'
 
 export type DayStatus =
   'en_attente' | 'a_verifier' | 'prete' | 'en_cours' | 'envoyee' | 'refusee' | 'inconnue' | 'vide'
@@ -192,6 +192,28 @@ export function isLocked(status: DayStatus | null): boolean {
   return (
     status === 'en_cours' || status === 'envoyee' || status === 'refusee' || status === 'inconnue'
   )
+}
+
+export interface Declaration {
+  debut: string
+  fin: string
+  statut: string | null
+}
+
+const DECLARATION_STATES: Record<string, { label: string; tone: string }> = {
+  'ppf:ereporting': { label: 'Transmise', tone: 'neutral' },
+  'ppf:ereporting-ack': { label: 'Reçue', tone: 'sent' },
+  'ppf:ereporting-response-ok': { label: 'Acceptée', tone: 'validated' },
+  'ppf:ereporting-ack-error': { label: 'Rejetée', tone: 'rejected' },
+  'ppf:ereporting-rejected': { label: 'Rejetée', tone: 'rejected' },
+}
+
+/** Ce qu'a répondu l'administration sur une décade ; null si elle n'est pas encore partie. */
+export function declarationState(declarations: Declaration[] | null, decade: Decade) {
+  const compact = (date: Date) => todayIso(date).replace(/-/g, '')
+  const found = declarations?.find((entry) => entry.debut === compact(decade.start))
+  if (!found) return null
+  return DECLARATION_STATES[found.statut ?? ''] ?? { label: 'Transmise', tone: 'neutral' }
 }
 
 export const SOURCE_NAMES: Record<string, string> = { shopify: 'Shopify', sumup: 'SumUp' }
