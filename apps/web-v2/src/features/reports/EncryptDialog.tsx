@@ -18,11 +18,13 @@ import { parseAmount } from '@/lib/money'
 import { RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 import { PhraseInput } from './PhraseInput'
 
+type Takings = Pick<SecretRevenue, 'carte' | 'especes'>
+
 interface Seal {
-  initial: SecretRevenue
+  initial: Takings
   /** La date a des recettes saisies : la fenêtre prévient qu'elles seront remplacées. */
   replaces: boolean
-  onSeal: (key: CryptoKey, revenue: SecretRevenue) => void
+  onSeal: (key: CryptoKey, revenue: Takings) => void
 }
 
 interface EncryptDialogProps {

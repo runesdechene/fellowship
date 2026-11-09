@@ -1,6 +1,6 @@
 /**
  * QUOI     — « Mon dossier — visible par toi seul » : où en est l'argent d'une date (à payer,
- *            acompte versé, payé), le montant, l'acompte, l'échéance du solde.
+ *            acompte versé, payé), le montant, l'acompte, l'échéance du solde, les commandes.
  * POURQUOI — la fonction plébiscitée : savoir ce qui est réglé et ce qui reste, sans tenir un
  *            tableur à côté (maquette 2027, fiche événement).
  * ATTENTION — le montant de la place est la ligne « stepper » du registre (set_stand_amount) ;
@@ -14,8 +14,10 @@ import { InfoRow, InfoRows } from '@/components/ui/InfoRows'
 import { Segmented, type SegmentedOption } from '@/components/ui/Segmented'
 import { balanceOf } from '@/lib/dossiers'
 import { formatEuros, parseAmount } from '@/lib/money'
+import { MyOrders } from './MyOrders'
 import type { DossierFields } from './useDossier'
 import type { PaymentOrientation, PaymentStatus } from './useEvent'
+import type { OrdersView } from './useOrders'
 
 const STEPS: Record<PaymentOrientation, SegmentedOption<PaymentStatus>[]> = {
   payeur: [
@@ -41,6 +43,7 @@ interface MyDossierProps {
   fields: DossierFields
   save: (patch: Partial<DossierFields>) => Promise<void>
   error: string | null
+  orders: OrdersView
 }
 
 /** Un montant vide efface ; un texte qui n'est pas un montant ne touche à rien. */
@@ -60,6 +63,7 @@ export function MyDossier({
   fields,
   save,
   error,
+  orders,
 }: MyDossierProps) {
   const status = (paymentStatus ?? 'a_payer') as PaymentStatus
   const receives = orientation === 'paye'
@@ -157,10 +161,12 @@ export function MyDossier({
               />
             </InfoRow>
           )}
+
+          <MyOrders key={orders.failures} view={orders} />
         </InfoRows>
       </div>
 
-      {error && <p className="event-status__error">{error}</p>}
+      {(error ?? orders.error) && <p className="event-status__error">{error ?? orders.error}</p>}
     </section>
   )
 }

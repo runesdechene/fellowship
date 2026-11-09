@@ -32,4 +32,5 @@ export type LedgerCategory =
   | 'repas'
   | 'remboursement'
   | 'ventes'
+  | 'commande_sure'
   | 'autre'

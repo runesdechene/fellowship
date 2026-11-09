@@ -108,6 +108,13 @@
   color: var(--reports-pale-ink);
 }
 
+.ledger__note {
+  padding: 0 var(--space-12) var(--space-6);
+  font: var(--type-report-small);
+  color: var(--reports-pale-ink);
+  text-align: right;
+}
+
 .ledger__line {
   display: flex;
   align-items: center;

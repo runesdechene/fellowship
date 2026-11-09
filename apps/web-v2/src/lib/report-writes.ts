@@ -13,6 +13,7 @@ export const CATEGORIES = [
   { value: 'ventes', label: 'Ventes', direction: 'in' },
   { value: 'remboursement', label: 'Remboursement', direction: 'in' },
   { value: 'cachet', label: 'Cachet', direction: 'in' },
+  { value: 'commande_sure', label: 'Commandes sûres', direction: 'in' },
   { value: 'emplacement', label: 'Emplacement', direction: 'out' },
   { value: 'essence', label: 'Essence', direction: 'out' },
   { value: 'peage', label: 'Péage', direction: 'out' },
@@ -24,23 +25,72 @@ export const CATEGORIES = [
 /** Pas une ligne du registre : elle ouvre le chiffrement de Carte et Espèces (Ledger). */
 export const SECRET_CATEGORY = { value: 'chiffrees', label: 'Recettes chiffrées' } as const
 
+/** La catégorie de la ligne « Commandes sûres » : elle a sa place fixe dans le bilan. */
+export const ORDER_CATEGORY = 'commande_sure'
+
+export type OrderKind = 'sures' | 'potentielles'
+export type Orders = Pick<SecretRevenue, OrderKind>
+
+export const ORDER_LABELS: Record<OrderKind, string> = {
+  sures: 'Commandes sûres',
+  potentielles: 'Commandes potentielles',
+}
+
 /** Les catégories de la ligne d'ajout : sur une date chiffrée, une recette passe par Carte et Espèces. */
 export function addableCategories(encrypted: boolean) {
-  return encrypted ? CATEGORIES.filter((entry) => entry.direction === 'out') : CATEGORIES
+  const addable = CATEGORIES.filter((entry) => entry.value !== ORDER_CATEGORY)
+  return encrypted ? addable.filter((entry) => entry.direction === 'out') : addable
 }
+
+/** Les commandes d'une date : dans le message déchiffré, sinon sa ligne du registre et sa colonne. */
+export function ordersOf(
+  secret: SecretRevenue | 'masked' | undefined,
+  lines: readonly { category: string; amount: number }[],
+  clearPotential: number | null | undefined,
+): Orders {
+  if (secret && secret !== 'masked') {
+    return { sures: secret.sures, potentielles: secret.potentielles }
+  }
+  return {
+    sures: lines.find((line) => line.category === ORDER_CATEGORY)?.amount ?? 0,
+    potentielles: clearPotential ?? 0,
+  }
+}
+
+type KeyStatus = 'none' | 'locked' | 'open'
+type RevenueLine = { direction: 'in' | 'out'; source: string }
 
 /**
  * Une date sans recette saisie en clair et pas encore chiffrée, d'une enseigne qui a sa phrase : elle
  * se présente avec Carte et Espèces, et le premier montant la scelle. Les dates qui ont des recettes
- * en clair restent telles quelles, et se chiffrent une par une.
+ * ou des commandes potentielles en clair restent telles quelles, et se chiffrent une par une.
  */
 export function encryptsByDefault(
   secret: 'none' | 'masked' | 'open',
-  lines: readonly { direction: 'in' | 'out'; source: string }[],
-  keyStatus: 'none' | 'locked' | 'open',
+  lines: readonly RevenueLine[],
+  keyStatus: KeyStatus,
+  clearPotential: number,
 ): boolean {
-  if (secret !== 'none' || keyStatus === 'none') return false
+  if (secret !== 'none' || keyStatus === 'none' || clearPotential > 0) return false
   return !lines.some((line) => line.direction === 'in' && line.source === 'manual')
+}
+
+/** Ce que le bilan et la fiche doivent faire des recettes d'une date : la même règle aux deux endroits. */
+export function revenueRegime(
+  secret: 'none' | 'masked' | 'open',
+  lines: readonly RevenueLine[],
+  keyStatus: KeyStatus,
+  clearPotential: number,
+) {
+  const byDefault = encryptsByDefault(secret, lines, keyStatus, clearPotential)
+  return {
+    /** Pas encore scellée : le premier montant la scelle. */
+    byDefault,
+    /** Illisible tant que la phrase n'est pas tapée. */
+    masked: secret === 'masked' || (byDefault && keyStatus === 'locked'),
+    /** Ses montants passent par le message chiffré. */
+    encrypted: secret !== 'none' || byDefault,
+  }
 }
 
 /**
@@ -65,7 +115,7 @@ export function mergeRevenue(
   part: keyof SecretRevenue,
   amount: number,
 ): SecretRevenue {
-  return { ...(current ?? { carte: 0, especes: 0 }), [part]: amount }
+  return { ...(current ?? { carte: 0, especes: 0, sures: 0, potentielles: 0 }), [part]: amount }
 }
 
 export function directionOf(category: LedgerCategory): 'in' | 'out' {
@@ -85,6 +135,7 @@ export function clearReportPlan(reportId: string) {
       improvements: [] as string[],
       note: null,
       media_paths: [] as string[],
+      potential_orders: null,
     },
   }
 }

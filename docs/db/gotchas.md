@@ -70,6 +70,11 @@ toutes deux en RLS `can_act_as(actor_id)`. Une date chiffrée compte comme un bi
 `exposeur_chiffres` rend les `payload` dans `secrets` et le client les déchiffre. Phrase oubliée :
 `reset_revenue_key(p_actor)` efface les deux tables pour l'enseigne.
 
+**Commandes d'une date (09/11/2026)** : en clair, « sûres » est une ligne du registre (catégorie
+`commande_sure`, comptée partout), « potentielles » la colonne `event_reports.potential_orders`
+(aucun calcul) ; les deux s'écrivent par `set_clear_order`. Sur une date chiffrée, les deux sont dans
+le `payload` (`sures`, `potentielles`, absents des messages plus anciens : 0).
+
 ### Table `event_reports`
 - ✅ `wins`, `improvements` (`TEXT[]`), `note`, `media_paths` (bucket privé `bilan-media`), `UNIQUE(actor_id, event_id)` (`uniq_event_report_actor`)
 - ❌ `booth_cost`, `charges`, `revenue` — **colonnes mortes**, voir ci-dessus

@@ -36,21 +36,48 @@ describe('cipher', () => {
     expect(isStrongPassphrase('   runesdechene202  ')).toBe(false)
   })
 
+  it('lit un message d’avant les commandes : elles valent 0', async () => {
+    const iv = crypto.getRandomValues(new Uint8Array(12))
+    const old = JSON.stringify({ carte: '000000012000', especes: '000000003000' })
+    const body = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      new TextEncoder().encode(old),
+    )
+    const payload = btoa(String.fromCharCode(...iv, ...new Uint8Array(body)))
+    await expect(openRevenue(key, payload)).resolves.toEqual({
+      carte: 120,
+      especes: 30,
+      sures: 0,
+      potentielles: 0,
+    })
+  })
+
+  it('garde les commandes au scellement', async () => {
+    const revenue = { carte: 1, especes: 2, sures: 300, potentielles: 200.5 }
+    await expect(openRevenue(key, await sealRevenue(key, revenue))).resolves.toEqual(revenue)
+  })
+
   it('rend les montants tels qu’ils ont été scellés', async () => {
-    const full = { carte: 2830, especes: 1380 }
-    const cents = { carte: 0, especes: 0.5 }
+    const full = { carte: 2830, especes: 1380, sures: 0, potentielles: 0 }
+    const cents = { carte: 0, especes: 0.5, sures: 0, potentielles: 0 }
     expect(await openRevenue(key, await sealRevenue(key, full))).toEqual(full)
     expect(await openRevenue(key, await sealRevenue(key, cents))).toEqual(cents)
   })
 
   it('donne deux messages différents pour le même montant', async () => {
-    const revenue = { carte: 100, especes: 50 }
+    const revenue = { carte: 100, especes: 50, sures: 0, potentielles: 0 }
     expect(await sealRevenue(key, revenue)).not.toBe(await sealRevenue(key, revenue))
   })
 
   it('ne trahit pas le montant par la longueur du message', async () => {
-    const zero = await sealRevenue(key, { carte: 0, especes: 0 })
-    const big = await sealRevenue(key, { carte: 999999.99, especes: 999999.99 })
+    const zero = await sealRevenue(key, { carte: 0, especes: 0, sures: 0, potentielles: 0 })
+    const big = await sealRevenue(key, {
+      carte: 999999.99,
+      especes: 999999.99,
+      sures: 0,
+      potentielles: 0,
+    })
     expect(zero.length).toBe(big.length)
   })
 
@@ -59,7 +86,7 @@ describe('cipher', () => {
     const again = await unlockKey(PHRASE, record)
     expect(again).not.toBeNull()
     if (!again) return
-    const revenue = { carte: 412, especes: 138 }
+    const revenue = { carte: 412, especes: 138, sures: 0, potentielles: 0 }
     expect(await openRevenue(again, await sealRevenue(key, revenue))).toEqual(revenue)
   })
 
@@ -72,15 +99,19 @@ describe('cipher', () => {
 
   it('refuse un montant hors plage et accepte le maximum', async () => {
     for (const bad of [-1, NaN, Infinity, 1_000_000]) {
-      await expect(sealRevenue(key, { carte: bad, especes: 0 })).rejects.toThrow()
-      await expect(sealRevenue(key, { carte: 0, especes: bad })).rejects.toThrow()
+      await expect(
+        sealRevenue(key, { carte: bad, especes: 0, sures: 0, potentielles: 0 }),
+      ).rejects.toThrow()
+      await expect(
+        sealRevenue(key, { carte: 0, especes: bad, sures: 0, potentielles: 0 }),
+      ).rejects.toThrow()
     }
-    const max = { carte: 999999.99, especes: 999999.99 }
+    const max = { carte: 999999.99, especes: 999999.99, sures: 0, potentielles: 0 }
     expect(await openRevenue(key, await sealRevenue(key, max))).toEqual(max)
   })
 
   it('rouvre avec la phrase en NFD ou avec une espace en fin', async () => {
-    const revenue = { carte: 10, especes: 5 }
+    const revenue = { carte: 10, especes: 5, sures: 0, potentielles: 0 }
     const payload = await sealRevenue(key, revenue)
     for (const typed of [PHRASE.normalize('NFD'), `${PHRASE} `]) {
       const unlocked = await unlockKey(typed, record)
@@ -98,8 +129,8 @@ describe('cipher', () => {
 
   it('rescelle toutes les recettes sous la nouvelle phrase, et rien sous l’ancienne', async () => {
     const amounts = [
-      { carte: 2830, especes: 1380 },
-      { carte: 0, especes: 0.5 },
+      { carte: 2830, especes: 1380, sures: 0, potentielles: 0 },
+      { carte: 0, especes: 0.5, sures: 0, potentielles: 0 },
     ]
     const rows = await Promise.all(
       amounts.map(async (revenue, index) => ({
@@ -129,8 +160,19 @@ describe('cipher', () => {
   it('refuse de rechiffrer si une recette ne s’ouvre pas avec l’ancienne clé', async () => {
     const stranger = await createKey('la phrase d’une autre enseigne')
     const rows = [
-      { event_id: 'a', payload: await sealRevenue(key, { carte: 1, especes: 2 }) },
-      { event_id: 'b', payload: await sealRevenue(stranger.key, { carte: 3, especes: 4 }) },
+      {
+        event_id: 'a',
+        payload: await sealRevenue(key, { carte: 1, especes: 2, sures: 0, potentielles: 0 }),
+      },
+      {
+        event_id: 'b',
+        payload: await sealRevenue(stranger.key, {
+          carte: 3,
+          especes: 4,
+          sures: 0,
+          potentielles: 0,
+        }),
+      },
     ]
     await expect(resealAll(key, rows, stranger.key)).rejects.toThrow()
   })

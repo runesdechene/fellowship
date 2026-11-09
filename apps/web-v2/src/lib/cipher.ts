@@ -20,6 +20,10 @@ export interface KeyRecord {
 export interface SecretRevenue {
   carte: number
   especes: number
+  /** Commandes promises : comptent comme une recette. */
+  sures: number
+  /** Commandes possibles : n'entrent dans aucun calcul. */
+  potentielles: number
 }
 
 const ITERATIONS = 600_000
@@ -120,20 +124,34 @@ const MAX_AMOUNT = 999_999.99
 
 export async function sealRevenue(key: CryptoKey, revenue: SecretRevenue): Promise<string> {
   // Hors de cette plage, les 12 chiffres ne tiennent plus (signe, NaN, 13 chiffres).
-  for (const amount of [revenue.carte, revenue.especes]) {
+  for (const amount of [revenue.carte, revenue.especes, revenue.sures, revenue.potentielles]) {
     if (!Number.isFinite(amount) || amount < 0 || amount > MAX_AMOUNT) {
       throw new Error(`Montant impossible à chiffrer : ${amount}`)
     }
   }
   return seal(
     key,
-    JSON.stringify({ carte: toCents(revenue.carte), especes: toCents(revenue.especes) }),
+    JSON.stringify({
+      carte: toCents(revenue.carte),
+      especes: toCents(revenue.especes),
+      sures: toCents(revenue.sures),
+      potentielles: toCents(revenue.potentielles),
+    }),
   )
 }
 
 export async function openRevenue(key: CryptoKey, payload: string): Promise<SecretRevenue> {
-  const { carte, especes } = JSON.parse(await open(key, payload)) as Record<string, string>
-  return { carte: toEuros(String(carte)), especes: toEuros(String(especes)) }
+  // Un message scellé avant le 09/11/2026 n'a pas de commandes : elles valent 0.
+  const { carte, especes, sures, potentielles } = JSON.parse(await open(key, payload)) as Record<
+    string,
+    string | undefined
+  >
+  return {
+    carte: toEuros(String(carte)),
+    especes: toEuros(String(especes)),
+    sures: toEuros(sures ?? '0'),
+    potentielles: toEuros(potentielles ?? '0'),
+  }
 }
 
 /**

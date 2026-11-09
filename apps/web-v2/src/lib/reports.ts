@@ -10,11 +10,11 @@
  *            Une date aux recettes CHIFFRÉES (secret 'masked' ou 'open') est remplie d'office : le
  *            chiffre existe, même verrouillé. Verrouillée ('masked'), ses chiffres clairs sont
  *            incomplets : l'interface affiche •••• (masked) au lieu des montants. Déverrouillée
- *            ('open'), secretLines() rend Carte et Espèces comme deux lignes saisies.
+ *            ('open'), secretLines() rend Carte, Espèces et Commandes sûres comme des lignes saisies.
  */
 import { daysUntil } from './dates'
 import type { SecretRevenue } from './cipher'
-import { ledgerProfit, ledgerRevenue, type LedgerLine } from './money'
+import { formatEuros, ledgerProfit, ledgerRevenue, type LedgerLine } from './money'
 
 export interface ReportLine extends LedgerLine {
   source: string
@@ -65,11 +65,25 @@ export function isFilled(lines: ReportLine[]): boolean {
   return lines.some((line) => line.source === 'manual')
 }
 
-/** Les recettes déchiffrées d'une date, comme deux lignes saisies dans le bilan. */
+/** Les recettes déchiffrées d'une date, comme des lignes saisies ; jamais les commandes potentielles. */
 export function secretLines(revenue: SecretRevenue): ReportLine[] {
   return [
     { amount: revenue.carte, direction: 'in', source: 'manual' },
     { amount: revenue.especes, direction: 'in', source: 'manual' },
+    { amount: revenue.sures, direction: 'in', source: 'manual' },
+  ]
+}
+
+/** Les mentions sous le total Recettes : les sûres y sont comptées, les potentielles non. */
+export function ordersNotes({
+  sures,
+  potentielles,
+}: Pick<SecretRevenue, 'sures' | 'potentielles'>) {
+  return [
+    ...(sures > 0 ? [`dont ${formatEuros(sures)} de commandes sûres`] : []),
+    ...(potentielles > 0
+      ? [`${formatEuros(potentielles)} de commandes potentielles, hors total`]
+      : []),
   ]
 }
 

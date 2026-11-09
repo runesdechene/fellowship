@@ -52,6 +52,7 @@ import { EventStatus } from './EventStatus'
 import { MyDossier } from './MyDossier'
 import { MyNote } from './MyNote'
 import { useDossier } from './useDossier'
+import { useOrders } from './useOrders'
 import { useEvent } from './useEvent'
 import { canChangeStatus, monthsBeyond } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
@@ -119,11 +120,13 @@ export function EventPage() {
     setPayment,
     setOrientation,
     setStandAmount,
+    reloadLedger,
     saving,
     writeError,
   } = useEvent(id, actor?.id, person?.actor_id)
   const lastEdition = useLastEditionReport(event?.previous_edition_id, actor?.id)
   const dossier = useDossier(id, actor?.id)
+  const orders = useOrders(id, actor?.id, reloadLedger)
   const apercu = useFicheApercu(member ? null : (event?.id ?? null))
 
   // La fiche est le seul écran à demander un décor à la coquille : l'affiche
@@ -358,6 +361,7 @@ export function EventPage() {
                 fields={dossier.fields}
                 save={dossier.save}
                 error={dossier.error}
+                orders={orders}
               />
             )}
           </div>

@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react'
 import { PhraseChangedError, RevenueKeyError, useRevenueKey } from '@/lib/revenue-key'
 import { createWriteQueue } from '@/lib/write-queue'
-import { addTag, removeTag } from '@/lib/report-writes'
+import { addTag, removeTag, type OrderKind } from '@/lib/report-writes'
 import type { SecretRevenue } from '@/lib/cipher'
 import type { LedgerCategory } from '@/types/database'
 import { loadReport, type ReportDetail, type ReportEntry } from './loadReport'
@@ -27,6 +27,8 @@ export interface ReportActions {
   sealRevenue: (key: CryptoKey, revenue: SecretRevenue) => void
   /** Change Carte ou Espèces d'une date déjà chiffrée, l'autre restant tel que la base le garde. */
   resealPart: (key: CryptoKey, part: keyof SecretRevenue, amount: number) => void
+  /** Une commande sur une date en clair ; sur une date chiffrée, elle passe par resealPart. */
+  setClearOrder: (kind: OrderKind, amount: number) => void
   addTag: (field: 'wins' | 'improvements', raw: string) => void
   removeTag: (field: 'wins' | 'improvements', tag: string) => void
   setNote: (note: string) => void
@@ -119,6 +121,9 @@ export function useReport(eventId: string | undefined, actorId: string | null | 
       perform('Les recettes n’ont pas pu être chiffrées.', (t) =>
         verify(key).then((check) => write.resealPart(t, key, part, amount, check)),
       )
+    },
+    setClearOrder: (kind, amount) => {
+      perform('Le montant n’a pas pu être enregistré.', (t) => write.setClearOrder(t, kind, amount))
     },
     addTag: (field, raw) => {
       perform('L’étiquette n’a pas pu être ajoutée.', (t) =>

@@ -773,6 +773,7 @@ export type Database = {
           improvements: string[] | null
           media_paths: string[]
           note: string | null
+          potential_orders: number | null
           revenue: number | null
           wins: string[] | null
         }
@@ -787,6 +788,7 @@ export type Database = {
           improvements?: string[] | null
           media_paths?: string[]
           note?: string | null
+          potential_orders?: number | null
           revenue?: number | null
           wins?: string[] | null
         }
@@ -801,6 +803,7 @@ export type Database = {
           improvements?: string[] | null
           media_paths?: string[]
           note?: string | null
+          potential_orders?: number | null
           revenue?: number | null
           wins?: string[] | null
         }
@@ -3611,6 +3614,15 @@ export type Database = {
       send_deadline_reminders: { Args: never; Returns: number }
       send_suggestions: { Args: never; Returns: number }
       send_weekly_new_events: { Args: never; Returns: number }
+      set_clear_order: {
+        Args: {
+          p_actor: string
+          p_amount: number
+          p_event: string
+          p_kind: string
+        }
+        Returns: undefined
+      }
       set_stand_amount: {
         Args: { p_actor_id: string; p_amount: number; p_event_id: string }
         Returns: undefined

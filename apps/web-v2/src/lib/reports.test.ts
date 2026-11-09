@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import {
   bestMonth,
   isFilled,
+  ordersNotes,
   previousRevenue,
   reportFigures,
   secretLines,
@@ -144,7 +145,7 @@ describe('yearSummary', () => {
     const open = date({
       secret: 'open',
       lines: [
-        ...secretLines({ carte: 2830, especes: 1380 }),
+        ...secretLines({ carte: 2830, especes: 1380, sures: 0, potentielles: 0 }),
         { amount: 1340, direction: 'out', source: 'stepper' },
       ],
     })
@@ -156,11 +157,23 @@ describe('yearSummary', () => {
 })
 
 describe('secretLines', () => {
-  it('rend la carte et les espèces en deux entrées saisies', () => {
-    expect(secretLines({ carte: 10, especes: 5 })).toEqual([
+  it('rend carte, espèces et commandes sûres ; jamais les potentielles', () => {
+    expect(secretLines({ carte: 10, especes: 5, sures: 3, potentielles: 1000 })).toEqual([
       { amount: 10, direction: 'in', source: 'manual' },
       { amount: 5, direction: 'in', source: 'manual' },
+      { amount: 3, direction: 'in', source: 'manual' },
     ])
+  })
+})
+
+describe('ordersNotes', () => {
+  it('ne dit rien sans commandes', () => {
+    expect(ordersNotes({ sures: 0, potentielles: 0 })).toEqual([])
+  })
+  it('« dont » pour les sûres, « hors total » pour les potentielles', () => {
+    const [sures, potentielles] = ordersNotes({ sures: 300, potentielles: 200 })
+    expect(sures).toMatch(/^dont 300.*commandes sûres$/)
+    expect(potentielles).toMatch(/^200.*commandes potentielles, hors total$/)
   })
 })
 
@@ -176,7 +189,10 @@ describe('previousRevenue', () => {
     expect(previousRevenue([clear, date({ secret: 'masked', lines: [stand] })])).toBeNull()
   })
   it('une date déchiffrée compte Carte et Espèces', () => {
-    const open = date({ secret: 'open', lines: secretLines({ carte: 2830, especes: 1380 }) })
+    const open = date({
+      secret: 'open',
+      lines: secretLines({ carte: 2830, especes: 1380, sures: 0, potentielles: 0 }),
+    })
     expect(previousRevenue([clear, open])).toBe(3980 + 4210)
   })
 })

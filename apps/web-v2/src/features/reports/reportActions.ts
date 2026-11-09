@@ -11,13 +11,17 @@ import { openRevenue, sealRevenue, type SecretRevenue } from '@/lib/cipher'
 import { PhraseChangedError } from '@/lib/revenue-key'
 import { must, supabase } from '@/lib/supabase'
 import { removeReportPhotos, uploadReportPhoto } from '@/lib/report-media'
-import { clearReportPlan, directionOf, mergeRevenue } from '@/lib/report-writes'
+import { clearReportPlan, directionOf, mergeRevenue, type OrderKind } from '@/lib/report-writes'
 import type { LedgerCategory } from '@/types/database'
 import type { ReportDetail, ReportEntry } from './loadReport'
 
-export interface Target {
+/** Une date d'une enseigne : ce qu'il faut pour écrire depuis la fiche, où il n'y a pas de bilan chargé. */
+export interface DateRef {
   actorId: string
   eventId: string
+}
+
+export interface Target extends DateRef {
   detail: ReportDetail
 }
 
@@ -98,7 +102,7 @@ export async function removeLine(target: Target, entry: ReportEntry) {
  * la clé a été vérifiée (useRevenueKey().verify) : la base refuse si la phrase a changé depuis.
  */
 export async function sealRevenueLines(
-  target: Target,
+  target: DateRef,
   key: CryptoKey,
   revenue: SecretRevenue,
   check: string,
@@ -120,7 +124,7 @@ export async function sealRevenueLines(
  * de zéro : la clé a été vérifiée juste avant (useReport), une phrase réinitialisée ne passe pas.
  */
 export async function resealPart(
-  target: Target,
+  target: DateRef,
   key: CryptoKey,
   part: keyof SecretRevenue,
   amount: number,
@@ -135,6 +139,17 @@ export async function resealPart(
   const row = must(response)
   const current = row ? await openRevenue(key, row.payload) : null
   await sealRevenueLines(target, key, mergeRevenue(current, part, amount), check)
+}
+
+/** Une commande sur une date en clair ; la base refuse si la date a été chiffrée entre-temps. */
+export async function setClearOrder(target: DateRef, kind: OrderKind, amount: number) {
+  const { error } = await supabase.rpc('set_clear_order', {
+    p_actor: target.actorId,
+    p_event: target.eventId,
+    p_kind: kind,
+    p_amount: amount,
+  })
+  if (error) throw new Error(error.message)
 }
 
 /** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */

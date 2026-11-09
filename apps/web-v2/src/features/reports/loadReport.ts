@@ -13,7 +13,7 @@ import { must, supabase } from '@/lib/supabase'
 import { parseSqlDate, todayIso } from '@/lib/dates'
 import { CONFIRMED_STATUSES } from '@/lib/friends'
 import { signedReportUrls } from '@/lib/report-media'
-import { CATEGORIES } from '@/lib/report-writes'
+import { CATEGORIES, ordersOf, type Orders } from '@/lib/report-writes'
 import { loadSecrets, withSecret } from './secretRevenue'
 import type { ReportDate } from '@/lib/reports'
 import type { SecretRevenue } from '@/lib/cipher'
@@ -35,6 +35,8 @@ export interface ReportDetail {
   entries: ReportEntry[]
   /** Carte et Espèces déchiffrées ; null si la date n'est pas chiffrée ou reste verrouillée. */
   revenue: SecretRevenue | null
+  /** Sûres et potentielles, en clair ou déchiffrées ; à 0 sur une date verrouillée. */
+  orders: Orders
   wins: string[]
   improvements: string[]
   note: string
@@ -66,7 +68,7 @@ export async function loadReport(
   const [reportResponse, ledgerResponse, secrets] = await Promise.all([
     supabase
       .from('event_reports')
-      .select('id, wins, improvements, note, media_paths')
+      .select('id, wins, improvements, note, media_paths, potential_orders')
       .eq('actor_id', actorId)
       .eq('event_id', eventId)
       .maybeSingle(),
@@ -107,6 +109,7 @@ export async function loadReport(
     reportId: report?.id ?? null,
     entries,
     revenue: secret && secret !== 'masked' ? secret : null,
+    orders: ordersOf(secret, entries, report?.potential_orders),
     wins: report?.wins ?? [],
     improvements: report?.improvements ?? [],
     note: report?.note ?? '',

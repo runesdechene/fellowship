@@ -17,7 +17,7 @@ const stand: EventLedgerLine = {
 
 describe('ledgerState', () => {
   it('ajoute Carte et Espèces ouvertes au registre et aux totaux', () => {
-    const state = ledgerState([stand], { carte: 1000, especes: 300 })
+    const state = ledgerState([stand], { carte: 1000, especes: 300, sures: 0, potentielles: 0 })
     expect(state.ledger.map((line) => line.label)).toEqual([null, 'Carte', 'Espèces'])
     expect(state.revenue).toBe(1300)
     expect(state.net).toBe(1100)

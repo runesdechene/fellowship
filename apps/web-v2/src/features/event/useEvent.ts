@@ -15,6 +15,7 @@ import type { SecretRevenue } from '@/lib/cipher'
 import { daysUntil, parseSqlDate } from '@/lib/dates'
 import { CONFIRMED_STATUSES, fetchFriendsByEvent, type GoingFriend } from '@/lib/friends'
 import { ledgerProfit, ledgerRevenue, standLine, type LedgerLine } from '@/lib/money'
+import { ORDER_CATEGORY, ORDER_LABELS } from '@/lib/report-writes'
 import { useRevenueKey } from '@/lib/revenue-key'
 import { must, supabase } from '@/lib/supabase'
 import { fetchTags, tagStylesByName, type TagStyle } from '@/lib/tags'
@@ -98,6 +99,8 @@ export interface EventActions {
    * suivi alimente. Zero l'efface.
    */
   setStandAmount: (amount: number) => Promise<void>
+  /** Relit le registre : une commande saisie sur la fiche change les totaux (useOrders). */
+  reloadLedger: () => Promise<void>
   /** Une écriture est en cours : les crans ne doivent pas être re-cliquables. */
   saving: boolean
   /** L'écriture a échoué. L'affichage est déjà revenu en arrière. */
@@ -146,6 +149,18 @@ export function ledgerState(rows: EventLedgerLine[], secret: SecretRevenue | 'ma
             direction: 'in',
             source: 'manual',
           },
+          ...(secret.sures > 0
+            ? [
+                {
+                  id: 'sures',
+                  category: ORDER_CATEGORY,
+                  label: ORDER_LABELS.sures,
+                  amount: secret.sures,
+                  direction: 'in' as const,
+                  source: 'manual',
+                },
+              ]
+            : []),
         ]
       : []
   const filled = rows.length > 0 || state !== 'none'
@@ -446,6 +461,7 @@ export function useEvent(
     setPayment,
     setOrientation,
     setStandAmount,
+    reloadLedger,
     saving,
     writeError,
   }

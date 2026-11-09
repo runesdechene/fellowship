@@ -4,7 +4,8 @@
  *            date chiffrée montre Carte et Espèces (« chiffré »), masquées tant que la phrase
  *            n'est pas tapée (UnlockRow) ; la catégorie « Recettes chiffrées » ouvre EncryptDialog.
  *            Une date sans recette en clair d'une enseigne qui a sa phrase montre Carte et Espèces
- *            d'office (encryptsByDefault) : le premier montant saisi scelle la date.
+ *            d'office (encryptsByDefault) : le premier montant saisi scelle la date. Commandes sûres
+ *            (comptées) et potentielles (hors total) ont toujours leur ligne, chiffrée ou non selon la date.
  * POURQUOI — chaque ligne s'enregistre aussitôt, comme le dossier d'une date : on tape, on passe.
  * ATTENTION — la ligne « depuis la fiche » est le prix de la place de Mon dossier : useReport
  *            l'écrit par set_stand_amount. Vider un montant retire la ligne ; un montant qui ne
@@ -18,6 +19,8 @@ import {
   CreditCard,
   Fuel,
   HandCoins,
+  PackageCheck,
+  PackageSearch,
   Plus,
   ShoppingBag,
   Tent,
@@ -31,12 +34,17 @@ import { DraftInput } from '@/components/ui/DraftInput'
 import { Select } from '@/components/ui/Select'
 import { formatDateRange } from '@/lib/dates'
 import { formatEuros, parseAmount } from '@/lib/money'
+import type { SecretRevenue } from '@/lib/cipher'
 import {
+  ORDER_CATEGORY,
+  ORDER_LABELS,
   SECRET_CATEGORY,
   addableCategories,
   categoryLabel,
-  encryptsByDefault,
+  revenueRegime,
+  type OrderKind,
 } from '@/lib/report-writes'
+import { ordersNotes } from '@/lib/reports'
 import { useRevenueKey } from '@/lib/revenue-key'
 import type { LedgerCategory } from '@/types/database'
 import peageIcon from '@/assets/peage.svg'
@@ -234,29 +242,51 @@ function AddLine({
 const sum = (lines: ReportEntry[]) => lines.reduce((total, line) => total + line.amount, 0)
 
 export function Ledger({ detail, actions }: { detail: ReportDetail; actions: ReportActions }) {
-  const { date, entries, revenue } = detail
+  const { date, entries, revenue, orders } = detail
   const revenueKey = useRevenueKey()
   const [invalid, setInvalid] = useState(false)
   const [asking, setAsking] = useState<'unlock' | 'dialog' | null>(null)
   const [unlocking, setUnlocking] = useState(false)
   // Pas encore scellée : Carte et Espèces valent 0 tant que la clé est ouverte, masquées sinon.
-  const byDefault = encryptsByDefault(date.secret, entries, revenueKey.status)
-  const masked = date.secret === 'masked' || (byDefault && revenueKey.status === 'locked')
-  const encrypted = date.secret !== 'none' || byDefault
+  const { byDefault, masked, encrypted } = revenueRegime(
+    date.secret,
+    entries,
+    revenueKey.status,
+    orders.potentielles,
+  )
   const clearIn = entries.filter((entry) => entry.direction === 'in')
-  const manualIn = clearIn.filter((entry) => entry.source === 'manual')
+  // Les commandes sûres ont leur ligne fixe : elles comptent dans le total, pas dans cette liste.
+  const otherIn = clearIn.filter((entry) => entry.category !== ORDER_CATEGORY)
+  const manualIn = otherIn.filter((entry) => entry.source === 'manual')
   const outLines = entries.filter((entry) => entry.direction === 'out')
-  const secretTotal = revenue ? revenue.carte + revenue.especes : 0
+  const secretTotal = revenue ? revenue.carte + revenue.especes + revenue.sures : 0
   const revenueTotal = masked ? <MaskedAmount /> : formatEuros(sum(clearIn) + secretTotal)
+  const notes = masked ? [] : ordersNotes(orders)
 
-  /** Carte ou Espèces modifiée sur place : les deux se rescellent ensemble. */
-  function reseal(part: 'carte' | 'especes', amount: number | null) {
+  /** Un montant chiffré modifié sur place : tous se rescellent ensemble. */
+  function reseal(part: keyof SecretRevenue, amount: number | null) {
     const key = revenueKey.key
     if (!key) return
     // Rien de scellé pour un zéro : la date resterait « remplie » sans que rien n'y soit saisi.
     if (byDefault && !amount) return
     actions.resealPart(key, part, amount ?? 0)
   }
+
+  const orderLine = (kind: OrderKind) => (
+    <LedgerLine
+      key={kind}
+      icon={<LineIcon Icon={kind === 'sures' ? PackageCheck : PackageSearch} />}
+      label={ORDER_LABELS[kind]}
+      badge={kind === 'potentielles' ? 'hors total' : encrypted ? 'chiffré' : undefined}
+      direction="in"
+      amount={masked ? 'masked' : orders[kind]}
+      onSave={(amount) => {
+        if (encrypted) reseal(kind, amount)
+        else actions.setClearOrder(kind, amount ?? 0)
+      }}
+      onInvalid={setInvalid}
+    />
+  )
 
   const secretLine = (part: 'carte' | 'especes') => (
     <LedgerLine
@@ -275,25 +305,30 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
 
   return (
     <div className="ledger">
-      {(encrypted || clearIn.length > 0) && (
-        <div className="ledger__group">
-          <div className="ledger__group-head">
-            <span>Recettes</span>
-            <span>{revenueTotal}</span>
-          </div>
-          {encrypted && [secretLine('carte'), secretLine('especes')]}
-          {masked && (
-            <UnlockRow
-              onAsk={() => {
-                setUnlocking(true)
-              }}
-            />
-          )}
-          {clearIn.map((entry) => (
-            <EntryLine key={entry.id} entry={entry} actions={actions} onInvalid={setInvalid} />
-          ))}
+      <div className="ledger__group">
+        <div className="ledger__group-head">
+          <span>Recettes</span>
+          <span>{revenueTotal}</span>
         </div>
-      )}
+        {notes.map((note) => (
+          <p key={note} className="ledger__note">
+            {note}
+          </p>
+        ))}
+        {encrypted && [secretLine('carte'), secretLine('especes')]}
+        {orderLine('sures')}
+        {orderLine('potentielles')}
+        {masked && (
+          <UnlockRow
+            onAsk={() => {
+              setUnlocking(true)
+            }}
+          />
+        )}
+        {otherIn.map((entry) => (
+          <EntryLine key={entry.id} entry={entry} actions={actions} onInvalid={setInvalid} />
+        ))}
+      </div>
       {outLines.length > 0 && (
         <div className="ledger__group">
           <div className="ledger__group-head">
@@ -340,7 +375,9 @@ export function Ledger({ detail, actions }: { detail: ReportDetail; actions: Rep
             // La maquette ne répartit pas les recettes saisies : tout part sur Carte, Espèces à 0.
             initial: { carte: sum(manualIn), especes: 0 },
             replaces: manualIn.length > 0,
-            onSeal: actions.sealRevenue,
+            onSeal: (key, takings) => {
+              actions.sealRevenue(key, { ...takings, ...orders })
+            },
           }}
           onClose={() => {
             setAsking(null)
