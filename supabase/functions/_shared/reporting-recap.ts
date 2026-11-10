@@ -49,6 +49,10 @@ export async function preparerRecap(entite: string, environnement: string, mois:
   const { data: note, error: noteErreur } = await admin.from('reporting_recap_notes').select('note')
     .eq('entity_actor_id', entite).eq('mois', `${mois}-01`).maybeSingle()
   if (noteErreur) throw noteErreur
+  // Le premier envoi réel : avant lui, le récap donne les chiffres calculés, sans les dire déclarés.
+  const { data: entreprise, error: entrepriseErreur } = await admin.from('reporting_entreprises')
+    .select('envoi_a_partir_du').eq('entity_actor_id', entite).single()
+  if (entrepriseErreur) throw entrepriseErreur
 
   const secret = (nom: string) => lireSecret(entite, 'sources', nom)
   const fichier = nomDuMois(mois).replace(' ', '-')
@@ -61,7 +65,7 @@ export async function preparerRecap(entite: string, environnement: string, mois:
       pieces.push({ nom: `sumup-versements-${fichier}.csv`, csv: csvVersementsSumup(await versementsSumup(await secret('sumup_api_key'), mois)) })
     }
   }
-  return { ...messageRecap(mois, jours, note?.note ?? null), note: note?.note ?? null, pieces }
+  return { ...messageRecap(mois, jours, note?.note ?? null, entreprise.envoi_a_partir_du), note: note?.note ?? null, pieces }
 }
 
 /** « 2026-11 » → « 2026-12 ». */

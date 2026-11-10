@@ -37,15 +37,17 @@ export function RecapPage({ entityId }: { entityId: string }) {
   const [noteProblem, setNoteProblem] = useState<string | null>(null)
   const previous = new Date(month.getFullYear(), month.getMonth() - 1, 1)
   const next = new Date(month.getFullYear(), month.getMonth() + 1, 1)
+  const name = monthName(month)
 
   return (
     <div className="admin-page reporting-settings">
       <header className="reporting__head">
         <div className="admin-home__head">
-          <h1 className="admin-home__title">Récap de {monthName(month)}</h1>
+          <h1 className="admin-home__title">
+            {/^[aeiou]/.test(name) ? `Récap d’${name}` : `Récap de ${name}`}
+          </h1>
           <p className="admin-page__lede">
-            L’e-mail que ton expert-comptable recevra, mot pour mot. Il ne compte que ce qui est
-            parti à l’administration.
+            L’e-mail que ton expert-comptable recevra, mot pour mot.
           </p>
         </div>
         <nav className="reporting-recap__months" aria-label="Mois">

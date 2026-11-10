@@ -20,13 +20,27 @@ test('le récap du mois additionne ce qui est parti, décade par décade', () =>
     j('2026-11-15', 'envoyee', [commande({ nom: '#2003', pays: 'CH', ttc: 17721, tva: 0 })]),
     j('2026-11-25', 'envoyee', [commande({ ttc: -3000, tva: -500 })]),
     j('2026-11-28', 'a_verifier', [commande({ ttc: 6000, tva: 1000 })]),
-  ])
+  ], null, '2026-11-01')
   assert.equal(sujet, 'Runes de Chêne : ventes aux particuliers de novembre 2026')
   assert.match(texte, /- Du 1er au 10 : 100,00 € HT à 20 % \(TVA 20,00 €\), 0,00 € hors TVA française\./)
   assert.match(texte, /- Du 11 au 20 : 0,00 € HT à 20 % \(TVA 0,00 €\), 177,21 € hors TVA française\./)
   assert.match(texte, /- Du 21 au 30 : -25,00 € HT à 20 % \(TVA -5,00 €\)/) // le 28 n'est pas parti : pas compté
   assert.match(texte, /Mois : 75,00 € HT à 20 % \(TVA 15,00 €\), 177,21 € hors TVA française\./)
   assert.match(texte, /Pas encore déclarés : 28\/11\/2026\./)
+})
+
+test('avant le premier envoi réel, le récap compte les journées vérifiées et le dit', () => {
+  const j = (jour: string, statut: string, ventes: Commande[]) => ({ ...journee(jour, { shopify: ventes, sumup: [] }), statut })
+  const jours = [
+    j('2026-10-04', 'prete', [commande({ ttc: 12000, tva: 2000 })]),
+    j('2026-10-05', 'a_verifier', [commande({ ttc: 6000, tva: 1000 })]),
+  ]
+  const { texte } = messageRecap('2026-10', jours, null, '2026-11-01')
+  assert.match(texte, /calculées depuis Shopify et SumUp.*L'e-reporting commence le 01\/11\/2026 : ces ventes ne sont pas déclarées/)
+  assert.match(texte, /Mois : 100,00 € HT à 20 % \(TVA 20,00 €\)/) // la journée prête compte, pas celle à vérifier
+  assert.match(texte, /Pas encore vérifiés : 05\/10\/2026\./)
+  // Après le début, une journée prête mais pas partie ne compte pas.
+  assert.match(messageRecap('2026-11', [j('2026-11-04', 'prete', [commande({})])], null, '2026-11-01').texte, /Mois : 0,00 €/)
 })
 
 test('la note du mois s’ajoute sous l’introduction du récap', () => {
