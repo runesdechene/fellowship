@@ -444,10 +444,6 @@
   align-items: flex-end;
 }
 
-.reporting-recap__files a {
-  color: inherit;
-}
-
 /* Le texte de l'e-mail, retours à la ligne compris, avec le retrait d'une ligne de réglage. */
 .reporting-recap__body {
   margin: 0;
@@ -456,6 +452,24 @@
   color: var(--ink-title);
   white-space: pre-line;
   overflow-wrap: anywhere;
+}
+
+/* L'aperçu d'une pièce jointe : le tableau des journées, qui défile seul en largeur. */
+.reporting-recap__table {
+  overflow-x: auto;
+  padding: var(--space-8) var(--space-20);
+}
+
+.reporting-recap__table :is(th, td) {
+  white-space: nowrap;
+}
+
+.reporting-recap__download {
+  display: block;
+  padding: var(--space-12) var(--space-20);
+  border-top: 1px solid var(--line-card);
+  font: var(--type-report-name);
+  color: var(--ink-title);
 }
 
 /* --- Téléphone ----------------------------------------------------------- */

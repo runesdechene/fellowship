@@ -15,6 +15,7 @@ import {
 } from '@/lib/dates'
 import { parseMonthKey } from '@/lib/reporting'
 import { SettingRow, SettingSection } from '@/features/settings/SettingRow'
+import { RecapFile } from './RecapFile'
 import { useRecap } from './useRecap'
 
 /** La note de « L’envoi » : où il part vraiment, et s'il part. */
@@ -72,13 +73,7 @@ export function RecapPage({ entityId }: { entityId: string }) {
             <SettingRow title="Pièces jointes">
               <span className="reporting-recap__files">
                 {recap.pieces.map((piece) => (
-                  <a
-                    key={piece.nom}
-                    href={`data:text/csv;charset=utf-8,${encodeURIComponent(piece.csv)}`}
-                    download={piece.nom}
-                  >
-                    {piece.nom}
-                  </a>
+                  <span key={piece.nom}>{piece.nom}</span>
                 ))}
               </span>
             </SettingRow>
@@ -87,6 +82,10 @@ export function RecapPage({ entityId }: { entityId: string }) {
           <SettingSection title="Le message" note="Le texte exact de l’e-mail.">
             <p className="reporting-recap__body">{recap.texte}</p>
           </SettingSection>
+
+          {recap.pieces.map((piece) => (
+            <RecapFile key={piece.nom} name={piece.nom} csv={piece.csv} />
+          ))}
         </div>
       )}
     </div>
