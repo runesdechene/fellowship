@@ -3,6 +3,7 @@
 // par un e-mail s'il y a quelque chose à voir (alerte.ts).
 // Auth : verify_jwt = false (config.toml) ; l'en-tête X-Reporting-Secret remplace le JWT, il est
 // envoyé par le cron. Corps facultatif { du, au } (AAAA-MM-JJ) : relit la période, sans rien envoyer.
+// { aujourdhui } (AAAA-MM-JJ) fait comme si l'on était ce jour-là pour le récap du mois (recap.ts) : pour l'essayer.
 // Une journée déjà validée, en cours d'envoi ou envoyée ne se réécrit jamais.
 // Secrets dans Vault, nommés reporting:<enseigne>:sources:<nom> — ils ne dépendent pas de l'environnement.
 // Conception : « E-Repporting Imperial/conception.md ».
@@ -12,6 +13,7 @@ import { journee, REECRIVABLES, type Ventes } from '../_shared/reporting-ventes.
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
 import { lireSecret } from '../_shared/reporting-superpdp.ts'
 import { alerter } from './alerte.ts'
+import { envoyerRecap } from './recap.ts'
 import { type Entreprise, envoyerPretes } from './envoi.ts'
 import { jourDe, lireShopify, lireSumup, seuilUeDepasse } from './sources.ts'
 
@@ -26,7 +28,8 @@ Deno.serve(async (req) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405)
   if (!SECRET || req.headers.get('x-reporting-secret') !== SECRET) return json({ error: 'unauthorized' }, 401)
 
-  const corps = (await req.json().catch(() => ({}))) as { du?: string; au?: string }
+  const corps = (await req.json().catch(() => ({}))) as { du?: string; au?: string; aujourdhui?: string }
+  if (corps.aujourdhui !== undefined && !JOUR.test(corps.aujourdhui)) return json({ error: 'invalid_date' }, 400)
   const hier = ilYa(1)
   const au = corps.au ?? hier
   const relecture = corps.du !== undefined
@@ -37,7 +40,8 @@ Deno.serve(async (req) => {
 
   const admin = getSupabaseAdmin()
   const { data: entreprises, error } = await admin.from('reporting_entreprises')
-    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du, alerte_email, rappel_echeance').eq('actif', true)
+    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du, alerte_email, rappel_echeance, recap_comptable, recap_comptable_email')
+    .eq('actif', true)
   if (error) return json({ error: 'failed' }, 500)
 
   const bilan = []
@@ -47,7 +51,8 @@ Deno.serve(async (req) => {
       const lecture = du <= au ? await lireEntreprise(e, du, au) : null
       const envoi = relecture ? null : await envoyerPretes(e, ilYa(DELAI_ENVOI))
       const alerte = relecture ? false : await alerter(e, lecture?.muettes ?? [])
-      bilan.push({ entreprise: e.entity_actor_id, du, au, lecture, envoi, alerte })
+      const recap = relecture ? false : await envoyerRecap(e, corps.aujourdhui ?? ilYa(0))
+      bilan.push({ entreprise: e.entity_actor_id, du, au, lecture, envoi, alerte, recap })
     } catch (err) {
       console.error('[reporting-quotidien]', e.entity_actor_id, err)
       bilan.push({ entreprise: e.entity_actor_id, erreur: String(err) })

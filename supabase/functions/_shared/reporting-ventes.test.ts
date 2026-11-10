@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { paysDeStand } from './reporting-stands.ts'
-import { cleVente, echeanceDe, horsCartesCadeaux, journee, messageAlerte, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, echeanceDe, horsCartesCadeaux, journee, messageAlerte, messageRecap, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
@@ -11,6 +11,22 @@ const commande = (c: Partial<Commande>): Commande => ({
 test('une carte cadeau vendue sort du montant, le reste de la commande reste', () => {
   assert.equal(horsCartesCadeaux(8000, [{ carteCadeau: true, ttc: 5000 }, { carteCadeau: false, ttc: 3000 }]), 3000)
   assert.equal(horsCartesCadeaux(5000, [{ carteCadeau: true, ttc: 5000 }]), 0)
+})
+
+test('le récap du mois additionne ce qui est parti, décade par décade', () => {
+  const j = (jour: string, statut: string, ventes: Commande[]) => ({ ...journee(jour, { shopify: ventes, sumup: [] }), statut })
+  const { sujet, texte } = messageRecap('2026-11', [
+    j('2026-11-04', 'envoyee', [commande({ ttc: 12000, tva: 2000 })]),
+    j('2026-11-15', 'envoyee', [commande({ nom: '#2003', pays: 'CH', ttc: 17721, tva: 0 })]),
+    j('2026-11-25', 'envoyee', [commande({ ttc: -3000, tva: -500 })]),
+    j('2026-11-28', 'a_verifier', [commande({ ttc: 6000, tva: 1000 })]),
+  ])
+  assert.equal(sujet, 'Runes de Chêne : ventes aux particuliers de novembre 2026')
+  assert.match(texte, /- Du 1er au 10 : 100,00 € HT à 20 % \(TVA 20,00 €\), 0,00 € hors TVA française\./)
+  assert.match(texte, /- Du 11 au 20 : 0,00 € HT à 20 % \(TVA 0,00 €\), 177,21 € hors TVA française\./)
+  assert.match(texte, /- Du 21 au 30 : -25,00 € HT à 20 % \(TVA -5,00 €\)/) // le 28 n'est pas parti : pas compté
+  assert.match(texte, /Mois : 75,00 € HT à 20 % \(TVA 15,00 €\), 177,21 € hors TVA française\./)
+  assert.match(texte, /Pas encore déclarés : 28\/11\/2026\./)
 })
 
 test('une commande française juste ne lève rien', () => {

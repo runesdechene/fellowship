@@ -100,6 +100,45 @@ export function messageAlerte(
   return { sujet: `Fellowship E-Reporting : ${sujet}`, texte: `${lignes.join('\n')}\n\nhttps://flw.sh/reporting` }
 }
 
+interface JourRecap {
+  jour: string
+  statut: string
+  lignes: { category_code: string; tax_exclusive_amount: string; tax_total: string }[]
+  detail: Record<string, { liste: { nom?: string; code?: string; facturee?: boolean }[] } | null>
+}
+
+const MOIS = 'janvier février mars avril mai juin juillet août septembre octobre novembre décembre'.split(' ')
+
+/** Le récap du mois pour l'expert-comptable : ce qui est parti à l'administration, décade par décade. */
+export function messageRecap(mois: string, jours: JourRecap[]) {
+  const [annee, m] = mois.split('-').map(Number)
+  const nomMois = `${MOIS[m - 1]} ${annee}`
+  const centimes = (montant: string) => Math.round(Number(montant) * 100)
+  const somme = (liste: JourRecap[], categorie: string, champ: 'tax_exclusive_amount' | 'tax_total') =>
+    liste.filter((j) => j.statut === 'envoyee').flatMap((j) => j.lignes).filter((l) => l.category_code === categorie).reduce((a, l) => a + centimes(l[champ]), 0)
+  const bilan = (liste: JourRecap[]) =>
+    `${euros(somme(liste, 'TLB1', 'tax_exclusive_amount'))} HT à 20 % (TVA ${euros(somme(liste, 'TLB1', 'tax_total'))}), ` +
+    `${euros(somme(liste, 'TNT1', 'tax_exclusive_amount'))} hors TVA française`
+
+  const fin = new Date(Date.UTC(annee, m, 0)).getUTCDate()
+  const decades = [[1, 10], [11, 20], [21, fin]].map(([du, au]) => {
+    const liste = jours.filter((j) => Number(j.jour.slice(8)) >= du && Number(j.jour.slice(8)) <= au)
+    return `- Du ${du === 1 ? '1er' : du} au ${au} : ${bilan(liste)}.`
+  })
+  const nonParties = jours.filter((j) => !['envoyee', 'vide'].includes(j.statut)).map((j) => dateFr(j.jour))
+  const facturees = jours.flatMap((j) => Object.values(j.detail).flatMap((lue) => lue?.liste ?? []))
+    .filter((v) => v.facturee).map((v) => v.nom ?? v.code)
+
+  const texte = [
+    `Ventes aux particuliers de ${nomMois}, telles que déclarées à l'administration (e-reporting), remboursements déduits.`,
+    '', ...decades, '', `Mois : ${bilan(jours)}.`, '',
+    'Hors TVA française : exports (Suisse, outre-mer…) et stands à l’étranger.',
+    ...(facturees.length ? [`Facturées à un pro, donc absentes de ce récap : ${facturees.join(', ')}.`] : []),
+    ...(nonParties.length ? [`Pas encore déclarés : ${nonParties.join(', ')}.`] : []),
+  ]
+  return { sujet: `Runes de Chêne : ventes aux particuliers de ${nomMois}`, texte: texte.join('\n') }
+}
+
 function dateFr(date: string): string {
   const c = date.replace(/\D/g, '')
   return `${c.slice(6, 8)}/${c.slice(4, 6)}/${c.slice(0, 4)}`
