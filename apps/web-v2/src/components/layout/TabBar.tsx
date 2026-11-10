@@ -170,7 +170,7 @@ export function TabBar({
             <span className="tab-sheet__grow">Nouveautés</span>
             <span className="tab-sheet__version">Fellowship {__APP_VERSION__}</span>
           </NavLink>
-          <InstallMenuItem onDone={close} />
+          <InstallMenuItem variant="sheet" onDone={close} />
           <NavLink
             to="/bienvenue?nouvelle-enseigne"
             className="tab-sheet__item tab-sheet__link"

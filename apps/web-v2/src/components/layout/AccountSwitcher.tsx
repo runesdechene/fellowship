@@ -17,6 +17,7 @@ import { ADMIN_HOME, isAdminPath } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
 import { isReportingPath, REPORTING_HOME } from '@/lib/reporting-zone'
 import { useReportingAccess } from '@/features/reporting/useReportingAccess'
+import { InstallMenuItem } from './InstallMenuItem'
 
 const REPORTING_LABEL = 'Fellowship E-Reporting'
 const ADMIN_LABEL = 'Administration'
@@ -192,6 +193,12 @@ export function AccountSwitcher({ collapsed, onExpand }: AccountSwitcherProps) {
             </span>
             <span className="account-switcher__name">Ajouter un compte exposant</span>
           </button>
+          <InstallMenuItem
+            variant="menu"
+            onDone={() => {
+              setOpen(false)
+            }}
+          />
         </div>
       )}
     </div>
