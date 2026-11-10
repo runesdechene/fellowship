@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
 
   const admin = getSupabaseAdmin()
   const { data: entreprises, error } = await admin.from('reporting_entreprises')
-    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du, alerte_email, rappel_echeance, recap_comptable, recap_comptable_email')
+    .select('entity_actor_id, environnement, date_de_vente, regime_tva, envoi_a_partir_du, alerte_email, rappel_echeance, recap_comptable, recap_comptable_email, derniere_alerte')
     .eq('actif', true)
   if (error) return json({ error: 'failed' }, 500)
 

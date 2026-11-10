@@ -75,6 +75,15 @@ export function echeanceDe(jour: string): string {
   return date.toISOString().slice(0, 10)
 }
 
+/** L'e-mail du matin repart-il ? S'il a changé depuis le dernier envoi ; inchangé, seulement quand une
+ *  échéance tombe dans deux jours au plus, ou est passée (Uriel, 10/11/2026 : plus de répétition). */
+export function alerteARedire(texte: string, precedent: string | null, jours: { jour: string }[], aujourdhui: string): boolean {
+  if (texte !== precedent) return true
+  const limite = new Date(`${aujourdhui}T12:00:00Z`)
+  limite.setUTCDate(limite.getUTCDate() + 2)
+  return jours.some((j) => echeanceDe(j.jour) <= limite.toISOString().slice(0, 10))
+}
+
 const A_TRAITER: Record<string, string> = {
   a_verifier: 'à vérifier',
   refusee: 'refusée par SuperPDP',

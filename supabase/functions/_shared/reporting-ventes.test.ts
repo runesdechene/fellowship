@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { paysDeStand } from './reporting-stands.ts'
-import { cleVente, echeanceDe, horsCartesCadeaux, journee, messageAlerte, messageRecap, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { alerteARedire, cleVente, echeanceDe, horsCartesCadeaux, journee, messageAlerte, messageRecap, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
@@ -41,6 +41,15 @@ test('avant le premier envoi réel, le récap compte les journées vérifiées e
   assert.match(texte, /Pas encore vérifiés : 05\/10\/2026\./)
   // Après le début, une journée prête mais pas partie ne compte pas.
   assert.match(messageRecap('2026-11', [j('2026-11-04', 'prete', [commande({})])], null, '2026-11-01').texte, /Mois : 0,00 €/)
+})
+
+test('l’e-mail du matin ne se répète pas, sauf à l’approche de l’échéance', () => {
+  const jours = [{ jour: '2026-11-04' }] // échéance le 20/11
+  assert.equal(alerteARedire('A', null, jours, '2026-11-10'), true) // premier envoi
+  assert.equal(alerteARedire('B', 'A', jours, '2026-11-10'), true) // quelque chose a changé
+  assert.equal(alerteARedire('A', 'A', jours, '2026-11-10'), false) // rien de neuf, échéance loin
+  assert.equal(alerteARedire('A', 'A', jours, '2026-11-18'), true) // deux jours avant
+  assert.equal(alerteARedire('A', 'A', jours, '2026-11-25'), true) // échéance passée
 })
 
 test('la note du mois s’ajoute sous l’introduction du récap', () => {

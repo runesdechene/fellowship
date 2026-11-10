@@ -17,6 +17,7 @@ export interface Entreprise {
   envoi_a_partir_du: string | null
   recap_comptable: boolean
   recap_comptable_email: string | null
+  derniere_alerte: string | null
 }
 
 /** Envoie les journées prêtes jusqu'à `limite`, par date croissante. */
