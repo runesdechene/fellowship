@@ -44,6 +44,16 @@ committer avec `git commit -m … -- <mes fichiers>` : seuls ces chemins partent
 reste en place. Un fichier partagé par les deux (`2-semantic.css`) : ne committer que ses propres
 morceaux, par un correctif filtré appliqué à un index temporaire (`GIT_INDEX_FILE`).
 
+## Deux sessions dans le même dossier : commiter par chemins
+
+**Le piège** (10/11/2026) : une autre session travaillait sur la même branche, dans le même dossier.
+J'avais mis mes fichiers dans l'index ; son `git commit` les a emportés sous son message
+(`56661873`, « le fil engage la conversation… » contient tout le récap du reporting).
+
+**How to apply :** quand `git status` montre des fichiers qu'on n'a pas touchés, commiter avec
+`git commit -m … -- <mes fichiers>` (jamais l'index entier), et ne rien laisser dans l'index entre
+deux étapes. Un fichier partagé (`2-semantic.css`) : seulement ses propres lignes, par patch.
+
 ## Check git diff before editing dirty files
 
 Always check `git diff HEAD -- <file>` before editing a file that's already modified in git status. Existing uncommitted changes may contain valid fixes from prior sessions.
