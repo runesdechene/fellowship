@@ -1,17 +1,19 @@
 // recap : le 11 de chaque mois, le récap du mois précédent pour l'expert-comptable. La dernière décade
 // se dépose au plus tard le 10 : le mois est alors parti. Une panne d'e-mail n'arrête rien.
-// Dans le bac à sable, le récap part à l'adresse d'alerte, jamais à l'expert-comptable.
+// Dans le bac à sable, le récap part à l'adresse d'alerte (ou du compte), jamais à l'expert-comptable.
 import { messageRecap } from '../_shared/reporting-ventes.ts'
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
+import { adresseAlerte } from './alerte.ts'
 import type { Entreprise } from './envoi.ts'
 
 const JOUR_DU_RECAP = '11'
 
 // shortcut : un passage manqué le 11 saute le récap du mois ; à suivre en base si ça arrive.
 export async function envoyerRecap(e: Entreprise, aujourdhui: string) {
-  const destinataire = e.environnement === 'production' ? e.recap_comptable_email : e.alerte_email
-  if (!e.recap_comptable || !destinataire || aujourdhui.slice(8) !== JOUR_DU_RECAP) return false
+  if (!e.recap_comptable || aujourdhui.slice(8) !== JOUR_DU_RECAP) return false
   try {
+    const destinataire = e.environnement === 'production' ? e.recap_comptable_email : await adresseAlerte(e)
+    if (!destinataire) return false
     const debut = new Date(`${aujourdhui.slice(0, 7)}-01T12:00:00Z`)
     debut.setUTCMonth(debut.getUTCMonth() - 1)
     const mois = debut.toISOString().slice(0, 7)

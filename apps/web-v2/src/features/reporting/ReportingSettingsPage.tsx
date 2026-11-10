@@ -125,7 +125,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
           </SettingRow>
           <SettingRow
             title="Ce qui bloque une journée"
-            note="Vente hors de France, taux autre que 20 %, devise autre que l’euro, client entreprise, carte cadeau, total négatif. Tu valides la journée à la main."
+            note="Commande non payée ou sans adresse, TVA de Shopify fausse, TVA comptée sur un export, stand à l’étranger à confirmer, seuil de vente dans l’UE dépassé. Tu valides la journée à la main."
           >
             <span className="reporting-settings__fixed">
               <Lock size={14} strokeWidth={2} aria-hidden="true" />
@@ -190,7 +190,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
         >
           <SettingRow
             title="Adresse d’alerte"
-            note="Journée à vérifier, source muette, déclaration refusée."
+            note="Journée à vérifier, source muette, déclaration refusée. Vide : l’adresse de ton compte."
           >
             <EmailSetting
               value={company.alerte_email}
@@ -200,7 +200,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
           </SettingRow>
           <SettingRow
             title="Rappel avant échéance"
-            note="Trois jours avant, si une journée de la décade n’est pas partie."
+            note="Dans l’e-mail, la date limite de chaque journée qui attend."
           >
             <Switch
               on={company.rappel_echeance}
@@ -216,7 +216,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
         >
           <SettingRow
             title="Récapitulatif mensuel"
-            note="Le 3 de chaque mois, les totaux du mois précédent par décade."
+            note="Le 11 de chaque mois, les totaux déclarés du mois précédent, par décade. Au bac à sable, il part à ton adresse d’alerte."
           >
             <Switch
               on={company.recap_comptable}
@@ -225,12 +225,12 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
             />
           </SettingRow>
           <SettingRow
-            title="Adresse de collecte Pennylane"
-            note="Le récapitulatif y arrive comme une pièce comptable."
+            title="Adresse de l’expert-comptable"
+            note="Le récapitulatif lui arrive par e-mail."
           >
             <EmailSetting
               value={company.recap_comptable_email}
-              placeholder="collecte@…pennylane.com"
+              placeholder="expert@cabinet.fr"
               onSave={(recap_comptable_email) => update({ recap_comptable_email })}
             />
           </SettingRow>

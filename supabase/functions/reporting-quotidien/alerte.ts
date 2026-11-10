@@ -6,9 +6,24 @@ import type { Entreprise } from './envoi.ts'
 
 const REJETS = ['ppf:ereporting-rejected', 'ppf:ereporting-ack-error']
 
+/** L'adresse d'alerte, ou à défaut celle du propriétaire de l'enseigne (le plus ancien s'ils sont plusieurs). */
+export async function adresseAlerte(e: Entreprise): Promise<string | null> {
+  if (e.alerte_email) return e.alerte_email
+  const admin = getSupabaseAdmin()
+  const { data: proprietaire, error } = await admin.from('memberships').select('user_actor_id')
+    .eq('entity_actor_id', e.entity_actor_id).eq('role', 'owner').order('created_at').limit(1).maybeSingle()
+  if (error) throw error
+  if (!proprietaire) return null
+  const { data: compte, error: compteErreur } = await admin.from('users').select('email')
+    .eq('actor_id', proprietaire.user_actor_id).maybeSingle()
+  if (compteErreur) throw compteErreur
+  return compte?.email ?? null
+}
+
 export async function alerter(e: Entreprise, muettes: string[]) {
-  if (!e.alerte_email) return false
   try {
+    const destinataire = await adresseAlerte(e)
+    if (!destinataire) return false
     const { data: jours, error } = await getSupabaseAdmin().from('reporting_journees').select('jour, statut')
       .eq('entity_actor_id', e.entity_actor_id).eq('environnement', e.environnement)
       .in('statut', ['a_verifier', 'refusee', 'inconnue', 'en_attente']).order('jour')
@@ -21,7 +36,7 @@ export async function alerter(e: Entreprise, muettes: string[]) {
       method: 'POST',
       headers: { Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: '"Fellowship" <notifications@equipe.flw.sh>', to: [e.alerte_email], subject: message.sujet, text: message.texte,
+        from: '"Fellowship" <notifications@equipe.flw.sh>', to: [destinataire], subject: message.sujet, text: message.texte,
       }),
     })
     if (!reponse.ok) throw new Error(`Resend ${reponse.status}`)
