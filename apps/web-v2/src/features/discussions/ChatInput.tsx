@@ -4,6 +4,7 @@
  *            collée dans le champ se joint au message ; l'envoi se fait au nom de l'acteur actif.
  *            En modification, le champ reprend le texte du message : « Entrée » l'enregistre,
  *            « Échap » ou la croix l'abandonne.
+ *            Un festival joint (`eventId`, venu du fil de Ma communauté) part avec le message suivant.
  * ATTENTION — le parent change la `key` à chaque message modifié : le champ repart de son texte.
  */
 import { useState } from 'react'
@@ -11,6 +12,7 @@ import { ArrowUp, ImagePlus, Plus, X } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { sendMessage, uploadMedia, type Media } from '@/lib/discussion-api'
 import type { Bubble } from '@/lib/discussions'
+import { FestivalAttachment } from './FestivalAttachment'
 
 interface Props {
   conversationId: string
@@ -18,9 +20,20 @@ interface Props {
   editing: Bubble | null
   onEdit: (messageId: string, body: string) => Promise<void>
   onEditDone: () => void
+  /** Le festival joint au prochain message, et de quoi le retirer. */
+  eventId: string | null
+  onDetach: () => void
 }
 
-export function ChatInput({ conversationId, placeholder, editing, onEdit, onEditDone }: Props) {
+export function ChatInput({
+  conversationId,
+  placeholder,
+  editing,
+  onEdit,
+  onEditDone,
+  eventId,
+  onDetach,
+}: Props) {
   const { actor } = useAuth()
   const [text, setText] = useState(editing?.body ?? '')
   const [file, setFile] = useState<File | null>(null)
@@ -43,9 +56,10 @@ export function ChatInput({ conversationId, placeholder, editing, onEdit, onEdit
         if (typeof uploaded === 'string') throw new Error(uploaded)
         media = uploaded
       }
-      await sendMessage(actor.id, conversationId, text, media)
+      await sendMessage(actor.id, conversationId, text, media, eventId)
       setText('')
       setFile(null)
+      if (eventId) onDetach()
     } catch (error) {
       setProblem(error instanceof Error ? error.message : 'Le message n’est pas parti. Réessaie.')
     } finally {
@@ -74,6 +88,7 @@ export function ChatInput({ conversationId, placeholder, editing, onEdit, onEdit
           </button>
         </p>
       )}
+      {eventId && !editing && <FestivalAttachment eventId={eventId} onRemove={onDetach} />}
       {file && (
         <p className="chat-input__file">
           {file.name}

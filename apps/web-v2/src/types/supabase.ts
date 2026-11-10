@@ -1231,18 +1231,21 @@ export type Database = {
           follower_actor: string
           following_actor: string
           id: string
+          welcome: boolean
         }
         Insert: {
           created_at?: string
           follower_actor: string
           following_actor: string
           id?: string
+          welcome?: boolean
         }
         Update: {
           created_at?: string
           follower_actor?: string
           following_actor?: string
           id?: string
+          welcome?: boolean
         }
         Relationships: [
           {
@@ -1353,6 +1356,7 @@ export type Database = {
           conversation_id: string
           created_at: string
           edited_at: string | null
+          event_id: string | null
           id: string
           media_kind: Database["public"]["Enums"]["message_media"] | null
           media_path: string | null
@@ -1363,6 +1367,7 @@ export type Database = {
           conversation_id: string
           created_at?: string
           edited_at?: string | null
+          event_id?: string | null
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
@@ -1373,6 +1378,7 @@ export type Database = {
           conversation_id?: string
           created_at?: string
           edited_at?: string | null
+          event_id?: string | null
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
@@ -1390,6 +1396,13 @@ export type Database = {
             columns: ["conversation_id"]
             isOneToOne: false
             referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
         ]
@@ -3387,6 +3400,7 @@ export type Database = {
           p_actor: string
           p_body?: string
           p_conversation: string
+          p_event?: string
           p_media_kind?: Database["public"]["Enums"]["message_media"]
           p_media_path?: string
         }
@@ -3964,6 +3978,7 @@ export type Database = {
         | "app_update"
         | "app_update_reply"
         | "app_update_comment"
+        | "welcome"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -4131,6 +4146,7 @@ export const Constants = {
         "app_update",
         "app_update_reply",
         "app_update_comment",
+        "welcome",
       ],
       participation_status: [
         "interesse",

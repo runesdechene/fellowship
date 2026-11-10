@@ -1,45 +1,34 @@
 /**
  * QUOI     — une ligne du fil de la communauté : qui, la phrase, la petite carte du festival ou
- *            l'avis, l'âge, et Suivre quand il a un sens.
+ *            l'avis, l'âge, et le geste qui a un sens : Suivre, Souhaiter la bienvenue, Écrire.
  * POURQUOI — lot 9a, maquette 2212:2. Un avis sans auteur porte le bouclier de l'identité
  *            protégée : la base n'a pas donné le nom, l'écran ne le devine pas.
+ *            Le fil engage la conversation (maquette 2815:233) : « Écrire » à un ami qui s'intéresse,
+ *            va ou a candidaté, le festival joint ; une arrivée reçoit la bienvenue, pas un message
+ *            (les messages restent entre amis, Uriel, 10/11/2026).
  */
-import { Plus, Shield } from 'lucide-react'
+import { HandHeart, MessageCircle, Plus, Shield } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Poster } from '@/components/ui/Poster'
 import { Avatar } from '@/components/ui/Avatar'
+import { EventChip } from '@/components/ui/EventChip'
 import { Stars } from '@/components/ui/Stars'
 import { feedPhrase, type FeedLine, type FeedPerson } from '@/lib/community'
-import { formatDateRange, parseSqlDate, timeAgo } from '@/lib/dates'
+import { timeAgo } from '@/lib/dates'
 import { eventPath } from '@/lib/event-path'
+import { useWrite } from '@/features/discussions/useWrite'
+
+/** Les lignes d'un ami où « Écrire » engage la conversation sur le festival. */
+const WRITABLE = ['going', 'applied', 'interested']
 
 interface FeedItemProps {
   line: FeedLine
   now: Date
   /** Le compte que Suivre ajouterait, s'il y en a un à proposer. */
   followable: FeedPerson | null
-  onFollow: (id: string) => void
-}
-
-function EventCard({ line }: { line: FeedLine }) {
-  if (!line.event) return null
-  const { event } = line
-  const dates = formatDateRange(parseSqlDate(event.startDate), parseSqlDate(event.endDate))
-  const place = event.city
-    ? ` · ${event.city}${event.department ? ` (${event.department})` : ''}`
-    : ''
-  return (
-    <Link className="feed-event" to={eventPath(event.id)}>
-      <Poster imageUrl={event.imageUrl} tags={event.tags} className="feed-event__poster" />
-      <span className="feed-event__body">
-        <span className="feed-event__name">{event.name}</span>
-        <span className="feed-event__meta">
-          {dates}
-          {place}
-        </span>
-      </span>
-    </Link>
-  )
+  /** `welcome` : l'abonnement se dit « bienvenue » au nouveau venu. */
+  onFollow: (id: string, welcome: boolean) => void
+  /** L'auteur de la ligne est un ami : on peut lui écrire. */
+  friend: boolean
 }
 
 function Review({ line }: { line: FeedLine }) {
@@ -57,8 +46,11 @@ function Review({ line }: { line: FeedLine }) {
   )
 }
 
-export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
+export function FeedItem({ line, now, followable, onFollow, friend }: FeedItemProps) {
   const phrase = feedPhrase(line)
+  const { write, busy } = useWrite()
+  const writeTo = friend && WRITABLE.includes(line.kind) ? line.who : null
+  const welcome = line.kind === 'arrival'
   return (
     <li className="feed-item">
       {line.who ? (
@@ -82,8 +74,8 @@ export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
             ),
           )}
         </p>
-        {['going', 'applied', 'interested', 'added'].includes(line.kind) && (
-          <EventCard line={line} />
+        {line.event && ['going', 'applied', 'interested', 'added'].includes(line.kind) && (
+          <EventChip event={line.event} />
         )}
         {line.kind === 'review' && <Review line={line} />}
       </div>
@@ -94,11 +86,25 @@ export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
           <button
             type="button"
             className="feed-item__follow"
-            onClick={() => onFollow(followable.id)}
-            aria-label={`Suivre ${followable.name}`}
+            onClick={() => onFollow(followable.id, welcome)}
+            aria-label={
+              welcome ? `Souhaiter la bienvenue à ${followable.name}` : `Suivre ${followable.name}`
+            }
           >
-            <Plus size={13} strokeWidth={2} />
-            Suivre
+            {welcome ? <HandHeart size={13} strokeWidth={2} /> : <Plus size={13} strokeWidth={2} />}
+            {welcome ? 'Souhaiter la bienvenue' : 'Suivre'}
+          </button>
+        )}
+        {writeTo && (
+          <button
+            type="button"
+            className="feed-item__follow"
+            disabled={busy}
+            onClick={() => void write(writeTo.id, line.event?.id)}
+            aria-label={`Écrire à ${writeTo.name}`}
+          >
+            <MessageCircle size={13} strokeWidth={2} />
+            Écrire
           </button>
         )}
       </div>

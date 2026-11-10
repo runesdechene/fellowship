@@ -77,6 +77,10 @@ function CommunityScreen() {
     mark,
   } = useCommunity(actor?.id, scope)
   const { network, answered, followBack, decline } = useNetwork()
+  const friends = useMemo(
+    () => new Set((network?.friends ?? []).map((member) => member.id)),
+    [network],
+  )
   const own = useMemo(
     () =>
       new Set([...entities.map((entity) => entity.actor_id), ...(person ? [person.actor_id] : [])]),
@@ -153,7 +157,8 @@ function CommunityScreen() {
                       line={line}
                       now={now}
                       followable={followable(line)}
-                      onFollow={(id) => void follow(id)}
+                      onFollow={(id, welcome) => void follow(id, welcome)}
+                      friend={!!line.who && friends.has(line.who.id)}
                     />
                   ))}
                 </ul>

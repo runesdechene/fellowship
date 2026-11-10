@@ -316,6 +316,9 @@
 
   --type-report-name: var(--weight-semibold) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-report-meta: var(--weight-regular) var(--size-13) / var(--leading-snug) var(--family-sans);
+  /* Le texte d'un e-mail du reporting (page Récap) : un paragraphe qu'on lit vraiment. */
+  --type-report-mail: var(--weight-regular) var(--size-14) / var(--leading-relaxed)
+    var(--family-sans);
 
   --type-settlement-due: var(--weight-semibold) var(--size-13) / var(--leading-snug)
     var(--family-sans);
@@ -1020,6 +1023,12 @@
   --side-poster-width: 36px;
   --side-poster-height: 50px;
   --type-community-tab: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
+  /* La carte d'un festival en ligne : le fil, la saisie d'un message, sa bulle (EventChip). */
+  --event-chip-surface: var(--community-inset);
+  --event-chip-poster-width: var(--feed-poster-width);
+  --event-chip-poster-height: var(--feed-poster-height);
+  --type-event-chip-name: var(--type-community-card-name);
+  --type-event-chip-meta: var(--type-community-small);
   --type-community-day: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-community-text: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
   --type-community-small: var(--weight-regular) var(--size-12) / var(--leading-snug)
@@ -1953,6 +1962,7 @@
   --chat-meta-ink: var(--ink-350);
   --chat-day-surface: var(--surface-card);
   --chat-read-ink: var(--sand-0);
+  --chat-mine-chip-surface: color-mix(in srgb, var(--sand-0) 14%, transparent);
   --chat-bubble-width: var(--width-chat-bubble);
   --chat-media-width: var(--width-chat-media);
   --chat-name-1: var(--plume-1);

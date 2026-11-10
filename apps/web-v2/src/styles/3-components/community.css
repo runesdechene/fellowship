@@ -242,43 +242,6 @@
   background: var(--surface-card-hover);
 }
 
-/* Le festival d'une ligne */
-.feed-event {
-  display: flex;
-  align-items: center;
-  gap: var(--space-12);
-  padding: var(--space-6) var(--space-14) var(--space-6) var(--space-6);
-  border-radius: var(--radius-nav);
-  background: var(--community-inset);
-}
-
-.feed-event__poster {
-  flex: none;
-  width: var(--feed-poster-width);
-  height: var(--feed-poster-height);
-  border-radius: var(--radius-xs);
-  object-fit: cover;
-}
-
-.feed-event__body,
-.side-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.feed-event__name {
-  font: var(--type-community-card-name);
-  color: var(--ink-title);
-}
-
-.feed-event__meta,
-.side-card__meta {
-  font: var(--type-community-small);
-  color: var(--ink-soft);
-}
-
 /* L'avis d'une ligne */
 .feed-review {
   display: flex;
@@ -449,12 +412,21 @@ a.side-card__row:hover {
 }
 
 .side-card__body {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .side-card__name {
   font: var(--type-list-name);
   color: var(--ink-title);
+}
+
+.side-card__meta {
+  font: var(--type-community-small);
+  color: var(--ink-soft);
 }
 
 .side-card__follow {

@@ -122,11 +122,12 @@ function toChatMessage(row: MessageRow): ChatMessage {
     mediaKind: row.media_kind,
     createdAt: row.created_at,
     editedAt: row.edited_at,
+    eventId: row.event_id,
   }
 }
 
 const MESSAGE_COLUMNS =
-  'id, conversation_id, author_actor, body, media_path, media_kind, created_at, edited_at'
+  'id, conversation_id, author_actor, body, media_path, media_kind, created_at, edited_at, event_id'
 
 /** Les 300 derniers messages, du plus ancien au plus récent. */
 export async function fetchMessages(conversationId: string): Promise<ChatMessage[]> {
@@ -243,6 +244,7 @@ export async function sendMessage(
   conversationId: string,
   body: string,
   media: Media | null,
+  eventId: string | null = null,
 ): Promise<void> {
   must(
     await supabase.rpc('envoyer_message', {
@@ -250,6 +252,7 @@ export async function sendMessage(
       p_conversation: conversationId,
       ...(body.trim() ? { p_body: body } : {}),
       ...(media ? { p_media_path: media.path, p_media_kind: media.kind } : {}),
+      ...(eventId ? { p_event: eventId } : {}),
     }),
   )
 }
@@ -350,6 +353,8 @@ export interface EventBrief {
   imageUrl: string | null
   startDate: string
   endDate: string
+  city: string | null
+  department: string | null
 }
 
 /** Le festival dont parle un sujet ; `null` s'il n'est plus lisible (fiche privée, supprimée). */
@@ -357,7 +362,7 @@ export async function fetchEventBrief(eventId: string): Promise<EventBrief | nul
   // En deux temps : `must(await … .maybeSingle())` d'une traite se type en `never` (.claude/rules/v2.md).
   const response = await supabase
     .from('events')
-    .select('id, name, tags, image_url, start_date, end_date')
+    .select('id, name, tags, image_url, start_date, end_date, city, department')
     .eq('id', eventId)
     .maybeSingle()
   const row = must(response)
@@ -369,6 +374,8 @@ export async function fetchEventBrief(eventId: string): Promise<EventBrief | nul
     imageUrl: row.image_url,
     startDate: row.start_date,
     endDate: row.end_date,
+    city: row.city,
+    department: row.department,
   }
 }
 
@@ -380,7 +387,7 @@ export async function fetchMyUpcomingEvents(
   const rows = must(
     await supabase
       .from('participations')
-      .select('events!inner(id, name, tags, image_url, start_date, end_date)')
+      .select('events!inner(id, name, tags, image_url, start_date, end_date, city, department)')
       .eq('actor_id', actorId)
       .in('status', PROGRAMMED_STATUSES)
       .gte('events.end_date', todaySql),
@@ -397,5 +404,7 @@ export async function fetchMyUpcomingEvents(
     imageUrl: events.image_url,
     startDate: events.start_date,
     endDate: events.end_date,
+    city: events.city,
+    department: events.department,
   }))
 }

@@ -82,6 +82,7 @@ const LINE_OF_TYPE: Record<string, PushLine> = {
   best_reply: 'discussions',
   review_reply: 'discussions',
   new_follower: 'new_followers',
+  welcome: 'new_followers',
   weekly_new_events: 'weekly',
   suggestion: 'suggestions',
   app_update: 'updates',

@@ -22,6 +22,7 @@ export const KNOWN_TYPES = [
   'friend_going',
   'event_updated',
   'new_follower',
+  'welcome',
   'deadline_reminder',
   'friend_added_event',
   'weekly_new_events',
@@ -90,6 +91,7 @@ const BY_SOMEONE = new Set([
   'review_reply',
   'friend_going',
   'new_follower',
+  'welcome',
   'friend_added_event',
 ])
 
@@ -195,6 +197,13 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
       return {
         icon: 'follow',
         text: [{ strong: who }, ' suit maintenant ta vitrine.'],
+        href: '/communaute/abonnes',
+      }
+    case 'welcome':
+      if (!who) return null
+      return {
+        icon: 'follow',
+        text: [{ strong: who }, ' te souhaite la bienvenue sur Fellowship.'],
         href: '/communaute/abonnes',
       }
     case 'deadline_reminder': {

@@ -298,6 +298,20 @@
   color: var(--chat-mine-ink);
 }
 
+/* Le festival joint à un message : la carte prend l'encre de la bulle à soi. */
+.chat-bubble .event-chip {
+  margin-bottom: var(--space-6);
+}
+
+.chat-row--mine .event-chip {
+  background: var(--chat-mine-chip-surface);
+  color: var(--chat-mine-ink);
+}
+
+.chat-row--mine .event-chip__meta {
+  color: var(--chat-mine-ink);
+}
+
 .chat-row--mine .chat-bubble--tail {
   border-bottom-right-radius: var(--round-6);
 }

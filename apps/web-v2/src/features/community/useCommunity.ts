@@ -191,13 +191,14 @@ export function useCommunity(actorId: string | undefined, scope: FeedScope) {
   }, [actorId, data.lines, data.scope])
 
   /** Suivre : le bouton disparaît aussitôt ; si l'écriture échoue, il revient. */
+  /** `welcome` : l'abonné souhaite la bienvenue ; la base l'annonce ainsi au nouveau venu. */
   const follow = useCallback(
-    async (id: string) => {
+    async (id: string, welcome = false) => {
       if (!actorId) return
       setData((current) => ({ ...current, followed: new Set([...current.followed, id]) }))
       const { error: failed } = await supabase
         .from('follows')
-        .insert({ follower_actor: actorId, following_actor: id })
+        .insert({ follower_actor: actorId, following_actor: id, welcome })
       if (failed) {
         setData((current) => {
           const followed = new Set(current.followed)

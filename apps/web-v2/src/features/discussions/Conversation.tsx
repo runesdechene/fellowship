@@ -36,6 +36,8 @@ import { useConversation } from './useDiscussions'
 
 /** La discussion complète d'un sujet ouvert sur sa story : un état de l'adresse. */
 export const CHAT_PARAM = 'fil'
+/** Le festival joint au prochain message (« Écrire » depuis le fil de Ma communauté). */
+export const FESTIVAL_PARAM = 'festival'
 
 interface Props {
   conversationId: string
@@ -236,6 +238,17 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
           editing={editing}
           onEdit={edit}
           onEditDone={() => setEditing(null)}
+          eventId={params.get(FESTIVAL_PARAM)}
+          onDetach={() =>
+            setParams(
+              (current) => {
+                const next = new URLSearchParams(current)
+                next.delete(FESTIVAL_PARAM)
+                return next
+              },
+              { replace: true },
+            )
+          }
           conversationId={conversationId}
           placeholder={sujet ? `Répondre à ${author?.label ?? 'ce sujet'}` : `Message à ${title}`}
         />

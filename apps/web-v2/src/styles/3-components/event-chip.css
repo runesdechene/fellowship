@@ -1,0 +1,57 @@
+/**
+ * QUOI     — la carte d'un festival en ligne (components/ui/EventChip.tsx).
+ * POURQUOI — le fil de Ma communauté, la saisie d'un message et sa bulle la partagent ; dans une
+ *            bulle à soi, elle prend l'encre et le voile de la bulle (discussions.css).
+ */
+.event-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  align-self: flex-start;
+  max-width: 100%;
+  padding: var(--space-6) var(--space-14) var(--space-6) var(--space-6);
+  border-radius: var(--radius-nav);
+  background: var(--event-chip-surface);
+  color: var(--ink-title);
+  text-decoration: none;
+}
+
+.event-chip__poster {
+  flex: none;
+  width: var(--event-chip-poster-width);
+  height: var(--event-chip-poster-height);
+  border-radius: var(--radius-xs);
+  object-fit: cover;
+}
+
+.event-chip__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.event-chip__name {
+  font: var(--type-event-chip-name);
+  overflow-wrap: anywhere;
+}
+
+.event-chip__meta {
+  font: var(--type-event-chip-meta);
+  color: var(--ink-soft);
+}
+
+.event-chip__remove {
+  display: inline-flex;
+  flex: none;
+  padding: var(--space-4);
+  border: none;
+  border-radius: var(--round-full);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.event-chip__remove:hover {
+  color: var(--ink-title);
+}

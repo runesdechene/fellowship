@@ -13,6 +13,7 @@ import { CheckCheck, Pencil, SmilePlus, Trash2 } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { dayLabel, formatTime } from '@/lib/dates'
 import type { Bubble, Person, ReactionSummary } from '@/lib/discussions'
+import { FestivalAttachment } from './FestivalAttachment'
 import { ReactionPicker } from './ReactionPicker'
 
 /** Huit encres douces pour les noms d'un groupe, attribuées par ordre d'arrivée. */
@@ -176,6 +177,7 @@ export function ChatFeed({
                       {author?.label ?? 'Exposant'}
                     </p>
                   )}
+                  {bubble.eventId && <FestivalAttachment eventId={bubble.eventId} />}
                   {bubble.mediaKind === 'image' && media && (
                     <img className="chat-bubble__media" src={media} alt="" />
                   )}
