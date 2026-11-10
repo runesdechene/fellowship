@@ -1,7 +1,7 @@
 // sources : lire, sans rien modifier, les ventes d'une période chez Shopify et SumUp, rangées par
 // jour de Paris. Montants en centimes. Une erreur remonte : la source sera notée muette.
 import { paysDeStand } from '../_shared/reporting-stands.ts'
-import { type Commande, type Paiement, paysEffectif, SEUIL_UE, tvaDe, zoneDe } from '../_shared/reporting-ventes.ts'
+import { type Commande, type Paiement, horsCartesCadeaux, paysEffectif, SEUIL_UE, tvaDe, zoneDe } from '../_shared/reporting-ventes.ts'
 
 const JOUR_PARIS = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' })
 export const jourDe = (iso: string) => JOUR_PARIS.format(new Date(iso))
@@ -42,11 +42,14 @@ export async function lireShopify(
         ranger(parJour, jourDe(date), {
           ...commune,
           nom: o.name,
-          ttc: centimes(o.totalPriceSet.shopMoney.amount),
+          ttc: horsCartesCadeaux(centimes(o.totalPriceSet.shopMoney.amount), o.lineItems.nodes.map((l: LigneShopify) => ({
+            carteCadeau: l.isGiftCard, ttc: centimes(l.discountedTotalSet.shopMoney.amount),
+          }))),
           tva: centimes(o.totalTaxSet.shopMoney.amount),
           payee: ['PAID', 'PARTIALLY_REFUNDED', 'REFUNDED'].includes(o.displayFinancialStatus),
         })
       }
+      // shortcut : le remboursement d'une carte cadeau se déduirait comme une vente ; à trier s'il arrive.
       o.refunds.forEach((r: RemboursementShopify, i: number) => {
         const ttc = -centimes(r.totalRefundedSet.shopMoney.amount)
         const jour = jourDe(r.createdAt)
@@ -131,7 +134,7 @@ const REQUETE = `query ($apres: String, $filtre: String) {
       shippingAddress { countryCodeV2 zip }
       billingAddress { countryCodeV2 zip }
       fulfillments(first: 1) { createdAt }
-      lineItems(first: 100) { nodes { id } }
+      lineItems(first: 100) { nodes { isGiftCard discountedTotalSet { shopMoney { amount } } } }
     }
   }
 }`
@@ -163,6 +166,8 @@ async function graphql(domaine: string, jeton: string, query: string, variables:
   if (!reponse.ok || corps.errors) throw new Error(`Shopify ${reponse.status} ${JSON.stringify(corps.errors ?? '')}`)
   return corps.data
 }
+
+interface LigneShopify { isGiftCard: boolean; discountedTotalSet: { shopMoney: { amount: string } } }
 
 interface RemboursementShopify { createdAt: string; totalRefundedSet: { shopMoney: { amount: string } } }
 

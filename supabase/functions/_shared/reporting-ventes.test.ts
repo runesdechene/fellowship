@@ -2,10 +2,15 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { paysDeStand } from './reporting-stands.ts'
-import { cleVente, echeanceDe, journee, messageAlerte, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
+import { cleVente, echeanceDe, horsCartesCadeaux, journee, messageAlerte, statutDeclaration, paysEffectif, statutApresEnvoi, ventesDuDetail, verifierCommande, type Commande } from './reporting-ventes.ts'
 
 const commande = (c: Partial<Commande>): Commande => ({
   nom: '#1', lien: 'l', pays: 'FR', ttc: 3000, tva: 500, articles: 1, payee: true, ...c,
+})
+
+test('une carte cadeau vendue sort du montant, le reste de la commande reste', () => {
+  assert.equal(horsCartesCadeaux(8000, [{ carteCadeau: true, ttc: 5000 }, { carteCadeau: false, ttc: 3000 }]), 3000)
+  assert.equal(horsCartesCadeaux(5000, [{ carteCadeau: true, ttc: 5000 }]), 0)
 })
 
 test('une commande française juste ne lève rien', () => {

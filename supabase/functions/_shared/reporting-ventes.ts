@@ -124,6 +124,12 @@ export function zoneDe(pays: string): 'france' | 'ue' | 'hors_ue' {
   return UE.has(pays) ? 'ue' : 'hors_ue'
 }
 
+/** Le montant d'une commande sans ses cartes cadeaux : un bon à usage multiple se déclare quand il sert,
+ *  pas quand il se vend (art. 256 ter du CGI). La commande payée avec la carte garde, elle, son plein total. */
+export function horsCartesCadeaux(ttc: number, lignes: { carteCadeau: boolean; ttc: number }[]): number {
+  return ttc - lignes.filter((l) => l.carteCadeau).reduce((somme, l) => somme + l.ttc, 0)
+}
+
 /** La TVA contenue dans un prix TTC à 20 %. */
 export function tvaDe(ttc: number): number {
   return Math.round(ttc / 6)
