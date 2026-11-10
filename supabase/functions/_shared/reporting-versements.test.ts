@@ -14,6 +14,7 @@ test('les versements Shopify reprennent l’export de l’admin, ligne pour lign
     'Payout Date,Status,Charges,Refunds,Adjustments,Marketplace Sales Tax,Advances,Reserved Funds,Fees,Retried Amount,Total,Currency,Bank Reference',
     '2026-10-08,paid,294.29,-3.52,0.00,0.00,0.00,0.00,5.42,0.00,285.35,EUR,SHOPIFY-VE5BRG66CJWL3LU6VVJMEUT3YKK',
     '2026-10-01,paid,183.40,0.00,0.00,0.00,0.00,0.00,3.51,0.00,179.89,EUR,SHOPIFY-MGIIFKZWFQFPIC6BEEA3ALN8YE7',
+    'Total,,477.69,-3.52,0.00,0.00,0.00,0.00,8.93,0.00,465.24,EUR,',
     '',
   ].join('\n'))
 })

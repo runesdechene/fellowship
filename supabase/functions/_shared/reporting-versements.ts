@@ -26,15 +26,23 @@ export interface LigneSumup {
   fee: number
 }
 
+const MONTANTS = ['encaisse', 'rembourse', 'ajustements', 'avances', 'reserve', 'frais', 'relance', 'net'] as const
+type Montants = Pick<VersementShopify, (typeof MONTANTS)[number]>
+
 const ENTETE_SHOPIFY = 'Payout Date,Status,Charges,Refunds,Adjustments,Marketplace Sales Tax,Advances,Reserved Funds,Fees,Retried Amount,Total,Currency,Bank Reference'
 
-/** L'export « Versements » de Shopify, du plus récent au plus ancien comme dans l'admin. */
+/** L'export « Versements » de Shopify, du plus récent au plus ancien comme dans l'admin, puis le total. */
 export function csvVersementsShopify(versements: VersementShopify[]): string {
-  const lignes = [...versements].sort((a, b) => b.date.localeCompare(a.date)).map((v) => [
-    v.date, v.statut.toLowerCase(), montant(v.encaisse), montant(v.rembourse), montant(v.ajustements), '0.00',
-    montant(v.avances), montant(v.reserve), montant(v.frais), montant(v.relance), montant(v.net), v.devise, v.reference ?? '',
-  ].map(champ).join(','))
-  return [ENTETE_SHOPIFY, ...lignes].join('\n') + '\n'
+  const montants = (v: Montants) => [
+    montant(v.encaisse), montant(v.rembourse), montant(v.ajustements), '0.00',
+    montant(v.avances), montant(v.reserve), montant(v.frais), montant(v.relance), montant(v.net),
+  ]
+  const total = Object.fromEntries(MONTANTS.map((m) => [m, versements.reduce((a, v) => a + v[m], 0)])) as Montants
+  const lignes = [...versements].sort((a, b) => b.date.localeCompare(a.date)).map((v) =>
+    [v.date, v.statut.toLowerCase(), ...montants(v), v.devise, v.reference ?? ''].map(champ).join(','))
+  // L'export de l'admin n'a pas de total : il est ajouté pour l'expert-comptable (Uriel, 10/11/2026).
+  const ligneTotal = ['Total', '', ...montants(total), versements[0]?.devise ?? '', ''].join(',')
+  return [ENTETE_SHOPIFY, ...lignes, ligneTotal].join('\n') + '\n'
 }
 
 /** Le tableau du relevé SumUp : un versement par ligne (les paiements regroupés), puis le total. */

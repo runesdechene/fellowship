@@ -1,6 +1,7 @@
 // reporting-recap : l'aperçu du récap d'un mois (page Récap) — destinataire, date d'envoi, objet, texte et
 // pièces jointes, fabriqués exactement comme l'e-mail du 11 (_shared/reporting-recap.ts). N'envoie rien.
-// Auth : verify_jwt = true, puis can_act_as : les membres de l'enseigne.
+// Avec `note` dans le corps, enregistre d'abord la précision du mois (vide : l'efface).
+// Auth : verify_jwt = true, puis can_act_as (les membres) ; écrire la note demande is_entity_owner.
 
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -19,12 +20,26 @@ Deno.serve(async (req) => {
   const { data: { user } } = await userClient.auth.getUser()
   if (!user) return json({ error: 'unauthorized' }, 401)
 
-  const body = (await req.json().catch(() => null)) as { entite?: string; mois?: string } | null
+  const body = (await req.json().catch(() => null)) as { entite?: string; mois?: string; note?: string } | null
   if (!body?.entite || !body.mois || !MOIS.test(body.mois)) return json({ error: 'invalid_body' }, 400)
+  if (body.note !== undefined && (typeof body.note !== 'string' || body.note.length > 2000)) {
+    return json({ error: 'invalid_note' }, 400)
+  }
   const { data: membre } = await userClient.rpc('can_act_as', { target_actor: body.entite })
   if (membre !== true) return json({ error: 'forbidden' }, 403)
 
   try {
+    if (body.note !== undefined) {
+      const { data: proprietaire } = await userClient.rpc('is_entity_owner', { target_entity: body.entite })
+      if (proprietaire !== true) return json({ error: 'forbidden' }, 403)
+      const note = body.note.trim()
+      const notes = getSupabaseAdmin().from('reporting_recap_notes')
+      const { error: noteErreur } = note
+        ? await notes.upsert({ entity_actor_id: body.entite, mois: `${body.mois}-01`, note, modifiee_par: user.id, modifiee_le: new Date().toISOString() })
+        : await notes.delete().eq('entity_actor_id', body.entite).eq('mois', `${body.mois}-01`)
+      if (noteErreur) throw noteErreur
+    }
+
     const { data: e, error } = await getSupabaseAdmin().from('reporting_entreprises')
       .select('entity_actor_id, environnement, alerte_email, recap_comptable, recap_comptable_email')
       .eq('entity_actor_id', body.entite).maybeSingle()

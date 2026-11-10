@@ -454,6 +454,11 @@
   overflow-wrap: anywhere;
 }
 
+/* La précision du mois : la zone de note, fondue dans sa carte (la carte a déjà son filet). */
+.draft-input.draft-input--box.reporting-recap__note:not(:focus-visible) {
+  border-color: transparent;
+}
+
 /* L'envoi et le message dans la colonne des réglages, puis les tableaux sur toute la largeur. */
 .reporting-recap__sections {
   display: flex;
@@ -469,6 +474,11 @@
 
 .reporting-recap__table :is(th, td) {
   white-space: nowrap;
+}
+
+/* La dernière ligne de chaque fichier est son total. */
+.reporting-recap__table tbody tr:last-child {
+  font: var(--type-event-meta-accent);
 }
 
 .reporting-recap__download {

@@ -29,6 +29,13 @@ test('le récap du mois additionne ce qui est parti, décade par décade', () =>
   assert.match(texte, /Pas encore déclarés : 28\/11\/2026\./)
 })
 
+test('la note du mois s’ajoute sous l’introduction du récap', () => {
+  const note = 'Avant le 9 novembre, Shopify ne calculait pas la TVA : elle est recalculée à 20 %.'
+  const { texte } = messageRecap('2026-11', [], note)
+  assert.match(texte, /passent par Pennylane\.\n\nAvant le 9 novembre[^\n]*\n\n- Du 1er au 10/)
+  assert.doesNotMatch(messageRecap('2026-11', []).texte, /Avant le 9/)
+})
+
 test('une commande française juste ne lève rien', () => {
   assert.deepEqual(verifierCommande(commande({})), [])
 })

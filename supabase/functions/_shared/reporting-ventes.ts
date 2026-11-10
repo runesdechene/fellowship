@@ -116,7 +116,7 @@ export function nomDuMois(mois: string): string {
 }
 
 /** Le récap du mois pour l'expert-comptable : ce qui est parti à l'administration, décade par décade. */
-export function messageRecap(mois: string, jours: JourRecap[]) {
+export function messageRecap(mois: string, jours: JourRecap[], note: string | null = null) {
   const [annee, m] = mois.split('-').map(Number)
   const nomMois = nomDuMois(mois)
   const centimes = (montant: string) => Math.round(Number(montant) * 100)
@@ -139,6 +139,8 @@ export function messageRecap(mois: string, jours: JourRecap[]) {
     `Ventes aux particuliers de ${nomMois}, telles que déclarées à l'administration (e-reporting), remboursements déduits.`,
     // shortcut : la phrase de Runes de Chêne, à passer en réglage à la deuxième enseigne.
     'Cet e-mail ne concerne que les ventes aux particuliers, sur Shopify et SumUp. Les factures aux professionnels passent par Pennylane.',
+    // La précision du mois, écrite à la main sur la page Récap.
+    ...(note ? ['', note] : []),
     '', ...decades, '', `Mois : ${bilan(jours)}.`, '',
     'Hors TVA française : exports (Suisse, outre-mer…) et stands à l’étranger.',
     ...(facturees.length ? [`Facturées à un pro, donc absentes de ce récap : ${facturees.join(', ')}.`] : []),

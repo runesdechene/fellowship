@@ -46,6 +46,9 @@ export async function preparerRecap(entite: string, environnement: string, mois:
   const { data: sources, error: sourcesErreur } = await admin.from('reporting_sources')
     .select('type, identifiant').eq('entity_actor_id', entite).eq('actif', true).order('type')
   if (sourcesErreur) throw sourcesErreur
+  const { data: note, error: noteErreur } = await admin.from('reporting_recap_notes').select('note')
+    .eq('entity_actor_id', entite).eq('mois', `${mois}-01`).maybeSingle()
+  if (noteErreur) throw noteErreur
 
   const secret = (nom: string) => lireSecret(entite, 'sources', nom)
   const fichier = nomDuMois(mois).replace(' ', '-')
@@ -58,7 +61,7 @@ export async function preparerRecap(entite: string, environnement: string, mois:
       pieces.push({ nom: `sumup-versements-${fichier}.csv`, csv: csvVersementsSumup(await versementsSumup(await secret('sumup_api_key'), mois)) })
     }
   }
-  return { ...messageRecap(mois, jours), pieces }
+  return { ...messageRecap(mois, jours, note?.note ?? null), note: note?.note ?? null, pieces }
 }
 
 /** « 2026-11 » → « 2026-12 ». */

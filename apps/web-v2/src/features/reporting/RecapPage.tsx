@@ -4,8 +4,10 @@
  * POURQUOI — maquette 2814:467, validée le 10/11/2026 : vérifier le récap avant qu'il parte. Le mois
  *            vit dans l'adresse ; par défaut, celui en cours (le prochain à partir).
  */
+import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { DraftInput } from '@/components/ui/DraftInput'
 import {
   formatFullDateOrdinal,
   formatMonthLabel,
@@ -31,7 +33,8 @@ export function RecapPage({ entityId }: { entityId: string }) {
   const today = new Date()
   const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1)
   const month = parseMonthKey(search.get('mois')) ?? thisMonth
-  const { recap, error } = useRecap(entityId, monthKey(month))
+  const { recap, error, saveNote } = useRecap(entityId, monthKey(month))
+  const [noteProblem, setNoteProblem] = useState<string | null>(null)
   const previous = new Date(month.getFullYear(), month.getMonth() - 1, 1)
   const next = new Date(month.getFullYear(), month.getMonth() + 1, 1)
 
@@ -78,6 +81,21 @@ export function RecapPage({ entityId }: { entityId: string }) {
                   ))}
                 </span>
               </SettingRow>
+            </SettingSection>
+
+            <SettingSection
+              title="Ajout d’info"
+              note="Une précision pour ce mois, ajoutée au message sous son introduction."
+            >
+              <DraftInput
+                multiline
+                className="draft-input--box reporting-recap__note"
+                label="Ajout d’info"
+                placeholder="Ex. : avant le 9 novembre, Shopify ne calculait pas la TVA."
+                value={recap.note ?? ''}
+                onSave={(note) => void saveNote(note).then(setNoteProblem)}
+              />
+              {noteProblem && <p className="admin-page__error">{noteProblem}</p>}
             </SettingSection>
 
             <SettingSection title="Le message" note="Le texte exact de l’e-mail.">
