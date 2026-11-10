@@ -15,9 +15,11 @@ import { must, supabase } from '@/lib/supabase'
 
 const LIMIT = 50
 
-/** La cloche dit tout sauf les nouveaux abonnés : son bloc « Demandes d'ami · Nouveaux abonnés »
- *  les montre (19/10/2026). La phrase reste dans KNOWN_TYPES pour la notification du téléphone. */
-const BELL_TYPES = KNOWN_TYPES.filter((type) => type !== 'new_follower')
+/** La cloche dit ce qui me concerne. Les nouveaux abonnés ont leur bloc « Demandes d'ami · Nouveaux
+ *  abonnés » (19/10/2026) ; l'actu des amis vit dans Ma communauté (Uriel, 10/11/2026). Ces phrases
+ *  restent dans KNOWN_TYPES pour la notification du téléphone. */
+const NOT_IN_BELL: readonly string[] = ['new_follower', 'friend_going', 'friend_added_event']
+const BELL_TYPES = KNOWN_TYPES.filter((type) => !NOT_IN_BELL.includes(type))
 
 /** Les avatars d'aujourd'hui et les affiches, en deux lectures pour toute la liste. Une lecture
  *  ratée garde l'icône : l'image décore, elle ne doit pas taire la cloche. */
