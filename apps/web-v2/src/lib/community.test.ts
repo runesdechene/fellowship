@@ -78,6 +78,17 @@ describe('countSince', () => {
   })
 })
 
+test('un ami qui s’intéresse à un festival', () => {
+  const read = line('interested', event)
+  expect(feedPhrase(read)).toEqual([
+    { strong: 'Gautier' },
+    ' s’intéresse à ',
+    { strong: 'Les Aventuriales' },
+    '.',
+  ])
+  expect(feedFor([read], 'ou')).toHaveLength(1)
+})
+
 describe('readFeed', () => {
   test('lit une ligne « va à » avec son festival', () => {
     const read = line('going', event)

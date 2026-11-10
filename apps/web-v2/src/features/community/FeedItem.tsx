@@ -82,7 +82,7 @@ export function FeedItem({ line, now, followable, onFollow }: FeedItemProps) {
             ),
           )}
         </p>
-        {(line.kind === 'going' || line.kind === 'applied' || line.kind === 'added') && (
+        {['going', 'applied', 'interested', 'added'].includes(line.kind) && (
           <EventCard line={line} />
         )}
         {line.kind === 'review' && <Review line={line} />}

@@ -276,3 +276,23 @@ export function isRecent(
 ): boolean {
   return today.getTime() - new Date(createdAt).getTime() < days * 24 * HOUR
 }
+
+/** « 1er », « 2 » : le jour du mois, à la française. */
+export function dayOfMonth(date: Date): string {
+  return date.getDate() === 1 ? '1er' : String(date.getDate())
+}
+
+/** « Dimanche 1er » : une journée dans un mois déjà nommé (le reporting). */
+export function formatWeekdayDay(date: Date): string {
+  return `${capitalize(WEEKDAY_FORMATTER.format(date))} ${dayOfMonth(date)}`
+}
+
+/** « Dimanche 1er novembre » : une journée seule, en tête de phrase. */
+export function formatWeekdayDayMonthTitle(date: Date): string {
+  return `${formatWeekdayDay(date)} ${monthName(date)}`
+}
+
+/** « 1er septembre 2027 » : une date seule, le premier du mois à la française. */
+export function formatFullDateOrdinal(date: Date): string {
+  return `${dayOfMonth(date)} ${monthName(date)} ${date.getFullYear()}`
+}

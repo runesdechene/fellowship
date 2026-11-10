@@ -10,7 +10,15 @@ import type { TextPart } from './notifications'
 import { eventPath } from './event-path'
 
 export type FeedKind =
-  'arrival' | 'going' | 'applied' | 'added' | 'review' | 'follow' | 'gathering' | 'visit'
+  | 'arrival'
+  | 'going'
+  | 'applied'
+  | 'interested'
+  | 'added'
+  | 'review'
+  | 'follow'
+  | 'gathering'
+  | 'visit'
 
 export interface FeedPerson {
   id: string
@@ -64,6 +72,7 @@ const KINDS: readonly FeedKind[] = [
   'arrival',
   'going',
   'applied',
+  'interested',
   'added',
   'review',
   'follow',
@@ -116,8 +125,22 @@ export function readPeople(raw: unknown): FeedPerson[] {
 }
 
 /** Les lignes qui ont besoin d'un festival, et celles qui ont besoin d'un nom. */
-const NEEDS_EVENT: readonly FeedKind[] = ['going', 'applied', 'added', 'review', 'gathering']
-const NEEDS_WHO: readonly FeedKind[] = ['arrival', 'going', 'applied', 'follow', 'visit']
+const NEEDS_EVENT: readonly FeedKind[] = [
+  'going',
+  'applied',
+  'interested',
+  'added',
+  'review',
+  'gathering',
+]
+const NEEDS_WHO: readonly FeedKind[] = [
+  'arrival',
+  'going',
+  'applied',
+  'interested',
+  'follow',
+  'visit',
+]
 
 function readLine(raw: unknown): FeedLine | null {
   const row = record(raw)
@@ -154,8 +177,8 @@ export function readFeed(rows: unknown): FeedLine[] {
 export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau'
 
 const TAB_KINDS: Record<CommunityTab, readonly FeedKind[]> = {
-  tout: ['arrival', 'going', 'applied', 'added', 'review', 'follow', 'visit'],
-  ou: ['going', 'applied', 'added'],
+  tout: ['arrival', 'going', 'applied', 'interested', 'added', 'review', 'follow', 'visit'],
+  ou: ['going', 'applied', 'interested', 'added'],
   avis: ['review'],
   reseau: ['arrival', 'follow'],
 }
@@ -200,6 +223,8 @@ export function feedPhrase(line: FeedLine): TextPart[] {
       return [{ strong: who ?? '' }, ' va à ', { strong: event }, '.']
     case 'applied':
       return [{ strong: who ?? '' }, ' a candidaté à ', { strong: event }, '.']
+    case 'interested':
+      return [{ strong: who ?? '' }, ' s’intéresse à ', { strong: event }, '.']
     case 'added':
       return [{ strong: who ?? 'Quelqu’un' }, ' a ajouté un festival sur Fellowship.']
     case 'review':
@@ -230,6 +255,8 @@ export function activityText(line: FeedLine): ActivityText | null {
       return event ? { verb: 'va à', object: event } : null
     case 'applied':
       return event ? { verb: 'a candidaté à', object: event } : null
+    case 'interested':
+      return event ? { verb: 's’intéresse à', object: event } : null
     case 'added':
       return event ? { verb: 'a ajouté', object: event } : null
     case 'follow':
