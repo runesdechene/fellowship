@@ -11,6 +11,7 @@ import {
   newFollowers,
   peopleCount,
   communityBadge,
+  exploreBadge,
   requestsLabel,
   type Member,
 } from './network'
@@ -70,11 +71,17 @@ describe('le réseau en mots', () => {
   test('compose la pastille de Communauté', () => {
     expect(communityBadge(0, 0)).toBeNull()
     expect(communityBadge(1, 0)).toEqual({ text: '1', label: '1 demande d’ami en attente' })
-    expect(communityBadge(0, 3)).toEqual({ text: '3', label: '3 nouveaux festivals' })
+    expect(communityBadge(0, 3)).toEqual({ text: '3', label: '3 nouvelles de tes amis' })
     expect(communityBadge(2, 12)).toEqual({
       text: '9+',
-      label: '2 demandes d’ami en attente, 12 nouveaux festivals',
+      label: '2 demandes d’ami en attente, 12 nouvelles de tes amis',
     })
+  })
+
+  test('la pastille d’Explorer compte les nouveaux festivals', () => {
+    expect(exploreBadge(0)).toBeNull()
+    expect(exploreBadge(1)).toEqual({ text: '1', label: '1 nouveau festival' })
+    expect(exploreBadge(14)).toEqual({ text: '9+', label: '14 nouveaux festivals' })
   })
 
   test('nomme le genre de compte', () => {

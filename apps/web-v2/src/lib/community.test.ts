@@ -7,6 +7,7 @@ import { describe, expect, test } from 'vitest'
 import {
   activityText,
   canFollow,
+  countSince,
   feedFor,
   feedPhrase,
   followReason,
@@ -64,6 +65,18 @@ function line(kind: string, extra: Record<string, unknown> = {}): FeedLine {
   if (!read) throw new Error(`ligne ${kind} illisible`)
   return read
 }
+
+describe('countSince', () => {
+  test('compte les nouvelles d’après la visite, sans « Ça se rassemble »', () => {
+    const lines = [
+      line('going', { ...event, occurred_at: '2026-10-11T09:00:00Z' }),
+      line('review', { ...event, occurred_at: '2026-10-10T09:00:00Z' }),
+      line('gathering', { ...event, detail: '3', occurred_at: '2026-10-12T09:00:00Z' }),
+    ]
+    expect(countSince(lines, new Date('2026-10-11T00:00:00Z'))).toBe(1)
+    expect(countSince(lines, new Date('2026-10-01T00:00:00Z'))).toBe(2)
+  })
+})
 
 describe('readFeed', () => {
   test('lit une ligne « va à » avec son festival', () => {

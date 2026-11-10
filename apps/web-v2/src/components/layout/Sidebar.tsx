@@ -37,7 +37,7 @@ import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { useAuth } from '@/lib/auth'
-import type { communityBadge } from '@/lib/network'
+import type { NavBadge } from '@/lib/network'
 import { NetworkActivity } from '@/features/activity/NetworkActivity'
 import { usePendingReports } from '@/features/admin-moderation/usePendingReports'
 import { AccountSwitcher } from './AccountSwitcher'
@@ -115,11 +115,12 @@ const REPORTING_ITEMS = [
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
-  community: ReturnType<typeof communityBadge>
+  community: NavBadge | null
+  explore: NavBadge | null
   updatesUnread: boolean
 }
 
-export function Sidebar({ collapsed, onToggle, community, updatesUnread }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle, community, explore, updatesUnread }: SidebarProps) {
   const ToggleIcon = collapsed ? PanelRightClose : PanelRightOpen
   const { actor, entities } = useAuth()
   const { pathname, search } = useLocation()
@@ -187,16 +188,14 @@ export function Sidebar({ collapsed, onToggle, community, updatesUnread }: Sideb
       ) : (
         <nav className="sidebar__nav">
           {items.map(({ to, label, Icon }) => {
+            const badge = to === '/communaute' ? community : to === '/explorer' ? explore : null
             const content = (
               <>
                 <Icon className="sidebar__item-icon" size={24} strokeWidth={1.75} />
                 <span className="sidebar__item-label">{label}</span>
-                {to === '/communaute' && community && (
-                  <span
-                    className="sidebar__count sidebar__count--alert"
-                    aria-label={community.label}
-                  >
-                    {community.text}
+                {badge && (
+                  <span className="sidebar__count sidebar__count--alert" aria-label={badge.label}>
+                    {badge.text}
                   </span>
                 )}
               </>

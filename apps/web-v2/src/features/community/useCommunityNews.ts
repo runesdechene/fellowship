@@ -1,26 +1,32 @@
 /**
- * QUOI     — les nouvelles de « Ma communauté » pour sa pastille : les festivals publics ajoutés
- *            par les autres depuis la dernière ouverture de la page (users.community_seen_at).
- *            Ouvrir /communaute remet le compte à zéro. Relu à chaque changement d'adresse.
- * POURQUOI — la pastille de la V1, qui ramenait chacun sur la page qui fait circuler le produit.
- *            L'instant vit sur la personne : ouvrir la page sur le téléphone l'éteint partout.
+ * QUOI     — les nouvelles de « Ma communauté » pour sa pastille : les lignes du fil de ses amis
+ *            (avis, dates, candidatures, festivals ajoutés, abonnements) arrivées depuis la dernière
+ *            ouverture de la page (users.community_seen_at). Ouvrir /communaute remet le compte à
+ *            zéro. Relu à chaque changement d'adresse.
+ * POURQUOI — Communauté annonce l'actu des amis (Uriel, 10/11/2026) ; les nouveaux festivals sont
+ *            passés à Explorer. Le compte part du fil lui-même (community_feed, portée « réseau ») :
+ *            la pastille annonce exactement ce que la page montre. L'instant vit sur la personne.
  * ATTENTION — une lecture ratée laisse la pastille éteinte : c'est un signe discret, pas une donnée.
  */
 import { useEffect, useState } from 'react'
+import { countSince, readFeed } from '@/lib/community'
 import { supabase } from '@/lib/supabase'
+
+/** Au-delà, la pastille dit « 9+ » : dix lignes suffisent. */
+const ENOUGH = 10
 
 export function useCommunityNews(
   pathname: string,
   personId: string | undefined,
-  myActorIds: string[],
+  actorId: string | undefined,
 ): number {
   const [count, setCount] = useState(0)
   const onPage = pathname === '/communaute'
-  const mine = myActorIds.join(',')
 
   useEffect(() => {
-    if (!personId) return
+    if (!personId || !actorId) return
     const person = personId
+    const actor = actorId
     let cancelled = false
     async function run() {
       if (onPage) {
@@ -31,27 +37,18 @@ export function useCommunityNews(
           .eq('actor_id', person)
         return
       }
-      const seen = await supabase
-        .from('users')
-        .select('community_seen_at')
-        .eq('actor_id', person)
-        .maybeSingle()
-      if (!seen.data) return
-      // Un festival sans auteur (import de l'administration) compte aussi.
-      const news = await supabase
-        .from('events')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_private', false)
-        .gt('created_at', seen.data.community_seen_at)
-        .or(`created_by_actor.is.null,created_by_actor.not.in.(${mine})`)
-      if (cancelled) return
-      setCount(news.count ?? 0)
+      const [seen, feed] = await Promise.all([
+        supabase.from('users').select('community_seen_at').eq('actor_id', person).maybeSingle(),
+        supabase.rpc('community_feed', { p_actor: actor, p_limit: ENOUGH, p_scope: 'reseau' }),
+      ])
+      if (cancelled || !seen.data || feed.error) return
+      setCount(countSince(readFeed(feed.data), new Date(seen.data.community_seen_at)))
     }
     void run()
     return () => {
       cancelled = true
     }
-  }, [pathname, personId, onPage, mine])
+  }, [pathname, personId, actorId, onPage])
 
   return onPage ? 0 : count
 }

@@ -156,19 +156,26 @@ export function requestsLabel(count: number): string {
   return count === 1 ? '1 demande d’ami en attente' : `${String(count)} demandes d’ami en attente`
 }
 
-/** La pastille de Communauté : demandes d’ami et festivals ajoutés ; null quand rien n’attend. */
-export function communityBadge(
-  requests: number,
-  news: number,
-): { text: string; label: string } | null {
-  const count = requests + news
+/** Une pastille de la navigation : le chiffre affiché, et sa phrase pour le lecteur d’écran. */
+export interface NavBadge {
+  text: string
+  label: string
+}
+
+function badge(count: number, parts: (string | false)[]): NavBadge | null {
   if (count === 0) return null
-  const parts = [
+  return { text: count > 9 ? '9+' : String(count), label: parts.filter(Boolean).join(', ') }
+}
+
+/** La pastille de Communauté : demandes d’ami et actu des amis ; null quand rien n’attend. */
+export function communityBadge(requests: number, news: number): NavBadge | null {
+  return badge(requests + news, [
     requests > 0 && requestsLabel(requests),
-    news > 0 && `${String(news)} ${news === 1 ? 'nouveau festival' : 'nouveaux festivals'}`,
-  ]
-  return {
-    text: count > 9 ? '9+' : String(count),
-    label: parts.filter(Boolean).join(', '),
-  }
+    news > 0 && `${String(news)} ${news === 1 ? 'nouvelle de tes amis' : 'nouvelles de tes amis'}`,
+  ])
+}
+
+/** La pastille d’Explorer : les festivals ajoutés depuis la dernière visite. */
+export function exploreBadge(news: number): NavBadge | null {
+  return badge(news, [`${String(news)} ${news === 1 ? 'nouveau festival' : 'nouveaux festivals'}`])
 }

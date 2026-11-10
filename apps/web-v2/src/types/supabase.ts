@@ -2235,6 +2235,45 @@ export type Database = {
           },
         ]
       }
+      reporting_ventes_pro: {
+        Row: {
+          entity_actor_id: string
+          marquee_le: string
+          marquee_par: string | null
+          reference: string
+          source: string
+        }
+        Insert: {
+          entity_actor_id: string
+          marquee_le?: string
+          marquee_par?: string | null
+          reference: string
+          source: string
+        }
+        Update: {
+          entity_actor_id?: string
+          marquee_le?: string
+          marquee_par?: string | null
+          reference?: string
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_ventes_pro_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "reporting_entreprises"
+            referencedColumns: ["entity_actor_id"]
+          },
+          {
+            foreignKeyName: "reporting_ventes_pro_marquee_par_fkey"
+            columns: ["marquee_par"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
       revenue_keys: {
         Row: {
           actor_id: string
@@ -2553,6 +2592,7 @@ export type Database = {
           display_name: string | null
           email: string
           email_token: string
+          explore_seen_at: string
           handle: string | null
           last_seen_at: string | null
           notifications_seen_at: string
@@ -2577,6 +2617,7 @@ export type Database = {
           display_name?: string | null
           email: string
           email_token?: string
+          explore_seen_at?: string
           handle?: string | null
           last_seen_at?: string | null
           notifications_seen_at?: string
@@ -2601,6 +2642,7 @@ export type Database = {
           display_name?: string | null
           email?: string
           email_token?: string
+          explore_seen_at?: string
           handle?: string | null
           last_seen_at?: string | null
           notifications_seen_at?: string
@@ -3760,6 +3802,7 @@ export type Database = {
         Args: { p_actor: string; p_conversation: string; p_title: string }
         Returns: undefined
       }
+      reporting_lancer_quotidien: { Args: never; Returns: undefined }
       reporting_secret: {
         Args: { p_entity: string; p_environnement: string; p_nom: string }
         Returns: string

@@ -13,5 +13,7 @@ L'écran Explorer (`/explorer`), maquettes `2027 — Explorer` et `2027 — Expl
 - `SearchResults.tsx` — titre, onglets, grille des festivals, cartes d'exposants (Suivre), festivals
   passés (plus récent d'abord ; « Quand » → Passés ne montre qu'eux).
 - `useExplorer.ts` — le chargement de l'accueil et de la recherche, Repérer et Suivre.
+- `useExploreNews.ts` — la pastille de la navigation : les festivals ajoutés depuis la dernière
+  ouverture d'Explorer (`users.explore_seen_at`).
 
 La logique pure vit dans `lib/explorer.ts` (titre, motif de recherche, fenêtre « Quand »).

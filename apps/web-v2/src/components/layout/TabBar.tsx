@@ -6,7 +6,8 @@
  *            suit la maquette 2123:66 ; l'administration et le thème s'y ajoutent, comme sur ordinateur.
  * POURQUOI — sur un écran étroit la barre latérale disparaît ; la navigation passe au pouce, en bas
  *            (maquette 2027 mobile). L'onglet actif porte le dégradé du logo.
- *            Un point rouge sur Communauté : des demandes d'ami attendent (Uriel, 19/10/2026). Un
+ *            Un point rouge sur Explorer : des festivals à découvrir ; sur Communauté : l'actu des
+ *            amis ou des demandes d'ami (Uriel, 10/11/2026). Un
  *            autre sur « Moi » : une nouveauté attend, et le menu mène aux Nouveautés (maquette 2371:443).
  * ATTENTION — invisible sur ordinateur (tab-bar.css). Elle glisse hors de l'écran quand une
  *            discussion est ouverte : le champ de saisie prend le bas de l'écran, comme sur WhatsApp.
@@ -34,7 +35,7 @@ import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { ADMIN_HOME } from '@/lib/admin-mode'
 import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
-import type { communityBadge } from '@/lib/network'
+import type { NavBadge } from '@/lib/network'
 import { usePlan } from '@/lib/usePlan'
 
 // Explorer à la loupe, pile au centre, comme Instagram ; « + » reste en haut (maquette 2779:470,
@@ -51,9 +52,11 @@ const SWIPE_TO_CLOSE = 80
 
 export function TabBar({
   community,
+  explore,
   updatesUnread,
 }: {
-  community: ReturnType<typeof communityBadge>
+  community: NavBadge | null
+  explore: NavBadge | null
   updatesUnread: boolean
 }) {
   const conversation = useMatch('/messages/:id')
@@ -205,13 +208,12 @@ export function TabBar({
         inert={chatting}
       >
         {TABS.map(({ to, label, Icon }) => {
+          const badge = to === '/communaute' ? community : to === '/explorer' ? explore : null
           const content = (
             <>
               <Icon size={22} strokeWidth={1.75} />
               <span>{label}</span>
-              {to === '/communaute' && community && (
-                <span className="tab-bar__dot" aria-label={community.label} />
-              )}
+              {badge && <span className="tab-bar__dot" aria-label={badge.label} />}
             </>
           )
           return (

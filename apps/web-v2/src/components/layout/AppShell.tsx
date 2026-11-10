@@ -3,7 +3,7 @@
  * POURQUOI — elle porte le PageChromeProvider : la page (enfant) déclare son décor, la barre du
  *            haut et le mur (frères) le rendent. Elle garde aussi le repli de la barre latérale,
  *            mémorisé sur l'appareil.
- *            Elle lit les demandes d'ami et la pastille des Nouveautés une fois pour la barre
+ *            Elle lit les pastilles (Explorer, Communauté, Nouveautés) une fois pour la barre
  *            latérale et la barre d'onglets.
  *            Une notification ouvre sa page au nom de son destinataire (`?compte=`) : la coquille
  *            active cette casquette, puis efface le paramètre (Uriel, 22/10/2026).
@@ -14,9 +14,10 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCommunityNews } from '@/features/community/useCommunityNews'
 import { useNetwork } from '@/features/community/useNetwork'
+import { useExploreNews } from '@/features/explorer/useExploreNews'
 import { useUpdatesUnread } from '@/features/updates/useUpdatesUnread'
 import { useAuth } from '@/lib/auth'
-import { communityBadge } from '@/lib/network'
+import { communityBadge, exploreBadge } from '@/lib/network'
 import { ACCOUNT_PARAM } from '@/lib/notifications'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { supabase } from '@/lib/supabase'
@@ -52,17 +53,20 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
   }, [collapsed])
 
   const toggleSidebar = useCallback(() => setCollapsed((previous) => !previous), [])
-  // La pastille de Communauté (demandes d'ami, festivals ajoutés) : relue à chaque changement d'adresse.
+  // Les pastilles d'Explorer et de Communauté : relues à chaque changement d'adresse.
   const { pathname, search, hash } = useLocation()
-  const { person, actors, switchActor } = useAuth()
+  const { person, actor, actors, switchActor } = useAuth()
   const navigate = useNavigate()
   const friendRequests = useNetwork(pathname).network?.requests.length ?? 0
-  const communityNews = useCommunityNews(
-    pathname,
-    person?.actor_id,
-    actors.map((a) => a.id),
-  )
+  const communityNews = useCommunityNews(pathname, person?.actor_id, actor?.id)
   const community = communityBadge(friendRequests, communityNews)
+  const explore = exploreBadge(
+    useExploreNews(
+      pathname,
+      person?.actor_id,
+      actors.map((a) => a.id),
+    ),
+  )
   const updatesUnread = useUpdatesUnread(pathname, person?.actor_id)
 
   // Une visite pour l'administration : à l'ouverture et à chaque retour sur l'onglet. La base ne
@@ -98,6 +102,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           collapsed={collapsed}
           onToggle={toggleSidebar}
           community={community}
+          explore={explore}
           updatesUnread={updatesUnread}
         />
         <main className="app-shell__main">
@@ -106,7 +111,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           {children}
         </main>
         <PosterWall />
-        <TabBar community={community} updatesUnread={updatesUnread} />
+        <TabBar community={community} explore={explore} updatesUnread={updatesUnread} />
         <SearchOverlay />
         <SujetComposer />
         <DiscussionDrawer />

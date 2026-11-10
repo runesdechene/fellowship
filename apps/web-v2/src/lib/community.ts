@@ -176,6 +176,11 @@ export function feedFor(lines: FeedLine[], tab: CommunityTab): FeedLine[] {
   return lines.filter((line) => TAB_KINDS[tab].includes(line.kind))
 }
 
+/** Les nouvelles arrivées depuis `seen`, pour la pastille ; « Ça se rassemble » n'en est pas une. */
+export function countSince(lines: FeedLine[], seen: Date): number {
+  return lines.filter((line) => line.kind !== 'gathering' && line.at > seen).length
+}
+
 export function gatheringOf(lines: FeedLine[]): FeedLine | null {
   return lines.find((line) => line.kind === 'gathering') ?? null
 }
