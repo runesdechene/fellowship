@@ -58,13 +58,47 @@ export function ordersOf(
   }
 }
 
+/**
+ * Les dates d'une enseigne encore en clair, et ce qu'on y scelle : les recettes saisies sur Carte
+ * (rien ne dit leur répartition, Espèces à 0, comme le bouton « Chiffrer » d'un bilan), les
+ * commandes gardées. `lines` : ses lignes `in` ; le cachet de la fiche (`stepper`) n'en fait pas partie.
+ */
+export function clearDatesToSeal(
+  lines: readonly {
+    event_id: string
+    category: string
+    amount: number
+    direction: string
+    source: string
+  }[],
+  reports: readonly { event_id: string; potential_orders: number | null }[],
+  sealed: readonly string[],
+): { eventId: string; revenue: SecretRevenue }[] {
+  const manual = lines.filter((line) => line.direction === 'in' && line.source === 'manual')
+  const eventIds = new Set([
+    ...manual.map((line) => line.event_id),
+    ...reports.filter((r) => (r.potential_orders ?? 0) > 0).map((r) => r.event_id),
+  ])
+  return [...eventIds]
+    .filter((eventId) => !sealed.includes(eventId))
+    .map((eventId) => {
+      const own = manual.filter((line) => line.event_id === eventId)
+      const potential = reports.find((r) => r.event_id === eventId)?.potential_orders
+      const carte = own
+        .filter((line) => line.category !== ORDER_CATEGORY)
+        .reduce((total, line) => total + line.amount, 0)
+      return { eventId, revenue: { carte, especes: 0, ...ordersOf(undefined, own, potential) } }
+    })
+}
+
 type KeyStatus = 'none' | 'locked' | 'open'
 type RevenueLine = { direction: 'in' | 'out'; source: string }
 
 /**
  * Une date sans recette saisie en clair et pas encore chiffrée, d'une enseigne qui a sa phrase : elle
  * se présente avec Carte et Espèces, et le premier montant la scelle. Les dates qui ont des recettes
- * ou des commandes potentielles en clair restent telles quelles, et se chiffrent une par une.
+ * ou des commandes potentielles en clair se chiffrent dès que la phrase est connue
+ * (clearDatesToSeal, lib/seal-clear-dates.ts) ; d'ici là, elles s'affichent telles quelles.
  */
 export function encryptsByDefault(
   secret: 'none' | 'masked' | 'open',

@@ -15,6 +15,7 @@
  *            réinitialisée ou recréée sur un autre appareil : `verify` avant tout scellement, sinon
  *            on écrirait des chiffrés que plus personne n'ouvre. Le refus vit sur l'enseigne
  *            (entities.revenue_clear_chosen_at, lu par mes_enseignes) : il suit sur tous les appareils.
+ *            Une clé ouverte scelle les dates restées en clair (lib/seal-clear-dates.ts).
  */
 import {
   createContext,
@@ -37,6 +38,7 @@ import {
 import { useAuth } from './auth'
 import { forgetDeviceKey, replaceDeviceKey } from './device-key'
 import { isIdle } from './idle'
+import { sealClearDates } from './seal-clear-dates'
 import { useViewTransition } from './navigation'
 import { must, supabase } from './supabase'
 
@@ -291,6 +293,19 @@ export function RevenueKeyProvider({ children }: { children: ReactNode }) {
     await forgetDeviceKey(target).catch(() => undefined)
     setSession((s) => (s.actorId === target ? { ...s, hasRecord: false, key: null } : s))
   }, [])
+
+  // Une clé ouverte scelle les dates encore en clair de l'enseigne, une fois par clé (Uriel,
+  // 10/11/2026 : verrouillé, leurs bénéfices restaient lisibles). Un échec réessaie à la prochaine clé.
+  // shortcut: un bilan déjà ouvert sur une de ces dates n'est pas relu ; le recharger s'il faut un jour.
+  const sealedWith = useRef<CryptoKey | null>(null)
+  useEffect(() => {
+    const { key, actorId: target } = session
+    if (!key || !target || sealedWith.current === key) return
+    sealedWith.current = key
+    sealClearDates(target, key).catch(() => {
+      sealedWith.current = null
+    })
+  }, [session])
 
   // 15 minutes sans geste dans l'onglet : la clé quitte la mémoire, les recettes se remasquent.
   const lastActivity = useRef(0)

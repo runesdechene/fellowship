@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import {
   addTag,
   addableCategories,
+  clearDatesToSeal,
   clearReportPlan,
   directionOf,
   encryptsByDefault,
@@ -168,5 +169,37 @@ describe('mergeRevenue', () => {
       sures: 0,
       potentielles: 0,
     })
+  })
+})
+
+describe('clearDatesToSeal', () => {
+  const line = (eventId: string, category: string, amount: number, source = 'manual') => ({
+    event_id: eventId,
+    category,
+    amount,
+    direction: 'in' as const,
+    source,
+  })
+
+  it('range les recettes en clair sur Carte et garde les commandes', () => {
+    const lines = [
+      line('a', 'ventes', 400),
+      line('a', 'remboursement', 12),
+      line('a', 'commande_sure', 300),
+    ]
+    expect(clearDatesToSeal(lines, [{ event_id: 'a', potential_orders: 50 }], [])).toEqual([
+      { eventId: 'a', revenue: { carte: 412, especes: 0, sures: 300, potentielles: 50 } },
+    ])
+  })
+
+  it('laisse les dates déjà chiffrées et ne touche pas au cachet de la fiche', () => {
+    const lines = [line('a', 'ventes', 400), line('b', 'cachet', 200, 'stepper')]
+    expect(clearDatesToSeal(lines, [], ['a'])).toEqual([])
+  })
+
+  it('chiffre une date qui n’a que des commandes potentielles', () => {
+    expect(clearDatesToSeal([], [{ event_id: 'c', potential_orders: 80 }], [])).toEqual([
+      { eventId: 'c', revenue: { carte: 0, especes: 0, sures: 0, potentielles: 80 } },
+    ])
   })
 })
