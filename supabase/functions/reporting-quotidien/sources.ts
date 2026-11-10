@@ -49,9 +49,12 @@ export async function lireShopify(
           payee: ['PAID', 'PARTIALLY_REFUNDED', 'REFUNDED'].includes(o.displayFinancialStatus),
         })
       }
-      // shortcut : le remboursement d'une carte cadeau se déduirait comme une vente ; à trier s'il arrive.
+      // Une carte cadeau remboursée n'avait pas été déclarée : elle ne se déduit pas. Plancher à 0 : une
+      // ligne peut être retirée sans argent rendu (#1560, 0 € rendu pour 50 € d'articles).
       o.refunds.forEach((r: RemboursementShopify, i: number) => {
-        const ttc = -centimes(r.totalRefundedSet.shopMoney.amount)
+        const ttc = -Math.max(0, horsCartesCadeaux(centimes(r.totalRefundedSet.shopMoney.amount), r.refundLineItems.nodes.map((l) => ({
+          carteCadeau: l.lineItem.isGiftCard, ttc: centimes(l.subtotalSet.shopMoney.amount),
+        }))))
         const jour = jourDe(r.createdAt)
         if (ttc === 0 || jour < du || jour > au) return // 0 € : une remise en stock
         ranger(parJour, jour, { ...commune, nom: `${o.name} remboursement ${i + 1}`, ttc, tva: tvaDe(ttc), payee: true })
@@ -130,7 +133,10 @@ const REQUETE = `query ($apres: String, $filtre: String) {
       name legacyResourceId createdAt test cancelledAt displayFinancialStatus
       totalPriceSet { shopMoney { amount } }
       totalTaxSet { shopMoney { amount } }
-      refunds(first: 20) { createdAt totalRefundedSet { shopMoney { amount } } }
+      refunds(first: 20) {
+        createdAt totalRefundedSet { shopMoney { amount } }
+        refundLineItems(first: 20) { nodes { lineItem { isGiftCard } subtotalSet { shopMoney { amount } } } }
+      }
       shippingAddress { countryCodeV2 zip }
       billingAddress { countryCodeV2 zip }
       fulfillments(first: 1) { createdAt }
@@ -169,7 +175,12 @@ async function graphql(domaine: string, jeton: string, query: string, variables:
 
 interface LigneShopify { isGiftCard: boolean; discountedTotalSet: { shopMoney: { amount: string } } }
 
-interface RemboursementShopify { createdAt: string; totalRefundedSet: { shopMoney: { amount: string } } }
+interface RemboursementShopify {
+  createdAt: string
+  totalRefundedSet: { shopMoney: { amount: string } }
+  // Une carte cadeau est sans TVA : son sous-total est ce qui a été rendu.
+  refundLineItems: { nodes: { lineItem: { isGiftCard: boolean }; subtotalSet: { shopMoney: { amount: string } } }[] }
+}
 
 interface PageSumup {
   items: { status: string; type: string; timestamp: string; transaction_code: string; amount: number }[]
