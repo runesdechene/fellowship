@@ -1,0 +1,87 @@
+/**
+ * QUOI     — les styles de l'invitation « Installer Fellowship » (components/layout/InstallInvite.tsx).
+ * POURQUOI — maquette 2822:233 : une carte blanche bordée d'un filet, le logo nu à gauche, posée
+ *            juste au-dessus des onglets du téléphone ; en bas à droite sur ordinateur.
+ */
+
+.install-invite {
+  position: fixed;
+  right: var(--space-16);
+  bottom: var(--space-16);
+  z-index: var(--layer-install);
+  display: flex;
+  gap: var(--space-16);
+  align-items: center;
+  width: min(100% - 2 * var(--space-16), var(--install-width));
+  padding: var(--space-16);
+  background: var(--surface-card);
+  border: 1px solid var(--line-card);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-banner);
+  transition:
+    opacity var(--duration-medium) var(--ease-drawer),
+    translate var(--duration-medium) var(--ease-drawer);
+}
+
+@starting-style {
+  .install-invite {
+    opacity: 0;
+    translate: 0 var(--space-16);
+  }
+}
+
+/* Le logo nu, jamais arrondi. */
+.install-invite__logo {
+  flex: none;
+  width: var(--install-logo-width);
+  height: auto;
+}
+
+.install-invite__text {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  min-width: 0;
+}
+
+.install-invite__title {
+  padding-right: var(--space-20); /* la place de la croix */
+  font: var(--type-install-title);
+  color: var(--ink-title);
+}
+
+.install-invite__line {
+  font: var(--type-install-line);
+  color: var(--ink-soft);
+}
+
+/* L'icône Partager de Safari, dans le fil de la phrase. */
+.install-invite__share {
+  vertical-align: text-bottom;
+}
+
+.install-invite__button {
+  margin-top: var(--space-4);
+}
+
+.install-invite__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  color: var(--ink-soft);
+}
+
+@media (width <= 760px) {
+  .install-invite {
+    right: 0;
+    bottom: calc(var(--tab-bar-height) + var(--space-12));
+    left: 0;
+    margin-inline: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .install-invite {
+    transition: none;
+  }
+}

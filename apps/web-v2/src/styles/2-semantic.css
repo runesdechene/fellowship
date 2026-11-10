@@ -259,6 +259,13 @@
   --layer-menu: 20;
   --layer-map: 30; /* la carte ouverte couvre la barre d'onglets du téléphone */
   --layer-update: 40; /* le bandeau « nouvelle version » passe au-dessus de tout (lot 12) */
+  --layer-install: 15; /* l'invitation à installer : sur les onglets, sous les menus */
+
+  /* L'invitation « Installer Fellowship » (maquette 2822:233). */
+  --install-width: 380px;
+  --install-logo-width: 48px;
+  --type-install-title: var(--type-card-title);
+  --type-install-line: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
 
   /* =========================================================================
      TYPOGRAPHIE — rôles complets (raccourci CSS `font`)
@@ -1020,15 +1027,15 @@
     var(--family-sans);
   --feed-poster-width: 34px;
   --feed-poster-height: 46px;
-  --side-poster-width: 36px;
-  --side-poster-height: 50px;
-  --type-community-tab: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   /* La carte d'un festival en ligne : le fil, la saisie d'un message, sa bulle (EventChip). */
   --event-chip-surface: var(--community-inset);
   --event-chip-poster-width: var(--feed-poster-width);
   --event-chip-poster-height: var(--feed-poster-height);
   --type-event-chip-name: var(--type-community-card-name);
   --type-event-chip-meta: var(--type-community-small);
+  --side-poster-width: 36px;
+  --side-poster-height: 50px;
+  --type-community-tab: var(--weight-medium) var(--size-13) / var(--leading-snug) var(--family-sans);
   --type-community-day: var(--weight-medium) var(--size-12) / var(--leading-snug) var(--family-sans);
   --type-community-text: var(--weight-regular) var(--size-14) / 1.5 var(--family-sans);
   --type-community-small: var(--weight-regular) var(--size-12) / var(--leading-snug)
@@ -1959,10 +1966,10 @@
   --chat-theirs-shadow: 0 1px 3px rgb(51 36 26 / 8%);
   --chat-mine-default: var(--terre-850);
   --chat-mine-ink: var(--sand-0);
+  --chat-mine-chip-surface: color-mix(in srgb, var(--sand-0) 14%, transparent);
   --chat-meta-ink: var(--ink-350);
   --chat-day-surface: var(--surface-card);
   --chat-read-ink: var(--sand-0);
-  --chat-mine-chip-surface: color-mix(in srgb, var(--sand-0) 14%, transparent);
   --chat-bubble-width: var(--width-chat-bubble);
   --chat-media-width: var(--width-chat-media);
   --chat-name-1: var(--plume-1);

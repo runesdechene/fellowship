@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { App } from './App'
 import { AuthProvider } from './lib/auth'
 import { RevenueKeyProvider } from './lib/revenue-key'
+import { listenForInstall } from './lib/installation'
 import { captureReferral } from './lib/referral'
 import { applyTheme, currentTheme } from './lib/theme'
 import './styles/index.css'
@@ -17,6 +18,9 @@ applyTheme(currentTheme())
 
 // Un lien de parrainage (`?r=`) arrive sur n'importe quelle page : le code attend l'inscription.
 captureReferral(window.location.search)
+
+// Avant React : Chrome ne propose l'installation qu'une fois, dès le chargement.
+listenForInstall()
 
 // Le service worker (public/sw.js) : les notifications, et la passation de la V1 à la bascule.
 if ('serviceWorker' in navigator) {

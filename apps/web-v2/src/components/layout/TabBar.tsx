@@ -37,6 +37,7 @@ import { useAuth } from '@/lib/auth'
 import { useTransitionNavigate } from '@/lib/navigation'
 import type { NavBadge } from '@/lib/network'
 import { usePlan } from '@/lib/usePlan'
+import { InstallMenuItem } from './InstallMenuItem'
 
 // Explorer à la loupe, pile au centre, comme Instagram ; « + » reste en haut (maquette 2779:470,
 // Uriel, 05/11/2026).
@@ -169,6 +170,7 @@ export function TabBar({
             <span className="tab-sheet__grow">Nouveautés</span>
             <span className="tab-sheet__version">Fellowship {__APP_VERSION__}</span>
           </NavLink>
+          <InstallMenuItem onDone={close} />
           <NavLink
             to="/bienvenue?nouvelle-enseigne"
             className="tab-sheet__item tab-sheet__link"

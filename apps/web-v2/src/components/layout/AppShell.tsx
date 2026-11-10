@@ -21,6 +21,7 @@ import { communityBadge, exploreBadge } from '@/lib/network'
 import { ACCOUNT_PARAM } from '@/lib/notifications'
 import { PageChromeProvider } from '@/lib/page-chrome'
 import { supabase } from '@/lib/supabase'
+import { InstallInvite } from './InstallInvite'
 import { PosterWall } from './PosterWall'
 import { Sidebar } from './Sidebar'
 import { TabBar } from './TabBar'
@@ -112,6 +113,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         </main>
         <PosterWall />
         <TabBar community={community} explore={explore} updatesUnread={updatesUnread} />
+        <InstallInvite />
         <SearchOverlay />
         <SujetComposer />
         <DiscussionDrawer />
