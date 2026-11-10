@@ -10,6 +10,27 @@ export function SettingCard({ children }: { children: ReactNode }) {
   return <div className="setting-card">{children}</div>
 }
 
+/** Un titre de section, son aide, puis sa carte (Réglages et Récap du reporting). */
+export function SettingSection({
+  title,
+  note,
+  children,
+}: {
+  title: string
+  note?: string
+  children: ReactNode
+}) {
+  return (
+    <section className="settings-section">
+      <div className="settings-section__head">
+        <h2 className="settings-section__title">{title}</h2>
+        {note && <p className="settings-section__note">{note}</p>}
+      </div>
+      <SettingCard>{children}</SettingCard>
+    </section>
+  )
+}
+
 interface SettingRowProps {
   title: string
   note?: string

@@ -4,6 +4,7 @@
  *            sélecteur d'identité, et l'adresse suffit à la barre pour savoir où l'on est.
  */
 export const REPORTING_HOME = '/reporting'
+export const REPORTING_RECAP = '/reporting/recap'
 export const REPORTING_SETTINGS = '/reporting/reglages'
 
 export function isReportingPath(pathname: string): boolean {

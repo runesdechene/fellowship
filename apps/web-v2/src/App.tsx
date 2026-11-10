@@ -15,8 +15,9 @@ import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
 import { BoardPage } from '@/features/admin-board/BoardPage'
 import { HomePage } from '@/features/admin-home/HomePage'
 import { ADMIN_HOME } from '@/lib/admin-mode'
-import { REPORTING_HOME, REPORTING_SETTINGS } from '@/lib/reporting-zone'
+import { REPORTING_HOME, REPORTING_RECAP, REPORTING_SETTINGS } from '@/lib/reporting-zone'
 import { DecadesPage } from '@/features/reporting/DecadesPage'
+import { RecapPage } from '@/features/reporting/RecapPage'
 import { ReportingRoute } from '@/features/reporting/ReportingRoute'
 import { ReportingSettingsPage } from '@/features/reporting/ReportingSettingsPage'
 import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
@@ -399,6 +400,12 @@ export function App() {
             <AppPage bare>
               {<ReportingRoute page={(id) => <DecadesPage entityId={id} />} />}
             </AppPage>
+          }
+        />
+        <Route
+          path={REPORTING_RECAP}
+          element={
+            <AppPage bare>{<ReportingRoute page={(id) => <RecapPage entityId={id} />} />}</AppPage>
           }
         />
         <Route

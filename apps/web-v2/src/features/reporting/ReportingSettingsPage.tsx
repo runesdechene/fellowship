@@ -7,7 +7,7 @@
  *            constante en attendant SuperPDP), « Tester » une source, l'état des identifiants et de
  *            la réception des factures (ils se lisent chez SuperPDP, par la fonction quotidienne).
  */
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { Lock } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -17,7 +17,7 @@ import { Switch } from '@/components/ui/Switch'
 import { useAuth } from '@/lib/auth'
 import { formatFullDateOrdinal, parseSqlDate } from '@/lib/dates'
 import { formatSiren, REGIMES, SOURCE_NAMES } from '@/lib/reporting'
-import { SettingCard, SettingRow } from '@/features/settings/SettingRow'
+import { SettingRow, SettingSection } from '@/features/settings/SettingRow'
 import { type CompanyPatch, useReportingSettings } from './useReportingSettings'
 
 const REGIME_OPTIONS = Object.entries(REGIMES).map(([value, label]) => ({ value, label }))
@@ -25,18 +25,6 @@ const SALE_DATES = [
   { value: 'commande', label: 'Commande' },
   { value: 'expedition', label: 'Expédition' },
 ]
-
-function Section({ title, note, children }: { title: string; note?: string; children: ReactNode }) {
-  return (
-    <section className="settings-section">
-      <div className="settings-section__head">
-        <h2 className="settings-section__title">{title}</h2>
-        {note && <p className="settings-section__note">{note}</p>}
-      </div>
-      <SettingCard>{children}</SettingCard>
-    </section>
-  )
-}
 
 /** Une adresse e-mail, enregistrée en quittant le champ ; vide, elle s'efface. */
 function EmailSetting({
@@ -91,7 +79,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
       {problem && <p className="admin-page__error">{problem}</p>}
 
       <div className="reporting-settings__sections">
-        <Section title="L’entreprise" note="Repris de ta fiche enseigne.">
+        <SettingSection title="L’entreprise" note="Repris de ta fiche enseigne.">
           <SettingRow title="Nom légal">
             {entity?.legal_name ?? 'À remplir dans tes réglages'}
           </SettingRow>
@@ -109,9 +97,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               onChange={(regime_tva) => update({ regime_tva })}
             />
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section title="Les ventes" note="Comment une journée est comptée.">
+        <SettingSection title="Les ventes" note="Comment une journée est comptée.">
           <SettingRow
             title="Date d’une vente"
             note="Le jour où une commande compte. À confirmer avec ton expert-comptable."
@@ -132,9 +120,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               Toujours
             </span>
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section title="Les sources" note="Lues chaque matin.">
+        <SettingSection title="Les sources" note="Lues chaque matin.">
           {sources.map((source) => (
             <SettingRow
               key={source.id}
@@ -154,9 +142,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
           >
             Ignoré
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section
+        <SettingSection
           title="SuperPDP"
           note="La plateforme agréée qui transmet tes ventes à l’administration."
         >
@@ -182,9 +170,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               ? formatFullDateOrdinal(parseSqlDate(company.envoi_a_partir_du))
               : 'Pas encore fixé'}
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section
+        <SettingSection
           title="Les alertes"
           note="Un seul e-mail, seulement quand il y a quelque chose à faire."
         >
@@ -208,9 +196,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               onToggle={() => update({ rappel_echeance: !company.rappel_echeance })}
             />
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section
+        <SettingSection
           title="L’expert-comptable"
           note="Pour que ta déclaration de TVA colle aux chiffres envoyés."
         >
@@ -234,9 +222,9 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               onSave={(recap_comptable_email) => update({ recap_comptable_email })}
             />
           </SettingRow>
-        </Section>
+        </SettingSection>
 
-        <Section title="L’abonnement">
+        <SettingSection title="L’abonnement">
           <SettingRow
             title="Fellowship E-Reporting"
             note="4 € HT par mois, en plus de ton forfait, sur la même facture."
@@ -260,7 +248,7 @@ export function ReportingSettingsPage({ entityId }: { entityId: string }) {
               <Button onClick={() => update({ actif: true })}>Reprendre</Button>
             </SettingRow>
           )}
-        </Section>
+        </SettingSection>
       </div>
 
       {stopping && (

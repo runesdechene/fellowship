@@ -109,10 +109,16 @@ interface JourRecap {
 
 const MOIS = 'janvier février mars avril mai juin juillet août septembre octobre novembre décembre'.split(' ')
 
+/** « 2026-11 » → « novembre 2026 ». */
+export function nomDuMois(mois: string): string {
+  const [annee, m] = mois.split('-').map(Number)
+  return `${MOIS[m - 1]} ${annee}`
+}
+
 /** Le récap du mois pour l'expert-comptable : ce qui est parti à l'administration, décade par décade. */
 export function messageRecap(mois: string, jours: JourRecap[]) {
   const [annee, m] = mois.split('-').map(Number)
-  const nomMois = `${MOIS[m - 1]} ${annee}`
+  const nomMois = nomDuMois(mois)
   const centimes = (montant: string) => Math.round(Number(montant) * 100)
   const somme = (liste: JourRecap[], categorie: string, champ: 'tax_exclusive_amount' | 'tax_total') =>
     liste.filter((j) => j.statut === 'envoyee').flatMap((j) => j.lignes).filter((l) => l.category_code === categorie).reduce((a, l) => a + centimes(l[champ]), 0)

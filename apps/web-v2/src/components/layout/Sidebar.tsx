@@ -16,6 +16,7 @@ import {
   CircleGauge,
   CircleHelp,
   Flag,
+  Mail,
   Megaphone,
   MessageSquare,
   PanelRightClose,
@@ -32,7 +33,12 @@ import {
 } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { isAdminPath } from '@/lib/admin-mode'
-import { isReportingPath, REPORTING_HOME, REPORTING_SETTINGS } from '@/lib/reporting-zone'
+import {
+  isReportingPath,
+  REPORTING_HOME,
+  REPORTING_RECAP,
+  REPORTING_SETTINGS,
+} from '@/lib/reporting-zone'
 import { LegalLink } from '@/components/ui/LegalLink'
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch'
 import { Wordmark } from '@/components/ui/Wordmark'
@@ -106,9 +112,10 @@ const ADMIN_ITEMS = [
   { to: '/admin/faq', label: 'FAQ', Icon: CircleHelp, prefixes: ['/admin/faq'] },
 ] as const
 
-/** La zone Reporting de l'enseigne active : ses deux pages (maquette 2795:233). */
+/** La zone Reporting de l'enseigne active : ses trois pages (maquettes 2795:233, 2814:467). */
 const REPORTING_ITEMS = [
   { to: REPORTING_HOME, label: 'Décades', Icon: ReceiptText },
+  { to: REPORTING_RECAP, label: 'Récap', Icon: Mail },
   { to: REPORTING_SETTINGS, label: 'Réglages', Icon: Settings },
 ] as const
 

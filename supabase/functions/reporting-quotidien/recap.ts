@@ -1,33 +1,32 @@
 // recap : le 11 de chaque mois, le récap du mois précédent pour l'expert-comptable. La dernière décade
 // se dépose au plus tard le 10 : le mois est alors parti. Une panne d'e-mail n'arrête rien.
 // Dans le bac à sable, le récap part à l'adresse d'alerte (ou du compte), jamais à l'expert-comptable.
-import { messageRecap } from '../_shared/reporting-ventes.ts'
-import { getSupabaseAdmin } from '../_shared/supabase-admin.ts'
-import { adresseAlerte } from './alerte.ts'
+// Le contenu vient de _shared/reporting-recap.ts, comme l'aperçu de la page Récap.
+import { encodeBase64 } from 'jsr:@std/encoding@1/base64'
+import { destinataireRecap, envoiDuRecap, preparerRecap } from '../_shared/reporting-recap.ts'
 import type { Entreprise } from './envoi.ts'
-
-const JOUR_DU_RECAP = '11'
 
 // shortcut : un passage manqué le 11 saute le récap du mois ; à suivre en base si ça arrive.
 export async function envoyerRecap(e: Entreprise, aujourdhui: string) {
-  if (!e.recap_comptable || aujourdhui.slice(8) !== JOUR_DU_RECAP) return false
+  const debut = new Date(`${aujourdhui.slice(0, 7)}-01T12:00:00Z`)
+  debut.setUTCMonth(debut.getUTCMonth() - 1)
+  const mois = debut.toISOString().slice(0, 7)
+  if (!e.recap_comptable || envoiDuRecap(mois) !== aujourdhui) return false
   try {
-    const destinataire = e.environnement === 'production' ? e.recap_comptable_email : await adresseAlerte(e)
+    const destinataire = await destinataireRecap(e)
     if (!destinataire) return false
-    const debut = new Date(`${aujourdhui.slice(0, 7)}-01T12:00:00Z`)
-    debut.setUTCMonth(debut.getUTCMonth() - 1)
-    const mois = debut.toISOString().slice(0, 7)
-    const { data: jours, error } = await getSupabaseAdmin().from('reporting_journees').select('jour, statut, lignes, detail')
-      .eq('entity_actor_id', e.entity_actor_id).eq('environnement', e.environnement)
-      .gte('jour', `${mois}-01`).lt('jour', `${aujourdhui.slice(0, 7)}-01`).order('jour')
-    if (error) throw error
+    const recap = await preparerRecap(e.entity_actor_id, e.environnement, mois)
 
-    const message = messageRecap(mois, jours)
-    const sujet = e.environnement === 'production' ? message.sujet : `[bac à sable] ${message.sujet}`
     const reponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${Deno.env.get('RESEND_API_KEY')}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: '"Fellowship" <notifications@equipe.flw.sh>', to: [destinataire], subject: sujet, text: message.texte }),
+      body: JSON.stringify({
+        from: '"Fellowship" <notifications@equipe.flw.sh>',
+        to: [destinataire],
+        subject: e.environnement === 'production' ? recap.sujet : `[bac à sable] ${recap.sujet}`,
+        text: recap.texte,
+        attachments: recap.pieces.map((p) => ({ filename: p.nom, content: encodeBase64(new TextEncoder().encode(p.csv)) })),
+      }),
     })
     if (!reponse.ok) throw new Error(`Resend ${reponse.status}`)
     return true

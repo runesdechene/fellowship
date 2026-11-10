@@ -15,7 +15,8 @@ import { lireSecret } from '../_shared/reporting-superpdp.ts'
 import { alerter } from './alerte.ts'
 import { envoyerRecap } from './recap.ts'
 import { type Entreprise, envoyerPretes } from './envoi.ts'
-import { jourDe, lireShopify, lireSumup, seuilUeDepasse } from './sources.ts'
+import { jourDe } from '../_shared/reporting-shopify.ts'
+import { lireShopify, lireSumup, seuilUeDepasse } from './sources.ts'
 
 const SECRET = Deno.env.get('REPORTING_TRIGGER_SECRET') ?? ''
 const JOUR = /^\d{4}-\d{2}-\d{2}$/
