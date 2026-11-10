@@ -448,4 +448,9 @@
     display: block;
     overflow-x: auto;
   }
+
+  /* Le tableau défile : un montant ou un jour ne se coupe pas en deux. */
+  .reporting-days :is(th, td) {
+    white-space: nowrap;
+  }
 }
