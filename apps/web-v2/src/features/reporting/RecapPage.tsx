@@ -61,28 +61,31 @@ export function RecapPage({ entityId }: { entityId: string }) {
       {error && <p className="admin-page__error">{error}</p>}
 
       {recap && (
-        <div className="reporting-settings__sections">
-          <SettingSection title="L’envoi" note={sendingNote(recap.environnement, recap.actif)}>
-            <SettingRow title="À">
-              {recap.destinataire ?? 'Aucune adresse : à remplir dans les réglages'}
-            </SettingRow>
-            <SettingRow title="Part le">
-              {formatFullDateOrdinal(parseSqlDate(recap.envoiLe))}
-            </SettingRow>
-            <SettingRow title="Objet">{recap.sujet}</SettingRow>
-            <SettingRow title="Pièces jointes">
-              <span className="reporting-recap__files">
-                {recap.pieces.map((piece) => (
-                  <span key={piece.nom}>{piece.nom}</span>
-                ))}
-              </span>
-            </SettingRow>
-          </SettingSection>
+        <div className="reporting-recap__sections">
+          <div className="reporting-settings__sections">
+            <SettingSection title="L’envoi" note={sendingNote(recap.environnement, recap.actif)}>
+              <SettingRow title="À">
+                {recap.destinataire ?? 'Aucune adresse : à remplir dans les réglages'}
+              </SettingRow>
+              <SettingRow title="Part le">
+                {formatFullDateOrdinal(parseSqlDate(recap.envoiLe))}
+              </SettingRow>
+              <SettingRow title="Objet">{recap.sujet}</SettingRow>
+              <SettingRow title="Pièces jointes">
+                <span className="reporting-recap__files">
+                  {recap.pieces.map((piece) => (
+                    <span key={piece.nom}>{piece.nom}</span>
+                  ))}
+                </span>
+              </SettingRow>
+            </SettingSection>
 
-          <SettingSection title="Le message" note="Le texte exact de l’e-mail.">
-            <p className="reporting-recap__body">{recap.texte}</p>
-          </SettingSection>
+            <SettingSection title="Le message" note="Le texte exact de l’e-mail.">
+              <p className="reporting-recap__body">{recap.texte}</p>
+            </SettingSection>
+          </div>
 
+          {/* Les tableaux prennent toute la largeur : 13 colonnes ne tiennent pas dans celle des réglages. */}
           {recap.pieces.map((piece) => (
             <RecapFile key={piece.nom} name={piece.nom} csv={piece.csv} />
           ))}

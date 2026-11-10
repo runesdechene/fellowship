@@ -454,6 +454,13 @@
   overflow-wrap: anywhere;
 }
 
+/* L'envoi et le message dans la colonne des réglages, puis les tableaux sur toute la largeur. */
+.reporting-recap__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-36);
+}
+
 /* L'aperçu d'une pièce jointe : le tableau des journées, qui défile seul en largeur. */
 .reporting-recap__table {
   overflow-x: auto;
