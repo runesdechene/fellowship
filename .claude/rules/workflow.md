@@ -33,6 +33,17 @@ session, puisqu'on ne pousse qu'à la fin. Le rappel passe par `systemMessage`, 
 **How to apply :** un hook `Stop` ne renvoie jamais d'`additionalContext` sur une condition qui reste
 vraie d'un tour à l'autre.
 
+## Deux sessions dans le même dépôt partagent l'index Git
+
+**Le piège** (10/11/2026) : une session indexait son lot « reporting » pendant qu'une autre faisait
+`git add <ses fichiers>` puis `git commit` : le commit a emporté les 20 fichiers de l'autre session.
+`git add` ciblé ne protège rien, c'est `git commit` qui prend tout l'index.
+
+**How to apply :** quand une autre session travaille (fichiers modifiés que je n'ai pas touchés),
+committer avec `git commit -m … -- <mes fichiers>` : seuls ces chemins partent, l'index de l'autre
+reste en place. Un fichier partagé par les deux (`2-semantic.css`) : ne committer que ses propres
+morceaux, par un correctif filtré appliqué à un index temporaire (`GIT_INDEX_FILE`).
+
 ## Check git diff before editing dirty files
 
 Always check `git diff HEAD -- <file>` before editing a file that's already modified in git status. Existing uncommitted changes may contain valid fixes from prior sessions.
