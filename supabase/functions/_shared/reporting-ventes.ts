@@ -131,6 +131,8 @@ export function messageRecap(mois: string, jours: JourRecap[]) {
 
   const texte = [
     `Ventes aux particuliers de ${nomMois}, telles que déclarées à l'administration (e-reporting), remboursements déduits.`,
+    // shortcut : la phrase de Runes de Chêne, à passer en réglage à la deuxième enseigne.
+    'Cet e-mail ne concerne que les ventes aux particuliers, sur Shopify et SumUp. Les factures aux professionnels passent par Pennylane.',
     '', ...decades, '', `Mois : ${bilan(jours)}.`, '',
     'Hors TVA française : exports (Suisse, outre-mer…) et stands à l’étranger.',
     ...(facturees.length ? [`Facturées à un pro, donc absentes de ce récap : ${facturees.join(', ')}.`] : []),
