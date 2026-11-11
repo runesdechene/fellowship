@@ -61,8 +61,8 @@ export interface Vitrine {
   followerFaces: Friend[]
   companionCount: number
   following: boolean
-  /** Le compte suit le visiteur : suivi en retour, c'est un ami, à qui l'on peut écrire. */
-  followsMe: boolean
+  /** Le visiteur peut lui écrire : la base en décide (peut_ecrire — amis, ou compte officiel). */
+  canWrite: boolean
   upcoming: VitrineDate[]
   past: VitrineDate[]
 }
@@ -85,7 +85,7 @@ async function countEntities(ids: string[]): Promise<number> {
   return response.count ?? 0
 }
 
-/** `follower` suit-il `actorId` ? Dans les deux sens, visiteur et vitrine sont amis. */
+/** `follower` suit-il `actorId` ? */
 async function isFollowing(follower: string, actorId: string): Promise<boolean> {
   const response = await supabase
     .from('follows')
@@ -94,6 +94,11 @@ async function isFollowing(follower: string, actorId: string): Promise<boolean> 
     .eq('following_actor', actorId)
     .maybeSingle()
   return must(response) !== null
+}
+
+/** Une seule règle dit qui peut écrire à qui, en base : l'écran la demande, il ne la recopie pas. */
+async function canWriteTo(viewer: string, actorId: string): Promise<boolean> {
+  return must(await supabase.rpc('peut_ecrire', { p_actor: viewer, p_other: actorId }))
 }
 
 /** `viewerId` nul : un visiteur sans compte (lot 12), qui ne suit personne et n'a pas d'amis. */
@@ -111,7 +116,7 @@ async function loadVitrine(
   if (!entity) return null
   const id = entity.actor_id
 
-  const [participations, followers, friendIds, following, followsMe] = await Promise.all([
+  const [participations, followers, friendIds, following, canWrite] = await Promise.all([
     supabase
       .from('participations')
       .select(
@@ -123,7 +128,7 @@ async function loadVitrine(
     supabase.rpc('get_followers_with_dates', { p_actor_id: id }),
     supabase.rpc('get_friend_ids', { p_user_id: id }),
     viewerId ? isFollowing(viewerId, id) : false,
-    viewerId ? isFollowing(id, viewerId) : false,
+    viewerId && viewerId !== id ? canWriteTo(viewerId, id) : false,
   ])
 
   const followerRows = must(followers)
@@ -179,7 +184,7 @@ async function loadVitrine(
     followerFaces: [...faces.values()],
     companionCount: companionEntities,
     following,
-    followsMe,
+    canWrite,
     upcoming: upcoming.map((date) => ({
       ...date,
       friends: (friendsByEvent.get(date.eventId) ?? []).filter((f) => f.id !== id),
@@ -252,7 +257,17 @@ export function useVitrine(slug: string | undefined, viewerId: string | null | u
       : await supabase
           .from('follows')
           .insert({ follower_actor: viewerId, following_actor: vitrine.actorId })
-    if (response.error) flip(wasFollowing, wasFollowing ? 1 : -1)
+    if (response.error) {
+      flip(wasFollowing, wasFollowing ? 1 : -1)
+      return
+    }
+    // Suivre en retour fait un ami (ne plus suivre le défait) : la base redit si l'on peut écrire.
+    try {
+      const canWrite = await canWriteTo(viewerId, vitrine.actorId)
+      setState((s) => (s.vitrine ? { ...s, vitrine: { ...s.vitrine, canWrite } } : s))
+    } catch {
+      /* lecture ratée : le bouton garde son état, la prochaine visite le corrige */
+    }
   }, [state.vitrine, viewerId])
 
   return { ...state, toggleFollow, reload, show }

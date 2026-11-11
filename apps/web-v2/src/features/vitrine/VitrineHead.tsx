@@ -25,6 +25,7 @@ import { InstagramIcon } from '@/components/ui/InstagramIcon'
 import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { WriteButton } from '@/features/discussions/WriteButton'
 import { useTransitionNavigate } from '@/lib/navigation'
+import { useOfficials } from '@/lib/useOfficials'
 import { initials, networkCounts } from '@/lib/vitrine'
 import { linkLabel, type LinkType } from '@/lib/vitrine-edit'
 import type { Vitrine } from './useVitrine'
@@ -58,6 +59,7 @@ export function VitrineHead({
   onEdit,
 }: VitrineHeadProps) {
   const go = useTransitionNavigate()
+  const officials = useOfficials()
   const [copied, setCopied] = useState(false)
   const [followers, companions] = networkCounts(vitrine.followerCount, vitrine.companionCount)
 
@@ -119,7 +121,9 @@ export function VitrineHead({
               Modifier la vitrine
             </Button>
           ) : (
-            signedIn && (
+            // Un compte officiel ne se suit pas : sa vitrine n'offre qu'« Écrire » (Uriel, 11/11/2026).
+            signedIn &&
+            !officials.has(vitrine.actorId) && (
               <Button
                 variant="action"
                 icon={
@@ -136,10 +140,8 @@ export function VitrineHead({
               </Button>
             )
           )}
-          {/* Les messages sont réservés aux amis : suivi dans les deux sens. */}
-          {!isOwner && vitrine.following && vitrine.followsMe && (
-            <WriteButton actorId={vitrine.actorId} />
-          )}
+          {/* Qui peut écrire à qui, la base le dit (peut_ecrire) : ses amis, et à un compte officiel. */}
+          {!isOwner && vitrine.canWrite && <WriteButton actorId={vitrine.actorId} />}
           <Button
             variant="icon"
             aria-label="Partager la vitrine"

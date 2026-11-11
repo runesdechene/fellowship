@@ -1,5 +1,6 @@
 /**
- * QUOI     — « Écrire » sur la vitrine d'un ami : ouvre la conversation à deux avec lui.
+ * QUOI     — « Écrire » sur une vitrine à qui l'on peut écrire (un ami, un compte officiel) :
+ *            ouvre la conversation à deux.
  * POURQUOI — le geste vit dans useWrite, partagé avec le fil de Ma communauté.
  */
 import { MessageCircle } from 'lucide-react'
