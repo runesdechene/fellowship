@@ -1,7 +1,9 @@
 # Le compte officiel Fellowship — conception
 
 > Discuté avec Uriel le 11/11/2026. Décision dans le vault : `_État.md` de Fellowship, *Tranché*.
-> Maquette à faire avant le code (Figma, skill `frontend-design`) : le badge et l'anneau.
+> Maquette validée le 11/11/2026 : Figma, page Story, planche `2835:893` — **badge A** (le sceau :
+> pastille au dégradé de la marque, cochée) et **anneau 2** (dégradé de la marque, plus épais, halo
+> en terre claire). Pas de bulle du mot au-dessus de la barre (retirée de l'app, elle ne revient pas).
 
 ## Pourquoi
 
