@@ -2,8 +2,11 @@
 
 > Discuté avec Uriel le 11/11/2026. Décision dans le vault : `_État.md` de Fellowship, *Tranché*.
 > Maquette validée le 11/11/2026 : Figma, page Story, planche `2835:893` — **badge A** (le sceau :
-> pastille au dégradé de la marque, cochée) et **anneau 2** (dégradé de la marque, plus épais, halo
-> en terre claire). Pas de bulle du mot au-dessus de la barre (retirée de l'app, elle ne revient pas).
+> pastille au dégradé de la marque, le logo Fellowship en blanc au centre ; 16 px près d'un nom
+> courant, 22 px sur la vitrine) et **anneau 2** (dégradé de la marque, plus épais, halo en terre
+> claire). Pas de coche : elle appartient au badge « Certifié » des Pro, qu'on ne doit pas confondre.
+> Pas de bulle du mot au-dessus de la barre (retirée de l'app, elle ne revient pas). Le logo
+> vectoriel est `dist/logo.svg` d'Uriel, à copier dans `apps/web-v2/src/assets/`.
 
 ## Pourquoi
 
