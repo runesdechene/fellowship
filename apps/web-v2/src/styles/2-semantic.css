@@ -1948,6 +1948,11 @@
   --story-face-size: var(--size-52);
   --story-ring-unread: var(--terre-450);
   --story-ring-seen: var(--sand-500);
+  /* Un compte officiel : anneau plus épais au dégradé de la marque, et un halo (maquette 2835:893). */
+  --story-official-ring-width: 4px;
+  --story-official-halo: var(--terre-150);
+  --story-official-halo-width: 1.5px;
+  --story-official-halo-gap: 5px;
   --story-note-line: var(--line-card);
   --story-note-ink: var(--ink-title);
   --story-name-ink: var(--ink-soft);
@@ -2186,6 +2191,7 @@
 
   /* Les sujets et le tchat, la nuit. */
   --story-ring-seen: var(--night-400);
+  --story-official-halo: var(--terre-900);
   --chat-paper-top: var(--night-50);
   --chat-paper-bottom: var(--night-0);
   --chat-motif-opacity: 0.035;

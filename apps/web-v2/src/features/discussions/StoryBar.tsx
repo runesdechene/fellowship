@@ -15,6 +15,8 @@ import { Avatar } from '@/components/ui/Avatar'
 import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { useAuth } from '@/lib/auth'
 import { conversationTone } from '@/lib/discussions'
+import { officialFirst } from '@/lib/officials'
+import { useOfficials } from '@/lib/useOfficials'
 import type { StorySujet } from '@/lib/discussion-api'
 import { useTagStyles } from '@/lib/useTagStyles'
 import { useMediaUrls, useStoryBar } from './useDiscussions'
@@ -27,8 +29,14 @@ export function StoryBar() {
   const { pathname } = useLocation()
   const bar = useStoryBar()
   const styles = useTagStyles()
+  const officials = useOfficials()
   const [params, setParams] = useSearchParams()
-  const sujets = bar.status === 'ready' ? bar.value : []
+  // Les sujets d'un compte officiel passent toujours en tête, juste après « Toi ».
+  const sujets = officialFirst(
+    bar.status === 'ready' ? bar.value : [],
+    (sujet) => sujet.created_by,
+    officials,
+  )
   const urls = useMediaUrls(
     sujets.map((sujet) => (sujet.media_kind === 'image' ? sujet.media_path : null)),
   )
@@ -66,6 +74,7 @@ export function StoryBar() {
             <SujetButton
               sujet={sujet}
               mine={sujet.created_by === actor.id}
+              official={officials.has(sujet.created_by)}
               ring={conversationTone(styles, sujet.event_tags)?.bgColor ?? null}
               photo={sujet.media_path ? (urls.get(sujet.media_path) ?? null) : null}
               onOpen={() => open(DISCUSSION_PARAM, sujet.id)}
@@ -80,15 +89,18 @@ export function StoryBar() {
 interface SujetButtonProps {
   sujet: StorySujet
   mine: boolean
+  /** Un compte officiel : l'anneau au dégradé de la marque, avec son halo (maquette 2835:893). */
+  official: boolean
   ring: string | null
   photo: string | null
   onOpen: () => void
 }
 
 /** Un sujet : sa photo prend la place du visage dans l'anneau (Uriel, 04/11/2026). */
-function SujetButton({ sujet, mine, ring, photo, onOpen }: SujetButtonProps) {
+function SujetButton({ sujet, mine, official, ring, photo, onOpen }: SujetButtonProps) {
   const classes = ['story']
-  if (sujet.seen && !mine) classes.push('story--seen')
+  if (official) classes.push('story--official')
+  else if (sujet.seen && !mine) classes.push('story--seen')
   if (!ring) classes.push('story--plain')
   const name = mine ? 'Toi' : sujet.author_label
   return (

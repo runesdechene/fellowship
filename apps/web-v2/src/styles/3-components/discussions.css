@@ -57,6 +57,24 @@
   border-style: dashed;
 }
 
+/* Un compte officiel : le dégradé de la marque sous une bordure transparente (le fond du centre
+   reprend celui de la barre), et un halo autour. Maquette 2835:893. */
+.story--official .story__ring {
+  border: var(--story-official-ring-width) solid transparent;
+  background:
+    linear-gradient(var(--surface-panel), var(--surface-panel)) padding-box,
+    var(--brand-gradient) border-box;
+}
+
+.story--official .story__ring::after {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * (var(--story-official-ring-width) + var(--story-official-halo-gap)));
+  border: var(--story-official-halo-width) solid var(--story-official-halo);
+  border-radius: var(--round-full);
+  pointer-events: none;
+}
+
 .story__face {
   --avatar-size: var(--story-face-size);
 }
