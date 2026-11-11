@@ -9,7 +9,9 @@
 import { ArrowRight, Check, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { resultsTitle } from '@/lib/explorer'
+import { useOfficials } from '@/lib/useOfficials'
 import { initials } from '@/lib/vitrine'
 import { ExploreCard } from './ExploreCard'
 import { ProEndCard } from './ProEndCard'
@@ -39,6 +41,8 @@ function ExhibitorCard({
   exhibitor: Exhibitor
   onFollow: (exhibitor: Exhibitor) => void
 }) {
+  // Un compte officiel ne se suit pas (Uriel, 11/11/2026) : son badge, sans bouton.
+  const official = useOfficials().has(exhibitor.actorId)
   return (
     <article className="exhibitor-card">
       <Link to={`/${exhibitor.slug}`} className="exhibitor-card__identity">
@@ -49,26 +53,31 @@ function ExhibitorCard({
             initials(exhibitor.name)
           )}
         </span>
-        <b className="exhibitor-card__name">{exhibitor.name}</b>
+        <b className="exhibitor-card__name">
+          {exhibitor.name}
+          <OfficialBadge actorId={exhibitor.actorId} />
+        </b>
         <span className="exhibitor-card__meta">
           {[exhibitor.craft, exhibitor.place].filter(Boolean).join(' · ')}
         </span>
       </Link>
-      <button
-        type="button"
-        className="exhibitor-card__follow"
-        aria-pressed={exhibitor.following}
-        onClick={() => {
-          onFollow(exhibitor)
-        }}
-      >
-        {exhibitor.following ? (
-          <Check size={14} strokeWidth={2} />
-        ) : (
-          <Plus size={14} strokeWidth={2} />
-        )}
-        {exhibitor.following ? 'Suivi' : 'Suivre'}
-      </button>
+      {!official && (
+        <button
+          type="button"
+          className="exhibitor-card__follow"
+          aria-pressed={exhibitor.following}
+          onClick={() => {
+            onFollow(exhibitor)
+          }}
+        >
+          {exhibitor.following ? (
+            <Check size={14} strokeWidth={2} />
+          ) : (
+            <Plus size={14} strokeWidth={2} />
+          )}
+          {exhibitor.following ? 'Suivi' : 'Suivre'}
+        </button>
+      )}
     </article>
   )
 }

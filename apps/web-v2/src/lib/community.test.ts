@@ -290,12 +290,14 @@ describe('followReason', () => {
   })
 })
 
-test('canFollow : jamais un compte suivi, jamais un des siens', () => {
+test('canFollow : jamais un compte suivi, jamais un des siens, jamais un compte officiel', () => {
   const followed = new Set(['f1'])
   const own = new Set(['me', 'shop'])
-  expect(canFollow('f1', followed, own)).toBe(false)
-  expect(canFollow('shop', followed, own)).toBe(false)
-  expect(canFollow('other', followed, own)).toBe(true)
+  const officials = new Set(['fellowship'])
+  expect(canFollow('f1', followed, own, officials)).toBe(false)
+  expect(canFollow('shop', followed, own, officials)).toBe(false)
+  expect(canFollow('fellowship', followed, own, officials)).toBe(false)
+  expect(canFollow('other', followed, own, officials)).toBe(true)
 })
 
 test('readPeople : des visages lus, les illisibles ignorés', () => {

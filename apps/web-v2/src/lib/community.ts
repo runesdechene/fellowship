@@ -320,13 +320,15 @@ export function mutualLabel(total: number): string {
   return total === 1 ? '1 ami en commun' : `${String(total)} amis en commun`
 }
 
-/** Un bouton Suivre n'a de sens ni sur un compte déjà suivi, ni sur un des siens. */
+/** Un bouton Suivre n'a de sens ni sur un compte déjà suivi, ni sur un des siens, ni sur un compte
+ *  officiel, qui ne se suit pas (Uriel, 11/11/2026). */
 export function canFollow(
   id: string,
   followed: ReadonlySet<string>,
   own: ReadonlySet<string>,
+  officials: ReadonlySet<string>,
 ): boolean {
-  return !followed.has(id) && !own.has(id)
+  return !followed.has(id) && !own.has(id) && !officials.has(id)
 }
 
 /** Où commence la page suivante : la plus ancienne nouvelle (jamais « Ça se rassemble »). */

@@ -14,6 +14,7 @@ import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
+import { useOfficials } from '@/lib/useOfficials'
 import {
   canFollow,
   feedFor,
@@ -94,6 +95,7 @@ function CommunityScreen() {
     )
   }, [requested, loading, error, scope, setParams])
   const { network, answered, followBack, decline } = useNetwork()
+  const officials = useOfficials()
   const friends = useMemo(
     () => new Set((network?.friends ?? []).map((member) => member.id)),
     [network],
@@ -124,7 +126,7 @@ function CommunityScreen() {
 
   function followable(line: FeedLine): FeedPerson | null {
     const target = followTarget(line)
-    return target && canFollow(target.id, followed, own) ? target : null
+    return target && canFollow(target.id, followed, own, officials) ? target : null
   }
 
   return (

@@ -110,7 +110,8 @@ function SujetButton({ sujet, mine, official, ring, photo, onOpen }: SujetButton
       // La couleur vient de la catégorie du festival, réglée en base : seule variable permise.
       style={ring ? ({ '--story-ring-color': ring } as CSSProperties) : undefined}
       onClick={onOpen}
-      aria-label={`${name} : ${sujet.mot}`}
+      // Le libellé remplace le contenu du bouton : le badge doit s'y dire aussi.
+      aria-label={`${name}${official ? ', Officiel' : ''} : ${sujet.mot}`}
     >
       <span className="story__ring">
         <Avatar
