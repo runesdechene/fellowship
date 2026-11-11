@@ -3,14 +3,16 @@
  *            « À suivre », et qui il suit déjà ; Suivre et Repérer.
  * POURQUOI — lot 9a. La base rend des lignes prêtes à afficher (community_feed, crossing_dates,
  *            accounts_to_follow), l'identité protégée déjà appliquée ; ce hook les lit et relit.
- *            Tout Suivre (événement `reseau-change`) relit la page. Deux fils : le réseau, ou toute
- *            la plateforme (par défaut ; le réseau sous `?fil=reseau`).
+ *            Tout Suivre (événement `reseau-change`) relit la page. Deux fils : ses abonnements (par
+ *            défaut), ou toute la plateforme (par défaut pour qui ne suit personne). Ouvrir la page
+ *            lit puis remet à maintenant community_seen_at : ce qui est plus récent se marque nouveau.
  * ATTENTION — une lecture ratée est une erreur affichée, jamais un fil vide (.claude/rules/v2.md).
  */
 import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/lib/auth'
 import {
   appendPage,
+  defaultScope,
   pageCursor,
   readFeed,
   readFollowReason,
@@ -51,7 +53,7 @@ export interface ToFollow {
 const PAGE_SIZE = 40
 
 interface CommunityData {
-  /** Le fil lu : un changement d'onglet vers l'autre fil ne montre jamais l'ancien. */
+  /** Le fil lu (le demandé, ou celui de defaultScope) : un autre fil demandé ne montre jamais l'ancien. */
   scope: FeedScope
   lines: FeedLine[]
   /** Une page pleine : il en reste peut-être d'autres, plus anciennes. */
@@ -61,14 +63,24 @@ interface CommunityData {
   followed: Set<string>
 }
 
-async function loadCommunity(actorId: string, scope: FeedScope): Promise<CommunityData> {
-  const [feed, crossing, toFollow, follows] = await Promise.all([
-    supabase.rpc('community_feed', { p_actor: actorId, p_limit: PAGE_SIZE, p_scope: scope }),
+async function loadCommunity(actorId: string, requested: FeedScope | null): Promise<CommunityData> {
+  const [crossing, toFollow, follows] = await Promise.all([
     supabase.rpc('crossing_dates', { p_actor: actorId }),
     supabase.rpc('accounts_to_follow', { p_actor: actorId }),
     supabase.from('follows').select('following_actor').eq('follower_actor', actorId),
   ])
-  const lines = readFeed(must(feed))
+  const followed = must(follows)
+  // Le fil par défaut dépend des abonnements : il se lit après eux.
+  const scope = requested ?? defaultScope(followed.length)
+  const lines = readFeed(
+    must(
+      await supabase.rpc('community_feed', {
+        p_actor: actorId,
+        p_limit: PAGE_SIZE,
+        p_scope: scope,
+      }),
+    ),
+  )
   return {
     scope,
     lines,
@@ -84,7 +96,7 @@ async function loadCommunity(actorId: string, scope: FeedScope): Promise<Communi
       faces: readPeople(row.faces),
     })),
     toFollow: await withMutual(actorId, must(toFollow)),
-    followed: new Set(must(follows).map((row) => row.following_actor)),
+    followed: new Set(followed.map((row) => row.following_actor)),
   }
 }
 
@@ -128,7 +140,7 @@ const EMPTY: CommunityData = {
   followed: new Set(),
 }
 
-export function useCommunity(actorId: string | undefined, scope: FeedScope) {
+export function useCommunity(actorId: string | undefined, requested: FeedScope | null) {
   const { person } = useAuth()
   const [data, setData] = useState<CommunityData>(EMPTY)
   const [loading, setLoading] = useState(true)
@@ -136,6 +148,33 @@ export function useCommunity(actorId: string | undefined, scope: FeedScope) {
   const [version, setVersion] = useState(0)
   const [loadingMore, setLoadingMore] = useState(false)
   const [moreFailed, setMoreFailed] = useState(false)
+  const [seen, setSeen] = useState<Date | null>(null)
+
+  // La dernière visite, lue avant d'être remise à maintenant : ce qui est plus récent est nouveau.
+  // La pastille (useCommunityNews) compte depuis cet instant.
+  useEffect(() => {
+    const me = person?.actor_id
+    if (!me) return
+    let cancelled = false
+    async function visit(id: string) {
+      const response = await supabase
+        .from('users')
+        .select('community_seen_at')
+        .eq('actor_id', id)
+        .maybeSingle()
+      // La requête ne part qu'attendue : un `void supabase.from(…).update(…)` seul n'envoie rien.
+      await supabase
+        .from('users')
+        .update({ community_seen_at: new Date().toISOString() })
+        .eq('actor_id', id)
+      if (cancelled || !response.data) return
+      setSeen(new Date(response.data.community_seen_at))
+    }
+    void visit(me)
+    return () => {
+      cancelled = true
+    }
+  }, [person?.actor_id])
 
   // Un Suivre ou un Refuser, ici ou ailleurs (la cloche, « Ta communauté ») : tout se relit.
   useEffect(() => {
@@ -150,7 +189,7 @@ export function useCommunity(actorId: string | undefined, scope: FeedScope) {
     async function load(id: string) {
       let result: CommunityData | null
       try {
-        result = await loadCommunity(id, scope)
+        result = await loadCommunity(id, requested)
       } catch {
         result = null
       }
@@ -163,7 +202,7 @@ export function useCommunity(actorId: string | undefined, scope: FeedScope) {
     return () => {
       cancelled = true
     }
-  }, [actorId, scope, version])
+  }, [actorId, requested, version])
 
   /** « Afficher plus » : la page d'avant la plus ancienne nouvelle, ajoutée au bout. */
   const loadMore = useCallback(async () => {
@@ -232,9 +271,11 @@ export function useCommunity(actorId: string | undefined, scope: FeedScope) {
     [actorId, person],
   )
 
-  const current = data.scope === scope
+  // Sans fil demandé, le fil lu est le bon ; le défaut écrit ensuite dans l'adresse ne vide rien.
+  const current = requested === null || data.scope === requested
   return {
     ...data,
+    seen,
     lines: current ? data.lines : [],
     hasMore: current && data.hasMore,
     loading: loading || !current,

@@ -157,6 +157,11 @@
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
+/* Arrivée depuis la dernière visite : le même fond que les notifications non lues. */
+.feed-item--new {
+  background: var(--surface-row-hover);
+}
+
 .feed-item + .feed-item {
   border-top: 1px solid var(--line-card);
 }

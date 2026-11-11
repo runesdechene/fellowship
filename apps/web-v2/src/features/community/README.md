@@ -6,7 +6,8 @@ appliquée ; `lib/community.ts` les lit et les dit.
 
 - `CommunityPage.tsx` — l'écran : filtres dans l'adresse (`?voir=`), « Ça se rassemble », le fil
   groupé par jour, la colonne de droite.
-- `useCommunity.ts` — les lectures, Suivre et Repérer.
+- `useCommunity.ts` — les lectures, Suivre et Repérer ; le fil par défaut (ses abonnements, la
+  plateforme pour qui ne suit personne) ; la dernière visite, qui marque les lignes nouvelles.
 - `FeedItem.tsx` — une ligne du fil (phrase, festival ou avis, âge, Suivre).
 - `Gathering.tsx` — « Ça se rassemble ».
 - `CrossingCard.tsx` — « Où vous vous croiserez ».
@@ -14,5 +15,5 @@ appliquée ; `lib/community.ts` les lit et les dit.
 - `NetworkPage.tsx` — « Mes amis » / « Mes abonnés » (`/communaute/amis`, `/communaute/abonnes`).
 - `NetworkCard.tsx` — « Ta communauté » : amis, abonnés, demandes d'ami en attente.
 - `useNetwork.ts` — l'état du réseau, lu aussi par la pastille de la navigation et le tableau de bord.
-- `useCommunityNews.ts` — l'autre moitié de la pastille : les nouvelles du fil des amis depuis la
-  dernière ouverture de la page (`users.community_seen_at`).
+- `useCommunityNews.ts` — l'autre moitié de la pastille : les nouvelles de ses abonnements depuis la
+  dernière ouverture de la page (`users.community_seen_at`), visites exclues.

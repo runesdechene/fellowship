@@ -5,10 +5,12 @@
  *            « Tu connais peut-être ».
  * POURQUOI — lot 9a, maquette 2212:2 : d'abord ce que vit la tribu, ensuite agrandir son réseau.
  *            « Toute la plateforme » montre tout le monde, ce qui est public seulement ; les
- *            filtres par type viennent dessous, au second rang (Uriel, 01/11/2026).
+ *            filtres par type viennent dessous, au second rang (Uriel, 01/11/2026). Le fil
+ *            s'ouvre sur ses abonnements, la plateforme seulement pour qui ne suit personne, et
+ *            ce qui est arrivé depuis la dernière visite se marque nouveau (11/11/2026).
  *            L'écran n'invente rien : useCommunity lit, lib/community.ts dit.
  */
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
@@ -60,9 +62,11 @@ export function CommunityPage() {
 function CommunityScreen() {
   const { actor, person, entities } = useAuth()
   const [params, setParams] = useSearchParams()
-  const scope = readScope(params.get('fil'))
+  const requested = readScope(params.get('fil'))
   const tab = readTab(params.get('voir'))
   const {
+    scope,
+    seen,
     lines,
     hasMore,
     crossing,
@@ -75,7 +79,20 @@ function CommunityScreen() {
     loadMore,
     follow,
     mark,
-  } = useCommunity(actor?.id, scope)
+  } = useCommunity(actor?.id, requested)
+
+  // Le fil choisi par défaut s'écrit dans l'adresse : un premier Suivre ne fait pas basculer la page.
+  useEffect(() => {
+    if (requested || loading || error) return
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current)
+        next.set('fil', scope)
+        return next
+      },
+      { replace: true },
+    )
+  }, [requested, loading, error, scope, setParams])
   const { network, answered, followBack, decline } = useNetwork()
   const friends = useMemo(
     () => new Set((network?.friends ?? []).map((member) => member.id)),
@@ -120,7 +137,7 @@ function CommunityScreen() {
             label="Fil"
             options={SCOPES}
             value={scope}
-            onChange={(next) => choose('fil', next === 'plateforme' ? null : next)}
+            onChange={(next) => choose('fil', next)}
           />
         </div>
         <div className="community__tabs" role="group" aria-label="Filtrer le fil">
@@ -159,6 +176,8 @@ function CommunityScreen() {
                       followable={followable(line)}
                       onFollow={(id, welcome) => void follow(id, welcome)}
                       friend={!!line.who && friends.has(line.who.id)}
+                      // Nouveau : ce que la pastille a compté, donc seulement dans ses abonnements.
+                      fresh={scope === 'reseau' && seen !== null && line.at > seen}
                     />
                   ))}
                 </ul>

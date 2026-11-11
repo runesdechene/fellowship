@@ -29,6 +29,8 @@ interface FeedItemProps {
   onFollow: (id: string, welcome: boolean) => void
   /** L'auteur de la ligne est un ami : on peut lui écrire. */
   friend: boolean
+  /** Arrivée depuis la dernière visite : le fond des notifications non lues. */
+  fresh: boolean
 }
 
 function Review({ line }: { line: FeedLine }) {
@@ -46,13 +48,13 @@ function Review({ line }: { line: FeedLine }) {
   )
 }
 
-export function FeedItem({ line, now, followable, onFollow, friend }: FeedItemProps) {
+export function FeedItem({ line, now, followable, onFollow, friend, fresh }: FeedItemProps) {
   const phrase = feedPhrase(line)
   const { write, busy } = useWrite()
   const writeTo = friend && WRITABLE.includes(line.kind) ? line.who : null
   const welcome = line.kind === 'arrival'
   return (
-    <li className="feed-item">
+    <li className={fresh ? 'feed-item feed-item--new' : 'feed-item'}>
       {line.who ? (
         <Avatar className="feed-item__avatar" src={line.who.avatarUrl} name={line.who.name} />
       ) : (

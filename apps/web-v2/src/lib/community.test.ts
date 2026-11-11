@@ -8,6 +8,7 @@ import {
   activityText,
   canFollow,
   countSince,
+  defaultScope,
   feedFor,
   feedPhrase,
   followReason,
@@ -139,17 +140,24 @@ describe('les onglets', () => {
   ]
   const kinds = (tab: Parameters<typeof feedFor>[1]) => feedFor(lines, tab).map((l) => l.kind)
 
-  test('chaque onglet garde ses lignes, jamais « Ça se rassemble »', () => {
-    expect(kinds('tout')).toEqual(['arrival', 'going', 'added', 'review', 'follow', 'visit'])
+  test('chaque onglet garde ses lignes, jamais « Ça se rassemble » ni les visites', () => {
+    expect(kinds('tout')).toEqual(['arrival', 'going', 'added', 'review', 'follow'])
     expect(kinds('ou')).toEqual(['going', 'added'])
     expect(kinds('avis')).toEqual(['review'])
     expect(kinds('reseau')).toEqual(['arrival', 'follow'])
   })
 
-  test('le fil se lit dans l’adresse : les abonnements, sauf « plateforme »', () => {
+  test('les visites ne comptent pas dans la pastille', () => {
+    expect(countSince(lines, new Date(0))).toBe(5)
+  })
+
+  test('le fil se lit dans l’adresse ; sans lui, les abonnements dès qu’il y en a', () => {
     expect(readScope('reseau')).toBe('reseau')
-    expect(readScope('x')).toBe('plateforme')
-    expect(readScope(null)).toBe('plateforme')
+    expect(readScope('plateforme')).toBe('plateforme')
+    expect(readScope('x')).toBeNull()
+    expect(readScope(null)).toBeNull()
+    expect(defaultScope(0)).toBe('plateforme')
+    expect(defaultScope(3)).toBe('reseau')
   })
 
   test('« Ça se rassemble » à part', () => {

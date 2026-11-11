@@ -177,7 +177,8 @@ export function readFeed(rows: unknown): FeedLine[] {
 export type CommunityTab = 'tout' | 'ou' | 'avis' | 'reseau'
 
 const TAB_KINDS: Record<CommunityTab, readonly FeedKind[]> = {
-  tout: ['arrival', 'going', 'applied', 'interested', 'added', 'review', 'follow', 'visit'],
+  // Les visites (« a ouvert Fellowship ») ne vivent que dans « Activité de la plateforme » (Uriel, 11/11/2026).
+  tout: ['arrival', 'going', 'applied', 'interested', 'added', 'review', 'follow'],
   ou: ['going', 'applied', 'interested', 'added'],
   avis: ['review'],
   reseau: ['arrival', 'follow'],
@@ -190,18 +191,23 @@ export function readTab(value: string | null): CommunityTab {
 /** Le fil que la base sert (community_feed) : les comptes suivis, ou toute la plateforme. */
 export type FeedScope = 'reseau' | 'plateforme'
 
-/** Toute la plateforme par défaut : qui arrive ne suit encore personne (Uriel, 05/11/2026). */
-export function readScope(value: string | null): FeedScope {
-  return value === 'reseau' ? 'reseau' : 'plateforme'
+/** Le fil demandé par l'adresse ; null : à choisir (voir defaultScope). */
+export function readScope(value: string | null): FeedScope | null {
+  return value === 'reseau' || value === 'plateforme' ? value : null
+}
+
+/** Ses abonnements d'abord ; toute la plateforme seulement pour qui ne suit personne (Uriel, 11/11/2026). */
+export function defaultScope(follows: number): FeedScope {
+  return follows > 0 ? 'reseau' : 'plateforme'
 }
 
 export function feedFor(lines: FeedLine[], tab: CommunityTab): FeedLine[] {
   return lines.filter((line) => TAB_KINDS[tab].includes(line.kind))
 }
 
-/** Les nouvelles arrivées depuis `seen`, pour la pastille ; « Ça se rassemble » n'en est pas une. */
+/** Les nouvelles arrivées depuis `seen`, pour la pastille : celles que la page montre, rien d'autre. */
 export function countSince(lines: FeedLine[], seen: Date): number {
-  return lines.filter((line) => line.kind !== 'gathering' && line.at > seen).length
+  return feedFor(lines, 'tout').filter((line) => line.at > seen).length
 }
 
 export function gatheringOf(lines: FeedLine[]): FeedLine | null {
