@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { useAuth } from '@/lib/auth'
 import { formatDateRange, parseSqlDate } from '@/lib/dates'
 import { closeSujet } from '@/lib/discussion-api'
@@ -172,6 +173,8 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         <div className="conversation__who">
           <p className="conversation__name">
             {sujet ? (detail.createdBy === actor.id ? 'Ton sujet' : author?.label) : title}
+            {sujet && detail.createdBy !== actor.id && <OfficialBadge actorId={detail.createdBy} />}
+            {detail.kind === 'direct' && <OfficialBadge actorId={others[0]?.id} />}
           </p>
           <p className="conversation__meta">
             {sujet

@@ -5,3 +5,4 @@ Les icônes reprises telles quelles de la maquette Figma, quand lucide n'a pas d
 - `peage.svg` — la route du péage (bilan d'une date, `features/reports/Ledger.tsx`), teinte par le
   CSS (masque).
 - `posters/` — les dessins des affiches par défaut, un par catégorie (voir son README).
+- `logo-blanc.svg` — le logo Fellowship en blanc, au centre du sceau « Officiel » (`components/ui/OfficialBadge.tsx`).

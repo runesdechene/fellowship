@@ -22,6 +22,7 @@ import { useState, type ComponentType, type CSSProperties } from 'react'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { InstagramIcon } from '@/components/ui/InstagramIcon'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { WriteButton } from '@/features/discussions/WriteButton'
 import { useTransitionNavigate } from '@/lib/navigation'
 import { initials, networkCounts } from '@/lib/vitrine'
@@ -154,7 +155,10 @@ export function VitrineHead({
 
       <div className="vitrine-head__identity">
         <div className="vitrine-head__title-row">
-          <h1 className="vitrine-head__name">{vitrine.name}</h1>
+          <h1 className="vitrine-head__name">
+            {vitrine.name}
+            <OfficialBadge actorId={vitrine.actorId} size="large" />
+          </h1>
           {vitrine.certified && (
             <span className="vitrine-badge vitrine-badge--certified">
               <BadgeCheck size={14} strokeWidth={2} />

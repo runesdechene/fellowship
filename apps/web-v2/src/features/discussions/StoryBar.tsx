@@ -12,6 +12,7 @@ import type { CSSProperties } from 'react'
 import { Play, Plus, User } from 'lucide-react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { useAuth } from '@/lib/auth'
 import { conversationTone } from '@/lib/discussions'
 import type { StorySujet } from '@/lib/discussion-api'
@@ -115,7 +116,10 @@ function SujetButton({ sujet, mine, ring, photo, onOpen }: SujetButtonProps) {
           {sujet.participants}
         </span>
       </span>
-      <span className="story__name">{name}</span>
+      <span className="story__name">
+        {name}
+        {!mine && <OfficialBadge actorId={sujet.created_by} />}
+      </span>
     </button>
   )
 }

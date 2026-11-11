@@ -11,6 +11,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { CheckCheck, Pencil, SmilePlus, Trash2 } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { dayLabel, formatTime } from '@/lib/dates'
 import type { Bubble, Person, ReactionSummary } from '@/lib/discussions'
 import { FestivalAttachment } from './FestivalAttachment'
@@ -175,6 +176,7 @@ export function ChatFeed({
                       className={`chat-bubble__name chat-bubble__name--${String(tones.get(bubble.authorId) ?? 0)}`}
                     >
                       {author?.label ?? 'Exposant'}
+                      <OfficialBadge actorId={bubble.authorId} />
                     </p>
                   )}
                   {bubble.eventId && <FestivalAttachment eventId={bubble.eventId} />}

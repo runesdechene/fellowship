@@ -8,8 +8,10 @@
  *            (les messages restent entre amis, Uriel, 10/11/2026).
  */
 import { HandHeart, MessageCircle, Plus, Shield } from 'lucide-react'
+import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Avatar } from '@/components/ui/Avatar'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { EventChip } from '@/components/ui/EventChip'
 import { Stars } from '@/components/ui/Stars'
 import { feedPhrase, type FeedLine, type FeedPerson } from '@/lib/community'
@@ -68,9 +70,12 @@ export function FeedItem({ line, now, followable, onFollow, friend, fresh }: Fee
             typeof part === 'string' ? (
               part
             ) : index === 0 && line.who?.slug ? (
-              <Link key={index} className="feed-item__name" to={`/${line.who.slug}`}>
-                {part.strong}
-              </Link>
+              <Fragment key={index}>
+                <Link className="feed-item__name" to={`/${line.who.slug}`}>
+                  {part.strong}
+                </Link>
+                <OfficialBadge actorId={line.who.id} />
+              </Fragment>
             ) : (
               <b key={index}>{part.strong}</b>
             ),

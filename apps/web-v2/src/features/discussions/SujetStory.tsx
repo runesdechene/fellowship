@@ -12,6 +12,7 @@ import type { CSSProperties } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { formatDateRange, parseSqlDate, timeAgo } from '@/lib/dates'
 import type { ConversationDetail, EventBrief } from '@/lib/discussion-api'
 import type { ChatMessage, Person } from '@/lib/discussions'
@@ -68,7 +69,10 @@ export function SujetStory(props: Props) {
         </Button>
         <Avatar className="sujet-story__avatar" src={author?.avatar} name={author?.label} />
         <div className="sujet-story__who">
-          <p className="sujet-story__name">{mine ? 'Ton sujet' : author?.label}</p>
+          <p className="sujet-story__name">
+            {mine ? 'Ton sujet' : author?.label}
+            {!mine && <OfficialBadge actorId={detail.createdBy} />}
+          </p>
           <p className="sujet-story__meta">
             {opening
               ? `${postedLabel(new Date(opening.createdAt), new Date())}, ${remaining}`

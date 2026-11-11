@@ -8,6 +8,7 @@ une classe CSS. Aucune valeur de design ici — tout vit dans `styles/3-componen
 - `Select.tsx` — le sélecteur maison, avec icône et couleur par état.
 - `Field.tsx` — libellé, champ, zone de texte, interrupteur.
 - `Avatar.tsx` — l'avatar rond et la pile d'avatars.
+- `OfficialBadge.tsx` — le sceau « Officiel », collé au nom d'un compte officiel ; rien sinon.
 - `Tag.tsx` — la pastille d'une catégorie (couleurs venues de la base).
 - `RichText.tsx` — un texte d'organisateur mis en forme, nettoyé avant d'être affiché.
 - `ProBadge.tsx` — la pastille « Pro », dans le dégradé du logo.

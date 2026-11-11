@@ -1,0 +1,30 @@
+/**
+ * QUOI     — le sceau « Officiel » (components/ui/OfficialBadge.tsx).
+ * POURQUOI — maquette 2835:893 : pastille au dégradé de la marque, logo blanc au centre.
+ */
+
+.official-badge {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--official-badge-size);
+  height: var(--official-badge-size);
+  margin-inline-start: var(--space-4);
+  border-radius: var(--round-full);
+  background: var(--brand-gradient);
+  vertical-align: middle;
+}
+
+.official-badge--small {
+  --official-badge-size: var(--size-16);
+}
+
+.official-badge--large {
+  --official-badge-size: var(--size-22);
+
+  margin-inline-start: var(--space-8);
+}
+
+.official-badge__logo {
+  width: 62%;
+}

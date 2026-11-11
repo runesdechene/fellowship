@@ -13,6 +13,7 @@ import { ArrowLeft, PenSquare } from 'lucide-react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Avatar, AvatarStack } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
+import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { useAuth } from '@/lib/auth'
 import { othersOf, type InboxRow } from '@/lib/discussion-api'
 import { conversationName, messagesExit, previewLine, remainingLabel } from '@/lib/discussions'
@@ -159,6 +160,7 @@ function InboxItem({
         <span className="inbox-item__line">
           <span className="inbox-item__name">
             {conversationName(row.kind, row.mot, row.title, others)}
+            {row.kind === 'direct' && <OfficialBadge actorId={others[0]?.id} />}
           </span>
           <span className="inbox-item__time">{when}</span>
         </span>

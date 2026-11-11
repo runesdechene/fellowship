@@ -1,3 +1,7 @@
+/**
+ * QUOI     — l'ordre de la barre des sujets : les comptes officiels en tête.
+ * POURQUOI — spec 2026-11-11-compte-officiel : les sujets de Fellowship passent toujours en premier.
+ */
 import { describe, expect, test } from 'vitest'
 import { officialFirst } from './officials'
 
