@@ -41,9 +41,13 @@ parle, pas un exposant parmi d'autres.
 
 - Une colonne booléenne `officiel` (par défaut `false`), sur la table qui porte l'id d'acteur
   partout dans les RPC — `actors`, à vérifier dans `information_schema` avant d'écrire.
-- `ouvrir_conversation` (définition **live** copiée entière) : la vérification « amis » d'une
-  conversation à deux laisse passer quand l'un des deux est officiel. Vérifier aussi que l'envoi d'un
-  message ne refait pas ce contrôle ailleurs.
+- **Une seule règle décide qui peut écrire à qui** : une fonction `peut_ecrire(moi, lui)` — amis, ou
+  l'un des deux est officiel. `ouvrir_conversation` (définition **live** copiée entière) l'appelle
+  pour une conversation à deux, à la place de son test « amis » ; le bouton Écrire (vitrine, fil)
+  s'affiche selon la même règle, jamais selon un test recopié. Vérifier que l'envoi d'un message ne
+  refait pas ce contrôle ailleurs. *Pourquoi* (Uriel, 11/11/2026) : une future invitation entre
+  non-amis ajoutera un état à la conversation (en attente, ouverte) et un cas à cette fonction, sans
+  rien défaire — les conversations avec un compte officiel seront ouvertes d'office.
 - `accounts_to_follow` (définition live) : exclut les comptes officiels.
 - Le front connaît la liste des comptes officiels par **une seule lecture** (une petite RPC ou un
   `select`), gardée en mémoire pour la session : le badge se décide sur l'id, sans changer chaque RPC
