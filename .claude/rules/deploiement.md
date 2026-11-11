@@ -45,6 +45,8 @@ Chez RdC, une V1 déployée depuis un autre dossier est partie sans ses redirect
 **Monter la version de `apps/web-v2/package.json` avant chaque déploiement** : elle part dans
 `/version.json`, et c'est elle qui fait paraître « Recharger » dans les onglets ouverts. Même
 version, aucun bandeau : les onglets gardent l'ancien code.
+La monter à la main (Edit), jamais par `Set-Content`/`Out-File` : PowerShell 5.1 y glisse un BOM
+(3.34.0, 11/11/2026). Et le chemin du fichier en entier : un chemin relatif n'a rien changé (3.35.0).
 
 **Toujours en brouillon d'abord**, puis `--prod` sur le même `dist/` (le script de prod ne
 rebâtit pas : il publie exactement ce qui a été vérifié).
