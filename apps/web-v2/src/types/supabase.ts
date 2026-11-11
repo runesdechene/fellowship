@@ -19,16 +19,19 @@ export type Database = {
           created_at: string
           id: string
           kind: Database["public"]["Enums"]["actor_kind"]
+          officiel: boolean
         }
         Insert: {
           created_at?: string
           id?: string
           kind: Database["public"]["Enums"]["actor_kind"]
+          officiel?: boolean
         }
         Update: {
           created_at?: string
           id?: string
           kind?: Database["public"]["Enums"]["actor_kind"]
+          officiel?: boolean
         }
         Relationships: []
       }
@@ -2071,6 +2074,7 @@ export type Database = {
           alerte_email: string | null
           created_at: string
           date_de_vente: string
+          derniere_alerte: string | null
           entity_actor_id: string
           environnement: string
           envoi_a_partir_du: string | null
@@ -2084,6 +2088,7 @@ export type Database = {
           alerte_email?: string | null
           created_at?: string
           date_de_vente?: string
+          derniere_alerte?: string | null
           entity_actor_id: string
           environnement?: string
           envoi_a_partir_du?: string | null
@@ -2097,6 +2102,7 @@ export type Database = {
           alerte_email?: string | null
           created_at?: string
           date_de_vente?: string
+          derniere_alerte?: string | null
           entity_actor_id?: string
           environnement?: string
           envoi_a_partir_du?: string | null
@@ -2204,6 +2210,45 @@ export type Database = {
           {
             foreignKeyName: "reporting_journees_validee_par_fkey"
             columns: ["validee_par"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["actor_id"]
+          },
+        ]
+      }
+      reporting_recap_notes: {
+        Row: {
+          entity_actor_id: string
+          modifiee_le: string
+          modifiee_par: string | null
+          mois: string
+          note: string
+        }
+        Insert: {
+          entity_actor_id: string
+          modifiee_le?: string
+          modifiee_par?: string | null
+          mois: string
+          note: string
+        }
+        Update: {
+          entity_actor_id?: string
+          modifiee_le?: string
+          modifiee_par?: string | null
+          mois?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reporting_recap_notes_entity_actor_id_fkey"
+            columns: ["entity_actor_id"]
+            isOneToOne: false
+            referencedRelation: "reporting_entreprises"
+            referencedColumns: ["entity_actor_id"]
+          },
+          {
+            foreignKeyName: "reporting_recap_notes_modifiee_par_fkey"
+            columns: ["modifiee_par"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["actor_id"]
@@ -3361,6 +3406,7 @@ export type Database = {
           who_slug: string
         }[]
       }
+      comptes_officiels: { Args: never; Returns: string[] }
       create_owned_entity: {
         Args: {
           p_brand_name: string
@@ -3719,6 +3765,10 @@ export type Database = {
       ouvrir_conversation: {
         Args: { p_actor: string; p_others: string[]; p_title?: string }
         Returns: string
+      }
+      peut_ecrire: {
+        Args: { p_actor: string; p_other: string }
+        Returns: boolean
       }
       phone_key: { Args: { p_tel: string }; Returns: string }
       prospect_attend_reponse: {
