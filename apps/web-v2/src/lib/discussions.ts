@@ -7,7 +7,7 @@
 import { tagStyleFor, type TagStyle } from './tags'
 
 /** Le mot d'un sujet : court, comme une note. La base impose la même borne. */
-export const MOT_MAX = 80
+export const MOT_MAX = 144
 
 export type Audience = 'amis' | 'abonnes' | 'public'
 
