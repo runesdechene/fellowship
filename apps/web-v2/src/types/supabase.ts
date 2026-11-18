@@ -1363,6 +1363,7 @@ export type Database = {
           id: string
           media_kind: Database["public"]["Enums"]["message_media"] | null
           media_path: string | null
+          mentions: Json
         }
         Insert: {
           author_actor: string
@@ -1374,6 +1375,7 @@ export type Database = {
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
+          mentions?: Json
         }
         Update: {
           author_actor?: string
@@ -1385,6 +1387,7 @@ export type Database = {
           id?: string
           media_kind?: Database["public"]["Enums"]["message_media"] | null
           media_path?: string | null
+          mentions?: Json
         }
         Relationships: [
           {
@@ -3449,6 +3452,7 @@ export type Database = {
           p_event?: string
           p_media_kind?: Database["public"]["Enums"]["message_media"]
           p_media_path?: string
+          p_mentions?: string[]
         }
         Returns: string
       }
@@ -3663,6 +3667,10 @@ export type Database = {
         Args: { p_actor: string; p_path: string }
         Returns: boolean
       }
+      mentions_de: {
+        Args: { p_body: string; p_others: string[] }
+        Returns: Json
+      }
       mes_conversations: {
         Args: { p_actor: string }
         Returns: {
@@ -3748,7 +3756,12 @@ export type Database = {
         Returns: number
       }
       modifier_message: {
-        Args: { p_actor: string; p_body: string; p_message: string }
+        Args: {
+          p_actor: string
+          p_body: string
+          p_mentions?: string[]
+          p_message: string
+        }
         Returns: undefined
       }
       mutual_friends: {
@@ -3771,6 +3784,10 @@ export type Database = {
         Returns: boolean
       }
       phone_key: { Args: { p_tel: string }; Returns: string }
+      prevenir_mentions: {
+        Args: { p_before: Json; p_message: string }
+        Returns: undefined
+      }
       prospect_attend_reponse: {
         Args: { p: Database["public"]["Tables"]["prospects"]["Row"] }
         Returns: boolean
@@ -3821,6 +3838,7 @@ export type Database = {
           p_media_fond?: boolean
           p_media_kind?: Database["public"]["Enums"]["message_media"]
           p_media_path?: string
+          p_mentions?: string[]
           p_mot: string
         }
         Returns: string
@@ -4029,6 +4047,7 @@ export type Database = {
         | "app_update_reply"
         | "app_update_comment"
         | "welcome"
+        | "mention"
       participation_status:
         | "interesse"
         | "inscrit"
@@ -4197,6 +4216,7 @@ export const Constants = {
         "app_update_reply",
         "app_update_comment",
         "welcome",
+        "mention",
       ],
       participation_status: [
         "interesse",
