@@ -8,9 +8,16 @@
  */
 
 /* ── LA BARRE DES SUJETS ── */
+/* Sous la ligne des boutons du haut, dans la colonne de la page : juste au-dessus du « Bonjour »,
+   comme le fil sous les stories d'Instagram (Uriel, 18/11/2026). La page dessous rend l'air
+   qu'elle gardait pour la barre du haut : les stories y suffisent. */
 .story-bar {
-  padding: var(--topbar-top) calc(var(--topbar-right) + var(--story-bar-clear)) 0
-    var(--topbar-right);
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding: calc(var(--topbar-top) + var(--topbar-control-height) + var(--space-12))
+    var(--page-gutter) 0;
+  margin-bottom: calc(var(--space-16) - var(--page-padding-top));
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -1091,10 +1098,7 @@
 /* ── TÉLÉPHONE ── */
 @media (width <= 760px) {
   .story-bar {
-    padding: calc(var(--topbar-top) + var(--topbar-control-height) + var(--space-12))
-      var(--mobile-gutter) 0;
-    /* La page dessous garde l'air de la barre du haut : on le lui reprend, les stories y suffisent
-       (le « Bonjour » arrive juste dessous, comme le fil sous les stories d'Instagram). */
+    padding-inline: var(--mobile-gutter);
     margin-bottom: calc(var(--space-16) - var(--mobile-padding-top));
   }
 
