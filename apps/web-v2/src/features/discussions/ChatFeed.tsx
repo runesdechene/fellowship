@@ -15,6 +15,7 @@ import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { dayLabel, formatTime } from '@/lib/dates'
 import type { Bubble, Person, ReactionSummary } from '@/lib/discussions'
 import { FestivalAttachment } from './FestivalAttachment'
+import { MentionText } from './MentionText'
 import { ReactionPicker } from './ReactionPicker'
 
 /** Huit encres douces pour les noms d'un groupe, attribuées par ordre d'arrivée. */
@@ -195,7 +196,11 @@ export function ChatFeed({
                   {bubble.mediaPath && !media && (
                     <span className="chat-bubble__media chat-bubble__media--wait" />
                   )}
-                  {bubble.body && <p className="chat-bubble__text">{bubble.body}</p>}
+                  {bubble.body && (
+                    <p className="chat-bubble__text">
+                      <MentionText text={bubble.body} mentions={bubble.mentions} />
+                    </p>
+                  )}
                   <p className="chat-bubble__meta">
                     {bubble.editedAt && <span>modifié</span>}
                     {formatTime(new Date(bubble.createdAt))}

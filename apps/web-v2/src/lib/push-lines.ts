@@ -49,7 +49,7 @@ export const PUSH_LINES: { key: PushLine; title: string; detail: string; pro: bo
   {
     key: 'discussions',
     title: 'Discussions',
-    detail: 'Une question sur un festival où tu vas, une réponse à la tienne',
+    detail: 'Une question sur un festival où tu vas, une réponse, un @ dans un sujet',
     pro: false,
   },
   {
@@ -88,6 +88,7 @@ const LINE_OF_TYPE: Record<string, PushLine> = {
   app_update: 'updates',
   app_update_reply: 'discussions',
   app_update_comment: 'discussions',
+  mention: 'discussions',
 }
 
 /** La ligne d'une notification ; null : elle reste dans la cloche. */

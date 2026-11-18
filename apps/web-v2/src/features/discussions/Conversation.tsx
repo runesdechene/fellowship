@@ -32,6 +32,7 @@ import { useTagStyles } from '@/lib/useTagStyles'
 import { ChatFeed } from './ChatFeed'
 import { ChatInput } from './ChatInput'
 import { MembersSheet } from './MembersSheet'
+import { MentionText } from './MentionText'
 import { SujetStory } from './SujetStory'
 import { useConversation } from './useDiscussions'
 
@@ -101,6 +102,8 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
   )
   const closed = sujet && remaining === 'clôturé'
   const readTimes = others.map((member) => member.lastReadAt).sort()
+  // Le mot est le premier message du fil : ses tags y sont rangés.
+  const motMentions = messages[0]?.authorId === detail.createdBy ? messages[0].mentions : []
   const title = conversationName(detail.kind, detail.mot, detail.title, others)
   const audience = AUDIENCES.find((option) => option.value === detail.audience)?.label
 
@@ -218,7 +221,9 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         <div className="conversation__pin">
           {event?.imageUrl && <img className="conversation__poster" src={event.imageUrl} alt="" />}
           <div className="conversation__pin-text">
-            <p className="conversation__mot">{detail.mot}</p>
+            <p className="conversation__mot">
+              {detail.mot && <MentionText text={detail.mot} mentions={motMentions} />}
+            </p>
             {event && (
               <p className="conversation__event">
                 {event.name},{' '}
@@ -268,6 +273,7 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
             )
           }
           conversationId={conversationId}
+          mentions={sujet}
           placeholder={sujet ? `Répondre à ${author?.label ?? 'ce sujet'}` : `Message à ${title}`}
         />
       )}

@@ -23,7 +23,9 @@ import {
 } from '@/lib/discussion-api'
 import { AUDIENCES, MOT_MAX, audienceHint, type Audience } from '@/lib/discussions'
 import { addPhoto } from '@/features/reports/reportActions'
+import { MentionList } from './MentionList'
 import { NEW_SUJET_PARAM, DISCUSSION_PARAM } from './StoryBar'
+import { useMentions } from './useMentions'
 
 /** Jusqu'où remontent les dates proposées : on parle d'un festival dans le mois qui suit. */
 const PAST_DAYS = 30
@@ -53,6 +55,8 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
   const [fond, setFond] = useState(false)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+  const motField = useRef<HTMLTextAreaElement>(null)
+  const mention = useMentions(motField, setMot)
 
   useEffect(() => {
     dialog.current?.showModal()
@@ -103,7 +107,15 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
         if (typeof uploaded === 'string') throw new Error(uploaded)
         sent = uploaded
       }
-      const id = await publishSujet(actor.id, mot.trim(), audience, eventId, sent, photoFond)
+      const id = await publishSujet(
+        actor.id,
+        mot.trim(),
+        audience,
+        eventId,
+        sent,
+        photoFond,
+        mention.ids(mot.trim()),
+      )
       const event = events.find((candidate) => candidate.id === eventId)
       // Une photo prise pendant ou après le festival rejoint les photos souvenir de son bilan.
       if (event && media && !video && event.startDate <= todayIso()) {
@@ -133,15 +145,23 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
       }}
     >
       <div className="sujet-composer__body">
-        <textarea
-          className="sujet-composer__mot"
-          value={mot}
-          maxLength={MOT_MAX}
-          rows={3}
-          placeholder="Ton mot : une question, une info, un covoit’…"
-          aria-label="Ton mot"
-          onChange={(event) => setMot(event.target.value)}
-        />
+        <div className="sujet-composer__mot-field">
+          <textarea
+            ref={motField}
+            className="sujet-composer__mot"
+            value={mot}
+            maxLength={MOT_MAX}
+            rows={3}
+            placeholder="Ton mot : une question, une info, un covoit’…"
+            aria-label="Ton mot"
+            onChange={(event) => {
+              setMot(event.target.value)
+              mention.track(event.target.value, event.target.selectionStart)
+            }}
+            onKeyDown={(event) => mention.keyDown(event)}
+          />
+          <MentionList {...mention.list} below />
+        </div>
         <p className="sujet-composer__count">
           {mot.length} / {MOT_MAX}
         </p>

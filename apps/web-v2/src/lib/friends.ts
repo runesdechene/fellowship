@@ -31,7 +31,7 @@ export const PROGRAMMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme'
 export const CONFIRMED_STATUSES: ParticipationStatus[] = ['inscrit', 'confirme']
 
 /** Les acteurs suivis dans les deux sens : la définition d'un « ami ». */
-async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
+export async function fetchMutualFriendIds(actorId: string): Promise<string[]> {
   const { following, followers } = await readFollows(actorId)
   return followers.map((follower) => follower.id).filter((id) => following.has(id))
 }

@@ -66,6 +66,11 @@ describe('notificationView', () => {
     expect(said(notificationView(row('new_follower', { actor_name: 'Les Bijoux d’Ysée' })))).toBe(
       '**Les Bijoux d’Ysée** suit maintenant ta vitrine.',
     )
+    const mention = notificationView(
+      row('mention', { actor_name: 'Lia Céramique', conversation_id: 'c1', mot: 'Covoit’ ?' }),
+    )
+    expect(said(mention)).toBe('**Lia Céramique** t’a mentionné dans un sujet : « Covoit’ ? »')
+    expect(mention?.href).toBe('/?discussion=c1')
   })
 
   it('un type inconnu, ou un nom manquant, n’est pas affiché', () => {
@@ -168,6 +173,7 @@ describe('KNOWN_TYPES', () => {
       count: 2,
       reason: { kind: 'near' },
       title: 'La nouvelle Fellowship est là',
+      conversation_id: 'c1',
     }
     for (const type of KNOWN_TYPES) expect(notificationView(row(type, full))).not.toBeNull()
     expect(KNOWN_TYPES).toContain('thread_question')

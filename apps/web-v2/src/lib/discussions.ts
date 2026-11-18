@@ -4,6 +4,7 @@
  * POURQUOI — logique pure, sans React ni réseau : elle se teste et se relit seule
  *            (docs/superpowers/specs/2026-11-04-sujets-et-messages-design.md).
  */
+import type { Mention } from './mentions'
 import { tagStyleFor, type TagStyle } from './tags'
 
 /** Le mot d'un sujet : court, comme une note. La base impose la même borne. */
@@ -62,6 +63,8 @@ export interface ChatMessage {
   editedAt: string | null
   /** Le festival joint au message (« Écrire » depuis le fil de Ma communauté). */
   eventId: string | null
+  /** Les exposants tagués d'un message de sujet. */
+  mentions: Mention[]
 }
 
 /** Une bulle, avec ce que son voisinage décide : le nom au début d'une suite, l'avatar à la fin. */

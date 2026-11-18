@@ -1,0 +1,98 @@
+/**
+ * QUOI     — le @ d'un sujet (features/discussions/MentionList, MentionText) : la liste des
+ *            exposants au-dessus du champ, et le @Nom en gras dans un texte.
+ * POURQUOI — maquette Story 2844:1023 et 2844:1123, validée par Uriel le 18/11/2026.
+ */
+
+.mention-list {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + var(--space-8));
+  left: 0;
+  z-index: 3;
+  padding-block: var(--space-6);
+  border: 1px solid var(--mention-list-line);
+  border-radius: var(--radius-card);
+  background: var(--mention-list-surface);
+  box-shadow: var(--mention-list-shadow);
+  list-style: none;
+  transition:
+    opacity var(--menu-motion),
+    translate var(--menu-motion);
+
+  @starting-style {
+    opacity: 0;
+    translate: 0 var(--space-4);
+  }
+}
+
+.mention-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  width: 100%;
+  padding: var(--space-8) var(--space-14);
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.mention-list [aria-selected='true'] .mention-list__item,
+.mention-list__item:hover {
+  background: var(--mention-list-active);
+}
+
+.mention-list__avatar {
+  flex: none;
+  width: var(--mention-avatar-size);
+  height: var(--mention-avatar-size);
+}
+
+.mention-list__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mention-list__name {
+  overflow: hidden;
+  color: var(--ink-title);
+  font: var(--type-mention-name);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mention-list__meta {
+  color: var(--ink-soft);
+  font: var(--type-mention-meta);
+}
+
+/* Le @Nom garde la couleur du texte qui le porte, en gras (bulles des autres comme les siennes). */
+.mention {
+  color: inherit;
+  font-weight: var(--mention-weight);
+  text-decoration: none;
+}
+
+.mention:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mention-list {
+    transition: none;
+  }
+}
+
+.mention-list--below {
+  top: calc(100% + var(--space-8));
+  bottom: auto;
+}
+
+/* Les champs qui portent la liste. */
+.chat-input,
+.story-reply,
+.sujet-composer__mot-field {
+  position: relative;
+}

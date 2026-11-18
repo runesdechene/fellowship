@@ -7,22 +7,26 @@
  *            Un festival joint (`eventId`, venu du fil de Ma communauté) part avec le message suivant.
  * ATTENTION — le parent change la `key` à chaque message modifié : le champ repart de son texte.
  */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowUp, ImagePlus, Plus, X } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { sendMessage, uploadMedia, type Media } from '@/lib/discussion-api'
 import type { Bubble } from '@/lib/discussions'
 import { FestivalAttachment } from './FestivalAttachment'
+import { MentionList } from './MentionList'
+import { useMentions } from './useMentions'
 
 interface Props {
   conversationId: string
   placeholder: string
   editing: Bubble | null
-  onEdit: (messageId: string, body: string) => Promise<void>
+  onEdit: (messageId: string, body: string, mentions: string[]) => Promise<void>
   onEditDone: () => void
   /** Le festival joint au prochain message, et de quoi le retirer. */
   eventId: string | null
   onDetach: () => void
+  /** Un sujet : « @ » tague un exposant. Les groupes et les conversations à deux n'en ont pas. */
+  mentions?: boolean
 }
 
 export function ChatInput({
@@ -33,12 +37,15 @@ export function ChatInput({
   onEditDone,
   eventId,
   onDetach,
+  mentions = false,
 }: Props) {
   const { actor } = useAuth()
   const [text, setText] = useState(editing?.body ?? '')
   const [file, setFile] = useState<File | null>(null)
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+  const field = useRef<HTMLTextAreaElement>(null)
+  const mention = useMentions(field, setText, editing?.mentions)
 
   async function send() {
     if (!actor || busy || (!text.trim() && !file)) return
@@ -46,7 +53,7 @@ export function ChatInput({
     setProblem(null)
     try {
       if (editing) {
-        await onEdit(editing.id, text)
+        await onEdit(editing.id, text, mentions ? mention.ids(text) : [])
         onEditDone()
         return
       }
@@ -56,8 +63,10 @@ export function ChatInput({
         if (typeof uploaded === 'string') throw new Error(uploaded)
         media = uploaded
       }
-      await sendMessage(actor.id, conversationId, text, media, eventId)
+      const tagged = mentions ? mention.ids(text) : []
+      await sendMessage(actor.id, conversationId, text, media, eventId, tagged)
       setText('')
+      mention.reset()
       setFile(null)
       if (eventId) onDetach()
     } catch (error) {
@@ -88,6 +97,7 @@ export function ChatInput({
           </button>
         </p>
       )}
+      {mentions && <MentionList {...mention.list} />}
       {eventId && !editing && <FestivalAttachment eventId={eventId} onRemove={onDetach} />}
       {file && (
         <p className="chat-input__file">
@@ -111,11 +121,15 @@ export function ChatInput({
         )}
         <div className="chat-input__field">
           <textarea
+            ref={field}
             rows={1}
             value={text}
             placeholder={placeholder}
             aria-label="Message"
-            onChange={(event) => setText(event.target.value)}
+            onChange={(event) => {
+              setText(event.target.value)
+              if (mentions) mention.track(event.target.value, event.target.selectionStart)
+            }}
             onPaste={(event) => {
               const image = [...event.clipboardData.files].find((pasted) =>
                 pasted.type.startsWith('image/'),
@@ -126,6 +140,7 @@ export function ChatInput({
             }}
             autoFocus={!!editing}
             onKeyDown={(event) => {
+              if (mentions && mention.keyDown(event)) return
               if (event.key === 'Escape' && editing) {
                 event.preventDefault()
                 onEditDone()

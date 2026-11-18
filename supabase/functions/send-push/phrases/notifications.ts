@@ -31,6 +31,7 @@ export const KNOWN_TYPES = [
   'app_update',
   'app_update_reply',
   'app_update_comment',
+  'mention',
 ] as const
 
 export interface NotificationRow {
@@ -94,6 +95,7 @@ const BY_SOMEONE = new Set([
   'new_follower',
   'welcome',
   'friend_added_event',
+  'mention',
 ])
 
 /** Ce qui arrive à une date : on montre son affiche. */
@@ -160,6 +162,17 @@ export function notificationPhrase(type: string, data: Record<string, unknown>):
         icon: 'question',
         text: [{ strong: who }, ` pose une question sur ${event}${quoted}`],
         href: discussion,
+      }
+    }
+    case 'mention': {
+      // Taguer ouvre le sujet au tagué : le lien ouvre sa story, où qu'il soit.
+      const conversation = text(data, 'conversation_id')
+      const mot = text(data, 'mot')
+      if (!who || !conversation) return null
+      return {
+        icon: 'reply',
+        text: [{ strong: who }, ' t’a mentionné dans un sujet', mot ? ` : « ${mot} »` : '.'],
+        href: `/?discussion=${conversation}`,
       }
     }
     case 'thread_reply':

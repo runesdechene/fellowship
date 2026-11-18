@@ -9,6 +9,9 @@ Les sujets et Messages (maquette Figma, page Story `2727:291` ; conception
   (`SujetStory`, on y répond par `StoryReply`), la discussion ensuite (`?fil`).
 - `Conversation` — un tchat : en-tête, `ChatFeed` (les bulles et leurs réactions,
   `ReactionPicker`), `ChatInput` (la saisie).
+- `useMentions`, `MentionList`, `MentionText` — le @ d'un sujet (maquette `2844:1023`) : taguer
+  un exposant dans le mot, la réponse sous la story ou le tchat, et le @Nom en gras qui mène à
+  sa vitrine. Logique pure dans `lib/mentions.ts`, recherche dans `lib/mention-search.ts`.
 - `MembersSheet`, `PeoplePicker` — gérer un groupe, choisir à qui écrire.
 - `MessagesPage` (`/messages`, `/messages/:id`) ; `NewMessage` prend la place de la liste sur
   `/messages/nouveau`.

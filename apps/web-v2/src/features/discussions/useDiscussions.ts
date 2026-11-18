@@ -182,8 +182,8 @@ export function useConversation(conversationId: string) {
 
   /** Modifier attend la base, qui renvoie le message par le temps réel ; supprimer est immédiat. */
   const edit = useCallback(
-    async (messageId: string, body: string) => {
-      if (actor) await editMessage(actor.id, messageId, body)
+    async (messageId: string, body: string, mentions: string[]) => {
+      if (actor) await editMessage(actor.id, messageId, body, mentions)
     },
     [actor],
   )

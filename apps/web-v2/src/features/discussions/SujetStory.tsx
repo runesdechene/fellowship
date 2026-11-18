@@ -16,6 +16,7 @@ import { OfficialBadge } from '@/components/ui/OfficialBadge'
 import { formatDateRange, parseSqlDate, timeAgo } from '@/lib/dates'
 import type { ConversationDetail, EventBrief } from '@/lib/discussion-api'
 import type { ChatMessage, Person } from '@/lib/discussions'
+import { MentionText } from './MentionText'
 import { StoryReply } from './StoryReply'
 
 interface Props {
@@ -86,7 +87,9 @@ export function SujetStory(props: Props) {
       </header>
 
       <div className="sujet-story__body">
-        <p className="sujet-story__mot">{detail.mot}</p>
+        <p className="sujet-story__mot">
+          {detail.mot && <MentionText text={detail.mot} mentions={opening?.mentions ?? []} />}
+        </p>
         {detail.mediaKind === 'image' && !fond && media && (
           <img className="sujet-story__media" src={media} alt="" />
         )}

@@ -9,6 +9,7 @@
  */
 import { fetchActorProfiles, PROGRAMMED_STATUSES } from './friends'
 import { imageProblem, resizeImage } from './image-resize'
+import { toMentions } from './mentions'
 import { must, supabase } from './supabase'
 import type { Audience, ChatMessage, Person } from './discussions'
 import type { Database } from '@/types/supabase'
@@ -123,11 +124,12 @@ function toChatMessage(row: MessageRow): ChatMessage {
     createdAt: row.created_at,
     editedAt: row.edited_at,
     eventId: row.event_id,
+    mentions: toMentions(row.mentions),
   }
 }
 
 const MESSAGE_COLUMNS =
-  'id, conversation_id, author_actor, body, media_path, media_kind, created_at, edited_at, event_id'
+  'id, conversation_id, author_actor, body, media_path, media_kind, created_at, edited_at, event_id, mentions'
 
 /** Les 300 derniers messages, du plus ancien au plus récent. */
 export async function fetchMessages(conversationId: string): Promise<ChatMessage[]> {
@@ -226,6 +228,8 @@ export async function publishSujet(
   media: Media | null,
   /** La photo en fond plein écran plutôt qu'en affiche. */
   fond: boolean,
+  /** Les exposants tagués : la base ne garde que ceux dont le « @Nom » reste dans le mot. */
+  mentions: string[] = [],
 ): Promise<string> {
   return must(
     await supabase.rpc('publier_sujet', {
@@ -235,6 +239,7 @@ export async function publishSujet(
       ...(eventId ? { p_event: eventId } : {}),
       ...(media ? { p_media_path: media.path, p_media_kind: media.kind } : {}),
       ...(fond ? { p_media_fond: true } : {}),
+      ...(mentions.length ? { p_mentions: mentions } : {}),
     }),
   )
 }
@@ -245,6 +250,7 @@ export async function sendMessage(
   body: string,
   media: Media | null,
   eventId: string | null = null,
+  mentions: string[] = [],
 ): Promise<void> {
   must(
     await supabase.rpc('envoyer_message', {
@@ -253,17 +259,24 @@ export async function sendMessage(
       ...(body.trim() ? { p_body: body } : {}),
       ...(media ? { p_media_path: media.path, p_media_kind: media.kind } : {}),
       ...(eventId ? { p_event: eventId } : {}),
+      ...(mentions.length ? { p_mentions: mentions } : {}),
     }),
   )
 }
 
 /** Réécrit le texte d'un de ses messages ; vide, il ne reste que la photo. */
-export async function editMessage(actorId: string, messageId: string, body: string): Promise<void> {
+export async function editMessage(
+  actorId: string,
+  messageId: string,
+  body: string,
+  mentions: string[] = [],
+): Promise<void> {
   must(
     await supabase.rpc('modifier_message', {
       p_actor: actorId,
       p_message: messageId,
       p_body: body,
+      ...(mentions.length ? { p_mentions: mentions } : {}),
     }),
   )
 }

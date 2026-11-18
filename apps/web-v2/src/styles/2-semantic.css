@@ -1940,6 +1940,15 @@
      L'anneau d'un sujet et les bulles prennent la couleur de la catégorie du festival lié, posée
      par le composant (--story-ring-color, --chat-tone) ; sans festival, le brun chaud. */
   --story-width: var(--width-story);
+  /* Le @ d'un sujet (maquette 2844:1023) : la liste flotte comme le choix d'une réaction. */
+  --mention-list-surface: var(--surface-card);
+  --mention-list-line: var(--line-card);
+  --mention-list-shadow: var(--reaction-picker-shadow);
+  --mention-list-active: var(--surface-row-hover);
+  --mention-avatar-size: var(--size-36);
+  --type-mention-name: var(--type-preview-name);
+  --type-mention-meta: var(--type-list-meta);
+  --mention-weight: var(--weight-semibold);
   --chat-motif-size: var(--size-64);
   --story-ring-size: var(--size-64);
   --story-face-size: var(--size-52);

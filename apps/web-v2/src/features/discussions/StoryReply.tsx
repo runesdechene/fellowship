@@ -4,10 +4,12 @@
  *            Le message part dans la discussion, puis la discussion s'ouvre pour qu'on le voie.
  * ATTENTION — texte seul : pour une photo ou une vidéo, on passe par la discussion complète.
  */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowUp } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
 import { sendMessage } from '@/lib/discussion-api'
+import { MentionList } from './MentionList'
+import { useMentions } from './useMentions'
 
 interface Props {
   conversationId: string
@@ -20,13 +22,15 @@ export function StoryReply({ conversationId, placeholder, onSent }: Props) {
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const [problem, setProblem] = useState<string | null>(null)
+  const field = useRef<HTMLInputElement>(null)
+  const mention = useMentions(field, setText)
 
   async function send() {
     if (!actor || busy || !text.trim()) return
     setBusy(true)
     setProblem(null)
     try {
-      await sendMessage(actor.id, conversationId, text, null)
+      await sendMessage(actor.id, conversationId, text, null, null, mention.ids(text))
       onSent()
     } catch (error) {
       setProblem(error instanceof Error ? error.message : 'Le message n’est pas parti. Réessaie.')
@@ -47,14 +51,20 @@ export function StoryReply({ conversationId, placeholder, onSent }: Props) {
           {problem}
         </p>
       )}
+      <MentionList {...mention.list} />
       <div className="story-reply__field">
         <input
+          ref={field}
           className="story-reply__input"
           value={text}
           placeholder={placeholder}
           aria-label={placeholder}
           enterKeyHint="send"
-          onChange={(event) => setText(event.target.value)}
+          onChange={(event) => {
+            setText(event.target.value)
+            mention.track(event.target.value, event.target.selectionStart)
+          }}
+          onKeyDown={(event) => mention.keyDown(event)}
         />
         {text.trim() && (
           <button type="submit" className="story-reply__send" aria-label="Envoyer" disabled={busy}>
