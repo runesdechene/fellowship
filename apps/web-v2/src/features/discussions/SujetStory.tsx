@@ -31,6 +31,8 @@ interface Props {
   onClose: () => void
   /** Ouvre la discussion complète. */
   onOpen: () => void
+  /** Clôturer le sujet : seulement pour son auteur, tant qu'il est ouvert. */
+  onEnd?: () => void
 }
 
 /** « Il y a 2 h », « Hier », « À l'instant ». */
@@ -41,7 +43,8 @@ function postedLabel(date: Date, now: Date): string {
 }
 
 export function SujetStory(props: Props) {
-  const { detail, event, messages, people, urls, me, remaining, closed, onClose, onOpen } = props
+  const { detail, event, messages, people, urls, me, remaining, closed, onClose, onOpen, onEnd } =
+    props
   const author = people.get(detail.createdBy)
   const mine = detail.createdBy === me
   // Le premier message est le mot lui-même, posé à la publication : les réponses viennent après.
@@ -79,6 +82,7 @@ export function SujetStory(props: Props) {
               : remaining}
           </p>
         </div>
+        {onEnd && <Button onClick={onEnd}>Clôturer</Button>}
       </header>
 
       <div className="sujet-story__body">

@@ -117,6 +117,19 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
     }
   }
 
+  const canClose = sujet && detail.createdBy === actor.id && !closed
+  const closeDialog = closing && (
+    <ConfirmDialog
+      title="Clôturer ce sujet ?"
+      text="Il quitte la barre des sujets. Le fil reste lisible pour ceux qui y ont écrit, plus personne n’y écrit."
+      confirmLabel="Clôturer"
+      busy={closing === 'busy'}
+      problem={problem}
+      onConfirm={() => void confirmClose()}
+      onClose={() => setClosing(null)}
+    />
+  )
+
   if (story && sujet && !params.has(CHAT_PARAM)) {
     const openChat = () => {
       const next = new URLSearchParams(params)
@@ -124,18 +137,22 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
       setParams(next)
     }
     return (
-      <SujetStory
-        detail={detail}
-        event={event}
-        messages={messages}
-        people={people}
-        urls={urls}
-        me={actor.id}
-        remaining={remaining}
-        closed={closed}
-        onClose={onClose}
-        onOpen={openChat}
-      />
+      <>
+        {closeDialog}
+        <SujetStory
+          detail={detail}
+          event={event}
+          messages={messages}
+          people={people}
+          urls={urls}
+          me={actor.id}
+          remaining={remaining}
+          closed={closed}
+          onClose={onClose}
+          onOpen={openChat}
+          onEnd={canClose ? () => setClosing('ask') : undefined}
+        />
+      </>
     )
   }
 
@@ -184,9 +201,7 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
                 : 'Conversation privée'}
           </p>
         </div>
-        {sujet && detail.createdBy === actor.id && !closed && (
-          <Button onClick={() => setClosing('ask')}>Clôturer</Button>
-        )}
+        {canClose && <Button onClick={() => setClosing('ask')}>Clôturer</Button>}
         {detail.kind === 'groupe' && (
           <Button
             icon={<Users size={16} strokeWidth={1.75} />}
@@ -257,17 +272,7 @@ export function Conversation({ conversationId, onClose, closeWith, story = false
         />
       )}
 
-      {closing && (
-        <ConfirmDialog
-          title="Clôturer ce sujet ?"
-          text="Il quitte la barre des sujets. Le fil reste lisible pour ceux qui y ont écrit, plus personne n’y écrit."
-          confirmLabel="Clôturer"
-          busy={closing === 'busy'}
-          problem={problem}
-          onConfirm={() => void confirmClose()}
-          onClose={() => setClosing(null)}
-        />
-      )}
+      {closeDialog}
       {deleting && (
         <ConfirmDialog
           title="Supprimer ce message ?"

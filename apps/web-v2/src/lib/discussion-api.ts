@@ -379,24 +379,24 @@ export async function fetchEventBrief(eventId: string): Promise<EventBrief | nul
   }
 }
 
-/** Mes prochaines dates programmées : ce dont un sujet peut parler. */
-export async function fetchMyUpcomingEvents(
-  actorId: string,
-  todaySql: string,
-): Promise<EventBrief[]> {
+/**
+ * Mes dates programmées qui finissent après `sinceSql` : ce dont un sujet peut parler. Les dates
+ * passées en font partie, car on lance souvent un sujet après l'événement pour en parler.
+ */
+export async function fetchMyEventsSince(actorId: string, sinceSql: string): Promise<EventBrief[]> {
   const rows = must(
     await supabase
       .from('participations')
       .select('events!inner(id, name, tags, image_url, start_date, end_date, city, department)')
       .eq('actor_id', actorId)
       .in('status', PROGRAMMED_STATUSES)
-      .gte('events.end_date', todaySql),
+      .gte('events.end_date', sinceSql),
   )
   // Le tri d'une table jointe ne range pas les lignes parentes : on trie ici.
   const events = rows
     .map(({ events }) => events)
     .sort((a, b) => a.start_date.localeCompare(b.start_date))
-    .slice(0, 8)
+    .slice(0, 10)
   return events.map((events) => ({
     id: events.id,
     name: events.name,

@@ -13,16 +13,20 @@ import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Segmented } from '@/components/ui/Segmented'
 import { useAuth } from '@/lib/auth'
-import { todayIso } from '@/lib/dates'
+import { addDays, todayIso } from '@/lib/dates'
 import {
-  fetchMyUpcomingEvents,
+  fetchMyEventsSince,
   publishSujet,
   uploadMedia,
   type EventBrief,
   type Media,
 } from '@/lib/discussion-api'
 import { AUDIENCES, MOT_MAX, audienceHint, type Audience } from '@/lib/discussions'
+import { addPhoto } from '@/features/reports/reportActions'
 import { NEW_SUJET_PARAM, DISCUSSION_PARAM } from './StoryBar'
+
+/** Jusqu'où remontent les dates proposées : on parle d'un festival dans le mois qui suit. */
+const PAST_DAYS = 30
 
 const AUDIENCE_ICONS = { amis: Users, abonnes: UserCheck, public: Globe }
 
@@ -59,7 +63,8 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
     let cancelled = false
     const run = async () => {
       try {
-        const found = await fetchMyUpcomingEvents(actor.id, todayIso())
+        const since = todayIso(addDays(new Date(), -PAST_DAYS))
+        const found = await fetchMyEventsSince(actor.id, since)
         if (!cancelled) setEvents(found)
       } catch {
         // Sans ses dates, le sujet se lance quand même : « À propos de » reste vide.
@@ -99,6 +104,13 @@ function ComposerDialog({ onClose }: { onClose: (opened?: string) => void }) {
         sent = uploaded
       }
       const id = await publishSujet(actor.id, mot.trim(), audience, eventId, sent, photoFond)
+      const event = events.find((candidate) => candidate.id === eventId)
+      // Une photo prise pendant ou après le festival rejoint les photos souvenir de son bilan.
+      if (event && media && !video && event.startDate <= todayIso()) {
+        const date = { actorId: actor.id, eventId: event.id, detail: { reportId: null } }
+        // Le sujet est publié : un souvenir manqué ne doit pas le faire republier.
+        await addPhoto(date, media.file).catch(() => undefined)
+      }
       onClose(id)
     } catch (error) {
       setProblem(error instanceof Error ? error.message : 'La publication a échoué. Réessaie.')

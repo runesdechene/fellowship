@@ -25,8 +25,13 @@ export interface Target extends DateRef {
   detail: ReportDetail
 }
 
+/** Ce qu'il faut pour trouver ou créer le bilan d'une date, même sans l'avoir chargé. */
+export interface ReportRef extends DateRef {
+  detail: Pick<ReportDetail, 'reportId'>
+}
+
 /** La ligne event_reports de la date, créée à la première saisie. */
-async function ensureReport({ actorId, eventId, detail }: Target): Promise<string> {
+async function ensureReport({ actorId, eventId, detail }: ReportRef): Promise<string> {
   if (detail.reportId) return detail.reportId
   const inserted = await supabase
     .from('event_reports')
@@ -163,7 +168,7 @@ export async function setClearOrder(target: DateRef, kind: OrderKind, amount: nu
 }
 
 /** Le contenu du bilan tel que la base le garde À CET INSTANT, pas tel que l'écran l'a lu. */
-async function readFresh(target: Target, reportId: string) {
+async function readFresh(target: DateRef, reportId: string) {
   const response = await supabase
     .from('event_reports')
     .select('wins, improvements, media_paths')
@@ -207,7 +212,7 @@ export async function setNote(target: Target, note: string) {
   )
 }
 
-export async function addPhoto(target: Target, file: File) {
+export async function addPhoto(target: ReportRef, file: File) {
   const reportId = await ensureReport(target)
   const path = await uploadReportPhoto(file, target.actorId, target.eventId)
   const fresh = await readFresh(target, reportId).catch(async (reason: unknown) => {
