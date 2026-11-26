@@ -1,7 +1,9 @@
 /**
- * QUOI     — ce qu'est Fellowship, en une grande phrase, et trois chiffres lus en base.
+ * QUOI     — ce qu'est Fellowship, en une grande phrase, trois chiffres lus en base, et la recherche
+ *            des festivals, sans compte.
  * POURQUOI — maquette du 26/11/2026 : la page dit pour qui elle est (les exposants).
  */
+import { LandingSearch } from '@/features/landing/LandingSearch'
 import { useCounts } from './useCounts'
 
 export function Manifesto() {
@@ -29,6 +31,9 @@ export function Manifesto() {
           ))}
         </ul>
       )}
+      <div className="discover-search">
+        <LandingSearch />
+      </div>
       <p className="discover-manifesto__since">Plateforme lancée publiquement en novembre 2026.</p>
     </section>
   )

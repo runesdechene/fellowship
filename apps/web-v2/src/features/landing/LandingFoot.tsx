@@ -39,7 +39,7 @@ export function LandingFoot({
         <nav className="landing-foot__links" aria-label="Plan du site">
           <div>
             <p className="landing-foot__head">L’application</p>
-            <Link to="/connexion">Explorer</Link>
+            <Link to="/festivals">Explorer</Link>
             <Link to="/connexion">Calendrier</Link>
             <Link to="/pro">Le Pro</Link>
           </div>
