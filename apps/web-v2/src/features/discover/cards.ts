@@ -62,13 +62,13 @@ export const CARDS: Card[] = [
     pro: true,
     title: 'Bilans de saison',
     text: 'Recettes, frais, bénéfice par date et par mois. Visibles par toi seul.',
-    crop: { image: 'bilans', x: 500, y: 196, width: 1390, height: 680 },
+    crop: { image: 'bilans', x: 500, y: 196, width: 1390, height: 1128 },
   },
   {
     size: 'narrow',
-    title: 'Ta prochaine date',
-    text: 'Elle t’attend en haut de ton tableau de bord.',
-    crop: { image: 'accueil', x: 512, y: 898, width: 676, height: 300 },
+    title: 'Ce qu’il te reste à faire',
+    text: 'Ta prochaine date, puis ce qui reste à envoyer, à payer ou à recevoir.',
+    crop: { image: 'taches', x: 0, y: 0, width: 2000, height: 2878 },
   },
   {
     size: 'narrow',
