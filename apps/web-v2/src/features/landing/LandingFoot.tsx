@@ -9,7 +9,16 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Wordmark } from '@/components/ui/Wordmark'
 
-export function LandingFoot({ children, away = false }: { children?: ReactNode; away?: boolean }) {
+export function LandingFoot({
+  children,
+  away = false,
+  tagline,
+}: {
+  children?: ReactNode
+  away?: boolean
+  /** Une phrase de positionnement, sous la marque (/decouvrir-v2). */
+  tagline?: string
+}) {
   const home = away ? import.meta.env.BASE_URL : ''
   return (
     <footer className="landing-foot">
@@ -19,6 +28,7 @@ export function LandingFoot({ children, away = false }: { children?: ReactNode; 
           <p className="landing-foot__name">
             <Wordmark />
           </p>
+          {tagline && <p className="landing-foot__tagline">{tagline}</p>}
           <p className="landing-foot__word">
             Fellowship est né sur les stands de la marque Runes de Chêne, d’une saison qui tenait
             sur des post‑it, un tableau Excel et des « c’est quoi ta prochaine date ? ». Partagé

@@ -1,0 +1,252 @@
+/**
+ * QUOI     — /decouvrir-v2 : les témoignages, les aides qui tournent, la lettre et les prix.
+ * POURQUOI — maquette du 26/11/2026.
+ */
+.discover-quote {
+  max-width: var(--discover-quote-width);
+  margin-inline: auto;
+  padding: var(--space-48) var(--space-20) var(--space-96);
+  text-align: center;
+}
+
+.discover-quote blockquote {
+  font: var(--type-discover-quote);
+  text-wrap: balance;
+}
+
+.discover-quote figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  margin-top: var(--space-20);
+  font: var(--type-discover-label);
+}
+
+.discover-quote img {
+  width: var(--space-36);
+  height: var(--space-36);
+  border-radius: var(--round-full);
+  object-fit: cover;
+}
+
+.discover-quote span {
+  color: var(--discover-mute);
+}
+
+.discover-helper {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: 0 var(--space-16) var(--space-80);
+}
+
+.discover-helper__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-64) var(--space-20) var(--space-51);
+  border-radius: var(--discover-round-box);
+  background: var(--discover-surface);
+  text-align: center;
+}
+
+.discover-helper__choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-14);
+  margin-top: var(--space-40);
+}
+
+.discover-helper__choice {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--round-full);
+  background: var(--discover-cream);
+  color: var(--discover-faded);
+  cursor: pointer;
+  transition:
+    scale var(--duration-medium) var(--ease-soft),
+    background var(--duration-medium) var(--ease-soft);
+}
+
+.discover-helper__choice.is-on {
+  background: var(--discover-ink);
+  color: var(--discover-cream);
+  scale: 1.12;
+}
+
+.discover-helper__lines {
+  display: grid;
+  margin-top: var(--space-28);
+}
+
+.discover-helper__lines p {
+  grid-area: 1 / 1;
+  font: var(--type-discover-line);
+  text-wrap: balance;
+  opacity: 0;
+  translate: 0 var(--space-8);
+  transition:
+    opacity var(--duration-slow) var(--ease-soft),
+    translate var(--duration-slow) var(--ease-soft);
+}
+
+/* L'entrante attend que la sortante soit partie : jamais deux phrases l'une sur l'autre. */
+.discover-helper__lines p.is-on {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: var(--duration-slow);
+}
+
+.discover-helper__text {
+  max-width: 480px;
+  margin-top: var(--space-22);
+  font: var(--type-discover-small);
+  color: var(--discover-text);
+}
+
+.discover-letter {
+  max-width: calc(var(--discover-letter-width) + 2 * var(--space-20));
+  margin-inline: auto;
+  padding: var(--space-56) var(--space-20) var(--space-80);
+}
+
+.discover-letter h2 {
+  margin-bottom: var(--space-26);
+  font: var(--type-discover-letter);
+}
+
+.discover-letter p,
+.discover-letter ol {
+  margin-bottom: var(--space-16);
+}
+
+.discover-letter ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding-left: var(--space-22);
+  list-style: decimal;
+}
+
+.discover-pricing {
+  max-width: var(--discover-width);
+  margin-inline: auto;
+  padding: 0 var(--space-20) var(--space-112);
+}
+
+.discover-pricing__lead {
+  margin-block: var(--space-14) var(--space-28);
+  color: var(--discover-text);
+  text-align: center;
+}
+
+.discover-pricing__billing {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto var(--space-28);
+  padding: var(--space-4);
+  border-radius: var(--round-full);
+  background: var(--discover-deep);
+}
+
+.discover-pricing__billing button {
+  padding: var(--space-8) var(--space-18);
+  border-radius: var(--round-full);
+  font: var(--type-discover-label);
+  cursor: pointer;
+  transition: background var(--duration-medium) var(--ease-soft);
+}
+
+.discover-pricing__billing button.is-on {
+  background: var(--discover-cream);
+}
+
+.discover-pricing__billing span {
+  color: var(--discover-saving);
+}
+
+.discover-pricing__plans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+}
+
+.discover-plan {
+  --plan-soft: var(--discover-text);
+  --plan-cta-bg: var(--discover-ink);
+  --plan-cta-ink: var(--discover-cream);
+
+  display: flex;
+  flex: 1 1 380px;
+  flex-direction: column;
+  gap: var(--space-22);
+  min-width: 0;
+  padding: clamp(var(--space-26), 3.6vw, var(--space-42));
+  border-radius: var(--discover-round-box);
+  background: var(--discover-surface);
+}
+
+.discover-plan--pro {
+  --plan-soft: var(--discover-on-accent-soft);
+  --plan-cta-bg: var(--discover-cream);
+  --plan-cta-ink: var(--discover-ink);
+
+  background: var(--discover-accent);
+  color: var(--discover-cream);
+}
+
+.discover-plan h3 {
+  font: var(--type-discover-card);
+}
+
+.discover-plan__soft {
+  font: var(--type-discover-small);
+  color: var(--plan-soft);
+}
+
+.discover-plan__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-10);
+  margin-bottom: var(--space-8);
+}
+
+.discover-plan__price strong {
+  font: var(--type-discover-price);
+}
+
+.discover a.discover-plan__cta {
+  background: var(--plan-cta-bg);
+  color: var(--plan-cta-ink);
+}
+
+.discover-plan ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.discover-plan li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.discover-plan li svg {
+  flex: none;
+  margin-top: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-helper__choice,
+  .discover-helper__lines p,
+  .discover-pricing__billing button {
+    transition: none;
+  }
+}

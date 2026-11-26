@@ -1,0 +1,204 @@
+/**
+ * QUOI     — /decouvrir-v2 : la FAQ, le dernier appel, les papiers à jeter et le pied de page.
+ * POURQUOI — maquette du 26/11/2026. La FAQ et le pied de page sont ceux de la landing : ici,
+ *            leurs variables changent d'encre pour le papier.
+ */
+.discover-faq {
+  --landing-faq-width: var(--discover-faq-width);
+  --landing-faq-glass: var(--discover-surface);
+  --landing-faq-edge: transparent;
+  --landing-faq-line: var(--discover-line);
+  --landing-faq-blur: 0;
+  --landing-cream: var(--discover-ink);
+  --landing-cream-soft: var(--discover-text);
+
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--space-20) var(--space-96);
+}
+
+.discover-faq .landing-faq {
+  margin-top: 0;
+}
+
+.discover-final {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-20) var(--space-20) var(--space-96);
+  text-align: center;
+}
+
+.discover-final > img {
+  width: auto;
+  height: 62px;
+}
+
+.discover-final h2 {
+  margin-top: var(--space-26);
+  font: var(--type-discover-final);
+  text-wrap: balance;
+}
+
+.discover-final > p {
+  max-width: 440px;
+  margin-block: var(--space-18) var(--space-26);
+  font: var(--type-discover-lead);
+  color: var(--discover-text);
+}
+
+.discover-toss {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--space-80);
+}
+
+.discover-toss__title {
+  font: var(--type-discover-strong);
+}
+
+.discover-toss__hint,
+.discover-toss__again {
+  font: var(--type-discover-tiny);
+  color: var(--discover-mute);
+}
+
+.discover-toss__again {
+  margin-top: var(--space-24);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.discover-toss__papers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-14);
+  max-width: var(--discover-toss-width);
+  margin-top: var(--space-20);
+}
+
+.discover-toss__papers li:nth-child(5n + 1) {
+  rotate: -4deg;
+}
+
+.discover-toss__papers li:nth-child(5n + 2) {
+  rotate: 3deg;
+}
+
+.discover-toss__papers li:nth-child(5n + 3) {
+  rotate: -1deg;
+}
+
+.discover-toss__papers li:nth-child(5n + 4) {
+  rotate: 4deg;
+}
+
+.discover-toss__papers li:nth-child(3n + 1) .discover-paper {
+  background: var(--discover-note);
+}
+
+.discover-paper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--discover-paper-width);
+  height: var(--discover-paper-height);
+  padding: var(--space-20) var(--space-9) var(--space-9);
+  border-radius: var(--space-4);
+  background: var(--discover-cream);
+  font: var(--type-discover-paper);
+  text-align: left;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  translate: var(--paper-x) var(--paper-y);
+  transition:
+    translate var(--duration-discover-throw) var(--ease-out),
+    rotate var(--duration-discover-throw) var(--ease-out),
+    opacity var(--duration-discover-throw) ease-in;
+}
+
+/* Le bout de scotch. */
+.discover-paper::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--space-7));
+  left: var(--space-28);
+  width: 38px;
+  height: 15px;
+  background: var(--discover-tape);
+}
+
+.discover-paper span {
+  color: var(--discover-text);
+}
+
+.discover-paper--held {
+  z-index: 5;
+  cursor: grabbing;
+  transition: none;
+}
+
+.discover-paper--gone {
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  rotate: 70deg;
+}
+
+/* --- Le pied de page de la landing, habillé de papier --------------------------- */
+.discover-foot {
+  --landing-cream: var(--discover-ink);
+  --landing-cream-soft: var(--discover-text);
+  --landing-gold: var(--discover-accent);
+  --landing-glass-line: var(--discover-line);
+  --wordmark-logo-width: auto; /* le logo garde ses proportions */
+
+  padding: var(--space-48) var(--space-20) var(--space-28);
+  background: var(--discover-deep);
+  clip-path: polygon(0 44px, 100% 0, 100% 100%, 0 100%);
+}
+
+.discover-foot .landing-foot {
+  max-width: var(--discover-width);
+  margin-inline: auto;
+  border-top: 0;
+}
+
+.discover-foot .landing-orga {
+  border: 0;
+  border-radius: var(--discover-round-box);
+  background: var(--discover-surface-soft);
+}
+
+.discover-foot .landing-seal--cream {
+  background: var(--discover-cream);
+  color: var(--discover-accent);
+}
+
+.discover-foot .landing-button--glass {
+  border-radius: var(--round-full);
+  background: var(--discover-ink);
+  color: var(--discover-cream);
+}
+
+.discover-foot .landing-foot__tagline {
+  font: var(--type-discover-strong);
+  color: var(--discover-ink);
+}
+
+@media (width <= 760px) {
+  .discover-foot .landing-orga {
+    grid-template-columns: 1fr;
+    padding: var(--space-26);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-paper {
+    transition: none;
+  }
+}

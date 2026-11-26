@@ -1,0 +1,135 @@
+/**
+ * QUOI     — /decouvrir-v2 : la grande phrase, les chiffres et la grille des captures.
+ * POURQUOI — maquette du 26/11/2026.
+ * ATTENTION — une capture se recadre par quatre variables (--crop-*), posées par FeatureGrid.tsx.
+ */
+.discover-manifesto {
+  max-width: 880px;
+  margin-inline: auto;
+  padding: var(--space-112) var(--space-20) var(--space-96);
+  text-align: center;
+}
+
+.discover-manifesto__statement {
+  font: var(--type-discover-statement);
+  color: var(--discover-faded);
+  text-wrap: balance;
+}
+
+.discover-manifesto__statement strong {
+  font: inherit;
+  color: var(--discover-ink);
+}
+
+.discover-stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--space-64);
+  padding: var(--space-26) var(--space-12);
+  border-radius: var(--discover-round);
+  background: var(--discover-surface);
+}
+
+.discover-stats li {
+  flex: 1 1 200px;
+  padding: var(--space-8) var(--space-12);
+  font: var(--type-discover-small);
+  color: var(--discover-text);
+}
+
+.discover-stats__value {
+  display: block;
+  font: var(--type-discover-stat);
+  color: var(--discover-ink);
+}
+
+.discover-grid {
+  max-width: var(--discover-width);
+  margin-inline: auto;
+  padding: var(--space-40) var(--space-20) var(--space-96);
+}
+
+.discover-grid__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  margin-top: var(--space-48);
+}
+
+.discover-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-26) var(--space-26) 0;
+  border-radius: var(--discover-round);
+  background: var(--discover-surface);
+}
+
+.discover-card--wide {
+  flex: 2 1 520px;
+}
+
+.discover-card--narrow {
+  flex: 1 1 300px;
+}
+
+.discover-card--half {
+  flex: 1 1 440px;
+}
+
+.discover-card__title,
+.discover-card__title a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--type-discover-card);
+}
+
+.discover-card__pro {
+  padding: var(--space-2) var(--space-9);
+  border-radius: var(--round-full);
+  background: var(--discover-accent);
+  font: var(--type-discover-paper);
+  color: var(--discover-cream);
+}
+
+.discover-card__text {
+  max-width: 460px;
+  margin-block: var(--space-8) var(--space-24);
+  font: var(--type-discover-small);
+  color: var(--discover-text);
+}
+
+.discover-card__shot {
+  position: relative;
+  overflow: hidden;
+  margin-top: auto;
+  aspect-ratio: var(--crop-width) / var(--crop-height);
+  border-radius: var(--round-16) var(--round-16) 0 0;
+  background: var(--discover-screen-bg);
+}
+
+.discover-card__shot img {
+  position: absolute;
+  top: calc(var(--crop-y) / var(--crop-height) * -100%);
+  left: calc(var(--crop-x) / var(--crop-width) * -100%);
+  width: calc(var(--discover-shot-source) / var(--crop-width) * 100%);
+  max-width: none;
+  height: auto;
+}
+
+.discover-card__phone {
+  width: var(--discover-phone-width);
+  height: var(--discover-phone-height);
+  overflow: hidden;
+  margin: auto auto 0;
+  border: var(--discover-phone-edge) solid var(--discover-ink);
+  border-bottom: 0;
+  border-radius: var(--space-36) var(--space-36) 0 0;
+}
+
+.discover-card__phone img {
+  width: 100%;
+}

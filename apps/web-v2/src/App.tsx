@@ -11,28 +11,14 @@ import { AppShell } from '@/components/layout/AppShell'
 import { IdentityError } from '@/components/layout/IdentityError'
 import { UpdateBanner } from '@/components/layout/UpdateBanner'
 import { GuestShell } from '@/components/layout/GuestShell'
-import { AccountsPage } from '@/features/admin-accounts/AccountsPage'
-import { BoardPage } from '@/features/admin-board/BoardPage'
-import { HomePage } from '@/features/admin-home/HomePage'
 import { ADMIN_HOME } from '@/lib/admin-mode'
+import { ADMIN_ROUTES } from '@/admin-routes'
 import { REPORTING_HOME, REPORTING_RECAP, REPORTING_SETTINGS } from '@/lib/reporting-zone'
 import { DecadesPage } from '@/features/reporting/DecadesPage'
 import { RecapPage } from '@/features/reporting/RecapPage'
 import { ReportingRoute } from '@/features/reporting/ReportingRoute'
 import { ReportingSettingsPage } from '@/features/reporting/ReportingSettingsPage'
-import { ProspectPage } from '@/features/admin-prospects/ProspectPage'
-import { ProspectsPage } from '@/features/admin-prospects/ProspectsPage'
-import { TemplatesPage } from '@/features/admin-prospects/TemplatesPage'
-import { UnclassifiedPage } from '@/features/admin-prospects/UnclassifiedPage'
-import { EntityPage } from '@/features/admin-entity/EntityPage'
-import { PersonPage } from '@/features/admin-person/PersonPage'
-import { ModerationPage } from '@/features/admin-moderation/ModerationPage'
-import { AdminEventsPage } from '@/features/admin-events/AdminEventsPage'
-import { CategoriesPage } from '@/features/admin-categories/CategoriesPage'
-import { TestimonialsPage } from '@/features/admin-testimonials/TestimonialsPage'
 import { UpdatesPage } from '@/features/updates/UpdatesPage'
-import { UpdatesAdminPage } from '@/features/admin-updates/UpdatesAdminPage'
-import { FaqAdminPage } from '@/features/admin-faq/FaqAdminPage'
 import { CalendarPage } from '@/features/calendar/CalendarPage'
 import { CommunityPage } from '@/features/community/CommunityPage'
 import { MessagesPage } from '@/features/discussions/MessagesPage'
@@ -47,6 +33,7 @@ import { EventRoute, LegacyEventRedirect } from '@/features/event/EventRoute'
 import { EmbedPage } from '@/features/embed/EmbedPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
 import { LandingPage } from '@/features/landing/LandingPage'
+import { DiscoverPage } from '@/features/discover/DiscoverPage'
 import { PublicSearchPage } from '@/features/public-search/PublicSearchPage'
 import { ProPage } from '@/features/pro/ProPage'
 import { ReportPage } from '@/features/reports/ReportPage'
@@ -126,25 +113,6 @@ function AppPage({
   )
 }
 
-/** L'administration : chaque section derrière la même garde (AdminRoute). */
-const ADMIN_ROUTES: [string, ReactNode][] = [
-  ['/admin/accueil', <HomePage />],
-  ['/admin/taches', <BoardPage />],
-  ['/admin/comptes', <AccountsPage />],
-  ['/admin/prospects', <ProspectsPage />],
-  ['/admin/prospects/modeles', <TemplatesPage />],
-  ['/admin/prospects/non-classes', <UnclassifiedPage />],
-  ['/admin/prospects/:id', <ProspectPage />],
-  ['/admin/signalements', <ModerationPage />],
-  ['/admin/evenements', <AdminEventsPage />],
-  ['/admin/categories', <CategoriesPage />],
-  ['/admin/mises-a-jour', <UpdatesAdminPage />],
-  ['/admin/temoignages', <TestimonialsPage />],
-  ['/admin/faq', <FaqAdminPage />],
-  ['/admin/enseignes/:id', <EntityPage />],
-  ['/admin/personnes/:id', <PersonPage />],
-]
-
 /** `/bienvenue` : l'arrivée à faire, ou le tableau de bord s'il n'y en a aucune. */
 function WelcomeRoute() {
   const { person, entities } = useAuth()
@@ -197,6 +165,8 @@ export function App() {
       <Routes>
         {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
         <Route path="/decouvrir" element={<LandingPage />} />
+        {/* La landing claire, à l'essai à côté de l'actuelle (26/11/2026). */}
+        <Route path="/decouvrir-v2" element={<DiscoverPage />} />
         <Route path="/festivals" element={<PublicSearchRoute />} />
         <Route path="/desinscription" element={<Unsubscribe />} />
         <Route path="/connexion" element={<LoginRoute />} />

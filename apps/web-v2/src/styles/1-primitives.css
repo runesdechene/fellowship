@@ -67,6 +67,22 @@
   --fete-face-5: #e2bf98;
 
   /* ---------------------------------------------------------------------
+     PALETTE — PAPIER : la landing claire (/decouvrir-v2, maquette validée le 26/11/2026). Elle
+     complète le papier, la crème et l'encre de la palette Fête.
+     --------------------------------------------------------------------- */
+  --paper-150: #f9eedf;
+  --paper-200: #f4e8d8; /* les aplats posés sur le papier */
+  --paper-300: #f1e2cd; /* le pied de page, les pistes d'onglets */
+  --paper-400: #efd3b6; /* le trait de surligneur */
+  --paper-500: #e6d5c0; /* les filets */
+  --paper-600: #d9c2a5;
+  --paper-note: #fbe9c4; /* un post-it */
+  --paper-peach: #f6ddc6; /* le texte adouci sur l'aplat terre */
+  --paper-ink-soft: #92796a; /* la suite adoucie d'une grande phrase */
+  --paper-ink: #6b5244; /* le texte courant */
+  --terre-650: #b4622f; /* l'arrivée du dégradé d'un bouton */
+
+  /* ---------------------------------------------------------------------
      PALETTE — ENCRE
      Deux encres et un tertiaire. La hiérarchie se fait par la taille et la
      graisse ; le gris n'est jamais une donnée importante.

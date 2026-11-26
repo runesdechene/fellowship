@@ -11,30 +11,10 @@ import { Link } from 'react-router-dom'
 import type { Showcase } from '@/lib/landing'
 import { formatPrice } from '@/lib/money'
 import { PRICES } from '@/lib/pricing'
+import { FREE, PRO_ADDS } from '@/lib/pro-offer'
 import { LandingBand } from './LandingBand'
 import { ProSoon } from './ProSoon'
 import { ForYouScreen } from './screens/ForYouScreen'
-
-/** Ce que donne le gratuit, puis ce que le Pro ajoute : résumés de la page /pro (PlanCard.tsx). */
-const FREE = [
-  'Ton calendrier, tes dossiers et tes paiements sur 6 mois',
-  'Trouve des dates sur tes 6 prochains mois',
-  'Tes amis, l’activité du réseau et la communauté',
-  'La note globale, les avis et les questions de chaque festival',
-  'Ton calendrier à synchroniser sur ton site',
-]
-
-const PRO_ADDS = [
-  'Toutes les fonctionnalités gratuites',
-  'Les notes détaillées : affluence, organisation, rentabilité',
-  'Toute l’année, pour candidater à temps aux plus gros festivals',
-  'Un rappel avant chaque clôture de candidature',
-  'Des festivals trouvés pour toi',
-  'L’alerte de chaque nouvelle édition',
-  'Tes objectifs de chiffre d’affaires',
-  'Le bilan de chaque festival',
-  'Le badge Certifié sur ta vitrine',
-]
 
 function Advantages({ items }: { items: string[] }) {
   return (

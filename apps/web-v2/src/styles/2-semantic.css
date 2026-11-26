@@ -2032,6 +2032,93 @@
   );
   --story-fond-glass: rgb(255 255 255 / 14%);
   --story-fond-line: rgb(255 255 255 / 45%);
+
+  /* --- /decouvrir-v2, la landing claire (maquette du 26/11/2026) ----------------
+   Une seule clarté, quel que soit le thème de l'application : fond papier,
+   aplats sans bordure, terre pour l'action. */
+  --discover-bg: var(--fete-paper);
+  --discover-surface: var(--paper-200);
+  --discover-surface-soft: var(--paper-150);
+  --discover-deep: var(--paper-300);
+  --discover-card-light: var(--sand-0);
+  --discover-screen-bg: var(--sand-50);
+  --discover-ink: var(--fete-ink);
+  --discover-text: var(--paper-ink);
+  --discover-mute: var(--fete-ink-mute);
+  --discover-faded: var(--paper-ink-soft);
+  --discover-cream: var(--fete-cream);
+  --discover-accent: var(--terre-700);
+  --discover-accent-light: var(--terre-400);
+  --discover-on-accent-soft: var(--paper-peach);
+  --discover-highlight: var(--paper-400);
+  --discover-line: var(--paper-500);
+  --discover-dot: var(--paper-600);
+  --discover-note: var(--paper-note);
+  --discover-tape: color-mix(in srgb, var(--terre-400) 40%, transparent);
+  --discover-saving: var(--sauge-700);
+  --discover-brand: linear-gradient(100deg, var(--terre-700), var(--terre-650));
+  --discover-mark: linear-gradient(
+    transparent 66%,
+    var(--discover-highlight) 66%,
+    var(--discover-highlight) 92%,
+    transparent 92%
+  );
+
+  /* La seule ombre de la page : l'application, posée au-dessus du fond. */
+  --discover-screen-shadow:
+    0 36px 64px -28px rgb(74 34 14 / 20%), 0 10px 28px -10px rgb(74 34 14 / 11%);
+
+  --discover-width: 1088px;
+  --discover-wide: 1240px;
+  --discover-hero-width: 1200px;
+  --discover-hero-text: 500px;
+  --discover-screen-width: clamp(100%, 66vw, 1180px);
+  --discover-screen-ratio: 2000 / 1324;
+  --discover-shot-source: 2000; /* la largeur d'une capture, en pixels (cards.ts) */
+  --discover-phone-width: 232px;
+  --discover-phone-height: 330px;
+  --discover-phone-edge: 7px;
+  --discover-letter-width: 580px;
+  --discover-quote-width: 820px;
+  --discover-faq-width: 760px;
+  --discover-paper-width: 96px;
+  --discover-paper-height: 122px;
+  --discover-toss-width: 660px;
+  --discover-nav-height: 64px;
+  --discover-round: var(--round-24);
+  --discover-round-box: var(--round-28);
+
+  --type-discover-hero: var(--weight-regular) clamp(var(--size-44), 4.8vw, var(--size-68)) / 1.08
+    var(--family-display);
+  --type-discover-title: var(--weight-regular) clamp(var(--size-38), 4.4vw, var(--size-56)) / 1.12
+    var(--family-display);
+  --type-discover-final: var(--weight-regular) clamp(var(--size-46), 6vw, var(--size-80)) / 1.06
+    var(--family-display);
+  --type-discover-statement: var(--weight-regular) clamp(var(--size-32), 4vw, var(--size-48)) / 1.22
+    var(--family-display);
+  --type-discover-price: var(--weight-regular) clamp(var(--size-64), 7vw, var(--size-96)) / 1
+    var(--family-display);
+  --type-discover-stat: var(--weight-regular) var(--size-60) / 1.1 var(--family-display);
+  --type-discover-letter: var(--weight-regular) var(--size-46) / 1.15 var(--family-display);
+  --type-discover-line: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
+  --type-discover-quote: var(--weight-regular) var(--size-34) / 1.3 var(--family-display);
+  --type-discover-mess: var(--weight-regular) var(--size-26) / 1.2 var(--family-display);
+  --type-discover-lead: var(--weight-regular) var(--size-18) / 1.6 var(--family-sans);
+  --type-discover-card: var(--weight-bold) var(--size-17) / 1.4 var(--family-sans);
+  --type-discover-body: var(--weight-regular) var(--size-15) / 1.6 var(--family-sans);
+  --type-discover-strong: var(--weight-semibold) var(--size-15) / 1.4 var(--family-sans);
+  --type-discover-small: var(--weight-regular) var(--size-14) / 1.6 var(--family-sans);
+  --type-discover-label: var(--weight-semibold) var(--size-14) / 1.4 var(--family-sans);
+  --type-discover-tiny: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
+  --type-discover-paper: var(--weight-regular) var(--size-12) / 1.25 var(--family-sans);
+
+  /* Les relais du haut de page sont lents à dessein : « reposant » (Uriel, 26/11/2026). */
+  --duration-discover-word-out: 600ms;
+  --duration-discover-word-in: 900ms;
+  --duration-discover-word-wait: 320ms;
+  --duration-discover-screen: 1100ms;
+  --duration-discover-settle: 1600ms;
+  --duration-discover-throw: 700ms;
 }
 
 /* =========================================================================

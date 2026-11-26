@@ -1,0 +1,424 @@
+/**
+ * QUOI     — /decouvrir-v2 : le fond papier, les boutons ronds, la barre et le haut de page.
+ * POURQUOI — maquette du 26/11/2026 : à plat, sans bordure ; seule l'application porte une ombre.
+ */
+.discover {
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--discover-bg);
+  color: var(--discover-ink);
+  font: var(--type-discover-body);
+}
+
+.discover a:hover {
+  color: var(--discover-accent);
+}
+
+.discover :focus-visible {
+  outline: 2px solid var(--discover-accent);
+  outline-offset: 3px;
+}
+
+.discover section,
+.discover #questions {
+  scroll-margin-top: var(--discover-nav-height);
+}
+
+.discover-wordmark {
+  --wordmark-ink: var(--discover-ink);
+  --wordmark-dot: var(--discover-accent-light);
+  --wordmark-gap: var(--space-10);
+  --wordmark-logo-width: auto; /* le logo garde ses proportions */
+  --wordmark-logo-height: 28px;
+  --type-wordmark: var(--type-wordmark-small);
+}
+
+.discover-title {
+  max-width: 720px;
+  margin-inline: auto;
+  font: var(--type-discover-title);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* --- Les boutons ------------------------------------------------------------- */
+.discover-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  padding: var(--space-14) var(--space-26);
+  border-radius: var(--round-full);
+  font: var(--type-discover-strong);
+}
+
+.discover a.discover-button--brand {
+  background: var(--discover-brand);
+  color: var(--discover-cream);
+}
+
+.discover a.discover-button--ink {
+  background: var(--discover-ink);
+  color: var(--discover-cream);
+}
+
+.discover-button--s {
+  padding: var(--space-7) var(--space-18);
+}
+
+/* --- La barre ---------------------------------------------------------------- */
+.discover-nav {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  background: var(--discover-bg);
+}
+
+.discover-nav__inner,
+.discover-nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.discover-nav__inner {
+  justify-content: space-between;
+  gap: var(--space-12);
+  max-width: var(--discover-wide);
+  margin-inline: auto;
+  padding: var(--space-12) var(--space-20);
+}
+
+.discover-nav__links {
+  gap: var(--space-4) var(--space-22);
+  font: var(--type-discover-label);
+}
+
+/* --- Le haut de page : la promesse, et l'application qui déborde à droite ----- */
+.discover-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-48) var(--space-56);
+  overflow: hidden;
+  padding-block: var(--space-56) var(--space-24);
+  padding-left: max(var(--space-20), calc((100% - var(--discover-hero-width)) / 2));
+}
+
+.discover-hero__text {
+  flex: 0 1 var(--discover-hero-text);
+  min-width: 0;
+  padding-right: var(--space-20);
+}
+
+.discover-hero__title {
+  font: var(--type-discover-hero);
+}
+
+.discover-hero__title > span {
+  display: block;
+}
+
+.discover-hero__title > .discover-hero__endings {
+  display: grid;
+}
+
+/* La sortante s'efface vers le haut ; l'entrante attend un peu, puis monte d'en bas. */
+.discover-hero__ending {
+  grid-area: 1 / 1;
+  opacity: 0;
+  translate: 0 0.22em;
+  filter: blur(6px);
+  transition:
+    opacity var(--duration-discover-word-out) var(--ease-soft),
+    translate var(--duration-discover-word-out) var(--ease-soft),
+    filter var(--duration-discover-word-out) var(--ease-soft);
+}
+
+.discover-hero__ending.is-leaving {
+  translate: 0 -0.18em;
+}
+
+.discover-hero__ending.is-on {
+  opacity: 1;
+  translate: 0 0;
+  filter: blur(0);
+  transition-duration: var(--duration-discover-word-in);
+  transition-delay: var(--duration-discover-word-wait);
+}
+
+.discover-hero__mark {
+  background: var(--discover-mark);
+}
+
+.discover-hero__lead {
+  margin-block: var(--space-24) var(--space-28);
+  font: var(--type-discover-lead);
+  color: var(--discover-text);
+  text-wrap: pretty;
+}
+
+.discover-hero__note {
+  margin-top: var(--space-12);
+  font: var(--type-discover-tiny);
+  color: var(--discover-mute);
+}
+
+.discover-hero__app {
+  flex: 999 1 520px;
+  min-width: 0;
+}
+
+.discover-window {
+  width: var(--discover-screen-width);
+  overflow: hidden;
+  border-radius: var(--round-20) 0 0 var(--round-20);
+  background: var(--discover-screen-bg);
+  box-shadow: var(--discover-screen-shadow);
+}
+
+.discover-window__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-28);
+  padding: var(--space-10) var(--space-18);
+  background: var(--discover-deep);
+}
+
+/* Trois points : un seul élément, répété par ses ombres. */
+.discover-window__dots {
+  width: 10px;
+  height: 10px;
+  margin-right: var(--space-32);
+  border-radius: var(--round-full);
+  background: var(--discover-dot);
+  box-shadow:
+    16px 0 var(--discover-dot),
+    32px 0 var(--discover-dot);
+}
+
+.discover-window__url {
+  padding: var(--space-2) var(--space-18);
+  border-radius: var(--round-full);
+  background: var(--discover-bg);
+  font: var(--type-discover-paper);
+  color: var(--discover-text);
+}
+
+/* Les écrans sont empilés : l'un s'efface pendant que l'autre apparaît. */
+.discover-window__view {
+  display: grid;
+  aspect-ratio: var(--discover-screen-ratio);
+  overflow: hidden;
+}
+
+.discover-window__screen {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  scale: 1.015;
+  transition:
+    opacity var(--duration-discover-screen) var(--ease-soft),
+    scale var(--duration-discover-settle) var(--ease-arrive);
+}
+
+.discover-window__screen.is-on {
+  opacity: 1;
+  scale: 1;
+}
+
+.discover-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-20) var(--space-20) 0 0;
+  padding: var(--space-5);
+  border-radius: var(--round-28);
+  background: var(--discover-deep);
+}
+
+.discover-tabs__tab {
+  position: relative;
+  padding: var(--space-10) var(--space-17);
+  border-radius: var(--round-full);
+  font: var(--type-discover-label);
+  color: var(--discover-text);
+  cursor: pointer;
+  transition: background var(--duration-medium) var(--ease-soft);
+}
+
+.discover-tabs__tab.is-on {
+  background: var(--discover-card-light);
+  color: var(--discover-ink);
+}
+
+/* La barre qui dit quand l'écran suivant arrive : la durée de Hero.tsx (SCREEN_MS). */
+.discover-tabs__tab.is-on::after {
+  content: '';
+  position: absolute;
+  inset: auto var(--space-18) var(--space-5);
+  height: 2px;
+  border-radius: var(--round-full);
+  background: var(--discover-accent);
+  transform-origin: left;
+  animation: discover-progress 5s linear both;
+}
+
+@keyframes discover-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* --- Les outils en vrac ------------------------------------------------------ */
+.discover-mess {
+  margin-top: var(--space-40);
+  padding: var(--space-20) var(--space-20) var(--space-22);
+  border-radius: var(--discover-round-box);
+  background: var(--discover-surface);
+}
+
+.discover-mess__title {
+  margin-bottom: var(--space-14);
+  font: var(--type-discover-mess);
+}
+
+.discover-mess__scene {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.discover-mess__pile {
+  display: flex;
+  padding-block: var(--space-8);
+}
+
+.discover-mess__tool,
+.discover-mess__home {
+  display: grid;
+  flex: none;
+  place-items: center;
+  background: var(--discover-card-light);
+  animation: discover-arrive var(--duration-entrance) var(--ease-arrive) backwards;
+}
+
+.discover-mess__tool {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--round-14);
+  outline: 3px solid var(--discover-surface);
+}
+
+.discover-mess__tool + .discover-mess__tool {
+  margin-left: calc(-1 * var(--space-12));
+}
+
+.discover-mess__tool img {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+}
+
+.discover-mess__tool:nth-child(1) {
+  rotate: -11deg;
+  translate: 0 3px;
+}
+
+.discover-mess__tool:nth-child(2) {
+  rotate: 8deg;
+  translate: 0 -6px;
+  animation-delay: 80ms;
+}
+
+.discover-mess__tool:nth-child(3) {
+  rotate: -5deg;
+  translate: 0 5px;
+  animation-delay: 160ms;
+}
+
+.discover-mess__tool:nth-child(4) {
+  rotate: 13deg;
+  translate: 0 -3px;
+  animation-delay: 240ms;
+}
+
+.discover-mess__tool:nth-child(5) {
+  rotate: -9deg;
+  translate: 0 7px;
+  animation-delay: 320ms;
+}
+
+.discover-mess__tool:nth-child(6) {
+  rotate: 6deg;
+  translate: 0 -5px;
+  animation-delay: 400ms;
+}
+
+.discover-mess__tool:nth-child(7) {
+  rotate: -12deg;
+  translate: 0 2px;
+  animation-delay: 480ms;
+}
+
+.discover-mess__arrow {
+  flex: 0 1 56px;
+  min-width: 28px;
+  fill: none;
+  stroke: var(--discover-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.discover-mess__home {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--round-20);
+  animation-delay: 700ms;
+}
+
+.discover-mess__home img {
+  width: auto;
+  height: 40px;
+}
+
+@keyframes discover-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Sur téléphone, la barre tient sur une ligne : les chapitres se lisent en défilant. */
+@media (width <= 760px) {
+  .discover-nav__links a[href^='#'] {
+    display: none;
+  }
+
+  .discover-nav__links {
+    gap: var(--space-10);
+    font: var(--type-discover-paper);
+  }
+
+  .discover-nav .discover-wordmark {
+    --wordmark-logo-height: 22px;
+    --type-wordmark: var(--weight-semibold) var(--size-18) / 1 var(--family-brand);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-hero__ending,
+  .discover-window__screen,
+  .discover-tabs__tab {
+    transition: none;
+  }
+
+  .discover-mess__tool,
+  .discover-mess__home,
+  .discover-tabs__tab.is-on::after {
+    animation: none;
+  }
+}
