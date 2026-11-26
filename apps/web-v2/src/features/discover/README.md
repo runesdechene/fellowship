@@ -9,6 +9,7 @@ témoignages, l'encadré des organisateurs et le pied de page.
 - `Hero.tsx` — la promesse à gauche (`ToolMess.tsx` : les outils en vrac), l'application à droite.
 - `Manifesto.tsx` — ce qu'est Fellowship, et trois chiffres lus en base (`useCounts.ts`).
 - `FeatureGrid.tsx` + `cards.ts` — la grille des détails de l'application.
+- `SoonCard.tsx` — sa dernière carte, ce qui arrive dans le Pro (liste : `lib/pro-soon.ts`).
 - `Quote.tsx` — un témoignage saisi en admin.
 - `Helper.tsx` — « Tout ce qu'il suit pour toi ».
 - `Letter.tsx` — « Pourquoi j'ai créé Fellowship ».

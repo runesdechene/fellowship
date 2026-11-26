@@ -133,3 +133,35 @@
 .discover-card__phone img {
   width: 100%;
 }
+
+/* Ce qui arrive dans le Pro : la même carte claire que les autres, une liste à la place. */
+.discover-soon {
+  padding-bottom: var(--space-26);
+}
+
+.discover-soon__list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-20);
+}
+
+.discover-soon__list li {
+  display: flex;
+  gap: var(--space-12);
+  font: var(--type-discover-small);
+  color: var(--discover-text);
+}
+
+.discover-soon__list svg {
+  flex: none;
+  margin-top: var(--space-2);
+  color: var(--discover-accent);
+}
+
+.discover-soon__list strong {
+  display: block;
+  font: var(--type-discover-strong);
+  color: var(--discover-ink);
+}

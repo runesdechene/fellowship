@@ -71,15 +71,21 @@ export const CARDS: Card[] = [
     crop: { image: 'accueil', x: 512, y: 898, width: 676, height: 300 },
   },
   {
+    size: 'narrow',
+    title: 'Les sujets',
+    text: 'Une question, une place dans la voiture : tu la lances, les autres exposants répondent.',
+    crop: { image: 'sujet', x: 1190, y: 390, width: 790, height: 915 },
+  },
+  {
+    size: 'wide',
+    title: 'La discussion',
+    text: 'Chaque sujet a son tchat. Tes conversations à deux et tes groupes sont au même endroit.',
+    crop: { image: 'discussion', x: 976, y: 728, width: 1024, height: 596 },
+  },
+  {
     size: 'half',
     title: 'Le fil de ta communauté',
     text: 'Qui va où, qui a candidaté, ce qu’ils en ont pensé. Et un bouton pour leur écrire.',
     crop: { image: 'communaute', x: 425, y: 425, width: 935, height: 760 },
-  },
-  {
-    size: 'half',
-    title: 'Les douze mois d’un coup d’œil',
-    text: 'Les mois pleins, les mois libres : tu sais où chercher.',
-    crop: { image: 'accueil', x: 495, y: 560, width: 1400, height: 250 },
   },
 ]
