@@ -1,6 +1,7 @@
 /**
  * QUOI     — « Pourquoi j'ai créé Fellowship », la lettre d'Uriel.
- * POURQUOI — maquette du 26/11/2026. Les faits viennent de la FAQ et du pied de page.
+ * POURQUOI — maquette du 26/11/2026. Les faits viennent de la FAQ et du pied de page. Le portrait
+ *            dans la phrase et le lien souligné reprennent la lettre d'Ogham (Uriel, 26/11/2026).
  * ATTENTION — l'ancre `assistant` est celle de « Pourquoi Fellowship » au pied de page.
  */
 export function Letter() {
@@ -8,8 +9,16 @@ export function Letter() {
     <section id="assistant" className="discover-letter">
       <h2>Pourquoi j’ai créé Fellowship</h2>
       <p>
-        Salut, moi c’est <strong>Uriel</strong>, artiste, entrepreneur, exposant et fondateur de
-        Runes de Chêne.
+        Salut, moi c’est{' '}
+        <strong className="discover-letter__me">
+          <img src={`${import.meta.env.BASE_URL}decouvrir/uriel.webp`} alt="" loading="lazy" />
+          Uriel
+        </strong>
+        , artiste, entrepreneur, exposant et fondateur de{' '}
+        <a href="https://runesdechene.com" target="_blank" rel="noreferrer">
+          Runes de Chêne
+        </a>
+        .
       </p>
       <p>
         Fellowship est né sur mes stands en 2024, d’une saison qui tenait sur des post‑it, un
