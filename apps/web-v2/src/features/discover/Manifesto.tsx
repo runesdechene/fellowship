@@ -16,8 +16,7 @@ export function Manifesto() {
     <section className="discover-manifesto">
       <p className="discover-manifesto__statement">
         <strong>Fellowship est ton copilote de festivals.</strong> Ta saison annuelle sur une frise,
-        tes dossiers et tes paiements à jour, ton calendrier en direct sur ton site, et ton réseau
-        de collègues qui grandit.
+        tes dossiers et tes paiements à jour, et ton réseau de collègues qui grandit.
       </p>
       {stats && (
         <ul className="discover-stats">
