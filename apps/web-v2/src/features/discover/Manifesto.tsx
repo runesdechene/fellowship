@@ -28,6 +28,7 @@ export function Manifesto() {
           ))}
         </ul>
       )}
+      <p className="discover-manifesto__since">Plateforme lancée publiquement en novembre 2026.</p>
     </section>
   )
 }

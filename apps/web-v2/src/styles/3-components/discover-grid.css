@@ -43,6 +43,12 @@
   color: var(--discover-ink);
 }
 
+.discover-manifesto__since {
+  margin-top: var(--space-16);
+  font: var(--type-discover-small);
+  color: var(--discover-text);
+}
+
 .discover-grid {
   max-width: var(--discover-width);
   margin-inline: auto;
