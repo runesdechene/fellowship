@@ -6,7 +6,6 @@ import { ArrowRight } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { CARDS, type Crop } from './cards'
-import { SoonCard } from './SoonCard'
 
 function Shot({ crop, title }: { crop: Crop | undefined; title: string }) {
   const shots = `${import.meta.env.BASE_URL}decouvrir/`
@@ -52,7 +51,6 @@ export function FeatureGrid() {
             <Shot crop={crop} title={title} />
           </article>
         ))}
-        <SoonCard />
       </div>
     </section>
   )

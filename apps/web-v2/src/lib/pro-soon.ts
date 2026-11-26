@@ -1,6 +1,6 @@
 /**
- * QUOI     — ce qui arrive dans le Pro : une seule liste, lue par la landing (ProSoon), par
- *            /decouvrir-v2 (SoonCard) et par la page /pro (ProFaq).
+ * QUOI     — ce qui arrive dans le Pro : une seule liste, lue par la landing (ProSoon) et par la
+ *            page /pro (ProFaq).
  * POURQUOI — Uriel, 25/10/2026 (maquette 2544:233) : on n'annonce que ce qui sort dans les
  *            prochains mois, et la même chose partout. Le coût de la route d'abord, il arrive vite.
  * ATTENTION — rien de tout ça n'existe encore. Une fonction livrée quitte cette liste et rejoint

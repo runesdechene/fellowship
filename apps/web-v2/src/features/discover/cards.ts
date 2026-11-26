@@ -35,9 +35,9 @@ export const CARDS: Card[] = [
   },
   {
     size: 'narrow',
-    title: 'Tes prochaines dates',
-    text: 'Dans combien de jours, où en est le dossier, et qui sera là.',
-    crop: { image: 'accueil', x: 1209, y: 835, width: 668, height: 360 },
+    title: 'Le fil de ta communauté',
+    text: 'Qui va où, qui a candidaté, ce qu’ils en ont pensé. Et un bouton pour leur écrire.',
+    crop: { image: 'communaute', x: 425, y: 425, width: 735, height: 690 },
   },
   {
     size: 'wide',
@@ -81,11 +81,5 @@ export const CARDS: Card[] = [
     title: 'La discussion',
     text: 'Chaque sujet a son tchat. Tes conversations à deux et tes groupes sont au même endroit.',
     crop: { image: 'discussion', x: 976, y: 728, width: 1024, height: 596 },
-  },
-  {
-    size: 'half',
-    title: 'Le fil de ta communauté',
-    text: 'Qui va où, qui a candidaté, ce qu’ils en ont pensé. Et un bouton pour leur écrire.',
-    crop: { image: 'communaute', x: 425, y: 425, width: 935, height: 760 },
   },
 ]
