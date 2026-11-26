@@ -585,39 +585,6 @@ select.landing-search__value {
   font: var(--type-landing-statement-s);
 }
 
-.landing-soon__text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-28);
-}
-
-.landing-soon__dossiers {
-  display: grid;
-  grid-template-columns: var(--landing-soon-text) var(--landing-oneclick-width) var(
-      --landing-pdf-width
-    );
-  justify-content: space-between;
-  align-items: start;
-  padding-top: var(--space-48);
-}
-
-.landing-soon__dossiers .landing-oneclick {
-  margin-top: var(--landing-oneclick-top);
-}
-
-.landing-soon__hunt {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-64);
-  margin-top: var(--space-96);
-}
-
-.landing-soon__hunt .landing-soon__text {
-  max-width: var(--landing-hunt-text);
-}
-
 /* --- La bande Pro ---------------------------------------------------------------------- */
 /* La bande de fin monte de gauche à droite : à droite, elle recouvre toute la pente. L'écran Pro,
    posé à droite, garde donc la pente en plus de la marge. */
@@ -886,28 +853,9 @@ select.landing-search__value {
     max-width: 100%;
   }
 
-  .landing-soon__dossiers {
-    grid-template-columns: repeat(2, auto);
-    justify-content: start;
-    gap: var(--space-40);
-  }
-
-  .landing-soon__dossiers .landing-soon__text {
-    grid-column: 1 / -1;
-  }
-
-  .landing-soon__dossiers .landing-oneclick {
-    margin-top: 0;
-  }
-
-  .landing-soon__hunt,
-  .landing-pro__main {
-    flex-direction: column-reverse;
-    align-items: flex-start;
-  }
-
   .landing-pro__main {
     flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -1026,25 +974,6 @@ select.landing-search__value {
   }
 
   .landing-who {
-    width: 100%;
-  }
-
-  .landing-soon__dossiers {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-40);
-  }
-
-  .landing-soon__dossiers .landing-oneclick {
-    margin-top: 0;
-  }
-
-  .landing-soon__hunt {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-
-  .landing-pdf__sheet,
-  .landing-oneclick__card {
     width: 100%;
   }
 

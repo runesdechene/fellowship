@@ -12,7 +12,6 @@ import { FinalCall } from './FinalCall'
 import { LandingTopBar } from './LandingTopBar'
 import { Opening } from './Opening'
 import { ProBand } from './ProBand'
-import { SoonBand } from './SoonBand'
 import { Stories } from './Stories'
 import { useTestimonials } from './useTestimonials'
 import { useLandingShowcase } from './useLandingShowcase'
@@ -29,7 +28,6 @@ export function LandingPage() {
       <main>
         <AssistantBand showcase={showcase} />
         <CommunityBand showcase={showcase} />
-        <SoonBand showcase={showcase} />
         <ProBand showcase={showcase} />
       </main>
       <FinalCall posters={posters} />

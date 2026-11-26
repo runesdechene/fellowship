@@ -17,7 +17,6 @@ import { useLandingNav } from './useLandingNav'
 const CHAPTERS = [
   { id: 'assistant', label: 'Mon copilote' },
   { id: 'communaute', label: 'Ma communauté' },
-  { id: 'bientot', label: 'Bientôt' },
   { id: 'pro', label: 'Le Pro' },
   { id: 'organisateurs', label: 'Organisateurs' },
 ] as const

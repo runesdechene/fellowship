@@ -1736,7 +1736,6 @@
   --type-landing-search-value: var(--weight-regular) var(--size-14) / normal var(--family-sans);
   --landing-mobile-wall: 440px;
   --landing-mobile-scale: 0.2; /* un écran de 1728 px ramené à un téléphone */
-  --landing-mobile-scale-hunt: 0.55; /* la chasse, dessinée pour 640 px */
 
   /* Les écrans de l'app dans la landing : l'app en clair, toujours */
   --landing-app-bg: var(--sand-50);
@@ -1800,23 +1799,7 @@
   --landing-community-who-top: 315px;
 
   /* La bande « Bientôt » (2290:98) */
-  --landing-soon-text: 520px;
-  --landing-oneclick-width: 332px;
-  --landing-oneclick-top: 130px;
-  --landing-pdf-width: 493px;
-  --landing-hunt-text: 560px;
-  --landing-paper-card: var(--sand-0);
-  --landing-paper-line: var(--fete-highlight-line);
-  --landing-paper-line-soft: var(--sand-300);
-  --landing-highlight: var(--fete-highlight);
-  --landing-highlight-ink: var(--terre-900);
-  --landing-check: var(--sauge-700);
-  --landing-caption-ink: var(--fete-ink-mute);
-  --landing-card-shadow: 0 18px 44px color-mix(in srgb, var(--fete-850) 8%, transparent);
-  --type-landing-caption: var(--weight-semibold) var(--size-14) / normal var(--family-sans);
-  --type-landing-card-name: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
   --type-landing-card-text: var(--weight-regular) var(--size-13) / 1.4 var(--family-sans);
-  --type-landing-card-label: var(--weight-medium) var(--size-12) / 1.4 var(--family-sans);
   /* La recherche publique (maquette 2314:2, lot 11b). */
   --type-landing-results-title: var(--weight-regular) var(--size-76) / 1.05 var(--family-display);
   --type-landing-results-lead: var(--weight-regular) var(--size-17) / 1.5 var(--family-sans);
@@ -1831,13 +1814,6 @@
   --radius-landing-result: 18px;
   --landing-results-beyond-width: 760px;
   --landing-result-shadow: 0 16px 36px color-mix(in srgb, var(--fete-ink) 10%, transparent);
-  --type-landing-pdf-kicker: var(--weight-semibold) var(--size-10) / normal var(--family-sans);
-  --type-landing-pdf-title: var(--weight-regular) var(--size-26) / 1.2 var(--family-display);
-  --type-landing-pdf-value: var(--weight-medium) var(--size-13) / 1.3 var(--family-sans);
-  --type-landing-hunt-title: var(--weight-regular) var(--size-28) / 1.2 var(--family-display);
-  --tracking-landing-kicker: 0.14em;
-  --landing-hunt-thumb-width: 48px;
-  --landing-hunt-thumb-height: 66px;
 
   /* La comparaison qui ouvre la bande Copilote (2458:2329, 23/10/2026) */
   --landing-compare-title-width: 960px;
@@ -1885,11 +1861,6 @@
   --type-landing-compare-label: var(--weight-semibold) var(--size-15) / normal var(--family-sans);
 
   /* Les encadrés « Bientôt · Pro », sous les prix (2458:2329) */
-  --landing-pro-soon-bg: color-mix(in srgb, var(--fete-cream) 7%, transparent);
-  --landing-pro-soon-line: color-mix(in srgb, var(--fete-cream) 18%, transparent);
-  --radius-landing-pro-soon: var(--round-16);
-  --type-landing-pro-soon-title: var(--weight-semibold) var(--size-16) / 1.3 var(--family-sans);
-  --type-landing-pro-soon-text: var(--weight-regular) var(--size-14) / 1.4 var(--family-sans);
 
   /* La bande Pro (2302:2) */
   --landing-pro-text: 633px;

@@ -1,7 +1,6 @@
 /**
  * QUOI     — la bande Pro, sur la terre : le grand paragraphe, « Gratuit » et le prix du Pro côte
- *            à côte, chacun avec ses avantages, deux appels, et l'écran « Pour toi » ; dessous, les
- *            encadrés de ce qui arrive dans le Pro (ProSoon).
+ *            à côte, chacun avec ses avantages, deux appels, et l'écran « Pour toi ».
  * POURQUOI — maquette 2290:2 (bande 2302:2, texte 2290:1322) ; le gratuit se lit d'abord, pour que
  *            personne ne croie l'application payante (Uriel, 14/10/2026).
  * ATTENTION — le prix vient de lib/pricing.ts : toujours celui que Stripe facture.
@@ -13,7 +12,6 @@ import { formatPrice } from '@/lib/money'
 import { PRICES } from '@/lib/pricing'
 import { FREE, PRO_ADDS } from '@/lib/pro-offer'
 import { LandingBand } from './LandingBand'
-import { ProSoon } from './ProSoon'
 import { ForYouScreen } from './screens/ForYouScreen'
 
 function Advantages({ items }: { items: string[] }) {
@@ -55,8 +53,7 @@ export function ProBand({ showcase }: { showcase: Showcase | null }) {
               <p className="landing-pro__big">{formatPrice(PRICES.monthly)}</p>
               <p className="landing-pro__label">Le Pro, HT par mois</p>
               <p className="landing-pro__note">
-                Ou {formatPrice(PRICES.yearly)} par an. 14 jours d’essai, annulable en un clic. Et
-                tout ce qui arrive en Pro, inclus.
+                Ou {formatPrice(PRICES.yearly)} par an. 14 jours d’essai, annulable en un clic.
               </p>
               <Advantages items={PRO_ADDS} />
             </div>
@@ -77,7 +74,6 @@ export function ProBand({ showcase }: { showcase: Showcase | null }) {
         </div>
         {showcase && showcase.dossiers.length > 0 && <ForYouScreen showcase={showcase} />}
       </div>
-      <ProSoon />
     </LandingBand>
   )
 }

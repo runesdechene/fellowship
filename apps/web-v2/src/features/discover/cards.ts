@@ -73,7 +73,7 @@ export const CARDS: Card[] = [
   {
     size: 'narrow',
     title: 'Les sujets',
-    text: 'Une question, une place dans la voiture : tu la lances, les autres exposants répondent.',
+    text: 'Plus besoin de fouiller WhatsApp : choisis un événement et lance une story de 7 jours à tes amis, tes abonnés ou tout Fellowship.',
     crop: { image: 'sujet', x: 1190, y: 390, width: 790, height: 915 },
   },
   {

@@ -17,7 +17,6 @@ const MONTHS = 12
 const PER_MONTH = 2
 const DOSSIERS = 4
 const FOR_YOU = 3
-const DAY = 24 * 60 * 60 * 1000
 const FACES = 5
 
 /** Runes de Chêne, toujours le premier visage de la preuve (Uriel, 14/10/2026). */
@@ -59,9 +58,7 @@ export interface Showcase {
   /** `events` : les dates montrées (deux au plus) ; `count` : toutes celles du mois. */
   months: { month: Date; count: number; events: (ShowEvent & { status: DemoStatus })[] }[]
   dossiers: (ShowEvent & { status: DemoStatus; paid: number; total: number })[]
-  oneClick: ShowEvent | null
-  pdf: ShowEvent | null
-  recent: (ShowEvent & { daysAgo: number })[]
+  recent: ShowEvent[]
   forYou: ShowEvent[]
   reports: (ShowEvent & { revenue: number | null; net: number | null })[]
 }
@@ -155,14 +152,7 @@ export function buildShowcase(
   }))
 
   const crowdId = crowd?.event.id
-  const oneClick = withPoster.find((e) => e.id !== crowdId) ?? null
-  const pdf = events.find((e) => e.id !== crowdId && e.id !== oneClick?.id) ?? null
   const forYou = withPoster.filter((e) => e.id !== crowdId).slice(-FOR_YOU)
-
-  const recent = input.recent.map((r) => ({
-    ...toEvent(r),
-    daysAgo: Math.max(0, Math.floor((today.getTime() - new Date(r.created_at).getTime()) / DAY)),
-  }))
 
   return {
     wall: withPoster.slice(0, WALL_POSTERS).flatMap((e) => (e.imageUrl ? [e.imageUrl] : [])),
@@ -171,9 +161,7 @@ export function buildShowcase(
     faces: input.faces,
     months,
     dossiers,
-    oneClick,
-    pdf,
-    recent,
+    recent: input.recent.map(toEvent),
     forYou,
     reports: input.past.map((r, i) => ({
       ...toEvent(r),

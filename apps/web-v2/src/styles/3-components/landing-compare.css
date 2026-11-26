@@ -1,6 +1,5 @@
 /**
- * QUOI     — la comparaison qui ouvre la bande Copilote (features/landing/ToolsCompare.tsx) et les
- *            encadrés « Bientôt · Pro » sous les prix (features/landing/ProSoon.tsx).
+ * QUOI     — la comparaison qui ouvre la bande Copilote (features/landing/ToolsCompare.tsx).
  * POURQUOI — maquette 2458:2329, validée le 23/10/2026 après le Concile : les huit outils en vrac,
  *            une flèche dessinée, puis l'icône Fellowship comme une app qu'on touche.
  * ATTENTION — chaque tuile se penche de `--tilt` et se décale de `--nudge` crans, posés par les
@@ -208,56 +207,6 @@
   font: var(--type-landing-store-name);
 }
 
-/* --- Les encadrés « Bientôt · Pro » ------------------------------------------------------ */
-.landing-pro-soon {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-18);
-  margin-top: var(--space-48);
-}
-
-.landing-pro-soon__head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-14);
-  font: var(--type-landing-tool-pain);
-  color: var(--landing-gold-soft);
-}
-
-.landing-pro-soon__list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* quatre encadrés : deux rangées de deux */
-  gap: var(--space-20);
-}
-
-.landing-pro-soon__list li {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-16);
-  padding: var(--space-20) var(--space-22);
-  border: 1px solid var(--landing-pro-soon-line);
-  border-radius: var(--radius-landing-pro-soon);
-  background: var(--landing-pro-soon-bg);
-  font: var(--type-landing-pro-soon-text);
-  color: var(--landing-gold-soft);
-}
-
-.landing-pro-soon__list li:first-child {
-  grid-column: 1 / -1;
-}
-
-.landing-pro-soon__list svg {
-  flex-shrink: 0;
-  color: var(--landing-gold-soft);
-}
-
-.landing-pro-soon__list strong {
-  display: block;
-  margin-bottom: var(--space-4);
-  font: var(--type-landing-pro-soon-title);
-  color: var(--landing-cream);
-}
-
 /* --- Blocs plus étroits ----------------------------------------------------------------- */
 /* La ligne (outils, flèche, app) demande 1 493 px ; elle peut mordre de 53 px sur la marge de la
    bande. En dessous, l'app passe sous les outils, et la flèche plonge vers elle. */
@@ -337,16 +286,5 @@
   .landing-tool__name,
   .landing-tool__pain {
     max-width: var(--landing-tool-cloud-text-phone);
-  }
-}
-
-@media (width <= 760px) {
-  .landing-pro-soon__list {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .landing-pro-soon__head {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }

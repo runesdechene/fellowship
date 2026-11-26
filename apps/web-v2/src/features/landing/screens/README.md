@@ -8,5 +8,4 @@ Aucun n'importe une page de l'app.
 - `DemoStatus.tsx` — inscrit, dossier envoyé, intéressé, dits par la forme.
 - `CalendarScreen.tsx`, `DashboardScreen.tsx` — la bande Assistant.
 - `CommunityScreen.tsx`, `WhoGoesScreen.tsx` — la bande Communauté.
-- `OneClickCard.tsx`, `PdfSheet.tsx`, `HuntScreen.tsx` — la bande « Bientôt · Pro ».
 - `ForYouScreen.tsx` — l'accueil d'un compte Pro, pour la bande Pro.

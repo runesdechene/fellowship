@@ -213,63 +213,6 @@
   color: var(--pro-check-ink);
 }
 
-/* --- Bientôt, et la FAQ -------------------------------------------------- */
-.pro-soon-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-16);
-  width: 100%;
-}
-
-.pro-soon-list > :first-child {
-  grid-column: 1 / -1;
-}
-
-.pro-soon {
-  display: flex;
-  align-items: center;
-  gap: var(--space-16);
-  width: 100%;
-  padding: var(--space-20) var(--space-26) var(--space-20) var(--space-24);
-  border-radius: var(--radius-card);
-  background: var(--surface-chip-neutral);
-}
-
-.pro-soon__icon {
-  display: flex;
-  flex: none;
-  padding: var(--space-10);
-  border-radius: var(--round-full);
-  background: var(--surface-card);
-  color: var(--ink-title);
-}
-
-.pro-soon__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.pro-soon__title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  font: var(--type-pro-month-title);
-  color: var(--ink-title);
-}
-
-.pro-soon__badge {
-  padding: var(--space-2) var(--space-6);
-  border-radius: var(--radius-xs);
-  background: var(--surface-card);
-  font: var(--type-pro-badge);
-}
-
-.pro-soon__body {
-  font: var(--type-reports-note);
-  color: var(--ink-soft);
-}
-
 .pro-faq {
   display: flex;
   flex-direction: column;
@@ -318,10 +261,6 @@
 }
 
 @media (width <= 760px) {
-  .pro-soon-list {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .pro-page {
     gap: var(--space-32);
     padding: var(--mobile-padding-top) var(--mobile-gutter) var(--space-40);

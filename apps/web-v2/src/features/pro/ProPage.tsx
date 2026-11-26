@@ -1,6 +1,6 @@
 /**
  * QUOI     — /pro, la page de l'offre : l'accroche, la formule (mensuel / annuel), les cartes
- *            Gratuit et Pro, le parrainage, ce qui arrive dans le Pro, la FAQ ; et le bandeau du retour
+ *            Gratuit et Pro, le parrainage, la FAQ ; et le bandeau du retour
  *            de Stripe.
  * POURQUOI — toutes les invitations du gratuit mènent ici (maquette « Offre Pro »). La formule vit
  *            dans l'adresse, le retour arrière la suit.
@@ -15,7 +15,7 @@ import { annualSaving, formulaFrom, type Formula } from '@/lib/pricing'
 import { billingAction } from '@/lib/plan'
 import { usePlan } from '@/lib/usePlan'
 import { FreeCard, ProCard } from './PlanCard'
-import { ProFaq, ProSoon } from './ProFaq'
+import { ProFaq } from './ProFaq'
 import { ReferralCard } from './ReferralCard'
 import { useCheckoutReturn, type ReturnState } from './useCheckoutReturn'
 
@@ -111,7 +111,6 @@ export function ProPage() {
         />
       </div>
       {entity && <ReferralCard entityId={entity.actor_id} brandName={entity.brand_name} />}
-      <ProSoon />
       <ProFaq />
     </div>
   )

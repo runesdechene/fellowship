@@ -58,9 +58,6 @@ describe('buildShowcase', () => {
     expect(show.reports).toEqual([])
     expect(show.months.every((m) => m.events.length === 0)).toBe(true)
     expect(show.dossiers).toEqual([])
-    expect(show.oneClick).toBeNull()
-    expect(show.pdf).toBeNull()
-    expect(show.recent).toEqual([])
     expect(show.forYou).toEqual([])
   })
 
@@ -120,27 +117,6 @@ describe('buildShowcase', () => {
     expect(show.dossiers.map((d) => [d.paid, d.total])).toEqual(
       DEMO.dossiers.slice(0, 4).map((d) => [d.paid, d.total]),
     )
-  })
-
-  it('montre l’inscription en un clic sur une date avec affiche, autre que la plus suivie', () => {
-    const upcoming = [
-      row('a', '2026-10-20'),
-      row('b', '2026-10-21', { image_url: null }),
-      row('c', '2026-10-22'),
-    ]
-    const registered = new Map([['a', 3]])
-    const show = buildShowcase({ ...empty, upcoming, registered }, TODAY)
-    expect(show.oneClick?.id).toBe('c')
-    expect(show.pdf?.id).toBe('b')
-  })
-
-  it('compte en jours l’ancienneté des derniers festivals ajoutés', () => {
-    const recent = [
-      row('n', '2027-03-01', { created_at: '2026-10-14T08:00:00Z' }),
-      row('m', '2027-04-01', { created_at: '2026-10-11T08:00:00Z' }),
-    ]
-    const show = buildShowcase({ ...empty, recent }, new Date('2026-10-14T18:00:00Z'))
-    expect(show.recent.map((r) => r.daysAgo)).toEqual([0, 3])
   })
 
   it('propose « Pour toi » trois dates avec affiche, sans répéter la plus suivie', () => {
