@@ -2059,18 +2059,18 @@
   --discover-round: var(--round-24);
   --discover-round-box: var(--round-28);
 
-  --type-discover-hero: var(--weight-regular) clamp(var(--size-44), 4.8vw, var(--size-68)) / 1.08
-    var(--family-display);
-  --type-discover-title: var(--weight-regular) clamp(var(--size-38), 4.4vw, var(--size-56)) / 1.12
-    var(--family-display);
-  --type-discover-final: var(--weight-regular) clamp(var(--size-46), 6vw, var(--size-80)) / 1.06
-    var(--family-display);
+  --type-discover-hero: var(--weight-semibold) clamp(var(--size-38), 4vw, var(--size-56)) / 1.12
+    var(--family-brand);
+  --type-discover-title: var(--weight-semibold) clamp(var(--size-32), 3.4vw, var(--size-44)) / 1.18
+    var(--family-brand);
+  --type-discover-final: var(--weight-semibold) clamp(var(--size-38), 4.8vw, var(--size-64)) / 1.12
+    var(--family-brand);
   --type-discover-statement: var(--weight-regular) clamp(var(--size-32), 4vw, var(--size-48)) / 1.22
     var(--family-display);
   --type-discover-price: var(--weight-regular) clamp(var(--size-64), 7vw, var(--size-96)) / 1
     var(--family-display);
   --type-discover-stat: var(--weight-regular) var(--size-60) / 1.1 var(--family-display);
-  --type-discover-letter: var(--weight-regular) var(--size-46) / 1.15 var(--family-display);
+  --type-discover-letter: var(--weight-semibold) var(--size-36) / 1.2 var(--family-brand);
   --type-discover-line: var(--weight-regular) var(--size-36) / 1.2 var(--family-display);
   --type-discover-quote: var(--weight-regular) var(--size-34) / 1.3 var(--family-display);
   --type-discover-mess: var(--weight-regular) var(--size-26) / 1.2 var(--family-display);
