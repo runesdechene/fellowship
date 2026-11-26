@@ -43,21 +43,6 @@
   color: var(--discover-ink);
 }
 
-/* La recherche de la landing, à plat et aux couleurs du papier. */
-.discover-search {
-  --landing-cream-paper: var(--discover-card-light);
-  --landing-ink: var(--discover-ink);
-  --landing-search-shadow: none;
-  --landing-search-line: var(--discover-line);
-  --landing-gold: var(--discover-accent-light);
-  --landing-terre: var(--discover-accent);
-  --landing-cream: var(--discover-cream);
-
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-22);
-}
-
 .discover-manifesto__since {
   margin-top: var(--space-16);
   font: var(--type-discover-small);
