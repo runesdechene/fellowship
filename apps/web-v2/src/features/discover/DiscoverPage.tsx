@@ -19,7 +19,7 @@ import { Pricing } from './Pricing'
 import { Quote } from './Quote'
 
 export function DiscoverPage() {
-  const [first, second] = useTestimonials()
+  const [first, second, third] = useTestimonials()
 
   return (
     <div className="discover">
@@ -33,6 +33,8 @@ export function DiscoverPage() {
         <Letter />
         {second && <Quote testimonial={second} />}
         <Pricing />
+        {/* Sa première phrase est une question : la seconde y répond. */}
+        {third && <Quote testimonial={third} sentences={2} />}
         <div id="questions" className="discover-faq">
           <LandingFaq />
         </div>
