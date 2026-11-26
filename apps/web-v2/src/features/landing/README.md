@@ -1,6 +1,9 @@
 # features/landing — la landing publique
 
-Ce qu'un visiteur sans compte voit sur `/`, et tout le monde sur `/decouvrir` (lot 11c, spec
+**Remplacée le 26/11/2026 par `features/discover/`** : `LandingPage.tsx` et ses bandes ne sont
+plus servies. La recherche publique, la FAQ, les témoignages et le pied de page, eux, servent encore.
+
+L'ancienne page d'accueil (lot 11c, spec
 `docs/superpowers/specs/2026-10-14-v2-landing-11c-design.md`, maquette `2290:2`). Tout ce qui vit
 sur Fellowship vient de la base ; seul l'exposant de démonstration vient de `lib/landing-demo.ts`.
 

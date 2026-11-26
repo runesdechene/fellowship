@@ -1,6 +1,6 @@
 /**
  * QUOI     — les routes de la V2 et leurs gardes : landing (sans compte sur `/`, pour tous sur
- *            `/decouvrir`), recherche publique (`/festivals`), connexion, arrivée, tableau de
+ *            `/decouvrir`, features/discover), recherche publique (`/festivals`), connexion, arrivée, tableau de
  *            bord, calendrier, création, fiche (ouverte sans compte), avis, explorer, bilans,
  *            offre Pro, réglages, vitrine, administration (admins seulement, `/admin`).
  * POURQUOI — chaque écran a une adresse ; tout compte connecté entre depuis la bascule (lot 12) ;
@@ -32,7 +32,6 @@ import { EventPage } from '@/features/event/EventPage'
 import { EventRoute, LegacyEventRedirect } from '@/features/event/EventRoute'
 import { EmbedPage } from '@/features/embed/EmbedPage'
 import { ExplorerPage } from '@/features/explorer/ExplorerPage'
-import { LandingPage } from '@/features/landing/LandingPage'
 import { DiscoverPage } from '@/features/discover/DiscoverPage'
 import { PublicSearchPage } from '@/features/public-search/PublicSearchPage'
 import { ProPage } from '@/features/pro/ProPage'
@@ -164,9 +163,7 @@ export function App() {
       {!pathname.endsWith('/embed') && <UpdateBanner />}
       <Routes>
         {/* La landing pour tout le monde, connecté ou non : pour la relire sans se déconnecter. */}
-        <Route path="/decouvrir" element={<LandingPage />} />
-        {/* La landing claire, à l'essai à côté de l'actuelle (26/11/2026). */}
-        <Route path="/decouvrir-v2" element={<DiscoverPage />} />
+        <Route path="/decouvrir" element={<DiscoverPage />} />
         <Route path="/festivals" element={<PublicSearchRoute />} />
         <Route path="/desinscription" element={<Unsubscribe />} />
         <Route path="/connexion" element={<LoginRoute />} />
@@ -188,7 +185,7 @@ export function App() {
         <Route
           path="/"
           element={
-            <AppPage guest={<LandingPage />}>
+            <AppPage guest={<DiscoverPage />}>
               <Dashboard />
             </AppPage>
           }

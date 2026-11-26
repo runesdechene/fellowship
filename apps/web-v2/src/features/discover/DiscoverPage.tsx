@@ -1,9 +1,8 @@
 /**
- * QUOI     — la landing claire de /decouvrir-v2.
+ * QUOI     — la landing publique : ce qu'un visiteur sans compte voit sur `/`, et tout le monde
+ *            sur `/decouvrir`.
  * POURQUOI — maquette validée par Uriel le 26/11/2026 : fond papier, aplats sans bordure,
  *            l'application à côté de la promesse. Elle parle aux exposants.
- * ATTENTION — à l'essai à côté de la landing actuelle : hors des moteurs de recherche tant qu'elle
- *            ne l'a pas remplacée.
  */
 import { LandingFaq } from '@/features/landing/LandingFaq'
 import { LandingFoot } from '@/features/landing/LandingFoot'
@@ -24,7 +23,6 @@ export function DiscoverPage() {
 
   return (
     <div className="discover">
-      <meta name="robots" content="noindex" />
       <DiscoverNav />
       <main>
         <Hero />

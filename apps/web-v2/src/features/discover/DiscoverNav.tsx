@@ -1,5 +1,5 @@
 /**
- * QUOI     — la barre qui reste en haut de /decouvrir-v2 : la marque, trois chapitres, la
+ * QUOI     — la barre qui reste en haut de la landing : la marque, trois chapitres, la
  *            connexion et « Commencer ».
  * POURQUOI — maquette du 26/11/2026.
  */

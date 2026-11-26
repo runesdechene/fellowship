@@ -1,8 +1,8 @@
-# features/discover — la landing claire, à l'essai sur `/decouvrir-v2`
+# features/discover — la landing publique (`/` sans compte, `/decouvrir`)
 
-Maquette validée par Uriel le 26/11/2026 (artifact « Fellowship — Découvrir (papier) »). Elle vit
-à côté de `features/landing/` tant qu'elle n'a pas pris sa place. Elle lui emprunte la FAQ, les
-témoignages, l'encadré des organisateurs et le pied de page.
+Maquette validée par Uriel le 26/11/2026 (artifact « Fellowship — Découvrir (papier) »). Elle
+emprunte à `features/landing/` la FAQ, les témoignages, l'encadré des organisateurs et le pied de
+page.
 
 - `DiscoverPage.tsx` — la page : les sections dans l'ordre de la maquette.
 - `DiscoverNav.tsx` — la barre qui reste en haut.
